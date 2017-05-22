@@ -1,0 +1,114 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Report Student Payment Late'); 
+	echo $this->headTitle(''); 
+	$frm =  $this->form_search;
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$rpt=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-list-product'), null, true);
+	$frm = $this->form_search;
+?>	
+<div style="width: 28cm;margin: 0 auto;">
+<form
+	action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-purchase-supplier')); ?>"
+	dojoType="dijit.form.Form" method="post">
+	<table style="width: 50%">
+		<tr>
+			<td><?php echo $frm->getElement("title");?></td>
+			<td><?php echo $frm->getElement("location");?></td>
+			<td> <?php echo $frm->getElement("status_search");?></td>
+			<td>
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</td>
+		</tr>
+	</table>
+</form>
+</div>
+<?php //print_r($this->pur_code); ?>
+<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+	<div id="divPrint">
+					<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">
+						
+						<tr>
+							<td width="28%" align="left">
+								<img style="width:25%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /><br >
+							</td>
+							<td align="center" width="44%">
+								<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';">របាយការណ៏​​ ផលិតផល</strong><br />
+								<span style="font-weight: bold;font-size: 11px;">&nbsp;&nbsp;  <?php //echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br /><br />
+							</td>
+							<td width="28%" align="right">
+								
+							</td>
+						</tr>
+						<tr>
+						 
+							<td colspan="3">
+								<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
+									<tr style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
+											<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?></td>
+											<td>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?></td>
+											<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?></td>
+											<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+								   </tr>
+									
+								<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_detail)) foreach ($this->pur_detail AS $rs) { $i++;
+								       
+								  ?>
+									<tr class="hover" style="font-size:11px; height: 18px;"​ align="center">
+										    <td> <?php echo $i; ?></td>
+										     <td><?php echo $rs['supplier_no'];?></td>
+										      <td><?php echo $rs['brand_name'];?></td>
+										     <td><?php echo $rs['sup_name'];?></td>
+										    <td><?php echo $rs['pro_id'];?></td>
+										    <td><?php echo number_format($rs['qty'],0);?></td>
+										    <td>&nbsp;$&nbsp;<?php echo $rs['cost'];?></td>
+										    <td>&nbsp;$&nbsp;<?php echo $rs['amount'];?></td>
+										    <td><?php echo $rs['date'];?></td>
+										    <td><?php echo $rs['status']; ?></td>
+									 </tr>
+								  
+												<?php $totalbalance=$totalbalance+$rs['amount'];}?>	 
+									
+								</table>	
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" align="right">
+							     <table width="20%"  style="border: 0px solid #000;border-collapse: collapse;"  >
+							           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
+							               <td>Total Amount :</td><td>&nbsp;$&nbsp;<?php echo number_format($totalbalance,2);?>&nbsp; </td>
+							           </tr>
+							     </table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+						<tr >
+							<td align="center" width="25%">
+								<span style=" font-size: 14px;">Verified by</span>
+							</td>
+							<td  width="50%">
+								&nbsp;
+							</td>
+							<td align="center"  width="25%">
+								<span style="font-size: 14px;text-align: right;">Prepared by</span>
+							</td>
+						</tr>
+						
+					</table>
+							
+			</div>		
+</div>
+
+
+
+
+

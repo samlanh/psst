@@ -1,0 +1,116 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('EDIT_SUBJECT')); 
+//	print_r($this->rs );
+	//print_r($this->row );
+?>	
+
+<?php  $subject_exam= $this->frm_subject_exam;?>
+<form  id='add_subject_exam' action="<?php echo $this->url(array('module'=>'global','controller'=>'subject','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<table cellspacing="10" width="40%" style="margin: 0 auto;">
+	<tr>
+		<td>
+			<fieldset style="background-color:menu;">
+					<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("EDIT_SUBJECT");?></strong></legend>
+						<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
+							<tr>
+								<td style="width: 100px"><?php echo $tr->translate("PARENT")?></td>
+								<td>
+									<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
+									
+										<option value="0" <?php if($this->row['parent']==0  ) echo 'selected="selected"';?>></option>
+										
+										<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
+													<option value="<?php echo $row['id']?>" <?php echo 'selected="selected"';?>><?php echo $row['subject_titleen']?></option>
+										<?php }?>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_KH")?></td>
+								<td><?php  echo $subject_exam->getElement('subject_kh');?></td>
+							</tr>
+							<tr>
+								<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_EN")?></td>
+								<td><?php  echo $subject_exam->getElement('subject_en');?></td>
+							</tr>
+							<tr>
+								<td style="width: 100px"><?php echo $tr->translate("SCORE_PERCENT")?></td>
+								<td><?php echo $subject_exam->getElement('score_percent');?></td>
+							</tr>
+							<tr>
+								<td style="width: 5px"><?php echo $tr->translate("ACCESS_TYPE")?></td>
+								<td>
+									<select class="fullside" name="access_type" id="access_type" dojoType="dijit.form.FilteringSelect" >
+										<option value="1" <?php if($this->row['access_type']==1) echo 'selected="selected"';?>>All</option>
+										<option value="2" <?php if($this->row['access_type']==2) echo 'selected="selected"';?>>GEP</option>
+										<option value="3" <?php if($this->row['access_type']==3) echo 'selected="selected"';?>>Kindergarten</option>
+										<option value="4" <?php if($this->row['access_type']==4) echo 'selected="selected"';?>>General Education</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td><input type="checkBox" <?php if($this->row['is_parent']==1){echo "checked='checked'";}?> dojoType="dijit.form.CheckBox" onChange="getValue();" value="1" id="is_parent" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
+							</tr>
+							<tr><input type="hidden" id="par" name="par" />
+								<td style="width: 5px"><?php echo $tr->translate("STATUS")?></td>
+								<td><?php  echo $subject_exam->getElement('status');?></td>
+							</tr>
+							<tr>
+								<td colspan="2" align="center">
+									<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+									<input type="submit" value="<?php echo $tr->translate("GO_EDIT");?>" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
+										 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="dijit.byId('add_subject_exam').submit();"/>
+								</td>
+							</tr>
+						</table>	
+			</fieldset>		
+		</td>
+	</tr>
+</table>	
+</form>
+
+
+<script type="text/javascript">
+
+	function getValue(){
+		//alert(1);
+		var par='';
+		if(dojo.byId('is_parent').checked){
+			par = 1;
+			dijit.byId('parent').attr('value','');
+			dijit.byId("parent").set('readOnly',true);
+			
+		}else{
+			par=0;
+			dijit.byId('parent').attr('value','0');
+			dijit.byId("parent").set('readOnly',false);
+		}
+		//dijit.byId('parent').attr('value',par);
+		$('#par').val(par);
+	}
+
+	dojo.ready(function(){
+
+		getValue();
+		dijit.byId('parent').attr('value','<?php echo $this->row['parent'] ?>');
+
+
+	});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

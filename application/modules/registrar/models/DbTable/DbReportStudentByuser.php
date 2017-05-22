@@ -1,0 +1,157 @@
+<?php
+
+class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstract
+{
+    protected $_name = 'rms_student';
+    public function getUserId(){
+    	$session_user=new Zend_Session_Namespace('auth');
+    	return $session_user->user_id;
+    }
+    
+    function getUserType(){
+    	$session_user=new Zend_Session_Namespace('auth');
+    	return $session_user->level;
+    }
+    
+    public function getBranchId(){
+    	$session_user=new Zend_Session_Namespace('auth');
+    	return $session_user->branch_id;
+    }
+    public function getType(){
+    	$db=$this->getAdapter();
+		$sql=" select type from rms_student_paymentdetail";
+    	return $db->fetchAll($sql);
+    }
+	function getAllStudentPayment($search=null){
+		try{
+	    	$_db = new Application_Model_DbTable_DbGlobal();
+	    	$branch_id = $_db->getAccessPermission('sp.branch_id');
+	    	$user_level = $_db->getUserAccessPermission('sp.user_id');
+	    	
+	    	$db=$this->getAdapter();
+
+	    	$type=$this->getType();
+        	$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
+	    	$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
+	    	$sql=" SELECT 
+					  spd.id,
+					  sp.receipt_number,
+					  s.stu_code,
+					  s.stu_khname,
+					  s.stu_enname,
+					  spd.type,
+					  sp.tuition_fee,
+					  spd.fee,
+					  spd.qty,
+					  spd.discount_percent,
+					  spd.discount_fix,
+					  spd.subtotal,
+					  spd.paidamount,
+					  spd.balance,
+					  spd.admin_fee,
+					  sp.other_fee,
+					  sp.create_date,
+					  sp.is_void,
+					  spd.note,
+					  spd.start_date,
+					  spd.validate,
+					  spd.is_start,
+					  spd.is_parent ,
+					  spd.is_complete,
+					  (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.year LIMIT 1) AS year,
+					  (SELECT pg.title FROM rms_program_name AS pg WHERE pg.service_id=spd.service_id) AS service_id,
+					  (SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user_id,
+					  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term) AS payment_term,
+					  (select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status
+					FROM
+					  rms_student AS s,
+					  rms_student_payment AS sp,
+					  rms_student_paymentdetail AS spd 
+					WHERE sp.id = spd.payment_id 
+					  AND s.stu_id = sp.student_id  $branch_id  $user_level 
+	    		";
+	    	
+	    	$where = " AND ".$from_date." AND ".$to_date;
+	    	
+	    	if(!empty($search['adv_search'])){
+	    		$s_where=array();
+	    		$s_search= addslashes(trim($search['adv_search']));
+	    		$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
+	    		$s_where[]=" sp.receipt_number LIKE '%{$s_search}%'";
+	    		$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
+	    		$s_where[]= " s.stu_enname LIKE '%{$s_search}%'";
+	    		$s_where[]= " s.grade LIKE '%{$s_search}%'";
+	    		$where.=' AND ('.implode(' OR ', $s_where).')';
+	    	}
+	    	if(($search['service']>0)){
+	    		$where.= " AND spd.service_id = ".$search['service'];
+	    	}
+	    	if(($search['branch_id']>0)){
+	    		$where.= " AND sp.branch_id = ".$search['branch_id'];
+	    	}
+	    	if(($search['study_year']>0)){
+	    		$where.= " AND sp.year = ".$search['study_year'];
+	    	}
+	    	if(!empty($search['user'])){
+	    		$where.= " AND sp.user_id = ".$search['user'];
+	    	}
+	    	$order=" ORDER By sp.id DESC ";
+// 	    	echo $sql.$where.$order;exit();
+	    	return $db->fetchAll($sql.$where.$order);
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+	  }
+	    
+	    
+	  public function getServices($service_id){
+	   	    $db=$this->getAdapter();
+	   	    $sql="SELECT pn.service_id,pn.title FROM  rms_program_name AS pn,rms_student_paymentdetail AS spd 
+						WHERE pn.service_id=spd.service_id AND pn.type=2 AND spd.service_id=$service_id";
+	   	    return $db->fetchOne($sql);
+	   }
+	   
+	function getAllService(){
+		$db = $this->getAdapter();
+		$sql="SELECT 
+				  p.service_id ,
+				  p.`title`
+				FROM
+				  `rms_servicefee_detail` as sfd,
+				  `rms_servicefee`  as sf,
+				  `rms_program_name` as p
+				WHERE `sf`.id = `sfd`.`service_feeid` 
+				  AND sf.`branch_id` = ".$this->getBranchId()."
+				  AND p.`service_id`=sfd.`service_id`
+				  or type=1
+				GROUP BY service_id 
+			";
+		//echo $sql;
+		return $db->fetchAll($sql);
+		
+// 		$i=0;
+// 		$result=array('');
+		
+// 		if(!empty($service)){
+// 			foreach ($service as $service_id){$i++;
+// 				//echo $result['id']."<br />";
+// 				$sql1 = "select service_id as id , title from rms_program_name where service_id=".$service_id['id'];
+// 				$result = $db->fetchRow($sql1);
+				
+				
+// 				//print_r($result);
+// 				//return $result;
+// 			}
+// 			//return $result;
+// 		}
+		
+	}
+	   
+	   
+	   
+}
+
+
+
+
+

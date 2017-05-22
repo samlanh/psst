@@ -1,0 +1,129 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Report Purchase'); 
+	echo $this->headTitle(''); 
+	$frm =  $this->form_search;
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$rpt=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-list-product'), null, true);
+	$frm = $this->form_search;
+?>	
+<meta charset="utf-8">
+<div style="width: 28cm;margin: 0 auto;">
+<form
+	action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-purchaseall')); ?>"
+	dojoType="dijit.form.Form" method="post">
+	<table style="width: 100%">
+		<tr>
+			<td><?php echo $frm->getElement("title");?></td>
+			<td><?php echo $frm->getElement("location");?></td>
+			<td><?php echo $frm->getElement("product");?></td>
+		</tr>
+		<tr>
+		    <td>
+				<input name="start_date" id="start_date" class="fullside"  constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->search['start_date'];?>" type="text">
+			</td>
+			<td>
+				<input name="end_date" id="end_date" class="fullside"  constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->search['end_date'];?>" type="text">
+			</td>
+			<td> <?php echo $frm->getElement("status_search");?></td>
+			<td>
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</td>
+		</tr>
+	</table>
+</form>
+</div>
+<?php //print_r($this->pur_code); ?>
+ 
+<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+	<div id="divPrint">
+					<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">
+						
+						<tr>
+							<td width="15%" align="center">
+								<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+							</td>
+							<td align="center" width="70%">
+								<strong style="padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_PURCHASE_ALL');?></strong>
+							</td>
+							<td width="15%" align="center">
+							</td>
+						</tr>
+						<tr>
+						 
+							<td colspan="3">
+								<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
+									<tr style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
+											<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?></td>
+											<td>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?></td>
+											<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?></td>
+											<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+								   </tr>
+									
+								<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_all)) foreach ($this->pur_all AS $rs) { $i++;
+								       
+								  ?>
+									<tr class="hover" style="font-size:11px; height: 18px;"​ align="center">
+										    <td> <?php echo $i; ?></td>
+										     <td><?php echo $rs['supplier_no'];?></td>
+										     <td><?php echo $rs['brand_name'];?></td>
+										     <td><?php echo $rs['sup_name'];?></td>
+										    <td><?php echo $rs['pro_id'];?></td>
+										    <td><?php echo number_format($rs['qty'],0);?></td>
+										    <td>&nbsp;$&nbsp;<?php echo $rs['cost'];?></td>
+										    <td>&nbsp;$&nbsp;<?php echo $rs['amount'];?></td>
+										    <td><?php echo $rs['date'];?></td>
+										    <td><?php echo $rs['status']; ?></td>
+									 </tr>
+								  
+												<?php $totalbalance=$totalbalance+$rs['amount'];}?>	  
+									
+								</table>	
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" align="right">
+							     <table width="20%"  style="border: 0px solid #000;border-collapse: collapse;"  >
+							           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
+							               <td>Total Amount :</td><td>&nbsp;$&nbsp;<?php echo number_format($totalbalance,2);?>&nbsp;</td>
+							           </tr>
+							     </table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+						<tr >
+							<td colspan="3" width="100%">
+								<table width="100%" style="font-family:'Khmer OS Battambang';">
+									<tr>
+										<td  width="25%" align="center">
+											<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+										</td>
+										<td  width="50%">
+											&nbsp;
+										</td>
+										<td align="center"  width="25%">
+											<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						
+					</table>
+							
+			</div>		
+</div>
+
+
+
+
+

@@ -1,0 +1,102 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Report Service Charge'); 
+	echo $this->headTitle(''); 
+	$frm = $this->form_search;
+?>	
+<div style="width: 28cm;margin: 0 auto;">
+<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-service-charge')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table>	
+		<tr>
+			<td>
+				<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
+			</td>
+			<td>
+				<select class="fullside"   name="year" id="year" dojoType="dijit.form.FilteringSelect">
+					<option value=""> Select Year </option>
+					<?php if(!empty($this->row)){foreach ($this->row as $id ){?>
+						<option value="<?php echo $id['id']?>" <?php if($id['id']==$this->search['year']) echo 'selected="selected"' ?>><?php echo $id['year'];?></option>
+					<?php }}?>
+				</select>
+			</td>
+			<td>
+				<?php echo $frm->getElement('branch_id');?>
+			</td>
+			<td>
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</td>
+		</tr>
+	
+	
+	</table>
+</form>	
+</div>
+<div style="border: 1px dotted #000; background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+	<div id="divPrint">
+							<table style="background:#fff; margin: 0 auto; white-space: nowrap;width: 100%">
+								<tr >
+									<td width="15%" align="center">
+										<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+									</td>
+									<td width="70%" align="center">
+										<strong style="padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></strong><br />
+									</td>
+									<td width="15%" align="center">
+									</td>
+								</tr>
+										
+
+								<tr>
+									<td colspan="3" id="exportExcel">
+										<table cellpadding="5"​ style=" font-family:'Khmer OS Battambang';margin:0 auto;width:100%;border: 1px solid #000; border-collapse: collapse;border: 1px solid #000;white-space: nowrap;"  border="1" >
+											<tr style="font-size:11px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
+												<td ><?php echo $tr->translate('N_O')?></td>
+												<td ><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
+												<td><?php echo $tr->translate('SERVICE_NAME')?></td>
+												<td><?php echo $tr->translate('MONTHLY')?></td>
+												<td ><?php echo $tr->translate('QUARTER')?></td>
+												<td ><?php echo $tr->translate('SEMESTER')?></td>
+												<td ><?php echo $tr->translate('YEAR')?></td>
+												<td ><?php echo $tr->translate('NOTE')?></td>
+											</tr>
+										<?php $i=0; foreach ($this->rs AS $row) { $i++;?>
+											<tr class="hover" style="font-size:11px; height: 20px;" align="center" >
+												<td ><?php echo $i;?></td>
+												<td ><?php echo $row['academic'];?></td>
+												<td align="left">&nbsp;&nbsp;<?php echo $row['service_name'];?></td>	
+												<td ><?php echo $row['monthly'];?> $</td>
+												<td ><?php echo $row['quarter'];?> $</td>
+												<td ><?php echo $row['semester'];?> $</td>
+												<td ><?php echo $row['year'];?> $</td>
+												<td ><?php echo $row['remark'];?></td>
+											</tr>
+										<?php }?>	
+										</table>	
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr>
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr >
+									<td colspan="3" width="100%" >
+										<table width="100%" style="font-family: 'Khmer OS Battambang';">
+											<tr>
+												<td  width="25%" align="center">
+													<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+												</td>
+												<td  width="50%">
+													&nbsp;
+												</td>
+												<td align="center"  width="25%">
+													<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+	</div>	
+</div>	

@@ -1,0 +1,254 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>	
+
+<script type="text/javascript">
+
+	function convertEnglishToKhmerNumber(num) {
+	    var str = '';        
+	    for (var i = 0; i < num.length; i++) {
+	        str = str + convertEngToKh(num.charAt(i));
+	    }
+	    return str;
+	}
+	
+	function getKHMonthByNumber(m){
+		//alert(Number(m));
+		var monthName=[
+			"មករា",
+			"កុម្ភៈ",
+			"មីនា",
+			"មេសា",
+			"ឧសភា",
+			"មិថុនា",
+			"កក្កដា",
+			"សីហា",
+			"កញ្ញា",
+			"តុលា",
+			"វិច្ឆិកា",
+			"ធ្នូ",
+			];
+			return (monthName[m-1]);
+	}	
+	
+	dojo.ready(function(){
+		print();
+	});
+	
+	function print(){
+		dijit.byId('print_income').show();
+	
+		window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint1').innerHTML;
+	    window.frames["print_frame"].window.focus();
+	    window.frames["print_frame"].window.print();
+	    <?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstaff','action'=>'rpt-all-staff'),null,true);
+		?>
+		window.location.href = '<?php echo $url_copy;?>';
+	    //dijit.byId("terms").hide();
+	      
+	}
+	
+
+</script>
+
+<div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
+	<div data-dojo-type="dijit.Dialog" style="width:22cm;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
+		<div id="divPrint1" style="width: 21cm !important; height: 13cm ; padding: 0px; margin: 0px;">
+		<?php $con=4;$margin=5;$i=0;if(!empty($this->rs)){ foreach ($this->rs AS $row){ $i++;?>	
+			<table  width="100%" style="white-space: nowrap;font-size:10px;font-family: 'Khmer OS Battambang';" class="print" cellspacing="1"  cellpadding="0">
+				<thead>
+				<style>
+					table { page-break-inside:auto }
+					tr{ page-break-inside:avoid; page-break-after:auto }
+				</style>
+				<tr>
+					<td width="50%" align="right">
+						<table style="border: 2px solid #3dd833;height: 9cm;width: 6.8cm;font-size:11px;font-family: 'Khmer OS Battambang';color:#00007b;">
+							<tr style="">
+								<td colspan="3" valign="top" align="center" width="100%" style="line-height: 25px;white-space: nowrap;font-size: 14px;background-color: #ffc107;border-radius:10px;">
+									<div style="margin-top: 3px;">
+										<span style="font-family: 'Khmer OS Muol Light';">សាលាកម្ពុជា - អូស្ត្រាលី </span><br />
+										CAMBODIA - AUSTRALIA SCHOOL <br />
+										Quality Discipline Morality <br />
+									</div>
+									
+								</td>
+							</tr>
+							<?php 
+								$address_kh='អាសយដ្ឋាន<br />  អាគារលេខ ២D ផ្លូវលេខ៣៧១ សឡា <br /> 
+											 ភូមិ ទ្រា សង្កាត់ ស្ទឹងមានជ័យ <br /> ខណ្ឌ មានជ័យ រាជធានីភ្នំពេញ<br />
+											ទូរស័ព្ទលេខ: ០១៧ ៦៨៣ ៤៧៥ <br />  ឬ  ០៨៦ ៣៦ ៥០ ៥៨
+											<br />បណ្ណនេះប្រើប្រាស់សម្រាប់កិច្ចការ<br />សាលាតែប៉ុណ្ណោះ។';
+							?>
+							<tr>
+								<td align="center" valign="top"  colspan="3" style="line-height: 25px;font-size: 15px;"> 
+									<img style="width:35%;" src="<?php echo $this->baseUrl().'/images/style.png'?>">
+									<div style="margin-bottom: -15px; padding: 10px;">
+									
+										<?php echo $address_kh;?>
+										
+									</div>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<?php 
+						if($row['sex']=='1' ){
+							$sex_en = "Male";
+							$sex_kh = "ប្រុស";
+						}else{
+							$sex_en = "Female";
+							$sex_kh = "ស្រី";
+						}
+						$staff_id = explode('/', $row['teacher_code']);
+					?>
+					
+					<td width="50%">
+						<table style="white-space:nowrap; border: 2px solid #3dd833;height: 9cm;width: 6.8cm;font-size:11px;font-family: 'Khmer OS Battambang',Arial,sans-serif;color:#00007b;" cellspacing="0" cellpadding="0">
+							<tr height="0">
+								<td colspan="4" align="center">
+									<img style="width:25%;margin: 5px 0px;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+								</td>
+							</tr>
+							<tr style="height: 0;line-height:22px;">
+								<td colspan="4" align="center" valign="top" style="background: #ffc107;">
+									<div style="font-family: 'Khmer OS Muol Light';margin-top: 5px;">បណ្ណសម្គាល់ខ្លួនបុគ្គលិក</div>
+									<div style="margin-top: -4px;"><?php echo 'លេខ';?>: <label id="stu_code<?php echo $i;?>"></label></div>
+									
+									<script type="text/javascript">
+										letter = '<?php echo $staff_id['1']?>';
+										staff_code = '<?php echo $staff_id['0']?>';
+										result = convertEnglishToKhmerNumber(staff_code);
+										dojo.byId('stu_code<?php echo $i;?>').innerHTML=result + '/' + letter;
+									</script>
+								</td>
+							</tr>
+							<tr style="height: 0;line-height: 25px" >
+								<td width="25%">
+									&nbsp;&nbsp;ឈ្មោះ
+								</td>
+								<td width="50%">
+									: <span style="font-family: 'Khmer OS Muol Light';"><?php echo $row['teacher_name_kh'];?></span>
+								</td>
+								<td width="15%">
+									ភេទ :
+								</td>
+								<td width="12%">
+									<?php echo $sex_kh;?>
+								</td>
+							</tr>
+							
+							<tr style="height: 0;line-height: 18px">
+								<td >
+									&nbsp;&nbsp;Name
+								</td>
+								<td >
+									: <span style="font-family: 'Khmer OS Muol Light';"><?php echo $row['teacher_name_en'];?></span>
+								</td>
+								<td >
+									Sex :
+								</td>
+								
+								<td >
+									<?php echo $sex_en;?>&nbsp;
+								</td>
+							</tr>
+							
+							<tr style="height: 0;line-height: 18px">
+								<td >
+									&nbsp;&nbsp;<?php echo 'កាលកំណើត';?>
+								</td>
+								<td colspan="3">
+									: <label id="dob<?php echo $i;?>"></label>
+									<script type="text/javascript">
+									<?php if($row['dob']==null || $row['dob']==''){ ?>
+											dob = '';
+									<?php }else{?>
+											dob = 'ថ្ងៃទី ' + convertEnglishToKhmerNumber('<?php echo date('d',strtotime($row['dob']));?>')+' ខែ '+getKHMonthByNumber('<?php echo date('m',strtotime($row['dob']));?>')+' ឆ្នាំ '+ convertEnglishToKhmerNumber('<?php echo date('Y',strtotime($row['dob']));?>');
+											dojo.byId('dob<?php echo $i;?>').innerHTML=dob;
+									<?php }?>
+									</script>
+									
+								</td>
+							</tr>
+							
+							<tr style="height: 0;line-height: 18px">
+								<td >
+									&nbsp;&nbsp;<?php echo 'តួនាទី';?>
+								</td>
+								<td colspan="3">
+									: <?php echo $row['staff_position'];?>
+									
+								</td>
+							</tr>
+							
+							<tr style="height: 0;line-height: 18px">
+								<td >
+									&nbsp;&nbsp;<?php echo 'សុពលភាព';?>
+								</td>
+								<td colspan="3">
+								: <label id="year<?php echo $i;?>"></label>
+									<script type="text/javascript">
+										kh_date = 'ថ្ងៃទី '+convertEnglishToKhmerNumber('<?php echo date('d',strtotime($row['expired_date']));?>')+' ខែ '+getKHMonthByNumber('<?php echo date('m',strtotime($row['expired_date']));?>')+' ឆ្នាំ '+ convertEnglishToKhmerNumber('<?php echo date('Y',strtotime($row['expired_date']));?>');
+										dojo.byId('year<?php echo $i;?>').innerHTML=kh_date;
+									</script>
+								</td>
+							</tr>
+							
+							<tr>
+								<td colspan="4">
+									<table width="100%" style="font-size:11px;font-family: 'Khmer OS Battambang';color:#00007b;">
+										<tr>
+											<td width="3%">
+												&nbsp;
+											</td>
+											<td width="27%" >
+												<img style="width:100%;height: 80px;border: 1px solid rgba(0, 0, 0, 0.1);" src="<?php echo $this->baseUrl().'/images/'.$row['photo'];?>">
+											</td>
+											<td width="70%" align="center" valign="top" colspan="2">
+												<div style="margin-top: -5px;">
+													<?php echo 'ធ្វើនៅថ្ងៃទី';?> : <label id="create_date<?php echo $i;?>"></label>
+													<script type="text/javascript">
+														create_date = convertEnglishToKhmerNumber('<?php echo date('d');?>')+' ខែ '+getKHMonthByNumber('<?php echo date('m');?>')+' ឆ្នាំ '+ convertEnglishToKhmerNumber('<?php echo date('Y');?>');
+														dojo.byId('create_date<?php echo $i;?>').innerHTML=create_date;
+													</script>
+												
+												</div>
+												<div style="margin-top: -2px;font-family: Khmer OS Muol Light;"><?php echo 'នាយក';?></div><br />
+												<div style="margin-top: 15px;font-family: Khmer OS Muol Light;"><?php echo 'ផាន់ សិទ្ធី';?></div>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				</thead>
+			</table>
+		<?php }}?>
+		</div>
+		<table width="100%">
+			<tr>
+				<td align="center">
+					<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+					
+					<button dojoType="dijit.form.Button" id="printall" iconClass="dijitEditorIcon dijitEditorIconPrint"
+						type="button" onclick="print();">Print ID Card</button>
+						
+					
+				</td>
+				
+			</tr>
+		</table>
+		
+	</div>
+</div>
+
+	
+	
+	
+	

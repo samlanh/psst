@@ -1,0 +1,16 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("SRMS_SERVICE_PROGRAM"));
+?>	
+<?php $frm =  $this->frm_search;?>
+<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'program','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+<div dojoType="dijit.layout.AccordionPane">
+	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+	
+	<?php echo $frm->getElement('cate_name');?>
+	<?php echo $frm->getElement("title");?>
+	<?php echo $frm->getElement('status_search');?>
+	
+</div>
+<?php echo $this->list;?>
+</form>

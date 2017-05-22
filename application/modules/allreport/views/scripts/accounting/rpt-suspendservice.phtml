@@ -1,0 +1,131 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Report Student Suspend Service'); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm=$this->form_search;
+?>
+<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-suspendservice')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table style="width: 100%;">
+		<tr>
+			<td>
+				<input dojoType="dijit.form.TextBox" class="fullside"  id="txtsearch" name="txtsearch" placeholder="Search by student name....." value="<?php echo $this->search['txtsearch'];?>" type="text">
+			</td>
+			<td>
+				<?php echo $frm->getElement('service')?>
+			</td>
+			<td align="left">
+				<?php echo $frm->getElement('study_year')?>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input  dojoType="dijit.form.DateTextBox" class="fullside" showLabel="true" name="start_date" id="start_date" type="text" value="<?php echo $this->search['start_date'] ?>" >
+			</td>
+			<td>
+				<input  dojoType="dijit.form.DateTextBox" class="fullside" showLabel="true" name="end_date" id="end_date" type="text"  value="<?php echo $this->search['end_date'] ?>" >
+			</td>
+			<td>
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</td>
+		</tr>
+	</table>	
+</form>
+<style>
+#footer{display: none;}
+</style>	
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+		<div id="divPrint">
+		<div id="exportExcel" >
+			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm; ">
+							<tr>
+								<td width="15%" align="center">
+									<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+								</td>
+								<td align="center" width="70%">
+									<strong style=" padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php echo $tr->translate('STUDENT_STOP_SERVICE_REPORT');?></strong>
+								</td>
+								<td width="15%" align="center">
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" id="exportExcel">
+									<style> th,td{ padding:0 1px;}</style>
+										<style type="text/css">
+											body{font-family: "Times New Roman",Arial; }
+											table{ border-collapse:collapse; margin:0 auto;
+											border-color:#000; }
+											.padd tr td{  }
+											.padd tr th{  background-color: #ccc; }
+										</style>
+
+									<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family: 'Hanuman',Arial,serif !important;">
+												<style> td{padding:0 3px; }</style>
+										  <?php
+											$student_id =0;
+										 	 $i=0; $total=0;if (!empty($this->rs)){ foreach($this->rs as $rs){ $i++;
+										 	 if($rs['stu_id']!=$student_id){
+										  ?>
+										  <tr style="border-left: 1px solid #fff; border-right: 1px solid #fff; border-top: 1px solid #fff;"><td colspan="8">&nbsp;</td></tr>
+										  <tr style="font-size:10px; height: 23px; border-left: 1px solid #fff; border-right: 1px solid #fff; border-top: 1px solid #fff; "​>
+										  	<td align="left" colspan="8">
+										  		<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 11px;font-family:'Hanuman',Arial,serif !important;"><?php echo $tr->translate('STUDENT_ID').' : '.$rs['stu_code'] .' &nbsp;'.$tr->translate('STUDENT_NAME').' : '.$rs['en_name'].' &nbsp; '.$tr->translate('SEX').' : '.$rs['sex'].' &nbsp; '.$tr->translate('ACADEMIC_YEAR').' : '.$rs['academic'];?></strong><br />
+										  	</td>
+										  </tr>
+										   <tr style="font-size:11px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
+										    <td>&nbsp;<?php echo $tr->translate('N_O')?>&nbsp;</td>
+										    <td>&nbsp;<?php echo $tr->translate('RECEIPT_NO')?>&nbsp;</td>
+										    <td>&nbsp;<?php echo $tr->translate('SERVICE_NAME')?>&nbsp;</td>
+<!-- 											<td>&nbsp;Payment Term&nbsp;</td> -->
+											<td>&nbsp;<?php echo $tr->translate('SUSPEND_TYPE')?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('REASON')?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('NOTE')?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('CREATED_DATE')?>&nbsp;</td>
+										  </tr>
+										 <?php  }
+										 $student_id=$rs['stu_id'];
+										 	 
+										 ?>
+										   <tr class="hover" style="font-size:10px; height: 18px; border-bottom: 1px solid #000;"​ align="center">
+										  	<td><?php echo $i;?></td>
+										   	<td><?php echo $rs['suspend_no']; ?></td>
+										   	<td><?php echo $rs['service']; ?></td>
+										  	<td><?php echo $rs['type_suspend']; ?></td>
+										   	<td><?php echo $rs['reason']; ?></td>
+										   	<td><?php echo $rs['note']; ?></td>
+										   	<td><?php echo $rs['define_date']; ?></td>
+										   </tr>
+										  <?php } }?>
+									</table>
+									
+								</td>
+						</tr>
+						
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+						<tr >
+							<td colspan="3" width="100%">
+								<table width="100%" style="font-family: 'Khmer OS Battambang';">
+									<tr>
+										<td  width="25%" align="center">
+											<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+										</td>
+										<td  width="50%">
+											&nbsp;
+										</td>
+										<td align="center"  width="25%">
+											<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+	</div>	
+	</div>
+</div>
+

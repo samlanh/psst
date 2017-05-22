@@ -1,0 +1,70 @@
+<?php 
+     $url_save = $this->url(array('module'=>'accounting','controller'=>'productcategory','action'=>'add'));
+     $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
+     $status_view=$this->status_view;
+     $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    // print_r($status_view);exit();
+?>
+<title><?php echo $this->tr->translate("CATEGORY")?></title>
+<form id="add_province" action="<?php echo $url_save;?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+	 <script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			} else {
+				return false;
+			}
+	</script>
+	<table cellspacing="20" style="margin: 0 auto; width: 600px">
+		<tr>
+			<td>
+				<fieldset>
+					<legend align="center"><strong><?php echo $tr->translate("ADD_CATEGORY_AND_MEASURE");?></strong></legend>
+					<table cellspacing="20" width="100%" >
+						<tr>
+							<td align="center" valign="top">
+								<table style="margin: 0 auto; width:100%;" cellspacing="10">
+									<tr>
+										<td><?php echo $tr->translate("TYPE");?></td>
+										<td><select name="type" id="type" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+											        <option value="1"><?php echo $tr->translate("CATEGORY");?></option>
+											         <option value="2"><?php echo $tr->translate("MEASURE");?></option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("NAME_CATEGORY_KH");?></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="name_kh" name="name_kh" value="" type="text" required="required" ></td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("NAME_CATEGORY_EN");?></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="name_en" name="name_en" value="" type="text" ></td>
+									</tr>
+									
+									<tr>
+										<td><?php echo $tr->translate("STATUS");?></td>
+										<td><select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+											        <option value="1"><?php echo $tr->translate("ACTIVE");?></option>
+											         <option value="0"><?php echo $tr->translate("DEACTIVE");?></option>
+											</select>
+										</td>
+									</tr>
+									 
+									<tr>
+										<td colspan="2" align="center">
+											<input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
+											<input type="submit" value="save_close" name="save_close" label="Save&Close" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+										    <input type="submit" value="save_new" name="save_new" label="Save&New" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+										</td>
+									</tr>					
+								</table>
+							</td>							
+						</tr>
+					</table>	
+				</fieldset>
+			</td>			
+		</tr>
+		
+	</table>	
+</form> 

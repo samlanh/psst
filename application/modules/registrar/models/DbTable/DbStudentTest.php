@@ -79,6 +79,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$s_where[] = " kh_name LIKE '%{$s_search}%'";
 				$s_where[] = " en_name LIKE '%{$s_search}%'";
 				$s_where[] = " old_school LIKE '%{$s_search}%'";
+				$s_where[] = " old_grade LIKE '%{$s_search}%'";
 				$where .=' AND ('.implode(' OR ',$s_where).')';
 		}
 	       

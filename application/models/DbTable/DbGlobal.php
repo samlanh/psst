@@ -114,12 +114,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $session_user->user_id;
    }
    
-   public function getDeptById($dept_id){
-   		$db = $this->getAdapter();
-   		$sql=" SELECT * FROM `rms_dept`
-   		WHERE `dept_id` = ".$db->quote($dept_id);
-   		return $db->fetchRow($sql);
-   }
+   
    public function getProvince(){
    	$db = $this->getAdapter();
    	$sql ="SELECT province_en_name,province_id FROM rms_province WHERE is_active=1 AND province_en_name!='' ";

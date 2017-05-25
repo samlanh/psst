@@ -76,9 +76,9 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 		$this->view->row_year=$db_homwork->getAllYears();
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$this->view->session=$db_global->getSession();
-		$this->view->degree=$db_global->getDegree();
-		$this->view->room = $row =$db_global->getAllRoom();
+		$this->view->session = $db_global->getSession();
+		$this->view->degree = $db_global->getDegree();
+		$this->view->room = $db_global->getAllRoom();
 		//get subject id
 	}
 	

@@ -84,6 +84,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $db = new Registrar_Model_DbTable_DbRegister();
        $this->view->all_student_code = $db->getAllGerneralOldStudent();
        $this->view->all_student_name = $db->getAllGerneralOldStudentName();
+       
+       $this->view->all_student_test = $db->getAllStudentTested();
+       
        $this->view->all_year = $db->getAllYears();
        $this->view->all_session = $db->getAllSession();
        $this->view->all_paymentterm = $db->getAllpaymentTerm();
@@ -156,10 +159,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$this->view->all_service = $db->getAllService();
     	$this->view->all_room = $db->getAllRoom();
     	
-    	$this->view->province = $db->getAllProvince();
-    	$this->view->district = $db->getAllDistrict();
-    	$this->view->commune = $db->getAllCommune();
-    	$this->view->village = $db->getAllVillage();
+    	//$this->view->province = $db->getAllProvince();
+//     	$this->view->district = $db->getAllDistrict();
+//     	$this->view->commune = $db->getAllCommune();
+//     	$this->view->village = $db->getAllVillage();
     	
     	$test = $this->view->branch_info = $db->getBranchInfo();
     	
@@ -267,6 +270,17 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$receipt = $db->getRecieptNo();
 			//array_unshift($teacher, array ( 'id' => -1, 'name' => 'select teacher') );
 			print_r(Zend_Json::encode($receipt));
+			exit();
+		}
+	}
+	
+	function getStudentTestInfoAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$stu_info = $db->getStudentTestInfo($data['stu_test_id']);
+			//array_unshift($teacher, array ( 'id' => -1, 'name' => 'select teacher') );
+			print_r(Zend_Json::encode($stu_info));
 			exit();
 		}
 	}

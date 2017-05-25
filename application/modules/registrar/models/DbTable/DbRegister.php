@@ -124,16 +124,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);
 					
 					
-					$id_updated = $this->getIdRecordUpdated($id);
-					
-					$this->_name='rms_study_history';
-					$array = array(
-							'is_finished'=> 1,
-							'finished_date'=> date('Y-m-d'),
-							);
-					$where = " stu_id = ".$id; 
-					$this->update($array, $where);
-					
 					
 				}else {
 					$stu_type='';
@@ -200,8 +190,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'year'			=>$data['study_year'],
 						'degree'		=>$data['dept'],
 						'grade'			=>$data['grade'],
-						'time'			=>$data['study_hour'],
 						'session'		=>$data['session'],
+						'time'			=>$data['study_hour'],
 						'room_id'		=>$data['room'],
 						'payment_term'	=>$data['payment_term'],
 						
@@ -231,11 +221,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$paymentid = $this->insert($arr);
 				
 				
-				if(!empty($id_updated)){
-					$parent = $id_updated ;
-				}else{
-					$parent = '';
-				}
 				
 				//echo $parent;exit();
 				
@@ -254,10 +239,26 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'user_id'	=> $this->getUserId(),
 						'branch_id'	=>$this->getBranchId(),
 						'payment_id'=>$paymentid,
-						'is_parent' =>$parent,
+						//'is_parent' =>$parent,
 						'create_date'=>date('Y-m-d H:i:s'),
 				);
 				$this->insert($array);
+				
+				
+	/////////////////////// rms_student_test ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
+				$this->_name='rms_student_test';
+				
+				if($data['stu_test']>0){
+					
+					$array = array(
+							'register'=>1,
+							);
+					$where= " id = ".$data['stu_test'];
+					$this->update($array, $where);
+				}
+				
+				
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 				
 //update is_start=0 ដើម្បីអោយដឹងថា Service និង ឈប់ប្រើ រឺ  expired នៅពេលដែលសិស្សចាស់បង់លុយម្តងទៀត រួច store ID record that updated in is_parent of new record
 	            $service = 4; // លេខ 4 ជាសេវាកម្មចុះឈ្មោះចូលរៀន
@@ -2016,5 +2017,30 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
     
+	
+	function getAllStudentTested(){
+		$db=$this->getAdapter();
+		 
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$branch_id = $_db->getAccessPermission();
+		 
+		$sql="select id,CONCAT(kh_name,'-',en_name)as name from rms_student_test where status=1 and register=0 $branch_id  ORDER BY id DESC ";
+		return $db->fetchAll($sql);
+	}
+	
+	
+	function getStudentTestInfo($stu_test_id){
+		$db=$this->getAdapter();
+		$sql="select * from rms_student_test where id = $stu_test_id ";
+		return $db->fetchRow($sql);
+	}
+	
+	
 }
+
+
+
+
+
+
 

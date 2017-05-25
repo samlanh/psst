@@ -447,7 +447,7 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("STUDENT_TYPE");?></td>
 							<td>
 								<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="changControll();" >
-									<option value="1">New Student</option>
+									<option value="1">Tested Student</option>
 									<option value="3">Old Student</option>
 								</select>
 							</td>
@@ -489,8 +489,13 @@ fieldset{  background:none;}
 										<?php }}?>
 									</select>
 								</div>
-								<div id="name_stu">
-									<input type="text"  name="stu_name" id="stu_name" readonly="true" class="fullside" dojoType="dijit.form.TextBox" />
+								<div id="stu_tested">
+									<select type="text" name="stu_test" id="stu_test" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getStudentTestInfo();"  >
+										<option value="0">--- Select Student Tested ---</option>
+										<?php if(!empty($this->all_student_test)){foreach ($this->all_student_test as $all_student_test){?>
+										<option value="<?php echo $all_student_test['id']?>"><?php echo $all_student_test['name']?></option>
+										<?php }}?>
+									</select>
 								</div>
 							</td>
 							
@@ -1325,13 +1330,13 @@ function changControll(){
 		 document.getElementById('student_old').style.display="block";
 		 document.getElementById('student_old_name').style.display="block";
 		 document.getElementById('id_stu').style.display="none";
-		 document.getElementById('name_stu').style.display="none";
+		 document.getElementById('stu_tested').style.display="none";
 		 clearControll();
 	}else{
 		 document.getElementById('student_old').style.display="none";
 		 document.getElementById('student_old_name').style.display="none";
 		 document.getElementById('id_stu').style.display="block";
-		 document.getElementById('name_stu').style.display="block";
+		 document.getElementById('stu_tested').style.display="block";
 		 clearControll();
 	} 
 }
@@ -2138,6 +2143,38 @@ function getservicefee(key){
 			dijit.byId("terms").show();	
 		}
 	}
+/////////////// get student test info ////////////////////////////////////////////////////////
+
+var url_student_test = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-student-test-info')); ?>";
+	function getStudentTestInfo(){
+		stu_test = dijit.byId('stu_test').get('value');
+	 	dojo.xhrPost({
+	 		url:url_student_test,
+	 		content:{
+	 			'stu_test_id':stu_test,
+	 			},
+	 		handleAs:"json",
+	 		load: function(data) {
+		 		//alert(data);
+	 			dijit.byId("kh_name").attr("value",data.kh_name);
+				dijit.byId("en_name").attr("value",data.en_name);
+				dijit.byId("sex").attr("value",data.sex);
+				dijit.byId("dob").attr("value",data.dob);
+				dijit.byId("parent_phone").attr("value",data.phone);
+	 		},
+	 		error: function(err) {
+	 			alert(err);
+	 		}
+	 	});	 
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 </script>
 <div class="overlay">
 	<div class="overlay-load">

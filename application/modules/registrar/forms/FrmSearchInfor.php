@@ -38,6 +38,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$opt = array(''=>$this->tr->translate("SELECT_YEAR"));
 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'].' '.$row['time'];
 		$generation->setMultiOptions($opt);
+		
+		
 		$_session = new Zend_Dojo_Form_Element_FilteringSelect('session');
 		$_session->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -51,6 +53,23 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$opt_session = array(''=>$this->tr->translate("SESSION"));
 		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
 		$_session->setMultiOptions($opt_session);
+		
+		
+		
+		$_room = new Zend_Dojo_Form_Element_FilteringSelect('room');
+		$_room->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>false
+		));
+		$_room->setValue($request->getParam("room"));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$result = $db->getAllRoom();
+		$opt_room = array(''=>$this->tr->translate("ROOM_NAME"));
+		if(!empty($result))foreach ($result As $rs)$opt_room[$rs['id']]=$rs['name'];
+		$_room->setMultiOptions($opt_room);
+		
+		
 		
 		$_time = new Zend_Dojo_Form_Element_FilteringSelect('time');
 		$_time->setAttribs(array('dojoType'=>$this->filter,
@@ -261,7 +280,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$branch_id->setMultiOptions($opt);
 	
-		$this->addElements(array($branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
+		$this->addElements(array($_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 		return $this;
 	} 
 

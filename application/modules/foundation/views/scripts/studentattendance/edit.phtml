@@ -98,7 +98,8 @@ dojo.ready(function(){
 		    	//filterStudent();
 		    }
 		}, "subject");
-		
+
+		<?php /*?>
 		new dijit.form.FilteringSelect({
 			//store: dept_store,
 			autoComplete: true,                        
@@ -111,6 +112,8 @@ dojo.ready(function(){
 				//filterStudent();
 			}
 		}, "grade");
+		<?php */?>
+		
 		getInfoBygroup(1);
 		initailize();
 });
@@ -130,7 +133,6 @@ function filterGrade(){
 				//alert(data);
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);  
-			    dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
 			    //if(a!=""){
 			    //	dijit.byId('grade').attr('value',a);
 		        //}
@@ -264,7 +266,7 @@ function gender(sex){
 							</td>
 							<td ><?php echo $tr->translate("DEGREE");?></td>
 							<td>
-								<select id="degree" name="degree" onchange="filterGrade();" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+								<select id="degree" name="degree" onchange="" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
 									<option value="-1"> ------ select degree---------</option>
 								<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
 									<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
@@ -275,8 +277,12 @@ function gender(sex){
 						<tr>
 							<td ><?php echo $tr->translate("GRADE");?></td>
 							<td>
-								<input id="grade" />
-								<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
+								<select id="grade" name="grade" onchange="" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+									<option value="-1"> ------ select grade---------</option>
+									<?php if(!empty($this->grade)){foreach ($this->grade as $grade){?>
+										<option value="<?php echo $grade['id'];?>"><?php echo $grade['name'];?></option>
+									<?php }}?>
+								</select>
 							</td>
 							<td ><?php echo $tr->translate("SESSION");?></td>
 							<td>
@@ -300,7 +306,7 @@ function gender(sex){
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("ATTENDANCE_DATE");?></td>
-							<td><input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="attendence_date" name="attendence_date" type="text" value="<?php echo date("Y-m-d");?>"></td>
+							<td><input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="attendence_date" constraints="{datePattern:'dd/MM/yyyy'}" name="attendence_date" type="text" value="<?php echo $this->row['date_attendence'];?>"></td>
 						    <td ><?php echo $tr->translate("STATUS");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
@@ -447,7 +453,6 @@ function getInfoBygroup(type=null){
 			
 			dijit.byId('grade').set('value',data.grade);
 			dijit.byId('grade').set('readOnly',true);
-			dijit.byId('grade_fromgrouop').set('value',data.grade);
 			
 			dijit.byId('session').set('value',data.session);
 			dijit.byId('session').set('readOnly',true);

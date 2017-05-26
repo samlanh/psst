@@ -1,9 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_SCORE"));
-	$row_sub=$this->rows_sub;
-	 $score = $this->rows_detail;
-	 $student = $this->student;
+	$score = $this->rows_detail;
+	$student = $this->student;
 	$db_score = new Foundation_Model_DbTable_DbScore();	 
 ?>	
 <head>
@@ -15,14 +14,6 @@
   <link rel="stylesheet" href="/resources/demos/style.css">
 </head>
 
-<?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	//echo $this->headTitle($tr->translate('ADD_FEE')); 
-	$payment_term = $this->payment_term;
-	$rs_sub=$this->rows_sub;
-	
-?>	
- 
 	<script>
 		dojo.require("dojo.NodeList-manipulate");
 		dojo.require("dojo.parser");

@@ -252,7 +252,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$where.= " AND s.group_id =".$search['group_name'];
 		}
 		if(!empty($search['study_year'])){
-			$where.=" AND s.academic_id =".$search['study_year'];
+			$where.=" AND g.academic_year =".$search['study_year'];
 		}
 		if(!empty($search['grade'])){
 			$where.=" AND `g`.`grade` =".$search['grade'];
@@ -260,17 +260,14 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		if(!empty($search['session'])){
 			$where.=" AND `g`.`session` =".$search['session'];
 		}
+		if(!empty($search['room'])){
+			$where.=" AND `g`.`room_id` =".$search['room'];
+		}
 		$order=" ORDER BY id DESC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
 
-	function getAllYears(){
-		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
-		GROUP BY from_academic,to_academic,generation";
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
+	
 	function getScoreById($score_id){
 		$db=$this->getAdapter();
 		$sql="SELECT * FROM rms_score WHERE id=$score_id";

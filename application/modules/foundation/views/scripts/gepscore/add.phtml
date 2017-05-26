@@ -1,8 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_NEW_STUDENT_SCORE"));
-	$row_sub=$this->rows_sub;
-	//print_r($this->rows_parent);
 ?>	
 <head>
   <meta charset="utf-8">
@@ -13,13 +11,6 @@
   <link rel="stylesheet" href="/resources/demos/style.css">
 </head>
 
-<?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	//echo $this->headTitle($tr->translate('ADD_FEE')); 
-	$payment_term = $this->payment_term;
-	$rs_sub=$this->rows_sub;
-	
-?>	
  
 <script>
 dojo.require("dojo.NodeList-manipulate");

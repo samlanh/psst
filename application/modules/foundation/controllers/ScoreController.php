@@ -14,7 +14,6 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 			$this->view->g_all_name=$db->getGroupSearch();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-				$this->view->g_name=$search;
 			}
 			else{
 				$search = array(
@@ -26,6 +25,10 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}
+			
+			$this->view->search = $search;
+			
+			
 			$rs_rows = $db->getAllScore($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
@@ -67,19 +70,14 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-	
-		$db_homwork=new Global_Model_DbTable_DbHomeWorkScore();
-		$this->view->row_year=$db_homwork->getAllYears();
+		
+		
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();
-		$this->view->rows_sub=$db_homwork->getSubjectId();
 	
 	
-		$db_homwork=new Global_Model_DbTable_DbHomeWorkScore();
-		$this->view->rows_sub=$db_homwork->getSubjectId();
-		$this->view->rows_parent=$db_homwork->getParent();
-		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$result= $db_global->getAllgroupStudy();
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
@@ -111,20 +109,13 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 		$data=$this->view->rows_detail=$_model->getSubjectById($id);
 		$this->view->row_g=$_model->getGroupStudent($id);
 		
-		$db_homwork=new Global_Model_DbTable_DbHomeWorkScore();
-		$this->view->row_year=$db_homwork->getAllYears();
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();
-		$this->view->rows_sub=$db_homwork->getSubjectId();
 	
-	
-		$db_homwork=new Global_Model_DbTable_DbHomeWorkScore();
-		$this->view->rows_sub=$db_homwork->getSubjectId();
-		$this->view->rows_parent=$db_homwork->getParent();
-		
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result= $db_global->getAllgroupStudy();
+		$result = $db_global->getAllgroupStudy();
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		

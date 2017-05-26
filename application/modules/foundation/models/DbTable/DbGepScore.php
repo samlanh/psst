@@ -23,15 +23,9 @@ class Foundation_Model_DbTable_DbGepScore extends Zend_Db_Table_Abstract
 	public function addStudentScore($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		$db_sub = new Global_Model_DbTable_DbHomeWorkScore();
 		try{
 			$_arr = array(
 					'group_id'=>$_data['group'],
-					'academic_id'=>$_data['year_study'],
-// 					'degree'=>$_data['degree'],
-// 					'grade'=>$_data['grade'],
-// 					'session_id'=>$_data['session'],
-					
 					'reportdate'=>$_data['reportdate'],
 					'date_input'=>date("Y-m-d"),
 					'status'=>$_data['status'],
@@ -126,7 +120,6 @@ class Foundation_Model_DbTable_DbGepScore extends Zend_Db_Table_Abstract
 		//print_r($_data);exit();
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		$db_sub = new Global_Model_DbTable_DbHomeWorkScore();
 		try{			
 			$_arr = array(
 					'group_id'=>$_data['group'],

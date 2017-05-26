@@ -72,19 +72,10 @@ class Foundation_GepscoreController extends Zend_Controller_Action {
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 		
-		$db_homwork=new Global_Model_DbTable_DbHomeWorkScore();
-		$this->view->row_year=$db_homwork->getAllYears();
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();
-		$this->view->rows_sub=$db_homwork->getSubjectId();
-	
-	
-		$db_homwork=new Global_Model_DbTable_DbHomeWorkScore();
-		$this->view->rows_sub=$db_homwork->getSubjectId();
-		$this->view->rows_parent=$db_homwork->getParent();
-		
-		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->room = $row =$db_global->getAllRoom();
 			
 	}

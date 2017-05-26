@@ -37,9 +37,9 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
     	if(!empty($search['session'])){
     		$where.=" AND (SELECT  `g`.`session` FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1)=".$search['session'];
     	}
-    	// 		if(!empty($search['time'])){
-    	// 			$where.=" AND sp.time=".$search['time'];
-    	// 		}
+   		if(!empty($search['room'])){
+			$where.=" AND (select `g`.`room_id` FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1 )=".$search['room'];
+		}
     	$order=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$where.$order);
     }

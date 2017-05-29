@@ -20,8 +20,8 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	$where= ' ';
     	$order=" ORDER BY id DESC ";
     	
-    	$from_date =(empty($search['start_date']))? '1': "date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': " create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= "  AND ".$from_date." AND ".$to_date;
     	
     	

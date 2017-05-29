@@ -9,7 +9,6 @@ class Global_RoomController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-			$db_dept=new Global_Model_DbTable_DbDept();
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = array(
@@ -49,7 +48,11 @@ class Global_RoomController extends Zend_Controller_Action {
    		try {
    			$_dbmodel = new Global_Model_DbTable_DbRoom();
    			$_major_id = $_dbmodel->addNewRoom($_data);
-   			Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
+   			if(isset($_data['save_close'])){
+   				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !","/global/room/index");
+   			}else{
+   				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !","/global/room/add");
+   			}
    
    		} catch (Exception $e) {
    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");

@@ -209,6 +209,15 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							<td ><?php echo $tr->translate("DOB");?></td>
 							<td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="date_of_birth" id="date_of_birth" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->rs['dob'];?>" type="text"/></td>
 							
+							<td><?php echo $tr->translate("PARENT_PHONE");?></td>
+							<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="phone" name="phone" value="<?php echo $this->rs['tel'];?>" type="text" ></td>
+						</tr>
+						<tr>			
+							<td><?php echo $tr->translate("POB");?></td>
+							<td colspan="3">
+								<textarea class="fullside"  style=" height: 60px !important;" tabindex="20" id="pob" name="pob"  ><?php echo $this->rs['pob'];?></textarea>
+							</td>
+							
 							<td ><?php echo $tr->translate("PHOTO");?></td>
 							<td>
 								<?php echo $photo->getElement('photo');?>

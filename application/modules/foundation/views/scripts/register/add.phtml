@@ -200,11 +200,20 @@ function getStudentNo(){
 									</td>
 					      		</tr>
 					      		<tr>
-									<td title="សញ្ឃាតិ"><?php echo $tr->translate("NATIONALITY");?></td>
+									<td><?php echo $tr->translate("NATIONALITY");?></td>
 									<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="studen_national" name="studen_national"  type="text" ></td>
 									
-									<td title="ថ្ងៃខែឆ្នាំកំនើត"><?php echo $tr->translate("DOB");?></td>
+									<td><?php echo $tr->translate("DOB");?></td>
 									<td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="date_of_birth" id="date_of_birth" dojoType="dijit.form.DateTextBox"  value="<?php echo date("2000-m-d")?>" type="text"/></td>
+									
+									<td><?php echo $tr->translate("PARENT_PHONE");?></td>
+									<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="phone" name="phone"  type="text" ></td>
+								</tr>
+					      		<tr>	
+									<td><?php echo $tr->translate("POB");?></td>
+									<td colspan="3">
+										<textarea class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="pob" name="pob"  ></textarea>
+									</td>
 									
 									<td ><?php echo $tr->translate("PHOTO");?></td>
 									<td><?php echo $photo->getElement('photo');?></td>
@@ -250,7 +259,7 @@ function getStudentNo(){
 									</td>
 					      		</tr>
 					      		<tr>
-					      			<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("ACADEMIC_YEAR");?>*</td>
+					      			<td><?php echo $tr->translate("ACADEMIC_YEAR");?>*</td>
 									<td>
 										<select class="fullside" tabindex="14" dojoType="dijit.form.FilteringSelect"  id="academic_year" name="academic_year" placeholder="----- Select Year -----" value="" type="text" >
 											<?php if(!empty($this->year))foreach ($this->year as $rows){?>
@@ -273,10 +282,10 @@ function getStudentNo(){
 									</td>
 								</tr>
 								<tr>
-									<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("STUDENT_ID");?>*</td>
+									<td><?php echo $tr->translate("STUDENT_ID");?>*</td>
 									<td><input  style="color: red;" class="fullside" tabindex="14" dojoType="dijit.form.TextBox"  id="student_id" name="student_id" value="" readonly="readonly" type="text" ></td>
 									
-									<td><?php echo $tr->translate("SESSION");?>*</td>
+									<td><?php echo $tr->translate("SESSION");?></td>
 									<td>
 									    <select class="fullside"  tabindex="18" name="session" id="session" dojoType="dijit.form.FilteringSelect" >
 										    <option value="1" label="morning"><?php echo $tr->translate("MORNING");?></option>
@@ -286,7 +295,7 @@ function getStudentNo(){
 										</select>
 									</td>
 									
-									<td title="កំរិតភាសា"><?php echo $tr->translate("ROOM_NAME");?>*</td>
+									<td><?php echo $tr->translate("ROOM_NAME");?></td>
 									<td>
 									   <select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" >
 									   		<option value="-1"> Select Room</option>
@@ -299,16 +308,16 @@ function getStudentNo(){
 								
 					      		</tr>
 					      		<tr>
-					      			<td title="ស្ថានការណ៍"><?php echo $tr->translate("STATUS");?>*</td>
+					      			<td><?php echo $tr->translate("STATUS");?></td>
 									<td>
 										<select class="fullside" tabindex="19" dojoType="dijit.form.FilteringSelect"   id="status" name="status" type="text">								
 											<option value="1" ><?php echo $this->translate("Active")?></option>
 											<option value="0" ><?php echo $this->translate("Deactive")?></option>
 										</select>
 									</td>
-									<td title="ពណ៌នា"><?php echo $tr->translate("REMARK");?>*</td>
+									<td title="ពណ៌នា"><?php echo $tr->translate("REMARK");?></td>
 									<td  colspan="3" >
-										<textarea class="fullside" dojoType="dijit.form.ValidationTextBox" style=" height: 60px !important;"
+										<textarea class="fullside"  style=" height: 60px !important;"
 										tabindex="20" dojoType=""  id="remark" name="remark"  ></textarea>
 									</td>
 					      		</tr>

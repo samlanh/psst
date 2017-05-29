@@ -23,6 +23,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'phone'		=>$data['phone'],
 					'old_school'=>$data['old_school'],
 					'old_grade'	=>$data['old_grade'],
+					'create_date'=>date('Y-m-d'),
 				);
 		$this->insert($array);
  	}

@@ -69,24 +69,23 @@
 										    <td>&nbsp;<?php echo $tr->translate("RECEIPT_NO"); ?>&nbsp;</td>
 										    <td>&nbsp;<?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("YEARS"); ?>&nbsp;</td>
 											<!-- <td>&nbsp;<?php //echo $tr->translate("RECEIPT"); ?>&nbsp;</td> -->
 											<td>&nbsp;<?php echo $tr->translate("SERVICE_NAME"); ?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("PAYMENT_TERM"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("TUITION_FEE"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("QTY"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("DISCOUNT"); ?>(%)&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("ADMIN_FEE"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("FEE"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Qty"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Dis.");?>(%)&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Admin"); ?>&nbsp;</td>
 											<!--<td>&nbsp;<?php //echo $tr->translate("OTHER_FEE"); ?>&nbsp;</td>-->
-											<td>&nbsp;<?php echo $tr->translate("TOTALE"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("PAID_AMOUNT"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("BALANCE"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("PAID_DATE"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("START_DATE"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("VALIDATE"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("REMARK"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Total"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Paid"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Balance"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Paid Date"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Start"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Validate"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Note"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("User"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Status"); ?>&nbsp;</td>
 										  </tr>
 										 
 										 <style> 
@@ -109,7 +108,6 @@
 										    <td><?php echo $rs['receipt_number']; ?></td>
 										    <td><?php echo $rs['stu_code']; ?></td>
 										    <td style=" white-space:nowrap; text-align:left"> <?php echo $rs['stu_enname']; ?> </td>
-										    <td><?php echo $rs['year']; ?></td>
 										    <!--<td><a style=" text-decoration: none; color:#000;" ><?php //echo $rs['receipt_number']; ?></a></td> -->
 										    <td style="text-align:left"><?php echo $rs["service_id"]; ?></td>
 										    <td style="text-align:center"><?php echo $rs["payment_term"]; ?></td>
@@ -214,13 +212,13 @@
 											<td align="center" colspan="8" ><strong> Other Income </strong> </td>
 										</tr>
 													
-										<tr style="font-size:11px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
+										<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('TITLE')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('CURRENCY_TYPE')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL')?></td>
-											<td style="border: 1px solid #000;"><?php echo $tr->translate('DATE')?></td>
+											<td style="border: 1px solid #000;"><?php echo $tr->translate('FOR_DATE')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('USER')?></td>
 										</tr>
 										 
@@ -289,13 +287,13 @@
 											<td align="center" colspan="8" ><strong> Other Expense </strong> </td>
 										</tr>
 													
-										<tr style="font-size:11px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
+										<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('TITLE')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('CURRENCY_TYPE')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL')?></td>
-											<td style="border: 1px solid #000;"><?php echo $tr->translate('DATE')?></td>
+											<td style="border: 1px solid #000;"><?php echo $tr->translate('FOR_DATE')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('USER')?></td>
 										</tr>
 										 

@@ -11,17 +11,13 @@
 	dojo.require("dojo.NodeList-manipulate");
 	
 	dojo.ready(function(){ 
-		initailize();
+		 initailize();
 		 getStudentInfo();
 		 dijit.byId('suspend_no').attr('value','<?php echo $this->id['suspend_no'];?>');
 		 dijit.byId('study_year').attr('value','<?php echo $this->id['year']?>');
+		 dijit.byId("study_year").set('readOnly',true);
 	});	
 
-	dojo.addOnLoad(function(){
-		   // document.musicPrefs.other.value="Afrobeat";
-			//getStudentBYId();
-		});
-	
 </script>
 <style>
 select{ width:100%;}
@@ -50,22 +46,22 @@ fieldset{  background:none;}
 						<tr>
 							<td><?php echo $tr->translate("STUDENT_ID");?></td>
 							<td>
-								<select class="fullside"  name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" onchange="getStudentInfo();" >
-									<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
-										<option value="<?php echo $row['stu_id']?>"<?php if($row['stu_id']==$this->id['student_id']) echo "selected='Selected'"?>><?php echo $row['stu_code']?></option>
+								<select class="fullside" readOnly="readOnly"  name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" onchange="" >
+									<?php if(!empty($this->stu_code))foreach ($this->stu_code as $stu_code){?>
+										<option value="<?php echo $stu_code['stu_id']?>"<?php if($stu_code['stu_id']==$this->id['student_id']) echo "selected='Selected'"?>><?php echo $stu_code['stu_code']?></option>
 									<?php }?>
 								</select>
 							</td>	
-							<td><?php echo $tr->translate("NAME_KH");?></td>
-							<td><?php echo $register->getElement('kh_name');?></td>
-						</tr>
-						<tr>
-						   
-							<td><?php echo $tr->translate("NAME_EN");?></td>
-							<td><?php echo $register->getElement('en_name');?></td>
 							
-							<td><?php echo $tr->translate("SEX");?></td>
-							<td><?php echo $register->getElement('sex');?></td>
+							<td><?php echo $tr->translate("STUDENT_ID");?></td>
+							<td>
+								<select class="fullside" readOnly="readOnly"  name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" onchange="" >
+									<?php if(!empty($this->stu_name))foreach ($this->stu_name as $stu_name){?>
+										<option value="<?php echo $stu_name['stu_id']?>"<?php if($stu_name['stu_id']==$this->id['student_id']) echo "selected='Selected'"?>><?php echo $stu_name['name']?></option>
+									<?php }?>
+								</select>
+							</td>
+							
 						</tr>
 						<tr>
 							<td colspan="4" align="left">
@@ -208,27 +204,27 @@ function dateReadonly(key) {
 	}
 }
 
-var url_student_info = "<?php echo $this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'get-student')); ?>";
+var url_student_info = "<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'get-student')); ?>";
 function getStudentInfo(){
-			studentid = dijit.byId('studentid').get('value');
-			//alert(studentid);
-			dojo.xhrPost({
-				url:url_student_info,
-				content:{
-					'studentid':studentid
-					},
-				handleAs:"json",
-				load: function(data) {
-					//alert(data);
-					//alert(data.sex);
-					dijit.byId("kh_name").attr("value",data.stu_khname);
-					dijit.byId("en_name").attr("value",data.stu_enname);
-					dijit.byId("sex").attr("value",data.sex);
+		studentid = dijit.byId('studentid').get('value');
+		//alert(studentid);
+		dojo.xhrPost({
+			url:url_student_info,
+			content:{
+				'studentid':studentid
 				},
-				error: function(err) {
-					alert(err);
-				}
-			});
+			handleAs:"json",
+			load: function(data) {
+				//alert(data);
+				//alert(data.sex);
+				//dijit.byId("kh_name").attr("value",data.stu_khname);
+				//dijit.byId("en_name").attr("value",data.stu_enname);
+				//dijit.byId("sex").attr("value",data.sex);
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
 }
 
 function deleteRecord(index) {

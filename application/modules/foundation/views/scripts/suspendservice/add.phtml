@@ -4,12 +4,6 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
 
-<?php 
-
-// 	echo Zend_Date::now();exit();
-
-?>
-
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
 <script type="text/javascript">
@@ -17,7 +11,6 @@
 	dojo.require('dojox.form.BusyButton');
 	dojo.require("dojo.NodeList-manipulate");
 	
-	//var student_store  = getDataStorefromJSON('id','name', <?php //print_r(Zend_Json::encode($this->rs));?> );
 	dojo.ready(function(){ 
 		addRow();
 		new dijit.form.FilteringSelect({
@@ -29,13 +22,7 @@
 		    class: 'fullside',  
 		    placeHolder:"Selected Student id",          
 		    onChange: function() {  
-		    	//dept_id = dijit.byId('dept').get('value');
-		    	//dijit.byId('grade').attr('value','');
-		    	//getallModel(dept_id,a=''); 
-		    	//getStudentNo(dept_id);
-		    	//getStudentInfo();
 		    	setID(1);
-		    	 
 		    }
 		}, "studentid");
 		
@@ -48,11 +35,6 @@
 		    class: 'fullside',  
 		    placeHolder:"Selected Student Name",          
 		    onChange: function() {  
-		    	//dept_id = dijit.byId('dept').get('value');
-		    	//dijit.byId('grade').attr('value','');
-		    	//getallModel(dept_id,a=''); 
-		    	//getStudentNo(dept_id);
-		    	//getStudentInfo();
 		    	setID(2); 
 		    }
 		}, "student_name");

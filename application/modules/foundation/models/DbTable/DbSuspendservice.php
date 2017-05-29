@@ -1,5 +1,5 @@
 <?php
-class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
+class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'rms_suspendservice';
@@ -100,30 +100,25 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    		
    		foreach ($ids as $i){
    			$idedit = $this->getIdEdit($data['id'],$data['service_'.$i]);
-   			
-   			echo $idedit; 
-   			
-   			if($data['status_'.$i]==0){
-   				
-   				$this->_name = 'rms_student_paymentdetail';
-					$array=array(
-						'is_suspend'	=> 0,
-						'is_start'		=>1,
-						);
-   				$where=" id=".$idedit;
-   				$this->update($array, $where);
-   				
-   			}else{
-   				
-   				$this->_name = 'rms_student_paymentdetail';
-//    				print_r($id);exit();
-   				$array=array(
-   						'is_suspend'	=> $data['type_'.$i],
-   						'is_start'		=>0,
-   				);
-   				$where=" id=".$idedit;
-   				$this->update($array, $where);
-   				
+   			if(!empty($idedit)){
+	   			if($data['status_'.$i]==0){
+	   				$this->_name = 'rms_student_paymentdetail';
+						$array=array(
+							'is_suspend'	=> 0,
+							'is_start'		=>1,
+							);
+	   				$where=" id = ".$idedit;
+	   				$this->update($array, $where);
+	   			}else{
+	   				$this->_name = 'rms_student_paymentdetail';
+	   				$array=array(
+	   						'is_suspend'	=> $data['type_'.$i],
+	   						'is_start'		=>0,
+	   				);
+	   				$where = "id = $idedit";
+	   				
+	   				$this->update($array, $where);
+	   			}
    			}
    			
    			$this->_name = 'rms_suspendservicedetail';
@@ -213,6 +208,12 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    	return $db->fetchAll($sql);
    }
    
+   public function getAllStudentName(){
+   	$db = $this->getAdapter();
+   	$sql="SELECT stu_id,CONCAT(stu_khname,'-',stu_enname) as name  FROM rms_student ORDER BY  stu_code DESC ";
+   	return $db->fetchAll($sql);
+   }
+   
    function getStudentID($acacemic){
    	$db=$this->getAdapter();
    	$sql="SELECT stu_id As id,stu_code As name  FROM rms_student  WHERE academic_year=$acacemic";
@@ -221,7 +222,7 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    
    function getStudentName($acacemic){
    	$db=$this->getAdapter();
-   	$sql="SELECT stu_id As id,stu_enname As name  FROM rms_student  WHERE academic_year=$acacemic";
+   	$sql="SELECT stu_id As id,CONCAT(stu_khname,'-',stu_enname) as name  FROM rms_student  WHERE academic_year=$acacemic";
    	return $db->fetchAll($sql);
    }
    

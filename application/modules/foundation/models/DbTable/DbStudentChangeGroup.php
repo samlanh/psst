@@ -6,18 +6,28 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 		$session_user=new Zend_Session_Namespace('auth');
 		return $session_user->user_id;
 	}
+	
 	public function getAllStudentID(){
 		$_db = $this->getAdapter();
-		$sql = "SELECT st.stu_id,st.stu_code FROM `rms_student` as st,rms_group_detail_student as gds where gds.type=1 and gds.is_pass=0 and gds.stu_id=st.stu_id and is_setgroup=1 and st.is_subspend=0 and st.status=1 and st.degree IN(1,2,3,4) group by gds.stu_id";
-		$orderby = " ORDER BY stu_code ";
-		return $_db->fetchAll($sql.$orderby);		
+		$sql = "SELECT st.stu_id as id,st.stu_code FROM `rms_student` as st,rms_group_detail_student as gds where gds.type=1 and gds.is_pass=0 and gds.stu_id=st.stu_id and is_setgroup=1 and st.is_subspend=0 and st.status=1 and st.degree IN(1,2,3,4) group by gds.stu_id";
+		//$orderby = " ORDER BY stu_code ";
+		return $_db->fetchAll($sql);		
 	}
+	
+	public function getAllStudentName(){
+		$_db = $this->getAdapter();
+		$sql = "SELECT st.stu_id as id,CONCAT(st.stu_khname,'-',st.stu_enname) as name FROM `rms_student` as st,rms_group_detail_student as gds where gds.type=1 and gds.is_pass=0 and gds.stu_id=st.stu_id and is_setgroup=1 and st.is_subspend=0 and st.status=1 and st.degree IN(1,2,3,4) group by gds.stu_id";
+		//$orderby = " ORDER BY stu_code ";
+		return $_db->fetchAll($sql);
+	}
+	
 	public function getAllGroup(){
 		$db = $this->getAdapter();
 		$sql = "SELECT group_code,id FROM `rms_group` where status = 1 and is_pass IN (0,2) ";
 // 		$orderby = " ORDER BY stu_code ";
 		return $db->fetchAll($sql);
 	}
+	
 	public function selectAllStudentChangeGroup($search){
 		$_db = $this->getAdapter();
 		$sql = "SELECT scg.id,(SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) AS code,
@@ -35,7 +45,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 		(SELECT `major_enname` FROM `rms_major` WHERE `major_id`=rms_group.grade ) AS to_grade,
 		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = rms_group.session )) LIMIT 1) AS `to_session`,
 		
-		moving_date,scg.note from `rms_student_change_group` as scg,rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 and rms_group.degree IN(1,2,3,4) ";
+		moving_date,scg.note from `rms_student_change_group` as scg,rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 and rms_group.degree IN(1,2,3,4) and scg.status=1";
 		$order_by=" order by id DESC";
 		$where=' ';
 		
@@ -69,15 +79,15 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 		$sql = "SELECT * FROM rms_student_change_group WHERE id =".$id;
 		return $db->fetchRow($sql);
 	}
-	public function getDegreeAndGradeToGroup($to_group){
+	public function getDegreeAndGradeToGroup($group){
 		$db = $this->getAdapter();
-		$sql = "SELECT academic_year,degree,grade,session,room_id FROM rms_group WHERE id =".$to_group;
+		$sql = "SELECT academic_year,degree,grade,session,room_id FROM rms_group WHERE id =".$group;
 		return $db->fetchRow($sql);
 	}
 	public function addStudentChangeGroup($_data){
 			$_db= $this->getAdapter();
 			$_db->beginTransaction();
-			$test = $this->getDegreeAndGradeToGroup($_data['to_group']);
+			
 			try{	
 				$stu_id=$_data['studentid'];
 				$_arr= array(
@@ -112,6 +122,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 				
 				$this->_name='rms_student';
 				
+				$test = $this->getDegreeAndGradeToGroup($_data['to_group']);
 				if($test['degree']==1){
 					$stu_type=3;
 				}else if($test['degree']==2 || $test['degree']==3 || $test['degree']==4){
@@ -120,12 +131,13 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 					$stu_type=2;
 				}
 				$array = array(
-							'academic_year'=>$test['academic_year'],
-							'degree'=>$test['degree'],
-							'grade'=>$test['grade'],
-							'session'=>$test['session'],
-							'room'=>$test['room_id'],
-							'stu_type'=>$stu_type,
+							'academic_year'	=>$test['academic_year'],
+							'degree'		=>$test['degree'],
+							'grade'			=>$test['grade'],
+							'session'		=>$test['session'],
+							'room'			=>$test['room_id'],
+							'stu_type'		=>$stu_type,
+							'group'			=>$_data['to_group'],
 						);
 				$where = " stu_id=".$_data['studentid'];
 				$this->update($array, $where);
@@ -141,47 +153,92 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
 		try{	
-			$test = $this->getDegreeAndGradeToGroup($_data['to_group']);
-			$stu_id=$_data['studentid'];
-			$_arr=array(
-						'user_id'=>$this->getUserId(),
-						//'stu_id'=>$_data['studentid'],
+			if($_data['status']==1){
+				$stu_id=$_data['studentid'];
+				$_arr=array(
+						'user_id'	=>$this->getUserId(),
 						'from_group'=>$_data['from_group'],
-						'to_group'=>$_data['to_group'],
+						'to_group'	=>$_data['to_group'],
 						'moving_date'=>$_data['moving_date'],
-						'note'=>$_data['note'],
-						'status'=>$_data['status'],
-					);
-			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["studentid"]);
-			$this->update($_arr, $where);
-			
-			$this->_name='rms_group_detail_student';
-			$arr= array(
-					'group_id'	=>$_data['to_group'],
-					'old_group'	=>$_data['from_group'],
-			);
-			$where="stu_id=".$stu_id." and is_pass=0 " ;
-			$this->update($arr, $where);
-			
-			$this->_name='rms_student';
-			if($test['degree']==1){
-				$stu_type=3;
-			}else if($test['degree']==2 || $test['degree']==3 || $test['degree']==4){
-				$stu_type=1;
-			}else if($test['degree']>4){
-				$stu_type=2;
+						'note'		=>$_data['note'],
+						'status'	=>$_data['status'],
+						);
+				$where=" id = ".$_data['id'];
+				$this->update($_arr, $where);
+				
+				
+				$this->_name='rms_group_detail_student';
+				$arr= array(
+						'group_id'	=>$_data['to_group'],
+						'old_group'	=>$_data['from_group'],
+				);
+				$where="stu_id=".$stu_id." and is_pass=0 and old_group = ".$_data['from_group'] ;
+				$this->update($arr, $where);
+				
+				
+				$this->_name='rms_student';
+				$test = $this->getDegreeAndGradeToGroup($_data['to_group']);
+				if($test['degree']==1){
+					$stu_type=3;
+				}else if($test['degree']==2 || $test['degree']==3 || $test['degree']==4){
+					$stu_type=1;
+				}else if($test['degree']>4){
+					$stu_type=2;
+				}
+				$array = array(
+						'academic_year'	=>$test['academic_year'],
+						'degree'		=>$test['degree'],
+						'grade'			=>$test['grade'],
+						'session'		=>$test['session'],
+						'room'			=>$test['room_id'],
+						'stu_type'		=>$stu_type,
+						'group'			=>$_data['to_group'],
+				);
+				$where = " stu_id=".$_data['studentid'];
+				$this->update($array, $where);
+			}else{
+				
+				$_arr=array(
+						'user_id'	=>$this->getUserId(),
+						'status'	=>$_data['status'],
+				);
+				$where=" id = ".$_data['id'];
+				$this->update($_arr, $where);
+				
+				
+				// update back to old group
+				$this->_name='rms_group_detail_student';
+				$arr= array(
+						'group_id'	=>$_data['from_group'],
+						'old_group'	=>null,
+				);
+				$where="stu_id=".$_data['studentid']." and is_pass=0 and old_group = ".$_data['from_group'] ;
+				$this->update($arr, $where);
+				
+				// update student info back to old_group
+				$this->_name='rms_student';
+				$test = $this->getDegreeAndGradeToGroup($_data['from_group']);
+				if($test['degree']==1){
+					$stu_type=3;
+				}else if($test['degree']==2 || $test['degree']==3 || $test['degree']==4){
+					$stu_type=1;
+				}else if($test['degree']>4){
+					$stu_type=2;
+				}
+				$array = array(
+						'academic_year'	=>$test['academic_year'],
+						'degree'		=>$test['degree'],
+						'grade'			=>$test['grade'],
+						'session'		=>$test['session'],
+						'room'			=>$test['room_id'],
+						'stu_type'		=>$stu_type,
+						'group'			=>$_data['from_group'],
+				);
+				$where = " stu_id=".$_data['studentid'];
+				$this->update($array, $where);
+				
+				
 			}
-			$array = array(
-					'academic_year'=>$test['academic_year'],
-					'degree'=>$test['degree'],
-					'grade'=>$test['grade'],
-					'session'=>$test['session'],
-					'room'=>$test['room_id'],
-					'stu_type'=>$stu_type,
-			);
-			$where = " stu_id=".$_data['studentid'];
-			$this->update($array, $where);
-			
 			return $_db->commit();
 			
 		}catch(Exception $e){

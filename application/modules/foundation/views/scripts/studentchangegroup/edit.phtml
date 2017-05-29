@@ -23,18 +23,23 @@ dojo.require("dijit.form.CheckBox");
 								<table cellspacing="5" width="100%"​>
 									<tr>
 										<td>
-											<table cellspacing="5" style="width: 95%;"​>
+											<table cellspacing="5" style="width: 95%;white-space: nowrap;"​>
 												<tr>
 													<td ><?php echo $tr->translate("STUDENT_ID")?></td>
 													<td>
 														<select class="fullside" readonly="readonly" name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" onchange="getStudentInfo();" >
-													    	<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
-																<option value="<?php echo $row['stu_id']?>"<?php if($row['stu_id']==$this->rows['stu_id']) echo 'selected="selected"';?>><?php echo $row['stu_code']?></option>
+													    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $stu_id){?>
+																<option value="<?php echo $stu_id['id']?>"<?php if($stu_id['id']==$this->rows['stu_id']) echo 'selected="selected"';?>><?php echo $stu_id['stu_code']?></option>
 															<?php }?>
 														</select>
 													</td>
 													<td ><?php echo $tr->translate("STUDENT_NAME")?></td>
-													<td ><input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="studentname" name="studentname" value="" type="text">
+													<td >
+														<select class="fullside" readonly="readonly" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" onchange="getStudentInfo();" >
+													    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $stu_name){?>
+																<option value="<?php echo $stu_name['id']?>"<?php if($stu_name['id']==$this->rows['stu_id']) echo 'selected="selected"';?>><?php echo $stu_name['name']?></option>
+															<?php }?>
+														</select>
 													</td>
 												</tr>
 												<tr>
@@ -55,6 +60,9 @@ dojo.require("dijit.form.CheckBox");
 														</select>
 													</td>
 												</tr>
+												<tr>
+													<td>&nbsp;</td>
+												</tr>
 												<tr><td ><?php echo $tr->translate("DETAIL")?></td></tr>
 												<tr>
 													<td  colspan="4" rowspan="1"><label id="lblfromgroup" readonly="readonly" name="detail_from_group" style="background:#fff;width:100%;height:70px;display:block;  padding: 10px; border: solid 1px #ccc;font-size: 14px;"></label></td>
@@ -62,7 +70,7 @@ dojo.require("dijit.form.CheckBox");
 											</table>
 										</td>
 										<td>
-											<table cellspacing="5" style="width: 95%;"​>
+											<table cellspacing="5" style="width: 95%;white-space: nowrap;"​>
 												<tr>
 													<td><?php echo $tr->translate("TO_GROUP")?></td>
 													<td>
@@ -87,6 +95,9 @@ dojo.require("dijit.form.CheckBox");
 															<option value="0" <?php if($this->rows['status']==0) echo 'selected="selected"';?>>Deactive</option>
 														</select>
 													</td>
+												</tr>
+												<tr>
+													<td>&nbsp;</td>
 												</tr>
 												<tr><td><?php echo $tr->translate("DETAIL")?></td></tr>
 												<tr>
@@ -126,26 +137,25 @@ dojo.ready(function(){
 
 });
 
-function getStudentInfo(){
-			studentid = dijit.byId('studentid').get('value');
-			var i=0;
-			dojo.xhrPost({
-				url:url_student,
-				content:{
-					'studentid':studentid
-					},
-				handleAs:"json",
-				load: function(data) {
-					//alert(data.stu_enname);
-					dijit.byId("studentname").attr("value",data.name);
-					dijit.byId("gender").attr("value",data.sex);
-					//dijit.byId("from_group").attr("value",data.group_id);
+	function getStudentInfo(){
+		studentid = dijit.byId('studentid').get('value');
+		dojo.xhrPost({
+			url:url_student,
+			content:{
+				'studentid':studentid
 				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-}
+			handleAs:"json",
+			load: function(data) {
+				//alert(data.stu_enname);
+				//dijit.byId("studentname").attr("value",data.name);
+				dijit.byId("gender").attr("value",data.sex);
+				//dijit.byId("from_group").attr("value",data.group_id);
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
 
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-to-group')); ?>';
 function toStudentGroup(type){
@@ -166,9 +176,9 @@ function toStudentGroup(type){
 			//alert(data);
 
 			if(type==1){
-				dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+"<br />"+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
+				dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+"<br />"+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
 			}else{
-				dojo.byId('lbltogroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+"<br />"+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
+				dojo.byId('lbltogroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+"<br />"+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+"&nbsp;&nbsp;,&nbsp;&nbsp;"+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
 			}
 				//dijit.byId("from_detail").attr("value",);
 			//dijit.byId("gender").attr("value",data.to_academic);

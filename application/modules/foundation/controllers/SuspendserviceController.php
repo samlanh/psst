@@ -24,7 +24,7 @@ class Foundation_SuspendserviceController extends Zend_Controller_Action {
 				);
 			}
 			
-			$db =  new Accounting_Model_DbTable_DbSuspendservice();
+			$db =  new Foundation_Model_DbTable_DbSuspendservice();
 			$rs = $db->getStudentSuspendService($search);
 				$list = new Application_Form_Frmtable();
 				$collumns = array("RECEIPT_NO","STUDENT_ID","NAME_KH","NAME_EN","SEX","CREATED_DATE");
@@ -44,7 +44,7 @@ public function addAction(){
 	if($this->getRequest()->isPost()){
 		$_data = $this->getRequest()->getPost();
 		try{
-				$db = new Accounting_Model_DbTable_DbSuspendservice();
+				$db = new Foundation_Model_DbTable_DbSuspendservice();
 				$row = $db->addSuspendservice($_data);
 				
 				if(isset($_data['save_close'])){
@@ -60,12 +60,12 @@ public function addAction(){
 				echo $e->getMessage();
 			}
 		}
-		$frm = new Accounting_Form_FrmServicesuspend();
+		$frm = new Foundation_Form_FrmServicesuspend();
 		$frm_servicesuspend=$frm->FrmServiceSuspend();
 		Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
 		$this->view->frm_servicesuspend = $frm_servicesuspend;
 		 
-		$db = new Accounting_Model_DbTable_DbSuspendservice();
+		$db = new Foundation_Model_DbTable_DbSuspendservice();
 		$this->view->stu_id = $db->getAllStudentCode();
 		
 		 
@@ -80,7 +80,7 @@ public function editAction(){
 		$_data = $this->getRequest()->getPost();
 		//print_r($_data);exit();
 		try{
-			$_db = new Accounting_Model_DbTable_DbSuspendservice();
+			$_db = new Foundation_Model_DbTable_DbSuspendservice();
 			$row = $_db->editSuspendService($_data);
 			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/suspendservice/index");
 		}catch(Exception $e){
@@ -90,14 +90,15 @@ public function editAction(){
 		}
 	}
 	
-	$frm = new Accounting_Form_FrmServicesuspend();
+	$frm = new Foundation_Form_FrmServicesuspend();
 	$frm_servicesuspend=$frm->FrmServiceSuspend();
 	Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
 	$this->view->frm_servicesuspend = $frm_servicesuspend;
 	
-	$_db = new Accounting_Model_DbTable_DbSuspendservice();
+	$_db = new Foundation_Model_DbTable_DbSuspendservice();
 	
-	$this->view->rs = $_db->getAllStudentCode();
+	$this->view->stu_code = $_db->getAllStudentCode();
+	$this->view->stu_name = $_db->getAllStudentName();
 	
 	$this->view->id = $_db->getStudentSuspendServiceByID($id);
 	
@@ -110,7 +111,7 @@ public function editAction(){
 function getStudentAction(){
 	if($this->getRequest()->isPost()){
 		$data=$this->getRequest()->getPost();
-		$db = new Accounting_Model_DbTable_DbSuspendservice();
+		$db = new Foundation_Model_DbTable_DbSuspendservice();
 		$studentinfo = $db->getAllStudentInfo($data['studentid']);
 		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 		print_r(Zend_Json::encode($studentinfo));
@@ -121,7 +122,7 @@ function getStudentAction(){
 function getStudentIdAction(){
 	if($this->getRequest()->isPost()){
 		$data=$this->getRequest()->getPost();
-		$db = new Accounting_Model_DbTable_DbSuspendservice();
+		$db = new Foundation_Model_DbTable_DbSuspendservice();
 		$stu_id = $db->getStudentID($data['study_year']);
 		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 		print_r(Zend_Json::encode($stu_id));
@@ -132,7 +133,7 @@ function getStudentIdAction(){
 function getStudentNameAction(){
 	if($this->getRequest()->isPost()){
 		$data=$this->getRequest()->getPost();
-		$db = new Accounting_Model_DbTable_DbSuspendservice();
+		$db = new Foundation_Model_DbTable_DbSuspendservice();
 		$stu_name = $db->getStudentName($data['study_year']);
 		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 		print_r(Zend_Json::encode($stu_name));

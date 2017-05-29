@@ -58,8 +58,9 @@ class Foundation_studentchangegroupController extends Zend_Controller_Action {
 		
 		$_add = new Foundation_Model_DbTable_DbStudentChangeGroup();
 		
-		$this->view->rs = $add =$_add->getAllStudentID();
-// 		print_r($this->view->rs);exit();
+		$this->view->stu_id = $_add->getAllStudentID();
+		$this->view->stu_name  = $_add->getAllStudentName();
+		
 		$this->view->row = $add =$_add->getAllGroup();
 		
 // 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -69,9 +70,9 @@ class Foundation_studentchangegroupController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
+		
 		$db= new Foundation_Model_DbTable_DbStudentChangeGroup();
 		$row = $this->view->rows = $db->getAllStudentChangeGroupById($id);
-		
 		
 		if($this->getRequest()->isPost())
 		{
@@ -90,7 +91,8 @@ class Foundation_studentchangegroupController extends Zend_Controller_Action {
 		
 		$_add = new Foundation_Model_DbTable_DbStudentChangeGroup();
 		
-		$this->view->rs = $add =$_add->getAllStudentID();
+		$this->view->stu_id = $_add->getAllStudentID();
+		$test = $this->view->stu_name  = $_add->getAllStudentName();
 		
 		$this->view->row = $add =$_add->getAllGroup();
 		

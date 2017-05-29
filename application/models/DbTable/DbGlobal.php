@@ -577,7 +577,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
    function getExchangeRate(){
 	   	$db=$this->getAdapter();
-	   	$sql="select rate from rms_rate";
+	   	$sql="select reil from rms_exchange_rate";
 	   	return $db->fetchOne($sql);
    }
    

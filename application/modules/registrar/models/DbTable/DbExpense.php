@@ -7,29 +7,31 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 		return $session_user->user_id;
 	}
 	function addExpense($data){
-		
-// 		if($data['currency_type']==1){
-// 			$amount_in_reil = 0 ;
-// 			$amount_in_dollar = $data['total_amount'];
-// 		}else{
-// 			$amount_in_reil = $data['total_amount'] ;
-// 			$amount_in_dollar = $data['convert_to_dollar'];
-// 		}
-		
-		$data = array(
+		$arr = array(
 					'branch_id'=>$data['branch_id'],
 					'title'=>$data['title'],
 					'total_amount'=>$data['total_amount'],
 					'invoice'=>$data['invoice'],
-					'curr_type'=>$data['currency_type'],
+					'payment_type'=>$data['payment_method'],
 					'description'=>$data['Description'],
 					'date'=>$data['Date'],
 					'status'=>$data['Stutas'],
 					'user_id'=>$this->getUserId(),
 					'create_date'=>date('Y-m-d'),
-				
 				);
-		$this->insert($data);
+		$expend_id = $this->insert($arr);
+		$ids = explode(',', $data['identity']);
+		$this->_name='ln_expense_detail';
+		foreach ($ids as $j){
+			$arr = array(
+					'expense_id'=>$expend_id,
+					'service_id'=>$data['expense_id'.$j],
+					'description'=>$data['remark'.$j],
+					'total_amount'=>$data['total_paid'.$j]
+				);
+			
+		   $this->insert($arr);
+		}
 
  }
  function updatExpense($data){

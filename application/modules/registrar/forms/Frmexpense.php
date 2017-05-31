@@ -61,14 +61,14 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		$_Description ->setAttribs(array(
 				'dojoType'=>'dijit.form.SimpleTextarea',
 				'class'=>'fullside',
-				'style'=>'width:98%',
+				'style'=>"font-size:14px;font-family: 'Khmer OS Battambang';height:50px;"
 		));
 		$total_amount=new Zend_Dojo_Form_Element_NumberTextBox('total_amount');
 		$total_amount->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'required'=>true,
-				'onkeyup'=>'convertToDollar();',
+				'readonly'=>'readonly'
 		));
 		
 		$convert_to_dollar=new Zend_Dojo_Form_Element_NumberTextBox('convert_to_dollar');
@@ -90,19 +90,18 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		
 		$id = new Zend_Form_Element_Hidden("id");
 		
-		$_currency_type = new Zend_Dojo_Form_Element_FilteringSelect('currency_type');
-		$_currency_type->setAttribs(array(
+		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
+		$payment_method->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
-				//'onchange'=>'convertToDollar();',
 		));
 		$opt = $db->getViewById(8,1);
-		$_currency_type->setMultiOptions($opt);
+		$payment_method->setMultiOptions($opt);
 		
 		
 	
 		if($data!=null){
-			$_currency_type->setValue($data['curr_type']);
+			$payment_method->setValue($data['curr_type']);
 			$_branch_id->setValue($data['branch_id']);
 			$title->setValue($data['title']);
 			$total_amount->setValue($data['total_amount']);
@@ -114,7 +113,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 			$id->setValue($data['id']);
 		}
 		
-		$this->addElements(array($invoice,$_currency_type,$title,$_Date ,$_stutas,$_Description,
+		$this->addElements(array($invoice,$payment_method,$title,$_Date ,$_stutas,$_Description,
 				$total_amount,$convert_to_dollar,$_branch_id,$for_date,$id,));
 		return $this;
 		

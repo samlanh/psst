@@ -82,6 +82,8 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	$frm = $pructis->FrmAddExpense();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
+    	$db = new Application_Model_GlobalClass();
+    	$this->view->expenseopt = $db->getAllExpenseIncomeType(5);
     }
  
     public function editAction()

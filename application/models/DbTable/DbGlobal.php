@@ -574,20 +574,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}
    	return $options;
    }
-
    function getExchangeRate(){
 	   	$db=$this->getAdapter();
 	   	$sql="select reil from rms_exchange_rate";
 	   	return $db->fetchOne($sql);
    }
-   
    function getDegree(){
 	   	$db=$this->getAdapter();
 	   	$sql="SELECT dept_id as id,CONCAT(en_name) AS name FROM rms_dept WHERE `is_active`=1";
 	   	return $db->fetchAll($sql);
    }
-   
-   
    function getAllYear(){
 	   	$db = $this->getAdapter();
 	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')','(',(select name_en from rms_view where type=7 and key_code=time),')') AS name FROM rms_tuitionfee WHERE `status`=1
@@ -595,29 +591,18 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);
    }
-   
    function getAllGrade(){
 	   	$db=$this->getAdapter();
 	   	$sql="SELECT major_id as id,major_enname AS name FROM rms_major WHERE `is_active`=1";
 	   	return $db->fetchAll($sql);
    }
-   
-   
-   
-   
-   
-   
+   public function getExpenseIncome($type){
+   	$db = $this->getAdapter();
+   	$_db = new Application_Model_DbTable_DbGlobal();
+   	$branch_id = $_db->getAccessPermission();
+   	$sql = "SELECT id ,account_name as name FROM `rms_account_name` WHERE status=1 AND account_name!=''
+   	AND account_type = ".$type;
+   	return $db->fetchAll($sql);
+   }
 }
-
-
-
-
-
-
 ?>
-
-
-
-
-
-

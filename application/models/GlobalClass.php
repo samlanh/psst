@@ -24,7 +24,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
    	$myopt .= '<option value="Yes">Yes</option>';
    	$myopt .= '<option value="No">No</option>';
    	return $myopt;
-   
    }	
    public function getImgAttachStatus($rows,$base_url, $case=''){
 		if($rows){			
@@ -199,14 +198,12 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			if(!empty($rows))foreach($rows as $value){
 				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
 			}
-			 
 			return $options;
 		}
 		public function getAllSession(){
 			$db=$this->getAdapter();
 			$sql=" SELECT key_code AS id,CONCAT(name_en,'-',name_kh) AS `name` FROM rms_view WHERE `type`=4 AND `status`=1 ";
 		    $rows=$db->fetchAll($sql);
-// 		    array_unshift($rows, array('id'=>-1,'name'=>"Add New"));
 		    $options = '';
 		    if(!empty($rows))foreach($rows as $value){
 		    	$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
@@ -217,7 +214,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			$rows = $_db->getAllstudentRequest($type);
-			//array_unshift($rows,array('service_id' => '-1',"title"=>$tr->translate("ADD")) );
 			array_unshift($rows,array('id' => '',"name"=>"Select Service"));
 			$options = '';
 			if(!empty($rows))foreach($rows as $value){
@@ -229,7 +225,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			if($rows){
 				$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
 				$imgtick='<img src="'.$base_url.'/images/icon/apply2.png"/>';
-		
 				foreach ($rows as $i =>$row){
 					if($row['status'] == 1){
 						$rows[$i]['status']= $imgtick;
@@ -332,7 +327,6 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		public function getTeachersunjectOption(){
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$rows = $_db->getAllTeacherSubject();
-			//array_unshift($rows, array('id'=>-1,'subject_name'=>"Add New"));
 			$options = '';
 			if(!empty($rows))foreach($rows as $value){
 				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['subject_name'].' , '.$value['teacher_name'], ENT_QUOTES).'</option>';
@@ -340,6 +334,16 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$options .= '<option Value="-1">Add New</option>';
 			return $options;
 		}
-		
+		public function getAllExpenseIncomeType($type){
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$rows = $_db->getExpenseIncome($type);
+			$options = '';
+			$options .= '<option Value="0">ជ្រើសរើសប្រភេទ</option>';
+			if(!empty($rows))foreach($rows as $value){
+				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']).'</option>';
+			}
+			
+			return $options;
+		}
 }
 

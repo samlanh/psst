@@ -141,7 +141,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getAllDegreeName(){
    	$db = $this->getAdapter();
-   	$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 ORDER BY id DESC";
+   	$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 ORDER BY id ASC";
    	return $db->fetchAll($sql);
    }
    
@@ -475,7 +475,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    function getAllMajor(){
    	$db = $this->getAdapter();
-   	$sql = "SELECT major_id AS id ,CONCAT(major_enname) AS name FROM `rms_major`
+   	$sql = "SELECT major_id AS id ,CONCAT(major_enname,' (',(select shortcut from rms_dept where rms_dept.dept_id=rms_major.dept_id),')') AS name FROM `rms_major`
    	WHERE is_active=1 Order BY major_id DESC ";
    	return $db->fetchAll($sql);
    }

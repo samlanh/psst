@@ -142,19 +142,18 @@ function addRow() {
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="4%" align="center">'+no+'</td>';
-			template+='<td width="40%"><lable id="acc_label'+col+'"><select dojoType="dijit.form.FilteringSelect" id="class_'+col+'" class="fullside" onchange="showpopup('+col+');" name="class_'+col+'">'+faculty+'</select></lable></td>';			
+			template+='<td width="40px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="40px" align="center">'+no+'</td>';
+			template+='<td width="22%"><select dojoType="dijit.form.FilteringSelect" id="class_'+col+'" class="fullside"  name="class_'+col+'">'+faculty+'</select></td>';			
 			column = 0;
 			value='';
-			//template+='<td width="15%"> <input type="text" required="true" name="monthly'+col+'" id="monthly'+col+'" dojoType="dijit.form.NumberTextBox" style=""/><label id="subsub"></label></td>';
 			for(j=0;j<payment_term;j++){ column++;
-			if(column!=1){
-               value=0;
+				if(column!=1){
+               		value=0;
 				}
-				template+='<td width="10%"><input type="text" value="'+value+'" required="true" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox" style="width: 100%;" /></td>';
+				template+='<td width="11%"><input type="text" class="fullside" value="'+value+'" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			}
-			template+='<td> <input type="text"  name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"style=""/><label id="subsub"></label></td>';
+			template+='<td> <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"style=""/></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -167,85 +166,21 @@ function addRow() {
 		     parseContent: true,
 		});
  }
-dojo.ready(function(){
-	 addRow();
-	 
-});
-
-a=0;
-function showpopup(key){
-	$('#hidden_key').val(key);
-	value=dijit.byId('class_'+key).get('value');
-	
-	//alert(value);
-	if(value==-1){
-		dijit.byId("popup_dept").show(key);
-	}
-	
-}
-
-var url_add_service = '<?php echo $this->url(array("module"=>"accounting","controller"=>"ServiceCharge","action"=>"add-service")); ?>';
-function addService(){
-	index = $('#hidden_key').val();
-	//language = dijit.byId('language_title').get('value');
-	dojo.xhrPost({
-			url:url_add_service,
-			form: dojo.byId("frm_add_tran"),
-			handleAs:"json",
-			load: function(data) {
-				
-				getService(index,data);
-		   dijit.byId('frm_add_tran').reset();
-		   dijit.byId("popup_dept").hide();
-				
-			},
-			error: function(err) {
-				alert(err);
-			}
+	dojo.ready(function(){
+		 addRow();
+		 
 	});
-}
-var nameContent;
-var url_a = '<?php echo $this->url(array("module"=>"accounting","controller"=>"ServiceCharge","action"=>"getallfac")); ?>';
-function getService(index,data){
-	type = 2;
-	//language = dijit.byId('language_title').get('value');
-	dojo.xhrPost({
-			url: url_a,
-			content: {"type":type},
-			handleAs:"json",
-			load: function(option) {
-				 dojo.html.set(dojo.byId("acc_label"+index), '<select onchange="showpopup('+index+');" name="class_'+index+'"  dojoType="dijit.form.FilteringSelect" >'
-				         +option+'</select>', {
-				           parseContent: true,
-				           onBegin: function() {
-				        	   dojo.require('dijit.form.FilteringSelect');
-				           }
-				       });
-				 dijit.byId('frm_add_tran').reset();
-				
-			},
-			error: function(err) {
-				alert(err);
+
+	 function deleteRecord(index) {
+			var identity = $('#identity').val();
+			var arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
 			}
-	});
-}
-
-
- function deleteRecord(index) {
-		var identity = $('#identity').val();
-		var arrays = identity.split(',');
-		for(var i=0;i<arrays.length;i++) {
-		if(arrays[i] == index) arrays.splice(i,1);
-		}
-		var strings = arrays.join(',');
-		$('#identity').val(strings);
-		dojo.query("#row"+index).remove();
-}
-
- function getkey(key){
-	 var a=key;
-	 return a;
- }
+			var strings = arrays.join(',');
+			$('#identity').val(strings);
+			dojo.query("#row"+index).remove();
+	 }
 
 
 	

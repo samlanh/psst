@@ -72,10 +72,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       		echo $e->getMessage();exit();
       	}
       }
-       $frm = new Registrar_Form_FrmRegister();
-       $frm_register=$frm->FrmRegistarWU();
-       Application_Model_Decorator::removeAllDecorator($frm_register);
-       $this->view->frm_register = $frm_register;
        
        $_db = new Application_Model_DbTable_DbGlobal();
        $this->view->all_dept = $_db->getAllDegreeName();

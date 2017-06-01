@@ -15,7 +15,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 					  CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
 					  
 					  (SELECT name_en FROM `rms_view`  WHERE `rms_view`.`type` = 7 AND `rms_view`.`key_code` = t.time) AS `time`,
-					  t.start_date,t.end_date,
 					  t.create_date,  
 					  (select name_kh from rms_view where type=1 and key_code=t.status) as status 
 					  FROM `rms_tuitionfee` AS t
@@ -79,8 +78,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 	    				'note'=>$_data['note'],
 	    				'time'=>$_data['time'],
 	    				'branch_id'=>$_data['branch'],
-	    				'start_date'=>$_data['start_date'],
-	    				'end_date'=>$_data['end_date'],
 	    				'create_date'=>date("Y-m-d"),
 	    				'user_id'=>$this->getUserId()
 	    				);
@@ -119,17 +116,15 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     	try{
     
     		$_arr = array(
-    				'from_academic'=>$_data['from_year'],
-    				'to_academic'=>$_data['to_year'],
-    				'generation'=>$_data['generation'],
-    				'note'=>$_data['note'],
-    				'status'=>$_data['status'],
-    				'time'=>$_data['time'],
-    				'branch_id'=>$_data['branch'],
-    				'start_date'=>$_data['start_date'],
-    				'end_date'=>$_data['end_date'],
-    				//'create_date'=>date("Y-m-d"),
-    				'user_id'=>$this->getUserId()
+    				'from_academic'	=>$_data['from_year'],
+    				'to_academic'	=>$_data['to_year'],
+    				'generation'	=>$_data['generation'],
+    				'note'			=>$_data['note'],
+    				'status'		=>$_data['status'],
+    				'is_finished'	=>$_data['is_finished'],
+    				'time'			=>$_data['time'],
+    				'branch_id'		=>$_data['branch'],
+    				'user_id'		=>$this->getUserId()
     		);
 //     		$fee_id = $this->insert($_arr);
     		$where=$this->getAdapter()->quoteInto("id=?", $_data['id']);

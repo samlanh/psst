@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('EDIT_SERVICE_FEE')); 
+	echo $this->headTitle($tr->translate('ADD_SERVICE_FEE')); 
 	$payment_term = $this->payment_term;
 ?>	
 <script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
@@ -21,7 +21,7 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 	<tr>
 		<td>
 		<fieldset>
-					<legend align="center"​ style="font-size: 20px;"><strong><?php echo $tr->translate("EDIT_SERVICE_FEE");?></strong></legend>
+					<legend align="center"​ style="font-size: 20px;"><strong><?php echo $tr->translate("ADD_SERVICE_FEE");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%; background:#DFF7FD;" cellspacing="10" broder 1>
 						<tr>
 							<td colspan="4">&nbsp;</td>
@@ -100,60 +100,105 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 </form>
 <script type="text/javascript">
 
-function ResetRecordRecord() {
-	var identity = $('#identity').val();
-	var arrays = identity.split(',');
-	if(arrays.length==1){
-		deleteRecord(identity);
-	}	
-	else{
-		for(var i=0;i<arrays.length;i++) {
-			deleteRecord(arrays[i]);
+	function ResetRecordRecord() {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		if(arrays.length==1){
+			deleteRecord(identity);
+		}	
+		else{
+			for(var i=0;i<arrays.length;i++) {
+				deleteRecord(arrays[i]);
+			}
 		}
 	}
-}
-var template = '';
-var faculty = '<?php echo $this->all_faculty; ?>';
-var metion = '<?php echo $this->all_metion; ?>';
-var payment_term = '<?php echo count($this->payment_term);?>';
-//var pay_term ="<?php //print_r($payment_term);?>";
-
-var col = 0;
-var no = 0;
-var title = 0;
-tmp = '';
-temp='';
-function addRow() {
+	var template = '';
+	var faculty = '<?php echo $this->all_faculty; ?>';
+	var payment_term = '<?php echo count($this->payment_term);?>';
+	
+	var col = 0;
+	var no = 0;
+	var title = 0;
+	tmp = '';
+	temp='';
+	function addRow() {
+			col++;no++;
+			template='';
+			if(title!=1){
+				temp+='<th><?php echo $tr->translate("N_O");?></th>';
+				temp+='<th><?php echo $tr->translate("DEL");?></th>';			
+				temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SERVICE");?></th>';
+				
+				<?php $s=0; ?>
+				<?php  foreach ($payment_term as $value){?>
+				
+				<?php echo"temp+='<th>$value</th>';"; ?>			
+				<?php }?>
+				
+				temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+				dojo.query("#head-title").append(temp);
+				title=1;
+			}
+				template+='<td width="40px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+				template+='<td width="40px" align="center">'+no+'</td>';
+				template+='<td width="22%"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+faculty+'</select></td>';			
+				
+				column = 0;
+				for(j=0;j<payment_term;j++){ column++;
+					template+='<td width="11%"><input type="text" id="fee'+col+'_'+column+'" class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox" /></td>';
+				}
+				template+='<td> <input type="text" name="remark'+col+'" id="remark'+col+'" class="fullside" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"style=""/></td>';
+			tmp='<tr id="row'+col+'">';
+			tmp+="</tr>";
+			dojo.query("#table_row").append(tmp);
+	
+			if($("#identity").val()!="") {
+				var identity = $("#identity").val();
+				$("#identity").val(identity+','+col);
+			} else {$("#identity").val(col);}
+			dojo.html.set(dojo.byId("row"+col),template , {
+			     parseContent: true,
+			});
+	 }
+	dojo.ready(function(){
+		 initailize();
+	});
+	
+	function initailize(){
+		<?php if(!empty($this->rows)){
+			foreach($this->rows as $row){
+		?>
 		col++;no++;
 		template='';
 		if(title!=1){
+			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th><?php echo $tr->translate("DEL");?></th>';			
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SERVICE");?></th>';
+			
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SERVICES");?></th>';
 			
 			<?php $s=0; ?>
 			<?php  foreach ($payment_term as $value){?>
 			
 			<?php echo"temp+='<th>$value</th>';"; ?>			
 			<?php }?>
-			
 			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="4%" align="center">'+no+'</td>';
-			template+='<td width="40%"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+faculty+'</select></td>';			
+			template+='<td width="40px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="40px" align="center">'+no+'</td>';
+			template+='<td width="22%"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+faculty+'</select></td>';			
 			
 			column = 0;
 			for(j=0;j<payment_term;j++){ column++;
-				template+='<td width="10%"><input type="text" required="true" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox" style="width: 100%;" /></td>';
+				template+='<td width="11%"><input type="text" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';
+				
 			}
-			template+='<td <input type="text" required="true" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"style=""/><label id="subsub"></label></td>';
+			template+='<td> <input type="text" name="remark'+col+'" id="remark'+col+'" class="fullside" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
-
+	
 		if($("#identity").val()!="") {
 			var identity = $("#identity").val();
 			$("#identity").val(identity+','+col);
@@ -161,125 +206,23 @@ function addRow() {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
- }
-dojo.ready(function(){
-	//var metion = '<?php echo $this->all_metion; ?>';
-	 //addRow();
-	 initailize();
-});
-
-function initailize(){
-	<?php if(!empty($this->rows)){
-		foreach($this->rows as $row){
-	?>
-	col++;no++;
-	template='';
-	if(title!=1){
-		temp+='<th><?php echo $tr->translate("DEL");?></th>';
-		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SERVICES");?></th>';
-		
-		<?php $s=0; ?>
-		<?php  foreach ($payment_term as $value){?>
-		
-		<?php echo"temp+='<th>$value</th>';"; ?>			
-		<?php }?>
-		temp+='<th><?php echo $tr->translate("REMARK");?></th>';
-		dojo.query("#head-title").append(temp);
-		title=1;
+		dijit.byId('class_'+col).attr('value','<?php echo $row['service_id']?>');
+		dijit.byId('fee'+col+'_1').attr('value','<?php echo $row['monthly']?>');
+		dijit.byId('fee'+col+'_2').attr('value','<?php echo $row['quarter']?>');
+		dijit.byId('fee'+col+'_3').attr('value','<?php echo $row['semester']?>');
+		dijit.byId('fee'+col+'_4').attr('value','<?php echo $row['year']?>');
+		dijit.byId('remark'+col).attr('value','<?php echo $row['note']?>');
+		<?php } }?>
 	}
-		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td width="40%"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+faculty+'</select></td>';			
-		
-		column = 0;
-		for(j=0;j<payment_term;j++){ column++;
-			template+='<td width="10%"><input type="text" required="true" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox" style="width: 100%;" /></td>';
-			
+	
+	 function deleteRecord(index) {
+			var identity = $('#identity').val();
+			var arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+			}
+			var strings = arrays.join(',');
+			$('#identity').val(strings);
+			dojo.query("#row"+index).remove();
 		}
-		template+='<td <input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"style=""/><label id="subsub"></label></td>';
-	tmp='<tr id="row'+col+'">';
-	tmp+="</tr>";
-	dojo.query("#table_row").append(tmp);
-
-	if($("#identity").val()!="") {
-		var identity = $("#identity").val();
-		$("#identity").val(identity+','+col);
-	} else {$("#identity").val(col);}
-	dojo.html.set(dojo.byId("row"+col),template , {
-	     parseContent: true,
-	});
-	dijit.byId('class_'+col).attr('value','<?php echo $row['service_id']?>');
-	dijit.byId('fee'+col+'_1').attr('value','<?php echo $row['monthly']?>');
-	dijit.byId('fee'+col+'_2').attr('value','<?php echo $row['quarter']?>');
-	dijit.byId('fee'+col+'_3').attr('value','<?php echo $row['semester']?>');
-	dijit.byId('fee'+col+'_4').attr('value','<?php echo $row['year']?>');
-	dijit.byId('remark'+col).attr('value','<?php echo $row['note']?>');
-	<?php } }?>
-}
-
-
-function showPopupFaculty(r_key){
-	faculty_id = dijit.byId('metion'+r_key).value;	
-	if(faculty_id==-1){
-		r_index = r_key;
-		dijit.byId("popup_dept").show();
-	}
-}
-var url_get_faculty ='<?php echo $this->url(array('module'=>'global','controller'=>'globals','action'=>'getfaculty-option')); ?>';
-function getAllFucaltyOption(f_id){                                                                      
-	dojo.xhrPost({
-		url: url_get_faculty,				    
-		handleAs:"json", 
-		load: function(response){
-			//alert(response.option);
-			dojo.html.set(dojo.byId("lbl_metion"+r_index),'',{
-			     parseContent: true});
-			faculty=response.option;
-			    select='<select class="full" dojoType="dijit.form.FilteringSelect" name="metion'+r_index+'" id="metion'+r_index+'" >'+faculty+'</select>';
-				dojo.html.set(dojo.byId("lbl_metion"+r_index),select, {
-				     parseContent: true
-				});
-				dijit.byId("metion"+r_index).attr( 'value',f_id);
-				alert('<?php echo $tr->translate("INSERT_SUCCESS"); ?>');
-				//dijit.byId('frm_service').reset();
-		},error:function(err){
-			alert(err);
-		}
-	});
-}
-var url_add_dept= '<?php echo $this->url(array('module'=>'global','controller'=>'index','action'=>'add-department')); ?>';
-function addNewDepartment(){
-	if(dijit.byId('frm_add_dept').validate()) { 
-		dojo.xhrPost({
-		    url: url_add_dept,
-		    form: dojo.byId('frm_add_dept'),
-		    content : { 
-				'en_name':dijit.byId('en_name').get('value'),
-			    'kh_name':dijit.byId('kh_name').get('value'),
-			    'shortcut':dijit.byId('shortcut').get('value'),
-			    'status':dijit.byId('status').get('value'),			    
-			},				    
-		   handleAs:"json", 
-		   load: function(response) {
-			   getAllFucaltyOption(response.id);
-			   //location.reload();
-		      hideDialog();
-		    },
-		    error: function(err) {
-		    }
-		});
-		}
-}
- function deleteRecord(index) {
-		var identity = $('#identity').val();
-		var arrays = identity.split(',');
-		for(var i=0;i<arrays.length;i++) {
-		if(arrays[i] == index) arrays.splice(i,1);
-		}
-		var strings = arrays.join(',');
-		$('#identity').val(strings);
-		dojo.query("#row"+index).remove();
-	}
 </script>

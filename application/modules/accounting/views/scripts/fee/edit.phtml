@@ -27,7 +27,7 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td ><?php echo $tr->translate("YEARS");?><input type="hidden" name="id" value="<?php echo $this->rs['id'];?>" /> </td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" class="fullside" readonly="true"  id="from_year" name="from_year"  type="text">
-									<?php for($i=2014;$i<=date('Y')+1;$i++){?>
+									<?php for($i=2016;$i<=date('Y')+1;$i++){?>
 										<option value="<?php echo $i;?>" <?php if($i==$this->rs['from_academic']) echo 'selected="selected"';?> ><?php echo $i; ?></option>
 									<?php }?>
 								</select>
@@ -35,7 +35,7 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td  ><?php echo $tr->translate("TO");?></td>
 							<td >
 								<select dojoType="dijit.form.FilteringSelect" readonly="true" class="fullside" id="to_year" name="to_year" type="text">
-									<?php for($i=2015;$i<=date('Y')+2;$i++){?>
+									<?php for($i=2016;$i<=date('Y')+2;$i++){?>
 										<option value="<?php echo $i;?>" <?php if($i==$this->rs['to_academic']) echo 'selected="selected"';?> ><?php echo $i; ?></option>
 									<?php }?>
 								</select>
@@ -69,14 +69,13 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 													
 						</tr>
 						<tr>
-							<td ><?php echo $tr->translate("START_DATE");?></td>
-							<td >
-								<input dojoType="dijit.form.DateTextBox"  id="start_date" class="fullside"  name="start_date" value="<?php echo $this->rs['start_date']; ?>" type="text">								
-							</td>
-							
-							<td  style="white-space: nowrap; "><?php echo $tr->translate("END_DATE");?></td>
-							<td ><input dojoType="dijit.form.DateTextBox"  class="fullside" class="fullside" id="end_date" name="end_date"  value="<?php echo $this->rs['end_date']; ?>" type="text"></td>
-							
+							<td ><?php echo $tr->translate("FINISHED");?></td>
+							<td>
+								<select dojoType="dijit.form.FilteringSelect"  id="is_finished" class="fullside" name="is_finished" type="text">		
+									<option value="0" <?php if($this->rs['status']==0){ echo "selected='selected'";}?>>Not Yet Finished</option>						
+									<option value="1" <?php if($this->rs['status']==1){ echo "selected='selected'";}?>>Finished</option>
+								</select>
+							</td>	
 							
 							<td ><?php echo $tr->translate("STATUS");?></td>
 							<td>
@@ -133,43 +132,6 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 	</tr>
 </table>	
 </form>
-<?php $frm_dept = $this->add_dept;?>
-<div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:7cm;" data-dojo-props="title:'<?php echo $tr->translate("ADD_FACULTY");?>', onCancel:hideDialog" id="popup_dept" >
-		<form id='frm_add_dept' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table>
-			<tr>
-				<td><?php echo $tr->translate("FACULTY_ENNAME");?></td>
-				<td>
-					<?php echo $frm_dept->getElement("en_name");?></td>
-			</tr>
-			<tr>
-				<td><?php echo $tr->translate("FACULTY_KHNAME");?></td>
-				<td>
-					<?php echo $frm_dept->getElement("kh_name");?></td>
-			</tr>
-			<tr>
-				<td><?php echo $tr->translate("SHORTCUT");?></td>
-				<td><?php echo $frm_dept->getElement("shortcut");?></td>
-			</tr>
-			<tr>
-				<td><?php echo $tr->translate("STATUS");?></td>
-				<td><?php echo $frm_dept->getElement("status");?>
-					<?php echo $frm_dept->getElement("dept_id");?>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" align="center"><br />
-					<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
-					dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNewDepartment();"/>
-			</tr>
-			<tr>
-				<td colspan="2">&nbsp;</td>
-			</tr>
-		</table>
-		</form>
-	</div>
-</div>
 <script type="text/javascript">
 function showPopupDept() {
 	if(dijit.byId('faculty').value==-1){
@@ -194,9 +156,7 @@ function ResetRecordRecord() {
 }
 var template = '';
 var grade = '<?php echo $this->all_grade; ?>';
-var metion = '<?php echo $this->all_metion; ?>';
 var payment_term = '<?php echo count($this->payment_term);?>';
-var session='<?php echo $this->all_session;?>';
 
 var col = 0;
 var no = 0;
@@ -210,9 +170,7 @@ function addRow() {
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			
-			temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("GRADE");?></th>';
-			//temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("SESSION");?></th>';
-			<?php $s=0; ?>
+			temp+='<th><?php echo $tr->translate("GRADE");?></th>';
 			<?php  foreach($payment_term as $value){?>
 			<?php echo"temp+='<th>$value</th>';"; ?>			
 			<?php }?>
@@ -221,13 +179,13 @@ function addRow() {
 			title=1;
 		}
 			template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="6%" align="center">'+no+'</td>';
-			template+='<td><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
+			template+='<td width="50px" align="center">'+no+'</td>';
+			template+='<td width="22%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
 			//template+='<td><select dojoType="dijit.form.FilteringSelect" id="session_'+col+'" name="session_'+col+'">'+session+'</select></td>';
 			
 			column = 0;
 			for(j=0;j<payment_term;j++){ column++;
-				template+='<td ><input type="text"  class="fullside" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+				template+='<td width="11%"><input type="text"  class="fullside" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			}
 			template+='<td> <input type="text" name="remark'+col+'"  class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ "/><label id="subsub"></label></td>';
 			
@@ -258,9 +216,7 @@ function initailize(){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		
-		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("GRADE");?></th>';
-		//temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("SESSION");?></th>';
-		<?php $s=0; ?>
+		temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
 		<?php  foreach ($payment_term as $value){?>
 		
 		<?php echo"temp+='<th>$value</th>';"; ?>			
@@ -270,16 +226,16 @@ function initailize(){
 		title=1;
 	}
 		template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template+='<td width="6%" align="center">'+no+'</td>';
-		template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
+		template+='<td width="50px" align="center">'+no+'</td>';
+		template+='<td width="22%"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
 		//template+='<td><select dojoType="dijit.form.FilteringSelect" id="session_'+col+'" name="session_'+col+'">'+session+'</select></td>';
 		
 		column = 0;
 		for(j=0;j<payment_term;j++){ column++;
-			template+='<td ><input type="text" required="true" id="fee'+col+'_'+column+'"   class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td width="11%"><input type="text" id="fee'+col+'_'+column+'"   class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			
 		}
-		template+='<td width="100px" > <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" style="width: 100px;"  /><label id="subsub"></label></td>';
+		template+='<td> <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" /></td>';
 		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -302,58 +258,6 @@ function initailize(){
 	//dijit.byId('session_'+col).attr('value','<?php //echo $row['session_id']?>');
 	
 	<?php } }?>
-}
-function showPopupFaculty(r_key){
-	faculty_id = dijit.byId('metion'+r_key).value;	
-	if(faculty_id==-1){
-		r_index = r_key;
-		dijit.byId("popup_dept").show();
-	}
-}
-var url_get_faculty ='<?php echo $this->url(array('module'=>'global','controller'=>'globals','action'=>'getfaculty-option')); ?>';
-function getAllFucaltyOption(f_id){                                                                      
-	dojo.xhrPost({
-		url: url_get_faculty,				    
-		handleAs:"json", 
-		load: function(response){
-			//alert(response.option);
-			dojo.html.set(dojo.byId("lbl_metion"+r_index),'',{
-			     parseContent: true});
-			faculty=response.option;
-			    select='<select class="full" dojoType="dijit.form.FilteringSelect" name="metion'+r_index+'" id="metion'+r_index+'" >'+faculty+'</select>';
-				dojo.html.set(dojo.byId("lbl_metion"+r_index),select, {
-				     parseContent: true
-				});
-				dijit.byId("metion"+r_index).attr( 'value',f_id);
-				alert('<?php echo $tr->translate("INSERT_SUCCESS"); ?>');
-				//dijit.byId('frm_service').reset();
-		},error:function(err){
-			alert(err);
-		}
-	});
-}
-var url_add_dept= '<?php echo $this->url(array('module'=>'global','controller'=>'index','action'=>'add-department')); ?>';
-function addNewDepartment(){
-	if(dijit.byId('frm_add_dept').validate()) { 
-		dojo.xhrPost({
-		    url: url_add_dept,
-		    form: dojo.byId('frm_add_dept'),
-		    content : { 
-				'en_name':dijit.byId('en_name').get('value'),
-			    'kh_name':dijit.byId('kh_name').get('value'),
-			    'shortcut':dijit.byId('shortcut').get('value'),
-			    'status':dijit.byId('status').get('value'),			    
-			},				    
-		   handleAs:"json", 
-		   load: function(response) {
-			   getAllFucaltyOption(response.id);
-			   //location.reload();
-		      hideDialog();
-		    },
-		    error: function(err) {
-		    }
-		});
-		}
 }
  function deleteRecord(index) {
 		var identity = $('#identity').val();

@@ -35,7 +35,7 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td style="white-space: nowrap;"><?php echo $tr->translate("YEARS");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true"  class="fullside" id="from_year" name="from_year" type="text">
-									<?php for($i=2014;$i<=date('Y')+1;$i++){?>
+									<?php for($i=date('Y')-1;$i<=date('Y')+1;$i++){?>
 										<option value="<?php echo $i;?>"><?php echo $i; ?></option>
 									<?php }?>
 								</select>
@@ -43,13 +43,13 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td ><?php echo $tr->translate("TO");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside"  id="to_year" name="to_year" type="text">
-									<?php for($i=2015;$i<=date('Y')+2;$i++){?>
+									<?php for($i=date('Y');$i<=date('Y')+2;$i++){?>
 										<option value="<?php echo $i;?>"><?php echo $i; ?></option>
 									<?php }?>
 								</select>
 							</td>
 							<td ><?php echo $tr->translate("GENERATION");?></td>
-							<td ><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="generation" name="generation"  type="text"></td>
+							<td ><input dojoType="dijit.form.ValidationTextBox"  class="fullside" id="generation" name="generation"  type="text"></td>
 							</tr>
 						<tr>
 							<td ><?php echo $tr->translate("TIME");?></td>
@@ -70,14 +70,6 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							</td>								
 							<td   ><?php echo $tr->translate("NOTE");?></td>
 							<td  ><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note"  type="text"></td>
-						</tr>
-						<tr>
-							<td ><?php echo $tr->translate("START_DATE");?></td>
-							<td >
-								<input dojoType="dijit.form.DateTextBox"  class="fullside" id="start_date" name="start_date" value="now" type="text">
-							</td>
-							<td ><?php echo $tr->translate("END_DATE");?></td>
-							<td><input dojoType="dijit.form.DateTextBox"  class="fullside" id="end_date" name="end_date" value="now" type="text"></td>
 						</tr>
 					</table>
 					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
@@ -164,15 +156,15 @@ function addRow() {
 			title=1;
 		}
 			template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="6%" align="center">'+no+'</td>';
-			template+='<td><select dojoType="dijit.form.FilteringSelect" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';
+			template+='<td width="50px" align="center">'+no+'</td>';
+			template+='<td width="17%"><select dojoType="dijit.form.FilteringSelect" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';
 			//template+='<td><select dojoType="dijit.form.FilteringSelect" id="session_'+col+'" name="session_'+col+'">'+session+'</select></td>';			
 			
 			column = 0;
 			for(j=0;j<payment_term;j++){ column++; 
-				template+='<td width="15%"><input type="text" required="true" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox" style="width: 100%;" /></td>';
+				template+='<td width="11%"><input type="text" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox" style="width: 100%;" /></td>';
 			}
-			template+='<td <input type="text"  name="remark'+col+'" class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"/><label id="subsub"></label></td>';
+			template+='<td> <input type="text"  name="remark'+col+'" class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"/></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);

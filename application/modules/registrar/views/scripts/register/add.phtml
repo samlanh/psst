@@ -407,7 +407,6 @@ select{ width:100%;}
 fieldset{  background:none;}
 .red{ color: red; padding-left:5px;}
 </style>
-<?php $register = $this->frm_register;?>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
@@ -894,18 +893,13 @@ function getMonthByNumber(m){
 								<td> : <label id="lb_sex" class=" one "></label></td>
 								
 								<td>Age </td>
-								<td> : <label id="lb_age" class=" one "></label></td>
+								<td> : <label  class=" one "></label></td>
 								
 								<td >ID </td>
 								<td > : <label id="lb_stu_id" class="one"></label></td>
 								
 							</tr>
-							<tr  >
 							
-								<td class="one "  valign="middle">&nbsp;&nbsp;Place of Birth</td>
-								<td colspan="9" > : &nbsp;<label id="lb_pob" class=" one "></label></td>
-								
-							</tr>
 							<tr >
 							
 								<td class="one "  valign="middle">&nbsp;&nbsp;Date of Birth </td>
@@ -1109,16 +1103,10 @@ function getMonthByNumber(m){
 								<td> : <label id="lb_sex1" class=" one "></label></td>
 								
 								<td>Age </td>
-								<td> : <label id="lb_age1" class=" one "></label></td>
+								<td> : <label  class=" one "></label></td>
 								
 								<td >ID </td>
 								<td > : <label id="lb_stu_id1" class="one"></label></td>
-								
-							</tr>
-							<tr  >
-							
-								<td class="one "  valign="middle">&nbsp;&nbsp;Place of Birth</td>
-								<td colspan="9" > : &nbsp;<label id="lb_pob1" class=" one "></label></td>
 								
 							</tr>
 							<tr >
@@ -1808,8 +1796,8 @@ function getservicefee(key){
 			dojo.byId("lb_stu_id").innerHTML = stu_id ;		
 			dojo.byId("lb_name").innerHTML = dijit.byId("kh_name").get('value')+" - "+dijit.byId("en_name").get('value');
 			dojo.byId("lb_sex").innerHTML = dijit.byId("sex").attr('displayedValue');
-			dojo.byId("lb_age").innerHTML = dijit.byId("age").attr('displayedValue');
-			dojo.byId("lb_pob").innerHTML = dijit.byId("street").attr('displayedValue') + ' , ភូមិ ' + dijit.byId("village").attr('displayedValue') + ' , សង្កាត់ ' + dijit.byId("commune").attr('displayedValue')+ ' ,  ខណ្ឌ ' + dijit.byId("district").attr('displayedValue')+ ' , រាជធានី ' + dijit.byId("province").attr('displayedValue');
+			//dojo.byId("lb_age").innerHTML = dijit.byId("age").attr('displayedValue');
+			//dojo.byId("lb_pob").innerHTML = dijit.byId("street").attr('displayedValue') + ' , ភូមិ ' + dijit.byId("village").attr('displayedValue') + ' , សង្កាត់ ' + dijit.byId("commune").attr('displayedValue')+ ' ,  ខណ្ឌ ' + dijit.byId("district").attr('displayedValue')+ ' , រាជធានី ' + dijit.byId("province").attr('displayedValue');
 			
 			dojo.byId("lb_branch_address").innerHTML = dijit.byId("br_address").get('value');
 			dojo.byId("lb_branch_tel").innerHTML = dijit.byId("br_tel").get('value');
@@ -1864,8 +1852,8 @@ function getservicefee(key){
 			dojo.byId("lb_stu_id1").innerHTML = stu_id ;		
 			dojo.byId("lb_name1").innerHTML = dijit.byId("kh_name").get('value')+" - "+dijit.byId("en_name").get('value');
 			dojo.byId("lb_sex1").innerHTML = dijit.byId("sex").attr('displayedValue');
-			dojo.byId("lb_age1").innerHTML = dijit.byId("age").attr('displayedValue');
-			dojo.byId("lb_pob1").innerHTML = dijit.byId("street").attr('displayedValue') + ' , ភូមិ ' + dijit.byId("village").attr('displayedValue') + ' , សង្កាត់ ' + dijit.byId("commune").attr('displayedValue')+ ' , ខណ្ឌ ' + dijit.byId("district").attr('displayedValue')+ ' , រាជធានី ' + dijit.byId("province").attr('displayedValue');
+			//dojo.byId("lb_age1").innerHTML = dijit.byId("age").attr('displayedValue');
+			//dojo.byId("lb_pob1").innerHTML = dijit.byId("street").attr('displayedValue') + ' , ភូមិ ' + dijit.byId("village").attr('displayedValue') + ' , សង្កាត់ ' + dijit.byId("commune").attr('displayedValue')+ ' , ខណ្ឌ ' + dijit.byId("district").attr('displayedValue')+ ' , រាជធានី ' + dijit.byId("province").attr('displayedValue');
 			
 			dojo.byId("lb_branch_address1").innerHTML = dijit.byId("br_address").get('value');
 			dojo.byId("lb_branch_tel1").innerHTML = dijit.byId("br_tel").get('value');

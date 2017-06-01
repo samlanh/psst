@@ -30,7 +30,7 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td ><?php echo $tr->translate("YEARS");?><input type="hidden" name="id" value="<?php echo $this->rs['id'];?>" /> </td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="from_year" name="from_year"  type="text">
-									<?php for($i=2014;$i<=date('Y')+1;$i++){?>
+									<?php for($i=2016;$i<=date('Y')+1;$i++){?>
 										<option value="<?php echo $i;?>" <?php if($i==$this->rs['from_academic']) echo 'selected="selected"';?> ><?php echo $i; ?></option>
 									<?php }?>
 								</select>
@@ -38,7 +38,7 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td ><?php echo $tr->translate("TO");?></td>
 							<td >
 								<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="to_year" name="to_year" type="text">
-									<?php for($i=2015;$i<=date('Y')+2;$i++){?>
+									<?php for($i=2016;$i<=date('Y')+2;$i++){?>
 										<option value="<?php echo $i;?>" <?php if($i==$this->rs['to_academic']) echo 'selected="selected"';?> ><?php echo $i; ?></option>
 									<?php }?>
 								</select>
@@ -72,33 +72,8 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td ><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note"  value="<?php echo $this->rs['note']; ?>" type="text"></td>
 							
 						</tr>
-						
-						<tr>
-							<td ><?php echo $tr->translate("START_DATE");?></td>
-							<td >
-								<input dojoType="dijit.form.DateTextBox"  id="start_date" class="fullside"  name="start_date" value="<?php echo $this->rs['start_date']; ?>" type="text">								
-							</td>
-							
-							<td  style="white-space: nowrap; "><?php echo $tr->translate("END_DATE");?></td>
-							<td ><input dojoType="dijit.form.DateTextBox"  class="fullside" class="fullside" id="end_date" name="end_date"  value="<?php echo $this->rs['end_date']; ?>" type="text"></td>
-							
-							<td style="white-space: nowrap;text-align: center;"><?php echo $tr->translate("STATUS");?></td>
-							<td>
-								<select dojoType="dijit.form.FilteringSelect"  id="status" class="fullside" name="status" type="text">								
-										<option value="1" <?php if($this->rs['status']==1){ echo "selected='selected'";}?>>Active</option>
-										<option value="0" <?php if($this->rs['status']==0){ echo "selected='selected'";}?>>Deactive</option>
-								</select>
-							</td>	
-													
-						</tr>
-						
-						<tr>
-							<td></td>
-							<td></td>
-							<td colspan="2">
-							</td>
-						</tr>
 					</table>
+					
 					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
 						<thead>
 							<tr>
@@ -163,9 +138,7 @@ function ResetRecordRecord() {
 }
 var template = '';
 var faculty = '<?php echo $this->all_faculty; ?>';
-var metion = '<?php echo $this->all_metion; ?>';
 var payment_term = '<?php echo count($this->payment_term);?>';
-var session='<?php echo $this->all_session;?>';
 
 var col = 0;
 var no = 0;
@@ -196,7 +169,7 @@ function addRow() {
 			
 			column = 0;
 			for(j=0;j<payment_term;j++){ column++;
-				template+='<td ><input type="text" required="true"  class="fullside" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+				template+='<td ><input type="text" class="fullside" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			}
 			template+='<td> <input type="text" name="remark'+col+'"  class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ "/><label id="subsub"></label></td>';
 			
@@ -227,11 +200,9 @@ function initailize(){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		
-		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("GRADE");?></th>';
-		//temp+='<th id="lbl_titlemetion" ><?php //echo $tr->translate("SESSION");?></th>';
-		<?php $s=0; ?>
-		<?php  foreach ($payment_term as $value){?>
+		temp+='<th><?php echo $tr->translate("GRADE");?></th>';
 		
+	<?php foreach ($payment_term as $value){?>
 		<?php echo"temp+='<th>$value</th>';"; ?>			
 		<?php }?>
 		temp+='<th><?php echo $tr->translate("REMARK");?></th>';
@@ -239,16 +210,14 @@ function initailize(){
 		title=1;
 	}
 		template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template+='<td width="6%" align="center">'+no+'</td>';
-		template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+faculty+'</select></td>';			
-		//template+='<td><select dojoType="dijit.form.FilteringSelect" id="session_'+col+'" name="session_'+col+'">'+session+'</select></td>';
-		
+		template+='<td width="50px" align="center">'+no+'</td>';
+		template+='<td width="22%" ><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+faculty+'</select></td>';			
 		column = 0;
 		for(j=0;j<payment_term;j++){ column++;
-			template+='<td ><input type="text" required="true" id="fee'+col+'_'+column+'"   class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td width="11%" ><input type="text" id="fee'+col+'_'+column+'"   class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			
 		}
-		template+='<td width="100px" > <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" style="width: 100px;"  /><label id="subsub"></label></td>';
+		template+='<td> <input type="text"  name="remark'+col+'" class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"/></td>';
 		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";

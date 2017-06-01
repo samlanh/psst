@@ -162,8 +162,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				    		'branch_id'		=>$this->getBranchId(),
 				    		'create_date'	=>date('Y-m-d H:i:s'),
 							'user_id'		=>$this->getUserId(),
- 
-					);
+						);
+				    
 			    	$id= $this->insert($arr);
 			    	
 			    	if($data['group']>-1){
@@ -180,6 +180,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			    	
 				}
 				
+			// insert to tbl_student_id for count id to generate new student_id
+			
+				$this->_name='rms_student_id';
+				if($data['student_type']==1){ 	//	new student
+					$arra = array(
+							'branch_id'	=>$this->getBranchId(),
+							'stu_id'	=>$id,
+							'degree'	=>$data['dept'],
+					);
+					$this->insert($arra);
+				}
+			//////////////////////////////////////////////////////////////////////	
 				
 				$this->_name='rms_student_payment';
 				$arr=array(
@@ -221,35 +233,35 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$paymentid = $this->insert($arr);
 				
 				
-				
-				//echo $parent;exit();
-				
 				$this->_name='rms_study_history';
 				
-				$array = array(
-						'stu_id'	=> $id,
-						'stu_type'	=> $stu_type,
-						//'stu_code'=> $data['stu_id'],
-						'academic_year'=>$data['study_year'],
-						'degree'	=> $data['dept'],
-						'grade'		=> $data['grade'],
-						'session'	=> $data['session'],
-						'parent_phone'=>$data['parent_phone'],
-						'remark'	=>$data['not'],
-						'user_id'	=> $this->getUserId(),
-						'branch_id'	=>$this->getBranchId(),
-						'payment_id'=>$paymentid,
-						//'is_parent' =>$parent,
-						'create_date'=>date('Y-m-d H:i:s'),
-				);
-				$this->insert($array);
+				if($data['student_type']!=3){
+					
+					$array = array(
+							'stu_id'	=> $id,
+							'stu_type'	=> $stu_type,
+							'stu_code'	=> $stu_code,
+							'academic_year'=>$data['study_year'],
+							'degree'	=> $data['dept'],
+							'grade'		=> $data['grade'],
+							'session'	=> $data['session'],
+							'room'		=> $data['room'],
+							'remark'	=> $data['not'],
+							'user_id'	=> $this->getUserId(),
+							'branch_id'	=> $this->getBranchId(),
+							'payment_id'=> $paymentid,
+							'create_date'=>date('Y-m-d H:i:s'),
+					);
+					$this->insert($array);
+					
+					
+				}
 				
 				
 	/////////////////////// rms_student_test ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 				$this->_name='rms_student_test';
 				
 				if($data['stu_test']>0){
-					
 					$array = array(
 							'register'=>1,
 							);
@@ -429,21 +441,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$where = ' stu_id = '.$id;
 					$this->update($arr, $where);
 					
-	///////////// update old study info to finished	/////////////////
-					
-					$id_updated = $this->getIdRecordUpdated($id);
-					
-					$this->_name='rms_study_history';
-					$array = array(
-							'is_finished'=> 1,
-							'finished_date'=>date('Y-m-d'),
-					);
-					$where = " is_finished=0 and stu_id = ".$id;
-					$this->update($array, $where);
-					
-					
-					
 				}else {
+					
 					$stu_type='';
 					$payfor_type='';
 					if($data['dept']==1){
@@ -501,6 +500,19 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 				}
 				
+			// insert to tbl_student_id for count id to generate new student_id
+					
+				$this->_name='rms_student_id';
+				if($data['student_type']==1){ 	//	new student
+					$arra = array(
+							'branch_id'	=>$this->getBranchId(),
+							'stu_id'	=>$id,
+							'degree'	=>$data['dept'],
+					);
+					$this->insert($arra);
+				}
+			//////////////////////////////////////////////////////////////////////
+				
 				
 				$this->_name='rms_student_payment';
 				$arr=array(
@@ -539,33 +551,41 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$paymentid = $this->insert($arr);
 				
 				
-				if(!empty($id_updated)){
-					$parent = $id_updated ;
-				}else{
-					$parent = '';
-				}
-				//echo $parent;exit();
-				
+		//////////////	rms_study_history ///////////////////////////////////////////////
 				$this->_name='rms_study_history';
 				
-				$array = array(
-						'stu_id'	=> $id,
-						'stu_type'	=> $stu_type,
-						//'stu_code'=> $data['stu_id'],
-						'academic_year'=>$data['study_year'],
-						'degree'	=> $data['dept'],
-						'grade'		=> $data['grade'],
-						'room'		=> $data['room'],
-						'session'	=> $data['session'],
-						'parent_phone'	=>$data['parent_phone'],
-						'remark'		=>$data['not'],
-						'user_id'	=> $this->getUserId(),
-						'branch_id'	=>$this->getBranchId(),
-						'payment_id'=>$paymentid,
-						'is_parent' =>$parent,
-						'create_date'=>date('Y-m-d H:i:s'),
-				);
-				$this->insert($array);
+				if($data['student_type']!=3){
+					$array = array(
+							'stu_id'	=> $id,
+							'stu_type'	=> $stu_type,
+							'stu_code'	=> $stu_code,
+							'academic_year'=>$data['study_year'],
+							'degree'	=> $data['dept'],
+							'grade'		=> $data['grade'],
+							'session'	=> $data['session'],
+							'room'		=> $data['room'],
+							'remark'	=> $data['not'],
+							'user_id'	=> $this->getUserId(),
+							'branch_id'	=> $this->getBranchId(),
+							'payment_id'=> $paymentid,
+							'create_date'=>date('Y-m-d H:i:s'),
+					);
+					$this->insert($array);
+				}
+				
+	/////////////////////// rms_student_test ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
+				
+				$this->_name='rms_student_test';
+				
+				if($data['stu_test']>0){
+					$array = array(
+							'register'=>1,
+							);
+					$where= " id = ".$data['stu_test'];
+					$this->update($array, $where);
+				}
+		//////////////////////////////////////////////////////////////////////////////////////		
+				
 				
 				
 				$this->_name='rms_student_paymentdetail';
@@ -1627,21 +1647,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     public function getNewAccountNumber($dept_id){
     	$db = $this->getAdapter();
     	$length = '';
-    	$id_eng = '';
-    	$pre='';
-    	$session_user=new Zend_Session_Namespace('auth');
-    	$branch_id = $session_user->branch_id;
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	//$pre = $dbp->getPrefixCode($branch_id);
-    	//$pre.='-';
-    	if($dept_id==1 OR $dept_id==2 ){//grade 0-12
-    		$sql=" SELECT COUNT(stu_id) FROM rms_student WHERE degree = $dept_id  ";
-    	}else {
-    		$sql="SELECT COUNT(stu_id) FROM rms_student WHERE degree NOT IN (1,2) ";
-    		$id_eng = '/CAS/ENG';
+    	$pre = '';
+    	
+    	if($dept_id==1){//Kindergarten
+    		$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (1) and status=1 ";
+    		$pre = 'KID';
+    	}else if($dept_id==2 || $dept_id==3){
+    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (2,3) and status=1 ";
+    		$pre = 'KFT';
+    	}else{
+    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree>3 and status=1 ";
+    		$pre = 'ENG';
     	}
     	
-    	$sql.=$dbp->getAccessPermission();
+    	$pre.='-';
+    	
+    	
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
     	$length = strlen((int)$new_acc_no);
@@ -1649,7 +1670,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	for($i = $length;$i<5;$i++){
     		$pre.='0';
     	}
-    	return $pre.$new_acc_no.$id_eng;
+    	return $pre.$new_acc_no;
     }
     public function getRecieptNo(){
     	$db = $this->getAdapter();

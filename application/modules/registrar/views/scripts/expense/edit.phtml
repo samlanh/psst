@@ -10,16 +10,16 @@ $frm = $this->frm_expense;
 }
 </style>
  <script>
-		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
+	require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
  </script>
 <form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'edit')); ?>" 
 				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				return true;
-			}else {
-				return false;
-			}
+	if(this.validate()) {
+		return true;
+	}else {
+		return false;
+	}
 </script>
 <table cellspacing="10" class='fullside' >
 	<tr>
@@ -31,24 +31,36 @@ $frm = $this->frm_expense;
 						    <td><?php echo $tr->translate("BRANCH_NAME")?></td>
 							<td><?php echo $frm->getElement('branch_id');?></td>
 							<td><?php echo $tr->translate("EXPENSE_TITLE")?></td>
-							<td><?php echo $frm->getElement('title');?></td>
-							<td><?php echo $tr->translate("CURRENCY")?></td>
-							<td><?php echo $frm->getElement('currency_type');//echo $frm->getElement('for_date');?></td>
+							<td><?php echo $frm->getElement('title');?><?php echo $frm->getElement('id');?></td>
+							<td><?php echo $tr->translate("Payment Method")?></td>
+							<td><?php echo $frm->getElement('payment_method');?></td>
 						</tr>
 						<tr>
-						   <td><?php echo $tr->translate("RECEIPT_NO")?></td>
+						   	<td><?php echo $tr->translate("RECEIPT_NO")?></td>
 							<td><?php echo $frm->getElement('invoice');?></td>
 							<td><?php echo $tr->translate("TOTAL_EXPENSE")?></td>
 							<td><?php echo $frm->getElement('total_amount');?></td>
-							<td><?php echo $tr->translate("NOTE")?></td>
-							<td><?php echo $frm->getElement('Description');?></td>
+							<td><?php echo $tr->translate("CREATED_DATE")?></td>
+							<td><?php echo $frm->getElement('Date');?></td>
 						</tr>
 						<tr>
-							
-						    <td><?php echo $tr->translate("DATE")?></td>
-							<td><?php echo $frm->getElement('Date');?></td>
-							<td><?php echo $tr->translate("STATUS")?></td>
-							<td><?php echo $frm->getElement('Stutas');?></td>
+							<td valign="top"><?php echo $tr->translate("STATUS")?></td>
+							<td valign="top"><?php echo $frm->getElement('Stutas');?></td>
+							<td valign="top"><?php echo $tr->translate("NOTE")?><input type="hidden" id="identity" name="identity" /></td>
+							<td colspan="3"><?php echo $frm->getElement('Description');?></td>
+						</tr>
+						<tr>
+							<td colspan="6">
+								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;width:100%;">
+									<tr id="head-title" class="head-td" align="right"></tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6" align="left">
+								<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+							 	   iconClass="dijitIconEditProperty" onclick="addRow();" />
+							</td>
 						</tr>
 					</table>
 				</fieldset>
@@ -64,55 +76,317 @@ $frm = $this->frm_expense;
 	</tr>	
 </table>
 </form>
-
+<div class="dijitHidden" style="padding: 0px; margin: 0px;">
+	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'" id="terms" >
+		<div id="PrintReceipt" style="width: 19cm !important; height: 12cm ; padding: 0px; margin-bottom:30px; ">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height: 11cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+				<tr>
+				    <td colspan="10"  style="" align="center">
+						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
+							<tr>
+								<td width="30%">
+									<img style="width: 55%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo_print.png'?>"><br />
+								</td>
+								<td width="40%" align="center" valign="top" style="">
+									<div style="font-size: 14px;text-align:center;font-family: Khmer OS Muol Light;">សាលាបញ្ញាសាស្រ្ត អន្តរជាតិ</div>
+									<div style="font-size: 12px;font-family:Battambang,Arial,Helvetica,sans-serif">Paññāsāstra International School</div> 
+									<div style="font-size: 13px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div> 
+									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:2px;">PAYMENT VOUCHER</div> 
+								</td>
+								<td width="30%">
+									<div style="font-size: 16px;font-weight:bold;text-align:center;">
+										N<sup>o</sup> : <label id="lb_receipt_no"></label>
+									</div>
+								</td>
+							</tr>
+						</table>
+				    </td>
+				</tr>
+				<tr>
+					<td colspan="10">
+						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
+							<tr >
+								<td width="10%"></td>
+								<td width="18%"></td>
+								<td width="9%"></td>
+								<td width="18%"></td>
+								<td width="4%"></td>
+								<td width="8%"></td>
+								<td width="4%"></td>
+								<td width="5%"></td>
+								<td width="3%"></td>
+								<td width="8%"></td>
+							</tr>
+							<tr >
+								<td class="one ">ចំណាយសម្រាប់​ <br />Pay For </td>
+								<td valign="top"> :&nbsp; <label id="bl_payfor"></label> </td>
+								<td  align="center">ថ្ងៃចំណាយ </br />Paid Date</td>
+								<td valign="top"> :&nbsp; <label id="lb_paiddate"></label> </td>
+								<td colspan="3"><label id="" >ចំណាយជា  </br />Payment Method</label></td>
+								<td colspan="3" valign="top">:&nbsp;<label id="lb_paymentmehtod"></label></td>
+							</tr>
+							<tr>
+								<td>សម្គាល់  </br /> Note </td>
+								<td colspan="9" valign="top"> :&nbsp; <label id="lb_note"></label></td>
+							</tr>
+							<tr>
+								<td colspan="10">
+									<div id="t_amountmoneytype"></div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="10">
+									<table width="100%"   style="font-family:'Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:-5px;margin-bottom:5px;">
+										<tr>
+											<td width="20%"></td>
+											<td width="20%"></td>
+											<td width="15%"></td>
+											<td width="15%"></td>
+											<td width="15%"></td>
+											<td width="15%"></td>
+										</tr>
+										<tr>
+											<td colspan="2"  align="center">
+												<div style="margin-top:-5px;"></div>
+											</td>
+											<td colspan="2">
+												&nbsp;
+											</td>
+											<td>
+												<div style="margin-top:-15px;"></div>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="4"></td>
+											<td>
+												<div style="margin-top:-15px;">ចំណាយសរុប <br />Paid Amount</div>
+											</td>
+											<td>
+												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: -4px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2" align="center">
+												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+													<?php 
+													   $session_user=new Zend_Session_Namespace('auth');
+													   $last_name=$session_user->last_name;
+													   $username = $session_user->first_name;
+													   echo"Paid By : ".$last_name." ".$username;
+													?>
+												</div>
+											</td>
+											<td colspan="2">
+												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+													<?php 
+													   echo"Received By :........................ &nbsp;&nbsp;";
+													?>
+												</div>
+											</td>
+											<td><div style="margin-top:-15px;"></div></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td colspan="2" align="center"><div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 40px;"></td>
+											<td colspan="2" align="center"><div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 40px;"></td>
+											<td colspan="2" align="center"></td>
+										</tr>
+										<tr>
+											<td colspan="2" align="center">Date : <?php echo date('d / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></td>
+											<td colspan="2" align="center">Date :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</td>
+											<td colspan="2" align="center"></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<table>
+			<tr><td colspan="10" style="border-bottom:1px dashed #000;"></td></tr>
+		</table>
+		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
+		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+			type="button" onclick="hideDialog();">Cancel</button>
+		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+			type="button" onclick="doPrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
+	</div>
+</div>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.store.Memory");
 dojo.require("dijit.form.Textarea");
-
 dojo.ready(function(){
-	
+	initailize();
 });
-
-var url_get_rate = "<?php echo $this->url(array('module'=>'registrar','controller'=>'Income','action'=>'get-rate')); ?>";
-	function convertToDollar(){
-
-		currency_type = dijit.byId('currency_type').get('value');
-		
-		if(currency_type==1){
-			document.getElementById('label').style.display="none";
-			document.getElementById('convert').style.display="none";
-		}else{
-			document.getElementById('label').style.display="block";
-			document.getElementById('convert').style.display="block";
-		
-
-			dojo.xhrPost({
-				url:url_get_rate,
-				content:{
-					'currency_type':currency_type
-					},
-				handleAs:"json",
-				load: function(data) {
-					  amount_in_kh = dijit.byId('total_amount').get('value');  
-					  //alert(amount);
-					  //amount=isNaN(amount)?0:amount;
-					  if(isNaN(amount_in_kh || amount_in_kh==0)){
-						  
-					  }else{ 
-					  	rate = data.reil;
-					  	amount_in_dollar = amount_in_kh / rate ; 
-					  	dijit.byId('convert_to_dollar').attr('value',amount_in_dollar);
-					  }
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-		
+var template = '';
+var service = '';
+var col = 0;
+var no = 0;
+var title = 0;
+tmp = '';
+temp='';
+optexpense = '<?php echo $this->expenseopt;?>';
+function initailize(){
+	<?php if(!empty($this->rows)){
+		foreach($this->rows as $row){
+	?>
+	col++;no++;
+	template='';
+	if(title!=1){
+		temp+='<th><?php echo $tr->translate("DEL");?></th>';
+		temp+='<th><?php echo $tr->translate("N_O");?></th>';
+		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ប្រភេទចំណាយ");?></th>';
+		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
+		temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+		dojo.query("#head-title").append(temp);
+		title=1;
 	}
+	template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+	template+='<td width="50px" align="center">'+no+'</td>';
+	template+='<td style="width:300px"><select style="width:100%" onchange="getValidate('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
+	template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="total_paid'+col+'" id="total_paid'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';			
+	template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
 	
+	tmp='<tr id="row'+col+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
+
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+col);
+	} else {$("#identity").val(col);}
+	dojo.html.set(dojo.byId("row"+col),template , {
+	     parseContent: true,
+	});
+	dijit.byId('expense_id'+col).attr('value',<?php echo $row['service_id']?>);
+	dijit.byId('total_paid'+col).attr('value',<?php echo $row['total_amount']?>);
+	dijit.byId('remark'+col).attr('value','<?php echo $row['description']?>');
+	<?php } }?>
+}
+function hideDialog(){
+	dijit.byId('terms').hide();
+}
+function doPrint() {
+	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+}
+	var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'get-receipt-number')); ?>";
+	function getReceiptNumber(){
+		dojo.xhrPost({
+			url:url_get_recceipt_number,
+			content:{
+				'branch_id':dijit.byId('branch_id').get('value')
+				},
+			handleAs:"json",
+			load: function(data) {
+				 dijit.byId('invoice').attr('value',data);
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
+		netTotal();
+	}
+	function calculateTotal(index){
+		netTotal();
+	}
+	function netTotal() {
+		var netTotal=0;
+		var rowId = $('#identity').val();
+		var rowIDArray = rowId.split(',');
+		for(var n = 0; n < rowIDArray.length; n++) {
+			netTotal += dijit.byId('total_paid'+rowIDArray[n]).get('value');
+		}
+		dijit.byId('total_amount').attr('value',netTotal);
+	 }
+	
+	function addRow() {
+			col++;no++;
+			template='';
+			if(title!=1){
+				temp+='<th><?php echo $tr->translate("DEL");?></th>';
+				temp+='<th><?php echo $tr->translate("N_O");?></th>';
+				temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ប្រភេទចំណាយ");?></th>';
+				temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
+				temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+				dojo.query("#head-title").append(temp);
+				title=1;
+		    }
+			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="50px" align="center">'+no+'</td>';
+			template+='<td style="width:300px"><select style="width:100%" onchange="getValidate('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
+			template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="total_paid'+col+'" id="total_paid'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';			
+			template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
+			tmp='<tr id="row'+col+'">';
+			tmp+="</tr>";
+			dojo.query("#table_row").append(tmp);
+			if($("#identity").val()!="") {
+				var identity = $("#identity").val();
+				$("#identity").val(identity+','+col);
+			} else {$("#identity").val(col);}
+			dojo.html.set(dojo.byId("row"+col),template , {
+			     parseContent: true,
+			});
+	 }
+	function printSave(){	
+		if(dijit.byId('office_receipt').validate()) {
+			paid_date = dijit.byId("Date").get('value')
+			var today = new Date(paid_date);
+			var dd = today.getDate();
+			var mon = today.toDateString().substr(4,3); //January is 0!
+			var yyyy = today.getFullYear();
+			dojo.byId("lb_paiddate").innerHTML  = dd+'/'+mon+'/'+yyyy;
+			dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
+			dojo.byId("lb_total_received").innerHTML = '$ ' + dijit.byId("total_amount").get('value');
+			dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
+			dojo.byId("lb_paymentmehtod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+			var rowId = $('#identity').val();
+			var rowIDArray = rowId.split(',');
+			template="";
+				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
+					  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
+					  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">No</div></strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">Expense Type</div></strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">Amount</div></strong></td>';
+					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">Description</div></strong></td>';
+					  temp+='</tr>';
+					  n=0;
+					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
+					  temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
+					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_paid"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+					  i++;
+					  temp+='</tr>';
+					}
+					for(row = n+1;row<=7;row++){
+						 temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
+						  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
+						  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
+						  temp+='<td style="border:1px solid #000;"></td>';
+						  temp+='</tr>';
+					}
+				temp+='</table>';
+			dojo.byId('t_amountmoneytype').innerHTML = temp;
+			dijit.byId("terms").show();	
+		}
+	}
 </script>

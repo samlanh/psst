@@ -566,7 +566,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$db=$this->getAdapter();
    	$sql="SELECT key_code,name_kh AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 ";
    	$rows = $db->fetchAll($sql);
-   	$options= array();
+   	$options= array(-1=>"ជ្រើសរើសប្រភេទបង់ប្រាក់");
    	if($is_opt!=null){
    		if(!empty($rows))foreach($rows AS $row){
    			$options[$row['key_code']]=$row['view_name'];
@@ -603,6 +603,21 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$sql = "SELECT id ,account_name as name FROM `rms_account_name` WHERE status=1 AND account_name!=''
    	AND account_type = ".$type;
    	return $db->fetchAll($sql);
+   }
+   function getAllStudent($opt=null,$type){
+   	$db = $this->getAdapter();
+   	$sql=" SELECT stu_id As id,stu_code,stu_khname FROM `rms_student` WHERE stu_khname!='' AND STATUS=1 AND is_subspend=0 ";
+   	$rows = $db->fetchAll($sql);
+   	
+   	if($opt!=null){
+   		$options=array(0=>"ជ្រើសរើសសិស្ស");
+   		if(!empty($rows))foreach($rows AS $row){
+   			$lable = $row['stu_code'];
+   			if($type==2){$lable = $row['stu_khname'];}
+   			$options[$row['id']]=$lable;
+   		}
+   	}
+   	return $options;
    }
 }
 ?>

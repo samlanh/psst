@@ -35,34 +35,44 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 
  }
  function updatExpense($data){
- 	
-//  	if($data['currency_type']==1){
-//  		$amount_in_reil = 0 ;
-//  		$amount_in_dollar = $data['total_amount'];
-//  	}else{
-//  		$amount_in_reil = $data['total_amount'] ;
-//  		$amount_in_dollar = $data['convert_to_dollar'];
-//  	}
- 	
-	$arr = array(
-					'branch_id'=>$data['branch_id'],
+	$arr = array('branch_id'=>$data['branch_id'],
 					'title'=>$data['title'],
 					'total_amount'=>$data['total_amount'],
 					'invoice'=>$data['invoice'],
-					'curr_type'=>$data['currency_type'],
+					'payment_type'=>$data['payment_method'],
 					'description'=>$data['Description'],
 					'date'=>$data['Date'],
 					'status'=>$data['Stutas'],
 					'user_id'=>$this->getUserId(),
-				
+					'create_date'=>date('Y-m-d'),
 				);
 	$where=" id = ".$data['id'];
 	$this->update($arr, $where);
+	
+	$ids = explode(',', $data['identity']);
+	$this->_name='ln_expense_detail';
+	$where = "expense_id = ".$data['id'];
+	$this->delete($where);
+	
+	foreach ($ids as $j){
+		$arr = array(
+				'expense_id'=>$data['id'],
+				'service_id'=>$data['expense_id'.$j],
+				'description'=>$data['remark'.$j],
+				'total_amount'=>$data['total_paid'.$j]);
+		$this->insert($arr);
+	}
+		
 }
 function getexpensebyid($id){
 	$db = $this->getAdapter();
 	$sql=" SELECT * FROM ln_expense where id=$id ";
 	return $db->fetchRow($sql);
+}
+function getexpenseDetailbyid($id){
+	$db = $this->getAdapter();
+	$sql=" SELECT * FROM ln_expense_detail WHERE expense_id=$id AND status=1";
+	return $db->fetchAll($sql);
 }
 
 function getAllExpense($search=null){
@@ -75,8 +85,10 @@ function getAllExpense($search=null){
 	$sql=" SELECT id,
 	(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
 	title,invoice,
-	(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = curr_type) AS currency_type, 
-	total_amount,description,date,status FROM ln_expense ";
+	(SELECT name_kh FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_type limit 1) AS payment_type,
+	total_amount,description,date,
+	(SELECT first_name FROM `rms_users` WHERE id=1 LIMIT 1) as user_name,
+	status FROM ln_expense ";
 	
 	if (!empty($search['adv_search'])){
 			$s_where = array();
@@ -88,8 +100,8 @@ function getAllExpense($search=null){
 		if($search['status']>-1){
 			$where.= " AND status = ".$search['status'];
 		}
-		if($search['currency_type']>-1){
-			$where.= " AND curr_type = ".$search['currency_type'];
+		if($search['payment_type']>-1){
+			$where.= " AND payment_type = ".$search['payment_type'];
 		}
        $order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);

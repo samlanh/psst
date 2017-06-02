@@ -1,0 +1,88 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$frm = $this->frm_credit;
+?>
+<title>Credit Memo</title>
+<style>	
+.fullside {
+	width: 100%;
+	height: 30px;
+}
+</style>
+ <script>
+		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
+ </script>
+<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'creditmemo','action'=>'add')); ?>" 
+		dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit">			
+	if(this.validate()) {
+		student_id = dijit.byId('student_id').get('value');
+        if(student_id==0){
+			alert("សូមជ្រើសរើសសិស្ស");dijit.byId('student_id').focus();return false;}
+		return true;
+	}else {
+		return false;
+	}
+</script>
+<table cellspacing="10" class='fullside' >
+	<tr>
+		<td>
+			<fieldset>
+				<legend><strong>Credit Memo</strong></legend>
+				<table cellspacing="10"  width="100%">
+					<tr>
+					    <td><?php echo $tr->translate("BRANCH_NAME")?></td>
+						<td><?php echo $frm->getElement('branch_id');?></td>
+						<td><?php echo $tr->translate("STUDENT_CODE")?></td>
+						<td><?php echo $frm->getElement('student_id');?></td>
+						<td><?php echo $tr->translate("STUDENT_NAME")?></td>
+						<td><?php echo $frm->getElement('student_name');?></td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("TOTAL_EXPENSE")?></td>
+						<td><?php echo $frm->getElement('total_amount');?></td>
+						<td><?php echo $tr->translate("CREATED_DATE")?></td>
+						<td><?php echo $frm->getElement('Date');?></td>
+						<td valign="top"><?php echo $tr->translate("STATUS")?></td>
+						<td valign="top"><?php echo $frm->getElement('status');?></td>
+					</tr>
+					<tr>
+						<td valign="top"><?php //echo $tr->translate("STATUS")?></td>
+						<td valign="top"><?php //echo $frm->getElement('Stutas');?></td>
+						<td valign="top"><?php echo $tr->translate("NOTE")?><input type="hidden" id="identity" name="identity" /></td>
+						<td colspan="3"><?php echo $frm->getElement('Description');?></td>
+					</tr>
+				</table>
+			</fieldset>
+		</td>
+	</tr>		
+	<tr>
+		<td align="center">
+		<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
+				 iconClass="dijitIconClear"/>
+			<input type="submit" label="<?php echo $tr->translate("SAVECLOSE");?>" name='saveclose' value='saveclose' dojoType="dijit.form.Button"
+				 iconClass="dijitIconDelete"/>
+			<input type="submit" label="<?php echo $tr->translate("SAVENEW")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
+				 iconClass="dijitIconNewTask"/>
+		</td>
+	</tr>	
+</table>
+</form>
+<script type="text/javascript">
+dojo.require("dijit.form.Textarea");
+//dojo.require("dojo.data.ItemFileWriteStore");  
+//dojo.require("dojo.NodeList-manipulate");
+//dojo.require("dojo.data.ObjectStore");
+//dojo.require("dojo.store.Memory");
+dojo.ready(function(){
+});
+function setSelected(type){
+	if(type==1){
+		student_id = dijit.byId("student_id").get('value');
+		dijit.byId("student_name").attr('value',student_id);
+	}else{
+		student_id = dijit.byId("student_name").get('value');
+		dijit.byId("student_id").attr('value',student_id);
+	}
+}
+</script>

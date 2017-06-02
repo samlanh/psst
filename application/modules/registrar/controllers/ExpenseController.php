@@ -20,7 +20,7 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		else{
     			$formdata = array(
     					"adv_search"=>'',
-    					"currency_type"=>-1,
+    					"payment_type"=>-1,
     					"status"=>-1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
@@ -39,7 +39,7 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH_NAME","EXPENSE_TITLE","RECEIPT_NO","CURRENCY","TOTAL_EXPENSE","NOTE","FOR_DATE","STATUS");
+    		$collumns = array("BRANCH_NAME","EXPENSE_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_EXPENSE","NOTE","FOR_DATE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'expense','action'=>'edit',
     		);
@@ -71,13 +71,11 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$user_type=$_db->getUserType();
 		if($user_type!=1){
 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
 		}
-		
     	$pructis=new Registrar_Form_Frmexpense();
     	$frm = $pructis->FrmAddExpense();
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -104,20 +102,22 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$user_type=$_db->getUserType();
 		if($user_type!=1){
-			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
+			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/expense');
 		}
 		
 		$id = $this->getRequest()->getParam('id');
 		$db = new Registrar_Model_DbTable_DbExpense();
 		$row  = $db->getexpensebyid($id);
 		$this->view->row = $row;
+		$this->view->rows = $db->getexpenseDetailbyid($id);
 		
     	$pructis=new Registrar_Form_Frmexpense();
     	$frm = $pructis->FrmAddExpense($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_expense=$frm;
-		
-    	
+
+    	$db = new Application_Model_GlobalClass();
+    	$this->view->expenseopt = $db->getAllExpenseIncomeType(5);
     }
     
     function getReceiptNumberAction(){

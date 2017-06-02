@@ -1,26 +1,36 @@
 <?php 
-Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
+Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 	protected $tr;
 	public function init()
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
-	public function FrmAddExpense($data=null){
-		
-		$title = new Zend_Dojo_Form_Element_ValidationTextBox('title');
-		$title->setAttribs(array(
-				'dojoType'=>'dijit.form.ValidationTextBox',
+	public function Frmcreditmemo($data=null){
+		$db = new Application_Model_DbTable_DbGlobal();
+		$student_id = new Zend_Dojo_Form_Element_FilteringSelect('student_id');
+		$student_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
-// 				/'required'=>true
+				'onchange'=>'setSelected(1)'
 				));
+		$optstu = $db->getAllStudent(1,1);
+		$student_id->setMultiOptions($optstu);
+		
+		$student_name = new Zend_Dojo_Form_Element_FilteringSelect('student_name');
+		$student_name->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'onchange'=>'setSelected(2)'
+		));
+		$optstu = $db->getAllStudent(1,2);
+		$student_name->setMultiOptions($optstu);
+		
 		
 		$for_date = new Zend_Dojo_Form_Element_FilteringSelect('for_date');
 		$for_date->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside'
 		));
-		$options= array(1=>"1",2=>"2",3=>"3",4=>"4",5=>"5",6=>"6",7=>"7",8=>"8",9=>"9",10=>"10",11=>"11",12=>"12");
-		$for_date->setMultiOptions($options);
 		
 		$_Date = new Zend_Dojo_Form_Element_DateTextBox('Date');
 		$_Date->setAttribs(array(
@@ -39,7 +49,6 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 				'onchange'=>'filterClient();'
 		));
 		
-		$db = new Application_Model_DbTable_DbGlobal();
 		$rows = $db->getAllBranch();
 		$options=array();
 		if(!empty($rows))foreach($rows AS $row){
@@ -47,8 +56,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		}
 		$_branch_id->setMultiOptions($options);
 		
-		
-		$_stutas = new Zend_Dojo_Form_Element_FilteringSelect('Stutas');
+		$_stutas = new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_stutas ->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
@@ -68,51 +76,20 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'required'=>true,
-				'readonly'=>'readonly'
 		));
-		
-		$convert_to_dollar=new Zend_Dojo_Form_Element_NumberTextBox('convert_to_dollar');
-		$convert_to_dollar->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>'fullside',
-				//'required'=>true
-		));
-		
-		$invoice=new Zend_Dojo_Form_Element_TextBox('invoice');
-		$invoice->setAttribs(array(
-				'dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside',
-				'readOnly'=>'readOnly',
-				'style'=>'color:red;',
-		));
-		//$db = new Registrar_Model_DbTable_DbIncome();
-		//$invoice_no = $db->getInvoiceNo();
-		
 		$id = new Zend_Form_Element_Hidden("id");
 		
-		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
-		$payment_method->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-		));
-		$opt = $db->getViewById(8,1);
-		$payment_method->setMultiOptions($opt);
-	
 		if($data!=null){
-			$payment_method->setValue($data['payment_type']);
 			$_branch_id->setValue($data['branch_id']);
-			$title->setValue($data['title']);
+			$student_id->setValue($data['student_id']);
 			$total_amount->setValue($data['total_amount']);
-			//$convert_to_dollar->setValue($data['amount_in_dollar']);
-			$_Description->setValue($data['description']);
+			$_Description->setValue($data['note']);
 			$_Date->setValue($data['date']);
 			$_stutas->setValue($data['status']);
-			$invoice->setValue($data['invoice']);
 			$id->setValue($data['id']);
 		}
-		
-		$this->addElements(array($invoice,$payment_method,$title,$_Date ,$_stutas,$_Description,
-				$total_amount,$convert_to_dollar,$_branch_id,$for_date,$id,));
+		$this->addElements(array($student_name,$student_id,$_Date ,$_stutas,$_Description,
+				$total_amount,$_branch_id,$for_date,$id,));
 		return $this;
 		
 	}	

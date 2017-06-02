@@ -13,7 +13,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'));
 		$_status_opt = array(
-				-1=>$this->tr->translate("ALL"),
+				-1=>$this->tr->translate("ជ្រើសរើសស្ថានការ"),
 				1=>$this->tr->translate("ACTIVE"),
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
@@ -28,16 +28,23 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_title->setValue($request->getParam("adv_search"));
 		
 		
-		$_currency_type = new Zend_Dojo_Form_Element_FilteringSelect('currency_type');
-		$_currency_type->setAttribs(array(
+// 		$_currency_type = new Zend_Dojo_Form_Element_FilteringSelect('payment_id');
+// 		$_currency_type->setAttribs(array(
+// 				'dojoType'=>'dijit.form.FilteringSelect',
+// 				'class'=>'fullside'
+// 		));
+// 		$opt = array(-1=>"--Select Currency Type--",1=>"Dollar",2=>'Riel',3=>"Bath");
+// 		$_currency_type->setMultiOptions($opt);
+// 		$_currency_type->setValue($request->getParam("currency_type"));
+		
+		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_type');
+		$payment_method->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside'
+				'class'=>'fullside',
 		));
-		$opt = array(-1=>"--Select Currency Type--",1=>"Dollar",2=>'Riel',3=>"Bath");
-		$_currency_type->setMultiOptions($opt);
-		$_currency_type->setValue($request->getParam("currency_type"));
-		
-		
+		$opt = $db->getViewById(8,1);
+		$payment_method->setMultiOptions($opt);
+		$payment_method->setValue($request->getParam("currency_type"));
 		
 		$_releasedate = new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$_releasedate->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
@@ -76,7 +83,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_branch_id->setValue($request->getParam("branch_id"));
 		
 		
-		$this->addElements(array($_title,$_branch_id,$_currency_type,$_releasedate
+		$this->addElements(array($_title,$_branch_id,$payment_method,$_releasedate
 				,$_dateline,$_status));
 		return $this;
 		

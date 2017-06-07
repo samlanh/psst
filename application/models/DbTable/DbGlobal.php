@@ -619,5 +619,34 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}
    	return $options;
    }
+   
+
+   function getDeduct(){
+	   	$db = $this->getAdapter();
+	   	$sql=" SELECT value FROM `ln_system_setting` WHERE id=19 ";
+	   	return $db->fetchOne($sql);
+   }
+   
+   
+   
+   
+   
+   
+   
 }
+
+
+
+
+
+
 ?>
+
+
+
+
+
+
+
+
+

@@ -94,11 +94,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->_name = "rms_student";
 					$stu_type='';
 					$payfor_type='';
-					if($data['dept']==1){
-						$stu_type=1;// kid - 6
+					if($data['dept']==1 || $data['dept']==2){
+						$stu_type=1;// kid - Grade6
 						$payfor_type=1; // kid  - Grade 12 
-					}else if($data['dept']==2){
-						$stu_type=2; // 7 - Grade 12
+					}else if($data['dept']==3){
+						$stu_type=2; // Grade7 - Grade 12
 						$payfor_type=1; // kid  - Grade 12 
 					}else{
 						$stu_type=3; // eng 
@@ -119,20 +119,20 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'tel'	 	 =>$data['parent_phone'],
 							'stu_type'	 =>$stu_type,
 							'is_stu_new' =>0,
+							
+							'group_id'	 =>$data['group'],
 							);
 					$where = ' stu_id = '.$id;
 					$this->update($arr, $where);
 					
-					
-					
 				}else {
 					$stu_type='';
 					$payfor_type='';
-					if($data['dept']==1){
-						$stu_type=1;// kid - 6
+					if($data['dept']==1 || $data['dept']==2){
+						$stu_type=1;// kid - Grade6
 						$payfor_type=1; // kid  - Grade 12 
-					}else if($data['dept']==2){
-						$stu_type=2; // 7 - Grade 12
+					}else if($data['dept']==3){
+						$stu_type=2; // Grade7 - Grade 12
 						$payfor_type=1; // kid  - Grade 12 
 					}else{
 						$stu_type=3; // eng 
@@ -146,22 +146,29 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 				    $arr=array(
 							'stu_code'		=>$stu_code,
-							'academic_year'	=>$data['study_year'],
+							
 							'stu_khname'	=>$data['kh_name'],
 							'stu_enname'	=>$data['en_name'],
 							'sex'			=>$data['sex'],
 				    		'tel'			=>$data['parent_phone'],
-							'session'		=>$data['session'],
+				    		'dob'			=>$data['dob'],
+				    		
+				    		'academic_year'	=>$data['study_year'],
 							'degree'		=>$data['dept'],
 							'grade'			=>$data['grade'],
 				    		'room'			=>$data['room'],
-				    		'dob'			=>$data['dob'],
+				    		'session'		=>$data['session'],
+				    		
+				    		
 				    		'remark'	 	=>$data['not'],
 						    'stu_type'		=>$stu_type,
 				    		'is_setgroup'	=>$isset_group,
 				    		'branch_id'		=>$this->getBranchId(),
 				    		'create_date'	=>date('Y-m-d H:i:s'),
 							'user_id'		=>$this->getUserId(),
+				    		
+				    		'group_id'	 	=>$data['group'],
+				    		
 						);
 				    
 			    	$id= $this->insert($arr);
@@ -183,7 +190,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			// insert to tbl_student_id for count id to generate new student_id
 			
 				$this->_name='rms_student_id';
-				if($data['student_type']==1){ 	//	new student
+				if($data['student_type']!=3){ 	//	new student
 					$arra = array(
 							'branch_id'	=>$this->getBranchId(),
 							'stu_id'	=>$id,
@@ -191,6 +198,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					);
 					$this->insert($arra);
 				}
+				
 			//////////////////////////////////////////////////////////////////////	
 				
 				$this->_name='rms_student_payment';
@@ -199,44 +207,45 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'receipt_number'=>$receipt_number,
 						'payment_type'	=> $data['payment_type'],
 						'payfor_type'	=>$payfor_type,
+						
 						'year'			=>$data['study_year'],
 						'degree'		=>$data['dept'],
 						'grade'			=>$data['grade'],
 						'session'		=>$data['session'],
 						'time'			=>$data['study_hour'],
 						'room_id'		=>$data['room'],
-						'payment_term'	=>$data['payment_term'],
 						
-						'ex_rate'		=>$data['ex_rate'],
-						'tuition_fee'	=>$data['tuitionfee'],
-						'discount_percent'=>$data['discount'],
+// 						'payment_term'	=>$data['payment_term'],
+// 						'tuition_fee'	=>$data['tuitionfee'],
+// 						'discount_percent'=>$data['discount'],
 						
-						'admin_fee'		=>$data['admin_fee'],
-						'total'			=>$data['total_payment'],
-						'total_payment'	=>$data['total_payment'],
-						'paid_amount'	=>$data['paid_amount'],
-						'receive_amount'=>$data['paid_amount'],
-						'balance_due'	=>$data['balance'],
+// 						'admin_fee'		=>$data['admin_fee'],
+// 						'total'			=>$data['total_payment'],
+// 						'total_payment'	=>$data['total_payment'],
+// 						'paid_amount'	=>$data['paid_amount'],
+// 						'receive_amount'=>$data['paid_amount'],
+// 						'balance_due'	=>$data['balance'],
+						
+						
 						'note'			=>$data['not'],
-						'student_type'	=>$data['student_type'],
+						'student_type'	=>$data['student_type'],  // 1=tested student , 2=new student , 3=old student
 						'create_date'	=>date('Y-m-d H:i:s'),
 						//'amount_in_khmer'=>$data['char_price'],
-						'user_id'=>$this->getUserId(),
-						'branch_id'=>$this->getBranchId(),
+						'user_id'		=>$this->getUserId(),
+						'branch_id'		=>$this->getBranchId(),
 						
+						'memo_id'		=>$data['credit_memo_id'],
 						'grand_total'	=>$data['grand_total'],
-						'grand_paid_amount'	=>$data['total_received'],
-						'grand_balance'	=>$data['total_balance'],
-						//'grand_return'	=>$data['total_return'],
+						'credit_memo'	=>$data['credit_memo'],
+						'deduct'		=>$data['deduct'],
+						'net_amount'	=>$data['net_amount'],
 						
 				);
 				$paymentid = $this->insert($arr);
 				
-				
+		/////////////// study_history /////////////////////////////////////////////		
 				$this->_name='rms_study_history';
-				
 				if($data['student_type']!=3){
-					
 					$array = array(
 							'stu_id'	=> $id,
 							'stu_type'	=> $stu_type,
@@ -253,12 +262,29 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'create_date'=>date('Y-m-d H:i:s'),
 					);
 					$this->insert($array);
-					
-					
 				}
 				
+	////////////////// rms_creditmemo /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
+				
+				$this->_name='rms_creditmemo';
+				if($data['student_type']==3){
+					if(!empty($data['credit_memo_id'])){
+						if($data['net_amount']>=0){
+							$array=array(
+								'type'=>1, // បង់រួច
+							);
+						}else{
+							$array=array(
+								'total_amountafter'=>abs($data['net_amount']), // 
+							);
+						}
+						$where = " id = ".$data['credit_memo_id'];
+						$this->update($array, $where);					
+					}
+				}
 				
 	/////////////////////// rms_student_test ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
+				
 				$this->_name='rms_student_test';
 				
 				if($data['stu_test']>0){
@@ -268,7 +294,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$where= " id = ".$data['stu_test'];
 					$this->update($array, $where);
 				}
-				
 				
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 				
@@ -285,55 +310,48 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'is_start'=>0
 				);
 				$this->update($arr,$where);
-//update is_complete = 1 ពេលសិស្សមកបង់ថ្លៃដែលបានជំពាក់
-				$this->_name='rms_student_paymentdetail';
-				if(!empty($data['id_balance_record'])){
-					$where="id=".$data['id_balance_record'];
-					$arr = array(
-							'is_complete'=>1,
-							'comment'=>"បង់រួច",
-					);
-					$this->update($arr,$where);
-				}
+				
 				$complete=1;
-				if($data['balance']>0){
-					$complete=0;
-					$comment="មិនទាន់បង់";
-				}else{
-					$complete=1;
-					$comment="បង់រួច";
-				}
+				$comment="បង់រួច";
 	             
 	            if($data){
-					$service_type=4; // tuition_fee service
-					$fee = $data["tuitionfee"];
-					$subtotal=$data["total_payment"] + $data["admin_fee"];
-					//$subtotal = $subtotal + $data["remark"]+$data["addmin_fee"] ;
-					$discount=$data['discount'];
-					$paidamount=$data['paid_amount'] + $data["admin_fee"];
-					$balance= $subtotal - $paidamount;
+	            	
+// 					$service_id=4; // tuition_fee service
+// 					$fee = $data["tuitionfee"];
+					
+// 					$subtotal=$data["total_payment"] + $data["admin_fee"];
+// 					//$subtotal = $subtotal + $data["remark"]+$data["addmin_fee"] ;
+// 					$discount=$data['discount'];
+// 					$paidamount=$data['paid_amount'] + $data["admin_fee"];
+// 					//$balance= $subtotal - $paidamount;
 					 
 					 $arr=array(
-	             			'payment_id'=>$paymentid,
-	             			'type'=>$payfor_type,
-	             			'service_id'=>$service_type,
-	             			'payment_term'=>$data['payment_term'],
-	             			'fee'=>$fee,
-	             			'qty'=>1,
-	             			'admin_fee'=>$data['admin_fee'],
-	             			'subtotal'=>$subtotal,//$subtotal,
-	             			'paidamount'=>$paidamount,//$paidamount,
-	             			'balance'=>$balance,
-	             			'discount_percent'=>$discount,//$discount,
-	             			'discount_fix'=>0,
-	             			'note'=>$data['not'],
-	             			'start_date'=>$data['start_date'],
-	             			'validate'=>$data['end_date'],
-	             			'references'=>'frome registration',
+	             			'payment_id'	=>$paymentid,
+	             			'type'			=>$payfor_type,
+					 		
+	             			'service_id'	=>4, //  tuition_fee service
+	             			
+	             			'payment_term'	=>$data['payment_term'],
+	             			'fee'			=>$data["tuitionfee"],
+	             			'qty'			=>1,
+	             			'subtotal'		=>$data["tuitionfee"],//$subtotal = fee * qty;
+	             			
+					 		'late_fee'		=>$data["late_fee"],
+					 		'discount_percent'=>$data['discount'],//$discount,
+					 		
+					 		'paidamount'	=>$data['total_payment'],//$paidamount,
+					 		
+	             			'balance'		=>0,
+	             			
+	             			'discount_fix'	=>0,
+	             			'note'			=>$data['not'],
+	             			'start_date'	=>$data['start_date'],
+	             			'validate'		=>$data['end_date'],
+	             			'references'	=>'frome registration',
 	             			'is_parent'		=>$expired_record_id, // store record that updated to finished used
 	             			'is_complete'	=>$complete,
 	             			'comment'		=>$comment,
-	             			'user_id'=>$this->getUserId(),
+	             			'user_id'		=>$this->getUserId(),
 	             	);
 	             	$this->insert($arr);
 	             }
@@ -373,26 +391,28 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             	}else{
 	             		$spd_id=0;
 	             	}
-	             	// check balance
+
+	             	
 	             	$complete=1;
-	             	if($data['subtotal_'.$i]-$data['paidamount_'.$i]>0){
-	             		$complete=0;
-	             		$status="មិនទាន់បង់";
-	             	}else{
-	             		$complete=1;
-	             		$status="បង់រួច";
-	             	}
-	             	$this->_name="rms_student_paymentdetail";
+             		$status="បង់រួច";
+
+             		$this->_name="rms_student_paymentdetail";
 	             	$_arr = array(
 	             			'payment_id'	=>$paymentid,
 	             			'service_id'	=>$data['service_'.$i],
 	             			'payment_term'	=>$data['term_'.$i],
 	             			'fee'			=>$data['price_'.$i],
 	             			'qty'			=>$data['qty_'.$i],
-	             			'discount_percent'	=>$data['discount_'.$i],
 	             			'subtotal'		=>$data['subtotal_'.$i],
+	             			
+	             			'late_fee'		=>$data['late_fee_service_'.$i],
+	             			'extra_fee'		=>$data['additional_fee_'.$i],
+	             			
+	             			'discount_percent'	=>$data['discount_'.$i],
+	             			
 	             			'paidamount'	=>$data['paidamount_'.$i],
-	             			'balance'		=>$data['subtotal_'.$i]-$data['paidamount_'.$i],
+	             			
+	             			'balance'		=>0,
 	             			'start_date'	=>$start_date,
 	             			'validate'		=>$validate,
 	             			'note'			=>$data['remark'.$i],
@@ -416,10 +436,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->_name = "rms_student";
 					$stu_type='';
 					$payfor_type='';
-					if($data['dept']==1){
+					if($data['dept']==1 || $data['dept']==2){
 						$stu_type=1;// kid - 6
 						$payfor_type=1; // kid  - Grade 12 
-					}else if($data['dept']==2){
+					}else if($data['dept']==3){
 						$stu_type=2; // 7 - Grade 12
 						$payfor_type=1; // kid  - Grade 12 
 					}else{
@@ -437,6 +457,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'stu_type'	=>$stu_type,
 							'remark'	=>$data['not'],
 							'is_stu_new'=>0,
+							'group_id'	=>$data['group'],
 					);
 					$where = ' stu_id = '.$id;
 					$this->update($arr, $where);
@@ -445,10 +466,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 					$stu_type='';
 					$payfor_type='';
-					if($data['dept']==1){
+					if($data['dept']==1 || $data['dept']==2){
 						$stu_type=1;// kid - 6
 						$payfor_type=1; // kid  - Grade 12 
-					}else if($data['dept']==2){
+					}else if($data['dept']==3){
 						$stu_type=2; // 7 - Grade 12
 						$payfor_type=1; // kid  - Grade 12 
 					}else{
@@ -468,6 +489,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'stu_enname'	=>$data['en_name'],
 							'sex'			=>$data['sex'],
 							'tel'			=>$data['parent_phone'],
+							'dob'			=>$data['dob'],
 							
 							'academic_year'	=>$data['study_year'],
 							'degree'		=>$data['dept'],
@@ -475,13 +497,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'session'		=>$data['session'],
 							'room'			=>$data['room'],
 							
-							'dob'			=>$data['dob'],
 							'is_setgroup'	=>$isset_group,
 							'stu_type'		=>$stu_type,
 							'remark'		=>$data['not'],
 							'branch_id'		=>$this->getBranchId(),
 							'create_date'	=>date('Y-m-d H:i:s'),
 							'user_id'		=>$this->getUserId(),
+							'group_id'		=>$data['group'],
 				
 					);
 					$id= $this->insert($arr);
@@ -526,27 +548,31 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'time'			=>$data['study_hour'],
 						'session'		=>$data['session'],
 						'room_id'		=>$data['room'],
-						'payment_term'	=>$data['payment_term'],
-						'tuition_fee'	=>$data['tuitionfee'],
-						'discount_percent'=>$data['discount'],
-						//'other_fee'		=>$data['remark'],
-						//'admin_fee'		=>$data['addmin_fee'],
-						'total'			=>$data['total_payment'],
-						'total_payment'	=>$data['total_payment'],
-						'paid_amount'	=>$data['paid_amount'],
-						'receive_amount'=>$data['paid_amount'],
-						'balance_due'	=>$data['balance'],
+						
+// 						'payment_term'	=>$data['payment_term'],
+// 						'tuition_fee'	=>$data['tuitionfee'],
+// 						'discount_percent'=>$data['discount'],
+// 						//'other_fee'		=>$data['remark'],
+// 						//'admin_fee'		=>$data['addmin_fee'],
+// 						'total'			=>$data['total_payment'],
+// 						'total_payment'	=>$data['total_payment'],
+// 						'paid_amount'	=>$data['paid_amount'],
+// 						'receive_amount'=>$data['paid_amount'],
+// 						'balance_due'	=>$data['balance'],
+						
+						
 						'note'			=>$data['not'],
 						'student_type'	=>$data['student_type'],
 						'create_date'	=>date('Y-m-d H:i:s'),
 						//'amount_in_khmer'=>$data['char_price'],
-						'user_id'=>$this->getUserId(),
-						'branch_id'=>$this->getBranchId(),
+						'user_id'		=>$this->getUserId(),
+						'branch_id'		=>$this->getBranchId(),
 						
+						'memo_id'		=>$data['credit_memo_id'],
 						'grand_total'	=>$data['grand_total'],
-						'grand_paid_amount'	=>$data['total_received'],
-						'grand_balance'	=>$data['total_balance'],
-						//'grand_return'	=>$data['total_return'],
+						'credit_memo'	=>$data['credit_memo'],
+						'deduct'		=>$data['deduct'],
+						'net_amount'	=>$data['net_amount'],
 				);
 				$paymentid = $this->insert($arr);
 				
@@ -571,6 +597,26 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'create_date'=>date('Y-m-d H:i:s'),
 					);
 					$this->insert($array);
+				}
+				
+				
+	////////////////// rms_creditmemo /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				
+				$this->_name='rms_creditmemo';
+				if($data['student_type']==3){
+					if(!empty($data['credit_memo_id'])){
+						if($data['net_amount']>=0){
+							$array=array(
+									'type'=>1, // បង់រួច
+							);
+						}else{
+							$array=array(
+									'total_amountafter'=>abs($data['net_amount']), //
+							);
+						}
+						$where = " id = ".$data['credit_memo_id'];
+						$this->update($array, $where);
+					}
 				}
 				
 	/////////////////////// rms_student_test ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
@@ -601,55 +647,49 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'is_start'=>0
 				);
 				$this->update($arr,$where);
-				//update is_complete = 1 ពេលសិស្សមកបង់ថ្លៃដែលបានជំពាក់
-				$this->_name='rms_student_paymentdetail';
-				if(!empty($data['id_balance_record'])){
-					$where="id=".$data['id_balance_record'];
-					$arr = array(
-							'is_complete'=>1,
-							'comment'=>"បង់រួច",
-					);
-					$this->update($arr,$where);
-				}
+				
+				
 				$complete=1;
-				if($data['balance']>0){
-					$complete=0;
-					$comment="មិនទាន់បង់";
-				}else{
-					$complete=1;
-					$comment="បង់រួច";
-				}
+				$comment="បង់រួច";
 				
 				if($data){
-					$service_type=4; // tuition_fee service
-					$fee = $data["tuitionfee"];
-					$subtotal=$data["total_payment"] + $data["admin_fee"] ;
-					//$subtotal = $subtotal + $data["remark"]+$data["addmin_fee"] ;
-					$discount=$data['discount'];
-					$paidamount=$data['paid_amount'] + $data["admin_fee"] ;
-					$balance= $subtotal - $paidamount;
+					
+// 					$service_type=4; // tuition_fee service
+// 					$fee = $data["tuitionfee"];
+// 					$subtotal=$data["total_payment"] + $data["admin_fee"] ;
+// 					//$subtotal = $subtotal + $data["remark"]+$data["addmin_fee"] ;
+// 					$discount=$data['discount'];
+// 					$paidamount=$data['paid_amount'] + $data["admin_fee"] ;
+// 					$balance= $subtotal - $paidamount;
 				
 					$arr=array(
-							'payment_id'=>$paymentid,
-							'type'=>$payfor_type,
-							'service_id'=>$service_type,
-							'payment_term'=>$data['payment_term'],
-							'fee'=>$fee,
-							'qty'=>1,
-							'admin_fee'=>$data['admin_fee'],
-							'subtotal'=>$subtotal,//$subtotal,
-							'paidamount'=>$paidamount,//$paidamount,
-							'balance'=>$balance,
-							'discount_percent'=>$discount,//$discount,
-							'discount_fix'=>0,
-							'note'=>$data['not'],
-							'start_date'=>$data['start_date'],
-							'validate'=>$data['end_date'],
-							'references'=>'frome registration',
+							'payment_id'	=>$paymentid,
+							'type'			=>$payfor_type,
+							
+							'service_id'	=>4, // tuition_fee service,
+							
+							'payment_term'	=>$data['payment_term'],
+	             			'fee'			=>$data["tuitionfee"],
+	             			'qty'			=>1,
+	             			'subtotal'		=>$data["tuitionfee"],//$subtotal = fee * qty;
+	             			
+					 		'late_fee'		=>$data["late_fee"],
+					 		'discount_percent'=>$data['discount'],//$discount,
+					 		
+					 		'paidamount'	=>$data['total_payment'],//$paidamount,
+					 		
+	             			'balance'		=>0,
+							'discount_fix'	=>0,
+							
+							'note'			=>$data['not'],
+							'start_date'	=>$data['start_date'],
+							'validate'		=>$data['end_date'],
+							
+							'references'	=>'from registration',
 							'is_parent'		=>$expired_record_id, // store record that updated to already used
 							'is_complete'	=>$complete,
 							'comment'		=>$comment,
-							'user_id'=>$this->getUserId(),
+							'user_id'		=>$this->getUserId(),
 					);
 					$this->insert($arr);
 			
@@ -665,14 +705,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				
 				$array=array(
 						'student_id'	=> $data['old_studens'],		
-						'receipt_number'=>$receipt_number,
+						'receipt_number'=> $receipt_number,
 						'payfor_type'	=> 3, // service and product
+						
 						'payment_type'	=> $data['payment_type'],
 						'student_type'	=> $data['student_type'],
-						'grand_total'	=> $data['grand_total'],
-						'grand_paid_amount'	=> $data['total_received'],
-						'grand_balance'	=> $data['total_balance'],
-						//'grand_return'	=> $data['total_return'],
+						
+						'memo_id'		=>$data['credit_memo_id'],
+						'grand_total'	=>$data['grand_total'],
+						'credit_memo'	=>$data['credit_memo'],
+						'deduct'		=>$data['deduct'],
+						'net_amount'	=>$data['net_amount'],
+				
 						'create_date'	=> date('Y-m-d'),
 						'user_id'		=>$this->getUserId(),
 						'branch_id'=>$this->getBranchId(),
@@ -714,37 +758,62 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}else{
 						$spd_id=0;
 					}
-					// check balance
+						
+					
 					$complete=1;
-					if($data['subtotal_'.$i]-$data['paidamount_'.$i]>0){
-						$complete=0;
-						$status="មិនទាន់បង់";
-					}else{
-						$complete=1;
-						$status="បង់រួច";
-					}
+					$status="បង់រួច";
+					
 					$this->_name="rms_student_paymentdetail";
 					 
 					$_arr = array(
 							'payment_id'	=>$paymentid,
+							'type'			=>$payfor_type,
 							'service_id'	=>$data['service_'.$i],
+							
 							'payment_term'	=>$data['term_'.$i],
 							'fee'			=>$data['price_'.$i],
 							'qty'			=>$data['qty_'.$i],
-							'discount_percent'	=>$data['discount_'.$i],
 							'subtotal'		=>$data['subtotal_'.$i],
+							
+							'late_fee'		=>$data['late_fee_service_'.$i],
+							'extra_fee'		=>$data['additional_fee_'.$i],
+							
+							'discount_percent'	=>$data['discount_'.$i],
+							
 							'paidamount'	=>$data['paidamount_'.$i],
-							'balance'		=>$data['subtotal_'.$i]-$data['paidamount_'.$i],
+							
+							'balance'		=>0,
+							
 							'start_date'	=>$start_date,
 							'validate'		=>$validate,
 							'note'			=>$data['remark'.$i],
-							'type'			=>$payfor_type,
+							
 							'is_parent'		=>$spd_id,
 							'is_complete'   =>$complete,
 							'comment'		=>$status,
 					);
 					$this->insert($_arr);
 				
+				}
+				
+				
+		////////////////// rms_creditmemo /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				
+				$this->_name='rms_creditmemo';
+				if($data['student_type']==3){
+					if(!empty($data['credit_memo_id'])){
+						if($data['net_amount']>=0){
+							$array=array(
+									'type'=>1, // បង់រួច
+							);
+						}else{
+							$array=array(
+									'total_amountafter'=>abs($data['net_amount']), //
+							);
+						}
+						$where = " id = ".$data['credit_memo_id'];
+						$this->update($array, $where);
+					}
 				}
 				
 			}
@@ -1497,7 +1566,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	        (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree)AS degree,
 		       (SELECT CONCAT(major_enname) FROM rms_major WHERE major_id=sp.grade ) AS grade,
 		       
- 		       sp.grand_total,sp.grand_paid_amount,sp.grand_balance , sp.create_date ,
+ 		       sp.grand_total,sp.credit_memo,sp.deduct,sp.net_amount, sp.create_date ,
  		       (select CONCAT(first_name) from rms_users where rms_users.id = sp.user_id) as user,
  		       (select name_en from rms_view where type=10 and key_code = sp.is_void) as void
  			   FROM rms_student AS s,rms_student_payment AS sp WHERE  s.stu_id=sp.student_id $user $branch_id ";
@@ -1930,7 +1999,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchOne($sql);
     }
     
-    public function getServiceFee($studentid,$serviceid,$termid,$year){
+    public function getServiceFee($studentid,$serviceid,$termid){
     	$db=$this->getAdapter();
     	
     	$branch = new Application_Model_DbTable_DbGlobal();
@@ -1944,7 +2013,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}
     	else{
 	    	$sql="select sfd.price_fee from rms_servicefee_detail as sfd,rms_servicefee as sf where sfd.service_id=$serviceid 
-	    		and sfd.payment_term=$termid and sf.academic_year = $year  $branch_id  limit 1";
+	    		and sfd.payment_term=$termid  $branch_id  limit 1";
 	    	return $db->fetchRow($sql);
     	}
     }
@@ -2055,6 +2124,29 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$sql="select * from rms_student_test where id = $stu_test_id ";
 		return $db->fetchRow($sql);
 	}
+	
+	
+	function getCreditMemoByStuId($stu_id){
+		$db=$this->getAdapter();
+		$sql="select id, total_amountafter from rms_creditmemo where student_id = $stu_id and type=0 ";
+		return $db->fetchRow($sql);
+	}
+	
+	function getStartDate($service_id , $stu_id){
+		$db = $this->getAdapter();
+		$sql = "SELECT spd.validate from rms_student_payment as sp,rms_student_paymentdetail as spd
+				where sp.student_id = $stu_id and spd.service_id = $service_id and spd.is_complete=1 and spd.is_start=1 AND sp.`id`=spd.`payment_id` and sp.is_void=0 ";
+		$order=' ORDER BY spd.id DESC';
+		return $db->fetchOne($sql.$order);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

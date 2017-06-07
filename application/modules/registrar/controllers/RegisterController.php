@@ -36,7 +36,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
     		//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("RECEIPT_NO","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","GRAND_TOTAL","PAID_AMOUNT","BALANCE","DATE_PAY","USER","STATUS");
+    		$collumns = array("RECEIPT_NO","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","Total","Credit Memo","Deduct","Net Amount","DATE_PAY","USER","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'register','action'=>'edit',
     		);
@@ -75,7 +75,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        
        $_db = new Application_Model_DbTable_DbGlobal();
        $this->view->all_dept = $_db->getAllDegreeName();
-       $data = $this->view->exchange_rate = $_db->getExchangeRate();
+       $this->view->exchange_rate = $_db->getExchangeRate();
+       $this->view->deduct = $_db->getDeduct();
        
        $db = new Registrar_Model_DbTable_DbRegister();
        $this->view->all_student_code = $db->getAllGerneralOldStudent();
@@ -230,7 +231,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
-    		$service_fee = $db->getServiceFee($data['studentid'],$data['service'],$data['term'],$data['year']);
+    		$service_fee = $db->getServiceFee($data['studentid'],$data['service'],$data['term']);
     		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service_fee));
     		exit();
@@ -281,4 +282,34 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		}
 	}
     
+	function getCreditMemoAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$credit_memo = $db->getCreditMemoByStuId($data['stu_id']);
+			//array_unshift($teacher, array ( 'id' => -1, 'name' => 'select teacher') );
+			print_r(Zend_Json::encode($credit_memo));
+			exit();
+		}
+	}
+	
+	function getStartDateAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$validate = $db->getStartDate($data['service_id'],$data['stu_id']);
+			print_r(Zend_Json::encode($validate));
+			exit();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

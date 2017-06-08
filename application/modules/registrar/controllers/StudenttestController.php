@@ -2,14 +2,13 @@
 
 class Registrar_StudenttestController extends Zend_Controller_Action
 {
-	const REDIRECT_URL = '/registrar/expense';
+	const REDIRECT_URL = '/registrar/studenttest';
 	
     public function init()
     {
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
-
     public function indexAction()
     {
     	try{
@@ -28,7 +27,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllStudentTest($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("NAME_KH","NAME_EN","SEX","DOB","PHONE","OLD_SCHOOL","OLD_GRADE");
+    		$collumns = array("NAME_KH","NAME_EN","SEX","DOB","PHONE","SERIAL","DEGREE","OLD_SCHOOL","OLD_GRADE","NOTE");
     		$link=array(
     				'module'=>'registrar','controller'=>'studenttest','action'=>'edit',
     		);
@@ -38,7 +37,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		echo $e->getMessage();
     	}
-    	
     }
     public function addAction()
     {
@@ -47,6 +45,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 			$db = new Registrar_Model_DbTable_DbStudentTest();				
 			try {
 				$db->addStudentTest($data);
+				print_r($data);exit();
 				if(!empty($data['saveclose'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest");
 				}else{
@@ -55,13 +54,11 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
-		
-		$db = new Registrar_Model_DbTable_DbStudentTest();
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->degree = $db->getAllDegreeName();
     }
- 
     public function editAction()
     {
     	$id = $this->getRequest()->getParam('id');
@@ -75,13 +72,13 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
 			}
 		}
-		
 		$id = $this->getRequest()->getParam('id');
 		$db = new Registrar_Model_DbTable_DbStudentTest();
 		$this->view->rs = $row  = $db->getStudentTestById($id);
 		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->degree = $db->getAllDegreeName();
     }
-    
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();

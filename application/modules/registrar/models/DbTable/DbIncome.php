@@ -132,18 +132,16 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		}else{
 			$table = 'ln_expense';
 		}
-		
 		$sql="select id from $table where status = 1 and branch_id = $branch_id order by id DESC";
 		$id = $db->fetchOne($sql);
 		$id = $id + 1;
 		$length = strlen($id) + 1;
 		$pre = '';
-		for($i=$length;$i<=4;$i++){
+		for($i=$length;$i<=6;$i++){
 			$pre.='0';
 		}
 		return $pre.$id;
 	}
-
 	function getInvoiceNo(){
 		$db = $this->getAdapter();
 		$sql = " select count(id) from ln_income ";

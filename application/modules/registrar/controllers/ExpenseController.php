@@ -1,5 +1,4 @@
 <?php
-
 class Registrar_ExpenseController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/registrar/expense';
@@ -119,21 +118,15 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	$db = new Application_Model_GlobalClass();
     	$this->view->expenseopt = $db->getAllExpenseIncomeType(5);
     }
-    
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbIncome();
     		$receipt = $db->getReceiptNumber($data['branch_id'],2);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($receipt));
     		exit();
     	}
     }
-    
-    
-    
-
 }
 
 

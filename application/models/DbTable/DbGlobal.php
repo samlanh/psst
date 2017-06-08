@@ -608,7 +608,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$db = $this->getAdapter();
    	$sql=" SELECT stu_id As id,stu_code,stu_khname FROM `rms_student` WHERE stu_khname!='' AND STATUS=1 AND is_subspend=0 ";
    	$rows = $db->fetchAll($sql);
-   	
    	if($opt!=null){
    		$options=array(0=>"ជ្រើសរើសសិស្ស");
    		if(!empty($rows))foreach($rows AS $row){
@@ -619,34 +618,24 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}
    	return $options;
    }
-   
-
    function getDeduct(){
 	   	$db = $this->getAdapter();
 	   	$sql=" SELECT value FROM `ln_system_setting` WHERE id=19 ";
 	   	return $db->fetchOne($sql);
    }
-   
-   
-   
-   
-   
-   
-   
+   public function getExpenseRecieptNo(){
+   	$db = $this->getAdapter();
+   	$_db = new Application_Model_DbTable_DbGlobal();
+//    	$branch_id = $_db->getAccessPermission();
+   	$sql="SELECT id FROM ln_expense WHERE 1 ORDER BY id DESC LIMIT 1 ";
+   	$acc_no = $db->fetchOne($sql);
+   	$new_acc_no= (int)$acc_no+1;
+   	$acc_no= strlen((int)$acc_no+1);
+   	$pre=0;
+   	for($i = $acc_no;$i<6;$i++){
+   		$pre.='0';
+   	}
+   	return $pre.$new_acc_no;
+   }
 }
-
-
-
-
-
-
 ?>
-
-
-
-
-
-
-
-
-

@@ -2,20 +2,18 @@
 class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'rms_student_test';
-	
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace('auth');
 		return $session_user->user_id;
 	}
-	
 	public function getBranchId(){
 		$session_user=new Zend_Session_Namespace('auth');
 		return $session_user->branch_id;
 	}
-	
 	function addStudentTest($data){
 		$array = array(
 					'branch_id'	=>$this->getBranchId(),
+					'receipt'=>$data['receipt'],
 					'kh_name'	=>$data['kh_name'],
 					'en_name'	=>$data['en_name'],
 					'sex'		=>$data['sex'],
@@ -23,11 +21,16 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'phone'		=>$data['phone'],
 					'old_school'=>$data['old_school'],
 					'old_grade'	=>$data['old_grade'],
+					'degree'	=>$data['degree'],
+					'note'		=>$data['note'],
+					'serial'	=>$data['serial'],
+					'address'	=>$data['address'],
+					'user_id'	=>$this->getUserId(),
+					'total_price'=>$data['test_cost'],
 					'create_date'=>date('Y-m-d'),
 				);
 		$this->insert($array);
  	}
- 	
 	function updateStudentTest($data,$id){
 		$array = array(
 					'branch_id'	=>$this->getBranchId(),
@@ -38,18 +41,23 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'phone'		=>$data['phone'],
 					'old_school'=>$data['old_school'],
 					'old_grade'	=>$data['old_grade'],
+					'degree'	=>$data['degree'],
+					'note'		=>$data['note'],
+					'serial'	=>$data['serial'],
+					'address'	=>$data['address'],
+					'user_id'	=>$this->getUserId(),
+					'total_price'=>$data['test_cost'],
+					'create_date'=>date('Y-m-d'),
 					'status'	=>$data['status'],
 				);
-		$where=" id = $id";
+		$where="id = $id";
 		$this->update($array, $where);
 	}
-	
 	function getStudentTestById($id){
 		$db = $this->getAdapter();
 		$sql=" SELECT * FROM rms_student_test where id=$id ";
 		return $db->fetchRow($sql);
-	}
-	
+	}	
 	function getAllStudentTest($search=null){
 		$db = $this->getAdapter();
 		$session_user=new Zend_Session_Namespace('auth');
@@ -57,22 +65,22 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
 		
 		$where = " and ".$from_date." AND ".$to_date;
-		
 		$sql="  SELECT 
 					id,
 					kh_name,
 					en_name,
-					(select name_kh from rms_view where type=2 and key_code=sex) as sex,
+					(select name_kh from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
 					dob,
-					phone,
+					phone,serial,
+					(select name_kh from rms_view where type=3 and key_code=degree LIMIT 1) as degree,
 					old_school,
-					old_grade
+					old_grade,
+					note
 				FROM 
 					rms_student_test
 				where
 					status=1
-					and register=0
-			";
+					and register=0 ";
 		
 		if (!empty($search['txtsearch'])){
 				$s_where = array();
@@ -82,23 +90,8 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$s_where[] = " old_school LIKE '%{$s_search}%'";
 				$s_where[] = " old_grade LIKE '%{$s_search}%'";
 				$where .=' AND ('.implode(' OR ',$s_where).')';
-		}
-	       
+		}      
 		$order=" order by id desc ";
-// 		echo $sql.$where.$order;exit();
 		return $db->fetchAll($sql.$where.$order);
-	}
-
-	
-	
-	
-	
-	
+	}	
 }
-
-
-
-
-
-
-

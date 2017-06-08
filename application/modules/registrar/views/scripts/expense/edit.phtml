@@ -12,7 +12,7 @@ $frm = $this->frm_expense;
  <script>
 	require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
  </script>
-<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'edit')); ?>" 
+<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'edit')); ?>" 
 				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 	if(this.validate()) {
@@ -70,15 +70,15 @@ $frm = $this->frm_expense;
 		<td align="center">
 			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
 				 iconClass="dijitIconClear"/>
-			<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
-				 iconClass="dijitEditorIcon dijitEditorIconSave"/>
+			<input type="button" onclick="printSave('');" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
+				 iconClass="dijitIconNewTask"/>
 		</td>
 	</tr>	
 </table>
 </form>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'" id="terms" >
-		<div id="PrintReceipt" style="width: 19cm !important; height: 12cm ; padding: 0px; margin-bottom:30px; ">
+		<div id="printexpense" style="width: 19cm !important; height: 12cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height: 11cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				<tr>
 				    <td colspan="10"  style="" align="center">
@@ -161,10 +161,10 @@ $frm = $this->frm_expense;
 										<tr>
 											<td colspan="4"></td>
 											<td>
-												<div style="margin-top:-15px;">ចំណាយសរុប <br />Paid Amount</div>
+												<div style="margin-top:-20px;">ចំណាយសរុប <br />Paid Amount</div>
 											</td>
 											<td>
-												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: -4px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
+												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
 											</td>
 										</tr>
 										<tr>
@@ -189,13 +189,14 @@ $frm = $this->frm_expense;
 											<td></td>
 										</tr>
 										<tr>
-											<td colspan="2" align="center"><div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 40px;"></td>
-											<td colspan="2" align="center"><div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 40px;"></td>
-											<td colspan="2" align="center"></td>
-										</tr>
-										<tr>
-											<td colspan="2" align="center">Date : <?php echo date('d / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></td>
-											<td colspan="2" align="center">Date :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</td>
+											<td colspan="2" align="center" >
+												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 30px;"></div>
+												<div style="margin-top:-11px;">Date : <?php echo date('d / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+											</td>
+											<td colspan="2" align="center" width="30%">
+												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 30px;"></div>
+												<div style="margin-top:-11px;">Date : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / </div>
+											</td>
 											<td colspan="2" align="center"></td>
 										</tr>
 									</table>
@@ -213,7 +214,7 @@ $frm = $this->frm_expense;
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 			type="button" onclick="hideDialog();">Cancel</button>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-			type="button" onclick="doPrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
+			type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
 </div>
 <script type="text/javascript">
@@ -273,28 +274,7 @@ function initailize(){
 function hideDialog(){
 	dijit.byId('terms').hide();
 }
-function doPrint() {
-	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
-    window.frames["print_frame"].window.focus();
-    window.frames["print_frame"].window.print();
-}
-	var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'get-receipt-number')); ?>";
-	function getReceiptNumber(){
-		dojo.xhrPost({
-			url:url_get_recceipt_number,
-			content:{
-				'branch_id':dijit.byId('branch_id').get('value')
-				},
-			handleAs:"json",
-			load: function(data) {
-				 dijit.byId('invoice').attr('value',data);
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
-	}
-	function deleteRecord(index) {
+function deleteRecord(index) {
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
 		for(var i=0;i<arrays.length;i++) {
@@ -354,10 +334,12 @@ function doPrint() {
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
 			dojo.byId("lb_paiddate").innerHTML  = dd+'/'+mon+'/'+yyyy;
+			dojo.byId("lb_receipt_no").innerHTML = dijit.byId("invoice").get("value");
 			dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
 			dojo.byId("lb_total_received").innerHTML = '$ ' + dijit.byId("total_amount").get('value');
 			dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
 			dojo.byId("lb_paymentmehtod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+			
 			var rowId = $('#identity').val();
 			var rowIDArray = rowId.split(',');
 			template="";
@@ -370,14 +352,14 @@ function doPrint() {
 					  temp+='</tr>';
 					  n=0;
 					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
-					  temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+					  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
 					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_paid"+rowIDArray[n]).attr('displayedValue')+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 					  i++;
 					  temp+='</tr>';
 					}
-					for(row = n+1;row<=7;row++){
+					for(row = n+1;row<=6;row++){
 						 temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
 						  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
 						  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
@@ -388,5 +370,11 @@ function doPrint() {
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
 			dijit.byId("terms").show();	
 		}
+	}
+	function doPrintInvoice() {
+		$('#office_receipt').submit();
+		window.frames["print_frame"].document.body.innerHTML = dojo.byId('printexpense').innerHTML;
+	    window.frames["print_frame"].window.focus();
+	    window.frames["print_frame"].window.print();
 	}
 </script>

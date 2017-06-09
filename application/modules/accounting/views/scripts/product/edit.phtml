@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('PRODUCT')); 
+	echo $this->headTitle($tr->translate('EDIT_PRODUCT')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	//print_r($this->pro_row);exit();
 	if(!empty($this->pro_locat)){
@@ -46,7 +46,7 @@ fieldset{  background:none;}
 	<tr>
 		<td>
 		<fieldset>
-					<legend align="center"><strong><?php echo $tr->translate("ADD_PRODUCT");?></strong></legend>
+					<legend align="center"><strong><?php echo $tr->translate("EDIT_PRODUCT");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%;padding:10px;" cellspacing="7" >
 						<tr>
 							<td style="width: 160px"><?php echo $tr->translate("PRODUCT_NAME");?></td>
@@ -60,7 +60,7 @@ fieldset{  background:none;}
 								<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="category_id" name="category_id" type="text"  placeholder="<?php echo $tr->translate("CHOOSE_CATEGORY_PRODUCT");?>">								
 										<option value="" ></option>
 										<?php if(!empty($this->cat_rows)) foreach ($this->cat_rows As $rs_cat){?>
-										<option value="<?php echo $rs_cat['id']?>" <?php if($rs_cat['id']==$this->pro_row['cat_id']){ echo 'selected="selected"';} ?>><?php echo $rs_cat['name_kh']?></option>
+										<option value="<?php echo $rs_cat['id']?>" <?php if($rs_cat['id']==$this->pro_row['cat_id']){ echo 'selected="selected"';} ?>><?php echo $rs_cat['name']?></option>
 										<?php }?>
 								</select>
 							</td>
@@ -68,9 +68,12 @@ fieldset{  background:none;}
 							<td ><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="pro_price" value="<?php echo $this->pro_row['pro_price'];?>" name="pro_price"  type="text" required="required"></td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("DESCRIPTION");?></td>
+							<td><?php echo $tr->translate("TYPE");?></td>
 							<td >
-								<textarea class="fullside" tabindex="8" style=" height: 40px !important;" dojotype="" id="descript" name="descript"><?php echo $this->pro_row['pro_des'];?></textarea>
+								<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="pro_type" name="pro_type" type="text">								
+									<option value="1" <?php if($this->pro_row['pro_type']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("Cut Stock");?></option>
+									<option value="2" <?php if($this->pro_row['pro_type']==2){echo 'selected="selected"';}?>><?php echo $tr->translate("Cut Stock Later");?></option>
+								</select>
 							</td>
 							<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
 							<td>
@@ -80,6 +83,14 @@ fieldset{  background:none;}
 								</select>
 							</td>
 						</tr>
+						
+						<tr>
+							<td><?php echo $tr->translate("DESCRIPTION");?></td>
+							<td >
+								<textarea class="fullside" tabindex="8" style=" height: 40px !important;" dojotype="" id="descript" name="descript"><?php echo $this->pro_row['pro_des'];?></textarea>
+							</td>
+						</tr>
+						
 						<tr>
 							<td colspan="4">
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
@@ -99,7 +110,7 @@ fieldset{  background:none;}
 						<tr>
 							<td colspan="4" align="center">
 								<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+								<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('GO_EDIT');?>"  dojoType="dijit.form.Button" 
 								 iconClass="dijitEditorIcon dijitEditorIconSave" />
 							</td>
 						</tr>

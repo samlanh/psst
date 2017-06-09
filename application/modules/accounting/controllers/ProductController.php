@@ -30,7 +30,7 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PRODUCT_NO","BRANCH_NAME","PRODUCT_NAME","PRODUCT_CATEGORY","PRICE",
+			$collumns = array("PRODUCT_NO","BRANCH_NAME","PRODUCT_NAME","PRODUCT_CATEGORY","TYPE","PRICE",
 					"QTY","TOTAL","DATE","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'product','action'=>'edit',
@@ -100,10 +100,6 @@ class Accounting_ProductController extends Zend_Controller_Action {
 					echo $e->getMessage();
 				}
 			}
-			$frm = new Accounting_Form_FrmServicesuspend();
-			$frm_servicesuspend=$frm->FrmServiceSuspend();
-			Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
-			$this->view->frm_servicesuspend = $frm_servicesuspend;
 			 
 			$_pro = new Accounting_Model_DbTable_DbProduct();
 			$this->view->branch_name = $_pro->getBrandLocation();
@@ -111,8 +107,7 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			$this->view->pro_row=$_pro->getProductById($id);
 		    $this->view->pro_locat=$_pro->getProLocationById($id);
 		    
-		    $this->view->cat_rows=$_pro->getCatAndMeasure(1);
-		    $this->view->mea_rows=$_pro->getCatAndMeasure(2);
+		    $this->view->cat_rows=$_pro->getProductCategory();
 	}
 
 

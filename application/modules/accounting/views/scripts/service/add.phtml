@@ -105,22 +105,22 @@ dojo.ready(function(){
 </script>
 
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:100%;" id="popup_dept" >
-		<form style="background-color: buttonface; width:15cm;" id='frm_add_service' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<div data-dojo-type="dijit.Dialog" style="width:40%;" id="popup_dept" >
+		<form style="background-color: buttonface;" id='frm_add_service' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate("បន្ថែមប្រភេទសេវាកម្ម/កម្មវិធី");?></legend><br />
+					<legend align="center" ><?php echo $tr->translate("បន្ថែមប្រភេទសេវាកម្ម");?></legend><br />
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("ចំណងជើង")?></td>
+							<td style="width:100px"><?php echo $tr->translate("Title")?></td>
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="p_title" id="p_title" type="text" required="required" /></td>
 						</tr>
 						<tr>
 							<td>ពណ៌នា</td>
 							<td>
-								<textarea class="fullside"   style=" height: 60px !important;"
+								<textarea class="fullside"   style=" height: 40px !important;"
 										tabindex="2" dojoType=""  id="note" name=note ></textarea>
 							</td>
 						</tr>
@@ -134,7 +134,7 @@ dojo.ready(function(){
 							</td>
 						</tr>
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("status")?></td>
+							<td style="width:100px"><?php echo $tr->translate("Status")?></td>
 							<td>
 								<select class="fullside"  tabindex="3" name="status_p" id="status_p" dojoType="dijit.form.FilteringSelect" >
 									    <option value="1"><?php echo $tr->translate("Active")?></option>

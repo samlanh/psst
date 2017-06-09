@@ -13,7 +13,8 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql=" SELECT p.id,p.pro_code,
 			 (SELECT CONCAT(branch_nameen) FROM rms_branch WHERE rms_branch.br_id=pl.brand_id) AS branch_name,
-				p.pro_name,(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id) As cat_id,
+				p.pro_name,(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id) As cat_name,
+				(select name_en from rms_view where type=11 and key_code=pro_type) as pro_type,
 			    p.pro_price, 
 				pl.pro_qty,pl.total_amount,p.date,p.status
 				FROM rms_product AS p,rms_product_location AS pl
@@ -55,14 +56,15 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$db->beginTransaction();
     	try{
 	    		$_arr = array(
-	    				'pro_name'=>$_data['product_name'],
-	    				'pro_code'=>$_data['product_code'],
-	    				'cat_id'=>$_data['category_id'],
-	    				'pro_price'=>$_data['pro_price'],
-	    				'pro_des'=>$_data['descript'],
-	    				'status'=>$_data['status'],
-	    				'date'=>date("Y-m-d"),
-	    				'user_id'=>$this->getUserId()
+	    				'pro_name'	=>$_data['product_name'],
+	    				'pro_code'	=>$_data['product_code'],
+	    				'cat_id'	=>$_data['category_id'],
+	    				'pro_price'	=>$_data['pro_price'],
+	    				'pro_des'	=>$_data['descript'],
+	    				'pro_type'	=>$_data['pro_type'],
+	    				'status'	=>$_data['status'],
+	    				'date'		=>date("Y-m-d"),
+	    				'user_id'	=>$this->getUserId()
 	    				);
 	    		$pro_id = $this->insert($_arr);
 	    		
@@ -82,21 +84,22 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	    		
 	    		$this->_name='rms_program_name';
 	    		$array = array(
-	    				'ser_cate_id'	=>$pro_id,
-	    				'title'			=>$_data['product_name'],
-	    				'description'	=>$_data['descript'],
-	    				'price'			=>$_data['pro_price'],
-	    				'status'		=>1,
-	    				'create_date'	=>date("Y-m-d H:i:s"),
-	    				'user_id'		=>$this->getUserId(),
-	    				'type'			=>1,
+		    				'ser_cate_id'	=>$pro_id,
+		    				'title'			=>$_data['product_name'],
+		    				'description'	=>$_data['descript'],
+		    				'price'			=>$_data['pro_price'],
+		    				'status'		=>1,
+		    				'create_date'	=>date("Y-m-d H:i:s"),
+		    				'user_id'		=>$this->getUserId(),
+		    				'type'			=>1, // type=1 => product 
+		    				'pro_type'		=>$_data['pro_type'], // 1=cut stock , 2=cut stock later
 	    				);
 	    		$this->insert($array);
 	    		
     			$db->commit();
 		   	}catch (Exception $e){
-		   		echo $e->getMessage();
 		   		$db->rollBack();
+		   		echo $e->getMessage();
 		   	}
     }
     
@@ -112,14 +115,15 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$db->beginTransaction();
     	try{
 	    		$_arr = array(
-	    				'pro_name'=>$_data['product_name'],
-	    				'pro_code'=>$_data['product_code'],
-	    				'cat_id'=>$_data['category_id'],
-	    				'pro_price'=>$_data['pro_price'],
-	    				'pro_des'=>$_data['descript'],
-	    				'status'=>$_data['status'],
-	    				'date'=>date("Y-m-d"),
-	    				'user_id'=>$this->getUserId()
+	    				'pro_name'	=>$_data['product_name'],
+	    				'pro_code'	=>$_data['product_code'],
+	    				'cat_id'	=>$_data['category_id'],
+	    				'pro_price'	=>$_data['pro_price'],
+	    				'pro_des'	=>$_data['descript'],
+	    				'pro_type'	=>$_data['pro_type'],
+	    				'status'	=>$_data['status'],
+	    				'date'		=>date("Y-m-d"),
+	    				'user_id'	=>$this->getUserId()
 	    				);
 	    		$where=" id=".$_data['id'];
 	    		$this->update($_arr, $where);
@@ -149,7 +153,8 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 		    				'price'			=>$_data['pro_price'],
 		    				'status'		=>$_data['status'],
 		    				'user_id'		=>$this->getUserId(),
-		    				'type'			=>1,
+		    				'type'			=>1, // type=1 => product 
+		    				'pro_type'		=>$_data['pro_type'], // 1=cut stock , 2=cut stock later
 		    		);
 		    		$where = " ser_cate_id=".$_data['id'];
 		    		$this->update($array, $where);
@@ -163,7 +168,8 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	    					'status'		=>1,
 	    					'create_date'	=>date("Y-m-d H:i:s"),
 	    					'user_id'		=>$this->getUserId(),
-	    					'type'			=>1,
+	    					'type'			=>1, // type=1 => product 
+	    					'pro_type'		=>$_data['pro_type'], // 1=cut stock , 2=cut stock later
 	    			);
 	    			$this->insert($array);
 	    		}
@@ -216,7 +222,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$sql="SELECT id,name_kh as name FROM rms_pro_category WHERE `status`=1 ";
     	return $db->fetchAll($sql);
     }
-    /////////////Category and Measure 
+    /////////////Category 
     function getAllCategory($search=null){
     	$db=$this->getAdapter();
     	$sql="SELECT 
@@ -271,7 +277,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     }
     function getProductName(){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.id As id,CONCAT(p.pro_name,' ',p.pro_size) AS name FROM rms_product AS p,rms_product_location AS pl 
+    	$sql="SELECT p.id As id,CONCAT(p.pro_name) AS name FROM rms_product AS p,rms_product_location AS pl 
      			  WHERE p.id=pl.pro_id AND p.status=1 ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('brand_id');

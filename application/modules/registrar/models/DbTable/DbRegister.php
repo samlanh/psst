@@ -370,8 +370,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             		$payfor_type = 4; // product payment
 	             		$start_date = null; 
 	             		$validate = null; // no need validate
-	             		
-	             		$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
+	             		if($data['product_type_'.$i]==1){ // 1= cut stock , 2=cut stock later
+	             			$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
+	             		}
 	             	}else{
 	             		$payfor_type = 3; // service payment
 	             		$start_date = $data['date_start_'.$i];
@@ -736,7 +737,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$payfor_type = 4; // product payment
 						$start_date = null;
 						$validate = null; // no need validate
-						$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
+						if($data['product_type_'.$i]==1){ // 1=cut stock , 2=cut stock later
+							$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
+						}
 					}else{
 						$payfor_type = 3; // service payment
 						$start_date = $data['date_start_'.$i];
@@ -1995,8 +1998,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getServiceType($service_id){
     	$db = $this->getAdapter();
-    	$sql="select type from rms_program_name where service_id=$service_id";
-    	return $db->fetchOne($sql);
+    	$sql="select type,pro_type from rms_program_name where service_id=$service_id";
+    	return $db->fetchRow($sql);
     }
     
     public function getServiceFee($studentid,$serviceid,$termid){

@@ -13,6 +13,7 @@ dojo.require("dijit.form.CheckBox");
 	
 var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?> );
 dojo.ready(function(){	
+
 	new dijit.form.FilteringSelect({
 		store: service_store,
 		autoComplete: true,                        
@@ -21,24 +22,21 @@ dojo.ready(function(){
 	    name: "title",  
 	    tabindex: "1",         
 	    class: 'fullside',  
-	    placeHolder:"Selected language", 
+	    placeHolder:"Selecte Category", 
 	    onChange: function() {          
-	   	service_id = dijit.byId('title').get('value');
-	    if(service_id==-1){
-	   	 dijit.byId("popup_dept").show();
-	     }
-	    else {
-	     
-	    }  
-	   } 
+		   	service_id = dijit.byId('title').get('value');
+		    if(service_id==-1){
+		   		dijit.byId("popup_dept").show();
+		    }
+	   }
 	}, "title");
 }); 
 </script>
 <?php  $item= $this->frm;?>
 <form  id='acc_item' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table cellspacing="10" width="50%" style="margin: 0 auto;">
-			<tr>
-				<td>
+	<table cellspacing="10" width="50%" style="margin: 0 auto;">
+		<tr>
+			<td>
 				<fieldset >
 					<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_SERVICE");?></strong></legend><br />
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
@@ -70,55 +68,45 @@ dojo.ready(function(){
 							</td>
 						</tr>
 					</table>	
-		</fieldset>		
-		</td>
-	</tr>
-</table>	
+				</fieldset>		
+			</td>
+		</tr>
+	</table>	
 </form>
+
 <script>
-function getProgramByType(){
-	id=dijit.byId('type').value;
-	if(id==-1){
+	var url_add_service = '<?php echo $this->url(array("module"=>"accounting","controller"=>"service","action"=>"submit")); ?>';
+	function addService(){
+		language = dijit.byId('p_title').get('value');
+		dojo.xhrPost({
+				url:url_add_service,
+				form: dojo.byId("frm_add_service"),
+				handleAs:"json",
+				load: function(data) {
+					//alert(data); 
+					var Itemmake = { 
+					     id: data,
+						         name: dijit.byId('p_title').get('value')
+						   };
+			 	addDataToSelectbox(dijit.byId('title'), service_store, Itemmake, data);
+			   dijit.byId('frm_add_service').reset();
+			   hideDialog();
+					
+				},
+				error: function(err) {
+					alert(err);
+				}
+		});
 	}
-		
-}
-</script>
-<script>
-var url_add_lang = '<?php echo $this->url(array("module"=>"accounting","controller"=>"service","action"=>"submit")); ?>';
-function addService(){
-	language = dijit.byId('p_title').get('value');
-	dojo.xhrPost({
-			url:url_add_lang,
-			form: dojo.byId("frm_add_tran"),
-			handleAs:"json",
-			load: function(data) {
-				//alert(data); 
-				var Itemmake = { 
-				     id: data,
-					         name: dijit.byId('p_title').get('value')
-					   };
-		 	addDataToSelectbox(dijit.byId('title'), service_store, Itemmake, data);
-		   dijit.byId('frm_add_tran').reset();
-		   dijit.byId("popup_dept").hide();
-				
-			},
-			error: function(err) {
-				alert(err);
-			}
-	});
-}
-function hideDialog() {		
-	dijit.byId("popup_dept").hide();
-}
-function popupgroup(){
-	//alert(2);
-	dijit.byId("popup_dept").show();
-}
+	function hideDialog() {		
+		dijit.byId("popup_dept").hide();
+	}
+
 </script>
 
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:100%;" id="popup_dept" >
-		<form style="background-color: buttonface; width:15cm;" id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form style="background-color: buttonface; width:15cm;" id='frm_add_service' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
@@ -134,10 +122,9 @@ function popupgroup(){
 							<td>
 								<textarea class="fullside"   style=" height: 60px !important;"
 										tabindex="2" dojoType=""  id="note" name=note ></textarea>
-									
 							</td>
 						</tr>
-							<tr>
+						<tr>
 							<td style="width:100px"><?php echo $tr->translate("Type")?></td>
 							<td>
 								<select class="fullside"  tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >

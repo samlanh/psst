@@ -12,9 +12,9 @@ class Registrar_StudentnearlyendserviceController extends Zend_Controller_Action
 			}else{
 				$search=array(
 						'adv_search' =>'',
-						'study_year'	=>-1,
-						'service'	=>-1,
-						'brandch_id'=> 0,
+						'grade_all'	=>'',
+						'service'	=>'',
+						'session'=> 0,
 						'end_date'	=>date('Y-m-d'),
 				);
 			}

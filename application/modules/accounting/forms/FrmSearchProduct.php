@@ -148,7 +148,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$cate->setValue($request->getParam("category_id"));
 		$opt_ls = array(''=>$this->tr->translate("SELECT_CATORY"));
 		$opt_l=new Accounting_Model_DbTable_DbProduct();
-		$row=$opt_l->getCatAndMeasure(1);
+		$row=$opt_l->getProductCategory();
 		if(!empty($row))foreach ($row As $rs)$opt_ls[$rs['id']]=$rs['name_kh'];
 		$cate->setMultiOptions($opt_ls);
 		

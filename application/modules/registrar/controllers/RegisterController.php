@@ -155,12 +155,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$this->view->all_paymentterm = $db->getAllpaymentTerm();
     	$this->view->all_service = $db->getAllService();
     	$this->view->all_room = $db->getAllRoom();
-    	
-    	//$this->view->province = $db->getAllProvince();
-//     	$this->view->district = $db->getAllDistrict();
-//     	$this->view->commune = $db->getAllCommune();
-//     	$this->view->village = $db->getAllVillage();
-    	
+
     	$test = $this->view->branch_info = $db->getBranchInfo();
     	
     	$db = new Foundation_Model_DbTable_DbStudent();

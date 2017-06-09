@@ -44,6 +44,7 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
       	$to_date = (empty($search['end_date']))? '1': " spd.validate <= '".$search['end_date']." 23:59:59'";
       	$where .= " AND ".$to_date;
+      	
     		if(!empty($search['adv_search'])){
     			$s_where = array();
     			$s_search = addslashes(trim($search['adv_search']));
@@ -54,14 +55,14 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     			$s_where[] = " spd.comment LIKE '%{$s_search}%'";
     			$where .=' AND ( '.implode(' OR ',$s_where).')';
     		}
-    		if($search['study_year']>0){
-    			$where.=" AND sp.year=".$search['study_year'];
+    		if($search['grade_all']>0){
+    			$where.=" AND s.grade=".$search['grade_all'];
     		}
     		if($search['service']>0){
     			$where.=" AND spd.service_id=".$search['service'];
     		}
-    		if($search['branch_id']>0){
-    			$where.=" AND sp.branch_id=".$search['branch_id'];
+    		if($search['session']>0){
+    			$where.=" AND s.session=".$search['session'];
     		}
     	return $db->fetchAll($sql.$where.$order);
     }

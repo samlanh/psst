@@ -391,7 +391,7 @@ fieldset{  background:none;}
 							
 							<input type="hidden" dojoType="dijit.form.TextBox" name="credit_memo_id" id="credit_memo_id" />
 							
-							<input type="text" name="test_fee" id="test_fee" value="<?php echo $this->deduct?>" dojoType="dijit.form.TextBox" />
+							<input type="hidden" name="test_fee" id="test_fee" value="<?php echo $this->deduct?>" dojoType="dijit.form.TextBox" />
 							
 						</tr>
 						<tr>
@@ -1047,7 +1047,7 @@ function addRow() {
 			
 			temp+='<th   width="100px"><?php echo $tr->translate("LATE_FEE");?></th>';
 			
-			temp+='<th   width="100px"><?php echo $tr->translate("ADD.FEE");?></th>';
+			temp+='<th   width="100px"><?php echo $tr->translate("ExTRA.FEE");?></th>';
 			
 			temp+='<th   width="100px"><?php echo $tr->translate("DISCOUNT");?> %</th>';
 			
@@ -1155,11 +1155,8 @@ function deleteRecord(index) {
 	 }
  }
  
- //set value totale 
+	//set value totale 
 	function getTotale(){
-		
-		//alert(1);
-		
 		tuitionfee=dijit.byId('tuitionfee').get('value');
 		tuitionfee=isNaN(tuitionfee)?0:tuitionfee;
 		
@@ -1185,7 +1182,7 @@ function deleteRecord(index) {
 	}
  
  
- function calculateTotal(index){
+	function calculateTotal(index){
 	 
 	 //alert(2);
 		price = dijit.byId('price_'+index).get('value');
@@ -1213,24 +1210,20 @@ function deleteRecord(index) {
 		dijit.byId('paidamount_'+index).attr('value',total_pay);
 		
 		netTotal();
- }
- function netTotal() {
-	//alert(3);
+	}
+	function netTotal() {
 	
 		var netTotal=0;
 		var netPaidAmount=0;
 		var rowId = $('#identity').val();
 		var rowIDArray = rowId.split(',');
-		//alert(rowIDArray);
-		total_payment = dijit.byId('total_payment').get('value');
 		
+		total_payment = dijit.byId('total_payment').get('value');
 		
 	/////////////////////////////////////////////////////////////////////	
 		var payment_type = $('input[name=payment_type]:checked').val();
 		if(payment_type!=2){
 			for(var n = 0; n < rowIDArray.length; n++) {
-				//netTotal += Number($('#subtotal_'+rowIDArray[n]).val());
-				//netTotal += dijit.byId('subtotal_'+rowIDArray[n]).get('value');
 				netPaidAmount += dijit.byId('paidamount_'+rowIDArray[n]).get('value');
 			}
 		}		
@@ -1259,30 +1252,30 @@ function deleteRecord(index) {
 		dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
 		
 		readMoneyInKhmer(netAmount.toFixed(2));
- }
+	}
  
  
  
- function onKeyUpDeduct(){
-	
-	grandTotal = dijit.byId('grand_total').get('value');
-	grandTotal = isNaN(grandTotal)?0:grandTotal;
-	
-	credit_memo = dijit.byId('credit_memo').get('value');
-	credit_memo = isNaN(credit_memo)?0:credit_memo;
-	
-	deduct = dijit.byId('deduct').get('value');
-	deduct = isNaN(deduct)?0:deduct;
-	
-	netAmount = grandTotal - credit_memo - deduct;
-	
-	dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
-	
-	readMoneyInKhmer(netAmount.toFixed(2));
- }
+	function onKeyUpDeduct(){
+		
+		grandTotal = dijit.byId('grand_total').get('value');
+		grandTotal = isNaN(grandTotal)?0:grandTotal;
+		
+		credit_memo = dijit.byId('credit_memo').get('value');
+		credit_memo = isNaN(credit_memo)?0:credit_memo;
+		
+		deduct = dijit.byId('deduct').get('value');
+		deduct = isNaN(deduct)?0:deduct;
+		
+		netAmount = grandTotal - credit_memo - deduct;
+		
+		dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
+		
+		readMoneyInKhmer(netAmount.toFixed(2));
+	}
  
  
- function readMoneyInKhmer(netTotal){
+	function readMoneyInKhmer(netTotal){
 		var str = netTotal.toString();
         str_cent = 'សេន';
 		
@@ -1300,9 +1293,9 @@ function deleteRecord(index) {
 	  
 	    last_money_decimal = read_in_khmer_from_0_to_9(last_decimal)
 	  
-	  money_khmer=read_money_in_khmer(netTotal);
-	  dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់');
- }
+	    money_khmer=read_money_in_khmer(netTotal);
+	    dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់');
+	}
  
  
  function alerterror(index){	

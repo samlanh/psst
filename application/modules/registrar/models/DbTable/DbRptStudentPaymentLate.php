@@ -30,7 +30,7 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  `rms_student_paymentdetail` AS spd,
 				  `rms_student_payment` AS sp,
 				  `rms_program_name` AS pn,
-				  rms_student as s
+				   rms_student as s
 				WHERE spd.`is_start` = 1 
 				  AND sp.id=spd.`payment_id`
 				  AND spd.`service_id`=pn.`service_id` 
@@ -41,12 +41,11 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
     	
     	$where = '';
     	
-    	if(($search['branch_id']>0)){
-    		$where.= " AND sp.branch_id = ".$search['branch_id'];
-    	}
+    	
      	$order=" ORDER by spd.validate DESC ";
      	$to_date = (empty($search['end_date']))? '1': " spd.validate < '".$search['end_date']." 23:59:59'";
-     	$where = " AND ".$to_date;     	
+     	$where = " AND ".$to_date;    
+     	 	
     		if(!empty($search['adv_search'])){
     			$s_where = array();
     			$s_search = addslashes(trim($search['adv_search']));
@@ -57,9 +56,18 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
     			$s_where[] = " spd.comment LIKE '%{$s_search}%'";
     			$where .=' AND ( '.implode(' OR ',$s_where).')';
     		}
+    		
     		if(!empty($search['service']) AND $search['service']>0){
     			$where.= " AND spd.service_id = ".$search['service'];
     		}
+    		
+    		if(($search['grade_all']>0)){
+    			$where.= " AND s.grade = ".$search['grade_all'];
+    		}
+    		if(($search['session']>0)){
+    			$where.= " AND s.session = ".$search['session'];
+    		}
+    		
      		//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }

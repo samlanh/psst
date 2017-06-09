@@ -11,9 +11,8 @@ class Registrar_StudentpaymentlateController extends Zend_Controller_Action {
 			}else{
 				$search=array(
 						'adv_search' =>'',
-						'study_year' =>-1,
-						'branch_id'=>0,
-						'service' =>-1,
+						'grade_all' =>'',
+						'session' =>'',
 						'end_date'=> date('Y-m-d'),
 				);
 			}

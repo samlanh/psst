@@ -24,18 +24,18 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
     		$data=$this->view->row = $db->getAllStudentPayment($search);
     		
-    		$user_type=$db->getUserType();
-    		if($user_type==1){
-	    		$db = new Allreport_Model_DbTable_DbRptOtherIncome();
-	    		$this->view->income = $db->getAllOtherIncome($search);
+//     		$user_type=$db->getUserType();
+//     		if($user_type==1){
+// 	    		$db = new Allreport_Model_DbTable_DbRptOtherIncome();
+// 	    		$this->view->income = $db->getAllOtherIncome($search);
 	    		
-	    		$db = new Allreport_Model_DbTable_DbRptOtherExpense();
-	    		$this->view->expense = $db->getAllOtherExpense($search);
-    		}
+// 	    		$db = new Allreport_Model_DbTable_DbRptOtherExpense();
+// 	    		$this->view->expense = $db->getAllOtherExpense($search);
+//     		}
     		
     	}catch(Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		echo $e->getMessage();
     	}
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();

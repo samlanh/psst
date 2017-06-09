@@ -74,12 +74,13 @@
 											<td>&nbsp;<?php echo $tr->translate("PAYMENT_TERM"); ?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("FEE"); ?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("Qty"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("Dis.");?>(%)&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("Admin"); ?>&nbsp;</td>
-											<!--<td>&nbsp;<?php //echo $tr->translate("OTHER_FEE"); ?>&nbsp;</td>-->
 											<td>&nbsp;<?php echo $tr->translate("Total"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("Paid"); ?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate("Balance"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Late Fee"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("Extra Fee"); ?>&nbsp;</td>
+											
+											<td>&nbsp;<?php echo $tr->translate("Dis.");?>(%)&nbsp;</td>
+											
+											<td>&nbsp;<?php echo $tr->translate("Total Payment"); ?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("Paid Date"); ?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("Start"); ?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("Validate"); ?>&nbsp;</td>
@@ -108,37 +109,27 @@
 										    <td><?php echo $rs['receipt_number']; ?></td>
 										    <td><?php echo $rs['stu_code']; ?></td>
 										    <td style=" white-space:nowrap; text-align:left"> <?php echo $rs['stu_enname']; ?> </td>
-										    <!--<td><a style=" text-decoration: none; color:#000;" ><?php //echo $rs['receipt_number']; ?></a></td> -->
+
+										    
 										    <td style="text-align:left"><?php echo $rs["service_id"]; ?></td>
 										    <td style="text-align:center"><?php echo $rs["payment_term"]; ?></td>
+										    
 										    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
 										    <td> <?php echo $rs['qty'];?></td>
+										    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>>$ <?php echo number_format($rs['subtotal'],2); ?></td>
+										    
+										    <td> <?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
+										    <td> <?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
+										    
 										    <?php if($rs['discount_percent'] > 0 ){ ?>
 										    <td> <?php echo $rs['discount_percent']; ?>%</td>
 										    <?php }else{?>
 										    <td> <?php echo ''; ?></td>
 										    <?php }?>
 										    
-										    <?php  if($rs['admin_fee'] > 0 ){ ?>
-										    <td>$ <?php echo $rs['admin_fee']; ?></td>
-										    <?php }else{?>
-										    <td> <?php echo ''; ?></td>
-										    <?php }?>
 										    
-										    <?php /*if($rs['other_fee'] > 0 ){ ?>
-										    <td>$ <?php echo $rs['other_fee']; ?></td>
-										    <?php }else{?>
-										    <td> <?php echo ''; ?></td>
-										    <?php } */?>
-										   
-										    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>>$ <?php echo number_format($rs['subtotal'],2); ?></td>
 										    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>>$ <?php echo number_format($rs['paidamount'],2); ?></td>
 										    
-										    <?php if($rs['balance'] > 0 && $rs['is_void'] != 1){ ?>
-										    <td <?php if($rs['is_complete'] == 0 ){ echo "style='color: red;'"; }?>>$ <?php echo $rs['balance']; ?></td>
-										    <?php }else{?>
-										    <td> <?php echo ''; ?></td>
-										    <?php }?>
 										    
 										    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
 										    <td><?php echo date('d-M-Y', strtotime($rs['start_date'])); ?></td>

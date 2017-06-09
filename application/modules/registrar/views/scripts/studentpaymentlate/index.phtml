@@ -20,7 +20,8 @@
 			</tr>
 		<tr> 
 			 <td><input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>" placeholder="Search" type="text" ></td>
-			 <td> <?php echo $frm->getElement("branch_id");?></td>
+			 <td> <?php echo $frm->getElement("grade_all");?></td>
+			 <td> <?php echo $frm->getElement("session");?></td>
 			 <td> <?php echo $frm->getElement("service");?></td>
 			 <td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date']; ?>"  type="text"></td>
 			 <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>

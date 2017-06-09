@@ -45,10 +45,10 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			$this->view->form_search=$form;
 		
 	}
-public function addAction(){
-	if($this->getRequest()->isPost()){
-		$_data = $this->getRequest()->getPost();
-		try{
+	public function addAction(){
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			try{
 				$db = new Accounting_Model_DbTable_DbProduct();
 				
 				$row = $db->addProduct($_data);
@@ -66,97 +66,74 @@ public function addAction(){
 				echo $e->getMessage();
 			}
 		}
-		$frm = new Accounting_Form_FrmServicesuspend();
-		$frm_servicesuspend=$frm->FrmServiceSuspend();
-		Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
-		$this->view->frm_servicesuspend = $frm_servicesuspend;
-		 
-		$_pro = new Accounting_Model_DbTable_DbProduct();
-		$this->view->branch_name = $_pro->getBrandLocation();
-		$this->view->pro_code=$_pro->getProCode();
-		$this->view->cat_rows=$_pro->getCatAndMeasure(1);
-		$this->view->mea_rows=$_pro->getCatAndMeasure(2);
-	
-}
-public function editAction(){
-	$id=$this->getRequest()->getParam('id');
-	if($this->getRequest()->isPost()){
-		$_data = $this->getRequest()->getPost();
-		$_data['id']=$id;
-		try{
-				$db = new Accounting_Model_DbTable_DbProduct();
-				$row = $db->updateProduct($_data);
-				
-				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product/add");
+			 
+			$_pro = new Accounting_Model_DbTable_DbProduct();
+			$this->view->branch_name = $_pro->getBrandLocation();
+			$this->view->pro_code=$_pro->getProCode();
+			
+			$pro_cate = $_pro->getProductCategory();
+			
+			array_unshift($pro_cate, array('id'=>'-1' , 'name'=>'Add New'));
+			
+			$this->view->cat_rows = $pro_cate;
+			
+	}
+	public function editAction(){
+		$id=$this->getRequest()->getParam('id');
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$_data['id']=$id;
+			try{
+					$db = new Accounting_Model_DbTable_DbProduct();
+					$row = $db->updateProduct($_data);
+					
+					if(isset($_data['save_close'])){
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product");
+					}else{
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product/add");
+					}
+					
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+				}catch(Exception $e){
+					Application_Form_FrmMessage::message("INSERT_FAIL");
+					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+					echo $e->getMessage();
 				}
-				
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
+			$frm = new Accounting_Form_FrmServicesuspend();
+			$frm_servicesuspend=$frm->FrmServiceSuspend();
+			Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
+			$this->view->frm_servicesuspend = $frm_servicesuspend;
+			 
+			$_pro = new Accounting_Model_DbTable_DbProduct();
+			$this->view->branch_name = $_pro->getBrandLocation();
+			$this->view->pro_code=$_pro->getProCode();
+			$this->view->pro_row=$_pro->getProductById($id);
+		    $this->view->pro_locat=$_pro->getProLocationById($id);
+		    
+		    $this->view->cat_rows=$_pro->getCatAndMeasure(1);
+		    $this->view->mea_rows=$_pro->getCatAndMeasure(2);
+	}
+
+
+
+	function addNewProCateAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Accounting_Model_DbTable_DbProduct();
+			$pro_cate = $db->AddProCate($data);
+			print_r(Zend_Json::encode($pro_cate));
+			exit();
 		}
-		$frm = new Accounting_Form_FrmServicesuspend();
-		$frm_servicesuspend=$frm->FrmServiceSuspend();
-		Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
-		$this->view->frm_servicesuspend = $frm_servicesuspend;
-		 
-		$_pro = new Accounting_Model_DbTable_DbProduct();
-		$this->view->branch_name = $_pro->getBrandLocation();
-		$this->view->pro_code=$_pro->getProCode();
-		$this->view->pro_row=$_pro->getProductById($id);
-	    $this->view->pro_locat=$_pro->getProLocationById($id);
-	    
-	    $this->view->cat_rows=$_pro->getCatAndMeasure(1);
-	    $this->view->mea_rows=$_pro->getCatAndMeasure(2);
-}
-
-function getStudentAction(){
-	if($this->getRequest()->isPost()){
-		$data=$this->getRequest()->getPost();
-		$db = new Accounting_Model_DbTable_DbSuspendservice();
-		$studentinfo = $db->getAllStudentInfo($data['studentid']);
-		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-		print_r(Zend_Json::encode($studentinfo));
-		exit();
 	}
-}
-
-function getStudentIdAction(){
-	if($this->getRequest()->isPost()){
-		$data=$this->getRequest()->getPost();
-		$db = new Accounting_Model_DbTable_DbSuspendservice();
-		$year = $db->getStudentID($data['study_year']);
-		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-		print_r(Zend_Json::encode($year));
-		exit();
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 
 
 }
+
+
+
+
+

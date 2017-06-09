@@ -211,31 +211,32 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$sql="SELECT id,pro_id,brand_id,pro_qty,total_amount,note FROM rms_product_location WHERE pro_id=$id";
     	return $db->fetchAll($sql);
     }
-    function getCatAndMeasure($type){ //if type=1 category , if type=2 measure 
+    function getProductCategory(){ //if type=1 category , if type=2 measure 
     	$db=$this->getAdapter();
-    	$sql="SELECT id,name_kh FROM rms_pro_category WHERE `status`=1 AND type_id=$type";
+    	$sql="SELECT id,name_kh as name FROM rms_pro_category WHERE `status`=1 ";
     	return $db->fetchAll($sql);
     }
     /////////////Category and Measure 
     function getAllCategory($search=null){
     	$db=$this->getAdapter();
-    	$sql="SELECT id,name_kh,name_en,type_id,`date`,`status` FROM rms_pro_category  WHERE 1 ";
-    	$where="";
+    	$sql="SELECT 
+    			id,
+    			name_kh,
+    			`date`,
+    			(select name_en from rms_view where type=1 and key_code=status) as status
+    		  FROM rms_pro_category  WHERE status=1 ";
+    	$where=" ";
     	if(!empty($search['title'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['title']));
     		$s_where[]= " name_kh LIKE '%{$s_search}%'";
-    		$s_where[]=" name_en LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}	  
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND status=".$search['status_search'];
     	}  		
-    	if(!empty($search['category'])){
-    		$where.=" AND type_id=".$search['category'];
-    	}
     		    	
-    	$order=" ORDER BY type_id DESC";
+    	$order=" ORDER BY id DESC";
     	//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -246,8 +247,6 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	try{
     		$_arr = array(
     				'name_kh'=>$_data['name_kh'],
-    				'name_en'=>$_data['name_en'],
-    				'type_id'=>$_data['type'],
     				'date'=>date("Y-m-d"),
     				'status'=>$_data['status'],
     				'user_id'=>$this->getUserId()
@@ -259,10 +258,10 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     		}else{
     			$this->insert($_arr);
     		}
-    	$db->commit();
+    		$db->commit();
     	}catch (Exception $e){
-    		echo $e->getMessage();
     		$db->rollBack();
+    		echo $e->getMessage();
     	}
     }
     function getGategoryById($id){
@@ -286,5 +285,21 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$sql.=$dbp->getAccessPermission('br_id');
     	return $db->fetchAll($sql);
     }
+
+    function AddProCate($data){
+    	$this->_name="rms_pro_category";
+    	$array = array(
+    				'name_kh'=>$data['title'],
+	    			'date'=>date('Y-m-d'),
+	    			'user_id'=>$this->getUserId(),
+    			);
+    	return $this->insert($array);
+    }
+    
+    
     
 }
+
+
+
+

@@ -1989,6 +1989,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				GROUP BY service_id ";
     	return $db->fetchAll($sql);
     }
+    function getAllProductName(){
+    	$db = $this->getAdapter();
+    	$sql="SELECT id,pro_name FROM `rms_product` WHERE STATUS=1 AND pro_name!='' ORDER BY pro_name";
+    	return $db->fetchAll($sql);
+    }
     
     public function getAllRoom(){
     	$db = $this->getAdapter();

@@ -57,7 +57,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     public function addAction(){
       if($this->getRequest()->isPost()){
       	$_data = $this->getRequest()->getPost();
-      	//print_r($_data);exit();
       	try {
       		$db = new Registrar_Model_DbTable_DbRegister();
       		$db->addRegister($_data);
@@ -88,14 +87,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $this->view->all_session = $db->getAllSession();
        $this->view->all_paymentterm = $db->getAllpaymentTerm();
        $this->view->all_service = $db->getAllService();
+       $this->view->all_product = $db->getAllProductName();
        $this->view->all_room = $db->getAllRoom();
-	   
-	   
 	   $test = $this->view->branch_info = $db->getBranchInfo();
-	  
 	   $db = new Foundation_Model_DbTable_DbStudent();
 	   $this->view->group = $db->getAllgroup();
-	   
     }
     
     public function editAction(){

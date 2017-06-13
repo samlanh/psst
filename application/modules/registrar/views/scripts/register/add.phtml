@@ -194,7 +194,7 @@
 			dijit.byId("payment_term").set('readOnly',true);
 			dijit.byId("tuitionfee").set('readOnly',true);
 			dijit.byId("discount").set('readOnly',true);
-			dijit.byId("paid_amount").set('readOnly',true);
+			//dijit.byId("paid_amount").set('readOnly',true);
 			dijit.byId("room").set('readOnly',true);
 			dijit.byId("parent_phone").set('readOnly',true);
 		}else{
@@ -212,7 +212,7 @@
 			dijit.byId("payment_term").set('readOnly',false);
 			dijit.byId("tuitionfee").set('readOnly',false);
 			dijit.byId("discount").set('readOnly',false);
-			dijit.byId("paid_amount").set('readOnly',false);
+			//dijit.byId("paid_amount").set('readOnly',false);
 			dijit.byId("room").set('readOnly',false);
 			dijit.byId("parent_phone").set('readOnly',false);
 		}
@@ -305,9 +305,9 @@ fieldset{  background:none;}
 									<td><?php echo $tr->translate("PAYMENT_TYPE");?></td>
 							    	<td>
 							    		<select class="fullside" name="payment_type" id="payment_type" dojoType="dijit.form.FilteringSelect" onchange="netTotal();displayNoneAddRow();SetReadonlyForPayService();">
-							    			<option value="1">Tuition Fee</option>
-							    			<option value="2">Service and Product</option>
-							    			<option value="3">Tuition Fee and Service</option>
+							    			<option value="1">Tuition Fee and Service</option>
+							    			<option value="2">Tuition Fee</option>
+							    			<option value="3">Service and Product</option>
 							    		</select>
 								    </td>
 							    </tr>
@@ -598,17 +598,18 @@ fieldset{  background:none;}
 								<input type="hidden" name="test_fee" id="test_fee" value="<?php echo $this->deduct?>" dojoType="dijit.form.TextBox" />
 							</td>
 						</tr>
-						<tr>
-							<td colspan="3" align="center">
-							    <input type="submit" name="save_close" id="save_close" value="????????  &??????" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
-								 iconClass="dijitEditorIcon dijitEditorIconSave"  OnClick=""/>
-								<input type="submit" name="save_new" id="save_new" value="????????" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-								 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="" />
-								 <input type="button" value="????????" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','');"/> 
-							</td>
-						</tr>
+						
 					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" align="center">
+				    <input type="submit" name="save_close" id="save_close" value="????????  &??????" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
+					 iconClass="dijitEditorIcon dijitEditorIconSave"  OnClick=""/>
+					<input type="submit" name="save_new" id="save_new" value="????????" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
+					 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="" />
+					 <input type="button" value="????????" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','');"/> 
 				</td>
 			</tr>
 		</table>

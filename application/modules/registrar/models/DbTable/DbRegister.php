@@ -356,6 +356,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             	$this->insert($arr);
 	             }
 	             
+	             $idpro = explode(',', $data['identitystock']);
+	             foreach ($idpro as $j){
+	             	$this->_name='rms_saledetail';
+	             	$arr = array(
+	             			'payment_id'=>$paymentid,
+	             			'pro_id'=>$data['produc_id'.$j],
+	             			'qty'=>$data['pro_qty'.$j],
+	             			'note'=>$data['remarkpro'.$j],
+	             			'in_receipt'=>0,
+	             	);
+	             	$this->insert($arr);
+	            }
 	             
 	             $this->_name="rms_student_paymentdetail";
 	             $ids = explode(',', $data['identity']);
@@ -372,6 +384,16 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             		$validate = null; // no need validate
 	             		if($data['product_type_'.$i]==1){ // 1= cut stock , 2=cut stock later
 	             			$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
+	             			
+	             			$this->_name='rms_saledetail';
+	             			$arr = array(
+	             					'payment_id'=>$paymentid,
+	             					'pro_id'=>$data['service_'.$i],
+	             					'qty'=>$data['qty_'.$i],
+	             					'note'=>$data['remark'.$i],
+	             					'in_receipt'=>1,
+	             					);
+	             		   $this->insert($arr);
 	             		}
 	             	}else{
 	             		$payfor_type = 3; // service payment

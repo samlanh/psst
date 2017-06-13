@@ -939,8 +939,8 @@ function addRow() {
 				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
 					template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
 				<?php }}?>
-				template+='<input type="text" style="width:30px;" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/>';
-				template+='<input type="text" style="width:30px;" dojoType="dijit.form.TextBox" name="product_type_'+col+'" id="product_type_'+col+'"/>';
+				template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/>';
+				template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="product_type_'+col+'" id="product_type_'+col+'"/>';
 			template+='</select></td>';	
 			template+='<td width="9%"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';
 				<?php foreach($this->all_paymentterm as $term){?>

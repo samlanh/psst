@@ -722,7 +722,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&			
 				
 			
-			else if($data['payment_type']==3){ // pay for service only for old studnet
+			else if($data['payment_type']==3){ // pay for service and product only for old studnet
 				
 				$this->_name="rms_student_payment";
 				

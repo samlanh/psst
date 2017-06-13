@@ -87,22 +87,17 @@
 														<td style="border: 1px solid #000;"><?php echo $row['name'];?></td>
 													</tr>
 													
-													<?php if($row['curr_type']==2){
-															$total_riel=$total_riel+$row['total_amount'];
-														  }else{
-														  	$total_dollar=$total_dollar+$row['total_amount'];
-														  }
+													<?php 
+														 $total_dollar=$total_dollar+$row['total_amount'];
 													?>
 													
 												<?php }?>	
 												</table>	
 												<table align="right" border="1" cell-padding="10" cell-spacing="10" style=" font-size: 13px;border: 1px solid #000;border-collapse: collapse;">
 													<tr style="background: #cccccc;">
-														<td style="padding: 0px 5px;"><?php echo $tr->translate('AMOUNT_IN_KH');?></td>
-														<td style="padding: 0px 5px;"><?php echo $tr->translate('AMOUNT_IN_DOLLAR');?></td>
+														<td style="padding: 0px 20px;"><?php echo $tr->translate('GRAND_TOTAL');?></td>
 													</tr>
 													<tr>
-														<td align="center"><?php echo $total_riel;?> រៀល</td>
 														<td align="center"><?php echo $total_dollar;?> $</td>
 													</tr>
 												</table>
@@ -138,21 +133,16 @@
 														<td style="border: 1px solid #000;"><?php echo $rs['date'];?></td>
 														<td style="border: 1px solid #000;"><?php echo $rs['name'];?></td>
 													</tr>
-													<?php if($rs['curr_type']==2){
-															$total_riel=$total_riel+$rs['total_amount'];
-														  }else{
-														  	$total_dollar=$total_dollar+$rs['total_amount'];
-														  }
+													<?php 
+													  	$total_dollar=$total_dollar+$rs['total_amount'];
 													?>
 												<?php }?>	
 												</table>
 												<table align="right" border="1" cell-padding="10" cell-spacing="10" style=" font-size: 13px;border: 1px solid #000;border-collapse: collapse;">
 													<tr style="background: #cccccc;">
-														<td style="padding: 0px 5px;"><?php echo $tr->translate('AMOUNT_IN_KH');?></td>
-														<td style="padding: 0px 5px;"><?php echo $tr->translate('AMOUNT_IN_DOLLAR');?></td>
+														<td style="padding: 0px 20px;"><?php echo $tr->translate('GRAND_TOTAL');?></td>
 													</tr>
 													<tr>
-														<td align="center"><?php echo $total_riel;?> រៀល</td>
 														<td align="center"><?php echo $total_dollar;?> $</td>
 													</tr>
 												</table>	

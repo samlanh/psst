@@ -45,7 +45,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 			$db = new Registrar_Model_DbTable_DbStudentTest();				
 			try {
 				$db->addStudentTest($data);
-				print_r($data);exit();
 				if(!empty($data['saveclose'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest");
 				}else{

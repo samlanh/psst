@@ -384,7 +384,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             		$validate = null; // no need validate
 	             		if($data['product_type_'.$i]==1){ // 1= cut stock , 2=cut stock later
 	             			$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
-	             			
 	             			$this->_name='rms_saledetail';
 	             			$arr = array(
 	             					'payment_id'=>$paymentid,

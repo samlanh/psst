@@ -33,35 +33,22 @@ $frm = $this->frm_expense;
 							<td><?php echo $frm->getElement('branch_id');?></td>
 							<td><?php echo $tr->translate("INCOME_TITLE")?></td>
 							<td><?php echo $frm->getElement('title');?></td>
-							<td><?php echo $tr->translate("CURRENCY")?></td>
-							<td><?php echo $frm->getElement('currency_type');//echo $frm->getElement('for_date');?></td>
+							<td><?php echo $tr->translate("Payment Method")?></td>
+							<td><?php echo $frm->getElement('payment_method');//echo $frm->getElement('for_date');?></td>
 						</tr>
 						<tr>
 						   <td><?php echo $tr->translate("RECEIPT_NO")?></td>
 							<td><?php echo $frm->getElement('invoice');?></td>
 							<td><?php echo $tr->translate("TOTAL_INCOME")?></td>
-							<td><?php echo $frm->getElement('total_amount');?></td>
-						    <td><?php echo $tr->translate("NOTE")?></td>
-							<td><?php echo $frm->getElement('Description');?></td>
+							<td><?php echo $frm->getElement('total_income');?></td>
+							<td><?php echo $tr->translate("DATE")?></td>
+							<td><?php echo $frm->getElement('Date');?></td>
 						</tr>
 						<tr>
-						    <td><?php echo $tr->translate("RECEIVED_DATE")?></td>
-							<td><?php echo $frm->getElement('Date');?></td>
 							<td><?php echo $tr->translate("STATUS")?></td>
 							<td><?php echo $frm->getElement('Stutas');?></td>
-						</tr>
-						<tr>
-							<td colspan="4">
-								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-									<tr id="head-title" class="head-td" align="right"></tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="4" align="left">
-								<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-							 	   iconClass="dijitIconEditProperty" onclick="addRow();" />
-							</td>
+							<td><?php echo $tr->translate("NOTE")?></td>
+							<td colspan="3"><?php echo $frm->getElement('Description');?></td>
 						</tr>
 					</table>
 				</fieldset>
@@ -108,55 +95,4 @@ var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar'
 		});
 }
 
-var template = '';
-var service = '';
-var col = 0;
-var no = 0;
-var title = 0;
-tmp = '';
-temp='';
-date_format = '"dd/MM/yyyy"';
-function addRow() {
-		col++;no++;
-		template='';
-		if(title!=1){
-			temp+='<th><?php echo $tr->translate("DEL");?></th>';
-			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SERVICES");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PAYMENT_TERM");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("DISCOUNT");?> %</th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SUBTOTAL");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PAID_AMOUNT");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("DATE_START");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("VALIDATE");?></th>';
-			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
-			dojo.query("#head-title").append(temp);
-			title=1;
-	    }
-		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template+='<td width="23%" align="center">'+no+'</td>';
-		
-		column = 0;
-		template+='<td><input type="text"  onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox" style="width:70px;" /><label id="qty"></label></td>';			
-		template+='<td><input type="text"  onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:70px;" /><label id="subsub"></label></td>';			
-		template+='<td><input type="text" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:70px;" /><label id="subsub"></label></td>';
-		template+='<td><input type="text"  readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:70px;" /><label id="qty"></label></td>';
-		template+='<td><input type="text"  onkeyup="alerterror('+col+');netTotal('+col+');"  name="paidamount_'+col+'" id="paidamount_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:70px;" /><label id="paidamount"></label></td>';
-		template+="<td><input type='text'  constraints="+"{datePattern:'dd/MM/yyyy'}"+" value='now' name='date_start_"+col+"' onchange='getValidate("+col+");' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' style='width:100px;' value='' /><label id='validate'></label></td>";
-		template+='<td><input type="text"  constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" style="width:100px;" /><label id="validate"></label></td>';
-		template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="??????" style="width:140px;" /><label id="subsub"></label></td>';
-		tmp='<tr id="row'+col+'">';
-		tmp+="</tr>";
-		dojo.query("#table_row").append(tmp);
-
-		if($("#identity").val()!="") {
-			var identity = $("#identity").val();
-			$("#identity").val(identity+','+col);
-		} else {$("#identity").val(col);}
-		dojo.html.set(dojo.byId("row"+col),template , {
-		     parseContent: true,
-		});
- }
 </script>

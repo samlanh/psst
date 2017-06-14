@@ -8,19 +8,13 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	
 	}
 	function addIncome($data){
-// 		if($data['currency_type']==1){
-// 			$amount_in_reil = 0 ;
-// 			$amount_in_dollar = $data['total_amount'];
-// 		}else{
-// 			$amount_in_reil = $data['total_amount'] ;
-// 			$amount_in_dollar = $data['convert_to_dollar'];
-// 		}
+		
 		$array = array(
 					'branch_id'=>$data['branch_id'],
 					'title'=>$data['title'],
-					'total_amount'=>$data['total_amount'],
+					'total_amount'=>$data['total_income'],
 					'invoice'=>$data['invoice'],
-					'curr_type'=>$data['currency_type'],
+					'payment_method'=>$data['payment_method'],
 					'description'=>$data['Description'],
 					'date'=>$data['Date'],
 					'status'=>$data['Stutas'],
@@ -28,23 +22,16 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 					'create_date'=>date('Y-m-d'),
 				);
 		$this->insert($array);
- }
+ 	 }
+ 	 
 	 function updateIncome($data){
-	 	
-	//  	if($data['currency_type']==1){
-	//  		$amount_in_reil = 0 ;
-	//  		$amount_in_dollar = $data['total_amount'];
-	//  	}else{
-	//  		$amount_in_reil = $data['total_amount'] ;
-	//  		$amount_in_dollar = $data['convert_to_dollar'];
-	//  	}
 	 	
 		$arr = array(
 					'branch_id'=>$data['branch_id'],
 					'title'=>$data['title'],
-					'total_amount'=>$data['total_amount'],
+					'total_amount'=>$data['total_income'],
 					'invoice'=>$data['invoice'],
-					'curr_type'=>$data['currency_type'],
+					'payment_method'=>$data['payment_method'],
 					'description'=>$data['Description'],
 					'date'=>$data['Date'],
 					'status'=>$data['Stutas'],
@@ -69,7 +56,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		$sql=" SELECT id,
 		(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
 		title, invoice,
-		(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = curr_type) AS currency_type,
+		(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
 		total_amount,description,date,status FROM ln_income ";
 		
 		if (!empty($search['adv_search'])){

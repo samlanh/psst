@@ -14,7 +14,7 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	$branch_id = $_db->getAccessPermission();
     	
     	$sql = "SELECT *,
-    			(select curr_nameen from ln_currency where ln_currency.id=ln_income.curr_type) as curr_name,
+    			(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
     			(select CONCAT(last_name,' - ',first_name) from rms_users as u where u.id = user_id)  as name
     			 from ln_income  WHERE 1 $branch_id  ";
     	$where= ' ';

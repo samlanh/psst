@@ -20,7 +20,7 @@ class Registrar_CalculatorController extends Zend_Controller_Action {
     }
     public function addAction()
     {
-    	$this->_redirect("/registrar/calculator");
+    	$this->_redirect("/registrar/Calculator");
     	
     }
 }

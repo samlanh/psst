@@ -1,5 +1,5 @@
 <?php
-class Registrar_indexController extends Zend_Controller_Action {	
+class Registrar_IndexController extends Zend_Controller_Action {	
 	
     public function init()
     {    	

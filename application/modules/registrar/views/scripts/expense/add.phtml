@@ -79,9 +79,9 @@ $frm = $this->frm_expense;
 </table>
 </form>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'" id="terms" >
-		<div id="printexpense" style="width: 19cm !important; height: 12cm ; padding: 0px; margin-bottom:30px; ">
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height: 11cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
+		<div id="printexpense" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				<tr>
 				    <td colspan="10"  style="" align="center">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
@@ -120,7 +120,7 @@ $frm = $this->frm_expense;
 								<td width="8%"></td>
 							</tr>
 							<tr >
-								<td class="one ">ចំណាយសម្រាប់​ <br />Pay For </td>
+								<td class="one ">ចំណាយឱ្យ​ <br />Pay To </td>
 								<td valign="top"> :&nbsp; <label id="bl_payfor"></label> </td>
 								<td  align="center">ថ្ងៃចំណាយ </br />Paid Date</td>
 								<td valign="top"> :&nbsp; <label id="lb_paiddate"></label> </td>
@@ -137,7 +137,7 @@ $frm = $this->frm_expense;
 								</td>
 							</tr>
 							<tr>
-								<td colspan="10">
+								<td colspan="10" valign="bottom">
 									<table width="100%"   style="font-family:'Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:-5px;margin-bottom:5px;">
 										<tr>
 											<td width="20%"></td>
@@ -169,8 +169,8 @@ $frm = $this->frm_expense;
 												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
 											</td>
 										</tr>
-										<tr>
-											<td colspan="2" align="center">
+										<tr >
+											<td colspan="2" align="center" valign="top">
 												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
 													<?php 
 													   $session_user=new Zend_Session_Namespace('auth');
@@ -180,14 +180,14 @@ $frm = $this->frm_expense;
 													?>
 												</div>
 											</td>
-											<td colspan="2">
+											<td colspan="2" valign="top">
 												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
 													<?php 
 													   echo"Received By :........................ &nbsp;&nbsp;";
 													?>
 												</div>
 											</td>
-											<td><div style="margin-top:-15px;"></div></td>
+											<td></td>
 											<td></td>
 										</tr>
 										<tr>
@@ -209,15 +209,10 @@ $frm = $this->frm_expense;
 				</tr>
 			</table>
 		</div>
-		<table>
-			<tr><td colspan="10" style="border-bottom:1px dashed #000;"></td></tr>
-		</table>
-		
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
 				 type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
-		
 	</div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
@@ -314,6 +309,10 @@ function addRow() {
  }
 function printSave(new_receipt){	
 	if(dijit.byId('office_receipt').validate()) {
+		if(dijit.byId("payment_method").get("value")==-1){
+			alert("សូមជ្រើសរើសប្រភេទបង់ប្រាក់");dijit.byId("payment_method").focus();
+			return false;
+		}
 		if(new_receipt==''){
 			getReceiptNumber(1);
 		}	
@@ -334,10 +333,10 @@ function printSave(new_receipt){
 		template="";
 			 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
 				  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
-				  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">No</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">Expense Type</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">Amount</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">Description</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ប្រភេទចំណាយ/Expense Type</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ពណ៌នា/Description</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនប្រាក់/Amount</div></strong></td>';
 				  temp+='</tr>';
 				  n=0;
 				i=1;  for(var n = 0; n < rowIDArray.length; n++) {

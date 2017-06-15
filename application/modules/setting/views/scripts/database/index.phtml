@@ -274,6 +274,9 @@ if(isset($_REQUEST['submit'])){
 		$zip->close() ;
 		$fileSize = get_file_size_unit(filesize(BACKUP_DIR . "/". $fileName . '.zip')) ;
 		// Function to append proper Unit after file-size .
+		
+		echo"<script>window.location=".based_url.";</script>";
+		
 }
 
 

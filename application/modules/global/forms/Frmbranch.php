@@ -68,19 +68,20 @@ Class Global_Form_Frmbranch extends Zend_Dojo_Form {
 				'required'=>true,
 				'onkeyup'=>'Caltweenty()'
 				));
-// 		$db=new Report_Model_DbTable_DbParamater();
-// 		$rows=$db->getAllBranch();
-// 		$opt_branch = array(''=>$this->tr->translate("SELECT_BRANCH_NAME"));
-// 		if(!empty($rows))foreach($rows AS $row) $opt_branch[$row['br_id']]=$row['branch_nameen'];
-// 		$select_branch_nameen = new Zend_Dojo_Form_Element_FilteringSelect('select_branch_nameen');
-// 		$select_branch_nameen->setAttribs(array(
-// 				'dojoType'=>$this->filter,
-// 				'class'=>'fullside',
-// 				'required'=>true,
-// 				'onkeyup'=>'Caltweenty()'
-// 		));
-// 		$select_branch_nameen->setMultiOptions($opt_branch);
-// 		$select_branch_nameen->setValue($request->getParam('select_branch_nameen'));
+		
+		$branch_id = new Zend_Dojo_Form_Element_FilteringSelect('main_branch_id');
+		$branch_id->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("SERVIC"),
+				'class'=>'fullside',
+				'required'=>false
+		));
+		$branch_id->setValue($request->getParam("main_branch_id"));
+		$db = new Accounting_Model_DbTable_DbTuitionFee();
+		$rows= $db->getAllBranch();
+		array_unshift($rows, array('id'=>'','name'=>"Select Branch"));
+		$opt=array();
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$branch_id->setMultiOptions($opt);
 		
 		$branch_code = new Zend_Dojo_Form_Element_NumberTextBox('branch_code');
 		$branch_code->setAttribs(array(
@@ -151,6 +152,7 @@ Class Global_Form_Frmbranch extends Zend_Dojo_Form {
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($data)){
+			$branch_id->setValue($data['parent']);
 			$br_id->setValue($data['br_id']);
 			$prefix_code->setValue($data['prefix']);
 			$branch_namekh->setValue($data['branch_namekh']);
@@ -165,7 +167,7 @@ Class Global_Form_Frmbranch extends Zend_Dojo_Form {
 			$branch_display->setValue($data['displayby']);
 		}
 		
-		$this->addElements(array($prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
+		$this->addElements(array($branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
 				$branch_status,$branch_display));
 		
 		return $this;

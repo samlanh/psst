@@ -29,14 +29,16 @@
 									    <td><?php echo $frm->getElement("prefix_code");?></td>
 									</tr>
 									<tr>
+										<td><?php echo $tr->translate("MAIN_BRANCH")?></td>
+										<td><?php echo $frm->getElement("main_branch_id");?></td>
 										<td><?php echo $tr->translate("ADDRESS")?></td>
 										<td><?php echo $frm->getElement("br_address");?></td>
 										<td><?php echo $tr->translate("PHONE")?></td>
 										<td><?php echo $frm->getElement("branch_tel");?></td>
-										<td><?php echo $tr->translate("BRANCH_FAX")?></td>
-										<td><?php echo $frm->getElement("fax");?></td>	
 									</tr>
 									<tr>		
+										<td><?php echo $tr->translate("BRANCH_FAX")?></td>
+										<td><?php echo $frm->getElement("fax");?></td>	
 										<td><?php echo $tr->translate("NOTE")?></td>
 										<td><?php echo $frm->getElement("branch_note");?></td>
 										<td><?php echo $tr->translate("STATUS")?></td>
@@ -58,6 +60,5 @@
 				</fieldset>
 			</td>			
 		</tr>
-		
 	</table>	
 </form>

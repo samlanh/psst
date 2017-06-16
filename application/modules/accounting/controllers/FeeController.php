@@ -31,7 +31,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();exit();
     	}
     	
     	$this->view->adv_search = $search;

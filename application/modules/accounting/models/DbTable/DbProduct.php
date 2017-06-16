@@ -18,7 +18,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 			    p.pro_price, 
 				pl.pro_qty,pl.total_amount,p.date,p.status
 				FROM rms_product AS p,rms_product_location AS pl
-				WHERE p.id=pl.pro_id ";
+				WHERE p.id=pl.pro_id and sale_set = ".$search['sale_set'];
     	
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " p.date >= '".$search['start_date']." 00:00:00'";
@@ -39,19 +39,15 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	if(!empty($search['location'])){
     		$where.=" AND pl.brand_id=".$search['location'];
     	}
-    	
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND p.status=".$search['status_search'];
     	}
-    	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('brand_id');
-    	
     	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
     public function addProduct($_data){
-    	//print_r($_data);exit();
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
@@ -67,7 +63,6 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	    				'user_id'	=>$this->getUserId()
 	    				);
 	    		$pro_id = $this->insert($_arr);
-	    		
 	    		$this->_name='rms_product_location';
 	    		$ids = explode(',', $_data['identity']);
 	    		$one_price=$_data['pro_price'];
@@ -81,7 +76,6 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	    				);
 	    				$this->insert($_arr);
 	    		}
-	    		
 	    		$this->_name='rms_program_name';
 	    		$array = array(
 		    				'ser_cate_id'	=>$pro_id,
@@ -110,7 +104,6 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     }
     
 	public function updateProduct($_data){
-    	//print_r($_data);exit();
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
@@ -186,14 +179,25 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('br_id');
     	$sql.=" ORDER BY br_id DESC";
-    	//echo $sql;exit();
     	$rows=$db->fetchAll($sql);
-        //array_unshift($rows,array('id' => '',"name"=>"Please select brand name"));
         $options = '';
         if(!empty($rows))foreach($rows as $value){
         	$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
         }
         return $options;
+    }
+    function getAllProductOption(){
+    	$db=$this->getAdapter();
+    	$sql="SELECT id, pro_name FROM rms_product WHERE status=1 AND pro_name!='' AND sale_set=0  ";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('br_id');
+    	$sql.=" ORDER BY id DESC ";
+    	$rows=$db->fetchAll($sql);
+    	$options = '';
+    	if(!empty($rows))foreach($rows as $value){
+    		$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['pro_name'], ENT_QUOTES).'</option>';
+    	}
+    	return $options;
     }
     function getProCode(){
     	$db = $this->getAdapter();
@@ -301,11 +305,146 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     			);
     	return $this->insert($array);
     }
-    
-    
-    
+    /*pro duct set group */
+    function getAllProductSetGroup($search=null){
+    	$db = $this->getAdapter();
+    	$sql=" SELECT p.id,p.pro_code,
+    	p.pro_name,(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id LIMIT 1) As cat_name,
+    	p.pro_price,p.date,p.status
+    	FROM rms_product AS p
+    	WHERE sale_set = ".$search['sale_set'];
+    	 
+    	$where="";
+    	$from_date =(empty($search['start_date']))? '1': " p.date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " p.date <= '".$search['end_date']." 23:59:59'";
+    	$where = " AND ".$from_date." AND ".$to_date;
+    	if(!empty($search['title'])){
+    		$s_where=array();
+    		$s_search=addslashes(trim($search['title']));
+    		$s_where[]= " p.pro_code LIKE '%{$s_search}%'";
+    		$s_where[]=" p.pro_name LIKE '%{$s_search}%'";
+    		$s_where[]= " p.pro_size LIKE '%{$s_search}%'";
+    		$s_where[]= " p.pro_size LIKE '%{$s_search}%'";
+    		$s_where[]= " p.pro_price LIKE '%{$s_search}%'";
+    		$where.=' AND ('.implode(' OR ', $s_where).')';
+    	}
+    	if($search['status_search']==1 OR $search['status_search']==0){
+    		$where.=" AND p.status=".$search['status_search'];
+    	}
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$where.=$dbp->getAccessPermission('brand_id');
+    	$order=" ORDER BY id DESC";
+//     	echo $sql.$where.$order;exit();
+    	return $db->fetchAll($sql.$where.$order);
+    }
+    public function addProductSetGroup($_data){
+    	$db = $this->getAdapter();
+    	$db->beginTransaction();
+    	try{
+    		$_arr = array(
+    				'pro_name'	=>$_data['product_name'],
+    				'pro_code'	=>$_data['product_code'],
+    				'cat_id'	=>$_data['category_id'],
+    				'pro_price'	=>$_data['pro_price'],
+    				'pro_des'	=>$_data['descript'],
+    				'pro_type'	=>2,
+    				'sale_set'	=>1,
+    				'status'	=>$_data['status'],
+    				'date'		=>date("Y-m-d"),
+    				'user_id'	=>$this->getUserId()
+    		);
+    		$pro_id = $this->insert($_arr);
+    		
+    		$this->_name='rms_product_setdetail';
+    		$ids = explode(',', $_data['identity']);
+    		$one_price=$_data['pro_price'];
+    		foreach ($ids as $i){
+    			$_arr = array(
+    					'pro_id'=>$pro_id,
+    					'subpro_id'=>$_data['pro_id'.$i],
+    					'qty'=>$_data['qty_'.$i],
+    					'remark'=>$_data['note_'.$i],
+    			);
+    			$this->insert($_arr);
+    		}
+    		    		
+    		$this->_name='rms_program_name';
+    		$array = array(
+    				'ser_cate_id'	=>$pro_id,
+    				'title'			=>$_data['product_name'],
+    				'description'	=>$_data['descript'],
+    				'price'			=>$_data['pro_price'],
+    				'status'		=>1,
+    				'create_date'	=>date("Y-m-d H:i:s"),
+    				'user_id'		=>$this->getUserId(),
+    				'type'			=>1, 
+    				'pro_type'		=>2,
+    		);
+    		$this->insert($array);
+    		$db->commit();    		
+    	}catch (Exception $e){
+    		$db->rollBack();
+    		echo $e->getMessage();exit();
+    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    }
+    function getProDetailById($id){
+    	$db=$this->getAdapter();
+    	$sql="SELECT * FROM rms_product_setdetail WHERE pro_id=$id";
+    	return $db->fetchAll($sql);
+    }  
+    public function updateProductSetDetail($_data){
+    	$db = $this->getAdapter();
+    	$db->beginTransaction();
+    	try{
+    		$_arr = array(
+    				'pro_name'	=>$_data['product_name'],
+    				'pro_code'	=>$_data['product_code'],
+    				'cat_id'	=>$_data['category_id'],
+    				'pro_price'	=>$_data['pro_price'],
+    				'pro_des'	=>$_data['descript'],
+    				'pro_type'	=>2,
+    				'sale_set'	=>1,
+    				'status'	=>$_data['status'],
+    				'date'		=>date("Y-m-d"),
+    				'user_id'	=>$this->getUserId()
+    		);
+    		$where=" id=".$_data['id'];
+    		$this->update($_arr, $where);
+    		
+    		$one_price=$_data['pro_price'];
+    		$this->_name='rms_product_setdetail';
+    		$where=" pro_id= ".$_data['id'];
+    		$this->delete($where);
+    		
+    		$ids = explode(',', $_data['identity']);
+    		foreach ($ids as $i){
+    			$_arr = array(
+    					    'pro_id'=>$_data['id'],
+    						'subpro_id'=>$_data['pro_id'.$i],
+    						'qty'=>$_data['qty_'.$i],
+    						'remark'=>$_data['note_'.$i],
+    					);
+    			$this->insert($_arr);
+    		}
+    		 
+    			$this->_name='rms_program_name';
+    			$array = array(
+    					//'ser_cate_id'	=>$pro_id,
+    					'title'			=>$_data['product_name'],
+    					'description'	=>$_data['descript'],
+    					'price'			=>$_data['pro_price'],
+    					'status'		=>$_data['status'],
+    					'user_id'		=>$this->getUserId(),
+    					'type'			=>1, 
+    					'pro_type'		=>2,
+    			);
+    			$where = " ser_cate_id=".$_data['id'];
+    			$this->update($array, $where);
+    		    $db->commit();
+    	}catch (Exception $e){
+    		$db->rollBack();
+    	}
+    }
 }
-
-
-
-

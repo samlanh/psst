@@ -14,6 +14,7 @@ class Accounting_ProductController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
     			$search = $this->getRequest()->getPost();
+    			$search['sale_set']=0;
     		}
     		else{
     			$search=array(
@@ -22,6 +23,7 @@ class Accounting_ProductController extends Zend_Controller_Action {
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
     							'status_search'=>1,
+    							'sale_set'=>0,
     					);
     		}
 			

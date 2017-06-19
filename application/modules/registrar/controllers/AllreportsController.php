@@ -108,7 +108,7 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		}else if($search['type']==2){
     			 
     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-    			$data=$this->view->row = $db->getAllStudentPayment($search);
+    			$data=$this->view->row = $db->getDailyReport($search);
     			 
     		}else if($search['type']==3){
     			 

@@ -126,7 +126,6 @@
 													<td>&nbsp;<?php echo $tr->translate('FEE');?>&nbsp;</td>
 													<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 													<td>&nbsp;<?php echo $tr->translate('DISCOUNT');?>&nbsp;</td>
-													<td>&nbsp;<?php echo $tr->translate('ADMIN_FEE');?>&nbsp;</td>
 													<td>&nbsp;<?php echo $tr->translate('SUBTOTAL');?>&nbsp;</td>
 													<td>&nbsp;<?php echo $tr->translate('PAID_AMOUNT');?>&nbsp;</td>
 													<td>&nbsp;<?php echo $tr->translate('BALANCE');?>&nbsp;</td>
@@ -163,7 +162,6 @@
 										    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
 										    <td><?php echo $rs['qty']; ?></td>
 										    <td><?php echo $rs['discount_percent']; ?>%</td>
-										    <td>$ <?php echo $rs['admin_fee']; ?></td>
 										    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>>$ <?php echo number_format($subtotal,2); ?></td>
 										    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>>$ <?php echo $rs['paid_amount']; ?></td>
 										    <td>$ <?php echo $rs['balance_due']; ?></td>

@@ -62,9 +62,33 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 			echo $e->getMessage();
+			echo $e->getMessage();
 		}
 	}
+	
+	function  rptPaymentdetailbytypeSumupAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'txtsearch' =>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+						'service_type'=>0
+				);
+			}
+			$db = new Allreport_Model_DbTable_DbRptPayment();
+			$this->view->row = $db->getPaymentDetailByTypeSumup($search);
+			$this->view->service = $db->getService();
+			$this->view->search = $search;
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			echo $e->getMessage();
+		}
+	}
+	
 	
 	function rptStudentpaymentdetailAction(){
 		try{

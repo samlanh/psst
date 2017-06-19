@@ -10,7 +10,7 @@
 	$otherExpense = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-other-expense'), null, true);
 	$otherIncome = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-other-income'), null, true);
 	
-	//$allstudent=$acl=$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'index'), null, true);
+	$dailyReport = $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'rpt-daily'), null, true);
 	
 	/*--------------------URLs link display--------------------------*/
 		  $tr=Application_Form_FrmLanguages::getCurrentlanguage();
@@ -34,7 +34,8 @@
 				'income'=>'<li><a href="">'.$tr->translate("OTHER_INCOME").'</a></li>',
 				'expense'=>'<li><a href="">'.$tr->translate("OTHER_EXPENSE").'</a></li>',
 				'rptproductsold'=>'<li><a href="">'.$tr->translate("របាយការណ៍ផលិតលក់បាន").'</a></li>',
-				'allreports'=>'<li><a href="">'.$tr->translate("RPT_CASHPAYMENT").'</a></li>',
+				'allreports'=>'<li><a href='.$dailyReport.'>'.$tr->translate("RPT_CASHPAYMENT").'</a></li>',
+				'rptbytype'=>'<li><a href="">'.$tr->translate("របាយការណ៏សរុបតាមប្រភេទ").'</a></li>',
 				'studentnearlyendservice'=>'<li><a href="">'.$tr->translate("STUDENT_NEARLY_END_SERVICE").'</a></li>',
 				'studentpaymentlate'=>'<li><a href="">'.$tr->translate("STUDENT_PAYMENT_LATE").'</a></li>',
 				'rptotherincomeexpense'=>'<li><a href="">'.$tr->translate("RPT_OTHER_INCOME_EXPENSE").'</a></li>',

@@ -356,18 +356,20 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             	$this->insert($arr);
 	             }
 	             
-	             $idpro = explode(',', $data['identitystock']);
-	             foreach ($idpro as $j){
-	             	$this->_name='rms_saledetail';
-	             	$arr = array(
-	             			'payment_id'=>$paymentid,
-	             			'pro_id'=>$data['produc_id'.$j],
-	             			'qty'=>$data['pro_qty'.$j],
-	             			'note'=>$data['remarkpro'.$j],
-	             			'in_receipt'=>0,
-	             	);
-	             	$this->insert($arr);
-	            }
+	             if(!empty($data['identitystock'])){
+		             $idpro = explode(',', $data['identitystock']);
+		             foreach ($idpro as $j){
+		             	$this->_name='rms_saledetail';
+		             	$arr = array(
+		             			'payment_id'=>$paymentid,
+		             			'pro_id'=>$data['produc_id'.$j],
+		             			'qty'=>$data['pro_qty'.$j],
+		             			'note'=>$data['remarkpro'.$j],
+		             			'in_receipt'=>0,
+		             	);
+		             	$this->insert($arr);
+		             }
+	             }
 	             
 	             $this->_name="rms_student_paymentdetail";
 	             $ids = explode(',', $data['identity']);
@@ -1771,12 +1773,17 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	
-    	$sql="SELECT id  FROM rms_student_payment where 1 $branch_id ORDER BY id DESC LIMIT 1 ";
-    	$acc_no = $db->fetchOne($sql);
-    	$new_acc_no= (int)$acc_no+1;
-    	$acc_no= strlen((int)$acc_no+1);
+    	$sql="SELECT count(id)  FROM rms_student_payment where 1 $branch_id LIMIT 1 ";
+    	$payment_no = $db->fetchOne($sql);
+    	
+    	$sql1="SELECT count(id)  FROM ln_income where 1 $branch_id LIMIT 1 ";
+    	$income_no = $db->fetchOne($sql1);
+    	
+    	$new_acc_no= (int)$payment_no+(int)$income_no+1;
+    	
+    	$acc_length = strlen((int)$new_acc_no+1);
     	$pre=0;
-    	for($i = $acc_no;$i<5;$i++){
+    	for($i = $acc_length;$i<5;$i++){
     		$pre.='0';
     	}
     	return $pre.$new_acc_no;
@@ -1892,7 +1899,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getGradeAllDept(){
     	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,CONCAT(major_enname) AS `name` FROM rms_major where is_active=1 order by dept_id,major_id ";
+    	$sql="SELECT major_id AS id,CONCAT(major_enname,' (',(select shortcut from rms_dept where rms_dept.dept_id=rms_major.dept_id),')') AS `name` FROM rms_major where is_active=1 order by dept_id,major_id ";
     	return $db->fetchAll($sql);
     }
     

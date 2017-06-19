@@ -72,6 +72,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	}
       }
        
+      
+//        $db = new Registrar_Model_DbTable_DbRegister();
+//        $receipt = $db->getRecieptNo();
+//        echo $receipt;exit();
+      
        $_db = new Application_Model_DbTable_DbGlobal();
        $this->view->all_dept = $_db->getAllDegreeName();
        $this->view->exchange_rate = $_db->getExchangeRate();

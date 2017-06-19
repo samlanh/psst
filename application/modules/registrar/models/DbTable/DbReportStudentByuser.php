@@ -148,7 +148,74 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		
 	}
 	   
-	   
+	function getDailyReport($search=null){
+		try{
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$branch_id = $_db->getAccessPermission('sp.branch_id');
+			$user_level = $_db->getUserAccessPermission('sp.user_id');
+	
+			$db=$this->getAdapter();
+	
+			$type=$this->getType();
+			$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
+			$sql=" SELECT
+						sp.receipt_number,
+						s.stu_code,
+						s.stu_khname,
+						s.stu_enname,
+						(select en_name from rms_dept where dept_id = s.degree) as degree,
+						(select major_enname from rms_major where major_id = s.grade) as grade,
+						(select name_en from rms_view where rms_view.type = 4 and key_code=s.session) as session,
+						sp.create_date,
+						sp.is_void,
+						(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.year LIMIT 1) AS year,
+						(SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user_id,
+						(select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status,
+						
+						sp.grand_total as total_payment,
+						sp.credit_memo,
+						sp.deduct,
+						sp.net_amount,
+						sp.note
+			
+				  FROM
+						rms_student AS s,
+						rms_student_payment AS sp
+				  WHERE s.stu_id = sp.student_id  $branch_id  $user_level
+			";
+	
+			$where = " AND ".$from_date." AND ".$to_date;
+	
+			if(!empty($search['adv_search'])){
+			$s_where=array();
+			$s_search= addslashes(trim($search['adv_search']));
+			$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
+			$s_where[]=" sp.receipt_number LIKE '%{$s_search}%'";
+			$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
+			$s_where[]= " s.stu_enname LIKE '%{$s_search}%'";
+			$s_where[]= " s.grade LIKE '%{$s_search}%'";
+			$where.=' AND ('.implode(' OR ', $s_where).')';
+			}
+			if(!empty($search['user'])){
+					$where.= " AND sp.user_id = ".$search['user'];
+			}
+			if(!empty($search['degree'])){
+				$where.= " AND s.degree = ".$search['degree'];
+			}
+			if(!empty($search['grade_all'])){
+				$where.= " AND s.grade = ".$search['grade_all'];
+			}
+			if(!empty($search['session'])){
+				$where.= " AND s.session = ".$search['session'];
+			}
+			$order=" ORDER By sp.id DESC ";
+		// 	    	echo $sql.$where.$order;exit();
+			return $db->fetchAll($sql.$where.$order);
+		}catch(Exception $e){
+				echo $e->getMessage();
+		}
+	}   
 	   
 }
 

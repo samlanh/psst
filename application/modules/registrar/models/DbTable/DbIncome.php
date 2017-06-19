@@ -2,45 +2,58 @@
 class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'ln_income';
+	
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace('auth');
 		return $session_user->user_id;
-	
 	}
+	
+	public function getBranchId(){
+		$session_user=new Zend_Session_Namespace('auth');
+		return $session_user->branch_id;
+	}
+	
 	function addIncome($data){
 		
+		$db = new Registrar_Model_DbTable_DbRegister();
+	    $receipt_no = $db->getRecieptNo();
+		
 		$array = array(
-					'branch_id'=>$data['branch_id'],
-					'title'=>$data['title'],
-					'total_amount'=>$data['total_income'],
-					'invoice'=>$data['invoice'],
+					'branch_id'		=>$this->getBranchId(),
+					'title'			=>$data['title'],
+					'cate_income'	=>$data['cate_income'],
+					'total_amount'	=>$data['total_income'],
+					'invoice'		=>$receipt_no,
 					'payment_method'=>$data['payment_method'],
-					'description'=>$data['Description'],
-					'date'=>$data['Date'],
-					'status'=>$data['Stutas'],
-					'user_id'=>$this->getUserId(),
-					'create_date'=>date('Y-m-d'),
+					'cheqe_no'		=>$data['cheqe_no'],
+					'description'	=>$data['note'],
+					'date'			=>$data['date'],
+					'status'		=>$data['status'],
+					'user_id'		=>$this->getUserId(),
+					'create_date'	=>date('Y-m-d'),
 				);
 		$this->insert($array);
  	 }
  	 
 	 function updateIncome($data){
-	 	
 		$arr = array(
-					'branch_id'=>$data['branch_id'],
-					'title'=>$data['title'],
-					'total_amount'=>$data['total_income'],
-					'invoice'=>$data['invoice'],
+					'branch_id'		=>$this->getBranchId(),
+					'title'			=>$data['title'],
+					'cate_income'	=>$data['cate_income'],
+					'total_amount'	=>$data['total_income'],
+					'invoice'		=>$data['invoice'],
 					'payment_method'=>$data['payment_method'],
-					'description'=>$data['Description'],
-					'date'=>$data['Date'],
-					'status'=>$data['Stutas'],
-					'user_id'=>$this->getUserId()
+					'cheqe_no'		=>$data['cheqe_no'],
+					'description'	=>$data['note'],
+					'date'			=>$data['date'],
+					'status'		=>$data['status'],
+					'user_id'		=>$this->getUserId(),
 				);
 		$where=" id = ".$data['id'];
 		$this->update($arr, $where);
 	}
-	function getexpensebyid($id){
+	
+	function getIncomeById($id){
 		$db = $this->getAdapter();
 		$sql=" SELECT * FROM ln_income where id=$id ";
 		return $db->fetchRow($sql);
@@ -54,7 +67,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		$where = " WHERE ".$from_date." AND ".$to_date;
 		
 		$sql=" SELECT id,
-		(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
+		(select cate.category_name from rms_cate_income_expense as cate where cate.id = cate_income) AS cate_name,
 		title, invoice,
 		(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
 		total_amount,description,date,status FROM ln_income ";
@@ -70,9 +83,6 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 			}
 			if($search['status']>-1){
 				$where.= " AND status = ".$search['status'];
-			}
-			if($search['currency_type']>-1){
-				$where.= " AND curr_type = ".$search['currency_type'];
 			}
 	       $order=" order by id desc ";
 			return $db->fetchAll($sql.$where.$order);
@@ -139,11 +149,28 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	}
 
 	
+	function getPaymentMethod($type){ // $type = rms_view type
+		$db=$this->getAdapter();
+		$sql="SELECT key_code as id,name_kh as name FROM rms_view WHERE `type`=$type AND `status`=1 ";
+		return $db->fetchAll($sql);
+	}
 	
+	function getCateIncome(){ // $type = rms_view type
+		$db=$this->getAdapter();
+		$sql="SELECT id,category_name as name FROM rms_cate_income_expense WHERE status=1 AND parent=1 ";
+		return $db->fetchAll($sql);
+	}
 	
-	
-	
-	
+	function addNewCateIncome($data){
+		$this->_name="rms_cate_income_expense";
+		$array = array(
+				'category_name'	=>$data['cate_title'],
+				'parent'		=>$data['type'],
+				'create_date'	=>date('Y-m-d'),
+				'user_id'		=>$this->getUserId(),
+				);
+		return $this->insert($array);
+	}
 	
 	
 	

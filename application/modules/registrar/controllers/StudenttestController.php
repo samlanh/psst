@@ -27,7 +27,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllStudentTest($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("NAME_KH","NAME_EN","SEX","DOB","PHONE","SERIAL","DEGREE","OLD_SCHOOL","OLD_GRADE","NOTE");
+    		$collumns = array("NAME_KH","NAME_EN","SEX","DOB","PHONE","SERIAL","DEGREE","OLD_SCHOOL","OLD_GRADE","NOTE","PRICE","BY_USER");
     		$link=array(
     				'module'=>'registrar','controller'=>'studenttest','action'=>'edit',
     		);
@@ -83,7 +83,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		$data = $this->getRequest()->getPost();
 	    	$db = new Registrar_Model_DbTable_DbStudentTest();
 	    	$receipt = $db->getReceiptNumber($data['branch_id'],1);
-	    	//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 	    	print_r(Zend_Json::encode($receipt));
 	    	exit();
     	}

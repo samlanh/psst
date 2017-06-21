@@ -216,8 +216,73 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				echo $e->getMessage();
 		}
 	}   
+	
+	
+	function getAllStudentTest($search=null){
+		try{
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$branch_id = $_db->getAccessPermission('st.branch_id');
+	
+			$db=$this->getAdapter();
+	
+			$from_date =(empty($search['start_date']))? '1': "st.create_date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': "st.create_date <= '".$search['end_date']." 23:59:59'";
+			
+			$sql="SELECT
+					st.receipt,
+					st.kh_name,
+					st.en_name,
+					(select name_en from rms_view where type=2 and key_code=st.sex) as sex,
+					st.dob,
+					st.phone,
+					(select en_name from rms_dept where dept_id = st.degree) as degree,
+					st.create_date,
+					(SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = st.user_id) AS user_id,
+					st.serial,
+					st.register,
+					st.old_school,
+					st.old_grade,
+					st.total_price,
+					st.note
+				FROM
+					rms_student_test AS st
+				WHERE 
+					1  
+					$branch_id 
+			";
+	
+			$where = " AND ".$from_date." AND ".$to_date;
+	
+			if(!empty($search['adv_search'])){
+			$s_where=array();
+			$s_search= addslashes(trim($search['adv_search']));
+			$s_where[]= " st.receipt LIKE '%{$s_search}%'";
+			$s_where[]= " st.stu_khname LIKE '%{$s_search}%'";
+			$s_where[]= " st.stu_enname LIKE '%{$s_search}%'";
+			$s_where[]= " st.serial LIKE '%{$s_search}%'";
+			$where.=' AND ('.implode(' OR ', $s_where).')';
+			}
+			if(!empty($search['degree'])){
+				$where.= " AND st.degree = ".$search['degree'];
+			}
+			$order=" ORDER By st.id DESC ";
+			
+// 				    	echo $sql.$where.$order;exit();
+			
+			return $db->fetchAll($sql.$where.$order);
+			
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}	
+	
+	
 	   
 }
+
+
+
+
 
 
 

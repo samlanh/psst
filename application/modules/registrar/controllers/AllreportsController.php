@@ -25,7 +25,8 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		
     		if($search['type']==1){
 	    		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-	    		$data=$this->view->row = $db->getAllStudentPayment($search);
+	    		$this->view->row = $db->getAllStudentPayment($search);
+	    		
 	    		
 	    		$user_type=$db->getUserType();
 	    		
@@ -95,7 +96,10 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		if($search['type']==1){
     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
     			$data=$this->view->row = $db->getDailyReport($search);
-    			 
+    			
+    			$data=$this->view->stu_test = $db->getAllStudentTest($search);
+//     			print_r($data);
+    			
     			$user_type=$db->getUserType();
     			 
     			if($user_type==1){
@@ -124,6 +128,14 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     				$this->view->expense = $db->getAllOtherExpense($search);
     			}
     		}
+    		
+    		if($search['type']==4){
+    			
+    			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+    			$data=$this->view->stu_test = $db->getAllStudentTest($search);
+    			
+    		}
+    		
     	}catch(Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		echo $e->getMessage();

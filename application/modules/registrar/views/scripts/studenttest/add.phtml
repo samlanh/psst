@@ -104,9 +104,10 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 		</tr>		
 		<tr>
 			<td align="center">
-			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
+				<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
 					 iconClass="dijitIconClear"/>
-				<input label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' dojoType="dijit.form.Button" onclick="printReceipt('');" type="button" iconClass="dijitIconNewTask"/>
+				<input label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' dojoType="dijit.form.Button" type="submit" iconClass="dijitEditorIcon dijitEditorIconSave"/>
+				<input label="<?php echo $tr->translate("PRINT")?>" name='print' id='print' value='print' dojoType="dijit.form.Button" onclick="printReceipt('');" type="button" iconClass="dijitIconNewTask"/>
 			</td>
 		</tr>	
 	</table>
@@ -117,22 +118,10 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 <?php $keycode = $this->keycode;?>
 	<div data-dojo-type="dijit.Dialog" style="width:24cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'" id="terms" >
-		<table width="100%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap;">
-				<tr>
-					<td colspan="10" valign="top">
-						<table border="0" cellspacing="0" style=" width:20cm;margin:0 auto;font-family: Khmer OS Battambang;font-size:16px;white-space:nowrap;">
-							<tr>
-							<td width="33%"><img src="<?php echo $this->baseUrl()."/images/logo.png"?>" style="margin-bottom: -90px;max-height:70px;"/></td>
-							<td width="33%" style="text-align:center;font-weight:bold;font-size: 16px;font-family:'Khmer MEF2';"><br /></td>	
-							<td width="33%">&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
+		
 		<div id="PrintReceipt" style="width: 20cm !important; height: 10cm ; padding: 0px; ">
 			<style>
-			.headerreceipt{height: 60px;}
+				.headerreceipt{height: 50px;}
 			</style>
 			<table width="100%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap;">
 				<tr>
@@ -147,8 +136,11 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 							<tr>
 								<td colspan="4" class="headerreceipt"></td>
 							</tr>
-							<tr>
-								<td colspan="4" style="text-align:center;font-weight:bold;font-size: 16px;font-family:'Khmer MEF2';">បង្កាន់ដៃបង់ប្រាក់ចូលធ្វើតេស<br />OFFICIAL RECEIPT</td>	
+							<tr style="line-height:24px;">
+								<td colspan="4" style="text-align:center;font-weight:bold;font-family:'Khmer MEF2';">
+									<div style="font-size:18px;">បង្កាន់ដៃបង់ប្រាក់</div>
+									<div style="font-size:15px;">OFFICIAL RECEIPT</div>
+								</td>	
 							</tr>
 							<style>
 								.h{ margin-top: -3px;margin-bottom: 3px;}
@@ -161,9 +153,11 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 								.border{border:1px solid #000;}
 							</style>
 							<tr style="height: 30px;">
-								<td class="one " colspan="2">&nbsp;&nbsp;</td>
-								<td class="one ">&nbsp;លេខបង្កាន់ដៃបង់&nbsp;</td>
-								<td class="border"><label id="lb_receipt" class=" values one"></label> </td>
+								<td colspan="4" align="center">
+									<div style="margin-top:-15px;font-size:17px;">
+										N<sup>o</sup> : <label id="lb_receipt" style="color:red;" ></label>
+									</div>
+								</td>
 							</tr>
 							<tr style="height: 30px;">
 								<td class="one ">&nbsp;ឈ្មោះជាខ្មែរ&nbsp;</td>
@@ -197,6 +191,9 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 								<td class="border"><label id="lb_note" class="values one"> </label></td>
 							</tr>
 							<tr style="font-size: 15px;">
+								<td colspan="2" align="center">&nbsp;</td>
+							</tr>
+							<tr style="font-size: 15px;">
 								<td colspan="2" align="center">អ្នកប្រគល់</td>
 								<td colspan="2" align="center">អ្នកទទួល</td>
 							</tr>
@@ -206,14 +203,14 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 							<tr style="font-size: 15px;">
 								<td colspan="2" align="center"></td>
 								<td colspan="2" align="center" valign="">
-									<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';margin-top: 26px;"> 
+									<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';margin-top: -7px;"> 
 								        <?php 
 										   $session_user=new Zend_Session_Namespace('auth');
 								           $last_name=$session_user->last_name;
 								           $username = $session_user->first_name;
 										   echo "".$last_name." ".$username;
 										?>
-										<p style="margin-top:-5px;"><?php $today = date("F j, Y, g:i a");echo $today; ?></p>
+										<p style="margin-top:-2px;font-size:11px;"><?php $today = date("F j, Y, g:i a");echo $today; ?></p>
 					        		</h4>
 					        	</td>
 							</tr>
@@ -258,11 +255,11 @@ function getReceiptNumber(condition){
 function printReceipt(new_receipt){
 	if(dijit.byId('frm_teststudent').validate()) {
 		if(new_receipt==''){
+			dojo.byId("lb_receipt").innerHTML = '';
 			getReceiptNumber(1);
 		}else{
 			dojo.byId("lb_receipt").innerHTML = new_receipt;
 		}
-	dojo.byId("lb_receipt").innerHTML = dijit.byId("receipt").get('value');
 	dojo.byId("lb_studentkh").innerHTML = dijit.byId("kh_name").get('value');
 	dojo.byId("lb_studenten").innerHTML = dijit.byId("en_name").get('value');
     dojo.byId("lb_serial").innerHTML = dijit.byId("serial").get('value');
@@ -295,7 +292,7 @@ function printSubmit(){
 	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
-    submitData();
+    //submitData();
 }
 function hideDialog(){
 	dijit.byId('terms').hide();

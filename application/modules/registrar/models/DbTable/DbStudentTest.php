@@ -67,12 +67,13 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$where = " and ".$from_date." AND ".$to_date;
 		$sql="  SELECT 
 					id,
+					receipt,
 					kh_name,
 					en_name,
 					(select name_kh from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
 					dob,
 					phone,serial,
-					(select name_kh from rms_view where type=3 and key_code=degree LIMIT 1) as degree,
+					(select en_name from rms_dept where dept_id=degree LIMIT 1) as degree,
 					old_school,
 					old_grade,
 					note,

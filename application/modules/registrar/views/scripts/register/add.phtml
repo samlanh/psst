@@ -9,7 +9,7 @@
 	dojo.require('dijit.form.TextBox');
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
 	dojo.ready(function(){
-		getTestFee();
+		//getTestFee();
 		changControll();
 		getStudentNo(1,'');
 		getReceiptNo('');
@@ -314,7 +314,7 @@ fieldset{  background:none;}
 						    <tr>
 								<td><?php echo $tr->translate("STUDENT_TYPE");?></td>
 								<td>
-									<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="changControll();getTestFee();" >
+									<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="changControll();" >
 										<option value="1">Tested Student</option>
 										<option value="3">Old Student</option>
 										<option value="2">New Student</option>
@@ -494,7 +494,7 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 							    <td><?php echo $tr->translate("TUITION_FEE");?></td>
-								<td><input type="text" name="tuitionfee" id="tuitionfee" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/></td>
+								<td><input type="text" name="tuitionfee" id="tuitionfee" readOnly="1" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/></td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("LATE_FEE");?></td>
@@ -505,7 +505,7 @@ fieldset{  background:none;}
 								<td><input type="text" name="discount" id="discount" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/></td>
 							</tr>
 							<tr>
-								<td><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
+								<td><?php echo $tr->translate("GRAND_TOTAL");?></td>
 								<td><input type="text" dojoType="dijit.form.NumberTextBox" readonly="true" value="0" name="total_payment" id="total_payment" class="fullside"/></td>
 							</tr>
 							
@@ -571,19 +571,23 @@ fieldset{  background:none;}
 				<td>
 					<table style="margin: 0 auto; width: 100%;" cellspacing="2" >
 						<tr>
-							<td ><?php echo $tr->translate("Total Payment");?></td>
+							<td ><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
 							<td align="right"><input type="text" readonly="readonly" name="grand_total" id="grand_total" value="0" dojoType="dijit.form.NumberTextBox" /></td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("Credit Memo");?></td>
-							<td align="right"><input type="text"  onkeyup=""  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" /></td>
+							<td><?php echo $tr->translate("FINE");?></td>
+							<td align="right"><input type="text"  onkeyup="onKeyUpDeduct();"  name="fine" id="fine"  value="0" dojoType="dijit.form.NumberTextBox" /></td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("Deduct");?></td>
+							<td><?php echo $tr->translate("CREDIT_MEMO");?></td>
+							<td align="right"><input type="text"  onkeyup="" readOnly="1"  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" /></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("DEDUCT");?></td>
 							<td align="right"><input type="text"  onkeyup="onKeyUpDeduct();"  name="deduct" id="deduct"  value="0" dojoType="dijit.form.NumberTextBox" /></td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("Net Amount");?></td>
+							<td><?php echo $tr->translate("NET_AMOUNT");?></td>
 							<td align="right"><input type="text" name="net_amount" readonly="readonly" id="net_amount" value="0" dojoType="dijit.form.NumberTextBox" /></td>
 						</tr>
 						<tr>
@@ -838,7 +842,7 @@ function getMonthByNumber(m){
 		</table>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-				 type="button" onclick="printSubmit();"><?php echo $tr->translate("SAVE_PRINT");?></button>
+				 type="button" onclick="confirmBeforePrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
 	</div>
@@ -866,6 +870,14 @@ function setHourDefault(){
 		dijit.byId('study_hour').attr('value','');
 	}
 }
+
+function confirmBeforePrint(){
+	value = confirm("Are you sure you want to print !!! ?");
+	if (value == true) {
+		printSubmit();
+	} 
+}
+
 function printSubmit(){
 	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
     window.frames["print_frame"].window.focus();
@@ -963,7 +975,7 @@ function addRow() {
 			temp+='<th   width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
 			temp+='<th   width="100px"><?php echo $tr->translate("SUBTOTAL");?></th>';
 			temp+='<th   width="100px"><?php echo $tr->translate("LATE_FEE");?></th>';
-			temp+='<th   width="100px"><?php echo $tr->translate("ExTRA.FEE");?></th>';
+			temp+='<th   width="100px"><?php echo $tr->translate("EXTRA_FEE");?></th>';
 			temp+='<th   width="100px"><?php echo $tr->translate("DISCOUNT");?> %</th>';
 			temp+='<th   width="100px"><?php echo $tr->translate("TOTAL_PAYMENT");?></th>';
 			temp+='<th   width="100px"><?php echo $tr->translate("DATE_START");?></th>';
@@ -1153,7 +1165,11 @@ function deleteRecord(index) {
 		credit_memo = isNaN(credit_memo)?0:credit_memo;
 		deduct = dijit.byId('deduct').get('value');
 		deduct = isNaN(deduct)?0:deduct;
-		netAmount = grandTotal - credit_memo - deduct;
+		fine = dijit.byId('fine').get('value');
+		fine = isNaN(fine)?0:fine;
+		
+		netAmount = grandTotal + fine - credit_memo - deduct;
+		
 		dijit.byId('grand_total').attr('value',grandTotal );
 		dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
 		readMoneyInKhmer(netAmount.toFixed(2));
@@ -1161,11 +1177,13 @@ function deleteRecord(index) {
 	function onKeyUpDeduct(){
 		grandTotal = dijit.byId('grand_total').get('value');
 		grandTotal = isNaN(grandTotal)?0:grandTotal;
+		fine = dijit.byId('fine').get('value');
+		fine = isNaN(fine)?0:fine;
 		credit_memo = dijit.byId('credit_memo').get('value');
 		credit_memo = isNaN(credit_memo)?0:credit_memo;
 		deduct = dijit.byId('deduct').get('value');
 		deduct = isNaN(deduct)?0:deduct;
-		netAmount = grandTotal - credit_memo - deduct;
+		netAmount = grandTotal + fine - credit_memo - deduct;
 		dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
 		readMoneyInKhmer(netAmount.toFixed(2));
 	}

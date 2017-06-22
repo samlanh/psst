@@ -1,0 +1,369 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$frm = $this->frm_callteral;
+echo $this->headTitle($tr->translate("ADD_BORROW_BOOK"));
+$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+?>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+<script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+</script>
+ 
+<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.7.2.min.js"></script>
+<script>
+	dojo.require("dijit.layout.TabContainer");
+	dojo.require("dijit.Dialog");
+	require(["dijit/form/DateTextBox","dijit/form/NumberTextBox","dojo/number","dijit/Dialog"]);
+</script>
+
+<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'library','controller'=>'borrowbook','action'=>'add')); ?>" 
+dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+                stu_id = dijit.byId('stu_id').get('value');
+				stu_name = dijit.byId('stu_name').get('value');
+				if (stu_id=='' || stu_id==0 || stu_id==-1){
+					alert('Please Select Student Id !');
+                    dijit.byId('stu_id').focus();
+			        return false;
+                }
+                if (stu_name=='' || stu_name==0 || stu_name==-1){
+					alert('Please Select Student Id !');
+                    dijit.byId('stu_id').focus();
+			        return false;
+                }
+				return true;
+			}else {
+				return false;
+			}
+</script>
+<table width="100%" style="padding-top: 10px;">
+	<tr>
+		<td>
+				<fieldset style="margin-top:-13px;">
+					<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_BORROW_BOOK");?></strong></legend>
+					<table style="margin: 0 auto; width: 100%;" cellspacing="10" >
+						
+						<tr>
+							<td nowrap="nowrap"><?php echo $tr->translate("STUDENT_ID")?></td>
+							<td>
+								<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect" onchange="setNameStudent();filterStudent();">
+								       <option value="0"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
+								 <?php if(!empty($this->stu_id)) foreach($this->stu_id As $rs_id){?>
+										<option value="<?php echo $rs_id['stu_id']?>" ><?php echo $rs_id['stu_code'];?></option>
+								 <?php }?>
+								</select>
+							</td>
+							<td nowrap="nowrap"><?php echo $tr->translate("STUDENT_NAME")?></td>
+							<td>
+								<select   name="stu_name" id="stu_name" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();">
+									<option value="0"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
+									<?php 
+									if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
+										<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
+									<?php }?>
+								</select>
+							</td>
+							<td nowrap="nowrap"><?php echo $tr->translate("BORROW_ID")?></td>
+							<td style="font-weight: 600;"><input dojoType="dijit.form.TextBox"   name="borrow_id" id="borrow_id" value="<?php echo $this->borr_no;?>"  type="text" readonly></td>
+							
+						</tr>
+						
+						<tr>
+							<td><?php echo $tr->translate("BORROW_DATE")?></td>
+							<td><input dojoType="dijit.form.DateTextBox" name="borrow_date" id="borrow_date" onchange="" value="<?php echo date('Y-m-d');?>" type="text"></td>
+							<td style="width: 5px;white-space: nowrap;"><?php echo $tr->translate("RETURN_DATE")?></td>
+							<td><input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text"  value="<?php echo date('Y-m-d');?>" ></td>
+							<td style="width: 5px"><?php echo $tr->translate("NOTE")?></td>
+							<td><input dojoType="dijit.form.TextBox"   name="note" value="" type="text"></td>
+						</tr>
+						<tr>
+							<td><?php //echo $tr->translate("ROOM_NAME")?></td>
+							<td>
+								 
+							</td>
+							<td></td>
+							<td></td>
+							<td style="width: 5px"><?php echo $tr->translate("STATUS")?></td>
+							<td><select name="status" id="status" dojoType="dijit.form.FilteringSelect">
+								    <option value="1" label="ប្រើប្រាស់">ប្រើប្រាស់</option>
+								    <option value="0" label="មិនប្រើប្រាស់">មិនប្រើប្រាស់</option>
+								</select>
+							</td>
+							
+						</tr>
+					    
+						<tr>
+							<td colspan="4" align="left">
+								 		<input type="text" name="identity" id="identity"  />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4">
+								<input type="checkbox" onchange="CheckAll();"  name="check_all" id="check_all" value="1" style=" margin: 0 10px; vertical-align: middle;"/>
+								<label><?php echo $tr->translate("CHECK_ALL_BY");?></label>
+								<input type="radio" onchange="CheckAll();" checked="checked"  name="attendence_opt" id="attendence_opt" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>
+								<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>
+								<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="8">
+							<labal id="liststudent">
+							</labal>
+							<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
+								
+							</table>
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="6" align="center">
+								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+									<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+										iconClass="dijitEditorIcon dijitEditorIconSave" />
+									<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+										iconClass="dijitEditorIcon dijitEditorIconSave" />
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+		</td>
+	</tr>
+</table>
+	                <div  id="showrecord">
+								aaa
+					 </div>
+</form>
+<?php 
+$techer= $this->frm_techer;
+?>
+<script type="text/javascript">
+dojo.require("dojo.date.locale");
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.store.Memory");
+dojo.require('dojox.form.BusyButton');
+
+dojo.require("dojo.html");
+var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
+dojo.ready(function(){
+
+			addRow();
+});
+function setEndDate(){
+	amount_date = dijit.byId('amountmonth').get('value');
+	release_date = dijit.byId("start_date").get('value');//just update follow by first payment
+	if(isNaN(amount_date)){
+	}else{
+		var a = new Date(release_date);
+		mm = a.getMonth()+amount_date+1;
+		var dd = a.getDate();
+		 if(dd<10){
+			 dd = "0"+dd;
+		}
+		 if(mm<10){
+			 mm = "0"+mm;
+		}
+		var y = a.getFullYear();
+		var epx_date = y + '-'+ mm + '-'+dd ;
+		dijit.byId('end_date').attr('value',epx_date);	
+    }
+}
+
+var url_room = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add-room')); ?>';
+function addRoom(){
+		//subject_id
+		dojo.xhrPost({
+			url:url_room,
+			form: dojo.byId("form_add_room"),
+			handleAs:"json",
+			load: function(data) {
+				
+				var myNewItem = {					
+						id: data,
+						name: dijit.byId('room_name').get('value')
+				};			
+				addDataToSelectbox(dijit.byId('room'), room_store, myNewItem, data);
+				
+				dijit.byId("form_add_room").reset();
+				//dijit.byId("pop_room").hide();
+				hideDialog();
+				//alert(1);
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+ 
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+}
+
+function hideDialog() {		
+	dijit.byId("popup_room").hide();
+}
+
+function setNameStudent(){
+	stu_id=dijit.byId("stu_id").get("value");
+	if(stu_id !='' || stu_id!=0){
+		dijit.byId("stu_name").attr("value",stu_id);
+	}
+}
+
+function setValue(){
+	stu_name=dijit.byId("stu_name").get("value");
+	if(stu_name!='' || stu_name !=0){
+		dijit.byId("stu_id").attr("value",stu_name);
+	}
+}
+
+var url_qty = '<?php echo $this->url(array('module'=>'library','controller'=>'borrowbook','action'=>'get-bookqty')); ?>';
+function getQtyById(index){
+	book_id = dijit.byId('book_id'+index).get('value');
+	if(book_id==0 || book_id==''){
+		dijit.byId('curr_qty'+index).attr("value",0);
+		return  false;
+	}
+		dojo.xhrPost({
+			url:url_qty,
+			content:{
+				'book_id':book_id
+				},
+			handleAs:"json",
+			load: function(data) {
+				//alert(data);
+			    dijit.byId('curr_qty'+index).attr("value",data);   
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+		getCheckQty(index);
+}
+
+function getCheckQty(index){
+	curr_qty=dijit.byId("curr_qty"+index).get("value");
+	borr_qty=dijit.byId("borr_qty"+index).get("value");
+	if(curr_qty < borr_qty){
+		dijit.byId("borr_qty"+index).attr("value",'');
+		alert('Quantity​ borrow is not enough​ !');
+	}
+}
+
+</script>
+
+<script>
+dojo.require("dojo.data.ItemFileWriteStore");
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.html");
+
+ 
+
+var url_getStudent= '<?php echo $this->url(array('module'=>'library','controller'=>'returnbook','action'=>'get-return-book')); ?>';
+function filterStudent(){
+	stu_id = dijit.byId('stu_id').get('value');
+	alert(stu_id);
+	if(stu_id==''){
+		return false;
+	}
+	dojo.xhrPost({
+	    url: url_getStudent,
+	    content : { 
+			'stu_id':stu_id,
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		   tem="";
+	       if(data!=""){
+				num =0;
+				title=0;
+				temp='';
+				str='';
+				column = 0;
+				str='';
+				for(i=0;i<data.length;i++){ alert(data[i].borr_id);
+					inx = i+1;
+					num++;
+					var gender='';
+					if(data[i].sex==1){
+						gender="<?php echo $tr->translate("MALE");?>";
+					}else{
+						gender="<?php echo $tr->translate("FEMALE");?>";
+					}
+					if(i<1){
+					str+='<tr class="head-td">';
+						str+='<th><?php echo $tr->translate("NUM");?></th>';
+						str+='<th><?php echo $tr->translate("STUDEN_CODE");?></th>';
+						str+='<th><?php echo $tr->translate("STUDEN_NAME");?></th>';
+						str+='<th><?php echo $tr->translate("GENDER");?></th>';
+						str+='<th><?php echo $tr->translate("STUDENT_MARK");?></th>';
+						str+='<th><?php echo $tr->translate("DESCRIPTION");?></th>';
+					str+='</tr>';
+					}
+					str+='<tr style=" background: #fff;">';
+						str+='<td>'+inx+'</td>';
+						str+='<td>'+data[i].borrow_no+'</td>';
+						str+='<td style="text-align: left;">&nbsp;'+data[i].book_name+'</td>';
+						str+='<td>'+gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
+						str+='<td>';
+							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>';
+							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>';
+							str+='<input type="radio"  name="attedence'+inx+'" id="attedence'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>';
+						str+='</td>';
+						str+='<td><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="sss'+inx+'" name="sss'+inx+'" type="text" value=""></td>';
+                        str+='<td><input  readonly="true" style="margin-left:0px;width:100px; " readonly="true"  type="text" value=""   name="end_use'+inx+'"  id="end_use'+inx+'" dojoType="dijit.form.ValidationTextBox" /></td>';
+						str+='</tr>';
+				    if(inx!=1) {//identity set value 1,2,3,4,5
+						var identity = $('#identity').val();
+						$('#identity').val(identity+','+inx);
+					} else {
+						$('#identity').val(inx);
+					}
+				}
+				document.getElementById("table_row").innerHTML = str;
+				 
+				
+	       }else{
+	    	   $('#identity').val('');
+	    	   document.getElementById("table_row").innerHTML = '';
+	       }
+	   },		
+	    error: function(err) {
+		 //   alert(err);
+	    }
+	});
+	
+}
+
+function CheckAll(){
+	var identity = $('#identity').val();
+	check_type = $('input[name="attendence_opt"]:checked').val();
+	if(identity==""){
+		return false;
+	}else{
+		 var arrays = identity.split(',');
+		 if(arrays!=""){
+	    	 for(var i=1;i<= arrays.length;i++) {
+	    		
+	    		 if($("#check_all").is(':checked')){
+	    			 $('input[value="'+check_type+'"]').attr("checked",true);
+	    		 }else{
+	    			 $('input[value="'+check_type+'"]').attr("checked",false);
+	    		 }
+	    	}
+		}
+	}
+}
+</script>
+

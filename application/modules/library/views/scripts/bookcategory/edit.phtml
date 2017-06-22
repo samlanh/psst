@@ -1,0 +1,154 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("EDIT_GATEGORY"));
+	$frm=$this->frm_cat;
+?>	
+<style>
+     
+</style>
+<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+<script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+</script>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+var dept_store  = getDataStorefromJSON('id','name', <?php //print_r(Zend_Json::encode($this->dept));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+	    store: dept_store,
+	    autoComplete: true,                        
+	    required: true,
+	    id: "dept",
+	    name: "dept",           
+	    class: "full height-text", 
+	    placeHolder:"Selected Dept",          
+	    onChange: function() {  
+	    	dept_id = dijit.byId('dept').get('value');
+	    	if(dept_id==-1){
+	    		dijit.byId("popup_add_dept").show();
+		    }
+	    }
+	}, "dept");
+});
+</script>
+<form  id='category' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
+	if(this.validate()) {
+				return true;
+			} else {
+				return false;
+			}
+</script>
+<table cellspacing="10" width="50%" style="margin: 0 auto; ">
+	<tr>
+		<td>
+			<fieldset>
+				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("EDIT_GATEGORY")?></strong></legend>
+				<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="10" >
+				   <tr>
+						<td  ><?php echo $tr->translate("PARENT")?> </td>
+						<td>
+							<!-- <input id="dept" />  -->
+							<?php echo $frm->getElement("parent");?>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("CATEGORY_NAME")?></td>
+						<td> 
+							<?php echo $frm->getElement("cat_name");?>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("REMARK")?></td>
+							<td> 
+								<?php echo $frm->getElement("note");?>
+						    </td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("STATUS")?></td>
+						<td>
+							 <?php echo $frm->getElement("status");?>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4" align="center" style="padding-left:40px;">
+							<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+							<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
+							 
+						</td>
+					</tr>
+				</table>	
+			</fieldset>		
+		</td>
+	</tr>
+</table>	
+</form>
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_add_dept" >
+		<form  id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				<tr>
+					<td><?php echo $tr->translate("DEGREE");?></td>
+					<td>
+						<input type="text" class="fullside" name='fac_enname' id="fac_enname" dojoType="dijit.form.TextBox" />
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo $tr->translate("SHORTCUT");?></td>
+					<td>
+						<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
+						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
+						
+						<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
+						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDept();"/>
+					</td>
+				</tr>
+			</table>
+
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+dojo.ready(function(){
+});
+var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-dept")); ?>';
+
+function addDept(){
+	dojo.xhrPost({
+			url:url_add_dept,
+			form: dojo.byId("frm_add_tran"),
+			handleAs:"json",
+			load: function(data) {
+				//alert(data); 
+				var Itemmake = { 
+				    	 id: data,
+					     name: dijit.byId('fac_enname').get('value')
+					   };
+		   addDataToSelectbox(dijit.byId('dept'), dept_store, Itemmake, data);
+		   dijit.byId('frm_add_tran').reset();
+		   dijit.byId("popup_add_dept").hide();
+				
+			},
+			error: function(err) {
+				alert(err);
+			}
+	});
+}
+
+function hideDialog(){
+	dijit.byId('frm_add_tran').reset();
+	dijit.byId("popup_add_dept").hide();
+}
+
+
+</script>

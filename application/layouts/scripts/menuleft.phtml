@@ -9,6 +9,7 @@
 	$allstudent=$acl=$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'index'), null, true);
 	$otherExpense = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-other-expense'), null, true);
 	$otherIncome = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-other-income'), null, true);
+	$library=$acl=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'index'), null, true);
 	
 	$dailyReport = $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'rpt-daily'), null, true);
 	
@@ -140,6 +141,13 @@
 			    'exchangerate'=>'<li><a href="">'.$tr->translate("EXCHANGE_RATE_INFORMATION").'</a></li>',
 				
 			),
+			'library'=>array(
+					'bookcategory'=>'<li><a href="">'.$tr->translate("BOOK_CATEGORY").'</a></li>',
+					'book'=>'<li><a href="">'.$tr->translate("BOOK").'</a></li>',
+					'borrowbook'=>'<li><a href="">'.$tr->translate("BORROW_BOOK").'</a></li>',
+					'returnbook'=>'<li><a href="">'.$tr->translate("RETURN_BOOK").'</a></li>',
+					'neardayreturnbook'=>'<li><a href="">'.$tr->translate("NEAR_DAY_RETURNBOOK").'</a></li>',
+			),
 			
 			'user'=>array(
 				'index'=>'<li><a href="">'.$tr->translate("USER").'</a></li>',
@@ -187,6 +195,7 @@
 				//'rpt-student-list-detail-part3'=>"<li><a href='".$baseurl."/allreport/accounting/rpt-student-list-detail-part3'>".$tr->translate("ប្រាក់ចំណូលរបស់និ")."</a></li>",
 				//'rpt-studentpayment'=>"<li><a href='".$baseurl."/allreport/accounting/rpt-studentpayment'>".$tr->translate("ប្រាក់ចំណូលរបស់និ")."</a></li>",
 				//'rpt-tuition-fee'=>"<li><a href='".$baseurl."/allreport/accounting/rpt-tuition-fee'>".$tr->translate("ប្រាក់ចំណូលរបស់និ")."</a></li>",
+				'library'=>"<li><span class''><a href=".$library.">".$tr->translate("LIBRARY_REPORT")."</a></span></li>",
 			),	
 			'setting'=>array(
 				'label'=>'<li><a href="">'.$tr->translate("Label_SETTING").'</a></li>',

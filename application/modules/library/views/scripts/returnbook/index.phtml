@@ -1,0 +1,28 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("RETURN_LIST"));
+	$url_edit = $this->url(array('module'=>'library','controller'=>'book','action'=>'edit',));
+?>	
+<?php $frm =  $this->frm_search;?>
+ <style>
+	#items  {
+	    border: 1px solid #CCCCCC;
+	    color: #000;
+	    font-family:'Khmer OS Battambang';  
+	    font-size: 100%;
+	    line-height: 30px;
+	    padding: 0px 5px 0px 5px;
+	    text-align: left;
+	    width: 35px;
+	}
+</style>
+<div dojoType="dijit.layout.AccordionPane">
+<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+	<?php echo $frm->getElement("title");?>
+	<?php echo $frm->getElement('start_date');?>
+	<?php echo $frm->getElement('end_date');?>
+	<?php echo $frm->getElement('status_search');?>
+	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+</form>
+</div>
+ <?php echo $this->list?>

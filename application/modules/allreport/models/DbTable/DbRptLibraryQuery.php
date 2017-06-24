@@ -239,6 +239,41 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     	$order=" ORDER BY b.id DESC ";
     	return $db->fetchAll($sql.$where.$order);
     }
+    
+    function getBookUnavailable($search=null){
+    	$db=$this->getAdapter();
+    	$sql="SELECT b.id,b.book_no,b.title,b.author,b.publisher,
+    	(SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id ) AS  cat_name,
+    	b.qty AS qty_curr,b.qty_after,b.unit_price,b.date,
+    	(SELECT CONCAT(rms_users.first_name,' ',last_name) FROM rms_users WHERE rms_users.id=b.user_id) AS user_name,b.user_id,
+    	(SELECT rms_view.name_en FROM rms_view WHERE rms_view.key_code=b.status AND rms_view.type=1 LIMIT 1 ) AS `status`
+    	FROM rms_book AS b WHERE b.status=1 AND b.qty_after=0 ";
+    	 
+    	$where = '';
+    	if(!empty($search["title"])){
+    		$s_where=array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[]="  b.book_no LIKE '%{$s_search}%'";
+    		$s_where[]="  b.title LIKE '%{$s_search}%'";
+    		$s_where[]="  b.author LIKE '%{$s_search}%'";
+    		$s_where[]="  b.publisher LIKE '%{$s_search}%'";
+    		$s_where[]="  b.qty LIKE '%{$s_search}%'";
+    		$s_where[]="  b.qty_after LIKE '%{$s_search}%'";
+    		$where.=' AND ('.implode(' OR ', $s_where).')';
+    	}
+    	 
+    	if($search["cood_book"]>0){
+    		$where.=' AND b.id='.$search["cood_book"];
+    	}
+    	 
+    	$db_cat=new Library_Model_DbTable_DbCategory();
+    	if($search["parent"]>0){
+    		$where.=' AND b.cat_id IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
+    	}
+    	//echo $sql.$where;
+    	return $db->fetchAll($sql.$where);
+    }
+    
    
 }
    

@@ -13,14 +13,12 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-			}
-			else{
+			}else{
 				$search = array(
 						'title'	        =>	'',
 						'cood_book'		=>	0,
 						'status_search'	=>	-1,
 						'parent'		=>0,
-						 
 				);
 			}
 			$this->view->search = $search;
@@ -69,8 +67,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-			}
-			else{
+			}else{
 				$search = array(
 						'title'	        =>	'',
 						//'cood_book'		=>	0,
@@ -78,7 +75,6 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 						'parent'		=>0,
 						'start_date'	=>date('Y-m-d'),
 						'end_date'		=>date('Y-m-d'),
-							
 				);
 			}
 			$this->view->search = $search;
@@ -100,8 +96,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-			}
-			else{
+			}else{
 				$search = array(
 						'title'	        =>	'',
 						//'cood_book'		=>	0,
@@ -110,7 +105,6 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 						'parent'		=>0,
 						'start_date'	=>date('Y-m-d'),
 						'end_date'		=>date('Y-m-d'),
-							
 				);
 			}
 			$this->view->search = $search;
@@ -132,8 +126,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-			}
-			else{
+			}else{
 				$search = array(
 						'title'	        =>	'',
 						//'cood_book'		=>	0,
@@ -141,12 +134,38 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 						'parent'		=>0,
 						'start_date'	=>date('Y-m-d'),
 						'end_date'		=>date('Y-m-d'),
-							
 				);
 			}
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbRptLibraryQuery();
 			$this->view->borr_detail= $db->getBorrowDetailByWeek($search);
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
+		}
+		$this->view->search = $search;
+		$frm_major = new Library_Form_FrmSearchMajor();
+		$frm_search = $frm_major->FrmMajors();
+		Application_Model_Decorator::removeAllDecorator($frm_search);
+		$this->view->frm_search = $frm_search;
+	}
+	
+	function rptUnavailableAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}else{
+				$search = array(
+						'title'	        =>	'',
+						'cood_book'		=>	0,
+						'status_search'	=>	-1,
+						'parent'		=>0,
+				);
+			}
+			$this->view->search = $search;
+			$db = new Allreport_Model_DbTable_DbRptLibraryQuery();
+			$this->view->book_list= $db->getBookUnavailable($search);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

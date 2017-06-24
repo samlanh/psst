@@ -86,6 +86,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 							'note'  	=> 	$data['note_'.$i],
 							'user_id'	=> 	$GetUserId,
 							'is_full'	=> 	0,
+							'date'		=>	date('Y-m-d'),
 							'status'	=> 	$data['status'],
 					);
 					$this->_name='rms_borrowdetails';
@@ -172,6 +173,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 							'borr_qty'	=>  $data['borr_qty'.$i],
 							'note'  	=> 	$data['note_'.$i],
 							'user_id'	=> 	$GetUserId,
+							'date'		=>	date('Y-m-d'),
 							'is_full'	=> 	0,
 							'status'	=> 	$data['status'],
 					);
@@ -281,7 +283,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 	
 	function getBookTitle(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(book_no,'-',title) AS name FROM rms_book WHERE `status`=1";
+		$sql="SELECT id,title AS name FROM rms_book WHERE `status`=1";
 		$rows=$db->fetchAll($sql);
 		array_unshift($rows,array('id' => '',"name"=>$this->tr->translate("SELECT_TITLE")));
 		$options = '';

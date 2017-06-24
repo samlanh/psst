@@ -16,7 +16,7 @@
       $user=$this->url(array('module'=>'user','controller'=>'index','action'=>'index'), null, true);
       $acl=$this->url(array('module'=>'rsvacl','controller'=>'index','action'=>'index'), null, true);
       $setting=$this->url(array('module'=>'setting','controller'=>'index','action'=>'index'), null, true);
-      $library=$this->url(array('module'=>'library','controller'=>'bookcategory','action'=>'index'), null, true);
+      $library=$this->url(array('module'=>'library','controller'=>'index','action'=>'index'), null, true);
       $module=Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
 	  
 	  $session_user=new Zend_Session_Namespace('auth');

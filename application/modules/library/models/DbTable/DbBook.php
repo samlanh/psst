@@ -171,6 +171,43 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		$sql="SELECT * FROM rms_book WHERE id=$id";
 		return $db->fetchRow($sql);
 	}
+	
+	function getTotalBookEmpty(){
+		$db=$this->getAdapter();
+		$sql=" SELECT qty_after FROM rms_book WHERE `status`=1 AND qty_after=0";
+		return $db->fetchAll($sql);
+	}
+	
+	function getBookNotReturn(){
+		$db=$this->getAdapter();
+		$sql=" SELECT b.id,bd.borr_qty
+		       FROM  rms_borrow AS b,rms_borrowdetails AS bd
+		       WHERE b.id=bd.borr_id 
+		       AND bd.is_full=0 ";
+		return $db->fetchAll($sql);
+	}
+	
+	function getBorrowThisDay(){
+		$date=date('Y-m-d');
+		$db=$this->getAdapter();
+		$sql="SELECT b.id,bd.borr_qty
+		       FROM  rms_borrow AS b,rms_borrowdetails AS bd
+		       WHERE b.id=bd.borr_id 
+		       AND bd.is_full=0 
+		       AND bd.date='$date'";
+		return $db->fetchAll($sql);
+	}
+	
+	function getReturnThisDay(){
+		$date=date('Y-m-d');
+		$db=$this->getAdapter();
+		$sql="SELECT b.id,bd.borr_qty
+		       FROM  rms_bookreturn AS b,rms_bookreturndetails AS bd
+		       WHERE b.id=bd.return_id 
+		       AND b.return_date='$date'";
+		return $db->fetchAll($sql);
+	}
+	
 }
 
 

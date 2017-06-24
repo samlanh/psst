@@ -59,7 +59,7 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 	
 	function getBookIdName(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(book_no,'-',title) AS name FROM rms_book WHERE `status`=1";
+		$sql="SELECT id,title AS name FROM rms_book WHERE `status`=1";
 		return $db->fetchAll($sql);
 	}
 	

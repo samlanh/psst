@@ -129,9 +129,9 @@ Class Global_Form_FrmCal extends Zend_Dojo_Form {
 				'readonly'=>true));
 		
 		$_rate = new Zend_Dojo_Form_Element_TextBox('rate');
-		$_rate->setAttribs(array('dojoType'=>'dijit.form.NumberTextBox','class'=>'fullside',
-				'readonly'=>true));
-		$_rate->setValue(4000);
+		$_rate->setAttribs(array('dojoType'=>'dijit.form.NumberTextBox','class'=>'fullside'
+				));
+		$_rate->setValue(4100);
 		
 		$amount_total = new Zend_Dojo_Form_Element_TextBox('total_amount');
 		$amount_total->setAttribs(array('dojoType'=>'dijit.form.NumberTextBox','class'=>'fullside black',

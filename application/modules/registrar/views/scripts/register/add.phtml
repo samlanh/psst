@@ -587,7 +587,7 @@ fieldset{  background:none;}
 							<td align="right"><input type="text"  onkeyup="onKeyUpDeduct();"  name="deduct" id="deduct"  value="0" dojoType="dijit.form.NumberTextBox" /></td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("NET_AMOUNT");?></td>
+							<td><span style="font-size: 14px;font-weight: bold;font-family: arail"><?php echo $tr->translate("NET_AMOUNT");?></span></td>
 							<td align="right"><input type="text" name="net_amount" readonly="readonly" id="net_amount" value="0" dojoType="dijit.form.NumberTextBox" /></td>
 						</tr>
 						<tr>
@@ -719,8 +719,11 @@ function getMonthByNumber(m){
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 <?php $keycode = $this->keycode;?>
-	<div id="terms" data-dojo-type="dijit.Dialog" style="width:21cm;height: 14cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
-		<div id="PrintReceipt" style="width: 21cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
+<style>
+.defaulheight{line-height: 22px !important;}
+</style>
+	<div id="terms" data-dojo-type="dijit.Dialog" style="width:25cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
+		<div id="PrintReceipt" style="width: 22cm !important; height: 12cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height: 11cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				<tr>
 				    <td colspan="10"  align="center">
@@ -739,9 +742,9 @@ function getMonthByNumber(m){
 								<td width="30%">
 								</td>
 								<td width="40%" align="center" valign="top" style="">
-									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt No</u> <label id="lb_receipt_no"></label></div> 
+									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
 								</td>
-								<td width="30%">
+								<td width="30%"><span style="font-size: 14px;font-weight: bold;font-family: arail">Pmt Date : <label id="lb_date" class=" one bold"></label></span>
 								</td>
 							</tr>
 						</table>
@@ -752,7 +755,7 @@ function getMonthByNumber(m){
 				</style>
 				<tr>
 					<td colspan="10">
-						<table width="100%" border="0" style="font-family: Khmer OS Battambang;font-size:12px;white-space:nowrap;margin-top:-12px;line-height: 15px;">
+						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang;font-size:12px;white-space:nowrap;margin-top:-12px;line-height: 15px;">
 							<tr >
 								<td width="10%"></td>
 								<td width="25%"></td>
@@ -764,24 +767,25 @@ function getMonthByNumber(m){
 							<tr style="height: 15px;">
 								<td>Student's ID </td>
 								<td> : &nbsp;&nbsp;<label id="lb_stu_id" class="one bold"></label></td>
-								<td align="center">Gender </td>
-								<td> : &nbsp;&nbsp;<label id="lb_sex" class=" one bold"></label></td>
-								<td>Pmt Date</td>
-								<td> : &nbsp;<label id="lb_date" class=" one bold"> </label> </td>
+								<td>DOB</td>
+								<td> : &nbsp;&nbsp;<label id="lb_dob" class="one bold"></label> </td>
+								<td >Grade</td>
+								<td> : &nbsp;&nbsp;<label id="lb_grade" class="one bold"></label> </td>
 							</tr>
 							<tr >
 								<td>Student's Name</td>
 								<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
-								<td align="center">Phone</td>
+								<td>Phone</td>
 								<td> : &nbsp;&nbsp;<label id="lb_phone" class="one bold"></label> </td>
 								<td>Academic Year</td>
 								<td>  : &nbsp;<label id="lb_study_year" class="one bold"> </label> </td>
 							</tr>
 							<tr >
+								
+								<td>Gender </td>
+								<td> : &nbsp;&nbsp;<label id="lb_sex" class=" one bold"></label></td>
 								<td>Degree</td>
 								<td> : &nbsp;&nbsp;<label id="lb_dept" class="one bold"></label> </td>
-								<td align="center">Grade</td>
-								<td> : &nbsp;&nbsp;<label id="lb_grade" class="one bold"></label> </td>
 								<td>Session</td>
 								<td> : &nbsp;<label id="lb_session" class="one bold"></label> </td>
 							</tr>
@@ -810,7 +814,7 @@ function getMonthByNumber(m){
 											<td> : &nbsp;&nbsp; <label id="lb_fine" ></label></td>
 										</tr>
 										<tr>
-											<td colspan="2" align=""><label id="lb_read_khmer" ></label></td>
+											<td colspan="2"><label style="font-size:10px;" id="lb_read_khmer" ></label></td>
 											<td><div>Credit Memo</div></td>
 											<td> : &nbsp;&nbsp; <label id="lb_credit_memo" ></label></td>
 										</tr>
@@ -841,7 +845,7 @@ function getMonthByNumber(m){
 																   $username = $session_user->first_name;
 																   echo "".$last_name." ".$username;
 																?>
-																<p style="margin-top:-2px;font-size:11px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></p>
+																<p style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></p>
 															</h4>
 														</td>
 														<td align="center"></td>
@@ -850,8 +854,8 @@ function getMonthByNumber(m){
 												</table>	
 													
 											</td>
-											<td valign="top"><div>Net Amount</div></td>
-											<td valign="top"> : &nbsp;&nbsp; <label id="lb_net_amount" ></label></td>
+											<td valign="top"><span style="font-size: 14px;font-weight: bold;font-family: arail">Net Amount</span></td>
+											<td valign="top"> : &nbsp;&nbsp; <span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_net_amount" ></label></span></td>
 										</tr>
 										
 									</table>
@@ -866,14 +870,22 @@ function getMonthByNumber(m){
 			<tr><td colspan="10" style="border-bottom:1px dashed #000;"></td></tr>
 		</table>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
-		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-				 type="button" onclick="confirmBeforePrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
+		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+				 type="button" onclick="myDialog.show();printSubmit();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
+</div>
+<div data-dojo-type="dijit/ConfirmDialog" data-dojo-id="myDialog" title="តើលោកអ្នកពិតជាត្រឹមត្រូវរឺទេ!">
+     <div class="dijitDialogPaneContentArea">
+    <div data-dojo-attach-point="contentNode">
+      	  តើលោកអ្នកពិតជាចង់បោះពុម្ពបង្កាន់ដៃនេះ  ពិតមែនរឺទេ ?
+    </div>
+  </div>
 </div>
 <script>
 //set hour defuale
+
 function setHourDefault(){
 	dept=dijit.byId('dept').get('value');
 	session=dijit.byId('session').get('value');
@@ -1222,7 +1234,17 @@ function deleteRecord(index) {
 	    first_money_decimal = read_in_khmer_from_10_to_99(first_decimal);
 	    last_money_decimal = read_in_khmer_from_0_to_9(last_decimal)
 	    money_khmer=read_money_in_khmer(netTotal);
-	    dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់');
+
+	    if(first_decimal>0){string_en='និង';}else{string_en="";str_cent_en=""}
+		if(first_decimal!='00' && first_decimal<10 ){str_zero_en = "Zero";}else{str_zero_en='';}
+	    first_money_decimal_en = read_in_english_from_10_to_99(first_decimal);
+	    last_money_decimal_en = read_in_english_from_0_to_9(last_decimal)
+	    money_english=read_money_in_english(netTotal);
+	    read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់'
+
+	    read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+' Dollar Only )'
+	    
+	    dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់'+read_eng);
 	}
  function alerterror(index){	
 		subtotal = dijit.byId('subtotal_'+index).get('value');
@@ -1417,18 +1439,18 @@ function getservicefee(key){
 			var rowIDArray = rowId.split(',');
 			template="";
 				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important;  " id="table">'
-					  temp+='<tr style=" font-size:11px; text-align:center;background:#f2f2f2;">';
+					  temp+='<tr style="height:25px;font-size:12px; font-weight: bold;font-family: arail;text-align:center;background:#f2f2f2;font-weight:bold;">';
 						  temp+='<td style="border:1px solid #000;">No</td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Item Name</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Term</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Course Period</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Unit Cost</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Qty</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Late Fee</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Extra Fee</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Discount</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Amount</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;">Note</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Unit Price</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Late Fee</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Extra Fee</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Discount</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Note</strong></td>';
 					  
 					  temp+='</tr>';
 				
@@ -1543,10 +1565,8 @@ function getservicefee(key){
 					  
 					  i++;
 					  temp+='</tr>';
-					  
 					} 
 				}else if(payment_type==2){
-					
 					temp+='<tr style="font-size:10px;border:1px solid #000;height:17px; ">';
 						  temp+='<td align="center" style="border:1px solid #000;">1</td>';
 						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId('grade').attr('displayedValue')+'</td>';
@@ -1646,17 +1666,12 @@ function getservicefee(key){
 						  epx_date = '';
 					  }
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  
-					  
 					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  
 					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee_service_'+rowIDArray[n]).get('value')+'</td>';
 					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('additional_fee_'+rowIDArray[n]).get('value')+'</td>';
-					  
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
 					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("paidamount_"+rowIDArray[n]).get('value')+'</td>';				  				  
-					  
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 					  
 					  i++;
@@ -1664,6 +1679,9 @@ function getservicefee(key){
 					  temp+='</tr>';
 					}
 				}
+				for(i;i<=10;i++){
+					 temp+='<tr style="border:1px solid #000;"><td align="center" style="border:1px solid #000;">&nbsp;'+i+'</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td></tr>';
+					}
 				temp+='</table>';
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
 			dijit.byId("terms").show();	

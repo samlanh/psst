@@ -24,7 +24,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$db=new Application_Model_DbTable_DbGlobal();
 		$branch_id = $db->getAccessPermission();
 		
-		$sql = "SELECT stu_id,CONCAT(stu_enname) as name FROM `rms_student` where status = 1 and is_subspend=0  $branch_id ";
+		$sql = "SELECT stu_id,CONCAT(stu_khname,'-',stu_enname) as name FROM `rms_student` where status = 1 and is_subspend=0  $branch_id ";
 		$orderby = " ORDER BY stu_enname ";
 		return $_db->fetchAll($sql.$orderby);
 	}
@@ -46,7 +46,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$db=new Application_Model_DbTable_DbGlobal();
 		$branch_id = $db->getAccessPermission();
 	
-		$sql = "SELECT stu_id,CONCAT(stu_enname) as name FROM `rms_student` where status = 1  $branch_id  ";
+		$sql = "SELECT stu_id,CONCAT(stu_khname,'-',stu_enname) as name FROM `rms_student` where status = 1  $branch_id  ";
 		$orderby = " ORDER BY stu_enname ";
 		return $_db->fetchAll($sql.$orderby);
 	}
@@ -57,8 +57,8 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		(SELECT stu_enname FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_drop`.`stu_id` limit 1) AS en_name,
 		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=(SELECT sex FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_drop`.`stu_id` limit 1))AS sex,
 		
-		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')', (select name_en from rms_view where type=7 and key_code=time)) FROM rms_tuitionfee WHERE rms_tuitionfee.id=academic_year) as academic_year,
-		(SELECT CONCAT(`major_enname`,' - ',major_khname) FROM `rms_major` WHERE `major_id`=grade ) AS grade,
+		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=academic_year) as academic_year,
+		(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=grade ) AS grade,
 		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE `rms_view`.`type` = 4 AND `rms_view`.`key_code` = session ) AS session,
 		
 		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`rms_student_drop`.`type` limit 1) as type,
@@ -126,29 +126,29 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				$where=" student_id=".$_data['studentid'];
 				if($_data['status']==1){
 					$arr=array(
-							'is_subspend'	=>	$_data['type'],
+							'is_suspend'	=>	$_data['type'],
 					);
 				}else{
 					$arr=array(
-							'is_subspend'	=>	0,
+							'is_suspend'	=>	0,
 					);
 				}
 				$this->update($arr, $where);
 				
 				
 				
-// 				$this->_name='rms_group_detail_student';
-// 				$where = " stu_id=".$_data['studentid']." and is_pass = 0";
-// 				if($_data['status']==1){
-// 					$ar=array(
-// 							'type'	=>	2,
-// 					);
-// 				}else{
-// 					$ar=array(
-// 							'type'	=>	1,
-// 					);
-// 				}
-// 				$this->update($ar, $where);
+				$this->_name='rms_group_detail_student';
+				$where = " stu_id=".$_data['studentid']." and is_pass = 0";
+				if($_data['status']==1){
+					$ar=array(
+							'type'	=>	2,
+					);
+				}else{
+					$ar=array(
+							'type'	=>	1,
+					);
+				}
+				$this->update($ar, $where);
 				
 				$_db->commit();
 			}catch(Exception $e){
@@ -191,27 +191,27 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 			$where=" student_id=".$_data['studentid'];
 			if($_data['status']==1){
 				$arr=array(
-						'is_subspend'	=>	$_data['type'],
+						'is_suspend'	=>	$_data['type'],
 				);
 			}else{
 				$arr=array(
-						'is_subspend'	=>	0,
+						'is_suspend'	=>	0,
 				);
 			}
 			$this->update($arr, $where);
 			
-// 			$this->_name='rms_group_detail_student';
-// 			$where = " stu_id=".$_data['studentid']." and is_pass = 0";
-// 			if($_data['status']==1){
-// 				$ar=array(
-// 						'type'	=>	2,
-// 				);
-// 			}else{
-// 				$ar=array(
-// 						'type'	=>	1,
-// 				);
-// 			}
-// 			$this->update($ar, $where);
+			$this->_name='rms_group_detail_student';
+			$where = " stu_id=".$_data['studentid']." and is_pass = 0";
+			if($_data['status']==1){
+				$ar=array(
+						'type'	=>	2,
+				);
+			}else{
+				$ar=array(
+						'type'	=>	1,
+				);
+			}
+			$this->update($ar, $where);
 
 			$db->commit();
 		}catch(Exception $e){
@@ -228,7 +228,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	function getStudentInfoById($stu_id){
 		$db = $this->getAdapter();
 		$sql = "SELECT CONCAT(st.stu_khname,' - ',st.stu_enname) as name,st.sex,
-			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')', (select name_en from rms_view where type=7 and key_code=time)) FROM rms_tuitionfee WHERE rms_tuitionfee.id=st.academic_year) as academic_year, 
+			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=st.academic_year) as academic_year, 
 			(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=st.grade ) AS grade,
 			(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE `rms_view`.`type` = 4 AND `rms_view`.`key_code` = st.session ) AS session
 			FROM `rms_student` as st WHERE stu_id=$stu_id LIMIT 1 ";

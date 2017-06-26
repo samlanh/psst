@@ -263,7 +263,7 @@ function getStudentNo(){
 									<td>
 										<select class="fullside" tabindex="14" dojoType="dijit.form.FilteringSelect"  id="academic_year" name="academic_year" placeholder="----- Select Year -----" value="" type="text" >
 											<?php if(!empty($this->year))foreach ($this->year as $rows){?>
-											<option value="<?php echo $rows['id']?>"><?php echo $rows['years'].' '.$rows['time']?></option>
+											<option value="<?php echo $rows['id']?>"><?php echo $rows['years']?></option>
 											<?php }?>
 										</select>
 									</td>

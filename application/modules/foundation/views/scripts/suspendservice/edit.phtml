@@ -13,7 +13,6 @@
 	dojo.ready(function(){ 
 		 initailize();
 		 getStudentInfo();
-		 dijit.byId('suspend_no').attr('value','<?php echo $this->id['suspend_no'];?>');
 		 dijit.byId('study_year').attr('value','<?php echo $this->id['year']?>');
 		 dijit.byId("study_year").set('readOnly',true);
 	});	
@@ -40,8 +39,6 @@ fieldset{  background:none;}
 						<tr>
 							<td style="width: 160px"><?php echo $tr->translate("YEARS");?></td>
 							<td><?php echo $register->getElement('study_year');?></td>
-							<td><?php echo $tr->translate("RECEIPT_NO");?></td>
-							<td><?php echo $register->getElement('suspend_no');?></td>
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("STUDENT_ID");?></td>
@@ -165,7 +162,7 @@ function initailize() {
 	}
 		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="15px" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';			
+		template+='<td><select style="width:100%;" readonly="readonly" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';			
 		column = 0;
 		template+='<td><select dojoType="dijit.form.FilteringSelect" id="type_'+col+'" onchange="dateReadonly('+col+')" name="type_'+col+'" style="width:100%;"><option value="1">Suspend</option><option value="2">Stop</option></select></td>';
 		template+='<td> <input type="text" name="reason_'+col+'" id="reason_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';

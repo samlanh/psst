@@ -152,7 +152,7 @@ Class Foundation_Form_FrmServicesuspend extends Zend_Dojo_Form {
 		$db_years=new Registrar_Model_DbTable_DbRegister();
 		$years=$db_years->getAllYears();
 		$opt = array(-1=>$this->tr->translate("SELECT_YEAR"));
-		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'].$row['time'];
+		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'];
 		$generation->setMultiOptions($opt);
 	
 		$rs_metion_opt = Application_Model_DbTable_DbGlobal::getAllMention();

@@ -23,7 +23,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		$rs_rows= $db->getAllTuitionFee($search);
     		
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","BATCH","TIME","CREATED_DATE","STATUS");
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE","CREATED_DATE","STATUS");
     		$link=array(
     				'module'=>'accounting','controller'=>'fee','action'=>'edit',
     		);
@@ -53,7 +53,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     						'generation'=> $rs['generation'],	
     						'class'		=>'',
     		            	//'session'	=> '',
-    						'time'		=> $rs['time'],
+    						//'time'		=> $rs['time'],
     						'month'		=>'',
     						'quarter'	=>'',
 			    			'semester'	=>'',

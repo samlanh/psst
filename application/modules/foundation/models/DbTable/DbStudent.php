@@ -19,7 +19,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				s.stu_code,CONCAT(s.stu_khname,' - ',s.stu_enname) as name,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex) AS sex,tel ,
 				
-				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')',' ',(select name_en from rms_view where type=7 and key_code = time)) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year) AS academic,
+				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year) AS academic,
 				
 				(SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree) AS degree,
 				

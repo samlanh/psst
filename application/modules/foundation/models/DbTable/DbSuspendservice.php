@@ -22,7 +22,7 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    		try{
 	   		$arr = array(
 	   			'student_id'	=> $data['studentid'],
-	   			'suspend_no'	=> $data['suspend_no'],
+// 	   			'suspend_no'	=> $data['suspend_no'],
 	   			'define_date'	=> date("Y-m-d"),
 	   			'year'			=> $data['study_year'],
 	   			'user_id'=>$this->getUserId()
@@ -84,7 +84,7 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    	try{
    		$arr = array(
    				'student_id'	=> $data['studentid'],
-   				'suspend_no'	=> $data['suspend_no'],
+//    				'suspend_no'	=> $data['suspend_no'],
    				//'define_date'	=>date("Y-m-d"),
    				'year'			=> $data['study_year'],
    				'user_id'		=>$this->getUserId()
@@ -162,7 +162,7 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    }
    public function getStudentSuspendService($search){
    	$db = $this->getAdapter();
-   	$sql="SELECT id,suspend_no,
+   	$sql="SELECT id,
   	 	(SELECT `stu_code` FROM  `rms_student` WHERE stu_id=student_id LIMIT 1) AS code,
    		(SELECT `stu_khname` FROM  `rms_student` WHERE stu_id=student_id LIMIT 1) as kh_name,
    		(SELECT `stu_enname` FROM  `rms_student` WHERE stu_id=student_id LIMIT 1) AS en_name,

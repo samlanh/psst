@@ -27,7 +27,7 @@ class Foundation_SuspendserviceController extends Zend_Controller_Action {
 			$db =  new Foundation_Model_DbTable_DbSuspendservice();
 			$rs = $db->getStudentSuspendService($search);
 				$list = new Application_Form_Frmtable();
-				$collumns = array("RECEIPT_NO","STUDENT_ID","NAME_KH","NAME_EN","SEX","CREATED_DATE");
+				$collumns = array("STUDENT_ID","NAME_KH","NAME_EN","SEX","CREATED_DATE");
 				$link=array(
 						'module'=>'foundation','controller'=>'suspendservice','action'=>'edit',
 				);

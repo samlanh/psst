@@ -18,7 +18,6 @@
 </script>
 
 <script type="text/javascript">
-var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->group));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 	    autoComplete: true,                        
@@ -31,7 +30,7 @@ dojo.ready(function(){
 }); 
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentgroup','action'=>'get-grade')); ?>';
+	var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-grade')); ?>';
 		function getallGrade(type){
 			if(type==1){
 				dept_id = dijit.byId('degree').get('value');
@@ -159,109 +158,111 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 
 
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:27cm;" id="popup_dept" >
-<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				return true;
-	   		}else {
-				return false;
-	   		}
-</script>
-<table width="100%">
-	<tr>
-		<td>
-				<fieldset style="margin-top:-13px;">
-					<legend align="center" ><strong>Group Faculty</strong></legend>
-					<table style="margin: 0 auto;" cellspacing="10">
-						<tr>
-							<td><?php echo $tr->translate("GROUP_CODE")?></td>
-							<td>
-								<input dojoType="dijit.form.ValidationTextBox" required="true" id="group_code" name="group_code" value="" type="text">
-							</td>
-						    <td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
-							<td>
-								<select name="academic_year" id="academic_year" type="text" dojoType="dijit.form.FilteringSelect">
-									<option value="0">Select AcademicYear</option>
-									<?php if(!empty($this->academy)){ foreach ($this->academy as $row){?>
-										<option value="<?php echo $row['id'];?>"><?php echo $row['years']; ?></option>
-									<?php }}?>
-							    </select>
-							</td>
-							<td ><?php echo $tr->translate("DEGREE")?></td>
-							<td>
-								<select name="degree_group" id="degree_group" type="text" dojoType="dijit.form.FilteringSelect" onchange="getallGrade(2);">
-										<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
-											<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->value['degree']) echo "selected='selected'"?>><?php echo $row['en_name']?></option>
-										<?php }?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("GRADE")?></td>
-							<td>
-								<input id="grade_group" name="grade_group" />
-							</td>
-							<td><?php echo $tr->translate("SEMESTER")?></td>
-							<td><input dojoType="dijit.form.ValidationTextBox" required="true" name="semester" value="" type="text"></td>
-							<td><?php echo $tr->translate("SESSION")?></td>
-							<td>
-								<select name="session_group" id="session_group" dojoType="dijit.form.FilteringSelect">
-									<?php if(!empty($this->rs_session)){ foreach ($this->rs_session as $row){?>
-										<option value="<?php echo $row['key_code'];?>"><?php echo $row['view_name']; ?></option>
-									<?php }}?>
-								</select>
-							</td>
-						</tr>
-						
-						<tr>
-							<td><?php echo $tr->translate("START_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox" name="start_date" id="start_date" onchange="setEndDate();" value="now" type="text"></td>
-							
-							<td><?php echo $tr->translate("AMOUNT_MONTH")?></td>
-							<td><input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" value="" onkeyup="setEndDate();" type="text"></td>
-							
-							<td><?php echo $tr->translate("END_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox" id="end_date" name="end_date" type="text" value="now" ></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("ROOM_NAME")?></td>
-							<td>
-								<select name="room" id="room" dojoType="dijit.form.FilteringSelect" >
-									<?php if(!empty($this->room))foreach ($this->room as $row){?>
-											<option value="<?php echo $row['room_id']?>"><?php echo $row['room_name']?></option>
-									<?php }?>
-								</select>
-							</td>
-							
-							<td><?php echo $tr->translate("TIME")?></td>
-							<td>
-								<select name="time" id="time" dojoType="dijit.form.FilteringSelect" >
-									<option value="-1">Select Time</option>
-									<option value="1">Part Time</option>
-									<option value="2">Full Time</option>
-								</select>
-							</td>
-							
-							<td><?php echo $tr->translate("NOTE")?></td>
-							<td><input dojoType="dijit.form.TextBox"   name="note" value="" type="text"></td>
-							
-						</tr>
-						<tr>
-							<td colspan="6" align="center">
-								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="CLEAR" dojoType="dijit.form.Button"/>
-								<input type="button" value="close" name="close" label="Close" dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconClose" onClick="HidePopupGroup()" />
-								<input type="button" value="save" name="save_new" label="SAVE" dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconSave" onClick="addGroup()" />
-							</td>
-						</tr>
-					</table>
-				</fieldset>
-		</td>
-	</tr>
-</table>
-</form>
+	<div data-dojo-type="dijit.Dialog" style="width:28cm;" id="popup_dept" >
+		<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					return true;
+	   			}else {
+					return false;
+	   			}
+			</script>
+			
+			<table width="100%">
+				<tr>
+					<td>
+							<fieldset style="margin-top:-13px;">
+								<legend align="center" ><strong>Create New Group</strong></legend>
+								<table style="margin: 0 auto; white-space: nowrap;" cellspacing="10">
+									<tr>
+										<td><?php echo $tr->translate("GROUP_CODE")?></td>
+										<td>
+											<input dojoType="dijit.form.ValidationTextBox" required="true" id="group_code" name="group_code" value="" type="text">
+										</td>
+									    <td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
+										<td>
+											<select name="academic_year" id="academic_year" type="text" dojoType="dijit.form.FilteringSelect">
+												<option value="0">Select AcademicYear</option>
+												<?php if(!empty($this->academy)){ foreach ($this->academy as $row){?>
+													<option value="<?php echo $row['id'];?>"><?php echo $row['years']; ?></option>
+												<?php }}?>
+										    </select>
+										</td>
+										<td ><?php echo $tr->translate("DEGREE")?></td>
+										<td>
+											<select name="degree_group" id="degree_group" type="text" dojoType="dijit.form.FilteringSelect" onchange="getallGrade(2);">
+													<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
+														<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->value['degree']) echo "selected='selected'"?>><?php echo $row['en_name']?></option>
+													<?php }?>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("GRADE")?></td>
+										<td>
+											<input id="grade_group" name="grade_group" />
+										</td>
+										<td><?php echo $tr->translate("SEMESTER")?></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" required="true" name="semester" value="" type="text"></td>
+										<td><?php echo $tr->translate("SESSION")?></td>
+										<td>
+											<select name="session_group" id="session_group" dojoType="dijit.form.FilteringSelect">
+												<?php if(!empty($this->rs_session)){ foreach ($this->rs_session as $row){?>
+													<option value="<?php echo $row['key_code'];?>"><?php echo $row['view_name']; ?></option>
+												<?php }}?>
+											</select>
+										</td>
+									</tr>
+									
+									<tr>
+										<td><?php echo $tr->translate("START_DATE")?></td>
+										<td><input dojoType="dijit.form.DateTextBox" name="start_date" id="start_date" onchange="setEndDate();" value="now" type="text"></td>
+										
+										<td><?php echo $tr->translate("AMOUNT_MONTH")?></td>
+										<td><input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" value="" onkeyup="setEndDate();" type="text"></td>
+										
+										<td><?php echo $tr->translate("END_DATE")?></td>
+										<td><input dojoType="dijit.form.DateTextBox" id="end_date" name="end_date" type="text" value="now" ></td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("ROOM_NAME")?></td>
+										<td>
+											<select name="room" id="room" dojoType="dijit.form.FilteringSelect" >
+												<?php if(!empty($this->room))foreach ($this->room as $row){?>
+														<option value="<?php echo $row['room_id']?>"><?php echo $row['room_name']?></option>
+												<?php }?>
+											</select>
+										</td>
+										
+										<td><?php echo $tr->translate("TIME")?></td>
+										<td>
+											<select name="time" id="time" dojoType="dijit.form.FilteringSelect" >
+												<option value="-1">Select Time</option>
+												<option value="1">Part Time</option>
+												<option value="2">Full Time</option>
+											</select>
+										</td>
+										
+										<td><?php echo $tr->translate("NOTE")?></td>
+										<td><input dojoType="dijit.form.TextBox"   name="note" value="" type="text"></td>
+										
+									</tr>
+									<tr>
+										<td colspan="6" align="center">
+											<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="CLEAR" dojoType="dijit.form.Button"/>
+											<input type="button" value="close" name="close" label="Close" dojoType="dijit.form.Button" 
+													iconClass="dijitEditorIcon dijitEditorIconClose" onClick="HidePopupGroup()" />
+											<input type="button" value="save" name="save_new" label="SAVE" dojoType="dijit.form.Button" 
+													iconClass="dijitEditorIcon dijitEditorIconSave" onClick="addGroup()" />
+										</td>
+									</tr>
+								</table>
+							</fieldset>
+					</td>
+				</tr>
+			</table>
+		</form>
 		
 	</div>
 </div>

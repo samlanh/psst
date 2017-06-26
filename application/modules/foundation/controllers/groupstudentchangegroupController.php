@@ -62,29 +62,18 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$this->view->row = $add =$_add->getfromGroup();
 		$this->view->rs = $add =$_add->gettoGroup();
 		
-		$dbstudent = new Foundation_Model_DbTable_DbGroup();
-		$this->view->academy = $dbstudent->getAllYear();
+		$this->view->academy = $_add->getAllYears();
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
-		$this->view->degree = $_db->getAllFecultyName();
+		$this->view->degree = $_db->getAllDegreeName();
 		
 		$db=new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_session=$db->getSession();
 		
-		$group = new Foundation_Model_DbTable_DbGroup();
-		
-		$group_option = $group->getGroupToEdit();
-		array_unshift($group_option, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-		$this->view->group = $group_option;
-		
-		$room =  $group->getRoom();
+		$room =  $db->getRoom();
 		array_unshift($room, array ( 'room_id' => 0, 'room_name' => 'Select Room') );
 		$this->view->room = $room;
 		
-// 		$_db = new Application_Model_DbTable_DbGlobal();
-// 		$this->view->degree = $rows = $_db->getAllFecultyName();
-// 		$this->view->occupation = $row =$_db->getOccupation();
-// 		$this->view->province = $row =$_db->getProvince();
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
@@ -115,8 +104,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		
 		$this->view->rows = $add =$_add->gettoGroup();
 		
-		$dbstudent = new Foundation_Model_DbTable_DbGroup();
-		$this->view->academy = $dbstudent->getAllYear();
+		$this->view->academy = $_add->getAllYear();
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $_db->getAllFecultyName();
@@ -124,13 +112,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$db=new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_session=$db->getSession();
 		
-		$group = new Foundation_Model_DbTable_DbGroup();
-		
-		$group_option = $group->getGroupToEdit();
-		array_unshift($group_option, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-		$this->view->group = $group_option;
-		
-		$room =  $group->getRoom();
+		$room =  $db->getRoom();
 		array_unshift($room, array ( 'room_id' => 0, 'room_name' => 'Select Room') );
 		$this->view->room = $room;
 	}
@@ -165,6 +147,17 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 			exit();
 		}
 	}	
+	
+	function getGradeAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+			$student = $db->getGradeByDegree($data['dept_id']);
+			print_r(Zend_Json::encode($student));
+			exit();
+		}
+	}
+	
 	
 }
 

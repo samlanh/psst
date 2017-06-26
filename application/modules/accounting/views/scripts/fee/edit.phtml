@@ -41,19 +41,12 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 								</select>
 							</td>
 							
-							<td ><?php echo $tr->translate("GENERATION");?></td>
+							<td ><?php echo $tr->translate("TYPE");?></td>
 							<td ><input dojoType="dijit.form.TextBox" readonly="true" class="fullside" id="generation" value="<?php echo $this->rs['generation']; ?>" name="generation"  type="text"></td>
 							
 							
 						</tr>
 						<tr>
-							<td ><?php echo $tr->translate("TIME");?></td>
-							<td  >
-								<select dojoType="dijit.form.FilteringSelect" readonly="true" class="fullside" id="time" name="time" type="text">								
-										<option value="1" <?php if($this->rs['time']==1){ echo "selected='selected'";}?>>ក្រៅម៉ោង</option>
-										<option value="2" <?php if($this->rs['time']==2){ echo "selected='selected'";}?>>ពេញម៉ោង</option>
-								</select>
-							</td>
 							<td ><?php echo $tr->translate("BRANCH");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="branch" name="branch" type="text">								
@@ -67,15 +60,16 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 							<td  ><?php echo $tr->translate("NOTE");?></td>
 							<td ><input dojoType="dijit.form.TextBox" readonly="true" class="fullside" id="note" name="note"  value="<?php echo $this->rs['note']; ?>" type="text"></td>
 													
-						</tr>
-						<tr>
+						
 							<td ><?php echo $tr->translate("FINISHED");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect"  id="is_finished" class="fullside" name="is_finished" type="text">		
-									<option value="0" <?php if($this->rs['status']==0){ echo "selected='selected'";}?>>Not Yet Finished</option>						
-									<option value="1" <?php if($this->rs['status']==1){ echo "selected='selected'";}?>>Finished</option>
+									<option value="0" <?php if($this->rs['is_finished']==0){ echo "selected='selected'";}?>>Not Yet Finished</option>						
+									<option value="1" <?php if($this->rs['is_finished']==1){ echo "selected='selected'";}?>>Finished</option>
 								</select>
 							</td>	
+						</tr>
+						<tr>
 							
 							<td ><?php echo $tr->translate("STATUS");?></td>
 							<td>

@@ -549,7 +549,7 @@ fieldset{  background:none;}
 								<select type="text" dojoType="dijit.form.FilteringSelect"   class="fullside" name="study_year" id="study_year" onchange="getTuitionFee();" >
 									<option value="">Select AcademicYear</option>
 									<?php if(!empty($this->all_year)){foreach ($this->all_year as $year){?>
-									<option value="<?php echo $year['id']?>"><?php echo $year['years'].$year['time']?></option>
+									<option value="<?php echo $year['id']?>"><?php echo $year['years']?></option>
 									<?php }}?>
 								</select>
 							</td>

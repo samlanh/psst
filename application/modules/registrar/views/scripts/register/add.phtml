@@ -413,7 +413,7 @@ fieldset{  background:none;}
 								<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="study_year" id="study_year" onchange="getTuitionFee();" >
 									<option value="">Select AcademicYear</option>
 									<?php if(!empty($this->all_year)){foreach ($this->all_year as $year){?>
-									<option value="<?php echo $year['id']?>"><?php echo $year['years'].$year['time']?></option>
+									<option value="<?php echo $year['id']?>"><?php echo $year['years']?></option>
 									<?php }}?>
 								</select>
 							</td>
@@ -587,7 +587,7 @@ fieldset{  background:none;}
 							<td align="right"><input type="text"  onkeyup="onKeyUpDeduct();"  name="deduct" id="deduct"  value="0" dojoType="dijit.form.NumberTextBox" /></td>
 						</tr>
 						<tr>
-							<td><span style="font-size: 14px;font-weight: bold;font-family: arail"><?php echo $tr->translate("NET_AMOUNT");?></span></td>
+							<td><?php echo $tr->translate("NET_AMOUNT");?></td>
 							<td align="right"><input type="text" name="net_amount" readonly="readonly" id="net_amount" value="0" dojoType="dijit.form.NumberTextBox" /></td>
 						</tr>
 						<tr>
@@ -719,12 +719,11 @@ function getMonthByNumber(m){
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 <?php $keycode = $this->keycode;?>
-	<div id="terms" data-dojo-type="dijit.Dialog" style="width:22cm;height: 14cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
+	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23cm;height: 14cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
 		<style>
 			.hearder_table{height:25px !important;}
 			.defaulheight{line-height: 22px !important;}
 		</style>
-	<div id="terms" data-dojo-type="dijit.Dialog" style="width:25cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
 		<div id="PrintReceipt" style="width: 22cm !important; height: 12cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height: 11cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				<tr>
@@ -759,7 +758,7 @@ function getMonthByNumber(m){
 				</style>
 				<tr>
 					<td colspan="10">
-						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang;font-size:12px;white-space:nowrap;margin-top:-12px;line-height: 15px;">
+						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px;white-space:nowrap;margin-top:-12px;line-height: 10px;">
 							<tr >
 								<td width="10%"></td>
 								<td width="25%"></td>
@@ -877,16 +876,34 @@ function getMonthByNumber(m){
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-				 type="button" onclick="myDialog.show();printSubmit();"><?php echo $tr->translate("SAVE_PRINT");?></button>
+				 type="button" onclick="confirmBeforePrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
 </div>
-<div data-dojo-type="dijit/ConfirmDialog" data-dojo-id="myDialog" title="តើលោកអ្នកពិតជាត្រឹមត្រូវរឺទេ!">
-     <div class="dijitDialogPaneContentArea">
-    <div data-dojo-attach-point="contentNode">
-      	  តើលោកអ្នកពិតជាចង់បោះពុម្ពបង្កាន់ដៃនេះ  ពិតមែនរឺទេ ?
-    </div>
-  </div>
+
+
+<div class="dijitHidden" style="padding: 0px; margin: 0px;">
+	<div id="alertBeforePrint" data-dojo-type="dijit.Dialog" style="width:10cm;height: 5cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពបង្កាន់ដៃ");?>'"  >
+		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm; font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
+			<tr>
+				<td align="center">
+					តើលោកអ្នកពិតជាចង់បោះពុម្ពបង្កាន់ដៃនេះ មែនទេ?
+				</td>
+			</tr>
+			
+			<tr>
+				<td align="center">
+					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+						type="button" onclick="hideDialog1();">No</button>
+					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+						type="button" onclick="printSubmit();"><?php echo $tr->translate("Yes");?></button>
+				</td>
+			</tr>
+			
+		</table>
+	</div>
+	
 </div>
+
 <script>
 //set hour defuale
 
@@ -913,20 +930,23 @@ function setHourDefault(){
 }
 
 function confirmBeforePrint(){
-	value = confirm("Are you sure you want to print !!! ?");
-	if (value == true) {
-		printSubmit();
-	} 
+	dijit.byId('alertBeforePrint').show();
 }
 
 function printSubmit(){
 	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
+	hideDialog1();
 }
 function hideDialog(){
 	dijit.byId('terms').hide();
 }
+
+function hideDialog1(){
+	dijit.byId('alertBeforePrint').hide();
+}
+
 function changControll(){
 	dijit.byId('not').attr('value','');
 	student_type=dijit.byId('student_type').get('value');
@@ -1443,7 +1463,7 @@ function getservicefee(key){
 			var rowIDArray = rowId.split(',');
 			template="";
 				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important;  " id="table">'
-					  temp+='<tr class="hearder_table" style=" font-size:11px; text-align:center;background:#f2f2f2;">';
+					  temp+='<tr class="hearder_table" style=" font-size:11px; text-align:center;background:#f2f2f2;font-weight:bold;">';
 						  temp+='<td style="border:1px solid #000;">No</td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
@@ -1619,8 +1639,6 @@ function getservicefee(key){
 						  
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';
 
-					temp+='</tr>';
-					//i++;
 					temp+='</tr>';
 					
 				}

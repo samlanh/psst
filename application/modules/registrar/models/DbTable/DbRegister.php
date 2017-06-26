@@ -1454,7 +1454,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql=" SELECT sp.id,sp.receipt_number,
     			s.stu_code,s.stu_enname,s.sex,
-    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')',(select name_en from rms_view where type=7 and key_code=rms_tuitionfee.time)) FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.year) AS year,
+    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.year) AS year,
     	        (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree)AS degree,
 		       (SELECT CONCAT(major_enname) FROM rms_major WHERE major_id=sp.grade ) AS grade,
 		       
@@ -1487,7 +1487,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$where.=" AND sp.degree=".$search['degree'];
     	}
     	if(!empty($search['study_year'])){
-    		$where.=" AND sp.academic_year=".$search['study_year'];
+    		$where.=" AND sp.year=".$search['study_year'];
     	}
 //     	if(!empty($search['time'])){
 //     		$where.=" AND sp.time=".$search['time'];

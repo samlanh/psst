@@ -364,9 +364,15 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	function selectStudentPass($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT stu_id  FROM rms_group_detail_student as gds WHERE gds.old_group=$id";
-		//$order=' ORDER BY id DESC';
 		return $db->fetchAll($sql);
 	}
+	
+	function getGradeByDegree($degree){
+		$db = $this->getAdapter();
+		$sql = "SELECT major_id as id,major_enname as name FROM rms_major WHERE dept_id = $degree";
+		return $db->fetchAll($sql);
+	}
+	
 	
 }
 

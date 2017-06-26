@@ -48,17 +48,11 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
 									<?php }?>
 								</select>
 							</td>
-							<td ><?php echo $tr->translate("GENERATION");?></td>
+							<td ><?php echo $tr->translate("TYPE");?></td>
 							<td ><input dojoType="dijit.form.ValidationTextBox"  class="fullside" id="generation" name="generation"  type="text"></td>
 							</tr>
 						<tr>
-							<td ><?php echo $tr->translate("TIME");?></td>
-							<td>
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="time" name="time" type="text">								
-										<option value="2">ពេញម៉ោង</option>
-										<option value="1">ក្រៅម៉ោង</option>
-								</select>
-							</td>
+							
 							<td style="white-space: nowrap;"><?php echo $tr->translate("BRANCH");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside"  id="branch" name="branch" type="text">								

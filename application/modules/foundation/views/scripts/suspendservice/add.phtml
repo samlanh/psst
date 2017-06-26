@@ -59,8 +59,6 @@ fieldset{  background:none;}
 						<tr>
 							<td style="width: 160px"><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 							<td><?php echo $register->getElement('study_year');?></td>
-							<td><?php echo $tr->translate("RECEIPT_NO");?></td>
-							<td><?php echo $register->getElement('suspend_no');?></td>
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("STUDENT_ID");?></td>
@@ -80,7 +78,7 @@ fieldset{  background:none;}
 						</tr>
 						<tr>
 							<td colspan="4">
-								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+								<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
 										<tr id="head-title" class="head-td" align="right"></tr>
 								</table>
 							</td>
@@ -137,7 +135,7 @@ function addRow() {
 			column = 0;
 			template+='<td><select dojoType="dijit.form.FilteringSelect" id="type_'+col+'" onchange="dateReadonly('+col+');" name="type_'+col+'" style="width:100%;"><option value="1">Suspend</option><option value="2">Stop</option></select></td>';
 			template+='<td> <input type="text"   name="reason_'+col+'" id="reason_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
-			template+='<td><select style="width:100%;"  dojoType="dijit.form.DateTextBox" id="date_'+col+'" name="date_'+col+'"></select></td>';
+			template+='<td><input style="width:100%;" value="now" dojoType="dijit.form.DateTextBox" id="date_'+col+'" name="date_'+col+'" /></td>';
 			template+='<td> <input type="text"   name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";

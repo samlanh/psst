@@ -719,9 +719,11 @@ function getMonthByNumber(m){
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 <?php $keycode = $this->keycode;?>
-<style>
-.defaulheight{line-height: 22px !important;}
-</style>
+	<div id="terms" data-dojo-type="dijit.Dialog" style="width:22cm;height: 14cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
+		<style>
+			.hearder_table{height:25px !important;}
+			.defaulheight{line-height: 22px !important;}
+		</style>
 	<div id="terms" data-dojo-type="dijit.Dialog" style="width:25cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
 		<div id="PrintReceipt" style="width: 22cm !important; height: 12cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height: 11cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
@@ -751,7 +753,9 @@ function getMonthByNumber(m){
 				    </td>
 				</tr>
 				<style>
-					.bold{font-weight:bold;}
+					.bold{
+						font-weight:bold;
+						}
 				</style>
 				<tr>
 					<td colspan="10">
@@ -796,7 +800,7 @@ function getMonthByNumber(m){
 							</tr>
 							<tr>
 								<td colspan="6">
-									<table border="0" width="100%" style="font-size:12px; white-space:nowrap;line-height:15px;margin-top:-5px;border-collapse:collapse;">
+									<table border="0" width="100%" style="font-size:12px; white-space:nowrap;line-height:15px;margin-top:-3px;border-collapse:collapse;">
 										<tr>
 											<td width="37%"></td>
 											<td width="37%"></td>
@@ -838,7 +842,7 @@ function getMonthByNumber(m){
 													</tr>	
 													<tr>
 														<td align="center">
-															<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: -2px;"> 
+															<h4 style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: -3px;"> 
 																<?php 
 																   $session_user=new Zend_Session_Namespace('auth');
 																   $last_name=$session_user->last_name;
@@ -1439,7 +1443,7 @@ function getservicefee(key){
 			var rowIDArray = rowId.split(',');
 			template="";
 				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important;  " id="table">'
-					  temp+='<tr style="height:25px;font-size:12px; font-weight: bold;font-family: arail;text-align:center;background:#f2f2f2;font-weight:bold;">';
+					  temp+='<tr class="hearder_table" style=" font-size:11px; text-align:center;background:#f2f2f2;">';
 						  temp+='<td style="border:1px solid #000;">No</td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
@@ -1451,7 +1455,6 @@ function getservicefee(key){
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Discount</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Note</strong></td>';
-					  
 					  temp+='</tr>';
 				
 				if(payment_type==1){

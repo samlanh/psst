@@ -33,7 +33,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_status->setValue($request->getParam("status_search"));
 		
 		$is_full=  new Zend_Dojo_Form_Element_FilteringSelect('is_full');
-		$is_full->setAttribs(array('dojoType'=>$this->filter,'style'=>'width:150px;'));
+		$is_full->setAttribs(array('dojoType'=>$this->filter,));
 		$_opt = array(
 				-1=>$this->tr->translate("SELECT_IS_FULL"),
 				1=>$this->tr->translate("COMPLETE"),
@@ -85,11 +85,26 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$cood_book->setMultiOptions($option);
 		$cood_book->setValue($request->getParam('cood_book'));
 		
+		$stu_name = new Zend_Dojo_Form_Element_FilteringSelect("stu_name");
+		$stu_name->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+		));
+		$option = array("0"=>$this->tr->translate("SELECT_STUDEN_NAME"));
+		$db_stu=new Library_Model_DbTable_DbNeardayreturnbook();
+		$result = $db_stu->getAllStudentId(2);
+		//print_r($result);exit();
+		if(!empty($result))foreach($result AS $row){
+			$option[$row['stu_id']]=$row['name'];
+		}
+		$stu_name->setMultiOptions($option);
+		$stu_name->setValue($request->getParam('stu_name'));
+		
 		//date
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$dates = date("Y-m-d");
 		$start_date->setAttribs(array(
-				'dojoType'=>"dijit.form.DateTextBox",'style'=>'width:150px;',
+				'dojoType'=>"dijit.form.DateTextBox",
 				'required'=>false));
 		$_date = $request->getParam("start_date");
 		if(empty($_date)){
@@ -100,7 +115,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$date = date("Y-m-d");
 		$end_date->setAttribs(array(
-				'dojoType'=>"dijit.form.DateTextBox",'style'=>'width:150px;',
+				'dojoType'=>"dijit.form.DateTextBox",
 				'required'=>false));
 		$_date = $request->getParam("end_date");
 		if(empty($_date)){
@@ -108,7 +123,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		}
 		$end_date->setValue($_date);
 		
-		$this->addElements(array($is_full,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
+		$this->addElements(array($stu_name,$is_full,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
 		
 		return $this;
 	}
@@ -160,6 +175,21 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		}
 		$cood_book->setMultiOptions($option);
 		$cood_book->setValue($request->getParam('cood_book'));
+		
+		$stu_name = new Zend_Dojo_Form_Element_FilteringSelect("stu_name");
+		$stu_name->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+		));
+		$option = array("0"=>$this->tr->translate("SELECT_STUDEN_NAME"));
+		$db_stu=new Library_Model_DbTable_DbNeardayreturnbook();
+		$result = $db_stu->getAllStudentId(2);
+		//print_r($result);exit();
+		if(!empty($result))foreach($result AS $row){
+			$option[$row['stu_id']]=$row['name'];
+		}
+		$stu_name->setMultiOptions($option);
+		$stu_name->setValue($request->getParam('stu_name'));
 	
 		//date
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
@@ -184,7 +214,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		}
 		$end_date->setValue($_date);
 	
-		$this->addElements(array($cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
+		$this->addElements(array($stu_name,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
 	
 		return $this;
 	}

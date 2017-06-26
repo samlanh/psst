@@ -13,7 +13,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
     dojo.require("dojo.parser");
 </script>
 
-<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'library','controller'=>'brokenbook','action'=>'add')); ?>" 
+<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'library','controller'=>'bookpurchase','action'=>'add')); ?>" 
 dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
@@ -34,7 +34,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						  <td ><?php echo $tr->translate("PURCHASE_NO")?></td>
 						  <td><input dojoType="dijit.form.TextBox"   name="purchase_no" id="purchase_no" value="<?php echo $this->po_no;?>"  type="text" readonly="readonly"></td>
 							<td ><?php echo $tr->translate("ORDER_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox"   name="phone" id="phone" value="<?php echo date('Y-m-d')?>"  type="text" required="required"></td>
+							<td><input dojoType="dijit.form.DateTextBox"   name="date_order" id="date_order" value="<?php echo date('Y-m-d')?>"  type="text" required="required"></td>
 						</tr>
 						<tr >
 							<td style="width: 5px"><?php echo $tr->translate("NOTE")?></td>

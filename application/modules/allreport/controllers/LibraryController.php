@@ -45,6 +45,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 				$search = array(
 						'title'	        =>	'',
 						'cood_book'	=>	0,
+						'stu_name'	=>	0,
 						'status_search'	=>	-1,
 						'end_date'=>date('Y-m-d')
 				);
@@ -72,6 +73,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 						'title'	        =>	'',
 						//'cood_book'		=>	0,
 						'is_full'	=>	-1,
+						'stu_name'	=>	0,
 						'parent'		=>0,
 						'start_date'	=>date('Y-m-d'),
 						'end_date'		=>date('Y-m-d'),
@@ -99,7 +101,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			}else{
 				$search = array(
 						'title'	        =>	'',
-						//'cood_book'		=>	0,
+						'stu_name'		=>	0,
 						//'status_search'	=>	-1,
 						'is_full'	=>	-1,
 						'parent'		=>0,
@@ -131,9 +133,10 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 						'title'	        =>	'',
 						//'cood_book'		=>	0,
 						'is_full'	=>	-1,
+						'stu_name'	=>	0,
 						'parent'		=>0,
-						'start_date'	=>date('Y-m-d'),
-						'end_date'		=>date('Y-m-d'),
+// 						'start_date'	=>date('Y-m-d'),
+// 						'end_date'		=>date('Y-m-d'),
 				);
 			}
 			$this->view->search = $search;

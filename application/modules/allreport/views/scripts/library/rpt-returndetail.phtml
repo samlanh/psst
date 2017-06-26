@@ -20,20 +20,15 @@
 		</tr>
 		-->
 	</table>
-	<table width="100%">	
-		 <tr> 
-			 <td colspan=""> <?php echo $frm->getElement("title");?></td>
-			<!--   <td> <?php echo $frm->getElement("cood_book");?></td> -->
-			 <td> <?php echo $frm->getElement('parent');?></td>
-			 <td> <?php echo $frm->getElement('start_date');?></td>
-			 <td> <?php echo $frm->getElement('end_date');?></td> 
-		     <td style="width:10px;"> <?php echo $frm->getElement('is_full');?></td> 
-			 <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-		<tr>
-			 
-		</tr>
-	</table>
+	 <?php echo $frm->getElement("title");?> 
+	 <?php echo $frm->getElement("stu_name");?>
+	 <?php echo $frm->getElement("cood_book");?> 
+	 <?php echo $frm->getElement('parent');?> 
+	 <?php echo $frm->getElement('start_date');?> 
+	<?php echo $frm->getElement('end_date');?> 
+	<?php echo $frm->getElement('is_full');?> 
+	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?> 
+ 
 </form>	
 </div>
 <style>

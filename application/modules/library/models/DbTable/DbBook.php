@@ -208,6 +208,31 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
+	public function getBookQty($book_id){
+		$db=$this->getAdapter();
+		$sql=" SELECT id,book_no,qty_after,qty FROM rms_book WHERE id=$book_id AND `status`=1 ";
+		$row = $db->fetchRow($sql);
+		if(empty($row)){
+			$session_user=new Zend_Session_Namespace('auth');
+			$userName=$session_user->user_name;
+			$GetUserId= $session_user->user_id;
+			$array = array(
+					'qty'		=>	0,
+					'qty_after'	=>	0,
+					'date'		=>	date('Y-m-d'),
+					'status'	=>	1,
+					"user_id"   =>  $GetUserId,
+			);
+			$this->_name="rms_book";
+			$this->insert($array);
+			$sql=" SELECT id,book_no,qty_after,qty FROM rms_book WHERE id=$book_id AND `status`=1 ";
+			return $row = $db->fetchRow($sql);
+		}else{
+	
+			return $row;
+		}
+	}
+	
 }
 
 

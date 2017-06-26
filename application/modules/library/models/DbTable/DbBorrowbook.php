@@ -46,6 +46,10 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
     	    $where.=' AND b.status='.$search["status_search"];
     	}
     	
+    	if($search["stu_name"]>0){
+    		$where.=' AND b.stu_id='.$search["stu_name"];
+    	}
+    	
     	$order=" GROUP BY b.borrow_no ORDER BY b.id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }

@@ -101,6 +101,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND b.id='.$search["cood_book"];
     	}
     	
+//     	if($search["stu_name"]>0){
+//     		$where.=' AND b.stu_id='.$search["stu_name"];
+//     	}
+    	
     	$db_cat=new Library_Model_DbTable_DbCategory();
     	if($search["parent"]>0){
     		$where.=' AND b.cat_id IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
@@ -149,6 +153,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND bd.is_full='.$search["is_full"];
     	}
     	
+    	if($search["stu_name"]>0){
+    		$where.=' AND b.stu_id='.$search["stu_name"];
+    	}
+    	
     	$order=" ORDER BY b.id DESC ";
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -188,6 +196,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND bd.is_full='.$search["is_full"];
     	}
     	
+    	if($search["stu_name"]>0){
+    		$where.=' AND b.stu_id='.$search["stu_name"];
+    	}
+    	
     	$db_cat=new Library_Model_DbTable_DbCategory();
     	if($search["parent"]>0){
     		$where.=' AND (SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id)  IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
@@ -211,9 +223,9 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     	WHERE b.id=bd.borr_id ";
     	 
     	$where = '';
-    	$from_date =(empty($search['start_date']))? '1': "b.borrow_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "b.borrow_date <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
+//     	$from_date =(empty($search['start_date']))? '1': "b.borrow_date >= '".$search['start_date']." 00:00:00'";
+//     	$to_date = (empty($search['end_date']))? '1': "b.borrow_date <= '".$search['end_date']." 23:59:59'";
+//     	$where = " AND ".$from_date." AND ".$to_date;
     	 
     	if(!empty($search["title"])){
     		$s_where=array();
@@ -234,6 +246,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     	 
     	if($search["is_full"]>-1){
     		$where.=' AND bd.is_full='.$search["is_full"];
+    	}
+    	
+    	if($search["stu_name"]>0){
+    		$where.=' AND b.stu_id='.$search["stu_name"];
     	}
     	 
     	$order=" ORDER BY b.id DESC ";

@@ -60,6 +60,7 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 			$session_user=new Zend_Session_Namespace('auth');
 		    $userName=$session_user->user_name;
 		    $GetUserId= $session_user->user_id;
+		    $db_book=new Library_Model_DbTable_DbBook();
              
 			$arr=array(
 					"title"     	=> 	$data["note"],
@@ -87,10 +88,11 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 					);
 					$this->_name='rms_bookbrokendetails';
 					$this->insert($data_item);
-					$rows=$this->getBookQty($data['book_id'.$i]); 
+					$rows=$db_book->getBookQty($data['book_id'.$i]); 
 					if($rows){
 							$datatostock= array(
 									'qty_after' => $rows["qty_after"]-$data['borr_qty'.$i],
+									'qty' 		=> $rows["qty"]-$data['borr_qty'.$i],
 									'date'		=>	date("Y-m-d"),
 									'user_id'	=>$GetUserId
 							);
@@ -127,15 +129,17 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 			$session_user=new Zend_Session_Namespace('auth');
 		    $userName=$session_user->user_name;
 		    $GetUserId= $session_user->user_id;
+		    $db_book=new Library_Model_DbTable_DbBook();
 		    
 		    $row_item=$this->getItemDetail($data['id']);
 		    if(!empty($row_item)){
 		    	foreach ($row_item As $rs_item){
-		    		$row=$this->getBookQty($rs_item['book_id']);
+		    		$row=$db_book->getBookQty($rs_item['book_id']);
 		    		//print_r($row);exit();
 		    		if($row){
 		    			$datatostock   = array(
 		    					'qty_after' =>  $row["qty_after"]+$rs_item['borr_qty'],
+		    					'qty' 		=> $row["qty"]+$rs_item['borr_qty'],
 		    					'date'		=>	date("Y-m-d"),
 		    			);
 		    			$this->_name="rms_book";
@@ -176,10 +180,11 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 					);
 					$this->_name='rms_bookbrokendetails';
 					$this->insert($data_item);
-					$rows=$this->getBookQty($data['book_id'.$i]); 
+					$rows=$db_book->getBookQty($data['book_id'.$i]); 
 					if($rows){
 							$datatostock= array(
 									'qty_after' => $rows["qty_after"]-$data['borr_qty'.$i],
+									'qty' 		=> $rows["qty"]-$data['borr_qty'.$i],
 									'date'		=>	date("Y-m-d"),
 									'user_id'	=>$GetUserId
 							);
@@ -214,31 +219,6 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	 
-	public function getBookQty($book_id){
-		$db=$this->getAdapter();
-		$sql=" SELECT id,book_no,qty_after FROM rms_book WHERE id=$book_id AND `status`=1 ";
-		$row = $db->fetchRow($sql);
-		if(empty($row)){
-			$session_user=new Zend_Session_Namespace('auth');
-			$userName=$session_user->user_name;
-			$GetUserId= $session_user->user_id;
-			$array = array(
-					'qty'		=>	0,
-					'qty_after'	=>	0,
-					'date'		=>	date('Y-m-d'),
-					'status'	=>	1,
-					"user_id"   =>  $GetUserId,
-			);
-			$this->_name="rms_book";
-			$this->insert($array);
-			$sql=" SELECT id,book_no,qty_after FROM rms_book WHERE id=$book_id AND `status`=1 ";
-			return $row = $db->fetchRow($sql);
-		}else{
-	
-			return $row;
-		}
-	}
-	
 	function getBrokenNo(){
 		$db=$this->getAdapter();
 		$sql="SELECT id FROM rms_bookbroken WHERE 1 ORDER BY id DESC";

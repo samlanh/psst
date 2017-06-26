@@ -34,6 +34,7 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 			$s_where=array();
 			$s_search = addslashes(trim($search['title']));
 			$s_where[]="  b.borrow_no LIKE '%{$s_search}%'";
+			$s_where[]="  b.stu_id LIKE '%{$s_search}%'";
 			$s_where[]="  b.phone LIKE '%{$s_search}%'";
 			$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
 			$s_where[]= "(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
@@ -43,6 +44,10 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 		 
 		if($search["status_search"]>-1){
 			$where.=' AND b.status='.$search["status_search"];
+		}
+		
+		if($search["stu_name"]>0){
+			$where.=' AND b.stu_id='.$search["stu_name"];
 		}
 		
 		if($search["cood_book"]>0){
@@ -60,6 +65,20 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 	function getBookIdName(){
 		$db=$this->getAdapter();
 		$sql="SELECT id,title AS name FROM rms_book WHERE `status`=1";
+		return $db->fetchAll($sql);
+	}
+	
+	function getAllStudentId($type){//type = 1 =>student id , 2=student name
+		$db=$this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$branch_id = $_db->getAccessPermission();
+		if($type==1){
+			$sql="SELECT s.stu_id As stu_id,s.stu_code As stu_code FROM rms_student AS s
+			WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+		}else {
+			$sql="SELECT s.stu_id As stu_id,CONCAT(s.stu_enname) as name FROM rms_student AS s
+			WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+		}
 		return $db->fetchAll($sql);
 	}
 	

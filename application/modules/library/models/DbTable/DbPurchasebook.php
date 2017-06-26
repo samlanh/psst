@@ -13,45 +13,33 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     }
     
-    function getAllBroken($search=null){
+    function getAllPurchase($search=null){
     	$db=$this->getAdapter();
-    	$sql=" SELECT b.id,b.broke_no,
-        		   
-        		  b.date_broken,SUM(bd.borr_qty) AS qty,b.title,
-				  (SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`,
-				  (SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name
-			       FROM rms_bookbroken AS b,rms_bookbrokendetails AS bd
-			       WHERE  b.status=1
-			       AND b.id=bd.broken_id";
+    	$sql=" SELECT b.id,b.purchase_no,b.title,b.date_order,
+                       SUM(bd.borr_qty),
+		       (SELECT CONCAT(u.first_name,' ',u.last_name) FROM rms_users AS u WHERE u.id=b.user_id LIMIT 1) AS user_name,
+		       (SELECT v.`name_en` FROM rms_view AS v WHERE v.`type`=1  AND b.user_id=v.`key_code` LIMIT 1) AS `status` 
+		       FROM rms_bookpurchase AS b,rms_bookpurchasedetails bd WHERE b.id=bd.purchase_id
+		       ";
     	$where = '';
-    	$from_date =(empty($search['start_date']))? '1': " b.date_broken >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " b.date_broken <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': " b.date_order >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " b.date_order <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
     	if(!empty($search["title"])){
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
+    		$s_where[]="  b.purchase_no LIKE '%{$s_search}%'";
     		$s_where[]="  b.title LIKE '%{$s_search}%'";
-    		$s_where[]="  b.broke_no LIKE '%{$s_search}%'";
-    		$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
-    		$s_where[]="  (SELECT rms_book.book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]="  (SELECT rms_book.title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-//     	$db_cat=new Library_Model_DbTable_DbCategory();
-//     	if($search["parent"]>0){
-//     		$where.=' AND bd.cat_id IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
-//     	}
-    	if(!empty($search["cood_book"])){
-    		$where.=' AND bd.book_id='.$search["cood_book"];
-    	}
     	if($search["status_search"]>-1){
-    	    $where.=' AND b.status='.$search["status_search"];
+    	    $where.=' AND status='.$search["status_search"];
     	}
-    	$order=" GROUP BY b.broke_no ORDER BY b.id DESC";
+    	$order=" GROUP BY b.purchase_no ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
  
-	public function addBrokenBook($data){
+	public function addPurchaseBook($data){
 		//print_r($data);exit();
 		$db = $this->getAdapter();
 		$db->beginTransaction();
@@ -63,13 +51,13 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
              
 			$arr=array(
 					"title"     	=> 	$data["note"],
-					"broke_no"     	=> 	$data["broken_no"],
-					"date_broken"   => 	date("Y-m-d",strtotime($data['broken_date'])),
+					"purchase_no"     	=> 	$data["purchase_no"],
+					"date_order"   => 	date("Y-m-d",strtotime($data['date_order'])),
 					"user_id"       => 	$GetUserId,
 					"status"        => 	$data['status'],
 			);
-			$this->_name="rms_bookbroken";
-			$broken_id = $this->insert($arr); 
+			$this->_name="rms_bookpurchase";
+			$po_id = $this->insert($arr); 
 			unset($info_purchase_order);
 
 			if($data['identity']!=""){
@@ -77,7 +65,7 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 				foreach ($ids as $i)
 				{
 					$data_item= array(
-							'broken_id'	=>  $broken_id,
+							'purchase_id'	=>  $po_id,
 							'book_id'	=> 	$data['book_id'.$i],
 							'borr_qty'	=>  $data['borr_qty'.$i],
 							'note'  	=> 	$data['note_'.$i],
@@ -85,12 +73,14 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 							'is_full'	=> 	1,
 							'status'	=> 	$data['status'],
 					);
-					$this->_name='rms_bookbrokendetails';
+					$this->_name='rms_bookpurchasedetails';
 					$this->insert($data_item);
-					$rows=$this->getBookQty($data['book_id'.$i]); 
+					$db_book=new Library_Model_DbTable_DbBook();
+					$rows=$db_book->getBookQty($data['book_id'.$i]); 
 					if($rows){
 							$datatostock= array(
-									'qty_after' => $rows["qty_after"]-$data['borr_qty'.$i],
+									'qty_after' => $rows["qty_after"]+$data['borr_qty'.$i],
+									'qty' => $rows["qty"]+$data['borr_qty'.$i],
 									'date'		=>	date("Y-m-d"),
 									'user_id'	=>$GetUserId
 							);
@@ -114,12 +104,12 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 
 	public function getItemDetail($id){
 		$db=$this->getAdapter();
-		$sql = "SELECT * FROM rms_bookbrokendetails WHERE broken_id=$id";
+		$sql = "SELECT * FROM rms_bookpurchasedetails WHERE purchase_id=$id";
 		$rows=$db->fetchAll($sql);
 		return $rows;
 	}
 	
-	public function editBrokenBook($data){
+	public function editPurchaseDetail($data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
@@ -129,13 +119,15 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 		    $GetUserId= $session_user->user_id;
 		    
 		    $row_item=$this->getItemDetail($data['id']);
+		    $db_book=new Library_Model_DbTable_DbBook();
 		    if(!empty($row_item)){
 		    	foreach ($row_item As $rs_item){
-		    		$row=$this->getBookQty($rs_item['book_id']);
+		    		$row=$db_book->getBookQty($rs_item['book_id']);
 		    		//print_r($row);exit();
 		    		if($row){
 		    			$datatostock   = array(
-		    					'qty_after' =>  $row["qty_after"]+$rs_item['borr_qty'],
+		    					'qty_after' =>  $row["qty_after"]-$rs_item['borr_qty'],
+		    					'qty' 		=>  $row["qty"]-$rs_item['borr_qty'],
 		    					'date'		=>	date("Y-m-d"),
 		    			);
 		    			$this->_name="rms_book";
@@ -147,18 +139,18 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
              
 		    $arr=array(
 		    		"title"     	=> 	$data["note"],
-		    		"date_broken"   => 	date("Y-m-d",strtotime($data['broken_date'])),
+		    		"purchase_no"     	=> 	$data["purchase_no"],
+		    		"date_order"   => 	date("Y-m-d",strtotime($data['date_order'])),
 		    		"user_id"       => 	$GetUserId,
-		    		"broke_no"     	=> 	$data["broken_no"],
 		    		"status"        => 	$data['status'],
 		    );
-		    $this->_name="rms_bookbroken";
+		    $this->_name="rms_bookpurchase";
 			$where=" id=".$data['id'];
 		    $this->update($arr, $where); 
 			unset($arr);
 			
-			$this->_name="rms_bookbrokendetails";
-			$where=" broken_id=".$data['id'];
+			$this->_name="rms_bookpurchasedetails";
+			$where=" purchase_id=".$data['id'];
 			$this->delete($where);
 
 			if($data['identity']!=""){
@@ -166,7 +158,7 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 				foreach ($ids as $i)
 				{
 					$data_item= array(
-							'broken_id'	=>  $data['id'],
+							'purchase_id'	=>  $data['id'],
 							'book_id'	=> 	$data['book_id'.$i],
 							'borr_qty'	=>  $data['borr_qty'.$i],
 							'note'  	=> 	$data['note_'.$i],
@@ -174,12 +166,13 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 							'is_full'	=> 	1,
 							'status'	=> 	$data['status'],
 					);
-					$this->_name='rms_bookbrokendetails';
+					$this->_name='rms_bookpurchasedetails';
 					$this->insert($data_item);
-					$rows=$this->getBookQty($data['book_id'.$i]); 
+					$rows=$db_book->getBookQty($data['book_id'.$i]); 
 					if($rows){
 							$datatostock= array(
-									'qty_after' => $rows["qty_after"]-$data['borr_qty'.$i],
+									'qty_after' => $rows["qty_after"]+$data['borr_qty'.$i],
+									'qty' => $rows["qty"]+$data['borr_qty'.$i],
 									'date'		=>	date("Y-m-d"),
 									'user_id'	=>$GetUserId
 							);
@@ -201,44 +194,19 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function getBrokenDetailById($id){
+	public function getPurchaseDetailById($id){
 		$db=$this->getAdapter();
-		$sql = "SELECT * FROM rms_bookbrokendetails WHERE broken_id=$id";
+		$sql = "SELECT * FROM rms_bookpurchasedetails WHERE purchase_id=$id";
 		$rows=$db->fetchAll($sql);
 		return $rows;
 	}
 	 
-	function getBrokenById($id){
+	function getPurchaseById($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM rms_bookbroken WHERE id=$id";
+		$sql="SELECT * FROM rms_bookpurchase WHERE id=$id";
 		return $db->fetchRow($sql);
 	}
 	 
-	public function getBookQty($book_id){
-		$db=$this->getAdapter();
-		$sql=" SELECT id,book_no,qty_after FROM rms_book WHERE id=$book_id AND `status`=1 ";
-		$row = $db->fetchRow($sql);
-		if(empty($row)){
-			$session_user=new Zend_Session_Namespace('auth');
-			$userName=$session_user->user_name;
-			$GetUserId= $session_user->user_id;
-			$array = array(
-					'qty'		=>	0,
-					'qty_after'	=>	0,
-					'date'		=>	date('Y-m-d'),
-					'status'	=>	1,
-					"user_id"   =>  $GetUserId,
-			);
-			$this->_name="rms_book";
-			$this->insert($array);
-			$sql=" SELECT id,book_no,qty_after FROM rms_book WHERE id=$book_id AND `status`=1 ";
-			return $row = $db->fetchRow($sql);
-		}else{
-	
-			return $row;
-		}
-	}
-	
 	function getPONo(){
 		$db=$this->getAdapter();
 		$sql="SELECT id FROM rms_bookpurchase WHERE 1 ORDER BY id DESC";

@@ -42,6 +42,10 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
     	    $where.=' AND `status`='.$search["status_search"];
     	}
     	
+    	if($search["stu_name"]>0){
+    		$where.=' AND stu_id='.$search["stu_name"];
+    	}
+    	
     	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }

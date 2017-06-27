@@ -12,7 +12,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     
     function getAceYear(){
     	$db=$this->getAdapter();
-    	$sql="SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')',(select name_en from rms_view where type=7 and key_code=time)) AS `name`
+    	$sql="SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS `name`
     	FROM rms_tuitionfee as tf WHERE tf.`status`=1 ";
     	$oder=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$oder);
@@ -44,7 +44,8 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    	$db=$this->getAdapter();
 	    	$_db = new Application_Model_DbTable_DbGlobal();
 	    	$branch_id = $_db->getAccessPermission();
-	    	$sql = "SELECT sf.id,CONCAT(tf.from_academic,' - ',tf.to_academic,'(',generation,')',(select name_en from rms_view where type=7 and key_code = time)) AS academic,
+	    	$sql = "SELECT sf.id,CONCAT(tf.from_academic,' - ',tf.to_academic,'(',generation,')') AS academic,
+	    			sf.note,
 	    		    tf.create_date,
 	    		    (select name_en from rms_view where type=1 and key_code=sf.status ) as status
 	    		    
@@ -208,7 +209,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission('branch_id');
     	 
-    	$sql="select id, CONCAT(from_academic,'-',to_academic,'(',generation,')',(select name_en from rms_view where type=7 and key_code=time)) as year from rms_tuitionfee where status=1  $branch_id  ";
+    	$sql="select id, CONCAT(from_academic,'-',to_academic,'(',generation,')') as year from rms_tuitionfee where status=1  $branch_id  ";
     	return $db->fetchAll($sql);
     }
     

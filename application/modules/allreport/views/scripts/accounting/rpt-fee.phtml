@@ -6,7 +6,7 @@
 ?>	
 <div style="width: 28cm;margin: 0 auto;">
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-fee')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table style="width: 70%">	
+	<table style="width: 80%">	
 		<tr>
 			<td>	
 				<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
@@ -21,6 +21,9 @@
 			</td>
 			<td>
 				<?php echo $frm->getElement('branch_id')?>
+			</td>
+			<td>
+				<?php echo $frm->getElement('grade_all')?>
 			</td>
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -56,30 +59,28 @@
 														<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH')?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('GENERATION')?></td>
+														<td style="border: 1px solid #000;"><?php echo $tr->translate('TYPE')?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate('GRADE')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('TIME')?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate('MONTHLY')?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate('QUARTER')?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate('SEMESTER')?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate('YEAR')?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate('NOTE')?></td>
 													</tr>
-												<?php $i=0; foreach ($this->rs AS $row) { $i++;?>
+												<?php $i=0; if(!empty($this->rs)){foreach ($this->rs AS $row) { $i++;?>
 													<tr class="hover" style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" >
 														<td style="border: 1px solid #000;"><?php echo $i;?></td>
 														<td style="border: 1px solid #000;"><?php echo $row['branch_id'];?></td>
 														<td style="border: 1px solid #000;"><?php echo $row['academic'];?></td>
 														<td style="border: 1px solid #000;"><?php echo $row['generation'];?></td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['class'];?></td>	
-														<td style="border: 1px solid #000;"><?php echo $row['time'];?></td>
 														<td style="border: 1px solid #000;"><?php echo $row['monthly'];?> $</td>
 														<td style="border: 1px solid #000;"><?php echo $row['quarter'];?> $</td>
 														<td style="border: 1px solid #000;"><?php echo $row['semester'];?> $</td>
 														<td style="border: 1px solid #000;"><?php echo $row['year'];?> $</td>
 														<td style="border: 1px solid #000;"><?php echo $row['remark'];?></td>
 													</tr>
-												<?php }?>	
+												<?php }}?>	
 												</table>	
 											</td>
 										</tr>

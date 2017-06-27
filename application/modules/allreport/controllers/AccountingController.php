@@ -425,17 +425,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	public function rptFeeAction(){
 	
 		if($this->getRequest()->isPost()){
-			$_data=$this->getRequest()->getPost();
-			$search = array(
-					'txtsearch' => $_data['txtsearch'],
-					'year' => $_data['year'],
-					'branch_id' => $_data['branch_id'],
-			);
+			$search=$this->getRequest()->getPost();
 		}
 		else{
 			$search=array(
 					'txtsearch' =>'',
 					'year' =>'',
+					'grade_all' =>'',
 					'branch_id' =>'',
 			);
 		}
@@ -456,7 +452,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$row=0;$indexterm=1;$key=0;
 		if(!empty($rs_rows)){
 			foreach ($rs_rows as $i => $rs) {
-				$rows = $db->getFeebyOther($rs['id']);
+				$rows = $db->getFeebyOther($rs['id'],$search['grade_all']);
+				print_r($rows);
 				$fee_row=1;
 				if(!empty($rows))foreach($rows as $payment_tran){
 					if($payment_tran['payment_term']==1){
@@ -489,6 +486,10 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$rs_rows=array();
 			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 		}
+		
+		//print_r($rs_rows);
+		
+		
 		$this->view->rs = $rs_rows;
 		$this->view->search = $search;
 	}

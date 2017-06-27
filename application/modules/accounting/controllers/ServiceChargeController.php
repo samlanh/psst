@@ -69,7 +69,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
     			$payment_term.='"'.$value.'",';
     		}
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("ACADEMIC_YEAR","CREATED_DATE","STATUS");
+    		$collumns = array("ACADEMIC_YEAR","NOTE","CREATED_DATE","STATUS");
     		$link=array(
     				'module'=>'accounting','controller'=>'servicecharge','action'=>'edit',
     		);

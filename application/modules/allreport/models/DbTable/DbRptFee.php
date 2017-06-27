@@ -47,14 +47,27 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
 
     	return $db->fetchAll($sql.$where.$order);
     }
-    function getFeebyOther($fee_id){
+    function getFeebyOther($fee_id,$grade_search){
     	//print_r($fee_id);exit();
     	$db = $this->getAdapter();
     	$sql = "select *,
-    	(SELECT CONCAT(major_enname) FROM `rms_major` WHERE major_id=rms_tuitionfee_detail.class_id) as class,
-    	(select name_en from rms_view where type=4 and key_code=session) as session
-    	from rms_tuitionfee_detail where fee_id =".$fee_id." ORDER BY id";
-    	return $db->fetchAll($sql);
+			    	(SELECT CONCAT(major_enname) FROM `rms_major` WHERE major_id=rms_tuitionfee_detail.class_id) as class,
+			    	(select name_en from rms_view where type=4 and key_code=session) as session
+			    	from rms_tuitionfee_detail where fee_id = $fee_id ";
+    	
+    	$where = ' ';
+    	$order = ' ORDER BY id';
+    	
+    	if(!empty($grade_search)){
+    		$where.=" AND class_id = ".$grade_search;
+    	}
+    	//echo $sql.$where.$order;
+    	$result = $db->fetchAll($sql.$where.$order);
+    	
+    	if(!empty($result)){
+    		return $result;
+    	}
+    	
     }
     
     function getAllYearFee(){

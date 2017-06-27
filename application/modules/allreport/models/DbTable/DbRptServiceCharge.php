@@ -14,7 +14,7 @@ class Allreport_Model_DbTable_DbRptServiceCharge extends Zend_Db_Table_Abstract
     	$_db=new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	
-    	$sql = "SELECT sf.id,CONCAT(from_academic,'-',to_academic,'(',generation,')',(select name_en from rms_view where type=7 and key_code=time)) AS academic,
+    	$sql = "SELECT sf.id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS academic,
     		    sf.create_date,sf.status FROM `rms_servicefee` as sf,rms_tuitionfee as tf  WHERE tf.id=sf.academic_year  $branch_id  ";
     	$order=" ORDER BY sf.id DESC ";
     	$where = '';

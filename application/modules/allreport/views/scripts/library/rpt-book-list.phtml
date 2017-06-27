@@ -21,17 +21,14 @@
 		</tr>
 		-->
 	</table>
-	<table width="100%">	
-		<tr> 
-			 <td> <?php echo $frm->getElement("title");?></td>
-			 <td> <?php echo $frm->getElement("cood_book");?></td> 
-			 <td> <?php echo $frm->getElement('parent');?></td>
-			<!-- <td> <?php //echo $frm->getElement('start_date');?></td>
-			  <td> <?php //echo $frm->getElement('end_date');?></td> -->
-			 <td> <?php echo $frm->getElement('status_search');?></td>
-			 <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
+	 <?php echo $frm->getElement("title");?>
+		 <?php echo $frm->getElement("cood_book");?>
+		 <?php echo $frm->getElement('block_id');?>
+		 <?php echo $frm->getElement('parent');?>
+			 <?php //echo $frm->getElement('start_date');?>
+			  <?php //echo $frm->getElement('end_date');?>
+			  <?php echo $frm->getElement('status_search');?>
+			 <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 </form>	
 </div>
 <style>
@@ -72,6 +69,7 @@
 														<td>&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("AUTHOR"); ?>&nbsp;</td>
 														<td style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("PUBLISHER"); ?>&nbsp;</td>
+														<td>&nbsp;<?php echo $tr->translate("BLOCK_NAME"); ?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("CATEGORY"); ?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("CURRENT_QTY"); ?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("QTY_AFTER"); ?>&nbsp;</td>
@@ -91,6 +89,7 @@
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['author'];?></td>
 														
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['publisher'];?></td>
+														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['block_name'];?></td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['cat_name'];?></td>
 														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['qty_curr'];?>&nbsp;ក្បាល</td>
 														<td style="border: 1px solid #000;background:yellow; font-weight: 900;">&nbsp;<?php echo $row['qty_after'];?>&nbsp;ក្បាល</td>

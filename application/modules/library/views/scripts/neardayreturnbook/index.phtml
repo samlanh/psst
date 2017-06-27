@@ -20,18 +20,13 @@ echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 		      </td>
 		</tr>
 	</table>
-	<table width="100%">	
-		<tr> 
-			 <td> <?php echo $frm->getElement("title");?></td>
-			 <td><?php echo $frm->getElement("stu_name")?></td>
-			 <td> <?php echo $frm->getElement("cood_book");?></td>
-			 <td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo date('Y-m-d',strtotime($this->search['end_date'])); ?>" type="text"></td>
-		</tr>
-		<tr>
-		     <td> <?php echo $frm->getElement('status_search');?></td>
-			 <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
+	
+			 <?php echo $frm->getElement("title");?>
+			 <?php echo $frm->getElement("stu_name")?>
+			 <?php echo $frm->getElement("cood_book");?>
+			 <input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  id="end_date" name="end_date" value="<?php echo date('Y-m-d',strtotime($this->search['end_date'])); ?>" type="text">
+		    <?php echo $frm->getElement('status_search');?>
+			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>  
 </form>	
 </div>
 <style>

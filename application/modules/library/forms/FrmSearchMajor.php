@@ -123,7 +123,22 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		}
 		$end_date->setValue($_date);
 		
-		$this->addElements(array($stu_name,$is_full,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
+		$block_id = new Zend_Dojo_Form_Element_FilteringSelect("block_id");
+		$block_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+		));
+		$option = array("0"=>$this->tr->translate("SELECT_BLOCK_BOOK"));
+		$db_stu=new Library_Model_DbTable_DbNeardayreturnbook();
+		$result = $db_stu->getAllBlcok();
+		//print_r($result);exit();
+		if(!empty($result))foreach($result AS $row){
+			$option[$row['id']]=$row['name'];
+		}
+		$block_id->setMultiOptions($option);
+		$block_id->setValue($request->getParam('block_id'));
+		
+		$this->addElements(array($block_id,$stu_name,$is_full,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
 		
 		return $this;
 	}
@@ -190,6 +205,21 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		}
 		$stu_name->setMultiOptions($option);
 		$stu_name->setValue($request->getParam('stu_name'));
+		
+		$block_id = new Zend_Dojo_Form_Element_FilteringSelect("block_id");
+		$block_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+		));
+		$option = array("0"=>$this->tr->translate("SELECT_BLOCK_BOOK"));
+		$db_stu=new Library_Model_DbTable_DbNeardayreturnbook();
+		$result = $db_stu->getAllBlcok();
+		//print_r($result);exit();
+		if(!empty($result))foreach($result AS $row){
+			$option[$row['id']]=$row['name'];
+		}
+		$block_id->setMultiOptions($option);
+		$block_id->setValue($request->getParam('block_id'));
 	
 		//date
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
@@ -214,7 +244,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		}
 		$end_date->setValue($_date);
 	
-		$this->addElements(array($stu_name,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
+		$this->addElements(array($block_id,$stu_name,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
 	
 		return $this;
 	}

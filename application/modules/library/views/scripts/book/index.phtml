@@ -24,6 +24,7 @@
 <div dojoType="dijit.layout.AccordionPane">
 <form id="frm_search" name="frm_search" action="" dojoType="dijit.form.Form" method="post">
 	<?php echo $frm->getElement("title");?>
+	<?php echo $frm->getElement("block_id");?>
 	<?php echo $frm->getElement('parent');?>
 	<?php echo $frm->getElement('status_search');?>
 	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -37,6 +38,7 @@
 				<th class="tdheader header"><?php echo $tr->translate("BOOK_NAME");?>
 				<th class="tdheader header"><?php echo $tr->translate("AUTHOR_NAME");?>
 				<th class="tdheader header"><?php echo $tr->translate("SERIAL_NO");?>
+				<th class="tdheader header"><?php echo $tr->translate("BLOCK_NAME");?>
 				<th class="tdheader header"><?php echo $tr->translate("CATEGORY");?>
 				<th class="tdheader header"><?php echo $tr->translate("QUANTITY");?>
 				<th class="tdheader header"><?php echo $tr->translate("UNIT_PRICE");?>
@@ -93,6 +95,7 @@
 				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['title'];?></a></td>
 				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['author'];?></a></td>
 				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['serial_no'];?></a></td>
+				<td id="items"><?php echo $row['block_name'];?></td>
 				<td id="items"><?php echo $row['cat_name'];?></td>
 				<td id="items" style="text-align: center"><?php echo $row['qty_after'];?> &nbsp;ក្បាល</td>
 				<td id="items">&nbsp;$&nbsp;<?php echo $row['unit_price'];?></td>

@@ -17,6 +17,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 				$search = array(
 						'title'	        =>	'',
 						'cood_book'		=>	0,
+						'block_id'		=>  0,
 						'status_search'	=>	-1,
 						'parent'		=>0,
 				);

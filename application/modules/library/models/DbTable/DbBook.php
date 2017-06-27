@@ -11,6 +11,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
     function getAllBook($search=null){
     	$db=$this->getAdapter();
     	$sql="SELECT b.id,b.book_no,b.title,b.author,b.serial_no,
+    			  (SELECT c.block_name FROM rms_blockbook AS c WHERE c.id=b.block_id) AS block_name,
 			      (SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id) AS cat_name,
 			        b.qty_after,b.unit_price,b.date,
 			      (SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
@@ -34,6 +35,10 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
         $db_cat=new Library_Model_DbTable_DbCategory();
     	if($search["parent"]>0){
     		$where.=' AND b.cat_id IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
+    	}
+    	
+    	if($search["block_id"] > 0){
+    		$where.=' AND b.block_id='.$search['block_id'];
     	}
     	
     	if($search["status_search"]>-1){
@@ -68,6 +73,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 					'author'	=>	$data["author_name"],
 					'serial_no'	=>	$data["serial_no"],
 					'cat_id'	=>	$data["parent_id"],
+					'block_id'	=>	$data["block_id"],
 					'photo'		=>	$pho_name,
 					'publisher'	=>	$data["publisher"],
 					'qty'		=>	$data["qty"],
@@ -108,6 +114,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 					'cat_id'	=>	$data["parent_id"],
 					'photo'		=>	$pho_name,
 					'publisher'	=>	$data["publisher"],
+					'block_id'	=>	$data["block_id"],
 					'qty'		=>	$data["qty"],
 					'qty_after'	=>	$data["qty"],
 					'unit_price'=>	$data["unit_price"],
@@ -164,6 +171,12 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT id,`name` FROM rms_bcategory WHERE  `status` = 1";
 		return $db->fetchAll($sql);		
+	}
+	
+	function getBlockAll(){
+		$db=$this->getAdapter();
+		$sql="SELECT id,block_name AS `name` FROM rms_blockbook WHERE `status`=1";
+		return $db->fetchAll($sql);
 	}
 	
 	function getBookRowById($id){

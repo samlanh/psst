@@ -18,6 +18,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$search = array(
 	    				'title'	       =>	'',
 		    			'parent'	   =>	0,
+    					'block_id'	   =>	0,
 		    			'status_search'	=>	-1
 	    		);
     	    }
@@ -63,6 +64,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	}
     	$db_cat = new Library_Model_DbTable_DbBook();
     	$this->view->cat=$db_cat->getCategoryAll();
+    	$this->view->block=$db_cat->getBlockAll();
     	
 		$frm_major = new Library_Form_FrmBook();
 		$frm_search = $frm_major->frmBook();
@@ -71,8 +73,11 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 		
 		$frm_major = new Library_Form_FrmCategory();
 		$frm_search = $frm_major->FrmCategory();
+		$frm_block  = $frm_major->FrmCategory();
 		Application_Model_Decorator::removeAllDecorator($frm_search);
+		Application_Model_Decorator::removeAllDecorator($frm_block);
 		$this->view->frm_cat = $frm_search;
+		$this->view->frm_block = $frm_block;
     }
     
     public function editAction(){
@@ -95,6 +100,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     	$this->view->cat=$db->getCategoryAll();
+    	$this->view->block=$db->getBlockAll();
     	$row=$db->getBookRowById($id);
     	$this->view->row=$row;
     	
@@ -114,6 +120,16 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		$_data = $this->getRequest()->getPost();
     		$_dbmodel = new Library_Model_DbTable_DbCategory();
     		$id = $_dbmodel->ajaxAddCategory($_data);
+    		print_r(Zend_Json::encode($id));
+    		exit();
+    	}
+    }
+    
+    function addBlockAction(){
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		$_dbmodel = new Library_Model_DbTable_DbCategory();
+    		$id = $_dbmodel->ajaxAddBlock($_data);
     		print_r(Zend_Json::encode($id));
     		exit();
     	}

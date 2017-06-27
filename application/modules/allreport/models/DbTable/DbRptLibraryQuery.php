@@ -78,6 +78,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     function getAllBookList($search=null){
     	$db=$this->getAdapter();
     	$sql="SELECT b.id,b.book_no,b.title,b.author,b.publisher,
+    		  (SELECT c.block_name FROM rms_blockbook AS c WHERE c.id=b.block_id AND c.status=1 LIMIT 1) AS  block_name,
 		      (SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id ) AS  cat_name,
 		      b.qty AS qty_curr,b.qty_after,b.unit_price,b.date,
 		      (SELECT CONCAT(rms_users.first_name,' ',last_name) FROM rms_users WHERE rms_users.id=b.user_id) AS user_name,b.user_id,
@@ -101,9 +102,9 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND b.id='.$search["cood_book"];
     	}
     	
-//     	if($search["stu_name"]>0){
-//     		$where.=' AND b.stu_id='.$search["stu_name"];
-//     	}
+    	if($search["block_id"]>0){
+    		$where.=' AND b.block_id='.$search["block_id"];
+    	}
     	
     	$db_cat=new Library_Model_DbTable_DbCategory();
     	if($search["parent"]>0){

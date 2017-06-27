@@ -89,6 +89,23 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 		$this->_name = "rms_bcategory";
 		return $this->insert($arr);
 	}
+	
+	public function ajaxAddBlock($data){
+		//return  $data;
+		$db = $this->getAdapter();
+		$session_user=new Zend_Session_Namespace('auth');
+		$userName=$session_user->user_name;
+		$GetUserId= $session_user->user_id;
+		$arr = array(
+				'block_name'	=>	$data["block_name"],
+				'date'			=>	new Zend_Date(),
+				'status'		=>	$data["block_status"],
+				'remark'		=>	$data["b_note"],
+				"user_id"       =>  $GetUserId,
+		);
+		$this->_name = "rms_blockbook";
+		return $this->insert($arr);
+	}
 	 
 	public function edit($data){
 		//print_r($data);exit();
@@ -129,7 +146,7 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	}
 	function getCategoryById($id){
 		$db=$this->getAdapter();
-		$sql="SELECT id,`name`,parent_id,remark,`status` FROM rms_bcategory  WHERE id=$id";
+		$sql="SELECT id,`name`,parent_id,remark,`status` FROM rms_bcategory  WHERE id=$id ";
 		return $db->fetchRow($sql);
 	}
 	
@@ -201,7 +218,11 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	
+	function getAllBlockName(){
+		$db=$this->getAdapter();
+		$sql=" SELECT id,block_name AS `name` FROM rms_blockbook WHERE `status`=1 ORDER BY id DESC ";
+		return $db->fetchAll($sql);
+	}
 	
 	
 }

@@ -1,0 +1,99 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("ADD_GATEGORY"));
+	$frm=$this->frm_cat;
+?>	
+<style>
+     
+</style>
+<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+<script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+</script>
+ 
+<form  id='category' action="<?php echo $this->url(array('module'=>'library','controller'=>'block','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
+	if(this.validate()) {
+				return true;
+			} else {
+				return false;
+			}
+</script>
+<table cellspacing="10" width="50%" style="margin: 0 auto; ">
+	<tr>
+		<td>
+			<fieldset>
+				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_BLOCK")?></strong></legend>
+				<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="10"  >
+				    
+					<tr>
+						<td nowrap="nowrap"><?php echo $tr->translate("BLOCK_NAME")?></td>
+						<td> 
+							<?php echo $frm->getElement("block_name");?>
+						</td>
+					</tr>
+					<tr>
+						<td nowrap="nowrap"><?php echo $tr->translate("REMARK")?></td>
+							<td> 
+								<?php echo $frm->getElement("note");?>
+						    </td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("STATUS")?></td>
+						<td>
+							 <?php echo $frm->getElement("status");?>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4" align="center" style="padding-left:40px;">
+							<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+							<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
+							<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
+						</td>
+					</tr>
+				</table>	
+			</fieldset>		
+		</td>
+	</tr>
+</table>	
+</form>
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_add_dept" >
+		<form  id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				<tr>
+					<td><?php echo $tr->translate("DEGREE");?></td>
+					<td>
+						<input type="text" class="fullside" name='fac_enname' id="fac_enname" dojoType="dijit.form.TextBox" />
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo $tr->translate("SHORTCUT");?></td>
+					<td>
+						<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
+						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
+						
+						<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
+						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDept();"/>
+					</td>
+				</tr>
+			</table>
+
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+dojo.ready(function(){
+});
+</script>

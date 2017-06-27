@@ -99,6 +99,24 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		$_cateory_parent->setMultiOptions($option);
 		$_cateory_parent->setValue($request->getParam('parent'));
 		
+		$_block_id = new Zend_Dojo_Form_Element_FilteringSelect("block_id");
+		$_block_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside',
+				'onchange'=>'showAddBlock();'
+		));
+		$option = array("0"=>$this->tr->translate("SELECT_BLOCK"),"-1"=>$this->tr->translate("ADD_NEW"));
+		$results = $db->getAllBlockName();
+		if(!empty($results))foreach($results AS $row){
+			$option[$row['id']]=$row['name'];
+		}
+		if (!empty($data)){
+			unset($option[$data['id']]);
+		}
+		$_block_id->setMultiOptions($option);
+		$_block_id->setValue($request->getParam('block_id'));
+		
 		$id = new Zend_Form_Element_Hidden("id");
 		$_photo = new Zend_Form_Element_File('photo');
 		$old_photo = new Zend_Form_Element_Hidden("old_photo");
@@ -117,8 +135,9 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 			$status		->setValue($data['status']);
 			$note		->setValue($data['note']);
 			$old_photo	->setValue($data['photo']);
+			$_block_id	->setValue($data['block_id']);
 		}
-		$this->addElements(array($old_photo,$id,$book_name,$book_id,$author_name,$serial_no,$publisher,$_photo,
+		$this->addElements(array($_block_id,$old_photo,$id,$book_name,$book_id,$author_name,$serial_no,$publisher,$_photo,
 				                 $qty,$unit_price,$remark,$status,$note,$_cateory_parent));
 		return $this;
 	}	

@@ -82,6 +82,12 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
+	function getAllBlcok(){//type = 1 =>student id , 2=student name
+		$db=$this->getAdapter();
+		 $sql="SELECT id,block_name AS `name` FROM rms_blockbook WHERE `status`=1";
+		return $db->fetchAll($sql);
+	}
+	
 }
 
 

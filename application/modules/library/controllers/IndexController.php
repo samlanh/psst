@@ -23,6 +23,8 @@ class Library_IndexController extends Zend_Controller_Action {
 				$this->view->rs_notreturn=$db->getBookNotReturn();
 				$this->view->rs_borr=$db->getBorrowThisDay();
 				$this->view->rs_return=$db->getReturnThisDay();
+				$this->view->rs_near_return=$db->getNearDayReturnBookLate();
+				$this->view->rs_studen=$db->getStudentNearDayReturnBook();
 			}
 			 
 		}catch (Exception $e){

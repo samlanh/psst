@@ -26,7 +26,8 @@ ul, ol {
 <?php 
 $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 $register=$this->url(array('module'=>'registrar','controller'=>'register','action'=>'add'), null, true);
- 
+$near_day_return=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-nealydayreturn'), null, true);
+
 ?>
 <style type="text/css">
 .metro-nav {
@@ -59,6 +60,14 @@ $register=$this->url(array('module'=>'registrar','controller'=>'register','actio
     	$r_thisday=$r_thisday+$rs['borr_qty'];
     }
 ?>
+
+<?php 
+    $s_num=0;
+    if(!empty($this->rs_studen)) foreach($this->rs_studen As $key=>$rs){
+    	$s_num=$s_num+1;
+    }
+?>
+
 <body class="fixed-top" style="font-family:'Kh OS Battambang'"">
    <div id="container" class="row-fluid" style="margin: 0 auto; background: #cfddf5;height: 100%; padding:10px 0px;">
          <div class="container-fluid">
@@ -75,27 +84,40 @@ $register=$this->url(array('module'=>'registrar','controller'=>'register','actio
                     </div>  
                      
                     <div class="metro-nav-block double" style="background:#655f19;">
-                        <a href="<?php //echo $income;?>" data-original-title="">
+                        <a target="_blank" href="<?php //echo $income;?>" data-original-title="">
                             <i class="icon-signout"></i>
                             <div class="info"> <?php echo $bnot_return;?> &nbsp;ក្បាល</div>
                             <div class="status"><?php echo $tr->translate('TOTAL_BOOK_NOT_RETURN');?></div>
                         </a>
                     </div>
                    <div class="metro-nav-block double" style="background:#ec920e;">
-                       <a href="<?php //echo $expense;?>" data-original-title="">
+                       <a target="_blank" href="<?php //echo $expense;?>" data-original-title="">
                            <i class="icon-tasks"></i>
                            <div class="info"><?php echo $b_thisday?>&nbsp;ក្បាល</div>
                            <div class="status"><?php echo $tr->translate('STUDENT_BORROWED_TODAY');?></div>
                        </a>
                    </div>
                     <div class="metro-nav-block double" style="background:#84089e;">
-                        <a href="<?php //echo $studnetpaymentreport;?>" data-original-title="">
+                        <a target="_blank" href="<?php //echo $studnetpaymentreport;?>" data-original-title="">
                             <i class="icon-shopping-cart"></i>
                             <div class="info"><?php echo $r_thisday;?> &nbsp;ក្បាល</div>
                             <div class="status"><?php echo $tr->translate('STUDENT_RETURNED_TODAY');?></div>
                         </a>
                     </div>
-                    
+                    <div class="metro-nav-block double" style="background:#8d3e03;">
+                        <a target="_blank" href="<?php echo $near_day_return;?>" data-original-title="">
+                            <i class="icon-user"></i>
+                            <div class="info"><?php echo $s_num;?> &nbsp;នាក់</div>
+                            <div class="status"><?php echo $tr->translate('STUDENT_NEAR_DAY_RETURN_BOOK');?></div>
+                        </a>
+                    </div>
+                     <div class="metro-nav-block double" style="background:#8d3e03;">
+                        <a target="_blank" href="<?php echo $near_day_return;?>" data-original-title="">
+                            <i class="icon-external-link"></i>
+                            <div class="info"><?php echo $this->rs_near_return['borr_qty'];?> &nbsp;ក្បាល</div>
+                            <div class="status"><?php echo $tr->translate('BOOK_NEAR_DAY_RETURN_BOOK');?></div>
+                        </a>
+                    </div>
                 </div>
                 <!--END METRO STATES-->
             </div>

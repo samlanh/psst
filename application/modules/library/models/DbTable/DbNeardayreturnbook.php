@@ -17,7 +17,7 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission('sp.branch_id');
-		$sql="SELECT bd.id,b.phone,        
+		$sql="SELECT bd.id,b.phone,b.stu_id,        
 			    b.borrow_no,(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) AS bookno,
 			    (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) AS bookname,
 		        (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
@@ -54,7 +54,7 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 			$where.=' AND bd.book_id='.$search["cood_book"];
 		}
 		
-		$order=" ORDER BY b.id DESC ";
+		$order=" ORDER BY b.stu_id DESC ";
 		$str_next = '+1 week';
 		$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
 		$to_date = (empty($search['end_date']))? '1': " b.return_date <= '".$search['end_date']." 23:59:59'";

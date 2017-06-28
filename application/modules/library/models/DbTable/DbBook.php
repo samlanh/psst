@@ -246,6 +246,45 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	function getNearDayReturnBookLate($search=null){
+		$db=$this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$branch_id = $_db->getAccessPermission('sp.branch_id');
+		$sql="SELECT  SUM(bd.borr_qty) AS borr_qty
+		FROM rms_borrow AS b,rms_borrowdetails AS bd
+		WHERE b.id=bd.borr_id
+		AND bd.is_full=0
+		AND b.is_completed=0";
+		$where = '';
+		$search['end_date']=date("Y-m-d");
+		$str_next = '+1 week';
+		$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
+		$to_date = (empty($search['end_date']))? '1': " b.return_date <= '".$search['end_date']." 23:59:59'";
+		$where .= " AND ".$to_date;
+		return $db->fetchRow($sql.$where);
+	}
+	
+	function getStudentNearDayReturnBook($search=null){
+		$db=$this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$branch_id = $_db->getAccessPermission('sp.branch_id');
+		$sql=" SELECT  SUM(b.stu_id) AS stu_id
+		FROM rms_borrow AS b,rms_borrowdetails AS bd
+		WHERE b.id=bd.borr_id
+		AND bd.is_full=0
+		AND b.is_completed=0 
+		";
+		$where = '';
+		$search['end_date']=date("Y-m-d");
+		$str_next = '+1 week';
+		$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
+		$to_date = (empty($search['end_date']))? '1': " b.return_date <= '".$search['end_date']." 23:59:59'";
+		$where .= " AND ".$to_date;
+		$group=" GROUP BY b.stu_id";
+		return $db->fetchAll($sql.$where.$group);
+	}
+	
+	
 }
 
 

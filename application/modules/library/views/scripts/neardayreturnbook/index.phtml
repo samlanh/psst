@@ -76,12 +76,14 @@ echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 														<td style="border: 1px solid #000;"><?php echo $tr->translate("REMAIN_DAY"); ?></td>
 													</tr>
 												</thead>
+												<?php $total=0;?>
 												<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
 												
 													$date1=date_create($row['return_date']);
 													$date2=date_create($this->search['end_date']);
 													$diff=date_diff($date1,$date2);
 													$day=$diff->format("%R%a");
+													$total=$total+$row['borr_qty'];
 												?>
 													<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
 														<td style="border: 1px solid #000;"><?php echo $i;?></td>
@@ -104,7 +106,22 @@ echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 														<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo ($daylate);?> days</td>
  													</tr>
 												<?php }}?>	 
-												</table>	
+												</table>
+												
+												<table width="100%" style="width:100%; border-collapse: collapse;white-space: nowrap;" >
+												<tr height="5px;"></tr>
+												<tr >
+													<td align="right" width="25%"  > 	</td>
+													<td > </td>
+													<td align="center"  width="15%" style="border: 1px solid #000;">
+														<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("TOTAL_RETURN_QTY"); ?>&nbsp;</span>
+													</td>
+													<td align="center" width="15%" style="border: 1px solid #000; font-weight: 900;">
+														<span style="font-size: 14px;"><?php echo $total;?>&nbsp;ក្បាល</span>
+													</td>
+												</tr>
+												</table>
+													
 												<table width="100%">
 												<tr>
 													<td colspan="3">&nbsp;</td>

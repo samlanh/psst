@@ -28,7 +28,7 @@ class Accounting_ProductsetController extends Zend_Controller_Action {
     		}
 			
 			$db =  new Accounting_Model_DbTable_DbProductset();
-			$rows = $db->getAllProduct($search);
+			$rows = $db->getAllProductSetGroup($search);
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();

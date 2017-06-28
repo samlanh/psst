@@ -27,35 +27,69 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
     
-    function updateStock($service_id,$qty_order){
+    function updateStock($service_id,$qty_order,$pro_type){ // $pro_type=0 ==> product រាយ  , $pro_type=1 ==> product set 
     	$db = $this->getAdapter();
     	
-    	$sql="select ser_cate_id from rms_program_name where service_id = $service_id "; // to get product id 
-    	$pro_id =  $db->fetchOne($sql);
-    	
-    	$sql1="select id,pro_qty from rms_product_location where pro_id = $pro_id ";
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$sql1.= $_db->getAccessPermission('brand_id');
-    	$qty_in_stock =  $db->fetchRow($sql1);
-    	//print_r($qty_in_stock);exit();
+    	$branch = $_db->getAccessPermission('brand_id');
     	
-    	$this->_name="rms_product_location";
-    	if(!empty($qty_in_stock)){
-	    	$qty = $qty_in_stock['pro_qty'] - $qty_order ;
-	    	$array = array(
-	    			'pro_qty'=>$qty,
-	    			);
-	    	$where = " id = ".$qty_in_stock['id'];
-	    	$this->update($array, $where);
-    	}else{
-    		$array = array(
-    				'pro_id'=>$pro_id,
-    				'brand_id'=>$this->getBranchId(),
-    				'pro_qty'=>-$qty_order,
-    				);
-    		$this->insert($array);
+    	try{
+	    	$sql="select ser_cate_id from rms_program_name where service_id = $service_id "; // to get product id 
+	    	$pro_id =  $db->fetchOne($sql);
+	   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    	
+	    	if($pro_type==0){ // product រាយ  
+		    	$sql1="select id,pro_qty from rms_product_location where pro_id = $pro_id $branch ";
+		    	$qty_in_stock =  $db->fetchRow($sql1);
+		    	//print_r($qty_in_stock);exit();
+		    	
+		    	$this->_name="rms_product_location";
+		    	if(!empty($qty_in_stock)){
+			    	$qty = $qty_in_stock['pro_qty'] - $qty_order ;
+			    	$array = array(
+			    			'pro_qty'=>$qty,
+			    			);
+			    	$where = " id = ".$qty_in_stock['id'];
+			    	$this->update($array, $where);
+		    	}else{
+		    		$array = array(
+		    				'pro_id'=>$pro_id,
+		    				'brand_id'=>$this->getBranchId(),
+		    				'pro_qty'=>-$qty_order,
+		    				);
+		    		$this->insert($array);
+		    	}
+		    	
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		    	
+	    	}else{ // product set 
+	    		
+	    		$query = " select id , subpro_id , qty from rms_product_setdetail where pro_id = $pro_id ";
+	    		$result_pro_set = $db->fetchAll($query);
+	    		
+	    		if(!empty($result_pro_set)){
+	    			foreach ($result_pro_set as $set_detail){
+
+	    				$query_qty_in_stock = " select id,pro_qty from rms_product_location where pro_id = ".$set_detail['subpro_id']." $branch ";
+	    				$qty_in_stock = $db->fetchRow($query_qty_in_stock);
+	    				
+	    				if(!empty($qty_in_stock)){
+	    					$last_qty = $qty_in_stock['pro_qty'] - ($qty_order * $set_detail['qty']);
+	    					
+	    					$this->_name = "rms_product_location";
+	    					$array = array(
+	    							'pro_qty'=>$last_qty,
+	    							);
+	    					$where = " id = ".$qty_in_stock['id'];
+	    					$this->update($array, $where);
+	    				}
+	    				
+	    			}
+	    		}
+	    	}
+    	}catch (Exception $e){
+    		echo $e->getMessage();
     	}
-    	//echo $qty;exit();
     }
     
     function getIdRecordUpdated($stu_id){
@@ -322,6 +356,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // 		             	$this->insert($arr);
 // 		             }
 // 	             }
+
 	             $this->_name="rms_student_paymentdetail";
 	             $ids = explode(',', $data['identity']);
 	             $disc = 0;
@@ -330,22 +365,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             	$payfor_type=0;
 	             	$start_date = '';
 	             	$validate='';
-	             	if($data['service_type_'.$i]==1){
+	             	if($data['service_type_'.$i]==1){ // product type
 	             		$payfor_type = 4; // product payment
 	             		$start_date = null; 
 	             		$validate = null; // no need validate
-	             		if($data['product_type_'.$i]==1){ // 1= cut stock , 2=cut stock later
-	             			$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
-	             			$this->_name='rms_saledetail';
-	             			$arr = array(
-	             					'payment_id'=>$paymentid,
-	             					'pro_id'=>$data['service_'.$i],
-	             					'qty'=>$data['qty_'.$i],
-	             					'note'=>$data['remark'.$i],
-	             					'in_receipt'=>1,
-	             					);
-	             		   $this->insert($arr);
-	             		}
+						
+						$this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
+						$this->_name='rms_saledetail';
+						$arr = array(
+								'payment_id'=>$paymentid,
+								'pro_id'=>$data['service_'.$i],
+								'qty'=>$data['qty_'.$i],
+								'note'=>$data['remark'.$i],
+								'in_receipt'=>1,
+								);
+					    $this->insert($arr);
+						
 	             	}else{
 	             		$payfor_type = 3; // service payment
 	             		$start_date = $data['date_start_'.$i];
@@ -646,9 +681,19 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$payfor_type = 4; // product payment
 						$start_date = null;
 						$validate = null; // no need validate
-						if($data['product_type_'.$i]==1){ // 1=cut stock , 2=cut stock later
-							$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
-						}
+						
+						$this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
+						
+						$this->_name='rms_saledetail';
+						$arr = array(
+								'payment_id'=>$paymentid,
+								'pro_id'=>$data['service_'.$i],
+								'qty'=>$data['qty_'.$i],
+								'note'=>$data['remark'.$i],
+								'in_receipt'=>1,
+						);
+						$this->insert($arr);
+						
 					}else{
 						$payfor_type = 3; // service payment
 						$start_date = $data['date_start_'.$i];
@@ -715,9 +760,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();exit();
+				echo $e->getMessage();
 			}
 	}
+	
+	
 	function getParentIDToUpdateBack($payment_id){
 		$db=$this->getAdapter();
 		$sql="select is_parent from rms_student_paymentdetail where payment_id = $payment_id";
@@ -735,27 +782,53 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		
 		if(!empty($ser_id)){
 			foreach ($ser_id as $i){
-				$sql1 = "select ser_cate_id from rms_program_name where service_id = ". $i['service_id'];
-				$pro_id = $db->fetchOne($sql1);
-				
+				$sql1 = "select ser_cate_id,pro_type from rms_program_name where service_id = ". $i['service_id'];
+				$pro_id = $db->fetchRow($sql1);
 				if(!empty($pro_id)){
-					$sql2 = "select id,pro_qty from rms_product_location where pro_id = $pro_id  $branch_id ";
-					$result = $db->fetchRow($sql2);
 					
-					if(!empty($result)){
-						$qty = $result['pro_qty'] + $i['qty'];
-						//echo $qty ; exit();
+					if($pro_id['pro_type']==0){ // product រាយ
+					
+						$sql2 = "select id,pro_qty from rms_product_location where pro_id = ".$pro_id['ser_cate_id']."  $branch_id ";
+						$result = $db->fetchRow($sql2);
 						
-						$this->_name="rms_product_location";
+						if(!empty($result)){
+							$qty = $result['pro_qty'] + $i['qty'];
+							//echo $qty ; exit();
+							
+							$this->_name="rms_product_location";
+							
+							$array = array(
+									'pro_qty'=>$qty,
+									);
+							$where = " id = ".$result['id'];
+							$this->update($array, $where);
+						}
 						
-						$array = array(
-								'pro_qty'=>$qty,
-								);
-						$where = " id = ".$result['id'];
-						$this->update($array, $where);
+					}else{  // product set
+						
+						$query = "select id , subpro_id , qty from rms_product_setdetail where pro_id = ".$pro_id['ser_cate_id'];
+						$result_set = $db->fetchAll($query);
+						
+						if(!empty($result_set)){
+							foreach ($result_set as $pro_in_set){
+								$query_qty_in_stock = "select id,pro_qty from rms_product_location where pro_id = ".$pro_in_set['subpro_id']."  $branch_id ";
+								$result_qty_in_stock = $db->fetchRow($query_qty_in_stock);
+								
+								if(!empty($result_qty_in_stock)){
+									$last_qty = $result_qty_in_stock['pro_qty'] + ($i['qty'] * $pro_in_set['qty']);
+									$this->_name="rms_product_location";
+										
+									$array = array(
+											'pro_qty'=>$last_qty,
+									);
+									$where = " id = ".$result_qty_in_stock['id'];
+									$this->update($array, $where);
+								}
+								
+							}
+						}
+						
 					}
-					
-					//print_r($result); exit();
 				}
 			}
 		}

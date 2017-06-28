@@ -1754,7 +1754,7 @@ function Initialize() {
 		
 		temp+='<th ><?php echo $tr->translate("LATE_FEE");?></th>';
 		
-		temp+='<th ><?php echo $tr->translate("ADD.FEE");?></th>';
+		temp+='<th ><?php echo $tr->translate("EXTRA_FEE");?></th>';
 		
 		temp+='<th ><?php echo $tr->translate("DISCOUNT");?> %</th>';
 		
@@ -1765,7 +1765,7 @@ function Initialize() {
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
-		template+='<td width="40px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="40px" align="center"><img  src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="40px" align="center">'+no+'</td>';
 
 		template+='<input type="hidden" dojoType="dijit.form.TextBox" name="old_service_'+col+'" id="old_service_'+col+'"/>';

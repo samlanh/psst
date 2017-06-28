@@ -1048,13 +1048,13 @@ function addRow() {
 			template+='<td width="40px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="40px" align="center">'+no+'</td>';
 			template+='<td width="20%"><input type="hidden" dojoType="dijit.form.TextBox" name="old_service_'+col+'" id="old_service_'+col+'"/>';
-			template+='<select class="fullside" onchange="getServiceType('+col+');getValidate('+col+');getOldVildateToStartDateService('+col+');" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
+			template+='<select  width="20%" class="fullside" onchange="getServiceType('+col+');getValidate('+col+');getOldVildateToStartDateService('+col+');" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
 				template+='<option value="">Select </option>';
 				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
 					template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
 				<?php }}?>
 				template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/>';
-				template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="product_type_'+col+'" id="product_type_'+col+'"/>';
+				template+='<input type="text" style="width:30px;" dojoType="dijit.form.TextBox" name="product_type_'+col+'" id="product_type_'+col+'"/>';
 			template+='</select></td>';	
 			template+='<td width="9%"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';
 				<?php foreach($this->all_paymentterm as $term){?>

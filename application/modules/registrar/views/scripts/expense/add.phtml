@@ -36,18 +36,20 @@ $frm = $this->frm_expense;
 						<td><?php echo $frm->getElement('payment_method');?></td>
 					</tr>
 					<tr>
-					   <td><?php echo $tr->translate("RECEIPT_NO")?></td>
+					    <td><?php echo $tr->translate("CHEQUE_NO")?></td>
+						<td><?php echo $frm->getElement('cheque_num');?></td>
+					    <td><?php echo $tr->translate("RECEIPT_NO")?></td>
 						<td><?php echo $frm->getElement('invoice');?></td>
 						<td><?php echo $tr->translate("TOTAL_EXPENSE")?></td>
 						<td><?php echo $frm->getElement('total_amount');?></td>
-						<td><?php echo $tr->translate("CREATED_DATE")?></td>
-						<td><?php echo $frm->getElement('Date');?></td>
 					</tr>
 					<tr>
+						<td><?php echo $tr->translate("CREATED_DATE")?></td>
+						<td><?php echo $frm->getElement('Date');?></td>
 						<td valign="top"><?php echo $tr->translate("STATUS")?></td>
 						<td valign="top"><?php echo $frm->getElement('Stutas');?></td>
 						<td valign="top"><?php echo $tr->translate("NOTE")?><input type="hidden" id="identity" name="identity" /></td>
-						<td colspan="3"><?php echo $frm->getElement('Description');?></td>
+						<td><?php echo $frm->getElement('Description');?></td>
 					</tr>
 					<tr>
 						<td colspan="6">

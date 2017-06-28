@@ -14,6 +14,12 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
  				'required'=>true
 				));
 		
+		$cheque_num = new Zend_Dojo_Form_Element_ValidationTextBox('cheque_num');
+		$cheque_num->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+		));
+		
 		$for_date = new Zend_Dojo_Form_Element_FilteringSelect('for_date');
 		$for_date->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
@@ -107,17 +113,18 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		$payment_method->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				
 		));
 		$opt = $db->getViewById(8,1);
 		$payment_method->setMultiOptions($opt);
 	
 		if($data!=null){
-			$payment_method->setValue($data['payment_method']);
+			$payment_method->setValue($data['payment_type']);
 			$_branch_id->setValue($data['branch_id']);
 			$title->setValue($data['title']);
 			$total_amount->setValue($data['total_amount']);
 			$total_income->setValue($data['total_amount']);
-			//$convert_to_dollar->setValue($data['amount_in_dollar']);
+			$cheque_num->setValue($data['cheque_no']);
 			$_Description->setValue($data['description']);
 			$_Date->setValue($data['date']);
 			$_stutas->setValue($data['status']);
@@ -125,7 +132,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 			$id->setValue($data['id']);
 		}
 		
-		$this->addElements(array($invoice,$payment_method,$title,$_Date ,$_stutas,$_Description,$total_income,
+		$this->addElements(array($cheque_num,$invoice,$payment_method,$title,$_Date ,$_stutas,$_Description,$total_income,
 				$total_amount,$convert_to_dollar,$_branch_id,$for_date,$id,));
 		return $this;
 		

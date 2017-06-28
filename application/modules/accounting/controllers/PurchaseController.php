@@ -24,7 +24,6 @@ class Accounting_PurchaseController extends Zend_Controller_Action {
     							'status_search'=>1,
     					);
     		}
-			
 			$db =  new Accounting_Model_DbTable_DbPurchase();
 			$rows = $db->getAllSupPurchase($search);
 			$rs_rows=new Application_Model_GlobalClass();

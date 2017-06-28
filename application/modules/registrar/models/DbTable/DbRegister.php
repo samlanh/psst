@@ -61,7 +61,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     function getIdRecordUpdated($stu_id){
     	$db = $this->getAdapter();
     	$sql = "select id from rms_study_history where stu_id = $stu_id and is_finished=0 ";
-    	return $db->fetchOne($sql);
+    	
     }
     
     function getStudentExist($data){

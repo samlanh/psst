@@ -36,7 +36,7 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 		$_subject_kh->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
 		
 		$_score_percent = new Zend_Dojo_Form_Element_TextBox('score_percent');
-		$_score_percent->setAttribs(array('dojoType'=>$this->t_num , 'required'=>'true','class'=>'fullside',));
+		$_score_percent->setAttribs(array('required'=>'true','class'=>'fullside',));
 		
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');

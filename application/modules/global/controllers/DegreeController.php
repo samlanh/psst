@@ -20,7 +20,6 @@ class Global_DegreeController extends Zend_Controller_Action {
     	else{
     		$search='';
     	}
-    	
         $rs_rows = $db_dept->getAllDegree($search);
         $glClass = new Application_Model_GlobalClass();
         $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
@@ -78,11 +77,8 @@ class Global_DegreeController extends Zend_Controller_Action {
     	}
     	
     	$this->view->row = $db->getDeptSubjectById($id);
-    	
     	$_db = new Global_Model_DbTable_DbGroup();
     	$this->view->subject = $_db->getAllSubjectStudy();
-    	
-    	
     	$row =$db->getDeptById($id);
     	$frm = new Application_Form_FrmOther();
     	$frm->FrmAddDept($row);

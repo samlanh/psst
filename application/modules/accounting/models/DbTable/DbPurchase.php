@@ -27,7 +27,6 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$s_where[]= " sp.supplier_no LIKE '%{$s_search}%'";
     		$s_where[]="  s.sup_name LIKE '%{$s_search}%'";
     		$s_where[]= " s.tel LIKE '%{$s_search}%'";
-    		
     		$s_where[]= " s.email LIKE '%{$s_search}%'";
     		$s_where[]= " spd.qty LIKE '%{$s_search}%'";
     		$s_where[]= " spd.cost LIKE '%{$s_search}%'";

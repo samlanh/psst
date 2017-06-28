@@ -366,6 +366,12 @@ function printCashCount(){
 		total_reil_dollar=dijit.byId('total_reil_dollar').get('value').toFixed(2);
 		dojo.byId("lb_dollar_reil").innerHTML =isNaN(total_reil_dollar)?0:total_reil_dollar; 
 		
+		//total dollar2
+		rs_dollar_total=dijit.byId('rs_dollar_total').get('value').toFixed(2);
+		dojo.byId("lb_total2").innerHTML =dojo.number.format(isNaN(rs_dollar_total)?0:rs_dollar_total); 
+		total_reil_dollar=dijit.byId('total_reil_dollar').get('value').toFixed(2);
+		dojo.byId("lb_dollar_reil").innerHTML =isNaN(total_reil_dollar)?0:total_reil_dollar; 
+		
 		///////////////////riel//////////////////////////
 
 		//R50000
@@ -409,9 +415,6 @@ function printCashCount(){
 		//all dolla and riel
 		total_amount=dijit.byId('total_amount').get('value');
 		dojo.byId("lbdr_totals_amount").innerHTML =dojo.number.format(isNaN(total_amount)?0:total_amount,2);
-
-
-
 		d_hundred=dijit.byId('d_hundred').get('value').toFixed(2);
 		rs_hundred=dijit.byId('rs_hundred').get('value').toFixed(2);
 	    dojo.byId("lb_hundred1").innerHTML =isNaN(d_hundred)?0:d_hundred;
@@ -443,7 +446,7 @@ function printCashCount(){
 		dojo.byId("rd_one1").innerHTML =isNaN(rs_one)?0:rs_one;  
 		//total dollar
 		rs_dollar_total=dijit.byId('rs_dollar_total').get('value').toFixed(2);
-		dojo.byId("lb_total1").innerHTML =dojo.number.format(isNaN(rs_dollar_total)?0:rs_dollar_total,2); 
+		//dojo.byId("lb_total1").innerHTML =dojo.number.format(isNaN(rs_dollar_total)?0:rs_dollar_total,2); 
 		///////////////////riel//////////////////////////
 
 		//R50000
@@ -487,12 +490,17 @@ function printCashCount(){
 		//all dolla and riel
 		total_amount=dijit.byId('total_amount').get('value');
 		dojo.byId("lbdr_totals_amount1").innerHTML =dojo.number.format(isNaN(total_amount)?0:total_amount,2);
+
+		rate=dijit.byId('rate').get('value');
+		dojo.byId("lbr_exchange_rate").innerHTML =dojo.number.format(isNaN(rate)?0:rate,2);
+		dojo.byId("lbr_exchange_rate1").innerHTML =dojo.number.format(isNaN(rate)?0:rate,2);
+
 		dojo.byId("lb_dollar_reil1").innerHTML =isNaN(total_reil_dollar)?0:total_reil_dollar; 
 		dijit.byId("inv_cash").show();	
 	}
 }
 function Printcashcount() {
-	window.frames["print_frame"].document.body.innerHTML=dojo.byId('printcashcount').innerHTML+dojo.byId('printcashcount1').innerHTML;
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('printcashcount').innerHTML;//+dojo.byId('printcashcount1').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
     $('#cash_count').submit();
@@ -503,290 +511,241 @@ function hideDialog(){
 }
 </script>
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:23cm;" align="center" data-dojo-props="title:'<?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT");?>'" id="inv_cash" >
-		<div id="printcashcount" style="font-family:'Khmer OS Battambang';width: 21cm; height: 10cm ; padding: 0px; margin: 0px;">
-			<table   cellspacing="5" width="100%" style="font-family:'Khmer OS Battambang';">
+	<div data-dojo-type="dijit.Dialog" style="width:25cm" align="center" data-dojo-props="title:'<?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT");?>'" id="inv_cash" >
+		<div id="printcashcount" style="font-family:'Khmer OS Battambang';width: 20cm; height: 15cm ; padding: 0px; margin: 0px;">
+			<table border="1"  width="100%" style="font-family:'Khmer OS Battambang'; font-size:10pt;border-collapse: collapse;border:none">
 				<tr>
-					<td colspan="2" width="100%">
-						<table style="width: 100%;">
-							<tr>
-								<td width="25%">
-								</td>
-								<td width="50%" align="center">
-									<strong>Cash Count Sheet</strong>
-								</td>
-								<td width="25%">
-									&nbsp;
-								</td>
-							</tr>
-						</table>
-					</td>
+					<td align="center" style="background: #bdd6f0;border: none;">Cash Count Sheet</td>
+					<td style="border:1px dashed #000;"></td>
+					<td align="center" style="background: #bdd6f0;border: none;">Cash Count Sheet</td>
 				</tr>
 				<tr>
-					<td>អ្នកប្រគល់</td>
+					<td align="center" style="border-bottom:none">អ្នកប្រគល់</td>
+					<td style="border:1px dashed #000;"></td>
+					<td align="center" style="border-bottom:none">អ្នកទទួល</td>
 				</tr>
 				<tr> 
-					<td width="48%" valign="top">
-					<fieldset style="background:none; border-bottom: none;border-left: none;border-right: none;line-height: 10px;  ">
-						<legend align="center"><?php echo $tr->translate("USD");?></legend>
-							<table  cellspacing="0" style="width:100%;line-height:5px; height:220px; font-size:12pt; color:rgba(14, 0, 107, 1); padding: 0px; margin: 0px; ">
-									<tr>
-										<td>$ 100</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_hundred"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_hundred"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 50</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fifty"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_fifty"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 20</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_tweenty"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_tweenty"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 10</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_ten"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_ten"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 5</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_five"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_five"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 1</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_one"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_one"></label></td>
-								   	</tr>
-								   	<tr>
-							            <td colspan="2" style="text-align: right;font-size: 14px;"><strong>All Total Dollars</strong></td>
-							            <td style=""><strong style="font-size: 14px;">&nbsp;=&nbsp;$&nbsp;<label id="lb_total"></strong></label></td>
-								   	</tr>
-								   	<tr>
-							            <td colspan="2" style="text-align: right;font-size: 14px;"><strong>Dollar From Reil</strong></td>
-							            <td style=""><strong style="font-size: 14px;">&nbsp;=&nbsp;$&nbsp;<label id="lb_dollar_reil"></strong></label></td>
-								   	</tr>
-						  </table>
-						</fieldset>
-				</td>
-				<td width="48%" valign="top">
-				<fieldset style="background:none;border-bottom: none; border-left: none;border-right: none;line-height: 10px;">
-					<legend align="center"><?php echo $tr->translate("RIEL");?></legend>
-						<table cellspacing="0" style="width:100% ;line-height:5px; height:220px; font-size:14px; color:rgba(14, 0, 107, 1); padding: 0px; margin: 0px;">
-								<tr>
-									<td>R 50,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fiftythousend"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_fiftythousend"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 10,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_tenthousend"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_tenhousend"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 5,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fivethousend"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_fivethousend"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 2,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_twothousend"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_twothousend"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 1,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_thousend"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_thousend"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 500</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fivehundred"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_fivehundred"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 100</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lbr_hundred"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_hundred"></label></td>
-							   	</tr>
-							   	<tr>
-							   		<td>&nbsp;</td>
-							   	</tr>
-							   	<tr>
-									<td align="right" colspan="2"><strong style="font-size: 14px;">Total in Khmer</strong></td>
-						            <td><strong style="font-size: 14px;">&nbsp;=&nbsp;&nbsp;R&nbsp;<label id="lbr_total_"></strong></label></td>
-							   	</tr>
-							   	<tr>
-									<td align="right" colspan="2"><strong style="font-size: 14px;">Exchange Rate</strong></td>
-						            <td ><strong style="font-size: 14px;">&nbsp;= &nbsp;R <label id="lbr_exchange_rate">4100</strong></label></td>
-							   	</tr>
-					  </table>
-				</fieldset>
-		 	 </td>
-		</tr>
-		<tr>
-			<td colspan="2" align="center" style="border-top: 1px solid #000;" ><strong style="font-size:14px;">All Totals :&nbsp;&nbsp;&nbsp;$&nbsp;&nbsp;&nbsp; <label id="lbdr_totals_amount"></strong></td>
-		</tr>
-		<tr>
-			<td colspan="2" align="center" style="border-top: 1px solid #000;" ><strong style="font-size:14px;"></strong></td>
-		</tr>
-		<tr>
-			<td align="center"><strong style="display:block;width:50%;border-top:1px solid #000;margin-top:50px;white-space: nowrap;">អ្នកប្រគល់ : <?php 
-													   $session_user=new Zend_Session_Namespace('auth');
-													   $last_name=$session_user->last_name;
-													   $username = $session_user->first_name;
-													   echo $last_name." ".$username;
-													?><label id="lbl_giver"></label></strong></td>
-			<td align="center"><strong style="display:block;width:50%;border-top:1px solid #000;margin-top:50px;white-space: nowrap;">អ្នកទទួល : <label id="lbl_receiver"></label></strong></td>
-		</tr>
-		<tr>
-			<td align="center" valign="top"><strong style="display:block;width:50%;white-space: nowrap;">ថ្ងៃទី..<?php echo date('D, jS/m/Y, H:i:s ',strtotime(Zend_Date::now()));?></strong></td>
-			<td align="center" valign="top"><strong style="display:block;width:50%;">ថ្ងៃទី....................................</strong></td>
-		</tr>
-		</table>
-	</div>
-	<div id="printcashcount1" style="font-family:'Khmer OS Battambang';width: 21cm; height: 14cm ; padding: 0px;">
-			<table   cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';border-top:1px dashed #000;margin-top: 30px;">
-				<tr>
-					<td colspan="2" width="100%">
-						<table style="width: 100%;">
-							<tr>
-								<td width="25%">
+					<td width="50%" valign="top">
+						<table border="1"  cellspacing="0" style="width:100%;line-height:5px; height:170px; font-size:8pt; color:rgba(14, 0, 107, 1); padding: 0px; margin: 0px;border-collapse: collapse;border:none ">
+							<tr style=" height: 18px;">
+								<td >&nbsp;&nbsp;&nbsp;&nbsp; $100</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_hundred"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_hundred"></label></td>
+						   	</tr >
+						   	<tr style=" height: 18px;">
+								<td >&nbsp;&nbsp;&nbsp;&nbsp; $50</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fifty"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_fifty"></label></td>
+						   	</tr>
+						   	<tr style=" height: 18px;">
+								<td>&nbsp;&nbsp;&nbsp;&nbsp; $20</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_tweenty"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_tweenty"></label></td>
+						   	</tr>
+						   	<tr style=" height: 18px;">
+								<td>&nbsp;&nbsp;&nbsp;&nbsp; $10</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_ten"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_ten"></label></td>
+						   	</tr>
+						   	<tr style=" height: 18px;">
+								<td>&nbsp;&nbsp;&nbsp;&nbsp; $5</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_five"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_five"></label></td>
+						   	</tr>
+						   	<tr style=" height: 18px;">
+								<td>&nbsp;&nbsp;&nbsp;&nbsp; $1</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_one"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_one"></label></td>
+						   	</tr>
+							<tr style="height: 23px;">
+								<td colspan="3" style="text-align: right;font-size: 12px;"><strong>All Total Dollars &nbsp;&nbsp;&nbsp;&nbsp;</strong>
+								<strong style="font-size: 14px;">&nbsp;=&nbsp;$&nbsp;<label id="lb_total2"></strong></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+							<tr style=" height: 18px;">
+								<td>&nbsp;&nbsp;&nbsp;&nbsp; R50,000</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fiftythousend"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_fiftythousend"></label></td>
+						   	</tr>
+						   	<tr style=" height: 18px;">
+								<td >&nbsp;&nbsp;&nbsp;&nbsp; R10,000</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_tenthousend"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_tenhousend"></label></td>
+						   	</tr>
+						   	<tr style="height:15px;">
+								<td >&nbsp;&nbsp;&nbsp;&nbsp; R5,000</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fivethousend"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_fivethousend"></label></td>
+						   	</tr>
+						   	<tr style=" height: 18px;">
+								<td >&nbsp;&nbsp;&nbsp;&nbsp; R2,000</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_twothousend"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_twothousend"></label></td>
+						   	</tr>
+						   	<tr style=" height: 18px;">
+								<td>&nbsp;&nbsp;&nbsp;&nbsp; R1,000</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_thousend"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_thousend"></label></td>
+						   	</tr>
+						   	<tr style=" height: 18px;">
+								<td >&nbsp;&nbsp;&nbsp;&nbsp; R500</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fivehundred"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_fivehundred"></label></td>
+						   	</tr>
+						   	<tr style=" height: 18px;">
+								<td >&nbsp;&nbsp;&nbsp;&nbsp; R100</td>
+					            <td>&nbsp;x&nbsp;&nbsp;<label id="lbr_hundred"></label></td>
+					            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_hundred"></label></td>
+						   	</tr>
+						   	<tr style="height: 23px;">
+								<td align="right" colspan="2"><strong style="font-size: 12px;">Total in Khmer &nbsp;&nbsp;&nbsp;&nbsp;</strong></td>
+					            <td><strong style="font-size: 12px;">&nbsp;=&nbsp;&nbsp;R&nbsp;<label id="lbr_total_"></strong></label></td>
+						   	</tr>
+						   	<tr style="height: 23px;">
+								<td align="right" colspan="2"><strong style="font-size: 12px;">Exchange Rate &nbsp;&nbsp;&nbsp;&nbsp;</strong></td>
+					            <td ><strong style="font-size: 12px;">&nbsp;= &nbsp;R <label id="lbr_exchange_rate"></strong></label></td>
+						   	</tr>
+							<tr style="height: 23px;">
+							<td colspan="2" style="text-align: right;font-size: 12px;"><strong>Dollar From Reil &nbsp;&nbsp;&nbsp;&nbsp;</strong></td>
+							<td style=""><strong style="font-size: 12px;">&nbsp;=&nbsp;$&nbsp;<label id="lb_dollar_reil1"></strong></label></td>
+						</tr>
+							<tr style="height: 23px;">
+								<td colspan="3" align="right" ><strong style="font-size:12px;"> All Totals :&nbsp;&nbsp;&nbsp; $<label id="lbdr_totals_amount1"></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+							<tr style="height: 40px;padding:5px;border-bottom:none" >
+							    <td colspan="2" border="0">
+									<p style="width: 95%;height: 40px;margin: 0px auto;border-bottom: 1px dotted #000;"></p>
 								</td>
-								<td width="50%" align="center">
-									<strong>Cash Count Sheet</strong>
-								</td>
-								<td width="25%">
-									&nbsp;
+								<td>
+								   <p style="width: 95%;height: 40px;margin: 0px auto;border-bottom: 1px dotted #000;"></p>
 								</td>
 							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>អ្នកទទួល</td>
-				</tr>
-				<tr> 
-					<td width="48%" valign="top">
-					<fieldset style="background:none; border-bottom: none;border-left: none;border-right: none;line-height: 10px;  ">
-						<legend align="center"><?php echo $tr->translate("USD");?></legend>
-							<table cellspacing="0" style="width:100% ;font-size:14px; color:rgba(14, 0, 107, 1); padding: 0px; margin: 0px;">
-									<tr>
-										<td>$ 100</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_hundred1"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_hundred1"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 50</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fifty1"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_fifty1"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 20</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_tweenty1"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_tweenty1"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 10</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_ten1"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_ten1"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 5</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_five1"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_five1"></label></td>
-								   	</tr>
-								   	<tr>
-										<td>$ 1</td>
-							            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_one1"></label></td>
-							            <td>&nbsp;=&nbsp;&nbsp;<label id="rd_one1"></label></td>
-								   	</tr>
-								   <tr>
-							            <td colspan="2" style="text-align: right;font-size: 14px;"><strong>All Total Dollars</strong></td>
-							            <td style=""><strong style="font-size: 14px;">&nbsp;=&nbsp;$&nbsp;<label id="lb_total1"></strong></label></td>
-								   	</tr>
-								   	<tr>
-							            <td colspan="2" style="text-align: right;font-size: 14px;"><strong>Dollar From Reil</strong></td>
-							            <td style=""><strong style="font-size: 14px;">&nbsp;=&nbsp;$&nbsp;<label id="lb_dollar_reil1"></label></strong></td>
-								   	</tr>
-						  </table>
-						</fieldset>
+							<tr style="height: 23px;">
+								<td align="center" colspan="2"><strong >អ្នកប្រគល់ : 
+								<?php 
+								   $session_user=new Zend_Session_Namespace('auth');
+								   $last_name=$session_user->last_name;
+								   $username = $session_user->first_name;
+								   echo $last_name." ".$username;
+								?>
+								<label id="lbl_giver" ></label></strong></td>
+								<td >
+								   <strong style="display:block;width:50%;margin:10px;font-size:12px; white-space: nowrap;">អ្នកទទួល : <label id="lbl_receiver" ></label>
+								  </strong>
+							    </td>
+							</tr>
+							<tr style="height:30px" >
+								<td align="center" colspan="2" valign="medule"><strong style="white-space: nowrap; font-size:12px">ថ្ងៃទី..<?php echo date('D, jS/m/Y',strtotime(Zend_Date::now()));?></strong></td>
+								<td  valign="medule"><strong style="display:block;color:blank; width:50%;margin:10px 0px; font-size:12px">ថ្ងៃទី....................................</strong></td>
+							</tr>
+						</table>	
 				</td>
-				<td width="48%" valign="top">
-				<fieldset style="background:none;border-bottom: none; border-left: none;border-right: none;line-height: 10px;">
-					<legend align="center"><?php echo $tr->translate("RIEL");?></legend>
-						<table cellspacing="0" style="width:100% ;line-height:5px; height:220px; font-size:14px; color:rgba(14, 0, 107, 1); padding: 0px; margin: 0px;">
-								<tr>
-									<td>R 50,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fiftythousend1"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_fiftythousend1"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 10,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_tenthousend1"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_tenhousend1"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 5,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fivethousend1"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_fivethousend1"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 2,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_twothousend1"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_twothousend1"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 1,000</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_thousend1"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_thousend1"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 500</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lb_fivehundred1"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_fivehundred1"></label></td>
-							   	</tr>
-							   	<tr>
-									<td>R 100</td>
-						            <td>&nbsp;x&nbsp;&nbsp;<label id="lbr_hundred1"></label></td>
-						            <td>&nbsp;=&nbsp;&nbsp;<label id="rr_hundred1"></label></td>
-							   	</tr>
-							   	<tr>
-							   		<td>&nbsp;</td>
-							   	</tr>
-							   	<tr>
-									<td align="right" colspan="2"><strong style="font-size: 14px;">Total in Khmer</strong></td>
-						            <td><strong style="font-size: 14px;">&nbsp;=&nbsp;&nbsp;R&nbsp;<label id="lbr_total_1"></strong></label></td>
-							   	</tr>
-							   	<tr>
-									<td align="right" colspan="2"><strong style="font-size: 14px;">Exchange Rate</strong></td>
-						            <td ><strong style="font-size: 14px;">&nbsp;= &nbsp;R <label id="lbr_exchange_rate1">4100</strong></label></td>
-							   	</tr>
-					  </table>
-				</fieldset>
-		 	 </td>
-		</tr>
-		<tr>
-			<td colspan="2" align="center" style="border-top: 1px solid #000;" ><strong style="font-size:14px;">All Totals :&nbsp;&nbsp;&nbsp;$&nbsp;&nbsp;&nbsp; <label id="lbdr_totals_amount1"></strong></td>
-		</tr>
-		<tr>
-			<td colspan="2" align="center" style="border-top: 1px solid #000;" ><strong style="font-size:14px;"></strong></td>
-		</tr>
-		<tr>
-			<td align="center"><strong style="display:block;width:50%;border-top:1px solid #000;margin-top:50px;white-space: nowrap;">អ្នកប្រគល់ : 
-			<?php 
-			   $session_user=new Zend_Session_Namespace('auth');
-			   $last_name=$session_user->last_name;
-			   $username = $session_user->first_name;
-			   echo $last_name." ".$username;
-			?>
-			<label id="lbl_giver" ></label></strong></td>
-			<td align="center"><strong style="display:block;width:50%;border-top:1px solid #000;margin-top:50px;white-space: nowrap;">អ្នកទទួល : <label id="lbl_receiver" ></label></strong></td>
-		</tr>
-		<tr>
-			<td align="center" valign="top"><strong style="display:block;width:50%;white-space: nowrap;">ថ្ងៃទី..<?php echo date('D, jS/m/Y, H:i:s ',strtotime(Zend_Date::now()));?></strong></td>
-			<td align="center" valign="top"><strong style="display:block;width:50%;">ថ្ងៃទី....................................</strong></td>
+				<td width="1px" style="border:1px dashed #000;"></td>
+				<td width="50%" valign="top" border="0">
+					<table border="1" cellspacing="0" style="width:100%;line-height:5px; height:170px; font-size:10pt; color:rgba(14, 0, 107, 1); padding: 0px; margin: 0px;border-collapse: collapse;border:none ">
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; $100</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_hundred1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rd_hundred1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; $50</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_fifty1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rd_fifty1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; $20</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_tweenty1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rd_tweenty1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; $10</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_ten1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rd_ten1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; $5</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_five1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rd_five1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; $1</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_one1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rd_one1"></label></td>
+						</tr>
+						<tr style="height: 23px; ">
+							<td colspan="3" style="text-align: right;font-size: 12px;"><strong>All Total Dollars &nbsp;&nbsp;&nbsp;&nbsp;</strong>
+							<strong style="font-size: 14px;">&nbsp;=&nbsp;$&nbsp;<label id="lb_total"></strong></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; R50,000</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_fiftythousend1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rr_fiftythousend1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; R10,000</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_tenthousend1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rr_tenhousend1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; R5,000</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_fivethousend1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rr_fivethousend1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; R2,000</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_twothousend1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rr_twothousend1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; R1,000</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_thousend1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rr_thousend1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; R500</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lb_fivehundred1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rr_fivehundred1"></label></td>
+						</tr>
+						<tr style=" height: 18px;">
+							<td>&nbsp;&nbsp;&nbsp;&nbsp; R100</td>
+							<td>&nbsp;x&nbsp;&nbsp;<label id="lbr_hundred1"></label></td>
+							<td>&nbsp;=&nbsp;&nbsp;<label id="rr_hundred1"></label></td>
+						</tr>
+						<tr style="height: 23px;">
+							<td align="right" colspan="2"><strong style="font-size: 12px;">Total in Khmer &nbsp;&nbsp;&nbsp;&nbsp;</strong></td>
+							<td><strong style="font-size: 14px;">&nbsp;=&nbsp;&nbsp;R&nbsp;<label id="lbr_total_1"></strong></label></td>
+						</tr>
+						<tr style="height: 23px;">
+							<td align="right" colspan="2"><strong style="font-size: 12px;">Exchange Rate &nbsp;&nbsp;&nbsp;&nbsp;</strong></td>
+							<td ><strong style="font-size: 14px;">&nbsp;= &nbsp;R <label id="lbr_exchange_rate1"></strong></label></td>
+						</tr>
+						<tr style="height: 23px;">
+							<td colspan="2" style="text-align: right;font-size: 12px;"><strong>Dollar From Reil &nbsp;&nbsp;&nbsp;&nbsp;</strong></td>
+							<td style=""><strong style="font-size: 12px;">&nbsp;=&nbsp;$&nbsp;<label id="lb_dollar_reil"></strong></label></td>
+						</tr>
+						<tr style="height: 23px;">
+							<td colspan="3" align="right" ><strong style="font-size:12px;">All Totals :&nbsp;&nbsp;&nbsp;$&nbsp;&nbsp;&nbsp; <label id="lbdr_totals_amount"></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						</tr>
+						<tr style="height: 40px;padding:5px;border-bottom:none" >
+							<td colspan="2" border="0"><p style="width: 95%;height: 40px;margin: 0px auto;border-bottom: 1px dotted #000;"></p></td>
+							<td><p style="width: 95%;height: 40px;margin: 0px auto;border-bottom: 1px dotted #000;"></p></td>
+							</tr>
+						<tr style="height: 23px;">
+							<td align="center" colspan="2"><strong style="font-size:12px" >អ្នកប្រគល់ : <?php 
+							   $session_user=new Zend_Session_Namespace('auth');
+							   $last_name=$session_user->last_name;
+							   $username = $session_user->first_name;
+							   echo $last_name." ".$username;
+							?><label id="lbl_giver"></label></strong>
+							</td>
+							<td ><strong style="font-size:12px" >&nbsp;&nbsp;&nbsp;អ្នកទទួល : <label id="lbl_receiver"></label></strong></td>
+						</tr>
+						<tr style="height: 30px;">
+							<td colspan="2" align="center" valign="medule"><strong style="white-space: nowrap;" >ថ្ងៃទី..<?php echo date('D, jS/m/Y',strtotime(Zend_Date::now()));?></strong></td>
+							<td  valign="medule"><strong style="display:block;width:50%;color:blank; white-space: nowrap;">ថ្ងៃទី....................................</strong></td>
+						</tr>
+				    </table>
+				</td>
 		</tr>
 		</table>
 	</div>

@@ -49,6 +49,9 @@
 					$arr = array(
 							'dept_id'	=>$id,
 							'subject_id'=>$_data['subject_study_'.$i],
+							'score_in_class'=>$_data['scoreinclass_'.$i],
+							'score_out_class'=>$_data['scoreoutclass_'.$i],
+							'score_short'=>$_data['scoreshort_'.$i],
 							'status'    => $_data['status_'.$i],
 							'note'   	=> $_data['note_'.$i],
 							'date' 		=> date("Y-m-d"),
@@ -83,6 +86,9 @@
 				$arr = array(
 						'dept_id'	=>$_data['dept_id'],
 						'subject_id'=>$_data['subject_study_'.$i],
+						'score_in_class'=>$_data['scoreinclass_'.$i],
+						'score_out_class'=>$_data['scoreoutclass_'.$i],
+						'score_short'=>$_data['scoreshort_'.$i],
 						'status'    => $_data['status_'.$i],
 						'note'   	=> $_data['note_'.$i],
 						'date' 		=> date("Y-m-d"),

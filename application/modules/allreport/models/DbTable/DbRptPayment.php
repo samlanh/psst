@@ -9,21 +9,57 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     
     }
+    
     public function getStudentPaymentByid($id){
     	$db = $this->getAdapter();
-    	$sql = 'SELECT * FROM v_getstudentpayment';
-    	$sql.=' WHERE id='.$id;
+    	$sql = "select 
+    				s.stu_code,
+    				s.stu_khname,
+    				s.stu_enname,
+    				(select name_kh from rms_view where type=2 and key_code=s.sex) as sex,
+    				sp.receipt_number,
+    				sp.create_date
+    				
+    			from
+    				rms_student_payment as sp,
+					rms_student as s,
+    				rms_student_paymentdetail as spd
+    			WHERE 
+    				sp.student_id=s.stu_id 
+    				and sp.id=spd.payment_id
+    				
+    	";
     	return $db->fetchRow($sql);
-    	}
+    }
+    
     public function getStudentPayment($search){
     	$db = $this->getAdapter();
     	$where=' ';
-    	$from_date =(empty($search['start_date']))? '1': "create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "create_date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
     	
-	   	$sql=" SELECT * FROM v_getstudentpayment WHERE 1 ";
-    	$order=" ORDER BY id DESC , receipt_number DESC ";
+	   	$sql="SELECT 
+	   				sp.id,
+	   				s.stu_code,
+	   				s.stu_khname,
+	   				s.stu_enname,
+	   				sp.receipt_number,
+	   				sp.grand_total as total_payment,
+	   				sp.fine,
+	   				sp.credit_memo,
+	   				sp.deduct,
+	   				sp.net_amount,
+	   				sp.create_date,
+	   				(select first_name from rms_users where rms_users.id=sp.user_id) as user,
+	   				sp.note 
+	   			FROM 
+	   				rms_student_payment as sp,
+					rms_student as s
+	   			WHERE sp.student_id=s.stu_id ";
+	   	
+    	$order=" ORDER BY id DESC";
+    	
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
     	}

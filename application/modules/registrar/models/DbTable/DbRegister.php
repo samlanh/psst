@@ -239,8 +239,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						//'amount_in_khmer'=>$data['char_price'],
 						'user_id'		=>$this->getUserId(),
 						'branch_id'		=>$this->getBranchId(),
-						'memo_id'		=>$data['credit_memo_id'],
+						
 						'grand_total'	=>$data['grand_total'],
+						'fine'			=>$data['fine'],
+						
+						'memo_id'		=>$data['credit_memo_id'],
 						'credit_memo'	=>$data['credit_memo'],
 						'deduct'		=>$data['deduct'],
 						'net_amount'	=>$data['net_amount'],
@@ -547,8 +550,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						//'amount_in_khmer'=>$data['char_price'],
 						'user_id'		=>$this->getUserId(),
 						'branch_id'		=>$this->getBranchId(),
-						'memo_id'		=>$data['credit_memo_id'],
+						
 						'grand_total'	=>$data['grand_total'],
+						'fine'			=>$data['fine'],
+						
+						'memo_id'		=>$data['credit_memo_id'],
 						'credit_memo'	=>$data['credit_memo'],
 						'deduct'		=>$data['deduct'],
 						'net_amount'	=>$data['net_amount'],
@@ -660,11 +666,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'payfor_type'	=> 3, // service and product
 						'payment_type'	=> $data['payment_type'],
 						'student_type'	=> $data['student_type'],
-						'memo_id'		=>$data['credit_memo_id'],
+						
 						'grand_total'	=>$data['grand_total'],
+						'fine'			=>$data['fine'],
+						
+						'memo_id'		=>$data['credit_memo_id'],
 						'credit_memo'	=>$data['credit_memo'],
 						'deduct'		=>$data['deduct'],
 						'net_amount'	=>$data['net_amount'],
+						
 						'create_date'	=> date('Y-m-d'),
 						'user_id'		=>$this->getUserId(),
 						'branch_id'=>$this->getBranchId(),
@@ -1531,7 +1541,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	        (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree)AS degree,
 		       (SELECT CONCAT(major_enname) FROM rms_major WHERE major_id=sp.grade ) AS grade,
 		       
- 		       sp.grand_total,sp.credit_memo,sp.deduct,sp.net_amount, sp.create_date ,
+ 		       sp.grand_total,sp.fine,sp.credit_memo,sp.deduct,sp.net_amount, sp.create_date ,
  		       (select CONCAT(first_name) from rms_users where rms_users.id = sp.user_id) as user,
  		       (select name_en from rms_view where type=10 and key_code = sp.is_void) as void
  			   FROM rms_student AS s,rms_student_payment AS sp WHERE  s.stu_id=sp.student_id $user $branch_id ";

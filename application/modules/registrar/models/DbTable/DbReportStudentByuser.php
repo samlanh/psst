@@ -174,6 +174,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						(select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status,
 						
 						sp.grand_total as total_payment,
+						sp.fine,
 						sp.credit_memo,
 						sp.deduct,
 						sp.net_amount,

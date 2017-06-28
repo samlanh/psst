@@ -28,6 +28,7 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 					  spd.`payment_id`,
 					  spd.type,
 					  spd.paidamount,
+					  sp.fine,
 					  sp.credit_memo,
 					  sp.deduct
 					FROM

@@ -14,16 +14,16 @@ class Accounting_ProductsetController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
     			$search = $this->getRequest()->getPost();
-    			$search['sale_set']=0;
+    			$search['sale_set']=1;
     		}
     		else{
     			$search=array(
     							'title' => '',
-    							'location' => '',
+    							//'location' => '',
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
     							'status_search'=>1,
-    							'sale_set'=>0,
+    							'sale_set'=>1,
     					);
     		}
 			
@@ -32,10 +32,10 @@ class Accounting_ProductsetController extends Zend_Controller_Action {
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PRODUCT_NO","BRANCH_NAME","PRODUCT_NAME","PRODUCT_CATEGORY","TYPE","PRICE",
-					"QTY","TOTAL","DATE","STATUS");
+			$collumns = array("PRODUCT_NO","PRODUCT_NAME","PRODUCT_CATEGORY","PRICE",
+					"DATE","STATUS");
 			$link=array(
-					'module'=>'accounting','controller'=>'product','action'=>'edit',
+					'module'=>'accounting','controller'=>'productset','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('pro_code'=>$link,'pro_name'=>$link,'branch_name'=>$link,));
 			}catch (Exception $e){

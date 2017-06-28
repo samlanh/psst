@@ -286,10 +286,11 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     function getAllProductSetGroup($search=null){
     	$db = $this->getAdapter();
     	$sql=" SELECT p.id,p.pro_code,
-    	p.pro_name,(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id LIMIT 1) As cat_name,
-    	p.pro_price,p.date,p.status
-    	FROM rms_product AS p
-    	WHERE sale_set = ".$search['sale_set'];
+	    	p.pro_name,
+	    	(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id LIMIT 1) As cat_name,
+	    	p.pro_price,p.date,p.status
+	    	FROM rms_product AS p
+	    	WHERE sale_set = ".$search['sale_set'];
     	 
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " p.date >= '".$search['start_date']." 00:00:00'";
@@ -298,11 +299,11 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     	if(!empty($search['title'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['title']));
-    		$s_where[]= " p.pro_code LIKE '%{$s_search}%'";
+    		$s_where[]=" p.pro_code LIKE '%{$s_search}%'";
     		$s_where[]=" p.pro_name LIKE '%{$s_search}%'";
-    		$s_where[]= " p.pro_size LIKE '%{$s_search}%'";
-    		$s_where[]= " p.pro_size LIKE '%{$s_search}%'";
-    		$s_where[]= " p.pro_price LIKE '%{$s_search}%'";
+    		$s_where[]=" p.pro_size LIKE '%{$s_search}%'";
+    		$s_where[]=" p.pro_size LIKE '%{$s_search}%'";
+    		$s_where[]=" p.pro_price LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if($search['status_search']==1 OR $search['status_search']==0){

@@ -15,7 +15,7 @@
 				<select class="fullside"   name="year" id="year" dojoType="dijit.form.FilteringSelect">
 					<option value=""> Select Year </option>
 					<?php if(!empty($this->row)){foreach ($this->row as $id ){?>
-						<option value="<?php echo $id['id']?>" <?php if($id['id']==$this->search['year']) echo 'selected="selected"' ?>><?php echo $id['year'].' '.$id['time'];?></option>
+						<option value="<?php echo $id['id']?>" <?php if($id['id']==$this->search['year']) echo 'selected="selected"' ?>><?php echo $id['year'];?></option>
 					<?php }}?>
 				</select>
 			</td>

@@ -453,7 +453,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		if(!empty($rs_rows)){
 			foreach ($rs_rows as $i => $rs) {
 				$rows = $db->getFeebyOther($rs['id'],$search['grade_all']);
-				print_r($rows);
+// 				print_r($rows);
 				$fee_row=1;
 				if(!empty($rows))foreach($rows as $payment_tran){
 					if($payment_tran['payment_term']==1){

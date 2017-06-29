@@ -34,6 +34,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
                         dijit.byId('parent_id').focus();
                         return false;
 					}
+				dijit.byId('save_new').set('disabled',true);
+			    dijit.byId('save_close').set('disabled',true);
 				return true;
 			} else {
 				return false;

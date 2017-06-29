@@ -15,7 +15,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 
 <form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'library','controller'=>'borrowbook','action'=>'add')); ?>" 
 dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
+<script type="dojo/method" event="onSubmit">		
 			if(this.validate()) {
                 stu_id = dijit.byId('stu_id').get('value');
 				stu_name = dijit.byId('stu_name').get('value');
@@ -29,6 +29,8 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
                     dijit.byId('stu_id').focus();
 			        return false;
                 }
+               dijit.byId('save_new').set('disabled',true);
+			   dijit.byId('save_close').set('disabled',true);
 				return true;
 			}else {
 				return false;
@@ -108,9 +110,9 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						<tr>
 							<td colspan="6" align="center">
 								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-									<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+									<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
-									<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+									<input type="submit" value="save_new"  id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
 							</td>
 						</tr>

@@ -27,6 +27,8 @@ ul, ol {
 $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 $register=$this->url(array('module'=>'registrar','controller'=>'register','action'=>'add'), null, true);
 $near_day_return=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-nealydayreturn'), null, true);
+$rpt_borrowdetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-borrowdetail'), null, true);
+$rpt_returndetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-returndetail'), null, true);
 
 ?>
 <style type="text/css">
@@ -84,21 +86,21 @@ $near_day_return=$this->url(array('module'=>'allreport','controller'=>'library',
                     </div>  
                      
                     <div class="metro-nav-block double" style="background:#655f19;">
-                        <a target="_blank" href="<?php //echo $income;?>" data-original-title="">
+                        <a href="<?php //echo $income;?>" data-original-title="">
                             <i class="icon-signout"></i>
                             <div class="info"> <?php echo $bnot_return;?> &nbsp;ក្បាល</div>
                             <div class="status"><?php echo $tr->translate('TOTAL_BOOK_NOT_RETURN');?></div>
                         </a>
                     </div>
                    <div class="metro-nav-block double" style="background:#ec920e;">
-                       <a target="_blank" href="<?php //echo $expense;?>" data-original-title="">
+                       <a target="_blank" href="<?php echo $rpt_borrowdetail;?>" data-original-title="">
                            <i class="icon-tasks"></i>
                            <div class="info"><?php echo $b_thisday?>&nbsp;ក្បាល</div>
                            <div class="status"><?php echo $tr->translate('STUDENT_BORROWED_TODAY');?></div>
                        </a>
                    </div>
                     <div class="metro-nav-block double" style="background:#84089e;">
-                        <a target="_blank" href="<?php //echo $studnetpaymentreport;?>" data-original-title="">
+                        <a target="_blank" href="<?php echo $rpt_returndetail;?>" data-original-title="">
                             <i class="icon-shopping-cart"></i>
                             <div class="info"><?php echo $r_thisday;?> &nbsp;ក្បាល</div>
                             <div class="status"><?php echo $tr->translate('STUDENT_RETURNED_TODAY');?></div>
@@ -114,7 +116,7 @@ $near_day_return=$this->url(array('module'=>'allreport','controller'=>'library',
                      <div class="metro-nav-block double" style="background:#8d3e03;">
                         <a target="_blank" href="<?php echo $near_day_return;?>" data-original-title="">
                             <i class="icon-external-link"></i>
-                            <div class="info"><?php echo $this->rs_near_return['borr_qty'];?> &nbsp;ក្បាល</div>
+                            <div class="info"><?php if(empty($this->rs_near_return['borr_qty']))echo 0;else echo $this->rs_near_return['borr_qty'];?> &nbsp;ក្បាល</div>
                             <div class="status"><?php echo $tr->translate('BOOK_NEAR_DAY_RETURN_BOOK');?></div>
                         </a>
                     </div>

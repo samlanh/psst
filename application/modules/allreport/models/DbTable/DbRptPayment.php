@@ -18,15 +18,21 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.stu_enname,
     				(select name_kh from rms_view where type=2 and key_code=s.sex) as sex,
     				sp.receipt_number,
-    				sp.create_date
+    				sp.create_date,
+    				(select first_name from rms_users where id=sp.user_id) as user,
     				
+    				sp.grand_total,
+    				sp.credit_memo,
+    				sp.deduct,
+    				sp.fine,
+    				sp.net_amount
     			from
     				rms_student_payment as sp,
 					rms_student as s,
     				rms_student_paymentdetail as spd
     			WHERE 
     				sp.student_id=s.stu_id 
-    				and sp.id=spd.payment_id
+    				and sp.id=$id
     				
     	";
     	return $db->fetchRow($sql);
@@ -181,7 +187,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	(SELECT (SELECT (SELECT `rms_view`.`name_kh`FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` = `rms_student`.`sex`))) FROM `rms_student` WHERE (`rms_student`.`stu_id` = `rms_student_payment`.`student_id`)LIMIT 1)FROM `rms_student_payment` WHERE id=payment_id LIMIT 1) as sex,
     	type,fee,qty,subtotal,
     	(SELECT title FROM `rms_program_name` WHERE `rms_program_name`.`service_id`= rms_student_paymentdetail.service_id LIMIT 1) as service,
-    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=8 AND key_code= payment_term LIMIT 1)as payment_term,
+    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=6 AND key_code= payment_term LIMIT 1)as payment_term,
     	subtotal,paidamount,
     	(SELECT `total_payment` FROM `rms_student_payment` WHERE id= payment_id LIMIT 1) as total_payment,
     	(SELECT `paid_amount` FROM `rms_student_payment` WHERE id= payment_id LIMIT 1) as paid_amount,

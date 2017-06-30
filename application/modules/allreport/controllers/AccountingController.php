@@ -50,7 +50,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}
 // 			print_r($search);exit();
 			$db = new Allreport_Model_DbTable_DbRptPayment();
-			$this->view->row = $db->getPaymentDetailByType($search);
+			$this->view->row = $db->getStudentPaymentDetail($search,2);
 			$this->view->service = $db->getService();
 			$this->view->search = $search;
 			
@@ -98,13 +98,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			else{
 				$search = array(
 						'txtsearch' =>'',
-						'branch_id' =>'',
 						'start_date'=> date('Y-m-d'),
                         'end_date'=>date('Y-m-d'),
 				);
 			}
 			$db = new Allreport_Model_DbTable_DbRptPayment();
-			$this->view->row = $db->getStudentPaymentDetail($search);
+			$this->view->row = $db->getStudentPaymentDetail($search,1);
 			
 			$this->view->rs = $db->getStudentPayment($search);
 			

@@ -314,7 +314,7 @@ fieldset{  background:none;}
 						    <tr>
 								<td><?php echo $tr->translate("STUDENT_TYPE");?></td>
 								<td>
-									<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="changControll();" >
+									<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="changControll();setReadonlyForOldStudent();" >
 										<option value="1">Tested Student</option>
 										<option value="3">Old Student</option>
 										<option value="2">New Student</option>
@@ -972,6 +972,28 @@ function changControll(){
 		 document.getElementById('stu_new').style.display="block";
 	}
 }
+
+function setReadonlyForOldStudent(){
+	
+	student_type = dijit.byId('student_type').get('value');
+	if(student_type==3){
+		dijit.byId("en_name").set('readOnly',true);
+		dijit.byId("kh_name").set('readOnly',true);
+		dijit.byId("sex").set('readOnly',true);
+		dijit.byId("dob").set('readOnly',true);
+		dijit.byId("parent_phone").set('readOnly',true);
+	}else{
+		dijit.byId("en_name").set('readOnly',false);
+		dijit.byId("kh_name").set('readOnly',false);
+		dijit.byId("sex").set('readOnly',false);
+		dijit.byId("dob").set('readOnly',false);
+		dijit.byId("parent_phone").set('readOnly',false);
+	}
+	
+	
+	
+}
+
 function setID(){
 	stu_id = dijit.byId('old_stu_name').get('value');
 	dijit.byId('old_studens').attr('value',stu_id);

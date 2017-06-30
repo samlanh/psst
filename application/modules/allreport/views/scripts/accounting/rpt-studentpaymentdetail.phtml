@@ -6,13 +6,10 @@
 	$frm = $this->form_search;
 ?>
 <form id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpaymentdetail')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table width="80%" align="left">
+		<table width="70%" align="left">
 			<tr>
 				<td>
 					<input dojoType="dijit.form.TextBox" class="fullside"  id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
-				</td>
-				<td>
-					<?php //echo $frm->getElement("branch_id");?>
 				</td>
 				<td>
 					<input name="start_date" id="start_date" class="fullside"  constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->search['start_date'];?>" type="text">

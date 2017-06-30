@@ -63,7 +63,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 	   			FROM 
 	   				rms_student_payment as sp,
 					rms_student as s
-	   			WHERE sp.student_id=s.stu_id ";
+	   			WHERE sp.student_id=s.stu_id 
+	   	";
 	   	
     	$order=" ORDER BY id DESC";
     	
@@ -79,6 +80,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getService(){
@@ -149,7 +151,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     }
     
     
-    public function getStudentPaymentDetail($search){
+    public function getStudentPaymentDetail($search,$order_no){
     	$db = $this->getAdapter();
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
@@ -159,7 +161,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$to_date   = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
 		
-    	$sql = "SELECT * FROM v_getstudentpaymentdetail WHERE 1  $branch_id  ";
+    	//$sql = "SELECT * FROM v_getstudentpaymentdetail WHERE 1  $branch_id  ";
     	
     	$sql=" select 
     			  spd.id,
@@ -187,11 +189,13 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				  spd.is_start,
 				  spd.is_parent ,
 				  spd.is_complete,
-				  (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.year LIMIT 1) AS year,
 				  (SELECT pg.title FROM rms_program_name AS pg WHERE pg.service_id=spd.service_id) AS service_name,
-				  (SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user,
+				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user,
 				  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term) AS payment_term,
-				  (select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status
+				  (select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status,
+				  
+				  (select title from rms_program_type as ser_cate where ser_cate.id = (select ser_cate_id from rms_program_name as pn where pn.service_id = spd.service_id and pn.type=2)) as service_cate                             
+				  
     			from 
     				rms_student_payment as sp,
     				rms_student_paymentdetail as spd,
@@ -201,8 +205,13 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				and sp.id=spd.payment_id
     		 ";
     	
+    	if($order_no==1){
+    		$order=" ORDER BY payment_id DESC ";
+    	}else{
+    		$order=" ORDER BY (select ser_cate_id from rms_program_name as pn where pn.service_id = spd.service_id) DESC ";
+    	}
     	
-    	$order=" ORDER BY payment_id DESC , receipt_number DESC ";
+    	
     	
     	if(!empty($search['txtsearch'])){
     		$s_where = array();
@@ -214,10 +223,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	
-    	if(!empty($search['branch_id'])){
-    		$where .= " and branch_id = ".$search['branch_id'];
+    	if(!empty($search['service'])){
+    		$where .= " and spd.service_id = ".$search['service'];
     	}
-    	
+    	//echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getPaymentReciptDetail($id){

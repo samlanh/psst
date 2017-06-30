@@ -62,7 +62,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						<tr>
 							<td nowrap="nowrap"><?php echo $tr->translate("STUDENT_ID")?></td>
 							<td>
-								<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect" onchange="setValue();getAllcustomer();">
+								<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect" onchange="getAllcustomer();setValueName();">
 								       <option value="0"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
 								 <?php if(!empty($this->stu_id)) foreach($this->stu_id As $rs_id){?>
 										<option value="<?php echo $rs_id['stu_id']?>" ><?php echo $rs_id['stu_code'];?></option>
@@ -71,7 +71,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 							</td>
 							<td nowrap="nowrap"><?php echo $tr->translate("STUDENT_NAME")?></td>
 							<td>
-								<select   name="stu_name" id="stu_name" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();">
+								<select   name="stu_name" id="stu_name" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue()">
 									<option value="0"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 									<?php 
 									if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
@@ -271,6 +271,13 @@ function setDate(d){
 }
 
 function setValue(){
+	stu_name=dijit.byId("stu_name").get("value");
+	if(stu_name!='' || stu_name !=0){
+		dijit.byId("stu_id").attr("value",stu_name);
+	}
+}
+
+function setValueName(){
 	stu_id=dijit.byId("stu_id").get("value");
 	if(stu_id!='' || stu_id !=0){
 		dijit.byId("stu_name").attr("value",stu_id);

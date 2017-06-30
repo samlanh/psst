@@ -284,6 +284,26 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$group);
 	}
 	
+	function getPurchaseDay(){
+		$date=date('Y-m-d');
+		$db=$this->getAdapter();
+		$sql="SELECT b.id,SUM(bd.borr_qty) AS borr_qty
+		FROM  rms_bookpurchase AS b,rms_bookpurchasedetails AS bd
+		WHERE b.id=bd.purchase_id
+		AND b.date_order='$date'";
+		return $db->fetchRow($sql);
+	}
+	
+	function getBrokenDay(){
+		$date=date('Y-m-d');
+		$db=$this->getAdapter();
+		$sql="SELECT b.id,SUM(bd.borr_qty) AS borr_qty
+		FROM  rms_bookbroken AS b,rms_bookbrokendetails AS bd
+		WHERE b.id=bd.broken_id
+		AND b.date_broken='$date'";
+		return $db->fetchRow($sql);
+	}
+	
 	
 }
 

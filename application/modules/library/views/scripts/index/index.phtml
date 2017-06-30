@@ -1,43 +1,43 @@
 <!DOCTYPE html>
+<html>
 <head>
-   <meta charset="utf-8" />
-   <title>Student Registration Management System</title>
-   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-   <meta content="" name="description" />
-   <meta content="" name="author" />
-   <link href="<?php echo $this->baseUrl()?>/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-   <link href="<?php echo $this->baseUrl()?>/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
-   <link href="<?php echo $this->baseUrl()?>/assets/bootstrap/css/bootstrap-fileupload.css" rel="stylesheet" />
-   <link href="<?php echo $this->baseUrl()?>/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-   <link href="<?php echo $this->baseUrl()?>/css/style.css" rel="stylesheet" />
-   <link href="<?php echo $this->baseUrl()?>/css/style-responsive.css" rel="stylesheet" />
-   <link href="<?php echo $this->baseUrl()?>/css/style-default.css" rel="stylesheet" id="style_color" />
-   <link rel="shortcut icon" href="<?php echo $this->baseUrl()?>/images/icon.ico" type="image/x-icon"/>
-<style>
-
-ul, ol {
-    padding: 0;
-     margin: 0px !important;}
-.container-fluid {
-    padding-right: 15px;
-    padding-left: 15px;
-}
-</style>
-<?php 
-$tr=Application_Form_FrmLanguages::getCurrentlanguage();
-$register=$this->url(array('module'=>'registrar','controller'=>'register','action'=>'add'), null, true);
-$near_day_return=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-nealydayreturn'), null, true);
-$rpt_borrowdetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-borrowdetail'), null, true);
-$rpt_returndetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-returndetail'), null, true);
-
-?>
-<style type="text/css">
-.metro-nav {
-    font-family: 'Kh Battambang','Khmer Battambang' !important;
-}
-</style>
-</head>
-<?php 
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="<?php echo $this->baseUrl();?>/css/dashboardstyle/bootstrap.min.css">
+  <link rel="stylesheet" href="<?php echo $this->baseUrl();?>/css/dashboardstyle/AdminLTE.min.css">
+  <link rel="stylesheet" href="<?php echo $this->baseUrl();?>/css/dashboardstyle/ionicons.min.css">
+  <!-- Font Awesome -->
+  <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+   Ionicons 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <style>
+		hr {
+		    margin-top: 0px; 
+		    margin-bottom: 0px; 
+		    border: 0;
+		    border-top: 1px solid #deb2b2;
+		}
+		.content-header {
+		    position: relative;
+		    padding: 0px 0px 0 15px; 
+		}
+  </style>
+   
+  <?php 
+		$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+		$register=$this->url(array('module'=>'registrar','controller'=>'register','action'=>'add'), null, true);
+		$near_day_return=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-nealydayreturn'), null, true);
+		$rpt_borrowdetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-borrowdetail'), null, true);
+		$rpt_returndetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-returndetail'), null, true);
+		
+		$rpt_purchasedetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-purchasedetail'), null, true);
+		$rpt_brokendetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-brokendetail'), null, true);
+	?>
+	<?php 
     $book_empt=0;$i=1;
     if(!empty($this->rs)) foreach($this->rs As $key=>$rs){
     	$book_empt=$book_empt+$i;
@@ -69,73 +69,158 @@ $rpt_returndetail=$this->url(array('module'=>'allreport','controller'=>'library'
     	$s_num=$s_num+1;
     }
 ?>
+ <title>  <?php echo $tr->translate('BOOK_LIST_DASHBOARD');?></title>
+</head>
+<body class="hold-transition skin-blue sidebar-mini" style="font-family:'khmer os battombong'">
+<div class="wrapper">
+<!-- Content Wrapper. Contains page content -->
+  <div class="">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h5 align="center"​​ style="font-weight:900;font-family: 'khmer os battambang';">
+        <?php echo $tr->translate('BOOK_LIST_DASHBOARD');?>
+         
+      </h5><hr>
+      <ol class="breadcrumb">
+        <li><a href="#"></a></li>
+         
+      </ol>
+    </section>
 
-<body class="fixed-top" style="font-family:'Kh OS Battambang'"">
-   <div id="container" class="row-fluid" style="margin: 0 auto; background: #cfddf5;height: 100%; padding:10px 0px;">
-         <div class="container-fluid">
-            <!-- BEGIN PAGE CONTENT-->
-            <div class="row-fluid">
-                <!--BEGIN METRO STATES-->
-                <div class="metro-nav metro-fix-view">
-                     <div class="metro-nav-block double" style="background:#585858;">
-                        <a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-unavailable'), null, true);?>" data-original-title="">
-                            <i class="icon-signout"></i>
-                            <div class="info"> <?php echo $book_empt;?> &nbsp;ក្បាល</div>
-                            <div class="status"><?php echo $tr->translate('TOTAL_BOOK_UNAVAILABLE');?></div>
-                        </a>
-                    </div>  
-                     
-                    <div class="metro-nav-block double" style="background:#655f19;">
-                        <a href="<?php //echo $income;?>" data-original-title="">
-                            <i class="icon-signout"></i>
-                            <div class="info"> <?php echo $bnot_return;?> &nbsp;ក្បាល</div>
-                            <div class="status"><?php echo $tr->translate('TOTAL_BOOK_NOT_RETURN');?></div>
-                        </a>
-                    </div>
-                   <div class="metro-nav-block double" style="background:#ec920e;">
-                       <a target="_blank" href="<?php echo $rpt_borrowdetail;?>" data-original-title="">
-                           <i class="icon-tasks"></i>
-                           <div class="info"><?php echo $b_thisday?>&nbsp;ក្បាល</div>
-                           <div class="status"><?php echo $tr->translate('STUDENT_BORROWED_TODAY');?></div>
-                       </a>
-                   </div>
-                    <div class="metro-nav-block double" style="background:#84089e;">
-                        <a target="_blank" href="<?php echo $rpt_returndetail;?>" data-original-title="">
-                            <i class="icon-shopping-cart"></i>
-                            <div class="info"><?php echo $r_thisday;?> &nbsp;ក្បាល</div>
-                            <div class="status"><?php echo $tr->translate('STUDENT_RETURNED_TODAY');?></div>
-                        </a>
-                    </div>
-                    <div class="metro-nav-block double" style="background:#8d3e03;">
-                        <a target="_blank" href="<?php echo $near_day_return;?>" data-original-title="">
-                            <i class="icon-user"></i>
-                            <div class="info"><?php echo $s_num;?> &nbsp;នាក់</div>
-                            <div class="status"><?php echo $tr->translate('STUDENT_NEAR_DAY_RETURN_BOOK');?></div>
-                        </a>
-                    </div>
-                     <div class="metro-nav-block double" style="background:#8d3e03;">
-                        <a target="_blank" href="<?php echo $near_day_return;?>" data-original-title="">
-                            <i class="icon-external-link"></i>
-                            <div class="info"><?php if(empty($this->rs_near_return['borr_qty']))echo 0;else echo $this->rs_near_return['borr_qty'];?> &nbsp;ក្បាល</div>
-                            <div class="status"><?php echo $tr->translate('BOOK_NEAR_DAY_RETURN_BOOK');?></div>
-                        </a>
-                    </div>
-                </div>
-                <!--END METRO STATES-->
+    <!-- Main content -->
+    <section class="content">
+      <!-- Small boxes (Stat box) -->
+      <div class="row" style="font-family: 'khmer os battambang' !important;">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $book_empt;?> &nbsp;ក្បាល</h4>
+              
+              <p style="font-family: 'khmer os battambang' !important;"><br></p>
             </div>
-            <!-- END PAGE CONTENT-->
-         </div>
-         <!-- END PAGE CONTAINER-->
-     
-      <!-- END PAGE -->  
-   </div>
-   <!-- END CONTAINER -->
-   <!-- BEGIN JAVASCRIPTS -->
-   <!-- Load javascripts at bottom, this will reduce page load time -->
-   <script src="<?php echo $this->baseUrl()?>/js/jquery-1.8.3.min.js"></script>
-   <script src="<?php echo $this->baseUrl()?>/js/jquery.nicescroll.js" type="text/javascript"></script>
-   <script src="<?php echo $this->baseUrl()?>/assets/bootstrap/js/bootstrap.min.js"></script>
-   <script src="<?php echo $this->baseUrl()?>/js/common-scripts.js"></script>
+            <div class="icon">
+              <i class="fa fa-book"></i>
+            </div>
+            <a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-unavailable'), null, true);?>" class="small-box-footer"><?php echo $tr->translate('TOTAL_BOOK_UNAVAILABLE');?> <i  class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $bnot_return;?> &nbsp;ក្បាល<sup style="font-size: 20px"></sup></h4>
+
+              <p><br></p>
+            </div>
+            <div class="icon">
+               <i class="fa fa-book"></i>
+            </div>
+            <a target="_blank" href="<?php echo $rpt_borrowdetail;?>" class="small-box-footer"><?php echo $tr->translate('TOTAL_BOOK_NOT_RETURN');?> <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $b_thisday?>&nbsp;ក្បាល</h4>
+
+              <p><br></p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-book"></i>
+            </div>
+            <a  target="_blank" href="<?php echo $rpt_borrowdetail;?>" class="small-box-footer"><?php echo $tr->translate('STUDENT_BORROWED_TODAY');?><i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
+          <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $r_thisday;?> &nbsp;ក្បាល</h4>
+
+              <p><br></p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-book"></i>
+            </div>
+            <a target="_blank" href="<?php echo $rpt_returndetail;?>" class="small-box-footer"><?php echo $tr->translate('STUDENT_RETURNED_TODAY');?> <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
+        <!-- ./col -->
+        
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $s_num;?> &nbsp;នាក់</h4>
+
+              <p><br></p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-graduation-cap"></i>
+            </div>
+            <a target="_blank" href="<?php echo $near_day_return;?>" class="small-box-footer"><?php echo $tr->translate('STUDENT_NEAR_DAY_RETURN_BOOK');?><i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php if(empty($this->rs_near_return['borr_qty']))echo 0;else echo $this->rs_near_return['borr_qty'];?> &nbsp;ក្បាល</h4>
+
+              <p><br></p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-book"></i>
+            </div>
+            <a  target="_blank" href="<?php echo $near_day_return;?>" class="small-box-footer"><?php echo $tr->translate('BOOK_NEAR_DAY_RETURN_BOOK');?><i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php if(empty($this->rs_purchase['borr_qty']))echo 0;else echo $this->rs_purchase['borr_qty'];?> &nbsp;ក្បាល</h4>
+
+              <p><br></p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-book"></i>
+            </div>
+            <a  target="_blank" href="<?php echo $rpt_purchasedetail;?>" class="small-box-footer"><?php echo $tr->translate('TOTAL_PURCHASE_BOOK_TO_DAY');?><i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php if(empty($this->rs_broken['borr_qty']))echo 0;else echo $this->rs_broken['borr_qty'];?> &nbsp;ក្បាល</h4>
+
+              <p><br></p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-book"></i>
+            </div>
+            <a  target="_blank" href="<?php echo $rpt_brokendetail;?>" class="small-box-footer"><?php echo $tr->translate('TOTAL_BROKEN_BOOK_TO_DAY');?><i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+    
+  </div>
+  
+</div>
+ 
 </body>
-<!-- END BODY -->
 </html>

@@ -15,7 +15,7 @@ class Allreport_Model_DbTable_DbRptOtherExpense extends Zend_Db_Table_Abstract
     	
     	$sql = "SELECT *,
     			(select name_en from rms_view where rms_view.type=8 and key_code=payment_type) as payment_type,
-    			(select CONCAT(last_name,' - ',first_name) from rms_users as u where u.id = user_id)  as name
+    			(select CONCAT(first_name) from rms_users as u where u.id = user_id)  as name
     			 from ln_expense  WHERE 1 $branch_id  ";
     	$where= ' ';
     	$order=" ORDER BY id DESC ";

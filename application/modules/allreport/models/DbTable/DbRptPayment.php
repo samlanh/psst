@@ -58,7 +58,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 	   				sp.net_amount,
 	   				sp.create_date,
 	   				(select first_name from rms_users where rms_users.id=sp.user_id) as user,
-	   				sp.note 
+	   				sp.note,
+	   				sp.is_void 
 	   			FROM 
 	   				rms_student_payment as sp,
 					rms_student as s
@@ -74,8 +75,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$s_search = addslashes(trim($search['txtsearch']));
 	 		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-    		$s_where[] = " kh_name LIKE '%{$s_search}%'";
-    		$s_where[] = " en_name LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	return $db->fetchAll($sql.$where.$order);
@@ -154,11 +155,53 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	
-    	$from_date =(empty($search['start_date']))? '1': " create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date   = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date   = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
 		
     	$sql = "SELECT * FROM v_getstudentpaymentdetail WHERE 1  $branch_id  ";
+    	
+    	$sql=" select 
+    			  spd.id,
+				  sp.receipt_number,
+				  s.stu_code,
+				  s.stu_khname,
+				  s.stu_enname,
+				  spd.type,
+				  sp.tuition_fee,
+				  spd.fee,
+				  spd.qty,
+				  spd.subtotal,
+				  spd.late_fee,
+				  spd.extra_fee,
+				  spd.discount_percent,
+				  spd.discount_fix,
+				  
+				  spd.paidamount,
+				  spd.balance,
+				  sp.create_date,
+				  sp.is_void,
+				  spd.note,
+				  spd.start_date,
+				  spd.validate,
+				  spd.is_start,
+				  spd.is_parent ,
+				  spd.is_complete,
+				  (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.year LIMIT 1) AS year,
+				  (SELECT pg.title FROM rms_program_name AS pg WHERE pg.service_id=spd.service_id) AS service_name,
+				  (SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user,
+				  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term) AS payment_term,
+				  (select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status
+    			from 
+    				rms_student_payment as sp,
+    				rms_student_paymentdetail as spd,
+    				rms_student as s
+    			where 
+    				s.stu_id = sp.student_id
+    				and sp.id=spd.payment_id
+    		 ";
+    	
+    	
     	$order=" ORDER BY payment_id DESC , receipt_number DESC ";
     	
     	if(!empty($search['txtsearch'])){

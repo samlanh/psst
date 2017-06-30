@@ -105,6 +105,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}
 			$db = new Allreport_Model_DbTable_DbRptPayment();
 			$this->view->row = $db->getStudentPaymentDetail($search);
+			
+			$this->view->rs = $db->getStudentPayment($search);
+			
 			$this->view->service = $db->getService();
 			$this->view->search = $search;
 			

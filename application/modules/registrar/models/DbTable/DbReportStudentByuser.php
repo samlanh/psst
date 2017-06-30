@@ -170,7 +170,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						sp.create_date,
 						sp.is_void,
 						(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.year LIMIT 1) AS year,
-						(SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user_id,
+						(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user_id,
 						(select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status,
 						
 						sp.grand_total as total_payment,
@@ -238,7 +238,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					st.phone,
 					(select en_name from rms_dept where dept_id = st.degree) as degree,
 					st.create_date,
-					(SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = st.user_id) AS user_id,
+					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = st.user_id) AS user,
 					st.serial,
 					st.register,
 					st.old_school,
@@ -248,7 +248,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				FROM
 					rms_student_test AS st
 				WHERE 
-					1  
+					status=1  
 					$branch_id 
 			";
 	
@@ -266,6 +266,10 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			if(!empty($search['degree'])){
 				$where.= " AND st.degree = ".$search['degree'];
 			}
+			if(!empty($search['user'])){
+				$where.=" AND user_id = ".$search['user'] ;
+			}
+			
 			$order=" ORDER By st.id DESC ";
 			
 // 				    	echo $sql.$where.$order;exit();

@@ -37,7 +37,8 @@
 									<img style="width:60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 								</td>
 								<td  align="center" width="70%">
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 15px;font-family:'Khmer MEF2';"><?php echo $tr->translate('STUDENT_SERVICE_PAYMENT_DETAIL_REPORT');?></strong><br >
+									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 18px;font-family:'Khmer MEF2';"><?php echo $tr->translate('STUDENT_PAYMENT_DETAIL_REPORT');?></strong><br />
+									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong>
 								</td>
 								<td width="15%" align="center">
 								</td>
@@ -53,59 +54,84 @@
 											.padd tr th{  background-color: #ccc; }
 										</style>
 
+									<?php 
+										$total=0;
+										$total_balance = 0;
+										$total_receive = 0;
+									?>	
+										
+										
 									<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family: 'Khmer OS Battambang';">
-										  <tr style="background-color: #ccc;line-height: 30px;font-weight: bold;font-size:10px; height: 20px; align="center" >
+										  <tr style="background-color: #ccc;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
 										    <td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+										    <td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>
+										    <td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('SERVICE_NAME');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('PAYMENT_TERM');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('FEE');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('LATE_FEE');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('EXTRA_FEE');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('DISCOUND');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('ADMIN_FEE');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('SUBTOTAL');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('PAID_AMOUNT');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('BALANCE');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('PAID_DATE');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('REMARK');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
 										  </tr>
-										  <tr></tr>
-												<style> td{padding:0 3px; }</style>
-										  <?php $i=0; $total=0;$total_balance = 0;$total_receive = 0; if(!empty($this->row)){foreach($this->row as $rs){ $i++;?>
-										  <tr class="hover" style="font-size:10px; color:#000; height: 18px;"​ align="center">
+										<style> 
+											td{padding:0 3px; }
+											.hover:hover{background: #ccc;}
+										</style>
+										  
+										  <?php $i=0;if(!empty($this->row)){foreach($this->row as $rs){ $i++;?>
+										  <tr class="hover" style="font-size:11px; color:#000; height: 18px;"​ align="center">
 										  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
-										    <td style=" white-space:nowrap; text-align:left"><?php echo $rs['en_name']; ?></td>
-										    <td style="text-align:left"><?php echo $rs['service']; ?></td>
-										    <td style="text-align:left"><?php echo $rs['payment_term']; ?></td>
-										    <td>$ <?php echo number_format($rs['fee'],2); if(empty($rs['fee']))echo '0.00'; ?></td>
-										    <td><?php echo $rs['qty']; if(empty($rs['qty']))echo '0'; ?></td>
-										    <td><?php echo $rs['discount_percent']; ?> %</td>
-										    <td>$ <?php echo $rs['admin_fee']; ?></td>
-										    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['subtotal']; ?></td>
-										    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paid_amount'];?></td>
-										    <td><?php echo $rs['balance_due'];?></td>
+										  	<td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
+										  	<td align="center"><?php echo $rs['stu_code']; ?></td>
+										    <td style="text-align:left"><?php echo $rs['stu_khname'].'-'.$rs['stu_enname']; ?></td>
+										    <td style="text-align:left"><?php echo $rs['service_name']; ?></td>
+										    <td align="center"><?php echo $rs['payment_term']; ?></td>
+										    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
+										    <td><?php echo $rs['qty'];?></td>
+										    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
+										    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
+										    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
+										    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
 										    <td><?php echo date('d-M-Y', strtotime($rs['create_date']));?></td>
 										    <td><?php echo $rs['user']; ?></td>
 										   	<td><?php echo $rs['note']; ?></td>
-										   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['status_void']; ?></td>
+										   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
 										  </tr>
-										 <?php 
-										 	if($rs['is_void']==1){
-										 		
-										 	}else{
-											 	$total = $rs['subtotal'] + $total; 
-											 	$total_receive = $total_receive + $rs['paid_amount'];
-											 	$total_balance = $total_balance + $rs['balance_due'];
+										  <?php 
+										 	if($rs['is_void']==0){
+										 		$total = $rs['paidamount'] + $total;
 										 	}
-										 ?> 
+										  ?> 
+										 
 										  <?php } }?>
 										 
 										</table>
 									</td>
 								</tr>
 								<tr><td colspan="3">&nbsp;</td></tr>
+									
+									<?php 
+										$fine=0;
+										$credit_memo=0;
+										$deduct=0;
+										$net_amount=0;									
+									?>
+									
+									<?php if(!empty($this->rs)){foreach ($this->rs as $payment){
+											if($payment['is_void']==0){
+												$fine = $fine + $payment['fine'];
+												$credit_memo = $credit_memo + $payment['credit_memo'];
+												$deduct = $deduct + $payment['deduct'];
+												$net_amount = $net_amount + $payment['net_amount'];
+											}
+									}}?>
 								<tr>
 									<td colspan="3">
 											<table width="29.2%" border="1" align="right" style="margin-right:0.5%; white-space:nowrap;font-family: 'Khmer OS Battambang';">
@@ -114,12 +140,20 @@
 														<td colspan="2" style="font-weight:bold;font-family: Arial Black; font-size: 10px;"><span style="color: red;">$ <?php echo number_format($total,2);?></span></td>
 										  		</tr>
 										  		<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
-										 				<th style="background-color: #ccc; width: 38%; font-weight:bold; font-size: 10px;">&nbsp;<?php echo $tr->translate('GRAND_TOTAL_RECEIVED_AMOUNT');?>&nbsp;</th>
-														<td colspan="2" style="font-weight:bold;font-family: Arial Black; font-size: 10px;"><span style="color: red;">$ <?php echo number_format($total_receive,2);?></span></td>
+										 				<th style="background-color: #ccc; width: 38%; font-weight:bold; font-size: 10px;">&nbsp;<?php echo $tr->translate('FINE');?>&nbsp;</th>
+														<td colspan="2" style="font-weight:bold;font-family: Arial Black; font-size: 10px;"><span style="color: red;">$ <?php echo number_format($fine,2);?></span></td>
 										  		</tr>
 										  		<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
-										 				<th style="background-color: #ccc; width: 38%; font-weight:bold;font-size: 10px;">&nbsp;<?php echo $tr->translate('GRAND_TOTAL_BALANCE');?>&nbsp;</th>
-														<td colspan="2" style="font-weight:bold;font-family: Arial Black; font-size: 10px;"><span style="color: red;">$ <?php echo number_format($total_balance,2);?></span></td>
+										 				<th style="background-color: #ccc; width: 38%; font-weight:bold;font-size: 10px;">&nbsp;<?php echo $tr->translate('CREDIT_MEMO');?>&nbsp;</th>
+														<td colspan="2" style="font-weight:bold;font-family: Arial Black; font-size: 10px;"><span style="color: red;">$ <?php echo number_format($credit_memo,2);?></span></td>
+										  		</tr>
+										  		<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
+										 				<th style="background-color: #ccc; width: 38%; font-weight:bold;font-size: 10px;">&nbsp;<?php echo $tr->translate('DEDUCT');?>&nbsp;</th>
+														<td colspan="2" style="font-weight:bold;font-family: Arial Black; font-size: 10px;"><span style="color: red;">$ <?php echo number_format($deduct,2);?></span></td>
+										  		</tr>
+										  		<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
+										 				<th style="background-color: #ccc; width: 38%; font-weight:bold;font-size: 10px;">&nbsp;<?php echo $tr->translate('NET_AMOUNT');?>&nbsp;</th>
+														<td colspan="2" style="font-weight:bold;font-family: Arial Black; font-size: 10px;"><span style="color: red;">$ <?php echo number_format($net_amount,2);?></span></td>
 										  		</tr>
 										  </table>
 									</td>

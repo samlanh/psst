@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('SRMS | Report Student Receivable'); 
+	$this->headTitle($tr->translate('STUDENT_PAYMENT_REPORT')); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>
@@ -72,7 +72,9 @@
 												   	<td><?php echo $rs['note']; ?></td>
 											  </tr>
 										  <?php 
-										  		$total = $rs['net_amount'] + $total; 
+										  		if($rs['is_void']==0){
+										  			$total = $rs['net_amount'] + $total; 
+										  		}
 										  ?> 
 										  <?php }} ?>
 										</table>

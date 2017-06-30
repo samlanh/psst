@@ -72,7 +72,7 @@
 								th,td{ padding:0 1px;}
 							</style>
 
-						<table class="padd" width="100%" border="1" align="center" style="font-family: 'Hanuman';">
+						<table class="padd" width="100%" border="1" align="center" style="font-family: Khmer OS Battambang,Times new roman;">
 							 
 							 <?php 
 							 	$i=0; $total=0;$total_paid=0;$total_balance=0;
@@ -83,7 +83,14 @@
 							 	$total_expense_dollar = 0;
 							 	$total_expense_kh =0;
 							 	$total_stu_test=0;
+							 	
+							 	$total_payment = 0;
+							 	$fine = 0;
+							 	$credit_memo = 0;
+							 	$deduct = 0;
+							 	
 							 	$net_amount = 0;
+							 	
 							 	if (!empty($this->row)){  
 							 ?>
 							 
@@ -132,20 +139,39 @@
 							    <td><?php echo $rs['user_id'];?></td>
 							    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>><?php echo $rs['void_status'];?></td>
 							  </tr>
-							  	 <?php $net_amount = $net_amount + $rs['net_amount']; ?>
+							  	 <?php 
+							  	 	if($rs['is_void']==0){
+							  	 		$total_payment = $total_payment + $rs['total_payment'];
+							  	 		$fine = $fine + $rs['fine'];
+							  	 		$credit_memo = $credit_memo + $rs['credit_memo'];
+							  	 		$deduct = $deduct + $rs['deduct'];
+						  	 			$net_amount = $net_amount + $rs['net_amount'];
+						  	 		} 
+							  	 ?>
 							  
 							  <?php } ?>
 							  
 							  <?php } ?>
 							</table>
-							<table width="100%" style="margin-top: 10px;">
+							<table width="100%" style="margin-top: 5px;">
 							<?php if(!empty($this->row)){?>
 									<tr>
 										<td colspan="3">
-											<table width="29.2%" border="1" align="right" style="white-space:nowrap;">
-												<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
-									 				<td style="background-color: #ccc; width: 38%; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
-													<td colspan="2" style=" color:#F00; font-weight:bold;font-family: Arial Black; font-size: 12px;">$ <?php echo number_format($net_amount,2);?></td>
+											<table width="40%" border="1" align="right" style="white-space:nowrap;font-family: Khmer OS Battambang,Times new roman;">
+												<tr align="center" style="font-size:13px; color:#000; height: 23px; background-color: #ccc;"​ >
+									 				<td style=""><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
+									 				<td style=""><?php echo $tr->translate("FINE");?></td>
+									 				<td style=""><?php echo $tr->translate("CREDIT_MEMO");?></td>
+									 				<td style=""><?php echo $tr->translate("DEDUCT");?></td>
+									 				<td style=""><?php echo $tr->translate("NET_AMOUNT");?></td>
+										  		</tr>
+										  		
+										  		<tr align="center" style="font-size:12px; color:red; height: 23px;"​ >
+									 				<td style=""><?php echo '$ '.$total_payment;?></td>
+									 				<td style=""><?php echo '$ '.$fine;?></td>
+									 				<td style=""><?php echo '$ '.$credit_memo;?></td>
+									 				<td style=""><?php echo '$ '.$deduct;?></td>
+									 				<td style=""><?php echo '$ '.$net_amount;?></td>
 										  		</tr>
 											</table>
 										</td>
@@ -170,9 +196,9 @@
 									th,td{ padding:0 1px;}
 								</style>
 
-							<table class="padd" width="100%" border="1" align="center" style="font-family: 'Hanuman';">
+							<table class="padd" width="100%" border="1" align="center" style="font-family: Khmer OS Battambang,Times new roman;">
 								<tr style="border-left:none;">
-									<td align="center" colspan="12" ><strong style="font-family: Daunpenh;font-size: 25px;"> Student Tested </strong> </td>
+									<td align="center" colspan="13" ><strong style="font-family: Daunpenh;font-size: 25px;"><div style="margin-bottom: -5px;margin-top: 5px;"> Student Tested </div></strong> </td>
 								</tr>
 											
 								<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
@@ -187,6 +213,7 @@
 									<td><?php echo $tr->translate('OLD_GRADE')?></td>
 									<td><?php echo $tr->translate('TOTAL')?></td>
 									<td><?php echo $tr->translate('NOTE')?></td>
+									<td><?php echo $tr->translate('USER')?></td>
 									<td><?php echo $tr->translate('STATUS')?></td>
 								</tr>
 								 
@@ -204,6 +231,7 @@
 									<td style="border: 1px solid #000;"><?php echo $stu_test['old_grade'];?></td>
 									<td style="border: 1px solid #000;"><?php echo '$ '.$stu_test['total_price'];?></td>
 									<td style="border: 1px solid #000;"><?php echo $stu_test['note'];?></td>
+									<td style="border: 1px solid #000;"><?php echo $stu_test['user'];?></td>
 									<?php 
 										if($stu_test['register']==1){
 											$status="Registered";
@@ -219,14 +247,14 @@
 									?> 
 								 <?php } ?>
 							</table>
-							<table width="100%" style="margin-top: 10px;">
+							<table width="100%" style="margin-top: 5px;">
 								<?php if(!empty($this->stu_test)){?>
 									<tr>
 										<td colspan="3">
 												<table width="29.2%" border="1" align="right" style="white-space:nowrap;">
-											  		<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
-										 				<td style="background-color: #ccc; width: 38%; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
-														<td colspan="2" style=" color:#F00; font-weight:bold;font-family: Arial Black; font-size: 12px;">$ <?php echo number_format($total_stu_test,2);?></td>
+											  		<tr style="font-size:10px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
+										 				<td style="background-color: #ccc; width: 38%; font-weight:bold; font-size: 12px;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
+														<td colspan="2" style=" color:#F00; font-weight:bold; font-size: 12px;">$ <?php echo number_format($total_stu_test,2);?></td>
 											  		</tr>
 											  </table>
 										</td>
@@ -254,15 +282,16 @@
 									th,td{ padding:0 1px;}
 								</style>
 
-							<table class="padd" width="100%" border="1" align="center" style="font-family: 'Hanuman';">
+							<table class="padd" width="100%" border="1" align="center" style="font-family: Khmer OS Battambang,Times new roman;">
 								<tr style="border-left:none;">
-									<td align="center" colspan="12" ><strong style="font-family: Daunpenh;font-size: 25px;"> Other Income </strong> </td>
+									<td align="center" colspan="12" ><strong style="font-family: Daunpenh;font-size: 25px;"><div style="margin-bottom: -5px;margin-top: 5px;"> Other Income </div></strong> </td>
 								</tr>
 											
 								<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('TITLE')?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></td>
+									<td style="border: 1px solid #000;"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('CURRENCY_TYPE')?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL')?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('FOR_DATE')?></td>
@@ -275,6 +304,7 @@
 									<td style="border: 1px solid #000;"><?php echo $i;?></td>
 									<td style="border: 1px solid #000;"><?php echo $row['title'];?></td>
 									<td style="border: 1px solid #000;"><?php echo $row['invoice'];?></td>
+									<td style="border: 1px solid #000;"><?php echo $row['income_category'];?></td>
 									<td align="canter" style="border: 1px solid #000;"><?php echo $row['payment_method'];?></td>	
 									<td style="border: 1px solid #000;"><?php echo '$ '.$row['total_amount'];?></td>
 									<td style="border: 1px solid #000;"><?php echo date('d-M-Y',strtotime($row['date']));?></td>
@@ -285,14 +315,14 @@
 									?> 
 								 <?php } ?>
 							</table>
-							<table width="100%" style="margin-top: 10px;">
+							<table width="100%" style="margin-top: 5px;">
 								<?php if(!empty($this->income)){?>
 									<tr>
 										<td colspan="3">
 												<table width="29.2%" border="1" align="right" style="white-space:nowrap;">
-											  		<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
-										 				<td style="background-color: #ccc; width: 38%; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
-														<td colspan="2" style=" color:#F00; font-weight:bold;font-family: Arial Black; font-size: 12px;">$ <?php echo number_format($total_income_dollar,2);?></td>
+											  		<tr style="font-size:10px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
+										 				<td style="background-color: #ccc; width: 38%; font-weight:bold; font-size: 12px;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
+														<td colspan="2" style=" color:#F00; font-weight:bold; font-size: 12px;">$ <?php echo number_format($total_income_dollar,2);?></td>
 											  		</tr>
 											  </table>
 										</td>
@@ -321,9 +351,9 @@
 										.padd tr th{  background-color: #e4e4e4; }
 									</style>
 
-								<table class="padd" width="100%" border="1" align="center" style="font-family: 'Hanuman';">
+								<table class="padd" width="100%" border="1" align="center" style="font-family: Khmer OS Battambang,Times new roman;">
 									<tr style="border-left:none;">
-										<td align="center" colspan="12" ><strong style="font-family: Daunpenh;font-size: 25px;"> Other Expense </strong> </td>
+										<td align="center" colspan="12" ><strong style="font-family: Daunpenh;font-size: 25px;"><div style="margin-bottom: -5px;margin-top: 5px;"> Other Expense </div></strong> </td>
 									</tr>
 												
 									<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
@@ -352,14 +382,14 @@
 										?> 
 									 <?php } ?>
 								</table>
-								<table width="100%" style="margin-top: 10px;">
+								<table width="100%" style="margin-top: 5px;">
 									<?php if(!empty($this->expense)){?>
 										<tr>
 											<td colspan="3">
 													<table width="29.2%" border="1" align="right" style="white-space:nowrap;">
-												  		<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
-												 				<td style="background-color: #ccc; width: 38%; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
-																<td colspan="2" style=" color:#F00; font-weight:bold;font-family: Arial Black; font-size: 12px;">$ <?php echo number_format($total_expense_dollar,2);?></td>
+												  		<tr style="font-size:10px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
+												 				<td style="background-color: #ccc; width: 38%; font-weight:bold; font-size: 12px;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
+																<td colspan="2" style=" color:#F00; font-weight:bold; font-size: 12px;">$ <?php echo number_format($total_expense_dollar,2);?></td>
 												  		</tr>
 												  </table>
 											</td>
@@ -377,7 +407,7 @@
 						?>
 						<tr>
 							<td colspan="3">
-								<table width="100%" style="margin-top: 10px;">
+								<table width="100%" style="margin-top: -5px;">
 									<?php if(!empty($this->row) || !empty($this->stu_test) || !empty($this->income) || !empty($this->expense)){?>
 										<tr>
 											<td colspan="3"><br /><br />
@@ -386,21 +416,21 @@
 												$final_total_dollar=$net_amount + $total_stu_test + $total_income_dollar - $total_expense_dollar;
 											?>
 												<table width="100%" border="1"  style="white-space:nowrap;">
-													<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
-														<td style="background-color: #ccc; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("CURRENCY_TYPE"); ?>&nbsp;</td>
-										 				<td style="background-color: #ccc; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>&nbsp;</td>
-										 				<td style="background-color: #ccc; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("STUDENT_TEST");?>&nbsp;</td>
-										 				<td style="background-color: #ccc; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("OTHER_INCOME"); ?>&nbsp;</td>
-										 				<td style="background-color: #ccc; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("OTHER_EXPENSE"); ?>&nbsp;</td>
-										 				<td style="background-color: #ccc; font-weight:bold;font-family: 'Hanuman',Arial Black; font-size: 12px;">&nbsp;<?php echo $tr->translate("សមតុល្យ"); ?>&nbsp;</td>
+													<tr style="background-color: #ccc;font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman; "​ align="center">
+														<td style=" font-weight:bold;">&nbsp;<?php echo $tr->translate("CURRENCY_TYPE"); ?>&nbsp;</td>
+										 				<td style="font-weight:bold; ">&nbsp;<?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>&nbsp;</td>
+										 				<td style="font-weight:bold; ">&nbsp;<?php echo $tr->translate("STUDENT_TEST");?>&nbsp;</td>
+										 				<td style="font-weight:bold;">&nbsp;<?php echo $tr->translate("OTHER_INCOME"); ?>&nbsp;</td>
+										 				<td style="font-weight:bold;">&nbsp;<?php echo $tr->translate("OTHER_EXPENSE"); ?>&nbsp;</td>
+										 				<td style="font-weight:bold;">&nbsp;<?php echo $tr->translate("សមតុល្យ"); ?>&nbsp;</td>
 											  		</tr>
-											  		<tr style="font-size:10px; color:#000; height: 23px;"​ align="center">
-										  				<td style="font-weight:bold;font-family: Arial Black; font-size: 12px;"> Dollar ($)</td>
-														<td style=" color:#F00; font-weight:bold;font-family: Arial Black; font-size: 12px;"> <?php echo $net_amount;?> $ </td>
-														<td style=" color:#F00; font-weight:bold;font-family: Arial Black; font-size: 12px;"> <?php echo $total_stu_test;?> $ </td>
-														<td style=" color:#F00; font-weight:bold;font-family: Arial Black; font-size: 12px;"> <?php echo $total_income_dollar;?> $​ </td>
-														<td style=" color:#F00; font-weight:bold;font-family: Arial Black; font-size: 12px;"> <?php echo $total_expense_dollar;?> $ </td>
-														<td style=" color:#F00; font-weight:bold;font-family: Arial Black; font-size: 12px;"><?php echo $final_total_dollar;?> $ </td>
+											  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
+										  				<td style="font-weight:bold;"> Dollar ($)</td>
+														<td style=" color:#F00; font-weight:bold;"> <?php echo $net_amount;?> $ </td>
+														<td style=" color:#F00; font-weight:bold;"> <?php echo $total_stu_test;?> $ </td>
+														<td style=" color:#F00; font-weight:bold;"> <?php echo $total_income_dollar;?> $​ </td>
+														<td style=" color:#F00; font-weight:bold;"> <?php echo $total_expense_dollar;?> $ </td>
+														<td style=" color:#F00; font-weight:bold;"> <?php echo $final_total_dollar;?> $ </td>
 											  		</tr>
 											    </table>
 											</td>

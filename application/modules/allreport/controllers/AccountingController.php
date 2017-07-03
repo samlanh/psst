@@ -161,9 +161,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
-	function rptInvoiceAction(){
-	
-	}
 	function rptStudentListDetailPart1Action(){
 	
 	}
@@ -186,9 +183,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	function rptListOfItemAction(){
 	
 	}
-	
-	
-	
 	public function rptstudentbalanceAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -835,6 +829,48 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows = $group->getAllStudentDrop($search);
 		$this->view->search=$search;
 	}
-	
-	
+	public function rptInvoiceAction(){
+		try{
+				if($this->getRequest()->isPost()){
+					$search = $this->getRequest()->getPost();
+				}
+				else{
+					$search=array(
+						'student_id' => '',
+						'student_name' => '',
+						'form_date'=> date('Y-m-d'),
+						'to_date'=>date('Y-m-d'),
+						'search'=>1,
+					);
+				}
+				$db = new Accounting_Model_DbTable_Dbinvoice();
+				$this->view->all_invoice = $db->getinvoice($search);
+				$db = new Registrar_Model_DbTable_DbRegister();
+				$this->view->all_student_name = $db->getAllGerneralOldStudentName();
+				$this->view->all_student_code = $db->getAllGerneralOldStudent();
+			}catch (Exception $e){
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+    public function rptInvoicedetailAction(){
+		$db = new Accounting_Model_DbTable_Dbinvoice();
+		$id=$this->getRequest()->getParam('id');
+		$this->view->invoice = $db->getinvoiceByid($id);
+		$this->view->invoice_service = $db->getinvoiceservice($id);
+		//print_r($this->view->invoice_service);exit();
+		if($this->getRequest()->isPost()){
+	    	try{
+	    		$data = $this->getRequest()->getPost();
+	    		$db->editinvice($data , $id);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/invoice");
+	    	}catch(Exception $e){
+	    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
+	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    	}
+    	}
+		$db = new Registrar_Model_DbTable_DbRegister();
+		$this->view->all_service = $db->getAllService();
+		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
+		$this->view->all_student_code = $db->getAllGerneralOldStudent();
+	}		
 }

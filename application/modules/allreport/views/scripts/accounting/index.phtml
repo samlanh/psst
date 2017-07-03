@@ -50,6 +50,8 @@
   $rpt_student_drop=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-student-drop'), null, true);
   
   $rpt_student_payment_by_type=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-paymentdetailbytype'), null, true);
+  
+  $rpt_invoice =$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-invoice'), null, true);
   ?>
   <div style="background:#ccc; width: 100%;">
   	<ul class="link-rpt">
@@ -64,13 +66,14 @@
   		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-suspendservice'), null, true);?>"><?php echo $tr->translate('STUDENT_STOP_SERVICE_REPORT');?></a></li>
   		<li><a href="<?php echo $rpt_tuitionfee;?>"><?php echo $tr->translate('RPT_FEE');?></a></li>
   		<li><a href="<?php echo $rpt_servicecharge;?>"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></a></li>
-  	   
   	    <li><a href="<?php echo $rpt_product_location;?>"><?php echo $tr->translate('RPT_PRODUCT_LOCATION');?></a></li>
   		<li><a href="<?php echo $rpt_purchaseall;?>"><?php echo $tr->translate('RPT_PURCHASE_ALL');?></a></li>
   		<li><a href="<?php echo $rpt_purchase;?>"><?php echo $tr->translate('RPT_PURCHASE');?></a></li>  
   		
   		<li><a href="<?php echo $rpt_product_sold;?>"><?php echo $tr->translate('RPT_PRODUCT_SOLD');?></a></li>
   		<li><a href="<?php echo $rpt_income_expense;?>"><?php echo $tr->translate('RPT_OTHER_INCOME_EXPENSE');?></a></li>
+		
+		<li><a href="<?php echo $rpt_invoice;?>"><?php echo $tr->translate('INVOICE');?></a></li>
   		<?php /*?>
   		<li><a href="<?php echo $rpt_student_by_teacher;?>"><?php echo $tr->translate('STUDENT_AMOUNTBY_TEACHER_REPORT');?></a></li>
   		<?php */?>

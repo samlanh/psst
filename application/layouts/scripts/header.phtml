@@ -23,8 +23,13 @@
 	  $level=$session_user->level;
 	  
 	//  echo $level;exit();
-	  
+	  $url = $this->baseUrl()."/images/cam-app-logo.png";
 	  $item_arr=array(
+	  		
+	  '#'=>'<li class="link">
+	  		<a title="ទំព័រដើម" href="'.$home.'">
+	  		<img style="max-height:45px" src="'.$url.'"<span class="icon_menu"></a>
+	  		</li>',
 	   'index'=>'<li class="link">
 							<a title="ទំព័រដើម" href="'.$home.'">
 								<span class="icon_menu"><i class="fa fa-home" aria-hidden="true"></i></span><br />&nbsp;&nbsp;&nbsp;&nbsp;'.$tr->translate("HOME_PAGE").'&nbsp;&nbsp;&nbsp;

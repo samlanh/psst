@@ -38,7 +38,7 @@ $student_register=$this->url(array('module'=>'foundation','controller'=>'registe
 $tuition_fee=$this->url(array('module'=>'accounting','controller'=>'fee','action'=>'index'), null, true);
 $service_fee=$this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'index'), null, true);
 $service_name=$this->url(array('module'=>'accounting','controller'=>'service','action'=>'index'), null, true);
-$stopservice=$this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'index'), null, true);
+$stopservice=$this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'index'), null, true);
 
 $rpt_dailypayment=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpayment'), null, true);
 $rpt_paymentdetail=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpaymentdetail'), null, true);

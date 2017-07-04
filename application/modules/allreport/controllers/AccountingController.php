@@ -287,30 +287,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	
 	public function rptIncomeExpenseAction(){
 		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}else{
-				$search=array(
-						'txtsearch' =>'',
-						'branch_id'	=>'',
-						'user'	=>'',
-						'start_date'=>date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
-				);
-			}
-			$db = new Allreport_Model_DbTable_DbRptOtherExpense();
-			$this->view->expense = $db->getAllOtherExpense($search);
-	
-			$db = new Allreport_Model_DbTable_DbRptOtherIncome();
-			$this->view->income = $db->getAllOtherIncome($search);
-				
-			//print_r($abc);exit();
-			$form=new Registrar_Form_FrmSearchInfor();
-			$form->FrmSearchRegister();
-			Application_Model_Decorator::removeAllDecorator($form);
-			$this->view->form_search=$form;
-	
-			$this->view->search = $search;
+			$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
+			$this->view->row = $db->getAllexspan();
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -318,8 +296,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 	}
-	
-	
+    public function rptIncomeExpenseDetailAction(){
+		$id 	=	 $this	->	getRequest()->getParam("id");
+		$db 	= 	new Allreport_Model_DbTable_DbRptIncomeExpense();
+		$this	->	view	->	row = $db	->	getAllexspanByid($id);	
+		$this	->	view	->	all_row = $db	->getAllexspandetailByid($id);
+		//print_r($this	->	view	->	all_row);exit();
+	}
 	public function rptOtherIncomeAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -799,17 +782,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->degree = $db->getAllDegree();
 		$this->view->grade= $db->getAllGrade();
 		$this->view->academic = $db->getAcademicyear();
-		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
-		
+		$this->view->form_search=$form;	
 	}
-	
-	
 	public function rptStudentDropAction(){
-	
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
@@ -821,12 +799,10 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'session' =>'',
 			);
 		}
-	
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
-	
 		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
 		$this->view->rs = $rs_rows = $group->getAllStudentDrop($search);
 		$this->view->search=$search;

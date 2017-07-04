@@ -41,8 +41,36 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
 
     	return $db->fetchAll($sql.$where.$order);
     }
-   
-    
+	public function getAllexspan(){
+	   $db=$this->getAdapter();
+	   $sql="SELECT e.* ,
+				b.branch_namekh AS branch ,
+				u.user_name ,
+				(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type) AS pay
+				
+			FROM ln_expense AS e ,
+			 rms_branch AS b ,
+				 rms_users AS u 
+			WHERE b.br_id=e.branch_id AND e.user_id=u.id";
+	   return $db->fetchAll($sql);
+	}
+	public function getAllexspanByid($id){
+	    $db=$this->getAdapter();
+	      $sql="SELECT e.* ,
+					b.branch_namekh AS branch ,
+					u.user_name ,
+					(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type) AS pay	
+				FROM ln_expense AS e ,
+    				 rms_branch AS b ,
+					 rms_users AS u 
+			    WHERE b.br_id=e.branch_id AND e.user_id=u.id and e.id='".$id."'";
+	    return $db->fetchrow($sql);
+    }
+	public function getAllexspandetailByid($id){
+	    $db=$this->getAdapter();
+	      $sql="SELECT e.* , s.account_name as service FROM ln_expense_detail AS e ,rms_account_name AS s WHERE e.expense_id=s.id and e.expense_id='".$id."'";
+	    return $db->fetchAll($sql);
+    }
 }
    
     

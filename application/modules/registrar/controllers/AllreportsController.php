@@ -27,7 +27,6 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
 	    		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
 	    		$this->view->row = $db->getAllStudentPayment($search);
 	    		
-	    		
 	    		$user_type=$db->getUserType();
 	    		
 	    		if($user_type==1){

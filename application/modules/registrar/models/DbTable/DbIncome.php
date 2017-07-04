@@ -143,9 +143,6 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = " select count(id) from ln_income ";
 		$amount = $db->fetchOne($sql);
-		
-		
-		//return 
 	}
 
 	

@@ -216,9 +216,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if(!empty($search['txtsearch'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['txtsearch']));
-    		$s_where[] = " kh_name LIKE '%{$s_search}%'";
-    		$s_where[] = " en_name LIKE '%{$s_search}%'";
-    		$s_where[] = " service LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
+    		//$s_where[] = " service LIKE '%{$s_search}%'";
     		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}

@@ -28,21 +28,13 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
     		
     		$this->view->adv_search = $formdata;
     		
-    		$_db = new Application_Model_DbTable_DbGlobal();
-    		$user_type=$_db->getUserType();
-    		if($user_type!=1){
-    			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-    		}
-    		
-			$rs_rows= $db->getAllExpense($formdata);//call frome model
-    		$glClass = new Application_Model_GlobalClass();
-    		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
+			$rs_rows= $db->getAllChangeProduct($formdata);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH_NAME","EXPENSE_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_EXPENSE","NOTE","FOR_DATE","BY_USER","STATUS");
+    		$collumns = array("RECEIPT_NO","NAME","TOTAL_PAYMENT","CREDIT_MEMO","CREATE_DATE","USER");
     		$link=array(
-    				'module'=>'registrar','controller'=>'expense','action'=>'edit',
+    				'module'=>'registrar','controller'=>'changeproduct','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'title'=>$link,'invoice'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('name'=>$link,'receipt_no'=>$link,'invoice'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		echo $e->getMessage();
@@ -59,9 +51,9 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
 			$data=$this->getRequest()->getPost();	
 			$db = new Registrar_Model_DbTable_DbChangeProduct();				
 			try {
-				$db->addExpense($data);
+				$db->addChangeProduct($data);
 				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/expense");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/changeproduct");
 				}else{
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}				
@@ -85,36 +77,31 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
     	$id = $this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();	
-			$data['id'] = $id;
 			$db = new Registrar_Model_DbTable_DbChangeProduct();				
 			try {
-				$db->updatExpense($data);				
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL);		
+				$db->editChangeProduct($data,$id);
+				if(!empty($data['saveclose'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/changeproduct");
+				}else{
+					Application_Form_FrmMessage::message("EDIT_SUCCESS");
+				}				
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				Application_Form_FrmMessage::message("EDIT_FAIL");
+				echo $e->getMessage();
 			}
 		}
-		
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$user_type=$_db->getUserType();
-		if($user_type!=1){
-			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/expense');
-		}
-		
-		$id = $this->getRequest()->getParam('id');
-		$db = new Registrar_Model_DbTable_DbChangeProduct();
-		$row  = $db->getexpensebyid($id);
-		$this->view->row = $row;
-		$this->view->rows = $db->getexpenseDetailbyid($id);
-		
-    	$pructis=new Registrar_Form_Frmexpense();
-    	$frm = $pructis->FrmAddExpense($row);
-    	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_expense=$frm;
 
-    	$db = new Application_Model_GlobalClass();
-    	$this->view->expenseopt = $db->getAllExpenseIncomeType(5);
+		$db = new Registrar_Model_DbTable_DbChangeProduct();
+    	$test = $this->view->all_product = $db->getAllProduct();
+    	
+    	$this->view->stu_code = $db->getAllStuCode();
+    	$this->view->stu_name = $db->getAllStuName();
+    	
+    	
+    	$this->view->row = $db->getAllChangeProductById($id);
+    	$this->view->row_detail = $db->getAllChangeProductDetailById($id);
     }
+    
     function getProductPriceAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();

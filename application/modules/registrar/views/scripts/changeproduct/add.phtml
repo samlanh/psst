@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title>Add Other Expense</title>
+<title>Add Change Product</title>
 <style>	
 .fullside {
 	width: 100%;
@@ -57,6 +57,7 @@ $frm = $this->frm_expense;
 					</tr>
 					
 					<tr>
+						<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" />
 						<td colspan="6">
 							<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;width:100%;">
 								<tr id="head-title" class="head-td" align="right"></tr>
@@ -69,6 +70,23 @@ $frm = $this->frm_expense;
 						 	   iconClass="dijitIconEditProperty" onclick="addRow();" />
 						</td>
 					</tr>
+					
+					<tr>
+						<td colspan="4">&nbsp;</td>
+						<td><?php echo $tr->translate("TOTAL_PAYMENT")?></td>
+						<td>
+							<input type="text" name="total_payment" id="total_payment" readonly="readonly" dojoType="dijit.form.TextBox" class="fullside" />
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="4">&nbsp;</td>
+						<td><?php echo $tr->translate("CREDIT_MEMO")?></td>
+						<td>
+							<input type="text" name="credit_memo" id="credit_memo" readonly="readonly" dojoType="dijit.form.TextBox" class="fullside" />
+						</td>
+					</tr>
+					
 				</table>
 			</fieldset>
 		</td>
@@ -269,29 +287,6 @@ function getReceiptNumber(receipt){
 	});
 }
 
-function deleteRecord(index) {
-	var identity = $('#identity').val();
-	var arrays = identity.split(',');
-	for(var i=0;i<arrays.length;i++) {
-	if(arrays[i] == index) arrays.splice(i,1);
-	}
-	var strings = arrays.join(',');
-	$('#identity').val(strings);
-	dojo.query("#row"+index).remove();
-	netTotal();
-}
-
-function netTotal(){
-	var netTotal=0;
-	var rowId = $('#identity').val();
-	var rowIDArray = rowId.split(',');
-	for(var n = 0; n < rowIDArray.length; n++) {
-		netTotal += dijit.byId('total_paid'+rowIDArray[n]).get('value');
-	}
-	dijit.byId('total_amount').attr('value',netTotal);
-}
-
-
 var template = '';
 var service = '';
 var col = 0;
@@ -322,7 +317,10 @@ function addRow() {
 	    }
 		template+='<td width="20px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="20px" align="center">'+no+'</td>';
-		template+='<td width="20%"><select onchange="getProductPrice('+col+',1);" dojoType="dijit.form.FilteringSelect" class="fullside" id="product_old_'+col+'" name="product_old_'+col+'">';
+		template+='<td width="20%"><input style="width:10px;" type="hidden" name="old_pro_type_'+col+'" id="old_pro_type_'+col+'" dojoType="dijit.form.TextBox"  /> ';
+		template+='<input style="width:10px;" type="hidden" name="old_pro_id_'+col+'" id="old_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
+		
+		template+='<select onchange="getProductPrice('+col+',1);" dojoType="dijit.form.FilteringSelect" class="fullside" id="product_old_'+col+'" name="product_old_'+col+'">';
 		template+='<option value="">----- Select product -----</option>';
 					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
 						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';
@@ -330,11 +328,13 @@ function addRow() {
 		template+='</select></td>';	
 
 		template+='<td width="7%"><input type="text" name="price_old_'+col+'" id="price_old_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';
-		template+='<td width="5%"><input type="text" onkeyup="calculateTotal('+col+');" name="qty_old_'+col+'" id="qty_old_'+col+'" class="fullside" value="1" dojoType="dijit.form.NumberTextBox" /></td>';
-		template+='<td width="8%"><input type="text" name="total_old_'+col+'" id="total_old_'+col+'" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';			
+		template+='<td width="5%"><input type="text" onkeyup="calculateTotal('+col+',1);" name="qty_old_'+col+'" id="qty_old_'+col+'" class="fullside" value="1" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="8%"><input type="text" name="total_old_'+col+'" id="total_old_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';			
 
 		
-		template+='<td width=20%"><select class="fullside" onchange="getProductPrice('+col+',2);" dojoType="dijit.form.FilteringSelect" id="product_new_'+col+'" name="product_new_'+col+'">';
+		template+='<td width=20%"><input style="width:10px;" type="hidden" name="new_pro_type_'+col+'" id="new_pro_type_'+col+'" dojoType="dijit.form.TextBox"  />';
+		template+='<input style="width:10px;" type="hidden" name="new_pro_id_'+col+'" id="new_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
+		template+='<select class="fullside" onchange="getProductPrice('+col+',2);" dojoType="dijit.form.FilteringSelect" id="product_new_'+col+'" name="product_new_'+col+'">';
 		template+='<option value="">----- Select product -----</option>';
 					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
 						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';
@@ -342,10 +342,10 @@ function addRow() {
 		template+='</select></td>';	
 		
 		template+='<td width="7%"><input type="text" name="price_new_'+col+'" id="price_new_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';
-		template+='<td width="5%"><input type="text" onkeyup="calculateTotal('+col+');" name="qty_new_'+col+'" id="qty_new_'+col+'" class="fullside" value="1" dojoType="dijit.form.NumberTextBox" /></td>';
-		template+='<td width="8%"><input type="text" name="total_new_'+col+'" id="total_new_'+col+'" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';	
+		template+='<td width="5%"><input type="text" onkeyup="calculateTotal('+col+',2);" name="qty_new_'+col+'" id="qty_new_'+col+'" class="fullside" value="1" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="8%"><input type="text" name="total_new_'+col+'" id="total_new_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';	
 
-		template+='<td width="10%"><input type="text" name="total_diff_'+col+'" id="total_diff_'+col+'" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';			
+		template+='<td width="10%"><input type="text" name="total_diff_'+col+'" id="total_diff_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';			
 		template+='<td width="10%"><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox"  class="fullside" /></td>';
 
 
@@ -376,10 +376,18 @@ function getProductPrice(index,type){
 		handleAs:"json",
 		load: function(data) {
 			if(type==1){
-				dijit.byId('price_old_'+index).attr('value',data);
+				dijit.byId('price_old_'+index).attr('value',data.price);
+				dijit.byId('old_pro_type_'+index).attr('value',data.pro_type);
+				dijit.byId('old_pro_id_'+index).attr('value',data.pro_id);
+				
 			}else{
-				dijit.byId('price_new_'+index).attr('value',data);
+				dijit.byId('price_new_'+index).attr('value',data.price);
+				dijit.byId('new_pro_type_'+index).attr('value',data.pro_type);
+				dijit.byId('new_pro_id_'+index).attr('value',data.pro_id);
 			}
+			
+			calculateTotal(index,type);				
+
 		},
 		error: function(err) {
 			alert(err);
@@ -452,4 +460,78 @@ function doPrintInvoice() {
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
 }
+
+
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+	netTotal();
+}
+
+function calculateTotal(index,type){
+	if(type==1){
+		price = dijit.byId('price_old_'+index).get('value');
+		price = isNaN(price)?0:price;
+		
+		qty = dijit.byId('qty_old_'+index).get('value');
+		qty = isNaN(qty)?0:qty;
+		
+		dijit.byId('total_old_'+index).attr('value',price * qty);
+		
+	}else{
+		price = dijit.byId('price_new_'+index).get('value');
+		price = isNaN(price)?0:price;
+		
+		qty = dijit.byId('qty_new_'+index).get('value');
+		qty = isNaN(qty)?0:qty;
+		
+		dijit.byId('total_new_'+index).attr('value',price * qty);
+	}
+	
+	calculateDifferent(index);
+}
+
+function calculateDifferent(index){
+
+	old_total = dijit.byId('total_old_'+index).get('value');
+	old_total = isNaN(old_total)?0:old_total;
+	
+	new_total = dijit.byId('total_new_'+index).get('value');
+	new_total = isNaN(new_total)?0:new_total;
+	
+	dijit.byId('total_diff_'+index).attr('value',new_total - old_total);
+	
+	
+	netTotal();
+}
+
+function netTotal(){
+	var netTotal=0;
+	var rowId = $('#identity').val();
+	var rowIDArray = rowId.split(',');
+	for(var n = 0; n < rowIDArray.length; n++) {
+		netTotal += dijit.byId('total_diff_'+rowIDArray[n]).get('value');
+	}
+	if(netTotal>0){
+		dijit.byId('credit_memo').attr('value',0);
+		dijit.byId('total_payment').attr('value',netTotal);
+	}else if(netTotal<0){
+		dijit.byId('total_payment').attr('value',0);
+		dijit.byId('credit_memo').attr('value',abs(netTotal));
+	}else{
+		dijit.byId('total_payment').attr('value',0);
+		dijit.byId('credit_memo').attr('value',0);
+	}
+}
+
+
+
+
+
 </script>

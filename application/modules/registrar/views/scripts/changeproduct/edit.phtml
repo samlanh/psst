@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title>Edit Other Expense</title>
+<title>Add Change Product</title>
 <style>	
 .fullside {
 	width: 100%;
@@ -10,10 +10,10 @@ $frm = $this->frm_expense;
 }
 </style>
  <script>
-	require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
+		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
  </script>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'changeproduct','action'=>'edit')); ?>" 
-				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 	if(this.validate()) {
 		return true;
@@ -24,64 +24,97 @@ $frm = $this->frm_expense;
 <table cellspacing="10" class='fullside' >
 	<tr>
 		<td>
-				<fieldset>
-					<legend><strong>ចំណាយ</strong></legend>
-					<table cellspacing="10"  width="100%">
-						<tr>
-						    <td><?php echo $tr->translate("BRANCH_NAME")?></td>
-							<td><?php echo $frm->getElement('branch_id');?></td>
-							<td><?php echo $tr->translate("EXPENSE_TITLE")?></td>
-							<td><?php echo $frm->getElement('title');?><?php echo $frm->getElement('id');?></td>
-							<td><?php echo $tr->translate("Payment Method")?></td>
-							<td><?php echo $frm->getElement('payment_method');?></td>
-						</tr>
-						<tr>
-						   	<td><?php echo $tr->translate("CHEQUE_NO")?></td>
-							<td><?php echo $frm->getElement('cheque_num');?></td>
-						   	<td><?php echo $tr->translate("RECEIPT_NO")?></td>
-							<td><?php echo $frm->getElement('invoice');?></td>
-							<td><?php echo $tr->translate("TOTAL_EXPENSE")?></td>
-							<td><?php echo $frm->getElement('total_amount');?></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("CREATED_DATE")?></td>
-							<td><?php echo $frm->getElement('Date');?></td>
-							<td valign="top"><?php echo $tr->translate("STATUS")?></td>
-							<td valign="top"><?php echo $frm->getElement('Stutas');?></td>
-							<td valign="top"><?php echo $tr->translate("NOTE")?><input type="hidden" id="identity" name="identity" /></td>
-							<td colspan="3"><?php echo $frm->getElement('Description');?></td>
-						</tr>
-						<tr>
-							<td colspan="6">
-								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;width:100%;">
-									<tr id="head-title" class="head-td" align="right"></tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="6" align="left">
-								<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-							 	   iconClass="dijitIconEditProperty" onclick="addRow();" />
-							</td>
-						</tr>
-					</table>
-				</fieldset>
+			<fieldset>
+				<legend><strong>ចំណាយ</strong></legend>
+				<table cellspacing="10"  width="100%">
+					<tr>
+					    <td><?php echo $tr->translate("RECEIPT")?></td>
+						<td>
+							<input type="text" name="receipt_no" id="receipt_no" value="<?php echo $this->row['receipt_no']?>" readonly="readonly" dojoType="dijit.form.TextBox" class="fullside" />
+						</td>
+						<td><?php echo $tr->translate("STUDENT_ID")?></td>
+						<td>
+							<select name="stu_id" id="stu_id" class="fullside" dojoType="dijit.form.FilteringSelect" readonly="readonly" onchange="setID(1);" >
+								<option value="-1">----- select student id -----</option>
+								<?php if(!empty($this->stu_code)){foreach ($this->stu_code as $stu_code){?>
+									<option value="<?php echo $stu_code['id']?>" <?php if($stu_code['id']==$this->row['stu_id']){echo "selected='selected'";}?>><?php echo $stu_code['stu_code']?></option>
+								<?php }}?>
+							</select>
+						</td>
+						<td><?php echo $tr->translate("STUDENT_NAME")?></td>
+						<td>
+							<select name="stu_name" id="stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" readonly="readonly" onchange="setID(2);" >
+								<option value="-1">----- select student name -----</option>
+								<?php if(!empty($this->stu_name)){foreach ($this->stu_name as $stu_name){?>
+									<option value="<?php echo $stu_name['id']?>" <?php if($stu_name['id']==$this->row['stu_id']){echo "selected='selected'";}?>><?php echo $stu_name['name']?></option>
+								<?php }}?>
+							</select>
+						</td>
+					</tr>
+					
+					<input type="text" name="credit_memo_id" id="credit_memo_id" value="<?php echo $this->row['credit_memo_id']?>" dojoType="dijit.form.TextBox" />
+					
+					<tr>
+						<td>
+							<?php echo $tr->translate("STATUS")?>
+						</td>
+						<td>
+							<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
+								<option value="1">Using</option>
+								<option value="0">Void</option>
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="6">&nbsp;</td>
+					</tr>
+					
+					<tr>
+						<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" />
+						<td colspan="6">
+							<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;width:100%;">
+								<tr id="head-title" class="head-td" align="right"></tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="6">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="4">&nbsp;</td>
+						<td><?php echo $tr->translate("TOTAL_PAYMENT")?></td>
+						<td>
+							<input type="text" name="total_payment" id="total_payment" readonly="readonly" value="<?php echo $this->row['total_payment']?>" dojoType="dijit.form.TextBox" class="fullside" />
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="4">&nbsp;</td>
+						<td><?php echo $tr->translate("CREDIT_MEMO")?></td>
+						<td>
+							<input type="text" name="credit_memo" id="credit_memo" readonly="readonly" value="<?php echo $this->row['credit_memo']?>"  dojoType="dijit.form.TextBox" class="fullside" />
+						</td>
+					</tr>
+					
+				</table>
+			</fieldset>
 		</td>
 	</tr>		
 	<tr>
 		<td align="center">
 			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
-				 iconClass="dijitIconClear"/>
-			<input type="button" onclick="printSave('');" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
-				 iconClass="dijitIconNewTask"/>
+				iconClass="dijitIconClear"/>
+			<input type="button" onclick="submitData();" label="<?php echo $tr->translate("GO_EDIT");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
+				iconClass="dijitIconDelete"/>
 		</td>
 	</tr>	
 </table>
 </form>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
-		<div id="printexpense" style="width: 19cm !important; height: 12cm ; padding: 0px; margin-bottom:30px; ">
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height: 11cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+		<div id="printexpense" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				<tr>
 				    <td colspan="10"  style="" align="center">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
@@ -120,7 +153,7 @@ $frm = $this->frm_expense;
 								<td width="8%"></td>
 							</tr>
 							<tr >
-								<td class="one ">ចំណាយសម្រាប់​ <br />Pay To </td>
+								<td class="one ">ចំណាយឱ្យ​ <br />Pay To </td>
 								<td valign="top"> :&nbsp; <label id="bl_payfor"></label> </td>
 								<td  align="center">ថ្ងៃចំណាយ </br />Paid Date</td>
 								<td valign="top"> :&nbsp; <label id="lb_paiddate"></label> </td>
@@ -137,7 +170,7 @@ $frm = $this->frm_expense;
 								</td>
 							</tr>
 							<tr>
-								<td colspan="10">
+								<td colspan="10" valign="bottom">
 									<table width="100%"   style="font-family:'Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:-5px;margin-bottom:5px;">
 										<tr>
 											<td width="20%"></td>
@@ -169,8 +202,8 @@ $frm = $this->frm_expense;
 												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
 											</td>
 										</tr>
-										<tr>
-											<td colspan="2" align="center">
+										<tr >
+											<td colspan="2" align="center" valign="top">
 												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
 													<?php 
 													   $session_user=new Zend_Session_Namespace('auth');
@@ -180,14 +213,14 @@ $frm = $this->frm_expense;
 													?>
 												</div>
 											</td>
-											<td colspan="2">
+											<td colspan="2" valign="top">
 												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
 													<?php 
 													   echo"Received By :........................ &nbsp;&nbsp;";
 													?>
 												</div>
 											</td>
-											<td><div style="margin-top:-15px;"></div></td>
+											<td></td>
 											<td></td>
 										</tr>
 										<tr>
@@ -209,25 +242,60 @@ $frm = $this->frm_expense;
 				</tr>
 			</table>
 		</div>
-		<table>
-			<tr><td colspan="10" style="border-bottom:1px dashed #000;"></td></tr>
-		</table>
-		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-			type="button" onclick="hideDialog();">Cancel</button>
+				type="button" onclick="hideDialog();">Cancel</button>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-			type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
+				 type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
 </div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 <script type="text/javascript">
+dojo.require("dijit.form.Textarea");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.store.Memory");
-dojo.require("dijit.form.Textarea");
 dojo.ready(function(){
-	initailize();
+	//getReceiptNumber("");
+	//addRow();
+	initailize()
 });
+
+function setID(type){
+	if(type==1){
+		stu_id = dijit.byId('stu_id').get('value');
+		dijit.byId('stu_name').attr('value',stu_id);
+	}else{
+		stu_id = dijit.byId('stu_name').get('value');
+		dijit.byId('stu_id').attr('value',stu_id);
+	}
+}
+
+
+function hideDialog(){
+	dijit.byId('terms').hide();
+}
+
+var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>";
+function getReceiptNumber(receipt){
+	dojo.xhrPost({
+		url:url_get_recceipt_number,
+		content:{
+			//'branch_id':dijit.byId('branch_id').get('value')
+			},
+		handleAs:"json",
+		load: function(data) {
+			 dijit.byId('receipt_no').attr('value',data);
+			 if(receipt!=''){
+				 printSave(data);
+			}
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
 var template = '';
 var service = '';
 var col = 0;
@@ -235,148 +303,343 @@ var no = 0;
 var title = 0;
 tmp = '';
 temp='';
-optexpense = '<?php echo $this->expenseopt;?>';
-function initailize(){
-	<?php if(!empty($this->rows)){
-		foreach($this->rows as $row){
-	?>
-	col++;no++;
-	template='';
-	if(title!=1){
-		temp+='<th><?php echo $tr->translate("DEL");?></th>';
-		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ប្រភេទចំណាយ");?></th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
-		temp+='<th><?php echo $tr->translate("REMARK");?></th>';
-		dojo.query("#head-title").append(temp);
-		title=1;
-	}
-	template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-	template+='<td width="50px" align="center">'+no+'</td>';
-	template+='<td style="width:300px"><select style="width:100%" onchange="getValidate('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
-	template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="total_paid'+col+'" id="total_paid'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';			
-	template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
-	
-	tmp='<tr id="row'+col+'">';
-	tmp+="</tr>";
-	dojo.query("#table_row").append(tmp);
+function addRow() {
+		col++;no++;
+		template='';
+		if(title!=1){
+			temp+='<th><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th><?php echo $tr->translate("PRODUCT_OLD");?></th>';
+			temp+='<th><?php echo $tr->translate("PRICE");?></th>';
+			temp+='<th><?php echo $tr->translate("QTY");?></th>';
+			temp+='<th><?php echo $tr->translate("TOTAL");?></th>';
 
-	if($("#identity").val()!="") {
-		var identity = $("#identity").val();
-		$("#identity").val(identity+','+col);
-	} else {$("#identity").val(col);}
-	dojo.html.set(dojo.byId("row"+col),template , {
-	     parseContent: true,
-	});
-	dijit.byId('expense_id'+col).attr('value',<?php echo $row['service_id']?>);
-	dijit.byId('total_paid'+col).attr('value',<?php echo $row['total_amount']?>);
-	dijit.byId('remark'+col).attr('value','<?php echo $row['description']?>');
+			temp+='<th><?php echo $tr->translate("PRODUCT_NEW");?></th>';
+			temp+='<th><?php echo $tr->translate("PRICE");?></th>';
+			temp+='<th><?php echo $tr->translate("QTY");?></th>';
+			temp+='<th><?php echo $tr->translate("TOTAL");?></th>';
+
+			temp+='<th><?php echo $tr->translate("DIFFERENT");?></th>';
+			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+			dojo.query("#head-title").append(temp);
+			title=1;
+	    }
+		template+='<td width="20px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="20px" align="center">'+no+'</td>';
+		template+='<td width="20%"><input style="width:10px;" type="hidden" name="old_pro_type_'+col+'" id="old_pro_type_'+col+'" dojoType="dijit.form.TextBox"  /> ';
+		template+='<input style="width:10px;" type="hidden" name="old_pro_id_'+col+'" id="old_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
+		
+		template+='<select onchange="getProductPrice('+col+',1);" dojoType="dijit.form.FilteringSelect" class="fullside" id="product_old_'+col+'" name="product_old_'+col+'">';
+		template+='<option value="">----- Select product -----</option>';
+					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
+						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';
+					<?php }}?>
+		template+='</select></td>';	
+
+		template+='<td width="7%"><input type="text" name="price_old_'+col+'" id="price_old_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="5%"><input type="text" onkeyup="calculateTotal('+col+',1);" name="qty_old_'+col+'" id="qty_old_'+col+'" class="fullside" value="1" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="8%"><input type="text" name="total_old_'+col+'" id="total_old_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';			
+
+		
+		template+='<td width=20%"><input style="width:10px;" type="hidden" name="new_pro_type_'+col+'" id="new_pro_type_'+col+'" dojoType="dijit.form.TextBox"  />';
+		template+='<input style="width:10px;" type="hidden" name="new_pro_id_'+col+'" id="new_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
+		template+='<select class="fullside" onchange="getProductPrice('+col+',2);" dojoType="dijit.form.FilteringSelect" id="product_new_'+col+'" name="product_new_'+col+'">';
+		template+='<option value="">----- Select product -----</option>';
+					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
+						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';
+					<?php }}?>
+		template+='</select></td>';	
+		
+		template+='<td width="7%"><input type="text" name="price_new_'+col+'" id="price_new_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="5%"><input type="text" onkeyup="calculateTotal('+col+',2);" name="qty_new_'+col+'" id="qty_new_'+col+'" class="fullside" value="1" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="8%"><input type="text" name="total_new_'+col+'" id="total_new_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';	
+
+		template+='<td width="10%"><input type="text" name="total_diff_'+col+'" id="total_diff_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';			
+		template+='<td width="10%"><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox"  class="fullside" /></td>';
+
+
+		tmp='<tr id="row'+col+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+col);
+		} else {$("#identity").val(col);}
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
+ }
+
+ var template = '';
+ var service = '';
+ var col = 0;
+ var no = 0;
+ var title = 0;
+ tmp = '';
+ temp='';
+ function initailize() {
+	 
+	<?php if(!empty($this->row_detail)){
+		foreach($this->row_detail as $row){
+	?>
+		col++;no++;
+		template='';
+		if(title!=1){
+			temp+='<th><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th><?php echo $tr->translate("PRODUCT_OLD");?></th>';
+			temp+='<th><?php echo $tr->translate("PRICE");?></th>';
+			temp+='<th><?php echo $tr->translate("QTY");?></th>';
+			temp+='<th><?php echo $tr->translate("TOTAL");?></th>';
+
+			temp+='<th><?php echo $tr->translate("PRODUCT_NEW");?></th>';
+			temp+='<th><?php echo $tr->translate("PRICE");?></th>';
+			temp+='<th><?php echo $tr->translate("QTY");?></th>';
+			temp+='<th><?php echo $tr->translate("TOTAL");?></th>';
+
+			temp+='<th><?php echo $tr->translate("DIFFERENT");?></th>';
+			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+			dojo.query("#head-title").append(temp);
+			title=1;
+	    }
+		
+		template+='<td width="20px" align="center"><img src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="20px" align="center">'+no+'</td>';
+		template+='<td width="20%"><input style="width:10px;" type="hidden" name="old_pro_type_'+col+'" id="old_pro_type_'+col+'" dojoType="dijit.form.TextBox"  /> ';
+		template+='<input style="width:10px;" type="hidden" name="old_pro_id_'+col+'" id="old_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
+		
+		template+='<select dojoType="dijit.form.FilteringSelect" class="fullside" readonly="readonly" id="product_old_'+col+'" name="product_old_'+col+'">';
+		template+='<option value="">----- Select product -----</option>';
+					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
+						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';
+					<?php }}?>
+		template+='</select></td>';	
+
+		template+='<td width="7%"><input type="text" name="price_old_'+col+'" id="price_old_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="5%"><input type="text" name="qty_old_'+col+'" id="qty_old_'+col+'" readonly="readonly" class="fullside" value="1" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="8%"><input type="text" name="total_old_'+col+'" id="total_old_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';			
+
+		
+		template+='<td width=20%"><input style="width:10px;" type="hidden" name="new_pro_type_'+col+'" id="new_pro_type_'+col+'" dojoType="dijit.form.TextBox"  />';
+		template+='<input style="width:10px;" type="hidden" name="new_pro_id_'+col+'" id="new_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
+		template+='<select class="fullside" dojoType="dijit.form.FilteringSelect" readonly="readonly" id="product_new_'+col+'" name="product_new_'+col+'">';
+		template+='<option value="">----- Select product -----</option>';
+					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
+						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';
+					<?php }}?>
+		template+='</select></td>';	
+		
+		template+='<td width="7%"><input type="text" name="price_new_'+col+'" id="price_new_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="5%"><input type="text" onkeyup="calculateTotal('+col+',2);" readonly="readonly" name="qty_new_'+col+'" id="qty_new_'+col+'" class="fullside" value="1" dojoType="dijit.form.NumberTextBox" /></td>';
+		template+='<td width="8%"><input type="text" name="total_new_'+col+'" id="total_new_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';	
+
+		template+='<td width="10%"><input type="text" name="total_diff_'+col+'" id="total_diff_'+col+'" readonly="readonly" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>';			
+		template+='<td width="10%"><input type="text" name="remark'+col+'" id="remark'+col+'" readonly="readonly" dojoType="dijit.form.TextBox"  class="fullside" /></td>';
+
+
+		tmp='<tr id="row'+col+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+col);
+		} else {$("#identity").val(col);}
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
+		
+		dijit.byId('old_pro_type_'+col).attr('value','<?php echo $row['old_pro_type']?>');
+		dijit.byId('old_pro_id_'+col).attr('value',<?php echo $row['old_pro_id']?>);
+		dijit.byId('product_old_'+col).attr('value',<?php echo $row['service_id_old']?>);
+		dijit.byId('price_old_'+col).attr('value','<?php echo $row['old_pro_price']?>');
+		dijit.byId('qty_old_'+col).attr('value','<?php echo $row['old_qty']?>');
+		dijit.byId('total_old_'+col).attr('value',<?php echo $row['old_total']?>);
+		
+		
+		dijit.byId('new_pro_type_'+col).attr('value',<?php echo $row['new_pro_type']?>);
+		dijit.byId('new_pro_id_'+col).attr('value','<?php echo $row['new_pro_id']?>');
+		dijit.byId('product_new_'+col).attr('value',<?php echo $row['service_id_new']?>);
+		dijit.byId('price_new_'+col).attr('value','<?php echo $row['new_pro_price']?>');
+		dijit.byId('qty_new_'+col).attr('value',<?php echo $row['new_qty']?>);
+		dijit.byId('total_new_'+col).attr('value','<?php echo $row['new_total']?>');
+		
+		dijit.byId('total_diff_'+col).attr('value',<?php echo $row['total_different']?>);
+		dijit.byId('remark'+col).attr('value','<?php echo $row['note']?>');
 	<?php } }?>
-}
-function hideDialog(){
-	dijit.byId('terms').hide();
-}
-function deleteRecord(index) {
-		var identity = $('#identity').val();
-		var arrays = identity.split(',');
-		for(var i=0;i<arrays.length;i++) {
-		if(arrays[i] == index) arrays.splice(i,1);
+	
+ }
+ 
+var url_get_product_price = "<?php echo $this->url(array('module'=>'registrar','controller'=>'changeproduct','action'=>'get-product-price')); ?>";
+function getProductPrice(index,type){
+	if(type==1){
+		pro_id = dijit.byId('product_old_'+index).get('value');
+	}else{
+		pro_id = dijit.byId('product_new_'+index).get('value');
+	}
+	dojo.xhrPost({
+		url:url_get_product_price,
+		content:{
+			'pro_id':pro_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(type==1){
+				dijit.byId('price_old_'+index).attr('value',data.price);
+				dijit.byId('old_pro_type_'+index).attr('value',data.pro_type);
+				dijit.byId('old_pro_id_'+index).attr('value',data.pro_id);
+				
+			}else{
+				dijit.byId('price_new_'+index).attr('value',data.price);
+				dijit.byId('new_pro_type_'+index).attr('value',data.pro_type);
+				dijit.byId('new_pro_id_'+index).attr('value',data.pro_id);
+			}
+			
+			calculateTotal(index,type);				
+
+		},
+		error: function(err) {
+			alert(err);
 		}
-		var strings = arrays.join(',');
-		$('#identity').val(strings);
-		dojo.query("#row"+index).remove();
-		netTotal();
-	}
-	function calculateTotal(index){
-		netTotal();
-	}
-	function netTotal() {
-		var netTotal=0;
+	});
+	
+}
+ 
+function printSave(new_receipt){	
+	if(dijit.byId('office_receipt').validate()) {
+		if(dijit.byId("payment_method").get("value")==-1){
+			alert("សូមជ្រើសរើសប្រភេទបង់ប្រាក់");dijit.byId("payment_method").focus();
+			return false;
+		}
+		if(new_receipt==''){
+			getReceiptNumber(1);
+		}	
+		paid_date = dijit.byId("Date").get('value')
+		var today = new Date(paid_date);
+		var dd = today.getDate();
+		var mon = today.toDateString().substr(4,3); //January is 0!
+		var yyyy = today.getFullYear();
+		dojo.byId("lb_paiddate").innerHTML  = dd+'/'+mon+'/'+yyyy;
+		dojo.byId("lb_receipt_no").innerHTML = new_receipt;
+		dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
+		dojo.byId("lb_total_received").innerHTML = '$ ' + dijit.byId("total_amount").get('value');
+		dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
+		dojo.byId("lb_paymentmehtod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+		
 		var rowId = $('#identity').val();
 		var rowIDArray = rowId.split(',');
-		for(var n = 0; n < rowIDArray.length; n++) {
-			netTotal += dijit.byId('total_paid'+rowIDArray[n]).get('value');
-		}
-		dijit.byId('total_amount').attr('value',netTotal);
-	 }
+		template="";
+			 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
+				  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
+				  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ប្រភេទចំណាយ/Expense Type</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ពណ៌នា/Description</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនប្រាក់/Amount</div></strong></td>';
+				  temp+='</tr>';
+				  n=0;
+				i=1;  for(var n = 0; n < rowIDArray.length; n++) {
+				  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+				  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
+				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_paid"+rowIDArray[n]).attr('displayedValue')+'</td>';
+				  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+				  i++;
+				  temp+='</tr>';
+				}
+				for(row = n+1;row<=6;row++){
+					 temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
+					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
+					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
+					  temp+='<td style="border:1px solid #000;"></td>';
+					  temp+='</tr>';
+				}
+			temp+='</table>';
+		dojo.byId('t_amountmoneytype').innerHTML = temp;
+		dijit.byId("terms").show();	
+	}
+}
+function submitData(){
+	if(dijit.byId('office_receipt').validate()) {
+		dijit.byId('saveclose').set('disabled',true);
+		dijit.byId('office_receipt').submit();
+	}
+}
+function doPrintInvoice() {
+	$('#office_receipt').submit();
+	window.frames["print_frame"].document.body.innerHTML = dojo.byId('printexpense').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+}
+
+
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+	netTotal();
+}
+
+function calculateTotal(index,type){
+	if(type==1){
+		price = dijit.byId('price_old_'+index).get('value');
+		price = isNaN(price)?0:price;
+		
+		qty = dijit.byId('qty_old_'+index).get('value');
+		qty = isNaN(qty)?0:qty;
+		
+		dijit.byId('total_old_'+index).attr('value',price * qty);
+		
+	}else{
+		price = dijit.byId('price_new_'+index).get('value');
+		price = isNaN(price)?0:price;
+		
+		qty = dijit.byId('qty_new_'+index).get('value');
+		qty = isNaN(qty)?0:qty;
+		
+		dijit.byId('total_new_'+index).attr('value',price * qty);
+	}
 	
-	function addRow() {
-			col++;no++;
-			template='';
-			if(title!=1){
-				temp+='<th><?php echo $tr->translate("DEL");?></th>';
-				temp+='<th><?php echo $tr->translate("N_O");?></th>';
-				temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ប្រភេទចំណាយ");?></th>';
-				temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
-				temp+='<th><?php echo $tr->translate("REMARK");?></th>';
-				dojo.query("#head-title").append(temp);
-				title=1;
-		    }
-			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="50px" align="center">'+no+'</td>';
-			template+='<td style="width:300px"><select style="width:100%" onchange="getValidate('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
-			template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="total_paid'+col+'" id="total_paid'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';			
-			template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
-			tmp='<tr id="row'+col+'">';
-			tmp+="</tr>";
-			dojo.query("#table_row").append(tmp);
-			if($("#identity").val()!="") {
-				var identity = $("#identity").val();
-				$("#identity").val(identity+','+col);
-			} else {$("#identity").val(col);}
-			dojo.html.set(dojo.byId("row"+col),template , {
-			     parseContent: true,
-			});
-	 }
-	function printSave(){	
-		if(dijit.byId('office_receipt').validate()) {
-			paid_date = dijit.byId("Date").get('value')
-			var today = new Date(paid_date);
-			var dd = today.getDate();
-			var mon = today.toDateString().substr(4,3); //January is 0!
-			var yyyy = today.getFullYear();
-			dojo.byId("lb_paiddate").innerHTML  = dd+'/'+mon+'/'+yyyy;
-			dojo.byId("lb_receipt_no").innerHTML = dijit.byId("invoice").get("value");
-			dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
-			dojo.byId("lb_total_received").innerHTML = '$ ' + dijit.byId("total_amount").get('value');
-			dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
-			dojo.byId("lb_paymentmehtod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
-			
-			var rowId = $('#identity').val();
-			var rowIDArray = rowId.split(',');
-			template="";
-				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
-					  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
-					  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</div></strong></td>';
-					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ប្រភេទចំណាយ/Expense Type</div></strong></td>';
-					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ពណ៌នា/Description</div></strong></td>';
-					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនប្រាក់/Amount</div></strong></td>';
-					  temp+='</tr>';
-					  n=0;
-					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
-					  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_paid"+rowIDArray[n]).attr('displayedValue')+'</td>';
-					  i++;
-					  temp+='</tr>';
-					}
-					for(row = n+1;row<=6;row++){
-						 temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
-						  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
-						  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
-						  temp+='<td style="border:1px solid #000;"></td>';
-						  temp+='</tr>';
-					}
-				temp+='</table>';
-			dojo.byId('t_amountmoneytype').innerHTML = temp;
-			dijit.byId("terms").show();	
-		}
+	calculateDifferent(index);
+}
+
+function calculateDifferent(index){
+
+	old_total = dijit.byId('total_old_'+index).get('value');
+	old_total = isNaN(old_total)?0:old_total;
+	
+	new_total = dijit.byId('total_new_'+index).get('value');
+	new_total = isNaN(new_total)?0:new_total;
+	
+	dijit.byId('total_diff_'+index).attr('value',new_total - old_total);
+	
+	
+	netTotal();
+}
+
+function netTotal(){
+	var netTotal=0;
+	var rowId = $('#identity').val();
+	var rowIDArray = rowId.split(',');
+	for(var n = 0; n < rowIDArray.length; n++) {
+		netTotal += dijit.byId('total_diff_'+rowIDArray[n]).get('value');
 	}
-	function doPrintInvoice() {
-		$('#office_receipt').submit();
-		window.frames["print_frame"].document.body.innerHTML = dojo.byId('printexpense').innerHTML;
-	    window.frames["print_frame"].window.focus();
-	    window.frames["print_frame"].window.print();
+	if(netTotal>0){
+		dijit.byId('credit_memo').attr('value',0);
+		dijit.byId('total_payment').attr('value',netTotal);
+	}else if(netTotal<0){
+		dijit.byId('total_payment').attr('value',0);
+		dijit.byId('credit_memo').attr('value',abs(netTotal));
+	}else{
+		dijit.byId('total_payment').attr('value',0);
+		dijit.byId('credit_memo').attr('value',0);
 	}
+}
+
+
+
+
+
 </script>

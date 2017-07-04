@@ -13,7 +13,7 @@ th.tdheader{background:url("../images/tbheader-bg1.jpg") repeat-x scroll center 
 td.items-no{padding:5px !important;text-align:center;}
 th.tdcheck{width:20px;}
 th.tdedit{width:30px;}
-tr.normal td, tr.alternate td{border:1px solid #DDDDDD;line-height:14px;padding:0px 5px 0px 5px;}
+tr.normal td, tr.alternate td{border:1px solid #DDDDDD;line-height:14px;padding:0px 2px 0px 2px;}
 td.items-no{border:1px solid #CCCCCC;color:#666666;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:30px;padding:0px 5px 0px 5px;text-align:center;width:35px;}
 td.items-no-inline{border:1px solid #CCCCCC;font-family:Arial,Helvetica,sans-serif;font-size:12px;padding:0px 5px 0px 5px;text-align:left;}
 tr.normal{background:none repeat scroll 0 0 #FFFFFF;}

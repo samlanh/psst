@@ -19,12 +19,13 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 		if($data['credit_memo']>0){
 			$this->_name="rms_creditmemo";
 			$arr = array(
-					'branch_id'=>$this->getBranchId(),
-					'student_id'=>$data['stu_id'],
-					'total_amount'=>$data['credit_memo'],
-					'total_amountafter'=>$data['credit_memo'],
-					'user_id'=>$this->getUserId(),
-					'date'=>date('Y-m-d'),
+					'branch_id'			=>$this->getBranchId(),
+					'student_id'		=>$data['stu_id'],
+					'total_amount'		=>$data['credit_memo'],
+					'total_amountafter'	=>$data['credit_memo'],
+					'user_id'			=>$this->getUserId(),
+					'note'				=>"from change product",
+					'date'				=>date('Y-m-d'),
 			);
 			$credit_memo_id = $this->insert($arr);
 		}
@@ -83,32 +84,32 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 		
  	 }
  	 
- 	 function updateReturnStock($pro_id,$pro_type,$qty){
+ 	 function updateReturnStock($pro_id_old,$pro_type_old,$qty_old){
  	 	$db = $this->getAdapter();
  	 	$this->_name='rms_product_location';
  	 	
- 	 	if($pro_type==0){ // product not set
- 	 		$sql = " select pro_qty from rms_product_location where pro_id = $pro_id ";
+ 	 	if($pro_type_old==0){ // product not set
+ 	 		$sql = " select pro_qty from rms_product_location where pro_id = $pro_id_old ";
  	 		$qty_in_stock = $db->fetchOne($sql);
  	 		
- 	 		$total_qty = $qty_in_stock + $qty;
+ 	 		$total_qty = $qty_in_stock + $qty_old;
  	 		
  	 		$array = array(
  	 				'pro_qty'=>$total_qty,
  	 				);
- 	 		$where = " pro_id = $pro_id ";
+ 	 		$where = " pro_id = $pro_id_old ";
  	 		$this->update($array, $where);
  	 		
  	 	}else{ // product set
  	 		
- 	 		$sql = " select subpro_id,qty from rms_product_setdetail where pro_id = $pro_id ";
+ 	 		$sql = " select subpro_id,qty from rms_product_setdetail where pro_id = $pro_id_old ";
  	 		$result = $db->fetchAll($sql);
  	 		if(!empty($result)){
  	 			foreach ($result as $sub_pro){
  	 				$sql = " select pro_qty from rms_product_location where pro_id = ".$sub_pro['subpro_id'];
  	 				$qty_in_stock = $db->fetchOne($sql);
  	 				
- 	 				$total_qty = $qty_in_stock + ($qty * $sub_pro['qty']);
+ 	 				$total_qty = $qty_in_stock + ($qty_old * $sub_pro['qty']);
  	 				
  	 				$array = array(
  	 						'pro_qty'=>$total_qty,
@@ -120,31 +121,31 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
  	 	}
  	 }
  	 
- 	 function updateCutStock($pro_id,$pro_type,$qty){
+ 	 function updateCutStock($pro_id_new,$pro_type_new,$qty_new){
  	 	$db = $this->getAdapter();
  	 	$this->_name='rms_product_location';
  	 	
- 	 	if($pro_type==0){ // product not set
- 	 		$sql = " select pro_qty from rms_product_location where pro_id = $pro_id ";
+ 	 	if($pro_type_new==0){ // product not set
+ 	 		$sql = " select pro_qty from rms_product_location where pro_id = $pro_id_new ";
  	 		$qty_in_stock = $db->fetchOne($sql);
  	 		 
- 	 		$total_qty = $qty_in_stock - $qty;
+ 	 		$total_qty = $qty_in_stock - $qty_new;
  	 		 
  	 		$array = array(
  	 				'pro_qty'=>$total_qty,
  	 		);
- 	 		$where = " pro_id = $pro_id ";
+ 	 		$where = " pro_id = $pro_id_new ";
  	 		$this->update($array, $where);
  	 		 
  	 	}else{ // product set
- 	 		$sql = " select subpro_id,qty from rms_product_setdetail where pro_id = $pro_id ";
+ 	 		$sql = " select subpro_id,qty from rms_product_setdetail where pro_id = $pro_id_new ";
  	 		$result = $db->fetchAll($sql);
  	 		if(!empty($result)){
  	 			foreach ($result as $sub_pro){
  	 				$sql = " select pro_qty from rms_product_location where pro_id = ".$sub_pro['subpro_id'];
  	 				$qty_in_stock = $db->fetchOne($sql);
  	 				
- 	 				$total_qty = $qty_in_stock - ($qty * $sub_pro['qty']);
+ 	 				$total_qty = $qty_in_stock - ($qty_new * $sub_pro['qty']);
  	 				
  	 				$array = array(
  	 						'pro_qty'=>$total_qty,
@@ -159,8 +160,8 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
  	 
 
 	 function editChangeProduct($data,$id){
-	 	
 	 	try{
+	 		//print_r($data);exit();
 		 	if($data['status']==0){
 		 		$this->_name="rms_change_product";
 		 		$arr = array(
@@ -178,8 +179,14 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 			 		$this->update($arr, $where);
 		 		}
 		 		
-		 		
-		 		
+		 		$ids = explode(',', $data['identity']);
+		 		foreach ($ids as $j){
+		 			 
+		 			$this->updateCutStock($data['old_pro_id_'.$j],$data['old_pro_type_'.$j],$data['qty_old_'.$j]);
+		 			 
+		 			$this->updateReturnStock($data['new_pro_id_'.$j],$data['new_pro_type_'.$j],$data['qty_new_'.$j]);
+		 			 
+		 		}
 		 		
 		 	}else{
 		 		return 0;
@@ -216,22 +223,21 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 					total_payment,
 					credit_memo,
 					cp.create_date,
-					(select first_name from rms_users where rms_users.id=cp.user_id) as user_id
+					(select first_name from rms_users where rms_users.id=cp.user_id) as user_id,
+					(select name_en from rms_view where type=10 and key_code=cp.is_void) as status
 				from
 					rms_change_product cp,
 					rms_student as s
 				where 
-					cp.status=1
-					and cp.stu_id=s.stu_id
+					cp.stu_id=s.stu_id
 		";
 	
 		if (!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['adv_search']));
-			$s_where[] = " account_id LIKE '%{$s_search}%'";
-			$s_where[] = " title LIKE '%{$s_search}%'";
-			$s_where[] = " total_amount LIKE '%{$s_search}%'";
-			$s_where[] = " invoice LIKE '%{$s_search}%'";
+			$s_where[] = " receipt_no LIKE '%{$s_search}%'";
+			$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
+			$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
 			
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}

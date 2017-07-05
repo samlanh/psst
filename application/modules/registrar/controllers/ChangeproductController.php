@@ -30,7 +30,7 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllChangeProduct($formdata);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("RECEIPT_NO","NAME","TOTAL_PAYMENT","CREDIT_MEMO","CREATE_DATE","USER");
+    		$collumns = array("RECEIPT_NO","NAME","TOTAL_PAYMENT","CREDIT_MEMO","CREATE_DATE","USER","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'changeproduct','action'=>'edit',
     		);
@@ -98,7 +98,11 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
     	$this->view->stu_name = $db->getAllStuName();
     	
     	
-    	$this->view->row = $db->getAllChangeProductById($id);
+    	$data = $this->view->row = $db->getAllChangeProductById($id);
+    	if($data['is_void']==1){
+    		Application_Form_FrmMessage::Sucessfull("You can not edit !!! ","/registrar/changeproduct");
+    	}
+    	
     	$this->view->row_detail = $db->getAllChangeProductDetailById($id);
     }
     

@@ -94,10 +94,12 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     	
     		if($search['type']==1){
     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-    			$data=$this->view->row = $db->getDailyReport($search);
+    			$data1=$this->view->row = $db->getDailyReport($search);
     			
-    			$data=$this->view->stu_test = $db->getAllStudentTest($search);
+    			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
 //     			print_r($data);
+    			
+    			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
     			
     			$user_type=$db->getUserType();
     			 

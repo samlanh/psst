@@ -116,10 +116,9 @@ dojo.require("dojo.parser");
             	<?php echo $this->layout()->content;  ?></td>
             </tr>
              <tr height="30px" style="border:1px solid #ccc;background:#B9B9CC; color: #008;">
-             	<td align="center" colspan="2">
-             		<marquee style="line-height: 40px;"><?php echo $tr->translate("COPY_RIGHT")." &copy; ".$tr->translate("COPY_RIGHT_BY");?>
-					<?php //echo $tr->translate("VERSION");?>
-             		Developed by Cam App Technology | <?php echo $tr->translate("អភិវឌ្ឍន៏ដោយ ខេម អ៊ែប តិចណូឡូជី");?>
+             	<td align="center" colspan="2" valign="middle">
+             		<marquee behavior="scroll" direction="left" onmouseout="this.start()" onmouseover="this.stop()" scrollamount="5" style="">Copyright © Cam App Technology,All Rights Reserved.
+             		Developed by Cam App Technology | <?php echo $tr->translate("អភិវឌ្ឍន៍ដោយ ខេម អ៊ែប តិចណូឡូជី");?>
 					Tel : 085 911 912 | 070 75 64 57</marquee>
              	</td>
              </tr>

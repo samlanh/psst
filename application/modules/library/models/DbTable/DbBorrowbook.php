@@ -277,10 +277,12 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		$branch_id = $_db->getAccessPermission();
 		if($type==1){
 			$sql="SELECT s.stu_id As stu_id,s.stu_code As stu_code FROM rms_student AS s
-			WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+			WHERE s.status=1 AND s.stu_enname!=''
+			and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
 		}else {
 			$sql="SELECT s.stu_id As stu_id,CONCAT(s.stu_enname) as name FROM rms_student AS s
-			WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+			WHERE s.status=1 AND s.stu_enname!=''
+			and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
 		}
 		return $db->fetchAll($sql);
 	}

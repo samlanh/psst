@@ -321,6 +321,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 		if($type==1){
 			$sql="SELECT s.stu_id AS stu_id,s.stu_code AS stu_code FROM rms_student AS s,rms_borrow AS b,rms_borrowdetails AS bd
 				WHERE s.stu_id=b.stu_id 
+				AND s.stu_enname!=''
 				AND b.id=bd.borr_id
 				AND s.status=1 
 				AND s.is_subspend=0
@@ -329,6 +330,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 		}else {
 			$sql="SELECT s.stu_id AS stu_id,CONCAT(s.stu_enname) as name FROM rms_student AS s,rms_borrow AS b,rms_borrowdetails AS bd
 				WHERE s.stu_id=b.stu_id 
+				AND s.stu_enname!=''
 				AND b.id=bd.borr_id
 				AND s.status=1 
 				AND s.is_subspend=0

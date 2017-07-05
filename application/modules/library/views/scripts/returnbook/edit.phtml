@@ -198,7 +198,7 @@ function getAllcustomer(id){
 				temp+='<td style="width: 20px"><input value="'+r+'" style="width: 20px;" onchange="uncheck('+r+')" type="checkbox"  name="check'+r+'" id="check'+r+'" '+check+'   /></td>';
 				temp+='<td>'+setDate(data[i].return_date)+'<input  style="margin-left:0px;width:200px; "  type="hidden" data-dojo-props="constraints:{places:0}" value="'+data[i].return_date+'"    name="date_return_'+r+'"  id="date_return_'+r+'" dojoType="dijit.form.TextBox" /></td>';
 				temp+='<td><input  style="margin-left:0px;width:200px; "  type="text" data-dojo-props="constraints:{places:0}" value=""    name="note_'+r+'"  id="note_'+r+'" dojoType="dijit.form.TextBox" /></td>';
-				tmp='<tr style="border:1px solid #000; font-size:14px;height:37px; !important;text-align:center;" id="row_capital'+r+'" >'
+				tmp='<tr style="border:1px solid #deafaf; font-size:14px;height:37px; !important;text-align:center;" id="row_capital'+r+'" >'
 				tmp+="</tr>";
 				dojo.query("#t_amountmoneytype").append(tmp);
 				dojo.html.set(dojo.byId("row_capital"+r),temp, {

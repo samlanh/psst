@@ -1781,7 +1781,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$branch_id = $_db->getAccessPermission();
     	
     	$sql="SELECT s.stu_id As stu_id,CONCAT(s.stu_enname) as name FROM rms_student AS s
-    	WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+    	WHERE stu_enname!='' AND s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
     	return $db->fetchAll($sql);
     }
     //select general  old student by name
@@ -2098,11 +2098,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	
 	function getAllStudentTested(){
 		$db=$this->getAdapter();
-		 
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
-		 
-		$sql="select id,CONCAT(kh_name,'-',en_name)as name from rms_student_test where status=1 and register=0 $branch_id  ORDER BY id DESC ";
+		$sql="select id,CONCAT(en_name,'-',kh_name)as name from rms_student_test where en_name!='' AND status=1 and register=0 $branch_id  ORDER BY id DESC ";
 		return $db->fetchAll($sql);
 	}
 	

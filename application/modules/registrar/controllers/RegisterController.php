@@ -15,7 +15,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$db = new Registrar_Model_DbTable_DbRegister();
     		    		if($this->getRequest()->isPost()){
     		    			$search=$this->getRequest()->getPost();
-    		    			
     		    		}
     		    		else{
     		    			$search = array(

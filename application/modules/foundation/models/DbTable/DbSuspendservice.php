@@ -17,6 +17,7 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
     
     
    public function addSuspendservice($data){
+  	//print_r($data);exit();
    	$db = $this->getAdapter();
    	$db->beginTransaction();
    		try{
@@ -30,6 +31,7 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 	   		$id = $this->insert($arr);
 	   		
 	   		$this->_name = 'rms_suspendservicedetail';
+	   		if($data['identity']!=""){
 	   		$ids = explode(',', $data['identity']);
 		   		foreach ($ids as $i){
 			   		$_arr = array(
@@ -44,7 +46,7 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 			   				);
 			   		$this->insert($_arr);
 		   		}
-		   	
+	   		}
 		   	$this->_name = 'rms_student_paymentdetail';
 			   	foreach ($ids as $i){
 			   		$getid = $this->getid($data['studentid'],$data['service_'.$i]);
@@ -79,6 +81,7 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    }
    
    public function editSuspendService($data){
+   //	print_r($data);exit();
    	$db = $this->getAdapter();
    	$db->beginTransaction();
    	try{
@@ -226,13 +229,14 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    	return $db->fetchAll($sql);
    }
    
-   
-   
-   
-   
-   
-   
-   
+   function getAllSerivesById($stu_id){
+   	$db = $this->getAdapter();
+   	$sql = "SELECT spd.id,spd.service_id FROM rms_student_paymentdetail AS spd,rms_student_payment AS sp 
+   			WHERE sp.student_id=$stu_id 
+   			AND sp.id=spd.payment_id
+   	 		AND spd.is_start=1 AND spd.is_suspend=0";
+   	return $db->fetchAll($sql);
+   }
    
 }
 

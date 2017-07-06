@@ -427,5 +427,23 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql ="SELECT * FROM `rms_group` AS g WHERE g.`id`=$group_id LIMIT 1";
 		return $db->fetchRow($sql);
 	}
+	
+	function getStudentViewDetailById($id){
+		$db=$this->getAdapter();
+		$sql="SELECT *,(SELECT province_kh_name FROM rms_province AS p WHERE p.province_id=s.province_id LIMIT 1) AS province_name,
+		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fa_job,
+		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job,
+		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS gu_job,
+	
+		(SELECT title FROM rms_degree_language WHERE rms_degree_language.id=s.lang_level LIMIT 1) AS lang_name,
+		(SELECT CONCAT(major_enname,' ',major_khname) FROM  rms_major WHERE rms_major.major_id=s.grade LIMIT 1) AS grade_name,
+		 
+		 
+		(SELECT CONCAT(en_name,'-',kh_name) FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1) AS degree_name
+	 
+		FROM rms_student AS s WHERE stu_id=$id";
+		return $db->fetchRow($sql);
+	}
+	
 }
 

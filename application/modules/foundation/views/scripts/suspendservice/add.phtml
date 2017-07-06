@@ -12,7 +12,7 @@
 	dojo.require("dojo.NodeList-manipulate");
 	
 	dojo.ready(function(){ 
-		addRow();
+		//addRow();
 		new dijit.form.FilteringSelect({
 		    store: student_id_store,
 		    autoComplete: true,                        
@@ -23,6 +23,7 @@
 		    placeHolder:"Selected Student id",          
 		    onChange: function() {  
 		    	setID(1);
+		    	getStudentService();
 		    }
 		}, "studentid");
 		
@@ -50,6 +51,21 @@ fieldset{  background:none;}
 //print_r($register);
 ?>
 <form id='suspend_service' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
+	if(this.validate()) {
+                study_year=dijit.byId('study_year').get('value');
+                  if(study_year==0 || study_year==''){
+                        alert('Please Select Study Year');
+                        dijit.byId('study_year').focus();
+                        return false;
+					}
+				dijit.byId('save_new').set('disabled',true);
+			    dijit.byId('save_close').set('disabled',true);
+				return true;
+			} else {
+				return false;
+			}
+</script>
 <table  cellspacing="10" style="margin: 0 auto; width: 100%;">
 	<tr>
 		<td>
@@ -70,21 +86,24 @@ fieldset{  background:none;}
 								<input id="student_name" />
 							</td>
 						</tr>
-						<tr>
-							<td colspan="4" align="left">
-									<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-								 		iconClass="dijitIconEditProperty" onclick="addRow();" />
-							</td>
-						</tr>
+						
 						<tr>
 							<td colspan="4">
-								<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
+							 	<div  id="showrecord"></div>
+							 	<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
 										<tr id="head-title" class="head-td" align="right"></tr>
 								</table>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="2"><input type="hidden" id="identity" name="identity" /></td>
+						</tr>
+						<tr>
+							<td colspan="4" align="left">
+								<!--  	<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+								 		iconClass="dijitIconEditProperty" onclick="addRow();" />
+								 -->
+							</td>
 						</tr>
 						<tr>
 							<td colspan="4" align="center">
@@ -130,9 +149,8 @@ function addRow() {
 			title=1;
 		}
 			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="15px" align="center">'+no+'</td>';
+			template+='<td width="30px" align="center">'+no+'</td>';
 			template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';			
-			column = 0;
 			template+='<td><select dojoType="dijit.form.FilteringSelect" id="type_'+col+'" onchange="dateReadonly('+col+');" name="type_'+col+'" style="width:100%;"><option value="1">Suspend</option><option value="2">Stop</option></select></td>';
 			template+='<td> <input type="text"   name="reason_'+col+'" id="reason_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
 			template+='<td><input style="width:100%;" value="now" dojoType="dijit.form.DateTextBox" id="date_'+col+'" name="date_'+col+'" /></td>';
@@ -159,6 +177,79 @@ function dateReadonly(key) {
 		dijit.byId("date_"+key).set('readOnly',false);
 		dijit.byId('date_'+col).attr('value','<?php echo date('Y-m-d')?>');
 	}
+}
+
+var url_servict_info = "<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'get-student-service')); ?>";
+fund_title=0;
+function getStudentService(){
+	temp='';
+	stu_id  = dijit.byId('studentid').get('value');
+	fund_title=0;
+	dojo.query("#showrecord").append('');
+	tmp='<table id="t_amountmoneytype" width="100%" style=" margin-top: 20px; border-collapse: collapse; border:1px solid #ccc !important;">';
+	tmp+='<tr style="background:#eee; font-size: 14px; height: 40px;font-weight: bold; margin-bottom: 10px;" id="head_title" class="head-title" align="center"></tr>';
+	tmp+='</table>';
+	dojo.query("#showrecord").append(tmp);
+	dojo.xhrPost({
+		url: url_servict_info,
+		content:{
+			'studentid':stu_id
+		},
+		handleAs:"json",
+		load: function(data) {
+			$('#identity').val('');
+			if(data==''){
+				alert('Student can not item !');
+				thead='<th style="margin-bottom: 20px;"><?php echo $tr->translate("DEL");?></th>';
+				thead+='<th style="width:10px;"><?php echo $tr->translate("N_O");?></th>';
+				thead+='<th ><?php echo $tr->translate("SERVICES");?></th>';
+				thead+='<th ><?php echo $tr->translate("TYPE");?></th>';
+				thead+='<th ><?php echo $tr->translate("REASON");?></th>';
+				thead+='<th ><?php echo $tr->translate("DATE_BACK");?></th>';
+				thead+='<th ><?php echo $tr->translate("NOTE");?></th>';
+				fund_title=1;
+				dojo.query("#head_title").append(thead);
+			}
+		
+			for(i=0;i<data.length;i++){
+				col++;no++;
+				if(fund_title!=1){
+					thead='<th style="margin-bottom: 20px;"><?php echo $tr->translate("DEL");?></th>';
+					thead+='<th style="width:10px;"><?php echo $tr->translate("N_O");?></th>';
+					thead+='<th ><?php echo $tr->translate("SERVICES");?></th>';
+					thead+='<th ><?php echo $tr->translate("TYPE");?></th>';
+					thead+='<th ><?php echo $tr->translate("REASON");?></th>';
+					thead+='<th ><?php echo $tr->translate("DATE_BACK");?></th>';
+					thead+='<th ><?php echo $tr->translate("NOTE");?></th>';
+					fund_title=1;
+					dojo.query("#head_title").append(thead);
+				}
+				 
+				temp='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+				temp+='<td width="15px" align="center">'+no+'</td>';
+				temp+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';
+				temp+='<td><select dojoType="dijit.form.FilteringSelect" id="type_'+col+'" onchange="dateReadonly('+col+');" name="type_'+col+'" style="width:100%;"><option value="1">Suspend</option><option value="2">Stop</option></select></td>';
+				temp+='<td> <input type="text"   name="reason_'+col+'" id="reason_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
+				temp+='<td><input style="width:100%;" value="now" dojoType="dijit.form.DateTextBox" id="date_'+col+'" name="date_'+col+'" /></td>';
+				temp+='<td> <input type="text"   name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
+				
+				 
+				tmp='<tr style="border:1px solid #deafaf; font-size:14px;height:37px; !important;text-align:center;" id="row'+col+'" >'
+				tmp+="</tr>";
+				dojo.query("#t_amountmoneytype").append(tmp);
+				dojo.html.set(dojo.byId("row"+col),temp, {
+					parseContent: true,
+				});
+
+				if($("#identity").val()!="") {
+					var identity = $("#identity").val();
+					$("#identity").val(identity+','+col);
+				} else {$("#identity").val(col);}
+				dijit.byId("service_"+col).attr('value',data[i].service_id);
+			}
+		},error: function(err) {
+		}
+	});
 }
 
 var url_student_info = "<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'get-student')); ?>";
@@ -199,6 +290,7 @@ function deleteRecord(index) {
 var student_id_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var get_id = "<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'get-student-id')); ?>";
 function getStudentID(){
+	dojo.query("#table_row").append('');
 	study_year= dijit.byId('study_year').get('value');
 	dojo.xhrPost({
 		url:get_id,
@@ -211,6 +303,9 @@ function getStudentID(){
 			student_id_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('studentid').set('store',student_id_store);  
 			//dijit.byId("studentid").attr("value",data);
+			}else{
+			    
+				setClear();
 			}
 		},
 		error: function(err) {
@@ -254,13 +349,11 @@ function setID(type){
 		dijit.byId('studentid').attr('value',id);
 	}
 }
-
-
-
-
-
-
+function setClear(){
+	dijit.byId('studentid').attr('value','');
+	dijit.byId('student_name').attr('value','');
+	dijit.byId('studentid').set('store','');
+	dijit.byId('student_name').set('store','');
+}
 
 </script>
-
-

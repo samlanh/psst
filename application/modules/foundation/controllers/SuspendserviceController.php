@@ -141,6 +141,17 @@ function getStudentNameAction(){
 	}
 }
 
+function getStudentServiceAction(){
+	if($this->getRequest()->isPost()){
+		$data=$this->getRequest()->getPost();
+		$db = new Foundation_Model_DbTable_DbSuspendservice();
+		$studentinfo = $db->getAllSerivesById($data['studentid']);
+		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
+		print_r(Zend_Json::encode($studentinfo));
+		exit();
+	}
+}
+
 
 
 

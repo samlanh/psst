@@ -19,8 +19,6 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
     		else{
     			$formdata = array(
     					"adv_search"=>'',
-    					"payment_type"=>-1,
-    					"status"=>-1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
     			);
@@ -49,7 +47,8 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();	
-			$db = new Registrar_Model_DbTable_DbChangeProduct();				
+			$db = new Registrar_Model_DbTable_DbChangeProduct();	
+			//print_r($data);exit();			
 			try {
 				$db->addChangeProduct($data);
 				if(!empty($data['saveclose'])){

@@ -25,14 +25,6 @@
 		<td> <input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" value="<?php  echo $this->search['start_date']; ?>"  type="text"></td>
 	 	<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text"></td>
 		<td> <?php echo $frm->getElement("user");?></td>
-		<td>
-			<select name="type" id="type" dojoType="dijit.form.FilteringSelect" class="fullside"  >
-				<option value="1" <?php if($this->search['type']==1){echo 'selected="selected"';}?>>All Payment</option>
-				<option value="2" <?php if($this->search['type']==2){echo 'selected="selected"';}?>>Student's Payment</option>
-				<option value="4" <?php if($this->search['type']==4){echo 'selected="selected"';}?>>Student Test</option>
-				<option value="3" <?php if($this->search['type']==3){echo 'selected="selected"';}?>>Income and Expense</option>
-			</select>
-		</td>
 	</tr>
 	<tr>
 		<td> <?php echo $frm->getElement("degree");?></td>
@@ -40,6 +32,20 @@
 		<td> <?php echo $frm->getElement("session");?></td>
 		<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 	</tr>
+	
+	<tr>
+		<td colspan="4">
+			<div style="margin: 10px 0px;">
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="all" id="all_payment" name="all_payment"  <?php if(!empty($this->search['all_payment'])){if($this->search['all_payment']=="all"){echo "checked='checked'";}}?> />All Payment
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/>Student Payment
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="2" id="student_test" name="student_test"  <?php if(!empty($this->search['student_test'])){if($this->search['student_test']==2){echo "checked='checked'";}}?> /> Student Test
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> Income
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /> Expense
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="5" id="change_product" name="change_product"  <?php if(!empty($this->search['change_product'])){if($this->search['change_product']==5){echo "checked='checked'";}}?> /> Change Product
+			</div>
+		</td>
+	</tr>
+	
 </table>
 </form>
 <style>

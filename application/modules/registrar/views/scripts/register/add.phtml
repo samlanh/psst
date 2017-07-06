@@ -610,10 +610,10 @@ fieldset{  background:none;}
 			</tr>
 			<tr>
 				<td colspan="3" align="center">
-				    <input type="submit" name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
-					 iconClass="dijitEditorIcon dijitEditorIconSave"  OnClick=""/>
-					<input type="submit" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-					 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="" />
+				    <input type="button" onclick="submitDataClose();" name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
+					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
+					<input type="button" onclick="submitDataAddNew();" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
+					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					 <input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','');"/> 
 				</td>
@@ -661,6 +661,9 @@ function getInfoBygroup(){
 function test1(){
 }
 function submitDataClose(){
+	
+	dijit.byId('save_close').set('disabled',true);
+	
 	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({
@@ -676,6 +679,9 @@ function submitDataClose(){
 		});
 }
 function submitDataAddNew(){
+	
+	dijit.byId('save_new').set('disabled',true);
+	
 	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({
@@ -1828,6 +1834,7 @@ function getservicefee(key){
 		}
 	}	
 </script>
+
 <div class="overlay">
 	<div class="overlay-load">
 		<div class="overlay-msg">

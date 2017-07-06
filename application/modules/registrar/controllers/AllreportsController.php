@@ -85,57 +85,98 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     					'degree' =>'',
     					'grade_all' =>'',
     					'session' =>'',
-    					'user'=>'',
-    					'type'=>1,
+    					'all_payment'=>'',
+    					'student_payment'=>'',
+    					'student_test'=>'',
+    					'income'=>'',
+    					'expense'=>'',
+    					'change_product'=>'',
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
     			);
     		}
-    	
-    		if($search['type']==1){
-    			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+    		
+    		//print_r($search);
+    		
+    		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+    		$user_type=$db->getUserType();
+    		
+    		if(!empty($search['all_payment'])){
+    			
     			$data1=$this->view->row = $db->getDailyReport($search);
-    			
     			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
-//     			print_r($data);
-    			
     			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
     			
     			$user_type=$db->getUserType();
-    			 
     			if($user_type==1){
-    				$db = new Allreport_Model_DbTable_DbRptOtherIncome();
-    				$this->view->income = $db->getAllOtherIncome($search);
-    	
-    				$db = new Allreport_Model_DbTable_DbRptOtherExpense();
-    				$this->view->expense = $db->getAllOtherExpense($search);
-    			}
-    		}else if($search['type']==2){
-    			 
-    			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-    			$data=$this->view->row = $db->getDailyReport($search);
-    			 
-    		}else if($search['type']==3){
-    			 
-    			$_db = new Registrar_Model_DbTable_DbReportStudentByuser();
-    			$user_type=$_db->getUserType();
-    			 
-    			if($user_type==1){
-    	
-    				$db = new Allreport_Model_DbTable_DbRptOtherIncome();
-    				$this->view->income = $db->getAllOtherIncome($search);
+    				$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
+    				$this->view->income = $_db->getAllOtherIncome($search);
     				 
-    				$db = new Allreport_Model_DbTable_DbRptOtherExpense();
-    				$this->view->expense = $db->getAllOtherExpense($search);
+    				$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
+    				$this->view->expense = $_db1->getAllOtherExpense($search);
     			}
     		}
     		
-    		if($search['type']==4){
-    			
-    			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-    			$data=$this->view->stu_test = $db->getAllStudentTest($search);
-    			
+    		if(!empty($search['student_payment'])){
+    			$data1=$this->view->row = $db->getDailyReport($search);
     		}
+    		if(!empty($search['student_test'])){
+    			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
+    		}
+    		if(!empty($search['income'])){
+    			if($user_type==1){
+	    			$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
+	    			$this->view->income = $_db->getAllOtherIncome($search);
+    			}
+    		}
+    		if(!empty($search['expense'])){
+    			if($user_type==1){
+	    			$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
+	    			$this->view->expense = $_db1->getAllOtherExpense($search);
+    			}
+    		}
+    		if(!empty($search['change_product'])){
+    			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
+    		}
+    		
+//     		if($search['type']==1){
+//     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+//     			$data1=$this->view->row = $db->getDailyReport($search);
+    			
+//     			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
+// //     			print_r($data);
+    			
+//     			
+    			
+//     			$user_type=$db->getUserType();
+    			 
+//     			
+//     		}else if($search['type']==2){
+    			 
+//     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+//     			$data=$this->view->row = $db->getDailyReport($search);
+    			 
+//     		}else if($search['type']==3){
+    			 
+//     			$_db = new Registrar_Model_DbTable_DbReportStudentByuser();
+//     			$user_type=$_db->getUserType();
+    			 
+//     			if($user_type==1){
+    	
+//     				$db = new Allreport_Model_DbTable_DbRptOtherIncome();
+//     				$this->view->income = $db->getAllOtherIncome($search);
+    				 
+//     				$db = new Allreport_Model_DbTable_DbRptOtherExpense();
+//     				$this->view->expense = $db->getAllOtherExpense($search);
+//     			}
+//     		}
+    		
+//     		if($search['type']==4){
+    			
+//     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+//     			$data=$this->view->stu_test = $db->getAllStudentTest($search);
+    			
+//     		}
     		
     	}catch(Exception $e){
     		Application_Form_FrmMessage::message("Application Error");

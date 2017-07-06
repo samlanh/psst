@@ -59,7 +59,7 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 									<table cellspacing="5"  width="100%">
 										<tr>
 										    <td><?php echo $tr->translate("RECEIPT")?></td>
-											<td><input readonly type="text" name="receipt" id="receipt" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+											<td><input readonly="readonly" style="color:red;" type="text" name="receipt" id="receipt" class="fullside" dojoType="dijit.form.TextBox"   /></td>
 										</tr>
 										<tr>
 										    <td><?php echo $tr->translate("SERIAL")?></td>
@@ -106,7 +106,8 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 			<td align="center">
 				<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
 					 iconClass="dijitIconClear"/>
-				<input label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' dojoType="dijit.form.Button" type="submit" iconClass="dijitEditorIcon dijitEditorIconSave"/>
+				<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="button" onclick="submitDataClose();" iconClass="dijitEditorIcon dijitEditorIconSave"/>
+				<input label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' dojoType="dijit.form.Button" type="button" onclick="submitDataAddNew();" iconClass="dijitEditorIcon dijitEditorIconSave"/>
 				<input label="<?php echo $tr->translate("PRINT")?>" name='print' id='print' value='print' dojoType="dijit.form.Button" onclick="printReceipt('');" type="button" iconClass="dijitIconNewTask"/>
 			</td>
 		</tr>	
@@ -230,6 +231,49 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 	</div>
 </div>
 <script>
+
+
+function submitDataClose(){
+	
+	dijit.byId('saveclose').set('disabled',true);
+	
+	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'add')); ?>';
+		loading();
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("frm_teststudent"),		    
+			load: function(data) {
+				document.getElementsByClassName("overlay")[0].style.display="none";	
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/registrar/studenttest";
+			},
+			error: function(e) {
+			}
+		});
+}
+function submitDataAddNew(){
+	
+	dijit.byId('savenew').set('disabled',true);
+	
+	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'add')); ?>';
+		loading();
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("frm_teststudent"),		    
+			load: function(data) {
+				document.getElementsByClassName("overlay")[0].style.display="none";		
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/registrar/studenttest/add";
+			},
+			error: function(e) {
+			}
+		});
+}
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
+
+
 dojo.ready(function(){
 	getReceiptNumber('');
 });
@@ -298,3 +342,27 @@ function hideDialog(){
 	dijit.byId('terms').hide();
 }
  </script>
+ 
+ 
+ <div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>	
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>
+ 
+ 
+ 
+ 
+ 
+ 
+ 

@@ -81,5 +81,22 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		
 		return $db->fetchAll($sql.$where.$order);
 	}
+	public function addNewSubjectajax($_data){
+		$_arr=array(
+				'parent' 			=> $_data['parent'],
+				'subject_titlekh' 	=> $_data['subject_kh'],
+				'subject_titleen' 	=> $_data['subject_en'],
+				'date' 				=> date("Y-m-d"),
+				'status'   			=> $_data['status'],
+				'is_parent'   		=> $_data['par'],
+				'score_percent'   	=> $_data['score_percent'],
+				'user_id'	  		=> $this->getUserId()
+		);
+		$subject_id = $this->insert($_arr);
+		$_model = new Global_Model_DbTable_DbGroup();
+		$option = $_model->getAllSubjectStudy();
+		$return = array('data'=>$subject_id,'option'=>$option);
+		return   $return;//$_model->getAllSubjectStudy();//option
+	}
 }
 

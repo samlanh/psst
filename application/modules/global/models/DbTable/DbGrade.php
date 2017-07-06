@@ -10,7 +10,7 @@ class Global_Model_DbTable_DbGrade extends Zend_Db_Table_Abstract
     
 	function getAllDept(){        
 		$db = $this->getAdapter();
-		$sql="select dept_id as id,en_name as name from rms_dept where is_active=1 ";
+		$sql="select dept_id as id,en_name as name from rms_dept where en_name!='' AND is_active=1 ";
 		return $db->fetchAll($sql);
 	}	
 	 

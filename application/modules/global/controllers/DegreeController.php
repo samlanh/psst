@@ -59,6 +59,11 @@ class Global_DegreeController extends Zend_Controller_Action {
     	$frm->FrmAddDept(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_dept = $frm;
+    	
+    	$subject_exam=new Global_Form_FrmAddSubjectExam();
+    	$frm_subject_exam=$subject_exam->FrmAddSubjectExam();
+    	Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
+    	$this->view->frm_subject_exam = $frm_subject_exam;
     }
     
     public function editAction(){

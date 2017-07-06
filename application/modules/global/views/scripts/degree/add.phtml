@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("SRMS_ADD_FACULTY"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+	$subject_exam= $this->frm_subject_exam;
 ?>	
 <?php  $frm_dept= $this->frm_dept;?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
@@ -32,6 +33,7 @@
 								<td><?php echo $tr->translate("STATUS");?></td>
 								<td><?php echo $frm_dept->getElement("status");?>
 									<?php //echo $frm_dept->getElement("dept_id");?>
+									<label id="subject_label"></label>
 								</td>
 							</tr>
 						</table>
@@ -70,16 +72,65 @@
 	</tr>
 </table>	
 </form>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_subject" >
+		<form  name='add_subject_exam' id='add_subject_exam'  dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				<tr>
+					<td>
+						<fieldset style="background-color:menu;">
+									<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_NEW_SUBJECT");?></strong></legend>
+									<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
+										<tr>
+											<td><input type="checkBox" checked="checked" dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
+											<input type="hidden" id="par" name="par" />
+										</tr>
+										<tr>
+											<td style="width: 100px"><?php echo $tr->translate("PARENT")?></td>
+											<td>
+												<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
+													<option value="0"></option>
+													<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
+																<option value="<?php echo $row['id']?>"><?php echo $row['subject_titleen']?></option>
+													<?php }?>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_KH")?></td>
+											<td><?php  echo $subject_exam->getElement('subject_kh');?></td>
+										</tr>
+										<tr>
+											<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_EN")?></td>
+											<td><?php  echo $subject_exam->getElement('subject_en');?></td>
+										</tr>
+										<tr>
+											<td style="width: 100px"><?php echo $tr->translate("SHORT_CUT")?></td>
+											<td><?php echo $subject_exam->getElement('score_percent');?></td>
+										</tr>
+										<tr>
+											<td colspan="2" align="center">
+												<input type="button" onclick="addSubject();" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+													iconClass="dijitEditorIcon dijitEditorIconSave" />
+											</td>
+										</tr>
+									</table>	
+						</fieldset>		
+					</td>
+				</tr>
+			</table>	
+			</form>
+	</div>
+</div>
 <script type="text/javascript">
-dojo.require("dojo.date.locale");
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
 dojo.require('dojox.form.BusyButton');
-
 dojo.require("dojo.html");
+
 dojo.ready(function(){
 	addRow();
+	getValue();
 });
 var subject = '<?php echo $this->subject;?>';
 var col = 0;
@@ -104,12 +155,10 @@ function addRow() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
-		
-		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" value="" type="text"></td>';	
-		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
-		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="" type="text"></td>';
-		
+		template+='<td><label id="subject_label'+col+'" ><select style="width:100%;" onchange="popupsubject('+col+');"  dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></label></td>';
+		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" value="" type="text"></td>';	
+		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
+		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
 		template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" id="status_'+col+'" name="status_'+col+'" style="width:100%;"><option value="1">Active</option><option value="0">Deactive</option></select></td>';
 	tmp='<tr id="row'+col+'">';
@@ -123,6 +172,67 @@ function addRow() {
 	dojo.html.set(dojo.byId("row"+col),template , {
 	     parseContent: true,
 	});
+}
+
+function getValue(){
+	var par='';
+	if(dojo.byId('is_parent').checked){
+		par = 1;
+		dijit.byId('parent').attr('value','');
+		dijit.byId("parent").set('readOnly',true);
+		 dijit.byId('parent').set('required',false);  
+	}else{
+		par=0;
+		dijit.byId("parent").set('readOnly',false);
+		 dijit.byId('parent').set('required',true);  
+	}
+	$('#par').val(par);
+}
+record_id=0;
+function popupsubject(index){
+//	record_id = $("#subject_study_"+index).get('value');
+	record_id = dijit.byId("subject_study_"+index).get('value');
+	if(record_id==-1){
+		dijit.byId("popup_subject").show();
+		record_id = index;
+	}
+}
+var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"addsubjectajax")); ?>';
+function addSubject(){
+	if(dijit.byId('add_subject_exam').validate()) {
+		dojo.xhrPost({
+				url:url_add_dept,
+				form: dojo.byId("add_subject_exam"),
+				handleAs:"json",
+				load: function(option) {
+					//alert("record_id"+option.data);
+					//alert("record_id"+option.option);
+					dojo.byId("subject_label"+record_id).innerHTML='';
+					dojo.byId("subject_label"+record_id).innerHTML='<select Onchange="popupsubject('+record_id+')" id="subject_study_'+record_id+'" name="subject_study_'+record_id+'" dojoType="dijit.form.FilteringSelect" >'+option+'</option>';
+					/*dojo.html.set(dojo.byId("subject_label"),'',
+							{
+					         parseContent: true,
+					         onBegin: function() {
+							}
+						});*/
+					
+					/*dojo.html.set(dojo.byId("subject_label"+record_id), '<select Onchange="popupsubject('+record_id+')" id="subject_study_'+record_id+'" name="subject_study_'+record_id+'" dojoType="dijit.form.FilteringSelect" >'
+				         +option+'</select>', {
+				         parseContent: true,
+				        onBegin: function() {
+					    }
+					});
+					dijit.byId('subject_study_'+record_id).attr("value",option.data);*/
+					
+				  dijit.byId('add_subject_exam').reset();
+				  dijit.byId("popup_subject").hide();
+				   
+				},
+				error: function(err) {
+					alert(err);
+				}
+		});
+	}
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();

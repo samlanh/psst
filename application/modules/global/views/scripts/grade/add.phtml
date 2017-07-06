@@ -21,7 +21,7 @@ dojo.ready(function(){
 	    id: "dept",
 	    name: "dept",           
 	    class: "full height-text", 
-	    placeHolder:"Selected Dept",          
+	    placeHolder:"Select Degree",          
 	    onChange: function() {  
 	    	dept_id = dijit.byId('dept').get('value');
 	    	if(dept_id==-1){
@@ -54,11 +54,9 @@ dojo.ready(function(){
 					</tr>
 					<tr>
 						<td><?php echo $tr->translate("DEGREE")?></td>
-						<td>
-							<input id="dept" /> 
+						<td><input id="dept" /> 
 						</td>
 					</tr>
-					
 					<tr>
 						<td><?php echo $tr->translate("STATUS")?></td>
 						<td>
@@ -68,7 +66,6 @@ dojo.ready(function(){
 							</select>
 						</td>
 					</tr>
-					
 					<tr>
 						<td colspan="4" align="center">
 							<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
@@ -84,7 +81,6 @@ dojo.ready(function(){
 	</tr>
 </table>	
 </form>
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_add_dept" >
 		<form  id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -149,14 +145,4 @@ function hideDialog(){
 	dijit.byId("popup_add_dept").hide();
 }
 
-
 </script>
-
-
-
-
-
-
-
-
-

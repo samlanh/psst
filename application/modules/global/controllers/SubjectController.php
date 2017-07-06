@@ -73,7 +73,10 @@ class Global_SubjectController extends Zend_Controller_Action {
 		$parent = new Global_Model_DbTable_DbSubjectExam();
 		$is_parent = $parent->getAllSubjectParent();
 		$this->view->rs = $is_parent;
-// 		print_r($abc);
+		$db = new Global_Model_DbTable_DbGrade();
+    	$dept = $db->getAllDept();
+    	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	$this->view->degree_store = $dept;
 		
 	}
 	function addsubjectAction(){//At callecteral when click client
@@ -114,9 +117,18 @@ class Global_SubjectController extends Zend_Controller_Action {
 		$this->view->rs = $is_parent;
 		
 		$getRow = $parent->getAllSubjectParentByID($id);
-//  		print_r($getRow);exit();
 		$this->view->row = $getRow;
 		
+	}
+	function addsubjectajaxAction(){//At callecteral when click client
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
+			$data['status']=1;
+			$option=$_dbmodel->addNewSubjectajax($data);
+			print_r(Zend_Json::encode($option));
+			exit();
+		}
 	}
 }
 

@@ -521,6 +521,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$sql="SELECT key_code,CONCAT(name_en,'-',name_kh) AS view_name FROM rms_view WHERE `type`=2 AND `status`=1";
    	return $db->fetchAll($sql);
    }
+   function getAllBranchName(){
+   	$db = $this->getAdapter();
+   	$sql=" SELECT br_id AS id,branch_namekh as name FROM `rms_branch` WHERE STATUS=1 AND branch_namekh!='' ";
+   	return $db->fetchAll($sql);
+   }
    function getAllBranch(){
    	$db = $this->getAdapter();
    	$sql=" SELECT br_id,branch_namekh,branch_nameen FROM `rms_branch` WHERE STATUS=1 AND branch_namekh!='' ";

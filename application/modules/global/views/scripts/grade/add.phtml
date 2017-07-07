@@ -117,7 +117,6 @@ dojo.ready(function(){
 dojo.ready(function(){
 });
 var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-dept")); ?>';
-
 function addDept(){
 	dojo.xhrPost({
 			url:url_add_dept,
@@ -131,15 +130,13 @@ function addDept(){
 					   };
 		   addDataToSelectbox(dijit.byId('dept'), dept_store, Itemmake, data);
 		   dijit.byId('frm_add_tran').reset();
-		   dijit.byId("popup_add_dept").hide();
-				
+		   dijit.byId("popup_add_dept").hide();	
 			},
 			error: function(err) {
 				alert(err);
 			}
 	});
 }
-
 function hideDialog(){
 	dijit.byId('frm_add_tran').reset();
 	dijit.byId("popup_add_dept").hide();

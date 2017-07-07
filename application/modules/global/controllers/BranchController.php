@@ -85,5 +85,17 @@ class Global_BranchController extends Zend_Controller_Action {
 		$this->view->frm_branch=$update;
 		Application_Model_Decorator::removeAllDecorator($update);
 	}
+	
+	function addbranchAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+		
+    		$db = new Global_Model_DbTable_DbBranch();
+    		$gty= $db->addajaxs($data);
+    		print_r(Zend_Json::encode($gty));
+    		exit();
+    	}
+    
+    }
 }
 

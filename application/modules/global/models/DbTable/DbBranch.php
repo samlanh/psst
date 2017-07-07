@@ -87,6 +87,17 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	}
     	return "C-".$pre.$new_acc_no;
     }
+	
+	function addajaxs($_data){
+		//return '0000';
+    	$_arr = array(
+				'branch_namekh'=>$_data['branch_nameen'],
+				'branch_nameen'=>$_data['branch_nameen'],
+				'fax'=>$_data['fax'], 
+				'br_address'=>$_data['br_address'],
+    			);
+    	return $this->insert($_arr);//insert data
+    }
 }  
 	  
 

@@ -48,8 +48,8 @@ dojo.ready(function(){
 											<img style="width:70%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /><br >
 										</td>
 										<td align="center" width="44%"  >
-											<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:Tahoma,'Khmer MEF2';"><?php echo $tr->translate("STUDENT_PROFILE"); ?></strong><br />
-											<span style="font-weight: bold;font-size: 11px;">&nbsp; For Date &nbsp; <?php echo date("d-M-Y");?></span><br /><br />
+											<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer OS Muol';"><?php echo $tr->translate("STUDENT_PROFILE"); ?></strong><br />
+											<span style="font-weight: bold;font-size: 12px; font-family:'Khmer OS Battambang';">&nbsp; For Date &nbsp; <?php echo date("d-M-Y");?></span><br /><br />
 										</td>
 										<td width="28%" align="right">
 										</td>
@@ -68,7 +68,14 @@ dojo.ready(function(){
 					     	    </tr>
 					      		<tr  >
 					      		    <td rowspan="3"   >
-										 <div style="width:160px;height:160px;padding:3px;"><img src="<?php if(!empty($this->rs['photo'])) echo  $this->baseUrl()."/images/student_pf.jpg"; else echo $this->baseUrl();?>/images/<?php echo $this->rs['photo'];?>" style="width:160px;height:160px;"/></div>
+					      		       <?php 
+					      		            $photo='user.jpg';
+					      		            if(!empty($this->rs['photo'])){
+					      		            	$photo=$this->rs['photo'];
+					      		            }
+					      		            
+					      		       ?>
+										 <div style="width:160px;height:160px;padding:3px;"><img src="<?php echo $this->baseUrl();?>/images/<?php echo $photo;?>" style="width:160px;height:160px;"/></div>
 					      		    </td>
 					      		      <td style="width:60%;" colspan="4">
 					      		       <br/> <br/><br/> 
@@ -87,7 +94,7 @@ dojo.ready(function(){
 					      		               </tr>
 					      		                 <tr>
 					      		                   <td><?php echo $tr->translate("EMAIL_ADDRESS");?>:&nbsp;<label><?php echo $this->rs['email'];?></label> </td>
-					      		                   <td colspan="2"><?php echo $tr->translate("POB");?>:&nbsp;<label><?php echo $this->rs['address'];?></label><?php echo $tr->translate("SYMBOL");?></td>
+					      		                   <td colspan="2"><?php echo $tr->translate("POB");?>:&nbsp;<label><?php //echo $this->rs['address'];?></label><?php echo $tr->translate("SYMBOL");?></td>
 					      		               </tr>
 					      		         </table>
 									</td>
@@ -112,7 +119,7 @@ dojo.ready(function(){
 									<td><?php echo $tr->translate("DISTRICT");?>:</td>
 									<td><label><?php echo $this->rs['district_name'];?></label> </td>
 									<td><?php echo $tr->translate("PROVINCE");?>:</td>
-									<td><label><?php echo $this->rs['province_name'];?></label>
+									<td><label><?php if(!empty($this->rs['province_name'])) echo $this->rs['province_name'];?></label>
 									 
 									</td>
 									
@@ -138,7 +145,7 @@ dojo.ready(function(){
 								</tr>
 					      		<tr>
 								    <td title="កំរិតភាសា"><?php echo $tr->translate("LANGUAGE_LEVEL");?>:</td>
-									<td><label><?php echo $this->rs['lang_name'];?></label></td>
+									<td><label><?php //echo $this->rs['lang_name'];?></label></td>
 					      			<td title="ស្ថានការណ៍"><?php echo $tr->translate("STATUS");?>:</td>
 					      			<?php $status='';
 					      			      if($this->rs['status']==1){

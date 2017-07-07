@@ -232,7 +232,8 @@ class Foundation_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    function getAllSerivesById($stu_id){
    	$db = $this->getAdapter();
    	$sql = "SELECT spd.id,spd.service_id FROM rms_student_paymentdetail AS spd,rms_student_payment AS sp 
-   			WHERE sp.student_id=$stu_id 
+   			WHERE sp.student_id=$stu_id
+   			AND spd.type=3 
    			AND sp.id=spd.payment_id
    	 		AND spd.is_start=1 AND spd.is_suspend=0";
    	return $db->fetchAll($sql);

@@ -165,7 +165,7 @@ function initailize() {
 		template+='<td width="15px" align="center">'+no+'</td>';
 		template+='<td><select style="width:100%;" readonly="readonly" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">'+service+'</select></td>';			
 		column = 0;
-		template+='<td><select dojoType="dijit.form.FilteringSelect" id="type_'+col+'" onchange="dateReadonly('+col+')" name="type_'+col+'" style="width:100%;"><option value="0">Normal</option><option value="1">Suspend</option><option value="2">Stop</option></select></td>';
+		template+='<td><select dojoType="dijit.form.FilteringSelect" id="type_'+col+'" onchange="dateReadonly('+col+')" name="type_'+col+'" style="width:100%;"><option value="1">Suspend</option><option value="2">Stop</option></select></td>';
 		template+='<td> <input type="text" name="reason_'+col+'" id="reason_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
 		template+='<td><select style="width:100%;"  dojoType="dijit.form.DateTextBox" id="date_'+col+'" name="date_'+col+'"></select></td>';
 		template+='<td> <input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';

@@ -46,11 +46,10 @@ public function addAction(){
 		try{
 				$db = new Foundation_Model_DbTable_DbSuspendservice();
 				$row = $db->addSuspendservice($_data);
-				
-				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/suspendservice");
+				if(!empty($_data['save_new'])){
+					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/suspendservice/add");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/suspendservice/add");
+					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/suspendservice/index");
 				}
 				
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
@@ -151,23 +150,4 @@ function getStudentServiceAction(){
 		exit();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -105,6 +105,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 				$_data = $this->getRequest()->getPost();
 				$_model = new Accounting_Model_DbTable_DbServiceCharge();
 				$_model->addServiceCharge($_data);
+				//print_r($_model);exit();
 				if(isset($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/servicecharge/add");
 				}else{
@@ -117,7 +118,9 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 		}
 		$_model = new Application_Model_GlobalClass();
 		$this->view->all_faculty = $_model->getAllServiceItemOption(2);
-
+		
+		$db_g=new Application_Model_DbTable_DbGlobal();
+		$this->view->all_service=$db_g->getAllstudentRequest(2);
 		 
 		$_model = new Application_Model_GlobalClass();
 		$this->view->all_metion = $_model ->getAllMetionOption();
@@ -131,6 +134,11 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 		
 		$db = new Accounting_Model_DbTable_DbServiceCharge();
 		$this->view->year = $db->getAllYear();
+		
+		$db = new Accounting_Model_DbTable_DbService();
+		$rs= $db->getServiceType(1);
+		array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->service = $rs;
 		
 	}
 	public function editAction(){
@@ -200,12 +208,15 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 					elseif($payment_tran['payment_term']==4){
 						$rs_rows[$key_old]['year'] = $payment_tran['price_fee'];
 					}
-	
 				}
-				
 			   $test = $this->view->rows =$rs_rows;
 			  // print_r($test);exit();
-			   
+			   $db_g=new Application_Model_DbTable_DbGlobal();
+			   $this->view->all_service=$db_g->getAllstudentRequest(2);
+			   $db = new Accounting_Model_DbTable_DbService();
+			   $rs= $db->getServiceType(1);
+			   array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   $this->view->service = $rs;
 	
 	}
 	
@@ -228,6 +239,8 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 		$_model = new Application_Model_GlobalClass();
 		$this->view->all_metion = $_model ->getAllMetionOption();
 		$this->view->all_faculty = $_model->getAllServiceItemOption(2);
+		$db_g=new Application_Model_DbTable_DbGlobal();
+		$this->view->all_service=$db_g->getAllstudentRequest(2);
 		// 		$this->view->all_faculty = $_model ->getAllFacultyOption();
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm();
@@ -276,13 +289,16 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 			}
 	
 		}
-	
 		$test = $this->view->rows =$rs_rows;
 		// print_r($test);exit();
-	
-	
+		$db_g=new Application_Model_DbTable_DbGlobal();
+		$this->view->all_service=$db_g->getAllstudentRequest(2);
+		
+		$db = new Accounting_Model_DbTable_DbService();
+		$rs= $db->getServiceType(1);
+		array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->service = $rs;
 	}
-	
 	
 	public function headAddRecordService($rs,$key){
 		$result[$key] = array(
@@ -314,6 +330,23 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 			$rs = $db->getAllServiceItemOption($_data["type"]);
 			print_r(Zend_Json::encode($rs));
 			exit();
+		}
+	}
+	
+	function addAjaxserviceAction(){
+		if($this->getRequest()->isPost()){
+			try{
+				$data = $this->getRequest()->getPost();
+				$db = new Accounting_Model_DbTable_DbService();
+				$row = $db->AddServiceAjax($data);
+				$result = array("id"=>$row);
+				print_r(Zend_Json::encode($row));
+				exit();
+				//Application_Form_FrmMessage::message("INSERT_SUCCESS");
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
 		}
 	}
 	

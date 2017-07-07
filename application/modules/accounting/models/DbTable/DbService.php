@@ -29,7 +29,6 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     				'user_id'=>$this->getUserId(),
     		);
     		return ($this->insert($_arr));
-    	
     } 
     
     public function addServicePopup($_data){
@@ -111,7 +110,28 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-    }	
+    }
+
+    public function AddServiceAjax($_data){
+    	//return 'hello';
+    	try{
+    		$this->_name='rms_program_name';
+    		$_db = $this->getAdapter();
+    		$_arr = array(
+    				'title'=>$_data['add_title'],
+    				'type'=>2,
+    				'ser_cate_id'=>$_data['title'],
+    				'description'=>$_data['description'],
+    				'create_date'=>Zend_Date::now(),
+    				'status'=>$_data['service_status'],
+    				'user_id'=>$this->getUserId(),
+    		);
+    		return $this->insert($_arr);
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    }
+    
 }
 
 

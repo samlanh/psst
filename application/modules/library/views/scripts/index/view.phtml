@@ -222,3 +222,31 @@
  
 </body>
 </html>
+
+<script>
+function getAllAccount(index){
+	 parent_id = dijit.byId('parrent_'+index).get('value');
+	 dojo.xhrPost({
+	  url:url_accountbyid, 
+	  content:{ 
+	      'parent':parent_id
+	  },     
+	  handleAs:"json",
+	  load: function(option) {
+	    dojo.html.set(dojo.byId("acc_label"+index), '<select Onchange="getParentByAccount('+r+')" name="account_id'+index+'" dojoType="dijit.form.FilteringSelect" >'
+	         +option+'</select>', {
+	           parseContent: true,
+	           onBegin: function() {
+	             //dojo.require('dijit.form.FilteringSelect');
+	             //this.inherited("onBegin", arguments);
+	           }
+	       });
+	  
+	  },
+	  error: function(err) {
+	   alert(err);
+	  }
+	 });
+	}
+
+</script>

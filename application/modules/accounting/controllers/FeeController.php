@@ -93,14 +93,25 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$data=$this->view->all_session=$_model->getAllSession();
     	$model = new Application_Model_DbTable_DbGlobal();
     	$this->view->payment_term = $model->getAllPaymentTerm(null,null);
+		
+		$branch = $model->getAllBranchName();
+    	array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	$this->view->branchopt = $branch;
     	
     	$frm = new Application_Form_FrmOther();
     	$frm =  $frm->FrmAddDept(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->add_dept = $frm;
     	
-    	$db = new Accounting_Model_DbTable_DbTuitionFee();
-    	$this->view->branch = $db->getAllBranch();
+		$fm = new Global_Form_Frmbranch();
+		$frm = $fm->Frmbranch();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_branch = $frm;
+		
+    	//$db = new Accounting_Model_DbTable_DbTuitionFee();
+    	//$this->view->branch = $db->getAllBranch();
+		
+		
     }
  	
     public function editAction()

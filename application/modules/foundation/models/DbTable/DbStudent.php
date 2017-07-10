@@ -295,12 +295,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'guardian_tel'	=>$_data['guardian_phone'],
 					
 					'is_setgroup'	=> 1,
-					'group'			=>$_data['group'],
+					'group_id'		=>$_data['group'],
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
 					'photo'			=>$pho_name
 					);
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
+			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 			$this->update($_arr, $where);
 			
 			$this->_name='rms_study_history';
@@ -319,8 +320,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
 			$this->update($arr, $where);
 			
-			
-			$this->_name='rms_student_group_history';
+/*			$this->_name='rms_student_group_history';
 			$arr_group_history= array(
 // 					'branch_id'=>$branch_id,
 // 					'stu_id'=>$id,
@@ -329,10 +329,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'date'		=>date("Y-m-d H:i:s"),
 					'user_id'	=>$this->getUserId(),
 			);
-			$where = "stu_id=".$_data["id"]."AND group_id=".$_data["old_group_id"];
-			
+			$where = "stu_id=".$_data["id"]."AND group_id=".$_data["group"];
 			$this->update($arr, $where);
+		*/
+			
 		}catch(Exception $e){
+			echo $e->getMessage();
+			exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}

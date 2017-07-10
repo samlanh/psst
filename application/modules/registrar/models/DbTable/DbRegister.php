@@ -1721,8 +1721,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
+    	$branch_id="";
     	
     	$sql="SELECT count(id)  FROM rms_student_payment where 1 $branch_id LIMIT 1 ";
+    	
     	$payment_no = $db->fetchOne($sql);
     	
     	$sql1="SELECT count(id)  FROM ln_income where 1 $branch_id LIMIT 1 ";
@@ -1730,7 +1732,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	
     	$sql2="SELECT count(id)  FROM rms_student_test where 1 $branch_id LIMIT 1 ";
     	$stu_test_no = $db->fetchOne($sql2); 
-    	
+
     	$sql3="SELECT count(id)  FROM rms_change_product where 1 LIMIT 1 ";
     	$change_product_no = $db->fetchOne($sql3);
     	

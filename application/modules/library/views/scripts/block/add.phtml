@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_GATEGORY"));
 	$frm=$this->frm_cat;
+	 
 ?>	
 <style>
      
@@ -15,8 +16,8 @@
 <form  id='category' action="<?php echo $this->url(array('module'=>'library','controller'=>'block','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
 	if(this.validate()) {
-			   dijit.byId('save_new').set('disabled',true);
-			   dijit.byId('save_close').set('disabled',true);
+			  // dijit.byId('save_new').set('disabled',true);
+			  // dijit.byId('save_close').set('disabled',true);
 				return true;
 			} else {
 				return false;

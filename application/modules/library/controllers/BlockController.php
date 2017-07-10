@@ -58,6 +58,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     			
     	}
+    	
 		$frm_major = new Library_Form_FrmCategory();
 		$frm_search = $frm_major->FrmBlock();
 		Application_Model_Decorator::removeAllDecorator($frm_search);

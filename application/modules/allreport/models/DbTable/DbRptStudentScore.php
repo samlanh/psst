@@ -50,6 +50,14 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     	 
     }
+    
+    
+    function getAllMonth(){
+		$db = $this->getAdapter();
+		$sql="select id , month_kh from rms_month where status=1 ";
+		return $db->fetchAll($sql);
+	}	
+    
    
     function getAllTitle(){
     	$db=$this->getAdapter();
@@ -182,57 +190,90 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    public function getStundetScoreGroup($search){ // fro rpt-score
    	$db = $this->getAdapter();
    	$sql="SELECT
-		s.`id`,sd.`group_id`,g.`group_code`,
-		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-		(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
-		(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
-		`g`.`semester` AS `semester`, 
-		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-		(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-		sd.`student_id`,st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`,s.`reportdate`
+				s.`id`,
+				sd.`group_id`,
+				g.`group_code`,
+				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+				(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+				(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+				`g`.`semester` AS `semester`, 
+				(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+				(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+				sd.`student_id`,
+				st.`stu_code`,
+				st.`stu_enname`,
+				st.`stu_khname`,
+				st.`sex`,
+				s.`reportdate`,
+				(select month_kh from rms_month where rms_month.id = s.for_month) as for_month,
+				s.for_semester
 		 FROM `rms_score` AS s, 
-		 `rms_score_detail` AS sd,
-		 `rms_student` AS st,
-		 `rms_group` AS g
-		 WHERE s.`id`=sd.`score_id` AND st.`stu_id`=sd.`student_id`
-		 AND g.`id`=sd.`group_id` AND s.status = 1 AND `g`.`degree` IN (1,2)
+			 `rms_score_detail` AS sd,
+			 `rms_student` AS st,
+			 `rms_group` AS g
+		 WHERE 
+		 	s.`id`=sd.`score_id` 
+		 	AND st.`stu_id`=sd.`student_id`
+		 	AND g.`id`=sd.`group_id` 
+		 	AND s.status = 1 
+		 	AND `g`.`degree` IN (1,2,3)
+		 	and s.type_score=1
 		";
+   	
    	$where='';
-   	$from_date =(empty($search['start_date']))? '1': " s.reportdate >= '".$search['start_date']." 00:00:00'";
-   	$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
-   	$where = " AND ".$from_date." AND ".$to_date;
+   	
+//    	$from_date =(empty($search['start_date']))? '1': " s.reportdate >= '".$search['start_date']." 00:00:00'";
+//    	$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
+//    	$where = " AND ".$from_date." AND ".$to_date;
    	
    	if(!empty($search['group_name'])){
    		$where.= " AND sd.group_id =".$search['group_name'];
    	}
-   	if(!empty($search['degree_high_primary'])){
-   		$where.=" AND `g`.`degree` =".$search['degree_high_primary'];
+   	if(!empty($search['degree_bac'])){
+   		$where.=" AND `g`.`degree` =".$search['degree_bac'];
    	}
    	if(!empty($search['study_year'])){
-   		$where.=" AND g.academic_year =".$search['study_year'];
+   		$where.=" AND s.for_academic_year =".$search['study_year'];
    	}
-   	if(!empty($search['grade_high_primary'])){
-   		$where.=" AND `g`.`grade` =".$search['grade_high_primary'];
+   	if(!empty($search['grade_bac'])){
+   		$where.=" AND `g`.`grade` =".$search['grade_bac'];
    	}
    	if(!empty($search['session'])){
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
-   	$order = "  GROUP BY sd.`student_id`,s.`reportdate` ORDER BY s.`reportdate`,sd.`group_id`,sd.`student_id`  ASC";
+   	
+   	if(!empty($search['for_month'])){
+   		$where.= " AND s.for_month =".$search['for_month'];
+   	}
+   	
+   	//echo $sql.$where;
+   	
+   	$order = "  GROUP BY sd.`student_id`,s.`reportdate` ORDER BY s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id`  ASC";
    	return $db->fetchAll($sql.$where.$order);
    }
+   
+   
    public function getSubjectScoreGroup($group_id){
    	$db = $this->getAdapter();
    	$sql = "SELECT
-		s.`id`,sd.`group_id`,sd.`student_id`,sj.`subject_titlekh`,sd.`score`,s.`reportdate`,sd.`subject_id`
-		 FROM `rms_score` AS s, 
-		 `rms_score_detail` AS sd,
-		 `rms_subject` AS sj
-		 WHERE s.`id`=sd.`score_id` 
-		 AND sj.`id`=sd.`subject_id` AND sd.`is_parent`=1
-		 AND sd.`group_id`=$group_id 
-		 GROUP BY sd.`subject_id`
+			 	s.`id`,
+			 	sd.`group_id`,
+			 	sd.`student_id`,
+			 	sj.`subject_titlekh`,
+			 	sd.`score`,
+			 	sd.`subject_id`
+			FROM `rms_score` AS s, 
+			    `rms_score_detail` AS sd,
+			    `rms_subject` AS sj
+		   WHERE 
+		   		s.`id`=sd.`score_id` 
+		 		AND sj.`id`=sd.`subject_id` 
+		 		AND sd.`is_parent`=1
+		 		AND sd.`group_id`=$group_id 
+		   GROUP BY 
+		   		sd.`subject_id`
 	   	";
+   	
    	return $db->fetchAll($sql);
    }
    

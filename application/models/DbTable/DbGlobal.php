@@ -591,7 +591,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    function getAllYear(){
 	   	$db = $this->getAdapter();
-	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')','(',(select name_en from rms_view where type=7 and key_code=time),')') AS name FROM rms_tuitionfee WHERE `status`=1
+	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
 	   	GROUP BY from_academic,to_academic,generation";
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);

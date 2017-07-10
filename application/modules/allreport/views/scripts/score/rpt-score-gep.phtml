@@ -1,0 +1,237 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
+	$this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
+	echo $this->headTitle();
+	$frm =  $this->form_search;
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	
+	$day = array(
+			"Mon" =>'ច័ន្ទ',
+			"Tue" =>'អង្គារ',
+			"Wed" =>'ពុធ',
+			"Thu" =>'ព្រហស្បតិ៍',
+			"Fri" =>'សុក្រ',
+			"Sat" =>'សៅរ៍',
+			"Sun" =>'អាទិត្យ',
+	);
+	$th = array("1"=>"1st","2"=>"2nd","2"=>"3nd","4"=>"4th",);
+	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មិនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+	$month_english = array("01"=>"January","02"=>"February","03"=>"March","04"=>"April","05"=>"May","06"=>"June","07"=>"July","08"=>"August","09"=>"September","10"=>"October","11"=>"November","12"=>"December",);
+	
+?>	
+<script type="text/javascript">
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.store.Memory");
+dojo.require("dojo.data.ObjectStore");
+dojo.require('dojox.form.BusyButton');
+dojo.ready(function(){
+	//control study year
+		var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
+		new dijit.form.FilteringSelect({
+		    store:group_store,
+		    autoComplete: true,                        
+		    required:false,
+		    id: "group_name",
+		    name: "group_name",
+		    class:'fullside',  
+		    value:'<?php echo $this->g_name['group_name'];?>',         
+		    required:'true',
+		    placeHolder:"Selected Group Name",          
+		    onChange: function() {  
+		    	//getGroupName();
+		    }
+		}, "group_name");
+});
+</script>
+<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'rpt-score-gep')); ?>" dojoType="dijit.form.Form" method="post">
+	<table style="width:90%">
+		<tr> 
+			<td><input id="group_name" /></td>
+			<td> <?php echo $frm->getElement("study_year");?></td>
+			<td> <?php echo $frm->getElement("degree_english");?></td>
+			<td> <?php echo $frm->getElement("grade_english");?></td>
+			<td> <?php echo $frm->getElement("session");?></td>
+			<td> <?php echo $frm->getElement("time");?></td>
+		</tr>
+		<tr>
+			<td> <?php echo $frm->getElement("start_date");?></td>
+			<td> <?php echo $frm->getElement("end_date");?></td>
+			<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+		</tr>
+	</table>
+</form>
+	<div style="border: 1px dotted #000;background: #fff;width:32cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+		<div id="divPrint">
+		<style type="text/css">
+			.style{
+				line-height: 20px; font-size: 12px !important;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+			}
+			td.rotate {
+    			vertical-align: middle;
+				width: 20px;
+			}
+			td.rotate > div,
+			td.rotate1 > div {
+			    transform: rotate(270deg);
+				text-align: center;
+				vertical-align: initial;
+			}
+			td.rotate1{
+				width: 70px;
+			}
+			td.rotate1 span{
+				 white-space: normal;
+			}
+			 td.rotate span{
+			    white-space: nowrap;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			    display: inline-block;
+			    /* max-width: 130px; */
+			}
+		</style>
+		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+				<tr>
+					<td colspan="3">
+						<table  cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;"  border="1" >
+							<?php
+							$old_groupid=0; $i=0;  $count=0; $count_male=0; 
+							$read =0;
+							$write =0;
+							$speak =0;
+							$listen =0;
+							$homework =0;
+							$month_of_semester = '';
+							 if (!empty($this->studentgroup)) foreach($this->studentgroup as $key=> $rs){ 
+								$subj = $db->getSubjectScoreGroupGEP($rs['group_id'],2);
+								$amount_test = $db->getAmountWeeklyscoreByGroup($rs['group_id'], $rs['reportdate']);
+							?>
+							<?php if ($old_groupid!=$rs['group_id'] || $month_of_semester != $rs['month_of_semester']){ $count = count($subj); ?>
+								<?php if ($key>0){ 
+								?>
+								<tr class="style" style=" line-height: 18px;">
+									<td colspan="4">&nbsp;Total Number of Students:&nbsp;<span ><?php echo $i;?></span>&nbsp;</td>
+									<td colspan="3">&nbsp;Male:&nbsp;<?php echo $count_male;?>&nbsp;</td>
+									<td colspan="4">&nbsp;Female:&nbsp;<?php echo $i-$count_male;?>&nbsp;</td>
+									<td colspan="<?php echo $count+2;?>">&nbsp;New Registered : <?php echo 0;?>&nbsp;</td>
+									<td colspan="2">&nbsp;Give Up&nbsp;</td>
+								</tr>
+								<?php }$i=0; $count_male=0;?>
+							<tr>
+								<td align="center" colspan="<?php echo $count+14;?>" style=" <?php if ($key<1){ echo 'border-top: 1px solid #fff;';}?> border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("Cambodia - Australia School");?></strong><br />
+									<span style="font-family: 'Times New Roman','Khmer OS Battambang'; font-size: 13px;">Evaluation of the Study of Students English Program of Academic <?php echo $rs['academic_year'];?></span><br />
+									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
+										<span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $month_english[date("m",strtotime($rs['reportdate']))]." ".date("Y",strtotime($rs['reportdate']));?> (<?php if (is_numeric($rs['semester'] )){ echo $th[$rs['semester']]." SEMESTER";}else{ echo $rs['semester'];}?>)</span>
+										<br />
+										<span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?> - <?php echo $rs['grade'];?></span> <br />
+										Group : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
+									 	<?php echo $tr->translate("Room");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> 
+									 	, <?php echo $tr->translate("Session");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
+									</strong>
+								</td>
+							</tr>
+							<tr style="font-size:14px; height: 25px;" align="center" >
+								<td rowspan="4"><?php echo $tr->translate("SR");?></td>
+								<!-- <td rowspan="4"><?php //echo $tr->translate("STUDENT_CODE");?></td> -->
+								<td rowspan="4"><?php echo $tr->translate("Stuent's Name");?></td>
+								<td rowspan="4"><?php echo $tr->translate("Sex");?></td>
+								<td colspan="6"><?php echo $tr->translate("Daily & weekly Appraisal 40%");?></td>
+								<td class="rotate" rowspan="4"><div><span><?php echo $tr->translate("Sum Up 40%");?></span></div></td>
+								<td colspan="<?php echo $count;?>"><?php echo $tr->translate("Monthly Test")?></td>
+								<td class="rotate" rowspan="4"><div><span><?php echo $tr->translate("Sum Up 60%");?></span></div></td>
+								<td class="rotate1" rowspan="4"><div><span><?php echo $tr->translate("Total Monthly Score 100%");?></span></div></td>
+								<td class="rotate" rowspan="4"><div><span><?php echo $tr->translate("Classification");?></span></div></td>
+								<td rowspan="4"><?php echo $tr->translate("Remarks");?></td>
+							</tr>
+							<tr style="font-size:14px; height: 20px;" align="center">
+								<td><?php echo $tr->translate("10%");?></td>
+								<td><?php echo $tr->translate("10%");?></td>
+								<td colspan="4"><?php echo $tr->translate("20%");?></td>
+								<td colspan="<?php echo $count;?>"><?php echo $tr->translate("60%");?></td>
+							</tr>
+							<tr style="font-size:14px; height: 20px;" align="center">
+								<td><?php echo $tr->translate("Attendance");?></td>
+								<td><?php echo $tr->translate("Participation");?></td>
+								<td colspan="4"><?php echo $tr->translate("Weekly Score");?></td>
+								<td colspan="<?php echo $count;?>"><?php echo $tr->translate("Scoring");?></td>
+							</tr>
+							<tr style="font-size:14px; height: 20px;" align="center">
+								<td><?php echo $tr->translate("Discipline");?></td>
+								<td><?php echo $tr->translate("Homework");?></td>
+								<td><?php echo $tr->translate("R");?></td>
+								<td><?php echo $tr->translate("W");?></td>
+								<td><?php echo $tr->translate("S");?></td>
+								<td><?php echo $tr->translate("L");?></td>
+								<?php  if (!empty($subj)) foreach ($subj as $subject){?>
+								<td><?php if ($subject['subject_id']==5){ echo "R";//$subject['subject_titlekh'];
+								}else if($subject['subject_id']==6){ echo "W";//$subject['subject_titlekh'];
+								}else if($subject['subject_id']==7){ echo "S";//$subject['subject_titlekh']
+								}else if($subject['subject_id']==8){ echo "L";//$subject['subject_titlekh'];
+								}?></td>
+								<?php }?>
+							</tr>
+							<?php } $i++; if ($rs['sex']==1){ $sex = $tr->translate("MALE"); $count_male= $count_male+1;}else{$sex = $tr->translate("FEMALE");}
+							//	Weekly Score Exam
+								$weekly_score_read = $db->getTotalWeeklyScoreBySubject($rs['group_id'], $rs['student_id'], 5, 1,$rs['reportdate']);
+								$weekly_score_write = $db->getTotalWeeklyScoreBySubject($rs['group_id'], $rs['student_id'], 6, 1,$rs['reportdate']);
+								$weekly_score_speak = $db->getTotalWeeklyScoreBySubject($rs['group_id'], $rs['student_id'], 7, 1,$rs['reportdate']);
+								$weekly_score_listen = $db->getTotalWeeklyScoreBySubject($rs['group_id'], $rs['student_id'], 8, 1,$rs['reportdate']);
+								$weekly_score_homework = $db->getTotalWeeklyScoreBySubject($rs['group_id'], $rs['student_id'], 9, 1,$rs['reportdate']);
+								if($amount_test!=0){
+									$read = ($weekly_score_read['score']*5)/($amount_test *10);
+									$write = ($weekly_score_write['score']*5)/($amount_test *10);
+									$speak = ($weekly_score_speak['score']*5)/($amount_test *10);
+									$listen = ($weekly_score_listen['score']*5)/($amount_test *10);
+									$homework = ($weekly_score_homework['score']*10)/($amount_test *10);
+								}
+							//	End Weekly Score Exam
+							$total_weekly = $read+$write+$speak+$listen+$homework;
+							
+							?>
+							<tr class="style" style=" line-height: 18px;">
+								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
+								<!--<td align="center" style="white-space:nowrap;">&nbsp;<?php //echo $rs['stu_code'];?>&nbsp;</td>-->
+								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
+								<td align="center">&nbsp;&nbsp;</td>
+								<td align="center">&nbsp;<?php echo number_format($homework,2);?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo number_format($read,2);?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo number_format($write,2);?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo number_format($speak,2);?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo number_format($listen,2);?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo number_format($total_weekly,2);?>&nbsp;</td>
+								<!-- Monthly Test Score Exam -->
+								<?php $total_score =0; $month_score_test=0; $subj = $db->getSubjectScoreGroupGEP($rs['group_id'],2); if (!empty($subj)) foreach ($subj as $subject){?>
+								<td align="center"><?php $score = $db->getTotalWeeklyScoreBySubject($rs['group_id'],$rs['student_id'],$subject['subject_id'],2,$rs['reportdate']); echo number_format($score['score'],2); $month_score_test = $month_score_test + $score['score'];?></td>
+								<?php }$total_score = $month_score_test+$total_weekly;?>
+								<!-- End Monthly Test Score Exam -->
+								<td align="center">&nbsp;<?php echo number_format($month_score_test,2);?>&nbsp;</td>
+								<td align="center"><?php echo number_format($total_score,2);?></td>
+								<td align="center">&nbsp;</td>
+								<td align="center" <?php if(($total_score)<50){echo 'style=" background: #fe4747;"'; }?>>
+									<?php if($total_score>=50){echo $tr->translate("PASS");}else{echo $tr->translate("FAIL");}?>
+								</td>
+							</tr>
+							<?php $old_groupid=$rs['group_id']; $month_of_semester = $rs['month_of_semester']; ?>
+							<?php }?>
+							<?php if (!empty($this->studentgroup)){?>
+							<tr class="style" style=" line-height: 18px;">
+								<td colspan="4">&nbsp;Total Number of Students:&nbsp;<span ><?php echo $i;?></span>&nbsp;</td>
+								<td colspan="3">&nbsp;Male:&nbsp;<?php echo $count_male;?>&nbsp;</td>
+								<td colspan="3">&nbsp;Female:&nbsp;<?php echo $i-$count_male;?>&nbsp;</td>
+								<td colspan="<?php echo $count+2;?>">&nbsp;New Registered : <?php echo 0;?>&nbsp;</td>
+								<td colspan="2">&nbsp;Give Up&nbsp;</td>
+							</tr>
+							<?php }?>
+						</table>
+					</td>
+				</tr>
+				
+			</table>
+		</div>
+	</div>

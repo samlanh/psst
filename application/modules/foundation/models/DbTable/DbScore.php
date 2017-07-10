@@ -27,12 +27,18 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
-					'reportdate'=>$_data['reportdate'],
+					//'reportdate'=>$_data['reportdate'],
 					'date_input'=>date("Y-m-d"),
-					'status'=>$_data['status'],
-					'user_id'=>$this->getUserId()
+					//'status'=>$_data['status'],
+					'user_id'=>$this->getUserId(),
+					'type_score'=>1, // 1 => BacII score
+					
+					'for_academic_year'=>$_data['year_study'],
+					'for_semester'=>$_data['for_semester'],
+					'for_month'=>$_data['for_month'],
 			);
 			$id=$this->insert($_arr);
+			
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				$k=0;
@@ -41,16 +47,21 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						foreach ($this->getSubjectByGroup($_data['group']) as $index => $rs_parent){
 							$parent_id = $rs_parent["subject_id"];
 								if(!empty($this->getChildSubject($parent_id))){
-// 									$count = count($this->getChildSubject($parent_id));
-									$parent_score = 0;
-									foreach ($this->getChildSubject($parent_id) as $key => $rs_subs){
-										$sub_name = str_replace(' ','',$rs_subs["subject_titleen"]);
-										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-										$subject_id = $rs_parent['subject_id'];
-										$no = $key+1;
-										$parent_score = $parent_score + $_data["$sub_name".$no];
+									$no = $index + 1;
+// 									$parent_score = 0;
+// 									foreach ($this->getChildSubject($parent_id) as $key => $rs_subs){
+// 										$sub_name = str_replace(' ','',$rs_subs["subject_titleen"]);
+// 										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
+// 										$subject_id = $rs_parent['subject_id'];
+// 										$no = $key+1;
+// 										$parent_score = $parent_score + $_data["$sub_name".$no];
 										
-									}
+// 									}
+									
+									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
+									$sub_name = $_data['stu_id_'.$k].$sub_name;
+									$subject_id = $rs_parent['subject_id'];
+									
 									
 // 									if(!$_data["$sub_name".$i]==''){
 									$arr=array(
@@ -58,7 +69,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 											'group_id'=>$_data['group'],
 											'student_id'=>$_data['stu_id_'.$k],
 											'subject_id'=> $subject_id,
-											'score'=> $parent_score,
+											'score'=> $_data["$sub_name".$no],
 											'status'=>1,
 											'user_id'=>$this->getUserId(),
 											'is_parent'=> $rs_parent["is_parent"]
@@ -124,10 +135,14 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
 						
-					'reportdate'=>$_data['reportdate'],
+					//'reportdate'=>$_data['reportdate'],
 					//'date_input'=>date("Y-m-d"),
 					'status'=>$_data['status'],
-					'user_id'=>$this->getUserId()
+					'user_id'=>$this->getUserId(),
+					
+					'for_academic_year'=>$_data['status'],
+					'for_semester'=>$_data['status'],
+					'for_month'=>$_data['status'],
 			);
 		$where="id=".$_data['score_id'];
 		$db->getProfiler()->setEnabled(true);
@@ -237,15 +252,15 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT s.id,s.title_score,(SELECT group_code FROM rms_group WHERE id=s.group_id ) AS  group_id,
 			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
-			(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+			(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
 			(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1)AS grade,
 			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session`) AS session_id,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			s.status
 			FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND g.degree IN(1,2) AND s.status=1";
 		$where ='';
-		$from_date =(empty($search['start_date']))? '1': " s.reportdate >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
+		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " s.date_input <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 		
 		if(!empty($search['group_name'])){
@@ -360,9 +375,17 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	
 	function getChildSubject($subject_id){
 		$db=$this->getAdapter();
-		$sql="SELECT sj.`id`,CONCAT(sj.subject_titlekh) AS sub_name,
-		sj.`parent`,sj.`is_parent`,sj.`subject_titleen`
-		 FROM `rms_subject` AS sj WHERE sj.`parent`=".$subject_id;
+		$sql="SELECT 
+					sj.`id`,
+					CONCAT(sj.subject_titlekh) AS sub_name,
+					sj.`parent`,
+					sj.`is_parent`,
+					sj.`subject_titleen`
+		 	  FROM 
+					`rms_subject` AS sj 
+			  WHERE 
+					sj.`parent`=".$subject_id;
+		
 		return $db->fetchAll($sql);
 	}
 	
@@ -404,7 +427,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	}
 	function getGroupStudent($id){
 		$db=$this->getAdapter();
-		$sql="SELECT id,group_id,status,reportdate FROM rms_score WHERE id=$id LIMIT 1";
+		$sql="SELECT id,group_id,status FROM rms_score WHERE id=$id LIMIT 1";
 		return $db->fetchRow($sql);
 	}
 	function getStudentScoreChildSubj($score_id,$student_id,$parent_suj_id){
@@ -429,6 +452,23 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
+
+	function getAllMonth(){
+		$db = $this->getAdapter();
+		$sql="select id , month_kh from rms_month where status=1 ";
+		return $db->fetchAll($sql);
+	}	
+	
+	
+	
+	
 	
 }
+
+
+
+
+
+
+
 

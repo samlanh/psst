@@ -57,6 +57,10 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     			
     	}
+    	
+    	$_model = new Global_Model_DbTable_DbGroup();
+    	$this->view->subject = $_model->getAllSubjectStudy();
+    	
     	$db = new Global_Model_DbTable_DbGrade();
     	$dept = $db->getAllDept();
     	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
@@ -103,11 +107,9 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		try{
     			$data = $this->getRequest()->getPost();
     			$db = new Global_Model_DbTable_DbGrade();
-    			$row = $db->addDept($data);
-    			$result = array("id"=>$row);
-    			print_r(Zend_Json::encode($row));
+    			$degree = $db->addDept($data);
+    			print_r(Zend_Json::encode($degree));
     			exit();
-    			//Application_Form_FrmMessage::message("INSERT_SUCCESS");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

@@ -542,8 +542,8 @@ public function init()
     		$search = array(
     				'group_name' => '',
     				'study_year'=> '',
-    				'grade_high_primary'=> '',
-    				'degree_high_primary'=>'',
+    				'grade_bac'=> '',
+    				'degree_bac'=>'',
     				'session'=> '',
     				'time'=> '',
     				'start_date'=> date('Y-m-d'),

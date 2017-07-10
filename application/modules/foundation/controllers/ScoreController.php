@@ -33,7 +33,7 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM","STATUS");
+			$collumns = array("TITLE","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'score','action'=>'edit',
 			);
@@ -84,6 +84,8 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 			
+		$db = new Foundation_Model_DbTable_DbScore();
+		$this->view->month = $db->getAllMonth();
 	}
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
@@ -119,6 +121,10 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		
+		
+		
+		$db = new Foundation_Model_DbTable_DbScore();
+		$this->view->month = $db->getAllMonth();
 		
 	}
 	function getGradeAction(){

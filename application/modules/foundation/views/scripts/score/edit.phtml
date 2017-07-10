@@ -239,7 +239,7 @@ function filterStudentByCondition(){
 	
 	var new_group = dijit.byId('group').get('value');
 
-	if(old_group ==new_group){
+	if(old_group == new_group){
 		filterStudentOld();
 	}else{
 	//	alert(old_group);
@@ -268,7 +268,7 @@ function filterStudentOld(){
 	        		if($rs["student_id"]==$rss["student_id"]){
 	        	?>
 	        	<?php if($rss["is_parent"]== 1){ $j=$j+1;?>
-	        	no= '<?php echo $j;?>';
+	        	no = '<?php echo $j;?>';
 	        	
 	            stringsname = '<?php echo str_replace(' ','',$rss['subject_titleen'])?>';
 	            str+='<div clss="main" style="width: 50%;display: inline-block; margin: 3px 0; vertical-align: top;">';
@@ -276,11 +276,11 @@ function filterStudentOld(){
 		                  str+='<div style="width: 67%; float: right;"><input   dojoType="dijit.form.validateNumberTextBox" class="fullside" name="<?php echo $rs["student_id"] ?>'+stringsname+no+'" id="<?php echo $rs["student_id"] ?>'+stringsname+no+'"   value="<?php echo $rss["score"] ?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></div>';
 		                  str+='<div id="main<?php echo $rs["student_id"] ?>'+stringsname+no+'" class="child_main" style="clear: both; text-align: right;">';
 								<?php $result_score = $db_score->getStudentScoreChildSubj($this->score_id, $rs["student_id"], $rss['subject_id']);
-									if (!empty($result_score)) $k=0; foreach ($result_score as $child){ $k++;
+									if (!empty($result_score)){ $k=0; foreach ($result_score as $child){ $k++;
 								?>
 								  str+='<div style=" width: 25%;  display: inline-block;white-space: nowrap;text-align:left;padding:0px 5px;font-size:12px;margin-top: 14px;"><?php echo $k.". ".str_replace(' ','',$child['subject_titlekh']);?></div>';
-					              str+='<div style="width: 20%;display: inline-block;"><input   dojoType="dijit.form.validateNumberTextBox" class="fullside" name="child<?php echo $rs["student_id"].str_replace(' ','',$child['subject_titleen']).$k; ?>" id="child<?php echo $rs["student_id"].str_replace(' ','',$child['subject_titleen']).$k; ?>"   value="<?php echo $child['score'];?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></div>';
-								<?php }?>
+					              str+='<div style="width: 20%;display: inline-block;"><input dojoType="dijit.form.validateNumberTextBox" class="fullside" name="child<?php echo $rs["student_id"].str_replace(' ','',$child['subject_titleen']).$k; ?>" id="child<?php echo $rs["student_id"].str_replace(' ','',$child['subject_titleen']).$k; ?>"   value="<?php echo $child['score'];?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></div>';
+								<?php }}?>
 		                  str+='</div>';
 		       str+='</div>';
 	       	 	<?php }?>
@@ -321,7 +321,7 @@ function filterStudentOld(){
 						
 							<td><?php echo $tr->translate("GROUP");?>*</td>
 							<td>
-								<select class="fullside" tabindex="15" name="group" id="group" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup(); getInfoBygroup();">
+								<select class="fullside" tabindex="15" name="group" id="group" readOnly="readOnly" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup(); getInfoBygroup();">
 									<?php if(!empty($this->group))foreach ($this->group as $row){?>
 									<option value="<?php echo $row['id']?>" <?php if ($row['id']==$this->score['group_id']){ echo "selected='selected'";}?>><?php echo $row['name']?></option>
 									<?php }?>
@@ -350,7 +350,8 @@ function filterStudentOld(){
 								<input id="grade" />
 								 <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
 							</td>
-							<td ><?php echo $tr->translate("SESSION");?></td>
+							
+							<td><?php echo $tr->translate("SESSION");?></td>
 							<td>
 								<select id="session" name="session" onchange="filterStudentByCondition();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
 									<option value="-1"> ------ select session---------</option>
@@ -372,9 +373,26 @@ function filterStudentOld(){
 							   </select>
 							</td>
 						
-							<td><?php echo $tr->translate("Monthly Report");?></td>
-							<td><input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="reportdate" name="reportdate" type="text" value="<?php echo date("Y-m-d",strtotime($this->score['reportdate']));?>"></td>
-							<td style="white-space: nowrap;text-align: right;"><?php echo $tr->translate("STATUS");?></td>
+							<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
+							<td>
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+									<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+										<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->score['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+									<?php }}?>
+								</select>
+							</td>
+						
+							<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
+							<td>
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+									<option value="1" <?php if ($this->score['for_semester']==1){ echo "Selected='selected'";}?>>ទី 1</option>
+									<option value="2" <?php if ($this->score['for_semester']==2){ echo "Selected='selected'";}?>>ទី 2</option>
+								</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td style="white-space: nowrap;"><?php echo $tr->translate("STATUS");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
 										<option value="1" <?php if ($this->score['status']==1){ echo "Selected='selected'";}?>>ប្រើប្រាស់</option>
@@ -382,12 +400,14 @@ function filterStudentOld(){
 								</select>
 							</td>
 						</tr>
+						
 						<tr>
 							<td colspan="8">
-							<labal id="liststudent">
-							</labal>
+								<labal id="liststudent">
+								</labal>
 							</td>
 						</tr>
+						
 					</table>
 					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
 						<thead>

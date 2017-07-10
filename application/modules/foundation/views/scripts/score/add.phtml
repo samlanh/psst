@@ -1,6 +1,9 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_NEW_STUDENT_SCORE"));
+	
+	$current_month = date("m");
+	//echo $current_month;exit();
 ?>	
 <head>
   <meta charset="utf-8">
@@ -8,7 +11,6 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
 </head>
 
  
@@ -193,7 +195,7 @@ function filterStudent(){
 		                        	str+='<div id="main'+data[i].stu_id+stringsname+no+'" class="child_main" style="clear: both; text-align: right;">';
 	                              	 str+='</div>';
 	                           str+='</div>';
-	                           getChildren(subject[j].subject_id , data[i].stu_id , +data[i].stu_id+stringsname+no);
+	                           getChildren(subject[j].subject_id , data[i].stu_id , +data[i].stu_id+stringsname+no , stringsname , no);
                       	 	}
                   
                    
@@ -300,15 +302,23 @@ function gender(sex){
 							   </select>
 							</td>
 						
-							<td><?php echo $tr->translate("Monthly Report");?></td>
-							<td><input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="reportdate" name="reportdate" type="text" value="<?php echo date("Y-m-d");?>"></td>
-							<td style="white-space: nowrap;text-align: right;"><?php echo $tr->translate("STATUS");?></td>
+							<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
 							<td>
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
-										<option value="1">ប្រើប្រាស់</option>
-										<option value="0">មិនប្រើប្រាស់</option>
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+									<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+										<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+									<?php }}?>
 								</select>
 							</td>
+						
+							<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
+							<td>
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+										<option value="1">ទី 1</option>
+										<option value="2">ទី 2</option>
+								</select>
+							</td>
+							
 						</tr>
 						<tr>
 							<td colspan="8">
@@ -468,8 +478,9 @@ function getSubjectByGroup(){
 	});
 }
 var url_getChileSubject= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-childsubject')); ?>';
-function getChildren(subject_id,stu_id,divid){
-
+function getChildren(subject_id , stu_id , divid , main_subject_name , main_subject_number){
+	
+	//alert(main_subject_name);
 	//alert(divid);
 	
 	if(group==''){
@@ -489,8 +500,8 @@ function getChildren(subject_id,stu_id,divid){
 			   for(i=0;i<data.length;i++){
 				   no++;
 				   stringsname = data[i].subject_titleen.replace(' ','');
-				   str+='<div style=" width: 25%;  display: inline-block;white-space: nowrap;text-align:left;padding:0px 5px;font-size:12px;margin-top: 14px;">'+no+' . '+data[i].sub_name.substring(20, 0)+'</div>';
-	               str+='<div style="width: 20%;display: inline-block;"><input   dojoType="dijit.form.validateNumberTextBox" class="fullside" name="child'+stu_id+stringsname+no+'" id="child'+stu_id+stringsname+no+'"   value="" type="text" onkeypress="return AllowOnlyNumbers(event);"   ></div>';
+				   str+='<div style=" width: 25%;display: inline-block;white-space: nowrap;text-align:left;padding:0px 5px;font-size:12px;margin-top: 14px;">'+no+' . '+data[i].sub_name.substring(20, 0)+'</div>';
+	               str+='<div style="width: 20%;display: inline-block;"><input dojoType="dijit.form.NumberTextBox" class="fullside"  name="child'+stu_id+stringsname+no+'" id="child'+stu_id+stringsname+no+'" onkeyup="CalculateTotalScore('+subject_id+','+stu_id+','+"'"+main_subject_name+"'"+','+main_subject_number+');"   value="" type="text" onkeypress="return AllowOnlyNumbers(event);" ></div>';
 			   }
 			   document.getElementById("main"+divid).innerHTML = str;
 		   }
@@ -500,5 +511,55 @@ function getChildren(subject_id,stu_id,divid){
 	    }
 	});
 }
+
+var url_getChileSubject = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-childsubject')); ?>';
+function CalculateTotalScore(mainSubjectId , stu_id , main_subject_name , main_subject_number){
+	
+	//alert(main_subject_name);
+	//alert(main_subject_number);
+	
+	dojo.xhrPost({
+	    url: url_getChileSubject,
+	    content : { 
+			'subject_id':mainSubjectId,
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+			//alert(data);
+			sum_sub_score = 0;
+			if(data!=""){
+				   no=0;
+				   for(i=0;i<data.length;i++){
+					   no++;
+					   stringsname = data[i].subject_titleen.replace(' ','');
+
+						control_name = "child"+stu_id+stringsname+no;
+
+					    //alert(control_name);
+						//alert(stringsname);
+					   
+					    child_score = $('#child'+stu_id+stringsname+no).val();
+					    if(child_score==''){child_score=0;}
+					    //alert(child_score);
+						//sum_sub_score = dijit.byId(control_name).get('value');
+					    
+						sum_sub_score = sum_sub_score + parseFloat(child_score);
+						
+						//alert(sum_sub_score);
+				   }
+
+				   //alert(sum_sub_score);
+				   
+				   $('#'+stu_id+main_subject_name+main_subject_number).val(sum_sub_score);
+				   
+			}
+	   },		
+	    error: function(err) {
+			   alert(err);
+		    }
+		});
+	
+}
+
 </script>
  

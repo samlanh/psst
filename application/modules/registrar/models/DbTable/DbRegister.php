@@ -1872,13 +1872,19 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     function getAllDegreeGEP(){
     	$db=$this->getAdapter();
-    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE dept_id NOT IN(1,2,3,4) AND is_active=1 ";
+    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE dept_id NOT IN(1,2,3) AND is_active=1 ";
+    	return $db->fetchAll($sql);
+    }
+    
+    function getAllDegreeBac(){
+    	$db=$this->getAdapter();
+    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE dept_id IN(1,2,3) AND is_active=1 ";
     	return $db->fetchAll($sql);
     }
    
     function getGradeAllBac(){
     	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE dept_id IN(2,3,4) AND is_active=1 ";
+    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE dept_id IN(1,2,3) AND is_active=1 ";
     	return $db->fetchAll($sql);
     }
     function getGradeAllKid(){

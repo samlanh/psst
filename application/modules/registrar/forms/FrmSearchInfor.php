@@ -97,6 +97,19 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_degree->setMultiOptions($opt_deg);
 		
 		
+		$_degree_bac = new Zend_Dojo_Form_Element_FilteringSelect('degree_bac');
+		$_degree_bac->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("DEGREE"),
+				'class'=>'fullside',
+				'required'=>false
+		));
+		$_degree_bac->setValue($request->getParam('degree_bac'));
+		$opt_deg = array(''=>$this->tr->translate("DEGREE"));
+		$opt_degree=$db_years->getAllDegreeBac();
+		if(!empty($opt_degree))foreach ($opt_degree As $rows)$opt_deg[$rows['id']]=$rows['name'];
+		$_degree_bac->setMultiOptions($opt_deg);
+		
+		
 		$_degree_gep = new Zend_Dojo_Form_Element_FilteringSelect('degree_gep');
 		$_degree_gep->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("DEGREE"),
@@ -129,7 +142,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 				'class'=>'fullside',
 				'required'=>false
 		));
-		$_grade_bac->setValue($request->getParam('grade_bac'));
+		$_grade_bac->setValue($request->getParam('grade_bac')); // kid - grade 12
 		$opt_g_bac = array(''=>$this->tr->translate("GRADE"));
 		$opt_grade_bac=$db_years->getGradeAllBac();
 		if(!empty($opt_grade_bac))foreach ($opt_grade_bac As $rows)$opt_g_bac[$rows['id']]=$rows['name'];
@@ -280,7 +293,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$branch_id->setMultiOptions($opt);
 	
-		$this->addElements(array($_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
+		$this->addElements(array($_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 		return $this;
 	} 
 

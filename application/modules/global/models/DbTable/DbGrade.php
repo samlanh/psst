@@ -109,18 +109,39 @@ class Global_Model_DbTable_DbGrade extends Zend_Db_Table_Abstract
 	}
 
 	public function addDept($data){
-		$this->_name='rms_dept';
 		try{
-			$db = $this->getAdapter();
-			$arr = array(
-					'en_name'=>$data['fac_enname'],
-					'shortcut'=> $data['shortcut_fac'],
-					'user_id'=>$this->getUserId(),
-					'modify_date'=>Zend_Date::now(),
+			$this->_name='rms_dept';
+			$_arr=array(
+					'en_name'	  => $data['fac_enname'],
+					'shortcut'    => $data['shortcut_fac'],
+					'modify_date' => date('Y-m-d'),
+					'user_id'	  => $this->getUserId()
 			);
-			return $this->insert($arr);
-		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$id =  $this->insert($_arr);
+				
+			if(!empty($data['identity'])){
+				$this->_name='rms_dept_subject_detail';
+				$ids = explode(',', $data['identity']);
+				foreach ($ids as $i){
+					$arr = array(
+							'dept_id'	=>$id,
+							'subject_id'=>$data['subject_study_'.$i],
+							'score_in_class'=>$data['scoreinclass_'.$i],
+							'score_out_class'=>$data['scoreoutclass_'.$i],
+							'score_short'=>$data['scoreshort_'.$i],
+							'note'   	=> $data['note_'.$i],
+							'date' 		=> date("Y-m-d"),
+							'user_id'	=> $this->getUserId()
+					);
+					$this->insert($arr);
+				}
+			}
+			
+			return $id;
+			
+		}catch(exception $e){
+			Application_Form_FrmMessage::message("Application Error!");
+			echo $e->getMessage();
 		}
 	}
 		

@@ -108,25 +108,50 @@
 			}
 			
 			$controller = 'index';
+			$label="";
+			
+			if($rs=='home'){
+				$controller='index';
+				$label="HOME_PAGE";
+			}
+			
 			if($rs=='rsvacl'){
 				$controller='user';
-			}elseif($rs=='setting'){
+				$label="ACL";
+			}
+			elseif($rs=='setting'){
 				$controller='setting';
-			}elseif($rs=='accounting'){
+				$label="SETTING";
+			}
+			elseif($rs=='accounting'){
 				$controller='fee';
+				$label="ACCOUNTING";
+				
 			}
 			elseif($rs=='foundation'){
 				$controller='register';
+				$label="ADMINISTRATION";
 			}
 			elseif($rs=='global'){
 				$controller='group';
-			}elseif($rs=='registrar'){
+				$label="OTHER_INFOMATION";
+			}
+			elseif($rs=='registrar'){
 				$controller='register';
+				$label="REGISTRAR";
+			}
+			elseif($rs=='allreport'){
+				$controller='accounting';
+				$label="ALLREPORT";
+			}
+			elseif($rs=='library'){
+				$controller='index';
+				$label="library";
 			}
 			
 			
 			$url =$this->url(array('module'=>$rs,'controller'=>$controller,'action'=>'index'), null, true); ;
-			$menuleft[$rs]="<li class='$class'><a href='$url'><span class='icon_menu'>$icon[$rs]</span><br />".$tr->translate(strtoupper($rs))."</a></li>";
+			$menuleft[$rs]="<li class='$class'><a href='$url'><span class='icon_menu'>$icon[$rs]</span><br />".$tr->translate(strtoupper($label))."</a></li>";
 		}
 	}
 	

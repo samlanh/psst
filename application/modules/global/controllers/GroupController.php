@@ -85,6 +85,16 @@ class Global_GroupController extends Zend_Controller_Action {
     	$this->view->subject = $_model->getAllSubjectStudy();
 		$this->view->year = $_model->getAllYear();
 		//print_r($this->view->year);exit();
+		
+		$db_gr=new Global_Model_DbTable_DbGrade();
+		$d_row=$db_gr->getNameGradeAll();
+		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->grade_name=$d_row;
+		
+		$db = new Global_Model_DbTable_DbGrade();
+		$dept = $db->getAllDept();
+		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->dept = $dept;
 	}
 		
 		
@@ -135,6 +145,16 @@ class Global_GroupController extends Zend_Controller_Action {
 		$years=new Global_Model_DbTable_DbGroup();
 		$this->view->row_year=$years->getAllYears();
 		$this->view->year = $_model->getAllYear();
+		
+		$db_gr=new Global_Model_DbTable_DbGrade();
+		$d_row=$db_gr->getNameGradeAll();
+		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->grade_name=$d_row;
+		
+		$db = new Global_Model_DbTable_DbGrade();
+		$dept = $db->getAllDept();
+		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->dept = $dept;
 	}
 	
 	
@@ -212,8 +232,23 @@ class Global_GroupController extends Zend_Controller_Action {
 			print_r(Zend_Json::encode($group));
 			exit();
 		}
-		
 	}
 	
+	function addGraddjaxAction(){
+    	if($this->getRequest()->isPost()){
+    		try{
+    			$data = $this->getRequest()->getPost();
+    			$db = new Global_Model_DbTable_DbGroup();
+    			$row = $db->addGradeAjax($data);
+    			$result = array("id"=>$row);
+    			print_r(Zend_Json::encode($row));
+    			exit();
+    			//Application_Form_FrmMessage::message("INSERT_SUCCESS");
+    		}catch(Exception $e){
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    }
 }
 

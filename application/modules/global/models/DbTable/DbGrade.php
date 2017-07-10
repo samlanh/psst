@@ -167,8 +167,16 @@ class Global_Model_DbTable_DbGrade extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	
-	
+	function getNameGradeAll(){
+		$db=$this->getAdapter();
+		$sql="SELECT m.major_id AS id,m.major_enname As name, 
+		        (SELECT d.en_name FROM rms_dept AS d WHERE m.dept_id=d.dept_id )AS dept_name,
+		        m.shortcut,m.modify_date,
+				(SELECT name_en FROM rms_view WHERE TYPE=1 AND key_code=is_active)
+		        FROM rms_major AS m WHERE 1 AND major_enname!='' ";
+		$order=" ORDER BY m.major_id DESC";
+		return $db->fetchAll($sql.$order);
+	}
 	
 	
 	

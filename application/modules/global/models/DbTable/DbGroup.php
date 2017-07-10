@@ -314,5 +314,23 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	
+	public function addGradeAjax($_data){
+		$this->_name='rms_major';
+		try{
+			$db = $this->getAdapter();
+			$arr = array(
+					'dept_id'	  => $_data['dept'],
+					'major_enname'  => $_data['major_enname'],
+					'shortcut'	  => $_data['shortcut'],
+					'modify_date' => Zend_Date::now(),
+					'is_active'	  => $_data['grade_status'],
+					'user_id'	  => $this->getUserId()
+			);
+			return $this->insert($arr);
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
+	
 }
 

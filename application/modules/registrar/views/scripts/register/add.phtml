@@ -661,7 +661,11 @@ function getInfoBygroup(){
 function test1(){
 }
 function submitDataClose(){
-	
+	condition = checkValidateAddRow();
+	if(condition==false){
+		alert("Please select service or product !!! ");
+		return false;
+	}
 	dijit.byId('save_close').set('disabled',true);
 	
 	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
@@ -679,6 +683,12 @@ function submitDataClose(){
 		});
 }
 function submitDataAddNew(){
+	
+	condition = checkValidateAddRow();
+	if(condition==false){
+		alert("Please select service or product !!! ");
+		return false;
+	}
 	
 	dijit.byId('save_new').set('disabled',true);
 	
@@ -1440,6 +1450,12 @@ function getservicefee(key){
 	 	});	 
 }
  function printSave(new_stu_id,new_receipt){		
+	
+	condition = checkValidateAddRow();
+	if(condition==false){
+		alert("Please select service or product !!! ");
+		return false;
+	}
 		if(dijit.byId('office_receipt').validate()) {
 			receipt='';
 			degree = dijit.byId('dept').get('value');
@@ -1832,7 +1848,24 @@ function getservicefee(key){
 				}
 			});
 		}
-	}	
+	}
+	
+	function checkValidateAddRow(){
+		var rowId = $('#identity').val();
+		//alert(rowId);
+		if(rowId!=''){
+			var rowIDArray = rowId.split(',');
+			for(var n = 0; n < rowIDArray.length; n++) {
+				service_id = dijit.byId('service_'+rowIDArray[n]).get('value');
+				if(service_id==''){
+					return false;
+				}
+			}
+		}
+	}
+	
+	
+	
 </script>
 
 <div class="overlay">

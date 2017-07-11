@@ -261,7 +261,7 @@ function getallGrade(){
 
 var url_room = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add-room')); ?>';
 function addRoom(){
-	
+	if(dijit.byId('form_add_room').validate()){
 		dojo.xhrPost({
 			url:url_room,
 			form: dojo.byId("form_add_room"),
@@ -279,6 +279,7 @@ function addRoom(){
 				alert(err);
 			}
 		});
+	}
 	}
 
 
@@ -579,6 +580,12 @@ function getSubjectByDegree(){
 
 var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-dept")); ?>';
 function addDept(){
+	if(dijit.byId('frm_add_dep').validate()){
+		fac_enname=dijit.byId('fac_enname').get('value');
+		if(fac_enname==''){
+			alert('Please inpute degree field !');
+			return false;
+		}
 	dojo.xhrPost({
 			url:url_add_dept,
 			form: dojo.byId("frm_add_dep"),
@@ -597,10 +604,12 @@ function addDept(){
 				alert(err);
 			}
 	});
+	}
 }
 
 var url_add_grade = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"add-graddjax")); ?>';
 function addGrade(){
+	if(dijit.byId('frm_add_grade').validate()){
 	rr = dijit.byId("dept").get('value');
     if(rr==''){
        alert('Please Selece Degree !');
@@ -624,6 +633,7 @@ function addGrade(){
 				alert(err);
 			}
 	});
+	}
 }
 
 function hideDialogGrade() {		

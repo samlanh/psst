@@ -253,6 +253,7 @@ function getallGrade(){
 var url_room = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add-room')); ?>';
 function addRoom(){
 		//subject_id
+	if(dijit.byId('form_add_room').validate()){
 		dojo.xhrPost({
 			url:url_room,
 			form: dojo.byId("form_add_room"),
@@ -275,6 +276,7 @@ function addRoom(){
 			}
 		});
 	}
+}
 
 var subject = '<?php echo $this->subject;?>';
 var col = 0;
@@ -437,14 +439,14 @@ function getSubjectByDegree(){
 
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_add_dept" >
-		<form  id='frm_add_dep' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form  id='frm_add_dep' name='frm_add_dep' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			    <tr><td colspan="2" style="text-align:center;"><?php echo $tr->translate("ADD_FACULTY");?></td></tr>
 				<tr>
 					<td><?php echo $tr->translate("DEGREE");?></td>
 					<td>
-						<input type="text" class="fullside" name='fac_enname' id="fac_enname" dojoType="dijit.form.TextBox" />
+						<input type="text" class="fullside" name='fac_enname' id="fac_enname" dojoType="dijit.form.TextBox" required="true"  />
 					</td>
 				</tr>
 				<tr>
@@ -525,51 +527,60 @@ function getSubjectByDegree(){
 
 var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-dept")); ?>';
 function addDept(){
-	dojo.xhrPost({
-			url:url_add_dept,
-			form: dojo.byId("frm_add_dep"),
-			handleAs:"json",
-			load: function(data) {
-				//alert(data); 
-				var Itemmake = { 
-				    	 id: data,
-					     name: dijit.byId('fac_enname').get('value')
-					   };
-		   addDataToSelectbox(dijit.byId('dept'), dept_store, Itemmake, data);
-		   dijit.byId('frm_add_dep').reset();
-		   dijit.byId("popup_add_dept").hide();	
-			},
-			error: function(err) {
-				alert(err);
-			}
-	});
+	if(dijit.byId('frm_add_dep').validate()){
+		fac_enname=dijit.byId('fac_enname').get('value');
+		if(fac_enname==''){
+			alert('Please inpute degree field !');
+			return false;
+		}
+		dojo.xhrPost({
+				url:url_add_dept,
+				form: dojo.byId("frm_add_dep"),
+				handleAs:"json",
+				load: function(data) {
+					//alert(data); 
+					var Itemmake = { 
+					    	 id: data,
+						     name: dijit.byId('fac_enname').get('value')
+						   };
+			   addDataToSelectbox(dijit.byId('dept'), dept_store, Itemmake, data);
+			   dijit.byId('frm_add_dep').reset();
+			   dijit.byId("popup_add_dept").hide();	
+				},
+				error: function(err) {
+					alert(err);
+				}
+		});
+	}
 }
 
 var url_add_grade = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"add-graddjax")); ?>';
 function addGrade(){
-	rr = dijit.byId("dept").get('value');
-    if(rr==''){
-       alert('Please Selece Degree !');
-	   return false;
+	if(dijit.byId('frm_add_grade').validate()){
+		rr = dijit.byId("dept").get('value');
+	    if(rr==''){
+	       alert('Please Selece Degree !');
+		   return false;
+		}
+		dojo.xhrPost({
+				url:url_add_grade,
+				form: dojo.byId("frm_add_grade"),
+				handleAs:"json",
+				load: function(data) {
+					//alert(data); 
+					var Itemmake = { 
+					    	 id: data,
+						     name: dijit.byId('major_enname').get('value')
+						   };
+			   addDataToSelectbox(dijit.byId('grade'), grade_store, Itemmake, data);
+			   dijit.byId('frm_add_grade').reset();
+			   dijit.byId("popup_grate").hide();	
+				},
+				error: function(err) {
+					alert(err);
+				}
+		});
 	}
-	dojo.xhrPost({
-			url:url_add_grade,
-			form: dojo.byId("frm_add_grade"),
-			handleAs:"json",
-			load: function(data) {
-				//alert(data); 
-				var Itemmake = { 
-				    	 id: data,
-					     name: dijit.byId('major_enname').get('value')
-					   };
-		   addDataToSelectbox(dijit.byId('grade'), grade_store, Itemmake, data);
-		   dijit.byId('frm_add_grade').reset();
-		   dijit.byId("popup_grate").hide();	
-			},
-			error: function(err) {
-				alert(err);
-			}
-	});
 }
 
 function hideDialogGrade() {		

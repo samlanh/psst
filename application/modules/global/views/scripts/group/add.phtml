@@ -109,19 +109,20 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							<td style="width: 5px"><?php echo $tr->translate("NOTE")?></td>
 							<td><input dojoType="dijit.form.TextBox"   name="note" value="" type="text"></td>
 						</tr>
-				    	<tr>
-							<td colspan="4" align="left">
-									<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-								 		iconClass="dijitIconEditProperty" onclick="addRow();" />
-							</td>
-							<input type="hidden" name="identity" id="identity"  />
-						</tr>
+				    	
 						<tr>
 							<td colspan="6">
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
 										<tr id="head-title" class="head-td" align="right"></tr>
 								</table>
 							</td>
+						</tr>
+						<tr>
+							<td colspan="4" align="left">
+									<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+								 		iconClass="dijitIconEditProperty" onclick="addRow();" />
+							</td>
+							<input type="hidden" name="identity" id="identity"  />
 						</tr>
 						<tr>
 							<td colspan="6" align="center">
@@ -184,7 +185,7 @@ dojo.ready(function(){
 				    }
 			    }
 			}, "grade");
-			//getallGrade();
+			getallGrade();
 
 			
 				new dijit.form.FilteringSelect({
@@ -237,6 +238,7 @@ function getallGrade(){
 			handleAs:"json",
 			load: function(data) {
 				//alert(data);
+				dijit.byId('grade').attr('value','');
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);   
 

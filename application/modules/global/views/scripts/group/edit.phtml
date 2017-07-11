@@ -179,7 +179,7 @@ dojo.ready(function(){
 				    }
 			    }
 			}, "grade");
-			//getallGrade();
+			getallGrade();
 
 			new dijit.form.FilteringSelect({
 				store: room_store,
@@ -245,6 +245,7 @@ function getallGrade(){
 			handleAs:"json",
 			load: function(data) {
 				//alert(data);
+				dijit.byId('grade').attr('value','');
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);   
 			    dijit.byId('grade').attr('value',<?php echo $this->rs['grade'];?>);   

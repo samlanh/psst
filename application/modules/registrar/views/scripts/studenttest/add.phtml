@@ -26,11 +26,11 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 									<table cellspacing="5"  width="100%">
 										<tr>
 											<td><?php echo $tr->translate("NAME_KH")?></td>
-											<td><input type="text" name="kh_name" id="kh_name" required="1" class="fullside" dojoType="dijit.form.ValidationTextBox"   /></td>
+											<td><input type="text" name="kh_name" id="kh_name" required="true" class="fullside" dojoType="dijit.form.ValidationTextBox"   /></td>
 										</tr>
 										<tr>
 											<td style="white-space: nowrap;"><?php echo $tr->translate("NAME_EN")?></td>
-											<td><input type="text" name="en_name" id="en_name" required="1"  class="fullside" dojoType="dijit.form.ValidationTextBox" /></td>
+											<td><input type="text" name="en_name" id="en_name" required="true"  class="fullside" dojoType="dijit.form.ValidationTextBox" /></td>
 										</tr>
 										<tr>
 											<td><?php echo $tr->translate("SEX")?></td>
@@ -85,7 +85,7 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 										</tr>
 										<tr>
 											 <td><?php echo $tr->translate("PRICE")?></td>
-											 <td><input type="text" name="test_cost" required="1"  id="test_cost" class="fullside" dojoType="dijit.form.NumberTextBox"   /></td>
+											 <td><input type="text" name="test_cost" required="true"  id="test_cost" class="fullside" dojoType="dijit.form.NumberTextBox"   /></td>
 										</tr>
 									</table>
 								</td>
@@ -235,9 +235,11 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 
 function submitDataClose(){
 	
-	dijit.byId('saveclose').set('disabled',true);
+	if(dijit.byId('frm_teststudent').validate()) {
 	
-	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'add')); ?>';
+		dijit.byId('saveclose').set('disabled',true);
+		
+		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
@@ -250,12 +252,13 @@ function submitDataClose(){
 			error: function(e) {
 			}
 		});
+	}
 }
 function submitDataAddNew(){
-	
-	dijit.byId('savenew').set('disabled',true);
-	
-	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'add')); ?>';
+	if(dijit.byId('frm_teststudent').validate()) {
+		dijit.byId('savenew').set('disabled',true);
+		
+		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
@@ -268,10 +271,12 @@ function submitDataAddNew(){
 			error: function(e) {
 			}
 		});
+	}
 }
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
+
 
 
 dojo.ready(function(){
@@ -304,26 +309,26 @@ function printReceipt(new_receipt){
 		}else{
 			dojo.byId("lb_receipt").innerHTML = new_receipt;
 		}
-	dojo.byId("lb_studentkh").innerHTML = dijit.byId("kh_name").get('value');
-	dojo.byId("lb_studenten").innerHTML = dijit.byId("en_name").get('value');
-    dojo.byId("lb_serial").innerHTML = dijit.byId("serial").get('value');
-	dojo.byId("lb_degree").innerHTML = dijit.byId("degree").attr('displayedValue');
-	dojo.byId("lb_gender").innerHTML = dijit.byId("sex").attr('displayedValue');
-	dojo.byId("lb_price").innerHTML = dijit.byId("test_cost").get('value');
-	dojo.byId("lb_dob").innerHTML = dijit.byId("dob").get('value');
-	dojo.byId("lb_address").innerHTML = dijit.byId("address").get('value');
-	dojo.byId("lb_phone").innerHTML = dijit.byId("phone").get('value');
-	dojo.byId("lb_note").innerHTML = dijit.byId("note").get('value');
-	var d = dijit.byId("dob").get('value');
-	 if(d!=null){
-		 var day = d.getDate();
-		 var mon = d.toDateString().substr(4,3);
-		 var year = d.getFullYear();
-		 dojo.byId("lb_dob").innerHTML  = day+'/'+mon+'/'+year;
-	 }else{
-		 dojo.byId("lb_dob").innerHTML  = '';
-	}
-	dijit.byId("terms").show();	
+		dojo.byId("lb_studentkh").innerHTML = dijit.byId("kh_name").get('value');
+		dojo.byId("lb_studenten").innerHTML = dijit.byId("en_name").get('value');
+		dojo.byId("lb_serial").innerHTML = dijit.byId("serial").get('value');
+		dojo.byId("lb_degree").innerHTML = dijit.byId("degree").attr('displayedValue');
+		dojo.byId("lb_gender").innerHTML = dijit.byId("sex").attr('displayedValue');
+		dojo.byId("lb_price").innerHTML = dijit.byId("test_cost").get('value');
+		dojo.byId("lb_dob").innerHTML = dijit.byId("dob").get('value');
+		dojo.byId("lb_address").innerHTML = dijit.byId("address").get('value');
+		dojo.byId("lb_phone").innerHTML = dijit.byId("phone").get('value');
+		dojo.byId("lb_note").innerHTML = dijit.byId("note").get('value');
+		var d = dijit.byId("dob").get('value');
+		 if(d!=null){
+			 var day = d.getDate();
+			 var mon = d.toDateString().substr(4,3);
+			 var year = d.getFullYear();
+			 dojo.byId("lb_dob").innerHTML  = day+'/'+mon+'/'+year;
+		 }else{
+			 dojo.byId("lb_dob").innerHTML  = '';
+		}
+		dijit.byId("terms").show();	
 	}
 }
 function submitData(){

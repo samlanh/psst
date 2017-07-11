@@ -67,6 +67,12 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
     		if(($search['session']>0)){
     			$where.= " AND s.session = ".$search['session'];
     		}
+    		if(($search['stu_name']>0)){
+    			$where.= " AND s.stu_id = ".$search['stu_name'];
+    		}
+    		if(($search['stu_code']>0)){
+    			$where.= " AND s.stu_id = ".$search['stu_code'];
+    		}
     		
      		//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);

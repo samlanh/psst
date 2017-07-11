@@ -26,6 +26,11 @@
 			 <td> <?php echo $frm->getElement("session");?></td>
 			 <td> <?php echo $frm->getElement("service");?></td>
 		     <td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo date('Y-m-d',strtotime($this->search['end_date'])); ?>" type="text"></td>
+		</tr>
+		
+		<tr> 
+			 <td> <?php echo $frm->getElement("stu_code");?></td>
+			 <td> <?php echo $frm->getElement("stu_name");?></td>
 			 <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 		</tr>
 	</table>
@@ -79,7 +84,7 @@
 													<tr style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
 														<td style="border: 1px solid #000;"><?php echo $i;?></td>
 														<td>&nbsp;<?php echo $row['branch_name'];?></td>
-														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['code'];?>&nbsp;</td>
+														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name'];?></td>	
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['sex'];?></td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['tel'];?></td>

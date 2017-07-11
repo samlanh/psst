@@ -154,7 +154,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	
 	function getCateIncome(){ // $type = rms_view type
 		$db=$this->getAdapter();
-		$sql="SELECT id,category_name as name FROM rms_cate_income_expense WHERE status=1 AND parent=1 ";
+		$sql="SELECT id,category_name as name FROM rms_cate_income_expense WHERE status=1 AND parent=1 and category_name!='' ";
 		return $db->fetchAll($sql);
 	}
 	

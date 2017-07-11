@@ -15,7 +15,7 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$sql="SELECT 
 				  sp.`receipt_number` AS receipt,
 				 (SELECT branch_nameen FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
-				  s.stu_code AS code,
+				  s.stu_code,
 				  (select major_enname from rms_major where major_id = s.grade) as grade,
 				  (select name_en from rms_view where type=4 and key_code =s.session) as session,
 				  CONCAT(s.stu_enname) AS name,
@@ -63,6 +63,12 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     		}
     		if($search['session']>0){
     			$where.=" AND s.session=".$search['session'];
+    		}
+    		if($search['stu_name']>0){
+    			$where.=" AND s.stu_id=".$search['stu_name'];
+    		}
+    		if($search['stu_code']>0){
+    			$where.=" AND s.stu_id=".$search['stu_code'];
     		}
     	return $db->fetchAll($sql.$where.$order);
     }

@@ -13,6 +13,8 @@ class Registrar_StudentpaymentlateController extends Zend_Controller_Action {
 						'adv_search' =>'',
 						'grade_all' =>'',
 						'session' =>'',
+						'stu_code' =>'',
+						'stu_name' =>'',
 						'end_date'=> date('Y-m-d'),
 				);
 			}

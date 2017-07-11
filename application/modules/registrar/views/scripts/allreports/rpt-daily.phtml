@@ -24,12 +24,14 @@
 		<td><input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>" placeholder="Search" type="text" ></td>
 		<td> <input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" value="<?php  echo $this->search['start_date']; ?>"  type="text"></td>
 	 	<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text"></td>
-		<td> <?php echo $frm->getElement("user");?></td>
+		<td> <?php echo $frm->getElement("stu_code");?></td>
+		<td> <?php echo $frm->getElement("stu_name");?></td>
 	</tr>
 	<tr>
 		<td> <?php echo $frm->getElement("degree");?></td>
 		<td> <?php echo $frm->getElement("grade_all");?></td>
 		<td> <?php echo $frm->getElement("session");?></td>
+		<td> <?php echo $frm->getElement("user");?></td>
 		<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 	</tr>
 	
@@ -547,6 +549,26 @@
 											<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
 										</td>
 									</tr>
+									
+									<tr>
+										<td>
+										</td>
+										<td  width="50%">
+											&nbsp;
+										</td>
+										<td align="center"  width="25%">
+											<div style="font-weight:bold;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';margin-top: -3px;"> 
+												<?php 
+												   $session_user=new Zend_Session_Namespace('auth');
+												   $last_name=$session_user->last_name;
+												   $username = $session_user->first_name;
+												   echo "".$last_name." ".$username;
+												?>
+												<div style="margin-top:-2px;font-size:12px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+											</div>
+										</td>
+									</tr>
+									
 								</table>
 							</td>
 						</tr>

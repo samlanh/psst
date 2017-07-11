@@ -11,16 +11,19 @@ class Registrar_RptproductsoldController extends Zend_Controller_Action {
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
-						'txtsearch' =>'',
-						'branch_id'	=>'',
-						'user'	=>'',
-						'type'	=>1,
-						'start_date'=>date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
+						'adv_search' 	=>'',
+						'start_date'	=>date("Y-m-d"),
+						'end_date'		=>date("Y-m-d"),
+						'user'			=>'',
+						'stu_code'		=>'',
+						'stu_name'		=>'',
+						'pro_name'		=>'',
 				);
 			}
 			$db = new Registrar_Model_DbTable_DbProductsold();
 			$this->view->rspro = $db->getProductSold($search);
+			
+			$this->view->all_pro = $db->getAllProductInProgramName($search);
 			
 			$form=new Registrar_Form_FrmSearchInfor();
 			$form->FrmSearchRegister();

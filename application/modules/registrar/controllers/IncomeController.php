@@ -43,7 +43,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$link=array(
     				'module'=>'registrar','controller'=>'income','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'title'=>$link,'invoice'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -78,12 +78,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
 		if($user_type!=1){
 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
 		}
-		
-    	$pructis=new Registrar_Form_Frmexpense();
-    	$frm = $pructis->FrmAddExpense();
-    	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_expense=$frm;
-    	
     	$db = new Registrar_Model_DbTable_DbIncome();
     	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type
     	$this->view->payment_method = $payment_method;
@@ -120,10 +114,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
 		$row  = $db->getIncomeById($id);
 		$this->view->rs = $row;
 		
-    	$pructis=new Registrar_Form_Frmexpense();
-    	$frm = $pructis->FrmAddExpense($row);
-    	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_expense=$frm;
 		
     	$db = new Registrar_Model_DbTable_DbIncome();
     	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type

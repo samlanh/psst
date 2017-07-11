@@ -15,6 +15,8 @@ class Registrar_StudentnearlyendserviceController extends Zend_Controller_Action
 						'grade_all'	=>'',
 						'service'	=>'',
 						'session'=> 0,
+						'stu_name'	=>'',
+						'stu_code'	=>'',
 						'end_date'	=>date('Y-m-d'),
 				);
 			}

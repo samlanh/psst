@@ -17,6 +17,11 @@ $frm = $this->frm_expense;
 				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				cate_income = dijit.byId('cate_income').get('value');
+				if(cate_income==0 || cate_income==-1){
+					alert('Please select category income !!! ');
+					return false;
+				}
 				return true;
 			}else {
 				return false;
@@ -53,25 +58,27 @@ $frm = $this->frm_expense;
 							</td>
 							<td><?php echo $tr->translate("TOTAL_INCOME")?></td>
 							<td>
-								<input type="text" name="total_income" id="total_income" dojoType="dijit.form.NumberTextBox" class="fullside" />
+								<input type="text" name="total_income" id="total_income" required="true" dojoType="dijit.form.NumberTextBox" class="fullside" />
 							</td>
+							
+							<td><?php echo $tr->translate("CHEQE_NO")?></td>
+							<td>
+								<input type="text" name="cheqe_no" id="cheqe_no" dojoType="dijit.form.TextBox" class="fullside" />
+							</td>
+							
+						</tr>
+						<tr>
 							<td><?php echo $tr->translate("FOR_DATE")?></td>
 							<td>
 								<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" />
 							</td>
-						</tr>
-						<tr>
+							
 							<td><?php echo $tr->translate("STATUS")?></td>
 							<td>
 								<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
 									<option value="1">Active</option>
 									<option value="0">Deactive</option>
 								</select>
-							</td>
-							
-							<td><?php echo $tr->translate("CHEQE_NO")?></td>
-							<td>
-								<input type="text" name="cheqe_no" id="cheqe_no" dojoType="dijit.form.TextBox" class="fullside" />
 							</td>
 							
 							<td><?php echo $tr->translate("NOTE")?></td>
@@ -155,31 +162,33 @@ dojo.require("dojo.store.Memory");
 
 	var url_add_cate_income = '<?php echo $this->url(array("module"=>"registrar","controller"=>"income","action"=>"add-cate-income")); ?>';
 	function addCateIncome(){
-		
-		dojo.xhrPost({
-			url:url_add_cate_income,
-			form: dojo.byId("frm_add_cate_income"),
-			handleAs:"json",
-			load: function(data) {
-				//alert(data); 
-				var Itemmake = { 
-				     	id: data,
-					    name: dijit.byId('cate_title').get('value')
-					};
-		 		addDataToSelectbox(dijit.byId('cate_income'), cate_income_store, Itemmake, data);
-			    dijit.byId('frm_add_cate_income').reset();
-			    hideDialog();
-				
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+		if(dijit.byId('frm_add_cate_income').validate()) {
+			dojo.xhrPost({
+				url:url_add_cate_income,
+				form: dojo.byId("frm_add_cate_income"),
+				handleAs:"json",
+				load: function(data) {
+					//alert(data); 
+					var Itemmake = { 
+							id: data,
+							name: dijit.byId('cate_title').get('value')
+						};
+					addDataToSelectbox(dijit.byId('cate_income'), cate_income_store, Itemmake, data);
+					dijit.byId('frm_add_cate_income').reset();
+					hidePopup();
+					
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
 	}
-	function hideDialog() {		
+	
+	function hidePopup(){		
+		//alert(1);
 		dijit.byId("popup_cate").hide();
 	}
-
 
 	function setReadonlyCheqe(){
 		payment_method = dijit.byId('payment_method').get('value');
@@ -193,47 +202,64 @@ dojo.require("dojo.store.Memory");
 
 
 	function printReceipt(new_receipt){
-
-		if(new_receipt==''){
-			getReceiptNumber(1);
-		}else{
-			dojo.byId("lb_receipt_no").innerHTML = new_receipt;
-		}
-
+		if(dijit.byId('frm_add_tran').validate()) {
 		
-		cate_income = dijit.byId('cate_income').get('value');
-		if(cate_income==0){
-			dojo.byId("lb_cate_income").innerHTML = "";
-		}else{
-			dojo.byId("lb_cate_income").innerHTML = dijit.byId("cate_income").attr('displayedValue');
+		//////////////////////////////////// check validate ///////////////////////////////
+			cate_income = dijit.byId('cate_income').get('value')
+			if(cate_income==0 || cate_income==-1){
+				alert("Please select category income !!! ");
+				dijit.byId('cate_income').focus();
+				return false;
+			}
+			payment_method = dijit.byId('payment_method').get('value')
+			if(payment_method==-1){
+				alert("Please select payment method !!! ");
+				dijit.byId('payment_method').focus();
+				return false;
+			}
+		///////////////////////////////////////////////////////////////////////////////////	
+			
+			if(new_receipt==''){
+				getReceiptNumber(1);
+			}else{
+				dojo.byId("lb_receipt_no").innerHTML = new_receipt;
+			}
+
+			
+			cate_income = dijit.byId('cate_income').get('value');
+			if(cate_income==0){
+				dojo.byId("lb_cate_income").innerHTML = "";
+			}else{
+				dojo.byId("lb_cate_income").innerHTML = dijit.byId("cate_income").attr('displayedValue');
+			}
+			
+			dojo.byId("lb_title").innerHTML = dijit.byId("title").get('value');
+
+			payment_method = dijit.byId('payment_method').get('value');
+			if(payment_method==-1){
+				dojo.byId("lb_payment_method").innerHTML = "";
+			}else{
+				dojo.byId("lb_payment_method").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+			}
+
+			dojo.byId("lb_total_income").innerHTML = dijit.byId("total_income").get('value');
+
+			var d = dijit.byId("date").get('value');
+			 if(d!=null){
+				 var day = d.getDate();
+				 var mon = d.toDateString().substr(4,3);
+				 var year = d.getFullYear();
+				 dojo.byId("lb_date").innerHTML  = day+'/'+mon+'/'+year;
+			 }else{
+				 dojo.byId("lb_date").innerHTML  = '';
+			 }
+
+			dojo.byId("lb_cheqe_no").innerHTML = dijit.byId("cheqe_no").get('value'); 
+			dojo.byId("lb_note").innerHTML = dijit.byId("note").get('value');
+			
+
+			dijit.byId("terms").show();	
 		}
-		
-		dojo.byId("lb_title").innerHTML = dijit.byId("title").get('value');
-
-		payment_method = dijit.byId('payment_method').get('value');
-		if(payment_method==-1){
-			dojo.byId("lb_payment_method").innerHTML = "";
-		}else{
-			dojo.byId("lb_payment_method").innerHTML = dijit.byId("payment_method").attr('displayedValue');
-		}
-
-		dojo.byId("lb_total_income").innerHTML = dijit.byId("total_income").get('value');
-
-		var d = dijit.byId("date").get('value');
-		 if(d!=null){
-			 var day = d.getDate();
-			 var mon = d.toDateString().substr(4,3);
-			 var year = d.getFullYear();
-			 dojo.byId("lb_date").innerHTML  = day+'/'+mon+'/'+year;
-		 }else{
-			 dojo.byId("lb_date").innerHTML  = '';
-		 }
-
-		dojo.byId("lb_cheqe_no").innerHTML = dijit.byId("cheqe_no").get('value'); 
-		dojo.byId("lb_note").innerHTML = dijit.byId("note").get('value');
-		
-
-		dijit.byId("terms").show();	
 	}
 
 
@@ -254,10 +280,10 @@ dojo.require("dojo.store.Memory");
 	
 	
 	function submitDataClose(){
-		
-		dijit.byId('saveclose').set('disabled',true);
-		
-		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>';
+		if(dijit.byId('frm_add_tran').validate()) {
+			dijit.byId('saveclose').set('disabled',true);
+			
+			var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>';
 			loading();
 			dojo.xhrPost({
 				url: url_submit,	
@@ -270,13 +296,14 @@ dojo.require("dojo.store.Memory");
 				error: function(e) {
 				}
 			});
+		}
 	}
 	
 	function submitDataAddNew(){
-		
-		dijit.byId('savenew').set('disabled',true);
-		
-		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>';
+		if(dijit.byId('frm_add_tran').validate()) {
+			dijit.byId('savenew').set('disabled',true);
+			
+			var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>';
 			loading();
 			dojo.xhrPost({
 				url: url_submit,	
@@ -289,6 +316,7 @@ dojo.require("dojo.store.Memory");
 				error: function(e) {
 				}
 			});
+		}
 	}
 	function loading(){
 		document.getElementsByClassName("overlay")[0].style.display="block";
@@ -417,7 +445,7 @@ dojo.require("dojo.store.Memory");
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("TITLE")?></td>
-							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="cate_title" id="cate_title" type="text" required="required" /></td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="cate_title" id="cate_title" type="text" required="true" /></td>
 						</tr>
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("TYPE")?></td>
@@ -429,7 +457,7 @@ dojo.require("dojo.store.Memory");
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialog();"/>
+								<input iconClass="dijitIconUndo" type="button" name="close" id="close" value="close" label="Close" dojoType="dijit.form.Button" onclick="hidePopup();" />
 								<input type="button" value="save" name="save" label="Save" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addCateIncome();"/>
 							</td>

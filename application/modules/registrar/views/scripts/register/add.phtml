@@ -666,9 +666,11 @@ function submitDataClose(){
 		alert("Please select service or product !!! ");
 		return false;
 	}
-	dijit.byId('save_close').set('disabled',true);
+	if(dijit.byId('office_receipt').validate()) {
+		
+		dijit.byId('save_close').set('disabled',true);
 	
-	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
+		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
@@ -681,6 +683,7 @@ function submitDataClose(){
 			error: function(e) {
 			}
 		});
+	}
 }
 function submitDataAddNew(){
 	
@@ -689,10 +692,11 @@ function submitDataAddNew(){
 		alert("Please select service or product !!! ");
 		return false;
 	}
+	if(dijit.byId('office_receipt').validate()) {
 	
-	dijit.byId('save_new').set('disabled',true);
-	
-	var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
+		dijit.byId('save_new').set('disabled',true);
+		
+		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
@@ -705,6 +709,7 @@ function submitDataAddNew(){
 			error: function(e) {
 			}
 		});
+	}
 }
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";

@@ -292,8 +292,37 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$opt=array();
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$branch_id->setMultiOptions($opt);
+		
+		
+		$_stu_code = new Zend_Dojo_Form_Element_FilteringSelect('stu_code');
+		$_stu_code->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>false
+		));
+		$_stu_code->setValue($request->getParam("stu_code"));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$result = $db->getAllStuCode();
+		$opt_stu_code = array(''=>$this->tr->translate("----- select student id -----"));
+		if(!empty($result))foreach ($result As $rs)$opt_stu_code[$rs['id']]=$rs['stu_code'];
+		$_stu_code->setMultiOptions($opt_stu_code);
+		
+		
+		$_stu_name = new Zend_Dojo_Form_Element_FilteringSelect('stu_name');
+		$_stu_name->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>false
+		));
+		$_stu_name->setValue($request->getParam("stu_name"));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$result = $db->getAllStuName();
+		$opt_stu_name = array(''=>$this->tr->translate("----- select student name -----"));
+		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
+		$_stu_name->setMultiOptions($opt_stu_name);
+		
 	
-		$this->addElements(array($_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
+		$this->addElements(array($_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 		return $this;
 	} 
 

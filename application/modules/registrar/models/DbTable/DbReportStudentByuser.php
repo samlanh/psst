@@ -210,6 +210,12 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			if(!empty($search['session'])){
 				$where.= " AND s.session = ".$search['session'];
 			}
+			if(!empty($search['stu_code'])){
+				$where.= " AND sp.student_id = ".$search['stu_code'];
+			}
+			if(!empty($search['stu_name'])){
+				$where.= " AND sp.student_id = ".$search['stu_name'];
+			}
 			$order=" ORDER By sp.id DESC ";
 		// 	    	echo $sql.$where.$order;exit();
 			return $db->fetchAll($sql.$where.$order);

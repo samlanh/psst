@@ -17,6 +17,20 @@ $frm = $this->frm_expense;
 				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				cate_income=dijit.byId('cate_income').get('value');
+				if(cate_income==-1 || cate_income==0){
+					alert('Please select category income !!! ');
+					dijit.byId('cate_income').focus();
+					return false;
+				}
+				
+				payment_method=dijit.byId('payment_method').get('value');
+				if(payment_method==-1){
+					alert('Please select payment method !!! ');
+					dijit.byId('payment_method').focus();
+					return false;
+				}
+				
 				return true;
 			}else {
 				return false;
@@ -53,14 +67,20 @@ $frm = $this->frm_expense;
 							</td>
 							<td><?php echo $tr->translate("TOTAL_INCOME")?></td>
 							<td>
-								<input type="text" name="total_income" id="total_income"  value="<?php echo $this->rs['total_amount'];?>" dojoType="dijit.form.NumberTextBox" class="fullside" />
+								<input type="text" name="total_income" id="total_income" required="true" value="<?php echo $this->rs['total_amount'];?>" dojoType="dijit.form.NumberTextBox" class="fullside" />
 							</td>
+							<td><?php echo $tr->translate("CHEQE_NO")?></td>
+							<td>
+								<input type="text" name="cheqe_no" id="cheqe_no"  value="<?php echo $this->rs['cheqe_no'];?>" dojoType="dijit.form.TextBox" class="fullside" />
+							</td>
+						</tr>
+						<tr>
+						
 							<td><?php echo $tr->translate("FOR_DATE")?></td>
 							<td>
 								<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->rs['date'];?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" />
 							</td>
-						</tr>
-						<tr>
+							
 							<td><?php echo $tr->translate("STATUS")?></td>
 							<td>
 								<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
@@ -69,10 +89,7 @@ $frm = $this->frm_expense;
 								</select>
 							</td>
 							
-							<td><?php echo $tr->translate("CHEQE_NO")?></td>
-							<td>
-								<input type="text" name="cheqe_no" id="cheqe_no"  value="<?php echo $this->rs['cheqe_no'];?>" dojoType="dijit.form.TextBox" class="fullside" />
-							</td>
+							
 							
 							<td><?php echo $tr->translate("NOTE")?></td>
 							<td colspan="1">
@@ -148,26 +165,27 @@ dojo.require("dojo.store.Memory");
 	
 	var url_add_cate_income = '<?php echo $this->url(array("module"=>"registrar","controller"=>"income","action"=>"add-cate-income")); ?>';
 	function addCateIncome(){
-		
-		dojo.xhrPost({
-			url:url_add_cate_income,
-			form: dojo.byId("frm_add_cate_income"),
-			handleAs:"json",
-			load: function(data) {
-				//alert(data); 
-				var Itemmake = { 
-				     	id: data,
-					    name: dijit.byId('cate_title').get('value')
-					};
-		 		addDataToSelectbox(dijit.byId('cate_income'), cate_income_store, Itemmake, data);
-			    dijit.byId('frm_add_cate_income').reset();
-			    hideDialog();
-				
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+		if(dijit.byId('frm_add_cate_income').validate()){
+			dojo.xhrPost({
+				url:url_add_cate_income,
+				form: dojo.byId("frm_add_cate_income"),
+				handleAs:"json",
+				load: function(data) {
+					//alert(data); 
+					var Itemmake = { 
+							id: data,
+							name: dijit.byId('cate_title').get('value')
+						};
+					addDataToSelectbox(dijit.byId('cate_income'), cate_income_store, Itemmake, data);
+					dijit.byId('frm_add_cate_income').reset();
+					hideDialog();
+					
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
 	}
 	function hideDialog() {		
 		dijit.byId("popup_cate").hide();
@@ -198,7 +216,7 @@ dojo.require("dojo.store.Memory");
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("TITLE")?></td>
-							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="cate_title" id="cate_title" type="text" required="required" /></td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="cate_title" id="cate_title" type="text" required="true" /></td>
 						</tr>
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("TYPE")?></td>

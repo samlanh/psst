@@ -7,6 +7,13 @@
 
 <?php  $subject_exam= $this->frm_subject_exam;?>
 <form  id='add_subject_exam' action="<?php echo $this->url(array('module'=>'global','controller'=>'subject','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit">   
+   if(this.validate()) {
+    return true;
+   }else {
+    return false;
+   }
+</script>
 <table cellspacing="10" width="40%" style="margin: 0 auto;">
 	<tr>
 		<td>

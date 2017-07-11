@@ -344,8 +344,8 @@ function printSave(new_receipt){
 				i=1;  for(var n = 0; n < rowIDArray.length; n++) {
 				  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 				  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
-				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_paid"+rowIDArray[n]).attr('displayedValue')+'</td>';
 				  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_paid"+rowIDArray[n]).attr('displayedValue')+'</td>';
 				  i++;
 				  temp+='</tr>';
 				}

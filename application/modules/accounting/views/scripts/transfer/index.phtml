@@ -1,0 +1,143 @@
+<?php 
+     $url_save = $this->url(array('module'=>'accounting','controller'=>'productcategory','action'=>'add'));
+     $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
+     $status_view=$this->status_view;
+     $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    // print_r($status_view);exit();
+?>
+<style>
+#table tr td{
+	border:1px solid #cccccc;
+	text-align: center;
+}
+#table tr th{
+	background: #cccccc;
+	border:1px solid #ddd;
+}
+</style>
+<title><?php echo $this->tr->translate("TRANSFERd")?></title>
+<form id="add_province" action="<?php echo $url_save;?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+	 <script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			} else {
+				return false;
+			}
+	</script>
+	<table cellspacing="20" width="100%" style="margin: 0 auto;">
+		<tr>
+			<td>
+				<fieldset>
+					<legend align="center"><strong><?php echo $tr->translate("Add Product Transfer");?></strong></legend>
+					<table cellspacing="20" width="100%" >
+						<tr>
+							<td align="center" valign="top">
+								<table style="margin: 0 auto; width:100%;" cellspacing="10">
+									<tr>
+										<td><?php echo $tr->translate("TRANSFER_NUMBER");?></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="name_kh" name="name_kh" value="" type="text" required="required" ></td>
+										<td><?php echo $tr->translate("TRANSFER_DATE");?></td>
+										<td><input dojoType="dijit.form.DateTextBox" class="fullside" id="invoice" name="invoice" value="" type="text" required="required" ></td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("TRANSFER_FORM");?></td>
+										<td>
+											<select name="transfer_from" id="transfer_from" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+											    <option value="1"><?php echo $tr->translate("1");?></option>
+											    <option value="0"><?php echo $tr->translate("2");?></option>
+											</select>
+										</td>
+										<td><?php echo $tr->translate("TRANSFER_TO");?></td>
+										<td><select name="transfer_to" id="transfer_to" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+											    <option value="1"><?php echo $tr->translate("3");?></option>
+											    <option value="0"><?php echo $tr->translate("4");?></option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("REMARK");?></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark" name="remark" value="" type="text" required="required" ></td>
+										<td><?php echo $tr->translate("STATUS");?></td>
+										<td><select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+											        <option value="1"><?php echo $tr->translate("ACTIVE");?></option>
+											         <option value="0"><?php echo $tr->translate("DEACTIVE");?></option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+									    <td colspan="4">
+										    <div style="background: #04a2e0;padding: 1px;">
+												<select name="product" id="product" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+													<option value="0"><?php echo $tr->translate("CHOOSE_PRODUCT");?></option>
+													<option value="1"><?php echo $tr->translate("p001");?></option>
+													<option value="2"><?php echo $tr->translate("p002");?></option>
+												</select>
+											</div>	
+										</td>
+									</tr>
+									<tr>
+									    <td colspan="4">
+										    <div style="padding:6px 9px 5px 5px; border: 1px solid #cccccc;">
+												<h3 style="background: #04a2e0;margin:-6px -9px 6px -5px;padding: 1px 25px;border-top: 2px solid #000088;color: #fff;"><?php echo $tr->translate("PRODUCT_LIST");?></h3>
+												
+										    <table class="collape tablesorter" id="table" style="white-space: nowrap;">
+											    <tr>
+												    <th><?php echo $tr->translate("NO");?></th>
+													<th><?php echo $tr->translate("PRODUCT_NAME");?></th>
+													<th><?php echo $tr->translate("QTY_CURR");?></th>
+													<th><?php echo $tr->translate("QTY_TRANSFER");?></th>
+													<th><?php echo $tr->translate("MEASURE");?></th>
+													<th><?php echo $tr->translate("REMARK");?></th>
+													<th><?php echo $tr->translate("DELETE");?></th>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>Book English</td>
+													<td>12</td>
+													<td width="50px"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="qty1" name="qty1" value="" type="text" required="required" ></td>
+													<td>ក្បាល់</td>
+													<td>dsdsds</td>
+													<td><a style="color:red;"><?php echo $tr->translate("DELETE");?></a></td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>Book English</td>
+													<td>12</td>
+													<td width="50px"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="qty2" name="qty2" value="" type="text" required="required" ></td>
+													<td>ក្បាល់</td>
+													<td>dsdsds</td>
+													<td><a style="color:red;"><?php echo $tr->translate("DELETE");?></a></td>
+												</tr>
+												<tr>
+													<td>1</td>
+													<td>Book English</td>
+													<td>12</td>
+													<td width="50px"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="qty3" name="qty3" value="" type="text" required="required" ></td>
+													<td>ក្បាល់</td>
+													<td>dsdsds</td>
+													<td><a style="color:red;"><?php echo $tr->translate("DELETE");?></a></td>
+												</tr>
+											
+											</table>
+										    </div>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="4" align="center">
+											<input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
+											<input type="submit" value="save_close" name="save_close" label="Save&Close" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+										    <input type="submit" value="save_new" name="save_new" label="Save&New" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+										</td>
+									</tr>					
+								</table>
+							</td>							
+						</tr>
+					</table>	
+				</fieldset>
+			</td>			
+		</tr>
+		
+	</table>	
+</form> 

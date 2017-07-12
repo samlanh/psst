@@ -5,7 +5,14 @@
 
 
 <?php $rs=$this->rs;?>
-<form id='edit_occupation' action="" method="post" enctype="application/x-www-form-urlencoded">
+<form id='edit_occupation'  action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded" dojoType="dijit.form.Form">
+<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			}else {
+				return false;
+			}
+</script>
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
     return true;

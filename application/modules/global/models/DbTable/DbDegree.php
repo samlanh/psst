@@ -10,7 +10,7 @@
 		$db = $this->getAdapter();
 		$sql = " SELECT dept_id,en_name,shortcut,modify_date,is_active as status,
 		         (SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE user_id=id LIMIT 1 ) AS user_name
-		         FROM rms_dept WHERE 1 ";
+		         FROM rms_dept WHERE 1 AND en_name!='' ";
 		$orderby = " ORDER BY dept_id DESC ";
 		if(empty($search)){
 			return $db->fetchAll($sql.$orderby);

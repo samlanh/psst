@@ -11,7 +11,14 @@
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
 </script>
-<form  id='edit-dept' action="<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<form  id='edit-dept' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			}else {
+				return false;
+			}
+</script>
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
     return true;

@@ -20,6 +20,9 @@
 			<fieldset style="background-color:menu;">
 					<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("EDIT_SUBJECT");?></strong></legend>
 						<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
+						    <tr>
+								<td><input type="checkBox" <?php if($this->row['is_parent']==1){echo "checked='checked'";}?> dojoType="dijit.form.CheckBox" onChange="getValue();" value="1" id="is_parent" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
+							</tr>
 							<tr>
 								<td style="width: 100px"><?php echo $tr->translate("PARENT")?></td>
 								<td>
@@ -42,9 +45,10 @@
 								<td><?php  echo $subject_exam->getElement('subject_en');?></td>
 							</tr>
 							<tr>
-								<td style="width: 100px"><?php echo $tr->translate("CODE")?></td>
+								<td style="width: 100px"><?php echo $tr->translate("SHORTCUT")?></td>
 								<td><?php echo $subject_exam->getElement('score_percent');?></td>
 							</tr>
+							<!--  
 							<tr>
 								<td style="width: 5px"><?php echo $tr->translate("ACCESS_TYPE")?></td>
 								<td>
@@ -56,9 +60,8 @@
 									</select>
 								</td>
 							</tr>
-							<tr>
-								<td><input type="checkBox" <?php if($this->row['is_parent']==1){echo "checked='checked'";}?> dojoType="dijit.form.CheckBox" onChange="getValue();" value="1" id="is_parent" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
-							</tr>
+							-->
+							
 							<tr><input type="hidden" id="par" name="par" />
 								<td style="width: 5px"><?php echo $tr->translate("STATUS")?></td>
 								<td><?php  echo $subject_exam->getElement('status');?></td>

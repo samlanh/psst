@@ -32,13 +32,13 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_status_opt = array(
 				1=>$this->tr->translate("ACTIVE"),
-				0=>$this->tr->translate("DACTIVE"));
+				0=>$this->tr->translate("DEACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$_submit->setLabel("save"); 
 		if(!empty($data)){
-			$_score_percent->setValue($data['score_percent']);
+			$_score_percent->setValue($data['shortcut']);
 			$_subject_exam->setValue($data['subject_titlekh']);
 			$_subject_kh->setValue($data['subject_titleen']);
 			$_status->setValue($data['status']);

@@ -11,7 +11,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 	
     public function getAllSubjectParent(){
     	$db = $this->getAdapter();
-    	$sql = "SELECT id,subject_titleen FROM rms_subject WHERE is_parent=1";
+    	$sql = "SELECT id,subject_titleen FROM rms_subject WHERE is_parent=1 AND `status`=1";
     	return $db->fetchAll($sql);
     }
     
@@ -29,8 +29,9 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'date' 				=> date("Y-m-d"),
 				'status'   			=> $_data['status'],
 				'is_parent'   		=> $_data['par'],
-				'score_percent'   	=> $_data['score_percent'],
-				'access_type'   	=> $_data['access_type'],
+				//'score_percent'   	=> $_data['score_percent'],
+				//'access_type'   	=> $_data['access_type'],
+		        'shortcut'			=> $_data['score_percent'],
 				'user_id'	  		=> $this->getUserId()
 		);
 		return  $this->insert($_arr);
@@ -42,9 +43,10 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'subject_titleen' 	=> $_data['subject_en'],
 				'date' 				=> date("Y-m-d"),
 				'status'   			=> $_data['status'],
-				'score_percent'   	=> $_data['score_percent'],
+				//'score_percent'   	=> $_data['score_percent'],
 				'is_parent'   		=> $_data['par'],
-				'access_type'   	=> $_data['access_type'],
+				//'access_type'   	=> $_data['access_type'],
+				'shortcut'			=> $_data['score_percent'],
 				'user_id'	  		=> $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("id=?", $id);
@@ -61,7 +63,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = " SELECT id,subject_titlekh,subject_titleen,date,status,
 		(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id) as user_name
-		FROM rms_subject
+		FROM rms_subject   
 		WHERE 1";
 		$order=" order by id DESC";
 		$where = '';

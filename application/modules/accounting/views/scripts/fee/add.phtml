@@ -3,7 +3,6 @@
 	echo $this->headTitle($tr->translate('ADD_FEE')); 
 	$payment_term = $this->payment_term;
 ?>	
-<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
@@ -24,9 +23,14 @@ table .set-style td, table .set-style th {
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
-    return true;
+		identity = dijit.byId('identity').get('value');
+		if(identity==''){
+			alert('Please set fee for grade !!! ');
+			return false;
+		}
+    	return true;
    }else {
-    return false;
+    	return false;
    }
 </script>
 <table cellspacing="10" style="margin: 0 auto;width:100%;" >
@@ -77,7 +81,7 @@ table .set-style td, table .set-style th {
 									else{$term.=','.$id;} ?>
 								<?php }?>
 									<input type="hidden" name="iden_term" id="iden_term"  value="<?php echo $term;?>" >
-									<input type="hidden" name="identity" id="identity"  value="" >
+									<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
 								 </td>
 							</tr>
 							<tr>
@@ -92,9 +96,9 @@ table .set-style td, table .set-style th {
 							<tr>
 								<td colspan="8" align="center">
 								 	<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-									<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+									<input type="button" onclick="submitDataClose();" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
-									<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+									<input type="button"  onclick="submitDataAddNew();" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
 								</td>
 							</tr>
@@ -108,6 +112,76 @@ table .set-style td, table .set-style th {
 
 <script type="text/javascript">
 
+function submitDataClose(){
+	condition = validateGrade();
+	if(condition==false){
+		alert("Please set fee to grade !!! ");
+		return false;
+	}
+	if(dijit.byId('office_receipt').validate()) {
+		
+		dijit.byId('save_close').set('disabled',true);
+	
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
+		loading();
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("office_receipt"),		    
+			load: function(data) {
+				document.getElementsByClassName("overlay")[0].style.display="none";	
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/fee";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+function submitDataAddNew(){
+	
+	condition = validateGrade();
+	if(condition==false){
+		alert("Please set fee to grade !!! ");
+		return false;
+	}
+	if(dijit.byId('office_receipt').validate()) {
+	
+		dijit.byId('save_new').set('disabled',true);
+		
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
+		loading();
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("office_receipt"),		    
+			load: function(data) {
+				document.getElementsByClassName("overlay")[0].style.display="none";		
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/fee/add";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
+
+function validateGrade(){
+	
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+
+	for(var i=0;i<arrays.length;i++) {
+		grade = dijit.byId('class_'+arrays[i]).get('value');
+		if(grade==-1){
+			return false;
+		}
+	}
+}
+
+									
 function ResetRecordRecord() {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -121,25 +195,28 @@ function ResetRecordRecord() {
 	}
 }
 var template = '';
-var grade = '<?php echo $this->all_grade; ?>';
-var metion = '<?php echo $this->all_metion; ?>';
-var payment_term = '<?php echo count($this->payment_term);?>';
-var session='<?php echo $this->all_session;?>';
+
+//var metion = '<?php echo $this->all_metion; ?>';
+
+//var session='<?php echo $this->all_session;?>';
 
 var col = 0;
 var no = 0;
 var title = 0;
+
 tmp = '';
 temp='';
 function addRow() { 
+	var grade = '<?php echo $this->all_grade; ?>';
+	var payment_term = '<?php echo count($this->payment_term);?>';
 		col++;no++;
 		template='';
 		if(title!=1){    
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("GRADE");?></th>';
-			//temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SESSION");?></th>';
+			temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
+			//temp+='<th id="lbl_titlemetion" width="100px"><?php //echo $tr->translate("SESSION");?></th>';
 			<?php $s=0; ?>
 			<?php  foreach ($payment_term as $value){?>
 			
@@ -151,14 +228,14 @@ function addRow() {
 		}
 			template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="50px" align="center">'+no+'</td>';
-			template+='<td width="17%"><select dojoType="dijit.form.FilteringSelect" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';
+			template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect" id="class_'+col+'" class="fullside" name="class_'+col+'">'+grade+'</select></td>';
 			//template+='<td><select dojoType="dijit.form.FilteringSelect" id="session_'+col+'" name="session_'+col+'">'+session+'</select></td>';			
 			
 			column = 0;
 			for(j=0;j<payment_term;j++){ column++; 
-				template+='<td width="11%"><input type="text" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox" style="width: 100%;" /></td>';
+				template+='<td width="11%"><input type="text" required="true" id="fee'+col+'_'+column+'" class="fullside" name="fee'+col+'_'+column+'" value="0" dojoType="dijit.form.NumberTextBox" /></td>';
 			}
-			template+='<td> <input type="text"  name="remark'+col+'" class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"/></td>';
+			template+='<td width="25%"> <input type="text"  name="remark'+col+'" class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"/></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -354,3 +431,21 @@ var url_add_dept = '<?php echo $this->url(array('module'=>'global','controller'=
 		</table>	
 	</form>
 </div>
+
+
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>	
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>
+

@@ -200,7 +200,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 			
 		$_model = new Application_Model_GlobalClass();
 		$this->view->all_metion = $_model ->getAllMetionOption();
-		$this->view->all_faculty = $_model ->getAllFacultyOption();
+		$this->view->all_grade = $_model ->getAllFacultyOption();
 		$data=$this->view->all_session=$_model->getAllSession();
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);

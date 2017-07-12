@@ -98,7 +98,7 @@ table .set-style td, table .set-style th {
 									<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 									<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
 									 	iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'accounting','controller'=>"fee",'action'=>'index'),null,true); ?>';" />
-									<input type="submit" label="<?php echo $tr->translate('SAVE_CLOSE');?>" id="save_new" dojoType="dijit.form.Button" 
+									<input type="button"  onclick="submitDataClose();" label="<?php echo $tr->translate('SAVE_CLOSE');?>" id="save_close" name="save_close" dojoType="dijit.form.Button" 
 								 		iconClass="dijitEditorIcon dijitEditorIconSave"/>
 								</td>
 							</tr>
@@ -111,6 +111,54 @@ table .set-style td, table .set-style th {
 </form>
 
 <script type="text/javascript">
+
+
+
+function submitDataClose(){
+	condition = validateGrade();
+	if(condition==false){
+		alert("Please set fee to grade !!! ");
+		return false;
+	}
+	if(dijit.byId('office_receipt').validate()) {
+		
+		dijit.byId('save_close').set('disabled',true);
+	
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
+		loading();
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("office_receipt"),		    
+			load: function(data) {
+				document.getElementsByClassName("overlay")[0].style.display="none";	
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/fee";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
+
+function validateGrade(){
+	
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+
+	for(var i=0;i<arrays.length;i++) {
+		grade = dijit.byId('class_'+arrays[i]).get('value');
+		if(grade==-1){
+			return false;
+		}
+	}
+}
+
+
+
 function showPopupDept() {
 	if(dijit.byId('faculty').value==-1){
 		dijit.byId("popup_dept").show();
@@ -133,7 +181,7 @@ function ResetRecordRecord() {
 	}
 }
 var template = '';
-var faculty = '<?php echo $this->all_faculty; ?>';
+var grade = '<?php echo $this->all_grade; ?>';
 var payment_term = '<?php echo count($this->payment_term);?>';
 
 var col = 0;
@@ -142,6 +190,7 @@ var title = 0;
 tmp = '';
 temp='';
 function addRow() {
+	var grade = '<?php echo $this->all_grade; ?>';
 		col++;no++;
 		template='';
 		if(title!=1){
@@ -159,15 +208,15 @@ function addRow() {
 			title=1;
 		}
 			template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="6%" align="center">'+no+'</td>';
-			template+='<td><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="class_'+col+'" name="class_'+col+'">'+faculty+'</select></td>';			
+			template+='<td width="50px" align="center">'+no+'</td>';
+			template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
 			//template+='<td><select dojoType="dijit.form.FilteringSelect" id="session_'+col+'" name="session_'+col+'">'+session+'</select></td>';
 			
 			column = 0;
 			for(j=0;j<payment_term;j++){ column++;
-				template+='<td ><input type="text" class="fullside" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+				template+='<td width="11%"><input type="text" class="fullside" required="true" value="0" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			}
-			template+='<td> <input type="text" name="remark'+col+'"  class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ "/><label id="subsub"></label></td>';
+			template+='<td width="25%"> <input type="text" name="remark'+col+'"  class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ "/><label id="subsub"></label></td>';
 			
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -207,13 +256,13 @@ function initailize(){
 	}
 		template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="50px" align="center">'+no+'</td>';
-		template+='<td width="22%" ><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+faculty+'</select></td>';			
+		template+='<td width="20%" ><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
 		column = 0;
 		for(j=0;j<payment_term;j++){ column++;
-			template+='<td width="11%" ><input type="text" id="fee'+col+'_'+column+'"   class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td width="11%" ><input type="text" id="fee'+col+'_'+column+'"  required="true" class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			
 		}
-		template+='<td> <input type="text"  name="remark'+col+'" class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"/></td>';
+		template+='<td width="25%"> <input type="text"  name="remark'+col+'" class="fullside" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"/></td>';
 		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -249,3 +298,20 @@ function initailize(){
 		dojo.query("#row"+index).remove();
 	}
 </script>
+
+
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>	
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

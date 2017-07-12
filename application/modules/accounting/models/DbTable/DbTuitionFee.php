@@ -15,9 +15,9 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 					  CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
 					  
 					  t.create_date,  
-					  (select name_kh from rms_view where type=1 and key_code=t.status) as status 
+					  (select name_en from rms_view where type=12 and key_code=t.is_finished) as is_finished 
 					  FROM `rms_tuitionfee` AS t
-					 WHERE 1	";
+					 WHERE t.status=1	";
     	$where =" ";
     	
 	    if(!empty($search['txtsearch'])){
@@ -128,34 +128,33 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 //     		$fee_id = $this->insert($_arr);
     		$where=$this->getAdapter()->quoteInto("id=?", $_data['id']);
     		$this->update($_arr, $where);
-    
-    		$this->_name='rms_tuitionfee_detail';
-    		$where = "fee_id = ".$_data['id'];
-    		$this->delete($where);
-    		$ids = explode(',', $_data['identity']);
-    		$id_term =explode(',', $_data['iden_term']);
-    		foreach ($ids as $i){
-    			foreach ($id_term as $j){
-    				$_arr = array(
-    						'fee_id'=>$_data['id'],
-    						'class_id'=>$_data['class_'.$i],
-    						//'session'=>$_data['session_'.$i],
-    						'payment_term'=>$j,
-    						'tuition_fee'=>$_data['fee'.$i.'_'.$j],
-    						'remark'=>$_data['remark'.$i],
-    						//'status'=>$_data['status_'.$i]
-    				);
-     				$this->insert($_arr);
-    				
-    			}
-    		}
+			
+			if($_data['is_finished']==0){
+				$this->_name='rms_tuitionfee_detail';
+				$where = "fee_id = ".$_data['id'];
+				$this->delete($where);
+				$ids = explode(',', $_data['identity']);
+				$id_term =explode(',', $_data['iden_term']);
+				foreach ($ids as $i){
+					foreach ($id_term as $j){
+						$_arr = array(
+								'fee_id'=>$_data['id'],
+								'class_id'=>$_data['class_'.$i],
+								//'session'=>$_data['session_'.$i],
+								'payment_term'=>$j,
+								'tuition_fee'=>$_data['fee'.$i.'_'.$j],
+								'remark'=>$_data['remark'.$i],
+								//'status'=>$_data['status_'.$i]
+						);
+						$this->insert($_arr);
+					}
+				}
+			}
     		$db->commit();
     		return true;
     	}catch (Exception $e){
     		$db->rollBack();
-    		echo $e->getMessage();exit();
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		return false;
+    		echo $e->getMessage();
     	}
     }
     public function setServiceChargeExist($service_id,$pay_type){

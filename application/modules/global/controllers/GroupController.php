@@ -183,9 +183,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$this->view->row = $db->getGroupSubjectById($id);
 		
-// 		print_r($this->view->row);exit();
-		
-		
 		$db = new Global_Model_DbTable_DbGroup();
 		$this->view->degree = $rows = $db->getAllFecultyName();
 		
@@ -198,8 +195,7 @@ class Global_GroupController extends Zend_Controller_Action {
 		$room = $model->getAllRoom();
 		array_unshift($room, Array('id'=> -1 ,'name' =>'Add New'));
 		$this->view->room =$room;
-	
-		
+
 		$_model = new Global_Model_DbTable_DbGroup();
 		$this->view->subject = $_model->getAllSubjectStudy();
 		$years=new Global_Model_DbTable_DbGroup();

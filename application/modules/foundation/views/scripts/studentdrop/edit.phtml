@@ -60,22 +60,23 @@
 												<option value="2" <?php if($this->row['type']==2) echo 'selected="selected"';?>>Stop</option>
 											</select>
 										</td>
-										<td><?php echo $tr->translate("REASON")?></td>
-										<td>
-											<input dojoType="dijit.form.TextBox" class="fullside" id="reason" name="reason" value="<?php echo $this->row['reason'];?>" type="text">
-										</td>
+										
 										<td><?php echo $tr->translate("STOP_DATE")?></td>
 										<td>
 											<input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="datestop" name="datestop" value="<?php echo $this->row['date_stop'];?>" type="text">
 										</td>
-									</tr>
-									<tr>
 										<td><?php echo $tr->translate("STATUS")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">
 												<option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>>Active</option>
 												<option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>>Deactive</option>
 											</select>
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("REASON")?></td>
+										<td colspan="5">
+											<input dojoType="dijit.form.TextBox" class="fullside" id="reason" name="reason" value="<?php echo $this->row['reason'];?>" required="true" type="text">
 										</td>
 									</tr>
 									<tr>

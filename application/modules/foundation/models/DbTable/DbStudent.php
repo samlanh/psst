@@ -90,6 +90,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	public function addStudent($_data){
+			//print_r($_data);exit();
 			$id = $this->getStudentExist($_data['name_en'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session']);	
 			if(!empty($id)){
 				return -1;

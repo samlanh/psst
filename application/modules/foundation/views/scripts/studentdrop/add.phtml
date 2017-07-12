@@ -77,13 +77,8 @@ dojo.require("dijit.form.CheckBox");
 												<option value="2">Stop</option>
 											</select>
 										</td>
-										<td><?php echo $tr->translate("REASON")?></td>
-										<td><input dojoType="dijit.form.TextBox" class="fullside" id="reason" name="reason" value="" type="text"></td>
-										
 										<td><?php echo $tr->translate("STOP_DATE")?></td>
 										<td><input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="datestop" name="datestop" value="now" type="text"></td>
-									</tr>
-									<tr>
 										<td><?php echo $tr->translate("STATUS")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">
@@ -91,6 +86,11 @@ dojo.require("dijit.form.CheckBox");
 												<option value="0">Deactive</option>
 											</select>
 										</td>
+
+									</tr>
+									<tr rowspan="2">
+										<td><?php echo $tr->translate("REASON")?></td>
+										<td colspan="5"><input dojoType="dijit.form.TextBox" class="fullside" id="reason" name="reason" value="" required="true"  ></td>
 									</tr>
 									<tr>
 										<td colspan="6" align="center">

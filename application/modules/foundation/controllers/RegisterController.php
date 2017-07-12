@@ -35,7 +35,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				$link1=array(
 						'module'=>'foundation','controller'=>'register','action'=>'view',
 				);
-				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link1,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'grade'=>$link));
+				$this->view->list=$list->getCheckList(2, $collumns, $rs_rows,array('branch_name'=>$link1,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'grade'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -216,6 +216,59 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$db= new Foundation_Model_DbTable_DbStudent();
 		$this->view->rs = $db->getStudentViewDetailById($id);
+	}
+	public function copyAction(){
+		$id=$this->getRequest()->getParam("id");
+		$db= new Foundation_Model_DbTable_DbStudent();
+		
+		if($this->getRequest()->isPost()){
+			try{
+				$_data = $this->getRequest()->getPost();
+				$db->addStudent($_data);
+				if($exist==-1){
+					Application_Form_FrmMessage::message("RECORD_EXIST");
+				}else{
+					if(isset($_data['save_close'])){
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register");
+					}else{
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add");
+					}
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+				}
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		
+		$this->view->group = $db->getAllgroup();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$row =$_db->getOccupation();
+		array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($row, array ( 'id' => 0,'name' => 'Select Job'));
+		$this->view->occupation = $row;
+		
+		$this->view->degree = $db->getAllFecultyName();
+		
+		//$this->view->occupation = $_db->getOccupation();
+		
+		$this->view->province = $db->getProvince();
+		
+		$this->view->rs = $db->getStudentById($id);
+		
+		$this->view->year = $db->getAllYear();
+		$this->view->room = $row =$db->getAllRoom();
+		
+		$row = $db->getStudentById($id);
+		if(empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_DATA","/foundation/register");
+		}
+		$rr = $db->getStudyHishotryById($id);
+		$this->view->rr = $rr;
+		$tsub=new Global_Form_FrmTeacher();
+		$frm_techer=$tsub->FrmTecher();
+		Application_Model_Decorator::removeAllDecorator($frm_techer);
+		$this->view->frm_techer = $frm_techer;
 	}
 }
 

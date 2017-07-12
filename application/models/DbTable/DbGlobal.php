@@ -523,9 +523,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    function getAllBranchName(){
    	$db = $this->getAdapter();
-   	$sql=" SELECT br_id AS id,branch_namekh as name FROM `rms_branch` WHERE STATUS=1 AND branch_namekh!='' ";
+   	$sql=" SELECT br_id AS id,branch_nameen as name FROM `rms_branch` WHERE STATUS=1 AND (branch_namekh!='' OR branch_nameen!='') ";
    	return $db->fetchAll($sql);
    }
+   function getallProductName(){
+   	$db = $this->getAdapter();
+   	$sql=" SELECT id ,pro_name as name FROM `rms_product` WHERE status=1 AND pro_name!='' ORDER BY pro_name,sale_set ";
+   	return $db->fetchAll($sql);
+   }
+   
    function getAllBranch(){
    	$db = $this->getAdapter();
    	$sql=" SELECT br_id,branch_namekh,branch_nameen FROM `rms_branch` WHERE STATUS=1 AND branch_namekh!='' ";

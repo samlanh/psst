@@ -18,7 +18,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		(SELECT stu_code FROM `rms_student` WHERE stu_id =rms_creditmemo.student_id  limit 1 ) as stu_code,
 		(SELECT stu_khname FROM `rms_student` WHERE stu_id =rms_creditmemo.student_id  limit 1 ) as student_name,
 		total_amount,date,note,
-		(SELECT first_name FROM `rms_users` WHERE id=1 LIMIT 1) as user_name,
+		(SELECT first_name FROM `rms_users` WHERE id=user_id LIMIT 1) as user_name,
 		status FROM rms_creditmemo ";
 	
 		if (!empty($search['adv_search'])){

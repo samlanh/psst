@@ -11,7 +11,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		
 		$where="";
     	$from_date =(empty($search['start_date']))? '1': " v.start_date>= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " v.end_date <= '".$search['end_date']." 23:59:59'";
+    	$to_date = (empty($search['end_date']))? '1': " v.start_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
     	if(!empty($search['search'])){
     		$s_where=array();

@@ -1,8 +1,9 @@
 <?php 
-     $url_save = $this->url(array('module'=>'accounting','controller'=>'transfer','action'=>'add'));
+     $url_save = $this->url(array('module'=>'accounting','controller'=>'transfer','action'=>'edit'));
      $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
      $status_view=$this->status_view;
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+     $result = $this->rs;
 ?>
 <style>
 #table tr td{
@@ -54,9 +55,11 @@
 								<table style="margin: 0 auto; width:100%;" cellspacing="10">
 									<tr>
 										<td><?php echo $tr->translate("TRANSFER_NUMBER");?></td>
-										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="transfer_no" name="transfer_no" type="text" required="required" ></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="transfer_no" name="transfer_no" type="text" required="required" value="<?php echo $result['transfer_no'];?>" >
+										<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="id" name="id" type="hidden" value="<?php echo $result['id'];?>" >
+										</td>
 										<td><?php echo $tr->translate("DATE");?></td>
-										<td><input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="" type="text" required="required" ></td>
+										<td><input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="<?php echo date("Y-m-d",strtotime($result['transfer_date']));?>" type="text" required="required" ></td>
 									</tr>
 									<tr>
 										<td><?php echo $tr->translate("FORM_LOCATION");?></td>
@@ -66,7 +69,7 @@
 											    print_r($this->rsbranch);
 											    if(!empty($this->rsbranch)){
 											    foreach($this->rsbranch as $rs){?>
-											    	<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+											    	<option <?php if($result['from_location']==$rs['id']){echo "selected";}?> value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
 											    <?php }}?>
 											</select>
 										</td>
@@ -75,18 +78,18 @@
 											    <?php 
 											    if(!empty($this->rsbranch)){
 											   	 foreach($this->rsbranch as $rs){?>
-											    	<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+											    	<option <?php if($result['to_location']==$rs['id']){echo "selected";}?> value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
 											    <?php }}?>
 											</select>
 										</td>
 									</tr>
 									<tr>
 										<td><?php echo $tr->translate("REMARK");?></td>
-										<td><input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="" type="text"  ></td>
+										<td><input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="<?php echo $result['note'];?>" type="text"  ></td>
 										<td><?php echo $tr->translate("STATUS");?></td>
 										<td><select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
-										       <option value="1"><?php echo $tr->translate("ACTIVE");?></option>
-										       <option value="0"><?php echo $tr->translate("DEACTIVE");?></option>
+										       <option value="1" <?php if($result['status']==1){echo "selected";}?> ><?php echo $tr->translate("ACTIVE");?></option>
+										       <option value="0" <?php if($result['status']==0){echo "selected";}?> ><?php echo $tr->translate("DEACTIVE");?></option>
 											</select>
 										</td>
 									</tr>
@@ -131,6 +134,49 @@
 	</table>	
 </form> 
 <script>
+dojo.ready(function(){
+	initailize();
+});
+function initailize(){
+	<?php if(!empty($this->rsdetail)){
+		foreach($this->rsdetail as $row){
+	?>
+	index++;
+	template='';
+	if(index==1){
+		temp='';
+		temp+='<td>NO</td>';
+		temp+='<td>ឈ្មោះផលិតផល</td>';
+		temp+='<td>QTY_TRANSFER</td>';
+		temp+='<td>ផ្សេងៗ</td>';
+		temp+='<td>លុប</td>';
+		dojo.query("#head-title").append(temp);
+		title=1;
+	}
+	pro_name='';
+	template='<td width="2%" align="center">'+index+'</td>';
+	template+='<td ><?php echo $row['pro_name'];?><input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
+	template+='<td ><input dojoType="dijit.form.NumberTextBox" class="fullside" type="text" required="1" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+	template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
+	template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
+	
+	tmp='<tr id="row'+index+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
+
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+index);
+	} else {$("#identity").val(index);}
+	dojo.html.set(dojo.byId("row"+index),template , {
+	     parseContent: true,
+	});
+	dijit.byId('qty_'+index).attr('value',<?php echo $row['qty']?>);
+	dijit.byId('remark_'+index).attr('value','<?php echo $row['note']?>');
+	dijit.byId('pro_id_'+index).attr('value',<?php echo $row['pro_id']?>);
+	
+	<?php } }?>
+}
 <?php $url_product =  $this->url(array('module'=>'','controller'=>'ajax','action'=>'get-product-name')); ?>
 index=0;
 function getProductName() {

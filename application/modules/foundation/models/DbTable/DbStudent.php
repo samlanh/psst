@@ -147,7 +147,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'district_name'	=>$_data['distric_note'],
 						'province_id'	=>$_data['student_province'],
 						
-						'group'			=>$_data['group'],
+						'group_id'		=>$_data['group'],
 						'stu_code'		=>$stu_code,
 						'academic_year'	=>$_data['academic_year'],
 						'degree'		=>$_data['degree'],
@@ -220,6 +220,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}catch(Exception $e){
 				$_db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				echo $e->getMessage();exit();
 			}
 	}
 	public function updateStudent($_data){
@@ -269,6 +270,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'district_name'	=>$_data['distric_note'],
 					'province_id'	=>$_data['student_province'],
 					
+					'group_id'		=>$_data['group'],
 					'academic_year'	=>$_data['academic_year'],
 					'stu_code'		=>$_data['student_id'],
 					'degree'		=>$_data['degree'],
@@ -295,7 +297,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'guardian_tel'	=>$_data['guardian_phone'],
 					
 					'is_setgroup'	=> 1,
-					'group_id'		=>$_data['group'],
+					
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
 					'photo'			=>$pho_name
@@ -320,18 +322,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
 			$this->update($arr, $where);
 			
-/*			$this->_name='rms_student_group_history';
+			$this->_name='rms_group_detail_student';
 			$arr_group_history= array(
-// 					'branch_id'=>$branch_id,
-// 					'stu_id'=>$id,
 					'status'	=>$_data['status'],
 					'group_id'	=>$_data['group'],
-					'date'		=>date("Y-m-d H:i:s"),
 					'user_id'	=>$this->getUserId(),
 			);
-			$where = "stu_id=".$_data["id"]."AND group_id=".$_data["group"];
+			$where = "stu_id=".$_data["id"]."AND is_pass=0 and type = 1 ";
 			$this->update($arr, $where);
-		*/
+		
 			
 		}catch(Exception $e){
 			echo $e->getMessage();

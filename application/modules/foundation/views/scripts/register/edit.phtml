@@ -37,7 +37,7 @@ dojo.ready(function(){
 	    placeHolder:"Selected Grade",          
 	    onChange: function() {  
 	    	make_id = dijit.byId('grade').get('value');
-	    	paymentTerm();
+	    	
 	    }
 	}, "grade");
 	getallGrade();
@@ -161,7 +161,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 					grade_store  = getDataStorefromJSON('id','name', data);
 				    dijit.byId('grade').set('store',grade_store); 
 				    dijit.byId('grade').attr('value','<?php echo $this->rs['grade']; ?>');  
-				   // dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
+				    //dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
 
 				},
 				error: function(err) {

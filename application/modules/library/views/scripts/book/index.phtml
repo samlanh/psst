@@ -2,6 +2,8 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("LIST_BOOK"));
 	$url_edit = $this->url(array('module'=>'library','controller'=>'book','action'=>'edit',));
+	$url_copy =$this->url(array('module'=>'library','controller'=>'book','action'=>'copy'));
+	$formList = new Application_Form_Frmtable();
 ?>	
 <?php $frm =  $this->frm_search;?>
  <style>
@@ -23,16 +25,20 @@
 </script>
 <div dojoType="dijit.layout.AccordionPane">
 <form id="frm_search" name="frm_search" action="" dojoType="dijit.form.Form" method="post">
+	<div style="width: 95px;border:1px solid #ccc;border-radius:10px;background:#eeeeee;"><?php echo $formList->showCopyBuntton($url_copy);?></div>
 	<?php echo $frm->getElement("title");?>
 	<?php echo $frm->getElement("block_id");?>
 	<?php echo $frm->getElement('parent');?>
 	<?php echo $frm->getElement('status_search');?>
 	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 </form>
+
 </div>
 <table class="collape tablesorter" id="table"  width="100%" style="white-space: nowrap;font-size: 100%;font-family: 'Khmer OS Battambang';" >
       <thead>
+	        <tr><input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" /></tr>
 			<tr>
+			    <th class="tdheader header" width="4%" align="center"></th>
 				<th class="tdheader header" width="4%" align="center"><?php echo $tr->translate("NUM");?></th>
 				<th class="tdheader header"><?php echo $tr->translate("BOOK_NO");?></th>
 				<th class="tdheader header"><?php echo $tr->translate("BOOK_NAME");?>
@@ -90,6 +96,7 @@
 			if(!empty($this->book_row)) foreach($this->book_row as $key=>$row){?>
 			
 			<tr class="normal" style="font-size: 100%;font-family: 'Khmer OS Battambang';">
+				<td id="items" width="4%" style="text-align: center;"><input type="radio" onclick="setValue()" name="copy" id="copy" value="<?php echo $row['id'];?>"></td>
 			    <td id="items" width="4%" style="text-align: center;"><?php echo $i++;?></td>
 				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['book_no'];?></a></td>
 				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['title'];?></a></td>
@@ -108,7 +115,30 @@
 					$footer = '<div class="footer_list">'.$stringPagination.$counter.'</div>';
 			 ?>
 </table>
-
 <?php echo $footer?>
+
+<script type="text/javascript">
+dojo.require("dijit.form.CheckBox"); 
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.DateTextBox");
+
+	function copyRecord(url){
+		 id = dijit.byId('recordcopy').get('value');
+		 if(id!=''){
+			window.location.href = url+'/id/'+id;
+		 }else{
+			alert('Please select record you want to copy');
+			return false;
+		 }
+	}
+
+	function setValue(index){
+		var recordcopy = $('input[name=copy]:checked').val();
+		dijit.byId('recordcopy').attr('value',recordcopy);
+	}
+	
+</script> 
+
  
  

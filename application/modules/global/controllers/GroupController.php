@@ -183,8 +183,8 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$this->view->row = $db->getGroupSubjectById($id);
 		
-		$db = new Global_Model_DbTable_DbGroup();
-		$this->view->degree = $rows = $db->getAllFecultyName();
+// 		$db = new Global_Model_DbTable_DbGroup();
+// 		$this->view->degree = $rows = $db->getAllFecultyName();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		
@@ -201,6 +201,19 @@ class Global_GroupController extends Zend_Controller_Action {
 		$years=new Global_Model_DbTable_DbGroup();
 		$this->view->row_year=$years->getAllYears();
 		$this->view->year = $_model->getAllYear();
+		
+		
+		$db = new Global_Model_DbTable_DbGrade();
+		$dept = $db->getAllDept();
+		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->degree = $dept;
+		
+		
+		$db_gr=new Global_Model_DbTable_DbGrade();
+		$d_row=$db_gr->getNameGradeAll();
+		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->grade_name=$d_row;
+		
 	}
 	
 	

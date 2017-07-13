@@ -23,7 +23,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'grade' 		=> $_data['grade'],
 					'amount_month' 	=> $_data['amountmonth'],
 					'start_date'	=> $_data['start_date'],
-					'expired_date'	=>$_data['end_date'],
+					'expired_date'	=> $_data['end_date'],
 					'date' 			=> date("Y-m-d"),
 					'status'   		=> $_data['status'],
 					'note'   		=> $_data['note'],
@@ -33,13 +33,13 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$id = $this->insert($_arr);
 			
 			$this->_name='rms_group_subject_detail';
-			$ids = explode(',', $_data['identity']);
+			$ids = explode(',', $_data['identity1']);
 			foreach ($ids as $i){
 				$arr = array(
-						'group_id'	=>$id,
-						'subject_id'=>$_data['subject_study_'.$i],
+						'group_id'	=> $id,
+						'subject_id'=> $_data['group_subject_study_'.$i],
 						'status'    => $_data['status_'.$i],
-						'note'   	=> $_data['note_'.$i],
+						'note'   	=> $_data['group_note_'.$i],
 						'date' 		=> date("Y-m-d"),
 						'user_id'	=> $this->getUserId()
 				);
@@ -319,7 +319,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		try{
 			$db = $this->getAdapter();
 			$arr = array(
-					'dept_id'	  => $_data['dept'],
+					'dept_id'	  => $_data['degree_popup1'],
 					'major_enname'  => $_data['major_enname'],
 					'shortcut'	  => $_data['shortcut'],
 					'modify_date' => Zend_Date::now(),

@@ -8,6 +8,7 @@ class Accounting_TransferController extends Zend_Controller_Action {
 
     public function indexAction()
     {	
+    	$db = new Accounting_Model_DbTable_DbTransferstock();
     	try{
     		if($this->getRequest()->isPost()){
     			$search = $this->getRequest()->getPost();
@@ -20,7 +21,6 @@ class Accounting_TransferController extends Zend_Controller_Action {
     					'end_date' =>date("Y-m-d"),
     			);
     		}
-    		$db = new Accounting_Model_DbTable_DbTransferstock();
     		$rs_rows= $db->getAllTransfer($search);
     		$list = new Application_Form_Frmtable();
     		$collumns = array("TRANSFER_NUMBER","TRANSFER_DATE","FROM_LOCATION","TO_LOCATION","NOTE","BY_USER","STATUS");
@@ -37,6 +37,7 @@ class Accounting_TransferController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
+    	
     }
 	public function addAction(){
 		$db = new Accounting_Model_DbTable_DbTransferstock();
@@ -50,6 +51,7 @@ class Accounting_TransferController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
+		$this->view->tran_no = $db->getTransferNo();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rsbranch = $db->getAllBranchName();
 		$this->view->rsproduct = $db->getallProductName();
@@ -72,5 +74,15 @@ class Accounting_TransferController extends Zend_Controller_Action {
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rsbranch = $db->getAllBranchName();
 		$this->view->rsproduct = $db->getallProductName();
+	}
+	function getcurrentproductAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Accounting_Model_DbTable_DbTransferstock();
+			$rs = $db->getProductLocation($data['pro_id'],$data['location_id']);
+			if(empty($rs)){$rs = array('pro_qty'=>0);}
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
 	}
 }

@@ -57,6 +57,8 @@
 										<td><?php echo $tr->translate("TRANSFER_NUMBER");?></td>
 										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="transfer_no" name="transfer_no" type="text" required="required" value="<?php echo $result['transfer_no'];?>" >
 										<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="id" name="id" type="hidden" value="<?php echo $result['id'];?>" >
+											<input dojoType="dijit.form.TextBox" class="fullside" id="old_flocation" name="old_flocation" type="hidden" value="<?php echo $result['from_location'];?>" >
+											<input dojoType="dijit.form.TextBox" class="fullside" id="old_tlocation" name="old_tlocation" type="hidden" value="<?php echo $result['to_location'];?>" >
 										</td>
 										<td><?php echo $tr->translate("DATE");?></td>
 										<td><input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="<?php echo date("Y-m-d",strtotime($result['transfer_date']));?>" type="text" required="required" ></td>

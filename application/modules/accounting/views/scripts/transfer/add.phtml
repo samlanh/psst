@@ -54,7 +54,7 @@
 								<table style="margin: 0 auto; width:100%;" cellspacing="10">
 									<tr>
 										<td><?php echo $tr->translate("TRANSFER_NUMBER");?></td>
-										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="transfer_no" name="transfer_no" type="text" required="required" ></td>
+										<td><input dojoType="dijit.form.ValidationTextBox"  readonly="readonly" class="fullside" id="transfer_no" name="transfer_no" type="text" value="<?php echo $this->tran_no;?>" required="required" ></td>
 										<td><?php echo $tr->translate("DATE");?></td>
 										<td><input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="" type="text" required="required" ></td>
 									</tr>
@@ -63,7 +63,6 @@
 										<td>
 											<select name="from_location" id="from_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
 											   <?php 
-											    print_r($this->rsbranch);
 											    if(!empty($this->rsbranch)){
 											    foreach($this->rsbranch as $rs){?>
 											    	<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
@@ -131,25 +130,27 @@
 	</table>	
 </form> 
 <script>
-<?php $url_product =  $this->url(array('module'=>'','controller'=>'ajax','action'=>'get-product-name')); ?>
 index=0;
 function getProductName() {
 	index++;
+	location_id = dijit.byId("from_location").get("value");
+	pro_id=dijit.byId("pro_id").get("value");
+	getcurrentproduct(pro_id,location_id,index);
 			if(index==1){
 				temp='';
 				temp+='<td >NO</td>';
 				temp+='<td >ឈ្មោះផលិតផល</td>';
+				temp+='<td >CURR_QTY</td>';
 				temp+='<td >QTY_TRANSFER</td>';
 				temp+='<td >ផ្សេងៗ</td>';
 				temp+='<td >លុប</td>';
 				dojo.query("#head-title").append(temp);
 			}
-            pro_id=dijit.byId("pro_id").get("value");
-            pro_name = dijit.byId("pro_id").attr('displayedValue')
-			var inp = '';
+		    pro_name = dijit.byId("pro_id").attr('displayedValue')
 			template='<td width="2%" align="center">'+index+'</td>';
 			template+='<td >'+pro_name+'<input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
-			template+='<td ><input dojoType="dijit.form.NumberTextBox" class="fullside" type="text" required="1" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+			template+='<td ><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
+			template+='<td ><input onkeyup="checkCurrentStock('+index+')" dojoType="dijit.form.NumberTextBox" required="1" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
 			template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 			template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
 		tmp='<tr id="row'+index+'">';
@@ -163,6 +164,33 @@ function getProductName() {
 			var identity = $('#identity').val();
 			$('#identity').val(identity+','+index);
 		} else {$('#identity').val(index);}
+		var inp = '';
+}
+function checkCurrentStock(index){
+	currqty = dijit.byId("currqty_"+index).get("value");
+	qty = dijit.byId("qty_"+index).get("value");
+	if(qty>currqty){
+     alert("ចំនួនទំនិញដែលត្រូវផ្ទេរមិនអាច លើសកំណត់បានទេ !");
+	 dijit.byId("qty_"+index).attr("value",currqty);
+	 dijit.byId("qty_"+index).focus();
+	}
+}
+var url_getproduct = '<?php echo $this->url(array('module'=>'accounting','controller'=>'transfer','action'=>'getcurrentproduct')); ?>';
+function getcurrentproduct(pro_id,location_id,index){
+	dojo.xhrPost({
+		url:url_getproduct,
+		content:{
+			'pro_id':pro_id,
+			'location_id':location_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId("currqty_"+index).attr("value",data.pro_qty);
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();

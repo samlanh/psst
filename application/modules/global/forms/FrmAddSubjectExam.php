@@ -20,13 +20,20 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 	public function FrmAddSubjectExam($data=null){
 		
 		$_subject_exam = new Zend_Dojo_Form_Element_TextBox('subject_kh');
-		$_subject_exam->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
+		$_subject_exam->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+    			'required'=>'true',
+				'class'=>'fullside',
+				));
 		
 		$_subject_kh = new Zend_Dojo_Form_Element_TextBox('subject_en');
 		$_subject_kh->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
 		
 		$_score_percent = new Zend_Dojo_Form_Element_TextBox('score_percent');
-		$_score_percent->setAttribs(array('required'=>'true','class'=>'fullside','dojoType'=>$this->text));
+		$_score_percent->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+				'class'=>'fullside',
+				));
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));

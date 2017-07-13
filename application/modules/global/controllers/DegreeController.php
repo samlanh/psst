@@ -64,6 +64,12 @@ class Global_DegreeController extends Zend_Controller_Action {
     	$frm_subject_exam=$subject_exam->FrmAddSubjectExam();
     	Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
     	$this->view->frm_subject_exam = $frm_subject_exam;
+    	
+    	$parent = new Global_Model_DbTable_DbSubjectExam();
+    	$is_parent = $parent->getAllSubjectParent();
+    	$sub = $parent->getAllSubjectParent(1);
+    	$this->view->rs = $is_parent;
+    	$this->view->sub = $sub;
     }
     
     public function editAction(){
@@ -89,6 +95,17 @@ class Global_DegreeController extends Zend_Controller_Action {
     	$frm->FrmAddDept($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_dept = $frm;
+    	
+    	$subject_exam=new Global_Form_FrmAddSubjectExam();
+    	$frm_subject_exam=$subject_exam->FrmAddSubjectExam();
+    	Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
+    	$this->view->frm_subject_exam = $frm_subject_exam;
+    	
+    	$parent = new Global_Model_DbTable_DbSubjectExam();
+    	$is_parent = $parent->getAllSubjectParent();
+    	$sub = $parent->getAllSubjectParent(1);
+    	$this->view->rs = $is_parent;
+    	$this->view->sub = $sub;
     }
     function addFacultyAction(){
     	if($this->getRequest()->isPost()){
@@ -101,5 +118,15 @@ class Global_DegreeController extends Zend_Controller_Action {
     	}
     }
   
+    function addsubjectajaxAction(){//At callecteral when click client
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
+    		$option=$_dbmodel->addSubjectajax($data);
+    		$result = array("id"=>$option);
+    		print_r(Zend_Json::encode($result));
+    		exit();
+    	}
+    }
 }
 

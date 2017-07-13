@@ -9,10 +9,15 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     }
 	
-    public function getAllSubjectParent(){
+    public function getAllSubjectParent($opt=null){
     	$db = $this->getAdapter();
-    	$sql = "SELECT id,subject_titleen FROM rms_subject WHERE is_parent=1 AND `status`=1";
-    	return $db->fetchAll($sql);
+    	if($opt!=null){
+    		$sql = "SELECT id,subject_titleen As name FROM rms_subject WHERE `status`=1 AND subject_titleen!=''";
+    		return $db->fetchAll($sql);
+    	}else{
+	    	$sql = "SELECT id,subject_titleen FROM rms_subject WHERE  parent=0 AND is_parent=1 AND `status`=1 AND subject_titleen!='' AND parent=0";
+	    	return $db->fetchAll($sql);
+    	}
     }
     
     public function getAllSubjectParentByID($id){
@@ -100,5 +105,20 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		$return = array('data'=>$subject_id,'option'=>$option);
 		return   $return;//$_model->getAllSubjectStudy();//option
 	}
+	
+	public function addSubjectajax($_data){
+		$_arr=array(
+				'parent' 			=> $_data['parent'],
+				'subject_titlekh' 	=> $_data['subject_kh'],
+				'subject_titleen' 	=> $_data['subject_en'],
+				'date' 				=> date("Y-m-d"),
+				'status'   			=> 1,
+				'is_parent'   		=> $_data['par'],
+				'shortcut'   		=> $_data['score_percent'],
+				'user_id'	  		=> $this->getUserId()
+		);
+		return $this->insert($_arr);
+	}
+	
 }
 

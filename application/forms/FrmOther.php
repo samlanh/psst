@@ -28,7 +28,7 @@ class Application_Form_FrmOther extends Zend_Dojo_Form
     	$_shortcut = new Zend_Dojo_Form_Element_TextBox('shortcut');
     	$_shortcut->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
-    			'required'=>'true',
+    			//'required'=>'true',
     			'class'=>' fullside height-text',
     			'missingMessage'=>'ភ្លេច​បំពេញ​ពាក្យកាត់!'
     			
@@ -37,13 +37,13 @@ class Application_Form_FrmOther extends Zend_Dojo_Form
     	$mul_shortcut = new Zend_Dojo_Form_Element_TextBox('mul_shortcut');
     	$mul_shortcut->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
-    			'required'=>'true',
+    			//'required'=>'true',
     			'class'=>' fullside height-text',
     			'missingMessage'=>'ភ្លេច​បំពេញ​ពាក្យកាត់!'
     			 
     	));
     	
-    	$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DACTIVE"));
+    	$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
     	$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
     	$_status->setMultiOptions($_arr);
     	$_status->setAttribs(array(
@@ -102,7 +102,7 @@ class Application_Form_FrmOther extends Zend_Dojo_Form
     	$_shortcut = new Zend_Dojo_Form_Element_TextBox('shortcut');
     	$_shortcut->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
-    			'required'=>'true',
+    			//'required'=>'true',
     			'class'=>'full height-text',
     			 
     	));

@@ -3,16 +3,8 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_callteral;
 echo $this->headTitle($tr->translate("ADD_STUDY_GROUP"));
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript">
-    dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
-	dojo.require('dijit.form.TextBox');
-</script>
-
 <form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add')); ?>" 
 dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
@@ -141,12 +133,11 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 $techer= $this->frm_techer;
 ?>
 <script type="text/javascript">
-dojo.require("dojo.date.locale");
+//dojo.require("dojo.date.locale");
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
+//dojo.require("dojo.store.Memory");
 dojo.require('dojox.form.BusyButton');
-
 dojo.require("dojo.html");
 var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );

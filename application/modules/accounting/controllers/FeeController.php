@@ -108,10 +108,15 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
 		
-    	//$db = new Accounting_Model_DbTable_DbTuitionFee();
-    	//$this->view->branch = $db->getAllBranch();
+    	$db_gr=new Global_Model_DbTable_DbGrade();
+		$d_row=$db_gr->getNameGradeAll();
+		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->grade_name=$d_row;
 		
-		
+		$db = new Global_Model_DbTable_DbGrade();
+		$dept = $db->getAllDept();
+		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->dept = $dept;
     }
  	
     public function editAction()

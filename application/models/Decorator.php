@@ -28,11 +28,14 @@ class Application_Model_Decorator
 		}
 	}
 	public function getMenuLeft($arr_menu,$controller,$module=null){
+		
+		//print_r($module);exit();
+		
 		$menu='';
 		$i=0;
 		$session_user=new Zend_Session_Namespace('auth');
 		$arr_actin=$session_user->arr_actin;
-		// 		print_r($arr_actin);
+// 				print_r($arr_actin);exit();
 	
 		//if(is_array($arr_menu)){
 		foreach($arr_menu as $param=>$url){

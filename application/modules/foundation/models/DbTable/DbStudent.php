@@ -115,9 +115,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			
 			//print_r($data['photo']);exit();
 			
-			if($_data['degree']==1){
+			if($_data['degree']==1 || $_data['degree']==2){
 				$stu_type=1;    //  kid - 6
-			}else if($_data['degree']==2){
+			}else if($_data['degree']==3){
 				$stu_type=2;    // 7-12
 			}else{
 				$stu_type=3;	// eng and other subject
@@ -218,6 +218,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$this->insert($arr_group_history);
 				
 				$_db->commit();
+				
 			}catch(Exception $e){
 				$_db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -225,10 +226,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}
 	}
 	public function updateStudent($_data){
+		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
+		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
+		
 		try{	
-			if($_data['degree']==1){
+			if($_data['degree']==1 || $_data['degree']==2){
 				$stu_type=1;    //  kid - 6
-			}else if($_data['degree']==2){
+			}else if($_data['degree']==3){
 				$stu_type=2;    // 7-12
 			}else{
 				$stu_type=3;	// eng and other subject
@@ -307,7 +311,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 			$this->update($_arr, $where);
 			
-			$this->_name='rms_study_history';
+			
+			
+			$this->_name = 'rms_study_history';
 				$arr= array(
 						'user_id'		=>$this->getUserId(),
 						'stu_type'		=>$stu_type,
@@ -320,8 +326,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'status'		=>$_data['status'],
 						'remark'		=>$_data['remark'],
 				);
-			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
+			$where=$this->getAdapter()->quoteInto("stu_id = ?", $_data["id"]);
 			$this->update($arr, $where);
+			
+			
 			
 			$this->_name='rms_group_detail_student';
 			$arr_group_history= array(
@@ -329,14 +337,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'group_id'	=>$_data['group'],
 					'user_id'	=>$this->getUserId(),
 			);
-			$where = "stu_id=".$_data["id"]."AND is_pass=0 and type = 1 ";
-			$this->update($arr, $where);
-		
+			$where = "stu_id=".$_data["id"]." AND is_pass=0 and type = 1 ";
+			$this->update($arr_group_history, $where);
+			
+			
+		$db->commit();//if not errore it do....
 			
 		}catch(Exception $e){
-			echo $e->getMessage();
-			exit();
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();exit();
 		}
 	}
 	function getStudyHishotryById($id){

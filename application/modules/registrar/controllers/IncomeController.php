@@ -39,7 +39,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","NOTE","FOR_DATE","STATUS");
+    		$collumns = array("INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQE_NO","NOTE","FOR_DATE","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'income','action'=>'edit',
     		);

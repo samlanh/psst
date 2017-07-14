@@ -67,10 +67,16 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		$where = " WHERE ".$from_date." AND ".$to_date;
 		
 		$sql=" SELECT id,
-		(select cate.category_name from rms_cate_income_expense as cate where cate.id = cate_income) AS cate_name,
-		title, invoice,
-		(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
-		total_amount,description,date,status FROM ln_income ";
+				(select cate.category_name from rms_cate_income_expense as cate where cate.id = cate_income) AS cate_name,
+				title, invoice,
+				(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
+				total_amount,
+				cheqe_no,
+				description,
+				date,
+				status 
+			FROM 
+				ln_income ";
 		
 		if (!empty($search['adv_search'])){
 				$s_where = array();

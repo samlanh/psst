@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
+	$this->headTitle($tr->translate('ADD_STUDENT_REGISTER')); 
 	echo $this->headTitle(''); 
 // 	print_r($this->rs['academic_year']);exit();
 	$photo= $this->frm_techer;
@@ -40,7 +40,7 @@ dojo.ready(function(){
 	    	paymentTerm();
 	    }
 	}, "grade");
-	getallGrade();
+	getallGrade(1);
 
 
 	new dijit.form.FilteringSelect({
@@ -118,37 +118,14 @@ dojo.ready(function(){
 		dijit.byId('gu_job').attr('value',0);
 	}
 	
-	new dijit.form.FilteringSelect({
-		store: language_store,
-		autoComplete: true,                        
-		                  
-	    id: "level",
-	    name: "level",  
-	    tabindex: "17",         
-	    class: 'fullside',  
-	    placeHolder:"Selected language", 
-	    onChange: function() {          
-	   	service_id = dijit.byId('level').get('value');
-	    if(service_id==-1){
-	   	 dijit.byId("popup_dept").show();
-	     }
-	    else {
-	     
-	    }  
-	   } 
-	}, "level");
-	dijit.byId('level').attr('value',"<?php echo $this->rs['lang_level']?>");
-	level = dijit.byId('level').get('value');
-	if(fa==''){
-		dijit.byId('level').attr('value',0);
-	}
+	
 	
 	dijit.byId('academic_year').attr('value',"<?php echo $this->rs['academic_year']?>");
 }); 
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
-	function getallGrade(){
+	function getallGrade(condition){
 		dept_id = dijit.byId('degree').get('value');
 			dojo.xhrPost({
 				url:url_dept,
@@ -160,9 +137,11 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 					//alert(data);
 					grade_store  = getDataStorefromJSON('id','name', data);
 				    dijit.byId('grade').set('store',grade_store); 
-				    dijit.byId('grade').attr('value','<?php echo $this->rs['grade']; ?>');  
-				   // dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
-
+				    if(condition==1){
+				    	dijit.byId('grade').attr('value','<?php echo $this->rs['grade']; ?>');  
+				    }else{
+				    	dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
+				    }
 				},
 				error: function(err) {
 					alert(err);
@@ -281,7 +260,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							
 							<td><?php echo $tr->translate("DEGREE");?>*</td>
 							<td>
-								<select class="fullside" tabindex="16" name="degree" id="degree" readonly="readonly"  dojoType="dijit.form.FilteringSelect" onchange="getallGrade();">
+								<select class="fullside" tabindex="16" name="degree" id="degree" readonly="readonly"  dojoType="dijit.form.FilteringSelect" onchange="getallGrade(0);">
 									<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
 									<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->rs['degree']) echo 'selected="selected"'?>><?php echo $row['en_name']?></option>
 									<?php }?>
@@ -413,44 +392,10 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 			</tr>
 		</table>
 </form>
-<?php 
-	echo $this->frm_popup_district;
-	echo $this->frm_popup_village;
-	echo $this->frm_popup_comm;
-?>
+
 <script>
-var url_add_lang = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"submit")); ?>';
-function addLanguage(){
-	language = dijit.byId('language_title').get('value');
-	dojo.xhrPost({
-			url:url_add_lang,
-			form: dojo.byId("frm_add_tran"),
-			handleAs:"json",
-			load: function(data) {
-				//alert(data); 
-				var Itemmake = { 
-				     id: data,
-					         name: dijit.byId('language_title').get('value')
-					   };
-		 	addDataToSelectbox(dijit.byId('level'), service_store, Itemmake, data);
-		   dijit.byId('frm_add_tran').reset();
-		   dijit.byId("popup_dept").hide();
-				
-			},
-			error: function(err) {
-				alert(err);
-			}
-	});
-}
-function hideDialog() {		
-	dijit.byId("popup_dept").hide();
-}
 function hideDialog1() {		
 	dijit.byId("popup_dept2").hide();
-}
-function popupgroup(){
-	//alert(2);
-	dijit.byId("popup_dept").show();
 }
 
 var url_add_job = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-job")); ?>';
@@ -507,54 +452,6 @@ function addJob(){
 
 
 </script>
-<div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:100%;" id="popup_dept" >
-		<form style="background-color: buttonface; width:15cm;" id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table cellspacing="10" width="100%" style="margin: 0 auto;">
-			<tr>
-				<td>
-					<fieldset style="background-color: buttonface;">
-					<legend align="center" >បន្ថែមកម្រិតភាសា</legend><br />
-					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
-						<tr>
-							<td style="width:100px"><?php echo $tr->translate("ចំណងជើងភាសា")?></td>
-							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="language_title" id="language_title" type="text" /></td>
-						</tr>
-						<tr>
-							<td>ពណ៌នា</td>
-							<td>
-								<textarea class="fullside"   style=" height: 60px !important;"
-										tabindex="2" dojoType=""  id="note" name=note ></textarea>
-									
-							</td>
-						</tr>
-						<tr>
-							<td style="width:100px"><?php echo $tr->translate("status")?></td>
-							<td>
-								<select class="fullside"  tabindex="3" name="status_p" id="status_p" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("Active")?></option>
-									    <option value="0"><?php echo $tr->translate("Deactive")?></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialog();" />
-								<input type="button" value="save" name="save" label="Save" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addLanguage();"/>
-							</td>
-						</tr>
-					</table>
-				</fieldset>
-				</td>
-			</tr>
-		</table>
-
-		</form>
-	</div>
-</div>
-
-
 
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:100%;" id="popup_dept2" >
@@ -617,201 +514,6 @@ function addJob(){
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.store.Memory");
 	
-	var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
-	var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
-	var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
-
-////////////filter place of birth /////////////////////////////////////////////
-
-	url_getdistrict = '<?php echo $this->url(array('module'=>'global','controller'=>'district','action'=>'get-district'));?>';
-	function filterDistrict(){
-		pro_id = dijit.byId('pob_province').get('value');
-		if(pro_id==0){
-			return false;}
-		dojo.xhrPost({
-			url:url_getdistrict,	
-			content:{ 
-				'pro_id': pro_id
-			},
-			handleAs:"json",
-			load: function(data) {	
-				district_store  = getDataStorefromJSON('id','name', data);		
-				dijit.byId('pob_district').set('store', district_store);
-				dijit.byId('pob_district').attr('value', '<?php echo $this->rs['dis_id'];?>');
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});	
-	}
-	
-	url_getcommune = '<?php echo $this->url(array('module'=>'global','controller'=>'commune','action'=>'get-commune'));?>';
-	function filterCommune(){
-		distict_id = dijit.byId('pob_district').get('value');
-		if(distict_id==0){
-			return false;}
-		dojo.xhrPost({
-			url:url_getcommune,	
-			content:{ 
-				'district_id': distict_id
-			},
-			handleAs:"json",
-			load: function(data) {	
-				commune_store  = getDataStorefromJSON('id','name', data);		
-				dijit.byId('pob_commune').set('store', commune_store);
-				dijit.byId('pob_commune').attr('value', '<?php echo $this->rs['comm_id'];?>');
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
-	}
-	
-	url_getvillage = '<?php echo $this->url(array('module'=>'global','controller'=>'village','action'=>'get-allvillage'));?>';
-	function filterVillage(){
-		commune_id = dijit.byId('pob_commune').get('value');
-		if(commune_id==0){
-			return false;}
-		dojo.xhrPost({
-			url:url_getvillage,	
-			content:{ 
-				'commune_id': commune_id
-			},
-			handleAs:"json",
-			load: function(data) {	
-				village_store  = getDataStorefromJSON('id','name', data);		
-				dijit.byId('pob_village').set('store', village_store);
-				dijit.byId('pob_village').attr('value', '<?php echo $this->rs['vill_id'];?>');
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
-	}
-	
-	
-	
-	function showPopupVillage(){
-		communeid = dijit.byId('pob_commune').get('value');
-		if(communeid!=-1){
-			province_id = dijit.byId('pob_province').get('value');
-			dijit.byId('province_name').attr('value',province_id);
-			dijit.byId('province_name').set('readOnly',true);
-	
-			district_name= dijit.byId('pob_district').get('value');
-			dijit.byId('district_name').attr('value',district_name);
-			dijit.byId('district_name').set('readOnly',true);
-	
-			dijit.byId('commune_name').attr('value',communeid);
-			dijit.byId('commune_name').set('readOnly',true);
-			dijit.byId('frm_village').show();
-		}else{
-			alert('please select commune first');
-			dijit.byId('pob_commune').focus();
-		}
-	}
-	function showPopupCommune(){
-		district = dijit.byId('pob_district').get('value');
-		if(district!=-1){
-			dijit.byId('district_nameen').attr('value',district);
-			dijit.byId('district_nameen').set('readOnly',true);
-			dijit.byId('frm_commune').show();
-		}else{
-			alert('please select district first');
-			dijit.byId('pob_district').focus();
-		}
-	}
-	function showPopupdistrict(){
-		province_id = dijit.byId('pob_province').get('value');
-		if(province_id!=0){
-			dijit.byId('province_names').attr('value',province_id);
-			dijit.byId('province_names').set('readOnly',true);
-			dijit.byId('frm_district').show();
-		}else{
-			alert('please select province first');
-			dijit.byId('pob_province').focus();
-		}
-	}
-	
-	
-	
-	
-	var district_url = '<?php echo $this->url(array('module'=>'global','controller'=>'district','action'=>'add-district'));?>';
-	function addNewDistrict(){
-		if(dijit.byId('frm_district').validate()) {
-			dojo.xhrPost({
-				url:district_url,	
-				form:dojo.byId('form_district'),
-				handleAs:"json",
-				load: function(data) {	
-					var myNewItem1 = {					
-							id: data,
-							name: dijit.byId('pop_district_namekh').get('value'),
-					};			
-					addDataToSelectbox(dijit.byId('district'), district_store, myNewItem1, data);	
-					dijit.byId('frm_district').reset();
-					dijit.byId('frm_district').hide();
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});	
-		}
-	}
-	
-	
-	var commune_url = '<?php echo $this->url(array('module'=>'global','controller'=>'commune','action'=>'add-commune'));?>';
-	function addNewCommune(){
-		if(dijit.byId('frm_commune').validate()) {
-			dojo.xhrPost({
-				url:commune_url,	
-				form:dojo.byId('form_commune'),
-				handleAs:"json",
-				load: function(data) {	
-					communeen = dijit.byId('commune_nameen').get('value');
-					communekh = dijit.byId('commune_namekh').get('value');
-					var Itemcommune = {					
-							id: data,
-							name: communekh,
-					};			
-					addDataToSelectbox(dijit.byId('commune'), commune_store, Itemcommune, data);
-					dijit.byId('frm_commune').reset();
-					dijit.byId('frm_commune').hide();
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-	
-	
-	client_village = '<?php echo $this->url(array('module'=>'global','controller'=>'village','action'=>'add-village'));?>';
-	function addVillage(){
-		if(dijit.byId('frm_village').validate()) {
-			dojo.xhrPost({
-				url:client_village,	
-				form:dojo.byId('form_village'),
-				handleAs:"json",
-				load: function(data) {
-					labelen = dijit.byId('village_name').get('value');
-					labelkh = dijit.byId('village_namekh').get('value');
-					var villageItem1 = {					
-							id: data,
-							name: labelkh,
-					};			
-					addDataToSelectbox(dijit.byId('village'), village_store, villageItem1, data);	
-					dijit.byId('frm_village').reset();
-					dijit.byId('frm_village').hide();
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-		}
-	}
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function getInfoBygroup(){
 		url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';

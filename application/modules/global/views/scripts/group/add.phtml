@@ -120,7 +120,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 								<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitIconEditProperty" onclick="addRow();" />
 						</td>
-						<input type="text" name="identity1" id="identity1"  />
+						<input type="hidden" name="identity1" id="identity1"  />
 					</tr>
 					<tr>
 						<td colspan="6" align="center">
@@ -476,7 +476,7 @@ function deleteRecord1(index) {
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate("ADD_NEW_ROOM")?></legend><br />
+					<legend align="center" ><?php echo $tr->translate("ADD_NEW_ROOM")?></legend>
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("ROOM_NAME")?></td>
@@ -513,48 +513,46 @@ function deleteRecord1(index) {
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:70%;overflow:scroll;" id="popup_add_dept" >
 		<form  id='frm_add_dep' name='frm_add_dep' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			
-			<table cellspacing="10" width="100%" style="margin: 0 auto;">
-			    <tr>
-					<td width="10%"><?php echo $tr->translate("DEGREE");?></td>
-					<td width="35%">
-						<input type="text" class="fullside" name='fac_enname' id="fac_enname" dojoType="dijit.form.TextBox" />
-					</td>
-					
-					<td width="10%"></td>
-					
-					<td width="10%"><?php echo $tr->translate("SHORTCUT");?></td>
-					<td width="35%">
-						<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
-					</td>
-				</tr>
-				
-				<tr>
-					<td colspan="5" align="left">
-						<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-							iconClass="dijitIconEditProperty" onclick="addRowDegree();" />
-					</td>
-					<input type="text" name="identity" id="identity"  />
-				</tr>
-				<tr>
-					<td colspan="5">
-						<table id="table_row1" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
-								<tr id="head-title1" class="head-td" align="right"></tr>
-						</table>
-					</td>
-				</tr>
-				
-				<tr>
-					<td colspan="5" align="center">
-						<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialogDegree()"/>
+				<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				    <tr>
+						<td width="10%"><?php echo $tr->translate("DEGREE");?></td>
+						<td width="35%">
+							<input type="text" class="fullside" name='fac_enname' id="fac_enname" dojoType="dijit.form.TextBox" />
+						</td>
 						
-						<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="save_dep" 
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDept();"/>
-					</td>
-				</tr>
-			</table>
-
+						<td width="10%"></td>
+						
+						<td width="10%"><?php echo $tr->translate("SHORTCUT");?></td>
+						<td width="35%">
+							<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="5" align="left">
+							<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitIconEditProperty" onclick="addRowDegree();" />
+						</td>
+						<input type="hidden" name="identity" id="identity"  />
+					</tr>
+					<tr>
+						<td colspan="5">
+							<table id="table_row1" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
+									<tr id="head-title1" class="head-td" align="right"></tr>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="5" align="center">
+							<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialogDegree()"/>
+							
+							<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="save_dep" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDept();"/>
+						</td>
+					</tr>
+				</table>
 		</form>
 	</div>
 </div>
@@ -567,7 +565,7 @@ function deleteRecord1(index) {
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate("បន្ថែមប្រភេទសេវាកម្ម");?></legend>
+					<legend align="center" ><?php echo $tr->translate("ADD_GRADE");?></legend>
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 					<tr>
 						<td><?php echo $tr->translate("NAME")?></td>

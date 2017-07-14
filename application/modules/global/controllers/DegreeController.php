@@ -128,5 +128,14 @@ class Global_DegreeController extends Zend_Controller_Action {
     		exit();
     	}
     }
+    function adddegreeAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$_dbmodel = new Global_Model_DbTable_DbDegree();
+    		$result=$_dbmodel->AddDegreeajax($data);
+    		print_r(Zend_Json::encode($result));
+    		exit();
+    	}
+    }
 }
 

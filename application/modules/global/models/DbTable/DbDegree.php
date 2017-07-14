@@ -104,20 +104,19 @@
 		$row=$db->fetchAll($sql);
 		return $row;
 	}
-	
 	public function getDeptById($dept_id){
 		$db = $this->getAdapter();
 		$sql=" SELECT * FROM `rms_dept` WHERE `dept_id` = $dept_id ";
 		return $db->fetchRow($sql);
 	}
-	
-	
-	
-	
-	
-	
-	
+	public function AddDegreeajax($_data){
+			$_arr=array(
+					'en_name'	  => $_data['fac_enname'],
+					'shortcut'    => $_data['shortcut_fac'],
+					'modify_date' => new Zend_Date(),
+					'is_active'   => 1,
+					'user_id'	  => $this->getUserId()
+			);
+			return $this->insert($_arr);
+	}	
 }
-
-
-

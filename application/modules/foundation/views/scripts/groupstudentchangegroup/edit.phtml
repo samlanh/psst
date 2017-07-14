@@ -63,6 +63,25 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 </script>
 
 <form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit" >			
+			if(this.validate()) {
+                from_group=dijit.byId('from_group').get('value');
+                to_group=dijit.byId('to_group').get('value');
+                if(from_group==0 || from_group==''){
+                        alert('Please Select Form Group !');
+						dijit.byId('from_group').focus();
+						return false;	
+                }
+				if(to_group==0 || to_group=='' || to_group==-1){
+                        alert('Please Select To Group !');
+						dijit.byId('to_group').focus();
+						return false;	
+                }
+				return true;
+			}else {
+				return false;
+			}
+	</script>
 	<table cellspacing="10" style="margin: 0 auto; width:100%">
 		<tr>
 			<td>
@@ -393,7 +412,6 @@ function toStudentGroup(type){
 		handleAs:"json",
 		load: function(data) {
 			//alert(data);
-
 			if(type==1){
 				dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+"<br />"+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?>  :  </span>'+data.start_date+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
 			}else{

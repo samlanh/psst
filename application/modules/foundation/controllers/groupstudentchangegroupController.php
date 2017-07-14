@@ -104,7 +104,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		
 		$this->view->rows = $add =$_add->gettoGroup();
 		
-		$this->view->academy = $_add->getAllYear();
+		$this->view->academy = $_add->getAllYears();
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $_db->getAllFecultyName();

@@ -2,13 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_GROUP_STUDENT_CHANGE_GROUP')); 
 ?>
-<script type="dojo/method" event="onSubmit">   
-	   if(this.validate()) {
-		return true;
-	   }else {
-		return false;
-	   }
-</script>
+
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.NumberTextBox");
@@ -64,6 +58,25 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 </script>
 
 <form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit" >			
+			if(this.validate()) {
+                from_group=dijit.byId('from_group').get('value');
+                to_group=dijit.byId('to_group').get('value');
+                if(from_group==0 || from_group==''){
+                        alert('Please Select Form Group !');
+						dijit.byId('from_group').focus();
+						return false;	
+                }
+				if(to_group==0 || to_group==''){
+                        alert('Please Select To Group !');
+						dijit.byId('to_group').focus();
+						return false;	
+                }
+				return true;
+			}else {
+				return false;
+			}
+	</script>
 	<table cellspacing="10" style="margin: 0 auto; width:100%;    font-family: 'Khmer OS Battambang'; ">
 		<tr>
 			<td>
@@ -124,7 +137,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 									<tr>
 										<td><?php echo $tr->translate("NOTE")?></td>
 										<td>
-											<input dojoType="dijit.form.TextBox" class="fullside" id="note" name="note" type="text" />
+											<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="note" name="note" type="text" />
 										</td>
 									</tr>
 									<tr style="white-space: nowrap;">
@@ -160,15 +173,6 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:28cm;" id="popup_dept" >
 		<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			
-			<script type="dojo/method" event="onSubmit">			
-				if(this.validate()) {
-					return true;
-	   			}else {
-					return false;
-	   			}
-			</script>
-			
 			<table width="100%">
 				<tr>
 					<td>

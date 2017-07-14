@@ -9,16 +9,29 @@ dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.CheckBox");
 </script>
-<script type="dojo/method" event="onSubmit">
-	if(this.validate()) {
-		return true;
-	} else {
-		return false;
-	}
-</script>
+
 
 
 <form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit" >			
+			if(this.validate()) {
+               studentid=dijit.byId('studentid').get('value');
+			   studentname=dijit.byId('studentname').get('value');
+               if(studentid==0 || studentid=='' || studentid ==-1){
+					alert('Select studentid feld!');
+					dijit.byId('studentid').focus();
+					return false;
+				}
+				if(studentname==0 || studentname=='' || studentname ==-1){
+					alert('Select student name feld!');
+					dijit.byId('studentname').focus();
+					return false;
+				}
+				return true;
+			}else {
+				return false;
+			}
+	</script>
 	<table cellspacing="20" style="margin: 0 auto; width: 100%">
 		<tr>
 			<td>
@@ -78,7 +91,7 @@ dojo.require("dijit.form.CheckBox");
 											</select>
 										</td>
 										<td><?php echo $tr->translate("STOP_DATE")?></td>
-										<td><input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="datestop" name="datestop" value="now" type="text"></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="datestop" name="datestop" value="now" type="text"></td>
 										<td><?php echo $tr->translate("STATUS")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">
@@ -90,7 +103,7 @@ dojo.require("dijit.form.CheckBox");
 									</tr>
 									<tr rowspan="2">
 										<td><?php echo $tr->translate("REASON")?></td>
-										<td colspan="5"><input dojoType="dijit.form.TextBox" class="fullside" id="reason" name="reason" value="" required="true"  ></td>
+										<td colspan="5"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="reason" name="reason" value=""  ></td>
 									</tr>
 									<tr>
 										<td colspan="6" align="center">

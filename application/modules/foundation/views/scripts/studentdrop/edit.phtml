@@ -4,6 +4,25 @@
 	//print_r($this->stu_name);exit();
 ?>
 <form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit" >			
+			if(this.validate()) {
+               studentid=dijit.byId('studentid').get('value');
+			   studentname=dijit.byId('studentname').get('value');
+               if(studentid==0 || studentid=='' || studentid ==-1){
+					alert('Select studentid feld!');
+					dijit.byId('studentid').focus();
+					return false;
+				}
+				if(studentname==0 || studentname=='' || studentname ==-1){
+					alert('Select student name feld!');
+					dijit.byId('studentname').focus();
+					return false;
+				}
+				return true;
+			}else {
+				return false;
+			}
+	</script>
 	<table cellspacing="20" style="margin: 0 auto; width: 100%">
 		<tr>
 			<td>

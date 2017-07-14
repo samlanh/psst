@@ -29,7 +29,7 @@ table .set-style td, table .set-style th {
 						<tr>
 							<td ><?php echo $tr->translate("YEARS");?><input type="hidden" name="id" value="<?php echo $this->rs['id'];?>" /> </td>
 							<td>
-								<select dojoType="dijit.form.FilteringSelect" class="fullside" readonly="true"  id="from_year" name="from_year"  type="text">
+								<select dojoType="dijit.form.FilteringSelect" class="fullside" id="from_year" name="from_year"  type="text">
 									<?php for($i=2016;$i<=date('Y')+1;$i++){?>
 										<option value="<?php echo $i;?>" <?php if($i==$this->rs['from_academic']) echo 'selected="selected"';?> ><?php echo $i; ?></option>
 									<?php }?>
@@ -37,7 +37,7 @@ table .set-style td, table .set-style th {
 							</td>
 							<td  ><?php echo $tr->translate("TO");?></td>
 							<td >
-								<select dojoType="dijit.form.FilteringSelect" readonly="true" class="fullside" id="to_year" name="to_year" type="text">
+								<select dojoType="dijit.form.FilteringSelect" class="fullside" id="to_year" name="to_year" type="text">
 									<?php for($i=2016;$i<=date('Y')+2;$i++){?>
 										<option value="<?php echo $i;?>" <?php if($i==$this->rs['to_academic']) echo 'selected="selected"';?> ><?php echo $i; ?></option>
 									<?php }?>
@@ -45,7 +45,7 @@ table .set-style td, table .set-style th {
 							</td>
 							
 							<td ><?php echo $tr->translate("TYPE");?></td>
-							<td ><input dojoType="dijit.form.TextBox" readonly="true" class="fullside" id="generation" value="<?php echo $this->rs['generation']; ?>" name="generation"  type="text"></td>
+							<td ><input dojoType="dijit.form.TextBox"  class="fullside" id="generation" value="<?php echo $this->rs['generation']; ?>" name="generation"  type="text"></td>
 							
 							
 						</tr>
@@ -61,7 +61,7 @@ table .set-style td, table .set-style th {
 							</td>
 							
 							<td  ><?php echo $tr->translate("NOTE");?></td>
-							<td ><input dojoType="dijit.form.TextBox" readonly="true" class="fullside" id="note" name="note"  value="<?php echo $this->rs['note']; ?>" type="text"></td>
+							<td ><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note"  value="<?php echo $this->rs['note']; ?>" type="text"></td>
 													
 						
 							<td ><?php echo $tr->translate("FINISHED");?></td>
@@ -94,7 +94,7 @@ table .set-style td, table .set-style th {
 						<thead>
 							<tr>
 								<td colspan="8" align="left">
-									<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+									<input type="button" <?php if($this->rs['is_finished']==1){ echo "disabled";}?> label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 								 		iconClass="dijitIconEditProperty" onclick="addRow();" />
 								 	<?php $id=0; for($i = 0;$i < count($payment_term);$i++){ ?>
 									<?php $id++;if($i==0)$term = $id;
@@ -270,17 +270,17 @@ function initailize(){
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
-		template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="50px" align="center">'+no+'</td>';
-		template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
+		template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect" <?php if($this->rs['is_finished']==1){ echo "readOnly";}?> class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
 		//template+='<td><select dojoType="dijit.form.FilteringSelect" id="session_'+col+'" name="session_'+col+'">'+session+'</select></td>';
 		
 		column = 0;
 		for(j=0;j<payment_term;j++){ column++;
-			template+='<td width="11%"><input type="text" id="fee'+col+'_'+column+'"   class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td width="11%"><input type="text" id="fee'+col+'_'+column+'" <?php if($this->rs['is_finished']==1){ echo "readOnly";}?> class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			
 		}
-		template+='<td width="25%"> <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" /></td>';
+		template+='<td width="25%"> <input type="text" class="fullside" <?php if($this->rs['is_finished']==1){ echo "readOnly";}?> name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ" /></td>';
 		
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";

@@ -1665,15 +1665,16 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	
     	$sql = "SELECT 
 				  id,
-				  CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years,
-				  (SELECT name_en FROM rms_view WHERE TYPE = 7 AND key_code = time) AS time 
-				FROM rms_tuitionfee 
-				WHERE `status` = 1  $branch_id  
+				  CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years
+				FROM 
+					rms_tuitionfee 
+				WHERE 
+					`status` = 1 and is_finished=0 $branch_id  
 				GROUP BY 
-				  from_academic,
-				  to_academic,
-				  generation,
-				  time ";
+				  	from_academic,
+				  	to_academic,
+				  	generation
+				";
     	$order=' ORDER BY id DESC';
     	
     	//echo $sql;exit();

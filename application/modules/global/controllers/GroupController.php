@@ -70,28 +70,21 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$_db = new Global_Model_DbTable_DbGroup();
 		$this->view->degree = $rows = $_db->getAllFecultyName();
+		$this->view->row_year=$_db->getAllYears();
+		$this->view->subject = $_db->getAllSubjectStudy();
 		
 		
-		$years=new Global_Model_DbTable_DbGroup();
-		$this->view->row_year=$years->getAllYears();
 		$model = new Application_Model_DbTable_DbGlobal();
-		$this->view->payment_term = $model->getAllPaymentTerm(null,1);
 		$room = $model->getAllRoom();
 		array_unshift($room, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		array_unshift($room, array ( 'id' => 0,'name' => 'Select Room'));
-		
 		$this->view->room = $room;
-		$_model = new Global_Model_DbTable_DbGroup();
-    	$this->view->subject = $_model->getAllSubjectStudy();
-		$this->view->year = $_model->getAllYear();
-		//print_r($this->view->year);exit();
 		
-		$db_gr=new Global_Model_DbTable_DbGrade();
-		$d_row=$db_gr->getNameGradeAll();
+		$db=new Global_Model_DbTable_DbGrade();
+		$d_row=$db->getNameGradeAll();
 		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->grade_name=$d_row;
 		
-		$db = new Global_Model_DbTable_DbGrade();
 		$dept = $db->getAllDept();
 		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->dept = $dept;
@@ -100,20 +93,16 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 	function editAction(){
 		$db= new Global_Model_DbTable_DbGroup();
-		
 		if($this->getRequest()->isPost()){
 			try {
 				$data = $this->getRequest()->getPost();
-				
 				$db->updateGroup($data);
 				if(!empty($data['save'])){
 					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group/index");
 				}
-				//Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
-				$err =$e->getMessage();
-				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+				echo $e->getMessage();
 			}
 		}
 		
@@ -130,28 +119,20 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->degree = $rows = $db->getAllFecultyName();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
-		
-		$faculty =  $model->getAllMajor();
-		array_unshift($faculty, Array('id'=> -1 ,'name' =>'Add New'));
-		$this->view->faculty =$faculty;
-	
 		$room = $model->getAllRoom();
 		array_unshift($room, Array('id'=> -1 ,'name' =>'Add New'));
 		$this->view->room =$room;
 	
 		
-		$_model = new Global_Model_DbTable_DbGroup();
-		$this->view->subject = $_model->getAllSubjectStudy();
-		$years=new Global_Model_DbTable_DbGroup();
-		$this->view->row_year=$years->getAllYears();
-		$this->view->year = $_model->getAllYear();
+		$_db = new Global_Model_DbTable_DbGroup();
+		$this->view->subject = $_db->getAllSubjectStudy();
+		$this->view->row_year=$_db->getAllYears();
 		
-		$db_gr=new Global_Model_DbTable_DbGrade();
-		$d_row=$db_gr->getNameGradeAll();
-		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-		$this->view->grade_name=$d_row;
+		$db=new Global_Model_DbTable_DbGrade();
+		$grade=$db->getNameGradeAll();
+		array_unshift($grade, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->grade_name=$grade;
 		
-		$db = new Global_Model_DbTable_DbGrade();
 		$dept = $db->getAllDept();
 		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->dept = $dept;
@@ -178,41 +159,26 @@ class Global_GroupController extends Zend_Controller_Action {
 		}
 		
 		$id=$this->getRequest()->getParam("id");
-		
 		$this->view->rs = $db->getGroupById($id);
-		
 		$this->view->row = $db->getGroupSubjectById($id);
 		
-// 		$db = new Global_Model_DbTable_DbGroup();
-// 		$this->view->degree = $rows = $db->getAllFecultyName();
-		
 		$model = new Application_Model_DbTable_DbGlobal();
-		
-		$faculty =  $model->getAllMajor();
-		array_unshift($faculty, Array('id'=> -1 ,'name' =>'Add New'));
-		$this->view->faculty =$faculty;
-	
 		$room = $model->getAllRoom();
 		array_unshift($room, Array('id'=> -1 ,'name' =>'Add New'));
 		$this->view->room =$room;
 
-		$_model = new Global_Model_DbTable_DbGroup();
-		$this->view->subject = $_model->getAllSubjectStudy();
-		$years=new Global_Model_DbTable_DbGroup();
-		$this->view->row_year=$years->getAllYears();
-		$this->view->year = $_model->getAllYear();
-		
+		$_db = new Global_Model_DbTable_DbGroup();
+		$this->view->subject = $_db->getAllSubjectStudy();
+		$this->view->row_year=$_db->getAllYears();
 		
 		$db = new Global_Model_DbTable_DbGrade();
 		$dept = $db->getAllDept();
 		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->degree = $dept;
 		
-		
-		$db_gr=new Global_Model_DbTable_DbGrade();
-		$d_row=$db_gr->getNameGradeAll();
-		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-		$this->view->grade_name=$d_row;
+		$grade=$db->getNameGradeAll();
+		array_unshift($grade, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->grade_name=$grade;
 		
 	}
 	

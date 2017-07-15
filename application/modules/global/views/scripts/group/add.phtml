@@ -48,10 +48,10 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
 						<td>
 							<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect">
-								<option></option>
-								<?php foreach($this->year as $year){?>
+								<option value="-1">select year</option>
+								<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
 									<option value="<?php echo $year['id'];?>"><?php echo $year['years'];?></option>
-								<?php }?>
+								<?php }}?>
 							</select>
 						</td>
 						
@@ -65,7 +65,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect">
 							<?php $row= new Application_Model_DbTable_DbGlobal();
 								  $rows=$row->getSession();
-								foreach($rows as $key =>$rs){?>
+									foreach($rows as $key =>$rs){?>
 									<option value="<?php echo $rs['key_code']?>" ><?php echo $rs['view_name'];?></option>
 							<?php 	}?>
 							</select>

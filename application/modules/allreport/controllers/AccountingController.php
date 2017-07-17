@@ -289,6 +289,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		try{
 			$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
 			$this->view->row = $db->getAllexspan();
+			//print_r($this->view->row);exit();
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");

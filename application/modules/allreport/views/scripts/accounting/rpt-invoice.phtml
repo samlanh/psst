@@ -1,0 +1,71 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('SRMS | Report Student Receivable'); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+?>
+<form
+	action=" "
+	dojoType="dijit.form.Form" method="post">
+	<table style="width: 100%">
+		<tr>
+			<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="search" name="search" value="" type="text" ></td>
+			<td> 
+				<select type="text" id="student_id" name="student_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setname();"  >
+					<option value="">Select Student Code</option>
+					<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
+					<option value="<?php echo $student_code['stu_id']?>"><?php echo $student_code['stu_code']?></option>
+					<?php }}?>
+				</select>
+			</td>
+			<td>
+				<select type="text" id="student_name" name="student_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
+					<option value="">Select Student Name</option>
+					<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
+					<option value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
+					<?php }}?>
+				</select>
+			</td>
+			<td><input type="text" name="form_date" id="from_date" class="fullside" placeholder="<?php echo $tr->translate("From Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
+			<td><input type="text" name="to_date" id="to_date" class="fullside" placeholder="<?php echo $tr->translate("to Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
+			<td>
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</td>
+		</tr>
+	</table>
+</form>
+<style>
+#footer{display: none;}
+</style>	
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+	<div id="divPrint">
+		<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+			<tr style="background: #ccc;">
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_ID");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_DATE");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_NUM");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INPUT_DATE");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("REMARK");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("AMOUNT");?></td>
+			</tr>
+			<?php if(!empty($this->all_invoice)){ foreach($this->all_invoice as $key=>$rs){ $key=$key+1; ?>
+			<tr>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
+				<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']; ?></a></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['invoice_date']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['invoice_num']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['input_date']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['remark']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['totale_amount']; ?></td>
+			</tr>
+			<?php
+			}}
+			?>
+		</table>
+	</div>	
+</div>
+

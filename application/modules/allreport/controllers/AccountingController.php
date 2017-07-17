@@ -851,5 +851,38 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->all_service = $db->getAllService();
 		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 		$this->view->all_student_code = $db->getAllGerneralOldStudent();
-	}		
+	}	
+    public function rptTransferAction(){
+		$db = new Accounting_Model_DbTable_DbTransferstock();
+    	try{
+    		if($this->getRequest()->isPost()){
+    			$search = $this->getRequest()->getPost();
+    			$this->view->row_ace=$search;
+    		}
+    		else{
+    			$search=array(
+    					'title' => '',
+    					'start_date' =>date("Y-m-d"),
+    					'end_date' =>date("Y-m-d"),
+    			);
+    		}
+    		$this-> view->all_transfer = $db->getAllTransfer($search);	
+    	}catch (Exception $e){
+    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    	 
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($form);
+    	$this->view->form_search=$form;
+	}
+    public function rptTransferdetailAction(){
+		$db = new Accounting_Model_DbTable_DbTransferstock();
+		$id=$this->getRequest()->getParam("id");
+		$this->view->rs = $db->getTransferById($id);
+		
+		$this->view->rsdetail = $db->getTransferByIdDetail($id);
+		print_r($this->view->rsdetail );
+	}	
 }

@@ -1,0 +1,75 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Report Student Payment Detail'); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm = $this->form_search;
+?>
+<style>
+#footer{display: none;}
+</style>	
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm; font-family:'Khmer OS Battambang';">
+	<div id="divPrint">
+		<table cellspacing="20" width="100%" style="margin: 0 auto; font-family:'Khmer OS Battambang';">
+		<tr>
+			<td>
+				<fieldset>
+					<legend align="center"><strong><?php echo $tr->translate("RPT_TRANSFER");?></strong></legend>
+					<table cellspacing="20" width="100%" >
+						<tr>
+							<td align="center" valign="top">
+								<table style="margin: 0 auto; width:100%;" cellspacing="10">
+									<tr>
+										<td width="25%"><?php echo $tr->translate("TRANSFER_NUMBER");?> : </td>
+										<td width="25%"><?php echo $this->rs['transfer_no']; ?></td>
+										<td width="25%"><?php echo $tr->translate("TRANSFER_DATE");?> : </td>
+										<td width="25%"><?php echo $this->rs['transfer_date']; ?></td>
+										
+									</tr>
+									<tr>
+										<td width="25%"><?php echo $tr->translate("FROM_LOCATION");?> : </td>
+										<td width="25%"><?php echo $this->rs['f_branch']; ?></td>
+										<td width="25%"><?php echo $tr->translate("TO_LOCATION");?>: </td>
+										<td width="25%"><?php echo $this->rs['t_branch']; ?></td>
+									</tr>
+									<tr>
+										<td width="25%"><?php echo $tr->translate("NOTE");?> : </td>
+										<td width="25%"><?php echo $this->rs['note']; ?></td>
+						
+									</tr>
+									
+									<tr>
+									    <td colspan="4">
+										    <table width="100%" style="border-collapse: collapse; white-space: nowrap;border:1px solid #000;">
+											    <tr style="background:#ccc;">
+												    <th  style="border:1px solid #000;"><?php echo $tr->translate("N_O");?></th>
+													<th  style="border:1px solid #000;"><?php echo $tr->translate("PRODUCT_NAME");?></th>
+													<th  style="border:1px solid #000;"><?php echo $tr->translate("QTY_TRANSFER");?></th>
+													<th  style="border:1px solid #000;"><?php echo $tr->translate("REMARK");?></th>
+												</tr>
+												<?php if(!empty($this->rsdetail)){
+													foreach($this->rsdetail as $key=> $row){ $key=$key+1;
+												?>	
+													<tr>
+													    <td align="center" style="border:1px solid #000;"><?php echo $key; ?></td>
+														<td style="border:1px solid #000;">&nbsp;&nbsp;<?php echo $row['pro_name']; ?></td>
+													    <td align="center" style="border:1px solid #000;">$&nbsp;<?php echo $row['qty']; ?></td>
+														<td style="border:1px solid #000;"><?php echo $row['note']; ?></td>
+													</tr>
+												<?php }} ?>	
+			
+											</table>
+										    </div>
+										</td>
+									</tr>					
+								</table>
+							</td>							
+						</tr>
+					</table>	
+				</fieldset>
+			</td>			
+		</tr>
+	</table>
+	</div>	
+</div>
+

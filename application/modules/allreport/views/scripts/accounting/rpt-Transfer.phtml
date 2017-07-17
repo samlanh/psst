@@ -1,0 +1,54 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('SRMS | Report Student Receivable'); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm =  $this->form_search;
+	$formList = new Application_Form_Frmtable();
+?>
+<form
+	action=" "
+	dojoType="dijit.form.Form" method="post">
+	<table style="width:80%" style="width:100 px;">
+	  <tr> 
+		 <td><?php echo $frm->getElement("title");?></td>
+		 <td><?php echo $frm->getElement("start_date");?></td>
+		 <td><?php echo $frm->getElement("end_date");?></td>
+		 <td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+   	  </tr>
+	</table>
+</form>
+<style>
+#footer{display: none;}
+</style>	
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+	<div id="divPrint">
+		<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+			<tr style="background: #ccc;">
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TRANSFER_NUMBER");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TRANSFER_DATE");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("FROM_LOCATION");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TO_LOCATION");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("NOTE");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STATUS");?></td>
+			</tr>
+			<?php if(!empty($this->all_transfer)){ foreach($this->all_transfer as $key=>$rs){ $key=$key+1; ?>
+			<tr>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-transferdetail/id/<?php echo $rs['id'];?>"><?php echo $rs['transfer_no']; ?></a></td>
+				<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-transferdetail/id/<?php echo $rs['id'];?>"><?php echo $rs['transfer_date']; ?></a></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['fromlocation']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['tolocation']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['note']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['user_name']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['status']; ?></td>
+			</tr>
+			<?php
+			}}
+			?>
+		</table>
+	</div>	
+</div>
+

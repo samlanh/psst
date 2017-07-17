@@ -169,13 +169,13 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 	
 	function getCategoryAll(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,`name` FROM rms_bcategory WHERE  `status` = 1";
+		$sql="SELECT id,`name` FROM rms_bcategory WHERE  `status` = 1 AND name!=''";
 		return $db->fetchAll($sql);		
 	}
 	
 	function getBlockAll(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,block_name AS `name` FROM rms_blockbook WHERE `status`=1";
+		$sql="SELECT id,block_name AS `name` FROM rms_blockbook WHERE `status`=1 AND block_name!=''";
 		return $db->fetchAll($sql);
 	}
 	

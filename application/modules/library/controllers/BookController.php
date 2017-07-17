@@ -1,11 +1,13 @@
 <?php
 class Library_BookController extends Zend_Controller_Action {
 private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+protected $tr;
     public function init()
     {    	
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
     public function indexAction()
     {
@@ -53,8 +55,13 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBook();
-    	$this->view->cat=$db_cat->getCategoryAll();
-    	$this->view->block=$db_cat->getBlockAll();
+    	
+    	$cat=$db_cat->getCategoryAll();
+    	array_unshift($cat, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->cat=$cat;
+    	$block=$db_cat->getBlockAll();
+    	array_unshift($block, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->block=$block;
     	
 		$frm_major = new Library_Form_FrmBook();
 		$frm_search = $frm_major->frmBook();
@@ -89,8 +96,14 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			echo $e->getMessage();
     		}
     	}
-    	$this->view->cat=$db->getCategoryAll();
-    	$this->view->block=$db->getBlockAll();
+    	 
+    	$cat=$db->getCategoryAll();
+    	array_unshift($cat, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->cat=$cat;
+    	$block=$db->getBlockAll();
+    	array_unshift($block, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->block=$block;
+    	
     	$row=$db->getBookRowById($id);
     	$this->view->row=$row;
     	$frm_major = new Library_Form_FrmBook();

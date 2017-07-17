@@ -270,6 +270,8 @@ var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enc
 function addBlock(){
 	b_name=dijit.byId('block_name').get('value');
 	if(b_name==''){
+		alert('Please input block name!');
+		dijit.byId('block_name').focus();
 		return false;
 	}
 	if(dijit.byId('frm_block').validate()){

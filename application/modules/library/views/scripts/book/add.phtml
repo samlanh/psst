@@ -281,29 +281,31 @@ function addDept(){
 var url_add_block = '<?php echo $this->url(array('module'=>'library','controller'=>'book','action'=>'add-block')); ?>';
 var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->block))?>);
 function addBlock(){
-	b_name=dijit.byId('block_name').get('value');
-	if(b_name==''){
-		return false;
-	}
 	if(dijit.byId('frm_block').validate()){
-		dojo.xhrPost({
-			url:url_add_block,
-			form: dojo.byId("frm_block"),
-			handleAs:"json",
-			load: function(data) {
-				var Itemcat = {					
-						id: data,
-					    name: dijit.byId('block_name').get('value')
-				};			
-				addDataToSelectbox(dijit.byId('block_id'), book_store, Itemcat, data);
-				dijit.byId('frm_block').reset();
-				dijit.byId("pop_block").hide();
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
-	}
+		b_name=dijit.byId('block_name').get('value');
+		if(b_name==''){
+			alert('Please input block name!');
+			dijit.byId('block_name').focus();
+			return false;
+		}
+			dojo.xhrPost({
+				url:url_add_block,
+				form: dojo.byId("frm_block"),
+				handleAs:"json",
+				load: function(data) {
+					var Itemcat = {					
+							id: data,
+						    name: dijit.byId('block_name').get('value')
+					};			
+					addDataToSelectbox(dijit.byId('block_id'), book_store, Itemcat, data);
+					dijit.byId('frm_block').reset();
+					dijit.byId("pop_block").hide();
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
 }
 
 function hideDialog(){

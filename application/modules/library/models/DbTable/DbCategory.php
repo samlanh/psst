@@ -220,7 +220,7 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	
 	function getAllBlockName(){
 		$db=$this->getAdapter();
-		$sql=" SELECT id,block_name AS `name` FROM rms_blockbook WHERE `status`=1 ORDER BY id DESC ";
+		$sql=" SELECT id,block_name AS `name` FROM rms_blockbook WHERE `status`=1 AND block_name!='' ORDER BY id DESC ";
 		return $db->fetchAll($sql);
 	}
 	

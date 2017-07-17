@@ -68,9 +68,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		$_model = new Accounting_Model_DbTable_DbTuitionFee();
-    		
-//     		$result=$_model->getCondition($_data);
-    		
     		try {
 	    		$rs =  $_model->addTuitionFee($_data);
 	    		if(isset($_data['save_close'])){
@@ -88,9 +85,9 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	}
     	
     	$_model = new Application_Model_GlobalClass();
-    	$this->view->all_metion = $_model ->getAllMetionOption();
+//     	$this->view->all_branch = $_model ->getAllMetionOption();
     	$this->view->all_grade = $_model ->getAllFacultyOption();
-    	$data=$this->view->all_session=$_model->getAllSession();
+//     	$data=$this->view->all_session=$_model->getAllSession();
     	$model = new Application_Model_DbTable_DbGlobal();
     	$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 		
@@ -113,15 +110,13 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->grade_name=$d_row;
 		
-		$db = new Global_Model_DbTable_DbGrade();
-		$dept = $db->getAllDept();
+		$dept = $db_gr->getAllDept();
 		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->dept = $dept;
     }
  	
     public function editAction()
 	{
-
 		if($this->getRequest()->isPost()){
 			try {
 				$_data = $this->getRequest()->getPost();
@@ -131,14 +126,12 @@ class Accounting_FeeController extends Zend_Controller_Action {
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();exit();
 			}
 		}
 		 
 		$_model = new Application_Model_GlobalClass();
-		$this->view->all_metion = $_model ->getAllMetionOption();
 		$this->view->all_grade = $_model ->getAllFacultyOption();
-		$data=$this->view->all_session=$_model->getAllSession();
+// 		$data=$this->view->all_session=$_model->getAllSession();
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 		 
@@ -155,14 +148,8 @@ class Accounting_FeeController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("NO_DATA","/accounting/fee");
 		}
 
-		$db = new Accounting_Model_DbTable_DbTuitionFee();
-		$this->view->branch = $db->getAllBranch();
-		
 		$row=0;$indexterm=1;$key=0;
-
 				$rows = $db->getFeeDetailById($id);
-				//print_r($rows);exit();
-// 				print_r($rows);exit();
 				$fee_row=1;$rs_rows=array();
 				if(!empty($rows))foreach($rows as $payment_tran){
 					if($payment_tran['payment_term']==1){
@@ -188,6 +175,19 @@ class Accounting_FeeController extends Zend_Controller_Action {
 					}
 				}
 			   $this->view->rows =$rs_rows;
+			   
+			   $db = new Accounting_Model_DbTable_DbTuitionFee();
+			   $this->view->branch = $db->getAllBranch();
+			   
+			   $db_gr=new Global_Model_DbTable_DbGrade();
+			   $d_row=$db_gr->getNameGradeAll();
+			   array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   $this->view->grade_name=$d_row;
+			   
+			   $dept = $db_gr->getAllDept();
+			   array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   $this->view->dept = $dept;
+			   
 	}
 	
 	function copyAction(){
@@ -202,11 +202,10 @@ class Accounting_FeeController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-			
 		$_model = new Application_Model_GlobalClass();
-		$this->view->all_metion = $_model ->getAllMetionOption();
+// 		$this->view->all_metion = $_model ->getAllMetionOption();
 		$this->view->all_grade = $_model ->getAllFacultyOption();
-		$data=$this->view->all_session=$_model->getAllSession();
+// 		$data=$this->view->all_session=$_model->getAllSession();
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 			
@@ -227,9 +226,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		$this->view->branch = $db->getAllBranch();
 		
 		$row=0;$indexterm=1;$key=0;
-		
 		$rows = $db->getFeeDetailById($id);
-		//print_r($rows);exit();
 		$fee_row=1;$rs_rows=array();
 		if(!empty($rows))foreach($rows as $payment_tran){
 			if($payment_tran['payment_term']==1){
@@ -255,14 +252,15 @@ class Accounting_FeeController extends Zend_Controller_Action {
 			}
 		}
 		$this->view->rows =$rs_rows;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
+		
+		$db_gr=new Global_Model_DbTable_DbGrade();
+		$d_row=$db_gr->getNameGradeAll();
+		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->grade_name=$d_row;
+		
+		$dept = $db_gr->getAllDept();
+		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->dept = $dept;
+	}	
     
 }

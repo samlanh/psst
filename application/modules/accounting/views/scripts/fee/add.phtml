@@ -7,7 +7,6 @@
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 </script>
 <style>
@@ -32,7 +31,8 @@ dojo.ready(function(){
 		store: grade_store,
 		autoComplete: true,                        
 		id: "grade",
-		name: "grade",           
+		name: "grade",  
+		style:'height:40px !important',         
 		class: 'fullside',  
 		placeHolder:"Select Grade",          
 		onChange: function() {  
@@ -62,7 +62,7 @@ dojo.ready(function(){
 		}
 	}, "degree_popup1");	
 	
-	var metion = '<?php echo $this->all_metion; ?>';
+	var metion = '<?php echo $this->all_branch; ?>';
 	new dijit.form.FilteringSelect({
 		store: branch_store,
 		autoComplete: true,                        
@@ -84,6 +84,7 @@ dojo.ready(function(){
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
 		identity = dijit.byId('identity').get('value');
+alert(identity);
 		if(identity==''){
 			alert('Please set fee for grade !!! ');
 			return false;
@@ -122,10 +123,13 @@ dojo.ready(function(){
 						<tr>
 							<td style="white-space: nowrap;"><?php echo $tr->translate("BRANCH");?></td>
 							<td><input id="branch" /></td>		
-							<td><?php echo $tr->translate("GRADE");?></td>
-							<td><input id="grade" name="grade" /></td>
 							<td><?php echo $tr->translate("NOTE");?></td>
-							<td><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note"  type="text"></td>
+							<td ><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note"  type="text"></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("GRADE");?></td>
+							<td colspan="3"><input id="grade" name="grade" /></td>
+							<td></td>
 						</tr>
 					</table>
 					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
@@ -243,7 +247,7 @@ dojo.ready(function(){
 <?php  $frm = $this->frm_branch;?>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:800px" id="popup_add_branch" >
-	<form  id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='frm_addbranch' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
 				return true;
@@ -378,27 +382,29 @@ function addGrade(){
 	}
 }
 function submitDataClose(){
-	condition = validateGrade();
-	if(condition==false){
-		alert("Please set fee to grade !!! ");
-		return false;
-	}
-	if(dijit.byId('frm_fee').validate()) {
-		dijit.byId('save_close').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
-		loading();
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("frm_fee"),		    
-			load: function(data) {
-				document.getElementsByClassName("overlay")[0].style.display="none";	
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/accounting/fee";
-			},
-			error: function(e) {
-			}
-		});
-	}
+	if(dijit.byId('frm_fee').validate()){
+		condition = validateGrade();
+		if(condition==false){
+			alert("Please set fee to grade !!! ");
+			return false;
+		}
+		if(dijit.byId('frm_fee').validate()) {
+			dijit.byId('save_close').set('disabled',true);
+			var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
+			loading();
+			dojo.xhrPost({
+			    url: url_submit,	
+				form: dojo.byId("frm_fee"),		    
+				load: function(data) {
+					document.getElementsByClassName("overlay")[0].style.display="none";	
+					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+					window.location.href ="<?php echo $this->baseUrl();?>/accounting/fee";
+				},
+				error: function(e) {
+				}
+			});
+		}
+}
 }
 function submitDataAddNew(){
 	condition = validateGrade();
@@ -428,6 +434,11 @@ function loading(){
 }
 function validateGrade(){
 	var identity = $('#identity').val();
+	if(identity==''){
+			alert("សូមជ្រើសរើសថ្នាក់សិក្សា !");
+			dijit.byId("grade").focus();
+			return false;
+		}
 	var arrays = identity.split(',');
 	for(var i=0;i<arrays.length;i++) {
 		grade = dijit.byId('class_'+arrays[i]).get('value');
@@ -513,9 +524,10 @@ function branch(){
 var b_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->branchopt));?> );
 var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
 	function addBranch(){
+		if(dijit.byId('frm_addbranch').validate()){
 		dojo.xhrPost({
 				url:url_addbranch,
-				form: dojo.byId("frm_add_tran"),
+				form: dojo.byId("frm_addbranch"),
 				handleAs:"json",
 				load: function(data) {
 					var Itemmake = { 
@@ -523,15 +535,16 @@ var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'
 							 name: dijit.byId('branch_nameen').get('value')
 						   };
 			   addDataToSelectbox(dijit.byId('branch'), b_store, Itemmake, data);
-			   dijit.byId('frm_add_tran').reset();
+			   dijit.byId('frm_addbranch').reset();
 			   dijit.byId("popup_add_branch").hide();	
 			},
 			error: function(err) {
 			}
 	});
 }
+}
 function hideDialog(){
-	dijit.byId('frm_add_tran').reset();
+	dijit.byId('frm_addbranch').reset();
 	dijit.byId("popup_add_branch").hide();
 }
 </script>

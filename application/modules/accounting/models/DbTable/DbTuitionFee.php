@@ -13,7 +13,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     	$sql = "SELECT t.id,
     				  (select CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
 					  CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
-					  
 					  t.create_date,  
 					  (select name_en from rms_view where type=12 and key_code=t.is_finished) as is_finished 
 					  FROM `rms_tuitionfee` AS t

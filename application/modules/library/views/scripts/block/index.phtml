@@ -18,10 +18,13 @@
 </style>
 <div dojoType="dijit.layout.AccordionPane">
 <form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-	<?php echo $frm->getElement("title");?>
-	<?php echo $frm->getElement('status_search');?>
-	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+	<table>
+		<tr>
+			<td><?php echo $frm->getElement("title");?></td>
+			<td><?php echo $frm->getElement('status_search');?></td>
+			<td><button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+		</tr>
+	</table>
 </form>
-
 </div>
 <?php echo $this->list;?>

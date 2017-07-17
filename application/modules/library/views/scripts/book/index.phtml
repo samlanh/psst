@@ -20,20 +20,20 @@
 </style>
 <script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
+    //dojo.require("dojo.NodeList-manipulate");
 </script>
-<div dojoType="dijit.layout.AccordionPane">
 <form id="frm_search" name="frm_search" action="" dojoType="dijit.form.Form" method="post">
-	<div style="width: 95px;border:1px solid #ccc;border-radius:10px;background:#eeeeee;"><?php echo $formList->showCopyBuntton($url_copy);?></div>
-	<?php echo $frm->getElement("title");?>
-	<?php echo $frm->getElement("block_id");?>
-	<?php echo $frm->getElement('parent');?>
-	<?php echo $frm->getElement('status_search');?>
-	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+	<table>
+		<tr>
+			<td><?php echo $formList->showCopyBuntton($url_copy);?></td>
+			<td><?php echo $frm->getElement("title");?></td>
+			<td><?php echo $frm->getElement("block_id");?></td>
+			<td><?php echo $frm->getElement('parent');?></td>
+			<td><?php echo $frm->getElement('status_search');?></td>
+			<td><button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+		</tr>
+	</table>
 </form>
-
-</div>
 <table class="collape tablesorter" id="table"  width="100%" style="white-space: nowrap;font-size: 100%;font-family: 'Khmer OS Battambang';" >
       <thead>
 	        <tr><input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" /></tr>
@@ -122,7 +122,6 @@ dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
-
 	function copyRecord(url){
 		 id = dijit.byId('recordcopy').get('value');
 		 if(id!=''){

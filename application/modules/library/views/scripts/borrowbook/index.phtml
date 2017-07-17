@@ -16,14 +16,16 @@
 	    width: 35px;
 	}
 </style>
-<div dojoType="dijit.layout.AccordionPane">
 <form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-	<?php echo $frm->getElement("title");?>
-	<?php echo $frm->getElement('stu_name');?>
-	<?php echo $frm->getElement('start_date');?>
-	<?php echo $frm->getElement('end_date');?>
-	<?php echo $frm->getElement('status_search');?>
-	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+	<table width="100%">
+		<tr>
+			<td><?php echo $frm->getElement("title");?></td>
+			<td><?php echo $frm->getElement('stu_name');?></td>
+			<td><?php echo $frm->getElement('start_date');?></td>
+			<td><?php echo $frm->getElement('end_date');?></td>
+			<td><?php echo $frm->getElement('status_search');?></td>
+			<td><button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+		</tr>
+	</table>
 </form>
-</div>
  <?php echo $this->list?>

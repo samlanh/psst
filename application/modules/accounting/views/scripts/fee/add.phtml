@@ -530,6 +530,10 @@ var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'
 			}
 	});
 }
+function hideDialog(){
+	dijit.byId('frm_add_tran').reset();
+	dijit.byId("popup_add_branch").hide();
+}
 </script>
 <div class="overlay">
 	<div class="overlay-load">

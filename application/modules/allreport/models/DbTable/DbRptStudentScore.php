@@ -204,9 +204,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				st.`stu_enname`,
 				st.`stu_khname`,
 				st.`sex`,
-				s.`reportdate`,
 				(select month_kh from rms_month where rms_month.id = s.for_month) as for_month,
-				s.for_semester
+				s.for_semester,
+				
+				SUM(sd.`score`) AS total_score,
+				AVG(sd.score) AS average
+				
 		 FROM `rms_score` AS s, 
 			 `rms_score_detail` AS sd,
 			 `rms_student` AS st,
@@ -215,6 +218,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		 	s.`id`=sd.`score_id` 
 		 	AND st.`stu_id`=sd.`student_id`
 		 	AND g.`id`=sd.`group_id` 
+		 	and sd.`is_parent`=1
 		 	AND s.status = 1 
 		 	AND `g`.`degree` IN (1,2,3)
 		 	and s.type_score=1
@@ -248,7 +252,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	
    	//echo $sql.$where;
    	
-   	$order = "  GROUP BY sd.`student_id`,s.`reportdate` ORDER BY s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id`  ASC";
+   	$order = "  GROUP BY sd.`student_id`,s.`reportdate` ORDER BY average DESC ,  s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id`  ASC";
    	return $db->fetchAll($sql.$where.$order);
    }
    

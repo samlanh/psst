@@ -141,7 +141,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getAllDegreeName(){
    	$db = $this->getAdapter();
-   	$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 ORDER BY id ASC";
+   	$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 and en_name!='' ORDER BY id ASC";
    	return $db->fetchAll($sql);
    }
    

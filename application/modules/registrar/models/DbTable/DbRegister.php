@@ -1602,7 +1602,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     function getAllGrade($grade_id){
     	$db = $this->getAdapter();
-    	$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and dept_id=".$grade_id;
+    	$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and major_enname!='' and dept_id=".$grade_id;
     	$order=' ORDER BY id DESC';
     	return $db->fetchAll($sql.$order);
     }

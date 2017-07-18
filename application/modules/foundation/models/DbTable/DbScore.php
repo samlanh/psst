@@ -140,13 +140,14 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'status'=>$_data['status'],
 					'user_id'=>$this->getUserId(),
 					
-					'for_academic_year'=>$_data['status'],
-					'for_semester'=>$_data['status'],
-					'for_month'=>$_data['status'],
+					'for_academic_year'=>$_data['year_study'],
+					'for_semester'=>$_data['for_semester'],
+					'for_month'=>$_data['for_month'],
 			);
 		$where="id=".$_data['score_id'];
 		$db->getProfiler()->setEnabled(true);
 		$this->update($_arr, $where);
+		
 		$id=$_data['score_id'];
 		
 		$this->_name='rms_score_detail';
@@ -161,16 +162,21 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						foreach ($this->getSubjectByGroup($_data['group']) as $index => $rs_parent){
 							$parent_id = $rs_parent["subject_id"];
 								if(!empty($this->getChildSubject($parent_id))){
-// 									$count = count($this->getChildSubject($parent_id));
-									$parent_score = 0;
-									foreach ($this->getChildSubject($parent_id) as $key => $rs_subs){
-										$sub_name = str_replace(' ','',$rs_subs["subject_titleen"]);
-										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-										$subject_id = $rs_parent['subject_id'];
-										$no = $key+1;
-										$parent_score = $parent_score + $_data["$sub_name".$no];
+									$no = $index + 1;
+// 									$parent_score = 0;
+// 									foreach ($this->getChildSubject($parent_id) as $key => $rs_subs){
+// 										$sub_name = str_replace(' ','',$rs_subs["subject_titleen"]);
+// 										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
+// 										$subject_id = $rs_parent['subject_id'];
+// 										$no = $key+1;
+// 										$parent_score = $parent_score + $_data["$sub_name".$no];
 										
-									}
+// 									}
+									
+									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
+									$sub_name = $_data['stu_id_'.$k].$sub_name;
+									$subject_id = $rs_parent['subject_id'];
+									
 									
 // 									if(!$_data["$sub_name".$i]==''){
 									$arr=array(
@@ -178,7 +184,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 											'group_id'=>$_data['group'],
 											'student_id'=>$_data['stu_id_'.$k],
 											'subject_id'=> $subject_id,
-											'score'=> $parent_score,
+											'score'=> $_data["$sub_name".$no],
 											'status'=>1,
 											'user_id'=>$this->getUserId(),
 											'is_parent'=> $rs_parent["is_parent"]
@@ -191,7 +197,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 										$subject_id = $rs_sub["id"];
 										$sub_name = str_replace(' ','',$rs_sub["subject_titleen"]);
 										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-										if(!$_data["$sub_name".$no2]==''){
+										//if(!$_data["$sub_name".$no2]==''){
 										$arr=array(
 												'score_id'=>$id,
 												'group_id'=>$_data['group'],
@@ -204,14 +210,14 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 										);
 										$this->_name='rms_score_detail';
 										$this->insert($arr);
-									  }
+									    //}
 									}
 								}else{/////////if parent have not subjects
 									$no3 = $index+1;
 									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
 									$sub_name = $_data['stu_id_'.$k].$sub_name;
 									$subject_id = $rs_parent['subject_id'];
-									if(!$_data["$sub_name".$no3]==''){
+									//if($_data["$sub_name".$no3]==''){
 									$arr=array(
 											'score_id'=>$id,
 											'group_id'=>$_data['group'],
@@ -224,7 +230,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 									);
 									$this->_name='rms_score_detail';
 									$this->insert($arr);
-								  }
+								    //}
 								}
 						}
 				}

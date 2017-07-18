@@ -63,6 +63,7 @@
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallModel(dept_id,a){
+		//alert(10);
 			dojo.xhrPost({
 				url:url_dept,
 				content:{
@@ -257,16 +258,16 @@
 			}else if(payment_term==4){
 				mm = a.getMonth()+12+1;
 			}
-				var dd = a.getDate();
-				 if(dd<10){
-					 dd = "0"+dd;
-				}
-				 if(mm<10){
-					 mm = "0"+mm;
-				}
-				var y = a.getFullYear();
-				var epx_date = y + '-'+ mm + '-'+dd ;
-				dijit.byId('end_date').attr('value',epx_date);	
+			var dd = a.getDate();
+			 if(dd<10){
+				 dd = "0"+dd;
+			}
+			 if(mm<10){
+				 mm = "0"+mm;
+			}
+			var y = a.getFullYear();
+			var epx_date = y + '-'+ mm + '-'+dd ;
+			dijit.byId('end_date').attr('value',epx_date);	
 	}
 	function getTestFee(){
 		student_type = dijit.byId('student_type').get('value');
@@ -491,7 +492,7 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("VALIDATE");?></td>
-								<td><input type="text" constraints="{datePattern:'dd/MM/yyyy'}" name="end_date" id="end_date" class="fullside" dojoType="dijit.form.DateTextBox"/>
+								<td><input type="text" constraints="{datePattern:'dd/MM/yyyy'}" required="true" name="end_date" id="end_date" class="fullside" dojoType="dijit.form.DateTextBox"/>
 								</td>
 							</tr>
 							<tr>
@@ -631,7 +632,12 @@ function getInfoBygroup(){
 	url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 	group = dijit.byId('group').get('value');
 	if(group==-1){
-		alert("Please Select Group");
+		//alert("Please Select Group");
+		dijit.byId('study_year').set('readOnly',false);
+		dijit.byId('dept').set('readOnly',false);
+		dijit.byId('grade').set('readOnly',false);
+		dijit.byId('session').set('readOnly',false);
+		dijit.byId('room').set('readOnly',false);
 		return false;
 	}
 	dojo.xhrPost({
@@ -661,11 +667,14 @@ function getInfoBygroup(){
 function test1(){
 }
 function submitDataClose(){
+	
 	condition = checkValidateAddRow();
 	if(condition==false){
 		alert("Please select service or product !!! ");
 		return false;
 	}
+	
+		
 	if(dijit.byId('office_receipt').validate()) {
 		
 		dijit.byId('save_close').set('disabled',true);
@@ -1042,13 +1051,20 @@ function getOldStudentInfo(){
 					if(data.group_id != null){
 						dijit.byId('group').attr('value',data.group_id);
 						getInfoBygroup();
+					}else{
+						dijit.byId('group').attr('value',-1);
+						dijit.byId('study_year').attr('value',data.academic_year);
+						dijit.byId('dept').attr('value',data.degree);
+						dijit.byId('session').attr('value',data.session);
+						dijit.byId('room').attr('value',data.room);
+						getallModel(data.degree,data.grade);
 					}
 					dijit.byId('kh_name').attr('value',data.stu_khname);
 					dijit.byId('en_name').attr('value',data.stu_enname);
 					dijit.byId('sex').attr('value',data.sex);
 					dijit.byId('parent_phone').attr('value',data.tel);
 					dijit.byId('dob').attr('value',data.dob);
-					getallModel(data.degree,data.grade);
+					
 			  }else {
 			  } 
 		},
@@ -1193,6 +1209,9 @@ function deleteRecord(index) {
 		 else if(term==4){
 			 var a = new Date(start_date);
 			  mm = a.getMonth()+(amount*12)+1;
+		 }else{
+			 var a = new Date(start_date);
+			  mm = a.getMonth()+1;
 		 }
 		 var dd = a.getDate();
 		  if(dd<10){
@@ -1204,6 +1223,11 @@ function deleteRecord(index) {
 		 var y = a.getFullYear();
 		 var epx_date = y + '-' + mm + '-' + dd ;
 		 dijit.byId('validate_'+key).attr('value',epx_date);
+		 
+		 if(term==5){
+			dijit.byId("validate_"+key).attr("value",'');
+		 }
+		 
 	 }
  }
 	function getTotale(){
@@ -1378,6 +1402,13 @@ function getservicefee(key){
  			studentid = dijit.byId('old_studens').get('value');
  			service_id = dijit.byId('service_'+key).get('value');
  			term = dijit.byId('term_'+key).get('value');
+			
+			if(term==5){
+				dijit.byId("price_"+key).attr("value",0);
+				calculateTotal(key);
+				return 0;
+			}
+			
  			//year = dijit.byId('study_year').get('value');
  			//alert(year);
  			dojo.xhrPost({
@@ -1411,6 +1442,13 @@ function getservicefee(key){
 	 		studentid = 0;
  			service_id = dijit.byId('service_'+key).get('value');
  			term = dijit.byId('term_'+key).get('value');
+			
+			if(term==5){
+				dijit.byId("price_"+key).attr("value",0);
+				calculateTotal(key);
+				return 0;
+			}
+			
 			if(service_id==''){
 				service_id=0;
 			}
@@ -1856,16 +1894,21 @@ function getservicefee(key){
 	}
 	
 	function checkValidateAddRow(){
-		var rowId = $('#identity').val();
-		//alert(rowId);
-		if(rowId!=''){
-			var rowIDArray = rowId.split(',');
-			for(var n = 0; n < rowIDArray.length; n++) {
-				service_id = dijit.byId('service_'+rowIDArray[n]).get('value');
-				if(service_id==''){
-					return false;
+		payment_type = dijit.byId('payment_type').get('value');
+		if(payment_type!=2)	{
+			var rowId = $('#identity').val();
+			//alert(rowId);
+			if(rowId!=''){
+				var rowIDArray = rowId.split(',');
+				for(var n = 0; n < rowIDArray.length; n++) {
+					service_id = dijit.byId('service_'+rowIDArray[n]).get('value');
+					if(service_id==''){
+						return false;
+					}
 				}
 			}
+		}else{
+			return true;
 		}
 	}
 	

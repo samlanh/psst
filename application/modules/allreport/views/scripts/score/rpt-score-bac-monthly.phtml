@@ -93,8 +93,8 @@ dojo.ready(function(){
 					<td colspan="3">
 						<table  cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;"  border="1" >
 							<?php
-							 $old_groupid=0; $i=0; $count_fail=0; $count=0;
-							 if (!empty($this->studentgroup)) foreach($this->studentgroup as $key=> $rs){ 
+							 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_average = 0; $old_rank=0;
+							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
 								if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
 								$subj = $db->getSubjectScoreGroup($rs['group_id']);
 							?>
@@ -140,6 +140,7 @@ dojo.ready(function(){
 								<td><?php echo $tr->translate("AVERAGE");?></td>
 								
 								<td><?php echo $tr->translate("");?></td>
+								<td><?php echo $tr->translate("Rank");?></td>
 							</tr>
 							<?php } $i++;?>
 							<tr class="style" style=" line-height: 18px;">
@@ -147,19 +148,28 @@ dojo.ready(function(){
 								<td align="center" style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_code'];?>&nbsp;</td>
 								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
-								<?php $total_score =0; $subj = $db->getSubjectScoreGroup($rs['group_id']); if (!empty($subj)) foreach ($subj as $subject){?>
-								<td align="center"><?php $score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); echo number_format($score['score'],2); $total_score = $total_score + $score['score'];?></td>
+								<?php 
+									$total_score = 0; 
+									$subj = $db->getSubjectScoreGroup($rs['group_id']); 
+									if (!empty($subj)) foreach ($subj as $subject){
+								?>
+								<td align="center">
+									<?php $score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); echo number_format($score['score'],2); $total_score = $total_score + $score['score'];?>
+								</td>
 								<?php }?>
 								
-								<td align="center"><?php echo number_format($total_score,2);?></td>
-								<td align="center"><?php echo number_format($total_score/$count,2);?></td>
+								<td align="center"><?php echo number_format($rs['total_score'],2);?></td>
+								<td align="center"><?php echo number_format($rs['average'],2);// Average ?></td>
 								
 								<td align="center" <?php if(($total_score/$count)<50){echo 'style=" background: #fe4747;"'; $count_fail++;}?>>
 									<?php if(($total_score/$count)>=50){echo $tr->translate("PASS");}else{echo $tr->translate("FAIL");}?>
 								</td>
+								<td>
+									<label id="record<?php echo $i;?>"></label>
+								</td>
 							</tr>
 							<?php $old_groupid=$rs['group_id']; ?>
-							<?php }?>
+							<?php }}?>
 							<?php if (!empty($this->studentgroup)){?>
 							<tr>
 								<td align="right" colspan="<?php echo $count+7;?>" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;  border-bottom: 1px solid #fff;" >

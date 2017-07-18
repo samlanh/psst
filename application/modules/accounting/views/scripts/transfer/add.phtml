@@ -60,24 +60,9 @@
 									</tr>
 									<tr>
 										<td><?php echo $tr->translate("FORM_LOCATION");?></td>
-										<td>
-											<select name="from_location" id="from_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
-											   <?php 
-											    if(!empty($this->rsbranch)){
-											    foreach($this->rsbranch as $rs){?>
-											    	<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
-											    <?php }}?>
-											</select>
-										</td>
+										<td><input id="f_branch" /></td>
 										<td><?php echo $tr->translate("TO_LOCATION");?></td>
-										<td><select name="to_location" id="to_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
-											    <?php 
-											    if(!empty($this->rsbranch)){
-											   	 foreach($this->rsbranch as $rs){?>
-											    	<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
-											    <?php }}?>
-											</select>
-										</td>
+										<td><input id="branch" /></td>
 									</tr>
 									<tr>
 										<td><?php echo $tr->translate("REMARK");?></td>
@@ -130,76 +115,211 @@
 	</table>	
 </form> 
 <script>
-index=0;
-function getProductName() {
-	index++;
-	location_id = dijit.byId("from_location").get("value");
-	pro_id=dijit.byId("pro_id").get("value");
-	getcurrentproduct(pro_id,location_id,index);
-			if(index==1){
-				temp='';
-				temp+='<td >NO</td>';
-				temp+='<td >ឈ្មោះផលិតផល</td>';
-				temp+='<td >CURR_QTY</td>';
-				temp+='<td >QTY_TRANSFER</td>';
-				temp+='<td >ផ្សេងៗ</td>';
-				temp+='<td >លុប</td>';
-				dojo.query("#head-title").append(temp);
-			}
-		    pro_name = dijit.byId("pro_id").attr('displayedValue')
-			template='<td width="2%" align="center">'+index+'</td>';
-			template+='<td >'+pro_name+'<input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
-			template+='<td ><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
-			template+='<td ><input onkeyup="checkCurrentStock('+index+')" dojoType="dijit.form.NumberTextBox" required="1" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
-			template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
-			template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
-		tmp='<tr id="row'+index+'">';
-		tmp+="</tr>";
-		dojo.query("#table_row").append(tmp);
-		dojo.html.set(dojo.byId("row"+index),template , {
-		     parseContent: true,
-		});
-		dijit.byId("pro_id_"+index).attr("value",pro_id);
-		if($('#identity').val()!="") {
-			var identity = $('#identity').val();
-			$('#identity').val(identity+','+index);
-		} else {$('#identity').val(index);}
-		var inp = '';
-}
-function checkCurrentStock(index){
-	currqty = dijit.byId("currqty_"+index).get("value");
-	qty = dijit.byId("qty_"+index).get("value");
-	if(qty>currqty){
-     alert("ចំនួនទំនិញដែលត្រូវផ្ទេរមិនអាច លើសកំណត់បានទេ !");
-	 dijit.byId("qty_"+index).attr("value",currqty);
-	 dijit.byId("qty_"+index).focus();
+	index=0;
+	function getProductName() {
+		index++;
+		location_id = dijit.byId("from_location").get("value");
+		pro_id=dijit.byId("pro_id").get("value");
+		getcurrentproduct(pro_id,location_id,index);
+				if(index==1){
+					temp='';
+					temp+='<td >NO</td>';
+					temp+='<td >ឈ្មោះផលិតផល</td>';
+					temp+='<td >CURR_QTY</td>';
+					temp+='<td >QTY_TRANSFER</td>';
+					temp+='<td >ផ្សេងៗ</td>';
+					temp+='<td >លុប</td>';
+					dojo.query("#head-title").append(temp);
+				}
+				pro_name = dijit.byId("pro_id").attr('displayedValue')
+				template='<td width="2%" align="center">'+index+'</td>';
+				template+='<td >'+pro_name+'<input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
+				template+='<td ><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
+				template+='<td ><input onkeyup="checkCurrentStock('+index+')" dojoType="dijit.form.NumberTextBox" required="1" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+				template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
+				template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
+			tmp='<tr id="row'+index+'">';
+			tmp+="</tr>";
+			dojo.query("#table_row").append(tmp);
+			dojo.html.set(dojo.byId("row"+index),template , {
+				 parseContent: true,
+			});
+			dijit.byId("pro_id_"+index).attr("value",pro_id);
+			if($('#identity').val()!="") {
+				var identity = $('#identity').val();
+				$('#identity').val(identity+','+index);
+			} else {$('#identity').val(index);}
+			var inp = '';
 	}
-}
-var url_getproduct = '<?php echo $this->url(array('module'=>'accounting','controller'=>'transfer','action'=>'getcurrentproduct')); ?>';
-function getcurrentproduct(pro_id,location_id,index){
-	dojo.xhrPost({
-		url:url_getproduct,
-		content:{
-			'pro_id':pro_id,
-			'location_id':location_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			dijit.byId("currqty_"+index).attr("value",data.pro_qty);
-		},
-		error: function(err) {
-			alert(err);
+	function checkCurrentStock(index){
+		currqty = dijit.byId("currqty_"+index).get("value");
+		qty = dijit.byId("qty_"+index).get("value");
+		if(qty>currqty){
+		 alert("ចំនួនទំនិញដែលត្រូវផ្ទេរមិនអាច លើសកំណត់បានទេ !");
+		 dijit.byId("qty_"+index).attr("value",currqty);
+		 dijit.byId("qty_"+index).focus();
 		}
-	});
-}
-function deleteRecord(index) {
-	var identity = $('#identity').val();
-	var arrays = identity.split(',');
-	for(var i=0;i<arrays.length;i++) {
-	if(arrays[i] == index) arrays.splice(i,1);
 	}
-	var strings = arrays.join(',');
-	$('#identity').val(strings);
-	dojo.query("#row"+index).remove();
-}
+	var url_getproduct = '<?php echo $this->url(array('module'=>'accounting','controller'=>'transfer','action'=>'getcurrentproduct')); ?>';
+	function getcurrentproduct(pro_id,location_id,index){
+		dojo.xhrPost({
+			url:url_getproduct,
+			content:{
+				'pro_id':pro_id,
+				'location_id':location_id
+				},
+			handleAs:"json",
+			load: function(data) {
+				dijit.byId("currqty_"+index).attr("value",data.pro_qty);
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
+	}
+	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+		store: branch_store,
+		autoComplete: true,                        
+		required: true,
+		id: "branch",
+		name: "branch",           
+		class: "full", 
+		placeHolder:"Selected Branch",          
+		onChange: function() {  
+			branch_id = dijit.byId('branch').get('value');
+			if(branch_id==-1){
+				dijit.byId("popup_add_branch").show();
+				}
+			}
+		}, "branch");	
+		
+		new dijit.form.FilteringSelect({
+		store: branch_store,
+		autoComplete: true,                        
+		required: true,
+		id: "f_branch",
+		name: "f_branch",           
+		class: "full", 
+		placeHolder:"Selected Branch",          
+		onChange: function() {  
+			branch_id = dijit.byId('f_branch').get('value');
+			if(branch_id==-1){
+				dijit.byId("popup_add_branch").show();
+				}
+			}
+		}, "f_branch");
+		
+	});
+	
+	var b_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->branchopt));?> );
+	var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
+	function addBranch(){
+		dojo.xhrPost({
+				url:url_addbranch,
+				form: dojo.byId("frm_add_tran"),
+				handleAs:"json",
+				load: function(data) {
+					var Itemmake = { 
+							 id: data,
+							 name: dijit.byId('branch_nameen').get('value')
+						   };		   
+			    addDataToSelectbox(dijit.byId('branch'), b_store, Itemmake, data);
+			    dijit.byId('frm_add_tran').reset();
+			    dijit.byId("popup_add_branch").hide();	
+			},
+			error: function(err) {
+			}
+	});
+	}
 </script>
+<?php  $frm = $this->frm_branch;?>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:800px" id="popup_add_branch" >
+	<form  id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		 <script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			} else {
+				return false;
+			}
+		</script>
+		<table cellspacing="10" style="margin: 0 auto; width:100%">
+			<tr>
+				<td>
+					<fieldset>
+						<legend align="center"><strong><?php echo $tr->translate("បន្ថែមសាខា");?></strong></legend>
+						<table cellspacing="10" width="100%" >
+							<tr>
+								<td>
+									<table width="100%" cellspacing="10">
+										<tr>
+											<td><?php echo $tr->translate("CODE")?></td>
+											<td><?php echo $frm->getElement("branch_code");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("BRANCH_NAME")?></td>
+											<td><?php echo $frm->getElement("branch_nameen");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("PREFIX_CODE");?></td>
+											<td><?php echo $frm->getElement("prefix_code");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("MAIN_BRANCH")?></td>
+											<td><?php echo $frm->getElement("main_branch_id");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("ADDRESS")?></td>
+											<td><?php echo $frm->getElement("br_address");?></td>
+										</tr>
+									</table>
+								</td>
+								<td align="center" valign="top">
+									<table width="100%" cellspacing="10">
+										<tr>		
+											<td><?php echo $tr->translate("PHONE")?></td>
+											<td><?php echo $frm->getElement("branch_tel");?></td>	
+										</tr>
+										<tr>		
+											<td><?php echo $tr->translate("BRANCH_FAX")?></td>
+											<td><?php echo $frm->getElement("fax");?></td>	
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("NOTE")?></td>
+											<td><?php echo $frm->getElement("branch_note");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("STATUS")?></td>
+											<td><?php echo $frm->getElement("branch_status");?></td>
+										</tr>
+									</table>
+								</td>							
+							</tr>
+							<tr>
+								<td colspan="2" align="center" >
+									<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
+									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
+									<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
+									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addBranch();"/>
+								</td>
+							</tr>
+						</table>	
+					</fieldset>
+				</td>			
+			</tr>
+		</table>	
+		</form>
+	</div>
+</div>

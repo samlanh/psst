@@ -5,11 +5,15 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-studentpayment')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<input  dojoType="dijit.form.TextBox"   id="txtsearch" name="txtsearch" placeholder="Advance Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
-		<input  name="from_date" id="from_date" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->search['start_date'];?>" type="text">
-		<input  name="to_date" id="to_date" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->search['end_date'];?>" type="text">
-		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-</form>
+		<table width="100%">
+			<tr>
+				<td><input  dojoType="dijit.form.TextBox"   id="txtsearch" name="txtsearch" placeholder="Advance Search....." value="<?php echo $this->search['txtsearch'];?>" type="text"></td>
+				<td><input  name="from_date" id="from_date" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->search['start_date'];?>" type="text"></td>
+				<td><input  name="to_date" id="to_date" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->search['end_date'];?>" type="text"></td>
+				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+			</tr>
+		</table>
+		</form>
 <style>
 #footer{display: none;}
 </style>	

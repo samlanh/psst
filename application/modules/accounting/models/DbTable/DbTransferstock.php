@@ -31,7 +31,14 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     }
     function getTransferById($id){
     	$db = $this->getAdapter();
-    	$sql = "SELECT * FROM rms_transferstock WHERE id=".$id;
+    	$sql = "SELECT t.* ,
+				(SELECT b.branch_nameen  FROM rms_branch AS b WHERE b.br_id=t.from_location)AS f_branch ,
+				(SELECT b.branch_nameen  FROM rms_branch AS b WHERE b.br_id=t.to_location)AS t_branch 
+
+			FROM 
+				rms_transferstock AS t 
+			WHERE 
+				t.id='".$id."'";
     	return $db->fetchRow($sql);
     }
     function getTransferByIdDetail($id){

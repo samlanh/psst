@@ -120,7 +120,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 										<td><?php echo $tr->translate("TO_GROUP")?></td>
 										<td >
 											<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" onchange="toStudentGroup(2);popupAddGroup();">
-												<option value="-1"> Add New</option>
+												<option value="-1"><?php echo $tr->translate("ADD_NEW")?></option>
 												<?php if(!empty($this->row))foreach ($this->rows as $_row){?>
 													<option value="<?php echo $_row['id']?>" <?php if($_row['id']==$this->rs['to_group']) echo 'selected="selected"';?>><?php echo $_row['group_code']?></option>
 												<?php }?>
@@ -190,14 +190,6 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:28cm;" id="popup_dept" >
 		<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			script type="dojo/method" event="onSubmit">			
-				if(this.validate()) {
-					return true;
-	   			}else {
-					return false;
-	   			}
-			</script>
-			
 		<table width="100%">
 			<tr>
 				<td>
@@ -448,26 +440,48 @@ function HidePopupGroup(){
 	dijit.byId("popup_dept").hide();
 }
 
-var url_add_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentgroup','action'=>'add-group')); ?>';
+//var url_add_group = '<?php //echo $this->url(array('module'=>'foundation','controller'=>'studentgroup','action'=>'add-group')); ?>';
+var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_new));?> );
+var url_add_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'add-group')); ?>';
 function addGroup(){
-	//group_code= dijit.byId('group_code').get('value');
-	dojo.xhrPost({
-			url:url_add_group,
-			form: dojo.byId("frm_add_tran"),
-			handleAs:"json",
-			load: function(data) {
-				var Itemmake = {     
-					      id: data,
-					      name: dijit.byId('group_code').get('value')
-					    };
-		    addDataToSelectbox(dijit.byId('to_group'), group_store, Itemmake, data);
-		    dijit.byId('frm_add_tran').reset();
-		    dijit.byId("popup_dept").hide();
-			},
-			error: function(err) {
-				alert(err);
-			}
-	});
+	 if(dijit.byId('frm_add_tran').validate()){
+		group_code= dijit.byId('group_code').get('value');
+		academic_year=dijit.byId('academic_year').get('value');
+		degree_group=dijit.byId('degree_group').get('value');
+		room=dijit.byId('room').get('value');
+		if(academic_year=='' || academic_year==0){
+			alert('Please selecte academic year !');
+			return false;
+			dijit.byId('academic_year').focus();
+		}
+		if(degree_group=='' || degree_group==0){
+			alert('Please selecte degree!');
+			return false;
+			dijit.byId('degree_group').focus();
+		}
+		if(room=='' || room==0){
+			alert('Please room degree!');
+			return false;
+			dijit.byId('room').focus();
+		}
+		dojo.xhrPost({
+				url:url_add_group,
+				form: dojo.byId("frm_add_tran"),
+				handleAs:"json",
+				load: function(data) {
+					var Itemmake = {     
+						      id: data,
+						      name: dijit.byId('group_code').get('value')
+						    };
+			    addDataToSelectbox(dijit.byId('to_group'), group_store, Itemmake, data);
+			    dijit.byId('frm_add_tran').reset();
+			    dijit.byId("popup_dept").hide();
+				},
+				error: function(err) {
+					alert(err);
+				}
+		});
+	 }
 }
 
 function setEndDate(){

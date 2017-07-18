@@ -52,7 +52,6 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	
 	public function updateGroup($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();

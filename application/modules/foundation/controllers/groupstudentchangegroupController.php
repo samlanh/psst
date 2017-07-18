@@ -61,9 +61,11 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		
 		$this->view->row = $add =$_add->getfromGroup();
 		$this->view->rs = $add =$_add->gettoGroup();
+		$g_new=$_add->getGroupNewAll();
+		array_unshift($g_new,array ('id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->g_new=$g_new;
 		
 		$this->view->academy = $_add->getAllYears();
-		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $_db->getAllDegreeName();
 		
@@ -95,23 +97,18 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$db= new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 		$result = $db->getAllGroupStudentChangeGroupById($id);
 		$this->view->rs = $result;
-		
 		$this->view->studentpass = $db->selectStudentPass($result['from_group']);
-		
 		$_add = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-		
 		$this->view->row = $add =$_add->getfromGroup();
-		
+		$g_new=$_add->getGroupNewAll();
+		array_unshift($g_new,array ('id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->g_new=$g_new;
 		$this->view->rows = $add =$_add->gettoGroup();
-		
 		$this->view->academy = $_add->getAllYears();
-		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $_db->getAllFecultyName();
-		
 		$db=new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_session=$db->getSession();
-		
 		$room =  $db->getRoom();
 		array_unshift($room, array ( 'room_id' => 0, 'room_name' => 'Select Room') );
 		$this->view->room = $room;
@@ -157,6 +154,16 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 			exit();
 		}
 	}
+	
+    function addGroupAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+    		$student = $db->AddNewGroupAjax($data);
+    		print_r(Zend_Json::encode($student));
+    		exit();
+    	}
+    }
 	
 	
 }

@@ -22,7 +22,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	    }
 	    	$rows = $db->getAllBlock($search);
     				$list = new Application_Form_Frmtable();
-    				$collumns = array("BLOCK_NAME","REMARK","DATE","USER","STATUS");
+    				$collumns = array("BLOCK_NAME","REMARK","DATE","STATUS","USER");
     				$link=array(
     						'module'=>'library','controller'=>'block','action'=>'edit', 
     				);

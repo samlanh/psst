@@ -326,6 +326,10 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
 				
+			if(!empty($search['user'])){
+				$where.=" AND cp.user_id = ".$search['user'] ;
+			}
+			
 			$order=" ORDER By cp.id DESC ";
 				
 			// 				    	echo $sql.$where.$order;exit();

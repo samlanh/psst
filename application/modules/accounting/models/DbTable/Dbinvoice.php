@@ -7,7 +7,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     }
 	public function getinvoice($search){
 		$db= $this->getAdapter();
-		$sql="SELECT v.* ,s.stu_khname ,s.stu_code  FROM tb_invoice_account  AS v , rms_student AS s WHERE stu_id = student_id";
+		$sql="SELECT v.* ,s.stu_khname ,s.stu_code  FROM rms_invoice_account  AS v , rms_student AS s WHERE stu_id = student_id";
 		
 		$where="";
     	$from_date =(empty($search['start_date']))? '1': " v.start_date>= '".$search['start_date']." 00:00:00'";
@@ -35,12 +35,12 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	}
 	public function getinvoiceByid($id){
 		$db= $this->getAdapter();
-		$sql="SELECT v.* ,s.stu_khname ,s.stu_code  FROM tb_invoice_account  AS v , rms_student AS s WHERE stu_id = student_id and id='".$id."'";
+		$sql="SELECT v.* ,s.stu_khname ,s.stu_code  FROM rms_invoice_account  AS v , rms_student AS s WHERE stu_id = student_id and id='".$id."'";
 		return $db->fetchrow($sql);
 	}
 	public function getinvoiceservice($id){
 		$db= $this->getAdapter();
-		$sql="SELECT v.* , p.title AS title FROM tb_invoice_account_detail AS v , rms_program_name AS p WHERE vid='".$id."' AND p.service_id = v.service_id";
+		$sql="SELECT v.* , p.title AS title FROM rms_invoice_account_detail AS v , rms_program_name AS p WHERE vid='".$id."' AND p.service_id = v.service_id";
 		return $db->fetchAll($sql);
 	}
     public function addinviceaccount($data){
@@ -55,7 +55,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 						'totale_amount'=>$data['totle_amount'],
 		    			'user_id'=>$this->getUserId(),
 		    			);
-				$this->_name='tb_invoice_account';		
+				$this->_name='rms_invoice_account';		
 		    	$_id = $this->insert($arr);
 				$ids = explode(',', $data['identity']);
 				foreach ($ids as $i){
@@ -67,7 +67,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 						'end_date'=>$data['enddate_'.$i],
 						'remark'=>$data['remark_'.$i],
 						);
-					$this->_name='tb_invoice_account_detail';	
+					$this->_name='rms_invoice_account_detail';	
 					$this->insert($arr_s);
 				}
 		    	
@@ -87,13 +87,13 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 						'totale_amount'=>$data['totle_amount'],
 		    			'user_id'=>$this->getUserId(),
 		    			);
-				$this->_name='tb_invoice_account';	
+				$this->_name='rms_invoice_account';	
 				$where="id = '".$id."'";	
 		    	$this->update($arr,$where);
 				
 				$db = Zend_Db_Table::getDefaultAdapter();
 				$where = $db->quoteInto('vid = ?', $id);
-				$db->delete('tb_invoice_account_detail', $where);
+				$db->delete('rms_invoice_account_detail', $where);
 				
 				$ids = explode(',', $data['identity']);
 				foreach ($ids as $i){
@@ -105,7 +105,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 						'end_date'=>$data['enddate_'.$i],
 						'remark'=>$data['remark_'.$i],
 						);
-					$this->_name='tb_invoice_account_detail';	
+					$this->_name='rms_invoice_account_detail';	
 					$this->insert($arr_s);
 				}
 		    	
@@ -115,7 +115,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	}
 	public function getvCode(){
 		  $db = $this->getAdapter();
-		  $sql="SELECT v.id FROM `tb_invoice_account` AS v  ORDER BY v.`id` DESC LIMIT 1";
+		  $sql="SELECT v.id FROM `rms_invoice_account` AS v  ORDER BY v.`id` DESC LIMIT 1";
 		  $num = $db->fetchOne($sql);
 		  $num_lentgh = strlen((int)$num+1);
 		  $num = (int)$num+1;

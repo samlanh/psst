@@ -35,7 +35,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$db_years=new Registrar_Model_DbTable_DbRegister();
 		$years=$db_years->getAllYears();
 		$opt = array(''=>$this->tr->translate("SELECT_YEAR"));
-		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'].' '.$row['time'];
+		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'];
 		$generation->setMultiOptions($opt);
 		
 		$user = new Zend_Dojo_Form_Element_FilteringSelect('user');

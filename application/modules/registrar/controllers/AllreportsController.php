@@ -23,6 +23,10 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     			);
     		}
     		
+    		//Application_Form_FrmMessage::redirector('/rsvacl/acl/index');
+    		
+    		$this->_redirect("/registrar/allreports/rpt-daily");
+    		
     		if($search['type']==1){
 	    		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
 	    		$this->view->row = $db->getAllStudentPayment($search);

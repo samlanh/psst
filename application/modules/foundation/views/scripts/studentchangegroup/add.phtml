@@ -11,11 +11,32 @@ dojo.require("dijit.form.CheckBox");
 </script>
 <form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit">   
-   		if(this.validate()) {
-       		  return true;
-  		 }else {
-  			  return false;
-  		 }
+   		if(this.validate()){
+			stu_id = dijit.byId('studentid').get('value');
+			if(stu_id==0){
+				dijit.byId("studentid").focus();
+				alert("Select student !!! ");
+				return false;
+			}
+
+			to_group = dijit.byId("to_group").get('value');		
+			if(to_group==0){
+				alert("Select group !!! ");
+				dijit.byId("to_group").focus();
+				return false;
+			}
+		
+			from_group = dijit.byId("from_group").get('value');	
+			if(to_group==from_group){
+				alert("You can not change student to same group !!!");
+				dijit.byId("to_group").focus();
+				return false;
+			}
+
+       		return true;
+  		}else {
+  			return false;
+  		}
 	</script>
 	<table cellspacing="10" style="margin: 0 auto; width:100%">
 		<tr>

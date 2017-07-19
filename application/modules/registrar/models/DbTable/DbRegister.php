@@ -1536,7 +1536,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	
     	$db=$this->getAdapter();
     	$sql=" SELECT sp.id,sp.receipt_number,
-    			s.stu_code,s.stu_enname,s.sex,
+    			s.stu_code,
+    			CONCAT(s.stu_khname,'-',s.stu_enname) as name,
+    			s.sex,
     			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.year) AS year,
     	        (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree)AS degree,
 		       (SELECT CONCAT(major_enname) FROM rms_major WHERE major_id=sp.grade ) AS grade,

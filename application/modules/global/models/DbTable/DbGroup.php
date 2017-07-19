@@ -33,18 +33,22 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$id = $this->insert($_arr);
 			
 			$this->_name='rms_group_subject_detail';
-			$ids = explode(',', $_data['identity1']);
-			foreach ($ids as $i){
-				$arr = array(
-						'group_id'	=> $id,
-						'subject_id'=> $_data['group_subject_study_'.$i],
-						'status'    => $_data['status_'.$i],
-						'note'   	=> $_data['group_note_'.$i],
-						'date' 		=> date("Y-m-d"),
-						'user_id'	=> $this->getUserId()
-				);
-				$this->insert($arr);
+			
+			if(!empty($_data['identity1'])){
+				$ids = explode(',', $_data['identity1']);
+				foreach ($ids as $i){
+					$arr = array(
+							'group_id'	=> $id,
+							'subject_id'=> $_data['group_subject_study_'.$i],
+							'status'    => $_data['status_'.$i],
+							'note'   	=> $_data['group_note_'.$i],
+							'date' 		=> date("Y-m-d"),
+							'user_id'	=> $this->getUserId()
+					);
+					$this->insert($arr);
+				}
 			}
+			
 			return $db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
@@ -79,17 +83,19 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$where = 'group_id = '.$_data['id'];
 			$this->delete($where);
 			
-			$ids = explode(',', $_data['identity']);
-			foreach ($ids as $i){
-				$arr = array(
-						'group_id'	=> $_data['id'],
-						'subject_id'=> $_data['subject_study_'.$i],
-						'status'    => $_data['status_'.$i],
-						'note'   	=> $_data['note_'.$i],
-						'date' 		=> date("Y-m-d"),
-						'user_id'	=> $this->getUserId()
-				);
-				$this->insert($arr);
+			if(!empty($_data['identity'])){
+				$ids = explode(',', $_data['identity']);
+				foreach ($ids as $i){
+					$arr = array(
+							'group_id'	=> $_data['id'],
+							'subject_id'=> $_data['subject_study_'.$i],
+							'status'    => $_data['status_'.$i],
+							'note'   	=> $_data['note_'.$i],
+							'date' 		=> date("Y-m-d"),
+							'user_id'	=> $this->getUserId()
+					);
+					$this->insert($arr);
+				}
 			}
 			
 			return $db->commit();

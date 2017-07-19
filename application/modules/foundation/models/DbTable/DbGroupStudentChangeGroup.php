@@ -215,112 +215,118 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
  		$_db->beginTransaction();
 		try{	
 			
-			$_arr=array(
-						'user_id'=>$this->getUserId(),
-						'from_group'=>$_data['from_group'],
-						'to_group'=>$_data['to_group'],
-						'moving_date'=>$_data['moving_date'],
-						'note'=>$_data['note'],
-						'array_checkbox'=>$_data['identity'],
-						'status'=>$_data['status']
-					);
-			$where=" id = ".$id;
-			$this->update($_arr, $where);
-			
-			$this->_name='rms_group_detail_student';
-			$StudentOldGroup = $this->getAllStudentOldGroup($_data['from_group']);
-			if(!empty($StudentOldGroup)){
-				foreach($StudentOldGroup as $result){
-					$arra=array(
-							'is_pass'=>0,
-							);
-					$where=" gd_id=".$result['gd_id'];
-					
-					$this->update($arra, $where);
-				}
-			}
-			
-			
-			$this->_name='rms_group_detail_student';
-			$where = "old_group = ".$_data['from_group']." and group_id = ".$_data['old_to_group'];
-			$this->delete($where);
-			
-			$group_detail = $this->getGroupDetail($_data['to_group']);
-			if($group_detail['degree']==1){
-				$stu_type=3;
-			}else if($group_detail['degree']== 2 || $group_detail['degree']== 3 || $group_detail['degree']== 4){
-				$stu_type=1;
-			}else if($group_detail['degree'] > 4){
-				$stu_type=2;
-			}
-			
-			
-			
-					$idsss=explode(',', $_data['identity']);
-					foreach ($idsss as $k){
-						if(!empty($_data['checkbox'.$k])){
-							
-							$this->_name='rms_group_detail_student';
-							$is_pass=array(
-									'is_pass'	=>1,
-							);
-							$where = " stu_id=".$_data['stu_id_'.$k];
-							$this->update($is_pass, $where);
-							
-							
-							$this->_name='rms_group_detail_student';
-							$stu=array(
-								'group_id'	=>$_data['to_group'],
-								'stu_id'	=>$_data['stu_id_'.$k],
-								'user_id'	=>$this->getUserId(),
-								'status'	=>1,
-								//'date'		=>date('Y-m-d'),
-								'type'		=>1,
-								'old_group'	=>$_data['from_group'],
-							);
-							$this->insert($stu);
-							
-							$this->_name = 'rms_student';
-								$array=array(
-										'session'		=>$group_detail['session'],
-										'degree'		=>$group_detail['degree'],
-										'grade'			=>$group_detail['grade'],
-										'academic_year'	=>$group_detail['academic_year'],
-										'room'			=>$group_detail['room_id'],
-										'stu_type'		=>$stu_type,
+				$_arr=array(
+							'user_id'=>$this->getUserId(),
+							'from_group'=>$_data['from_group'],
+							'to_group'=>$_data['to_group'],
+							'moving_date'=>$_data['moving_date'],
+							'note'=>$_data['note'],
+							'array_checkbox'=>$_data['identity'],
+							'status'=>$_data['status']
+						);
+				$where=" id = ".$id;
+				$this->update($_arr, $where);
+				
+			if($_data['status']==1){
+				
+				$this->_name='rms_group_detail_student';
+				$StudentOldGroup = $this->getAllStudentOldGroup($_data['from_group']);
+				if(!empty($StudentOldGroup)){
+					foreach($StudentOldGroup as $result){
+						$arra=array(
+								'is_pass'=>0,
 								);
-								$where = " stu_id=".$_data['stu_id_'.$k];
-								$this->update($array, $where);
-							}
-						}
-
-			$this->_name = 'rms_group';
-			$group=array(
-					'is_use'	=>0,
-					'is_pass'	=>2,
-					
-				);
-			$where=" id=".$_data['old_to_group'];
-			$this->update($group, $where);
-
-			$this->_name = 'rms_group';
-			$group=array(
-					'is_use'	=>0,
-					'is_pass'	=>1,
-				);
-			$where=" id=".$_data['from_group'];
-			$this->update($group, $where);
-							
+						$where=" gd_id=".$result['gd_id'];
 						
-			$this->_name = 'rms_group';
-			$group=array(
-					'is_use'	=>1,
-					'is_pass'	=>0,
+						$this->update($arra, $where);
+					}
+				}
+				
+				$this->_name='rms_group_detail_student';
+				$where = "old_group = ".$_data['from_group']." and group_id = ".$_data['old_to_group'];
+				$this->delete($where);
+				
+				$group_detail = $this->getGroupDetail($_data['to_group']);
+				if($group_detail['degree']==1 || $group_detail['degree']==2){
+					$stu_type=1;    //  kid - 6
+				}else if($group_detail['degree']==3){
+					$stu_type=2;    // 7-12
+				}else{
+					$stu_type=3;	// eng and other subject
+				}
+				
+				$idsss=explode(',', $_data['identity']);
+				foreach ($idsss as $k){
+					if(!empty($_data['checkbox'.$k])){
+						
+						$this->_name='rms_group_detail_student';
+						$is_pass=array(
+								'is_pass'	=>1,
+						);
+						$where = " stu_id=".$_data['stu_id_'.$k];
+						$this->update($is_pass, $where);
+						
+						
+						$this->_name='rms_group_detail_student';
+						$stu=array(
+							'group_id'	=>$_data['to_group'],
+							'stu_id'	=>$_data['stu_id_'.$k],
+							'user_id'	=>$this->getUserId(),
+							'status'	=>1,
+							//'date'		=>date('Y-m-d'),
+							'type'		=>1,
+							'old_group'	=>$_data['from_group'],
+						);
+						$this->insert($stu);
+						
+						$this->_name = 'rms_student';
+						$array=array(
+								'session'		=>$group_detail['session'],
+								'degree'		=>$group_detail['degree'],
+								'grade'			=>$group_detail['grade'],
+								'academic_year'	=>$group_detail['academic_year'],
+								'room'			=>$group_detail['room_id'],
+								'stu_type'		=>$stu_type,
+								'group_id'		=>$_data['to_group'],
+						);
+						$where = " stu_id=".$_data['stu_id_'.$k];
+						$this->update($array, $where);
+					}
+				}
+	
+				$this->_name = 'rms_group';
+				$group=array(
+						'is_use'	=>0,
+						'is_pass'	=>2,
+						
 					);
-			$where=" id=".$_data['to_group'];
-			$this->update($group, $where);
+				$where=" id=".$_data['old_to_group'];
+				$this->update($group, $where);
+	
+				$this->_name = 'rms_group';
+				$group=array(
+						'is_use'	=>0,
+						'is_pass'	=>1,
+					);
+				$where=" id=".$_data['from_group'];
+				$this->update($group, $where);
+								
 							
+				$this->_name = 'rms_group';
+				$group=array(
+						'is_use'	=>1,
+						'is_pass'	=>0,
+						);
+				$where=" id=".$_data['to_group'];
+				$this->update($group, $where);
+			}else{
+				
+				
+				
+			}
+			
 			return $_db->commit();
+			
 		}catch(Exception $e){
 			$_db->rollBack();
 			echo $e->getMessage();exit();

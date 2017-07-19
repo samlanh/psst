@@ -242,7 +242,7 @@ dojo.require("dojo.store.Memory");
 				dojo.byId("lb_payment_method").innerHTML = dijit.byId("payment_method").attr('displayedValue');
 			}
 
-			dojo.byId("lb_total_income").innerHTML = dijit.byId("total_income").get('value');
+			dojo.byId("lb_total_income").innerHTML = "$ "+dijit.byId("total_income").get('value').toFixed(2);
 
 			var d = dijit.byId("date").get('value');
 			 if(d!=null){

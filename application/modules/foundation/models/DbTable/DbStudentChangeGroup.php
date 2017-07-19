@@ -102,6 +102,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 				$this->_name='rms_student_change_group';
 				$id = $this->insert($_arr);
 				
+				
 				$this->_name='rms_group_detail_student';
 				$arr= array(
 						'group_id'=>$_data['to_group'],
@@ -123,12 +124,13 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 				$this->_name='rms_student';
 				
 				$test = $this->getDegreeAndGradeToGroup($_data['to_group']);
-				if($test['degree']==1){
-					$stu_type=3;
-				}else if($test['degree']==2 || $test['degree']==3 || $test['degree']==4){
-					$stu_type=1;
-				}else if($test['degree']>4){
-					$stu_type=2;
+				
+				if($test['degree']==1 || $test['degree']==2){
+					$stu_type=1;    //  kid - 6
+				}else if($test['degree']==3){
+					$stu_type=2;    // 7-12
+				}else{
+					$stu_type=3;	// eng and other subject
 				}
 				$array = array(
 							'academic_year'	=>$test['academic_year'],
@@ -137,7 +139,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 							'session'		=>$test['session'],
 							'room'			=>$test['room_id'],
 							'stu_type'		=>$stu_type,
-							'group'			=>$_data['to_group'],
+							'group_id'		=>$_data['to_group'],
 						);
 				$where = " stu_id=".$_data['studentid'];
 				$this->update($array, $where);
@@ -146,7 +148,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 				
 			}catch(Exception $e){
 				$_db->rollBack();
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				echo $e->getMessage();
 			}
 	}
 	public function updateStudentChangeGroup($_data){
@@ -178,13 +180,15 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 				
 				$this->_name='rms_student';
 				$test = $this->getDegreeAndGradeToGroup($_data['to_group']);
-				if($test['degree']==1){
-					$stu_type=3;
-				}else if($test['degree']==2 || $test['degree']==3 || $test['degree']==4){
-					$stu_type=1;
-				}else if($test['degree']>4){
-					$stu_type=2;
+				
+				if($test['degree']==1 || $test['degree']==2){
+					$stu_type=1;    //  kid - 6
+				}else if($test['degree']==3){
+					$stu_type=2;    // 7-12
+				}else{
+					$stu_type=3;	// eng and other subject
 				}
+				
 				$array = array(
 						'academic_year'	=>$test['academic_year'],
 						'degree'		=>$test['degree'],
@@ -192,12 +196,11 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 						'session'		=>$test['session'],
 						'room'			=>$test['room_id'],
 						'stu_type'		=>$stu_type,
-						'group'			=>$_data['to_group'],
+						'group_id'			=>$_data['to_group'],
 				);
 				$where = " stu_id=".$_data['studentid'];
 				$this->update($array, $where);
 			}else{
-				
 				$_arr=array(
 						'user_id'	=>$this->getUserId(),
 						'status'	=>$_data['status'],
@@ -218,13 +221,15 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 				// update student info back to old_group
 				$this->_name='rms_student';
 				$test = $this->getDegreeAndGradeToGroup($_data['from_group']);
-				if($test['degree']==1){
-					$stu_type=3;
-				}else if($test['degree']==2 || $test['degree']==3 || $test['degree']==4){
-					$stu_type=1;
-				}else if($test['degree']>4){
-					$stu_type=2;
+				
+				if($test['degree']==1 || $test['degree']==2){
+					$stu_type=1;    //  kid - 6
+				}else if($test['degree']==3){
+					$stu_type=2;    // 7-12
+				}else{
+					$stu_type=3;	// eng and other subject
 				}
+				
 				$array = array(
 						'academic_year'	=>$test['academic_year'],
 						'degree'		=>$test['degree'],
@@ -232,18 +237,16 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 						'session'		=>$test['session'],
 						'room'			=>$test['room_id'],
 						'stu_type'		=>$stu_type,
-						'group'			=>$_data['from_group'],
+						'group_id'		=>$_data['from_group'],
 				);
 				$where = " stu_id=".$_data['studentid'];
 				$this->update($array, $where);
-				
-				
 			}
 			return $_db->commit();
 			
 		}catch(Exception $e){
 			$_db->rollBack();
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
 		}
 	}
 	function getAllGrade($grade_id){

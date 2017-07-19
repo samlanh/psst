@@ -783,7 +783,7 @@ function getMonthByNumber(m){
 				</style>
 				<tr>
 					<td colspan="10">
-						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px;white-space:nowrap;margin-top:-12px;line-height: 10px;">
+						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px;white-space:nowrap;margin-top:-10px;line-height: 11px;">
 							<tr >
 								<td width="10%"></td>
 								<td width="25%"></td>
@@ -792,7 +792,7 @@ function getMonthByNumber(m){
 								<td width="10%"></td>
 								<td width="20%"></td>
 							</tr>
-							<tr style="height: 15px;">
+							<tr>
 								<td>Student's ID </td>
 								<td> : &nbsp;&nbsp;<label id="lb_stu_id" class="one bold"></label></td>
 								<td>Dob</td>
@@ -903,10 +903,11 @@ function getMonthByNumber(m){
 
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div id="alertBeforePrint" data-dojo-type="dijit.Dialog" style="width:10cm;height: 5cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពបង្កាន់ដៃ");?>'"  >
-		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm; font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
+		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;color:red; font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
 			<tr>
-				<td align="center">
-					តើលោកអ្នកពិតជាចង់បោះពុម្ពបង្កាន់ដៃនេះ មែនទេ?
+				<td align="center" >
+					តើលោកអ្នកពិតជាចង់បោះពុម្ពបង្កាន់ដៃនេះ មែនទេ? <br />
+					Do you really want to print ?
 				</td>
 			</tr>
 			
@@ -1119,7 +1120,7 @@ function addRow() {
 			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td width="8%"> <input type="text" class="fullside" readonly="readonly" onkeyup="alerterror('+col+');netTotal('+col+');"  name="paidamount_'+col+'" value="0" id="paidamount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+="<td width='10%'> <input type='text' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" value='now' name='date_start_"+col+"' onchange='getValidate("+col+");' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
-			template+='<td width="10%"> <input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" required="true" dojoType="dijit.form.DateTextBox" /></td>';
+			template+='<td width="10%"> <input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
 			template+='<td width="8%"> <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ...." style="width:140px;" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -1492,6 +1493,9 @@ function getservicefee(key){
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
 			dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
+			
+			dojo.byId("lb_dob").innerHTML = dijit.byId("dob").attr('displayedValue');
+			
 			dojo.byId("lb_name").innerHTML = dijit.byId("kh_name").get('value')+" - "+dijit.byId("en_name").get('value');
 			dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
 			dojo.byId("lb_dept").innerHTML = dijit.byId('dept').attr('displayedValue');
@@ -1748,9 +1752,6 @@ function getservicefee(key){
 					  temp+='</tr>';
 					}
 				}
-				for(i;i<=10;i++){
-					 temp+='<tr style="border:1px solid #000; height:10px !important;font-size:10px;"><td align="center" style="border:1px solid #000;">&nbsp;'+i+'</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td><td style="border:1px solid #000;">&nbsp;</td></tr>';
-					}
 				temp+='</table>';
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
 			dijit.byId("terms").show();	

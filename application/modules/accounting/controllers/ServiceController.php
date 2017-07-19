@@ -94,7 +94,7 @@ public function editAction(){
 		}
 	}
 	$db = new Accounting_Model_DbTable_DbService();
-	$rs= $db->getServiceType(1);
+	$rs= $db->getServiceType(2);
 	array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 	$this->view->service = $rs;
 	

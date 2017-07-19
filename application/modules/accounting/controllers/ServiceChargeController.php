@@ -160,7 +160,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 		
 		$_model = new Application_Model_GlobalClass();
 		$this->view->all_metion = $_model ->getAllMetionOption();
-		$this->view->all_faculty = $_model->getAllServiceItemOption(1);
+		$this->view->all_faculty = $_model->getAllServiceItemOption(2);
 // 		$this->view->all_faculty = $_model ->getAllFacultyOption();
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm();

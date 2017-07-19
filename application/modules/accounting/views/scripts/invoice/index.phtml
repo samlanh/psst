@@ -2,6 +2,7 @@
 $request = Zend_Controller_Front::getInstance ()->getRequest ();
 $tr = Application_Form_FrmLanguages::getCurrentlanguage ();
 $frm = $this->form_search;
+$formList = new Application_Form_Frmtable();
 ?>
 <title><?php echo $tr->translate("INVOICE");?></title>
 <style>
@@ -37,8 +38,8 @@ $frm = $this->form_search;
 					<?php }}?>
 				</select>
 			</td>
-			<td><input type="text" name="form_date" id="from_date" class="fullside" placeholder="<?php echo $tr->translate("From Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
-			<td><input type="text" name="to_date" id="to_date" class="fullside" placeholder="<?php echo $tr->translate("to Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
+			<td><input type="text" name="form_date" id="from_date" constraints="{datePattern:'dd/MM/yyyy'}" value="now" class="fullside" placeholder="<?php echo $tr->translate("From Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
+			<td><input type="text" name="to_date" id="to_date" constraints="{datePattern:'dd/MM/yyyy'}" value="now" class="fullside" placeholder="<?php echo $tr->translate("to Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -46,29 +47,12 @@ $frm = $this->form_search;
 		</tr>
 	</table>
 </form>
-<table class="table" >
-    <tr style="background: #04a2e0;">
-	    <td><?php echo $tr->translate("N_O");?></td>
-		<td><?php echo $tr->translate("STUDENT_ID");?></td>
-		<td><?php echo $tr->translate("STUDENT_NAME");?></td>
-		<td><?php echo $tr->translate("INVOICE_DATE");?></td>
-		<td><?php echo $tr->translate("INVOICE_NUM");?></td>
-		<td><?php echo $tr->translate("INPUT_DATE");?></td>
-		<td><?php echo $tr->translate("REMARK");?></td>
-		<td><?php echo $tr->translate("AMOUNT");?></td>
-	</tr>
-	<?php if(!empty($this->all_invoice)){ foreach($this->all_invoice as $key=>$rs){ $key=$key+1; ?>
-	<tr>
-	    <td><?php echo $key; ?></td>
-	    <td><a href="<?php echo $this->baseurl();?>/accounting/invoice/edit/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
-		<td><a href="<?php echo $this->baseurl();?>/accounting/invoice/edit/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']; ?></a></td>
-		<td><?php echo $rs['invoice_date']; ?></td>
-		<td><?php echo $rs['invoice_num']; ?></td>
-		<td><?php echo $rs['input_date']; ?></td>
-		<td><?php echo $rs['remark']; ?></td>
-		<td> $&nbsp; <?php echo $rs['totale_amount']; ?></td>
-	</tr>
-	<?php
-	}}
-	?>
-</table>
+<style>
+		.btn-action{
+			background: rgba(165, 188, 193, 0.36);
+			padding: 3px 10px;
+   			border-radius: 5px;
+		}
+	
+	</style>
+<?php echo $this->list; ?>

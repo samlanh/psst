@@ -3,6 +3,7 @@
      $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
      $status_view=$this->status_view;
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
 <style>
 #table tr td{
@@ -15,8 +16,9 @@
 }
 .center{border:1px solid #000;}
 </style>
-<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
+	
     dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 </script>
@@ -118,7 +120,9 @@
 	index=0;
 	function getProductName() {
 		index++;
-		location_id = dijit.byId("from_location").get("value");
+		grade=dijit.byId("pro_id").get("value");
+		if(grade==''){return false;}
+		location_id = dijit.byId("f_branch").get("value");
 		pro_id=dijit.byId("pro_id").get("value");
 		getcurrentproduct(pro_id,location_id,index);
 				if(index==1){
@@ -188,6 +192,7 @@
 		dojo.query("#row"+index).remove();
 	}
 	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
+	var to_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 		store: branch_store,
@@ -206,7 +211,7 @@
 		}, "branch");	
 		
 		new dijit.form.FilteringSelect({
-		store: branch_store,
+		store: to_store,
 		autoComplete: true,                        
 		required: true,
 		id: "f_branch",
@@ -222,8 +227,6 @@
 		}, "f_branch");
 		
 	});
-	
-	var b_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->branchopt));?> );
 	var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
 	function addBranch(){
 		dojo.xhrPost({
@@ -234,14 +237,23 @@
 					var Itemmake = { 
 							 id: data,
 							 name: dijit.byId('branch_nameen').get('value')
-						   };		   
-			    addDataToSelectbox(dijit.byId('branch'), b_store, Itemmake, data);
+						   };	
+					var Itemmake1 = { 
+							 id: data,
+							 name: dijit.byId('branch_nameen').get('value')
+						   };
+			    addDataToSelectbox(dijit.byId('branch'), branch_store, Itemmake, data);
+				addDataToSelectbox(dijit.byId('f_branch'), to_store, Itemmake, data);
 			    dijit.byId('frm_add_tran').reset();
 			    dijit.byId("popup_add_branch").hide();	
 			},
 			error: function(err) {
 			}
 	});
+
+	}
+	function Caltweenty(){
+		
 	}
 </script>
 <?php  $frm = $this->frm_branch;?>

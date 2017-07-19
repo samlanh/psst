@@ -20,7 +20,15 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 				);
     		}
 			$db = new Accounting_Model_DbTable_Dbinvoice();
-			$this->view->all_invoice = $db->getinvoice($search);
+			$rs_rows = $db->getinvoice($search);
+			
+			$list = new Application_Form_Frmtable();
+    		$collumns = array("STUDENT_ID","STUDENT_NAME","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
+    		$link=array(
+    				'module'=>'accounting','controller'=>'invoice','action'=>'edit',
+    		);
+    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('branch'=>$link,'academic'=>$link,'class'=>$link,'generation'=>$link));
+			
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 			$this->view->all_student_code = $db->getAllGerneralOldStudent();

@@ -26,8 +26,8 @@
 					<?php }}?>
 				</select>
 			</td>
-			<td><input type="text" name="form_date" id="from_date" class="fullside" placeholder="<?php echo $tr->translate("From Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
-			<td><input type="text" name="to_date" id="to_date" class="fullside" placeholder="<?php echo $tr->translate("to Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
+			<td><input type="text" name="form_date" constraints="{datePattern:'dd/MM/yyyy'}"  value="now" id="from_date" class="fullside" placeholder="<?php echo $tr->translate("From Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
+			<td><input type="text" name="to_date" constraints="{datePattern:'dd/MM/yyyy'}"  value="now" id="to_date" class="fullside" placeholder="<?php echo $tr->translate("to Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>

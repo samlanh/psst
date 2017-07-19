@@ -1,0 +1,61 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('SRMS | Report Student Receivable'); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm = $this->frm_search;
+?>
+<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+  <table width="80%">
+   <tr>  
+        <td><?php echo $frm->getElement("adv_search");?></td>
+        <td><?php echo $frm->getElement('status');?></td>
+   		<td><?php echo $frm->getElement('payment_type');?></td>
+   </tr>
+   <tr>
+   		<td> <input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="start_date" name="start_date" value="now"  type="text"></td>
+		<td><input dojoType="dijit.form.DateTextBox"  constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="end_date" name="end_date" value="now" type="text"></td>
+   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+   </tr>
+</table>
+</form>
+<style>
+#footer{display: none;}
+</style>	
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+	<div id="divPrint">
+		<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+			<tr style="background: #ccc;">
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH_NAME");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_CODE");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TOTAL_AMOUNT");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("FOR_DATE");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("NOTE");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STATUS");?></td>
+			</tr>
+			<?php if(!empty($this->all_memo)){ foreach($this->all_memo as $key=>$rs){ $key=$key+1; ?>
+			<tr>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['branch_name']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['stu_code']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['student_name']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['total_amount']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['date']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['note']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['user_name']; ?></td>
+				<?php if($rs['status']==1){ ?>
+					<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("ACTIVE");?></td>
+				<?php }else{ ?> 
+					<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("DISACTIVE");?></td>
+				<?php } ?>
+			</tr>
+			<?php
+			}}
+			?>
+		</table>
+	</div>	
+</div>
+

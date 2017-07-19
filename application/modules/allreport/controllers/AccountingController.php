@@ -881,8 +881,35 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$db = new Accounting_Model_DbTable_DbTransferstock();
 		$id=$this->getRequest()->getParam("id");
 		$this->view->rs = $db->getTransferById($id);
-		
 		$this->view->rsdetail = $db->getTransferByIdDetail($id);
 		print_r($this->view->rsdetail );
+	}
+	public function rptCreditmemoAction(){
+		try{
+    		$db = new Accounting_Model_DbTable_DbCreditmemo();
+    		if($this->getRequest()->isPost()){
+    			$formdata=$this->getRequest()->getPost();
+    		}
+    		else{
+    			$formdata = array(
+    					"adv_search"=>'',
+    					"payment_type"=>-1,
+    					"status"=>-1,
+    					'start_date'=> date('Y-m-d'),
+    					'end_date'=>date('Y-m-d'),
+    			);
+    		}
+			$this->view->all_memo= $db->getAllCreditmemo($formdata);
+    		
+    	}catch (Exception $e){
+    		Application_Form_FrmMessage::message("Application Error");
+    		echo $e->getMessage();
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+		$frm = new Registrar_Form_FrmSearchexpense();
+    	$frm = $frm->AdvanceSearch();
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_search = $frm;
 	}	
+	
 }

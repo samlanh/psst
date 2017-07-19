@@ -54,6 +54,7 @@
   $rpt_invoice =$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-invoice'), null, true);
   
    $rpt_transfer =$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-transfer'), null, true);
+   $rpt_creditmemo =$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-creditmemo'), null, true);
   ?>
   <div style="background:#ccc; width: 100%;">
   	<ul class="link-rpt">
@@ -77,6 +78,7 @@
 		
 		<li><a href="<?php echo $rpt_invoice;?>"><?php echo $tr->translate('INVOICE');?></a></li>
 		<li><a href="<?php echo $rpt_transfer;?>"><?php echo $tr->translate('TRANSFER');?></a></li>
+		<li><a href="<?php echo $rpt_creditmemo;?>"><?php echo $tr->translate('CREDITMENO');?></a></li>
   		<?php /*?>
   		<li><a href="<?php echo $rpt_student_by_teacher;?>"><?php echo $tr->translate('STUDENT_AMOUNTBY_TEACHER_REPORT');?></a></li>
   		<?php */?>

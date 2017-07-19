@@ -53,8 +53,17 @@ class Accounting_TransferController extends Zend_Controller_Action {
 		}
 		$this->view->tran_no = $db->getTransferNo();
 		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->rsbranch = $db->getAllBranchName();
 		$this->view->rsproduct = $db->getallProductName();
+		
+		$branch = $db->getAllBranchName();
+    	array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	$this->view->branchopt = $branch;
+		
+		$fm = new Global_Form_Frmbranch();
+		$frm = $fm->Frmbranch();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_branch = $frm;
+		
 	}
 	public function editAction(){
 		$db = new Accounting_Model_DbTable_DbTransferstock();

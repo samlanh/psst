@@ -39,6 +39,9 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     	if(!empty($search['location'])){
     		$where.=" AND pl.brand_id=".$search['location'];
     	}
+    	if(!empty($search['category_id'])){
+    		$where.=" AND p.cat_id=".$search['category_id'];
+    	}
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND p.status=".$search['status_search'];
     	}

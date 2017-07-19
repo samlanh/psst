@@ -152,8 +152,20 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		if(!empty($row))foreach ($row As $rs)$opt_ls[$rs['id']]=$rs['name'];
 		$cate->setMultiOptions($opt_ls);
 		
+		//supplier 
+		$supplier_id= new Zend_Dojo_Form_Element_FilteringSelect('supplier_id');
+		$supplier_id->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+		));
+		$supplier_id->setValue($request->getParam("supplier_id"));
+		$opt_p = array(''=>$this->tr->translate("SUPPLIER_NAME"));
+		$_pro=new Accounting_Model_DbTable_DbPurchase();
+		$rows=$_pro->getSuplierName();
+		if(!empty($rows))foreach ($rows As $row)$opt_p[$row['id']]=$row['sup_name'];
+		$supplier_id->setMultiOptions($opt_p);
 		
-		$this->addElements(array($cate,$branch_id,$location,$product,$category,$start_date,$user,$end_date,$_title,$generation,$_status,$service));
+		$this->addElements(array($supplier_id,$cate,$branch_id,$location,$product,$category,$start_date,$user,$end_date,$_title,$generation,$_status,$service));
 		return $this;
 	} 
 

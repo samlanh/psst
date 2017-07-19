@@ -37,6 +37,9 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	if(!empty($search['product'])){
     		$where.=" AND spd.pro_id=".$search['product'];
     	}
+    	if(!empty($search['supplier_id'])){
+    		$where.=" AND s.id=".$search['supplier_id'];
+    	}
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND sp.status=".$search['status_search'];
     	}
@@ -243,7 +246,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getProductNames(){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,CONCAT(p.pro_name,' ',p.pro_size) AS `name` FROM rms_product AS p,rms_product_location AS pl
+    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
  				WHERE p.id=pl.pro_id AND p.status=1  ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('brand_id');
@@ -257,6 +260,17 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
         }
         return $options;
     }
+    
+    function getProductName(){
+    	$db=$this->getAdapter();
+    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
+    	WHERE p.id=pl.pro_id AND p.status=1  ";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('brand_id');
+    	$sql.=" GROUP BY p.id ORDER BY id DESC ";
+    	return $db->fetchAll($sql);
+    }
+    
     function getPurchaseCode(){
     	$db = $this->getAdapter();
     	$sql="SELECT id FROM rms_supplier_product WHERE STATUS=1 ORDER BY id DESC LIMIT 1";
@@ -293,7 +307,9 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getSupplierProducts($id){
     	$db=$this->getAdapter();
-    	$sql="SELECT id,supproduct_id,pro_id,qty,cost,amount,note,STATUS FROM rms_supproduct_detail WHERE supproduct_id=$id";
+    	$sql="SELECT id,supproduct_id,pro_id,qty,cost,amount,note,status,
+		(SELECT p.pro_name FROM rms_product AS p WHERE p.id=pro_id LIMIT 1) AS pro_name
+    	FROM rms_supproduct_detail WHERE supproduct_id=$id";
     	return $db->fetchAll($sql);
     }
     function getAllBranch(){

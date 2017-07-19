@@ -19,6 +19,7 @@ class Accounting_PurchaseController extends Zend_Controller_Action {
     			$search=array(
     							'title' => '',
     							'product' => '',
+    					        'supplier_id'=>'',
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
     							'status_search'=>1,
@@ -65,10 +66,15 @@ public function addAction(){
 			}
 		}
 		$_pur = new Accounting_Model_DbTable_DbPurchase();
-		$this->view->product= $_pur->getProductNames();
+		$this->view->product= $_pur->getProductName();
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->bran_name=$_pur->getAllBranch();
+		
+		$db_gr=new Global_Model_DbTable_DbGrade();
+		$d_row=$db_gr->getNameGradeAll();
+		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->grade_name=$d_row;
 	
 	}
 	public function editAction(){
@@ -81,9 +87,9 @@ public function addAction(){
 				$row = $db->updateProduct($_data,$id);
 		
 				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
+					//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
+					//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
 				}
 		
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
@@ -95,6 +101,7 @@ public function addAction(){
 		}
 		$_pur = new Accounting_Model_DbTable_DbPurchase();
 		$this->view->product= $_pur->getProductNames();
+		$this->view->products= $_pur->getProductName();
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->row_sup=$_pur->getSupplierById($id);

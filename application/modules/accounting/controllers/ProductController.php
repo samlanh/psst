@@ -20,6 +20,7 @@ class Accounting_ProductController extends Zend_Controller_Action {
     			$search=array(
     							'title' => '',
     							'location' => '',
+    							'category_id'=>'',
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
     							'status_search'=>1,

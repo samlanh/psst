@@ -247,7 +247,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
  				WHERE p.id=pl.pro_id AND p.status=1  ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('brand_id');
-    	$sql.=" ORDER BY id DESC";
+    	$sql.=" GROUP BY p.id ORDER BY id DESC ";
         $rows=$db->fetchAll($sql);
         
         array_unshift($rows,array('id' => '',"name"=>"Please select product name"));

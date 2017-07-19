@@ -116,8 +116,8 @@ function popupgroup(){
 </script>
 
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:100%;" id="popup_dept" >
-		<form style="background-color: buttonface; width:15cm;" id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_dept" >
+		<form style="background-color: buttonface;" id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
@@ -139,8 +139,8 @@ function popupgroup(){
 							<tr>
 							<td style="width:100px"><?php echo $tr->translate("Type")?></td>
 							<td>
-								<select class="fullside"  tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("SERVICE")?></option>
+								<select class="fullside"  readonly tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
+									    <option value="1" ><?php echo $tr->translate("SERVICE")?></option>
 									    <option value="2"><?php echo $tr->translate("PROGRAM")?></option>
 								</select>
 							</td>

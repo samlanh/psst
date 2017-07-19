@@ -21,7 +21,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     		$_arr = array(
     				'title'=>$_data['add_title'],
-    				'type'=>2,
+    				'type'=>1,
     				'ser_cate_id'=>$_data['title'],
     				'description'=>$_data['description'],
     				'create_date'=>Zend_Date::now(),
@@ -35,7 +35,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$_arr = array(
     			'title'=>$_data['service_name'],
-    			'type'=>2,
+    			'type'=>1,
     			'ser_cate_id'=>$_data['service_type'],
     			'description'=>$_data['description'],
     			'create_date'=>Zend_Date::now(),
@@ -77,7 +77,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	,(SELECT title FROM `rms_program_type` WHERE id=ser_cate_id LIMIT 1) AS cate_name
     	,`description`,p.`status`,p.`create_date`
     	,(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE p.user_id=id ) AS user_name
-    	FROM `rms_program_name` AS p Where type=2 ";
+    	FROM `rms_program_name` AS p WHERE type=2 ";
     	$order=" ORDER BY service_id DESC";
     	 
     	if(empty($search)){
@@ -113,13 +113,15 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     }
 
     public function AddServiceAjax($_data){
-    	//return 'hello';
+    	if(empty($_data['service_type'])){
+    		$_data['service_type']=2;
+    	}
     	try{
     		$this->_name='rms_program_name';
     		$_db = $this->getAdapter();
     		$_arr = array(
     				'title'=>$_data['add_title'],
-    				'type'=>2,
+    				'type'=>$_data['service_type'],
     				'ser_cate_id'=>$_data['title'],
     				'description'=>$_data['description'],
     				'create_date'=>Zend_Date::now(),

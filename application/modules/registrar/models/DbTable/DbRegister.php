@@ -1989,7 +1989,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     public function getAllRoom(){
     	$db = $this->getAdapter();
-    	$sql = "select room_id as id , room_name as name from rms_room where is_active=1 ";
+    	$sql = "select room_id as id , room_name as name from rms_room where is_active=1 AND room_name!='' ";
     	return $db->fetchAll($sql);
     }
     

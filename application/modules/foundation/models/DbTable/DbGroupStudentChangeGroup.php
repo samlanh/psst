@@ -16,7 +16,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			  FROM
 			    `rms_group_detail_student` AS gds,
 			    `rms_group` AS g 
-			  WHERE  gds.type=1 AND gds.group_id = g.id AND g.`degree` IN (1,2,3,4) AND group_code!=''";
+			  WHERE  gds.type=1 AND gds.group_id = g.id AND group_code!=''";
 			$request=Zend_Controller_Front::getInstance()->getRequest();
 			if($request->getActionName()=='add'){
 				$sql.=" AND gds.is_pass=0 ";

@@ -8,7 +8,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	header('content-type: text/html; charset=utf8');
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	
 	}
     public function indexAction(){
     	try{

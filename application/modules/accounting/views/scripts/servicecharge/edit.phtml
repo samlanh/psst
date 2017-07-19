@@ -344,8 +344,8 @@ function ResetRecordRecord() {
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("Type")?></td>
 							<td>
-								<select class="fullside"  tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("SERVICE")?></option>
+								<select class="fullside"  readonly tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
+									    <option value="1" selected="selected"><?php echo $tr->translate("SERVICE")?></option>
 									    <option value="2"><?php echo $tr->translate("PROGRAM")?></option>
 								</select>
 							</td>
@@ -396,6 +396,7 @@ function ResetRecordRecord() {
 							<tr>
 								<td nowrap="nowrap"><?php echo $tr->translate("PROGRAM_TITLE")?></td>
 								<td> 
+									<input dojoType="dijit.form.TextBox" name="service_type" id="service_type" value="2"  type="hidden">
 									<input dojoType="dijit.form.TextBox"   name="add_title" id="add_title" value=""  type="text">
 							   </td>
 							</tr>

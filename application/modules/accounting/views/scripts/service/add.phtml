@@ -105,9 +105,9 @@ dojo.ready(function(){
 </script>
 
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:40%;" id="popup_dept" >
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_dept" >
 		<form style="background-color: buttonface;" id='frm_add_service' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+			<table cellspacing="5" style="margin: 0 auto; width:100%;">
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
@@ -121,14 +121,14 @@ dojo.ready(function(){
 							<td>ពណ៌នា</td>
 							<td>
 								<textarea class="fullside"   style=" height: 40px !important;"
-										tabindex="2" dojoType=""  id="note" name=note ></textarea>
+									tabindex="2" dojoType=""  id="note" name=note ></textarea>
 							</td>
 						</tr>
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("Type")?></td>
 							<td>
-								<select class="fullside"  tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("SERVICE")?></option>
+								<select class="fullside"  readonly tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
+									<option value="1"><?php echo $tr->translate("SERVICE")?></option>
 								</select>
 							</td>
 						</tr>

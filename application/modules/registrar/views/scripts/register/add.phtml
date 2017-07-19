@@ -63,7 +63,6 @@
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallModel(dept_id,a){
-		//alert(10);
 			dojo.xhrPost({
 				url:url_dept,
 				content:{
@@ -625,8 +624,8 @@ fieldset{  background:none;}
 function getInfoBygroup(){
 	url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 	group = dijit.byId('group').get('value');
+	if(group==''){return false;}
 	if(group==-1){
-		//alert("Please Select Group");
 		dijit.byId('study_year').set('readOnly',false);
 		dijit.byId('dept').set('readOnly',false);
 		dijit.byId('grade').set('readOnly',false);
@@ -1375,15 +1374,12 @@ function getservicefee(key){
 				dijit.byId("price_"+key).set('readOnly',true);
 			}
 			
- 			//year = dijit.byId('study_year').get('value');
- 			//alert(year);
  			dojo.xhrPost({
  				url:url_service_fee,
  				content:{
  					'term':term,
  					'service':service_id,
  					'studentid':studentid,
- 					//'year':year,
  					},
  				handleAs:"json",
  				load: function(data) {
@@ -1399,7 +1395,6 @@ function getservicefee(key){
 	 					calculateTotal(key);
  				},
  				error: function(err) {
- 					//alert('no result !!!');
  					alert(err);
  				}
  			});

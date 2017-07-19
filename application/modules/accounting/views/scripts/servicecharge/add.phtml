@@ -235,7 +235,6 @@ function addRow() {
 					form: dojo.byId("frm_add_service"),
 					handleAs:"json",
 					load: function(data) {
-						//alert(data); 
 						var Itemmake = { 
 						     id: data,
 							         name: dijit.byId('p_title').get('value')
@@ -304,8 +303,8 @@ function addRow() {
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("Type")?></td>
 							<td>
-								<select class="fullside"  tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("SERVICE")?></option>
+								<select class="fullside" readonly tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
+									    <option value="1" selected="selected"><?php echo $tr->translate("SERVICE")?></option>
 									    <option value="2"><?php echo $tr->translate("PROGRAM")?></option>
 								</select>
 							</td>
@@ -335,10 +334,8 @@ function addRow() {
 		</form>
 	</div>
 </div>
-	
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" data-dojo-type="dijit.Dialog" id="pop_service" >
-	
 		<form name="frm_add" id='frm_add' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		 <table cellspacing="10" width="50%" style="margin: 0 auto; ">
 			<tr>
@@ -356,7 +353,8 @@ function addRow() {
 							<tr>
 								<td nowrap="nowrap"><?php echo $tr->translate("PROGRAM_TITLE")?></td>
 								<td> 
-									<input dojoType="dijit.form.TextBox"   name="add_title" id="add_title" value=""  type="text">
+									<input dojoType="dijit.form.TextBox" name="add_title" id="add_title" value=""  type="text">
+									<input dojoType="dijit.form.TextBox" name="service_type" id="service_type" value="2"  type="hidden">
 							   </td>
 							</tr>
 							<tr>

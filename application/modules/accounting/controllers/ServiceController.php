@@ -80,7 +80,6 @@ public function editAction(){
 	$id=$this->getRequest()->getParam("id");
 	$db = new Accounting_Model_DbTable_Dbservice();
 	$row = $db->getServiceById($id);
-// 	print_r($row);exit();
 	if($this->getRequest()->isPost())
 	{
 		try{
@@ -94,7 +93,6 @@ public function editAction(){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
 	$db = new Accounting_Model_DbTable_DbService();
 	$rs= $db->getServiceType(1);
 	array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));

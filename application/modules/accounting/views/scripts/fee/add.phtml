@@ -34,6 +34,7 @@ dojo.ready(function(){
 		name: "grade",  
 		style:'height:40px !important',         
 		class: 'fullside',  
+		required:false,
 		placeHolder:"Select Grade",          
 		onChange: function() {  
 			make_id = dijit.byId('grade').get('value');
@@ -204,8 +205,7 @@ alert(identity);
 						</tr>
 							<tr>
 								<td colspan="2" align="center">
-									<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialogGrade();"/>
-									<input type="button" value="save" id="savegrade" name="save" label="Save" dojoType="dijit.form.Button" 
+									<input type="button" value="save" id="savegrade" name="save" label="<?php echo $tr->translate("GO_SAVE");?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addGrade();"/>
 								</td>
 						</tr>
@@ -214,14 +214,13 @@ alert(identity);
 				</td>
 			</tr>
 		</table>
-
 		</form>
 	</div>
 </div>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:400px;" id="popup_add_dept" >
 		<form  id='frm_add_dep' name='frm_add_dep' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-				<table cellspacing="10" style="margin: 0 auto;">
+				<table cellspacing="10" style="margin: 0 auto; width:100%">
 				    <tr>
 						<td width="10%"><?php echo $tr->translate("DEGREE");?></td>
 						<td width="35%">
@@ -234,8 +233,6 @@ alert(identity);
 					</tr>
 					<tr>
 						<td colspan="2" align="center">
-							<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="canceldegree" 
-							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialogDegree()"/>
 							<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="save_dep" 
 							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="adddegree();"/>
 						</td>
@@ -374,9 +371,11 @@ function addGrade(){
 			   addDataToSelectbox(dijit.byId('grade'), grade_store, Itemmake, data);
 			   dijit.byId('frm_add_grade').reset();
 			   dijit.byId("popup_grate").hide();	
+			   dijit.byId("savegrade").set('disabled',false);
 				},
 				error: function(err) {
 					alert(err);
+					dijit.byId("savegrade").set('disabled',false);
 				}
 		});
 	}
@@ -466,10 +465,12 @@ var title = 0;
 tmp = '';
 temp='';
 function addRow(){ 
-	var grade = '<?php echo $this->all_grade; ?>';
+	//var grade = '<?php //echo $this->all_grade; ?>';
+	grade=dijit.byId("grade").get("value");
+	if(grade==''){return false;}
 	var payment_term = '<?php echo count($this->payment_term);?>';
 		col++;no++;
-		grade=dijit.byId("grade").get("value");
+		
 		label_grade = dijit.byId("grade").attr('displayedValue');
 		template='';
 		if(title!=1){    

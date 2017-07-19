@@ -105,7 +105,6 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 				$_data = $this->getRequest()->getPost();
 				$_model = new Accounting_Model_DbTable_DbServiceCharge();
 				$_model->addServiceCharge($_data);
-				//print_r($_model);exit();
 				if(isset($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/servicecharge/add");
 				}else{
@@ -161,7 +160,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 		
 		$_model = new Application_Model_GlobalClass();
 		$this->view->all_metion = $_model ->getAllMetionOption();
-		$this->view->all_faculty = $_model->getAllServiceItemOption(2);
+		$this->view->all_faculty = $_model->getAllServiceItemOption(1);
 // 		$this->view->all_faculty = $_model ->getAllFacultyOption();
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm();
@@ -322,7 +321,6 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 			}
 		}
 	}
-	
 	public function getallfacAction(){
 		$db = new Application_Model_GlobalClass();
 		if($this->getRequest()->isPost()){
@@ -332,7 +330,6 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 	function addAjaxserviceAction(){
 		if($this->getRequest()->isPost()){
 			try{
@@ -348,11 +345,5 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-	}
-	
+	}	
 }
-
-
-
-
-

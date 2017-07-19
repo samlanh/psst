@@ -110,7 +110,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     }
     public function updateTuitionFee($_data){
     	$db = $this->getAdapter();
-//     	print_r($_data);exit();
     	$db->beginTransaction();
     	try{
     
@@ -125,10 +124,12 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     				'branch_id'		=>$_data['branch'],
     				'user_id'		=>$this->getUserId()
     		);
-//     		$fee_id = $this->insert($_arr);
     		$where=$this->getAdapter()->quoteInto("id=?", $_data['id']);
     		$this->update($_arr, $where);
-			
+    		if($_data['is_finished']==1){
+    			$db->commit();
+    			return true;
+    		}
 			if($_data['is_finished']==0){
 				$this->_name='rms_tuitionfee_detail';
 				$where = "fee_id = ".$_data['id'];

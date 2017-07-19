@@ -181,9 +181,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->grade_name=$grade;
 		
 	}
-	
-	
-	
 	function addRoomAction(){
 		if($this->getRequest()->isPost()){
 			try{
@@ -208,7 +205,6 @@ class Global_GroupController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 	function addGraddjaxAction(){
     	if($this->getRequest()->isPost()){
     		try{
@@ -218,11 +214,22 @@ class Global_GroupController extends Zend_Controller_Action {
     			$result = array("id"=>$row);
     			print_r(Zend_Json::encode($row));
     			exit();
-    			//Application_Form_FrmMessage::message("INSERT_SUCCESS");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
+    	}
+    }
+    function getgroupAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Foundation_Model_DbTable_DbStudent();
+    		$group = $db->getAllgroup();
+    		$degree = $db->getAllFecultyName();    		
+    		array_unshift($group, array ('id' => -1, 'name' => 'Add New'));
+    		$result = array('group'=>$group,'degree'=>$degree);
+    		print_r(Zend_Json::encode($result));
+    		exit();
     	}
     }
 }

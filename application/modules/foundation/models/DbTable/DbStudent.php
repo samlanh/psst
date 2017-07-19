@@ -410,7 +410,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	public function getAllFecultyName(){
 		$db = $this->getAdapter();
-		$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' ORDER BY id DESC";
+		$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' ORDER BY id DESC";
 		//$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' AND dept_id IN(1,2,3,4) ORDER BY id DESC";
 		
 		return $db->fetchAll($sql);
@@ -430,7 +430,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-		FROM `rms_group` AS `g` where g.is_pass=0 and status=1 ";
+		FROM `rms_group` AS `g` where g.is_pass=0 and status=1 ORDER BY `g`.`id` DESC ";
 		return $db->fetchAll($sql);
 	}
 	function getGroupInforByID($group_id){

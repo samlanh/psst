@@ -2,30 +2,40 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
 	echo $this->headTitle(''); 
-// 	print_r($this->rs['academic_year']);exit();
 	$photo= $this->frm_techer;
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
-<script type="dojo/method" event="onSubmit">			
-	if(this.validate()) {
-				return true;
-			} else {
-				return false;
-			}
-</script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
+//dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.CheckBox");
+//dojo.require("dijit.form.CheckBox");
 
 var language_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->language));?> );
 var job_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
 var job_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
 var job_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->group));?> );
 
 dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: group_store,
+	    autoComplete: true,                        
+	    id: "group",
+	    name: "group",  
+	    value:'<?php echo $this->rs['group_id'];?>' ,       
+	    class: 'fullside',  
+	    placeHolder:"SELECT_GROUP",  
+	    onChange: function() {  
+	    	group_id = dijit.byId('group').get('value');
+	    	if(group_id==-1){
+	    		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
+			  }else{
+				  getInfoBygroup();
+			  }
+	    }
+	}, "group");
 	
 	new dijit.form.FilteringSelect({
 	    autoComplete: true,                        
@@ -37,16 +47,13 @@ dojo.ready(function(){
 	    placeHolder:"Selected Grade",          
 	    onChange: function() {  
 	    	make_id = dijit.byId('grade').get('value');
-	    	
 	    }
 	}, "grade");
 	getallGrade(1);
 
-
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		autoComplete: true,                        
-		                     
 	    id: "fa_job",
 	    name: "fa_job",  
 	    tabindex: "17",         
@@ -71,7 +78,6 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		autoComplete: true,                        
-		                    
 	    id: "mo_job",
 	    name: "mo_job",  
 	    tabindex: "17",         
@@ -87,16 +93,15 @@ dojo.ready(function(){
 	    }  
 	   } 
 	}, "mo_job");
+	
 	dijit.byId('mo_job').attr('value',"<?php echo $this->rs['mother_job']?>");
 	mo = dijit.byId('mo_job').get('value');
 	if(mo==''){
 		dijit.byId('mo_job').attr('value',0);
 	}
-
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		autoComplete: true,                        
-		                
 	    id: "gu_job",
 	    name: "gu_job",  
 	    tabindex: "17",         
@@ -108,8 +113,7 @@ dojo.ready(function(){
 	   	 dijit.byId("popup_dept2").show();
 		   	dijit.byId('value_j').attr('value',3);
 	     }
-	    else {
-	    }  
+	    else {}  
 	   } 
 	}, "gu_job");
 	dijit.byId('gu_job').attr('value',"<?php echo $this->rs['guardian_job']?>");
@@ -117,10 +121,8 @@ dojo.ready(function(){
 	if(fa==''){
 		dijit.byId('gu_job').attr('value',0);
 	}
-	
 	dijit.byId('academic_year').attr('value',"<?php echo $this->rs['academic_year']?>");
 }); 
-
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallGrade(condition){
@@ -132,7 +134,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 					},
 				handleAs:"json",
 				load: function(data) {
-					//alert(data);
 					grade_store  = getDataStorefromJSON('id','name', data);
 				    dijit.byId('grade').set('store',grade_store); 
 				    if(condition==1){
@@ -147,10 +148,10 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 			});
 	}
 </script>
-<?php //print_r($this->rs);?>
 <form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 		<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				dijit.byId('save_close').set('disabled',true);	
 				return true;
 			}else {
 				return false;
@@ -164,12 +165,9 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 					<table  cellspacing="5" style="margin:0 auto;" width="100%">
 						<tr>
 							<td ><?php echo $tr->translate("NAME_KH");?></td>
-							<td><input class="fullside"  tabindex="2" dojoType="dijit.form.ValidationTextBox"  id="name_kh" name="name_kh" value="<?php echo $this->rs['stu_khname'];?>" type="text"  ></td>
-							
+							<td><input class="fullside" tabindex="2" dojoType="dijit.form.ValidationTextBox"  id="name_kh" name="name_kh" value="<?php echo $this->rs['stu_khname'];?>" type="text"  ></td>
 							<td ><?php echo $tr->translate("NAME_EN");?></td>
-							<td><input class="fullside"  tabindex="2" dojoType="dijit.form.ValidationTextBox"  id="name_en" name="name_en" value="<?php echo $this->rs['stu_enname'];?>" type="text"  ></td>
-							
-							
+							<td><input class="fullside" tabindex="2" required="true" dojoType="dijit.form.ValidationTextBox" id="name_en" name="name_en" value="<?php echo $this->rs['stu_enname'];?>" type="text"  ></td>
 							<td ><?php echo $tr->translate("SEX");?></td>
 							<td>
 								<select class="fullside"  tabindex="3" name="sex" id="sex" dojoType="dijit.form.FilteringSelect" >
@@ -177,33 +175,25 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 									<option value="2"<?php if($this->rs['sex']==2){{ echo "selected='selected'"; }} ?> ><?php echo $tr->translate("FEMALE")?></option>
 								</select>
 							</td>
-							
 						</tr>
 						<tr>
 							<td title="សញ្ឃាតិ"><?php echo $tr->translate("NATIONALITY");?></td>
 							<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="studen_national" name="studen_national" value="<?php echo $this->rs['nationality'];?>" type="text" ></td>
-						
 							<td ><?php echo $tr->translate("DOB");?></td>
 							<td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="date_of_birth" id="date_of_birth" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->rs['dob'];?>" type="text"/></td>
-							
 							<td><?php echo $tr->translate("PARENT_PHONE");?></td>
 							<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="phone" name="phone" value="<?php echo $this->rs['tel'];?>" type="text" ></td>
 						</tr>
 						<tr>			
 							<td><?php echo $tr->translate("POB");?></td>
-							<td colspan="3">
-								<textarea class="fullside"  style=" height: 60px !important;" tabindex="20" id="pob" name="pob"  ><?php echo $this->rs['pob'];?></textarea>
-							</td>
-							
+							<td colspan="3"><textarea class="fullside"  style=" height: 60px !important;" tabindex="20" id="pob" name="pob"  ><?php echo $this->rs['pob'];?></textarea></td>
 							<td ><?php echo $tr->translate("PHOTO");?></td>
 							<td>
 								<?php echo $photo->getElement('photo');?>
 								<img  src="<?php echo $this->baseUrl().'/images/'.$this->rs['photo'];?>" width="70px">
 							</td>
 						</tr>
-						
-						<input type="hidden" name="old_photo" value="<?php echo $this->rs['photo'];?>" id="old_photo" dojoType="dijit.form.TextBox" />
-						
+							<input type="hidden" name="old_photo" value="<?php echo $this->rs['photo'];?>" id="old_photo" dojoType="dijit.form.TextBox" />
 						<tr>
 							<td colspan="6"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("CURRENT_ADDRESS");?></strong></td>
 						</tr>
@@ -214,7 +204,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							<td><input class="fullside" tabindex="10" dojoType="dijit.form.TextBox"  id="way_note" name="way_note" value="<?php echo $this->rs['street_num'];?>" type="text" ></td>
 							<td><?php echo $tr->translate("VILLAGE");?></td>
 							<td><input class="fullside" tabindex="11" dojoType="dijit.form.TextBox"  id="village_note" name="village_note" value="<?php echo $this->rs['village_name'];?>" type="text" ></td>
-							
 						</tr>
 						<tr>								
 							<td><?php echo $tr->translate("COMMUNE");?></td>
@@ -229,22 +218,22 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 									<?php }?>
 								</select>
 							</td>
-							
 						</tr>
 						<tr>
 							<td colspan="6"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("STUDY_INFO");?></strong></td>
 						</tr>
 						<tr>
 						<td><?php echo $tr->translate("GROUP");?>*</td>
-							<td>
-								<select class="fullside" tabindex="15" name="group" id="group" dojoType="dijit.form.FilteringSelect" onchange="getInfoBygroup();">
-									<option value=""><?php echo $tr->translate("SELECT_GROUP");?></option>
-									<?php if(!empty($this->group))foreach ($this->group as $row){?>
-									<option value="<?php echo $row['id']?>" <?php if($row['id']==$this->rs['group_id']) echo 'selected="selected"'?>><?php echo $row['name']?></option>
-									<?php }?>
-								</select>
+							<td><input id="group" />
+								<!-- <select class="fullside" tabindex="15" name="group" id="group" dojoType="dijit.form.FilteringSelect" onchange="getInfoBygroup();">
+									<option value=""><?php //echo $tr->translate("SELECT_GROUP");?></option>
+									<?php //if(!empty($this->group))foreach ($this->group as $row){?>
+									<option value="<?php //echo $row['id']?>" <?php //if($row['id']==$this->rs['group_id']) echo 'selected="selected"'?>><?php //echo $row['name']?></option>
+									<?php //}?>
+								</select> -->
 								<input class="fullside" dojoType="dijit.form.TextBox"  id="old_group_id" name="old_group_id" value="<?php echo $this->rs['group_id'];?>" type="hidden"  >
 							</td>
+							<td><input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/></td>
 						</tr>
 						<tr>
 							<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("ACADEMIC_YEAR");?>*</td>
@@ -255,7 +244,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 									<?php }?>
 								</select>
 							</td>
-							
 							<td><?php echo $tr->translate("DEGREE");?>*</td>
 							<td>
 								<select class="fullside" tabindex="16" name="degree" id="degree" readonly="readonly"  dojoType="dijit.form.FilteringSelect" onchange="getallGrade(0);">
@@ -263,7 +251,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 									<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->rs['degree']) echo 'selected="selected"'?>><?php echo $row['en_name']?></option>
 									<?php }?>
 								</select>
-							
 							</td>
 							<td><?php echo $tr->translate("GRADE");?>*</td>
 							<td>
@@ -283,7 +270,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 									<option value="4" <?php if($this->rs['session']==4){ echo "selected='selected'"; }?>><?php echo $tr->translate("WEEKEND")?></option>
 								</select>
 							</td>
-							
 							<td title="កំរិតភាសា"><?php echo $tr->translate("ROOM_NAME");?></td>
 							<td>
 							   <select id="room" name="room" class="fullside" type="text" readonly="readonly"  dojoType="dijit.form.FilteringSelect" >
@@ -293,7 +279,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 									<?php }}?>
 							   </select>
 							</td>
-						
 						</tr>
 						<tr>
 							<td title="ស្ថានការណ៍"><?php echo $tr->translate("STATUS");?></td>
@@ -311,7 +296,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						</tr>
 					</table>
 				  </div><!-- end tab 1 -->
-				  
 				  <div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("PARENT_INFO");?>" selected="false">
 					<table width="100%" style="margin:0 auto;" cellspacing="5">
 						<tr>
@@ -327,12 +311,10 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("OCCUPATION");?></td>
-							<td>
-								<input id="fa_job" />
+							<td><input id="fa_job" />
 							</td>
 							<td><?php echo $tr->translate("PHONE");?>*</td>
 							<td><input class="fullside"  tabindex="27" dojoType="dijit.form.ValidationTextBox"  id="fa_phone" name="fa_phone" value="<?php echo $this->rs['father_phone'];?>" type="text"  ></td>
-						
 						</tr>
 						<tr>
 							<td colspan="6" style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("MOTHER_INFO");?></strong></td>
@@ -347,18 +329,15 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("OCCUPATION");?></td>
-							<td>
-								<input id="mo_job" />
-							</td>
+							<td><input id="mo_job" /></td>
 							<td><?php echo $tr->translate("PHONE");?>*</td>
 							<td><input class="fullside"  tabindex="33" dojoType="dijit.form.ValidationTextBox"  id="mon_phone" name="mon_phone" value="<?php echo $this->rs['mother_phone'];?>" type="text"   ></td>
 						</tr>
-				  
 						<tr>
 							<td colspan="6" style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("GUARDIAN_INFO");?></strong></td>
 						</tr>
 						<tr>
-							<td ><?php echo $tr->translate("NAME");?>*</td>
+							<td><?php echo $tr->translate("NAME");?>*</td>
 							<td><input class="fullside"  tabindex="35" dojoType="dijit.form.ValidationTextBox"  id="guardian_name_en" name="guardian_name_en" value="<?php echo $this->rs['guardian_enname'];?>" type="text"  ></td>
 							<td><?php echo $tr->translate("DOB");?></td>
 							<td><input class="fullside"  tabindex="36" dojoType="dijit.form.DateTextBox"  id="guardian_dob" name="guardian_dob" value="<?php echo $this->rs['guardian_dob'];?>" type="text" ></td>
@@ -367,9 +346,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("OCCUPATION");?></td>
-							<td>
-								<input id="gu_job" />
-							</td>
+							<td><input id="gu_job" /></td>
 							<td><?php echo $tr->translate("PHONE");?>*</td>
 							<td><input class="fullside"  tabindex="40" dojoType="dijit.form.ValidationTextBox"  id="guardian_phone" name="guardian_phone" value="<?php echo $this->rs['guardian_tel'];?>" type="text"  ></td>
 						</tr>
@@ -380,36 +357,30 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 			</tr>
 			<tr>
 				<td align="center">
-						<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-						<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-							iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"register",'action'=>'index'),null,true); ?>';" />
-						<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+					<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
+						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"register",'action'=>'index'),null,true); ?>';" />
+					<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />
-						
 				</td>
 			</tr>
 		</table>
 </form>
-
 <script>
-
 function hideDialog1() {		
 	dijit.byId("popup_dept2").hide();
 }
-
 var url_add_job = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-job")); ?>';
 function addJob(){
 	fa_job=dijit.byId('fa_job').get('value');
 	mo_job=dijit.byId('mo_job').get('value');
 	gu_job=dijit.byId('gu_job').get('value');
 	type=dijit.byId('value_j').get('value');
-	//alert(type);
 	dojo.xhrPost({
 		url:url_add_job,
 		form: dojo.byId("frm_add_tran1"),
 		handleAs:"json",
 		load: function(data) {
-			//alert(data); 
 			var Itemmake = { 
 			    		id: data,
 				        name: dijit.byId('occu_name').get('value')
@@ -418,44 +389,32 @@ function addJob(){
 		 		addDataToSelectbox(dijit.byId('fa_job'), job_store, Itemmake, data);
 		 		addDataToSelectbox(dijit.byId('mo_job'), job_store1, Itemmake, data);
 		 		addDataToSelectbox(dijit.byId('gu_job'), job_store2, Itemmake, data);
-
 				dijit.byId('mo_job').attr('value',mo_job);
 				dijit.byId('gu_job').attr('value',gu_job);
-		 		
 			}else if(type==2){
 				addDataToSelectbox(dijit.byId('fa_job'), job_store, Itemmake, data);
 		 		addDataToSelectbox(dijit.byId('mo_job'), job_store1, Itemmake, data);
 		 		addDataToSelectbox(dijit.byId('gu_job'), job_store2, Itemmake, data);
-
 				dijit.byId('fa_job').attr('value',fa_job);
 				dijit.byId('gu_job').attr('value',gu_job);
 			}else if(type==3){
 				addDataToSelectbox(dijit.byId('fa_job'), job_store, Itemmake, data);
 		 		addDataToSelectbox(dijit.byId('mo_job'), job_store1, Itemmake, data);
 		 		addDataToSelectbox(dijit.byId('gu_job'), job_store2, Itemmake, data);
-
 				dijit.byId('mo_job').attr('value',mo_job);
 				dijit.byId('fa_job').attr('value',fa_job);
 			}
 	    dijit.byId('frm_add_tran1').reset();
 	    dijit.byId("popup_dept2").hide();
-			
 		},
 		error: function(err) {
 			alert(err);
 		}
 	});
-	
 }
-
-
-
 </script>
-
-
-
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:100%;" id="popup_dept2" >
+	<div data-dojo-type="dijit.Dialog" style="width:500px" id="popup_dept2" >
 		<form style="background-color: buttonface; width:15cm;" id='frm_add_tran1' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
@@ -472,11 +431,7 @@ function addJob(){
 							<tr>
 								<td><?php echo $tr->translate('OCCUPATION_ENNAME');?></td>
 								<td>
-								
-								
 									<input dojoType="dijit.form.TextBox" type="hidden" name="value_j" id="value_j" value=""   />
-									
-									
 									<input dojoType="dijit.form.ValidationTextBox"  class="fullside" id="occu_enname" name="occu_enname" value="" type="text">
 								</td>
 							</tr>
@@ -489,7 +444,6 @@ function addJob(){
 	    								<option value="0" label="deactive">Deactive</option>
 									</select>
 								</td>
-								
 							</tr>
 							<tr>
 								<td colspan="4" align="center">
@@ -499,24 +453,15 @@ function addJob(){
 									​ ​​iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog1();"/>
 								</td>
 							</tr>
-							
 						</table>
 				</fieldset>
 				</td>
 			</tr>
 		</table>
-
 		</form>
 	</div>
 </div>
 <script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.store.Memory");
-	
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function getInfoBygroup(){
 		url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 		group = dijit.byId('group').get('value');
@@ -533,17 +478,13 @@ function addJob(){
 			load: function(data) {
 				dijit.byId('academic_year').set('value',data.academic_year);
 				dijit.byId('academic_year').set('readOnly',true);
-				
 				dijit.byId('degree').set('value',data.degree);
 				dijit.byId('degree').set('readOnly',true);
-				
 				dijit.byId('grade').set('value',data.grade);
 				dijit.byId('grade').set('readOnly',true);
 				dijit.byId('grade_fromgrouop').set('value',data.grade);
-				
 				dijit.byId('session').set('value',data.session);
 				dijit.byId('session').set('readOnly',true);
-				
 				dijit.byId('room').set('value',data.room_id);
 				dijit.byId('room').set('readOnly',true);
 			},
@@ -552,5 +493,41 @@ function addJob(){
 			}
 		});
 	}
-
+	var url_getgroup = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getgroup"));?>';										
+	function getRefreshGroup(){
+		loading();
+		dojo.xhrPost({
+			url:url_getgroup,
+			handleAs:"json",
+			load: function(data) {
+				group_store  = getDataStorefromJSON('id','name', data.group);
+			    dijit.byId('group').set('store',group_store);  
+			    degree_store  = getDataStorefromJSON('id','name', data.degree);
+			    dijit.byId('degree').set('store',degree_store);  
+			    document.getElementsByClassName("overlay")[0].style.display="none";
+			},
+			error: function(err) {
+				alert("err here ");
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			}
+		});
+	}
+	function loading(){
+	    document.getElementsByClassName("overlay")[0].style.display="block";
+	}
 </script>
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

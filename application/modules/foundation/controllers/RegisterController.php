@@ -45,7 +45,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-		
 	}
 	function addAction(){
 		$db = new Foundation_Model_DbTable_DbStudent();
@@ -68,7 +67,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$this->view->group = $db->getAllgroup();
+		$group = $db->getAllgroup();
+		array_unshift($group, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
@@ -113,8 +114,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$this->view->group = $db->getAllgroup();
-		
+		$group = $db->getAllgroup();
+		array_unshift($group, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
@@ -123,8 +125,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->occupation = $row;
 		
 		$this->view->degree = $db->getAllFecultyName();
-		
-		//$this->view->occupation = $_db->getOccupation();
 		
 		$this->view->province = $db->getProvince();
 		
@@ -224,7 +224,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
-				$db->addStudent($_data);
+				$exist = $db->addStudent($_data);
 				if($exist==-1){
 					Application_Form_FrmMessage::message("RECORD_EXIST");
 				}else{
@@ -241,7 +241,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			}
 		}
 		
-		$this->view->group = $db->getAllgroup();
+		$group = $db->getAllgroup();
+		array_unshift($group, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->group = $group;
+		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
 		array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
@@ -249,8 +252,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->occupation = $row;
 		
 		$this->view->degree = $db->getAllFecultyName();
-		
-		//$this->view->occupation = $_db->getOccupation();
 		
 		$this->view->province = $db->getProvince();
 		

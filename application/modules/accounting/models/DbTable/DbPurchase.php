@@ -51,17 +51,15 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
-    function updateStock($pro_id,$qty_order){
+    function updateStock($pro_id,$location_id,$qty_order){
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission('brand_id');
     	
     	$db=$this->getAdapter();
-    	$sql="select * from rms_product_location where pro_id=$pro_id   $branch_id";
+    	$sql="select * from rms_product_location where pro_id=$pro_id AND brand_id=$location_id  $branch_id";
     	$qty_stock = $db->fetchRow($sql);
-    	
     	//print_r($qty_stock);exit();
-    	
     	$this->_name="rms_product_location";
     	if(!empty($qty_stock)){
     		$qty = $qty_stock['pro_qty'] + $qty_order;
@@ -70,8 +68,15 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     				);
     		$where = " id = ".$qty_stock['id'];
     		$this->update($array, $where);
-    	}
-    	//echo $sql;exit();
+    	}elseif(empty($qty_stock)){
+    		$this->_name="rms_product_location";
+    		$_arrs = array(
+    				'pro_id'=>$pro_id,
+    				'brand_id'=>$location_id,
+    				'pro_qty'=>$qty_order,
+    		);
+    		$this->insert($_arrs);
+    	}else {}
     }
     
     public function addPurchase($_data){
@@ -105,7 +110,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				'sup_id'		=>$sup_id,
 	    				'supplier_no'	=>$_data['purchase_no'],
 	    				'amount_due'	=>$_data['amount_due'],
-	    				'branch_id'	=>$_data['branch_id'],
+	    				'branch_id'		=>$_data['branch_id'],
 	    				'date'			=>date("Y-m-d"),
 	    				'status'		=>$_data['status'],
 	    				'user_id'		=>$this->getUserId()
@@ -127,7 +132,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				);
 	    				$this->insert($_arr);
 	    				
-	    				$this->updateStock($_data['product_name_'.$i],$_data['qty_'.$i]);
+	    				$this->updateStock($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i]);
 	    		}
     			$db->commit();
 		   	}catch (Exception $e){
@@ -183,7 +188,6 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{ 
-    		
     		$this->updateStockBack($id);
     		
     		$this->_name = "rms_supplier";
@@ -235,7 +239,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				);
 	    				$this->insert($_arr);
 	    				
-	    			$this->updateStock($_data['product_name_'.$i],$_data['qty_'.$i]);
+	    			$this->updateStock($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i]);
 	    				
 	    		}
     			$db->commit();
@@ -318,6 +322,49 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('br_id');
     	return $db->fetchAll($sql);
+    }
+    
+    public function ajaxAddProduct($data){
+    	$db = $this->getAdapter();
+    	$session_user=new Zend_Session_Namespace('auth');
+    	$userName=$session_user->user_name;
+    	$GetUserId= $session_user->user_id;
+    	$_arr = array(
+    			'pro_name'	=>$data['product_name'],
+    			'pro_code'	=>$data['product_code'],
+    			'cat_id'	=>$data['category_id'],
+    			'pro_price'	=>$data['pro_price'],
+    			'pro_des'	=>$data['descript'],
+    			'pro_type'	=>$data['pro_type'],
+    			'status'	=>$data['p_status'],
+    			'date'		=>date("Y-m-d"),
+    			'user_id'	=>$this->getUserId()
+    	);
+    	$this->_name = "rms_product";
+    	$pro_id = $this->insert($_arr);
+    	$_arr = array(
+    			'pro_id'=>$pro_id,
+    			'brand_id'=>$data['location_id'],
+    			'pro_qty'=>0,
+    			'total_amount'=>0,
+    			'note'=>'',
+    	);
+    	$this->_name='rms_product_location';
+    	$this->insert($_arr);
+    	$array = array(
+    			'ser_cate_id'	=>$pro_id,
+    			'title'			=>$data['product_name'],
+    			'description'	=>$data['descript'],
+    			'price'			=>$data['pro_price'],
+    			'status'		=>1,
+    			'create_date'	=>date("Y-m-d H:i:s"),
+    			'user_id'		=>$this->getUserId(),
+    			'type'			=>1, // type=1 => product
+    			'pro_type'		=>$data['pro_type'], // 1=cut stock , 2=cut stock later
+    	);
+    	$this->_name='rms_program_name';
+    	$this->insert($array);
+    	return $pro_id;
     }
     
 }

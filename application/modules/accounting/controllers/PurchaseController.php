@@ -66,7 +66,10 @@ public function addAction(){
 			}
 		}
 		$_pur = new Accounting_Model_DbTable_DbPurchase();
-		$this->view->product= $_pur->getProductName();
+		$pro=$_pur->getProductName();
+		array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
+		$this->view->product= $pro;
+		
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->bran_name=$_pur->getAllBranch();
@@ -75,6 +78,12 @@ public function addAction(){
 		$d_row=$db_gr->getNameGradeAll();
 		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->grade_name=$d_row;
+		
+		$_pro = new Accounting_Model_DbTable_DbProduct();
+		$this->view->pro_code=$_pro->getProCode();
+		$pro_cate = $_pro->getProductCategory();
+		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>'Add New'));
+		$this->view->cat_rows = $pro_cate;
 	
 	}
 	public function editAction(){
@@ -87,9 +96,9 @@ public function addAction(){
 				$row = $db->updateProduct($_data,$id);
 		
 				if(isset($_data['save_close'])){
-					//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
 				}else{
-					//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
 				}
 		
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
@@ -101,12 +110,20 @@ public function addAction(){
 		}
 		$_pur = new Accounting_Model_DbTable_DbPurchase();
 		$this->view->product= $_pur->getProductNames();
-		$this->view->products= $_pur->getProductName();
+		$pro=$_pur->getProductName();
+		array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
+		$this->view->products= $pro;
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->row_sup=$_pur->getSupplierById($id);
 		$this->view->row_pur_detai=$_pur->getSupplierProducts($id);		
 		$this->view->bran_name=$_pur->getAllBranch();
+		
+		$_pro = new Accounting_Model_DbTable_DbProduct();
+		$this->view->pro_code=$_pro->getProCode();
+		$pro_cate = $_pro->getProductCategory();
+		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>'Add New'));
+		$this->view->cat_rows = $pro_cate;
 	}
 
 function getStudentAction(){
@@ -137,6 +154,16 @@ function getStudentAction(){
     		$row = $db->getSuplierInfo($data['sup_id']);
     		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($row));
+    		exit();
+    	}
+    }
+    
+    function addProductAction(){
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		$_dbmodel = new Accounting_Model_DbTable_DbPurchase();
+    		$id = $_dbmodel->ajaxAddProduct($_data);
+    		print_r(Zend_Json::encode($id));
     		exit();
     	}
     }

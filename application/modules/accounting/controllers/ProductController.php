@@ -38,7 +38,7 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'accounting','controller'=>'product','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('pro_code'=>$link,'pro_name'=>$link,'branch_name'=>$link,));
+			$this->view->list=$list->getCheckList(2, $collumns, $rs_rows,array('pro_code'=>$link,'pro_name'=>$link,'branch_name'=>$link,));
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
@@ -112,9 +112,6 @@ class Accounting_ProductController extends Zend_Controller_Action {
 		    
 		    $this->view->cat_rows=$_pro->getProductCategory();
 	}
-
-
-
 	function addNewProCateAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -123,6 +120,39 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			print_r(Zend_Json::encode($pro_cate));
 			exit();
 		}
+	}
+	public function copyAction(){
+		$id=$this->getRequest()->getParam('id');
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$_data['id']=$id;
+				try{
+					$db = new Accounting_Model_DbTable_DbProduct();
+					
+					$row = $db->addProduct($_data);
+					
+					if(isset($_data['save_close'])){
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product");
+					}else{
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product/add");
+					}
+					
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+				}catch(Exception $e){
+					Application_Form_FrmMessage::message("INSERT_FAIL");
+					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+					echo $e->getMessage();
+				}
+			}
+			 
+			$_pro = new Accounting_Model_DbTable_DbProduct();
+			$this->view->branch_name = $_pro->getBrandLocation();
+			$this->view->pro_code=$_pro->getProCode();
+			$this->view->pro_row=$_pro->getProductById($id);
+		    $this->view->pro_locat=$_pro->getProLocationById($id);
+		    
+		    $this->view->cat_rows=$_pro->getProductCategory();
+		
 	}
 
 

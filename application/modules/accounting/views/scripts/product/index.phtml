@@ -2,6 +2,8 @@
 $request = Zend_Controller_Front::getInstance ()->getRequest ();
 $tr = Application_Form_FrmLanguages::getCurrentlanguage ();
 $frm = $this->form_search;
+$url_copy =$this->url(array('module'=>'accounting','controller'=>'product','action'=>'copy'));
+$formList = new Application_Form_Frmtable();
 ?>
 <title><?php echo $tr->translate("PRODUCT");?></title>
 <meta charset="utf-8">
@@ -9,6 +11,7 @@ $frm = $this->form_search;
 	dojoType="dijit.form.Form" method="post">
 	<table style="width: 90%">
 		<tr>
+		    <td style="width: 95px;"><?php echo $formList->showCopyBuntton($url_copy);?></td>
 			<td><?php echo $frm->getElement("title");?></td>
 			<td><?php echo $frm->getElement("location");?></td>
 			<td> <?php echo $frm->getElement("category_id");?></td>
@@ -20,10 +23,27 @@ $frm = $this->form_search;
 					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			</td>
 		</tr>
+		<input type="text" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
 	</table>
 </form>
 <?php
 echo $this->list;
 ?>
+<script>
+	function copyRecord(url){
+		 id = dijit.byId('recordcopy').get('value');
+		 if(id!=''){
+			window.location.href = url+'/id/'+id;
+		 }else{
+			alert('Please select record you want to copy');
+			return false;
+		 }
+	}
+
+	function setValue(index){
+		var recordcopy = $('input[name=copy]:checked').val();
+		dijit.byId('recordcopy').attr('value',recordcopy);
+	}
+</script>
 
  

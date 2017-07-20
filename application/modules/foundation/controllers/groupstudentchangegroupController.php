@@ -97,6 +97,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$db= new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 		$result = $db->getAllGroupStudentChangeGroupById($id);
 		$this->view->rs = $result;
+		
 		$this->view->studentpass = $db->selectStudentPass($result['from_group']);
 		$_add = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 		$this->view->row = $add =$_add->getfromGroup();

@@ -284,27 +284,27 @@ var url_get_all_student_from_group = "<?php echo $this->url(array('module'=>'fou
 					},
 				handleAs:"json",
 				load: function(respone) {
-					tem='<table class="collape tablesorter" style="font-size:12px;background-color:white;width: 99.5%; "  id="table" >'
-						+'<thead><tr ><th class="tdheader"><?php echo $tr->translate('NUM');?></th>'
-							+'<th class="tdheader"><?php echo $tr->translate('CODE');?></th>'
-							+'<th class="tdheader"><?php echo $tr->translate('NAME_KH');?></th>'
-							+'<th class="tdheader"><?php echo $tr->translate('NAME_EN');?></th>'
-							+'<th class="tdheader" colspan="2"><?php echo $tr->translate('SEX');?></th>'
-							+'<th style="white-space:nowrap; border-right: 0px none;" class="tdheader" colspan="1"><input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></th>'
-							+'<th style="white-space:nowrap;border-left: 0px none;" class="tdheader" > <?php echo $tr->translate('CHECK_ALL');?></th></tr>'
+					tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table" >'
+						+'<thead><tr style="background:rgba(97, 191, 248, 0.73);height: 30px;font-size:13px;"><th><?php echo $tr->translate('NUM');?></th>'
+							+'<th><?php echo $tr->translate('CODE');?></th>'
+							+'<th><?php echo $tr->translate('NAME_KH');?></th>'
+							+'<th><?php echo $tr->translate('NAME_EN');?></th>'
+							+'<th colspan="2"><?php echo $tr->translate('SEX');?></th>'
+							+'<th style="white-space:nowrap; border-right: 0px none;" colspan="1"><input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></th>'
+							+'<th style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></th></tr>'
 						+'</thead>';
 					if(respone!=""){
 						num=0;
 						for(var i=0;i<respone.length;i++){
 							inx = i+1;
 
-								tem += '<tr>';
+								tem += '<tr style="border:1px solid #000;">';
 							
 							    tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
-								tem += '<td>&nbsp;<label style="font-size:11px;">'+respone[i].stu_code+'</label></td>';
-								tem += '<td>&nbsp;<label style="font-size:11px;">'+respone[i].stu_khname+'</label></td>';
-								tem += '<td>&nbsp;<label style="font-size:11px;">'+respone[i].stu_enname+'</label></td>';
-								tem += '<td colspan="2" align="center">&nbsp;<label style="font-size:11px;">'+respone[i].sex+'</label></td>';
+								tem += '<td>&nbsp;<label>'+respone[i].stu_code+'</label></td>';
+								tem += '<td>&nbsp;<label>'+respone[i].stu_khname+'</label></td>';
+								tem += '<td>&nbsp;<label>'+respone[i].stu_enname+'</label></td>';
+								tem += '<td colspan="2" align="center">&nbsp;<label>'+respone[i].sex+'</label></td>';
 								tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" checked="checked" value="'+inx+'" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
 							    tem += '</tr>';
 
@@ -372,6 +372,7 @@ function setValue(i){
 		}
 	}
 }
+
 function check(i){
 	if(dojo.byId('checkall').checked){
 		for(var j=1;j<=i;j++){

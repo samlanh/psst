@@ -385,6 +385,7 @@ function addNewProduct(){
 
 var url_add_pro_cate = '<?php echo $this->url(array("module"=>"accounting","controller"=>"Product","action"=>"add-new-pro-cate")); ?>';
 function addProCate(){
+	if(dijit.byId('frm_add_pro_cate').validate()){
 	dojo.xhrPost({
 		url:url_add_pro_cate,
 		form: dojo.byId("frm_add_pro_cate"),
@@ -402,6 +403,7 @@ function addProCate(){
 			alert(err);
 		}
 	});
+	}
 }
 
 </script>

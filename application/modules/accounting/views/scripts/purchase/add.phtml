@@ -322,8 +322,6 @@ function addRow() {
 		});
  }
 
- 
-
 var url_getsuplier = "<?php echo $this->url(array('module'=>'accounting','controller'=>'purchase','action'=>'get-supplier-info')); ?>";
 function getSuplierInfo(){
 			sup_id = dijit.byId('sup_id').get('value');
@@ -382,7 +380,6 @@ function isNewCustomer(){
 		$('#new_cu').show();
 		dijit.byId('supplier_name').attr('required', true);
 	}
-	
 }
 
 function sumAmountDue() {
@@ -422,6 +419,7 @@ function addNewProduct(){
 
 var url_add_pro_cate = '<?php echo $this->url(array("module"=>"accounting","controller"=>"Product","action"=>"add-new-pro-cate")); ?>';
 function addProCate(){
+	if(dijit.byId('frm_add_pro_cate').validate()){
 	dojo.xhrPost({
 		url:url_add_pro_cate,
 		form: dojo.byId("frm_add_pro_cate"),
@@ -439,6 +437,7 @@ function addProCate(){
 			alert(err);
 		}
 	});
+	}
 }
  
 </script>

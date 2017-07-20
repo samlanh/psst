@@ -226,7 +226,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     }
     function getProductCategory(){ //if type=1 category , if type=2 measure 
     	$db=$this->getAdapter();
-    	$sql="SELECT id,name_kh as name FROM rms_pro_category WHERE `status`=1 ";
+    	$sql="SELECT id,name_kh as name FROM rms_pro_category WHERE `status`=1 AND name_kh!=''";
     	return $db->fetchAll($sql);
     }
     /////////////Category 

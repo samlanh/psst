@@ -21,7 +21,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     		$_arr = array(
     				'title'=>$_data['add_title'],
-    				'type'=>1,
+    				'type'=>2,
     				'ser_cate_id'=>$_data['title'],
     				'description'=>$_data['description'],
     				'create_date'=>Zend_Date::now(),
@@ -30,12 +30,11 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     		);
     		return ($this->insert($_arr));
     } 
-    
     public function addServicePopup($_data){
     	$db = $this->getAdapter();
     	$_arr = array(
     			'title'=>$_data['service_name'],
-    			'type'=>1,
+    			'type'=>2,
     			'ser_cate_id'=>$_data['service_type'],
     			'description'=>$_data['description'],
     			'create_date'=>Zend_Date::now(),
@@ -43,7 +42,6 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     			'user_id'=>$this->getUserId(),
     	);
     	return ($this->insert($_arr));
-    	 
     }
     
     public function serviceExist($service_name,$_type){
@@ -72,11 +70,10 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     public function getAllServiceNames($search=''){
     	$db = $this->getAdapter();
     	$where='';
-    	
     	$sql = "SELECT service_id AS id,p.title
     	,(SELECT title FROM `rms_program_type` WHERE id=ser_cate_id LIMIT 1) AS cate_name
     	,`description`,p.`status`,p.`create_date`
-    	,(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE p.user_id=id ) AS user_name
+    	,(SELECT first_name FROM rms_users WHERE p.user_id=id ) AS user_name
     	FROM `rms_program_name` AS p WHERE type=2 ";
     	$order=" ORDER BY service_id DESC";
     	 
@@ -91,6 +88,10 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
 // 	    	$s_where[] = " kh_name LIKE '%{$s_search}%'";
 // 	    	$s_where[] = " en_name LIKE '%{$s_search}%'";
 	    	$where .=' AND ( '.implode(' OR ',$s_where).')';
+	    }
+	    //print_r($search);//exit();
+	    if($search['cate_name']>0){
+	    	$sql.=" AND ser_cate_id=".$search['cate_name'];
 	    }
     	return $db->fetchAll($sql.$where.$order);
     }

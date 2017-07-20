@@ -236,10 +236,15 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$row = $db->getServiceType();
 		$_cate_opt="";
 		$_cate_name = new Zend_Dojo_Form_Element_FilteringSelect('cate_name');
+		$action = $request->getActionName();
+		if($action=='index'){
+			$_cate_opt=array(-1=>'Select Category');
+		}
 		if(!empty($row)){
 			foreach($row as $rs)$_cate_opt[$rs['id']]=$rs['title'];
 			$_cate_name->setMultiOptions($_cate_opt);
 		}
+		$_cate_name->setValue($request->getParam("cate_name"));
 		
 		$_cate_name->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("SEARCH_BY_TYPE")));

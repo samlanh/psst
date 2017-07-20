@@ -13,15 +13,10 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 	public function indexAction(){
 		try{
 			if($this->getRequest()->isPost()){
-				$_data=$this->getRequest()->getPost();
-				$search = array(
-						'txtsearch' => $_data['txtsearch'],
-						);
+				$search=$this->getRequest()->getPost();
 			}
 			else{
-				$search=array(
-						'txtsearch' =>'',
-						);
+				$search=array('txtsearch' =>'','cate_name'=>-1);
 			}
 			$db = new Accounting_Model_DbTable_DbService();
 			$rs_rows = $db->getAllServiceNames($search);
@@ -41,7 +36,6 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$frm = new Global_Form_FrmSearchMajor();
 		$frm = $frm->frmSearchServiceProgram();

@@ -55,17 +55,17 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		    $userName=$session_user->user_name;
 		    $GetUserId= $session_user->user_id;
 		    
-		    $adapter = new Zend_File_Transfer_Adapter_Http();
-		    $part = PUBLIC_PATH.'/images';
-		    $adapter->setDestination($part);
-		    $adapter->receive();
-		    $photo = $adapter->getFileInfo();
+// 		    $adapter = new Zend_File_Transfer_Adapter_Http();
+// 		    $part = PUBLIC_PATH.'/images';
+// 		    $adapter->setDestination($part);
+// 		    $adapter->receive();
+// 		    $photo = $adapter->getFileInfo();
 		    	
-		    if(!empty($photo['photo']['name'])){
-		    	$pho_name = $photo['photo']['name'];
-		    }else{
-		    	$pho_name = '';
-		    }
+// 		    if(!empty($photo['photo']['name'])){
+// 		    	$pho_name = $photo['photo']['name'];
+// 		    }else{
+// 		    	$pho_name = '';
+// 		    }
 		    
 			$arr = array(
 					'book_no'	=>	$data["book_id"],
@@ -74,7 +74,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 					'serial_no'	=>	$data["serial_no"],
 					'cat_id'	=>	$data["parent_id"],
 					'block_id'	=>	$data["block_id"],
-					'photo'		=>	$pho_name,
+					//'photo'		=>	$pho_name,
 					'publisher'	=>	$data["publisher"],
 					'qty'		=>	$data["qty"],
 					'qty_after'	=>	$data["qty"],
@@ -94,17 +94,17 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		    $userName=$session_user->user_name;
 		    $GetUserId= $session_user->user_id;
 		    
-		    $adapter = new Zend_File_Transfer_Adapter_Http();
-		    $part = PUBLIC_PATH.'/images';
-		    $adapter->setDestination($part);
-		    $adapter->receive();
-		    $photo = $adapter->getFileInfo();
+// 		    $adapter = new Zend_File_Transfer_Adapter_Http();
+// 		    $part = PUBLIC_PATH.'/images';
+// 		    $adapter->setDestination($part);
+// 		    $adapter->receive();
+// 		    $photo = $adapter->getFileInfo();
 		    	
-		    if(!empty($photo['photo']['name'])){
-		    	$pho_name = $photo['photo']['name'];
-		    }else{
-		    	$pho_name = $data['old_photo'];
-		    }
+// 		    if(!empty($photo['photo']['name'])){
+// 		    	$pho_name = $photo['photo']['name'];
+// 		    }else{
+// 		    	$pho_name = $data['old_photo'];
+// 		    }
 		    
 			$arr = array(
 					'book_no'	=>	$data["book_id"],
@@ -112,7 +112,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 					'author'	=>	$data["author_name"],
 					'serial_no'	=>	$data["serial_no"],
 					'cat_id'	=>	$data["parent_id"],
-					'photo'		=>	$pho_name,
+					//'photo'		=>	$pho_name,
 					'publisher'	=>	$data["publisher"],
 					'block_id'	=>	$data["block_id"],
 					'qty'		=>	$data["qty"],

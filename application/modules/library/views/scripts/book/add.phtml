@@ -4,7 +4,7 @@
 	$frm=$this->frm_book;
 ?>	
 <style>
-     
+ 
 </style>
 <script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript">
@@ -25,7 +25,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 
 </script>
  
- 
+<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <form  id='frm_book' action="" dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data" >
 <script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
 	if(this.validate()) {
@@ -46,12 +46,12 @@ dojo.require("dojo.data.ItemFileWriteStore");
 				return false;
 			}
 </script>
-<table cellspacing="10" width="70%" style="margin: 0 auto; ">
+<table cellspacing="0" width="70%" style="margin: 0 auto; ">
 	<tr>
 		<td>
 			<fieldset>
 				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_BOOK")?></strong></legend>
-				<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="10"  >
+				<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="2"  >
 				    <tr>
 						<td ><?php echo $tr->translate("BOOK_NAME")?> </td>
 						<td><?php echo $frm->getElement("book_name");?></td>
@@ -77,32 +77,33 @@ dojo.require("dojo.data.ItemFileWriteStore");
 						<td><?php echo $frm->getElement("qty");?></td>
 					</tr>
 					<tr>
-						<td ><?php echo $tr->translate("NOTE")?> </td>
-						<td><?php echo $frm->getElement("remark");?></td>
+					    <td><?php echo $tr->translate("STATUS")?></td>
+						<td><?php echo $frm->getElement("statuss");?></td>
 						<td><?php echo $tr->translate("UNIT_PRICE")?>($)</td>
 						<td><?php echo $frm->getElement("unit_price");?></td>
 					</tr>
+					<tr><td><?php echo $tr->translate('DESCRIPTION')?></td></tr>
 					<tr>
-						<td><?php echo $tr->translate("IMAGE")?></td>
-						<td><?php echo $frm->getElement("photo");?></td>
-						<td><?php echo $tr->translate("STATUS")?></td>
-						<td><?php echo $frm->getElement("statuss");?></td>
-					</tr>
-					
-					<tr>
-						<td colspan="4" align="center" style="padding-left:40px;">
-							<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
-							<input type="submit" value="save_new" name="save_new"  id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-								 iconClass="dijitEditorIcon dijitEditorIconSave" />
+						<td colspan="4">
+							<textarea class="ckeditor"  rows="1"   id="remark" name="remark"></textarea>
 						</td>
 					</tr>
+				    <tr>
+					<td colspan="4" align="center" style="padding-left:40px;">
+						<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+						<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+						<input type="submit" value="save_new" name="save_new"  id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+							 iconClass="dijitEditorIcon dijitEditorIconSave" />
+					</td>
+				    </tr>
 				</table>	
-			</fieldset>		
+			</fieldset>	
+			
 		</td>
 	</tr>
-</table>	
+	</table>	
+	 
 </form>
 <?php $frm_c=$this->frm_cat;?>
 <div class="dijitHidden">
@@ -279,7 +280,7 @@ function addDept(){
 }
 
 var url_add_block = '<?php echo $this->url(array('module'=>'library','controller'=>'book','action'=>'add-block')); ?>';
-var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->block))?>);
+var cat_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->block))?>);
 function addBlock(){
 	if(dijit.byId('frm_block').validate()){
 		b_name=dijit.byId('block_name').get('value');
@@ -297,7 +298,7 @@ function addBlock(){
 							id: data,
 						    name: dijit.byId('block_name').get('value')
 					};			
-					addDataToSelectbox(dijit.byId('block_id'), book_store, Itemcat, data);
+					addDataToSelectbox(dijit.byId('block_id'), cat_store, Itemcat, data);
 					dijit.byId('frm_block').reset();
 					dijit.byId("pop_block").hide();
 				},

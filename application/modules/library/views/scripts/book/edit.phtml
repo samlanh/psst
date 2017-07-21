@@ -18,7 +18,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 
 </script>
  
- 
+ <script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <form  id='frm_book' action="" dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data" >
 <script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
 	if(this.validate()) {
@@ -38,7 +38,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		<td>
 			<fieldset>
 				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("EDIT_BOOK")?></strong></legend>
-				<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="10"  >
+				<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="3"  >
 				    <tr>
 						<td ><?php echo $tr->translate("BOOK_NAME")?> </td>
 						<td><?php echo $frm->getElement("book_name");?></td>
@@ -64,18 +64,16 @@ dojo.require("dojo.data.ItemFileWriteStore");
 						<td><?php echo $frm->getElement("qty");?></td>
 					</tr>
 					<tr>
-						<td ><?php echo $tr->translate("NOTE")?> </td>
-						<td><?php echo $frm->getElement("remark");?></td>
+						<td><?php echo $tr->translate("STATUS")?></td>
+						<td><?php echo $frm->getElement("statuss");?></td>
 						<td><?php echo $tr->translate("UNIT_PRICE")?>($)</td>
 						<td><?php echo $frm->getElement("unit_price");?></td>
 					</tr>
+					<tr><td><?php echo $tr->translate('DESCRIPTION')?></td></tr>
 					<tr>
-						<td><?php echo $tr->translate("IMAGE")?></td>
-						<td><?php echo $frm->getElement("photo");?>
-						<?php echo $frm->getElement("old_photo")?>
-						<img src="<?php echo $this->baseUrl()?>/images/<?php echo $this->row['photo']?>" alt="Smiley face" height="42" width="42"></td>
-						<td><?php echo $tr->translate("STATUS")?></td>
-						<td><?php echo $frm->getElement("statuss");?></td>
+						<td colspan="4">
+							<textarea class="ckeditor"  rows="1"   id="remark" name="remark"><?php echo $this->row['note'];?></textarea>
+						</td>
 					</tr>
 					
 					<tr>
@@ -266,7 +264,7 @@ function addDept(){
 }
 
 var url_add_block = '<?php echo $this->url(array('module'=>'library','controller'=>'book','action'=>'add-block')); ?>';
-var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->block))?>);
+var cat_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->block))?>);
 function addBlock(){
 	b_name=dijit.byId('block_name').get('value');
 	if(b_name==''){
@@ -284,7 +282,7 @@ function addBlock(){
 						id: data,
 					    name: dijit.byId('block_name').get('value')
 				};			
-				addDataToSelectbox(dijit.byId('block_id'), book_store, Itemcat, data);
+				addDataToSelectbox(dijit.byId('block_id'), cat_store, Itemcat, data);
 				dijit.byId('frm_block').reset();
 				dijit.byId("pop_block").hide();
 			},

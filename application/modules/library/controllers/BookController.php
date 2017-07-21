@@ -106,6 +106,7 @@ protected $tr;
     	
     	$row=$db->getBookRowById($id);
     	$this->view->row=$row;
+    	$this->view->row=$row;
     	$frm_major = new Library_Form_FrmBook();
     	$frm_search = $frm_major->frmBook($row);
     	Application_Model_Decorator::removeAllDecorator($frm_search);
@@ -159,6 +160,7 @@ protected $tr;
     	$this->view->cat=$db->getCategoryAll();
     	$this->view->block=$db->getBlockAll();
     	$row=$db->getBookRowById($id);
+    	$this->view->row=$row;
     	$this->view->row=$row;
     	$frm_major = new Library_Form_FrmBook();
     	$frm_search = $frm_major->frmBook($row);

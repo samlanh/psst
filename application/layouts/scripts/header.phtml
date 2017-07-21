@@ -19,7 +19,7 @@
       $library=$this->url(array('module'=>'library','controller'=>'index','action'=>'index'), null, true);
       $module=Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
 	  
-	  $session_user=new Zend_Session_Namespace('auth');
+	  $session_user=new Zend_Session_Namespace('authstu');
 	  $level=$session_user->level;
 	  
 	  $url_logo = $this->baseUrl()."/images/cam-app-logo.png";
@@ -96,7 +96,7 @@
 // 	}  
 	  
 	$module=Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
-	$session_user=new Zend_Session_Namespace('auth');
+	$session_user=new Zend_Session_Namespace('authstu');
 	$arr_module = $session_user->arr_module;
 	$menuleft=array();
 	$class='link';
@@ -162,7 +162,7 @@
 			<a ><img src="<?php echo $url_logo;?>" style="max-height:45px"  /></a>
 		</li>
 		<?php
-		$session_user=new Zend_Session_Namespace('auth');
+		$session_user=new Zend_Session_Namespace('authstu');
 		$modules_access = $session_user->arr_module;
 			foreach($menuleft as $key=>$value){
 					if($module==$value){

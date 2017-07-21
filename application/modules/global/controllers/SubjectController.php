@@ -77,7 +77,6 @@ class Global_SubjectController extends Zend_Controller_Action {
     	$dept = $db->getAllDept();
     	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
     	$this->view->degree_store = $dept;
-		
 	}
 	function addsubjectAction(){//At callecteral when click client
 		if($this->getRequest()->isPost()){

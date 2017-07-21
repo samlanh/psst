@@ -71,6 +71,7 @@ class Global_GroupController extends Zend_Controller_Action {
 		$_db = new Global_Model_DbTable_DbGroup();
 		$this->view->degree = $rows = $_db->getAllFecultyName();
 		$this->view->row_year=$_db->getAllYears();
+		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
 		$this->view->subject = $_db->getAllSubjectStudy();
 		
 		
@@ -88,6 +89,13 @@ class Global_GroupController extends Zend_Controller_Action {
 		$dept = $db->getAllDept();
 		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->dept = $dept;
+		
+		$subject_exam=new Global_Form_FrmAddSubjectExam();
+		$frm_subject_exam=$subject_exam->FrmAddSubjectExam();
+		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
+		$this->view->frm_subject_exam = $frm_subject_exam;
+		
+		
 	}
 		
 		

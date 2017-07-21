@@ -3,16 +3,13 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_callteral;
 echo $this->headTitle($tr->translate("ADD_STUDY_GROUP"));
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
 	dojo.require('dijit.form.TextBox');
 </script>
-
 <form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add')); ?>" 
 dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
@@ -54,10 +51,8 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 								<?php }}?>
 							</select>
 						</td>
-						
 						<td><?php echo $tr->translate("SEMESTER")?></td>
 						<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" required="true" name="semester" value="" type="text"></td>
-						
 					</tr>
 					<tr>
 						<td><?php echo $tr->translate("SESSION")?></td>
@@ -70,34 +65,26 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							<?php 	}?>
 							</select>
 						</td>
-						
 						<td ><?php echo $tr->translate("DEGREE")?></td>
 						<td>
 							<input id="degree" name="degree" />
 						</td>
-						
 						<td style="white-space: nowrap;"><?php echo $tr->translate("GRADE")?></td>
 						<td>
 							<input id="grade" name="grade" />
 						</td>
-						
 					</tr>
-					
 					<tr>
 						<td style="width: 5px"><?php echo $tr->translate("START_DATE")?></td>
 						<td><input dojoType="dijit.form.DateTextBox" name="start_date" id="start_date" class="fullside" onchange="setEndDate();" value="<?php echo date('Y-m-d');?>" type="text"></td>
-						
 						<td><?php echo $tr->translate("AMOUNT_MONTH")?></td>
 						<td><input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" class="fullside" value="" onkeyup="setEndDate();" type="text"></td>
-						
 						<td ><?php echo $tr->translate("END_DATE")?></td>
 						<td><input dojoType="dijit.form.DateTextBox" id="end_date" name="end_date" type="text" class="fullside" value="<?php echo date('Y-m-d');?>" ></td>
 					</tr>
 					<tr>
 						<td><?php echo $tr->translate("ROOM_NAME")?></td>
-						<td>
-							<input id="room" />
-						</td>
+						<td><input id="room" /></td>
 						<td ><?php echo $tr->translate("STATUS")?></td>
 						<td><select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect">
 								<option value="1" label="ប្រើប្រាស់">ប្រើប្រាស់</option>
@@ -107,7 +94,6 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						<td ><?php echo $tr->translate("NOTE")?></td>
 						<td><input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="" type="text"></td>
 					</tr>
-					
 					<tr>
 						<td colspan="6">
 							<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
@@ -137,22 +123,80 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 	</tr>
 </table>
 </form>
+<?php  $subject_exam= $this->frm_subject_exam;?>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_add_degree" >
+		<form  id='frm_degree' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
+							<tr>
+								<td><input type="checkBox" checked="checked" dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
+								<input type="hidden" id="par" name="par" />
+							</tr>
+							<tr>
+								<td style="width: 100px"><?php echo $tr->translate("PARENT")?></td>
+								<td>
+									<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
+										<option value="0"></option>
+										<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
+													<option value="<?php echo $row['id']?>"><?php echo $row['subject_titleen']?></option>
+										<?php }?>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_KH")?></td>
+								<td><?php  echo $subject_exam->getElement('subject_kh');?></td>
+							</tr>
+							<tr>
+								<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_EN")?></td>
+								<td><?php  echo $subject_exam->getElement('subject_en');?></td>
+							</tr>
+							<tr>
+								<td style="width: 100px"><?php echo $tr->translate("SHORTCUT")?></td>
+								<td><?php echo $subject_exam->getElement('score_percent');?></td>
+							</tr>
+							<tr>
+								<td colspan="2" align="center">
+									<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+										iconClass="dijitEditorIcon dijitEditorIconSave" />
+								</td>
+							</tr>
+						</table>
+		</form>
+	</div>
+</div>
 <?php 
 $techer= $this->frm_techer;
 ?>
 <script type="text/javascript">
-dojo.require("dojo.date.locale");
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
 dojo.require('dojox.form.BusyButton');
 
 dojo.require("dojo.html");
 var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
+var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
 dojo.ready(function(){
-
+	new dijit.form.FilteringSelect({
+		store: subject_store,
+		autoComplete: true,                        
+		required: false,
+		id: "subject_id",
+		name: "subject_id",           
+		class: "fullside", 
+		placeHolder:"Select Degree",          
+		onChange: function() {  
+			subject_id = dijit.byId('subject_id').get('value');
+			if(subject_id==-1){
+				dijit.byId("popup_add_degree").show();
+				//addRowDegree();
+			}else{
+				addRowDegree();
+			}
+		}
+	}, "subject_id");
 	new dijit.form.FilteringSelect({
 		store: dept_store,
 		autoComplete: true,                        
@@ -186,7 +230,6 @@ dojo.ready(function(){
 		}
 	}, "degree_popup1");	
 
-
 	new dijit.form.FilteringSelect({
 		store: grade_store,
 		autoComplete: true,                        
@@ -203,9 +246,7 @@ dojo.ready(function(){
 			}
 		}
 	}, "grade");
-	//getallGrade();
 
-			
 	new dijit.form.FilteringSelect({
 		store: room_store,
 		autoComplete: true,                        
@@ -220,12 +261,8 @@ dojo.ready(function(){
 			}
 		}
 	}, "room");
-			
 	addRow();
-	
 });
-
-
 function setEndDate(){
 	amount_date = dijit.byId('amountmonth').get('value');
 	release_date = dijit.byId("start_date").get('value');//just update follow by first payment
@@ -245,7 +282,6 @@ function setEndDate(){
 		dijit.byId('end_date').attr('value',epx_date);	
     }
 }
-
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 function getallGrade(){
 	dept_id = dijit.byId('degree').get('value');
@@ -256,7 +292,6 @@ function getallGrade(){
 				},
 			handleAs:"json",
 			load: function(data) {
-				//alert(data);
 				dijit.byId('grade').attr('value','');
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);   
@@ -268,10 +303,8 @@ function getallGrade(){
 		});
 }
 
-
 var url_room = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add-room')); ?>';
 function addRoom(){
-		//subject_id
 	if(dijit.byId('form_add_room').validate()){
 		dojo.xhrPost({
 			url:url_room,
@@ -286,9 +319,7 @@ function addRoom(){
 				addDataToSelectbox(dijit.byId('room'), room_store, myNewItem, data);
 				
 				dijit.byId("form_add_room").reset();
-				//dijit.byId("pop_room").hide();
 				hideDialog();
-				//alert(1);
 			},
 			error: function(err) {
 				alert(err);
@@ -296,7 +327,6 @@ function addRoom(){
 		});
 	}
 }
-
 var subject = '<?php echo $this->subject;?>';
 var col = 0;
 var no = 0;
@@ -395,24 +425,17 @@ function getSubjectByDegree(){
 						dojo.html.set(dojo.byId("row"+col),template , {
 							 parseContent: true,
 						});
-
 						dijit.byId('group_subject_study_'+col).attr('value',data[i].subject_id);
-						
 						dijit.byId('group_note_'+col).attr('value',data[i].note);
-
 						dijit.byId('status_'+col).attr('value',data[i].status);
-						//alert(1);
 					}
 			    }
-
 			},
 			error: function(err) {
 				alert(err);
 			}
 		});
 }
-
-
 var subject = '<?php echo $this->subject;?>';
 var col1 = 0;
 var no1 = 0;
@@ -420,6 +443,9 @@ var title1 = 0;
 tmp1 = '';
 temp1='';
 function addRowDegree(){
+	subject_label = dijit.byId("subject_id").attr('displayedValue');
+	subject_id = dijit.byId("subject_id").get('value');
+	if(subject_id=='' || subject_id==-1){return false;}
 	col1++;no1++;
 	template1='';
 	if(title1!=1){
@@ -435,7 +461,9 @@ function addRowDegree(){
 	}
 		template1+='<td width="4%" align="center"><img onclick="deleteRecord1('+col1+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template1+='<td width="4%" align="center">'+no1+'</td>';
-		template1+='<td width="25%"><label id="subject_label'+col1+'"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col1+'" name="subject_study_'+col1+'">'+subject+'</select></label></td>';
+		//template1+='<td width="25%"><label id="subject_label'+col1+'"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col1+'" name="subject_study_'+col1+'">'+subject+'</select></label></td>';
+		
+		template1+='<td width="25%">&nbsp;<label id="subject_label'+col1+'">'+subject_label+'</label><input dojoType="dijit.form.TextBox" value="'+subject_id+'" name="subject_study_'+col1+'" id="subject_study_'+col1+'" type="hidden"></td>';
 		template1+='<td width="10%"><input required="false" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col1+'" id="scoreinclass_'+col1+'" value="" type="text"></td>';	
 		template1+='<td width="10%"><input required="false" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col1+'" id="scoreoutclass_'+col1+'" value="" type="text"></td>';
 		template1+='<td width="10%"><input required="false" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col1+'" id="scoreshort_'+col1+'" value="0" type="text"></td>';
@@ -452,7 +480,6 @@ function addRowDegree(){
 	     parseContent: true,
 	});
 }
-
 function deleteRecord1(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -463,12 +490,7 @@ function deleteRecord1(index) {
 	$('#identity').val(strings);
 	dojo.query("#row1"+index).remove();
 }
-
-
 </script>
-
-
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_room" >
 		<form style="background-color: buttonface; " id='form_add_room' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -482,7 +504,6 @@ function deleteRecord1(index) {
 							<td style="width:100px"><?php echo $tr->translate("ROOM_NAME")?></td>
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="room_name" id="room_name" type="text" required="required" /></td>
 						</tr>
-						
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("STATUS")?></td>
 							<td>
@@ -504,36 +525,27 @@ function deleteRecord1(index) {
 				</td>
 			</tr>
 		</table>
-
 		</form>
 	</div>
 </div>
-<!-- statrt add new version -->
-
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:70%;overflow:scroll;" id="popup_add_dept" >
+	<div data-dojo-type="dijit.Dialog" style="width:70%;overflow-y:scroll;" id="popup_add_dept" >
 		<form  id='frm_add_dep' name='frm_add_dep' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<table cellspacing="10" width="100%" style="margin: 0 auto;">
 				    <tr>
 						<td width="10%"><?php echo $tr->translate("DEGREE");?></td>
-						<td width="35%">
-							<input type="text" class="fullside" name='fac_enname' id="fac_enname" dojoType="dijit.form.TextBox" />
+						<td width="35%"><input type="text" class="fullside" name='fac_enname' id="fac_enname" required="true" dojoType="dijit.form.ValidationTextBox" />
 						</td>
-						
 						<td width="10%"></td>
-						
 						<td width="10%"><?php echo $tr->translate("SHORTCUT");?></td>
 						<td width="35%">
 							<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
 						</td>
 					</tr>
-					
 					<tr>
-						<td colspan="5" align="left">
-							<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitIconEditProperty" onclick="addRowDegree();" />
+						<td><?php echo $tr->translate("SUBJECT");?></td>
+						<td colspan="4"><input id="subject_id" /><input type="hidden" name="identity" id="identity"  />
 						</td>
-						<input type="hidden" name="identity" id="identity"  />
 					</tr>
 					<tr>
 						<td colspan="5">
@@ -542,12 +554,10 @@ function deleteRecord1(index) {
 							</table>
 						</td>
 					</tr>
-					
 					<tr>
 						<td colspan="5" align="center">
 							<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
 							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialogDegree()"/>
-							
 							<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="save_dep" 
 							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDept();"/>
 						</td>
@@ -556,11 +566,9 @@ function deleteRecord1(index) {
 		</form>
 	</div>
 </div>
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:40%;" id="popup_grate" >
 		<form style="background-color: buttonface;" id='frm_add_grade' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
@@ -569,20 +577,17 @@ function deleteRecord1(index) {
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 					<tr>
 						<td><?php echo $tr->translate("NAME")?></td>
-						<td> 
-							<input dojoType="dijit.form.ValidationTextBox" required="true" class="full height-text" id="major_enname" name="major_enname" value="" type="text">
+						<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="full height-text" id="major_enname" name="major_enname" value="" type="text">
 						</td>
 					</tr>
 					<tr>
 						<td><?php echo $tr->translate("SHORTCUT")?></td>
-							<td> 
-								<input dojoType="dijit.form.ValidationTextBox"  class="full height-text" id="shortcut" name="shortcut" value="" type="text">
+							<td><input dojoType="dijit.form.ValidationTextBox"  class="full height-text" id="shortcut" name="shortcut" value="" type="text">
 						</td>
 					</tr>
 					<tr>
 						<td><?php echo $tr->translate("DEGREE")?></td>
-						<td>
-							<input id="degree_popup1" /> 
+						<td><input id="degree_popup1" /> 
 						</td>
 					</tr>
 					<tr>
@@ -606,13 +611,10 @@ function deleteRecord1(index) {
 				</td>
 			</tr>
 		</table>
-
 		</form>
 	</div>
 </div>
-
 <script>
-
 var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-dept")); ?>';
 function addDept(){
 	if(dijit.byId('frm_add_dep').validate()){
@@ -626,19 +628,14 @@ function addDept(){
 				form: dojo.byId("frm_add_dep"),
 				handleAs:"json",
 				load: function(data) {
-					//alert(data); 
 					var Itemmake = { 
 					    	 id: data,
 						     name: dijit.byId('fac_enname').get('value')
 						   };
 			   addDataToSelectbox(dijit.byId('degree'), dept_store, Itemmake, data);
-			   //addDataToSelectbox(dijit.byId('degree_popup1'), dept_store, Itemmake, data);
-			   
 			   dijit.byId('frm_add_dep').reset();
 			   dijit.byId("popup_add_dept").hide();	
-			   
 			   getSubjectByDegree();
-			   
 				},
 				error: function(err) {
 					alert(err);
@@ -646,7 +643,6 @@ function addDept(){
 		});
 	}
 }
-
 var url_add_grade = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"add-graddjax")); ?>';
 function addGrade(){
 	if(dijit.byId('frm_add_grade').validate()){
@@ -660,7 +656,6 @@ function addGrade(){
 				form: dojo.byId("frm_add_grade"),
 				handleAs:"json",
 				load: function(data) {
-					//alert(data); 
 					var Itemmake = { 
 					    	 id: data,
 						     name: dijit.byId('major_enname').get('value')
@@ -675,11 +670,9 @@ function addGrade(){
 		});
 	}
 }
-
 function hideDialogGrade() {		
 	dijit.byId("popup_grate").hide();
 }
-
 function hideDialogDegree() {		
 	dijit.byId("popup_add_dept").hide();
 }

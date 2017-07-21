@@ -4,7 +4,7 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 {
  	protected $_name = 'rms_bcategory';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('auth');
+    	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
     }
  
@@ -57,7 +57,7 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
     }
 	public function add($data){
 			$db = $this->getAdapter();
-			$session_user=new Zend_Session_Namespace('auth');
+			$session_user=new Zend_Session_Namespace('authstu');
 		    $userName=$session_user->user_name;
 		    $GetUserId= $session_user->user_id;
 			$arr = array(
@@ -75,7 +75,7 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	public function ajaxAddCategory($data){
 		//return  $data;
 		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('auth');
+		$session_user=new Zend_Session_Namespace('authstu');
 		$userName=$session_user->user_name;
 		$GetUserId= $session_user->user_id;
 		$arr = array(
@@ -93,7 +93,7 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	public function ajaxAddBlock($data){
 		//return  $data;
 		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('auth');
+		$session_user=new Zend_Session_Namespace('authstu');
 		$userName=$session_user->user_name;
 		$GetUserId= $session_user->user_id;
 		$arr = array(
@@ -110,7 +110,7 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	public function edit($data){
 		//print_r($data);exit();
 				$db = $this->getAdapter();
-				$session_user=new Zend_Session_Namespace('auth');
+				$session_user=new Zend_Session_Namespace('authstu');
 			    $userName=$session_user->user_name;
 			    $GetUserId= $session_user->user_id;
 				$arr = array(

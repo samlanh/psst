@@ -206,7 +206,7 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 								<td colspan="2" align="center" valign="">
 									<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';margin-top: -7px;"> 
 								        <?php 
-										   $session_user=new Zend_Session_Namespace('auth');
+										   $session_user=new Zend_Session_Namespace('authstu');
 								           $last_name=$session_user->last_name;
 								           $username = $session_user->first_name;
 										   echo "".$last_name." ".$username;

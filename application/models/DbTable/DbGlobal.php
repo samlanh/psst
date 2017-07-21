@@ -110,7 +110,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
 
    public function getUserId(){
-   	$session_user=new Zend_Session_Namespace('auth');
+   	$session_user=new Zend_Session_Namespace('authstu');
    	return $session_user->user_id;
    }
    
@@ -539,7 +539,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $db->fetchAll($sql);
    }
    public function getAccessPermission($branch_str='branch_id'){
-	   	$session_user=new Zend_Session_Namespace('auth');
+	   	$session_user=new Zend_Session_Namespace('authstu');
 	   	$branch_id = $session_user->branch_id;
 	   	$level = $session_user->level;
 	   	if($level==1 OR $level==2){
@@ -556,7 +556,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	
 	   	$user = $this->getUserId();
 	   	
-	   	$session_user=new Zend_Session_Namespace('auth');
+	   	$session_user=new Zend_Session_Namespace('authstu');
 	   	$level = $session_user->level;
 	   	if($level==1){
 	   		$result = "";
@@ -569,7 +569,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    
    function getUserType(){
-   	$session_user=new Zend_Session_Namespace('auth');
+   	$session_user=new Zend_Session_Namespace('authstu');
    	return $session_user->level;
    }
    

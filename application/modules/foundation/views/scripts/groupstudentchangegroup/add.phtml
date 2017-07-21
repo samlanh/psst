@@ -6,11 +6,10 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.NumberTextBox");
-	dojo.require("dijit.form.Textarea");
+	//dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dijit.form.CheckBox");
 </script>
-
 <script type="text/javascript">
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
@@ -50,13 +49,11 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 						}
 					},
 					error: function(err) {
-						//alert(222);
 					}
 				});
 		}
 
 </script>
-
 <form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit" >			
 			if(this.validate()) {
@@ -72,7 +69,13 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 						dijit.byId('to_group').focus();
 						return false;	
                 }
-				return true;
+                if(from_group==to_group){
+                	alert("From Group and To Group Can not The Same !"); 
+					dijit.byId('to_group').focus();
+					return false;
+				}
+				dijit.byId("save_new").set('disabled',true);	
+				dijit.byId("save_close").set('disabled',true);	
 			}else {
 				return false;
 			}
@@ -101,20 +104,19 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 										<td align="left"><?php echo $tr->translate("DETAIL")?></td>
 										<td  style=""><label id="lblfromgroup" name="detail_from_group" style="background:#fff;height:70px;display:block; font-size: 14px; padding: 10px; border: solid 1px #ccc;"></label></td>
 									</tr>
-									<tr >
+									<tr>
 										<td colspan="2"  align="center"> <?php echo $tr->translate("STUDENT_LIST")?> </td>
 									</tr>
-									<tr >
+									<tr>
 										<td colspan="2"  > <div id="data_table" style="height: 300px !important;overflow: scroll;"> </div> </td>
 									</tr>
 								</table>
 							</td>
-							
 							<td width="40%" align="center" valign="top">
 								<table cellspacing="10" style="border: 1px solid #ccc;"​>
 									<tr>
 										<td width="10px" ><?php echo $tr->translate("TO_GROUP")?></td>
-										<td >
+										<td>
 											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="required"  id="to_group" name="to_group" type="text" placeholder="to group" onchange="toStudentGroup(2);popupAddGroup();">
 												<option value="0" >Select Group</option>
 												<option value="-1" ><?php echo $tr->translate("ADD_NEW")?></option>
@@ -122,6 +124,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 													<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
 												<?php }?>
 											</select>
+											<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
 										</td>
 									</tr>
 									<tr>
@@ -153,9 +156,9 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 									<tr>
 										<td colspan="2" align="center">
 										<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" onclick="clear();" dojoType="dijit.form.Button"/>
-										<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+										<input type="submit" id="save_close" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 											iconClass="dijitEditorIcon dijitEditorIconSave" />
-										<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+										<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 											iconClass="dijitEditorIcon dijitEditorIconSave" />
 										</td>
 									</tr>
@@ -168,8 +171,6 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 		</tr>
 	</table>	
 </form>
-
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:28cm;" id="popup_dept" >
 		<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -218,14 +219,11 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 											</select>
 										</td>
 									</tr>
-									
 									<tr>
 										<td><?php echo $tr->translate("START_DATE")?></td>
 										<td><input dojoType="dijit.form.DateTextBox" name="start_date" id="start_date" onchange="setEndDate();" value="now" type="text"></td>
-										
 										<td><?php echo $tr->translate("AMOUNT_MONTH")?></td>
 										<td><input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" value="" onkeyup="setEndDate();" type="text"></td>
-										
 										<td><?php echo $tr->translate("END_DATE")?></td>
 										<td><input dojoType="dijit.form.DateTextBox" id="end_date" name="end_date" type="text" value="now" ></td>
 									</tr>
@@ -238,7 +236,6 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 												<?php }?>
 											</select>
 										</td>
-										
 										<td><?php echo $tr->translate("TIME")?></td>
 										<td>
 											<select name="time" id="time" dojoType="dijit.form.FilteringSelect" >
@@ -247,7 +244,6 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 												<option value="2">Full Time</option>
 											</select>
 										</td>
-										
 										<td><?php echo $tr->translate("NOTE")?></td>
 										<td><input dojoType="dijit.form.TextBox"   name="note" value="" type="text"></td>
 										
@@ -273,6 +269,24 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 
 
 <script type="text/javascript">
+var url_getgroup = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getgroup"));?>';										
+function getRefreshGroup(){
+	loading();
+	dojo.xhrPost({
+		url:url_getgroup,
+		handleAs:"json",
+		load: function(data) {
+			group_store  = getDataStorefromJSON('id','name', data.group);
+		    dijit.byId('to_group').set('store',group_store);  
+		    //degree_store  = getDataStorefromJSON('id','name', data.degree);
+		    //dijit.byId('degree').set('store',degree_store);  
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
 var url_get_all_student_from_group = "<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-all-student')); ?>";
 	function getStudentFromGroup(){
 			from_group = dijit.byId('from_group').get('value');
@@ -400,7 +414,8 @@ function clear(){
 function popupAddGroup(){
 	id = dijit.byId('to_group').get('value');
 	if(id==-1){
-		dijit.byId("popup_dept").show();	
+		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
+	//dijit.byId("popup_dept").show();	
 	}
 }
 function HidePopupGroup(){
@@ -470,8 +485,22 @@ function setEndDate(){
 		dijit.byId('end_date').attr('value',epx_date);	
     }
 }
-
-
-
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
 </script>
-
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

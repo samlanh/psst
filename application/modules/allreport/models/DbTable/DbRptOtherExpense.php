@@ -4,7 +4,7 @@ class Allreport_Model_DbTable_DbRptOtherExpense extends Zend_Db_Table_Abstract
 {
     protected $_name = 'ln_income';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('auth');
+    	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
     }
     function getAllOtherExpense($search){

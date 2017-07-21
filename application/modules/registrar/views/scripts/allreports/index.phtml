@@ -3,7 +3,7 @@
 	$this->headTitle('Dialy Payment Report'); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$session_user=new Zend_Session_Namespace('auth');
+	$session_user=new Zend_Session_Namespace('authstu');
 	$user_id=$session_user->user_id;
 	$frm =  $this->form_search;
 ?>

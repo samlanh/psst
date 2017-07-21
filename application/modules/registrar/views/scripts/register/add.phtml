@@ -63,6 +63,7 @@
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallModel(dept_id,a){
+		if(dept_id==''){return false;}
 			dojo.xhrPost({
 				url:url_dept,
 				content:{
@@ -867,7 +868,7 @@ function getMonthByNumber(m){
 														<td align="center">
 															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: -3px;"> 
 																<?php 
-																   $session_user=new Zend_Session_Namespace('auth');
+																   $session_user=new Zend_Session_Namespace('authstu');
 																   $last_name=$session_user->last_name;
 																   $username = $session_user->first_name;
 																   echo "".$last_name." ".$username;

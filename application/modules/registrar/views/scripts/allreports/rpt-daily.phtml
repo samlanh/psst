@@ -3,7 +3,7 @@
 	$this->headTitle('Dialy Payment Report'); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$session_user=new Zend_Session_Namespace('auth');
+	$session_user=new Zend_Session_Namespace('authstu');
 	$user_id=$session_user->user_id;
 	$frm =  $this->form_search;
 ?>
@@ -564,7 +564,7 @@
 										<td align="center"  width="25%">
 											<div style="font-weight:bold;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';margin-top: -3px;"> 
 												<?php 
-												   $session_user=new Zend_Session_Namespace('auth');
+												   $session_user=new Zend_Session_Namespace('authstu');
 												   $last_name=$session_user->last_name;
 												   $username = $session_user->first_name;
 												   echo "".$last_name." ".$username;

@@ -9,7 +9,7 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
  		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
  	}
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('auth');
+    	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
     }
     
@@ -57,7 +57,7 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		try{
 			$db_global = new Application_Model_DbTable_DbGlobal();
-			$session_user=new Zend_Session_Namespace('auth');
+			$session_user=new Zend_Session_Namespace('authstu');
 		    $userName=$session_user->user_name;
 		    $GetUserId= $session_user->user_id;
 		    $db_book=new Library_Model_DbTable_DbBook();
@@ -126,7 +126,7 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		try{
 			$db_global = new Application_Model_DbTable_DbGlobal();
-			$session_user=new Zend_Session_Namespace('auth');
+			$session_user=new Zend_Session_Namespace('authstu');
 		    $userName=$session_user->user_name;
 		    $GetUserId= $session_user->user_id;
 		    $db_book=new Library_Model_DbTable_DbBook();

@@ -3,12 +3,12 @@ class Registrar_Model_DbTable_Dbcashcount extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'rms_cashcount';
 	public function getUserId(){
-		$session_user=new Zend_Session_Namespace('auth');
+		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->user_id;
 	}
 	function getAllcashcount($search=null){
 		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('auth');
+		$session_user=new Zend_Session_Namespace('authstu');
 		$from_date =(empty($search['start_date']))? '1': " input_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " input_date <= '".$search['end_date']." 23:59:59'";
 		$where = " WHERE ".$from_date." AND ".$to_date;
@@ -99,7 +99,7 @@ class Registrar_Model_DbTable_Dbcashcount extends Zend_Db_Table_Abstract
 	
 // 	function getAllExpenseReport($search=null){
 // 		$db = $this->getAdapter();
-// 		$session_user=new Zend_Session_Namespace('auth');
+// 		$session_user=new Zend_Session_Namespace('authstu');
 // 		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
 // 		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
 // 		$where = " WHERE ".$from_date." AND ".$to_date;

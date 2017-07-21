@@ -4,7 +4,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_group';
     public function getUserId(){
-    	$session_user=new Zend_Session_Namespace('auth');
+    	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
     	 
     }
@@ -276,11 +276,12 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	}
 	
 	
-	public function getAllSubjectStudy(){
+	public function getAllSubjectStudy($opt=null){
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$rows = $_db->getAllSubjectStudy();
 		array_unshift($rows,array('id' => -1,"name"=>"បន្ថែមមុខវិជ្ជាសិក្សា"));
+		if($opt!=null){return $rows;}
 		$options = '<option value="">ជ្រើសរើសរើសមុខវិជ្ជា</option>';
 		if(!empty($rows))foreach($rows as $value){
 			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';

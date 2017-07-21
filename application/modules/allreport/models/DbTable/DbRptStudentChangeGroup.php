@@ -5,7 +5,7 @@ class Allreport_Model_DbTable_DbRptStudentChangeGroup extends Zend_Db_Table_Abst
 
     protected $_name = 'rms_student_change_group';
 //     public function getUserId(){
-//     	$session_user=new Zend_Session_Namespace('auth');
+//     	$session_user=new Zend_Session_Namespace('authstu');
 //     	return $session_user->user_id;
     	 
 //     }

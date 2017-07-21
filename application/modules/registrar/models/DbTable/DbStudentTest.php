@@ -3,11 +3,11 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'rms_student_test';
 	public function getUserId(){
-		$session_user=new Zend_Session_Namespace('auth');
+		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->user_id;
 	}
 	public function getBranchId(){
-		$session_user=new Zend_Session_Namespace('auth');
+		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->branch_id;
 	}
 	function addStudentTest($data){
@@ -60,7 +60,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	}	
 	function getAllStudentTest($search=null){
 		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('auth');
+		$session_user=new Zend_Session_Namespace('authstu');
 		$from_date =(empty($search['start_date']))? '1': " create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
 		

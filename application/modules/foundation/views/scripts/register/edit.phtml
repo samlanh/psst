@@ -504,7 +504,11 @@ function addJob(){
 				group_store  = getDataStorefromJSON('id','name', data.group);
 			    dijit.byId('group').set('store',group_store);  
 			    degree_store  = getDataStorefromJSON('id','name', data.degree);
-			    dijit.byId('degree').set('store',degree_store);  
+			    dijit.byId('degree').set('store',degree_store);
+
+			    room_store  = getDataStorefromJSON('id','name', data.room);
+			    dijit.byId('room').set('store',room_store);  
+			      
 			    document.getElementsByClassName("overlay")[0].style.display="none";
 			},
 			error: function(err) {

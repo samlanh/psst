@@ -235,7 +235,12 @@ class Global_GroupController extends Zend_Controller_Action {
     		$group = $db->getAllgroup();
     		$degree = $db->getAllFecultyName();    		
     		array_unshift($group, array ('id' => -1, 'name' => 'Add New'));
-    		$result = array('group'=>$group,'degree'=>$degree);
+    		
+    		$model = new Application_Model_DbTable_DbGlobal();
+    		$room = $model->getAllRoom();
+    		array_unshift($room, array ( 'id' => 0,'name' => 'Select Room'));
+    		
+    		$result = array('group'=>$group,'degree'=>$degree,'room'=>$room);
     		print_r(Zend_Json::encode($result));
     		exit();
     	}

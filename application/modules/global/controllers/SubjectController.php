@@ -124,7 +124,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
 			$data['status']=1;
-			$option=$_dbmodel->addNewSubjectajax($data);
+			$option=$_dbmodel->addSubjectajax($data);
 			print_r(Zend_Json::encode($option));
 			exit();
 		}

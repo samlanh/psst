@@ -126,7 +126,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 <?php  $subject_exam= $this->frm_subject_exam;?>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_add_degree" >
-		<form  id='frm_degree' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form  id='frm_subject' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
 							<tr>
 								<td><input type="checkBox" checked="checked" dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
@@ -157,7 +157,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							</tr>
 							<tr>
 								<td colspan="2" align="center">
-									<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+									<input type="button" value="save_subject" name="save_subject" onclick="addSubjectajax();" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
 								</td>
 							</tr>
@@ -670,7 +670,30 @@ function addGrade(){
 		});
 	}
 }
-function hideDialogGrade() {		
+var url_add_subject = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"addsubjectajax")); ?>';
+function addSubjectajax(){
+	if(dijit.byId('frm_subject').validate()){
+		dojo.xhrPost({
+				url:url_add_subject,
+				form: dojo.byId("frm_subject"),
+				handleAs:"json",
+				load: function(data) {
+					alert(data);
+					/*var Itemmake = { 
+					    	 id: data,
+						     name: dijit.byId('major_enname').get('value')
+						   };
+				   addDataToSelectbox(dijit.byId('grade'), grade_store, Itemmake, data);
+				   dijit.byId('frm_add_grade').reset();
+				   dijit.byId("popup_grate").hide();	*/
+				},
+				error: function(xhr, status, error) {
+					 alert(xhr.responseText);
+				}
+		});
+	}
+}
+function hideDialogGrade(){		
 	dijit.byId("popup_grate").hide();
 }
 function hideDialogDegree() {		

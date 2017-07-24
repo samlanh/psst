@@ -219,7 +219,6 @@ class Global_GroupController extends Zend_Controller_Action {
     			$data = $this->getRequest()->getPost();
     			$db = new Global_Model_DbTable_DbGroup();
     			$row = $db->addGradeAjax($data);
-    			$result = array("id"=>$row);
     			print_r(Zend_Json::encode($row));
     			exit();
     		}catch(Exception $e){

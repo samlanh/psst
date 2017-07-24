@@ -41,8 +41,9 @@
 			placeHolder:"Selected Grade",          
 			onChange: function() {
 				getTuitionFee();
-				dijit.byId('discount').attr('value','0');
-				getTotale();
+				dijit.byId('discount_percent').attr('value','0');
+				dijit.byId('discount_fix').attr('value','0');
+				//getTotale();
 			}
 		}, "grade");
 
@@ -177,7 +178,7 @@
 				if(data !=''){
 					dijit.byId('tuitionfee').attr('value',data.tuition_fee);
 					dijit.byId('total_payment').attr('value',data.tuition_fee);
-					netTotal();
+					getTotale();
 				}
 			},
 			error: function(err) {
@@ -202,7 +203,7 @@
 			dijit.byId("study_hour").set('readOnly',true);
 			dijit.byId("payment_term").set('readOnly',true);
 			dijit.byId("tuitionfee").set('readOnly',true);
-			dijit.byId("discount").set('readOnly',true);
+			dijit.byId("discount_percent").set('readOnly',true);
 			//dijit.byId("paid_amount").set('readOnly',true);
 			dijit.byId("room").set('readOnly',true);
 			dijit.byId("parent_phone").set('readOnly',true);
@@ -220,7 +221,7 @@
 			dijit.byId("study_hour").set('readOnly',false);
 			dijit.byId("payment_term").set('readOnly',false);
 			dijit.byId("tuitionfee").set('readOnly',false);
-			dijit.byId("discount").set('readOnly',false);
+			dijit.byId("discount_percent").set('readOnly',false);
 			//dijit.byId("paid_amount").set('readOnly',false);
 			dijit.byId("room").set('readOnly',false);
 			dijit.byId("parent_phone").set('readOnly',false);
@@ -481,7 +482,7 @@ fieldset{  background:none;}
 			<td valign="top">
 				<fieldset style="margin-top: -10px;"> 
 					<legend align="center"><strong><?php echo $tr->translate("OFFICIAL_RECEIPT");?></strong></legend> 
-						<table style="margin: 0 auto; width: 100%;" cellspacing="2" >
+						<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="2" >
 							<tr>
 								<td><?php echo $tr->translate("RECEIPT_NO");?></td>
 								<td><input type="text" style="color: red;" dojoType="dijit.form.TextBox" name="receipt_no" id="receipt_no" class="fullside" readOnly="readOnly"/></td>
@@ -515,8 +516,18 @@ fieldset{  background:none;}
 								<td><input type="text" name="late_fee" id="late_fee" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/></td>
 						    </tr>
 						    <tr>
-							    <td><?php echo $tr->translate("DISCOUND");?></td>
-								<td><input type="text" name="discount" id="discount" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/></td>
+								<td><?php echo $tr->translate("DISCOUND");?></td>
+								<td width="100%">
+									<table width="100%" style="white-space:nowrap;">
+										<tr>
+											
+											<td width="35%"><input type="text" name="discount_percent" id="discount_percent" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/></td>
+											
+											<td align="center"><?php echo $tr->translate("DISCOUNT");?></td>
+											<td width="35%"><input type="text" name="discount_fix" id="discount_fix" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/></td>
+										</tr>
+									</table>
+								</td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("GRAND_TOTAL");?></td>
@@ -1190,17 +1201,28 @@ function deleteRecord(index) {
 	function getTotale(){
 		tuitionfee=dijit.byId('tuitionfee').get('value');
 		tuitionfee=isNaN(tuitionfee)?0:tuitionfee;
+		
 		late_fee = dijit.byId('late_fee').get('value');
 		late_fee = isNaN(late_fee)?0:late_fee;
-		discount=dijit.byId('discount').get('value');
-		pc=discount/100;
+		
+		discount_percent=dijit.byId('discount_percent').get('value');
+		discount_percent = isNaN(discount_percent)?0:discount_percent;
+		
+		discount_fix=dijit.byId('discount_fix').get('value');
+		discount_fix = isNaN(discount_fix)?0:discount_fix;
+		
+		pc=discount_percent/100;
 		ds = (tuitionfee - late_fee) * pc;
-		total_payment = (tuitionfee - late_fee) - ds;
-		if(discount<=100){
+		
+		total_payment = (tuitionfee - late_fee) - ds - discount_fix;
+		
+		if(discount_percent<=100 && total_payment>0){
 		   dijit.byId('total_payment').attr('value',total_payment);
 		}else{ 
 			alert('Can not discount more than 100%');
-			dijit.byId('discount').attr('value','100');
+			dijit.byId('discount_percent').attr('value','0');
+			dijit.byId('discount_fix').attr('value','0');
+			getTotale();
 		}
 		netTotal();
 	}
@@ -1575,7 +1597,28 @@ function getservicefee(key){
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee').get('value')+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
 						  
-						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('discount').get('value')+' %</td>';
+						  
+						  dis_percent = dijit.byId('discount_percent').get('value');
+						  dis_percent = isNaN(dis_percent)?0:dis_percent;
+						  
+						  dis_fix = dijit.byId('discount_fix').get('value');
+						  dis_fix = isNaN(dis_fix)?0:dis_fix;
+						  
+						  discount=0;
+						  if(dis_percent>0 && dis_fix>0){
+							  discount = dis_percent + " %  + " + dis_fix + " $"; 
+						  }else{
+							  if(dis_percent>0){
+								  discount = dis_percent + " %";
+							  }else{
+								  discount = dis_fix + " $";
+							  }
+						  }
+						  
+						  
+						  temp+='<td align="center" style="border:1px solid #000;">'+discount+'</td>';
+						  
+						  
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('total_payment').get('value')+'</td>';
 						  
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';
@@ -1687,7 +1730,7 @@ function getservicefee(key){
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee').get('value')+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
 						  
-						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('discount').get('value')+' %</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('discount_percent').get('value')+' %</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('total_payment').get('value')+'</td>';
 						  
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';

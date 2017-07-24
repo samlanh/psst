@@ -116,6 +116,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		$stu_code = $this->getNewAccountNumber($data['dept']);
 		$receipt_number = $this->getRecieptNo();
+		
 		try{
 			if($data['payment_type']==1){//Tuition Fee and Service
 				if($data['student_type']==3){//old
@@ -329,10 +330,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             			'qty'			=>1,
 	             			'subtotal'		=>$data["tuitionfee"],//$subtotal = fee * qty;
 					 		'late_fee'		=>$data["late_fee"],
-					 		'discount_percent'=>$data['discount'],//$discount,
+					 		'discount_percent'=>$data['discount_percent'],//$discount,
 					 		'paidamount'	=>$data['total_payment'],//$paidamount,
 	             			'balance'		=>0,
-	             			'discount_fix'	=>0,
+	             			'discount_fix'	=>$data['discount_fix'],
 	             			'note'			=>$data['not'],
 	             			'start_date'	=>$data['start_date'],
 	             			'validate'		=>$data['end_date'],
@@ -415,6 +416,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             			'late_fee'		=>$data['late_fee_service_'.$i],
 	             			'extra_fee'		=>$data['additional_fee_'.$i],
 	             			'discount_percent'	=>$data['discount_'.$i],
+	             			'discount_fix'	=>0,
 	             			'paidamount'	=>$data['paidamount_'.$i],
 	             			'balance'		=>0,
 	             			'start_date'	=>$start_date,
@@ -640,10 +642,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             			'qty'			=>1,
 	             			'subtotal'		=>$data["tuitionfee"],//$subtotal = fee * qty;
 					 		'late_fee'		=>$data["late_fee"],
-					 		'discount_percent'=>$data['discount'],//$discount,
+					 		'discount_percent'=>$data['discount_percent'],//$discount,
+							'discount_fix'	=>$data['discount_fix'],
 					 		'paidamount'	=>$data['total_payment'],//$paidamount,
 	             			'balance'		=>0,
-							'discount_fix'	=>0,
+							
 							'note'			=>$data['not'],
 							'start_date'	=>$data['start_date'],
 							'validate'		=>$data['end_date'],
@@ -736,7 +739,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'subtotal'		=>$data['subtotal_'.$i],
 							'late_fee'		=>$data['late_fee_service_'.$i],
 							'extra_fee'		=>$data['additional_fee_'.$i],
-							'discount_percent'	=>$data['discount_'.$i],
+							'discount_percent' =>$data['discount_'.$i],
+							'discount_fix'	=>0,
+							
+							
 							'paidamount'	=>$data['paidamount_'.$i],
 							'balance'		=>0,
 							'start_date'	=>$start_date,

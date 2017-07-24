@@ -6,7 +6,6 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
-    	 
     }
     
 	public function AddNewGroup($_data){
@@ -322,15 +321,20 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	
 	public function addGradeAjax($_data){
 		$this->_name='rms_major';
-		$db = $this->getAdapter();
-		$arr = array(
-				'dept_id'	  => $_data['degree_popup1'],
-				'major_enname'  => $_data['major_enname'],
-				'shortcut'	  => $_data['shortcut'],
-				'modify_date' => Zend_Date::now(),
-				'is_active'	  => $_data['grade_status'],
-				'user_id'	  => $this->getUserId());
-		return $this->insert($arr);
+		try{
+			$db = $this->getAdapter();
+			$arr = array(
+					'major_enname'  => $_data['major_enname'],
+					'shortcut'	  => $_data['shortcut'],
+					'dept_id'	  => $_data['degree_popup1'],
+					'modify_date' => Zend_Date::now(),
+					'is_active'	  => $_data['grade_status'],
+					'user_id'	  => $this->getUserId()
+			);
+			return $this->insert($arr);
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 	}
 	
 }

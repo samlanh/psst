@@ -182,17 +182,17 @@ dojo.ready(function(){
 			    store: dept_store,
 			    autoComplete: true,                        
 			    required: true,
-			    id: "dept",
-			    name: "dept",           
+			    id: "degree_popup1",
+			    name: "degree_popup1",           
 			    class: "full height-text", 
 			    placeHolder:"Select Degree",          
 			    onChange: function() {  
-			    	dept_id = dijit.byId('dept').get('value');
+			    	dept_id = dijit.byId('degree_popup1').get('value');
 			    	if(dept_id==-1){
 			    		dijit.byId("popup_add_dept").show();
 				    }
 			    }
-			}, "dept");
+			}, "degree_popup1");
 		
 	});
 function setEndDate(){
@@ -494,7 +494,9 @@ function getSubjectByDegree(){
 					</tr>
 					<tr>
 						<td><?php echo $tr->translate("DEGREE")?></td>
-						<td><input id="dept" /></td>
+						<td>
+							<input id="degree_popup1" /> 
+						</td>
 					</tr>
 					<tr>
 						<td><?php echo $tr->translate("STATUS")?></td>
@@ -551,27 +553,25 @@ function addDept(){
 var url_add_grade = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"add-graddjax")); ?>';
 function addGrade(){
 	if(dijit.byId('frm_add_grade').validate()){
-		rr = dijit.byId("degree").get('value');
-	    if(rr==''){
-	       alert('Please Selece Degree !');
-		   return false;
-		}
-	    dijit.byId('save_grade').set('disabled',true);	
-		dojo.xhrPost({
-				url:url_add_grade,
-				form: dojo.byId("frm_add_grade"),
-				handleAs:"json",
-				load: function(data) {
-					alert(data);
-					var Itemmake = { 
-					    	 id: data,
-						     name: dijit.byId('major_enname').get('value')
-						   };
-			   addDataToSelectbox(dijit.byId('grade'), grade_store, Itemmake, data);
-			   dijit.byId('frm_add_grade').reset();
-			   dijit.byId("popup_grate").hide();
-			   dijit.byId('save_grade').set('disabled',false);		
-				},
+	popup_dept = dijit.byId("degree_popup1").get('value');
+    if(popup_dept==''){
+       alert('Please Selece Degree !');
+	   return false;
+	}
+	dojo.xhrPost({
+			url:url_add_grade,
+			form: dojo.byId("frm_add_grade"),
+			handleAs:"json",
+			load: function(data) {
+				//alert(data); 
+				var Itemmake = { 
+				    	 id: data,
+					     name: dijit.byId('major_enname').get('value')
+					   };
+		   addDataToSelectbox(dijit.byId('grade'), grade_store, Itemmake, data);
+		   dijit.byId('frm_add_grade').reset();
+		   dijit.byId("popup_grate").hide();	
+			},
 			error: function(err) {
 				alert(err);
 					dijit.byId('save_grade').set('disabled',false);		

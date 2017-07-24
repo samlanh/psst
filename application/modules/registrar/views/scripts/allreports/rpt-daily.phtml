@@ -135,7 +135,7 @@
 							    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>><?php echo $i;?></td>
 							    <td><?php echo $rs['receipt_number']; ?></td>
 							    <td><?php echo $rs['stu_code']; ?></td>
-							    <td style=" white-space:nowrap; text-align:left"> <?php echo $rs['stu_enname']; ?> </td>
+							    <td style=" white-space:nowrap; text-align:left"> <?php echo $rs['stu_khname'].'-'.$rs['stu_enname']; ?> </td>
 								<td><?php echo $rs['degree']; ?></td>
 								<td><?php echo $rs['grade']; ?></td>
 								<td><?php echo $rs['session']; ?></td>

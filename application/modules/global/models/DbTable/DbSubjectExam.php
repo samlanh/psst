@@ -97,7 +97,8 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'status'   			=> $_data['status'],
 				'is_parent'   		=> $_data['par'],
 				'score_percent'   	=> $_data['score_percent'],
-				'user_id'	  		=> $this->getUserId()
+				'user_id'	  		=> $this->getUserId(),
+				'access_type'=>1,
 		);
 		$subject_id = $this->insert($_arr);
 		$_model = new Global_Model_DbTable_DbGroup();
@@ -109,14 +110,15 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 	public function addSubjectajax($_data){
 		$this->_name="rms_subject";
 		$_arr=array(
-				//'parent' 			=> $_data['parent'],
-				'subject_titlekh' 	=> 1,//$_data['subject_kh'],
-				'subject_titleen' 	=> 2,//$_data['subject_en'],
+				'parent' 			=> $_data['parent'],
+				'subject_titlekh' 	=> $_data['subject_kh'],
+				'subject_titleen' 	=> $_data['subject_en'],
 				'date' 				=> date("Y-m-d"),
 				'status'   			=> 1,
-				//'is_parent'   		=> $_data['is_parent'],
-				'shortcut'   		=> 2,//$_data['score_percent'],
-				'user_id'	  		=> $this->getUserId()
+				'is_parent'   		=> $_data['is_parent'],
+				'shortcut'   		=> $_data['score_percent'],
+				'user_id'	  		=> $this->getUserId(),
+				'access_type'=>1,
 		);
 		return $this->insert($_arr);
 	}

@@ -1216,7 +1216,7 @@ function deleteRecord(index) {
 		
 		total_payment = (tuitionfee - late_fee) - ds - discount_fix;
 		
-		if(discount_percent<=100 && total_payment>0){
+		if(discount_percent<=100){
 		   dijit.byId('total_payment').attr('value',total_payment);
 		}else{ 
 			alert('Can not discount more than 100%');

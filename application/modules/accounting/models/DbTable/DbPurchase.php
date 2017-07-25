@@ -110,7 +110,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				'sup_id'		=>$sup_id,
 	    				'supplier_no'	=>$_data['purchase_no'],
 	    				'amount_due'	=>$_data['amount_due'],
-	    				'branch_id'		=>$_data['branch_id'],
+	    				'branch_id'		=>$_data['branch'],
 	    				'date'			=>date("Y-m-d"),
 	    				'status'		=>$_data['status'],
 	    				'user_id'		=>$this->getUserId()
@@ -132,7 +132,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				);
 	    				$this->insert($_arr);
 	    				
-	    				$this->updateStock($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i]);
+	    				$this->updateStock($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i]);
 	    		}
     			$db->commit();
 		   	}catch (Exception $e){

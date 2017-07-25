@@ -84,6 +84,18 @@ public function addAction(){
 		$pro_cate = $_pro->getProductCategory();
 		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>'Add New'));
 		$this->view->cat_rows = $pro_cate;
+		
+		$model = new Application_Model_DbTable_DbGlobal();
+		$branch = $model->getAllBranchName();
+		array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->branchopt = $branch;
+		
+		$fm = new Global_Form_Frmbranch();
+		$frm = $fm->Frmbranch();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_branch = $frm;
+		
+		
 	
 	}
 	public function editAction(){

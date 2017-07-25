@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	//echo $this->headTitle($tr->translate('PRODUCT')); 
+	echo $this->headTitle($tr->translate('PURCHASE')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
 ?>	
@@ -47,7 +47,7 @@
 		id: "branch",
 		name: "branch",           
 		class: "full", 
-		placeHolder:"Selected Dept",          
+		placeHolder:"Selected branch",          
 		onChange: function() {  
 			branch_id = dijit.byId('branch').get('value');
 			if(branch_id==-1){

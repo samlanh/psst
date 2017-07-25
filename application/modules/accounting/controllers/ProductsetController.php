@@ -32,7 +32,7 @@ class Accounting_ProductsetController extends Zend_Controller_Action {
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PRODUCT_NO","PRODUCT_NAME","PRODUCT_CATEGORY","PRICE",
+			$collumns = array("PRODUCT_CODE","PRODUCT_NAME","PRODUCT_CATEGORY","PRICE",
 					"DATE","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'productset','action'=>'edit',
@@ -87,12 +87,12 @@ class Accounting_ProductsetController extends Zend_Controller_Action {
 			$_data['id']=$id;
 			try{
 					$db = new Accounting_Model_DbTable_DbProductset();
-					$row = $db->updateProduct($_data);
+					$row = $db->updateProductSetDetail($_data);
 					
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/productset");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product/add");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/productset/add");
 					}
 					
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
@@ -104,7 +104,12 @@ class Accounting_ProductsetController extends Zend_Controller_Action {
 			}
 			 
 			$_pro = new Accounting_Model_DbTable_DbProductset();
-			$this->view->branch_name = $_pro->getBrandLocation();
+			//$this->view->branch_name = $_pro->getBrandLocation();
+			
+			$this->view->productopt = $_pro->getAllProductOption();
+			
+			$this->view->pro_detail=$_pro->getProDetailById($id);
+			
 			$this->view->pro_code=$_pro->getProCode();
 			$this->view->pro_row=$_pro->getProductById($id);
 		    $this->view->pro_locat=$_pro->getProLocationById($id);

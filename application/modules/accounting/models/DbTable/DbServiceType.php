@@ -11,10 +11,17 @@ class Accounting_Model_DbTable_DbServiceType extends Zend_Db_Table_Abstract
     }
     public function AddServiceType($_data){
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$_rs = $_db->getServicTypeByName($_data['title'],$_data['type']);
-    	if(!empty($_rs)){
-    		return -1;
+    	
+    	$request=Zend_Controller_Front::getInstance()->getRequest();
+    	$action = $request->getActionName();
+    	if($action=="add"){
+	    	$_rs = $_db->getServicTypeByName($_data['title'],$_data['type']);
+	    	if(!empty($_rs)){
+	    		return -1;
+	    	}
     	}
+    	
+    	
     	$_arr = array(
     			'title'=>$_data['title'],
     			'item_desc'=>$_data['item_desc'],
@@ -73,12 +80,18 @@ class Accounting_Model_DbTable_DbServiceType extends Zend_Db_Table_Abstract
     //////////////
     public function getAllServicesType($search=''){
 		$db = $this->getAdapter();
-    	$sql = "SELECT id,title,item_desc
-    	,type,status
-    	,create_date
-    	,(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE user_id=id ) AS user_name
-    	 FROM rms_program_type
-    	WHERE 1";
+    	$sql = "SELECT 
+    				id,
+    				title,
+    				item_desc,
+			    	type,
+			    	create_date,
+			    	(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE user_id=id ) AS user_name,
+			    	status
+    	 		FROM 
+    	 			rms_program_type
+    			WHERE 
+    				title!='' and status=1 ";
     	$order=" ORDER BY id DESC";
     	$where = '';
     	if(empty($search)){

@@ -33,11 +33,11 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH_NAME","STUDENT_CODE","STUDENT_NAME","TOTAL_AMOUNT","FOR_DATE","NOTE","BY_USER","STATUS");
+    		$collumns = array("BRANCH_NAME","STUDENT_CODE","STUDENT_NAME","TOTAL_AMOUNT","TOTAL_AMOUNT_AFTER","FOR_DATE","NOTE","PAID_STATUS","BY_USER","STATUS");
     		$link=array(
     				'module'=>'accounting','controller'=>'creditmemo','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'student_code'=>$link,'student_name'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'student_name'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		echo $e->getMessage();

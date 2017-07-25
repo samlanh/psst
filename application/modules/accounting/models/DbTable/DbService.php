@@ -70,11 +70,19 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     public function getAllServiceNames($search=''){
     	$db = $this->getAdapter();
     	$where='';
-    	$sql = "SELECT service_id AS id,p.title
-    	,(SELECT title FROM `rms_program_type` WHERE id=ser_cate_id LIMIT 1) AS cate_name
-    	,`description`,p.`status`,p.`create_date`
-    	,(SELECT first_name FROM rms_users WHERE p.user_id=id ) AS user_name
-    	FROM `rms_program_name` AS p WHERE type=2 ";
+    	$sql = "SELECT 
+    				service_id AS id,
+    				p.title,
+			    	(SELECT title FROM `rms_program_type` WHERE id=ser_cate_id LIMIT 1) AS cate_name,
+			    	`description`,p.`create_date`,
+			    	(SELECT first_name FROM rms_users WHERE p.user_id=id ) AS user_name,
+			    	p.`status`
+    			FROM 
+    				`rms_program_name` AS p 
+    			WHERE 
+    				type=2 
+    				and p.title!='' ";
+    	
     	$order=" ORDER BY service_id DESC";
     	 
     	if(empty($search)){

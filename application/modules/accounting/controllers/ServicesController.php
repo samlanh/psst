@@ -34,7 +34,7 @@ class Accounting_ServicesController extends Zend_Controller_Action {
     		else{
     			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
     		}
-    		$collumns = array("PROGRAM_TITLE","DISCRIPTION","TYPE","STATUS","MODIFY_DATE","BY_USER");
+    		$collumns = array("PROGRAM_TITLE","DISCRIPTION","TYPE","MODIFY_DATE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'accounting','controller'=>'services','action'=>'edit');
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('cate_name'=>$link,'title'=>$link));

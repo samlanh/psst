@@ -246,7 +246,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		}
 		$_cate_name->setValue($request->getParam("cate_name"));
 		
-		$_cate_name->setAttribs(array('dojoType'=>$this->filter,
+		$_cate_name->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
 				'placeholder'=>$this->tr->translate("SEARCH_BY_TYPE")));
 	
 		$_type = new Zend_Dojo_Form_Element_FilteringSelect('type');

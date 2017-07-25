@@ -28,7 +28,7 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 			else{
 				$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 			}
-			$collumns = array("PROGRAM_TITLE","TYPE","DISCRIPTION","STATUS","MODIFY_DATE","BY_USER");
+			$collumns = array("PROGRAM_TITLE","TYPE","DISCRIPTION","MODIFY_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'service','action'=>'edit',
 			);
@@ -37,8 +37,8 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$frm = new Global_Form_FrmSearchMajor();
-		$frm = $frm->frmSearchServiceProgram();
+		$frm1 = new Global_Form_FrmSearchMajor();
+		$frm = $frm1->frmSearchServiceProgram();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_search = $frm;
 		$this->view->adv_search = $search;
@@ -88,7 +88,7 @@ public function editAction(){
 		}
 	}
 	$db = new Accounting_Model_DbTable_DbService();
-	$rs= $db->getServiceType(2);
+	$rs= $db->getServiceType(1);
 	array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 	$this->view->service = $rs;
 	

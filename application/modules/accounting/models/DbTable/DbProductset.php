@@ -197,16 +197,16 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     	}
     	return $pre.$new_acc_no;
     }
-//     function getProductById($id){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT * FROM rms_product WHERE id=$id";
-//     	return $db->fetchRow($sql);
-//     }
-//     function getProLocationById($id){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT id,pro_id,brand_id,pro_qty,total_amount,note FROM rms_product_location WHERE pro_id=$id";
-//     	return $db->fetchAll($sql);
-//     }
+    function getProductById($id){
+    	$db=$this->getAdapter();
+    	$sql="SELECT * FROM rms_product WHERE id=$id";
+    	return $db->fetchRow($sql);
+    }
+    function getProLocationById($id){
+    	$db=$this->getAdapter();
+    	$sql="SELECT id,pro_id,brand_id,pro_qty,total_amount,note FROM rms_product_location WHERE pro_id=$id";
+    	return $db->fetchAll($sql);
+    }
     function getProductCategory(){ //if type=1 category , if type=2 measure 
     	$db=$this->getAdapter();
     	$sql="SELECT id,name_kh as name FROM rms_pro_category WHERE `status`=1 ";

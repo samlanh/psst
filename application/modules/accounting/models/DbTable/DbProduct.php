@@ -16,7 +16,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 				p.pro_name,(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id) As cat_name,
 				(select name_en from rms_view where type=11 and key_code=pro_type) as pro_type,
 			    p.pro_price, 
-				pl.pro_qty,pl.total_amount,p.date,p.status
+				pl.pro_qty,p.date,p.status
 				FROM rms_product AS p,rms_product_location AS pl
 				WHERE p.id=pl.pro_id and sale_set = ".$search['sale_set'];
     	
@@ -118,7 +118,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	    				'pro_des'	=>$_data['descript'],
 	    				'pro_type'	=>$_data['pro_type'],
 	    				'status'	=>$_data['status'],
-	    				'date'		=>date("Y-m-d"),
+	    				//'date'		=>date("Y-m-d"),
 	    				'user_id'	=>$this->getUserId()
 	    				);
 	    		$where=" id=".$_data['id'];

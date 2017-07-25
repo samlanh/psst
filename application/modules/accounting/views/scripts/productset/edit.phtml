@@ -61,6 +61,11 @@ fieldset{  background:none;}
 					<td><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="pro_price" value="<?php echo $this->pro_row['pro_price'];?>" name="pro_price"  type="text" required="required"></td>
 				</tr>
 				<tr>
+					<td><?php echo $tr->translate("NOTE");?></td>
+					<td>
+						<textarea class="fullside" tabindex="8" style=" height: 40px !important;" dojotype="" id="descript" name="descript"><?php echo $this->pro_row['pro_des'];?></textarea>
+					</td>
+				
 					<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
 					<td>
 						<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="status" name="status" type="text">								
@@ -68,14 +73,11 @@ fieldset{  background:none;}
 							<option value="0" ><?php echo $tr->translate("DEACTIVE");?></option>
 						</select>
 					</td>
-					<td><?php echo $tr->translate("DESCRIPTION");?></td>
-					<td>
-						<textarea class="fullside" tabindex="8" style=" height: 40px !important;" dojotype="" id="descript" name="descript"><?php echo $this->pro_row['pro_des'];?></textarea>
-					</td>
+					
 				</tr>
 				<tr>
 					<td colspan="4">
-						<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+						<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
 							<tr id="head-title" class="head-td" align="right"></tr>
 						</table>
 					</td>
@@ -116,7 +118,7 @@ function addRow() {
 		if(title!=1){
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRO_NAME");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
@@ -146,7 +148,7 @@ function oldRow() {
 	if(title!=1){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRO_NAME");?></th>';
+		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 		dojo.query("#head-title").append(temp);

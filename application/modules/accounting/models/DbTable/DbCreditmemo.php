@@ -11,15 +11,25 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		$session_user=new Zend_Session_Namespace('authstu');
 		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
-		$where = " WHERE ".$from_date." AND ".$to_date;
+		$where = " AND ".$from_date." AND ".$to_date;
 	
-		$sql=" SELECT id,
-		(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
-		(SELECT stu_code FROM `rms_student` WHERE stu_id =rms_creditmemo.student_id  limit 1 ) as stu_code,
-		(SELECT stu_khname FROM `rms_student` WHERE stu_id =rms_creditmemo.student_id  limit 1 ) as student_name,
-		total_amount,date,note,
-		(SELECT first_name FROM `rms_users` WHERE id=user_id LIMIT 1) as user_name,
-		status FROM rms_creditmemo ";
+		$sql=" SELECT 
+				id,
+				(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
+				(SELECT stu_code FROM `rms_student` WHERE stu_id =c.student_id  limit 1 ) as stu_code,
+				(SELECT CONCAT(stu_khname,'-',stu_enname) FROM `rms_student` WHERE stu_id =c.student_id  limit 1 ) as student_name,
+				total_amount,
+				total_amountafter,
+				date,
+				note,
+				(select name_en from rms_view where rms_view.type=13 and key_code=c.type) as paid_status,
+				(SELECT first_name FROM `rms_users` WHERE id=user_id LIMIT 1) as user_name,
+				status 
+			  FROM 
+				rms_creditmemo c
+			  Where
+				1
+			";
 	
 		if (!empty($search['adv_search'])){
 			$s_where = array();

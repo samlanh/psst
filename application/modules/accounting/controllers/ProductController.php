@@ -33,8 +33,8 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PRODUCT_NO","BRANCH_NAME","PRODUCT_NAME","PRODUCT_CATEGORY","TYPE","PRICE",
-					"QTY","TOTAL","DATE","STATUS");
+			$collumns = array("PRODUCT_CODE","BRANCH_NAME","PRODUCT_NAME","PRODUCT_CATEGORY","TYPE","PRICE",
+					"QTY","DATE","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'product','action'=>'edit',
 			);
@@ -43,7 +43,7 @@ class Accounting_ProductController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 			$forms=new Accounting_Form_FrmSearchProduct();
-			$form=$forms->FrmSearchProduct();
+			$form=$forms->FrmSearchProduct($search);
 			Application_Model_Decorator::removeAllDecorator($form);
 			$this->view->form_search=$form;
 		

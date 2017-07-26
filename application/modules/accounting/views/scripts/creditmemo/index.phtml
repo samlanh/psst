@@ -11,6 +11,13 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
   <table width="80%">
    <tr>  
         <td><?php echo $frm->getElement("adv_search");?></td>
+        <td>
+        	<select name="paid_status" id="paid_status" dojoType="dijit.form.FilteringSelect" class="fullside"  >
+        		<option value="" <?php if($this->adv_search['paid_status']==""){echo 'selected="selected"';} ?>> Piad Status </option>
+        		<option value="1" <?php if($this->adv_search['paid_status']==1){echo 'selected="selected"';} ?>> Cleared </option>
+        		<option value="0" <?php if($this->adv_search['paid_status']==0){echo 'selected="selected"';} ?>> Not Cleared </option>
+        	</select>
+        </td>
         <td><?php echo $frm->getElement('status');?></td>
    		<td> <input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="start_date" name="start_date" value="<?php echo $this->adv_search['start_date']; ?>"  type="text"></td>
 		<td><input dojoType="dijit.form.DateTextBox"  constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="end_date" name="end_date" value="<?php echo $this->adv_search['end_date'];?>" type="text"></td>

@@ -5,7 +5,7 @@
 	$frm =  $this->form_search;
 ?>	
 <div style="width: 28cm;margin: 0 auto;">
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'Rptproductsold','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'rptproductsold','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="100%">	
 			<tr>
 		       <td colspan="4">
@@ -59,6 +59,7 @@
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
+				
 					<table cellpadding="5"​ style="font-family:Khmer OS Battambang,Times New Roman; border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 						<tr style="font-size:14px;font-weight:bold; height: 20px;border: 1px solid #000; background: #ccc; line-height: 30px;" align="center" >
 							<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>

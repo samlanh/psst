@@ -29,7 +29,7 @@ class Global_GroupController extends Zend_Controller_Action {
 			//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
 			$list = new Application_Form_Frmtable();
 			
-			$collumns = array("GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","START_DATE","END_DATE","NOTE");
+			$collumns = array("GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","START_DATE","END_DATE","NOTE","STATUS");
 			
 			$link=array(
 					'module'=>'global','controller'=>'group','action'=>'edit',
@@ -116,7 +116,11 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$id=$this->getRequest()->getParam("id");
 		
-		$this->view->rs = $db->getGroupById($id);
+		$this->view->rs = $group_info = $db->getGroupById($id);
+		
+		if($group_info['is_pass']==1){
+			Application_Form_FrmMessage::Sucessfull(" ក្រុមសិក្សាត្រូវបានបញ្ចប់ មិនអាចកែបានទេ !!! ", "/global/group/index");
+		}
 		
 		$this->view->row = $db->getGroupSubjectById($id);
 		

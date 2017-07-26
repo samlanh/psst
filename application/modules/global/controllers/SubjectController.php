@@ -30,7 +30,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 			 
 			 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("SUBJECT_IN_KH","SUBJECT_IN_EN","MODIFY_DATE","STATUS","USER");
+			$collumns = array("SUBJECT_IN_KH","SUBJECT_IN_EN","MODIFY_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'subject','action'=>'edit',
 			);

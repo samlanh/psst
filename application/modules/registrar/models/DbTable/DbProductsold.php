@@ -12,7 +12,7 @@ class Registrar_Model_DbTable_DbProductsold extends Zend_Db_Table_Abstract
     	
     	$sql="SELECT sd.id,
     	 	 (SELECT branch_nameen FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
-			 (SELECT stu_enname FROM `rms_student` WHERE stu_id=sp.student_id LIMIT 1) AS stu_enname,
+			 (SELECT CONCAT(stu_khname,'-',stu_enname) FROM `rms_student` WHERE stu_id=sp.student_id LIMIT 1) AS stu_enname,
 			 (SELECT stu_code FROM `rms_student` WHERE stu_id=sp.student_id LIMIT 1) AS stu_code,
 			 sp.receipt_number,
 			 sd.qty,

@@ -472,49 +472,7 @@ function addJob(){
 	}
 }
 </script>
-<div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_dept" >
-		<form style="background-color: buttonface;" id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table cellspacing="10" width="100%" style="margin: 0 auto;">
-			<tr>
-				<td>
-					<fieldset style="background-color: buttonface;">
-					<legend align="center" >បន្ថែមកម្រិតភាសា</legend><br />
-					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
-						<tr>
-							<td style="width:100px"><?php echo $tr->translate("ចំណងជើងភាសា")?></td>
-							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="language_title" id="language_title" type="text"   /></td>
-						</tr>
-						<tr>
-							<td>ពណ៌នា</td>
-							<td>
-								<textarea class="fullside"   style=" height: 60px !important;" tabindex="2" dojoType=""  id="note" name=note ></textarea>
-							</td>
-						</tr>
-						<tr>
-							<td style="width:100px"><?php echo $tr->translate("status")?></td>
-							<td>
-								<select class="fullside"  tabindex="3" name="status_p" id="status_p" dojoType="dijit.form.FilteringSelect" >
-								    <option value="1"><?php echo $tr->translate("Active")?></option>
-								    <option value="0"><?php echo $tr->translate("Deactive")?></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save" name="save" label="Save" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addLanguage();"/>
-							</td>
-						</tr>
-					</table>
-				</fieldset>
-				</td>
-			</tr>
-		</table>
-		</form>
-	</div>
-</div>
+
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_dept2" >
 		<form style="background-color: buttonface;" id='frm_add_tran1' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -522,27 +480,23 @@ function addJob(){
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate('ADD_OCCUPATION');?></legend><br />
+					<legend align="center" ><?php echo $tr->translate('ADD_OCCUPATION');?></legend>
 						<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
 							<tr>
-								<td><?php echo $tr->translate('OCCUPATION_KHNAME');?></td>
+								<td><?php echo $tr->translate('TITLE');?></td>
 								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="occu_name" name="occu_name" value="" type="text"></td>
 							</tr>
 							<tr>
-								<td><?php echo $tr->translate('OCCUPATION_ENNAME');?></td>
-								<td><input dojoType="dijit.form.TextBox" type="hidden" name="value_j" id="value_j" value=""   />
-									<input dojoType="dijit.form.ValidationTextBox"  class="fullside" id="occu_enname" name="occu_enname" value="" type="text">
-								</td>
-							</tr>
-							<tr>
-							<tr>
 								<td><?php echo $tr->translate('STATUS');?></td>
 								<td><select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"   class="fullside">
-	    								<option value="1" label="active">Active</option>
-	    								<option value="0" label="deactive">Deactive</option>
+	    								<option value="1" >Active</option>
+	    								<option value="0" >Deactive</option>
 									</select>
 								</td>
 							</tr>
+							
+							<input type="text" name="value_j" id="value_j" dojoType="dijit.form.TextBox" />
+							
 							<tr>
 								<td colspan="4" align="center">
 									<input type="button" value="ចាកចេញ" label="Close" id="close" name="close" dojoType="dijit.form.Button" 

@@ -1058,7 +1058,9 @@ function getOldStudentInfo(){
 						dijit.byId('group').attr('value',data.group_id);
 						getInfoBygroup();
 					}else{
-						dijit.byId('group').attr('value',-1);
+						alert(data.degree);
+						alert(data.grade);
+						dijit.byId('group').attr('value','-1');
 						dijit.byId('study_year').attr('value',data.academic_year);
 						dijit.byId('dept').attr('value',data.degree);
 						dijit.byId('session').attr('value',data.session);

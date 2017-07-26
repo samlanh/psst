@@ -12,7 +12,6 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 	public function addNewOccupation($_data){
 		$_arr=array(
 				'occu_name'	  => $_data['occu_name'],
-				'occu_enname'	  => $_data['occu_enname'],
 				'create_date' => Zend_Date::now(),
 				'status'   => $_data['status'],
 				'user_id'	  => $this->getUserId()
@@ -23,7 +22,6 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 	public function addNewOccupationPopup($_data){
 		$_arr=array(
 				'occu_name'	  => $_data['occu_name'],
-				'occu_enname'	  => $_data['occu_enname'],
 				'create_date' => Zend_Date::now(),
 				'status'   => $_data['status_j'],
 				'user_id'	  => $this->getUserId()
@@ -42,7 +40,6 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 	public function updateOccupation($_data){
 		$_arr=array(
 				'occu_name'	  => $_data['occu_name'],
-				'occu_enname'	  => $_data['occu_enname'],
 				'create_date' => Zend_Date::now(),
 				'status'   => $_data['status'],
 				'user_id'	  => $this->getUserId()
@@ -52,9 +49,16 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 	}
 	function getAllOccupation($search){
 		$db = $this->getAdapter();
-		$sql = " SELECT occupation_id AS id,occu_name,occu_enname, create_date,status,(SELECT  CONCAT(first_name,' ', last_name) FROM rms_users WHERE id=user_id )AS user_name
-		FROM rms_occupation ";
-		$order = ' ORDER BY occu_name ASC '; 
+		$sql = " SELECT 
+					occupation_id AS id,
+					occu_name,
+					create_date,
+					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
+					status
+				FROM 
+					rms_occupation ";
+		
+		$order = ' ORDER BY id DESC '; 
 		$where = ' WHERE occu_name!="" ';
 		if(empty($search)){
 			return $db->fetchAll($sql.$order);
@@ -63,7 +67,6 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
 			$s_where[] = " occu_name LIKE '%{$s_search}%'";
-			$s_where[] = " occu_enname LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		return $db->fetchAll($sql.$where.$order);

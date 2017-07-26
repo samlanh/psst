@@ -18,7 +18,7 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  s.stu_code,
 				  (select major_enname from rms_major where major_id = s.grade) as grade,
 				  (select name_en from rms_view where type=4 and key_code =s.session) as session,
-				  CONCAT(s.stu_enname) AS name,
+				  CONCAT(s.stu_khname,'-',s.stu_enname) AS name,
 				  (select name_en from rms_view where rms_view.type=2 and key_code=s.sex )AS sex,
 				  s.tel,
 				  pn.`title` service,

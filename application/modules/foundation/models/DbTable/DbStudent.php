@@ -404,7 +404,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
 		
-		$sql = "select id,CONCAT(from_academic,'-',to_academic,'(',generation,')')as years,(select name_en from rms_view where type=7 and key_code=time) as time  from  rms_tuitionfee  where  1  $branch_id  ";
+		$sql = "select id,CONCAT(from_academic,'-',to_academic,'(',generation,')')as years,(select name_en from rms_view where type=7 and key_code=time) as time  from  rms_tuitionfee  where status=1 $branch_id  ";
 		$group = " group by from_academic,to_academic,generation,time ";
 		return $db->fetchAll($sql);
 	}

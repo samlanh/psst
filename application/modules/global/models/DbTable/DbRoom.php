@@ -46,10 +46,17 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 	}
 	function getAllRooms($search=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT room_id AS id,room_name, modify_date,is_active as status,
-		(SELECT  CONCAT(first_name,' ', last_name) FROM rms_users WHERE id=user_id )AS user_name
-		FROM rms_room
-		WHERE 1 ";
+		$sql = " SELECT 
+					room_id AS id,
+					room_name,
+					modify_date,
+					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
+					is_active as status
+				FROM 
+					rms_room
+				WHERE 
+					room_name != ''
+			 ";
 		$order=" order by id DESC ";
 		$where = '';
 		

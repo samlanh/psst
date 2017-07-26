@@ -29,7 +29,7 @@ class Global_OccupationController extends Zend_Controller_Action {
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("OCCUPATION_KHNAME","OCCUPATION_ENNAME","CREATED_DATE","STATUS","BY_USER");
+			$collumns = array("OCCUPATION_KHNAME","CREATED_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'occupation','action'=>'edit',
 			);

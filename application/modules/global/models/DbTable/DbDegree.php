@@ -8,9 +8,16 @@
 	
 	function getAllDegree($search = ''){
 		$db = $this->getAdapter();
-		$sql = " SELECT dept_id,en_name,shortcut,modify_date,is_active as status,
-		         (SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE user_id=id LIMIT 1 ) AS user_name
-		         FROM rms_dept WHERE 1 AND en_name!='' ";
+		$sql = " SELECT 
+					 dept_id,
+					 en_name,
+					 shortcut,
+					 modify_date,
+			         (SELECT CONCAT(first_name) FROM rms_users WHERE user_id=id LIMIT 1 ) AS user_name,
+			         is_active as status
+		         FROM 
+					 rms_dept 
+				 WHERE en_name!='' ";
 		$orderby = " ORDER BY dept_id DESC ";
 		if(empty($search)){
 			return $db->fetchAll($sql.$orderby);

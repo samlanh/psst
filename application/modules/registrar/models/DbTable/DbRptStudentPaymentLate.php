@@ -17,7 +17,7 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  sp.`receipt_number` AS receipt,
 				  (SELECT branch_nameen FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
 				  (select stu_code from rms_student where rms_student.stu_id=sp.student_id limit 1)AS code,
-				  (select CONCAT(stu_enname) from rms_student where rms_student.stu_id=sp.student_id limit 1)AS name,
+				  (select CONCAT(stu_khname,'-',stu_enname) from rms_student where rms_student.stu_id=sp.student_id limit 1)AS name,
 				  (select name_en from rms_view where rms_view.type=2 and key_code=(select sex from rms_student where rms_student.stu_id=sp.student_id limit 1))AS sex,
 				  (select tel from rms_student where rms_student.stu_id=sp.student_id limit 1)AS tel,
 				  pn.`title` service,

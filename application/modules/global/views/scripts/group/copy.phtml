@@ -174,7 +174,9 @@ dojo.ready(function(){
 				dijit.byId("popup_add_dept").show();
 				addRowDegree();
 			}else{
-				getSubjectByDegree();
+				if(dept_id != <?php echo $this->rs['degree']?>){
+					getSubjectByDegree();
+				}
 				getallGrade();
 			}
 		}

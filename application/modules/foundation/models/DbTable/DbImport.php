@@ -12,39 +12,75 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     public function updateItemsByImport($data){
     	$db = $this->getAdapter();
     	$count = count($data);
-    	print_r($data);exit();
+//     	print_r($data);exit();
     	for($i=2; $i<=$count; $i++){
     		$arr = array(
-    				'branch_id'=>$data[$i]['B'],
-    				'stu_id'=>$data[$i]['C'],
-    				'degree'=>$data[$i]['D'],
-    				'status'=>1,
+    				'group_id'=>0,
+    				'branch_id'=>1,
+    				'user_id'=>$this->getUserId(),
+    				'stu_enname'=>$data[$i]['B'],
+    				'stu_khname'=>$data[$i]['C'],
+    				'stu_code'=>$data[$i]['E'],
+    				'academic_year'=>0,
+    				'grade'=>$data[$i]['H'],
+    				//     				'session'=>$data[$i]['D'],
+    		//     				'degree'=>$data[$i]['D'],
+    				'sex'=>($data[$i]['D']=="M")?1:2,
+    				'nationality'=>$data[$i]['J'],
+    				'dob'=>date("Y-m-d",strtotime($data[$i]['F'])),
+    				'age'=>$data[$i]['G'],
+    				//     				'tel'=>$data[$i]['D'],
+    				'pob'=>$data[$i]['K'],
+    				//     				'email'=>$data[$i]['D'],
+    				'address'=>$data[$i]['F'],
+    				'father_enname'=>$data[$i]['R'],
+    				'father_khname'=>$data[$i]['R'],
+    				'father_phone'=>$data[$i]['S'],
+    				'mother_khname'=>$data[$i]['P'],
+    				'mother_enname'=>$data[$i]['P'],
+    				'mother_phone'=>$data[$i]['Q'],
+    				'guardian_enname'=>$data[$i]['P'],
+    				'guardian_khname'=>$data[$i]['P'],
+    				'guardian_document'=>$data[$i]['M'],
+    				'guardian_tel'=>$data[$i]['N'],
+    				//     				'stu_type'=>1,
+    		//     				'guardian_dob'=>$data[$i]['D'],
+    		//     				'street'=>$data[$i]['D'],
+    		//     				'vill_id'=>$data[$i]['D'],
+    				//     				'mother_dob'=>$data[$i]['D'],
+    				//     				'mother_nation'=>$data[$i]['D'],
+    				//     				'mother_job'=>$data[$i]['D'],
+    				//     				'father_dob'=>$data[$i]['D'],
+    				//     				'father_nation'=>$data[$i]['D'],
+    				//     				'father_job'=>$data[$i]['D'],
+    				//     				'home_num'=>$data[$i]['D'],
+    				//     				'street_num'=>$data[$i]['D'],
+    				//     				'village_name'=>$data[$i]['D'],
+    				//     				'commune_name'=>$data[$i]['D'],
+    				//     				'district_name'=>$data[$i]['D'],
+    				//     				'province_id'=>$data[$i]['D'],
+    		
+    				'remark'=>$data[$i]['D'],
+    				'create_date'=>$data[$i]['T'],
+    				'is_stu_new'=>0,
+    				'is_subspend'=>0,
+    				'modify_date'=>date("Y-m-d"),
+    				'is_setgroup'=>0,
+    				'password'=>12345,
     		);
-    		$this->_name='rms_student';    		
+    		
+    		$this->_name='rms_student';
     		$id = $this->insert($arr);
+    		
     		
     		$arr = array(
     				'branch_id'=>1,
     				'stu_id'=>$id,
-    				'degree'=>1,
+//     				'degree'=>$data[$i]['D'],
     				'status'=>1,
     		);
     		$this->_name='rms_student_id';
     		$id = $this->insert($arr);
-    		
-    		
-//     		$price = array(
-//     				1=>$data[$i]['E'],
-//     				2=>$data[$i]['F'],
-//     				3=>$data[$i]['G'],
-//     				4=>$data[$i]['H'],
-//     				5=>$data[$i]['I'],
-//     				6=>$data[$i]['J'],
-//     				7=>$data[$i]['K'],
-//     				8=>$data[$i]['L'],
-//     				9=>$data[$i]['M'],
-//     				10=>$data[$i]['N'],
-//     		);
     		 
     		
     	}

@@ -123,48 +123,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 	</tr>
 </table>
 </form>
-<?php  $subject_exam= $this->frm_subject_exam;?>
-<div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popupsubject" >
-		<form  id='frm_subject' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
-							<tr>
-								<td><input type="checkBox" checked="checked" dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
-								<input type="hidden" id="par" name="par" />
-							</tr>
-							<tr>
-								<td style="width: 100px"><?php echo $tr->translate("PARENT")?></td>
-								<td>
-									<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
-										<option value="0"></option>
-										<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
-													<option value="<?php echo $row['id']?>"><?php echo $row['subject_titleen']?></option>
-										<?php }?>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_KH")?></td>
-								<td><?php  echo $subject_exam->getElement('subject_kh');?></td>
-							</tr>
-							<tr>
-								<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_EN")?></td>
-								<td><?php  echo $subject_exam->getElement('subject_en');?></td>
-							</tr>
-							<tr>
-								<td style="width: 100px"><?php echo $tr->translate("SHORTCUT")?></td>
-								<td><?php echo $subject_exam->getElement('score_percent');?></td>
-							</tr>
-							<tr>
-								<td colspan="2" align="center">
-									<input type="button" value="save_subject" id="save_subject" onclick="addSubjectajax();" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconSave" />
-								</td>
-							</tr>
-						</table>
-		</form>
-	</div>
-</div>
+
 <?php 
 $techer= $this->frm_techer;
 ?>
@@ -264,6 +223,7 @@ dojo.ready(function(){
 		}
 	}, "room");
 	addRow();
+	getValue();
 });
 function setEndDate(){
 	amount_date = dijit.byId('amountmonth').get('value');
@@ -305,36 +265,22 @@ function getallGrade(){
 		});
 }
 
-var url_room = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add-room')); ?>';
-function addRoom(){
-	if(dijit.byId('form_add_room').validate()){
-		dijit.byId('save_room').set('disabled',true);	
-		dojo.xhrPost({
-			url:url_room,
-			form: dojo.byId("form_add_room"),
-			handleAs:"json",
-			load: function(data) {
-				var myNewItem = {					
-						id: data,
-						name: dijit.byId('room_name').get('value')
-				};			
-				addDataToSelectbox(dijit.byId('room'), room_store, myNewItem, data);
-				dijit.byId("form_add_room").reset();
-				hideDialog();
-				dijit.byId('save_room').set('disabled',false);	
-			},
-			error: function(err) {
-				dijit.byId('save_room').set('disabled',false);	
-			}
-		});
-	}
-}
+
 var subject = '<?php echo $this->subject;?>';
 var col = 0;
 var no = 0;
 var title = 0;
 tmp = '';
 temp='';
+
+function refreshSubject(){
+	<?php 				
+		//$_db = new Global_Model_DbTable_DbGroup();
+		//$refreshSubject = $_db->getAllSubjectStudy();
+		//print_r($refreshSubject)
+	?>
+}
+
 function addRow() {
 	col++;no++;
 	template='';
@@ -438,6 +384,7 @@ function getSubjectByDegree(){
 			}
 		});
 }
+
 var subject = '<?php echo $this->subject;?>';
 var col1 = 0;
 var no1 = 0;
@@ -568,6 +515,55 @@ function deleteRecord1(index) {
 		</form>
 	</div>
 </div>
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popupsubject" >
+		<form  id='frm_subject' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table style="margin: 0 auto; width: 95%;white-space: nowrap;" >
+				<tr>
+					<td><input type="checkBox" checked="checked" dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
+					<input type="hidden" id="par" name="par" />
+				</tr>
+				<tr>
+					<td style="width: 100px"><?php echo $tr->translate("PARENT")?></td>
+					<td>
+						<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
+							<option value="0"></option>
+							<?php if(!empty($this->parent_subject))foreach ($this->parent_subject as $parent_subject){?>
+										<option value="<?php echo $parent_subject['id']?>"><?php echo $parent_subject['name']?></option>
+							<?php }?>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_KH")?></td>
+					<td>
+						<input name="subject_kh" id="subject_kh" dojoType="dijit.form.ValidationTextBox" required="required" class="fullside" />
+					</td>
+				</tr>
+				<tr>
+					<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_EN")?></td>
+					<td>
+						<input name="subject_en" id="subject_en" dojoType="dijit.form.ValidationTextBox" required="required" class="fullside" />
+					</td>
+				</tr>
+				<tr>
+					<td style="width: 100px"><?php echo $tr->translate("SHORTCUT")?></td>
+					<td>
+						<input name="shortcut_sub" id="shortcut_sub" dojoType="dijit.form.TextBox" class="fullside" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<input type="button" value="save_subject" id="save_subject" onclick="addSubjectajax();" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:40%;" id="popup_grate" >
 		<form style="background-color: buttonface;" id='frm_add_grade' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -617,7 +613,7 @@ function deleteRecord1(index) {
 	</div>
 </div>
 <script>
-var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-dept")); ?>';
+var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-deptandsubject")); ?>';
 function addDept(){
 	if(dijit.byId('frm_add_dep').validate()){
 		fac_enname=dijit.byId('fac_enname').get('value');
@@ -632,14 +628,15 @@ function addDept(){
 				handleAs:"json",
 				load: function(data) {
 					var Itemmake = { 
-					    	 id: data,
+					    	 id: data.degree,
 						     name: dijit.byId('fac_enname').get('value')
 						   };
-			   addDataToSelectbox(dijit.byId('degree'), dept_store, Itemmake, data);
-			   dijit.byId('frm_add_dep').reset();
-			   dijit.byId("popup_add_dept").hide();	
-			   getSubjectByDegree();
-			   dijit.byId('save_dep').set('disabled',false);	
+				   addDataToSelectbox(dijit.byId('degree'), dept_store, Itemmake, data.degree);
+				   dijit.byId('frm_add_dep').reset();
+				   dijit.byId("popup_add_dept").hide();	
+				   //getSubjectByDegree();
+				   subject = data.sub_option;
+				   dijit.byId('save_dep').set('disabled',false);	
 				},
 				error: function(err) {
 					dijit.byId('save_dep').set('disabled',false);	
@@ -700,6 +697,47 @@ function addSubjectajax(){
 		});
 	}
 }
+
+var url_room = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add-room')); ?>';
+function addRoom(){
+	if(dijit.byId('form_add_room').validate()){
+		dijit.byId('save_room').set('disabled',true);	
+		dojo.xhrPost({
+			url:url_room,
+			form: dojo.byId("form_add_room"),
+			handleAs:"json",
+			load: function(data) {
+				var myNewItem = {					
+						id: data,
+						name: dijit.byId('room_name').get('value')
+				};			
+				addDataToSelectbox(dijit.byId('room'), room_store, myNewItem, data);
+				dijit.byId("form_add_room").reset();
+				hideDialog();
+				dijit.byId('save_room').set('disabled',false);	
+			},
+			error: function(err) {
+				dijit.byId('save_room').set('disabled',false);	
+			}
+		});
+	}
+}
+
+function getValue(){
+	var par='';
+	if(dojo.byId('is_parent').checked){
+		par = 1;
+		dijit.byId('parent').attr('value','');
+		dijit.byId("parent").set('readOnly',true);
+		 dijit.byId('parent').set('required',false);  
+	}else{
+		par=0;
+		dijit.byId("parent").set('readOnly',false);
+		 dijit.byId('parent').set('required',true);  
+	}
+	$('#par').val(par);
+}
+
 function hideDialogGrade(){		
 	dijit.byId("popup_grate").hide();
 }

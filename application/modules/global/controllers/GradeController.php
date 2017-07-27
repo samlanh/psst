@@ -58,8 +58,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			
     	}
     	
-    	$_model = new Global_Model_DbTable_DbGroup();
-    	$this->view->subject = $_model->getAllSubjectStudy();
     	
     	$db = new Global_Model_DbTable_DbGrade();
     	$dept = $db->getAllDept();
@@ -69,6 +67,11 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 		$this->view->teacher= $db->getTeacher();
 		
 		$this->view->session= $db->getSession();
+		
+		
+		$_db = new Global_Model_DbTable_DbGroup();
+		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
+		$this->view->parent_subject = $_db->getParentSubject();
     }
     
     public function editAction(){
@@ -109,6 +112,31 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$db = new Global_Model_DbTable_DbGrade();
     			$degree = $db->addDept($data);
     			print_r(Zend_Json::encode($degree));
+    			exit();
+    		}catch(Exception $e){
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    }
+    
+    
+    function addDeptandsubjectAction(){
+    	if($this->getRequest()->isPost()){
+    		try{
+    			$data = $this->getRequest()->getPost();
+    			$db = new Global_Model_DbTable_DbGrade();
+    			$degree = $db->addDept($data);
+    			 
+    			$_db = new Global_Model_DbTable_DbGroup();
+    			$sub_option = $_db->getAllSubjectStudy();
+    			 
+    			$result = array(
+    					"degree"=>$degree,
+    					"sub_option"=>$sub_option,
+    			);
+    			 
+    			print_r(Zend_Json::encode($result));
     			exit();
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");

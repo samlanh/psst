@@ -290,6 +290,13 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	}
 	
 	
+	function getParentSubject(){
+		$db = $this->getAdapter();
+		$sql = "select id,subject_titlekh as name from rms_subject where is_parent =1 and status=1 ";
+		return $db->fetchAll($sql);
+	}
+	
+	
 	function getAllYear(){
 		$db = $this->getAdapter();
 		$sql = "select id,CONCAT(from_academic,'-',to_academic,'(',generation,')')as years from rms_tuitionfee ";

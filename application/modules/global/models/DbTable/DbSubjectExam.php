@@ -93,7 +93,6 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		$_arr=array(
 				'parent' 			=> $_data['parent'],
 				'subject_titlekh' 	=> $_data['subject_kh'],
-				'subject_titleen' 	=> $_data['subject_en'],
 				'date' 				=> date("Y-m-d"),
 				'status'   			=> $_data['status'],
 				'is_parent'   		=> $_data['par'],
@@ -117,7 +116,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'date' 				=> date("Y-m-d"),
 				'status'   			=> 1,
 				'is_parent'   		=> $_data['is_parent'],
-				'shortcut'   		=> $_data['score_percent'],
+				'shortcut'   		=> $_data['shortcut_sub'],
 				'user_id'	  		=> $this->getUserId(),
 				'access_type'=>1,
 		);

@@ -220,7 +220,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getAllSubjectStudy(){
    	$db = $this->getAdapter();
-   		$sql = " SELECT id,CONCAT(subject_titleen,' - ',subject_titlekh) as name FROM `rms_subject` WHERE
+   		$sql = " SELECT id,subject_titlekh as name FROM `rms_subject` WHERE
    		is_parent=1 AND status = 1 ";
    	return $db->fetchAll($sql);
    }

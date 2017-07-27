@@ -65,6 +65,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
+		
 		$subject_exam=new Global_Form_FrmAddSubjectExam();
 		$frm_subject_exam=$subject_exam->FrmAddSubjectExam();
 		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);

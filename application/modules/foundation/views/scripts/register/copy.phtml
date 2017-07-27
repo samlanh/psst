@@ -269,7 +269,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						</tr>
 						<tr>
 							<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("STUDENT_ID");?>*</td>
-							<td><input class="fullside"  style="color: red;" tabindex="15" dojoType="dijit.form.TextBox" readonly="readonly" id="student_id" name="student_id" value="<?php echo $this->rs['stu_code']; ?>" type="text" ></td>
+							<td><input class="fullside"  style="color: red;" tabindex="15" dojoType="dijit.form.TextBox" id="student_id" name="student_id" value="<?php echo $this->rs['stu_code']; ?>" type="text" ></td>
 							<td><?php echo $tr->translate("SESSION");?>*</td>
 							<td><select class="fullside" tabindex="19" readonly="readonly"  name="session" id="session" dojoType="dijit.form.FilteringSelect" >
 									<option value="1" <?php if($this->rs['session']==1){ echo "selected='selected'"; } ?>><?php echo $tr->translate("MORNING")?></option>

@@ -94,4 +94,30 @@ class Accounting_TransferController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	public function showBarcodesAction(){
+		$this->_helper->layout()->disableLayout();
+		$id = $this->getRequest()->getParam('id');
+		if(!empty($id)){
+			$ids=explode(',', $id);
+			$this->view->pro_id = $ids;
+		}
+		else{
+			//$this->_redirect("/product/index/index");
+		}
+	
+	}
+	public function generatebarcodeAction(){
+		$this->_helper->layout()->disableLayout();
+		$loan_code = $this->getRequest()->getParam('loan_code');		
+		header('Content-type: image/png');
+		
+		//$barcodeOptions = array('text' => "$_itemcode",'barHeight' => 30);
+		$barcodeOptions = array('text' => "$loan_code",'barHeight' => 40);
+		//'font' => 4(set size of label),//'barHeight' => 40//set height of img barcode
+		$rendererOptions = array();
+		$renderer = Zend_Barcode::factory(
+				'code128', 'image', $barcodeOptions, $rendererOptions
+		)->render();
+	
+	}
 }

@@ -356,7 +356,7 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     				'create_date'	=>date("Y-m-d H:i:s"),
     				'user_id'		=>$this->getUserId(),
     				'type'			=>1, 
-    				'pro_type'		=>1,
+    				'pro_type'		=>1, // product set
     		);
     		$this->insert($array);
     		$db->commit();    		
@@ -416,7 +416,7 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     					'status'		=>$_data['status'],
     					'user_id'		=>$this->getUserId(),
     					'type'			=>1, 
-    					'pro_type'		=>2,
+    					'pro_type'		=>1, // product set 
     			);
     			$where = " ser_cate_id=".$_data['id'];
     			$this->update($array, $where);

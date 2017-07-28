@@ -89,7 +89,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 		    				'create_date'	=>date("Y-m-d H:i:s"),
 		    				'user_id'		=>$this->getUserId(),
 		    				'type'			=>1, // type=1 => product 
-		    				'pro_type'		=>$_data['pro_type'], // 1=cut stock , 2=cut stock later
+		    				'pro_type'		=>0, // product not set
 	    				);
 	    		$this->insert($array);
 	    		
@@ -150,7 +150,6 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 		    				'status'		=>$_data['status'],
 		    				'user_id'		=>$this->getUserId(),
 		    				'type'			=>1, // type=1 => product 
-		    				'pro_type'		=>$_data['pro_type'], // 1=cut stock , 2=cut stock later
 		    		);
 		    		$where = " ser_cate_id=".$_data['id'];
 		    		$this->update($array, $where);

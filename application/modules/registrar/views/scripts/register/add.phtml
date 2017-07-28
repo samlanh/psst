@@ -202,7 +202,7 @@
 			dijit.byId("session").set('readOnly',true);
 			dijit.byId("study_hour").set('readOnly',true);
 			dijit.byId("payment_term").set('readOnly',true);
-			dijit.byId("tuitionfee").set('readOnly',true);
+			//dijit.byId("tuitionfee").set('readOnly',true);
 			dijit.byId("discount_percent").set('readOnly',true);
 			//dijit.byId("paid_amount").set('readOnly',true);
 			dijit.byId("room").set('readOnly',true);
@@ -220,7 +220,7 @@
 			dijit.byId("session").set('readOnly',false);
 			dijit.byId("study_hour").set('readOnly',false);
 			dijit.byId("payment_term").set('readOnly',false);
-			dijit.byId("tuitionfee").set('readOnly',false);
+			//dijit.byId("tuitionfee").set('readOnly',false);
 			dijit.byId("discount_percent").set('readOnly',false);
 			//dijit.byId("paid_amount").set('readOnly',false);
 			dijit.byId("room").set('readOnly',false);
@@ -616,7 +616,7 @@ fieldset{  background:none;}
 			</tr>
 			<tr>
 				<td colspan="3" align="center">
-				    <input type="button" onclick="submitDataClose();" name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
+				    <input type="submit" name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					<input type="button" onclick="submitDataAddNew();" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
@@ -633,6 +633,9 @@ fieldset{  background:none;}
 </style>
 <script type="text/javascript">
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			//onclick="submitDataClose();" 
+
 function getInfoBygroup(){
 	url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 	group = dijit.byId('group').get('value');
@@ -1058,8 +1061,8 @@ function getOldStudentInfo(){
 						dijit.byId('group').attr('value',data.group_id);
 						getInfoBygroup();
 					}else{
-						alert(data.degree);
-						alert(data.grade);
+						//alert(data.degree);
+						//alert(data.grade);
 						dijit.byId('group').attr('value','-1');
 						dijit.byId('study_year').attr('value',data.academic_year);
 						dijit.byId('dept').attr('value',data.degree);

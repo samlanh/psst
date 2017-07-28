@@ -588,7 +588,10 @@ fieldset{  background:none;}
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("CREDIT_MEMO");?></td>
-							<td align="right"><input type="text"  onkeyup="" readOnly="1"  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" /></td>
+							<td align="right">
+								<input type="text"  onkeyup="" readOnly="1"  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" />
+							</td>
+							<input type="text" name="credit_memo_after" id="credit_memo_after" dojoType="dijit.form.NumberTextBox" value="0" />
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("DEDUCT");?></td>
@@ -616,7 +619,7 @@ fieldset{  background:none;}
 			</tr>
 			<tr>
 				<td colspan="3" align="center">
-				    <input type="submit" name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
+				    <input type="button" onclick="submitDataClose();"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					<input type="button" onclick="submitDataAddNew();" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
@@ -1280,7 +1283,16 @@ function deleteRecord(index) {
 		netAmount = grandTotal + fine - credit_memo - deduct;
 		
 		dijit.byId('grand_total').attr('value',grandTotal );
-		dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
+		
+		if(netAmount<0){
+			dijit.byId('net_amount').attr('value',0);
+			dijit.byId('credit_memo_after').attr('value',abs(netAmount));
+		}else{
+			dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
+			dijit.byId('credit_memo_after').attr('value',0);
+		}
+		
+		
 		readMoneyInKhmer(netAmount.toFixed(2));
 	}
 	function onKeyUpDeduct(){
@@ -1293,7 +1305,16 @@ function deleteRecord(index) {
 		deduct = dijit.byId('deduct').get('value');
 		deduct = isNaN(deduct)?0:deduct;
 		netAmount = grandTotal + fine - credit_memo - deduct;
-		dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
+		
+		if(netAmount<0){
+			dijit.byId('net_amount').attr('value',0);
+			dijit.byId('credit_memo_after').attr('value',abs(netAmount));
+		}else{
+			dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
+			dijit.byId('credit_memo_after').attr('value',0);
+		}
+		//dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
+		
 		readMoneyInKhmer(netAmount.toFixed(2));
 	}
 	function readMoneyInKhmer(netTotal){

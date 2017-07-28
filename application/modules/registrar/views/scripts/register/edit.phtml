@@ -53,7 +53,7 @@
 				//getAllTeacherByCourse();
 		    	//dijit.byId('discount').attr('value','0');
 		    	//dijit.byId('not').attr('value','');
-		    	getTotale();
+		    	//getTotale();
 		    }
 		}, "grade");
 
@@ -76,7 +76,7 @@
 		//SetReadonlyForPayService();
 		//dijit.byId('dept').attr('value','<?php //echo $this->degree_row['degree'];?>');
 		getDateTerm();
-		
+		readMoneyInKhmer('<?php echo $this->payment['net_amount']?>');
 		
 	});	
 
@@ -609,19 +609,19 @@ fieldset{  background:none;}
 					    </tr>
 					    <tr>
 						    <td><?php echo $tr->translate("TUITION_FEE");?></td>
-							<td><input type="text" name="tuitionfee" id="tuitionfee" readonly="true" value="<?php echo $this->payment_detail_register['fee']?>" onkeyup="getTotale();netTotal();" class="fullside" dojoType="dijit.form.TextBox"/></td>
+							<td><input type="text" name="tuitionfee" id="tuitionfee" readonly="true" value="<?php echo $this->payment_detail_register['fee']?>"  class="fullside" dojoType="dijit.form.TextBox"/></td>
 						    
 							<td><?php echo $tr->translate("LATE_FEE");?></td>
 							<td ><input type="text" name="late_fee" id="late_fee" readonly="1"  value="<?php echo $this->payment_detail_register['late_fee']?>" class="fullside" dojoType="dijit.form.NumberTextBox"/></td>
 							
 						    <td><?php echo $tr->translate("DISCOUND");?></td>
-							<td ><input type="text" name="discount" id="discount" readonly="true" value="<?php echo $this->payment_detail_register['discount_percent']?>" onkeyup="getTotale();netTotal();" class="fullside" dojoType="dijit.form.TextBox"/></td>
+							<td ><input type="text" name="discount" id="discount" readonly="true" value="<?php echo $this->payment_detail_register['discount_percent']?>" class="fullside" dojoType="dijit.form.TextBox"/></td>
 							
 						</tr>
 						
 						<tr>
 						    <td><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
-							<td><input type="text" name="total_payment" id="total_payment" readonly="true" value="<?php echo $this->payment['paid_amount']?>" onkeyup="netTotal();" class="fullside" dojoType="dijit.form.TextBox"/></td>
+							<td><input type="text" name="total_payment" id="total_payment" readonly="true" value="<?php echo $this->payment_detail_register['paidamount']?>"  class="fullside" dojoType="dijit.form.TextBox"/></td>
 							
 							<td><?php echo $tr->translate("NOT");?></td>
 							<td><input type="text" name="not" id="not" readonly="1" value="<?php echo $this->payment['note']?>" class="fullside" dojoType="dijit.form.TextBox"/></td>
@@ -646,22 +646,27 @@ fieldset{  background:none;}
 							<td colspan="2" align="right">
 								<table style="width:400px;border-collapse: collapse;" cellpadding="10" cellspacing="10" >
 									<tr>
-										<td ><?php echo $tr->translate("Total Payment");?></td>
-										<td align="right"><input type="text" readonly="readonly" name="grand_total" id="grand_total" value="0" dojoType="dijit.form.NumberTextBox" /></td>
+										<td ><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
+										<td align="right"><input type="text" readonly="readonly" name="grand_total" id="grand_total"  value="<?php echo $this->payment['grand_total']?>" dojoType="dijit.form.NumberTextBox" /></td>
 									</tr>
 									<tr>
-										<td><?php echo $tr->translate("Credit Memo");?></td>
+										<td><?php echo $tr->translate("FINE");?></td>
+										<td align="right"><input type="text" name="fine" id="fine" readonly="1" value="<?php echo $this->payment['fine']?>" value="0" dojoType="dijit.form.NumberTextBox" /></td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("CREDIT_MEMO");?></td>
 										<td align="right"><input type="text" readonly="1" onkeyup=""  name="credit_memo" id="credit_memo"  value="<?php echo $this->payment['credit_memo']?>" dojoType="dijit.form.NumberTextBox" /></td>
+										<input type="text" dojoType="dijit.form.TextBox" name="credit_memo_id" id="credit_memo_id" value="<?php echo $this->payment['memo_id']?>" />
 									</tr>
 									
 									<tr>
-										<td><?php echo $tr->translate("Deduct");?></td>
-										<td align="right"><input type="text" readonly="1" onkeyup="onKeyUpDeduct();"  name="deduct" id="deduct"  value="<?php echo $this->payment['deduct']?>" dojoType="dijit.form.NumberTextBox" /></td>
+										<td><?php echo $tr->translate("DEDUCT");?></td>
+										<td align="right"><input type="text" readonly="1" name="deduct" id="deduct"  value="<?php echo $this->payment['deduct']?>" dojoType="dijit.form.NumberTextBox" /></td>
 									</tr>
 									
 									<tr>
-										<td><?php echo $tr->translate("Net Amount");?></td>
-										<td align="right"><input type="text" name="net_amount" readonly="readonly" id="net_amount"  dojoType="dijit.form.NumberTextBox" /></td>
+										<td><?php echo $tr->translate("NET_AMOUNT");?></td>
+										<td align="right"><input type="text" name="net_amount" readonly="readonly" id="net_amount" value="<?php echo $this->payment['net_amount']?>" dojoType="dijit.form.NumberTextBox" /></td>
 									</tr>
 								</table>
 							</td>
@@ -1495,10 +1500,11 @@ function deleteRecord(index) {
 		deduct = isNaN(deduct)?0:deduct;
 		
 		
-		netAmount = grandTotal - credit_memo - deduct;
+		//netAmount = grandTotal - credit_memo - deduct;
 		
 		dijit.byId('grand_total').attr('value',grandTotal );
-		dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
+		
+		//dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
 		
 		readMoneyInKhmer(netAmount.toFixed(2));
  }

@@ -214,6 +214,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}
 			//////////////////////////////////////////////////////////////////////	
 				$this->_name='rms_student_payment';
+				
+				if($data['credit_memo_after']>0){
+					//$credit_memo_after = $data['credit_memo_after'];
+					$cut_credit_memo = $data['credit_memo'] - $data['credit_memo_after'];
+				}else{
+					//$credit_memo_after = $data['credit_memo'];
+					$cut_credit_memo = $data['credit_memo'];
+				}
+				
 				$arr=array(
 						'student_id'	=>$id,
 						'receipt_number'=>$receipt_number,
@@ -245,7 +254,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'fine'			=>$data['fine'],
 						
 						'memo_id'		=>$data['credit_memo_id'],
-						'credit_memo'	=>$data['credit_memo'],
+						'credit_memo'	=>$cut_credit_memo,
 						'deduct'		=>$data['deduct'],
 						'net_amount'	=>$data['net_amount'],
 				);
@@ -272,15 +281,16 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}
 	////////////////// rms_creditmemo /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 				$this->_name='rms_creditmemo';
-				if($data['student_type']==3){
+				if($data['student_type']==3){ // only old_student can have credit_memo
 					if(!empty($data['credit_memo_id'])){
-						if($data['net_amount']>=0){
+						if($data['credit_memo_after']>0){
 							$array=array(
-								'type'=>1, // បង់រួច
+									'total_amountafter'=>$data['credit_memo_after'],
 							);
 						}else{
 							$array=array(
-								'total_amountafter'=>abs($data['net_amount']), // 
+									'total_amountafter'=>0,
+									'type'=>1, // បង់រួច
 							);
 						}
 						$where = " id = ".$data['credit_memo_id'];
@@ -928,6 +938,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$this->delete($where);
 	}
 	
+	function updateCreditMemoBack($data){
+		$db = $this->getAdapter();
+		$sql=" select total_amountafter from rms_creditmemo where id = ".$data['credit_memo_id'];
+		$result = $db->fetchOne($sql);
+		
+		$credit_memo = $result + $data['credit_memo'];
+		
+		$array = array(
+				'total_amountafter' => $credit_memo,
+				'type' => 0,
+				);
+		$where = " id = ".$data['credit_memo_id'];
+		$this->_name='rms_creditmemo';
+		$this->update($array, $where);
+	}
+	
 	function updateRegister($data,$payment_id){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
@@ -943,6 +969,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						);
 				$where = " id = ".$payment_id;
 				$this->update($arra, $where);
+				
+				if(!empty($data['credit_memo_id'])){
+					$this->updateCreditMemoBack($data);
+				}
 				
 //&&&&&&&&&&&&&&&&&&&&&&&&  if payment_type=1 (pay both tuition_fee and service or product)	$%%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$			
 				if($data['payment_type']==1){

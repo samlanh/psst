@@ -36,6 +36,10 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 	    	$where.=" AND t.branch_id=".$search['branch_id'];
 	    }
 	    
+	    if($search['finished_status']!=""){
+	    	$where.=" AND t.is_finished=".$search['finished_status'];
+	    }
+	    
 	    $dbp = new Application_Model_DbTable_DbGlobal();
 	    $where.=$dbp->getAccessPermission();
 	    

@@ -115,7 +115,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'subject_titleen' 	=> $_data['subject_en'],
 				'date' 				=> date("Y-m-d"),
 				'status'   			=> 1,
-				'is_parent'   		=> $_data['is_parent'],
+				'is_parent'   		=> $_data['par'],
 				'shortcut'   		=> $_data['shortcut_sub'],
 				'user_id'	  		=> $this->getUserId(),
 				'access_type'=>1,

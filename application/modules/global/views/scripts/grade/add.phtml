@@ -1,10 +1,10 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_GRADE"));
+	$baseurl = $this->baseUrl();
 ?>	
 <?php  $frm_major= $this->frm_major;?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");

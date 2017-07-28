@@ -14,9 +14,10 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    							'txtsearch' => '',
-    							'year' => '',
-    							'branch_id'=>'',
+	    					'txtsearch' => '',
+	    					'year' => '',
+	    					'branch_id'=>'',
+    						'finished_status' => '',
     					);
     		}
     		$db = new Accounting_Model_DbTable_DbTuitionFee();

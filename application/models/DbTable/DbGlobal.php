@@ -513,7 +513,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    function getSession(){
    	$db=$this->getAdapter();
    	//$sql="SELECT key_code,CONCAT(name_en,'-',name_kh) AS view_name FROM rms_view WHERE `type`=4 AND `status`=1";
-   	$sql="SELECT key_code,name_kh AS view_name FROM rms_view WHERE `type`=4 AND `status`=1";
+   	$sql="SELECT key_code,name_en AS view_name FROM rms_view WHERE `type`=4 AND `status`=1";
 	return $db->fetchAll($sql);
    }
    function getGender(){
@@ -617,13 +617,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    function getAllStudent($opt=null,$type){
    	$db = $this->getAdapter();
-   	$sql=" SELECT stu_id As id,stu_code,stu_khname FROM `rms_student` WHERE stu_khname!='' AND STATUS=1 AND is_subspend=0 ";
+   	$sql=" SELECT stu_id As id,stu_code,CONCAT(stu_khname,'-',stu_enname) as name FROM `rms_student` WHERE stu_khname!='' AND STATUS=1 AND is_subspend=0 ";
    	$rows = $db->fetchAll($sql);
    	if($opt!=null){
    		$options=array(0=>"ជ្រើសរើសសិស្ស");
    		if(!empty($rows))foreach($rows AS $row){
    			$lable = $row['stu_code'];
-   			if($type==2){$lable = $row['stu_khname'];}
+   			if($type==2){$lable = $row['name'];}
    			$options[$row['id']]=$lable;
    		}
    	}

@@ -259,15 +259,21 @@ function deleteRecord(index) {
 										</tr>
 										<tr>
 											<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_KH")?></td>
-											<td><?php  echo $subject_exam->getElement('subject_kh');?></td>
+											<td>
+												<input name="subject_kh" id="subject_kh" dojoType="dijit.form.ValidationTextBox" required="required" class="fullside" />
+											</td>
 										</tr>
 										<tr>
 											<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_EN")?></td>
-											<td><?php  echo $subject_exam->getElement('subject_en');?></td>
+											<td>
+												<input name="subject_en" id="subject_en" dojoType="dijit.form.ValidationTextBox" required="required" class="fullside" />
+											</td>
 										</tr>
 										<tr>
 											<td style="width: 100px"><?php echo $tr->translate("SHORTCUT")?></td>
-											<td><?php echo $subject_exam->getElement('score_percent');?></td>
+											<td>
+												<input name="shortcut_sub" id="shortcut_sub" dojoType="dijit.form.TextBox" class="fullside" />
+											</td>
 										</tr>
 										<tr>
 											<td colspan="2" align="center">

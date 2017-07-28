@@ -69,16 +69,19 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'0'=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
+		
+		
 		//date 
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
-		$dates = date("Y-m-d");
 		$start_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
+				'value'=>'now',
 				'class'=>'fullside',));
 		$_date = $request->getParam("start_date");
-		if(empty($_date)){
-			$_date = date('Y-m-d');
-		}
+		echo $_date;
+// 		if(empty($_date)){
+// 			$_date = date('Y-m-d');
+// 		}
 		$start_date->setValue($_date);
 		
 		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');

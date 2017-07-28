@@ -91,7 +91,7 @@ dojo.require("dijit.form.CheckBox");
 											</select>
 										</td>
 										<td><?php echo $tr->translate("STOP_DATE")?></td>
-										<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="datestop" name="datestop" value="now" type="text"></td>
+										<td><input dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="datestop" name="datestop" value="now" type="text"></td>
 										<td><?php echo $tr->translate("STATUS")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">

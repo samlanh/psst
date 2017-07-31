@@ -59,7 +59,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 	   				sp.create_date,
 	   				(select first_name from rms_users where rms_users.id=sp.user_id) as user,
 	   				sp.note,
-	   				sp.is_void 
+	   				sp.is_void,
+	   				(select name_en from rms_view where type=10 and key_code = is_void) as vois_status 
 	   			FROM 
 	   				rms_student_payment as sp,
 					rms_student as s

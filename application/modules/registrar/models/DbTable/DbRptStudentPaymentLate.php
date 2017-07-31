@@ -36,6 +36,7 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  AND spd.`service_id`=pn.`service_id` 
 				  AND sp.is_void != 1  
 				  and s.stu_id = sp.student_id
+				  and sp.is_suspend = 0
 				  $branch_id  
     		";
     	

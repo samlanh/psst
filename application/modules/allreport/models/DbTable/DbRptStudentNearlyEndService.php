@@ -34,6 +34,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  AND spd.`service_id`=pn.`service_id`
     			  AND sp.is_void!=1  $branch_id
     			  and s.stu_id = sp.student_id
+    			  and sp.is_suspend = 0
     		";
     	
      	$order=" ORDER by sp.receipt_number ASC ";

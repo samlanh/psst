@@ -33,8 +33,10 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				WHERE spd.`is_start` = 1
 				  AND s.stu_id=sp.student_id 
 				  AND sp.id=spd.`payment_id`
-				  AND spd.`service_id`=pn.`service_id` 
-    			  AND sp.is_void != 1  $branch_id
+				  AND spd.`service_id` = pn.`service_id` 
+    			  AND sp.is_void != 1  
+    			  and sp.is_suspend = 0
+    			  $branch_id
     		";
     	
     	$where=" ";

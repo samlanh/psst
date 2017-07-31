@@ -34,6 +34,7 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  AND spd.`service_id`=pn.`service_id`
     			  $branch_id	
     			  and sp.student_id=s.stu_id
+    			  and sp.is_suspend = 0
     		";
     	
      	$order=" ORDER by sp.receipt_number ASC ";

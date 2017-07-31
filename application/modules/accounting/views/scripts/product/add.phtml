@@ -4,17 +4,13 @@
 ?>	
 <title><?php echo $tr->translate("ADD_PRODUCT");?></title>
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require('dojox.form.BusyButton');
 	dojo.require("dojo.NodeList-manipulate");
-	
 	var pro_cate_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cat_rows));?> );
-
+	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
 	dojo.ready(function(){ 
-		addRow();
-
 		new dijit.form.FilteringSelect({
 			store: pro_cate_store,
 			autoComplete: true,                        
@@ -31,10 +27,24 @@
 			    }
 		   }
 		}, "category_id");
-
-		
+		new dijit.form.FilteringSelect({
+			store: branch_store,
+			autoComplete: true,                        
+			required: false,
+			id: "branch",
+			name: "branch",           
+			class: "full", 
+			placeHolder:"Selected Branch",          
+			onChange: function() {  
+				branch_id = dijit.byId('branch').get('value');
+				if(branch_id==-1){
+					dijit.byId("popup_add_branch").show();
+				}else{
+					addRow();
+				}
+			}
+		}, "branch");
 	});	
- 
 </script>
 <style>
 select{ width:100%;}
@@ -44,6 +54,12 @@ fieldset{  background:none;}
 <form id='suspend_service' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'product','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				identity = dijit.byId('identity').get('value');
+				if(identity==''){
+					alert('សូមជ្រើសរើសសាខា !');
+                    dijit.byId("branch").focus();
+					return false;
+				}
 				return true;
 			} else {
 				return false;
@@ -57,7 +73,7 @@ fieldset{  background:none;}
 				<table style="margin: 0 auto; width: 100%;padding:10px;" cellspacing="7" >
 					<tr>
 						<td style="width: 160px"><?php echo $tr->translate("PRODUCT_NAME");?></td>
-						<td width="200px" ><input dojoType="dijit.form.TextBox"  class="fullside" id="product_name" value="" name="product_name"  type="text"​​ required="required"></td>
+						<td width="200px" ><input dojoType="dijit.form.ValidationTextBox"  class="fullside" id="product_name" value="" name="product_name"  type="text"​​ required="required"></td>
 						<td style="width: 160px"><?php echo $tr->translate("PRODUCT_CODE");?></td>
 						<td width="200px" ><input dojoType="dijit.form.TextBox"  class="fullside" id="product_code" value="<?php echo $this->pro_code;?>" name="product_code"  type="text"></td>
 					</tr>
@@ -85,29 +101,23 @@ fieldset{  background:none;}
 							</select>
 						</td>
 					</tr>
-					
 					<tr>
+						<td style="white-space: nowrap;"><?php echo $tr->translate("BRANCH");?></td>
+						<td><input id="branch" /></td>		
 						<td><?php echo $tr->translate("NOTE");?></td>
 						<td >
 							<textarea class="fullside" tabindex="8" style=" height: 40px !important;" dojotype="" id="descript" name="descript"></textarea>
 						</td>
 					</tr>
-					
 					<tr>
 						<td colspan="4">
 							<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
-									<tr id="head-title" class="head-td" align="right"></tr>
+								<tr id="head-title" class="head-td" align="right"></tr>
 							</table>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="4" align="left">
-								<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-							 		iconClass="dijitIconEditProperty" onclick="addRow();" />
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2"><input type="hidden" id="identity" name="identity" /></td>
+						<td colspan="2"><input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" /></td>
 					</tr>
 					<tr>
 						<td colspan="4" align="center">
@@ -124,8 +134,118 @@ fieldset{  background:none;}
 		</tr>
 	</table>	
 </form>
-
+<?php  $frm = $this->frm_branch;?>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:800px" id="popup_add_branch" >
+	<form  id='frm_addbranch' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		 <script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			} else {
+				return false;
+			}
+		</script>
+		<table cellspacing="10" style="margin: 0 auto; width:100%">
+			<tr>
+				<td>
+					<fieldset>
+						<legend align="center"><strong><?php echo $tr->translate("បន្ថែមសាខា");?></strong></legend>
+						<table cellspacing="10" width="100%" >
+							<tr>
+								<td>
+									<table width="100%" cellspacing="10">
+										<tr>
+											<td><?php echo $tr->translate("CODE")?></td>
+											<td><?php echo $frm->getElement("branch_code");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("BRANCH_NAME")?></td>
+											<td><?php echo $frm->getElement("branch_nameen");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("PREFIX_CODE");?></td>
+											<td><?php echo $frm->getElement("prefix_code");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("MAIN_BRANCH")?></td>
+											<td><?php echo $frm->getElement("main_branch_id");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("ADDRESS")?></td>
+											<td><?php echo $frm->getElement("br_address");?></td>
+										</tr>
+									</table>
+								</td>
+								<td align="center" valign="top">
+									<table width="100%" cellspacing="10">
+										<tr>		
+											<td><?php echo $tr->translate("PHONE")?></td>
+											<td><?php echo $frm->getElement("branch_tel");?></td>	
+										</tr>
+										<tr>		
+											<td><?php echo $tr->translate("BRANCH_FAX")?></td>
+											<td><?php echo $frm->getElement("fax");?></td>	
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("NOTE")?></td>
+											<td><?php echo $frm->getElement("branch_note");?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("STATUS")?></td>
+											<td><?php echo $frm->getElement("branch_status");?></td>
+										</tr>
+									</table>
+								</td>							
+							</tr>
+							<tr>
+								<td colspan="2" align="center" >
+									<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
+									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
+									<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
+									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addBranch();"/>
+								</td>
+							</tr>
+						</table>	
+					</fieldset>
+				</td>			
+			</tr>
+		</table>	
+	</form>
+</div>
+</div>
 <script type="text/javascript">
+function branch(){
+    dept_id = dijit.byId('branch').get('value');
+    if(dept_id==-1){
+    	dijit.byId("popup_add_branch").show();
+	}
+}
+var b_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->branchopt));?> );
+var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
+	function addBranch(){
+		if(dijit.byId('frm_addbranch').validate()){
+		dojo.xhrPost({
+				url:url_addbranch,
+				form: dojo.byId("frm_addbranch"),
+				handleAs:"json",
+				load: function(data) {
+					var Itemmake = { 
+							 id: data,
+							 name: dijit.byId('branch_nameen').get('value')
+						   };
+			   addDataToSelectbox(dijit.byId('branch'), b_store, Itemmake, data);
+			   dijit.byId('frm_addbranch').reset();
+			   dijit.byId("popup_add_branch").hide();	
+			},
+			error: function(err) {
+			}
+	});
+	}
+}
+function hideDialog(){
+	dijit.byId('frm_addbranch').reset();
+	dijit.byId("popup_add_branch").hide();
+}
 	var template = '';
 	var branch_name = '<?php echo $this->branch_name; ?>';
 	var col = 0;
@@ -134,6 +254,9 @@ fieldset{  background:none;}
 	tmp = '';
 	temp='';
 	function addRow() {
+		branch = dijit.byId('branch').get('value');
+		if(branch==''){return false;}
+			branch_lable = dijit.byId("branch").attr('displayedValue');
 			col++;no++;
 			template='';
 			if(title!=1){
@@ -147,7 +270,7 @@ fieldset{  background:none;}
 			}
 				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="35px" align="center">'+no+'</td>';
-				template+='<td><select class="fullside" dojoType="dijit.form.FilteringSelect" id="brand_name_'+col+'" name="brand_name_'+col+'">'+branch_name+'</select></td>';			
+				template+='<td>'+branch_lable+'<input class="fullside" type="hidden" value="'+branch+'" required="true" name="brand_name_'+col+'" id="brand_name_'+col+'" dojoType="dijit.form.TextBox" /></td>';			
 				template+='<td> <input class="fullside" type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" onKeyup="getTotalePricePro('+col+');"/></td>';
 				template+='<td> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
 			tmp='<tr id="row'+col+'">';

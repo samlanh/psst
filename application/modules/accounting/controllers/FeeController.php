@@ -76,8 +76,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 	    		}else{
 	    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/fee/add");
 	    		}
-	    		Application_Form_FrmMessage::message("INSERT_SUCCESS");
-	    		
+	    			Application_Form_FrmMessage::message("INSERT_SUCCESS");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
 	   			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

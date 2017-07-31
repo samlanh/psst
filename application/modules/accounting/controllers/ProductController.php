@@ -18,14 +18,14 @@ class Accounting_ProductController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    							'title' => '',
-    							'location' => '',
-    							'category_id'=>'',
-    							'start_date'=> date('Y-m-d'),
-    							'end_date'=>date('Y-m-d'),
-    							'status_search'=>1,
-    							'sale_set'=>0,
-    					);
+    				'title' => '',
+    				'location' => '',
+    				'category_id'=>'',
+    				'start_date'=> date('Y-m-d'),
+    				'end_date'=>date('Y-m-d'),
+    				'status_search'=>1,
+    				'sale_set'=>0,
+    			);
     		}
 			
 			$db =  new Accounting_Model_DbTable_DbProduct();
@@ -53,7 +53,6 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try{
 				$db = new Accounting_Model_DbTable_DbProduct();
-				
 				$row = $db->addProduct($_data);
 				
 				if(isset($_data['save_close'])){
@@ -69,7 +68,6 @@ class Accounting_ProductController extends Zend_Controller_Action {
 				echo $e->getMessage();
 			}
 		}
-			 
 			$_pro = new Accounting_Model_DbTable_DbProduct();
 			$this->view->branch_name = $_pro->getBrandLocation();
 			$this->view->pro_code=$_pro->getProCode();
@@ -79,6 +77,16 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			array_unshift($pro_cate, array('id'=>'-1' , 'name'=>'Add New'));
 			
 			$this->view->cat_rows = $pro_cate;
+			
+			$fm = new Global_Form_Frmbranch();
+			$frm = $fm->Frmbranch();
+			Application_Model_Decorator::removeAllDecorator($frm);
+			$this->view->frm_branch = $frm;
+			
+			$model = new Application_Model_DbTable_DbGlobal();
+			$branch = $model->getAllBranchName();
+			array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			$this->view->branchopt = $branch;
 			
 	}
 	public function editAction(){
@@ -109,8 +117,17 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			$this->view->pro_code=$_pro->getProCode();
 			$this->view->pro_row=$_pro->getProductById($id);
 		    $this->view->pro_locat=$_pro->getProLocationById($id);
-		    
 		    $this->view->cat_rows=$_pro->getProductCategory();
+		    
+		    $fm = new Global_Form_Frmbranch();
+		    $frm = $fm->Frmbranch();
+		    Application_Model_Decorator::removeAllDecorator($frm);
+		    $this->view->frm_branch = $frm;
+		    	
+		    $model = new Application_Model_DbTable_DbGlobal();
+		    $branch = $model->getAllBranchName();
+		    array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		    $this->view->branchopt = $branch;
 	}
 	function addNewProCateAction(){
 		if($this->getRequest()->isPost()){
@@ -152,16 +169,15 @@ class Accounting_ProductController extends Zend_Controller_Action {
 		    $this->view->pro_locat=$_pro->getProLocationById($id);
 		    
 		    $this->view->cat_rows=$_pro->getProductCategory();
-		
+		    
+		    $fm = new Global_Form_Frmbranch();
+		    $frm = $fm->Frmbranch();
+		    Application_Model_Decorator::removeAllDecorator($frm);
+		    $this->view->frm_branch = $frm;
+		    	
+		    $model = new Application_Model_DbTable_DbGlobal();
+		    $branch = $model->getAllBranchName();
+		    array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		    $this->view->branchopt = $branch;
 	}
-
-
-
-
-
 }
-
-
-
-
-

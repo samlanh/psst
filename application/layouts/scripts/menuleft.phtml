@@ -168,17 +168,18 @@
 
 	?>
 	<div id="header-left">
-	<ul>
+		<ul>
 			<?php 
-// 				$request=Zend_Controller_Front::getInstance()->getRequest();
-			if($request->getModuleName()!='report'){
+	// 				$request=Zend_Controller_Front::getInstance()->getRequest();
+				if($request->getModuleName()!='report'){
 					if($request->getModuleName()!='default' AND $action!='changepassword' ){
-					$dc=new Application_Model_Decorator();					
-					$class="current-left";					
-					$menu=$dc->getMenuLeft($arr_param_menu[$request->getModuleName()],$request->getControllerName(),$request->getModuleName());
-					if($menu) echo $menu;	
-				 }		
+						$dc=new Application_Model_Decorator();					
+						$class="current-left";					
+						$menu=$dc->getMenuLeft($arr_param_menu[$request->getModuleName()],$request->getControllerName(),$request->getModuleName());
+						//print_r($arr_param_menu[$request->getModuleName()]);
+						if($menu) echo $menu;	
+					 }		
 				}				
 			?>
-	</ul>																
+		</ul>																
 	</div>

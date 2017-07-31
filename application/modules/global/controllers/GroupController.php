@@ -76,6 +76,8 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->parent_subject = $_db->getParentSubject();
 		$this->view->subject = $_db->getAllSubjectStudy();
 		
+		$this->view->teacher = $_db->getAllTeacher();
+		
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();

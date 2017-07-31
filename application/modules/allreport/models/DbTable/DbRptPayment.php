@@ -64,7 +64,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 	   			FROM 
 	   				rms_student_payment as sp,
 					rms_student as s
-	   			WHERE sp.student_id=s.stu_id 
+	   			WHERE 
+	   				sp.student_id=s.stu_id 
 	   	";
 	   	
     	$order=" ORDER BY id DESC";

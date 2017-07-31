@@ -14,7 +14,7 @@ dojo.require("dijit.form.DateTextBox");
 var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->position));?> );
 
 	dojo.ready(function(){
-		
+		getTeacherID();
 		new dijit.form.FilteringSelect({
 			store: position_store,
 			autoComplete: true,                        
@@ -51,91 +51,51 @@ dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 	<tr>
 		<td>
 			<fieldset style="margin-top:-13px;">
-				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_STAFF");?></strong></legend>
+				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_TEACHER");?></strong></legend>
 				<table style="margin: 0 auto; width: 100%;white-space: nowrap;" cellspacing="10">
 					<tr>
-						<td style="width: 100px;"><?php echo $tr->translate("ID_NUMBER")?></td>
-						<td><?php  echo $techer->getElement('code');?></td>
+						<td><?php echo $tr->translate("ID_NUMBER")?></td>
+						<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" value="" readonly type="text"></td>
 						
-						<td style="width: 100px"><?php echo $tr->translate("KH_NAME")?></td>
+						<td><?php echo $tr->translate("KH_NAME")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="kh_name" name="kh_name" value="" type="text"></td>
 						
-						<td style="width: 100px"><?php echo $tr->translate("EN_NAME")?></td>
+						<td><?php echo $tr->translate("EN_NAME")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="en_name" name="en_name" value="" type="text"></td>
 					</tr>
 					<tr>
-						<td style="width: 100px"><?php echo $tr->translate("SEX")?></td>
+						<td><?php echo $tr->translate("SEX")?></td>
 						<td>
 							<select dojoType="dijit.form.FilteringSelect" value="1" class="fullside" id="sex" name="sex" value="" type="text">
 								<option value="1">Male</option>
 								<option value="2">Female</option>
 							</select>
 						</td>
-						
-						<td style="width: 100px"><?php echo $tr->translate("DOB")?></td>
+						<td><?php echo $tr->translate("DOB")?></td>
 						<td>
-							<input dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="dob" name="dob" value="" type="text" />
+							<input dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" />
 						</td>
-						
-						<td style="width: 100px"><?php echo $tr->translate("NATIONALITY")?></td>
+						<td><?php echo $tr->translate("NATIONALITY")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="nationality" name="nationality" value="" type="text"></td>
 					</tr>
 					
 					<tr>
-						<td style="width: 100px"><?php echo $tr->translate("PHONE")?></td>
+						<td><?php echo $tr->translate("PHONE")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="phone" name="phone" value="" type="text"></td>
 						
-						<td style="width: 100px"><?php echo $tr->translate("ADDRESS")?></td>
+						<td><?php echo $tr->translate("ADDRESS")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="address" name="address" value="" type="text"></td>
 					
-						<td style="width: 5px"><?php echo $tr->translate("BRANCH")?></td>
-						<td>
-							<select name="branch_id" id="branch_id" value="3" type="text" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-								<?php if(!empty($this->branch_id)){foreach ($this->branch_id as $branch){?>
-								<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
-								<?php }}?>
-							</select> 
-						</td>
-						
-					</tr>
-					
-					<tr>
-						
-						
-						<td style="width: 100px"><?php echo $tr->translate("POSITION")?></td>
-						<td>
-							<input id="staff_position" />
-						</td>
-						
-						<td style="width: 100px"><?php echo $tr->translate("EXPIRE_DATE")?></td>
-						<td>
-							<input dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="expired_date" name="expired_date" value="" type="text" />
-						</td>
-					
-						<td style="width: 100px"><?php echo $tr->translate("NOTE")?></td>
+						<td><?php echo $tr->translate("NOTE")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note" value="" type="text"></td>
-						
-					</tr>
-					<tr>
-						<td style="width: 100px"><?php echo $tr->translate("STATUS")?></td>
-						<td>
-							<select dojoType="dijit.form.FilteringSelect" value="1" class="fullside" id="status" name="status" value="" type="text">
-								<option value="1">Active</option>
-								<option value="0">Deactive</option>
-							</select>
-						</td>
-						
-						<td style="width: 5px"><?php echo $tr->translate("PHOTO")?></td>
-						<td><?php  echo $techer->getElement('photo');?></td>
 					</tr>
 					<tr>
 						<td colspan="6" align="center">
-								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
-								
-								<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
-								<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
+							<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
+							<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
+							<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
 						</td>
 					</tr>
 				</table>
@@ -146,6 +106,22 @@ dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 </form>
 
 <script type="text/javascript">
+
+	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
+	function getTeacherID(){
+		dojo.xhrPost({
+			url:url_get_teacher_id,
+			handleAs:"json",
+			load: function(data) {
+				//alert(data); 
+				dijit.byId('code').attr('value',data);
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+
 
 	var url_add_position = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"add-position")); ?>';
 	function addPosition(){

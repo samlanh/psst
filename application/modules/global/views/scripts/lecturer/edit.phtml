@@ -28,7 +28,7 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 		     	}
 		   } 
 		}, "staff_position");
-		dijit.byId('staff_position').attr('value','<?php echo $this->rs['position']?>');
+		//dijit.byId('staff_position').attr('value','<?php echo $this->rs['position']?>');
 	});
 
 </script>
@@ -51,79 +51,50 @@ dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_STAFF");?></strong></legend>
 				<table style="margin: 0 auto; width: 100%;white-space: nowrap;" cellspacing="10">
 					<tr>
-						<td style="width: 100px;"><?php echo $tr->translate("ID_NUMBER")?></td>
-						<td><?php  echo $techer->getElement('code');?></td>
+						<td><?php echo $tr->translate("ID_NUMBER")?></td>
+						<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" readonly value="<?php echo $this->rs['teacher_code']?>" type="text"></td>
 						
-						<td style="width: 100px"><?php echo $tr->translate("KH_NAME")?></td>
+						<td><?php echo $tr->translate("KH_NAME")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="kh_name" name="kh_name" value="<?php echo $this->rs['teacher_name_kh']?>" type="text"></td>
 						
-						<td style="width: 100px"><?php echo $tr->translate("EN_NAME")?></td>
+						<td><?php echo $tr->translate("EN_NAME")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="en_name" name="en_name" value="<?php echo $this->rs['teacher_name_en']?>" type="text"></td>
 					</tr>
-					<input type="text" name="old_photo" id="old_photo" value="<?php echo $this->rs['photo'];?>" dojoType="dijit.form.TextBox" />
 					<tr>
-						<td style="width: 100px"><?php echo $tr->translate("SEX")?></td>
+						<td><?php echo $tr->translate("SEX")?></td>
 						<td>
-							<select dojoType="dijit.form.FilteringSelect" value="1" class="fullside" id="sex" name="sex" value="" type="text">
+							<select dojoType="dijit.form.FilteringSelect" class="fullside" id="sex" name="sex" type="text">
 								<option value="1" <?php if($this->rs['sex']==1){echo 'selected="selected"';}?> >Male</option>
 								<option value="2" <?php if($this->rs['sex']==2){echo 'selected="selected"';}?> >Female</option>
 							</select>
 						</td>
 						
-						<td style="width: 100px"><?php echo $tr->translate("DOB")?></td>
+						<td><?php echo $tr->translate("DOB")?></td>
 						<td>
-							<input dojoType="dijit.form.DateTextBox" value="<?php echo $this->rs['dob']?>" class="fullside" id="dob" name="dob" value="" type="text" />
+							<input dojoType="dijit.form.DateTextBox" value="<?php echo $this->rs['dob']?>" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" />
 						</td>
 						
-						<td style="width: 100px"><?php echo $tr->translate("NATIONALITY")?></td>
+						<td><?php echo $tr->translate("NATIONALITY")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="nationality" name="nationality" value="<?php echo $this->rs['nationality']?>" type="text"></td>
 					</tr>
 					
 					<tr>
-						<td style="width: 100px"><?php echo $tr->translate("PHONE")?></td>
+						<td><?php echo $tr->translate("PHONE")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="phone" name="phone" value="<?php echo $this->rs['tel']?>" type="text"></td>
 						
-						<td style="width: 100px"><?php echo $tr->translate("ADDRESS")?></td>
+						<td><?php echo $tr->translate("ADDRESS")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="address" name="address" value="<?php echo $this->rs['address']?>" type="text"></td>
 					
-						<td style="width: 5px"><?php echo $tr->translate("BRANCH")?></td>
-						<td>
-							<select name="branch_id" id="branch_id" value="3" type="text" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-								<?php if(!empty($this->branch_id)){foreach ($this->branch_id as $branch){?>
-								<option value="<?php echo $branch['id']?>" <?php if($branch['id']==$this->rs['branch_id']){echo 'selected="selected"';}?>><?php echo $branch['name']?></option>
-								<?php }}?>
-							</select> 
-						</td>
-					</tr>
-					<tr>
-						
-						<td style="width: 100px"><?php echo $tr->translate("POSITION")?></td>
-						<td>
-							<input id="staff_position" />
-						</td>
-						
-						<td style="width: 100px"><?php echo $tr->translate("EXPIRE_DATE")?></td>
-						<td>
-							<input dojoType="dijit.form.DateTextBox" class="fullside" id="expired_date" name="expired_date" value="<?php echo $this->rs['expired_date']?>" type="text" />
-						</td>
-					
-						<td style="width: 100px"><?php echo $tr->translate("NOTE")?></td>
+						<td><?php echo $tr->translate("NOTE")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note" value="<?php echo $this->rs['note']?>" type="text"></td>
-						
 					</tr>
 					<tr>
-						<td style="width: 100px"><?php echo $tr->translate("STATUS")?></td>
+						<td><?php echo $tr->translate("STATUS")?></td>
 						<td>
 							<select dojoType="dijit.form.FilteringSelect" value="1" class="fullside" id="status" name="status" value="" type="text">
 								<option value="1" <?php if($this->rs['status']==1){echo 'selected="selected"';}?>>Active</option>
 								<option value="0" <?php if($this->rs['status']==0){echo 'selected="selected"';}?>>Deactive</option>
 							</select>
-						</td>
-						
-						<td style="width: 5px"><?php echo $tr->translate("PHOTO")?></td>
-						<td>
-							<?php  echo $techer->getElement('photo');?>
-							<img  src="<?php echo $this->baseUrl().'/images/'.$this->rs['photo'];?>" width="70px">
 						</td>
 					</tr>
 					<tr>

@@ -29,7 +29,7 @@ class Application_Model_Decorator
 	}
 	public function getMenuLeft($arr_menu,$controller,$module=null){
 		
-		//print_r($module);exit();
+// 		print_r($arr_menu);exit();
 		
 		$menu='';
 		$i=0;
@@ -39,6 +39,10 @@ class Application_Model_Decorator
 	
 		//if(is_array($arr_menu)){
 		foreach($arr_menu as $param=>$url){
+			
+// 			echo $param.'<br />';
+// 			echo 'url='.$url.'<br />';
+			
 			//$access = array_search($module.'/'.$param,$arr_actin);
 			//if($access!=''){
 			if($param==$controller){

@@ -39,10 +39,10 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'	=> $id,
 							'subject_id'=> $_data['group_subject_study_'.$i],
-							'status'    => $_data['status_'.$i],
+							'teacher'   => $_data['teacher_'.$i],
 							'note'   	=> $_data['group_note_'.$i],
 							'date' 		=> date("Y-m-d"),
-							'user_id'	=> $this->getUserId()
+							'user_id'	=> $this->getUserId(),
 					);
 					$this->insert($arr);
 				}
@@ -88,7 +88,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'	=> $_data['id'],
 							'subject_id'=> $_data['subject_study_'.$i],
-							'status'    => $_data['status_'.$i],
+							'teacher'   => $_data['teacher_'.$i],
 							'note'   	=> $_data['note_'.$i],
 							'date' 		=> date("Y-m-d"),
 							'user_id'	=> $this->getUserId()
@@ -344,6 +344,13 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
+	
+	function getAllTeacher(){
+		$db = $this->getAdapter();
+		$sql = "SELECT id,CONCAT(teacher_name_kh,'-',teacher_name_en) as name FROM rms_teacher WHERE status=1 ";
+		return $db->fetchAll($sql);
+	}
+	
 	
 }
 

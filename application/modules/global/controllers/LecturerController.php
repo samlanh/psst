@@ -22,7 +22,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 			$rs_rows= $db->getAllTeacher($search);
 			//print_r($rs_rows);exit();
 			$list = new Application_Form_Frmtable();
-			$collumns = array("STAFF_ID","NAME_KH","NAME_EN","SEX","PHONE","BRANCH","POSITION","NOTE","STATUS");
+			$collumns = array("ID_NUMBER","NAME_KH","NAME_EN","SEX","NATIONALITY","PHONE","NOTE","STATUS");
 			 
 			$link=array(
 					'module'=>'global','controller'=>'lecturer','action'=>'edit',
@@ -42,11 +42,9 @@ class Global_LecturerController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_search = $frm;
 	}
-	function addAction()
-	{
+	function addAction(){
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			
 			try {
 				$db = new Global_Model_DbTable_DbTeacher();
 				$id = $db->AddNewStaff($_data);
@@ -120,5 +118,13 @@ class Global_LecturerController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	
+	function getTeacherIdAction(){
+		$db = new Global_Model_DbTable_DbTeacher();
+		$code = $db->getTeacherCode();
+		print_r(Zend_Json::encode($code));
+		exit();
+	}
+	
 }
 

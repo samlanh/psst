@@ -14,22 +14,39 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 	}
 	
 	function addChangeProduct($data){
+		$db = $this->getAdapter();
 		
 		$credit_memo_id = 0;
+		$this->_name="rms_creditmemo";
 		if($data['credit_memo']>0){
-			$this->_name="rms_creditmemo";
-			$arr = array(
-					'branch_id'			=>$this->getBranchId(),
-					'student_id'		=>$data['stu_id'],
-					'total_amount'		=>$data['credit_memo'],
-					'total_amountafter'	=>$data['credit_memo'],
-					'user_id'			=>$this->getUserId(),
-					'note'				=>"from change product",
-					'date'				=>date('Y-m-d'),
-			);
-			$credit_memo_id = $this->insert($arr);
+
+		////////////////////////////////// select if this student reamin credit_memo ///////////////////////////////////////	
+			$sql = "SELECT * FROM rms_creditmemo WHERE student_id = ".$data['stu_id']." AND type=0 and status=1 ORDER BY id DESC LIMIT 1" ;
+			$result = $db->fetchRow($sql);
+
+			if(!empty($result)){ // if have , sum and update 
+				$total_credit_memo = $result['total_amountafter'] + $data['credit_memo'];
+				$array = array(
+						'total_amountafter'=>$total_credit_memo,
+						);
+				$where = " id = ".$result['id'];
+				$this->update($array, $where);
+				
+				$credit_memo_id = $result['id'];
+				
+			}else{ // insert new
+				$arr = array(
+						'branch_id'			=>$this->getBranchId(),
+						'student_id'		=>$data['stu_id'],
+						'total_amount'		=>$data['credit_memo'],
+						'total_amountafter'	=>$data['credit_memo'],
+						'user_id'			=>$this->getUserId(),
+						'note'				=>"from change product",
+						'date'				=>date('Y-m-d'),
+				);
+				$credit_memo_id = $this->insert($arr);
+			}
 		}
-		
 		
 		$db = new Registrar_Model_DbTable_DbRegister();
 		$receipt = $db->getRecieptNo();
@@ -160,6 +177,7 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
  	 
 
 	 function editChangeProduct($data,$id){
+	 	$db = $this->getAdapter();
 	 	try{
 	 		//print_r($data);exit();
 		 	if($data['status']==0){
@@ -172,11 +190,26 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 		 		
 		 		$this->_name="rms_creditmemo";
 		 		if($data['credit_memo_id']>0){
-		 			$ar = array(
-		 				'status'=>0,
+		 			
+		 			$sql="select * from rms_creditmemo where id = ".$data['credit_memo_id']." and type=0 and status=1 ";
+		 			$result = $db->fetchRow($sql);
+		 			
+		 			$total_credit_memo = $result['total_amountafter'] - $data['credit_memo'];
+		 			
+		 			if($total_credit_memo>0){
+		 				$array = array(
+		 						'total_amountafter'=>$total_credit_memo,
+		 						);
+		 				$where=" id = ".$data['credit_memo_id'];
+		 				$this->update($array, $where);
+		 			}else{
+		 				$ar = array(
+		 						'status'=>0,
+		 						'type'=>1,
 		 				);
-			 		$where=" id = ".$data['credit_memo_id'];
-			 		$this->update($arr, $where);
+		 				$where=" id = ".$data['credit_memo_id'];
+		 				$this->update($arr, $where);
+		 			}
 		 		}
 		 		
 		 		$ids = explode(',', $data['identity']);
@@ -185,9 +218,7 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 		 			$this->updateCutStock($data['old_pro_id_'.$j],$data['old_pro_type_'.$j],$data['qty_old_'.$j]);
 		 			 
 		 			$this->updateReturnStock($data['new_pro_id_'.$j],$data['new_pro_type_'.$j],$data['qty_new_'.$j]);
-		 			 
 		 		}
-		 		
 		 	}else{
 		 		return 0;
 		 	}

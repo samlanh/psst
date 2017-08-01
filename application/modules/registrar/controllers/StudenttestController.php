@@ -27,11 +27,11 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllStudentTest($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("RECEIPT_NO","NAME_KH","NAME_EN","SEX","DOB","PHONE","SERIAL","DEGREE","OLD_SCHOOL","OLD_GRADE","NOTE","PRICE","BY_USER");
+    		$collumns = array("RECEIPT_NO","NAME_KH","NAME_EN","SEX","DOB","PHONE","SERIAL","DEGREE","OLD_SCHOOL","OLD_GRADE","NOTE","PRICE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'studenttest','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('kh_name'=>$link,'en_name'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('receipt'=>$link,'kh_name'=>$link,'en_name'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -74,9 +74,14 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		$id = $this->getRequest()->getParam('id');
 		$db = new Registrar_Model_DbTable_DbStudentTest();
 		$this->view->rs = $row  = $db->getStudentTestById($id);
+		if($row['register']==1){
+			Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/registrar/studenttest");
+		}
+		
 		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $db->getAllDegreeName();
+		$this->view->session = $db->getAllSession();
     }
     
     

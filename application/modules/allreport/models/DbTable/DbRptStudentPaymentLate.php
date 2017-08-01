@@ -33,6 +33,7 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  AND sp.id=spd.`payment_id`
 				  AND spd.`service_id`=pn.`service_id`
     			  $branch_id	
+    			  and sp.is_void=0
     			  and sp.student_id=s.stu_id
     			  and sp.is_suspend = 0
     		";
@@ -45,17 +46,29 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
      	if(!empty($search['service'])){
      		$where .= " and spd.service_id = ".$search['service'];
      	}
+     	if(($search['grade_all']>0)){
+     		$where.= " AND s.grade = ".$search['grade_all'];
+     	}
+     	if(($search['session']>0)){
+     		$where.= " AND s.session = ".$search['session'];
+     	}
+     	if(($search['stu_name']>0)){
+     		$where.= " AND s.stu_id = ".$search['stu_name'];
+     	}
+     	if(($search['stu_code']>0)){
+     		$where.= " AND s.stu_id = ".$search['stu_code'];
+     	}
      	
-    		if(!empty($search['txtsearch'])){
-    			$s_where = array();
-    			$s_search = addslashes(trim($search['txtsearch']));
-    			$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
-    			$s_where[] = " (select stu_code from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select CONCAT(stu_khname,stu_enname) from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " spd.comment LIKE '%{$s_search}%'";
-    			$where .=' AND ( '.implode(' OR ',$s_where).')';
-    		}
+    	if(!empty($search['txtsearch'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['txtsearch']));
+    		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
+    		$s_where[] = " (select stu_code from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select CONCAT(stu_khname,stu_enname) from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
+    		$s_where[] = " spd.comment LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
     		
 //     		echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);

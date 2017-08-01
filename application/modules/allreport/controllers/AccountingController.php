@@ -252,17 +252,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	public function rptstudentnearlyendserviceAction(){
 		try{
 			if($this->getRequest()->isPost()){
-				$data=$this->getRequest()->getPost();
-				$search = array(
-						'txtsearch' => $data['txtsearch'],
-						//'start_date'=> $data['from_date'],
-						'end_date'	=>$data['to_date'],
-						'service'	=>$data['service']
-				);
+				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
 						'txtsearch' =>'',
-						//'start_date'=> date('Y-m-d'),
+						'grade_all' =>'',
+						'session' 	=>'',
+						'stu_code' 	=>'',
+						'stu_name' 	=>'',
 						'end_date'	=>date('Y-m-d'),
 						'service'	=>''
 				);;
@@ -284,6 +281,37 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}
 	}
 	
+	public function rptstudentpaymentlateAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}else{
+				$search=array(
+						'txtsearch' =>'',
+						'grade_all' =>'',
+						'session' 	=>'',
+						'stu_code' 	=>'',
+						'stu_name' 	=>'',
+						'end_date'	=>date('Y-m-d'),
+						'service'	=>'',
+				);;
+			}
+			$db = new Allreport_Model_DbTable_DbRptStudentPaymentLate();
+			$abc = $this->view->row = $db->getAllStudentPaymentLate($search);
+				
+			$form=new Registrar_Form_FrmSearchInfor();
+			$form->FrmSearchRegister();
+			Application_Model_Decorator::removeAllDecorator($form);
+			$this->view->form_search=$form;
+				
+			$this->view->search = $search;
+	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
+		}
+	}
 	
 	public function rptIncomeExpenseAction(){
 		try{
@@ -368,40 +396,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	}
 	
 	
-	public function rptstudentpaymentlateAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$data=$this->getRequest()->getPost();
-				$search = array(
-						'txtsearch' => $data['txtsearch'],
-						//'start_date'=> $data['from_date'],
-						'end_date'	=>$data['to_date'],
-						'service'	=>$data['service'],
-				);
-			}else{
-				$search=array(
-						'txtsearch' =>'',
-						//'start_date'=> date('Y-m-d'),
-						'end_date'	=>date('Y-m-d'),
-						'service'	=>'',
-				);;
-			}
-			$db = new Allreport_Model_DbTable_DbRptStudentPaymentLate();
-			$abc = $this->view->row = $db->getAllStudentPaymentLate($search);
-			
-			$form=new Registrar_Form_FrmSearchInfor();
-			$form->FrmSearchRegister();
-			Application_Model_Decorator::removeAllDecorator($form);
-			$this->view->form_search=$form;
-			
-			$this->view->search = $search;
-				
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
-		}
-	}
+	
 	
 	public function rptFeeAction(){
 	

@@ -115,6 +115,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    
    
+   public function getAllSession(){
+	   	$db = $this->getAdapter();
+	   	$sql ="SELECT key_code as id,name_en as name FROM rms_view WHERE type=4 AND status=1 ";
+	   	return $db->fetchAll($sql);
+   }
+   
    public function getProvince(){
    	$db = $this->getAdapter();
    	$sql ="SELECT province_en_name,province_id FROM rms_province WHERE is_active=1 AND province_en_name!='' ";

@@ -32,6 +32,12 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$this->insert($array);
  	}
 	function updateStudentTest($data,$id){
+		
+		$updated_result = 0;
+		if(!empty($data['degree_result']) && !empty($data['grade_result']) && !empty($data['session_result'])){
+			$updated_result = 1;
+		}
+		
 		$array = array(
 					'branch_id'	=>$this->getBranchId(),
 					'kh_name'	=>$data['kh_name'],
@@ -47,12 +53,19 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'address'	=>$data['address'],
 					'user_id'	=>$this->getUserId(),
 					'total_price'=>$data['test_cost'],
-					'create_date'=>date('Y-m-d'),
 					'status'	=>$data['status'],
+				
+					'degree_result'	=>$data['degree_result'],
+					'grade_result'	=>$data['grade_result'],
+					'session_result'=>$data['session_result'],
+				
+					'updated_result'=>$updated_result,
+				
 				);
 		$where="id = $id";
 		$this->update($array, $where);
 	}
+	
 	function getStudentTestById($id){
 		$db = $this->getAdapter();
 		$sql=" SELECT * FROM rms_student_test where id=$id ";
@@ -78,7 +91,8 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					old_grade,
 					note,
 					total_price,
-					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1)
+					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1),
+					(select name_en from rms_view where type=14 and key_code=updated_result) as result_status
 				FROM 
 					rms_student_test
 				where

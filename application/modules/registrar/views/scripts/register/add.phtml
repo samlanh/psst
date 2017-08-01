@@ -949,21 +949,19 @@ function getMonthByNumber(m){
 function setHourDefault(){
 	dept=dijit.byId('dept').get('value');
 	session=dijit.byId('session').get('value');
-	if(session==1 && (dept==1 || dept==3 || dept==4)){
-		dijit.byId('study_hour').attr('value','7:30 - 10:30');
-	}else if(session==2 && (dept==1 || dept==3)){
-		dijit.byId('study_hour').attr('value','13:30 - 16:30');
-	}else if(session==1 && dept==2){
+	if(session==1){
 		dijit.byId('study_hour').attr('value','7:30 - 11:30');
-	}else if(session==2 && dept==2){
+	}
+	else if(session==2){
 		dijit.byId('study_hour').attr('value','13:00 - 17:00');
 	}
-	else if(session==3 && dept==5){
+	else if(session==3){
 		dijit.byId('study_hour').attr('value','17:30 - 19:00');
 	}
-	else if(session==4 && dept==6){
-		dijit.byId('study_hour').attr('value','7:30 - 16:30');
-	}else{
+	else if(session==4){
+		dijit.byId('study_hour').attr('value','8:30 - 17:00');
+	}
+	else{
 		dijit.byId('study_hour').attr('value','');
 	}
 }
@@ -1843,6 +1841,13 @@ function getservicefee(key){
 				dijit.byId("sex").attr("value",data.sex);
 				dijit.byId("dob").attr("value",data.dob);
 				dijit.byId("parent_phone").attr("value",data.phone);
+				
+				dijit.byId("dept").attr("value",data.degree_result);
+				dijit.byId("session").attr("value",data.session_result);
+				
+				getallModel(data.degree_result,data.grade_result);
+
+				
 	 		},
 	 		error: function(err) {
 	 			alert(err);

@@ -55,7 +55,6 @@ protected $tr;
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBook();
-    	
     	$cat=$db_cat->getCategoryAll();
     	array_unshift($cat, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
     	$this->view->cat=$cat;

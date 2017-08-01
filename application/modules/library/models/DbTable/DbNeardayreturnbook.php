@@ -20,8 +20,7 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 		$sql="SELECT bd.id,b.phone,b.stu_id,        
 			    b.borrow_no,(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) AS bookno,
 			    (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) AS bookname,
-		        (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
-			    (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_name,
+		          b.card_id,b.name,(SELECT name_kh FROM rms_view WHERE rms_view.key_code=b.borrow_type AND rms_view.type=13 LIMIT 1) AS `type`,
 			    (SELECT name_en FROM rms_view WHERE rms_view.type=2 AND key_code=(SELECT sex FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1))AS sex,
 			    (SELECT major_enname FROM rms_major WHERE major_id = (SELECT grade FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1)) AS grade,
 			    b.borrow_date,b.return_date,bd.borr_qty
@@ -34,7 +33,8 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 			$s_where=array();
 			$s_search = addslashes(trim($search['title']));
 			$s_where[]="  b.borrow_no LIKE '%{$s_search}%'";
-			$s_where[]="  b.stu_id LIKE '%{$s_search}%'";
+			$s_where[]="  b.card_id LIKE '%{$s_search}%'";
+			$s_where[]="  b.name LIKE '%{$s_search}%'";
 			$s_where[]="  b.phone LIKE '%{$s_search}%'";
 			$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
 			$s_where[]= "(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
@@ -46,16 +46,16 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 			$where.=' AND b.status='.$search["status_search"];
 		}
 		
-		if($search["stu_name"]>0){
-			$where.=' AND b.stu_id='.$search["stu_name"];
-		}
+		if(!empty($search["is_type_bor"])){
+    		$where.=' AND b.borrow_type='.$search["is_type_bor"];
+    	}
 		
 		if($search["cood_book"]>0){
 			$where.=' AND bd.book_id='.$search["cood_book"];
 		}
 		
 		$order=" ORDER BY b.stu_id DESC ";
-		$str_next = '+1 week';
+		$str_next = '+1 3 days';
 		$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
 		$to_date = (empty($search['end_date']))? '1': " b.return_date <= '".$search['end_date']." 23:59:59'";
 		$where .= " AND ".$to_date;
@@ -79,6 +79,18 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 			$sql="SELECT s.stu_id As stu_id,CONCAT(s.stu_enname) as name FROM rms_student AS s
 			WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
 		}
+		return $db->fetchAll($sql);
+	}
+	
+	function getAllBorrowName(){
+		$db=$this->getAdapter();
+		$sql="SELECT id,name FROM rms_borrow WHERE is_completed=0";
+		return $db->fetchAll($sql);
+	}
+	
+	function getIsTypeBorowName(){
+		$db=$this->getAdapter();
+		$sql="SELECT key_code AS id , name_en AS `name`  FROM rms_view  WHERE `type`=13";
 		return $db->fetchAll($sql);
 	}
 	

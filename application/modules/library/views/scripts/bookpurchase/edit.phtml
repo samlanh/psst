@@ -4,6 +4,8 @@ $frm = $this->frm_callteral;
  
 echo $this->headTitle($tr->translate("ADD_BROKEN_BOOK"));
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+$frm_b=$this->frm_book;
+$frm_c=$this->frm_cat;
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
@@ -12,7 +14,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
 </script>
-
+<?php //print_r($this->pus_item);?>
 <form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'library','controller'=>'bookpurchase','action'=>'edit')); ?>" 
 dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
@@ -39,14 +41,18 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						<tr >
 							<td style="width: 5px"><?php echo $tr->translate("NOTE")?></td>
 							<td >
-								<textarea id="note" rows="2" cols="32" name="note" dojoType="dijit.form.Textarea" style="height:35px;"><?php echo $this->row['title'];?></textarea>								
+								<textarea id="note_p" rows="2" cols="30" name="note_p" dojoType="dijit.form.Textarea" style="height:35px;"><?php echo $this->row['title'];?></textarea>								
 							</td>
 							<td ><?php echo $tr->translate("STATUS")?></td>
-							<td><select name="status" id="status" dojoType="dijit.form.FilteringSelect">
+							<td><select name="status_p" id="status_p" dojoType="dijit.form.FilteringSelect">
 								    <option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>>ប្រើប្រាស់</option>
 								    <option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>>មិនប្រើប្រាស់</option>
 								</select>
 							</td>
+						</tr>
+						<tr>
+						    <td><?php echo $tr->translate("AMOUNT_DUE")?>($)</td>
+						    <td><input dojoType="dijit.form.NumberTextBox"   name="amount_due" id="amount_due" value="<?php echo $this->row['amount_due'];?>"  type="text" readonly="true"></td>
 						</tr>
 						<tr>
 							<td colspan="6">
@@ -156,14 +162,20 @@ function oldRow() {
 		temp+='<th id="lbl_titlemetion" width="250px"><?php echo $tr->translate("BOOK_TITLE");?></th>';
 		 
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY_ORDER");?>(ក្បាល)</th>';
+		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
+		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;"   dojoType="dijit.form.FilteringSelect" class="fullside" id="book_id'+col+'" name="book_id'+col+'">'+subject+'</select></td>';
-		template+='<td><input style="width:100%;text-align:center;"  onkeyup="getCheckQty('+col+')" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="borr_qty'+col+'" id="borr_qty'+col+'" value="" type="text" required="required"></td>';	
+		template+='<td><select style="width:100%;"   dojoType="dijit.form.FilteringSelect" class="fullside" id="book_id'+col+'" name="book_id'+col+'" onchange="addPurchase('+col+')">'+subject+'</select></td>';
+		//template+='<td><input style="width:100%;text-align:center;"  onkeyup="getCheckQty('+col+')" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="borr_qty'+col+'" id="borr_qty'+col+'" value="" type="text" required="required"></td>';
+		template+='<td><input style="width:100%;text-align:center;" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="qty_'+col+'" id="qty_'+col+'" value="" type="text" required="required" onKeyup="getTotalePricePro('+col+');sumAmountDue();"/></td>';
+		template+='<td><input style="width:100%;text-align:center;" dojoType="dijit.form.NumberTextBox"   class="fullside" name="cost_'+col+'" id="cost_'+col+'" value="" type="text" required="required" onKeyup="getTotalePricePro('+col+');sumAmountDue();"/></td>';
+		template+='<td><input style="width:100%;text-align:center;" dojoType="dijit.form.NumberTextBox"   class="fullside" name="amount_'+col+'" id="amount_'+col+'" value="" type="text" readonly="true"></td>';
+				
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';	
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -177,7 +189,9 @@ function oldRow() {
 	     parseContent: true,
 	});
 	dijit.byId('book_id'+col).attr('value','<?php echo $rows['book_id'];?>');
-	dijit.byId('borr_qty'+col).attr('value','<?php echo $rows['borr_qty'];?>');
+	dijit.byId('qty_'+col).attr('value','<?php echo $rows['borr_qty'];?>');
+	dijit.byId('cost_'+col).attr('value','<?php echo $rows['cost']?>');
+	dijit.byId('amount_'+col).attr('value','<?php echo $rows['amount']?>');
 	dijit.byId('note_'+col).attr('value','<?php echo $rows['note'];?>');
 	<?php }?>
 }
@@ -191,14 +205,20 @@ function addRow() {
 		temp+='<th id="lbl_titlemetion" width="250px"><?php echo $tr->translate("BOOK_TITLE");?></th>';
 		 
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY_ORDER");?>(ក្បាល)</th>';
+		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
+		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;"   dojoType="dijit.form.FilteringSelect" class="fullside" id="book_id'+col+'" name="book_id'+col+'">'+subject+'</select></td>';
-		template+='<td><input style="width:100%;text-align:center;"  onkeyup="getCheckQty('+col+')" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="borr_qty'+col+'" id="borr_qty'+col+'" value="" type="text" required="required"></td>';	
+		template+='<td><select style="width:100%;"   dojoType="dijit.form.FilteringSelect" class="fullside" id="book_id'+col+'" name="book_id'+col+'" onchange="addPurchase('+col+')">'+subject+'</select></td>';
+		//template+='<td><input style="width:100%;text-align:center;"  onkeyup="getCheckQty('+col+')" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="borr_qty'+col+'" id="borr_qty'+col+'" value="" type="text" required="required"></td>';	
+		template+='<td><input style="width:100%;text-align:center;" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="qty_'+col+'" id="qty_'+col+'" value="" type="text" required="required" onKeyup="getTotalePricePro('+col+');sumAmountDue();"/></td>';
+		template+='<td><input style="width:100%;text-align:center;" dojoType="dijit.form.NumberTextBox"   class="fullside" name="cost_'+col+'" id="cost_'+col+'" value="" type="text" required="required" onKeyup="getTotalePricePro('+col+');sumAmountDue();"/></td>';	
+		template+='<td><input style="width:100%;text-align:center;" dojoType="dijit.form.NumberTextBox"   class="fullside" name="amount_'+col+'" id="amount_'+col+'" value="" type="text" readonly="true"></td>';
+		
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';	
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -297,4 +317,296 @@ function setEndDate(){
     }
 }
 
+function addPurchase(r){
+	book_id=dijit.byId("book_id"+r).get("value");
+	dijit.byId("index").attr('value',r);
+	if(book_id==-1){
+		dijit.byId('pop_book').show();
+	}
+}
+
+function getTotalePricePro(row){
+	qty_id=dijit.byId('qty_'+row).get('value');
+	cost_id=dijit.byId('cost_'+row).get('value');
+	amount=qty_id*cost_id;
+	dijit.byId('amount_'+row).attr('value',amount);
+}
+
+function sumAmountDue(){
+	t=0;
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0; i<arrays.length; i++){
+			t+=dijit.byId('amount_'+arrays[i]).get('value');
+		}
+		dijit.byId('amount_due').attr('value',t);
+}
+ 
+var url_make = '<?php echo $this->url(array('module'=>'library','controller'=>'book','action'=>'add-category')); ?>';
+var c_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->cat))?>);
+function addCategory(){
+	if(dijit.byId('frm_category').validate()){
+		dojo.xhrPost({
+			url:url_make,
+			form: dojo.byId("frm_category"),
+			handleAs:"json",
+			load: function(data) {
+				var Itemcat = {					
+						id: data,
+					    name: dijit.byId('cat_name').get('value')
+				};			
+				addDataToSelectbox(dijit.byId('parent_id'), c_store, Itemcat, data);
+				dijit.byId('frm_category').reset();
+				dijit.byId("pop_category").hide();
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+}
+
+var url_add_block = '<?php echo $this->url(array('module'=>'library','controller'=>'book','action'=>'add-block')); ?>';
+var b_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->block))?>);
+function addBlock(){
+	if(dijit.byId('frm_block').validate()){
+		b_name=dijit.byId('block_name').get('value');
+		if(b_name==''){
+			alert('Please input block name!');
+			dijit.byId('block_name').focus();
+			return false;
+		}
+			dojo.xhrPost({
+				url:url_add_block,
+				form: dojo.byId("frm_block"),
+				handleAs:"json",
+				load: function(data) {
+					var Itemcat = {					
+							id: data,
+						    name: dijit.byId('block_name').get('value')
+					};			
+					addDataToSelectbox(dijit.byId('block_id'), b_store, Itemcat, data);
+					dijit.byId('frm_block').reset();
+					dijit.byId("pop_block").hide();
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+}
+
+var url_book = '<?php echo $this->url(array('module'=>'library','controller'=>'bookpurchase','action'=>'add-book-purchase')); ?>';
+var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->book))?>);
+function addBook(){
+	if(dijit.byId('frm_book').validate()){
+		b_name=dijit.byId('book_name').get('value');
+		if(b_name==''){
+			alert('Please input Book name!');
+			dijit.byId('book_name').focus();
+			return false;
+		}
+			dojo.xhrPost({
+				url:url_book,
+				form: dojo.byId("frm_book"),
+				handleAs:"json",
+				load: function(data) {
+					var Itemcat = {					
+							id: data,
+						    name: dijit.byId('book_name').get('value')+'('+dijit.byId('book_id').get('value')+')',
+					};			
+					var num=dijit.byId("index").get("value");
+					addDataToSelectbox(dijit.byId('book_id'+num), book_store, Itemcat, data);
+					dijit.byId('frm_book').reset();
+					dijit.byId("pop_book").hide();
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+}
+
+function getTotalBookPrice(){
+	qty=dijit.byId("qty").get("value");
+	unit_price=dijit.byId("unit_price").get("value");
+	total=qty*unit_price;
+	if(total!=''){
+		dijit.byId("total_amount").attr("value",total);
+	}
+}
+
+function getAmount(){
+	qty=dijit.byId("qty").get("value");
+	amount=dijit.byId("total_amount").attr("value",total);
+	total=eval(amount/qty);
+	dijit.byId("unit_price").attr("value",total);
+}
+
+function showAddCat(){
+	parent=dijit.byId("parent_id").get("value");
+	if(parent==-1){
+		dijit.byId('pop_category').show();
+	}
+}
+
+function showAddBlock(){
+	block_id=dijit.byId("block_id").get("value");
+	if(block_id==-1){
+		dijit.byId('pop_block').show();
+	}
+}
+
 </script>
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" data-dojo-type="dijit.Dialog" id="pop_book" >
+		<form name="frm_book" id='frm_book' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="5" width="100%" style="margin: 0 auto; ">
+				<tr>
+					<td>
+						<fieldset>
+							<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_BOOK")?></strong></legend>
+							<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="5"  >
+							    <tr>
+									<td ><?php echo $tr->translate("BOOK_NAME")?> </td>
+									<td><?php echo $frm_b->getElement("book_name");?></td>
+									<td><?php echo $tr->translate("BOOK_NO")?></td>
+									<td><?php echo $frm_b->getElement("book_id");?></td>
+								</tr>
+								<tr>
+									<td ><?php echo $tr->translate("AUTHOR_NAME")?> </td>
+									<td><?php echo $frm_b->getElement("author_name");?></td>
+									<td><?php echo $tr->translate("SERIAL_NO")?></td>
+									<td><?php echo $frm_b->getElement("serial_no");?></td>
+								</tr>
+								<tr>
+									<td ><?php echo $tr->translate("CATEGORY")?> </td>
+									<td><?php echo $frm_b->getElement("parent_id");?></td>
+									<td><?php echo $tr->translate("BOOK_BLOCK")?></td>
+									<td><?php echo $frm_b->getElement("block_id");?></td>
+								</tr>
+								<tr>
+									<td ><?php echo $tr->translate("PUBLISHER")?> </td>
+									<td><?php echo $frm_b->getElement("publisher");?></td>
+									 <td><?php echo $tr->translate("STATUS")?></td>
+									<td><?php echo $frm_b->getElement("statuss");?></td>
+								</tr>
+								     <input dojoType="dijit.form.TextBox"   name="index" id="index" value=""  type="hidden">
+							    <tr>
+									<td colspan="4" align="center" style="padding-left:40px;">
+										<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+										<input type="button" value="save_service" name="save_service" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+											onclick="addBook();" iconClass="dijitEditorIcon dijitEditorIconSave" />
+									</td>
+								</tr>
+							</table>	
+						</fieldset>	
+						
+					</td>
+				</tr>
+		</table>	
+		</form>
+	</div>
+</div>
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" data-dojo-type="dijit.Dialog" id="pop_category" >
+	
+		<form id='frm_category' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<table cellspacing="10" width="100%" style="margin: 0 auto; ">
+			<tr>
+				<td>
+					<fieldset>
+						<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_GATEGORY")?></strong></legend>
+						<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="10"  >
+						   <tr>
+								<td ><?php echo $tr->translate("PARENT")?> </td>
+								<td>
+									<!-- <input id="dept" />  -->
+									<?php echo $frm_c->getElement("parent");?>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate("CATEGORY_NAME")?></td>
+								<td> 
+									<?php echo $frm_c->getElement("cat_name");?>
+								</td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate("REMARK")?></td>
+									<td> 
+										<?php echo $frm_c->getElement("note");?>
+								    </td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate("STATUS")?></td>
+								<td>
+									 <?php echo $frm_c->getElement("status");?>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4" align="center" style="padding-left:40px;">
+									<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+									<input type="button" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+										onclick="addCategory();checkSubmit();"    iconClass="dijitEditorIcon dijitEditorIconSave" />
+									 
+								</td>
+							</tr>
+						</table>	
+					</fieldset>		
+				</td>
+			</tr>
+		</table>	
+		</form>
+	</div>
+</div>
+
+ 
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" data-dojo-type="dijit.Dialog" id="pop_block" >
+	
+		<form id='frm_block' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		 <table cellspacing="10" width="50%" style="margin: 0 auto; ">
+			<tr>
+				<td>
+					<fieldset>
+						<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_BLOCK")?></strong></legend>
+						<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="10"  >
+						    
+							<tr>
+								<td nowrap="nowrap"><?php echo $tr->translate("BLOCK_NAME")?></td>
+								<td> 
+									<input dojoType="dijit.form.TextBox"   name="block_name" id="block_name" value=""  type="text">
+							   </td>
+							</tr>
+							<tr>
+								<td nowrap="nowrap"><?php echo $tr->translate("REMARK")?></td>
+									<td> 
+										 <input dojoType="dijit.form.TextBox"   name="b_note" id="b_note" value=""  type="text">
+								    </td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate("STATUS")?></td>
+								<td>
+									<select name="block_status" id="block_status" dojoType="dijit.form.FilteringSelect">
+									    <option value="1" label="ប្រើប្រាស់">ប្រើប្រាស់</option>
+									    <option value="0" label="មិនប្រើប្រាស់">មិនប្រើប្រាស់</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4" align="center" style="padding-left:40px;">
+									<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+									<input type="button" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+										onclick="addBlock();" iconClass="dijitEditorIcon dijitEditorIconSave" />
+								</td>
+							</tr>
+						</table>	
+					</fieldset>		
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</div>

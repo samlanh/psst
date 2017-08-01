@@ -15,35 +15,40 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
     
     function getAllReturnBook($search=null){
     	$db=$this->getAdapter();
-    	$sql=" SELECT id,return_no,
-		       (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=rms_bookreturn.stu_id LIMIT 1) AS stu_code,
-		       (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=rms_bookreturn.stu_id LIMIT 1) AS stu_name,
-		        return_date,note,
-		       (SELECT first_name FROM rms_users WHERE id=rms_bookreturn.user_id LIMIT 1) AS user_name,
-			   (SELECT name_en FROM rms_view WHERE key_code=rms_bookreturn.status LIMIT 1) AS `status`
-		       FROM rms_bookreturn 
-		       WHERE  1";
+    	$sql=" SELECT b.id,b.return_no,
+			    (SELECT name_en FROM rms_view AS v WHERE v.key_code=bor.borrow_type AND v.type=13 LIMIT 1)AS borrow_type,bor.card_id,bor.name,
+			     b.return_date,b.note,
+				(SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
+				(SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`
+				FROM rms_bookreturn AS b,rms_borrow AS bor 
+				WHERE  b.borrow_id=bor.id 
+				AND bor.name!=''";
     	$where = '';
     	
-    	$from_date =(empty($search['start_date']))? '1': " return_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " return_date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': " b.return_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " b.return_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
     	
     	if(!empty($search["title"])){
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
-    		$s_where[]="  return_no LIKE '%{$s_search}%'";
-    		$s_where[]= "(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=rms_bookreturn.stu_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]= "(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=rms_bookreturn.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[]="  b.return_no LIKE '%{$s_search}%'";
+    		$s_where[]="  bor.card_id LIKE '%{$s_search}%'";
+    		$s_where[]="  bor.name LIKE '%{$s_search}%'";
+//     		$s_where[]= "(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=rms_bookreturn.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+//     		$s_where[]= "(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=rms_bookreturn.stu_id LIMIT 1) LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	
     	if($search["status_search"]>-1){
-    	    $where.=' AND `status`='.$search["status_search"];
+    	    $where.=' AND b.status='.$search["status_search"];
     	}
     	
-    	if($search["stu_name"]>0){
-    		$where.=' AND stu_id='.$search["stu_name"];
+//     	if($search["stu_name"]>0){
+//     		$where.=' AND stu_id='.$search["stu_name"];
+//     	}
+    	if(!empty($search["is_type_bor"])){
+    		$where.=' AND bor.borrow_type='.$search["is_type_bor"];
     	}
     	
     	$order=" ORDER BY id DESC";
@@ -62,7 +67,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 			$arr=array(
 					"return_no"     => 	$data["borrow_id"],
 					"phone"     	=> 	$data["phone"],
-					"stu_id"        => 	$data["stu_id"],
+					"borrow_id"     => 	$data["stu_id"],
 					"return_date"   => 	date("Y-m-d",strtotime($data['return_date'])),
 					"note"          => 	$data['notes'],
 					"is_completed"  => 	0,
@@ -85,6 +90,8 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 							'return_id'	=>  $borr_id,
 							'book_id'	=> 	$data['book_id_'.$i],
 							'borr_qty'	=>  $data['return_qty_'.$i],
+							'delay_qty'	=>  $data['delay_qty_'.$i],
+							'date_delay'=>  $data['date_delay_'.$i],
 							'note'  	=> 	$data['note_'.$i],
 							'borr_detail_id'=>$data['borrow_id_'.$i],
 							'user_id'	=> 	$GetUserId,
@@ -97,6 +104,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 					$borr_item= array(
 							'is_full'	=> 	$is_comp,
 							'borr_qty'	=>  $data['borrow_qty_'.$i]-$data['return_qty_'.$i],
+							'return_date'=> date("Y-m-d",strtotime($data['date_delay_'.$i]))
 					);
 					$this->_name='rms_borrowdetails';
 					$where=" id=".$data['borrow_id_'.$i];
@@ -128,6 +136,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 	}
 	
 	public function updateReturnBook($data){
+		//print_r($data['stu_id']);exit();
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
@@ -155,7 +164,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 // 						$db->getProfiler()->setEnabled(false);
 					}
 					
-					$borr_qty=$this->getQtyBorrow($rs_item['stu_id'],$rs_item['book_id']);
+					$borr_qty=$this->getQtyBorrow($rs_item['borrow_id'],$rs_item['book_id']);
 					if($borr_qty){
 						$arr    = array(
 								'borr_qty' =>  $borr_qty["borr_qty"]+$rs_item['borr_qty'],
@@ -207,6 +216,9 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 							'user_id'	=> 	$GetUserId,
 							'is_full'	=> 	$is_comp,
 							'status'	=> 	$data['status'],
+							
+							'delay_qty'	=>  $data['delay_qty_'.$i],
+							'date_delay'=>  $data['date_delay_'.$i],
 					);
 					$this->_name='rms_bookreturndetails';
 					$this->insert($data_item);
@@ -217,6 +229,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 								'is_full'	=> 	$is_comp,
 								'borr_qty' =>  $borr_qtys["borr_qty"]-$data['return_qty_'.$i],
 								'date'		=>	date("Y-m-d"),
+								'return_date'=> date("Y-m-d",strtotime($data['date_delay_'.$i]))
 						);
 						$this->_name="rms_borrowdetails";
 						$where=" id = ".$borr_qtys['id'];
@@ -251,7 +264,7 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 	
 	public function getItemDetail($id){
 		$db=$this->getAdapter();
-		$sql = "SELECT bd.id,b.stu_id,bd.borr_qty,bd.book_id FROM rms_bookreturn AS b,rms_bookreturndetails AS bd 
+		$sql = "SELECT bd.id,b.stu_id,b.borrow_id,bd.borr_qty,bd.book_id FROM rms_bookreturn AS b,rms_bookreturndetails AS bd 
 		        WHERE  bd.return_id=$id
 		        AND b.id=bd.return_id";
 		$rows=$db->fetchAll($sql);
@@ -340,6 +353,40 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
+	function getAllBorrowId($type){
+		$db=$this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$branch_id = $_db->getAccessPermission();
+		if($type==1){
+			$sql="SELECT b.id AS stu_id,b.card_id AS stu_code FROM rms_borrow AS b,rms_borrowdetails AS bd
+				 WHERE b.id=bd.borr_id
+				 AND bd.is_full=0   $branch_id
+			 	 GROUP BY b.id ORDER BY b.id DESC";
+		}else{
+			$sql="SELECT b.id AS stu_id,b.name AS name FROM rms_borrow AS b,rms_borrowdetails AS bd
+				 WHERE b.id=bd.borr_id
+				 AND bd.is_full=0   $branch_id
+				 GROUP BY b.id ORDER BY b.id DESC";
+		}
+	    return $db->fetchAll($sql);
+	}
+	
+	function getAllBorrId($opt=null){
+		$db=$this->getAdapter();
+		if($opt!=null){
+			$sql="SELECT b.id AS stu_id,b.card_id AS stu_code FROM rms_borrow AS b,rms_borrowdetails AS bd
+			WHERE b.id=bd.borr_id
+			GROUP BY b.id ORDER BY b.id DESC";
+			return $db->fetchAll($sql);
+		}else{
+			$sql="SELECT b.id AS stu_id,b.name AS name FROM rms_borrow AS b,rms_borrowdetails AS bd
+			WHERE b.id=bd.borr_id
+			GROUP BY b.id ORDER BY b.id DESC";
+			return $db->fetchAll($sql);
+		}
+		
+	}
+	
 	function getBookTitle(){
 		$db=$this->getAdapter();
 		$sql="SELECT id,CONCAT(book_no,'-',title) AS name FROM rms_book WHERE `status`=1";
@@ -398,8 +445,9 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 		$sql=" SELECT bd.borr_qty,bd.id,bd.book_id
 		      FROM rms_borrow AS b,rms_borrowdetails AS bd
 		      WHERE b.id=bd.borr_id
-		      AND b.stu_id = $stu_id
+		      AND b.id = $stu_id
 		      AND bd.book_id=$book_id";
+	    //echo "helo";exit();
 		$row=$db->fetchRow($sql);
 		if(empty($row)){
 		   

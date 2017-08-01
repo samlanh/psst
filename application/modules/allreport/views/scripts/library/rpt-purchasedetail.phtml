@@ -57,13 +57,15 @@
 														<td>&nbsp;<?php echo $tr->translate("BOOK_NO"); ?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("QTY"); ?>&nbsp;</td>
+														<td>&nbsp;<?php echo $tr->translate("COST"); ?>&nbsp;</td>
+														<td>&nbsp;<?php echo $tr->translate("AMOUNT"); ?>&nbsp;</td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate("ORDER_DATE"); ?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate("CATEGORY"); ?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate("BLOCK_BOOK"); ?></td>
 														<td style="border: 1px solid #000;"><?php echo $tr->translate("USER"); ?></td>
 													</tr>
 													 </thead>
-													 <?php $total=0;?>
+													 <?php $total=0;$amount=0;$net_total=0;?>
 												<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_detail))foreach ($this->pur_detail AS $row) { $i++;
 													 if($row['sex']==1){
 													 	$sex='M';
@@ -72,6 +74,8 @@
 													 	$comp=$tr->translate("COMPLETE");
 													 }else{$comp=$tr->translate("NOT_COMPLETE");
 													 }
+													 $amount=$row['borr_qty']*$row['cost'];
+													 $net_total=$net_total+$amount;
 												?>
 													<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
 														<td style="border: 1px solid #000;"><?php echo $i;?></td>
@@ -81,6 +85,8 @@
 														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['book_no'];?>&nbsp;</td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['book_name'];?></td>	
 														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['borr_qty'];?>&nbsp;ក្បាល</td>
+														<td style="border: 1px solid #000;">&nbsp;$&nbsp;<?php echo $row['cost'];?>&nbsp;</td>
+														<td style="border: 1px solid #000;">&nbsp;$&nbsp;<?php echo number_format($amount, 2);?>&nbsp;</td>
 														<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['date_order']));?>&nbsp;</td>
 														<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo $row['cat_name'];?></td>	
 														<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo $row['block_name'];?></td>	
@@ -99,6 +105,16 @@
 													</td>
 													<td align="center" width="15%" style="border: 1px solid #000; font-weight: 900;">
 														<span style="font-size: 14px;"><?php echo $total;?>&nbsp;ក្បាល</span>
+													</td>
+												</tr>
+												<tr >
+													<td align="right" width="25%"  > 	</td>
+													<td > </td>
+													<td align="center"  width="15%" style="border: 1px solid #000;">
+														<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("NET_AMOUNT"); ?>&nbsp;</span>
+													</td>
+													<td align="center" width="15%" style="border: 1px solid #000; font-weight: 900;">
+														<span style="font-size: 14px;">&nbsp;$&nbsp;<?php echo number_format($net_total, 2);?></span>
 													</td>
 												</tr>
 												</table>

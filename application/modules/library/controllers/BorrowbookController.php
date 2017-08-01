@@ -18,7 +18,8 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$search = array(
 	    				'title'	        =>	'',
 		    			'parent'	    =>	0,
-    					'stu_name'	    =>	0,
+    					//'borrow_name'	=>	0,
+    					'is_type_bor'	=>	0,
 		    			'status_search'	=>	-1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d') 
@@ -28,7 +29,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    	$glClass = new Application_Model_GlobalClass();
 			//$rs_rows = $glClass->getGetPayTerm($rs_row, BASE_URL );
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BORROW_NO","STUDEN_CODE","STUDEN_NAME","PHONE","ALL_QTY","BORROW_DATE","RETURN_DATE","NOTE","USER",
+			$collumns = array("BORROW_NO","TYPE","CODE","NAME","PHONE","ALL_QTY","BORROW_DATE","RETURN_DATE","NOTE","USER",
 					"STATUS");
 			$link=array(
 					'module'=>'library','controller'=>'borrowbook','action'=>'edit',

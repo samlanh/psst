@@ -8,7 +8,8 @@
 	<table width="100%">
 		  <tr>
 		  	<td><?php echo $frm->getElement("title");?> </td>
-			 <td><?php echo $frm->getElement("stu_name");?></td>
+			<!--  <td><?php echo $frm->getElement("stu_name");?></td> -->
+			 <td><?php echo $frm->getElement("is_type_bor");?></td>
 			 <td><?php echo $frm->getElement("cood_book");?> </td>
 			 <td><?php echo $frm->getElement('parent');?></td> 
 			 <td><?php echo $frm->getElement('start_date');?> </td>
@@ -54,8 +55,9 @@
 													<tr style="font-size:12px; height: 20px;border: 1px solid #000; background: #ccc; line-height: 30px; font-weight: bold;" align="center" >
 														<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("RETURN_NO"); ?>&nbsp;</td>
-														<td>&nbsp;<?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
-														<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</td>
+														<td>&nbsp;<?php echo $tr->translate("TYPE"); ?>&nbsp;</td>
+														<td>&nbsp;<?php echo $tr->translate("CODE"); ?>&nbsp;</td>
+														<td>&nbsp;<?php echo $tr->translate("NAME"); ?>&nbsp;</td>
 														<td style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("BOOK_NO"); ?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</td>
@@ -70,7 +72,7 @@
 												<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->borr_detail))foreach ($this->borr_detail AS $row) { $i++;
 													 if($row['sex']==1){
 													 	$sex='M';
-													 }else{$sex='F';}
+													 }else if ($row['sex']==2){$sex='F';}else{$sex='';}
 													 if($row['is_full']==1){
 													 	$comp=$tr->translate("COMPLETE");
 													 }else{$comp=$tr->translate("NOT_COMPLETE");
@@ -79,8 +81,9 @@
 													<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
 														<td style="border: 1px solid #000;"><?php echo $i;?></td>
 														<td>&nbsp;<?php echo $row['return_no'];?></td>
-														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['stu_code'];?></td>
-														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['stu_name'];?></td>
+														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['type'];?></td>
+														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['card_id'];?></td>
+														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name'];?></td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $sex;?></td>
 														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['book_no'];?>&nbsp;</td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['book_name'];?></td>	

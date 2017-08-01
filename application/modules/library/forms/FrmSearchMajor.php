@@ -100,6 +100,33 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$stu_name->setMultiOptions($option);
 		$stu_name->setValue($request->getParam('stu_name'));
 		
+		$borrow_name = new Zend_Dojo_Form_Element_FilteringSelect("borrow_name");
+		$borrow_name->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true','class'=>'fullside',
+		));
+		$option = array("0"=>$this->tr->translate("Select Borrow Name"));
+		$result = $db_stu->getAllBorrowName();
+		//print_r($result);exit();
+		if(!empty($result))foreach($result AS $row){
+			$option[$row['id']]=$row['name'];
+		}
+		$borrow_name->setMultiOptions($option);
+		$borrow_name->setValue($request->getParam('borrow_name'));
+		
+		$is_type_bor = new Zend_Dojo_Form_Element_FilteringSelect("is_type_bor");
+		$is_type_bor->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true','class'=>'fullside',
+		));
+		$option = array("0"=>$this->tr->translate("Select Type Borrow"));
+		$result = $db_stu->getIsTypeBorowName();
+		if(!empty($result))foreach($result AS $row){
+			$option[$row['id']]=$row['name'];
+		}
+		$is_type_bor->setMultiOptions($option);
+		$is_type_bor->setValue($request->getParam('is_type_bor'));
+		
 		//date
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$dates = date("Y-m-d");
@@ -138,7 +165,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$block_id->setMultiOptions($option);
 		$block_id->setValue($request->getParam('block_id'));
 		
-		$this->addElements(array($block_id,$stu_name,$is_full,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
+		$this->addElements(array($is_type_bor,$borrow_name,$block_id,$stu_name,$is_full,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
 		
 		return $this;
 	}

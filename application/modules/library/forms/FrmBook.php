@@ -21,11 +21,12 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		$book_id->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("Book Name")
+				'placeholder'=>$this->tr->translate("Book No"),
+				'required'=>'true',
 				));
-		$db_book=new Library_Model_DbTable_DbBook();
-		$b_id=$db_book->getBookNo();
-		$book_id->setValue($b_id);
+// 		$db_book=new Library_Model_DbTable_DbBook();
+// 		$b_id=$db_book->getBookNo();
+// 		$book_id->setValue($b_id);
 		
 		$author_name = new Zend_Dojo_Form_Element_ValidationTextBox('author_name');
 		$author_name->setAttribs(array(
@@ -52,13 +53,22 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		$qty->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'required'=>'true','class'=>'fullside',
+				'onkeyup'=>'getTotalBookPrice()'
 		        ));
 		
 		$unit_price = new Zend_Dojo_Form_Element_NumberTextBox('unit_price');
 		$unit_price->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
+				'onkeyup'=>'getTotalBookPrice()'
 				));
+		
+		$total_amount = new Zend_Dojo_Form_Element_NumberTextBox('total_amount');
+		$total_amount->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'readonly'=>true
+		));
 		
 		$remark = new Zend_Dojo_Form_Element_TextBox('remarks');
 		$remark->setAttribs(array(
@@ -111,9 +121,7 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		if(!empty($results))foreach($results AS $row){
 			$option[$row['id']]=$row['name'];
 		}
-		if (!empty($data)){
-			unset($option[$data['id']]);
-		}
+		
 		$_block_id->setMultiOptions($option);
 		$_block_id->setValue($request->getParam('block_id'));
 		
@@ -137,7 +145,7 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 			$old_photo	->setValue($data['photo']);
 			$_block_id	->setValue($data['block_id']);
 		}
-		$this->addElements(array($_block_id,$old_photo,$id,$book_name,$book_id,$author_name,$serial_no,$publisher,$_photo,
+		$this->addElements(array($total_amount,$_block_id,$old_photo,$id,$book_name,$book_id,$author_name,$serial_no,$publisher,$_photo,
 				                 $qty,$unit_price,$remark,$status,$note,$_cateory_parent));
 		return $this;
 	}	

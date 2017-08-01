@@ -15,9 +15,8 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
     
     function getAllBorrow($search=null){
     	$db=$this->getAdapter();
-    	$sql=" SELECT b.id,b.borrow_no,
-		       (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
-		       (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_name,b.phone,
+    	$sql=" SELECT b.id,b.borrow_no,(SELECT v.name_kh FROM rms_view  AS v WHERE v.key_code=b.borrow_type AND v.type=13)AS `type`,
+    			b.card_id,b.name,b.phone,
 		        SUM(bd.borr_qty) AS qty,
 				b.borrow_date,b.return_date,b.note,
 		       (SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
@@ -25,6 +24,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		       FROM rms_borrow AS b,rms_borrowdetails AS bd
 		       WHERE  1
 		       AND b.id=bd.borr_id 
+		       AND b.name!=''
 		        ";
     	$where = '';
     	
@@ -46,8 +46,12 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
     	    $where.=' AND b.status='.$search["status_search"];
     	}
     	
-    	if($search["stu_name"]>0){
-    		$where.=' AND b.stu_id='.$search["stu_name"];
+//     	if($search["borrow_name"]>0){
+//     		$where.=' AND b.id='.$search["borrow_name"];
+//     	}
+    	
+    	if(!empty($search["is_type_bor"])){
+    		$where.=' AND b.borrow_type='.$search["is_type_bor"];
     	}
     	
     	$order=" GROUP BY b.borrow_no ORDER BY b.id DESC";
@@ -74,6 +78,9 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 					"is_completed"  => 	0,
 					"user_id"       => 	$GetUserId,
 					"status"        => 	$data['status'],
+					"card_id"     	=> 	$data["card_id"],
+					"name"     		=> 	$data["name"],
+					"borrow_type"   => 	$data["type"],
 			);
 			$this->_name="rms_borrow";
 			$borr_id = $this->insert($arr); 
@@ -91,6 +98,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 							'user_id'	=> 	$GetUserId,
 							'is_full'	=> 	0,
 							'date'		=>	date('Y-m-d'),
+							'return_date'=>	date("Y-m-d",strtotime($data['return_date'])),
 							'status'	=> 	$data['status'],
 					);
 					$this->_name='rms_borrowdetails';
@@ -157,6 +165,9 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 					"user_id"       => 	$GetUserId,
 					"is_completed"  => 	0,
 					"status"        => 	$data['status'],
+					"card_id"     	=> 	$data["card_id"],
+					"name"     		=> 	$data["name"],
+					"borrow_type"   => 	$data["type"],
 			);
 			$this->_name="rms_borrow";
 			$where="id=".$data['id'];
@@ -178,6 +189,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 							'note'  	=> 	$data['note_'.$i],
 							'user_id'	=> 	$GetUserId,
 							'date'		=>	date('Y-m-d'),
+							'return_date'=>	date("Y-m-d",strtotime($data['return_date'])),
 							'is_full'	=> 	0,
 							'status'	=> 	$data['status'],
 					);
@@ -289,8 +301,9 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 	
 	function getBookTitle(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,title AS name FROM rms_book WHERE `status`=1";
+		$sql="SELECT id,CONCAT(title,'(',book_no,')') AS name FROM rms_book WHERE `status`=1";
 		$rows=$db->fetchAll($sql);
+		array_unshift($rows,array('id' => '-1',"name"=>$this->tr->translate("ADD_NEW")));
 		array_unshift($rows,array('id' => '',"name"=>$this->tr->translate("SELECT_TITLE")));
 		$options = '';
 		if(!empty($rows))foreach($rows as $value){

@@ -7,6 +7,7 @@ $frm = $this->frm_loan;
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 //print_r($this->rs_return);
+ 
 ?>
 <style>
 	.fullside50{ width:48%;}
@@ -37,6 +38,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		setValue();
 	    //oldAdd();
 		dijit.byId("stu_id").attr("value","<?php echo $this->rs_return['stu_id'];?>");
+		dijit.byId("stu_id").attr("value","<?php echo $this->rs_return['borrow_id']?>");
 		getAllcustomer('<?php echo $this->rs_return['id']?>');
 	});
 		
@@ -52,7 +54,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						<tr>
 							<td nowrap="nowrap"><?php echo $tr->translate("STUDENT_ID")?></td>
 							<td>
-								<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect" onchange="setValue(); " readonly="readonly" >
+								<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect" onchange="setValue(); "  readonly="true" >
 								       <option value="0"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
 								 <?php if(!empty($this->stu_id)) foreach($this->stu_id As $rs_id){?>
 										<option value="<?php echo $rs_id['stu_id']?>" ><?php echo $rs_id['stu_code'];?></option>
@@ -61,7 +63,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 							</td>
 							<td nowrap="nowrap"><?php echo $tr->translate("STUDENT_NAME")?></td>
 							<td>
-								<select   name="stu_name" id="stu_name" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();"  readonly="readonly">
+								<select   name="stu_name" id="stu_name" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();" readonly="true"  >
 									<option value="0"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 									<?php 
 									if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
@@ -69,8 +71,8 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									<?php }?>
 								</select>
 							</td>
-							<td nowrap="nowrap"> </td>
-							<td style="font-weight: 600;"> </td>
+							<td nowrap="nowrap"><?php echo $tr->translate("IS_TYPE")?></td>
+							<td ><input dojoType="dijit.form.TextBox" id="is_type" name="is_type" type="text"  value="" readonly="true">  </td>
 						</tr>
 						<tr>
 							<td nowrap="nowrap"><?php echo $tr->translate("RETURN_NO")?></td>
@@ -174,10 +176,13 @@ function getAllcustomer(id){
 					thead+='<th ><?php echo $tr->translate("BORROW_QTY");?></th>';
 					thead+='<th><?php echo $tr->translate("RETURN_QTY");?></th>';
 					thead+='<th style="width:60px;"><?php echo $tr->translate("CHECKED");?>&nbsp;</th>';
+					thead+='<th style="width:100px;"><?php echo $tr->translate("DELAY_QTY");?></th>';
 					thead+='<th style="width:100px;"><?php echo $tr->translate("RETURN_DATE");?></th>';
+					thead+='<th style="width:100px;"><?php echo $tr->translate("DATE_DELAY");?></th>';
 					thead+='<th style="width:100px;"><?php echo $tr->translate("NOTE");?></th>';
 					fund_title=1;
 					dojo.query("#head_title").append(thead);
+					dijit.byId('is_type').attr('value',data[i].borrow_type);
 				}
 				//ccc=data[i].paid;
 				ccc=0;
@@ -194,9 +199,13 @@ function getAllcustomer(id){
 				temp+='<td>'+data[i].book_name+'<input  type="hidden"   value="'+data[i].book_id+'"  name="book_id_'+r+'"  id="book_id_'+r+'"  dojoType="dijit.form.TextBox"/></td>';
 				temp+='<td>'+data[i].borr_qty+' ក្បាល<input  type="hidden"   value="'+data[i].borr_qty+'" required   name="oldqty_return_'+r+'"  id="oldqty_return_'+r+'"  /><input  type="hidden"   value="'+data[i].oldbor_qty+'" required   name="oldbor_qty_'+r+'"  id="oldbor_qty_'+r+'"  /></td>';
 				
-				temp+='<td><input  style="margin-left:0px;width:100px;font-weight:900; "  type="text" data-dojo-props="constraints:{places:0}" value="'+data[i].borr_qty+'"    name="return_qty_'+r+'"  id="return_qty_'+r+'" dojoType="dijit.form.NumberTextBox"   onkeyup="compareValue('+r+')" /></td>';
+				temp+='<td><input  style="margin-left:0px;width:100px;font-weight:900; "  type="text" data-dojo-props="constraints:{places:0}" value="'+data[i].borr_qty+'"    name="return_qty_'+r+'"  id="return_qty_'+r+'" dojoType="dijit.form.NumberTextBox"   onkeyup="compareValue('+r+');getQtyReurtn('+r+')" /><input  type="hidden" value="'+data[i].borr_qty+'"  name="old_return_qty'+r+'"  id="old_return_qty'+r+'" dojoType="dijit.form.TextBox"   /></td>';
 				temp+='<td style="width: 20px"><input value="'+r+'" style="width: 20px;" onchange="uncheck('+r+')" type="checkbox"  name="check'+r+'" id="check'+r+'" '+check+'   /></td>';
+
+				temp+='<td><input  style="margin-left:0px;width:50px;font-weight:900; "  type="text" data-dojo-props="constraints:{places:0}" value="'+data[i].delay_qty+'" name="delay_qty_'+r+'"  id="delay_qty_'+r+'" dojoType="dijit.form.NumberTextBox" readonly="true" onkeyup="getQtyDelay('+r+');"/><input  type="hidden" value="'+data[i].delay_qty+'"  name="old_delay_qty_'+r+'"  id="old_delay_qty_'+r+'" dojoType="dijit.form.TextBox"   /></td>';
+				
 				temp+='<td>'+setDate(data[i].return_date)+'<input  style="margin-left:0px;width:200px; "  type="hidden" data-dojo-props="constraints:{places:0}" value="'+data[i].return_date+'"    name="date_return_'+r+'"  id="date_return_'+r+'" dojoType="dijit.form.TextBox" /></td>';
+				temp+='<td><input  style="margin-left:0px;width:150px; "  type="text" data-dojo-props="constraints:{places:0}" value="'+data[i].date_delay+'"    name="date_delay_'+r+'"  id="date_delay_'+r+'" dojoType="dijit.form.DateTextBox" readonly="true"/></td>';
 				temp+='<td><input  style="margin-left:0px;width:200px; "  type="text" data-dojo-props="constraints:{places:0}" value=""    name="note_'+r+'"  id="note_'+r+'" dojoType="dijit.form.TextBox" /></td>';
 				tmp='<tr style="border:1px solid #deafaf; font-size:14px;height:37px; !important;text-align:center;" id="row_capital'+r+'" >'
 				tmp+="</tr>";
@@ -228,8 +237,13 @@ function checkSelect(r) {
 function uncheck(r) {
    if($("#check"+r).is(":checked")){
 	   dijit.byId("return_qty_"+r).set('readOnly',true);
+	   dijit.byId("delay_qty_"+r).set('readOnly',true);
+	   dijit.byId("date_delay_"+r).set('readOnly',true);
+	   //dijit.byId("delay_qty_"+r).set('value',0);
    }else{
 	   dijit.byId("return_qty_"+r).set('readOnly',false);
+	   dijit.byId("delay_qty_"+r).set('readOnly',false);
+	   dijit.byId("date_delay_"+r).set('readOnly',false);
    }
 }
  
@@ -277,6 +291,39 @@ function compareValue(r){
 	if( return_qty > total){
 		alert('Quantity return​ can not bigger then borrow qty​ !');
 		dijit.byId("return_qty_"+r).attr("value",total);
+	}
+}
+
+function getQtyDelay(r){
+	delay_qty=dijit.byId("delay_qty_"+r).get('value');
+	return_qty=dijit.byId("return_qty_"+r).get('value');
+	old_qty=dijit.byId("old_return_qty"+r).get('value');
+	old_delay_qty=dijit.byId("old_delay_qty_"+r).get('value');
+	all_qty=parseInt(old_delay_qty)+parseInt(old_qty);
+	total=all_qty-delay_qty;
+	
+	dijit.byId('return_qty_'+r).attr('value',total);
+	//alert(all_qty);
+	if(delay_qty > all_qty ){
+		 alert("Delay qty can't bigger return qty !");
+		dijit.byId("delay_qty_"+r).attr('value',all_qty);
+		dijit.byId("return_qty_"+r).attr('value',0);
+		 
+	}
+}
+
+function getQtyReurtn(r){
+	delay_qty=dijit.byId("delay_qty_"+r).get('value');
+	return_qty=dijit.byId("return_qty_"+r).get('value');
+	old_qty=dijit.byId("old_return_qty"+r).get('value');
+	old_delay_qty=dijit.byId("old_delay_qty_"+r).get('value');
+	all_qty=parseInt(old_delay_qty)+parseInt(old_qty);
+	total=all_qty-return_qty;
+	dijit.byId('delay_qty_'+r).attr('value',total);
+	if(delay_qty > all_qty ){
+		alert("Delay qty can't bigger return qty !");
+		dijit.byId("delay_qty_"+r).attr('value',all_qty);
+		dijit.byId("return_qty_"+r).attr('value',0);
 	}
 }
 

@@ -50,11 +50,12 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 		    $GetUserId= $session_user->user_id;
              
 			$arr=array(
-					"title"     	=> 	$data["note"],
-					"purchase_no"     	=> 	$data["purchase_no"],
-					"date_order"   => 	date("Y-m-d",strtotime($data['date_order'])),
+					"title"     	=> 	$data["note_p"],
+					"purchase_no"   => 	$data["purchase_no"],
+					"amount_due"    => 	$data["amount_due"],
+					"date_order"    => 	date("Y-m-d",strtotime($data['date_order'])),
 					"user_id"       => 	$GetUserId,
-					"status"        => 	$data['status'],
+					"status"        => 	$data['status_p'],
 			);
 			$this->_name="rms_bookpurchase";
 			$po_id = $this->insert($arr); 
@@ -67,11 +68,13 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 					$data_item= array(
 							'purchase_id'	=>  $po_id,
 							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $data['borr_qty'.$i],
+							'borr_qty'	=>  $data['qty_'.$i],
+							'cost'		=>  $data['cost_'.$i],
+							'amount'	=>  $data['amount_'.$i],
 							'note'  	=> 	$data['note_'.$i],
 							'user_id'	=> 	$GetUserId,
 							'is_full'	=> 	1,
-							'status'	=> 	$data['status'],
+							'status'	=> 	$data['status_p'],
 					);
 					$this->_name='rms_bookpurchasedetails';
 					$this->insert($data_item);
@@ -79,8 +82,10 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 					$rows=$db_book->getBookQty($data['book_id'.$i]); 
 					if($rows){
 							$datatostock= array(
-									'qty_after' => $rows["qty_after"]+$data['borr_qty'.$i],
-									'qty' => $rows["qty"]+$data['borr_qty'.$i],
+									'qty_after' => $rows["qty_after"]+$data['qty_'.$i],
+									'qty' 		=> $rows["qty"]+$data['qty_'.$i],
+									'unit_price'=> $data['cost_'.$i],
+									'total_amount'=> $data['amount_'.$i],
 									'date'		=>	date("Y-m-d"),
 									'user_id'	=>$GetUserId
 							);
@@ -138,11 +143,12 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 		    }else { }
              
 		    $arr=array(
-		    		"title"     	=> 	$data["note"],
-		    		"purchase_no"     	=> 	$data["purchase_no"],
-		    		"date_order"   => 	date("Y-m-d",strtotime($data['date_order'])),
-		    		"user_id"       => 	$GetUserId,
-		    		"status"        => 	$data['status'],
+		    		"title"     	=> 	$data["note_p"],
+					"purchase_no"   => 	$data["purchase_no"],
+					"amount_due"    => 	$data["amount_due"],
+					"date_order"    => 	date("Y-m-d",strtotime($data['date_order'])),
+					"user_id"       => 	$GetUserId,
+					"status"        => 	$data['status_p'],
 		    );
 		    $this->_name="rms_bookpurchase";
 			$where=" id=".$data['id'];
@@ -160,19 +166,21 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 					$data_item= array(
 							'purchase_id'	=>  $data['id'],
 							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $data['borr_qty'.$i],
+							'borr_qty'	=>  $data['qty_'.$i],
+							'cost'		=>  $data['cost_'.$i],
+							'amount'	=>  $data['amount_'.$i],
 							'note'  	=> 	$data['note_'.$i],
 							'user_id'	=> 	$GetUserId,
 							'is_full'	=> 	1,
-							'status'	=> 	$data['status'],
+							'status'	=> 	$data['status_p'],
 					);
 					$this->_name='rms_bookpurchasedetails';
 					$this->insert($data_item);
 					$rows=$db_book->getBookQty($data['book_id'.$i]); 
 					if($rows){
 							$datatostock= array(
-									'qty_after' => $rows["qty_after"]+$data['borr_qty'.$i],
-									'qty' => $rows["qty"]+$data['borr_qty'.$i],
+									'qty_after' => $rows["qty_after"]+$data['qty_'.$i],
+									'qty' 		=> $rows["qty"]+$data['qty_'.$i],
 									'date'		=>	date("Y-m-d"),
 									'user_id'	=>$GetUserId
 							);

@@ -19,7 +19,8 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$search = array(
 	    				'title'	        =>	'',
 		    			'parent'	    =>	0,
-    					'stu_name'	    =>	0,
+    					//'stu_name'	    =>	0,
+    					'is_type_bor'	=>0,
 		    			'status_search'	=>	-1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d') 
@@ -29,12 +30,12 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    	$glClass = new Application_Model_GlobalClass();
 			//$rs_rows = $glClass->getGetPayTerm($rs_row, BASE_URL );
 			$list = new Application_Form_Frmtable();
-			$collumns = array("RETURN_NO","STUDEN_CODE","STUDEN_NAME","RETURN_DATE","NOTE","USER",
+			$collumns = array("RETURN_NO","IS_TYPE","CODE","NAME","RETURN_DATE","NOTE","USER",
 					"STATUS");
 			$link=array(
 					'module'=>'library','controller'=>'returnbook','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_row,array('return_no'=>$link,'stu_code'=>$link,'stu_name'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_row,array('return_no'=>$link,'borrow_type'=>$link,'card_id'=>$link,'name'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -44,6 +45,12 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$frm_search = $frm_major->frmSearchReturn();
     	Application_Model_Decorator::removeAllDecorator($frm_search);
     	$this->view->frm_search = $frm_search;
+    	
+    	$frm_bor=new Library_Form_FrmSearchMajor();
+    	$search=$frm_bor->FrmMajors();
+    	Application_Model_Decorator::removeAllDecorator($search);
+    	$this->view->frm_bor=$search;
+    	
     }
     
     public function addAction(){
@@ -64,8 +71,8 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbReturnbook();
-    	$this->view->stu_id=$db_cat->getAllStudentId(1);
-    	$this->view->stu_name=$db_cat->getAllStudentId(2);
+    	$this->view->stu_id=$db_cat->getAllBorrowId(1);
+    	$this->view->stu_name=$db_cat->getAllBorrowId(2);
     	$b=$this->view->book_title=$db_cat->getBookTitle();
     	$this->view->borr_no=$db_cat->getReturnBookNo();
      
@@ -101,8 +108,12 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();
-    	$this->view->stu_id=$db_cat->getAllStudentId(1);
-    	$this->view->stu_name=$db_cat->getAllStudentId(2);
+//     	$this->view->stu_id=$db_cat->getAllStudentId(1);
+//     	$this->view->stu_name=$db_cat->getAllStudentId(2);
+    	$db_cat = new Library_Model_DbTable_DbReturnbook();
+    	$this->view->stu_id=$db_cat->getAllBorrId(1);
+    	$this->view->stu_name=$db_cat->getAllBorrId();
+    	
     	$b=$this->view->book_title=$db_cat->getBookTitle();
     	$this->view->borr_no=$db_cat->getBorrowNo();
     	

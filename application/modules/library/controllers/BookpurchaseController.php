@@ -6,6 +6,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
     public function indexAction()
     {
@@ -65,7 +66,33 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$b=$this->view->book_title=$db_cat->getBookTitle();
     	$db=new Library_Model_DbTable_DbPurchasebook();
     	$this->view->po_no=$db->getPONo();
-      
+    	
+    	$frm_major = new Library_Form_FrmBook();
+    	$frm_search = $frm_major->frmBook();
+    	Application_Model_Decorator::removeAllDecorator($frm_search);
+    	$this->view->frm_book = $frm_search;
+    	
+    	$frm_major = new Library_Form_FrmCategory();
+    	$frm_search = $frm_major->FrmCategory();
+    	$frm_block  = $frm_major->FrmCategory();
+    	Application_Model_Decorator::removeAllDecorator($frm_search);
+    	Application_Model_Decorator::removeAllDecorator($frm_block);
+    	$this->view->frm_cat = $frm_search;
+    	$this->view->frm_block = $frm_block;
+    	
+    	$book_data = new Library_Model_DbTable_DbBook();
+    	$cat_data=new Library_Model_DbTable_DbCategory();
+    	$c=$book_data->getCategoryAll();
+    	array_unshift($c, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->cat=$c;
+
+    	$block=$book_data->getBlockAll();
+    	array_unshift($block, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->block=$block;
+    	
+    	$book=$cat_data->getAllBookOpt();
+    	array_unshift($book, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->book=$book;
     }
     
     public function editAction(){
@@ -95,6 +122,33 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$this->view->po_no=$db->getPONo();
     	$this->view->row=$db->getPurchaseById($id);
     	$this->view->pus_item=$db->getPurchaseDetailById($id);
+    	
+    	$frm_major = new Library_Form_FrmBook();
+    	$frm_search = $frm_major->frmBook();
+    	Application_Model_Decorator::removeAllDecorator($frm_search);
+    	$this->view->frm_book = $frm_search;
+    	 
+    	$frm_major = new Library_Form_FrmCategory();
+    	$frm_search = $frm_major->FrmCategory();
+    	$frm_block  = $frm_major->FrmCategory();
+    	Application_Model_Decorator::removeAllDecorator($frm_search);
+    	Application_Model_Decorator::removeAllDecorator($frm_block);
+    	$this->view->frm_cat = $frm_search;
+    	$this->view->frm_block = $frm_block;
+    	 
+    	$book_data = new Library_Model_DbTable_DbBook();
+    	$cat_data=new Library_Model_DbTable_DbCategory();
+    	$c=$book_data->getCategoryAll();
+    	array_unshift($c, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->cat=$c;
+    	
+    	$block=$book_data->getBlockAll();
+    	array_unshift($block, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->block=$block;
+    	 
+    	$book=$cat_data->getAllBookOpt();
+    	array_unshift($book, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+    	$this->view->book=$book;
     }
     
     function addCategoryAction(){
@@ -115,7 +169,16 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		print_r(Zend_Json::encode($gty));
     		exit();
     	}
+    }
     
+    function addBookPurchaseAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Library_Model_DbTable_DbCategory();
+    		$gty= $db->ajaxAddBook($data);
+    		print_r(Zend_Json::encode($gty));
+    		exit();
+    	}
     }
     
 }

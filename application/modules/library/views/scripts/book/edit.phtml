@@ -191,6 +191,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 </div>
 
 <script>
+var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->cat))?>);
 $('#frm_book').submit(function() {
 	
  
@@ -213,10 +214,10 @@ function showAddBlock(){
 <script type="text/javascript">
 
 dojo.ready(function(){
+	
 });
 
 var url_make = '<?php echo $this->url(array('module'=>'library','controller'=>'book','action'=>'add-category')); ?>';
-var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->cat))?>);
 function addCategory(){
 	if(dijit.byId('frm_category').validate()){
 		dojo.xhrPost({

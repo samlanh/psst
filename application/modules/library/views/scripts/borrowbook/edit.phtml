@@ -3,6 +3,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_callteral;
 echo $this->headTitle($tr->translate("EDIT_BORROW_BOOK"));
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+//print_r($this->stu_id);exit();
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
@@ -18,12 +19,12 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 			if(this.validate()) {
                 stu_id = dijit.byId('stu_id').get('value');
 				stu_name = dijit.byId('stu_name').get('value');
-				if (stu_id=='' || stu_id==0 || stu_id==-1){
+				if (stu_id==-1){
 					alert('Please Select Student Id !');
                     dijit.byId('stu_id').focus();
 			        return false;
                 }
-                if (stu_name=='' || stu_name==0 || stu_name==-1){
+                if (stu_name==-1){
 					alert('Please Select Student Id !');
                     dijit.byId('stu_id').focus();
 			        return false;
@@ -39,26 +40,47 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 				<fieldset style="margin-top:-13px;">
 					<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("EDIT_BORROW_BOOK");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%;" cellspacing="10" >
+						<tr> 
+						    <td><?php echo $tr->translate("CHOOSE_ONE")?></td>
+						    <td>
+						        <select name="type" id="type" dojoType="dijit.form.FilteringSelect" onchange="hideControll();setControll();" >
+						             <option value="1" <?php if($this->row['borrow_type']==1) echo 'selected="selected"';?> ><?php echo $tr->translate("Student")?></option>
+						             <option value="2" <?php if($this->row['borrow_type']==2) echo 'selected="selected"';?>><?php echo $tr->translate("Teacher")?> </option>
+						             <option value="3" <?php if($this->row['borrow_type']==3) echo 'selected="selected"';?>> <?php echo $tr->translate("Parents of student")?></option>
+						             <option value="4" <?php if($this->row['borrow_type']==4) echo 'selected="selected"';?>> <?php echo $tr->translate("Other")?></option>
+						        </select>
+						    </td>
+						</tr>
 						
 						<tr>
 							<td nowrap="nowrap"><?php echo $tr->translate("STUDENT_ID")?></td>
 							<td>
-								<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect" onchange="setNameStudent(1);">
+							<span id="span_stu_id">
+								<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect" onchange="setNameStudent(1);setControll();">
 								       <option value="0"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
 								 <?php if(!empty($this->stu_id)) foreach($this->stu_id As $rs_id){?>
 										<option value="<?php echo $rs_id['stu_id']?>" ><?php echo $rs_id['stu_code'];?></option>
 								 <?php }?>
 								</select>
+							</span>
+							<span id="span_card_id">
+								<input dojoType="dijit.form.ValidationTextBox"   name="card_id" id="card_id" value="<?php //echo $this->row['card_id'];?>"  type="text" required="required">
+							</span>
 							</td>
-							<td nowrap="nowrap"><?php echo $tr->translate("STUDENT_NAME")?></td>
+							<td nowrap="nowrap"><span id="student_name_lbl"><?php echo $tr->translate("STUDENT_NAME")?></span><span id="name_lbl"><?php echo $tr->translate("NAME")?></span></td>
 							<td>
-								<select   name="stu_name" id="stu_name" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();">
+							 <span id="span_stu_name">
+								<select   name="stu_name" id="stu_name" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();setControll();">
 									<option value="0"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 									<?php 
 									if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
 										<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
 									<?php }?>
 								</select>
+							 </span>
+							 <span id="span_name">
+									<input dojoType="dijit.form.TextBox"   name="name" id="name" value="<?php //echo $this->row['name'];?>"  type="text" >
+							 </span>
 							</td>
 							<td nowrap="nowrap"><?php echo $tr->translate("BORROW_NO")?></td>
 							<td style="font-weight: 600;"><input dojoType="dijit.form.TextBox"   name="borrow_id" id="borrow_id" value="<?php echo $this->row['borrow_no'];?>"  type="text" readonly></td>
@@ -131,6 +153,8 @@ var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enc
 dojo.ready(function(){
 	        oldAdd();
 			dijit.byId("stu_id").attr("value","<?php echo $this->row['stu_id'];?>");
+			 
+			hideControll();
 });
 function setEndDate(){
 	amount_date = dijit.byId('amountmonth').get('value');
@@ -355,4 +379,51 @@ function setEndDate(){
     }
 }
 
+function hideControll(){
+	type_id=dijit.byId("type").get("value");
+	if(type_id==1){
+		dijit.byId("card_id").attr('required', false);
+		dijit.byId("stu_name").attr('required', true);
+		$("#span_card_id").hide();
+		$("#span_name").hide();
+		$("#name_lbl").hide();
+		
+		$("#span_stu_id").show();
+		$("#span_stu_name").show();
+		$("#student_name_lbl").show();
+	}else {
+		setControllClear();
+		dijit.byId("card_id").attr('required', true);
+		dijit.byId("stu_name").attr('value', '');
+		dijit.byId("stu_id").attr('value','');
+		dijit.byId("stu_name").attr('required', false);
+		dijit.byId("stu_id").attr('required', false);
+		dijit.byId("card_id").attr('required', true);
+		$("#span_card_id").show();
+		$("#span_name").show();
+		$("#name_lbl").show();
+		
+		$("#span_stu_id").hide();
+		$("#span_stu_name").hide();
+		$("#student_name_lbl").hide();
+	}
+}
+
+function setControll(){
+	stu_code= dijit.byId("stu_id").attr('displayedValue');
+	stu_name=dijit.byId("stu_name").attr('displayedValue');
+	type=dijit.byId('type').get('value');
+	if(type==<?php echo $this->row['borrow_type']?>){
+		dijit.byId("card_id").attr('value','<?php echo $this->row['card_id']?>');
+		dijit.byId("name").attr('value','<?php echo $this->row['name']?>');
+	}else{
+		dijit.byId("card_id").attr('value',stu_code);
+		dijit.byId("name").attr('value',stu_name);
+	}
+}
+
+function setControllClear(){
+	dijit.byId("card_id").attr('value','');
+	dijit.byId("name").attr('value','');
+}
 </script>

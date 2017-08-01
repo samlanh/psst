@@ -106,6 +106,32 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 		$this->_name = "rms_blockbook";
 		return $this->insert($arr);
 	}
+	
+	public function ajaxAddBook($data){
+		$db = $this->getAdapter();
+		$session_user=new Zend_Session_Namespace('authstu');
+		$userName=$session_user->user_name;
+		$GetUserId= $session_user->user_id;
+		$arr = array(
+					'book_no'	=>	$data["book_id"],
+					'title'		=>	$data["book_name"],
+					'author'	=>	$data["author_name"],
+					'serial_no'	=>	$data["serial_no"],
+					'cat_id'	=>	$data["parent_id"],
+					'block_id'	=>	$data["block_id"],
+					'publisher'	=>	$data["publisher"],
+					'qty'		=>	0,
+					'qty_after'	=>	0,
+// 					'unit_price'=>	$data["unit_price"],
+// 					'total_amount'=>$data["total_amount"],
+					'date'		=>	date('Y-m-d'),
+					'status'	=>	$data["statuss"],
+					//'note'		=>	$data["remark"],
+					"user_id"   =>  $GetUserId,
+		);
+		$this->_name = "rms_book";
+		return $this->insert($arr);
+	}
 	 
 	public function edit($data){
 		//print_r($data);exit();
@@ -194,11 +220,12 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	
 	function getReturnBook($stu_id){
 		$db=$this->getAdapter();
-		$sql=" SELECT bd.id as borrow_id,b.borrow_no,bd.borr_qty,(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id  LIMIT 1) AS book_no,
-		        (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id  LIMIT 1) AS book_name,b.return_date,bd.book_id
+		$sql="SELECT bd.id AS borrow_id,b.phone,b.borrow_no,bd.borr_qty,(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id  LIMIT 1) AS book_no,
+		        (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id  LIMIT 1) AS book_name,bd.return_date,bd.book_id,
+		        (SELECT v.name_en FROM rms_view AS v WHERE v.key_code=b.borrow_type AND  v.type=13 LIMIT 1) AS borrow_type
 				FROM rms_borrow AS b,rms_borrowdetails AS bd 
 				WHERE b.id=bd.borr_id
-				AND b.stu_id=$stu_id
+				AND b.id=$stu_id
 				AND bd.is_full=0
        		    AND b.is_completed=0 ";
 		return $db->fetchAll($sql);
@@ -207,13 +234,15 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	function getReturnBookDetail($id){
 		$db=$this->getAdapter();
 		$sql=" SELECT bd.id AS return_id,b.return_no,bd.borr_qty,(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id  LIMIT 1) AS book_no,
-		(SELECT title FROM rms_book WHERE rms_book.id=bd.book_id  LIMIT 1) AS book_name,b.return_date,bd.book_id,
+		(SELECT title FROM rms_book WHERE rms_book.id=bd.book_id  LIMIT 1) AS book_name,bd.date_delay,bd.delay_qty,bd.book_id,b.return_date,
 		(SELECT rms_borrowdetails.borr_qty FROM rms_borrowdetails WHERE rms_borrowdetails.id=bd.borr_detail_id LIMIT 1) AS oldbor_qty ,
-		(SELECT rms_borrowdetails.id FROM rms_borrowdetails WHERE rms_borrowdetails.id=bd.borr_detail_id LIMIT 1) AS borrow_id 
-		FROM rms_bookreturn AS b,rms_bookreturndetails AS bd
+		(SELECT rms_borrowdetails.id FROM rms_borrowdetails WHERE rms_borrowdetails.id=bd.borr_detail_id LIMIT 1) AS borrow_id,
+		(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=bor.borrow_type AND  v.type=13 LIMIT 1) AS borrow_type 
+		FROM rms_bookreturn AS b,rms_bookreturndetails AS bd,rms_borrow AS bor
 		WHERE b.id=bd.return_id
 		AND bd.return_id=$id
 		AND b.is_completed=0
+		AND bor.id=b.borrow_id
 		";
 		return $db->fetchAll($sql);
 	}
@@ -224,6 +253,12 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
+	function getAllBookOpt(){
+		$db=$this->getAdapter();
+		$sql="SELECT id,CONCAT(title,'(',book_no,')') AS name FROM rms_book WHERE STATUS=1";
+		$order=" ORDER BY id DESC";
+		return $db->fetchAll($sql.$order);
+	}
 	
 }
 

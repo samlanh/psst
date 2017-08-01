@@ -119,6 +119,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     	$sql="SELECT bd.id,b.borrow_no,b.stu_id,b.borrow_date,b.return_date,
 		     (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
 		     (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_name, 
+		     b.card_id,b.name,(SELECT name_kh FROM rms_view WHERE rms_view.key_code=b.borrow_type AND rms_view.type=13 LIMIT 1) AS `type`,
 		     (SELECT sex FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS sex,        
 		     (SELECT `name` FROM rms_bcategory WHERE rms_bcategory.id=(SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id) LIMIT 1) AS cat_name,
 		     (SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_no,
@@ -137,8 +138,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[]="  b.borrow_no LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[]="  b.card_id LIKE '%{$s_search}%'";
+    		$s_where[]="  b.name LIKE '%{$s_search}%'";
+//     		$s_where[]=" (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+//     		$s_where[]=" (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
      		$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
@@ -154,8 +157,12 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND bd.is_full='.$search["is_full"];
     	}
     	
-    	if($search["stu_name"]>0){
-    		$where.=' AND b.stu_id='.$search["stu_name"];
+//     	if($search["stu_name"]>0){
+//     		$where.=' AND b.stu_id='.$search["stu_name"];
+//     	}
+
+    	if($search["is_type_bor"]>0){
+    		$where.=' AND b.borrow_type='.$search["is_type_bor"];
     	}
     	
     	if($search['cood_book']>0){
@@ -169,16 +176,16 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     function getReturnBookDetail($search=null){
     	$db=$this->getAdapter();
     	$sql="SELECT bd.id,b.return_no,b.stu_id,b.borrow_date,b.return_date,
-    	(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
-    	(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_name,
-    	(SELECT sex FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS sex,
-    	(SELECT `name` FROM rms_bcategory WHERE rms_bcategory.id=(SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id) LIMIT 1) AS cat_name,
-    	(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_no,
-    	(SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_name,
-    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users WHERE rms_users.id=bd.user_id LIMIT 1) AS user_name,
-    	bd.borr_qty,bd.is_full
-    	FROM rms_bookreturn AS b,rms_bookreturndetails AS bd
-    	WHERE b.id=bd.return_id ";
+          	 bor.card_id,bor.name,(SELECT name_kh FROM rms_view WHERE rms_view.key_code=bor.borrow_type AND rms_view.type=13 LIMIT 1) AS `type`,
+	    	(SELECT sex FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=bor.stu_id LIMIT 1) AS sex,
+	    	(SELECT `name` FROM rms_bcategory WHERE rms_bcategory.id=(SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id) LIMIT 1) AS cat_name,
+	    	(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_no,
+	    	(SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_name,
+	    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users WHERE rms_users.id=bd.user_id LIMIT 1) AS user_name,
+	    	bd.borr_qty,bd.is_full
+	    	FROM rms_bookreturn AS b,rms_bookreturndetails AS bd,rms_borrow AS bor
+	    	WHERE b.id=bd.return_id
+	    	AND bor.id=b.borrow_id";
     	 
     	$where = '';
     	$from_date =(empty($search['start_date']))? '1': "b.return_date >= '".$search['start_date']." 00:00:00'";
@@ -189,8 +196,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[]="  b.return_no LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[]="  bor.card_id LIKE '%{$s_search}%'";
+    		$s_where[]="  bor.name LIKE '%{$s_search}%'";
+//     		$s_where[]=" (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+//     		$s_where[]=" (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
@@ -201,8 +210,11 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND bd.is_full='.$search["is_full"];
     	}
     	
-    	if($search["stu_name"]>0){
-    		$where.=' AND b.stu_id='.$search["stu_name"];
+//     	if($search["stu_name"]>0){
+//     		$where.=' AND b.stu_id='.$search["stu_name"];
+//     	}
+    	if($search["is_type_bor"]>0){
+    		$where.=' AND bor.borrow_type='.$search["is_type_bor"];
     	}
     	
     	if($search['cood_book']>0){
@@ -220,8 +232,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     function getBorrowDetailByWeek($search=null){
     	$db=$this->getAdapter();
     	$sql="SELECT bd.id,b.borrow_no,b.stu_id,b.borrow_date,b.return_date,b.amount_week,
-    	(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
-    	(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_name,
+    	b.card_id,b.name,(SELECT name_kh FROM rms_view WHERE rms_view.key_code=b.borrow_type AND rms_view.type=13 LIMIT 1) AS `type`,
     	(SELECT sex FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS sex,
     	(SELECT `name` FROM rms_bcategory WHERE rms_bcategory.id=(SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id) LIMIT 1) AS cat_name,
     	(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_no,
@@ -240,8 +251,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[]="  b.borrow_no LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[]="  b.card_id LIKE '%{$s_search}%'";
+    		$s_where[]="  b.name LIKE '%{$s_search}%'";
+//     		$s_where[]=" (SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
+//     		$s_where[]=" (SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
@@ -257,8 +270,11 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND bd.is_full='.$search["is_full"];
     	}
     	
-    	if($search["stu_name"]>0){
-    		$where.=' AND b.stu_id='.$search["stu_name"];
+//     	if($search["stu_name"]>0){
+//     		$where.=' AND b.stu_id='.$search["stu_name"];
+//     	}
+    	if($search["is_type_bor"]>0){
+    		$where.=' AND b.borrow_type='.$search["is_type_bor"];
     	}
     	
     	if($search["cood_book"]>0){
@@ -305,7 +321,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     
     function getPurchaseDetail($search=null){
     	$db=$this->getAdapter();
-    	$sql="SELECT bd.id,b.purchase_no,b.stu_id,b.date_order,
+    	$sql="SELECT bd.id,b.purchase_no,b.stu_id,b.date_order,bd.cost,
     	(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
     	(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_name,
     	(SELECT sex FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS sex,

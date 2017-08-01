@@ -22,7 +22,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				total_amountafter,
 				c.date,
 				c.note,
-				(select name_en from rms_view where rms_view.type=13 and key_code=c.type) as paid_status,
+				(select name_en from rms_view where rms_view.type=15 and key_code=c.type) as paid_status,
 				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) as user_name,
 				c.status 
 			  FROM 

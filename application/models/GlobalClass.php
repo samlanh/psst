@@ -340,6 +340,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$rows = $_db->getExpenseIncome($type);
 			$options = '';
 			$options .= '<option Value="0">ជ្រើសរើសប្រភេទ</option>';
+			$options .= '<option Value="-1">Add New</option>';
 			if(!empty($rows))foreach($rows as $value){
 				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']).'</option>';
 			}

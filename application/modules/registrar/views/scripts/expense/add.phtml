@@ -295,7 +295,7 @@ function addRow() {
 	    }
 		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="50px" align="center">'+no+'</td>';
-		template+='<td style="width:300px"><select style="width:100%" onchange="getValidate('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
+		template+='<td style="width:300px"><select style="width:100%" onchange="popupCateExpense('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
 		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="total_paid'+col+'" id="total_paid'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';			
 		template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
 		tmp='<tr id="row'+col+'">';
@@ -373,4 +373,85 @@ function doPrintInvoice() {
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
 }
+
+function popupCateExpense(index){
+	expense_id = dijit.byId("expense_id"+index).get('value');
+	$("#tow_value").val(index);
+	if(expense_id==-1){
+		dijit.byId("popup_cate_expense").show();
+	}
+}
+
+var cate_expense_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cate_expense));?> );
+var url_add_cate_expense = '<?php echo $this->url(array("module"=>"registrar","controller"=>"expense","action"=>"add-cate-expense")); ?>';
+function addCateExpense(){
+	if(dijit.byId('add_cate_expense').validate()) {
+		dojo.xhrPost({
+			url:url_add_cate_expense,
+			form: dojo.byId("add_cate_expense"),
+			handleAs:"json",
+			load: function(data){
+			  var Itemmake = { 
+				        id: data.id,
+				        name: dijit.byId('account_name').get('value')
+				         };
+					index=$("#tow_value").val();
+				    addDataToSelectbox(dijit.byId('expense_id'+index), cate_expense_store, Itemmake, data.id);
+
+			  optexpense = data.new_array;
+					  
+			  dijit.byId('add_cate_expense').reset();
+			  dijit.byId("popup_cate_expense").hide();
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+}
+
+
 </script>
+
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_cate_expense" >
+		<form  name='add_subject_exam' id='add_cate_expense'  dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				<tr>
+					<td>
+						<fieldset style="background-color:menu;">
+									<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_NEW_SUBJECT");?></strong></legend>
+									<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
+										
+										<tr>
+											<td><?php echo $tr->translate("TITLE")?></td>
+											<td>
+												<input name="account_name" id="account_name" dojoType="dijit.form.ValidationTextBox" required="required" class="fullside" />
+											</td>
+										</tr>
+										
+										<tr>
+											<td><?php echo $tr->translate("ACCOUNT_CODE")?></td>
+											<td>
+												<input name="account_code" id="account_code" dojoType="dijit.form.TextBox" required="required" class="fullside" />
+											</td>
+										</tr>
+										
+										<tr>
+											<td colspan="2" align="center">
+												<input type="button" onclick="addCateExpense();" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+													iconClass="dijitEditorIcon dijitEditorIconSave" />
+											</td>
+										</tr>
+									</table>	
+						</fieldset>		
+					</td>
+				</tr>
+			</table>	
+			<input type="text"  name="tow_value" id="tow_value" value="" />
+ 			</form>
+	</div>
+</div>
+
+

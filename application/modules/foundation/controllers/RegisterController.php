@@ -11,7 +11,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-				$this->view->adv_search=$search;
+				
 			}
 			else{
 				$search = array(
@@ -24,6 +24,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}
+			
+			$this->view->adv_search=$search;
+			
 			$db_student= new Foundation_Model_DbTable_DbStudent();
 			$rs_rows = $db_student->getAllStudent($search);
 			 

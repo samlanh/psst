@@ -81,6 +81,15 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	$this->view->frm_expense=$frm;
     	$db = new Application_Model_GlobalClass();
     	$this->view->expenseopt = $db->getAllExpenseIncomeType(5);
+    	
+    	$_db = new Registrar_Model_DbTable_DbExpense();
+    	$cate_expense = $_db->getAllCateExpense(5);
+    	
+    	array_unshift($cate_expense, array('id'=>-1 , 'name'=>'Add New'));
+    	
+    	$this->view->cate_expense = $cate_expense;
+    	
+    	
     }
  
     public function editAction()
@@ -117,6 +126,8 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 
     	$db = new Application_Model_GlobalClass();
     	$this->view->expenseopt = $db->getAllExpenseIncomeType(5);
+    	
+    	 
     }
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){
@@ -127,6 +138,18 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		exit();
     	}
     }
+    
+    function addCateExpenseAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$db = new Registrar_Model_DbTable_DbExpense();
+    		$id = $db->addCateExpense($data);
+    		print_r(Zend_Json::encode($id));
+    		exit();
+    	}
+    }
+    
+    
 }
 
 

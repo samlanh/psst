@@ -142,6 +142,36 @@ function getAllExpenseReport($search=null){
 	return $db->fetchAll($sql.$where.$order);
 }
 
+	public function getAllCateExpense($type){
+		$db = $this->getAdapter();
+		$sql = "SELECT id ,account_name as name FROM `rms_account_name` WHERE status=1 AND account_name!=''
+				and account_type = ".$type;
+		return $db->fetchAll($sql);
+	}
 
+
+	function addCateExpense($data){
+		$this->_name="rms_account_name";
+		$arr = array(
+				'account_code'=>$data['account_code'],
+				'account_name'=>$data['account_name'],
+				'account_type'=>5, // expense category
+				'status'=>1,
+				'user_id'=>$this->getUserId(),
+				'date'=>date('Y-m-d'),
+		);
+		$id = $this->insert($arr);
+	
+		$db = new Application_Model_GlobalClass();
+		$new_arrar_cate_expense = $db->getAllExpenseIncomeType(5);
+		
+		$result = array(
+				'id'=>$id,
+				'new_array'=>$new_arrar_cate_expense,
+				);
+				
+		return $result;
+		
+	}
 
 }

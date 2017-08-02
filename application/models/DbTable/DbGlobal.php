@@ -618,7 +618,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$_db = new Application_Model_DbTable_DbGlobal();
    	$branch_id = $_db->getAccessPermission();
    	$sql = "SELECT id ,account_name as name FROM `rms_account_name` WHERE status=1 AND account_name!=''
-   	AND account_type = ".$type;
+   			AND account_type = ".$type;
    	return $db->fetchAll($sql);
    }
    function getAllStudent($opt=null,$type){

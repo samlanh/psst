@@ -12,9 +12,35 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     public function updateItemsByImport($data){
     	$db = $this->getAdapter();
     	$count = count($data);
-//     	print_r($data);exit();
     	for($i=2; $i<=$count; $i++){
     		$arr = array(
+    				'branch_id'=>1,
+    				'user_id'=>$this->getUserId(),
+    				'en_name'=>$data[$i]['B'],
+    				'kh_name'=>$data[$i]['B'],
+    				'serial'=>$data[$i]['D'],
+    				'sex'=>($data[$i]['C']=="M")?1:2,
+    				'dob'=>date("Y-m-d",strtotime($data[$i]['E'])),
+    				'phone'=>$data[$i]['G'],
+    				'total_price'=>0,
+    				'note'=>$data[$i]['J'].",".$data[$i]['K'].",".$data[$i]['L'],
+    				'address'=>$data[$i]['F'],    				
+					
+//     				'degree_result'=>$data[$i]['H'],
+    				'grade_result'=>$data[$i]['L'],
+//     				'session_result'=>$data[$i]['H'],
+//     				'updated_result'=>$data[$i]['J'],
+//     				'create_date'=>$data[$i]['T'],
+//     				'is_stu_new'=>0,
+//     				'is_subspend'=>0,
+//     				'modify_date'=>date("Y-m-d"),
+//     				'is_setgroup'=>0,
+//     				'password'=>12345,
+    		);
+    		$this->_name='rms_student_test';
+    		$id = $this->insert($arr);
+    		
+    		/*$arr = array(
     				'group_id'=>0,
     				'branch_id'=>1,
     				'user_id'=>$this->getUserId(),
@@ -68,11 +94,8 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     				'is_setgroup'=>0,
     				'password'=>12345,
     		);
-    		
     		$this->_name='rms_student';
     		$id = $this->insert($arr);
-    		
-    		
     		$arr = array(
     				'branch_id'=>1,
     				'stu_id'=>$id,
@@ -80,11 +103,8 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     				'status'=>1,
     		);
     		$this->_name='rms_student_id';
-    		$id = $this->insert($arr);
-    		 
-    		
+    		$id = $this->insert($arr);*/
     	}
-    	
     }
 }   
 

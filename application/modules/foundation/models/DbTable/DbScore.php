@@ -123,6 +123,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 // 			exit();
 		  $db->commit();
 		}catch (Exception $e){
+			echo $e->getMessage();exit();
 			$db->rollBack();
 		}
    }

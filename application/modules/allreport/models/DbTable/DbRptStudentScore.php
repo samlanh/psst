@@ -206,6 +206,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				st.`sex`,
 				(select month_kh from rms_month where rms_month.id = s.for_month) as for_month,
 				s.for_semester,
+				s.reportdate,
 				
 				SUM(sd.`score`) AS total_score,
 				AVG(sd.score) AS average

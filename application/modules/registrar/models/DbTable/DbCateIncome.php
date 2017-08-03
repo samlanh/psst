@@ -48,9 +48,7 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 					ci.status
 			FROM 
 				rms_cate_income_expense as ci 
-			where 
-				1
-			";
+			where 1 ";
 		$where = " ";
 		if (!empty($search['adv_search'])){
 			$s_where = array();

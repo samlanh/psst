@@ -169,7 +169,7 @@ class Global_Model_DbTable_DbGrade extends Zend_Db_Table_Abstract
 	
 	function getNameGradeAll(){
 		$db=$this->getAdapter();
-		$sql="SELECT m.major_id AS id,m.major_enname As name, 
+		$sql="SELECT m.major_id AS id,CONCAT(m.major_enname,' (',(SELECT d.en_name FROM rms_dept AS d WHERE m.dept_id=d.dept_id ),')') As name, 
 		        (SELECT d.en_name FROM rms_dept AS d WHERE m.dept_id=d.dept_id )AS dept_name,
 		        m.shortcut,m.modify_date,
 				(SELECT name_en FROM rms_view WHERE TYPE=1 AND key_code=is_active)

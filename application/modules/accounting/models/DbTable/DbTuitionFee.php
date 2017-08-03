@@ -69,7 +69,7 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     	$db->beginTransaction();
 		
     	$fee_id = $this->getCondition($_data);
-    	 
+    	
     	try{
     		if(!empty($fee_id)){
     			

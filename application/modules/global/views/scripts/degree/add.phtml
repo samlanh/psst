@@ -134,7 +134,7 @@ function addRow() {
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
-		template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" id="status_'+col+'" name="status_'+col+'" style="width:100%;"><option value="1"><?php echo $tr->translate("ACTIVE")?></option><option value="0"><?php echo $tr->translate("DEACTIVE")?></option></select> <input style="width:10px;" dojoType="dijit.form.TextBox" class="fullside" name="oldindex_'+col+'" id="oldindex_'+col+'" value="'+col+'" type="text"></td>';
+		template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" id="status_'+col+'" name="status_'+col+'" style="width:100%;"><option value="1"><?php echo $tr->translate("ACTIVE")?></option><option value="0"><?php echo $tr->translate("DEACTIVE")?></option></select> <input style="width:10px;" dojoType="dijit.form.TextBox" class="fullside" name="oldindex_'+col+'" id="oldindex_'+col+'" value="'+col+'" type="hidden"></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -286,7 +286,7 @@ function deleteRecord(index) {
 					</td>
 				</tr>
 			</table>	
-			<input type="text"  name="tow_value" id="tow_value" value="" />
+			<input type="hidden"  name="tow_value" id="tow_value" value="" />
  			</form>
 	</div>
 </div>

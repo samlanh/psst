@@ -1,8 +1,8 @@
 <?php
 
-class Registrar_CateIncomeController extends Zend_Controller_Action
+class Registrar_CateExpenseController extends Zend_Controller_Action
 {
-	const REDIRECT_URL = '/registrar/cateincome';
+	const REDIRECT_URL = '/registrar/expense';
 	
     public function init()
     {
@@ -13,28 +13,31 @@ class Registrar_CateIncomeController extends Zend_Controller_Action
     public function indexAction()
     {
     	try{
-    		$db = new Registrar_Model_DbTable_DbCateIncome();
+    		$db = new Registrar_Model_DbTable_DbCateExpense();
     		if($this->getRequest()->isPost()){
     			$search=$this->getRequest()->getPost();
     		}
     		else{
     			$search = array(
     					"adv_search"=>'',
+    					"currency_type"=>-1,
     					"status"=>-1,
+    					'start_date'=> date('Y-m-d'),
+    					'end_date'=>date('Y-m-d'),
     			);
     		}
     		
     		$this->view->adv_search = $search;
     		
-			$rs_rows= $db->getAllCateIncome($search);//call frome model
+			$rs_rows= $db->getAllCateExpense($search);//call frome model
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
     		$collumns = array("TITLE","ACCOUNT_CODE","USER","CREATE_DATE","STATUS");
     		$link=array(
-    				'module'=>'registrar','controller'=>'cateincome','action'=>'edit',
+    				'module'=>'registrar','controller'=>'cateexpense','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('category_name'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('account_name'=>$link,'account_code'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -49,11 +52,11 @@ class Registrar_CateIncomeController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();	
-			$db = new Registrar_Model_DbTable_DbCateIncome();				
+			$db = new Registrar_Model_DbTable_DbCateExpense();				
 			try {
-				$db->addCateIncome($data);
+				$db->addCateExpense($data);
 				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/cateincome");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/cateexpense");
 				}else{
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}				
@@ -72,18 +75,18 @@ class Registrar_CateIncomeController extends Zend_Controller_Action
     		$id = $this->getRequest()->getParam('id');
 			$data=$this->getRequest()->getPost();	
 			$data['id']=$id;
-			$db = new Registrar_Model_DbTable_DbCateIncome();				
+			$db = new Registrar_Model_DbTable_DbCateExpense();				
 			try {
-				$db->updateCateIncome($data);				
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', "/registrar/cateincome");		
+				$db->updateCateExpense($data);				
+				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', "/registrar/cateexpense");		
 			} catch (Exception $e) {
 				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
 			}
 		}
 		
 		$id = $this->getRequest()->getParam('id');
-		$db = new Registrar_Model_DbTable_DbCateIncome();
-		$row  = $db->getCateIncomeById($id);
+		$db = new Registrar_Model_DbTable_DbCateExpense();
+		$row  = $db->getCateExpenseById($id);
 		$this->view->rs = $row;
 		
     }

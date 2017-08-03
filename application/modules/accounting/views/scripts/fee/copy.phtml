@@ -26,7 +26,7 @@ table .set-style td, table .set-style th {
 	<tr>
 		<td>
 		<fieldset>
-					<legend align="center" style="font-size: 20px;"><strong><?php echo $tr->translate("EDIT_FEE");?></strong></legend>
+					<legend align="center" style="font-size: 20px;"><strong><?php echo $tr->translate("ADD_FEE");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%; background:#DFF7FD;" cellspacing="10" broder 1>
 						<tr>
 							<td ><?php echo $tr->translate("YEARS");?><input type="hidden" name="id" value="<?php echo $this->rs['id'];?>" /> </td>
@@ -244,7 +244,7 @@ function addGrade(){
 				load: function(data) {
 					var Itemmake = { 
 					    	 id: data,
-						     name: dijit.byId('major_enname').get('value')
+						     name: dijit.byId('major_enname').get('value')+" ("+dijit.byId('degree_popup1').attr('displayedValue')+")"
 						   };
 			   addDataToSelectbox(dijit.byId('grade'), grade_store, Itemmake, data);
 			   dijit.byId('frm_add_grade').reset();

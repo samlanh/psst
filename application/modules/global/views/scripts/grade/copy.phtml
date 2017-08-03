@@ -36,7 +36,7 @@ dojo.ready(function(){
 
 
 <?php  $frm_major= $this->frm_major;?>
-<form  id='edit-major' action="<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<form  id='edit-major' action="<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'copy')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <table cellspacing="10" width="40%" style="margin: 0 auto;">
 	<tr>
 		<td>
@@ -92,29 +92,29 @@ dojo.ready(function(){
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_add_dept" >
 		<form  id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<fieldset>
-				<legend align="center">Add New Degree</legend>	
-				<table cellspacing="10" width="100%" style="margin: 0 auto;">
-				<tr>
-					<td><?php echo $tr->translate("DEGREE");?></td>
-					<td>
-						<input type="text" class="fullside" name='fac_enname' id="fac_enname" required="true" dojoType="dijit.form.ValidationTextBox" />
-					</td>
-				</tr>
-				<tr>
-					<td><?php echo $tr->translate("SHORTCUT");?></td>
-					<td>
-						<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" align="center">
-						<input type="button"  label="<?php echo $tr->translate("SAVE");?>" 
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDept();"/>
-						
-						<input type="button"  label="<?php echo $tr->translate("CANCEL");?>"  
-						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
-				</tr>
-				</table>
+				<legend align="center">Add New Degree</legend>
+					<table cellspacing="10" width="100%" style="margin: 0 auto;">
+					<tr>
+						<td><?php echo $tr->translate("DEGREE");?></td>
+						<td>
+							<input type="text" class="fullside" name='fac_enname' id="fac_enname" required="true" dojoType="dijit.form.ValidationTextBox" />
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("SHORTCUT");?></td>
+						<td>
+							<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center">
+							<input type="button"  label="<?php echo $tr->translate("SAVE");?>" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDept();"/>
+							
+							<input type="button"  label="<?php echo $tr->translate("CANCEL");?>"  
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
+					</tr>
+					</table>
 			</fieldset>
 		</form>
 	</div>

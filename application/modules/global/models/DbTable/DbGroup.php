@@ -289,6 +289,19 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $options;
 	}
 	
+	public function getAllTeacherOption(){
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$teacher = $this->getAllTeacher();
+		array_unshift($teacher,array('id' => -1,"name"=>"Add New"));
+		$teacher_options = '<option value="">Select Teacher</option>';
+		if(!empty($teacher))foreach($teacher as $value){
+			$teacher_options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+		}
+		return $teacher_options;
+	}
+	
+	
 	
 	function getParentSubject(){
 		$db = $this->getAdapter();
@@ -347,10 +360,50 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	
 	function getAllTeacher(){
 		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT(teacher_name_kh,'-',teacher_name_en) as name FROM rms_teacher WHERE status=1 ";
+		$sql = "SELECT id,CONCAT(teacher_name_kh,'-',teacher_name_en) as name FROM rms_teacher WHERE status=1 and teacher_name_kh!='' ";
 		return $db->fetchAll($sql);
 	}
 	
+	
+	
+	public function addTeacherAjax($_data){
+		$this->_name='rms_teacher';
+		
+		$_db = new Global_Model_DbTable_DbTeacher();
+		$teacher_code = $_db->getTeacherCode();
+		
+		try{
+			$db = $this->getAdapter();
+			$arr = array(
+					'teacher_code' => $teacher_code,
+					'teacher_name_kh' => $_data['kh_name'],
+					'teacher_name_en' => $_data['en_name'],
+					'sex' => $_data['sex'],
+					'dob' => $_data['dob'],
+					'nationality'  => $_data['nationality'],
+			        'tel'   => $_data['phone'],
+					'address' => $_data['address'],
+					'note' => $_data['note'],
+		
+					'branch_id' => 1,
+			        'create_date' => Zend_Date::now(),
+			        'user_id'	  => $this->getUserId(),
+			);
+			$id = $this->insert($arr);
+			
+			$teacher_option = $this->getAllTeacherOption();
+			
+			$array = array(
+						'id'=>$id,
+						'new_teacher_option'=>$teacher_option,
+					);
+			
+			return $array;
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
 	
 }
 

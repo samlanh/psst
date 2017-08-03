@@ -76,8 +76,11 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->parent_subject = $_db->getParentSubject();
 		$this->view->subject = $_db->getAllSubjectStudy();
 		
-		$this->view->teacher = $_db->getAllTeacher();
+		$teacher = $_db->getAllTeacher();
+		array_unshift($teacher, array('id'=>-1,'name'=>'Add New'));
+		$this->view->teacher = $teacher;
 		
+		$this->view->teacher_option = $_db->getAllTeacherOption();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();
@@ -249,5 +252,22 @@ class Global_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
+    
+    function addTeacherPopupAction(){
+    	if($this->getRequest()->isPost()){
+    		try{
+    			$data = $this->getRequest()->getPost();
+    			$db = new Global_Model_DbTable_DbGroup();
+    			$teacher = $db->addTeacherAjax($data);
+    			print_r(Zend_Json::encode($teacher));
+    			exit();
+    		}catch(Exception $e){
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    }
+    
+    
 }
 

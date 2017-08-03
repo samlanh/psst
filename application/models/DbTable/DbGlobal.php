@@ -227,7 +227,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    public function getAllSubjectStudy(){
    	$db = $this->getAdapter();
    		$sql = " SELECT id,subject_titlekh as name FROM `rms_subject` WHERE
-   		is_parent=1 AND status = 1 ";
+   		is_parent=1 AND status = 1 and subject_titlekh!='' ";
    	return $db->fetchAll($sql);
    }
    

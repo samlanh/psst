@@ -27,7 +27,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    	$link=array(
 	    			'module'=>'global','controller'=>'grade','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('major_enname'=>$link ,'major_khname'=>$link,'dept_name'=>$link));
+	    	$this->view->list=$list->getCheckList(2, $collumns, $rs_rows,array('major_enname'=>$link ,'major_khname'=>$link,'dept_name'=>$link));
 	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
@@ -103,6 +103,31 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 		
 		//$this->view->teacherbyid = $db->getTeacherBySubjectID($id);
 		//print_r($abc);exit();
+    }
+    
+    public function copyAction(){
+    	$id = $this->getRequest()->getParam("id");
+    	if($this->getRequest()->isPost()){
+    		try{
+    			$_data = $this->getRequest()->getPost();
+    			$db = new Global_Model_DbTable_DbGrade();
+    			$db->AddGrade($_data);
+    			Application_Form_FrmMessage::Sucessfull("ការកែប្រែដោយជោគជ័យ", "/global/grade/index");
+    		}catch(Exception $e){
+    			Application_Form_FrmMessage::message("Application Error");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    	 
+    	$db= new Global_Model_DbTable_DbGrade();
+    	$row=$db->getMajorById($id);
+    	$this->view->rs = $row;
+    	 
+    	$db = new Global_Model_DbTable_DbGrade();
+    	$dept = $db->getAllDept();
+    	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	$this->view->dept = $dept;
+    
     }
     
     function addDeptAction(){

@@ -2,10 +2,10 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title>Add Category Income </title>
+<title>Add Category Expense </title>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 
-<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'cateincome','action'=>'add')); ?>" 
+<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'cateexpense','action'=>'add')); ?>" 
 											dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
@@ -22,7 +22,7 @@ $frm = $this->frm_expense;
 						<table style="margin: 0 auto; width: 95%;" cellspacing="10">
 							<tr>
 								<td><?php echo $tr->translate("TITLE")?></td>
-								<td><input type="text" name="title" id="title"  dojoType="dijit.form.ValidationTextBox" class="fullside" /></td>
+								<td><input type="text" name="title" id="title" required="true" dojoType="dijit.form.ValidationTextBox" class="fullside" /></td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("ACCOUNT_CODE")?></td>

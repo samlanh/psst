@@ -1,7 +1,7 @@
 <?php
-class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
+class Registrar_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'rms_cate_income_expense';
+	protected $_name = 'rms_account_name';
 	
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace('authstu');
@@ -13,19 +13,21 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 		return $session_user->branch_id;
 	}
 	
-	function addCateIncome($data){
+	function addCateExpense($data){
 		$array = array(
-					'category_name'	=>$data['title'],
+					'account_name'	=>$data['title'],
 					'account_code'	=>$data['acc_code'],
+					'account_type'	=>5,
 					'user_id'		=>$this->getUserId(),
-					'create_date'	=>date('Y-m-d'),
+				
+					'date'	=>date('Y-m-d'),
 				);
 		$this->insert($array);
  	 }
  	 
-	 function updateCateIncome($data){
+	 function updateCateExpense($data){
 		$arr = array(
-					'category_name'	=>$data['title'],
+					'account_name'	=>$data['title'],
 					'account_code'	=>$data['acc_code'],
 					'status'		=>$data['status'],
 					'user_id'		=>$this->getUserId(),
@@ -34,24 +36,27 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 		$this->update($arr, $where);
 	}
 	
-	function getCateIncomeById($id){
+	function getCateExpenseById($id){
 		$db = $this->getAdapter();
-		$sql=" SELECT * FROM rms_cate_income_expense where id=$id ";
+		$sql=" SELECT * FROM rms_account_name where id=$id ";
 		return $db->fetchRow($sql);
 	}
 	
-	function getAllCateIncome($search=null){
+	function getAllCateExpense($search=null){
 		$db = $this->getAdapter();
 		$sql=" SELECT 
-					ci.id,
-					ci.category_name,
-					ci.account_code,
-					(select first_name from rms_users where rms_users.id = ci.user_id) as user,
-					create_date,
-					ci.status
-			FROM 
-				rms_cate_income_expense as ci 
-			where 1 ";
+					ac.id,
+					ac.account_name,
+					ac.account_code,
+					(select first_name from rms_users where rms_users.id = ac.user_id) as user,
+					date,
+					ac.status
+				FROM 
+					rms_account_name as ac 
+				where 
+					account_type=5
+					and account_name!=''
+			 ";
 		$where = " ";
 		if (!empty($search['adv_search'])){
 			$s_where = array();

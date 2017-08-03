@@ -55,6 +55,16 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" required="true" name="semester" value="" type="text"></td>
 					</tr>
 					<tr>
+						
+						<td ><?php echo $tr->translate("DEGREE")?></td>
+						<td>
+							<input id="degree" name="degree" />
+						</td>
+						<td style="white-space: nowrap;"><?php echo $tr->translate("GRADE")?></td>
+						<td>
+							<input id="grade" name="grade" />
+						</td>
+						
 						<td><?php echo $tr->translate("SESSION")?></td>
 						<td>
 							<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect">
@@ -64,14 +74,6 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 									<option value="<?php echo $rs['key_code']?>" ><?php echo $rs['view_name'];?></option>
 							<?php 	}?>
 							</select>
-						</td>
-						<td ><?php echo $tr->translate("DEGREE")?></td>
-						<td>
-							<input id="degree" name="degree" />
-						</td>
-						<td style="white-space: nowrap;"><?php echo $tr->translate("GRADE")?></td>
-						<td>
-							<input id="grade" name="grade" />
 						</td>
 					</tr>
 					<tr>
@@ -267,6 +269,7 @@ function getallGrade(){
 
 
 var subject = '<?php echo $this->subject;?>';
+var teacher_option = '<?php echo $this->teacher_option;?>';
 var col = 0;
 var no = 0;
 var title = 0;
@@ -295,13 +298,10 @@ function addRow() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td width="40%"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td width="40%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
 		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
-		template+='<td width="24%"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
-					template+='<option value="-1">select teacher</option>';  
-					<?php if(!empty($this->teacher)){foreach ($this->teacher as $teacher){?>
-					  template+='<option value="<?php echo $teacher['id']?>"><?php echo $teacher['name']?></option>';
-					<?php }}?>
+		template+='<td width="24%"><select dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
+			template+=teacher_option;  
 		template+='</select></td>';
 		
 	tmp='<tr id="row'+col+'">';
@@ -328,6 +328,17 @@ function deleteRecord(index) {
 }
 function hideDialog() {		
 	dijit.byId("popup_room").hide();
+}
+
+function popupTeacher(index){
+	teacher_id = dijit.byId('teacher_'+index).get('value');
+	if(teacher_id==-1){
+		$("#tow_value").val(index);
+		getTeacherID();
+		dijit.byId("popup_teacher").show();
+	}
+
+	
 }
 
 var url_dept_subject = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getsubjectbydegree')); ?>';
@@ -618,6 +629,72 @@ function deleteRecord1(index) {
 		</form>
 	</div>
 </div>
+
+
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:80%;" id="popup_teacher" >
+		<form  name='frm_add_teacher' id='frm_add_teacher'  dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				<tr>
+					<td>
+						<fieldset style="background-color:menu;">
+							<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_TEACHER");?></strong></legend>
+							<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
+								<tr>
+									<td><?php echo $tr->translate("ID_NUMBER")?></td>
+									<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" value="" readonly type="text"></td>
+									
+									<td><?php echo $tr->translate("KH_NAME")?></td>
+									<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="kh_name" name="kh_name" value="" type="text"></td>
+									
+									<td><?php echo $tr->translate("EN_NAME")?></td>
+									<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="en_name" name="en_name" value="" type="text"></td>
+								</tr>
+								<tr>
+									<td><?php echo $tr->translate("SEX")?></td>
+									<td>
+										<select dojoType="dijit.form.FilteringSelect" value="1" class="fullside" id="sex" name="sex" value="" type="text">
+											<option value="1">Male</option>
+											<option value="2">Female</option>
+										</select>
+									</td>
+									<td><?php echo $tr->translate("DOB")?></td>
+									<td>
+										<input dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" />
+									</td>
+									<td><?php echo $tr->translate("NATIONALITY")?></td>
+									<td><input dojoType="dijit.form.TextBox"  class="fullside" id="nationality" name="nationality" value="" type="text"></td>
+								</tr>
+								
+								<tr>
+									<td><?php echo $tr->translate("PHONE")?></td>
+									<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="phone" name="phone" value="" type="text"></td>
+									
+									<td><?php echo $tr->translate("ADDRESS")?></td>
+									<td><input dojoType="dijit.form.TextBox"  class="fullside" id="address" name="address" value="" type="text"></td>
+								
+									<td><?php echo $tr->translate("NOTE")?></td>
+									<td><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note" value="" type="text"></td>
+								</tr>
+								<tr>
+									<td colspan="6" align="center">
+										<input type="button" onclick="addTeacher();" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
+											iconClass="dijitEditorIcon dijitEditorIconSave" />
+									</td>
+								</tr>
+							</table>	
+						</fieldset>		
+					</td>
+				</tr>
+			</table>	
+			<input type="text"  name="tow_value" id="tow_value" value="" />
+ 			</form>
+	</div>
+</div>
+
+
+
 <script>
 var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-deptandsubject")); ?>';
 function addDept(){
@@ -727,6 +804,50 @@ function addRoom(){
 			}
 		});
 	}
+}
+
+var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
+var url_add_teacher = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"add-teacher-popup")); ?>';
+function addTeacher(){
+	if(dijit.byId('frm_add_teacher').validate()) {
+		dojo.xhrPost({
+			url:url_add_teacher,
+			form: dojo.byId("frm_add_teacher"),
+			handleAs:"json",
+			load: function(data) {
+			  var Itemmake = { 
+				        id: data.id,
+				        name: dijit.byId('kh_name').get('value')+'-'+dijit.byId('en_name').get('value')
+				         };
+					index=$("#tow_value").val();
+				    addDataToSelectbox(dijit.byId('teacher_'+index), teacher_store, Itemmake, data.id);
+
+				teacher_option = data.new_teacher_option;
+					  
+			  dijit.byId('frm_add_teacher').reset();
+			  dijit.byId("popup_teacher").hide();
+			   
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+}
+
+var url_get_teacher_id = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
+function getTeacherID(){
+	dojo.xhrPost({
+		url:url_get_teacher_id,
+		handleAs:"json",
+		load: function(data) {
+			//alert(data); 
+			dijit.byId('code').attr('value',data);
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 
 function getValue(){

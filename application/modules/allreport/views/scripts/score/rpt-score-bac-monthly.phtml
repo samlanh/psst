@@ -6,9 +6,6 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-	
-	//$current_month = date("m");
-	
 	$day = array(
 			"Mon" =>'ច័ន្ទ',
 			"Tue" =>'អង្គារ',
@@ -32,14 +29,13 @@
 				"11"=>"វិច្ឆិកា",
 				"12"=>"ធ្នូ"
 			);
-	
 ?>	
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
+//dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
+//dojo.require("dojo.store.Memory");
 dojo.require("dojo.data.ObjectStore");
-dojo.require('dojox.form.BusyButton');
+//dojo.require('dojox.form.BusyButton');
 dojo.ready(function(){
 	//control study year
 		var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
@@ -54,7 +50,6 @@ dojo.ready(function(){
 		    required:'true',
 		    placeHolder:"Selected Group Name",          
 		    onChange: function() {  
-		    	//getGroupName();
 		    }
 		}, "group_name");
 });
@@ -63,12 +58,12 @@ dojo.ready(function(){
 	<table style="width:90%">
 		<tr> 
 			<td><input id="group_name" /></td>
-			<td> <?php echo $frm->getElement("degree_bac");?></td>
-			<td> <?php echo $frm->getElement("grade_bac");?></td>
-			<td> <?php echo $frm->getElement("session");?></td>
+			<td><?php echo $frm->getElement("degree_bac");?></td>
+			<td><?php echo $frm->getElement("grade_bac");?></td>
+			<td><?php echo $frm->getElement("session");?></td>
 		</tr>
 		<tr>
-			<td> <?php echo $frm->getElement("study_year");?></td>
+			<td><?php echo $frm->getElement("study_year");?></td>
 			<td>
 				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
 					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
@@ -86,12 +81,21 @@ dojo.ready(function(){
 			.style{
 				line-height: 20px; font-size: 12px !important;
 				font-family: 'Times New Roman','Khmer OS Battambang';
+				
+			}
+			.padding{ padding: 0 1px !important;}
+			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+			tr{ page-break-inside:avoid; page-break-after:auto }
+			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
 			}
 		</style>
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr>
 					<td colspan="3">
-						<table  cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;"  border="1" >
+						<table  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:1px solid #000;"  border="1" >
 							<?php
 							 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_average = 0; $old_rank=0;
 							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
@@ -128,9 +132,9 @@ dojo.ready(function(){
 									</strong>
 								</td>
 							</tr>
-							<tr style="font-size:14px; height: 30px;" align="center" >
+							<tr class="cheader" align="center" >
 								<td><?php echo $tr->translate("NUM");?></td>
-								<td><?php echo $tr->translate("STUDENT_CODE");?></td>
+								<td><?php echo $tr->translate("ID_NUMBER");?></td>
 								<td><?php echo $tr->translate("STUDENT_NAME");?></td>
 								<td><?php echo $tr->translate("SEX");?></td>
 								<?php  if (!empty($subj)) foreach ($subj as $subject){?>
@@ -138,9 +142,8 @@ dojo.ready(function(){
 								<?php }?>
 								<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<td><?php echo $tr->translate("AVERAGE");?></td>
-								
-								<td><?php echo $tr->translate("");?></td>
-								<td><?php echo $tr->translate("Rank");?></td>
+								<td><?php echo $tr->translate("RESULT");?></td>
+								<td><?php echo $tr->translate("RANK");?></td>
 							</tr>
 							<?php } $i++;?>
 							<tr class="style" style=" line-height: 18px;">
@@ -157,16 +160,12 @@ dojo.ready(function(){
 									<?php $score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); echo number_format($score['score'],2); $total_score = $total_score + $score['score'];?>
 								</td>
 								<?php }?>
-								
 								<td align="center"><?php echo number_format($rs['total_score'],2);?></td>
 								<td align="center"><?php echo number_format($rs['average'],2);// Average ?></td>
-								
 								<td align="center" <?php if(($total_score/$count)<50){echo 'style=" background: #fe4747;"'; $count_fail++;}?>>
-									<?php if(($total_score/$count)>=50){echo $tr->translate("PASS");}else{echo $tr->translate("FAIL");}?>
+									<?php if(($total_score/$count)>=50){echo $tr->translate("STUDENT_PASS");}else{echo $tr->translate("STUDENT_FAIL");}?>
 								</td>
-								<td>
-									<label id="record<?php echo $i;?>"></label>
-								</td>
+								<td><label id="record<?php echo $i;?>"></label></td>
 							</tr>
 							<?php $old_groupid=$rs['group_id']; ?>
 							<?php }}?>
@@ -174,18 +173,17 @@ dojo.ready(function(){
 							<tr>
 								<td align="right" colspan="<?php echo $count+7;?>" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;  border-bottom: 1px solid #fff;" >
 									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family: 'Times New Roman','Khmer OS Battambang';">
-									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $i." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
+									<?php echo $tr->translate("STUDENT_PASS");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $i." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 									</strong><br />
 									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family: 'Times New Roman','Khmer OS Battambang';">
-										<?php echo $tr->translate("AMOUNT_STUDENT_FAIL");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $count_fail." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
-									</strong><br />
+										<?php echo $tr->translate("STUDENT_FAIL");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $count_fail." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
+									</strong>
 								</td>
 							</tr>
 							<?php }?>
 						</table>
 					</td>
 				</tr>
-				
 			</table>
 		</div>
 	</div>

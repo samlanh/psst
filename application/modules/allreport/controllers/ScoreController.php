@@ -32,16 +32,12 @@ public function init()
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	$this->view->studentgroup = $db->getStundetScoreGroup($search);
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
-    	
     	$this->view->month = $db->getAllMonth();
-    	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     }
-    
-    
     function rptScoreGepAction(){
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();

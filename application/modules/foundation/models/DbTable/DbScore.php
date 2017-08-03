@@ -29,10 +29,9 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'group_id'=>$_data['group'],
 					//'reportdate'=>$_data['reportdate'],
 					'date_input'=>date("Y-m-d"),
-					//'status'=>$_data['status'],
+					'note'=>$_data['note'],
 					'user_id'=>$this->getUserId(),
 					'type_score'=>1, // 1 => BacII score
-					
 					'for_academic_year'=>$_data['year_study'],
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],
@@ -46,7 +45,8 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					$k=$k+1;
 						foreach ($this->getSubjectByGroup($_data['group']) as $index => $rs_parent){
 							$parent_id = $rs_parent["subject_id"];
-								if(!empty($this->getChildSubject($parent_id))){
+							$getChildren= $this->getChildSubject($parent_id);
+								if(!empty($getChildren)){
 									$no = $index + 1;
 // 									$parent_score = 0;
 // 									foreach ($this->getChildSubject($parent_id) as $key => $rs_subs){
@@ -55,13 +55,10 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 // 										$subject_id = $rs_parent['subject_id'];
 // 										$no = $key+1;
 // 										$parent_score = $parent_score + $_data["$sub_name".$no];
-										
 // 									}
-									
 									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
 									$sub_name = $_data['stu_id_'.$k].$sub_name;
 									$subject_id = $rs_parent['subject_id'];
-									
 									
 // 									if(!$_data["$sub_name".$i]==''){
 									$arr=array(
@@ -120,27 +117,23 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						}
 				}
 			}
-// 			exit();
 		  $db->commit();
 		}catch (Exception $e){
-			echo $e->getMessage();exit();
 			$db->rollBack();
 		}
    }
    public function updateStudentScore($_data){
-		//print_r($_data);exit();
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{			
 			$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
-						
 					//'reportdate'=>$_data['reportdate'],
 					//'date_input'=>date("Y-m-d"),
+					'note'=>$_data['note'],
 					'status'=>$_data['status'],
 					'user_id'=>$this->getUserId(),
-					
 					'for_academic_year'=>$_data['year_study'],
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],
@@ -150,11 +143,8 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$this->update($_arr, $where);
 		
 		$id=$_data['score_id'];
-		
 		$this->_name='rms_score_detail';
-
 		$this->delete("score_id=".$_data['score_id']);
-		  
 		if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				$k=0;
@@ -162,7 +152,8 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					$k=$k+1;
 						foreach ($this->getSubjectByGroup($_data['group']) as $index => $rs_parent){
 							$parent_id = $rs_parent["subject_id"];
-								if(!empty($this->getChildSubject($parent_id))){
+							$getChildren= $this->getChildSubject($parent_id);
+								if(!empty($getChildren)){
 									$no = $index + 1;
 // 									$parent_score = 0;
 // 									foreach ($this->getChildSubject($parent_id) as $key => $rs_subs){
@@ -236,7 +227,6 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						}
 				}
 			}
-// 			exit();
 		  $db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
@@ -264,14 +254,22 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session`) AS session_id,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			s.status
-			FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND g.degree IN(1,2) AND s.status=1";
+			FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1";
+		//before add more =>AND g.degree IN(1,2) 
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " s.date_input <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 		
-		if(!empty($search['group_name'])){
-			$where.= " AND s.group_id =".$search['group_name'];
+		if(!empty($search['title'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['title']));
+			$s_where[]=" s.title_score LIKE '%{$s_search}%'";
+			$s_where[]=" s.note LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if($search['degree']>0){
+			$where.= " AND g.degree =".$search['degree'];
 		}
 		if(!empty($search['study_year'])){
 			$where.=" AND g.academic_year =".$search['study_year'];
@@ -288,7 +286,6 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$order=" ORDER BY id DESC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
-
 	
 	function getScoreById($score_id){
 		$db=$this->getAdapter();

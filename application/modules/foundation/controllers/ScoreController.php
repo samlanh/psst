@@ -1,10 +1,7 @@
 <?php
 class Foundation_ScoreController extends Zend_Controller_Action {
-	
-	
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -17,18 +14,17 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
+						'title'=>'',
 						'group_name' => '',
 						'study_year'=> '',
-						'grade'=> '',
-						'session'=> '',
-						'time'=> '',
+						'degree'=>0,
+						'grade'=> 0,
+						'session'=> 0,
+						'time'=> 0,
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}
-			
 			$this->view->search = $search;
-			
-			
 			$rs_rows = $db->getAllScore($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
@@ -37,12 +33,11 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'foundation','controller'=>'score','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('student_no'=>$link,'student_id'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('title_score'=>$link,'student_no'=>$link,'student_id'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
 		
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
@@ -94,7 +89,6 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 					$rs =  $_model->updateStudentScore($_data);
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/score");
 				}
-	
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -118,10 +112,8 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		
 		
-		
 		$db = new Foundation_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
-		
 	}
 	function getGradeAction(){
 		if($this->getRequest()->isPost()){

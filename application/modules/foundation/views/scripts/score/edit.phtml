@@ -7,24 +7,18 @@
 ?>	
 <head>
   <meta charset="utf-8">
-  <title>jQuery UI Accordion - Default functionality</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="<?php echo $this->baseUrl()."/collap/jquery-ui.css";?>">
+  <script src="<?php echo $this->baseUrl()."/collap/jquery-1.10.2.js";?>"></script>
+  <script src="<?php echo $this->baseUrl()."/collap/jquery-ui.js";?>"></script>
   <link rel="stylesheet" href="/resources/demos/style.css">
 </head>
-
 	<script>
 		dojo.require("dojo.NodeList-manipulate");
-		dojo.require("dojo.parser");
-		dojo.require("dijit.layout.AccordionContainer");
-		dojo.require("dijit.layout.ContentPane");
 		dojo.require("dijit.form.NumberTextBox");
 		dojo.require("dijit.form.DateTextBox");
 		dojo.require("dojo.data.ItemFileWriteStore");  
 		dojo.require("dijit.form.DateTextBox");
 	</script>
-	
 	<style>
 		select{ width:100%;}
 		fieldset{  background:none;}
@@ -82,7 +76,6 @@ dojo.require("dojo.store.Memory");
 dojo.require("dojo.data.ObjectStore");
 dojo.require('dojox.form.BusyButton');
 dojo.ready(function(){
-	//control study year
 	 getInfoBygroup();
 	 getSubjectByGroup();
 	var subject = [];
@@ -100,8 +93,6 @@ dojo.ready(function(){
 		    	filterStudentByCondition();
 		    }
 		}, "year_study");
-
-		
 		new dijit.form.FilteringSelect({
 			//store: dept_store,
 			autoComplete: true,                        
@@ -115,8 +106,6 @@ dojo.ready(function(){
 		}, "grade");
 		
 });
-
-
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-grade')); ?>';
 function filterGrade(){
@@ -128,24 +117,16 @@ function filterGrade(){
 				},
 			handleAs:"json",
 			load: function(data) {
-				//alert(data);
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);  
-			    //if(a!=""){
-			    //	dijit.byId('grade').attr('value',a);
-		        //}
 			    dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
 			},
 			error: function(err) {
-				//alert(err);
 			}
 		});
 }
-
-
 var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
 function filterStudent(){
-	//alert(1);
 	year = dijit.byId('year_study').get('value');
 	grade = dijit.byId('grade').get('value');
 	session = dijit.byId('session').get('value');
@@ -165,15 +146,11 @@ function filterStudent(){
 	dojo.xhrPost({
 	    url: url_getStudent,
 	    content : { 
-		   // 'year':year,
-			//'grade':grade,
-			//'session':session,
 			'group':group,
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
 		   tem="";
-		  // alert(subject);
 	       if(data!=""){
 				num =0;
 				title=0;
@@ -200,8 +177,6 @@ function filterStudent(){
 	                           str+='</div>';
 	                           getChildren(subject[j].subject_id,data[i].stu_id,+data[i].stu_id+stringsname+no);
                       	 	}
-                  
-                   
 					str+='</div>';
 					str+='</div>';
 				    if(inx!=1) {//identity set value 1,2,3,4,5
@@ -214,18 +189,14 @@ function filterStudent(){
 				str+='</div>';
 				document.getElementById("liststudent").innerHTML = str;
 				 $( "#accordion" ).accordion();
-				 
-				
 	       }else{
 	    	   $('#identity').val('');
 	    	   document.getElementById("liststudent").innerHTML = '';
 	       }
 	   },		
 	    error: function(err) {
-		 //   alert(err);
 	    }
 	});
-	
 }
 function gender(sex){
 	if(sex==1){
@@ -234,7 +205,6 @@ function gender(sex){
 	return sex;
 }
 var old_group = '<?php echo $this->row_g['group_id'];?>';
-
 function filterStudentByCondition(){
 	
 	var new_group = dijit.byId('group').get('value');
@@ -242,7 +212,6 @@ function filterStudentByCondition(){
 	if(old_group == new_group){
 		filterStudentOld();
 	}else{
-	//	alert(old_group);
 		filterStudent();
 	}
 }
@@ -316,9 +285,8 @@ function filterStudentOld(){
 						<tr>
 							<td><?php echo $tr->translate("TITLE");?></td>
 							<td>
-								<input type="text" name="title" id="title" class="fullside" value="<?php echo $this->score['title_score'];?>" dojoType="dijit.form.TextBox" />
+								<input type="text" name="title" id="title" class="fullside" value="<?php echo $this->score['title_score'];?>" required="1" dojoType="dijit.form.ValidationTextBox" />
 							</td>
-						
 							<td><?php echo $tr->translate("GROUP");?>*</td>
 							<td>
 								<select class="fullside" tabindex="15" name="group" id="group" readOnly="readOnly" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup(); getInfoBygroup();">
@@ -331,8 +299,6 @@ function filterStudentOld(){
 							<td>
 								<input id="year_study" />
 							</td>
-							
-							
 						</tr>
 						<tr>
 							<td ><?php echo $tr->translate("DEGREE");?></td>
@@ -344,13 +310,11 @@ function filterStudentOld(){
 								<?php }}?>
 								</select>
 							</td>
-						
 							<td ><?php echo $tr->translate("GRADE");?></td>
 							<td>
 								<input id="grade" />
 								 <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
 							</td>
-							
 							<td><?php echo $tr->translate("SESSION");?></td>
 							<td>
 								<select id="session" name="session" onchange="filterStudentByCondition();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
@@ -360,7 +324,6 @@ function filterStudentOld(){
 								<?php }}?>
 								</select>
 							</td>
-							
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("ROOM_NAME");?>*</td>
@@ -372,7 +335,6 @@ function filterStudentOld(){
 							   		<?php }}?>
 							   </select>
 							</td>
-						
 							<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
@@ -381,7 +343,6 @@ function filterStudentOld(){
 									<?php }}?>
 								</select>
 							</td>
-						
 							<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
@@ -390,8 +351,9 @@ function filterStudentOld(){
 								</select>
 							</td>
 						</tr>
-						
 						<tr>
+							<td><?php echo $tr->translate("NOTE");?></td>
+							<td colspan="3"><textarea class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea></td>
 							<td style="white-space: nowrap;"><?php echo $tr->translate("STATUS");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
@@ -400,14 +362,11 @@ function filterStudentOld(){
 								</select>
 							</td>
 						</tr>
-						
 						<tr>
 							<td colspan="8">
-								<labal id="liststudent">
-								</labal>
+								<label id="liststudent"></label>
 							</td>
 						</tr>
-						
 					</table>
 					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
 						<thead>
@@ -433,7 +392,6 @@ function filterStudentOld(){
 	<tr id="main"></tr>
 </table>	
 </form>
-
 <script> //validate controll form 
 function AllowOnlyNumbers(e) {
 

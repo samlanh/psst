@@ -1,5 +1,4 @@
   <?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-  // report
   $rpt_student=$this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'rpt-student'), null, true);
   $rpt_studentchangegroup=$this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'rpt-student-change-group'), null, true);
   $rpt_studentdrop=$this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'rpt-student-drop'), null, true);
@@ -39,12 +38,9 @@
   		<li><a href="<?php echo $rpt_studentchangegroup;?>"><?php echo $tr->translate('RPT_STUDENT_CHANGE_GROUP');?></a></li>
   		<li><a href="<?php echo $rpt_studentdrop;?>"><?php echo $tr->translate('RPT_STOP_STUDY');?></a></li>
   		<li><a href="<?php ;?>"><?php echo $tr->translate('RPT_ATTEND');?></a></li>
-  		
   		<li><a href="<?php echo $rpt_student_group;?>"><?php echo $tr->translate('RPT_STUDENT_GROUP');?></a></li>
   		<li><a href="<?php echo $rpt_group_student_change_group;?>"><?php echo $tr->translate('RPT_GROUP_STUDENT_CHANGE_GROUP');?></a></li>
-  		<li><a href="<?php echo $student_score;?>"><?php echo $tr->translate('RPT_STUDENT_SCORE');?></a></li>
   	    <li><a href="<?php echo $attendent;?>"><?php echo $tr->translate('RPT_STUDENT_ATTENDENT');?></a></li>
-  	    <li><a href="<?php echo $rpt_medium_score;?>"><?php echo $tr->translate('RPT_MEDIUM_SCORE');?></a></li>
   	</ul>
   </div>
   <div style="clear: both;"></div>

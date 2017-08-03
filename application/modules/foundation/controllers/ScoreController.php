@@ -64,19 +64,15 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 					$rs =  $db->addStudentScore($_data);
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/score");
 				}
-	
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
-		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();
-	
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$result= $db_global->getAllgroupStudy();

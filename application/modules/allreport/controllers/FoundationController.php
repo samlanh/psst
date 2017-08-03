@@ -267,30 +267,8 @@ public function init()
 	{
 	
 	}
-	public function rptStudentGroupAction()
-	{	
-		$id=$this->getRequest()->getParam("id");
-		if($this->getRequest()->isPost()){
-			$_data=$this->getRequest()->getPost();
-			$search = array(
-					'txtsearch' => $_data['txtsearch']
-			);
-			
-		}
-		else{
-			$search = array(
-					'txtsearch' => ""
-			);
-		}		
-		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$row = $db->getStudentGroup($id,$search);
-		$this->view->rs = $row;
-		$rs= $db->getGroupDetailByID($id);
-		$this->view->rr = $rs;
-	
-	}
 	public function studentGroupAction()
-	{	
+	{
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
@@ -300,19 +278,38 @@ public function init()
 					'study_year'	=> "",
 					'grade' 		=> "",
 					'session' 		=> "",
+					'room'=>0,
+					'degree'=>0,
 			);
 		}
-		
+		$db = new Allreport_Model_DbTable_DbRptGroup();
+		$rs= $db->getGroupDetail($search);
+		$this->view->rs = $rs;
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
-		
-		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$rs= $db->getGroupDetail($search);
-		$this->view->rs = $rs;	
-	
 	}
+	public function rptStudentGroupAction()
+	{	
+		$id=$this->getRequest()->getParam("id");
+		if(empty($id)){
+			$this->_redirect("/allreport/foundation/student-group");
+		}
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search = array(
+					'txtsearch' => "");
+		}		
+		$db = new Allreport_Model_DbTable_DbRptGroup();
+		$row = $db->getStudentGroup($id,$search);
+		$this->view->rs = $row;
+		$rs= $db->getGroupDetailByID($id);
+		$this->view->rr = $rs;
+	}
+	
 //////////report student score 
     function rptStudentScoreAction(){
 //     	if($this->getRequest()->isPost()){

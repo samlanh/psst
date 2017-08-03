@@ -1,29 +1,15 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_NEW_STUDENT_SCORE"));
-	
 	$current_month = date("m");
-	//echo $current_month;exit();
 ?>	
 <head>
   <meta charset="utf-8">
   <title>jQuery UI Accordion - Default functionality</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="<?php echo $this->baseUrl()."/collap/jquery-ui.css";?>">
+  <script src="<?php echo $this->baseUrl()."/collap/jquery-1.10.2.js";?>"></script>
+  <script src="<?php echo $this->baseUrl()."/collap/jquery-ui.js";?>"></script>
 </head>
-
- 
-<script>
-dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.parser");
-dojo.require("dijit.layout.AccordionContainer");
-dojo.require("dijit.layout.ContentPane");
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.DateTextBox");
-</script>
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -31,7 +17,6 @@ table tr.head-title{ background: none repeat scroll 0% 0% rgba(213, 249, 244, 1)
 table tr td.null-border{ background: #fff; border-left:none !important;}
 table .set-style td,table .set-style th{ padding: 0px; border:1px solid #ccc;font-size: 12px;}
 table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
-
 div.panel {
     padding: 0 18px;
     display: none;
@@ -77,11 +62,8 @@ ol{margin: 10px;}
 <script type="text/javascript">
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
-dojo.require("dojo.data.ObjectStore");
-dojo.require('dojox.form.BusyButton');
+//dojo.require('dojox.form.BusyButton');
 dojo.ready(function(){
-	//control study year
 	var subject = [];
 		var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
 		new dijit.form.FilteringSelect({
@@ -100,7 +82,6 @@ dojo.ready(function(){
 
 		
 		new dijit.form.FilteringSelect({
-			//store: dept_store,
 			autoComplete: true,                        
 			id: "grade",
 			name: "grade",           
@@ -110,10 +91,7 @@ dojo.ready(function(){
 				filterStudent();
 			}
 		}, "grade");
-		
 });
-
-
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-grade')); ?>';
 function filterGrade(){
@@ -125,24 +103,17 @@ function filterGrade(){
 				},
 			handleAs:"json",
 			load: function(data) {
-				//alert(data);
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);  
-			    //if(a!=""){
-			    //	dijit.byId('grade').attr('value',a);
-		        //}
 			    dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
 			},
 			error: function(err) {
-				//alert(err);
 			}
 		});
 }
 
-
 var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
 function filterStudent(){
-	//alert(1);
 	year = dijit.byId('year_study').get('value');
 	grade = dijit.byId('grade').get('value');
 	session = dijit.byId('session').get('value');
@@ -162,15 +133,11 @@ function filterStudent(){
 	dojo.xhrPost({
 	    url: url_getStudent,
 	    content : { 
-		   // 'year':year,
-			//'grade':grade,
-			//'session':session,
 			'group':group,
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
 		   tem="";
-		   //alert(subject);
 	       if(data!=""){
 				num =0;
 				title=0;
@@ -197,8 +164,6 @@ function filterStudent(){
 	                           str+='</div>';
 	                           getChildren(subject[j].subject_id , data[i].stu_id , +data[i].stu_id+stringsname+no , stringsname , no);
                       	 	}
-                  
-                   
 					str+='</div>';
 					str+='</div>';
 				    if(inx!=1) {//identity set value 1,2,3,4,5
@@ -211,18 +176,14 @@ function filterStudent(){
 				str+='</div>';
 				document.getElementById("liststudent").innerHTML = str;
 				 $("#accordion").accordion();
-				 
-				
 	       }else{
 	    	   $('#identity').val('');
 	    	   document.getElementById("liststudent").innerHTML = '';
 	       }
 	   },		
 	    error: function(err) {
-		 //   alert(err);
 	    }
 	});
-	
 }
 function gender(sex){
 	if(sex==1){
@@ -230,7 +191,6 @@ function gender(sex){
 	}else sex='Female';
 	return sex;
 }
-
 </script>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
@@ -244,14 +204,13 @@ function gender(sex){
 	<tr>
 		<td>
 		<fieldset>
-					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("ADD_NEW_STUDENT_SCORE");?></strong></legend>
+					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("STUDENT_SCORE");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%; background:#DFF7FD;" cellspacing="10" broder 1>
 						<tr>
 							<td><?php echo $tr->translate("TITLE");?></td>
 							<td>
-								<input type="text" name="title" id="title" class="fullside" dojoType="dijit.form.TextBox" />
+								<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" />
 							</td>
-						
 							<td><?php echo $tr->translate("GROUP");?>*</td>
 							<td>
 								<select class="fullside" tabindex="15" name="group" id="group" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup(); getInfoBygroup();">
@@ -262,7 +221,6 @@ function gender(sex){
 							</td>
 							<td ><?php echo $tr->translate("STUDY_YEAR");?></td>
 							<td><input id="year_study" /></td>
-							
 						</tr>
 						<tr>
 							<td ><?php echo $tr->translate("DEGREE");?></td>
@@ -274,7 +232,6 @@ function gender(sex){
 								<?php }}?>
 								</select>
 							</td>
-						
 							<td ><?php echo $tr->translate("GRADE");?></td>
 							<td>
 								<input id="grade" />
@@ -289,7 +246,6 @@ function gender(sex){
 								<?php }}?>
 								</select>
 							</td>
-							
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("ROOM_NAME");?>*</td>
@@ -301,7 +257,6 @@ function gender(sex){
 							   		<?php }}?>
 							   </select>
 							</td>
-						
 							<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
@@ -310,7 +265,6 @@ function gender(sex){
 									<?php }}?>
 								</select>
 							</td>
-						
 							<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
@@ -318,12 +272,10 @@ function gender(sex){
 										<option value="2">ទី 2</option>
 								</select>
 							</td>
-							
 						</tr>
 						<tr>
 							<td colspan="8">
-							<labal id="liststudent">
-							</labal>
+							<labal id="liststudent"></labal>
 							</td>
 						</tr>
 					</table>
@@ -352,10 +304,8 @@ function gender(sex){
 	</tr>
 </table>	
 </form>
-
 <script> //validate controll form 
 function AllowOnlyNumbers(e) {
-
     e = (e) ? e : window.event;
     var key = null;
     var charsKeys = [
@@ -370,7 +320,6 @@ function AllowOnlyNumbers(e) {
         112, // p Ctrl + p print
         80 // P Ctrl + P print
     ];
-
     var specialKeys = [
 	    8, // backspace
 	    9, // tab
@@ -479,10 +428,6 @@ function getSubjectByGroup(){
 }
 var url_getChileSubject= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-childsubject')); ?>';
 function getChildren(subject_id , stu_id , divid , main_subject_name , main_subject_number){
-	
-	//alert(main_subject_name);
-	//alert(divid);
-	
 	if(group==''){
 		return false;
 	}
@@ -493,7 +438,6 @@ function getChildren(subject_id , stu_id , divid , main_subject_name , main_subj
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
-		  // alert(data);
 		   str='';
 		   if(data!=""){
 			   no=0;
@@ -515,9 +459,6 @@ function getChildren(subject_id , stu_id , divid , main_subject_name , main_subj
 var url_getChileSubject = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-childsubject')); ?>';
 function CalculateTotalScore(mainSubjectId , stu_id , main_subject_name , main_subject_number){
 	
-	//alert(main_subject_name);
-	//alert(main_subject_number);
-	
 	dojo.xhrPost({
 	    url: url_getChileSubject,
 	    content : { 
@@ -525,7 +466,6 @@ function CalculateTotalScore(mainSubjectId , stu_id , main_subject_name , main_s
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
-			//alert(data);
 			sum_sub_score = 0;
 			if(data!=""){
 				   no=0;
@@ -535,20 +475,12 @@ function CalculateTotalScore(mainSubjectId , stu_id , main_subject_name , main_s
 
 						control_name = "child"+stu_id+stringsname+no;
 
-					    //alert(control_name);
-						//alert(stringsname);
-					   
 					    child_score = $('#child'+stu_id+stringsname+no).val();
 					    if(child_score==''){child_score=0;}
-					    //alert(child_score);
-						//sum_sub_score = dijit.byId(control_name).get('value');
 					    
 						sum_sub_score = sum_sub_score + parseFloat(child_score);
 						
-						//alert(sum_sub_score);
 				   }
-
-				   //alert(sum_sub_score);
 				   
 				   $('#'+stu_id+main_subject_name+main_subject_number).val(sum_sub_score);
 				   
@@ -558,8 +490,5 @@ function CalculateTotalScore(mainSubjectId , stu_id , main_subject_name , main_s
 			   alert(err);
 		    }
 		});
-	
 }
-
 </script>
- 

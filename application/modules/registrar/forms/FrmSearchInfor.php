@@ -54,8 +54,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
 		$_session->setMultiOptions($opt_session);
 		
-		
-		
 		$_room = new Zend_Dojo_Form_Element_FilteringSelect('room');
 		$_room->setAttribs(array(
 				'dojoType'=>$this->filter,

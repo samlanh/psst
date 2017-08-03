@@ -171,8 +171,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    function getAllgroupStudy(){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-   	FROM `rms_group` AS `g` WHERE g.status =1 ";
+   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
+   	FROM `rms_group` AS `g` WHERE g.status =1 AND group_code!='' ";
    	return $db->fetchAll($sql);
    }
    function getAllgroupStudyNotPass($action=null){

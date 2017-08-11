@@ -73,15 +73,15 @@
 							<?php $i=0; if(!empty($this->rs)){foreach ($this->rs AS $row) { $i++;?>
 								<tr class="hover" style="font-size:12px;border: 1px solid #000;" align="center" >
 									<td style="border: 1px solid #000;"><?php echo $i;?></td>
-									<td style="border: 1px solid #000;"><?php echo $row['branch_id'];?></td>
-									<td style="border: 1px solid #000;"><?php echo $row['academic'];?></td>
-									<td style="border: 1px solid #000;"><?php echo $row['generation'];?></td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['class'];?></td>	
-									<td style="border: 1px solid #000;"><?php echo number_format($row['monthly'],2);?> $</td>
-									<td style="border: 1px solid #000;"><?php echo number_format($row['quarter'],2);?> $</td>
-									<td style="border: 1px solid #000;"><?php echo number_format($row['semester'],2);?> $</td>
-									<td style="border: 1px solid #000;"><?php echo number_format($row['year'],2);?> $</td>
-									<td style="border: 1px solid #000;"><?php echo $row['remark'];?></td>
+									<td style="border: 1px solid #000;"><?php echo @$row['branch_id'];?></td>
+									<td style="border: 1px solid #000;"><?php echo @$row['academic'];?></td>
+									<td style="border: 1px solid #000;"><?php echo @$row['generation'];?></td>
+									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo @$row['class'];?></td>	
+									<td style="border: 1px solid #000;"><?php echo number_format(@$row['monthly'],2);?> $</td>
+									<td style="border: 1px solid #000;"><?php echo number_format(@$row['quarter'],2);?> $</td>
+									<td style="border: 1px solid #000;"><?php echo number_format(@$row['semester'],2);?> $</td>
+									<td style="border: 1px solid #000;"><?php echo number_format(@$row['year'],2);?> $</td>
+									<td style="border: 1px solid #000;"><?php echo @$row['remark'];?></td>
 								</tr>
 							<?php }}?>	
 							</table>	

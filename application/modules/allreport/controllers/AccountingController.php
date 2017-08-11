@@ -405,13 +405,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
+					'generation'=>'',
 					'txtsearch' =>'',
 					'year' =>'',
 					'grade_all' =>'',
 					'branch_id' =>'',
-			);
+					'degree_bac'=>0,);
 		}
-		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
@@ -428,8 +428,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$row=0;$indexterm=1;$key=0;
 		if(!empty($rs_rows)){
 			foreach ($rs_rows as $i => $rs) {
-				$rows = $db->getFeebyOther($rs['id'],$search['grade_all']);
-// 				print_r($rows);
+				$rows = $db->getFeebyOther($rs['id'],$search['grade_all'],$search['degree_bac']);
 				$fee_row=1;
 				if(!empty($rows))foreach($rows as $payment_tran){
 					if($payment_tran['payment_term']==1){
@@ -455,6 +454,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
 						$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
 					}
+				}else{
+					if($key==0){
+						$rs_rows=array();
+					}else{
+						
+					}
 				}
 			}
 		}
@@ -462,10 +467,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$rs_rows=array();
 			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 		}
-		
-		//print_r($rs_rows);
-		
-		
 		$this->view->rs = $rs_rows;
 		$this->view->search = $search;
 	}

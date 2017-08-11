@@ -6,7 +6,7 @@
 ?>	
 <div style="width: 28cm;margin: 0 auto;">
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-fee')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table style="width: 80%">	
+	<table style="width: 100%">	
 		<tr>
 			<td>	
 				<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
@@ -19,12 +19,10 @@
 					<?php }}?>
 				</select>
 			</td>
-			<td>
-				<?php echo $frm->getElement('branch_id')?>
-			</td>
-			<td>
-				<?php echo $frm->getElement('grade_all')?>
-			</td>
+			<td><?php echo $frm->getElement('branch_id')?></td>
+			<td><?php echo $frm->getElement('generation')?></td>
+			<td><?php echo $frm->getElement('degree_bac')?></td>
+			<td><?php echo $frm->getElement('grade_all')?></td>
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			</td>
@@ -34,90 +32,84 @@
 </div>
 <div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 			<div id="divPrint">
-				<div id="exportExcel">
-				
-									<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
-										<tr >
-											<td width="15%" align="center">
-												<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-											</td>
-											<td width="70%" align="center">
-												<strong style="padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_FEE')?></strong><br />
-											</td>
-											<td width="15%" align="center">
-											</td>
-										</tr>
-										
-										<style>
-											table tr th{background-color: #ccc;}										
-										</style>
-										
-										<tr>
-											<td colspan="3" id="exportExcel">
-												<table cellpadding="5"​ style=" font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
-													<tr style="font-size:11px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('TYPE')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('GRADE')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('MONTHLY')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('QUARTER')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('SEMESTER')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('YEAR')?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate('NOTE')?></td>
-													</tr>
-												<?php $i=0; if(!empty($this->rs)){foreach ($this->rs AS $row) { $i++;?>
-													<tr class="hover" style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" >
-														<td style="border: 1px solid #000;"><?php echo $i;?></td>
-														<td style="border: 1px solid #000;"><?php echo $row['branch_id'];?></td>
-														<td style="border: 1px solid #000;"><?php echo $row['academic'];?></td>
-														<td style="border: 1px solid #000;"><?php echo $row['generation'];?></td>
-														<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['class'];?></td>	
-														<td style="border: 1px solid #000;"><?php echo $row['monthly'];?> $</td>
-														<td style="border: 1px solid #000;"><?php echo $row['quarter'];?> $</td>
-														<td style="border: 1px solid #000;"><?php echo $row['semester'];?> $</td>
-														<td style="border: 1px solid #000;"><?php echo $row['year'];?> $</td>
-														<td style="border: 1px solid #000;"><?php echo $row['remark'];?></td>
-													</tr>
-												<?php }}?>	
-												</table>	
-											</td>
-										</tr>
-										<tr>
-											<td colspan="3">&nbsp;</td>
-										</tr>
-										<tr>
-											<td colspan="3">&nbsp;</td>
-										</tr>
-										<tr >
-											<td colspan="3" width="100%">
-												<table width="100%"  style="font-family: 'Khmer OS Battambang';">
-													<tr>
-														<td  width="25%" align="center">
-															<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
-														</td>
-														<td  width="50%">
-															&nbsp;
-														</td>
-														<td align="center"  width="25%">
-															<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-					</div>
+				<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
+					<tr >
+						<td width="15%" align="center">
+							<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+						</td>
+						<td width="70%" align="center">
+							<strong style="padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_FEE')?></strong><br />
+						</td>
+						<td width="15%" align="center">
+						</td>
+					</tr>
+					<style>
+						table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+						tr{ page-break-inside:avoid; page-break-after:auto }
+						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+						#header {
+						  display: table-header-group;
+						  page-break-inside:avoid; page-break-after:auto;
+						}
+																		
+					</style>
+					<tr>
+						<td colspan="3" id="exportExcel">
+							<table cellpadding="2"​ style=" font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
+								<thead>
+									<tr class="cheader" align="center" >
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('TYPE')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('GRADE')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('MONTHLY')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('QUARTER')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('SEMESTER')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('YEAR')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('NOTE')?></td>
+									</tr>
+								</thead>
+							<?php $i=0; if(!empty($this->rs)){foreach ($this->rs AS $row) { $i++;?>
+								<tr class="hover" style="font-size:12px;border: 1px solid #000;" align="center" >
+									<td style="border: 1px solid #000;"><?php echo $i;?></td>
+									<td style="border: 1px solid #000;"><?php echo $row['branch_id'];?></td>
+									<td style="border: 1px solid #000;"><?php echo $row['academic'];?></td>
+									<td style="border: 1px solid #000;"><?php echo $row['generation'];?></td>
+									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $row['class'];?></td>	
+									<td style="border: 1px solid #000;"><?php echo number_format($row['monthly'],2);?> $</td>
+									<td style="border: 1px solid #000;"><?php echo number_format($row['quarter'],2);?> $</td>
+									<td style="border: 1px solid #000;"><?php echo number_format($row['semester'],2);?> $</td>
+									<td style="border: 1px solid #000;"><?php echo number_format($row['year'],2);?> $</td>
+									<td style="border: 1px solid #000;"><?php echo $row['remark'];?></td>
+								</tr>
+							<?php }}?>	
+							</table>	
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="3">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="3" width="100%">
+							<table width="100%"  style="font-family: 'Khmer OS Battambang';">
+								<tr>
+									<td  width="25%" align="center">
+										<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+									</td>
+									<td  width="50%">
+										&nbsp;
+									</td>
+									<td align="center"  width="25%">
+										<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
 			</div>		
 </div>
-
-
-
-
-
-
-
-
-
-

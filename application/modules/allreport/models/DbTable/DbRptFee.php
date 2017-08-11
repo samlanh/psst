@@ -32,6 +32,9 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	if(!empty($search['branch_id'])){
     		$where.=" AND branch_id = ".$search['branch_id'] ;
     	}
+    	if(!empty($search['generation']) AND $search['generation']>0){
+    		$where.=" AND generation = '".$search['generation']."'" ;
+    	}
     	
     	if(!empty($search['txtsearch'])){
     		$s_where = array();
@@ -40,38 +43,37 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     		$s_where[] = " rms_tuitionfee.generation LIKE '%{$s_search}%'";
     		$s_where[] = " rms_tuitionfee.from_academic LIKE '%{$s_search}%'";
     		$s_where[] = " rms_tuitionfee.to_academic LIKE '%{$s_search}%'";
-    		//$s_where[] = " (SELECT major_enname FROM rms_major WHERE rms_major.major_id = (select class_id from rms_tuitionfee_detail where rms_tuitionfee_detail.fee_id = rms_tuitionfee.id  limit 1)limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select name_en from rms_view where rms_view.type=7 and rms_view.key_code=rms_tuitionfee.time) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select name_en from rms_view where rms_view.type=7 and rms_view.key_code=rms_tuitionfee.time LIMIT 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-		//echo $sql.$where;
+//     	echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
-    function getFeebyOther($fee_id,$grade_search){
-    	//print_r($fee_id);exit();
+    function getFeebyOther($fee_id,$grade_search,$degree_id){
     	$db = $this->getAdapter();
-    	$sql = "select *,
-			    	(SELECT CONCAT(major_enname) FROM `rms_major` WHERE major_id=rms_tuitionfee_detail.class_id) as class,
-			    	(select name_en from rms_view where type=4 and key_code=session) as session
-			    	from rms_tuitionfee_detail where fee_id = $fee_id ";
+    	$sql = "select tf.*,
+			    	m.major_enname as class,
+			    	(select name_en from rms_view where type=4 and key_code=tf.session LIMIT 1) as session
+			    	from rms_tuitionfee_detail as tf,rms_major as m WHERE  
+    				m.major_id=tf.class_id AND tf.fee_id = $fee_id ";
     	
     	$where = ' ';
-    	$order = ' ORDER BY id ASC';
+    	$order = ' ORDER BY tf.id ASC';
     	
-    	if(!empty($grade_search)){
-    		$where.=" AND class_id = ".$grade_search;
+    	if($degree_id>0){
+    		$where.=" AND m.dept_id = ".$degree_id;
     	}
-    	//echo $sql.$where.$order;
-    	$result = $db->fetchAll($sql.$where.$order);
-    	
+    	if($grade_search>0){
+    		$where.=" AND tf.class_id = ".$grade_search;
+    	}
+
+    	$result = $db->fetchAll($sql.$where.$order);    	
     	if(!empty($result)){
     		
     		return $result;
     	}
-    	
     }
-    
-    function getAllYearFee(){
+function getAllYearFee(){
     	$db=$this->getAdapter();
     	$_db=new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();

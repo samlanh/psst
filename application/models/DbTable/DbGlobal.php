@@ -667,6 +667,23 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$sql=" select stu_id as id , CONCAT(stu_khname,'-',stu_enname) AS name from rms_student where status=1 and is_subspend=0 ";
    	return $db->fetchAll($sql);
    }
+   function getAllGeneration($opt=null,$option=null){
+   	$db= $this->getAdapter();
+   	$sql="SELECT  DISTINCT(generation) AS generation FROM `rms_tuitionfee` WHERE generation!=''ORDER BY id DESC ";
+   	$rows =  $db->fetchAll($sql);
+   	if($opt==null){
+   		return $rows;
+   	}else{
+   		if($option!=null){
+   			$opt_gen = array(-1=>"Please Select Type");
+   		}else{
+   			$opt_gen=array();
+   		}
+   		if(!empty($rows))foreach($rows AS $row) $opt_gen[$row['generation']]=$row['generation'];
+   		return $opt_gen;
+   	}
+   
+   }
    
    
    

@@ -1840,7 +1840,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     ///select degree searching 
     function getDegree(){
     	$db=$this->getAdapter();
-    	$sql="SELECT dept_id AS id,CONCAT(en_name,'-',kh_name) AS `name` FROM rms_dept  WHERE dept_id  IN(1,2,3,4)";
+    	$sql="SELECT dept_id AS id,CONCAT(en_name,'-',kh_name) AS `name` FROM rms_dept  WHERE 1";
     	return $db->fetchAll($sql);
     }
     //function add rms_student_detailpayment
@@ -1896,13 +1896,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getGradeAllDept(){
     	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,CONCAT(major_enname,' (',(select shortcut from rms_dept where rms_dept.dept_id=rms_major.dept_id),')') AS `name` FROM rms_major where is_active=1 order by dept_id,major_id ";
+    	$sql="SELECT major_id AS id,CONCAT(major_enname ,' (',(select shortcut from rms_dept where rms_dept.dept_id=rms_major.dept_id LIMIT 1),')') AS `name` FROM rms_major where major_enname!='' AND is_active=1 order by dept_id,major_id ";
     	return $db->fetchAll($sql);
     }
     
     function getGradeAll(){
     	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE dept_id IN(1,2,3,4) AND is_active=1 AND major_enname!='' ";
+    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND is_active=1 AND major_enname!='' ";
     	return $db->fetchAll($sql);
     }
     function getAllDegree(){
@@ -1912,24 +1912,24 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     function getAllDegreeGEP(){
     	$db=$this->getAdapter();
-    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE dept_id NOT IN(1,2,3) AND is_active=1 ";
+    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE en_name!=''  AND is_active=1 ";
     	return $db->fetchAll($sql);
     }
     
     function getAllDegreeBac(){
     	$db=$this->getAdapter();
-    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE dept_id IN(1,2,3) AND is_active=1 ";
+    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE en_name!=''  AND is_active=1 ";
     	return $db->fetchAll($sql);
     }
    
     function getGradeAllBac(){
     	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE dept_id IN(1,2,3) AND is_active=1 ";
+    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND  is_active=1 ";
     	return $db->fetchAll($sql);
     }
     function getGradeAllKid(){
     	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE dept_id =1  AND is_active=1 ";
+    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND dept_id =1  AND is_active=1 ";
     	return $db->fetchAll($sql);
     }
     
@@ -1945,12 +1945,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getGradeGepAll(){
     	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE dept_id NOT IN(1,2,3,4) AND is_active=1 ";
+    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND is_active=1 ";
     	return $db->fetchAll($sql);
     }
     function getAllGrades(){
     	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE is_active=1";
+    	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND is_active=1";
     	return $db->fetchAll($sql);
     }
     function getServicesAll(){

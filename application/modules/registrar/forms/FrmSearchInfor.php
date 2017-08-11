@@ -277,8 +277,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		}
 		$end_date->setValue($_date);
 		
-		
-		
 		$branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
 		$branch_id->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("SERVIC"),
@@ -307,7 +305,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($result))foreach ($result As $rs)$opt_stu_code[$rs['id']]=$rs['stu_code'];
 		$_stu_code->setMultiOptions($opt_stu_code);
 		
-		
 		$_stu_name = new Zend_Dojo_Form_Element_FilteringSelect('stu_name');
 		$_stu_name->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -320,6 +317,17 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$opt_stu_name = array(''=>$this->tr->translate("----- select student name -----"));
 		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
 		$_stu_name->setMultiOptions($opt_stu_name);
+		
+		
+		$generation = new Zend_Dojo_Form_Element_FilteringSelect('generation');
+		$generation->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>false
+		));
+		$generation->setValue($request->getParam("generation"));
+		$generoption=$db->getAllGeneration(1,1);
+		$generation->setMultiOptions($generoption);
 		
 	
 		$this->addElements(array($_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));

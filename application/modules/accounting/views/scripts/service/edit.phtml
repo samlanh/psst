@@ -35,6 +35,13 @@ dojo.ready(function(){
 </script>
 <?php  $item= $this->frm;?>
 <form  id='acc_item' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit">   
+   if(this.validate()) {
+    	return true;
+   }else {
+    	return false;
+   }
+</script>		
 		<table cellspacing="10" width="50%" style="margin: 0 auto;">
 			<tr>
 				<td>

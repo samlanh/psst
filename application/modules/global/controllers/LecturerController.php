@@ -71,7 +71,6 @@ class Global_LecturerController extends Zend_Controller_Action {
 		$position = $db->getAllPosition();
 		array_unshift($position, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
 		$this->view->position = $position;
-		
 	}
 	public function editAction()
 	{
@@ -103,6 +102,10 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
 		$this->view->branch_id = $db->getAllBranch();
 		
+		$db = new Global_Model_DbTable_DbTeacher();
+		$position = $db->getAllPosition();
+		array_unshift($position, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
+		$this->view->position = $position;
 		
 		$db = new Global_Model_DbTable_DbTeacher();
 		$position = $db->getAllPosition();

@@ -131,7 +131,11 @@ Class Global_Form_FrmCal extends Zend_Dojo_Form {
 		$_rate = new Zend_Dojo_Form_Element_TextBox('rate');
 		$_rate->setAttribs(array('dojoType'=>'dijit.form.NumberTextBox','class'=>'fullside'
 				));
-		$_rate->setValue(4100);
+		$key = new Application_Model_DbTable_DbKeycode();
+		$datavalue=$key->getKeyCodeMiniInv(TRUE);
+		//print_r($data['rate']);
+		$_rate->setValue($datavalue['rate']);
+		
 		
 		$amount_total = new Zend_Dojo_Form_Element_TextBox('total_amount');
 		$amount_total->setAttribs(array('dojoType'=>'dijit.form.NumberTextBox','class'=>'fullside black',
@@ -144,6 +148,7 @@ Class Global_Form_FrmCal extends Zend_Dojo_Form {
 		$date->setAttribs(array('dojoType'=>'dijit.form.DateTextBox','class'=>'fullside','constraints'=>"{datePattern:'dd/MM/yyyy'}"));
 		$id = new Zend_Form_Element_Hidden('id');
 		if($data!=null){
+			$_rate->setValue($datavalue['exchange_rate']);
 			$_hundred->setValue($data['dollar_100']);
 			$_fifty->setValue($data['dollar_50']);
 			$_tweenty->setValue($data['dollar_20']);

@@ -54,9 +54,14 @@ dojo.ready(function(){
 	
 });
 </script>
-
-
 <form  id='edit-major' action="<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			}else {
+				return false;
+			}
+</script>
 <table cellspacing="10" width="40%" style="margin: 0 auto;">
 	<tr>
 		<td>

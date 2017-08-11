@@ -26,7 +26,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_khname->setAttribs(array('dojoType'=>$this->tvalidate, 'class'=>'fullside',));
 		
 		$code = new Zend_Dojo_Form_Element_TextBox('code');
-		$code->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside','readOnly'=>'readOnly'));
+		$code->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$code_num = $db->getTeacherCode();
 		$code->setValue($code_num);

@@ -150,6 +150,8 @@ class Global_GroupController extends Zend_Controller_Action {
 		$dept = $db->getAllDept();
 		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->dept = $dept;
+		
+		$this->view->teacher_option = $_db->getAllTeacherOption();
 	}
 	
 	

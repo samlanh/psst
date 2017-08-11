@@ -49,6 +49,8 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$db->AddGrade($_data);
     			if(!empty($_data['save_close'])){
     				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/grade/index");
+    			}else{
+    				Application_Form_FrmMessage::message("INSERT_SUCCESS");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
@@ -112,13 +114,12 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$_data = $this->getRequest()->getPost();
     			$db = new Global_Model_DbTable_DbGrade();
     			$db->AddGrade($_data);
-    			Application_Form_FrmMessage::Sucessfull("ការកែប្រែដោយជោគជ័យ", "/global/grade/index");
+    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCESS", "/global/grade/index");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("Application Error");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
-    	 
     	$db= new Global_Model_DbTable_DbGrade();
     	$row=$db->getMajorById($id);
     	$this->view->rs = $row;
@@ -127,9 +128,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$dept = $db->getAllDept();
     	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
     	$this->view->dept = $dept;
-    
     }
-    
     function addDeptAction(){
     	if($this->getRequest()->isPost()){
     		try{
@@ -144,8 +143,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     }
-    
-    
     function addDeptandsubjectAction(){
     	if($this->getRequest()->isPost()){
     		try{
@@ -169,6 +166,4 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     }
- 
 }
-

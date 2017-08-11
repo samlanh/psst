@@ -33,10 +33,16 @@ dojo.ready(function(){
 	dijit.byId('dept').attr('value',"<?php echo $this->rs['dept_id']?>");
 });
 </script>
-
-
 <?php  $frm_major= $this->frm_major;?>
 <form  id='edit-major' action="<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			}else {
+				return false;
+			}
+</script>
+
 <table cellspacing="10" width="40%" style="margin: 0 auto;">
 	<tr>
 		<td>

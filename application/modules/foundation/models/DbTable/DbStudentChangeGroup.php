@@ -143,12 +143,10 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 						);
 				$where = " stu_id=".$_data['studentid'];
 				$this->update($array, $where);
-				
 				return $_db->commit();
-				
 			}catch(Exception $e){
 				$_db->rollBack();
-				echo $e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 	}
 	public function updateStudentChangeGroup($_data){

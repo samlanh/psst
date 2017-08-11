@@ -229,6 +229,7 @@ function addRow() {
 	 
 	 var url_add_service_type = '<?php echo $this->url(array("module"=>"accounting","controller"=>"service","action"=>"submit")); ?>';
 		function addCategory(){
+			if(dijit.byId('frm_add_service').validate()){
 			language = dijit.byId('p_title').get('value');
 			dojo.xhrPost({
 					url:url_add_service_type,
@@ -249,14 +250,15 @@ function addRow() {
 					}
 			});
 		}
-		
+	}	
 		function hideDialog() {		
 			dijit.byId("popup_dept").hide();
 		}
 
 		var b_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->all_service));?> );
 		var url_add_service = '<?php echo $this->url(array("module"=>"accounting","controller"=>"servicecharge","action"=>"add-ajaxservice")); ?>';
-		function addStudentService(){
+function addStudentService(){
+	if(dijit.byId('frm_add').validate()){
 			language = dijit.byId('add_title').get('value');
 			dojo.xhrPost({
 					url:url_add_service,
@@ -276,7 +278,8 @@ function addRow() {
 						alert(err);
 					}
 			});
-		}
+	}
+}
 	
 </script>
 			
@@ -343,7 +346,6 @@ function addRow() {
 					<fieldset>
 						<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_SERVICE")?></strong></legend>
 						<table style="margin: 0 auto; width: 100%;text-align: right;" cellspacing="10"  >
-						    
 							<tr>
 								<td nowrap="nowrap"><?php echo $tr->translate("SERVICE_TYPE")?></td>
 								<td>
@@ -353,7 +355,7 @@ function addRow() {
 							<tr>
 								<td nowrap="nowrap"><?php echo $tr->translate("PROGRAM_TITLE")?></td>
 								<td> 
-									<input dojoType="dijit.form.TextBox" name="add_title" id="add_title" value=""  type="text">
+									<input dojoType="dijit.form.ValidationTextBox" required="1" name="add_title" id="add_title" value=""  type="text">
 									<input dojoType="dijit.form.TextBox" name="service_type" id="service_type" value="2"  type="hidden">
 							   </td>
 							</tr>

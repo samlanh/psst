@@ -217,6 +217,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						);
 				$this->insert($arr_group_history);
 				
+				
+				$this->_name = 'rms_group';
+				$group=array(
+						'is_use'	=>1,
+						'is_pass'=>2,
+				);
+				$where=" id=".$_data['group'];
+				$this->update($group, $where);
+				
 				$_db->commit();
 				
 			}catch(Exception $e){
@@ -430,7 +439,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-		FROM `rms_group` AS `g` where g.is_pass=0 and status=1 ORDER BY `g`.`id` DESC ";
+		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
 		return $db->fetchAll($sql);
 	}
 	function getGroupInforByID($group_id){

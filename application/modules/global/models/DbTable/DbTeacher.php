@@ -26,11 +26,11 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			}
 		*////////////////////////////////////////////////////////////////////////	
 			
-			$teacher_code = $this->getTeacherCode();
+// 			$teacher_code = $this->getTeacherCode();
 			
 			
 			$_arr=array(
-					'teacher_code' => $teacher_code,
+					'teacher_code' => $_data['code'],
 					'teacher_name_kh' => $_data['kh_name'],
 					'teacher_name_en' => $_data['en_name'],
 					'sex' => $_data['sex'],

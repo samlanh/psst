@@ -36,15 +36,11 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('group_code'=>$link,'grade'=>$link,'session'=>$link,'to_group_code'=>$link));
 
 		$this->view->adv_search = $search;
-		
-		
-		
 	}
 	function addAction(){
 		if($this->getRequest()->isPost()){
 			try{
 				$data = $this->getRequest()->getPost();
-// 				print_r($data);exit();
 				$_add = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
  				$_add->addGroupStudentChangeGroup($data);
  				if(!empty($data['save_close'])){

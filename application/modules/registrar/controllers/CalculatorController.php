@@ -50,7 +50,6 @@ class Registrar_CalculatorController extends Zend_Controller_Action {
     				Application_Form_FrmMessage::message("INSERT_SUCCESS");
     			}
     		}catch (Exception $e) {
-    			echo $e->getMessage();exit();
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}

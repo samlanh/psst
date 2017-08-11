@@ -52,7 +52,7 @@ dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 				<table style="margin: 0 auto; width: 100%;white-space: nowrap;" cellspacing="10">
 					<tr>
 						<td><?php echo $tr->translate("ID_NUMBER")?></td>
-						<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" readonly value="<?php echo $this->rs['teacher_code']?>" type="text"></td>
+						<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" value="<?php echo $this->rs['teacher_code']?>" type="text"></td>
 						
 						<td><?php echo $tr->translate("KH_NAME")?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="kh_name" name="kh_name" value="<?php echo $this->rs['teacher_name_kh']?>" type="text"></td>

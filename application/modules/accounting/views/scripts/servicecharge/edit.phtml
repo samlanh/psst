@@ -245,7 +245,6 @@ function ResetRecordRecord() {
 		dijit.byId('remark'+col).attr('value','<?php echo $row['note']?>');
 		<?php } }?>
 	}
-
  function deleteRecord(index) {
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
@@ -256,25 +255,23 @@ function ResetRecordRecord() {
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
 	}
-
- function showAddBlock(r){
-		service_id=dijit.byId("class_"+r).get("value");
-		one_value=dijit.byId("one_value"+r).get("value");
-		$('#tow_value').val(one_value);
-		if(service_id==-1){
-			dijit.byId('pop_service').show();
-		}
+function showAddBlock(r){
+	service_id=dijit.byId("class_"+r).get("value");
+	one_value=dijit.byId("one_value"+r).get("value");
+	$('#tow_value').val(one_value);
+	if(service_id==-1){
+		dijit.byId('pop_service').show();
 	}
-
+}
  var url_add_service_type = '<?php echo $this->url(array("module"=>"accounting","controller"=>"service","action"=>"submit")); ?>';
 	function addCategory(){
+		if(dijit.byId('frm_add_service').validate()){
 		language = dijit.byId('p_title').get('value');
 		dojo.xhrPost({
 				url:url_add_service_type,
 				form: dojo.byId("frm_add_service"),
 				handleAs:"json",
 				load: function(data) {
-					//alert(data); 
 					var Itemmake = { 
 					     id: data,
 						         name: dijit.byId('p_title').get('value')
@@ -282,21 +279,19 @@ function ResetRecordRecord() {
 			 	addDataToSelectbox(dijit.byId('title'), service_store, Itemmake, data);
 			   dijit.byId('frm_add_service').reset();
 			   hideDialog();
-					
 				},
 				error: function(err) {
-					//alert(err);
 				}
 		});
-	}
-	
+		}
+}
 	function hideDialog() {		
 		dijit.byId("popup_dept").hide();
 	}
-
 	var b_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->all_service));?> );
 	var url_add_service = '<?php echo $this->url(array("module"=>"accounting","controller"=>"servicecharge","action"=>"add-ajaxservice")); ?>';
-	function addStudentService(){
+function addStudentService(){
+	if(dijit.byId('frm_add').validate()){
 		language = dijit.byId('add_title').get('value');
 		dojo.xhrPost({
 				url:url_add_service,
@@ -311,16 +306,14 @@ function ResetRecordRecord() {
 			    addDataToSelectbox(dijit.byId('class_'+index), b_store, Itemmake, data);
 			    dijit.byId('frm_add').reset();
 			  	dijit.byId("pop_service").hide();
-					
 				},
 				error: function(err) {
 					alert(err);
 				}
 		});
 	}
-	
-</script>
-		
+}
+</script>		
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:40%;" id="popup_dept" >
 		<form style="background-color: buttonface;" id='frm_add_service' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -371,14 +364,11 @@ function ResetRecordRecord() {
 				</td>
 			</tr>
 		</table>
-
 		</form>
 	</div>
 </div>
-	
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" data-dojo-type="dijit.Dialog" id="pop_service" >
-	
 		<form name="frm_add" id='frm_add' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		 <table cellspacing="10" width="50%" style="margin: 0 auto; ">
 			<tr>
@@ -397,7 +387,7 @@ function ResetRecordRecord() {
 								<td nowrap="nowrap"><?php echo $tr->translate("PROGRAM_TITLE")?></td>
 								<td> 
 									<input dojoType="dijit.form.TextBox" name="service_type" id="service_type" value="2"  type="hidden">
-									<input dojoType="dijit.form.TextBox"   name="add_title" id="add_title" value=""  type="text">
+									<input dojoType="dijit.form.ValidationTextBox" required="1" name="add_title" id="add_title" value=""  type="text">
 							   </td>
 							</tr>
 							<tr>

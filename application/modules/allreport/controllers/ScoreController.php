@@ -18,19 +18,52 @@ public function init()
     	}
     	else{
     		$search = array(
+    				'title',
+    				'room'=>0,
+    				'group_name' => 0,
+    				'study_year'=> 0,
+    				'grade'=> 0,
+    				'degree'=>0,
+    				'session'=> 0,
+    				'for_month'=>date('m'),
+    				);
+    	}
+    	
+    	$this->view->search=$search;
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$this->view->studentgroup = $db->getStundetScoreGroup($search);
+    	
+    	$group = $db->getAllgroupStudyNotPass();
+    	array_unshift($group, array ( 'id' => 0,'name' => 'ជ្រើសរើស'));
+    	
+    	$this->view->g_all_name=$group;
+    	$this->view->month = $db->getAllMonth();
+    	
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($form);
+    	$this->view->form_search=$form;
+    }
+    function rptScoreDetailAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search = array(
     				'group_name' => '',
     				'study_year'=> '',
     				'grade_bac'=> '',
     				'degree_bac'=>'',
     				'session'=> '',
     				'for_month'=>date('m'),
-    				);
+    		);
     	}
-    	
+    	 
     	$this->view->search=$search;
-    	
+    	 
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundetScoreGroup($search);
+    	$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id);
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
     	$this->view->month = $db->getAllMonth();
     	$form=new Registrar_Form_FrmSearchInfor();

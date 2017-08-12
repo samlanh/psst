@@ -11,6 +11,7 @@
 			<td>
 				<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
 			</td>
+			<td><?php echo $frm->getElement('branch_id');?></td>
 			<td>
 				<select class="fullside"   name="year" id="year" dojoType="dijit.form.FilteringSelect">
 					<option value=""> Select Year </option>
@@ -19,15 +20,12 @@
 					<?php }}?>
 				</select>
 			</td>
-			<td>
-				<?php echo $frm->getElement('branch_id');?>
-			</td>
+			<td><?php echo $frm->getElement('service_type');?></td>
+			<td><?php echo $frm->getElement('service');?></td>
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			</td>
 		</tr>
-	
-	
 	</table>
 </form>	
 </div>
@@ -42,27 +40,39 @@
 										<strong style="padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></strong><br />
 									</td>
 									<td width="15%" align="center">
+									<style>
+									table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+									tr{ page-break-inside:avoid; page-break-after:auto }
+									.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+									#header {
+									  display: table-header-group;
+									  page-break-inside:avoid; page-break-after:auto;
+									}
+									.hover:hover{background:#ccc;}
+								</style>
 									</td>
 								</tr>
-										
-
 								<tr>
 									<td colspan="3" id="exportExcel">
 										<table cellpadding="5"​ style=" font-family:'Khmer OS Battambang';margin:0 auto;width:100%;border: 1px solid #000; border-collapse: collapse;border: 1px solid #000;white-space: nowrap;"  border="1" >
-											<tr style="font-size:11px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
-												<td ><?php echo $tr->translate('N_O')?></td>
-												<td ><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
-												<td><?php echo $tr->translate('SERVICE_NAME')?></td>
-												<td><?php echo $tr->translate('MONTHLY')?></td>
-												<td ><?php echo $tr->translate('QUARTER')?></td>
-												<td ><?php echo $tr->translate('SEMESTER')?></td>
-												<td ><?php echo $tr->translate('YEAR')?></td>
-												<td ><?php echo $tr->translate('NOTE')?></td>
-											</tr>
+											<thead>
+												<tr class="cheader" align="center" >
+													<td ><?php echo $tr->translate('N_O')?></td>
+													<td ><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
+													<td><?php echo $tr->translate('SERVICE_CATE')?></td>
+													<td><?php echo $tr->translate('SERVICE_NAME')?></td>
+													<td><?php echo $tr->translate('MONTHLY')?></td>
+													<td ><?php echo $tr->translate('QUARTER')?></td>
+													<td ><?php echo $tr->translate('SEMESTER')?></td>
+													<td ><?php echo $tr->translate('YEAR')?></td>
+													<td ><?php echo $tr->translate('NOTE')?></td>
+												</tr>
+											</thead>
 										<?php $i=0; foreach ($this->rs AS $row) { $i++;?>
-											<tr class="hover" style="font-size:11px; height: 20px;" align="center" >
+											<tr class="hover" style="font-size:12px;" align="center" >
 												<td ><?php echo $i;?></td>
 												<td ><?php echo $row['academic'];?></td>
+												<td align="left">&nbsp;&nbsp;<?php echo $row['ser_type'];?></td>	
 												<td align="left">&nbsp;&nbsp;<?php echo $row['service_name'];?></td>	
 												<td ><?php echo $row['monthly'];?> $</td>
 												<td ><?php echo $row['quarter'];?> $</td>

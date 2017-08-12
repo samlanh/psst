@@ -199,13 +199,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    public function getAllServiceItemsName($status=1,$type=null){
    	$db = $this->getAdapter();
    	if($status==1){
-   		
    		$sql ="SELECT DISTINCT title,service_id FROM rms_program_name WHERE title!='' AND status=1 ORDER BY title";
-   		
    	}else{
-   		
    		$sql ="SELECT DISTINCT title,service_id AS id FROM rms_program_name WHERE title!='' ORDER BY title";
-   	
    	}
    return $db->fetchAll($sql);
    }

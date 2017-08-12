@@ -310,6 +310,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			 	sd.`group_id`,
 			 	sd.`student_id`,
 			 	sj.`subject_titlekh`,
+			 	sj.`subject_titleen`,
+			 	sj.shortcut,
 			 	sd.`score`,
 			 	sd.`subject_id`
 			FROM `rms_score` AS s, 

@@ -61,13 +61,20 @@ class Allreport_Model_DbTable_DbRptServiceCharge extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     	
     }    
-    function getServiceFeebyId($service_id){
+    function getServiceFeebyId($service_id,$service_type,$serid){
     	$db = $this->getAdapter();
-    	//     	if($type!=null){
-//     	$sql = "SELECT * FROM `rms_servicefee_detail` WHERE service_feeid=".$service_id." ORDER BY service_id ";
-    	$sql = "SELECT id,service_id,price_fee,payment_term,remark,
-    			(select title from rms_program_name where rms_program_name.service_id=rms_servicefee_detail.service_id limit 1)AS service_name FROM `rms_servicefee_detail` 
-    			WHERE service_feeid=".$service_id." ORDER BY service_id ";
+    	$sql = "SELECT sd.id,sd.service_id,sd.price_fee,sd.payment_term,sd.remark,
+    			p.title AS service_name ,
+    			(SELECT pt.title FROM `rms_program_type` AS pt WHERE pt.id=p.ser_cate_id LIMIT 1) as ser_type
+    			FROM `rms_servicefee_detail` as sd,rms_program_name p 
+    			WHERE p.service_id=sd.service_id AND sd.service_feeid=".$service_id." ";
+    	if($service_type>0){
+    		$sql.=" AND p.ser_cate_id = ".$service_type;
+    	}
+    	if($serid>0){
+    		$sql.=" AND sd.service_id = ".$serid;
+    	}
+    	$sql.=" ORDER BY sd.service_id ";
     	return $db->fetchAll($sql);
     }
 

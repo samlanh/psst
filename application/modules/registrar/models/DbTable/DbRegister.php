@@ -1955,7 +1955,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     function getServicesAll(){
     	$db=$this->getAdapter();
-    	$sql="SELECT service_id AS id,title FROM rms_program_name WHERE `type` = 2";
+    	$sql="SELECT service_id AS id,title FROM rms_program_name WHERE `type` = 2 AND title!='' ";
     	return $db->fetchAll($sql);
     }
     public function getNewStudent($newid,$stu_type){

@@ -32,7 +32,7 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	if(!empty($search['branch_id'])){
     		$where.=" AND branch_id = ".$search['branch_id'] ;
     	}
-    	if(!empty($search['generation']) AND $search['generation']>0){
+    	if(!empty($search['generation']) AND $search['generation']!=-1){
     		$where.=" AND generation = '".$search['generation']."'" ;
     	}
     	
@@ -46,14 +46,14 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     		$s_where[] = " (select name_en from rms_view where rms_view.type=7 and rms_view.key_code=rms_tuitionfee.time LIMIT 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-//     	echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
     function getFeebyOther($fee_id,$grade_search,$degree_id){
     	$db = $this->getAdapter();
     	$sql = "select tf.*,
 			    	m.major_enname as class,
-			    	(select name_en from rms_view where type=4 and key_code=tf.session LIMIT 1) as session
+			    	(select name_en from rms_view where type=4 and key_code=tf.session LIMIT 1) as session,
+			    	(SELECT en_name FROM `rms_dept` WHERE dept_id=m.dept_id LIMIT 1) as degree
 			    	from rms_tuitionfee_detail as tf,rms_major as m WHERE  
     				m.major_id=tf.class_id AND tf.fee_id = $fee_id ";
     	
@@ -69,7 +69,6 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
 
     	$result = $db->fetchAll($sql.$where.$order);    	
     	if(!empty($result)){
-    		
     		return $result;
     	}
     }

@@ -51,7 +51,7 @@
 						  display: table-header-group;
 						  page-break-inside:avoid; page-break-after:auto;
 						}
-																		
+					.hover:hover{background:#eee;}										
 					</style>
 					<tr>
 						<td colspan="3" id="exportExcel">
@@ -62,6 +62,7 @@
 										<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH')?></td>
 										<td style="border: 1px solid #000;"><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
 										<td style="border: 1px solid #000;"><?php echo $tr->translate('TYPE')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('DEGREE')?></td>
 										<td style="border: 1px solid #000;"><?php echo $tr->translate('GRADE')?></td>
 										<td style="border: 1px solid #000;"><?php echo $tr->translate('MONTHLY')?></td>
 										<td style="border: 1px solid #000;"><?php echo $tr->translate('QUARTER')?></td>
@@ -76,6 +77,7 @@
 									<td style="border: 1px solid #000;"><?php echo @$row['branch_id'];?></td>
 									<td style="border: 1px solid #000;"><?php echo @$row['academic'];?></td>
 									<td style="border: 1px solid #000;"><?php echo @$row['generation'];?></td>
+									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo @$row['degree'];?></td>	
 									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo @$row['class'];?></td>	
 									<td style="border: 1px solid #000;"><?php echo number_format(@$row['monthly'],2);?> $</td>
 									<td style="border: 1px solid #000;"><?php echo number_format(@$row['quarter'],2);?> $</td>

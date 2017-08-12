@@ -32,7 +32,6 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
     		if(!empty($service)){
     			foreach ($service as $i => $rs) {
     				$rows = $db->getServiceFeebyId($rs['id']);
-    				//print_r(row);exit();
     				$fee_row=1;
     				if(!empty($rows))foreach($rows as $payment_tran){
     					if($payment_tran['payment_term']==1){

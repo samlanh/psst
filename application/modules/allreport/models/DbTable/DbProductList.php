@@ -43,7 +43,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     }
     function getProductLocation($search=null){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.pro_code,CONCAT(p.pro_name,' ',pro_size) AS pro_name ,
+    	$sql="SELECT p.pro_code,CONCAT(p.pro_name) AS pro_name ,
     	             (SELECT name_kh FROM `rms_pro_category` WHERE id = p.cat_id limit 1) as category_name,
     	             (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id limit 1) AS brand_name,pl.brand_id,
     				 pl.pro_qty,p.pro_price,pl.total_amount,

@@ -45,7 +45,7 @@ select{ width:100%;}
 fieldset{  background:none;}
 .red{ color: red; padding-left:5px;}
 </style>
-<form id='suspend_service' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'product','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+<form id='suspend_service' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'product','action'=>'copy')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
 				identity = dijit.byId('identity').get('value');
@@ -69,7 +69,7 @@ fieldset{  background:none;}
 							<td style="width: 160px"><?php echo $tr->translate("PRODUCT_NAME");?></td>
 							<td width="200px" ><input dojoType="dijit.form.TextBox"  class="fullside" id="product_name" value="<?php echo $this->pro_row['pro_name'];?>" name="product_name"  type="text"​​ required="required"></td>
 							<td style="width: 160px"><?php echo $tr->translate("PRODUCT_CODE");?></td>
-							<td width="200px" ><input dojoType="dijit.form.TextBox"  class="fullside" id="product_code" value="<?php echo $this->pro_row['pro_code'];?>" name="product_code"  type="text"></td>
+							<td width="200px" ><input dojoType="dijit.form.TextBox"  class="fullside" id="product_code" value="<?php echo $this->pro_code;?>" name="product_code"  type="text"></td>
 						</tr>
 						<tr>
 							<td ><?php echo $tr->translate("PRODUCT_CATEGORY");?></td>

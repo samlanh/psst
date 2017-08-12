@@ -131,7 +131,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		
 		$this->view->province = $db->getProvince();
 		
-		$this->view->rs = $db->getStudentById($id);
+		$this->view->rs =$test =  $db->getStudentById($id);
+		//echo $test['group_id'];exit();
 		
 		$this->view->year = $db->getAllYear();
 		$this->view->room = $row =$db->getAllRoom();

@@ -152,6 +152,12 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->dept = $dept;
 		
 		$this->view->teacher_option = $_db->getAllTeacherOption();
+		
+		
+		$teacher = $_db->getAllTeacher();
+		array_unshift($teacher, array('id'=>-1,'name'=>'Add New'));
+		$this->view->teacher = $teacher;
+		
 	}
 	
 	
@@ -197,6 +203,13 @@ class Global_GroupController extends Zend_Controller_Action {
 		$grade=$db->getNameGradeAll();
 		array_unshift($grade, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->grade_name=$grade;
+		
+		
+		$this->view->teacher_option = $_db->getAllTeacherOption();
+		
+		$teacher = $_db->getAllTeacher();
+		array_unshift($teacher, array('id'=>-1,'name'=>'Add New'));
+		$this->view->teacher = $teacher;
 		
 	}
 	function addRoomAction(){

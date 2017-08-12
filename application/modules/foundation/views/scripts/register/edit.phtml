@@ -226,13 +226,8 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						</tr>
 						<tr>
 						<td><?php echo $tr->translate("GROUP");?>*</td>
-							<td><input id="group" />
-								<!-- <select class="fullside" tabindex="15" name="group" id="group" dojoType="dijit.form.FilteringSelect" onchange="getInfoBygroup();">
-									<option value=""><?php //echo $tr->translate("SELECT_GROUP");?></option>
-									<?php //if(!empty($this->group))foreach ($this->group as $row){?>
-									<option value="<?php //echo $row['id']?>" <?php //if($row['id']==$this->rs['group_id']) echo 'selected="selected"'?>><?php //echo $row['name']?></option>
-									<?php //}?>
-								</select> -->
+							<td>
+								<input id="group" />
 								<input class="fullside" dojoType="dijit.form.TextBox"  id="old_group_id" name="old_group_id" value="<?php echo $this->rs['group_id'];?>" type="hidden"  >
 							</td>
 							<td><input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/></td>

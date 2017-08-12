@@ -33,7 +33,7 @@
 <style>
 .hover:hover{ background: #ddd;}
 </style>
-<div style="border: 1px dotted #000;background: #fff;width:31cm; margin: 0 auto;">
+<div style="border: 1px dotted #000;background: #fff;width:100%;margin: 0 auto;">
 		<div id="divPrint"  >
 			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm;" >
 				<tr style="font-size: 13px;">
@@ -73,7 +73,7 @@
 							 
 							  <tr style="font-size:12px; height: 20px; white-space:nowrap;background: #ccc !important; line-height: 25px; font-weight: bold;" align="center">
 							    <td rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
-							    <td rowspan="2">&nbsp;<?php echo $tr->translate("SERIAL_ID"); ?>&nbsp;</td>
+							    <td rowspan="2">&nbsp;<?php echo $tr->translate("SERIAL"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_KH"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_EN"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
@@ -94,6 +94,8 @@
 							 </tr>
 							 <style> 
 								td{padding:0 3px; }
+								table { page-break-inside:auto }
+								tr{ page-break-inside:avoid; page-break-after:auto }
 							 </style>
 							 
 							 <?php foreach($this->row as $rs){ $i++;?>
@@ -108,7 +110,7 @@
 								    
 								    <td><?php echo $rs['degree_result']; ?></td>
 								    <td><?php echo $rs['grade_result']; ?></td>
-								    <td><?php echo $rs['grade_result']; ?></td>
+								    <td><?php echo $rs['session_result']; ?></td>
 								    
 								   	<td><?php echo $rs['note']; ?></td>
 								    <td><?php echo $rs['user_id'];?></td>

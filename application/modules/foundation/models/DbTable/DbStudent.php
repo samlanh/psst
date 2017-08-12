@@ -115,10 +115,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			
 			//print_r($data['photo']);exit();
 			
-			if($_data['degree']==1 || $_data['degree']==2){
-				$stu_type=1;    //  kid - 6
-			}else if($_data['degree']==3){
-				$stu_type=2;    // 7-12
+			if($_data['degree']==4){
+				$stu_type=1;    //  kid
+			}else if($_data['degree']==1 || $_data['degree']==2 || $_data['degree']==3){
+				$stu_type=2;    // G1-G12
 			}else{
 				$stu_type=3;	// eng and other subject
 			}
@@ -221,10 +221,19 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>1,
-						'is_pass'=>2,
+						'is_pass'	=>2,
 				);
 				$where=" id=".$_data['group'];
 				$this->update($group, $where);
+				
+				
+				$this->_name = 'rms_student_id';
+				$arra=array(
+						'branch_id'	=>$branch_id,
+						'stu_id'	=>$id,
+						'degree'	=>$_data['degree'],
+				);
+				$this->insert($arra);
 				
 				$_db->commit();
 				
@@ -239,10 +248,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
 		try{	
-			if($_data['degree']==1 || $_data['degree']==2){
-				$stu_type=1;    //  kid - 6
-			}else if($_data['degree']==3){
-				$stu_type=2;    // 7-12
+			if($_data['degree']==4){
+				$stu_type=1;    //  kid
+			}else if($_data['degree']==1 || $_data['degree']==2 || $_data['degree']==3){
+				$stu_type=2;    // G1-G12
 			}else{
 				$stu_type=3;	// eng and other subject
 			}
@@ -339,16 +348,33 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$this->update($arr, $where);
 			
 			
+			if(!empty($_data['old_group_id'])){
+				$this->_name='rms_group_detail_student';
+				$arr_group_history= array(
+						'status'	=>$_data['status'],
+						'group_id'	=>$_data['group'],
+						'user_id'	=>$this->getUserId(),
+				);
+				$where = "stu_id=".$_data["id"]." AND is_pass=0 and type = 1 ";
+				$this->update($arr_group_history, $where);
+			}else{
+				$this->_name='rms_group_detail_student';
+				$arr_group_history= array(
+						'stu_id'	=>$_data["id"],
+						'group_id'	=>$_data['group'],
+						'date'		=>date("Y-m-d"),
+						'status'	=>$_data['status'],
+						'user_id'	=>$this->getUserId(),
+				);
+				$this->insert($arr_group_history);
+			}
 			
-			$this->_name='rms_group_detail_student';
-			$arr_group_history= array(
-					'status'	=>$_data['status'],
-					'group_id'	=>$_data['group'],
-					'user_id'	=>$this->getUserId(),
+			$this->_name = 'rms_student_id';
+			$arra=array(
+					'degree'	=>$_data['degree'],
 			);
-			$where = "stu_id=".$_data["id"]." AND is_pass=0 and type = 1 ";
-			$this->update($arr_group_history, $where);
-			
+			$where = " stu_id = ".$_data["id"];
+			$this->update($arra, $where);
 			
 		$db->commit();//if not errore it do....
 			

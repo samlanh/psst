@@ -53,6 +53,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     public function addProduct($_data){
     	$db = $this->getAdapter();
     	$db->beginTransaction();
+    	//exit();
     	try{
 	    		$_arr = array(
 	    				'pro_name'	=>$_data['product_name'],

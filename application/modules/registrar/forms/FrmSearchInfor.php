@@ -26,18 +26,18 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 				'placeholder'=>$this->tr->translate("SEARCH")));
 		$_title->setValue($request->getParam("title"));
 	    
-		$generation = new Zend_Dojo_Form_Element_FilteringSelect('study_year');
-		$generation->setAttribs(array(
+		$study_year = new Zend_Dojo_Form_Element_FilteringSelect('study_year');
+		$study_year->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
 				'required'=>false
 		));
-		$generation->setValue($request->getParam("study_year"));
+		$study_year->setValue($request->getParam("study_year"));
 		$db_years=new Registrar_Model_DbTable_DbRegister();
 		$years=$db_years->getAllYears();
 		$opt = array(''=>$this->tr->translate("SELECT_YEAR"));
 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'];
-		$generation->setMultiOptions($opt);
+		$study_year->setMultiOptions($opt);
 		
 		
 		$_session = new Zend_Dojo_Form_Element_FilteringSelect('session');
@@ -330,7 +330,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$generation->setMultiOptions($generoption);
 		
 	
-		$this->addElements(array($_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
+		$this->addElements(array($study_year,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 		return $this;
 	} 
 

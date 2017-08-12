@@ -46,12 +46,11 @@
 									<tr style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
 											<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('PRODUCT_NO');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('PRODUCT_CODE');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 											
 											<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
-											<td>&nbsp;<?php echo $tr->translate('AMOUNT_DUE');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
 								   </tr>
@@ -69,11 +68,10 @@
 										    <td> <?php echo $i; ?></td>
 										    <td><?php echo $rs['category_name'];?></td>
 										    <td><?php echo $rs['pro_code'];?></td>
-										    <td align="left">&nbsp;<?php echo $rs['pro_name'];?></td>
+										    <td align="center">&nbsp;<?php echo $rs['pro_name'];?></td>
 										    <td><?php echo number_format($rs['pro_qty'],0); ?></td>
 										    
 										     <td>&nbsp;$&nbsp;<?php echo $rs['pro_price'];?></td>
-										    <td>&nbsp;$&nbsp;<?php echo $rs['total_amount'];?></td>
 										    <td><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
 										    <td><?php echo $rs['status']; ?></td>
 										  </tr>

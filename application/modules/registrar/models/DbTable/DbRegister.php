@@ -1733,14 +1733,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$length = '';
     	$pre = '';
     	
-    	if($dept_id==1){//Kindergarten
-    		$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (1) and status=1 ";
+    	if($dept_id==4){//Kindergarten
+    		$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (4) and status=1 ";
     		$pre = 'K';
-    	}else if($dept_id==2 || $dept_id==3){
-    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (2,3) and status=1 ";
+    	}else if($dept_id==1  || $dept_id==2 || $dept_id==3){
+    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (1,2,3) and status=1 ";
     		$pre = 'G';
     	}else{
-    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree>3 and status=1 ";
+    		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree>4 and status=1 ";
     		$pre = 'GE';
     	}
     	

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+	<div class="wrapper" style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;" >
+		<div class="contain" id="divPrint">
+			<style>
+    	.wrapper{
+    		width: 100%;
+    		margin: 0px;
+    		padding: 0px;
+    	}
+    	.contain{
+    		width: 1024px;
+    		margin: 0 auto;
+    	}
+		table {
+    		border-collapse: collapse;
+    		width: 100%;
+		}
+		th, td {
+    		padding: 4px;
+		}
+		.border-td td{
+			border:solid 1px #ddd;
+		}
+		.img-logo img{
+			width: 130px;
+		}
+		.ul-li li{
+			
+		}
+		.center-no-next{text-align: center;}
+		.back-color,.back-footer{background-color: #eee;}
+		.back-color td{padding: 20px;}
+		.text-left td{text-align: right;}
+    </style>
+			<table cellpadding="0" cellspacing="0" width="100%">
+				<tr class="no-boder">
+					<td>
+						<table>
+							<tr>
+								<td>
+									<table style="text-align:center;border:solid 1px #FFF;font-family:'Khmer MEF2',cursive;font-weight: bold;">
+										<tr style="line-height: 20px;">
+											<td>ព្រះរាជាណាចក្រកម្ពុជា</td>
+										</tr>
+										<tr style="line-height: 15px;">
+											<td>ជាតិ​ សាសនា​ ព្រះមហាក្សត្រ</td>
+										</tr>
+										<tr style="text-align:left;line-height: 15px;">
+											<td>ខេត្ត-ក្រុង​ ភ្នំពេញ</td>
+										</tr>
+										<tr style="text-align:left;line-height: 15px;">
+											<td>វិទ្យាល័យបញ្ញាសាស្រ្តអន្តរជាតិ សាខាទី១</td>
+										</tr>
+										<tr style="line-height: 15px;">
+											<td>ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា ២០១៦-២០១៧</td>
+										</tr>
+										<tr style="line-height: 15px;">
+											<td>
+												សិស្សឈ្មោះ ទិត្យរក្សា ថ្នាក់ទី ១០A ចំនួនសិស្ស ១៥​ នាក់
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr style="font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+					<td>
+						<table border="1" style="text-align:center; border-color: #000;font-size: 14px; ">
+							<tr style="line-height: 18px;">
+								<td rowspan="2">ល.រ​</td>
+								<td rowspan="2">មុខវិជ្ជា</td>
+								<td colspan="2">ប្រឡងឆមាសទី១</td>
+								<td colspan="2" style="white-space: nowrap;">ប្រឡងឆមាសទី២</td>
+								<td colspan="2">ប្រចាំឆ្នាំ</td>
+								<td rowspan="2">មូលវិចារហត្ថលេខា​<br />និងឈ្មោះគ្រូ</td>
+							</tr>
+							<tr style="line-height: 18px;">
+								<td>ពិន្ទុ</td>
+								<td>ធំ.ថ្នាក់</td>
+								<td>ពិន្ទុ</td>
+								<td>ធំ.ថ្នាក់</td>
+								<td>ពិន្ទុ</td>
+								<td>ធំ.ថ្នាក់</td>
+							</tr>
+							 <?php
+							  	for($i=1;$i<=18;$i++){?>
+								  <tr style="line-height:16px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+									<td><?php echo $i;?></td>
+									<td style="font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;"><?php echo 'ភាសារខ្មែរ';?></td>
+									<td><?php echo '112';?></td>
+									<td> <?php echo '14th';?></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							  	<?php
+							  	} ?>
+							  	 <tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+									<td colspan="2" style="white-space:nowrap;text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">សរុបពិន្ទុប្រឡងឆមាស</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td rowspan="7">
+										<table style="text-align:center;font-size:14px;">
+											<tr style="line-height:16px;"><td>បានទទួល</td></tr>
+											<tr style="line-height:16px;"><td>ប័ណ្ណសរសើរចំនួន</td></tr>
+											<tr style="line-height:16px;"><td>...........</td></tr>
+											<tr style="line-height:16px;"><td>លិខិតសរសើរចំនួន</td></tr>
+											<tr style="line-height:16px;"><td>.............</td></tr>
+											<tr style="line-height:16px;white-space: nowrap;"><td>ស័ក្ខប័ណ្ណលើកទឹកចិត្តចំនួន</td></tr>
+											<tr style="line-height:16px;"><td>.............</td></tr>
+										</table>
+									</td>
+								</tr>
+								<tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+									<td colspan="2" style="white-space:nowrap;text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">មធ្យមភាគពិន្ទុប្រឡងឆមាស</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr style="white-space:nowrap;text-align:left;line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+									<td colspan="2" style="font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">មធ្យមភាគពិន្ទុខែប្រចាំឆមាស</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr style="white-space:nowrap;line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+									<td colspan="2" style="text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">មធ្យមភាគពិន្ទុប្រចាំឆមាស</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+									<td colspan="2" style="text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">សីលធម៌រស់នៅ</td>
+									<td colspan="2">........ល្អ.........</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+									<td colspan="2" style="text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">ពលកម្មបង្កបង្កើនផល</td>
+									<td colspan="2">........ល្អ.........</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+									<td colspan="2" style="text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">សុខភាព-អនាម័យ</td>
+									<td colspan="2">........ល្អ.........</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr style="line-height:15px;text-align:left;font-size: 12px !important;">
+									<td colspan="2">
+										<table>
+											<tr style="line-height:15px;"><td>ចំនួនអវត្តមាន</td></tr>
+											<tr style="line-height:15px;"><td></td></tr>
+										</table>
+									</td>
+									<td colspan="2">
+										<table>
+											<tr style="line-height:13px;white-space: nowrap;"><td>មានច្បាប់​ 03 ដង</td></tr>
+											<tr style="line-height:13px;white-space: nowrap;"><td>ឥតច្បាប់​ 00 ដង</td></tr>
+										</table>
+									</td>
+									<td colspan="2">
+										<table>
+											<tr style="line-height:13px;white-space: nowrap;"><td>មានច្បាប់​....ដង</td></tr>
+											<tr style="line-height:13px;white-space: nowrap;"><td>ឥតច្បាប់​....ដង</td></tr>
+										</table>
+									</td>
+									<td colspan="2">
+										<table>
+											<tr style="line-height:13px;white-space: nowrap;"><td>មានច្បាប់​....ដង</td></tr>
+											<tr style="line-height:13px;white-space: nowrap;"><td>ឥតច្បាប់​....ដង</td></tr>
+										</table>
+									</td>
+									<td></td>
+								</tr>
+						</table>
+					</td>
+				</tr>
+				<tr style="font-family: 'khmer', cursive;">
+					<td>
+						<table width="100%" >
+							<tr>
+								<td width="50%">
+									<table width="100%" >
+										<tr style="font-family:'Khmer MEF2',cursive;font-weight: bold;"><td>មូលវិចារនាយកសាលា</td></tr>
+										<tr><td>......................................</td></tr>
+										<tr><td style="font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">ភ្នំពេញថ្ងៃទី........ខែ......ឆ្នាំ២០......</td></tr>
+									</table>
+								</td>
+								<td style="text-align:right;" width="50%">
+									<table width="100%" >
+										<tr style="text-align:right;font-family:'Khmer MEF2',cursive;font-weight: bold;"><td>មូលវិចារគ្រូបន្ទុកថ្នាក់</td></tr>
+										<tr style="text-align:right;"><td>..........................................<br>..........................................</td></tr>
+										<tr style="text-align:right;"><td style="font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">ភ្នំពេញថ្ងៃទី........ខែ..........ឆ្នាំ២០......</td></tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>			
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

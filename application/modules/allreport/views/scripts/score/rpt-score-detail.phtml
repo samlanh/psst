@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
-	$this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
 	echo $this->headTitle();
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
@@ -93,10 +92,7 @@ dojo.ready(function(){
 			}
 		</style>
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
-				<tr>
-					<td colspan="3" id="exportExcel">
-						<table  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:1px solid #000;"  border="1" >
-							<?php
+				<?php
 							 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
 							 $duplicate=0;$count_pass=0;
 							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
@@ -105,22 +101,25 @@ dojo.ready(function(){
 							?>
 							<?php if ($old_groupid!=$rs['group_id']){ $count = count($subj); ?>
 						    <?php $i=0; $count_fail=0;?>
-							<tr>
-								<td align="center" colspan="<?php echo $count+7;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?></strong><br />
-									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
-										<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
-										<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> ,
-										<?php echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['for_month'];?></span>
-										<br />
-										<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
-										<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
-									 	<?php echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['for_semester'];?></span> , 
-									 	<?php echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> ,
-									 	<?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
-									</strong>
-								</td>
-							</tr>
+				<tr>
+					<td colspan="3" align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+						<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?></strong><br />
+						<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
+							<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
+							<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> ,
+							<?php echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['for_month'];?></span>
+							<br />
+							<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
+							<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
+						 	<?php echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['for_semester'];?></span> , 
+						 	<?php echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> ,
+						 	<?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
+						</strong>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" id="exportExcel">
+						<table  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:1px solid #000;"  border="1" >
 							<tr class="cheader" align="center" >
 								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
 								<td rowspan="2"><?php echo $tr->translate("ID_NUMBER");?></td>
@@ -182,16 +181,15 @@ dojo.ready(function(){
 										</strong><br />
 									</td>
 								</tr>
-								
 							<?php }?>
 						</table>
 						<?php
-										$string=",";
-											if (!empty($subj)) foreach ($subj as $key =>$subject){?>
-											<?php 
-											if($key+1==count($subj)){$string="";}
-											echo $subject['shortcut']."=".$subject['subject_titleen'].$string;?>
-										<?php }?>
+							$string=",";
+								if (!empty($subj)) foreach ($subj as $key =>$subject){?>
+								<?php 
+								if($key+1==count($subj)){$string="";}
+								echo $subject['shortcut']."=".$subject['subject_titleen'].$string;?>
+							<?php }?>
 					</td>
 				</tr>
 			</table>

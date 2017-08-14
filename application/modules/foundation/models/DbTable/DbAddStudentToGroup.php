@@ -5,7 +5,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	
 	protected $_name = 'rms_group_detail_student';
 	public function getUserId(){
-		$session_user=new Zend_Session_Namespace('auth');
+		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->user_id;
 	
 	}
@@ -23,7 +23,9 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	}
 	public function getGroup(){
 		$db = $this->getAdapter();
-		$sql="SELECT id,group_code as name FROM rms_group WHERE status = 1 AND degree IN (2,3,4) ";
+		$sql="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+			 (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+			 FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
 		return $db->fetchAll($sql);
 	}
 	
@@ -33,42 +35,25 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		return $db->fetchAll($sql);
 	}
 	
-	public function addGroup($_data){
-		$db = $this->getAdapter();
-		$arr = array(
-				'group_code' 	=> $_data['group_code'],
-				'room_id' 		=> $_data['room'],
-				'academic_year' => $_data['academic_year'],
-				'semester' 		=> $_data['semester'],
-				'session' 		=> $_data['session_group'],
-				'degree' 		=> $_data['degree_group'],
-				'grade' 		=> $_data['grade_group'],
-				'time' 			=> $_data['time'],
-				'amount_month'	=> $_data['amountmonth'],
-				'start_date' 	=> $_data['start_date'],
-				'expired_date'	=>$_data['end_date'],
-				'date' 			=> date("Y-m-d"),
-				'status'   		=> 1,
-				'note'   		=> $_data['note'],
-				'user_id'	  	=> $this->getUserId()
-				);
-		$this->_name='rms_group';
-		return $this->insert($arr);
-	}
 	public function getGroupById($id){
 		$db = $this->getAdapter();
-		$sql = "
-		SELECT group_id,stu_id,status FROM rms_group_detail_student WHERE group_id=".$id;
+		$sql = "SELECT id,status FROM rms_group WHERE id=".$id;
 		return $db->fetchRow($sql);
 	
 	}
 	public function getStudentGroup($id){
 		$db = $this->getAdapter();
-		$sql = "
-			SELECT `group_id`,stu_id,(SELECT `stu_code` FROM `rms_student`WHERE `stu_id`=`rms_group_detail_student`.`stu_id`)AS code,
-			(SELECT `stu_enname` FROM `rms_student`WHERE `stu_id`=`rms_group_detail_student`.`stu_id`)AS en_name, 
-			(SELECT `stu_khname` FROM `rms_student`WHERE `stu_id`=`rms_group_detail_student`.`stu_id`)AS kh_name
-			FROM `rms_group_detail_student` WHERE `status`=1 AND`group_id`=".$id;
+		$sql = "SELECT 
+					`group_id`,
+					stu_id,
+					(SELECT `stu_code` FROM `rms_student`WHERE `stu_id`=`gds`.`stu_id`)AS code,
+					(SELECT `stu_enname` FROM `rms_student`WHERE `stu_id`=`gds`.`stu_id`)AS en_name, 
+					(SELECT `stu_khname` FROM `rms_student`WHERE `stu_id`=`gds`.`stu_id`)AS kh_name
+				FROM 
+					`rms_group_detail_student` as gds 
+				WHERE 
+					`status`=1 AND`group_id`=".$id;
+			
 		return $db->fetchAll($sql);
 		
 	}
@@ -81,107 +66,117 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($rr)){
 			foreach($rr as $row){
 				$data=array(
-						'is_setgroup' => 0,
+						'is_setgroup' 	=> 0,
+						'group_id' 		=> 0,
 				);
 				$where='stu_id = '.$row['stu_id'];
 				$this->update($data, $where);
 		    }
-		}else{
-			
-		    }
+		}
 		
-		$where = $this->getAdapter()->quoteInto("group_id=?", $id);
+		$where = " group_id = $id and status=1 and is_pass=0 ";
 		$this->_name='rms_group_detail_student';
 		$this->delete($where);
 		
-		$a = $_data['public-methods'];
-		foreach ($a as $rs){
-			$arr = array(
-					'user_id'=>$this->getUserId(),
-					'group_id'=>$_data['group'],
-					'stu_id'=>$rs,
-					'status'=>$_data['status'],
-					'date'=>date('Y-m-d')
-			);
-			$this->_name='rms_group_detail_student';
-			$this->insert($arr);
 		
-			$this->_name='rms_student';
-			$data=array(
-					'is_setgroup'=> 1,
-			);
-			$where='stu_id = '.$rs;
-			$this->update($data, $where);
+		if($_data['status'] != 0){
+			if(!empty($_data['public-methods'])){
+				
+				$array_student = $_data['public-methods'];
+				foreach ($array_student as $student){
+					$arr = array(
+							'user_id'=>$this->getUserId(),
+							'group_id'=>$_data['group'],
+							'stu_id'=>$student,
+							'status'=>$_data['status'],
+							'date'=>date('Y-m-d')
+					);
+					$this->_name='rms_group_detail_student';
+					$this->insert($arr);
+				
+					$this->_name='rms_student';
+					$data=array(
+							'is_setgroup'	=> 1,
+							'group_id'		=>$_data['group'],
+							'academic_year'	=> $_data['academic_year_group'],
+							'degree'		=> $_data['degree_group'],
+							'grade'			=> $_data['grade_group'],
+							'session'		=> $_data['session_group'],
+							'room'			=> $_data['room_group'],
+					);
+					$where='stu_id = '.$student;
+					$this->update($data, $where);
+				}
+			}
 		}
 	}
 	
 	
 	public function addStudentGroup($_data){
-		
-// 		print_r($_data);exit();
-		
-		
 		$db = $this->getAdapter();
-		$a = $_data['public-methods'];
-		foreach ($a as $rs){
-			$arr = array(
-					'user_id'=>$this->getUserId(),
-					'group_id'=>$_data['group'],
-					'stu_id'=>$rs,
-					'status'=>$_data['status'],
-					'date'=>date('Y-m-d')
-			);
-			$this->_name='rms_group_detail_student';
-			$this->insert($arr);
+		//print_r($_data);exit();		
+		if(!empty($_data['public-methods'])){
 			
-			$this->_name='rms_student';
-			$data=array(
-					'is_setgroup'=> 1,
-					);
-			$where='stu_id = '.$rs;
-			$this->update($data, $where);
-		}
-		$this->_name = 'rms_group';
-		$data_gro = array(
+			//print_r($_data['public-methods']);exit();
+			
+			$all_stu_id = $_data['public-methods'];
+			foreach ($all_stu_id as $stu_id){
+				$arr = array(
+					'user_id'	=>$this->getUserId(),
+					'group_id'	=>$_data['group'],
+					'stu_id'	=>$stu_id,
+					'status'	=>$_data['status'],
+					'date'		=>date('Y-m-d')
+				);
+				$this->_name='rms_group_detail_student';
+				$this->insert($arr);
+				
+				$this->_name='rms_student';
+				$data=array(
+					'is_setgroup'	=> 1,
+					'academic_year'	=> $_data['academic_year_group'],
+					'degree'		=> $_data['degree_group'],
+					'grade'			=> $_data['grade_group'],
+					'session'		=> $_data['session_group'],
+					'room'			=> $_data['room_group'],
+					'group_id'		=> $_data['group'],
+				);
+				$where='stu_id = '.$stu_id;
+				$this->update($data, $where);
+			}
+			
+			$this->_name = 'rms_group';
+			$data_gro = array(
 				'is_use'=> 1,
-				'is_pass'=> 0,
-		);
-		$where = 'id = '.$_data['group'];
-		$this->update($data_gro, $where);
-
+				'is_pass'=> 2,
+			);
+			$where = 'id = '.$_data['group'];
+			$this->update($data_gro, $where);
+		}
 	}
 	public function getGroupDetail($search){
 		$db = $this->getAdapter();
 		$sql = " SELECT
-		`g`.`id`,
-		`g`.`group_code`    AS `group_code`,
-		(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) as academic,
-		
-		(SELECT en_name
-		 FROM `rms_dept`
-		 WHERE (`rms_dept`.`dept_id`=`g`.`degree`)),
-		(SELECT major_enname
-		 FROM `rms_major`
-		 WHERE (`rms_major`.`major_id`=`g`.`grade`)),
-		(SELECT	`rms_view`.`name_en`
-		FROM `rms_view`
-		WHERE ((`rms_view`.`type` = 4)
-		AND (`rms_view`.`key_code` = `g`.`session`))
-		LIMIT 1) AS `session`,
-		`g`.`semester` AS `semester`,
-		(SELECT
-		`r`.`room_name`
-		FROM `rms_room` `r`
-		WHERE (`r`.`room_id` = `g`.`room_id`)) AS `room_name`,
-		`g`.`start_date`,
-		`g`.`expired_date`,
-		`g`.`note`,
-		(select name_en from rms_view where rms_view.type=9 and key_code=g.is_pass) as status,
-		(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.`group_id`=`g`.`id` GROUP BY gds.group_id)AS Num_Student,
-		
-		(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.is_pass=0 and gds.`group_id`=`g`.`id` and g.is_pass=1 GROUP BY gds.group_id)AS remain_Student
-		
-		FROM rms_group g where g.degree IN (2,3,4) ";
+					`g`.`id`,
+					`g`.`group_code` AS `group_code`,
+					(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) as academic,
+					(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`)) as degree,
+					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`)) as grade,
+					(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))) AS `session`,
+					(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)) AS `room_name`,
+					`g`.`semester` AS `semester`,
+					`g`.`start_date`,
+					`g`.`expired_date`,
+					`g`.`note`,
+					(select name_en from rms_view where rms_view.type=9 and key_code=g.is_pass) as status,
+					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.`group_id`=`g`.`id` GROUP BY gds.group_id)AS Num_Student,
+					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.is_pass=0 and gds.`group_id`=`g`.`id` and g.is_pass=1 GROUP BY gds.group_id)AS remain_Student
+				FROM 
+					rms_group g 
+				where 
+					g.status=1 
+					and g.is_pass != 1 
+			  ";
 		
 		$order = " ORDER BY `g`.`id` DESC " ;	
 		
@@ -205,8 +200,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($search['study_year'])){
 			$where.=' AND g.academic_year='.$search['study_year'];
 		}
-		if(!empty($search['grade_bac'])){
-			$where.=' AND g.grade='.$search['grade_bac'];
+		if(!empty($search['grade_all'])){
+			$where.=' AND g.grade='.$search['grade_all'];
 		}
 		if(!empty($search['session'])){
 			$where.=' AND g.session='.$search['session'];
@@ -224,7 +219,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	function getSearchStudent($search){
 		$db=$this->getAdapter();
 		$sql="SELECT 
-				stu_id ,
+				stu_id,
 				stu_code,
 				stu_enname,
 				stu_khname,
@@ -251,8 +246,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($search['session'])){
 			$sql.=" AND session =".$search['session'];
 		}
-		
-		echo $sql;
+		//echo $sql;
 		
 		return $db->fetchAll($sql);
 	}

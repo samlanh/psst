@@ -256,11 +256,18 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 	function getStudentChangeGroup1ById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT start_date,expired_date,
-		(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=rms_group.academic_year )AS year,
-		(select major_enname from `rms_major` where `rms_major`.`major_id`=`rms_group`.`grade`)AS grade,
-		(select en_name from rms_dept where rms_dept.dept_id=rms_group.degree) as degree,
-		(select name_en from `rms_view` where `rms_view`.`type`=4 and `rms_view`.`key_code`=`rms_group`.`session`)AS session
-		FROM `rms_group` WHERE id=$id LIMIT 1 ";
+					(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=rms_group.academic_year )AS year,
+					(select major_enname from `rms_major` where `rms_major`.`major_id`=`rms_group`.`grade`)AS grade,
+					(select en_name from rms_dept where rms_dept.dept_id=rms_group.degree) as degree,
+					(select name_en from `rms_view` where `rms_view`.`type`=4 and `rms_view`.`key_code`=`rms_group`.`session`)AS session,
+					(select room_name from rms_room where room_id = rms_group.room_id) as room,
+					academic_year as academic_year_id,
+					degree as degree_id,
+					grade as grade_id,
+					session as session_id,
+					room_id
+				FROM 
+					`rms_group` WHERE id=$id LIMIT 1 ";
 		return $db->fetchRow($sql);
 	}
 	function getStudentInfoById($stu_id){

@@ -1,20 +1,11 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_STUDENT_GROUP')); 
-	$payment_term = $this->payment_term;
-	$rate = $this->rate;
 ?>	
 <head>
- <link href="<?php echo $this->baseUrl()."/jsmultiselect"?>/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />
  <link href="<?php echo $this->baseUrl()."/jsmultiselect"?>/multi-select.css" media="screen" rel="stylesheet" type="text/css" />
 </head>
-<script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				return true;
-	   		}else {
-				return false;
-	   		}
-</script>
+
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
     dojo.require('dijit.form.Textarea');
@@ -46,6 +37,7 @@ table .set-style tr td a {
 
 <script type="text/javascript">
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->group));?> );
+
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
@@ -53,22 +45,9 @@ dojo.ready(function(){
 	    id: "grade",
 	    name: "grade",           
 	    class: 'fullside',  
-	    placeHolder:"Selected Grade",          
+	    placeHolder:"Selecte Grade",          
 	}, "grade");
 	dijit.byId('grade').attr('value','');
-
-	new dijit.form.FilteringSelect({
-	    autoComplete: true,                        
-	    id: "grade_group",
-	    name: "grade_group",           
-	    class: 'fullside',  
-	    placeHolder:"Selected Grade",          
-	}, "grade_group");
-
-	
-	
-	getallGrade(1);
-	getallGrade(2);
 
 	new dijit.form.FilteringSelect({
 	    store: group_store,
@@ -76,63 +55,50 @@ dojo.ready(function(){
 	    required: true,
 	    id: "group",
 	    name: "group",           
-	    class: 'fullside',            
+	    class: 'fullside',
+	    placeHolder:"Selecte Group",    
 	    onChange: function() { 
-	     group_id = dijit.byId('group').get('value');
-	     if(group_id==-1){
-	    	 dijit.byId("popup_dept").show();
-	      }
-	     else {
-	      
-	     }  
-	     toStudentGroup();          
+	    	group_id = dijit.byId('group').get('value');
+		    if(group_id==-1){
+		    	dojo.byId('lbldetail').innerHTML='';
+		    	window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
+			}else{
+				toStudentGroup();
+			}        
 	    } 
 	}, "group");
 	//toStudentGroup();
 }); 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'get-grade')); ?>';
-	function getallGrade(type){
-		if(type==1){
-			dept_id = dijit.byId('degree').get('value');
-		}
-		else if(type==2){
-			dept_id = dijit.byId('degree_group').get('value');
-		}
-			dojo.xhrPost({
-				url:url_dept,
-				content:{
-					'dept_id':dept_id,
-					},
-				handleAs:"json",
-				load: function(data) {
-					if(type==1){
-						grade_store  = getDataStorefromJSON('id','name', data);
-					    dijit.byId('grade').set('store',grade_store);   
-					    dijit.byId('grade').attr('value','<?php echo $this->value['grade']; ?>');  
-					}
-					else{
-						grade_store  = getDataStorefromJSON('id','name', data);
-						dijit.byId('grade_group').set('store',grade_store); 
-					}
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
 				},
-				error: function(err) {
-					//alert(222);
-				}
-			});
-		
+			handleAs:"json",
+			load: function(data) {
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store);   
+			    dijit.byId('grade').attr('value','<?php echo $this->value['grade']; ?>');  
+			},
+			error: function(err) {
+				//alert(222);
+			}
+		});
 	}
 	
 </script>
-<?php
-$frm_set_price = $this->frm_set_charge;?>
+
 <table cellspacing="10" style="margin: 0 auto;width:100%;" border="0">
 	<tr>
 		<td valign="top">
 			<form id='studentgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<fieldset style="width: 50%;float: left;">
 						<legend align="center"><strong>Search Group</strong></legend>
-					<table style="margin: 0 auto; width: 100%;float: left; background:#DFF7FD;" cellspacing="10" broder 1>
+					<table style="margin: 0 auto; width: 100%;float: left; background:#DFF7FD;white-space: nowrap;" cellspacing="10" broder="1">
 						<tr>
 							<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 							<td>
@@ -145,7 +111,7 @@ $frm_set_price = $this->frm_set_charge;?>
 							</td>
 							<td><?php echo $tr->translate("DEGREE");?></td>
 							<td >
-								<select class="fullside"  name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getallGrade(1);">
+								<select class="fullside"  name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getallGrade();">
 									<option value="">Select Degree</option>
 									<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
 										<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->value['degree']) echo "selected='selected'"?>><?php echo $row['en_name']?></option>
@@ -177,9 +143,16 @@ $frm_set_price = $this->frm_set_charge;?>
 					</table>
 				</fieldset>				
 			</form>
+			
+			
 			<form id='submitgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'submit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<script type="dojo/method" event="onSubmit">			
 					if(this.validate()) {
+						group = dijit.byId('group').get('value');
+						if(group == -1){
+							alert('Please select group !!! ');
+							return false;
+						}
 						return true;
 	   				}else {
 						return false;
@@ -189,21 +162,37 @@ $frm_set_price = $this->frm_set_charge;?>
 						<legend align="center"><strong>To Group</strong></legend>
 							<table style="margin: 0 auto; width: 100%; background:#DFF7FD;white-space: nowrap;" cellspacing="10" border="0">
 								<tr>
-									<td width="100px"><?php echo $tr->translate("GROUP_CODE");?></td>
-									<td>
-										<input id="group" />
+									<td width="20%"><?php echo $tr->translate("GROUP_CODE");?></td>
+									<td width="80%">
+										<table width="100%" style="white-space: nowrap;">
+											<tr>
+												<td width="85%">
+													<input id="group" />
+												</td>
+												<td width="15%">
+													<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
+												</td>
+											</tr>
+										</table>
 									</td>
 								</tr> 
 								<tr>
 									<td><?php echo $tr->translate("DETAIL")?></td>
-									<td><label id="lbldetail" name=lbldetail style="border: 1px solid #ccc; background:#fff;height:70px;display:block;"></label></td>
+									<td><label id="lbldetail" name=lbldetail style="border: 1px solid #ccc; background:#fff;height:100px;display:block;"></label></td>
+								
+									<input type="text" name="academic_year_group" id="academic_year_group" dojoType="dijit.form.TextBox" /> 
+									<input type="text" name="degree_group" id="degree_group" dojoType="dijit.form.TextBox" />
+									<input type="text" name="grade_group" id="grade_group" dojoType="dijit.form.TextBox" />
+									<input type="text" name="session_group" id="session_group" dojoType="dijit.form.TextBox" />
+									<input type="text" name="room_group" id="room_group" dojoType="dijit.form.TextBox" />
+								
 								</tr> 
 								<tr>
 									<td><?php echo $tr->translate("STATUS");?></td>
 									<td>
 										<select class="fullside" dojoType="dijit.form.FilteringSelect" required="true"  id="status" name="status" type="text">								
-											<option value="1"><?php echo $tr->translate("Active");?></option>
-											<option value="0"><?php echo $tr->translate("Deactive");?></option>
+											<option value="1"><?php echo $tr->translate("ACTIVE");?></option>
+											<option value="0"><?php echo $tr->translate("DEACTIVE");?></option>
 										</select>
 									</td>
 								</tr>
@@ -219,14 +208,12 @@ $frm_set_price = $this->frm_set_charge;?>
 					</fieldset>
 					<div align="center">
 						<a id="select-all" href="#"><span style="font-size: 15px;">Select all</span></a> <span style="font-size: 16px;"> | </span>
-						<a id="select-100" href="#"><span style="font-size: 15px;">Select 100 elems</span></a> <span style="font-size: 16px;"> | </span>
-						<a id="deselect-all" href="#"><span style="font-size: 15px;">Deselect all</span></a> <span style="font-size: 16px;"> | </span>
-						<a id="refresh" href="#"><span style="font-size: 15px;">Refresh</span></a>
+						<a id="deselect-all" href="#"><span style="font-size: 15px;">Deselect all</span></a> <span style="font-size: 16px;"> </span>
 					</div>
 					<select multiple id="public-methods" name="public-methods[]">
 						<?php $no=0; if(!empty($this->rs)) foreach($this->rs as $row){ $no++;?>
 							<option value="<?php echo $row['stu_id'];?>">
-								<?php echo $no, ". " , $row['stu_code']," ",$row['stu_enname']," ",$row['stu_khname']; ?>
+								<?php echo $no, ". " , $row['stu_code'],"-",$row['stu_enname'],"-",$row['stu_khname']; ?>
 							</option>
 						<?php }?>
 					</select>
@@ -239,163 +226,16 @@ $frm_set_price = $this->frm_set_charge;?>
 	</tr>
 </table>	
 
-<div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:27cm;" id="popup_dept" >
-<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				return true;
-	   		}else {
-				return false;
-	   		}
-</script>
-<table width="100%">
-	<tr>
-		<td>
-				<fieldset style="margin-top:-13px;">
-					<legend align="center" ><strong>Group Faculty</strong></legend>
-					<table style="margin: 0 auto;" cellspacing="10">
-						<tr>
-							<td><?php echo $tr->translate("GROUP_CODE")?></td>
-							<td>
-								<input dojoType="dijit.form.ValidationTextBox" required="true" id="group_code" name="group_code" value="" type="text">
-							</td>
-						    <td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
-							<td>
-								<select name="academic_year" id="academic_year" type="text" dojoType="dijit.form.FilteringSelect">
-									<option value="0">Select AcademicYear</option>
-									<?php if(!empty($this->academy)){ foreach ($this->academy as $row){?>
-										<option value="<?php echo $row['id'];?>"><?php echo $row['years']; ?></option>
-									<?php }}?>
-							    </select>
-							</td>
-							<td ><?php echo $tr->translate("DEGREE")?></td>
-							<td>
-								<select name="degree_group" id="degree_group" type="text" dojoType="dijit.form.FilteringSelect" onchange="getallGrade(2);">
-										<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
-											<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->value['degree']) echo "selected='selected'"?>><?php echo $row['en_name']?></option>
-										<?php }?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("GRADE")?></td>
-							<td>
-								<input id="grade_group" name="grade_group" />
-							</td>
-							<td><?php echo $tr->translate("SEMESTER")?></td>
-							<td><input dojoType="dijit.form.ValidationTextBox" required="true" name="semester" value="" type="text"></td>
-							<td><?php echo $tr->translate("SESSION")?></td>
-							<td>
-								<select name="session_group" id="session_group" dojoType="dijit.form.FilteringSelect">
-									<?php if(!empty($this->rs_session)){ foreach ($this->rs_session as $row){?>
-										<option value="<?php echo $row['key_code'];?>"><?php echo $row['view_name']; ?></option>
-									<?php }}?>
-								</select>
-							</td>
-						</tr>
-						
-						<tr>
-							<td><?php echo $tr->translate("START_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox" name="start_date" id="start_date" onchange="setEndDate();" value="now" type="text"></td>
-							
-							<td><?php echo $tr->translate("AMOUNT_MONTH")?></td>
-							<td><input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" value="" onkeyup="setEndDate();" type="text"></td>
-							
-							<td><?php echo $tr->translate("END_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox" id="end_date" name="end_date" type="text" value="now" ></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("ROOM_NAME")?></td>
-							<td>
-								<select name="room" id="room" dojoType="dijit.form.FilteringSelect" >
-									<?php if(!empty($this->room))foreach ($this->room as $row){?>
-											<option value="<?php echo $row['room_id']?>"><?php echo $row['room_name']?></option>
-									<?php }?>
-								</select>
-							</td>
-							
-							<td><?php echo $tr->translate("TIME")?></td>
-							<td>
-								<select name="time" id="time" dojoType="dijit.form.FilteringSelect" >
-									<option value="-1">Select Time</option>
-									<option value="1">Part Time</option>
-									<option value="2">Full Time</option>
-								</select>
-							</td>
-							
-							<td><?php echo $tr->translate("NOTE")?></td>
-							<td><input dojoType="dijit.form.TextBox"   name="note" value="" type="text"></td>
-							
-						</tr>
-						<tr>
-							<td colspan="6" align="center">
-								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="CLEAR" dojoType="dijit.form.Button"/>
-								<input type="button" value="close" name="close" label="Close" dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconClose" onClick="HidePopupGroup()" />
-								<input type="button" value="save" name="save_new" label="SAVE" dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconSave" onClick="addGroup()" />
-							</td>
-						</tr>
-					</table>
-				</fieldset>
-		</td>
-	</tr>
-</table>
-</form>
-		
-	</div>
-</div>
 
 <script type="text/javascript">
-var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student')); ?>';
-function getStudentInfo(){
-			studentid = dijit.byId('studentid').get('value');
-			dojo.xhrPost({
-				url:url_student,
-				content:{
-					'studentid':studentid
-					},
-				handleAs:"json",
-				load: function(data) {
-					//alert(data.stu_enname);
-					dijit.byId("studentname").attr("value",data.stu_enname);
-					dijit.byId("gender").attr("value",data.sex);
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-}
-var url_add_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'add-group')); ?>';
-function addGroup(){
-	group_code= dijit.byId('group_code').get('value');
-	dojo.xhrPost({
-			url:url_add_group,
-			form: dojo.byId("frm_add_tran"),
-			handleAs:"json",
-			load: function(data) {
-				var Itemmake = {     
-					      id: data,
-					       name: dijit.byId('group_code').get('value')
-					    };
-		   addDataToSelectbox(dijit.byId('group'), group_store, Itemmake, data);
-		   dijit.byId('frm_add_tran').reset();
-		   dijit.byId("popup_dept").hide();
-				
-			},
-			error: function(err) {
-				alert(err);
-			}
-	});
-}
 
 
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-to-group')); ?>';
 function toStudentGroup(){
 		group = dijit.byId('group').get('value');
 		if(group==-1){
-				popupgroup();
+			alert('Please select group !!! ');
+			return false;
 		}
 	
 	dojo.xhrPost({
@@ -405,48 +245,58 @@ function toStudentGroup(){
 			},
 		handleAs:"json",
 		load: function(data) {
-			//alert(data);
+			//alert(data.academic_year_id);
 
-				dojo.byId('lbldetail').innerHTML='<span style="color:red;">Academic :  </span>'+data.year+'<span style="color:red;">  Degree :  </span>'+data.degree+'<span style="color:red;">  Grade :  </span>'+data.grade+"<br />"+'<span style="color:red;">  Session :  </span>'+data.session+'<span style="color:red;">  Start Date :  </span>'+data.start_date+'<span style="color:red;">  Expired Date :  </span>'+data.expired_date;
+			dojo.byId('lbldetail').innerHTML='<span style="color:red;">Academic :  </span>'+data.year+'<span style="color:red;"> , Degree :  </span>'+data.degree+'<br /><span style="color:red;">  Grade :  </span>'+data.grade+'<span style="color:red;"> , Session :  </span>'+data.session+'<span style="color:red;"> , Room :  </span>'+data.room+'<br /><span style="color:red;">  Start Date :  </span>'+data.start_date+'<span style="color:red;"> , Expired Date :  </span>'+data.expired_date;   
 
+			dijit.byId('academic_year_group').attr('value',data.academic_year_id);
+			dijit.byId('degree_group').attr('value',data.degree_id);
+			dijit.byId('grade_group').attr('value',data.grade_id);
+			dijit.byId('session_group').attr('value',data.session_id);
+			dijit.byId('room_group').attr('value',data.room_id);
 		},
 		error: function(err) {
 			alert(err);
 		}
 	});
 }
-function popupgroup(){
-	dijit.byId('academic_year').attr('value',dijit.byId('academy').get('value'));
-	dijit.byId('degree_group').attr('value',dijit.byId('degree').get('value'));
-	dijit.byId('grade_group').attr('value',dijit.byId('grade').get('value'));
-	dijit.byId('session_group').attr('value',dijit.byId('session').get('value'));
-	
-	dijit.byId("popup_dept").show();
-}
-function HidePopupGroup(){
-	//alert(2);
-	dijit.byId("popup_dept").hide();
-}
-function setEndDate(){
-	amount_date = dijit.byId('amountmonth').get('value');
-	release_date = dijit.byId("start_date").get('value');//just update follow by first payment
-	if(isNaN(amount_date)){
-	}else{
-		var a = new Date(release_date);
-		mm = a.getMonth()+amount_date+1;
-		var dd = a.getDate();
-		 if(dd<10){
-			 dd = "0"+dd;
+
+var url_getgroup = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getgroup"));?>';										
+function getRefreshGroup(){
+	loading();
+	dojo.xhrPost({
+		url:url_getgroup,
+		handleAs:"json",
+		load: function(data) {
+			group_store  = getDataStorefromJSON('id','name', data.group);
+		    dijit.byId('group').set('store',group_store);  
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			document.getElementsByClassName("overlay")[0].style.display="none";
 		}
-		 if(mm<10){
-			 mm = "0"+mm;
-		}
-		var y = a.getFullYear();
-		var epx_date = y + '-'+ mm + '-'+dd ;
-		dijit.byId('end_date').attr('value',epx_date);	
-    }
+	});
+}
+
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
 }
 
 </script>
 
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>
 

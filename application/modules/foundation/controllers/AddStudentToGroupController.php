@@ -19,7 +19,8 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 				$search = array(
 						'adv_search' => '',
 						'study_year' => '',
-						'grade_bac' => '',
+						'degree' => '',
+						'grade_all' => '',
 						'session' => '',
 						);
 			}
@@ -32,11 +33,11 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 			else{
 				$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 			}
-			$collumns = array("GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","SEMESTER","ROOM_NAME","START_DATE","END_DATE","NOTE","STATUS","AMOUNT_STUDENT","REMAIN_STUDENT");
+			$collumns = array("GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","START_DATE","END_DATE","NOTE","STATUS","AMOUNT_STUDENT","REMAIN_STUDENT");
 			$link=array(
 					'module'=>'foundation','controller'=>'addstudenttogroup','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('group_code'=>$link,'room_name'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('group_code'=>$link,'room_name'=>$link,'academic'=>$link,'degree'=>$link,'grade'=>$link,'session'=>$link));
 			
 			$form=new Registrar_Form_FrmSearchInfor();
 			$form->FrmSearchRegister();
@@ -59,10 +60,10 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 				$this->view->rs = $rs;
 			}else{
 				$search = array(
-						'degree' => 0,
-						'grade' => 0,
-						'session' => 0,
-						'academy'=> 0);
+						'degree' => '',
+						'grade' => '',
+						'session' => '',
+						'academy'=> '');
 				//$rs = $db->getSearchStudent($search);
 			}
 			
@@ -91,12 +92,15 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 				
 				$db = new Foundation_Model_DbTable_DbAddStudentToGroup();
 				$db->addStudentGroup($_data);
+				
+				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+				
 				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS");
-					$this->_redirect('/foundation/studentgroup/index');
+					//Application_Form_FrmMessage::message("INSERT_SUCCESS","/foundation/addstudenttogroup");
+					$this->_redirect('/foundation/addstudenttogroup');
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS");
-					$this->_redirect('/foundation/studentgroup/add');
+					//Application_Form_FrmMessage::message("INSERT_SUCCESS","/foundation/addstudenttogroup/add");
+					$this->_redirect('/foundation/addstudenttogroup/add');
 				}
 				//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
@@ -124,7 +128,6 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 	}
 	function editAction(){
 		$id=$this->getRequest()->getParam("id");
-		$db = new 	Foundation_Model_DbTable_DbStudent();
 		$_db = new Foundation_Model_DbTable_DbAddStudentToGroup();
 		$g_id = $_db->getGroupById($id);
 		
@@ -136,20 +139,20 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 			try{
 				if($this->getRequest()->isPost()){
 					$_data=$this->getRequest()->getPost();
-					$_data=$this->getRequest()->getPost();
 					$search = array(
 							'degree' => $_data['degree'],
 							'grade' => $_data['grade'],
 							'session' => $_data['session'],
 							'academy'=> $_data['academy']);
-					$rs =$db->getSearchStudent($search);
+					$rs = $_db->getSearchStudent($search);
 					$this->view->rs = $rs;
 				}else{
 					$search = array(
 							'degree' => 0,
 							'grade' => 0,
 							'session' => 0,
-							'academy'=> 0);
+							'academy'=> 0
+							);
 				}
 			
 				$this->view->value=$search;
@@ -184,16 +187,5 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 		}
 	}
 	
-	function addGroupAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbAddStudentToGroup();
-			$group = $db->addGroup($data);
-			$result = array("id"=>$group);
-			print_r(Zend_Json::encode($group));
-			exit();
-		}
-	}
-
 	
 }

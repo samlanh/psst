@@ -151,11 +151,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $db->fetchAll($sql);
    }
    
-   public function getAllFecultyName(){
-   	$db = $this->getAdapter();
-   		$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' AND dept_id IN(2,3,4) ORDER BY id DESC";
-   		return $db->fetchAll($sql);
-   }
    public function getGepDept(){
    	$db = $this->getAdapter();
    	$sql ="SELECT dept_id as id,en_name AS name FROM rms_dept WHERE dept_id NOT IN (1,2,3,4) AND is_active =1";

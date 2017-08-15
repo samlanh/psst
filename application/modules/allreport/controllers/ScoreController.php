@@ -126,9 +126,6 @@ public function init()
     function rptTranscriptAction(){
     	 
     }
-    function certifyAction(){
-    	
-    }
     function academicTranscriptAction(){
     	
     }

@@ -58,7 +58,8 @@
 									<td><?php echo $tr->translate("NATIONALITY");?></td>
 									<td><?php echo $tr->translate("DATE_OF_BIRTH");?></td>	
 									<td><?php echo $tr->translate("POB");?></td>
-									<td><?php echo $tr->translate("CONTACT_NO");?></td>					
+									<td><?php echo $tr->translate("CONTACT_NO");?></td>	
+									<td><?php echo $tr->translate("PRINT");?></td>					
 								</tr>
 								</thead>
 								<?php  $i=0; foreach ($this->rs as $row){ $i++;?>
@@ -72,6 +73,7 @@
 									<td><?php echo date("d-m-Y",strtotime($row['dob']));?></td>
 									<td><?php echo $row['pob'];?></td>
 									<td><?php echo $row['tel'];?></td>
+									<td><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'certify','id'=>$row['gd_id'])); ?>"><?php echo $tr->translate("PRINT_CERTIFY");?></a></td>
 								</tr>
 								<?php }?>	
 							</table>	

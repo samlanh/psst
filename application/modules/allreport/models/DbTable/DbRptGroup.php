@@ -57,9 +57,72 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
     }
    public function getStudentGroup($id,$search){
    	$db = $this->getAdapter();
-	   	$sql= 'SELECT * FROM v_getallstudentbygroup '; 
-		$sql.=' WHERE group_id='.$id;
-		$order= ' ORDER BY stu_id DESC ';
+// 	   	$sql= 'SELECT * FROM v_getallstudentbygroup '; 
+$sql="
+SELECT
+  g.gd_id,
+  `g`.`group_id` AS `group_id`,
+  `g`.`stu_id`   AS `stu_id`,
+  (SELECT
+     `rms_group`.`group_code`FROM `rms_group` WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1) AS `group_code`,
+  (SELECT `rms_student`.`stu_code` FROM `rms_student`
+   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `stu_code`,
+  (SELECT
+     `rms_student`.`stu_khname`
+   FROM `rms_student`
+   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `kh_name`,
+  (SELECT
+     `rms_student`.`stu_enname`
+   FROM `rms_student`
+   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `en_name`,
+  (SELECT
+     `rms_student`.`nationality`
+   FROM `rms_student`
+   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `nation`,
+  (SELECT
+     `rms_student`.`address`
+   FROM `rms_student`
+   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `pob`,
+  (SELECT
+     `rms_student`.`tel`
+   FROM `rms_student`
+   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `tel`,
+  (SELECT
+     (SELECT
+        `rms_view`.`name_kh`
+      FROM `rms_view`
+      WHERE ((`rms_view`.`type` = 2)
+             AND (`rms_view`.`key_code` = `rms_student`.`sex`)) LIMIT 1)
+   FROM `rms_student`
+   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `sex`,
+  (SELECT
+     `rms_student`.`dob`
+   FROM `rms_student`
+   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `dob`,
+  (SELECT
+     (SELECT
+        `rms_room`.`room_name`
+      FROM `rms_room`
+      WHERE (`rms_room`.`room_id` = `rms_group`.`room_id`) LIMIT 1)
+   FROM `rms_group`
+   WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1 ) AS `room`,
+  (SELECT
+     (SELECT
+        `rms_view`.`name_en`
+      FROM `rms_view`
+      WHERE ((`rms_view`.`type` = 4)
+             AND (`rms_view`.`key_code` = `rms_group`.`session`)) LIMIT 1)
+   FROM `rms_group`
+   WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1) AS `session`,
+  (SELECT
+     CONCAT(`rms_group`.`from_academic`,'-',`rms_group`.`to_academic`)
+   FROM `rms_group`
+   WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1) AS `academic`,
+  `g`.`status`   AS `status`
+FROM `rms_group_detail_student` AS g
+WHERE (`g`.`status` = 1) ";
+		$sql.=' AND group_id='.$id;
+	$order= ' ORDER BY stu_id DESC ';
    	if(empty($search)){
    		return $db->fetchAll($sql.$order);
    	}

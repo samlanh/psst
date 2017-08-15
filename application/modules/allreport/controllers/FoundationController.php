@@ -587,8 +587,14 @@ public function init()
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     }
+    
     function certifyAction(){
-    	 
+    	$id=$this->getRequest()->getParam("id");
+    	//echo $id;exit();
+    	$db = new Allreport_Model_DbTable_DbCertify();
+    	$result = $db->getStudentCertify($id);
+    	$this->view->rs = $result;
+    	//print_r($result);
     }
 }
 

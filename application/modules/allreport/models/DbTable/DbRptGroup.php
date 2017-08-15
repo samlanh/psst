@@ -114,10 +114,6 @@ SELECT
              AND (`rms_view`.`key_code` = `rms_group`.`session`)) LIMIT 1)
    FROM `rms_group`
    WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1) AS `session`,
-  (SELECT
-     CONCAT(`rms_group`.`from_academic`,'-',`rms_group`.`to_academic`)
-   FROM `rms_group`
-   WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1) AS `academic`,
   `g`.`status`   AS `status`
 FROM `rms_group_detail_student` AS g
 WHERE (`g`.`status` = 1) ";

@@ -20,7 +20,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 		    			'parent'	    =>	0,
     					//'borrow_name'	=>	0,
     					'is_type_bor'	=>	0,
-		    			'status_search'	=>	-1,
+		    			'status_search'	=>	1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d') 
 	    		);

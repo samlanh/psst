@@ -156,7 +156,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 							<tr>
 								<td nowrap="nowrap"><?php echo $tr->translate("BLOCK_NAME")?></td>
 								<td> 
-									<input dojoType="dijit.form.TextBox"   name="block_name" id="block_name" value=""  type="text">
+									<input dojoType="dijit.form.ValidationTextBox"   name="block_name" id="block_name" value=""  type="text" required="true">
 							   </td>
 							</tr>
 							<tr>
@@ -266,10 +266,10 @@ function addDept(){
 var url_add_block = '<?php echo $this->url(array('module'=>'library','controller'=>'book','action'=>'add-block')); ?>';
 var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->block))?>);
 function addBlock(){
-	b_name=dijit.byId('block_name').get('value');
+	/*b_name=dijit.byId('block_name').get('value');
 	if(b_name==''){
 		return false;
-	}
+	}*/
 	if(dijit.byId('frm_block').validate()){
 		dojo.xhrPost({
 			url:url_add_block,

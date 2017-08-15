@@ -17,8 +17,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql=" SELECT b.id,b.borrow_no,(SELECT v.name_kh FROM rms_view  AS v WHERE v.key_code=b.borrow_type AND v.type=13)AS `type`,
     			b.card_id,b.name,b.phone,
-		        SUM(bd.borr_qty) AS qty,
-				b.borrow_date,b.return_date,b.note,
+		        SUM(bd.borr_qty) AS qty,DATE_FORMAT(b.borrow_date,'%d/%b/%Y'),DATE_FORMAT(b.return_date,'%d/%b/%Y'),b.note,
 		       (SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
 			   (SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`
 		       FROM rms_borrow AS b,rms_borrowdetails AS bd
@@ -85,7 +84,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 			$this->_name="rms_borrow";
 			$borr_id = $this->insert($arr); 
 			unset($info_purchase_order);
-
+            
 			if($data['identity']!=""){
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
@@ -105,6 +104,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 					$this->insert($data_item);
 					$rows=$this->getBookQty($data['book_id'.$i]); 
 					if($rows){
+						
 							$datatostock= array(
 									'qty_after' => $rows["qty_after"]-$data['borr_qty'.$i],
 									'date'		=>	date("Y-m-d"),
@@ -113,6 +113,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 							$this->_name="rms_book";
 							$where=" id = ".$rows['id'];
 							$this->update($datatostock, $where);
+							
 					}else{
 						
 					}
@@ -171,21 +172,28 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 			);
 			$this->_name="rms_borrow";
 			$where="id=".$data['id'];
+			$db->getProfiler()->setEnabled(true);
 		    $this->update($arr, $where); 
 			unset($arr);
-			
+			 
 			$this->_name="rms_borrowdetails";
 			$where=" borr_id=".$data['id'];
+			$db->getProfiler()->setEnabled(true);
 			$this->delete($where);
 
 			if($data['identity']!=""){
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
+				    if($data['status']!=0){
+				    	$qty=$data['borr_qty'.$i];
+				    }else{
+				    	$qty=0;
+				    }
 					$data_item= array(
 							'borr_id'	=>  $data['id'],
 							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $data['borr_qty'.$i],
+							'borr_qty'	=>  $qty,
 							'note'  	=> 	$data['note_'.$i],
 							'user_id'	=> 	$GetUserId,
 							'date'		=>	date('Y-m-d'),
@@ -193,21 +201,26 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 							'is_full'	=> 	0,
 							'status'	=> 	$data['status'],
 					);
+					$db->getProfiler()->setEnabled(true);
 					$this->_name='rms_borrowdetails';
 					$this->insert($data_item);
 					$rows=$this->getBookQty($data['book_id'.$i]); 
 					if($rows){
+						if($data['status']!=0){
 							$datatostock= array(
 									'qty_after' => $rows["qty_after"]-$data['borr_qty'.$i],
 									'date'		=>	date("Y-m-d"),
-									'user_id'	=>$GetUserId
+									'user_id'	=>	$GetUserId
 							);
 							$this->_name="rms_book";
 							$where=" id = ".$rows['id'];
+							$db->getProfiler()->setEnabled(true);
 							$this->update($datatostock, $where);
-					}else{
-						
-					}
+// 							Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQuery());
+// 							Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQueryParams());
+// 							$db->getProfiler()->setEnabled(false);
+						}
+					}else{ }
 				 }
 			}
 			$db->commit();
@@ -301,9 +314,9 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 	
 	function getBookTitle(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(title,'(',book_no,')') AS name FROM rms_book WHERE `status`=1";
+		$sql="SELECT id,CONCAT(title,'(',book_no,')') AS name FROM rms_book WHERE `status`=1 AND title!=''";
 		$rows=$db->fetchAll($sql);
-		array_unshift($rows,array('id' => '-1',"name"=>$this->tr->translate("ADD_NEW")));
+		//array_unshift($rows,array('id' => '-1',"name"=>$this->tr->translate("ADD_NEW")));
 		array_unshift($rows,array('id' => '',"name"=>$this->tr->translate("SELECT_TITLE")));
 		$options = '';
 		if(!empty($rows))foreach($rows as $value){

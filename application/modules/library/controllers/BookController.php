@@ -21,7 +21,7 @@ protected $tr;
 	    				'title'	       =>	'',
 		    			'parent'	   =>	0,
     					'block_id'	   =>	0,
-		    			'status_search'	=>	-1
+		    			'status_search'	=>	1
 	    		);
     	    }
     	    $this->view->book_row=$db->getAllBook($search);

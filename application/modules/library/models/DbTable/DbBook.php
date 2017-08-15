@@ -17,7 +17,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 			      (SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
 			      (SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`
 			      FROM rms_book AS b 
-			      WHERE b.status=1 ";
+			      WHERE b.title!='' ";
     	$where = '';
     	if(!empty($search["title"])){
     		$s_where=array();
@@ -46,6 +46,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
     	}
     	
     	$order=" ORDER BY id DESC";
+    	//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }
  

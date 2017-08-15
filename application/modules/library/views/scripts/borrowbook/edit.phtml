@@ -29,6 +29,17 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
                     dijit.byId('stu_id').focus();
 			        return false;
                 }
+				var rowId = $('#identity').val();
+    			if(rowId!=''){ 
+					var rowIDArray = rowId.split(',');
+					for(var n = 0; n < rowIDArray.length; n++){
+					var book_id = dijit.byId('book_id'+rowIDArray[n]).get('value');
+					if(book_id==''){
+							alert("Please select book title!");
+							return false;
+						}
+					}
+				}
 				return true;
 			}else {
 				return false;
@@ -89,11 +100,11 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						
 						<tr>
 							<td nowrap="nowrap"><?php echo $tr->translate("BORROW_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox" name="borrow_date" id="borrow_date" onchange="" value="<?php echo $this->row['borrow_date'];?>" type="text"></td>
+							<td><input dojoType="dijit.form.DateTextBox" name="borrow_date" id="borrow_date" onchange="" value="<?php echo $this->row['borrow_date'];?>" type="text"  constraints="{datePattern:'dd/MM/yyyy'}"></td>
 							<td nowrap="nowrap"><?php echo $tr->translate("AMOUNT_WEEK")?></td>
 							<td><input dojoType="dijit.form.NumberTextBox"   name="amountweek" id="amountweek" value="<?php echo $this->row['amount_week']?>" onkeyup="setEndDate();" type="text"></td>
 							<td style="width: 5px;white-space: nowrap;" nowrap="nowrap"><?php echo $tr->translate("RETURN_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text"  value="<?php echo $this->row['return_date'];?>" ></td>
+							<td><input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text"  value="<?php echo $this->row['return_date'];?>" constraints="{datePattern:'dd/MM/yyyy'}"></td>
 							
 							<!--  <td><input dojoType="dijit.form.TextBox"   name="note" value="<?php //echo $this->row['note'];?>" type="text"></td>-->
 						</tr>

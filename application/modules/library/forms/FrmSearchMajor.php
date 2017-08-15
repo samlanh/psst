@@ -132,7 +132,9 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$dates = date("Y-m-d");
 		$start_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",'class'=>'fullside',
-				'required'=>false));
+				'required'=>false,
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				));
 		$_date = $request->getParam("start_date");
 		if(empty($_date)){
 			$_date = date('Y-m-d');
@@ -143,7 +145,9 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$date = date("Y-m-d");
 		$end_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",'class'=>'fullside',
-				'required'=>false));
+				'required'=>false,
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				));
 		$_date = $request->getParam("end_date");
 		if(empty($_date)){
 			$_date = date("Y-m-d");
@@ -253,6 +257,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$dates = date("Y-m-d");
 		$start_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'required'=>false));
 		$_date = $request->getParam("start_date");
 		if(empty($_date)){
@@ -264,6 +269,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$date = date("Y-m-d");
 		$end_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'required'=>false));
 		$_date = $request->getParam("end_date");
 		if(empty($_date)){

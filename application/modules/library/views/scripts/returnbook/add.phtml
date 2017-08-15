@@ -86,7 +86,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 							<td nowrap="nowrap"><?php echo $tr->translate("RETURN_NO")?></td>
 							<td style="font-weight: 600;"><input dojoType="dijit.form.TextBox"   name="borrow_id" id="borrow_id" value="<?php echo $this->borr_no;?>"  type="text" readonly></td>
 							<td style="width: 5px;white-space: nowrap;"><?php echo $tr->translate("RETURN_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text"  value="<?php echo date('Y-m-d');?>" ></td>
+							<td><input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text"  value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}"></td>
 							<td ><?php echo $tr->translate("STATUS")?></td>
 							<td><select name="status" id="status" dojoType="dijit.form.FilteringSelect">
 								    <option value="1" label="ប្រើប្រាស់">ប្រើប្រាស់</option>
@@ -138,6 +138,7 @@ function myYmd(D){
 	var Result = D.getFullYear() + '-' + pad((D.getMonth() + 1)) + '-' + pad(D.getDate());
 	return Result;
 }
+
 function getAllcustomer(){
 	temp='';
 	stu_id  = dijit.byId('stu_id').get('value');
@@ -172,7 +173,7 @@ function getAllcustomer(){
 				dojo.query("#head_title").append(thead);
 			}
 		
-			for(i=0;i<data.length;i++){
+			for(i=0;i<data.length;i++){  
 				r++;
 				if(fund_title!=1){
 					thead='<th style="margin-bottom: 20px;"><?php echo $tr->translate("DEL");?></th>';
@@ -213,7 +214,7 @@ function getAllcustomer(){
 				
 				temp+='<td>'+setDate(data[i].return_date)+'<input  style="margin-left:0px;width:200px; "  type="hidden" data-dojo-props="constraints:{places:0}" value="'+data[i].return_date+'"    name="date_return_'+r+'"  id="date_return_'+r+'" dojoType="dijit.form.TextBox" /></td>';
 
-				temp+='<td><input  style="margin-left:0px;width:150px; "  type="text" data-dojo-props="constraints:{places:0}" value="<?php echo date('Y-m-d');?>"    name="date_delay_'+r+'"  id="date_delay_'+r+'" dojoType="dijit.form.DateTextBox" readonly="true"/></td>';
+				temp+='<td><input  style="margin-left:0px;width:150px; "  type="text"  constraints='+'{datePattern:"dd/MM/yyyy"}'+'    value="now"    name="date_delay_'+r+'"  id="date_delay_'+r+'" dojoType="dijit.form.DateTextBox" readonly="true" /></td>';
 				
 				temp+='<td><input  style="margin-left:0px;width:150px; "  type="text" data-dojo-props="constraints:{places:0}" value=""    name="note_'+r+'"  id="note_'+r+'" dojoType="dijit.form.TextBox" /></td>';
 				tmp='<tr style="border:1px solid #deafaf; font-size:14px;height:37px; !important;text-align:center;" id="row_capital'+r+'" >'
@@ -282,7 +283,7 @@ function setDate(d){
 	 var yyyy = d.getFullYear().toString();
 	 var mm = (d.getMonth() + 101).toString().slice(-2);
 	 var dd = (d.getDate() + 100).toString().slice(-2);
-	 return mm+'/'+ dd +'/'+yyyy;
+	 return dd+'/'+ mm +'/'+yyyy;
 }
 
 function setValue(){

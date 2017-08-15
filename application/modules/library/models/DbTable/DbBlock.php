@@ -13,7 +13,7 @@ class Library_Model_DbTable_DbBlock extends Zend_Db_Table_Abstract
     	$sql="SELECT id,block_name,remark,`date`,
 			      (SELECT name_en FROM rms_view WHERE key_code=rms_blockbook.status LIMIT 1) AS `status`,
 				(SELECT first_name FROM rms_users WHERE id=rms_blockbook.user_id LIMIT 1) AS user_name
-				FROM rms_blockbook WHERE 1 ";
+				FROM rms_blockbook WHERE block_name!='' ";
     	$where = '';
     	if(!empty($search["title"])){
     		$s_where=array();

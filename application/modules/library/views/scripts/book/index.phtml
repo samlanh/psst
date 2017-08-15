@@ -106,7 +106,7 @@
 				<td id="items"><?php echo $row['cat_name'];?></td>
 				<td id="items" style="text-align: center"><?php echo $row['qty_after'];?> &nbsp;ក្បាល</td>
 				<td id="items">&nbsp;$&nbsp;<?php echo $row['unit_price'];?></td>
-				<td id="items"><?php echo $row['date'];?></td>
+				<td id="items"><?php echo date("d/M/Y",strtotime($row['date']));?></td>
 				<td id="items"><?php echo $row['user_name'];?></td>
 				<td id="items"><?php echo $row['status'];?></td>
 			</tr>

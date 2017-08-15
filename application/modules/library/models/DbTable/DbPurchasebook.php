@@ -163,10 +163,15 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
+					if($data['status_p']!=0){
+						$qty=$data['qty_'.$i];
+					}else{
+						$qty=0;
+					}
 					$data_item= array(
 							'purchase_id'	=>  $data['id'],
 							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $data['qty_'.$i],
+							'borr_qty'	=>  $qty,
 							'cost'		=>  $data['cost_'.$i],
 							'amount'	=>  $data['amount_'.$i],
 							'note'  	=> 	$data['note_'.$i],
@@ -186,7 +191,10 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 							);
 							$this->_name="rms_book";
 							$where=" id = ".$rows['id'];
-							$this->update($datatostock, $where);
+							if($data['status_p']!=0){
+								$this->update($datatostock, $where);
+							}
+							
 					}else{
 						
 					}

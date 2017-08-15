@@ -20,7 +20,17 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
                  
-			   
+			   var rowId = $('#identity').val();
+    			if(rowId!=''){ 
+					var rowIDArray = rowId.split(',');
+					for(var n = 0; n < rowIDArray.length; n++){
+					var book_id = dijit.byId('book_id'+rowIDArray[n]).get('value');
+					if(book_id==''){
+							alert("Please select book title!");
+							return false;
+						}
+					}
+				}
 				return true;
 			}else {
 				return false;
@@ -34,9 +44,9 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 					<table style="margin: 0 auto; width: 100%;" cellspacing="10" >
 						<tr >
 						  <td ><?php echo $tr->translate("PURCHASE_NO")?></td>
-						  <td><input dojoType="dijit.form.TextBox"   name="purchase_no" id="purchase_no" value="<?php echo $this->row['purchase_no'];?>"  type="text" readonly="readonly"></td>
+						  <td><input dojoType="dijit.form.TextBox"   name="purchase_no" id="purchase_no" value="<?php echo $this->row['purchase_no'];?>"  type="text"  ></td>
 							<td ><?php echo $tr->translate("ORDER_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox"   name="date_order" id="date_order" value="<?php echo $this->row['date_order'];?>"  type="text" required="required"></td>
+							<td><input dojoType="dijit.form.DateTextBox"   constraints="{datePattern:'dd/MM/yyyy'}"  name="date_order" id="date_order" value="<?php echo $this->row['date_order'];?>"  type="text" required="required"></td>
 						</tr>
 						<tr >
 							<td style="width: 5px"><?php echo $tr->translate("NOTE")?></td>

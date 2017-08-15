@@ -37,7 +37,6 @@ dojo.ready(function(){
 		required:false,
 		placeHolder:"Select Grade",          
 		onChange: function() {  
-			make_id = dijit.byId('grade').get('value');
 			grade   = dijit.byId('grade').get('value');
 			if(grade==-1){
 				dijit.byId("popup_grate").show();
@@ -402,7 +401,7 @@ function submitDataClose(){
 				}
 			});
 		}
-}
+	}
 }
 function submitDataAddNew(){
 	condition = validateGrade();

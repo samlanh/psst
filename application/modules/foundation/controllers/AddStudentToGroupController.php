@@ -22,6 +22,7 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 						'degree' => '',
 						'grade_all' => '',
 						'session' => '',
+						'room' => '',
 						);
 			}
 			
@@ -124,7 +125,7 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$this->_redirect('/foundation/studentgroup/index');
+		$this->_redirect('/foundation/addstudenttogroup/index');
 	}
 	function editAction(){
 		$id=$this->getRequest()->getParam("id");

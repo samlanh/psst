@@ -206,6 +206,9 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($search['session'])){
 			$where.=' AND g.session='.$search['session'];
 		}
+		if(!empty($search['room'])){
+			$where.=' AND g.room_id='.$search['room'];
+		}
 		
 		return $db->fetchAll($sql.$where.$order);
 	}

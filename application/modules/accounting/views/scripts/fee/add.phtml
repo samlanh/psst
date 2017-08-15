@@ -155,9 +155,9 @@ dojo.ready(function(){
 							<tr>
 								<td colspan="8" align="center">
 								 	<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-									<input type="button" onclick="submitDataClose();" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+									<input type="button" onclick="alertBeforeSubmit(1);" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
-									<input type="button"  onclick="submitDataAddNew();" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+									<input type="button"  onclick="alertBeforeSubmit(2);" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
 								</td>
 							</tr>
@@ -242,83 +242,213 @@ dojo.ready(function(){
 <?php  $frm = $this->frm_branch;?>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:800px" id="popup_add_branch" >
-	<form  id='frm_addbranch' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		 <script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				return true;
-			} else {
-				return false;
-			}
-		</script>
-		<table cellspacing="10" style="margin: 0 auto; width:100%">
-			<tr>
-				<td>
-					<fieldset>
-						<legend align="center"><strong><?php echo $tr->translate("បន្ថែមសាខា");?></strong></legend>
-						<table cellspacing="10" width="100%" >
-							<tr>
-								<td>
-									<table width="100%" cellspacing="10">
-										<tr>
-											<td><?php echo $tr->translate("CODE")?></td>
-											<td><?php echo $frm->getElement("branch_code");?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("BRANCH_NAME")?></td>
-											<td><?php echo $frm->getElement("branch_nameen");?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("PREFIX_CODE");?></td>
-											<td><?php echo $frm->getElement("prefix_code");?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("MAIN_BRANCH")?></td>
-											<td><?php echo $frm->getElement("main_branch_id");?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("ADDRESS")?></td>
-											<td><?php echo $frm->getElement("br_address");?></td>
-										</tr>
-									</table>
-								</td>
-								<td align="center" valign="top">
-									<table width="100%" cellspacing="10">
-										<tr>		
-											<td><?php echo $tr->translate("PHONE")?></td>
-											<td><?php echo $frm->getElement("branch_tel");?></td>	
-										</tr>
-										<tr>		
-											<td><?php echo $tr->translate("BRANCH_FAX")?></td>
-											<td><?php echo $frm->getElement("fax");?></td>	
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("NOTE")?></td>
-											<td><?php echo $frm->getElement("branch_note");?></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("STATUS")?></td>
-											<td><?php echo $frm->getElement("branch_status");?></td>
-										</tr>
-									</table>
-								</td>							
-							</tr>
-							<tr>
-								<td colspan="2" align="center" >
-									<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
-									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
-									<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
-									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addBranch();"/>
-								</td>
-							</tr>
-						</table>	
-					</fieldset>
-				</td>			
-			</tr>
-		</table>	
-	</form>
+		<form  id='frm_addbranch' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					return true;
+				} else {
+					return false;
+				}
+			</script>
+			
+			<table cellspacing="10" style="margin: 0 auto; width:100%">
+				<tr>
+					<td>
+						<fieldset>
+							<legend align="center"><strong><?php echo $tr->translate("បន្ថែមសាខា");?></strong></legend>
+							<table cellspacing="10" width="100%" >
+								<tr>
+									<td>
+										<table width="100%" cellspacing="10">
+											<tr>
+												<td><?php echo $tr->translate("CODE")?></td>
+												<td><?php echo $frm->getElement("branch_code");?></td>
+											</tr>
+											<tr>
+												<td><?php echo $tr->translate("BRANCH_NAME")?></td>
+												<td><?php echo $frm->getElement("branch_nameen");?></td>
+											</tr>
+											<tr>
+												<td><?php echo $tr->translate("PREFIX_CODE");?></td>
+												<td><?php echo $frm->getElement("prefix_code");?></td>
+											</tr>
+											<tr>
+												<td><?php echo $tr->translate("MAIN_BRANCH")?></td>
+												<td><?php echo $frm->getElement("main_branch_id");?></td>
+											</tr>
+											<tr>
+												<td><?php echo $tr->translate("ADDRESS")?></td>
+												<td><?php echo $frm->getElement("br_address");?></td>
+											</tr>
+										</table>
+									</td>
+									<td align="center" valign="top">
+										<table width="100%" cellspacing="10">
+											<tr>		
+												<td><?php echo $tr->translate("PHONE")?></td>
+												<td><?php echo $frm->getElement("branch_tel");?></td>	
+											</tr>
+											<tr>		
+												<td><?php echo $tr->translate("BRANCH_FAX")?></td>
+												<td><?php echo $frm->getElement("fax");?></td>	
+											</tr>
+											<tr>
+												<td><?php echo $tr->translate("NOTE")?></td>
+												<td><?php echo $frm->getElement("branch_note");?></td>
+											</tr>
+											<tr>
+												<td><?php echo $tr->translate("STATUS")?></td>
+												<td><?php echo $frm->getElement("branch_status");?></td>
+											</tr>
+										</table>
+									</td>							
+								</tr>
+								<tr>
+									<td colspan="2" align="center" >
+										<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
+										dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
+										<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
+										dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addBranch();"/>
+									</td>
+								</tr>
+							</table>	
+						</fieldset>
+					</td>			
+				</tr>
+			</table>	
+		</form>
+	</div>
 </div>
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_alert" >
+		<form  id='frm_alert' name='frm_alert' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" style="margin: 0 auto; width:100%">
+			    <tr>
+					<td align="center" style="font-size: 20px;color: red;">
+						DO you really want to save ?
+					</td>
+					<input type="hidden" name="save_type" id="save_type" dojoType="dijit.form.TextBox" /> 
+				</tr>
+				<tr>
+					<td align="center">
+						<input type="button"  label="<?php echo $tr->translate("Yes");?>" id="yes" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="checkSaveType();"/>
+							
+						<input type="button"  label="<?php echo $tr->translate("No");?>" id="no" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideAlert();"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
 </div>
+
 <script type="text/javascript">
+
+function alertBeforeSubmit(save_type){
+	if(dijit.byId('frm_fee').validate()){
+		dijit.byId('save_type').attr('value',save_type);
+		dijit.byId("popup_alert").show();
+	}
+}
+function hideAlert(){
+	dijit.byId("popup_alert").hide();
+}
+function checkSaveType(){
+	save_type = dijit.byId('save_type').get('value');
+
+	if(save_type==1){
+		submitDataClose();
+	}else{
+		submitDataAddNew();
+	}
+	
+}
+
+									
+function submitDataClose(){
+	if(dijit.byId('frm_fee').validate()){
+		condition = validateGrade();
+		if(condition==false){
+			alert("Please set fee to grade !!! ");
+			return false;
+		}
+		if(dijit.byId('frm_fee').validate()) {
+			dijit.byId('save_close').set('disabled',true);
+			var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
+			loading();
+			dojo.xhrPost({
+			    url: url_submit,	
+				form: dojo.byId("frm_fee"),		    
+				load: function(data) {
+					document.getElementsByClassName("overlay")[0].style.display="none";	
+					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+					window.location.href ="<?php echo $this->baseUrl();?>/accounting/fee";
+				},
+				error: function(e) {
+				}
+			});
+		}
+	}
+}
+function submitDataAddNew(){
+	condition = validateGrade();
+	if(condition==false){
+		alert("Please set fee to grade !!! ");
+		return false;
+	}
+	if(dijit.byId('frm_fee').validate()) {
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
+		loading();
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("frm_fee"),		    
+			load: function(data) {
+				document.getElementsByClassName("overlay")[0].style.display="none";		
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/fee/add";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
+function validateGrade(){
+	var identity = $('#identity').val();
+	if(identity==''){
+		//alert("សូមជ្រើសរើសថ្នាក់សិក្សា !");
+		dijit.byId("grade").focus();
+		return false;
+	}
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+		grade = dijit.byId('class_'+arrays[i]).get('value');
+		if(grade==-1){
+			return false;
+		}
+	}
+}
+function ResetRecordRecord() {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	if(arrays.length==1){
+		deleteRecord(identity);
+	}	
+	else{
+		for(var i=0;i<arrays.length;i++) {
+			deleteRecord(arrays[i]);
+		}
+	}
+}
+
+
+									
 var url_degree = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"adddegree")); ?>';
 function adddegree(){
 	if(dijit.byId('frm_add_dep').validate()){
@@ -378,84 +508,7 @@ function addGrade(){
 		});
 	}
 }
-function submitDataClose(){
-	if(dijit.byId('frm_fee').validate()){
-		condition = validateGrade();
-		if(condition==false){
-			alert("Please set fee to grade !!! ");
-			return false;
-		}
-		if(dijit.byId('frm_fee').validate()) {
-			dijit.byId('save_close').set('disabled',true);
-			var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
-			loading();
-			dojo.xhrPost({
-			    url: url_submit,	
-				form: dojo.byId("frm_fee"),		    
-				load: function(data) {
-					document.getElementsByClassName("overlay")[0].style.display="none";	
-					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-					window.location.href ="<?php echo $this->baseUrl();?>/accounting/fee";
-				},
-				error: function(e) {
-				}
-			});
-		}
-	}
-}
-function submitDataAddNew(){
-	condition = validateGrade();
-	if(condition==false){
-		alert("Please set fee to grade !!! ");
-		return false;
-	}
-	if(dijit.byId('frm_fee').validate()) {
-		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
-		loading();
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("frm_fee"),		    
-			load: function(data) {
-				document.getElementsByClassName("overlay")[0].style.display="none";		
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/accounting/fee/add";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
-function loading(){
-    document.getElementsByClassName("overlay")[0].style.display="block";
-}
-function validateGrade(){
-	var identity = $('#identity').val();
-	if(identity==''){
-			alert("សូមជ្រើសរើសថ្នាក់សិក្សា !");
-			dijit.byId("grade").focus();
-			return false;
-		}
-	var arrays = identity.split(',');
-	for(var i=0;i<arrays.length;i++) {
-		grade = dijit.byId('class_'+arrays[i]).get('value');
-		if(grade==-1){
-			return false;
-		}
-	}
-}
-function ResetRecordRecord() {
-	var identity = $('#identity').val();
-	var arrays = identity.split(',');
-	if(arrays.length==1){
-		deleteRecord(identity);
-	}	
-	else{
-		for(var i=0;i<arrays.length;i++) {
-			deleteRecord(arrays[i]);
-		}
-	}
-}
+
 var template = '';
 var col = 0;
 var no = 0;

@@ -1,5 +1,8 @@
   <?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();
   // report
+  
+  echo $this->headTitle($tr->translate("SCORE_ATTENDANT_REPORT"));
+  
   $rpt_score_bac_monthly = $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-bac-monthly'), null, true);
   $rpt_score_gep = $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-gep'), null, true);
   $rpt_semester_evaluation = $this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'rpt-semester-evaluation'), null, true);

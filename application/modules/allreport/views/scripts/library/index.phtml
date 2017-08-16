@@ -32,6 +32,9 @@ hr.style-two {
   <?php 
   
   $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  
+  echo $this->headTitle($tr->translate("LIBRARY_REPORT"));
+  
   $rpt_fee=$this->url(array('module'=>'allreport','controller'=>'fee','action'=>'rpt-fee'), null, true);
   
   ?>

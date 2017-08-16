@@ -43,14 +43,35 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     }
     function getProductLocation($search=null){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.pro_code,CONCAT(p.pro_name) AS pro_name ,
-    	             (SELECT name_kh FROM `rms_pro_category` WHERE id = p.cat_id limit 1) as category_name,
-    	             (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id limit 1) AS brand_name,pl.brand_id,
-    				 pl.pro_qty,p.pro_price,pl.total_amount,
-			         p.date,(SELECT name_kh FROM rms_view WHERE rms_view.key_code=p.status AND rms_view.type=1 limit 1) AS `status` 
-			        FROM rms_product AS p,rms_product_location AS pl
-			       WHERE p.id=pl.pro_id ";
-    	$where="";
+    	
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$level = $_db->getUserType();
+    	
+    	if($level==4){
+    		$branch_id = $_db->getAccessPermission("brand_id");
+    	}else{
+    		$branch_id = "";
+    	}
+    	
+    	$sql="SELECT 
+    				p.pro_code,
+    				CONCAT(p.pro_name) AS pro_name ,
+    	            (SELECT name_kh FROM `rms_pro_category` WHERE id = p.cat_id limit 1) as category_name,
+    	            (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id limit 1) AS brand_name,
+    	            pl.brand_id,
+    				pl.pro_qty,
+    				p.pro_price,
+    				pl.total_amount,
+			        p.date,
+			        (SELECT name_kh FROM rms_view WHERE rms_view.key_code=p.status AND rms_view.type=1 limit 1) AS `status` 
+			  FROM 
+			  		rms_product AS p,
+			  		rms_product_location AS pl
+			  WHERE 
+    				p.id=pl.pro_id 
+    				$branch_id
+    		";
+    	$where=" ";
     	if(!empty($search['title'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['title']));

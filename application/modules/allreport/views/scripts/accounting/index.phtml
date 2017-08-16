@@ -26,6 +26,9 @@
   <?php 
   
   $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  
+  echo $this->headTitle($tr->translate("ACCOUNTING_REPORT"));
+  
   $rpt_fee=$this->url(array('module'=>'allreport','controller'=>'fee','action'=>'rpt-fee'), null, true);
   $rpt_servicecharge=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-service-charge'), null, true);
   $rpt_student_balance=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentbalance'), null, true);

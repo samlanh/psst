@@ -1,5 +1,8 @@
   <?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();
   // report
+  
+  echo $this->headTitle($tr->translate("ALL_STUDENT_REPORT"));
+  
   $rpt_all_student=$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student'), null, true);
   $rpt_all_amount_student=$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-amount-student'), null, true);
   $rpt_student_history=$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-study-history'), null, true);

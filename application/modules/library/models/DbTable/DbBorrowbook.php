@@ -35,6 +35,8 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[]="  b.borrow_no LIKE '%{$s_search}%'";
+    		$s_where[]="  b.card_id LIKE '%{$s_search}%'";
+    		$s_where[]="  b.name LIKE '%{$s_search}%'";
     		$s_where[]="  b.phone LIKE '%{$s_search}%'";
     		$s_where[]= "(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]= "(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) LIKE '%{$s_search}%'";

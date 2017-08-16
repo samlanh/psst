@@ -18,7 +18,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$search = array(
 	    				'title'	       =>	'',
 		    			'parent'	   =>	'',
-		    			'status_search'	=>	''
+		    			'status_search'	=>	1
 	    		);
     	    }
 	    	$rows = $db->getAllCategoryVandy(0,'','','',$search);

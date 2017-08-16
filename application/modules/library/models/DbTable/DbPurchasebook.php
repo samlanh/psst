@@ -18,7 +18,7 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
     	$sql=" SELECT b.id,b.purchase_no,b.title,b.date_order,
                        SUM(bd.borr_qty),
 		       (SELECT CONCAT(u.first_name,' ',u.last_name) FROM rms_users AS u WHERE u.id=b.user_id LIMIT 1) AS user_name,
-		       (SELECT v.`name_en` FROM rms_view AS v WHERE v.`type`=1  AND b.user_id=v.`key_code` LIMIT 1) AS `status` 
+		       (SELECT v.`name_en` FROM rms_view AS v WHERE v.`type`=1  AND b.status=v.`key_code` LIMIT 1) AS `status` 
 		       FROM rms_bookpurchase AS b,rms_bookpurchasedetails bd WHERE b.id=bd.purchase_id
 		       ";
     	$where = '';
@@ -32,8 +32,8 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
     		$s_where[]="  b.title LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-    	if($search["status_search"]>-1){
-    	    $where.=' AND status='.$search["status_search"];
+    	if($search["status_search"] > -1){
+    	    $where.=' AND b.status='.$search["status_search"];
     	}
     	$order=" GROUP BY b.purchase_no ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);

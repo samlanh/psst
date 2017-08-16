@@ -325,6 +325,19 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		return $options;
 	}
 	
+	function getBookTitlePurchase(){
+		$db=$this->getAdapter();
+		$sql="SELECT id,CONCAT(title,'(',book_no,')') AS name FROM rms_book WHERE `status`=1 AND title!=''";
+		$rows=$db->fetchAll($sql);
+		array_unshift($rows,array('id' => '-1',"name"=>$this->tr->translate("ADD_NEW")));
+		array_unshift($rows,array('id' => '',"name"=>$this->tr->translate("SELECT_TITLE")));
+		$options = '';
+		if(!empty($rows))foreach($rows as $value){
+			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+		}
+		return $options;
+	}
+	
 	function getBorrowNo(){
 		$db=$this->getAdapter();
 		$sql="SELECT id FROM rms_borrow WHERE 1 ORDER BY id DESC";

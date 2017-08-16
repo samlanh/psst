@@ -16,13 +16,11 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
     function getAllBroken($search=null){
     	$db=$this->getAdapter();
     	$sql=" SELECT b.id,b.broke_no,
-        		   
-        		  b.date_broken,SUM(bd.borr_qty) AS qty,b.title,
+        		  DATE_FORMAT(b.date_broken, '%d/%m/%Y'),SUM(bd.borr_qty) AS qty,b.title,
 				  (SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`,
 				  (SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name
 			       FROM rms_bookbroken AS b,rms_bookbrokendetails AS bd
-			       WHERE  b.status=1
-			       AND b.id=bd.broken_id";
+			       WHERE b.id=bd.broken_id";
     	$where = '';
     	$from_date =(empty($search['start_date']))? '1': " b.date_broken >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " b.date_broken <= '".$search['end_date']." 23:59:59'";
@@ -169,10 +167,15 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
+					if(!empty($data['status'])){
+						$qty=$data['borr_qty'.$i];
+					}else{
+						$qty=0;
+					}
 					$data_item= array(
 							'broken_id'	=>  $data['id'],
 							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $data['borr_qty'.$i],
+							'borr_qty'	=>  $qty,
 							'note'  	=> 	$data['note_'.$i],
 							'user_id'	=> 	$GetUserId,
 							'is_full'	=> 	1,
@@ -190,7 +193,9 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 							);
 							$this->_name="rms_book";
 							$where=" id = ".$rows['id'];
-							$this->update($datatostock, $where);
+							if (!empty($data['status'])){
+								$this->update($datatostock, $where);
+							}
 					}else{
 						
 					}

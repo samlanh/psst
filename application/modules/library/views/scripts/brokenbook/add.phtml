@@ -17,6 +17,18 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				var rowId = $('#identity').val();
+    			if(rowId!=''){ 
+					var rowIDArray = rowId.split(',');
+					for(var n = 0; n < rowIDArray.length; n++){
+					var book_id = dijit.byId('book_id'+rowIDArray[n]).get('value');
+					if(book_id==''){
+							alert("Please select book title!");
+							return false;
+						}
+					}
+				}
+
 			   dijit.byId('save_new').set('disabled',true);
 			   dijit.byId('save_close').set('disabled',true);
 				return true;
@@ -35,7 +47,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							<td nowrap="nowrap"><?php echo $tr->translate("Broken_No")?></td>
 							<td><input  dojoType="dijit.form.TextBox" id="broken_no" name="broken_no" type="text"  value="<?php echo $this->bro_no;?>" readonly="readonly"></td>
 							<td nowrap="nowrap"><?php echo $tr->translate("RETURN_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox" id="broken_date" name="broken_date" type="text"  value="<?php echo date('Y-m-d');?>" ></td>
+							<td><input dojoType="dijit.form.DateTextBox" id="broken_date" constraints="{datePattern:'dd/MM/yyyy'}" name="broken_date" type="text"  value="<?php echo date('Y-m-d');?>" ></td>
 						</tr>
 						<tr>
 							<td style="width: 5px"><?php echo $tr->translate("NOTE")?></td>

@@ -18,7 +18,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$search = array(
 	    				'title'	        =>	'',
 		    			'cood_book'	    =>	0,
-		    			'status_search'	=>	-1,
+		    			'status_search'	=>	1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d') 
 	    		);

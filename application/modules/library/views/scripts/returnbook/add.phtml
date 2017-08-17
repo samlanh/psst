@@ -178,14 +178,13 @@ function getAllcustomer(){
 				if(fund_title!=1){
 					thead='<th style="margin-bottom: 20px;"><?php echo $tr->translate("DEL");?></th>';
 					thead+='<th style="width:10px;"><?php echo $tr->translate("N_O");?></th>';
-					thead+='<th ><?php echo $tr->translate("BORROW_ID");?></th>';
-					thead+='<th ><?php echo $tr->translate("BOOK_NO");?></th>';
+					thead+='<th ><?php echo $tr->translate("BORROW_NO");?></th>';
 					thead+='<th ><?php echo $tr->translate("BOOK_TITLE");?></th>';
 					thead+='<th ><?php echo $tr->translate("BORROW_QTY");?></th>';
 					thead+='<th><?php echo $tr->translate("RETURN_QTY");?></th>';
 					thead+='<th style="width:60px;"><?php echo $tr->translate("CHECKED");?>&nbsp;</th>';
 					thead+='<th style="width:100px;"><?php echo $tr->translate("DELAY_QTY");?></th>';
-					thead+='<th style="width:100px;"><?php echo $tr->translate("RETURN_DATE");?></th>';
+					thead+='<th style="width:100px;"><?php echo $tr->translate("RETURN_DAY");?></th>';
 					thead+='<th style="width:100px;"><?php echo $tr->translate("DATE_DELAY");?></th>';
 					thead+='<th style="width:100px;"><?php echo $tr->translate("NOTE");?></th>';
 					fund_title=1;
@@ -204,8 +203,7 @@ function getAllcustomer(){
 				temp='<td  ><img style="cursor:pointer" onclick="deleteRecord('+r+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				temp+='<td>'+r+'</td>';
 				temp+='<td>'+data[i].borrow_no+'<input  type="hidden" value="'+data[i].borrow_id+'"  name="borrow_id_'+r+'"  id="borrow_id_'+r+'"  /></td>';
-				temp+='<td>'+data[i].book_no+'</td>';
-				temp+='<td>'+data[i].book_name+'<input  type="hidden"   value="'+data[i].book_id+'"  name="book_id_'+r+'"  id="book_id_'+r+'"  /></td>';
+				temp+='<td>'+data[i].book_name+"("+data[i].book_no+")"+'<input  type="hidden"   value="'+data[i].book_id+'"  name="book_id_'+r+'"  id="book_id_'+r+'"  /></td>';
 				temp+='<td>'+data[i].borr_qty+' ក្បាល<input  type="hidden"   value="'+data[i].borr_qty+'" required   name="borrow_qty_'+r+'"  id="borrow_qty_'+r+'"  /></td>';
 				temp+='<td><input  style="margin-left:0px;width:50px;font-weight:900; "  type="text" data-dojo-props="constraints:{places:0}" value="'+data[i].borr_qty+'"    name="return_qty_'+r+'"  id="return_qty_'+r+'" dojoType="dijit.form.NumberTextBox" readonly="true"  onkeyup="compareValue('+r+');getQtyReurtn('+r+')" required/><input  type="hidden" value="'+data[i].borr_qty+'"  name="old_return_qty'+r+'"  id="old_return_qty'+r+'" dojoType="dijit.form.TextBox"   /></td>';
 				temp+='<td style="width: 20px"><input value="'+r+'" style="width: 20px;" onchange="uncheck('+r+')" type="checkbox"  name="check'+r+'" id="check'+r+'" '+check+'   /></td>';

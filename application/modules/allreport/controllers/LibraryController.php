@@ -45,10 +45,10 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			}else{
 				$search = array(
 						'title'	        =>	'',
-						'cood_book'	=>	0,
-						'stu_name'	=>	0,
+						'cood_book'		=>	0,
+						'student_name'	=>	0,
 						'status_search'	=>	-1,
-						'end_date'=>date('Y-m-d')
+						'end_date'		=>date('Y-m-d')
 				);
 			}
 			$db = new Library_Model_DbTable_DbNeardayreturnbook();
@@ -73,8 +73,8 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 				$search = array(
 						'title'	        =>	'',
 						'cood_book'		=>	0,
-						'is_full'	=>	-1,
-						//'stu_name'	=>	0,
+						'is_full'		=>	-1,
+						'student_name'	=>	0,
 						'is_type_bor'	=>0,
 						'parent'		=>0,
 						'start_date'	=>date('Y-m-d'),
@@ -103,7 +103,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 			}else{
 				$search = array(
 						'title'	        =>	'',
-// 						'stu_name'		=>	0,
+						'student_name'	=>	0,
 						//'status_search'	=>	-1,
 						'is_type_bor'	=>	0,
 				        'cood_book'		=>0,
@@ -136,8 +136,8 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 				$search = array(
 						'title'	        =>	'',
 						'cood_book'		=>	0,
-						'is_full'	=>	-1,
-						//'stu_name'	=>	0,
+						'is_full'		=>	-1,
+						'student_name'	=>	0,
 						'is_type_bor'	=>0,
 						'parent'		=>0,
 // 						'start_date'	=>date('Y-m-d'),

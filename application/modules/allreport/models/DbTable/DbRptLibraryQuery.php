@@ -157,9 +157,9 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND bd.is_full='.$search["is_full"];
     	}
     	
-//     	if($search["stu_name"]>0){
-//     		$where.=' AND b.stu_id='.$search["stu_name"];
-//     	}
+    	if($search["student_name"]>0){
+    		$where.=' AND b.stu_id='.$search["student_name"];
+    	}
 
     	if($search["is_type_bor"]>0){
     		$where.=' AND b.borrow_type='.$search["is_type_bor"];
@@ -210,9 +210,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND bd.is_full='.$search["is_full"];
     	}
     	
-//     	if($search["stu_name"]>0){
-//     		$where.=' AND b.stu_id='.$search["stu_name"];
-//     	}
+    	if($search["student_name"]>0){
+    		$where.=' AND bor.stu_id='.$search["student_name"];
+    	}
+    	
     	if($search["is_type_bor"]>0){
     		$where.=' AND bor.borrow_type='.$search["is_type_bor"];
     	}
@@ -270,9 +271,10 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     		$where.=' AND bd.is_full='.$search["is_full"];
     	}
     	
-//     	if($search["stu_name"]>0){
-//     		$where.=' AND b.stu_id='.$search["stu_name"];
-//     	}
+    	if($search["student_name"]>0){
+    		$where.=' AND b.stu_id='.$search["student_name"];
+    	}
+    	
     	if($search["is_type_bor"]>0){
     		$where.=' AND b.borrow_type='.$search["is_type_bor"];
     	}

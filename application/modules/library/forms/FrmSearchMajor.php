@@ -169,7 +169,22 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$block_id->setMultiOptions($option);
 		$block_id->setValue($request->getParam('block_id'));
 		
-		$this->addElements(array($is_type_bor,$borrow_name,$block_id,$stu_name,$is_full,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
+		$student_name = new Zend_Dojo_Form_Element_FilteringSelect("student_name");
+		$student_name->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true','class'=>'fullside',
+		));
+		$option = array("0"=>$this->tr->translate("SELECT_STUDEN_NAME"));
+		$db_stuname=new Library_Model_DbTable_DbCategory();
+		$result = $db_stuname->getAllStudentOpt();
+		//print_r($result);exit();
+		if(!empty($result))foreach($result AS $row){
+			$option[$row['stu_id']]=$row['name'];
+		}
+		$student_name->setMultiOptions($option);
+		$student_name->setValue($request->getParam('student_name'));
+		
+		$this->addElements(array($student_name,$is_type_bor,$borrow_name,$block_id,$stu_name,$is_full,$cood_book,$start_date,$end_date,$_cateory_parent,$_title,$_status));
 		
 		return $this;
 	}

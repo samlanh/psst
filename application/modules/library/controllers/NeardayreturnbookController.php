@@ -18,6 +18,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    				'title'	        =>	'',
     					'cood_book'	=>	0,
     					'is_type_bor'	=>	0,
+    					'student_name'	=>0,
 		    			'status_search'	=>	-1,
     					'end_date'=>date('Y-m-d') 
 	    		);

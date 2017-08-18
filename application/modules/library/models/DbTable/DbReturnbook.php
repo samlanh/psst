@@ -44,9 +44,9 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
     	    $where.=' AND b.status='.$search["status_search"];
     	}
     	
-//     	if($search["stu_name"]>0){
-//     		$where.=' AND stu_id='.$search["stu_name"];
-//     	}
+    	if($search["student_name"]>0){
+    		$where.=' AND bor.stu_id='.$search["student_name"];
+    	}
     	if(!empty($search["is_type_bor"])){
     		$where.=' AND bor.borrow_type='.$search["is_type_bor"];
     	}

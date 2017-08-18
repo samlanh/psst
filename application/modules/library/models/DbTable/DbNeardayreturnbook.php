@@ -49,6 +49,10 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 		if(!empty($search["is_type_bor"])){
     		$where.=' AND b.borrow_type='.$search["is_type_bor"];
     	}
+    	
+    	if($search['student_name']>0){
+    		$where.=' AND b.stu_id='.$search["student_name"];
+    	}
 		
 		if($search["cood_book"]>0){
 			$where.=' AND bd.book_id='.$search["cood_book"];

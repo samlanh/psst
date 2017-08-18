@@ -47,9 +47,9 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
     	    $where.=' AND b.status='.$search["status_search"];
     	}
     	
-//     	if($search["borrow_name"]>0){
-//     		$where.=' AND b.id='.$search["borrow_name"];
-//     	}
+    	if($search["student_name"]>0){
+    		$where.=' AND b.stu_id='.$search["student_name"];
+    	}
     	
     	if(!empty($search["is_type_bor"])){
     		$where.=' AND b.borrow_type='.$search["is_type_bor"];

@@ -1,17 +1,19 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Nearly End Service'); 
-	echo $this->headTitle(''); 
 	$frm =  $this->frm_search;
 ?>	
+<title><?php echo $tr->translate('STUDENT_NEARLY_RETURN_BOOK_REPORT');?></title>
 <div style="width: 28cm;margin: 0 auto;">
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-nealydayreturn')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<table width="100%">
 	    <tr>
 	   	<td> <?php echo $frm->getElement("title");?> </td>
 		<td><?php echo $frm->getElement("is_type_bor");?> </td>
+		<td><?php echo $frm->getElement("student_name");?> </td>
 		<td><?php echo $frm->getElement("cood_book");?> </td>
-		<td><input dojoType="dijit.form.DateTextBox"    id="end_date" name="end_date" value="<?php echo date('Y-m-d',strtotime($this->search['end_date'])); ?>" type="text"> </td>
+		</tr>
+		<tr>
+		<td><input dojoType="dijit.form.DateTextBox"    id="end_date" name="end_date" value="<?php echo date('Y-m-d',strtotime($this->search['end_date'])); ?>" class="fullside" type="text"> </td>
 		<td><?php echo $frm->getElement('status_search');?></td> 
 		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
 		</tr>

@@ -1,9 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('BOOK_LIST_REPORT'); 
-	echo $this->headTitle(''); 
 	$frm =  $this->frm_search;
 ?>	
+<title><?php echo $tr->translate('BOOK_LIST_REPORT');?></title>
 <div style="width: 28cm;margin: 0 auto;">
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-book-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<table width="100%">
@@ -81,7 +80,7 @@
 														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['qty_curr'];?>&nbsp;ក្បាល</td>
 														<td style="border: 1px solid #000;background:yellow; font-weight: 900;">&nbsp;<?php echo $row['qty_after'];?>&nbsp;ក្បាល</td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['unit_price'];?></td>
-														<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['date']));?>&nbsp;</td>
+														<td style="border: 1px solid #000;">&nbsp;<?php echo date("d/M/Y",strtotime($row['date']));?>&nbsp;</td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['user_name'];?></td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['status'];?></td>
  													</tr>

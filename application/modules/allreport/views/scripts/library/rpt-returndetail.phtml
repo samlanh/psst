@@ -1,18 +1,20 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('STUDENT_BORROW_BOOK_DETAIL_REPORT'); 
 	$frm =  $this->frm_search;
 ?>	
+<title><?php echo $tr->translate('STUDENT_RETURN_BOOK_DETAIL_REPORT');?></title>
 <div style="width: 28cm;margin: 0 auto;">
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-returndetail')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<table width="100%">
 		  <tr>
-		  	<td><?php echo $frm->getElement("title");?> </td>
-			<!--  <td><?php echo $frm->getElement("stu_name");?></td> -->
+		  	 <td><?php echo $frm->getElement("title");?> </td>
 			 <td><?php echo $frm->getElement("is_type_bor");?></td>
+			 <td><?php echo $frm->getElement("student_name");?></td>
 			 <td><?php echo $frm->getElement("cood_book");?> </td>
 			 <td><?php echo $frm->getElement('parent');?></td> 
-			 <td><?php echo $frm->getElement('start_date');?> </td>
+		</tr>
+		<tr>
+			<td><?php echo $frm->getElement('start_date');?> </td>
 			 <td><?php echo $frm->getElement('end_date');?> </td>
 			 <td><?php echo $frm->getElement('is_full');?> </td>
 			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?> </td>

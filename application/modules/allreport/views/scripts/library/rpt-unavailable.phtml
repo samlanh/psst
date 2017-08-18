@@ -1,9 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('BOOK_LIST_REPORT'); 
-	echo $this->headTitle(''); 
 	$frm =  $this->frm_search;
 ?>	
+<title><?php echo $tr->translate('BOOK_UNAVAILABLE_REPORT');?></title>
 <div style="width: 28cm;margin: 0 auto;">
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-unavailable')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<table width="100%">	

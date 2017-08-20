@@ -8,8 +8,8 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 	dojo.require('dijit.form.Button');
 	dojo.require("dijit.form.DateTextBox");
 </script>
-<form id="list" name="list" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'rptbytype','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
-	<table width="100%">
+	<div style="border: 1px dotted #000;width:27cm;background: #fff; margin: 0 auto;min-height: 27cm;">
+		<table width="100%">
 	   <tr>
 	       <td colspan="4">
 				<div class="menureport">
@@ -22,28 +22,26 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 	      </td>
 		</tr>
 	 </table> 
-	 <table width="50%" align="left"> 
-	   <tr>
-	   		<td> <input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="start_date" name="start_date" value="<?php echo $this->search['start_date']; ?>"  type="text"></td>
-			<td><input dojoType="dijit.form.DateTextBox"  constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text"></td>
-	   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-	   </tr>
-	</table>
-</form>
-
-	<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+		<form id="list" name="list" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'rptbytype','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+		<table width="50%" align="left"​ style="width:27cm;margin: 0 auto;"> 
+		   <tr>
+		   		<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="start_date" name="start_date" value="<?php echo $this->search['start_date']; ?>"  type="text"></td>
+				<td><input dojoType="dijit.form.DateTextBox"  constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text"></td>
+		   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+		   </tr>
+		</table>
+		</form>
 		<div id="divPrint">
-			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm; ">
+			<table style="background:#fff; margin: 0 auto; width: 100%; padding:0.5cm;" >
 				<tr>
 					<td width="15%" align="center">
 						<img style="width: 70%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 					</td>
 					<td align="center" width=70%">
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('របាយការណ៏សរុបតាមប្រភេទ');?></strong><br />
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_INCOMEBYCATE');?></strong><br />
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer MEF2';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong>
 					</td>
-					<td width="15%" align="center">
-					</td>
+					<td width="15%" align="center"></td>
 				</tr>
 				<tr>
 					<td colspan="3">
@@ -52,19 +50,25 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 								body{font-family: "Times New Roman",Arial; }
 								table{ border-collapse:collapse; margin:0 auto;
 								border-color:#000; }
-								.padd tr td{  text-align:center}
+								.padd tr td{  text-align:left}
 								.padd tr th{  background-color: #ccc; }
 							</style>
 
-						<table class="padd" width="50%" border="1" align="center" style="white-space:nowrap;font-family: Khmer OS Battambang;">
-							 
-							<tr>
-								<td>No</td>
-								<td><?php echo $tr->translate("TYPE");?></td>
-								<td><?php echo $tr->translate("TOTAL");?></td>
+						<table class="padd" width="100%" border="1" align="left" style="white-space:nowrap;font-family: Khmer OS Battambang;">
+							<tr style="background:#efefef;text-align:center;color:#000; font-size: 14px;font-family:'Khmer MEF2';">
+								<td style="text-align:center">លរ</td>
+								<td style="text-align:center"><?php echo $tr->translate("លេខគណនី");?></td>
+								<td style="text-align:center"><?php echo $tr->translate("ឈ្មោះគណនីជាខ្មែរ");?></td>
+								<td style="text-align:center"><?php echo $tr->translate("ឈ្មោះគណនីជាអង់គ្លេស");?></td>
+								<td style="text-align:center"><?php echo $tr->translate("សរុប");?></td>
 							</tr> 
-							 
-							 
+							<tr style="background:#efefef;color:#000; font-size: 16px;font-weight:bold;font-family:'Arail';text-align: center !important;">
+								<td style="text-align:center">No.</td>
+								<td style="text-align:center">Account Code</td>
+								<td style="text-align:center">Account in Khmer</td>
+								<td style="text-align:center">Account in English</td>
+								<td style="text-align:center">Amount</td>
+							</tr> 
 							<style> td{padding:0 3px; }</style>
 							<?php 
 								$i=0; 
@@ -74,18 +78,18 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 								$sum_up = 0;
 								$net_total=0;
 							  ?>
-							  
 							  <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
 							  
 								  <?php if($rs['type']!=$type){	?>
 									   <?php  if($key>0 ){?>
-												  <tr style="font-size:12px; color:#000; height: 30px;"​ align="center">
-												  		<td><?php echo $no;?></td>
-											 			<td width="50%" style="  background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</td>
-														<td width="50%" style=" color:#F00; font-weight:bold;">$ <?php echo number_format($grand_total,2);?></td>
-												  </tr>
+												<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+												  <td><?php echo $no;?></td>
+											 	  <td width="50%" style=" font-weight:bold;">&nbsp;&nbsp;</td>
+												  <td width="50%" style=" color:#F00; font-weight:bold;"></td>
+											 	  <td width="50%" style="  background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</td>
+												  <td width="50%" style=" color:#F00; font-weight:bold;">$ <?php echo number_format($grand_total,2);?></td>
+												</tr>
 										<?php }$sum_up = $sum_up + $grand_total;$grand_total=0;?>
-										
 									<?php 
 									 	}
 									 	$type=$rs['type'];
@@ -103,21 +107,19 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 							 	 	?>
 							  
 							  	<?php }$sum_up = $sum_up + $grand_total; ?>
-								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="center">
+								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
 								 		<td><?php echo $no."";?></td>
-							 			<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</th>
+							 			<td width="50%" style=" font-weight:bold;">&nbsp;</th>
+										<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+								  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</th>
 										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($grand_total,2);?></td>
 								  </tr>
 							 <?php }?>	  
-							 
-							 
-							 
 							 <?php 
 									$i=0; 
 									$payment_id=0;
 									$fine=0;
 							 ?>
-							  
 							  <?php if(!empty($this->rs)){ foreach($this->rs as $key => $rs){ $i++;?>
 								  <?php 
 								  		if($rs['payment_id']!=$payment_id){	
@@ -126,23 +128,19 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 									 	$payment_id=$rs['payment_id'];
 							 	  ?>
 							  	  <?php }?>
-							  
-								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="center">
+								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
 								  		<td><?php echo 4;?></td>
-							 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("FINE");?>&nbsp;</th>
+							 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+							 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+							 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("FINE");?>&nbsp;</td>
 										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($fine,2);?></td>
 								  </tr>
 							  <?php }?>
-							 
-							 
-							 
-							 
 								<?php 
 									$i=0; 
 									$payment_id=0;
 									$credit_memo=0;
 							    ?>
-							  
 							  <?php if(!empty($this->rs)){ foreach($this->rs as $key => $rs){ $i++;?>
 								  	<?php 
 								  		if($rs['payment_id']!=$payment_id){	
@@ -151,21 +149,19 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 									 	$payment_id=$rs['payment_id'];
 							 	  	?>
 							  	  <?php } ?>
-							  
-							  
-								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="center">
+								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
 								  		<td><?php echo 5;?></td>
-							 			<td width="50%" style=" background-color: #efefef; font-weight:bold; ">&nbsp;<?php echo $tr->translate("CREDIT_MEMO");?>&nbsp;</th>
+								  		<td width="50%" style="font-weight:bold;">&nbsp;&nbsp;</td>
+										<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+										<td width="50%" style=" background-color: #efefef; font-weight:bold; ">&nbsp;<?php echo $tr->translate("CREDIT_MEMO");?>&nbsp;</td>
 										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($credit_memo,2);?></td>
 								  </tr>
 							  <?php } ?>
-							  
 							  <?php 
 									$i=0; 
 									$payment_id=0;
 									$deduct=0;
 							   ?>
-							  
 							  <?php if(!empty($this->rs)){ foreach($this->rs as $key => $rs){ $i++;?>
 								  <?php 
 								  		if($rs['payment_id']!=$payment_id){	
@@ -174,46 +170,39 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 									 	$payment_id=$rs['payment_id'];
 							 	  ?>
 							  	  <?php }?>
-							  
-								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="center">
+								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
 								  		<td><?php echo 6;?></td>
-							 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("DEDUCT");?>&nbsp;</th>
+							 			<td width="50%" style="font-weight:bold; ">&nbsp;&nbsp;</th>
+										<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+								  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate("DEDUCT");?>&nbsp;</th>
 										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($deduct,2);?></td>
 								  </tr>
-							  <?php }?>
-							  
-							  
-							  
-							  
+							  <?php }
+							  ?>
+							  <?php $net_total = $sum_up + $fine - $credit_memo - $deduct; ?>
+							  	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+								  		<td colspan="3" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"> </td>
+								  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;&nbsp;សរុបរួម / Total</td>
+										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($net_total,2);?></td>
+								  </tr>
 						</table>
 					</td>	
-				</tr>		
-					
+				</tr>	
 				<tr>
-					<td colspan="3">		
-						<table class="padd" width="50%" border="1" align="center" style="white-space:nowrap;font-family: Khmer OS Battambang;margin-top: 10px;">
-							 
-							<style> td{padding:0 3px; }</style>
-							 
+					<td colspan="3">
+						<table width="100%" style="font-size:12px;font-weight:bold;color:#000; font-size: 14px;font-family:'khmer os battambang';">
+							<tr style="text-align: center;">
+								<td width="30%">បានឃើញនិង ឯកភាព</td>
+								<td width="30%">បានពិនិត្យ</td>
+								<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
+							</tr>
+							<tr style="text-align: center;">
+								<td width="30%" style="font-size: 16px;font-family:'Khmer MEF2'">លោកអគ្គនាយក</td>
+								<td width="30%">ប្រធានគណនេយ្យ</td>
+								<td width="30%">បេឡាករ</td>
+							</tr>
 						</table>
-					</td>
-				</tr>
-				
-				<tr>
-					<td colspan="3">		
-						<table class="padd" width="50%" border="1" align="center" style="white-space:nowrap;font-family: Khmer OS Battambang;margin-top: 10px;">
-							 <?php $net_total = $sum_up + $fine - $credit_memo - $deduct; ?>
-							  <tr style="font-size:13px; color:#000; height: 30px;"​ align="center">
-						 			<td width="50%" style=" background-color: #ccc;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Net Total");?>&nbsp;</th>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($net_total,2);?></td>
-							  </tr>
-						</table>
-					</td>
-				</tr>
-				
-				<tr><td colspan="3">&nbsp;</td></tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
+					</td>	
 				</tr>
 			</table>
 		</div>	

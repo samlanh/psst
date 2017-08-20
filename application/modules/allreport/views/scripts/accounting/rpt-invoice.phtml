@@ -9,12 +9,12 @@
 	dojoType="dijit.form.Form" method="post">
 	<table style="width: 100%">
 		<tr>
-			<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="search" name="search" value="" type="text" ></td>
+			<td><input dojoType="dijit.form.TextBox" class="fullside" id="search" name="search" value="<?php echo $this->rssearch['search'];?>" type="text" ></td>
 			<td> 
 				<select type="text" id="student_id" name="student_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setname();"  >
 					<option value="">Select Student Code</option>
 					<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
-					<option value="<?php echo $student_code['stu_id']?>"><?php echo $student_code['stu_code']?></option>
+					<option <?php if($this->rssearch['student_id']==$student_code['stu_id']){echo "selected";}?> value="<?php echo $student_code['stu_id'];?>"><?php echo $student_code['stu_code']?></option>
 					<?php }}?>
 				</select>
 			</td>
@@ -22,12 +22,12 @@
 				<select type="text" id="student_name" name="student_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
 					<option value="">Select Student Name</option>
 					<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
-					<option value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
+					<option <?php if($this->rssearch['student_name']==$student_name['stu_id']){echo "selected";}?> value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
 					<?php }}?>
 				</select>
 			</td>
-			<td><input type="text" name="form_date" constraints="{datePattern:'dd/MM/yyyy'}"  value="now" id="from_date" class="fullside" placeholder="<?php echo $tr->translate("From Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
-			<td><input type="text" name="to_date" constraints="{datePattern:'dd/MM/yyyy'}"  value="now" id="to_date" class="fullside" placeholder="<?php echo $tr->translate("to Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
+			<td><input type="text" name="form_date" value="<?php echo date("Y/m/d",strtotime($this->rssearch['form_date']));?>" constraints="{datePattern:'dd/MM/yyyy'}" id="from_date" class="fullside" placeholder="<?php echo $tr->translate("From Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
+			<td><input type="text" name="to_date" value="<?php echo date("Y/m/d",strtotime($this->rssearch['to_date']));?>" constraints="{datePattern:'dd/MM/yyyy'}" id="to_date" class="fullside" placeholder="<?php echo $tr->translate("to Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -40,32 +40,55 @@
 </style>	
 <div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
 	<div id="divPrint">
-		<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
-			<tr style="background: #ccc;">
-				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_ID");?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_DATE");?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_NUM");?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INPUT_DATE");?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("REMARK");?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("AMOUNT");?></td>
-			</tr>
-			<?php if(!empty($this->all_invoice)){ foreach($this->all_invoice as $key=>$rs){ $key=$key+1; ?>
+		<style>
+			a{text-decoration: none;color: 000;}
+		</style>
+		<table width="100%">
 			<tr>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
-				<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
-				<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']; ?></a></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['invoice_date']; ?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['invoice_num']; ?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['input_date']; ?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['remark']; ?></td>
-				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['totale_amount']; ?></td>
+				<td width="15%" align="center">
+					<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> 
+				</td>
+				<td align="center" width="70%">
+					<strong style="padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_INVOICE');?></strong> 
+					<div><?php echo date("d/m/Y",strtotime($this->rssearch['form_date'])).' '.$tr->translate('TO').' ';echo date("d/m/Y",strtotime($this->rssearch['to_date']));?></div>
+				</td>
+				<td width="15%" align="center">
+				</td>
 			</tr>
-			<?php
-			}}
-			?>
+			<tr>
+				<td colspan="3">
+					<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+						<tr style="background: #ccc;font-size: 14px;"">
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_ID");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("SEX");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_DATE");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_NUM");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INPUT_DATE");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("REMARK");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
+						</tr>
+						<?php 
+						$gender=array(1=>"Male",2=>"Female");
+						if(!empty($this->all_invoice)){ foreach($this->all_invoice as $key=>$rs){ $key=$key+1; ?>
+						<tr style="font-size: 12px;">
+							<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
+							<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
+							<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['stu_khname']; ?></a></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo @$gender[$rs['sex']]; ?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['invoice_num']; ?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs['input_date'])); ?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['remark']; ?></td>
+							<td style="border:1px solid #000;text-align: center;">$ <?php echo number_format($rs['totale_amount'],2); ?></td>
+						</tr>
+						<?php
+						}}
+						?>
+					</table>
+				</td>
+			</tr>
 		</table>
 	</div>	
 </div>
-

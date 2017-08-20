@@ -51,7 +51,10 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	}
 	public function getinvoiceByid($id){
 		$db= $this->getAdapter();
-		$sql="SELECT v.* ,s.stu_khname ,s.stu_code  FROM rms_invoice_account  AS v , rms_student AS s WHERE stu_id = student_id and id='".$id."'";
+		$sql="SELECT v.* ,
+			s.stu_khname ,s.stu_enname ,s.stu_code,s.sex
+			FROM rms_invoice_account  AS v ,
+			rms_student AS s WHERE stu_id = student_id and id=".$id." LIMIT 1";
 		return $db->fetchrow($sql);
 	}
 	public function getinvoiceservice($id){

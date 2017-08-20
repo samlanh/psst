@@ -3,7 +3,6 @@
      $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
      $status_view=$this->status_view;
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    // print_r($status_view);exit();
 ?>
 <style>
 #table tr td{
@@ -22,8 +21,11 @@
 			identity = dijit.byId('identity').get('value');
 			if(identity==''){
 				alert('Please Select service !!! ');
+				addRow();
 				return false;
 			}
+			dijit.byId('save_new').set('disabled',true);
+			dijit.byId('save_close').set('disabled',true);
 			return true;
 	   }else {
 			return false;
@@ -58,7 +60,6 @@
 												<?php }}?>
 											</select>
 										</td>
-										
 									</tr>
 									<tr>
 										<td><?php echo $tr->translate("INVOICE_DATE");?></td>
@@ -68,11 +69,10 @@
 									</tr>
 									<tr>
 										<td><?php echo $tr->translate("REMARK");?></td>
-										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark" name="remark" value="" type="text" required="required" ></td>
+										<td><input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="" type="text"  ></td>
 										<td><?php echo $tr->translate("INPUT_DATE");?></td>
 										<td><input type="text" name="input_date" id="input_date" constraints="{datePattern:'dd/MM/yyyy'}" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/></td>
 									</tr>
-									
 									<tr>
 									    <td colspan="4">
 										    <table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;">
@@ -80,7 +80,7 @@
 												    <th width="4%"><?php echo $tr->translate("DELETE");?></th>
 												    <th><?php echo $tr->translate("N_O");?></th>
 													<th><?php echo $tr->translate("SERVICES");?></th>
-													<th><?php echo $tr->translate("AMOUNT");?></th>
+													<th><?php echo $tr->translate("PRICE");?></th>
 													<th><?php echo $tr->translate("START_DATE");?></th>
 													<th><?php echo $tr->translate("END_DATE");?></th>
 													<th><?php echo $tr->translate("REMARK");?></th>
@@ -92,7 +92,7 @@
 									<tr>
 										<td colspan="2" align="left">
 										<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
-											<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+											<input type="button" label="<?php echo $tr->translate('ADD_SERVICE');?>" dojoType="dijit.form.Button" 
 												iconClass="dijitIconEditProperty" onclick="addRow();" />
 										</td>
 										<td><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
@@ -101,9 +101,9 @@
 									<tr>
 										<td colspan="4" align="center">
 											<input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
-											<input type="submit" value="save_close" name="save_close" label="Save&Close" dojoType="dijit.form.Button" 
+											<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
 												iconClass="dijitEditorIcon dijitEditorIconSave" />
-										    <input type="submit" value="save_new" name="save_new" label="Save&New" dojoType="dijit.form.Button" 
+										    <input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
 												iconClass="dijitEditorIcon dijitEditorIconSave" />
 										</td>
 									</tr>					
@@ -119,8 +119,6 @@
 <script>
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ObjectStore");
-	dojo.require('dijit.form.TextBox');
 	var col= 0; var no=0;
 function addRow() {
 		col++;no++;
@@ -134,8 +132,8 @@ function addRow() {
 				<?php }}?>
 			template+='</select></td>';	
 			template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
+			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
+			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
 			template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -170,7 +168,6 @@ function calulator(index){
 		amount = amount + parseFloat(a) ;
 	}
 	dijit.byId("totle_amount").attr('value',amount);
-	
 }
 function setID(){
 	stu_id = dijit.byId('student_name').get('value');

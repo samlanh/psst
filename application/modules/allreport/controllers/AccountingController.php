@@ -830,27 +830,29 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
+			$this->view->rssearch = $search;
 		}
     public function rptInvoicedetailAction(){
 		$db = new Accounting_Model_DbTable_Dbinvoice();
 		$id=$this->getRequest()->getParam('id');
+		
+		if($this->getRequest()->isPost()){
+// 	    	try{
+// 	    		$data = $this->getRequest()->getPost();
+// 	    		$db->editinvice($data , $id);
+// 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/invoice");
+// 	    	}catch(Exception $e){
+// 	    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
+// 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 	    	}
+    	}
+// 		$db = new Registrar_Model_DbTable_DbRegister();
+// 		$this->view->all_service = $db->getAllService();
+// 		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
+// 		$this->view->all_student_code = $db->getAllGerneralOldStudent();
+		
 		$this->view->invoice = $db->getinvoiceByid($id);
 		$this->view->invoice_service = $db->getinvoiceservice($id);
-		//print_r($this->view->invoice_service);exit();
-		if($this->getRequest()->isPost()){
-	    	try{
-	    		$data = $this->getRequest()->getPost();
-	    		$db->editinvice($data , $id);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/invoice");
-	    	}catch(Exception $e){
-	    		Application_Form_FrmMessage::message("APPLICATION_ERROR");
-	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-	    	}
-    	}
-		$db = new Registrar_Model_DbTable_DbRegister();
-		$this->view->all_service = $db->getAllService();
-		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
-		$this->view->all_student_code = $db->getAllGerneralOldStudent();
 	}	
     public function rptTransferAction(){
 		$db = new Accounting_Model_DbTable_DbTransferstock();

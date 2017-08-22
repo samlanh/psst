@@ -14,6 +14,7 @@ class Registrar_StudentpaymentlateController extends Zend_Controller_Action {
 						'grade_all' =>'',
 						'session' =>'',
 						'stu_code' =>'',
+						'service_type'=>-1,
 						'stu_name' =>'',
 						'end_date'=> date('Y-m-d'),
 				);
@@ -23,7 +24,6 @@ class Registrar_StudentpaymentlateController extends Zend_Controller_Action {
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();

@@ -23,8 +23,6 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     			);
     		}
     		
-    		//Application_Form_FrmMessage::redirector('/rsvacl/acl/index');
-    		
     		$this->_redirect("/registrar/allreports/rpt-daily");
     		
     		if($search['type']==1){
@@ -41,17 +39,14 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
 		    		$this->view->expense = $db->getAllOtherExpense($search);
 	    		}
     		}else if($search['type']==2){
-    			
     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
     			$data=$this->view->row = $db->getAllStudentPayment($search);
     			
     		}else if($search['type']==3){
-    			
     			$_db = new Registrar_Model_DbTable_DbReportStudentByuser();
     			$user_type=$_db->getUserType();
     			
     			if($user_type==1){
-    				
     				$db = new Allreport_Model_DbTable_DbRptOtherIncome();
     				$this->view->income = $db->getAllOtherIncome($search);
     			

@@ -88,7 +88,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 									<tr>
 										<td>User Type</td>
 										<td>
-											<select onchange="disabledAgent(this.value);" name="user_type" class='fullside' required="true" id="user_type" 
+											<select onchange="getpopupUsertype();" name="user_type" class='fullside' required="true" id="user_type" 
 											 missingMessage="អ្នក​ភ្លេច​បំពេញ​  តំណែង!" dojoType="dijit.form.FilteringSelect"> 
 												<?php foreach ($this->user_typelist as $key => $ust) : ?>
 													<option value="<?php echo $key;?>"><?php echo $ust;?></option>
@@ -113,3 +113,58 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	</table>	
 	<input type="hidden" id="agent" name="agent" value="0" />	
 </form>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;overflow-y:scroll;" id="popup_usertype" >
+		<form  id='frm_usertype' name='frm_usertype' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="15">
+				<tr>
+					<td>User Type</td>
+					<td width="300px">
+						<input type="text" required="true" name="user_typename" id="user_typename" placeholder="User Type" 
+						dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->usertype['user_type'];?>"
+						missingMessage="Invalid User type!" class='fullside'/>
+					</td>
+				</tr>
+				<tr>
+					<td>Parent Name</td>
+					<td>
+						<select onchange="disabledAgent(this.value);" class='fullside' id="parent_id"  name="parent_id" required="true" 
+						 missingMessage="Invalid Parent Name!" dojoType="dijit.form.FilteringSelect"> 
+						 	<?php foreach ($this->user_typelist as $key => $ust) : ?>
+								<option value="<?php echo $key;?>"><?php echo $ust;?></option>
+							<?php endforeach;?>																															
+						</select> 
+					</td>
+				</tr>	
+				<tr>
+					<td colspan="2" align="center">
+						<input type="button" onclick="addUsrType();" value="រក្សាទុក" label="រក្សាទុក" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 							
+					</td>
+				</tr>								
+			</table>
+		</form>
+	</div>
+</div>	
+<script>
+function getpopupUsertype(){
+	user_type = dijit.byId("user_type").get("value");
+	if(user_type==-1){
+		dijit.byId("popup_usertype").show();
+	}
+}
+var url_addusertype = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"usertype","action"=>"addusertype")); ?>';
+function addUsrType(){
+	dojo.xhrPost({
+		url:url_addusertype,
+		form: dojo.byId("frm_usertype"),
+		handleAs:"json",
+		load: function(data) {
+			alert(data);
+			
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+</script>

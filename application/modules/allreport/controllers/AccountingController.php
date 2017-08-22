@@ -142,11 +142,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}
 			else{
 				$search=array(
-						'txtsearch' => '',
-						'start_date'=>date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
+						'title' => '',
 						'service'=>'',
 						'study_year'=>'',
+						'service_type'=>-1,
+						'grade_all'=>-1,
+						'degree'=>-1,
+						'start_date'=>date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
 				);
 			}
 		$this->view->search = $search;
@@ -155,7 +158,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			//echo $e->getMessage();
 		}
 		
 		$form=new Registrar_Form_FrmSearchInfor();
@@ -788,26 +790,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;	
 	}
-	public function rptStudentDropAction(){
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search=array(
-					'title' =>'',
-					'study_year' =>'',
-					'grade_bac' =>'',
-					'session' =>'',
-			);
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
-		$this->view->rs = $rs_rows = $group->getAllStudentDrop($search);
-		$this->view->search=$search;
-	}
+	
 	public function rptInvoiceAction(){
 		try{
 				if($this->getRequest()->isPost()){

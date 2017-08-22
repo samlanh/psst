@@ -19,9 +19,8 @@ class Registrar_RptbytypeController extends Zend_Controller_Action {
     		}
     		
     		$db = new Registrar_Model_DbTable_DbRptByType();
-    		$data=$this->view->row = $db->getAllStudentPaymentByType($search,1);
-    		$data1=$this->view->rs = $db->getAllStudentPaymentByType($search,2);
-    		//print_r($data);
+    		$this->view->row = $db->getAllStudentPaymentByType($search,1);
+    		$this->view->rs = $db->getAllStudentPaymentByType($search,2);
     	}catch(Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		echo $e->getMessage();

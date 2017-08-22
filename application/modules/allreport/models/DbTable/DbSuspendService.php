@@ -10,54 +10,65 @@ class Allreport_Model_DbTable_DbSuspendService extends Zend_Db_Table_Abstract
     	 
 //     }
 public function  getStudetnSuspendServiceDetail($search=null){
-		//print_r($id); exit();
 		try{
 			$db = $this->getAdapter();
 			$sql = 'SELECT 
-			(SELECT `student_id` FROM `rms_suspendservice` WHERE id=`suspendservice_id`) AS stu_id,
-			(SELECT (SELECT `stu_enname` FROM `rms_student` WHERE `stu_id`=`student_id`) FROM `rms_suspendservice` WHERE id =`suspendservice_id`) AS en_name,
-			(SELECT (SELECT `stu_khname` FROM `rms_student` WHERE `stu_id`=`student_id`) FROM `rms_suspendservice` WHERE id =`suspendservice_id`) AS kh_name,
-			(SELECT (SELECT `stu_code` FROM `rms_student` WHERE `stu_id`=`student_id`) FROM `rms_suspendservice` WHERE id =`suspendservice_id`) AS stu_code,
-			(SELECT (SELECT (SELECT `name_en` FROM `rms_view` WHERE `type`=2 AND `key_code`=`sex`) FROM `rms_student` WHERE `stu_id`=`student_id`) FROM `rms_suspendservice` WHERE id =`suspendservice_id`) AS sex,
-			(SELECT (SELECT CONCAT(`from_academic`,"-",`to_academic`,"(",generation,")") FROM `rms_tuitionfee` WHERE id =`year`) FROM `rms_suspendservice` WHERE id=`suspendservice_id`) as academic,
-			(SELECT suspend_no FROM rms_suspendservice WHERE id = suspendservice_id) as suspend_no,
-			(SELECT title FROM `rms_program_name` WHERE TYPE =2 AND `service_id`= rms_suspendservicedetail.service_id LIMIT 1) as service,
+			ss.student_id AS stu_id,
+			s.`stu_enname` AS en_name,
+			s.`stu_khname` AS kh_name,
+			s.`stu_code` AS stu_code,
+			(SELECT `name_en` FROM `rms_view` WHERE `type`=2 AND `key_code`=s.`sex`) AS sex,
+			(SELECT CONCAT(`from_academic`,"-",`to_academic`,"(",generation,")") FROM `rms_tuitionfee` WHERE id =ss.`year`) AS academic,
+			ss. suspend_no,
+			p.title as service,
+			(SELECT title FROM `rms_program_type` WHERE id=p.ser_cate_id LIMIT 1) AS service_type,
 			(SELECT `name_en` FROM `rms_view` WHERE `type`=5 AND `key_code`= type_suspend LIMIT 1)AS type_suspend,
-			reason,note,
-			rms_suspendservice.define_date
-			FROM rms_suspendservicedetail,rms_suspendservice WHERE rms_suspendservicedetail.suspendservice_id=rms_suspendservice.id and status=1 ';
-			$where ='';
-			$order = ' ORDER BY rms_suspendservicedetail.id DESC ';
+			reason,sd.note,
+			ss.define_date
+			FROM rms_suspendservicedetail AS sd,
+			rms_suspendservice AS ss,
+			rms_student AS s,
+			rms_program_name as p
+			WHERE 
+			sd.suspendservice_id=ss.id AND
+			sd.status=1 
+			AND s.stu_id = ss.student_id
+			AND p.service_id = sd.service_id ';
+			$order = ' ORDER BY sd.id DESC ';
 			
-			$from_date =(empty($search['start_date']))? '1': "rms_suspendservice.define_date >= '".$search['start_date']." 00:00:00'";
-			$to_date = (empty($search['end_date']))? '1': "rms_suspendservice.define_date <= '".$search['end_date']." 23:59:59'";
-			$where .= " AND ".$to_date." and ".$from_date;
+			$from_date =(empty($search['start_date']))? '1': " ss.define_date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': " ss.define_date <= '".$search['end_date']." 23:59:59'";
+			$where= " AND ".$from_date." AND ".$to_date;
 			
-			if(!empty($search['service'])){
-				$where .=" and service_id = ".$search['service'];
+			if($search['service_type']>0){
+				$where .=" AND p.ser_cate_id = ".$search['service_type'];
 			}
+			if($search['service']>0){
+				$where .=" AND sd.service_id = ".$search['service'];
+			}
+// 			if($search['degree']>0){
+// 				$where .=" AND sd.service_id = ".$search['degree'];
+// 			}
+			
+// 			if(!empty($search['grade_all'])){
+// 				$where .=" AND sd.service_id = ".$search['grade_all'];
+// 			}
+			
 			if(!empty($search['study_year'])){
-				$where .=" and year = ".$search['study_year'];
+				$where .=" AND ss.year = ".$search['study_year'];
 			}
-			
-			if (empty($search)){
-				return $db->fetchAll($sql.$order);
-			}
-			if(!empty($search['txtsearch'])){
+			if(!empty($search['title'])){
 				$s_where = array();
-				$s_search = addslashes(trim($search['txtsearch']));
-				$s_where[] = " (SELECT suspend_no FROM rms_suspendservice WHERE id = suspendservice_id) LIKE '%{$s_search}%'";
-				$s_where[] = " (SELECT (SELECT `stu_enname` FROM `rms_student` WHERE `stu_id`=`student_id`) FROM `rms_suspendservice` WHERE id =`suspendservice_id`) LIKE '%{$s_search}%'";
-				$s_where[] = " (SELECT (SELECT `stu_khname` FROM `rms_student` WHERE `stu_id`=`student_id`) FROM `rms_suspendservice` WHERE id =`suspendservice_id`) LIKE '%{$s_search}%'";
-				$s_where[] = " (SELECT (SELECT `stu_code` FROM `rms_student` WHERE `stu_id`=`student_id`) FROM `rms_suspendservice` WHERE id =`suspendservice_id`) LIKE '%{$s_search}%'";
+				$s_search = addslashes(trim($search['title']));
+				$s_where[] = " ss.suspend_no  LIKE '%{$s_search}%'";
+				$s_where[] = " s.`stu_enname` LIKE '%{$s_search}%'";
+				$s_where[] = " s.`stu_khname` LIKE '%{$s_search}%'";
+				$s_where[] = " s.`stu_code` LIKE '%{$s_search}%'";
 				$where .=' AND ( '.implode(' OR ',$s_where).')';
-			
 			}
-			//echo $sql.$where;exit();
 			return $db->fetchAll($sql.$where.$order);
 		}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 		}
 	}
 	public function getStudetnByid($id){

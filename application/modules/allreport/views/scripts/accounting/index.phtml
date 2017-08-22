@@ -50,8 +50,6 @@
   $rpt_student_by_teacher = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-teacher-students'), null, true);
   $rpt_product_sold=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-productsold'), null, true);
   
-  $rpt_student_drop=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-student-drop'), null, true);
-  
   $rpt_student_payment_by_type=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-paymentdetailbytype'), null, true);
   
   $rpt_invoice =$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-invoice'), null, true);
@@ -68,7 +66,6 @@
   		<li><a href="<?php echo $rpt_student_payment_late;?>"><?php echo $tr->translate('RPT_STUDENT_PAYMENT_LATE');?></a></li>
   		
   		
-  		<li><a href="<?php echo $rpt_student_drop;?>"><?php echo $tr->translate('RPT_STUDENT_DROPS');?></a></li>
   		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-suspendservice'), null, true);?>"><?php echo $tr->translate('STUDENT_STOP_SERVICE_REPORT');?></a></li>
   		<li><a href="<?php echo $rpt_tuitionfee;?>"><?php echo $tr->translate('RPT_FEE');?></a></li>
   		<li><a href="<?php echo $rpt_servicecharge;?>"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></a></li>

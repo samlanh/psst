@@ -20,7 +20,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 		(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
 		 from rms_student_drop as stdp,rms_student as st where stdp.stu_id=st.stu_id and stdp.status=1 ";
 
-    	$where=' ';
+    	$from_date =(empty($search['start_date']))? '1': " date_stop >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " date_stop <= '".$search['end_date']." 23:59:59'";
+    	$where = " AND ".$from_date." AND ".$to_date;
     	$order=" order by id DESC";
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);

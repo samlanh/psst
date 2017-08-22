@@ -23,6 +23,7 @@ class Accounting_Model_DbTable_DbServiceType extends Zend_Db_Table_Abstract
     	
     	
     	$_arr = array(
+    			'code'=>$_data['code'],
     			'title'=>$_data['title'],
     			'item_desc'=>$_data['item_desc'],
     			'status'=>$_data['status'],

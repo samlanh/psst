@@ -3,16 +3,13 @@
 	echo $this->headTitle($tr->translate('ADD_SUSPEND_SERVICE')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
-
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require('dojox.form.BusyButton');
 	dojo.require("dojo.NodeList-manipulate");
 	
 	dojo.ready(function(){ 
-		//addRow();
 		new dijit.form.FilteringSelect({
 		    store: student_id_store,
 		    autoComplete: true,                        
@@ -50,7 +47,7 @@ fieldset{  background:none;}
 <?php $register = $this->frm_servicesuspend;
 //print_r($register);
 ?>
-<form id='suspend_service' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<form id='suspend_service' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
 	if(this.validate()) {
                 study_year=dijit.byId('study_year').get('value');
@@ -179,7 +176,7 @@ function dateReadonly(key) {
 	}
 }
 
-var url_servict_info = "<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'get-student-service')); ?>";
+var url_servict_info = "<?php echo $this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'get-student-service')); ?>";
 fund_title=0;
 function getStudentService(){
 	temp='';
@@ -252,7 +249,7 @@ function getStudentService(){
 	});
 }
 
-var url_student_info = "<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'get-student')); ?>";
+var url_student_info = "<?php echo $this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'get-student')); ?>";
 function getStudentInfo(){
 			studentid = dijit.byId('studentid').get('value');
 			//alert(studentid);
@@ -288,7 +285,7 @@ function deleteRecord(index) {
 }
 
 var student_id_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var get_id = "<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'get-student-id')); ?>";
+var get_id = "<?php echo $this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'get-student-id')); ?>";
 function getStudentID(){
 	dojo.query("#table_row").append('');
 	study_year= dijit.byId('study_year').get('value');
@@ -316,7 +313,7 @@ function getStudentID(){
 
 
 var student_name_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var get_name = "<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'get-student-name')); ?>";
+var get_name = "<?php echo $this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'get-student-name')); ?>";
 function getStudentName(){
 	study_year= dijit.byId('study_year').get('value');
 	dojo.xhrPost({

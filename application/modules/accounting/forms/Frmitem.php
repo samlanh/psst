@@ -43,6 +43,9 @@ Class Accounting_Form_Frmitem extends Zend_Dojo_Form {
 		$_title = new Zend_Dojo_Form_Element_ValidationTextBox('title');
 		$_title->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true'));
 	
+		$code = new Zend_Dojo_Form_Element_TextBox('code');
+		$code->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
+		
 		$_tem_desc = new Zend_Dojo_Form_Element_TextBox('item_desc');
 		$_tem_desc->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 	
@@ -70,9 +73,9 @@ Class Accounting_Form_Frmitem extends Zend_Dojo_Form {
 			$_tem_desc->setValue($data['item_desc']);
 			$_status->setValue($data['status']);
 			$_type->setValue($data['type']);
-			
+			$code->setValue($data['code']);
 		}
-		$this->addElements(array($_title,$_tem_desc,$_status,$_type,$_id));
+		$this->addElements(array($code,$_title,$_tem_desc,$_status,$_type,$_id));
 	
 		return $this;
 	

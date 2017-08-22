@@ -64,7 +64,9 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`rms_student_drop`.`type` limit 1) as type,
 		reason,date_stop from `rms_student_drop`,rms_student where rms_student.stu_id=rms_student_drop.stu_id and rms_student_drop.status=1 ";
 		$order_by=" order by id DESC";
-		$where='';
+		$from_date =(empty($search['start_date']))? '1': " date_stop >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " date_stop <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
 		if(empty($search)){
 			return $_db->fetchAll($sql.$order_by);
 		}

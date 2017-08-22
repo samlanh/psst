@@ -224,7 +224,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 		$db = $this->getAdapter();
 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-		FROM `rms_group` AS `g` WHERE g.status=1 and g.is_pass=0";
+		FROM `rms_group` AS `g` WHERE g.status=1 and g.is_pass!=1 ";
 		return $db->fetchAll($sql);
 	}
 }

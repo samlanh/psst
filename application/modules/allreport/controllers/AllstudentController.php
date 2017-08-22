@@ -277,5 +277,28 @@ public function init()
 			exit();
 		}
 	}
+	public function rptStudentDropAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' =>'',
+					'study_year' =>'',
+					'grade_bac' =>'',
+					'session' =>'',
+					'start_date'=>date("Y-m-d"),
+					'end_date'=>date("Y-m-d")
+					
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
+		$this->view->rs = $rs_rows = $group->getAllStudentDrop($search);
+		$this->view->search=$search;
+	}
 }
 

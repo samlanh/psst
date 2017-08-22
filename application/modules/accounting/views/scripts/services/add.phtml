@@ -18,6 +18,10 @@
 					<legend align="center" ><?php echo $tr->translate("មុខវិជ្ជាសិក្សា");?></legend><br />
 					<table style="margin: 0 auto; width: 95%;" cellspacing="10">
 						<tr>
+							<td style="width:100px"><?php echo $tr->translate("CODE")?></td>
+							<td><?php  echo $item->getElement('code');?></td>
+						</tr>
+						<tr>
 							<td style="width:100px"><?php echo $tr->translate("PROGRAM_TITLE")?></td>
 							<td><?php  echo $item->getElement('title');?></td>
 						</tr>

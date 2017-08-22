@@ -15,6 +15,7 @@ class Registrar_StudentnearlyendserviceController extends Zend_Controller_Action
 						'grade_all'	=>'',
 						'service'	=>'',
 						'session'=> 0,
+						'service_type'=>-1,
 						'stu_name'	=>'',
 						'stu_code'	=>'',
 						'end_date'	=>date('Y-m-d'),
@@ -28,12 +29,10 @@ class Registrar_StudentnearlyendserviceController extends Zend_Controller_Action
 		
 		$db = new Registrar_Model_DbTable_DbRptStudentNearlyEndService();
 		$abc = $this->view->row = $db->getAllStudentNearlyEndService($search);
-		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-		
 		$this->view->search = $search;
 	}
 	public function addAction(){

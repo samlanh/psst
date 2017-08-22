@@ -69,8 +69,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					  rms_student_payment AS sp,
 					  rms_student_paymentdetail AS spd 
 					WHERE sp.id = spd.payment_id 
-					  AND s.stu_id = sp.student_id  $branch_id  $user_level 
-	    		";
+					  AND s.stu_id = sp.student_id  $branch_id  $user_level ";
 	    	
 	    	$where = " AND ".$from_date." AND ".$to_date;
 	    	
@@ -264,8 +263,8 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			$s_where=array();
 			$s_search= addslashes(trim($search['adv_search']));
 			$s_where[]= " st.receipt LIKE '%{$s_search}%'";
-			$s_where[]= " st.stu_khname LIKE '%{$s_search}%'";
-			$s_where[]= " st.stu_enname LIKE '%{$s_search}%'";
+			$s_where[]= " st.kh_name LIKE '%{$s_search}%'";
+			$s_where[]= " st.en_name LIKE '%{$s_search}%'";
 			$s_where[]= " st.serial LIKE '%{$s_search}%'";
 			$where.=' AND ('.implode(' OR ', $s_where).')';
 			}

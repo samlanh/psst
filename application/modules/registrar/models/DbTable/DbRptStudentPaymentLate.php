@@ -21,6 +21,7 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  (select name_en from rms_view where rms_view.type=2 and key_code=(select sex from rms_student where rms_student.stu_id=sp.student_id limit 1))AS sex,
 				  (select tel from rms_student where rms_student.stu_id=sp.student_id limit 1)AS tel,
 				  pn.`title` service,
+				  (SELECT title FROM `rms_program_type` WHERE id=pn.ser_cate_id LIMIT 1) AS service_type,
 				  (select major_enname from rms_major where major_id = s.grade) as grade,
 				  (select name_en from rms_view where type=4 and key_code =s.session) as session,
 				  spd.`start_date` as start,
@@ -57,7 +58,9 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
     			$s_where[] = " spd.comment LIKE '%{$s_search}%'";
     			$where .=' AND ( '.implode(' OR ',$s_where).')';
     		}
-    		
+    		if($search['service_type']>0){
+    			$where.=" AND pn.ser_cate_id=".$search['service_type'];
+    		}
     		if(!empty($search['service']) AND $search['service']>0){
     			$where.= " AND spd.service_id = ".$search['service'];
     		}

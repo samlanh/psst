@@ -4,7 +4,6 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require('dojox.form.BusyButton');
@@ -26,7 +25,7 @@ fieldset{  background:none;}
 <?php $register = $this->frm_servicesuspend;
 //print_r($register);
 ?>
-<form id='suspend_service' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<form id='suspend_service' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <table  cellspacing="10" style="margin: 0 auto; width: 100%;">
 	<tr>
 		<td>
@@ -80,7 +79,7 @@ fieldset{  background:none;}
 						<tr>
 							<td colspan="4" align="center">
 								<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input iconClass="dijitIconUndo" type="button" value="back" label="<?php echo $tr->translate('GO_BACK');?>" dojoType="dijit.form.Button" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"suspendservice",'action'=>'index'),null,true); ?>';" />
+								<input iconClass="dijitIconUndo" type="button" value="back" label="<?php echo $tr->translate('GO_BACK');?>" dojoType="dijit.form.Button" onclick="window.location = '<?php echo $this->url(array('module'=>'accounting','controller'=>"suspendservice",'action'=>'index'),null,true); ?>';" />
 								<input type="submit" name="save_new" id="save_new" value="ážšáž€áŸ’ážŸáž¶áž‘áž»áž€" label="<?php echo $tr->translate('GO_EDIT');?>"  dojoType="dijit.form.Button" 
 								 iconClass="dijitEditorIcon dijitEditorIconSave" />
 								
@@ -202,7 +201,7 @@ function dateReadonly(key) {
 	}
 }
 
-var url_student_info = "<?php echo $this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'get-student')); ?>";
+var url_student_info = "<?php echo $this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'get-student')); ?>";
 function getStudentInfo(){
 		studentid = dijit.byId('studentid').get('value');
 		//alert(studentid);

@@ -132,6 +132,10 @@ function popupgroup(){
 					<legend align="center" ><?php echo $tr->translate("បន្ថែមប្រភេទសេវាកម្ម/កម្មវិធី");?></legend><br />
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
+							<td style="width:100px"><?php echo $tr->translate("ACC_CODE")?></td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.TextBox" name="code" id="code" type="text" /></td>
+						</tr>
+						<tr>
 							<td style="width:100px"><?php echo $tr->translate("ចំណងជើង")?></td>
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="p_title" id="p_title" type="text" required="required" /></td>
 						</tr>

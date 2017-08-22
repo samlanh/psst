@@ -114,6 +114,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	$this->_name='rms_program_type';
     	$_db = $this->getAdapter();
 	    	$_arr = array(
+	    			'code'=>$_data['code'],
 	    			'title'=>$_data['p_title'],
 	    			'item_desc'=>$_data['note'],
 	    			'status'=>$_data['status_p'],

@@ -22,10 +22,11 @@
 			 <td><input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>" placeholder="Search" type="text" ></td>
 			 <td> <?php echo $frm->getElement("grade_all");?></td>
 			 <td> <?php echo $frm->getElement("session");?></td>
+			 <td> <?php echo $frm->getElement("service_type");?></td>
 			 <td> <?php echo $frm->getElement("service");?></td>
-			 <td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date']; ?>"  type="text"></td>
 		</tr>
 		<tr> 
+		     <td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date']; ?>"  type="text"></td>
 			 <td> <?php echo $frm->getElement("stu_code");?></td>
 			 <td> <?php echo $frm->getElement("stu_name");?></td>
 			 <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
@@ -66,6 +67,7 @@
 													    <td>&nbsp;<?php echo $tr->translate("TEL");?>&nbsp;</td>
 													    <td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 														<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
+														<td>&nbsp;<?php echo $tr->translate("SERVICE_TYPE"); ?>&nbsp;</td>
 										                <td>&nbsp;<?php echo $tr->translate("SERVICE_NAME"); ?>&nbsp;</td>
 										                <td>&nbsp;<?php echo $tr->translate("PAID_DATE"); ?>&nbsp;</td>
 										                <td>&nbsp;<?php echo $tr->translate("START_DATE"); ?>&nbsp;</td>
@@ -87,6 +89,7 @@
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['tel'];?></td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['grade'];?></td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['session'];?></td>
+														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['service_type'];?></td>
 														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['service'];?></td>
 														<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
 														<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['start']));?>&nbsp;</td>

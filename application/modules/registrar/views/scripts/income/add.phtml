@@ -40,7 +40,6 @@ $frm = $this->frm_expense;
 							</td>
 							<td><?php echo $tr->translate("INCOME_TITLE")?></td>
 							<td><input type="text" name="title" id="title" dojoType="dijit.form.TextBox" class="fullside" /></td>
-							
 							<td><?php echo $tr->translate("PAYMENT_METHOD")?></td>
 							<td>
 								<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
@@ -65,10 +64,9 @@ $frm = $this->frm_expense;
 							<td>
 								<input type="text" name="cheqe_no" id="cheqe_no" dojoType="dijit.form.TextBox" class="fullside" />
 							</td>
-							
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("FOR_DATE")?></td>
+							<td><?php echo $tr->translate("DATE")?></td>
 							<td>
 								<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" />
 							</td>
@@ -115,7 +113,6 @@ dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.store.Memory");
 
 	var cate_income_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cate_income));?> );
-
 	dojo.ready(function(){
 		getReceiptNumber('');
 		setReadonlyCheqe();
@@ -143,7 +140,6 @@ dojo.require("dojo.store.Memory");
 			dojo.xhrPost({
 				url:url_get_recceipt_number,
 				content:{
-					//'branch_id':dijit.byId('branch_id').get('value')
 					},
 				handleAs:"json",
 				load: function(data) {
@@ -156,9 +152,7 @@ dojo.require("dojo.store.Memory");
 					alert(err);
 				}
 			});
-	}
-
-
+}
 
 	var url_add_cate_income = '<?php echo $this->url(array("module"=>"registrar","controller"=>"income","action"=>"add-cate-income")); ?>';
 	function addCateIncome(){
@@ -186,10 +180,8 @@ dojo.require("dojo.store.Memory");
 	}
 	
 	function hidePopup(){		
-		//alert(1);
 		dijit.byId("popup_cate").hide();
 	}
-
 	function setReadonlyCheqe(){
 		payment_method = dijit.byId('payment_method').get('value');
 		if(payment_method == 3){
@@ -253,32 +245,20 @@ dojo.require("dojo.store.Memory");
 			 }else{
 				 dojo.byId("lb_date").innerHTML  = '';
 			 }
-
 			dojo.byId("lb_cheqe_no").innerHTML = dijit.byId("cheqe_no").get('value'); 
 			dojo.byId("lb_note").innerHTML = dijit.byId("note").get('value');
-			
-
 			dijit.byId("terms").show();	
 		}
 	}
-
-
 	function printSubmit(){
-		//$('#office_receipt').submit();
-		 //doPrint();
-		
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
-
-	    //hideDialog();
+	    dijit.byId('frm_add_tran').submit();
 	}
 	function hideDialog(){
 		dijit.byId('terms').hide();
 	}
-
-	
-	
 	function submitDataClose(){
 		if(dijit.byId('frm_add_tran').validate()) {
 			dijit.byId('saveclose').set('disabled',true);
@@ -298,8 +278,7 @@ dojo.require("dojo.store.Memory");
 			});
 		}
 	}
-	
-	function submitDataAddNew(){
+function submitDataAddNew(){
 		if(dijit.byId('frm_add_tran').validate()) {
 			dijit.byId('savenew').set('disabled',true);
 			
@@ -321,11 +300,7 @@ dojo.require("dojo.store.Memory");
 	function loading(){
 		document.getElementsByClassName("overlay")[0].style.display="block";
 	}
-	
-	
 </script>
-
-
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 <?php $keycode = $this->keycode;?>
 	<div data-dojo-type="dijit.Dialog" style="width:24cm;height: 14cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'" id="terms" >
@@ -334,68 +309,52 @@ dojo.require("dojo.store.Memory");
 			<table width="100%" height="49%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap;">
 				<tr>
 					<td colspan="10" valign="top">
-						<table width="100%" border="0" cellspacing="10" style="font-family: Khmer OS Battambang;font-size:11px;white-space:nowrap;line-height: 20px;">
-							
+						<table width="100%" border="0" cellspacing="10" style="font-family: Khmer OS Battambang;font-size:16px;white-space:nowrap;line-height: 20px;">
 							<tr><td>&nbsp;</td></tr>
-							<tr><td>&nbsp;</td></tr>	
+							<tr>
+								<td colspan="4" style="text-align:center;font-weight:bold;font-family:'Khmer MEF2';">
+									<div style="font-size:18px;">បង្កាន់ដៃបង់ប្រាក់</div>
+									<div style="font-size:15px;">OFFICIAL RECEIPT</div>
+								</td>
+							</tr>	
 							<tr><td>&nbsp;</td></tr>
-							
-							<tr >
-								<td width="15%"></td>
-								<td width="35%"></td>
-								<td width="15%"></td>
-								<td width="35%"></td>
-							</tr>
 							<style>
 								.h{ margin-top: -3px;margin-bottom: 3px;}
 								.tab_row{ margin-top: -8px;}
 								
 								.h1{ margin-top: -6px;}
-								.values{  height: 20px; padding: 0 5px;display: block;
+								.values{ min-height: 20px; padding: 0 5px;display: block;
 										 font-family: Khmer OS battambang ,Times New Roman;}
-								.fonteng{font-size:13px;}
-								.one{white-space:nowrap;font-size:14px;}
-								.border{border:1px solid #000;}
+								.fonteng{font-size:16px;}
+								.one{white-space:nowrap;font-size:16px;}
+								.border{border:1px solid #000; min-width:220px}
 							</style>
-									
 							<tr style="height: 30px;">
-								<td class="one ">&nbsp;Receipt No&nbsp;</td>
+								<td class="one ">&nbsp;<?php echo $tr->translate("RECEIPT_NO");?>&nbsp;</td>
 								<td class="border"><label id="lb_receipt_no" class=" values one "></label> </td>
-								
-								<td class="one ">&nbsp;Category&nbsp;</td>
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("FOR_DATE");?>&nbsp;</td>
+								<td class="border"><label id="lb_date" class="values one"> </label></td>
+							</tr>
+							<tr style="height: 30px;">
+								<td class="one ">&nbsp;<?php echo $tr->translate("INCOME_TITLE");?>&nbsp;</td>
+								<td class="border"><label id="lb_title" class="values one"></label> </td>
+								<td class="one ">&nbsp;<?php echo $tr->translate("INCOME_CATEGORY");?>&nbsp;</td>
 								<td class="border"><label id="lb_cate_income" class=" values one"></label> </td>
 							</tr>
-							
-							<tr  style="height: 30px;">
-								
-								<td class="one ">&nbsp;Title&nbsp;</td>
-								<td class="border"><label id="lb_title" class="values one"></label> </td>
-								
-								<td class="one ">&nbsp;Payment Method&nbsp;</td>
+							<tr style="height: 30px;">
+								<td class="one ">&nbsp;<?php echo $tr->translate("PAYMENT_METHOD");?>&nbsp;</td>
 								<td class="border"><label id="lb_payment_method" class="values one"></label> </td>
-								
-							</tr>
-							
-							
-							<tr  style="height: 30px;">
-								<td class="one " align="left">&nbsp;Total Income&nbsp;</td>
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("TOTAL_INCOME");?>&nbsp;</td>
 								<td class="border"><label id="lb_total_income" class="values one"> </label></td>
-								
-								<td class="one " align="left">&nbsp;For Date&nbsp;</td>
-								<td class="border"><label id="lb_date" class="values one"> </label></td>
-								
 							</tr>
-							
-							<tr  style="height: 30px;">
-								<td class="one " align="left">&nbsp;Cheqe No&nbsp;</td>
+							<tr style="height: 30px;">
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("CHEQE_NO");?>&nbsp;</td>
 								<td class="border"><label id="lb_cheqe_no" class="values one"> </label></td>
-								
-								<td class="one " align="left">&nbsp;Note&nbsp;</td>
-								<td class="border"><label id="lb_note" class="values one"> </label></td>
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
+								<td class="border" style="white-space: normal !important;"><label style="white-space: normal !important;" id="lb_note" class="values one"> </label></td>
 							</tr>
-							
-							<tr style="font-size: 15px;">
-								<td colspan="2" align="center">អ្នកប្រគល់</td>
+							<tr style="font-size: 15px; font-weight:bold;font-family:'Khmer MEF2'">
+								<td colspan="2" align="center" >អ្នកប្រគល់</td>
 								<td colspan="2" align="center">អ្នកទទួល</td>
 							</tr>
 							<tr style="font-size: 15px;">
@@ -420,21 +379,15 @@ dojo.require("dojo.store.Memory");
 						</table>
 					</td>
 				</tr>
-				
 			</table>
 		</div>
-		
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
-		
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
 				 type="button" onclick="printSubmit();"><?php echo $tr->translate("PRINT");?></button>
-		
 	</div>
 </div>
-
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_cate" >
 		<form style="background-color: buttonface;" id='frm_add_cate_income' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -487,9 +440,3 @@ dojo.require("dojo.store.Memory");
 }
 .overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
 </style>
-
-
-
-
-
-

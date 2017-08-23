@@ -17,7 +17,7 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				s.pob,
     				(select en_name from rms_dept where dept_id = g.degree) as degree,
     				(select major_enname from rms_major where major_id = g.grade) as grade,
-    				CONCAT(t.from_academic,' - ',to_academic) as academic_year,
+    				CONCAT(t.from_academic,' - ',t.to_academic) as academic_year,
     				t.generation
     			from 
     				rms_student as s,
@@ -28,8 +28,7 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				s.stu_id = gds.stu_id
     				and g.id=gds.group_id
     				and g.academic_year=t.id
-    				and gds.gd_id=$id
-    		";
+    				and gds.gd_id=$id ";
     	return $db->fetchRow($sql);
     }
 }

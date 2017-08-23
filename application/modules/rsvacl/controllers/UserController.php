@@ -14,11 +14,11 @@ class RsvAcl_UserController extends Zend_Controller_Action
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	
     	$db=new Application_Model_DbTable_DbGlobal();
-    	$sql = "SELECT u.user_type_id,u.user_type FROM `rms_acl_user_type` u where u.`status`=1";
-    	$results = $db->getGlobalDb($sql);
-		foreach ($results as $key => $r){
-			$this->user_typelist[$r['user_type_id']] = $r['user_type'];    
-		}		
+    	$sql = "SELECT u.user_type_id AS id,u.user_type AS name FROM `rms_acl_user_type` u where u.`status`=1";
+    	$this->user_typelist = $db->getGlobalDb($sql);
+// 		foreach ($results as $key => $r){
+// 			$this->user_typelist[$r['id']] = $r['name'];    
+// 		}		
     }
 
     public function indexAction()
@@ -45,7 +45,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
         	'branch_name'=>$rs['branch_name'],
         	'name'=>$rs['last_name'].' '.$rs['name'],
         	'user_name'=>$rs['user_name'],
-        	'user_type'=>$this->user_typelist[$rs['user_type']],
+        	'user_type'=>$rs['users_type'],
         	'status'=>$rs['status']);
         }
         $list = new Application_Form_Frmtable();
@@ -60,7 +60,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
         $link=array(
         		'module'=>'rsvacl','controller'=>'user','action'=>'edit',
         );
-        $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'user_name'=>$link,'name'=>$link));
+        $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('user_type'=>$link,'branch_name'=>$link,'user_name'=>$link,'name'=>$link));
     }
     public function viewUserAction()
     {   
@@ -108,7 +108,6 @@ class RsvAcl_UserController extends Zend_Controller_Action
 				Application_Form_FrmMessage::Sucessfull('អ្នក​ប្រើ​ប្រាស់​របស់​អ្នក​បាន​ត្រឹម​តែ '.self::MAX_USER.' នាក់ ទេ!', self::REDIRECT_URL);
 			}
 			 
-			$this->view->user_typelist =$this->user_typelist;
 		
 			if($this->getRequest()->isPost()){
 				$userdata=$this->getRequest()->getPost();
@@ -122,6 +121,12 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			}
 			$db  = new Application_Model_DbTable_DbGlobal();
 			$this->view->rs_branch = $db->getAllBranch();
+			$user_type = $this->user_typelist;
+			$this->view->user_typelist =$user_type;
+			
+			array_unshift($user_type, array('id'=>-1,'name'=>'Add New'));
+			$this->view->user_type = $user_type;
+			
 	}
 	public function editAction()
 	    {
@@ -140,10 +145,14 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			$us_id = $this->getRequest()->getParam('id');
 			$us_id = (empty($us_id))? 0 : $us_id;
 			
-			
 			$this->view->user_edit = $db_user->getUserEdit($us_id);
 
-			$this->view->user_typelist =$this->user_typelist;
+			$user_type = $this->user_typelist;
+			$this->view->user_typelist =$user_type;
+				
+			array_unshift($user_type, array('id'=>-1,'name'=>'Add New'));
+			$this->view->user_type = $user_type;
+			
 			$db  = new Application_Model_DbTable_DbGlobal();
 			$this->view->rs_branch = $db->getAllBranch();
     }

@@ -24,7 +24,7 @@
 	    	<select name="user_type" id="user_type"  onChange="document.frmlist_agent.submit();" style=" height: 30px;" dojoType="dijit.form.FilteringSelect"> 
 				<option value="-1" <?php if($this->user_type == -1) echo 'selected="selected"';?> >ជ្រើសរើស ប្រភេទ​អ្នក​ប្រើ​ប្រាស់</option> 
 				<?php foreach ($this->user_typelist as $key => $ut) : ?>
-					<option value="<?php echo $key;?>" <?php if($key == $this->user_type) echo 'selected'?>><?php echo $ut;?></option>
+					<option value="<?php echo $ut['id'];?>" <?php if($ut['id'] == $this->user_type) echo 'selected'?>><?php echo $ut['name'];?></option>
 				<?php endforeach;?>	 
 			</select>
 	    	<select name="active" id="active"  onChange="document.frmlist_agent.submit();" style=" height: 30px;" dojoType="dijit.form.FilteringSelect"> 

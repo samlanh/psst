@@ -56,82 +56,6 @@ public function init()
 		$this->view->rs = $db->getAllStu($search);
 		$this->view->search=$search;
 	}
-	
-	
-	public function rptgroupstudentchangegroupAction()
-	{
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}else{
-			$search=array(
-					'title' => '',
-					'study_year' => '',
-					'grade_bac' => '',
-					'session' => '',
-			);
-		}
-		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-		
-		$db= new Allreport_Model_DbTable_DbRptGroupStudentChangeGroup();
-		$this->view->rs = $db->getAllStu($search);
-// 		print_r($this->view->rs);exit();
-		$this->view->search=$search;
-	}
-	
-	
-	
-	public function rptStudentDropAction(){
-	
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search=array(
-					'title' =>'',
-					'study_year' =>'',
-					'grade_bac' =>'',
-					'session' =>'',
-			);
-		}
-		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-		
-		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
-		$this->view->rs = $rs_rows = $group->getAllStudentDrop($search);
-		$this->view->search=$search;
-	}
-	public function rptStudentChangeGroupAction(){
-	
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search=array(
-					'title' => '',
-					'study_year' => '',
-					'grade_bac' => '',
-					'session' => '',
-			);
-		}
-	
-		$group= new Allreport_Model_DbTable_DbRptStudentChangeGroup();
-	
-		$this->view->rs = $rs_rows = $group->getAllStudentChangeGroup($search);
-		$this->view->search=$search;
-		
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-	}
-	
 	public function rptGroupAction(){
 	
 		if($this->getRequest()->isPost()){
@@ -262,29 +186,7 @@ public function init()
 	{
 	
 	}
-	public function studentGroupAction()
-	{
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search = array(
-					'title' 		=> "",
-					'study_year'	=> "",
-					'grade' 		=> "",
-					'session' 		=> "",
-					'room'=>0,
-					'degree'=>0,
-			);
-		}
-		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$rs= $db->getGroupDetail($search);
-		$this->view->rs = $rs;
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-	}
+	
 	public function rptStudentGroupAction()
 	{	
 		$id=$this->getRequest()->getParam("id");

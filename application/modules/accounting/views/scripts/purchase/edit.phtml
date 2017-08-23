@@ -9,7 +9,6 @@
 	{
 		$rs=0;
 	}
-	
 ?>	
 <title><?php echo $tr->translate("CATEGORY");?></title>
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
@@ -144,8 +143,8 @@ fieldset{  background:none;}
 							   			<option value="2" <?php if($this->row_sup['sex']==2) echo 'selected="selected"';?>><?php echo $tr->translate("FEMALE")?></option>
 							   		</select>
 							   	</td>
-							   <td><?php echo $tr->translate("Tel")?>*</td>
-							   <td><input type="text" dojoType="dijit.form.ValidationTextBox" required="required" name="phone"  id="phone" value="<?php echo $this->row_sup['tel'];?>" class="fullside"></td>
+							   <td><?php echo $tr->translate("Tel")?></td>
+							   <td><input type="text" dojoType="dijit.form.TextBox" name="phone"  id="phone" value="<?php echo $this->row_sup['tel'];?>" class="fullside"></td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("EMAIL")?></td>

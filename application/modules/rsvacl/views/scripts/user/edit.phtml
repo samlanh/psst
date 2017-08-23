@@ -86,6 +86,10 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 										</td>
 									</tr>
 									<tr>
+										<td>User Type</td>
+										<td><input id="user_type" /></td>
+									</tr>	
+									<tr>
 										<td>Status</td>
 										<td>
 											<select name="active" required="true" id="active" class='fullside' dojoType="dijit.form.FilteringSelect"  missingMessage="អ្នក​ភ្លេច​បំពេញ​  ស្ថាន​ភាព!"> 
@@ -94,17 +98,6 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 											</select> 
 										</td>
 									</tr>
-									<tr>
-										<td>User Type</td>
-										<td>
-											<select onchange="disabledAgent(this.value);" class='fullside' name="user_type" required="true" id="user_type" 
-											 missingMessage="អ្នក​ភ្លេច​បំពេញ​  តំណែង!" dojoType="dijit.form.FilteringSelect"> 
-											 	<?php foreach ($this->user_typelist as $key => $ust) : ?>
-													<option value="<?php echo $key;?>"  <?php if($this->user_edit['user_type'] == $key) echo 'selected';?> ><?php echo $ust;?></option>
-												<?php endforeach;?>																																
-											</select> 
-										</td>
-									</tr>									
 								</table>
 							</td>							
 						</tr>
@@ -122,3 +115,56 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	</table>	
 	<input type="hidden" name="id" value="<?php echo $this->user_edit['id'];?>" />
 </form>
+<script>
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore");  
+
+var usertype_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->user_type));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: usertype_store,
+		autoComplete: true,                        
+		id: "user_type",
+		name: "user_type",
+		class: "fullside", 	
+		value:'<?php echo $this->user_edit['user_type'];?>',
+		placeHolder:"Select User Type",          
+		onChange: function() {  
+			user_type = dijit.byId('user_type').get('value');
+			if(user_type==-1){
+				dijit.byId("popup_usertype").show();
+			}
+		}
+	}, "user_type");
+});
+
+function getpopupUsertype(){
+	user_type = dijit.byId("user_type").get("value");
+	if(user_type==-1){
+		dijit.byId("popup_usertype").show();
+	}
+}
+var url_addusertype = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"usertype","action"=>"addusertype")); ?>';
+function addUsrType(){
+	if(dijit.byId('frm_usertype').validate()){
+		dojo.xhrPost({
+			url:url_addusertype,
+			form: dojo.byId("frm_usertype"),
+			handleAs:"json",
+			load: function(data) {
+				var myNewItem = {					
+						id: data,
+						name: dijit.byId('user_typename').get('value')
+				};			
+				addDataToSelectbox(dijit.byId('user_type'), usertype_store, myNewItem, data);
+				dijit.byId("frm_usertype").reset();
+				dijit.byId("popup_usertype").hide();
+				
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+   }
+}
+</script>

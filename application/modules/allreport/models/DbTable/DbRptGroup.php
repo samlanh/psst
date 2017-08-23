@@ -87,6 +87,11 @@ SELECT
      `rms_student`.`tel`
    FROM `rms_student`
    WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `tel`,
+   (SELECT
+     `rms_student`.`sex`
+   FROM `rms_student`
+   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `gender`,
+   
   (SELECT
      (SELECT
         `rms_view`.`name_kh`

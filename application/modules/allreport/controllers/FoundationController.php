@@ -187,25 +187,7 @@ public function init()
 	
 	}
 	
-	public function rptStudentGroupAction()
-	{	
-		$id=$this->getRequest()->getParam("id");
-		if(empty($id)){
-			$this->_redirect("/allreport/foundation/student-group");
-		}
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search = array(
-					'txtsearch' => "");
-		}		
-		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$row = $db->getStudentGroup($id,$search);
-		$this->view->rs = $row;
-		$rs= $db->getGroupDetailByID($id);
-		$this->view->rr = $rs;
-	}
+	
 //////////report student score 
 //     function rptStudentScoreAction(){
 // //     	if($this->getRequest()->isPost()){
@@ -490,13 +472,6 @@ public function init()
     	$this->view->form_search=$form;
     }
     
-    function certifyAction(){
-    	$id=$this->getRequest()->getParam("id");
-    	//echo $id;exit();
-    	$db = new Allreport_Model_DbTable_DbCertify();
-    	$result = $db->getStudentCertify($id);
-    	$this->view->rs = $result;
-    	//print_r($result);
-    }
+   
 }
 

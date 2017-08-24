@@ -8,7 +8,7 @@
 <table>
 	<tr>
 		<td>
-			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'rpt-student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<input dojoType="dijit.form.TextBox"   id="txtsearch" name="txtsearch" placeholder="Search by student name....." value="" type="text">
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			</form>
@@ -81,7 +81,7 @@
 									<td><?php echo date("d-m-Y",strtotime($row['dob']));?></td>
 									<td><?php echo $row['pob'];?></td>
 									<td><?php echo $row['tel'];?></td>
-									<td><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'certify','id'=>$row['gd_id'])); ?>"><?php echo $tr->translate("PRINT_CERTIFY");?></a></td>
+									<td><a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'certify','id'=>$row['gd_id'])); ?>"><?php echo $tr->translate("PRINT_CERTIFY");?></a></td>
 								</tr>
 								<?php }?>	
 								<tr>

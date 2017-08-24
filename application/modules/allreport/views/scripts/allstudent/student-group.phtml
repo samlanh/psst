@@ -68,9 +68,9 @@
 							  if (!empty($this->rs))foreach($this->rs as $rs){ $i++;?>
 							  <tr style="font-size:12px; height: 18px;"​ align="center" class='padding'>
 							    <td><?php echo $i;?></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'foundation','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $rs['group_code']; ?></a></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'foundation','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $rs['academic']; ?></a></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'foundation','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $rs['semester']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $rs['group_code']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $rs['academic']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $rs['semester']; ?></a></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?></td>
 							    <td><?php echo $rs['grade']; ?></td>
 							    <td><?php echo $rs['session']; ?></td>
@@ -81,7 +81,7 @@
 							    <td><?php echo $rs['status']; ?></td>
 							    <td><?php echo $rs['Num_Student']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'foundation','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $tr->translate("PRINT"); ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $tr->translate("PRINT"); ?></a></td>
 							  </tr>
 							  <?php } ?>
 							</table>

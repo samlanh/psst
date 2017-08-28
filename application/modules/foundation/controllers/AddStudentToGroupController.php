@@ -50,7 +50,6 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
-				// print_r($_data);exit();
 				$search = array(
 						'degree' => $_data['degree'],
 						'grade' => $_data['grade'],

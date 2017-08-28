@@ -129,17 +129,16 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		
 		//date
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
-		$dates = date("Y-m-d");
 		$start_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",'class'=>'fullside',
 				'required'=>false,
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				));
 		$_date = $request->getParam("start_date");
-		if(empty($_date)){
-			$_date = date('Y-m-d');
+		if(!empty($_date)){
+			$start_date->setValue($_date);
 		}
-		$start_date->setValue($_date);
+		
 		
 		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$date = date("Y-m-d");
@@ -269,16 +268,14 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 	
 		//date
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
-		$dates = date("Y-m-d");
 		$start_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'required'=>false));
 		$_date = $request->getParam("start_date");
-		if(empty($_date)){
-			$_date = date('Y-m-d');
+		if(!empty($_date)){
+			$start_date->setValue($_date);
 		}
-		$start_date->setValue($_date);
 	
 		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$date = date("Y-m-d");

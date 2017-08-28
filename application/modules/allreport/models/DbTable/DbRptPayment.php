@@ -65,8 +65,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 	   				rms_student_payment as sp,
 					rms_student as s
 	   			WHERE 
-	   				sp.student_id=s.stu_id 
-	   	";
+	   				sp.student_id=s.stu_id ";
 	   	
     	$order=" ORDER BY id DESC";
     	
@@ -155,23 +154,15 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     
     public function getStudentPaymentDetail($search,$order_no){
     	$db = $this->getAdapter();
-    	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
-    	
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date   = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
 		
-    	//$sql = "SELECT * FROM v_getstudentpaymentdetail WHERE 1  $branch_id  ";
-    	
-    	$sql=" select 
+    	$sql=" Select 
     			  spd.id,
-				  sp.receipt_number,
-				  s.stu_code,
-				  s.stu_khname,
-				  s.stu_enname,
-				  spd.type,
+    			  spd.type,
 				  sp.tuition_fee,
 				  spd.fee,
 				  spd.qty,
@@ -180,56 +171,74 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				  spd.extra_fee,
 				  spd.discount_percent,
 				  spd.discount_fix,
-				  
 				  spd.paidamount,
 				  spd.balance,
-				  sp.create_date,
-				  sp.is_void,
 				  spd.note,
 				  spd.start_date,
 				  spd.validate,
 				  spd.is_start,
 				  spd.is_parent ,
 				  spd.is_complete,
-				  (SELECT pg.title FROM rms_program_name AS pg WHERE pg.service_id=spd.service_id) AS service_name,
-				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user,
-				  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term) AS payment_term,
-				  (select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status,
-				  
-				  (select title from rms_program_type as ser_cate where ser_cate.id = (select ser_cate_id from rms_program_name as pn where pn.service_id = spd.service_id and pn.type=2)) as service_cate                             
-				  
-    			from 
+				  sp.receipt_number,
+				  sp.create_date,
+				  sp.is_void,
+				  s.stu_code,
+				  s.stu_khname,
+				  s.stu_enname,
+				  p.title AS service_name,
+				  (SELECT major_enname FROM `rms_major` WHERE major_id=sp.grade LIMIT 1) As major_name,
+				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
+				  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
+				  (select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status,
+				  (select title from rms_program_type where rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate                             
+    			FROM 
     				rms_student_payment as sp,
     				rms_student_paymentdetail as spd,
-    				rms_student as s
+    				rms_student as s,
+    				rms_program_name as p
     			where 
     				s.stu_id = sp.student_id
-    				and sp.id=spd.payment_id
-    		 ";
-    	
-    	if($order_no==1){
-    		$order=" ORDER BY payment_id DESC ";
-    	}else{
-    		$order=" ORDER BY (select ser_cate_id from rms_program_name as pn where pn.service_id = spd.service_id) DESC ";
-    	}
+    				AND sp.id=spd.payment_id 
+    				AND p.service_id=spd.service_id ";
     	
     	
-    	
-    	if(!empty($search['txtsearch'])){
+    	if(!empty($search['title'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['txtsearch']));
+    		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
-    		//$s_where[] = " service LIKE '%{$s_search}%'";
+    		$s_where[] = " p.title LIKE '%{$s_search}%'";
     		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	
-    	if(!empty($search['service'])){
-    		$where .= " and spd.service_id = ".$search['service'];
+    	if($search['branch_id']>0){
+    		$where .= " and sp.branch_id = ".$search['branch_id'];
     	}
-    	//echo $sql.$where.$order;
+    	if($search['payment_by']>0){
+    		$where .= " and spd.type = ".$search['payment_by'];
+    	}
+    	if(!empty($search['service'])){
+    		$where .= " AND spd.type!=1 AND spd.service_id = ".$search['service'];
+    	}
+    	
+    	if($search['study_year']>0){
+    		$where .= " and sp.year = ".$search['study_year'];
+    	}
+    	if($search['degree']>0){
+    		$where .= " and sp.degree = ".$search['degree'];
+    	}
+    	if($search['grade_all']>0){
+    		$where .= " AND spd.type=1 AND sp.grade = ".$search['grade_all'];
+    	}
+    	if($search['user']>0){
+    		$where .= " and sp.user_id = ".$search['user'];
+    	}
+    	if($order_no==1){
+    		$order=" ORDER BY payment_id DESC ";
+    	}else{
+    		$order=" ORDER BY p.ser_cate_id DESC ";
+    	}
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getPaymentReciptDetail($id){

@@ -257,7 +257,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						</tr>
 						<tr>
 							<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("STUDENT_ID");?>*</td>
-							<td><input class="fullside"  style="color: red;" tabindex="15" dojoType="dijit.form.TextBox" readonly="readonly" id="student_id" name="student_id" value="<?php echo $this->rs['stu_code']; ?>" type="text" ></td>
+							<td><input class="fullside"  style="color: red;" tabindex="15" dojoType="dijit.form.TextBox"  id="student_id" name="student_id" value="<?php echo $this->rs['stu_code']; ?>" type="text" ></td>
 							<td><?php echo $tr->translate("SESSION");?>*</td>
 							<td>
 								<select class="fullside" tabindex="19" readonly="readonly"  name="session" id="session" dojoType="dijit.form.FilteringSelect" >
@@ -269,7 +269,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							</td>
 							<td title="កំរិតភាសា"><?php echo $tr->translate("ROOM_NAME");?></td>
 							<td>
-							   <select id="room" name="room" class="fullside" type="text" readonly="readonly"  dojoType="dijit.form.FilteringSelect" >
+							   <select id="room" name="room" class="fullside" type="text" dojoType="dijit.form.FilteringSelect" >
 									<option value="-1"> Select Room</option>
 									<?php if(!empty($this->room)){foreach ($this->room as $room){?>
 									<option value="<?php echo $room['id'];?>" <?php if($room['id']==$this->rs['room']){echo 'selected="selected"';}?>><?php echo $room['name'];?></option>
@@ -483,7 +483,7 @@ function addJob(){
 				dijit.byId('session').set('value',data.session);
 				dijit.byId('session').set('readOnly',true);
 				dijit.byId('room').set('value',data.room_id);
-				dijit.byId('room').set('readOnly',true);
+				//dijit.byId('room').set('readOnly',true);
 			},
 			error: function(err) {
 				alert(err);

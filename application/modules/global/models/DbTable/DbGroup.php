@@ -24,7 +24,8 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'start_date'	=> $_data['start_date'],
 					'expired_date'	=> $_data['end_date'],
 					'date' 			=> date("Y-m-d"),
-					'status'   		=> $_data['status'],
+					//'status'   		=> $_data['status'],
+					'teacher_id'   	=> $_data['teacher_id'],
 					'note'   		=> $_data['note'],
 					'user_id'	 	=> $this->getUserId(),
 					'is_use' 		=> 0
@@ -71,6 +72,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'start_date' 	=> $_data['start_date'],
 					'expired_date'	=>$_data['end_date'],
 					'date' 			=> date("Y-m-d"),
+					'teacher_id'   	=> $_data['teacher_id'],
 					'status'   		=> $_data['status'],
 					'note'   		=> $_data['note'],
 					'user_id'	  	=> $this->getUserId()

@@ -39,7 +39,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'];
 		$study_year->setMultiOptions($opt);
 		
-		
 		$_session = new Zend_Dojo_Form_Element_FilteringSelect('session');
 		$_session->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -66,8 +65,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$opt_room = array(''=>$this->tr->translate("ROOM_NAME"));
 		if(!empty($result))foreach ($result As $rs)$opt_room[$rs['id']]=$rs['name'];
 		$_room->setMultiOptions($opt_room);
-		
-		
 		
 		$_time = new Zend_Dojo_Form_Element_FilteringSelect('time');
 		$_time->setAttribs(array('dojoType'=>$this->filter,
@@ -119,7 +116,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$opt_degree=$db_years->getAllDegreeGEP();
 		if(!empty($opt_degree))foreach ($opt_degree As $rows)$opt_deg[$rows['id']]=$rows['name'];
 		$_degree_gep->setMultiOptions($opt_deg);
-		
 		
 		$_grade = new Zend_Dojo_Form_Element_FilteringSelect('grade');
 		$_grade->setAttribs(array('dojoType'=>$this->filter,
@@ -252,17 +248,17 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_status->setValue($request->getParam("status_search"));
 		//date 
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
-		$dates = date("Y-m-d");
 		$start_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				));
 		$_date = $request->getParam("start_date");
-		if(empty($_date)){
-			$_date = date('Y-m-d');
+		
+		if(!empty($_date)){
+			$start_date->setValue($_date);
 		}
-		$start_date->setValue($_date);
+		
 		
 		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$date = date("Y-m-d");
@@ -274,6 +270,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_date = $request->getParam("end_date");
 		if(empty($_date)){
 			$_date = date("Y-m-d");
+			
 		}
 		$end_date->setValue($_date);
 		
@@ -340,7 +337,17 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$service_type->setMultiOptions($opt);
 		$service_type->setValue($request->getParam("service_type"));
 		
-		$this->addElements(array($study_year,$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
+		$payment_by = new Zend_Dojo_Form_Element_FilteringSelect('payment_by');
+		$payment_by->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>false
+		));
+		$opt=array(-1=>"Select Payment By",1=>"Tution Fee",3=>"Service",4=>"Product");
+		$payment_by->setMultiOptions($opt);
+		$payment_by->setValue($request->getParam("payment_by"));
+		
+		$this->addElements(array($payment_by,$study_year,$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 	
 // 		$this->addElements(array($_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 // 		$this->addElements(array($study_year,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));

@@ -66,7 +66,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
       		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-      		//echo $e->getMessage();
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
@@ -140,7 +139,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	
     	$this->view->product_only = $db->getProductOnlyByID($id);
     	
-    	
     	$this->view->all_student_code = $db->getAllGerneralOldStudent();
     	$this->view->all_student_name = $db->getAllGerneralOldStudentName();
     	$this->view->all_year = $db->getAllYears();
@@ -160,8 +158,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$grade = $db->getAllGrade($data['dept_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}
@@ -181,8 +177,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$payment = $db->getPaymentTerm($data['generat_id'],$data['pay_id'],$data['grade_id']);
-    		//print_r($grade);exit();
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($payment));
     		exit();
     	}
@@ -201,7 +195,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$general = $db->getGeneralOldStudentById($data['student_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($general));
     		exit();
     	}
@@ -220,7 +213,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$service_fee = $db->getServiceFee($data['studentid'],$data['service'],$data['term']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($service_fee));
     		exit();
     	}
@@ -231,7 +223,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
     		$product_fee = $db->getProductFee($data['service_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($product_fee));
     		exit();
     	}
@@ -253,7 +244,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$receipt = $db->getRecieptNo();
-			//array_unshift($teacher, array ( 'id' => -1, 'name' => 'select teacher') );
 			print_r(Zend_Json::encode($receipt));
 			exit();
 		}
@@ -264,7 +254,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$stu_info = $db->getStudentTestInfo($data['stu_test_id']);
-			//array_unshift($teacher, array ( 'id' => -1, 'name' => 'select teacher') );
 			print_r(Zend_Json::encode($stu_info));
 			exit();
 		}
@@ -275,7 +264,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$credit_memo = $db->getCreditMemoByStuId($data['stu_id']);
-			//array_unshift($teacher, array ( 'id' => -1, 'name' => 'select teacher') );
 			print_r(Zend_Json::encode($credit_memo));
 			exit();
 		}
@@ -290,14 +278,13 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	function getStudentpaymenthistoryAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$payment = $db->getStudentPaymentHistory($data['student_id']);
+			print_r(Zend_Json::encode($payment));
+			exit();
+		}
+	}
 }

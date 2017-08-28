@@ -43,33 +43,32 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getPurchaseCodeSuplier($search=null){
     	$db=$this->getAdapter();
-    	$sql="SELECT sp.branch_id,sp.id,sp.supplier_no,s.sup_name,
-				      (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id) AS branch_name,
-				       sp.amount_due,sp.date,
-				      (SELECT name_kh FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1) AS `status`
-								FROM rms_supplier_product AS sp,rms_supplier AS s 
-								WHERE sp.sup_id=s.id AND sp.status=1";
+    	$sql="SELECT sp.branch_id,sp.id,sp.supplier_no,s.sup_name,s.tel,
+				(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id LIMIT 1) AS branch_name,
+				sp.amount_due,sp.date,
+				(SELECT name_kh FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1 LIMIT 1) AS `status`
+				FROM rms_supplier_product AS sp,rms_supplier AS s 
+			    WHERE sp.sup_id=s.id AND sp.status=1 ";
     	
-    	$where="";
-//     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
-//     	$to_date = (empty($search['end_date']))? '1': " sp.date <= '".$search['end_date']." 23:59:59'";
-//     	$where = " AND ".$from_date." AND ".$to_date;
+    	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " sp.date <= '".$search['end_date']." 23:59:59'";
+    	$where = " AND ".$from_date." AND ".$to_date;
     	if(!empty($search['title'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['title']));
     		$s_where[]= " sp.supplier_no LIKE '%{$s_search}%'";
     		$s_where[]=" s.sup_name LIKE '%{$s_search}%'";
+    		$s_where[]=" s.tel LIKE '%{$s_search}%'";
     		$s_where[]= " sp.amount_due LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if(!empty($search['location'])){
     		$where.=" AND sp.branch_id=".$search['location'];
     	}
-    	 
-    	if($search['status_search']==1 OR $search['status_search']==0){
-    		$where.=" AND sp.status=".$search['status_search'];
+    	if($search['supplier_id']>0){
+    		$where.=" AND sp.sup_id=".$search['supplier_id'];
     	}
-    	
+    	 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('branch_id');
     	return $db->fetchAll($sql.$where);
@@ -119,15 +118,20 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function  getAllPurchase($search=null){
     	$db=$this->getAdapter();
-    	$sql=" SELECT  sp.id,sp.supplier_no,s.sup_name,
+    	$sql=" SELECT  sp.id,sp.supplier_no,s.sup_name,s.tel,
 		           (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name ,
-		           (SELECT pro_name FROM rms_product WHERE rms_product.id=spd.pro_id) AS pro_id, 
+		           pro.pro_name AS pro_id,
+		           (SELECT g.name_kh FROM `rms_pro_category` AS g WHERE g.id=pro.cat_id LIMIT 1) AS cate_name,
 		            spd.qty,spd.qty,spd.cost,spd.amount,spd.date,
-		       			(SELECT name_kh FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
-       				FROM rms_supplier_product AS sp,rms_supproduct_detail AS spd,rms_supplier AS s 
-       				WHERE sp.id=spd.supproduct_id  AND s.id=sp.sup_id";
+		       		(SELECT name_kh FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
+       				FROM rms_supplier_product AS sp,
+       				rms_supproduct_detail AS spd,
+       				rms_supplier AS s,
+       				rms_product as pro
+       				WHERE sp.id=spd.supproduct_id  
+    					AND s.id=sp.sup_id
+    				AND pro.id=spd.pro_id	";
     	
-    	$where="";
     	    	$from_date =(empty($search['start_date']))? '1': " spd.date >= '".$search['start_date']." 00:00:00'";
     	     	$to_date = (empty($search['end_date']))? '1': " spd.date <= '".$search['end_date']." 23:59:59'";
     	     	$where = " AND ".$from_date." AND ".$to_date;
@@ -147,8 +151,14 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	if(!empty($search['product'])){
     		$where.=" AND spd.pro_id=".$search['product'];
     	}
-    	if($search['status_search']==1 OR $search['status_search']==0){
-    		$where.=" AND spd.status=".$search['status_search'];
+    	if($search['category_id']>0){
+    		$where.=" AND pro.cat_id=".$search['category_id'];
+    	}
+//     	if($search['status_search']==1 OR $search['status_search']==0){
+//     		$where.=" AND spd.status=".$search['status_search'];
+//     	}
+    	if($search['supplier_id']>0){
+    		$where.=" AND sp.sup_id=".$search['supplier_id'];
     	}
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();

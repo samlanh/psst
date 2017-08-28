@@ -235,8 +235,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		 	  WHERE 
 				`status`=1 
 				AND is_setgroup = 0 
-				and is_subspend=0 
-			";
+				and is_subspend=0 ";
 		if(!empty($search['academy'])){
 			$sql.=" AND academic_year =".$search['academy'];
 		}
@@ -249,6 +248,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($search['session'])){
 			$sql.=" AND session =".$search['session'];
 		}
+		$sql.=" ORDER BY stu_enname ASC ";
 		//echo $sql;
 		
 		return $db->fetchAll($sql);

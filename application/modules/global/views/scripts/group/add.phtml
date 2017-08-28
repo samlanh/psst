@@ -78,20 +78,21 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 					</tr>
 					<tr>
 						<td style="width: 5px"><?php echo $tr->translate("START_DATE")?></td>
-						<td><input dojoType="dijit.form.DateTextBox" name="start_date" id="start_date" class="fullside" onchange="setEndDate();" value="<?php echo date('Y-m-d');?>" type="text"></td>
+						<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" name="start_date" id="start_date" class="fullside" onchange="setEndDate();" value="<?php echo date('Y-m-d');?>" type="text"></td>
 						<td><?php echo $tr->translate("AMOUNT_MONTH")?></td>
 						<td><input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" class="fullside" value="" onkeyup="setEndDate();" type="text"></td>
 						<td ><?php echo $tr->translate("END_DATE")?></td>
-						<td><input dojoType="dijit.form.DateTextBox" id="end_date" name="end_date" type="text" class="fullside" value="<?php echo date('Y-m-d');?>" ></td>
+						<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date" type="text" class="fullside" value="<?php echo date('Y-m-d');?>" ></td>
 					</tr>
 					<tr>
 						<td><?php echo $tr->translate("ROOM_NAME")?></td>
 						<td><input id="room" /></td>
-						<td ><?php echo $tr->translate("STATUS")?></td>
-						<td><select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect">
+						<td ><?php echo $tr->translate("TEACHER_ROOM")?></td>
+						<td><input id="teacher_id" />
+							<!-- <select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect">
 								<option value="1" label="ប្រើប្រាស់">ប្រើប្រាស់</option>
 								<option value="0" label="មិនប្រើប្រាស់">មិនប្រើប្រាស់</option>
-							</select>
+							</select> -->
 						</td>
 						<td ><?php echo $tr->translate("NOTE")?></td>
 						<td><input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="" type="text"></td>
@@ -139,7 +140,26 @@ var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enc
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
+var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
+
 dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: teacher_store,
+		autoComplete: true,                        
+		required: false,
+		id: "teacher_id",
+		name: "teacher_id",           
+		class: "fullside", 
+		placeHolder:"Select Teacher",          
+		onChange: function() {  
+			teacher_id = dijit.byId('teacher_id').get('value');
+			if(teacher_id==-1){
+				$("#tow_value").val(-2)
+				dijit.byId("popup_teacher").show();
+			}
+		}
+	}, "teacher_id");
+	
 	new dijit.form.FilteringSelect({
 		store: subject_store,
 		autoComplete: true,                        
@@ -793,7 +813,6 @@ function addRoom(){
 	}
 }
 
-var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
 var url_add_teacher = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"add-teacher-popup")); ?>';
 function addTeacher(){
 	if(dijit.byId('frm_add_teacher').validate()) {
@@ -807,10 +826,12 @@ function addTeacher(){
 				        name: dijit.byId('kh_name').get('value')+'-'+dijit.byId('en_name').get('value')
 				         };
 					index=$("#tow_value").val();
-				    addDataToSelectbox(dijit.byId('teacher_'+index), teacher_store, Itemmake, data.id);
-
-				teacher_option = data.new_teacher_option;
-					  
+					if(index<0){
+						addDataToSelectbox(dijit.byId('teacher_id'), teacher_store, Itemmake, data.id);
+					}else{
+						addDataToSelectbox(dijit.byId('teacher_'+index), teacher_store, Itemmake, data.id);
+					}	
+			  teacher_option = data.new_teacher_option;
 			  dijit.byId('frm_add_teacher').reset();
 			  dijit.byId("popup_teacher").hide();
 			   

@@ -5,7 +5,8 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$rpt=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-list-product'), null, true);
-?>	
+	
+	?>	
 	<div style="width: 28cm;margin: 0 auto;">
 		<form
 			action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-product-location')); ?>"
@@ -15,6 +16,7 @@
 					<td><?php echo $frm->getElement("title");?></td>
 					<td><?php echo $frm->getElement("location");?></td>
 					<td><?php echo $frm->getElement("category_id");?></td>
+					<td><?php echo $frm->getElement("product");?></td>
 					<td> <?php echo $frm->getElement("status_search");?></td>
 					<td>
 						<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
@@ -39,50 +41,63 @@
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
+					<style>
+						table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+						tr{ page-break-inside:avoid; page-break-after:auto }
+						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+						#header {
+						  display: table-header-group;
+						  page-break-inside:avoid; page-break-after:auto;
+						}
+					.hover:hover{background:#eee;}										
+					</style>
 						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
+							<thead>
 							<tr style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
-									<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CODE');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
-									
-									<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('PRODUCT_CODE');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('BAR_CODE');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
 						   </tr>
-							
+						   </thead>
 						<?php 
-						$branch_name =''; 
-						$i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pro_loc)) foreach ($this->pro_loc AS $rs) { $i++;
+							$branch_name =''; 
+							$i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pro_loc)) foreach ($this->pro_loc AS $rs) { $i++;
 						   if($branch_name!=$rs['brand_name']){
 						  ?>
 							<tr class="hover" style="font-size:15px; height: 18px;"​ align="center">
-							      <td colspan="9" ><?php echo $rs['brand_name']; ?></td>
+							    <td colspan="9" ><?php echo $rs['brand_name']; ?></td>
 							</tr>
 							<?php } $branch_name=$rs['brand_name'];?>
 							<tr class="hover" style="font-size:11px; height: 18px;"​ align="center">
-								    <td> <?php echo $i; ?></td>
-								    <td><?php echo $rs['category_name'];?></td>
-								    <td><?php echo $rs['pro_code'];?></td>
-								    <td align="center">&nbsp;<?php echo $rs['pro_name'];?></td>
-								    <td><?php echo number_format($rs['pro_qty'],0); ?></td>
-								    
-								     <td>&nbsp;$&nbsp;<?php echo $rs['pro_price'];?></td>
-								    <td><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
-								    <td><?php echo $rs['status']; ?></td>
-								  </tr>
+							    <td> <?php echo $i; ?></td>
+							    <td><?php echo $rs['category_name'];?></td>
+							    <td><?php echo $rs['pro_code'];?></td>
+							    <?php $url_barcode = $this->url(array("module"=>"allreport","controller"=>"accounting","action"=>"generate-barcode","pro_code"=>$rs['pro_code']),null,true); ?>
+							    <td><img src="<?php echo $url_barcode;?>" /></td>
+							    <td align="center">&nbsp;<?php echo $rs['pro_name'];?></td>
+							    <td><?php echo number_format($rs['pro_qty'],0); ?></td>
+							    <td>&nbsp;$&nbsp;<?php echo $rs['pro_price'];?></td>
+							    <td><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
+							    <td><?php echo $rs['note']; ?></td>
+							    <td><?php echo $rs['status']; ?></td>
+							</tr>
 								<?php
 									} 
 								?>
 						</table>	
 					</td>
 				</tr>
-				
 				<tr>
 					<td colspan="3">&nbsp;</td>
 				</tr>
-				<tr >
+				<tr>
 					<td colspan="3" width="100%">
 						<table width="100%" style="font-family:'Khmer OS Battambang';">
 							<tr>
@@ -102,8 +117,3 @@
 			</table>
 		</div>		
 	</div>
-
-
-
-
-

@@ -12,11 +12,13 @@
 <form
 	action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-purchase')); ?>"
 	dojoType="dijit.form.Form" method="post">
-	<table style="width: 80%">
+	<table style="width: 100%">
 		<tr>
 			<td><?php echo $frm->getElement("title");?></td>
 			<td><?php echo $frm->getElement("location");?></td>
-			<td> <?php echo $frm->getElement("status_search");?></td>
+			<td> <?php echo $frm->getElement("supplier_id");?></td>
+			<td> <?php echo $frm->getElement("start_date");?></td>
+			<td> <?php echo $frm->getElement("end_date");?></td>
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -25,7 +27,6 @@
 	</table>
 </form>
 </div>
-<?php //print_r($this->pur_code); ?>
  
 <div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 	<div id="divPrint">
@@ -48,9 +49,11 @@
 											<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('TEL');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('TOTAL_AMOUNT');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate('PRINT');?>&nbsp;</td>
 								   </tr>
 									
 								<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_code)) foreach ($this->pur_code AS $rs) { $i++;
@@ -61,9 +64,11 @@
 										    <td ><a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/accounting/rpt-purchase-supplier/id/<?php echo $rs['id'];?>"><?php echo $rs['supplier_no'];?></a></td>
 										    <td><?php echo $rs['branch_name'];?></td>
 										    <td><?php echo $rs['sup_name'];?></td>
+										    <td><?php echo $rs['tel'];?></td>
 										    <td>&nbsp;$&nbsp;<?php echo $rs['amount_due'];?></td>
-										    <td><?php echo $rs['date'];?></td>
+										    <td><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
 										    <td><?php echo $rs['status']; ?></td>
+										    <td><a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/accounting/rpt-purchase-supplier/id/<?php echo $rs['id'];?>"><?php echo $tr->translate('PRINT');?></a></td>
 									 </tr>
 								  
 												<?php $totalbalance=$totalbalance+$rs['amount_due'];}?>	 

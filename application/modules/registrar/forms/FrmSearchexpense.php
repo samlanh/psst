@@ -49,17 +49,20 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_releasedate = new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$_releasedate->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
 				'onchange'=>'CalculateDate();',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside'));
 		$_date = $request->getParam("start_date");
 		
-		if(empty($_date)){
-			$_date = date('Y-m-d');
+		if(!empty($_date)){
+			$_releasedate->setValue($_date);
 		}
-		$_releasedate->setValue($_date);
+		
 		
 		
 		$_dateline = new Zend_Dojo_Form_Element_DateTextBox('end_date');
-		$_dateline->setAttribs(array('dojoType'=>'dijit.form.DateTextBox','required'=>'true','class'=>'fullside'
+		$_dateline->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
+				'required'=>'true','class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
 		$_date = $request->getParam("end_date");
 		

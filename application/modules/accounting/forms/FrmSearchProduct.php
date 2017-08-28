@@ -76,9 +76,9 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$start_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
 				'value'=>'now',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside',));
 		$_date = $request->getParam("start_date");
-		echo $_date;
 // 		if(empty($_date)){
 // 			$_date = date('Y-m-d');
 // 		}
@@ -89,6 +89,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$end_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'required'=>false));
 		$_date = $request->getParam("end_date");
 		if(empty($_date)){
@@ -103,9 +104,9 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'required'=>false
 		));
 		$category->setValue($request->getParam("category"));
+		
 		$_opt = array(
-				1=>$this->tr->translate("PRODUCT_CATEGORY"),
-				2=>$this->tr->translate("PRODUCT_MEASURE"));
+				-1=>$this->tr->translate("PRODUCT_CATEGORY"),);
 		$category->setMultiOptions($_opt);
 		//product name 
 		$product= new Zend_Dojo_Form_Element_FilteringSelect('product');
@@ -114,8 +115,9 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'class'=>'fullside',
 				'required'=>false
 		));
+		
 		$product->setValue($request->getParam("product"));
-		$opt_p = array(''=>$this->tr->translate("PRODUCT"));
+		$opt_p = array(''=>$this->tr->translate("SELECT_PRODUCT"));
 		$_pro=new Accounting_Model_DbTable_DbProduct();
 		$rows=$_pro->getProductName();
 		if(!empty($rows))foreach ($rows As $row)$opt_p[$row['id']]=$row['name'];
@@ -149,8 +151,10 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'required'=>false
 		));
 		$cate->setValue($request->getParam("category_id"));
-		$opt_ls = array(''=>$this->tr->translate("SELECT_CATORY"));
+		
+		$opt_ls = array(''=>$this->tr->translate("PRODUCT_CATEGORY"));
 		$opt_l=new Accounting_Model_DbTable_DbProduct();
+		
 		$row=$opt_l->getProductCategory();
 		if(!empty($row))foreach ($row As $rs)$opt_ls[$rs['id']]=$rs['name'];
 		$cate->setMultiOptions($opt_ls);

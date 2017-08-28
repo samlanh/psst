@@ -280,7 +280,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							</td>
 							<td title="កំរិតភាសា"><?php echo $tr->translate("ROOM_NAME");?></td>
 							<td>
-							   <select id="room" name="room" class="fullside" type="text" readonly="readonly"  dojoType="dijit.form.FilteringSelect" >
+							   <select id="room" name="room" class="fullside" type="text"  dojoType="dijit.form.FilteringSelect" >
 									<option value="-1"> Select Room</option>
 									<?php if(!empty($this->room)){foreach ($this->room as $room){?>
 									<option value="<?php echo $room['id'];?>" <?php if($room['id']==$this->rs['room']){echo 'selected="selected"';}?>><?php echo $room['name'];?></option>
@@ -520,7 +520,7 @@ function addJob(){
 				dijit.byId('session').set('value',data.session);
 				dijit.byId('session').set('readOnly',true);
 				dijit.byId('room').set('value',data.room_id);
-				dijit.byId('room').set('readOnly',true);
+				//dijit.byId('room').set('readOnly',true);
 			},
 			error: function(err) {
 				alert(err);

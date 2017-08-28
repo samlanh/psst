@@ -60,6 +60,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     	            (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id limit 1) AS brand_name,
     	            pl.brand_id,
     				pl.pro_qty,
+    				pl.note,
     				p.pro_price,
     				pl.total_amount,
 			        p.date,
@@ -69,8 +70,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
 			  		rms_product_location AS pl
 			  WHERE 
     				p.id=pl.pro_id 
-    				$branch_id
-    		";
+    				$branch_id ";
     	$where=" ";
     	if(!empty($search['title'])){
     		$s_where=array();
@@ -85,7 +85,9 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     	if(!empty($search['location'])){
     		$where.=" AND pl.brand_id=".$search['location'];
     	}
-    	
+    	if(!empty($search['product'])){
+    		$where.=" AND p.id=".$search['product'];
+    	}
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND p.status=".$search['status_search'];
     	}
@@ -95,7 +97,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('brand_id');
-    	$where.=" ORDER BY pl.brand_id DESC";
+    	$where.=" ORDER BY pl.brand_id DESC,p.cat_id DESC";
     	return $db->fetchAll($sql.$where);
     }
     function getProductsByLocId($loc_id){

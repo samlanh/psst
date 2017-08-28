@@ -245,14 +245,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // 						'balance_due'	=>$data['balance'],
 						'note'			=>$data['not'],
 						'student_type'	=>$data['student_type'],  // 1=tested student , 2=new student , 3=old student
-						'create_date'	=>date('Y-m-d H:i:s'),
+						//'create_date'	=>date('Y-m-d H:i:s'),//check date here 
+						'create_date'	=>$data['paid_date'],
 						//'amount_in_khmer'=>$data['char_price'],
 						'user_id'		=>$this->getUserId(),
 						'branch_id'		=>$this->getBranchId(),
-						
 						'grand_total'	=>$data['grand_total'],
 						'fine'			=>$data['fine'],
-						
 						'memo_id'		=>$data['credit_memo_id'],
 						'credit_memo'	=>$cut_credit_memo,
 						'deduct'		=>$data['deduct'],
@@ -656,7 +655,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'discount_fix'	=>$data['discount_fix'],
 					 		'paidamount'	=>$data['total_payment'],//$paidamount,
 	             			'balance'		=>0,
-							
 							'note'			=>$data['not'],
 							'start_date'	=>$data['start_date'],
 							'validate'		=>$data['end_date'],
@@ -2177,21 +2175,49 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$order=' ORDER BY spd.id DESC';
 		return $db->fetchOne($sql.$order);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	function getStudentPaymentHistory($studentid){
+		$db = $this->getAdapter();
+		 
+		$sql = "Select 
+    			  spd.id,
+    			  spd.type,
+				  sp.tuition_fee,
+				  spd.fee,
+				  spd.qty,
+				  spd.subtotal,
+				  spd.late_fee,
+				  spd.extra_fee,
+				  spd.discount_percent,
+				  spd.discount_fix,
+				  spd.paidamount,
+				  spd.balance,
+				  spd.note,
+				  DATE_FORMAT(spd.start_date, '%d-%m-%Y') AS start_date ,
+				  DATE_FORMAT(spd.validate, '%d-%m-%Y') AS validate ,
+				  spd.is_start,
+				  spd.is_parent ,
+				  spd.is_complete,
+				  sp.receipt_number,
+				  DATE_FORMAT(sp.create_date, '%d-%m-%Y') AS create_date ,
+				  sp.is_void,
+				  s.stu_code,
+				  s.stu_khname,
+				  s.stu_enname,
+				  p.title AS service_name,
+				  (SELECT major_enname FROM `rms_major` WHERE major_id=sp.grade LIMIT 1) As major_name,
+				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
+				  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
+				  (select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status,
+				  (select title from rms_program_type where rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate                             
+    			FROM 
+    				rms_student_payment as sp,
+    				rms_student_paymentdetail as spd,
+    				rms_student as s,
+    				rms_program_name as p
+    			where 
+    				s.stu_id = sp.student_id
+    				AND sp.id=spd.payment_id 
+    				AND p.service_id=spd.service_id and sp.student_id= $studentid";
+			return $db->fetchAll($sql);
+	}
 }
-
-
-
-
-
-
-

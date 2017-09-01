@@ -104,6 +104,7 @@ dojo.ready(function(){
 				filterStudentByCondition();
 			}
 		}, "grade");
+		checkExamType();
 		
 });
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
@@ -326,13 +327,14 @@ function filterStudentOld(){
 							</td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("ROOM_NAME");?>*</td>
+							<td><?php echo $tr->translate("EXAM_TYPE");?></td>
 							<td>
-							   <select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" >
-							   		<option value="-1"> Select Room</option>
-							   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
-							   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
-							   		<?php }}?>
+							   <select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
+							   		<option value="1" <?php if($this->score['exam_type']==1){echo "selected";} ?>>ប្រចាំខែ</option>
+							   		<option value="2" <?php if($this->score['exam_type']==2){echo "selected";} ?>>ប្រលងឆមាស</option>
+							   		<?php //if(!empty($this->room)){foreach ($this->room as $room){?>
+							   		<!-- <option value="<?php //echo $room['id'];?>"><?php //echo $room['name'];?></option> -->
+							   		<?php //}}?>
 							   </select>
 							</td>
 							<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
@@ -488,8 +490,8 @@ function getInfoBygroup(){
 			dijit.byId('session').set('value',data.session);
 			dijit.byId('session').set('readOnly',true);
 			
-			dijit.byId('room').set('value',data.room_id);
-			dijit.byId('room').set('readOnly',true);
+			//dijit.byId('room').set('value',data.room_id);
+			//dijit.byId('room').set('readOnly',true);
 		},
 		error: function(err) {
 			alert(err);
@@ -515,6 +517,13 @@ function getSubjectByGroup(){
 		 //   alert(err);
 	    }
 	});
+}
+function checkExamType(){
+	exam_type = dijit.byId("exam_type").get("value");
+	dijit.byId('for_month').set("readOnly",false);
+	if(exam_type==2){
+		dijit.byId('for_month').set("readOnly",true);
+	}
 }
 var url_getChileSubject= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-childsubject')); ?>';
 function getChildren(subject_id,stu_id,divid){

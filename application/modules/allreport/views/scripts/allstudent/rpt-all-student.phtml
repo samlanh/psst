@@ -19,9 +19,8 @@
 			</tr>
 			<tr>
 				<td><?php echo $frm->getElement("session");?></td>
-				<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->search['start_date'];?>" type="text"></td>
-				<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="end_date" name="end_date"  value="<?php echo $this->search['end_date'];?>" type="text"></td>
-				
+				<td><?php echo $frm->getElement("start_date");?></td>
+				<td><?php echo $frm->getElement("end_date");?></td>
 				<td>
 					<select name="stu_type" id="stu_type" type="text" class="fullside" dojoType="dijit.form.FilteringSelect" >
 						<option value="-1" <?php if($this->search['stu_type']==-1){echo 'selected="selected"';}?>> All Students </option>
@@ -37,7 +36,6 @@
 </div>
 <script type="text/javascript">
 function getKHMonthByNumber(m){
-	//alert(Number(m));
 	var monthName=[
 		"មករា",
 		"កុម្ភៈ",
@@ -74,7 +72,6 @@ function getKHMonthByNumber(m){
 			table tr th{
 				border: 1px solid #000;	
 			}
-			
 		</style>
 		
 			<tr>
@@ -157,12 +154,7 @@ function getKHMonthByNumber(m){
 			</td>
 		</tr>
 	</table>
-	
-
 </div>
-	
-
-
 <div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:22cm;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
 		<div id="divPrint1" style="width: 21cm !important; height: 13cm ; padding: 0px; margin: 0px;">
@@ -177,9 +169,9 @@ function getKHMonthByNumber(m){
 								</td>
 								<td valign="top" align="center" width="65%" style="line-height: 20px;white-space: nowrap;">
 									<div style="margin-right: 20px;margin-top: 3px;">
-										<span style="font-family: 'Khmer OS Muol Light';">សាលាកម្ពុជា - អូស្ត្រាលី </span><br />
-										CAMBODIA - AUSTRALIA SCHOOL <br />
-										Quality Discipline Morality <br />
+										<span style="font-family: 'Khmer OS Muol Light';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></span><br />
+										<?php echo $tr->translate("SCHOOL_NAME");?><br />
+										<?php echo $tr->translate("SLOGAN_SCHOOL");?> <br />
 										<img style="width:40%;" src="<?php echo $this->baseUrl().'/images/style.png'?>">
 									</div>
 								</td>
@@ -348,7 +340,7 @@ function getKHMonthByNumber(m){
 												
 												</div>
 												<div style="margin-top: -2px;<?php if($row['dept']<=2){echo 'font-family: Khmer OS Muol Light;';}?>"><?php if($row['dept']<=2){echo 'នាយក';}else{echo 'Director';}?></div><br />
-												<div style="margin-top: 10px;<?php if($row['dept']<=2){echo 'font-family: Khmer OS Muol Light;';}?>"><?php if($row['dept']<=2){echo 'ផាន់ សិទ្ធី';}else{echo 'PHAN SOTHY';}?></div>
+												<div style="margin-top: 10px;<?php if($row['dept']<=2){echo 'font-family: Khmer OS Muol Light;';}?>"><?php if($row['dept']<=2){}?></div>
 											</td>
 										</tr>
 									</table>

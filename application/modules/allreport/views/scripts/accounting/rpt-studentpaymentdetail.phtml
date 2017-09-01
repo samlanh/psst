@@ -93,10 +93,12 @@
 							  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
 							  	<td align="center"><?php echo $rs['stu_code']; ?></td>
 							    <td style="text-align:left"><?php echo $rs['stu_khname'].'-'.$rs['stu_enname']; ?></td>
-							    <?php if($rs['type']==1){
-							    	$rs['service_cate']="Tuition Fee";
-							    	$rs['service_name']=$rs['major_name'];
-							    }
+							    <?php if($rs['type']==1){//tuition fee
+								    	$rs['service_cate']="Tuition Fee";
+								    	$rs['service_name']=$rs['major_name'];
+							    	}elseif($rs['type']==4){//for procut
+							    		$rs['service_cate']=$rs['product_category'];
+							    	}
 							    ?>
 							    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
 							    <td style="text-align:left"><?php echo $rs['service_name']; ?></td>
@@ -110,8 +112,8 @@
 							    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
 							    <td><?php echo $rs['discount_fix']; ?> </td>
 							    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
-							    <td><?php echo date('d/m/Y', strtotime($rs['start_date'])); ?></td>
-							    <td><?php echo date('d/m/Y', strtotime($rs['validate'])); ?></td>
+							    <td><?php echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?></td>
+							    <td><?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); ?></td>
 							    <td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
 							   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
 							  	 <td><?php echo $rs['user']; ?></td>
@@ -166,7 +168,7 @@
 						  </table>
 						</td>
 					</tr>
-					<tr >
+					<tr>
 						<td colspan="3" width="100%">
 							<table width="100%">
 								<tr>

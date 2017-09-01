@@ -99,8 +99,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		
 	}
-		
-		
 	function editAction(){
 		$db= new Global_Model_DbTable_DbGroup();
 		if($this->getRequest()->isPost()){

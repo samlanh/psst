@@ -34,11 +34,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
     		//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("RECEIPT_NO","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","TOTAL_PAYMENT","FINE","CREDIT_MEMO","DEDUCT","NET_AMOUNT","DATE_PAY","USER","STATUS");
-    		$link=array(
-    				'module'=>'registrar','controller'=>'register','action'=>'edit',
-    		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));
+    		$collumns = array("RECEIPT_NO","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","TOTAL_PAYMENT","FINE","CREDIT_MEMO","DEDUCT","NET_AMOUNT","DATE_PAY","USER","STATUS","PRINT_SCHOLARSHIP");
+    		$link=array('module'=>'registrar','controller'=>'register','action'=>'edit',);
+    		$letter=array('module'=>'registrar','controller'=>'register','action'=>'congratulationletter',);
+    		
+    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('បោះ.អាហារូ'=>$letter,'branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		echo $e->getMessage();
@@ -286,5 +286,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			print_r(Zend_Json::encode($payment));
 			exit();
 		}
+	}
+	function congratulationletterAction(){
+		$id=$this->getRequest()->getParam('id');
+		if(empty($id)){$this->_redirect("registrar/register");}
+		$db = new Registrar_Model_DbTable_DbRegister();
+		$this->view->rs = $db->getStudentPaymentByID($id);
 	}
 }

@@ -62,15 +62,18 @@
 								<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("PRINT");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("RESULT_SEMESTER1");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("RESULT_SEMESTER2");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("YEARLY_EXAM");?>&nbsp;</td>
 							  </tr>
 							  </thead>
 							  <?php $i=0; 
 							  if (!empty($this->rs))foreach($this->rs as $rs){ $i++;?>
 							  <tr style="font-size:12px; height: 18px;"​ align="center" class='padding'>
 							    <td><?php echo $i;?></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $rs['group_code']; ?></a></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $rs['academic']; ?></a></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $rs['semester']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['semester']; ?></a></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?></td>
 							    <td><?php echo $rs['grade']; ?></td>
 							    <td><?php echo $rs['session']; ?></td>
@@ -81,7 +84,10 @@
 							    <td><?php echo $rs['status']; ?></td>
 							    <td><?php echo $rs['Num_Student']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="blank"><?php echo $tr->translate("PRINT"); ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-resultbysemester','id'=>$rs['id'],'type'=>1));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-resultbysemester','id'=>$rs['id'],'type'=>2));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-resultbyyear','id'=>$rs['id'],'type'=>3));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
 							  </tr>
 							  <?php } ?>
 							</table>

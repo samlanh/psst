@@ -48,7 +48,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 								<select name="academic_year" id="academic_year" class="fullside" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect">
 									<option value="-1">select year</option>
 									<?php if(!empty($this->row_year)){ foreach($this->row_year as $year){?>
-										<option value="<?php echo $year['id'];?>"<?php if($year['id']==$this->rs['academic_year']) echo 'selected="selected"';?>><?php echo $year['years'];?></option>
+										<option value="<?php echo $year['id'];?>" <?php if($year['id']==$this->rs['academic_year']) echo 'selected="selected"';?>><?php echo $year['years'];?></option>
 									<?php }}?>
 							    </select>
 							</td>
@@ -56,28 +56,24 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" name="semester" value="<?php echo $this->rs['semester'];?>" type="text"></td>
 						</tr>
 						<tr>
-							
+							<td ><?php echo $tr->translate("DEGREE")?></td>
+							<td>
+								<input id="degree" />
+							</td>
+							<td><?php echo $tr->translate("GRADE")?></td>
+							<td>
+								<input id="grade" name="grade"  />
+							</td>
 							<td><?php echo $tr->translate("SESSION")?></td>
 							<td>
 								<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect">
 								<?php $row= new Application_Model_DbTable_DbGlobal();
 								      $rows=$row->getSession();
 									foreach($rows as $key =>$rs){?>
-										<option value='<?php echo $rs['key_code']?>' ><?php echo $rs['view_name'];?></option>
+										<option value='<?php echo $rs['key_code']?>' <?php if($rs['key_code']==$this->rs['session']) echo 'selected="selected"';?> ><?php echo $rs['view_name'];?></option>
 								<?php 	}?>
 								</select>
 							</td>
-							<td ><?php echo $tr->translate("DEGREE")?></td>
-
-							<td>
-								<input id="degree" />
-							</td>
-							
-							<td><?php echo $tr->translate("GRADE")?></td>
-							<td>
-								<input id="grade" name="grade"  />
-							</td>
-							
 						</tr>
 						
 						<tr>

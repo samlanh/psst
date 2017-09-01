@@ -268,10 +268,10 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	WHERE
    	s.`id`=sd.`score_id`
    	AND st.`stu_id`=sd.`student_id`
-   	AND g.`id`=sd.`group_id`
+   	AND g.`id`=s.`group_id`
    	AND sd.`is_parent`=1
    	AND s.status = 1
-   	AND s.type_score=1 AND s.group_id= $id ";
+   	AND s.type_score=1 AND s.id= $id ";
 //    echo $sql;exit();
    	$where='';
    
@@ -294,14 +294,111 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	if(!empty($search['session'])){
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
-   	if(!empty($search['for_month'])){
-   		$where.= " AND s.for_month =".$search['for_month'];
-   	}
-   	$order = "  GROUP BY sd.`student_id`,s.`reportdate` ORDER BY average DESC ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC 	";
+//    	if(!empty($search['for_month'])){
+//    		$where.= " AND s.for_month =".$search['for_month'];
+//    	}
+   	$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` ORDER BY average DESC ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC 	";
 //    	echo $sql.$where.$order;exit();
    	return $db->fetchAll($sql.$where.$order);
    }
-   
+   public function getStundetScorebySemester($group_id,$semester){ // fro rpt-score by semester I+II
+   	$db = $this->getAdapter();
+   	$sql="
+   	SELECT
+   	s.`id`,
+   	sd.`group_id`,
+   	g.`group_code`,
+   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+   	(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+   	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+   	`g`.`semester` AS `semester`,
+   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+   	sd.`student_id`,
+   	st.`stu_code`,
+   	st.`stu_enname`,
+   	st.`stu_khname`,
+   	st.`sex`,
+   	s.for_semester,
+   	(SELECT AVG(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc 
+   		WHERE 
+   		sc.id=sdd.score_id
+   		AND sc.group_id=$group_id
+   		AND sc.for_semester =$semester
+   		AND sc.exam_type=2
+   		AND sdd.`is_parent`=1 
+   		AND sdd.student_id = sd.student_id
+   		GROUP BY sdd.student_id LIMIT 1) AS avg_exam,
+   	SUM(sd.`score`) AS total_score,
+   	AVG(sd.score) as average,
+   	(SELECT COUNT(ss.id) FROM `rms_score` AS ss WHERE ss.group_id=$group_id AND ss.exam_type=1 AND for_semester = $semester) AS amount_month
+   	FROM `rms_score` AS s,
+   	`rms_score_detail` AS sd,
+   	`rms_student` AS st,
+   	`rms_group` AS g
+   	WHERE
+   		s.`id`=sd.`score_id`
+	   	AND st.`stu_id`=sd.`student_id`
+	   	AND g.`id`=s.`group_id`
+	   	AND sd.`is_parent`=1
+	   	AND s.status = 1
+	   	AND s.type_score=1
+   		AND g.id= $group_id
+   		AND s.for_semester=$semester
+   	AND s.exam_type=1 ";
+   	$where='';
+   	$order = " GROUP BY sd.`student_id` ORDER BY average,avg_exam DESC,s.for_academic_year,s.for_semester ASC ";
+   	return $db->fetchAll($sql.$where.$order);
+   }
+   public function getStundetScorebyYear($group_id,$semester){ // score result for yearly
+   	$db = $this->getAdapter();
+		   	$sql="
+		   	SELECT
+		   	s.`id`,
+		   	sd.`group_id`,
+		   	g.`group_code`,
+		   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+		   	(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+		   	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+		   	`g`.`semester` AS `semester`,
+		   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+		   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+		   	sd.`student_id`,
+		   	st.`stu_code`,
+		   	st.`stu_enname`,
+		   	st.`stu_khname`,
+		   	st.`sex`,
+		   	s.for_semester,
+		   	(SELECT AVG(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc 
+		   		WHERE 
+		   		sc.id=sdd.score_id
+		   		AND sc.group_id=$group_id
+		   		AND sc.for_semester =$semester
+		   		AND sc.exam_type=2
+		   		AND sdd.`is_parent`=1 
+		   		AND sdd.student_id = sd.student_id
+		   		GROUP BY sdd.student_id LIMIT 1) AS avg_exam,
+		   	SUM(sd.`score`) AS total_score,
+		   	AVG(sd.score) as average,
+		   	(SELECT COUNT(ss.id) FROM `rms_score` AS ss WHERE ss.group_id=$group_id AND ss.exam_type=1 AND for_semester = $semester) AS amount_month
+		   	FROM `rms_score` AS s,
+		   	`rms_score_detail` AS sd,
+		   	`rms_student` AS st,
+		   	`rms_group` AS g
+		   	WHERE
+		   		s.`id`=sd.`score_id`
+			   	AND st.`stu_id`=sd.`student_id`
+			   	AND g.`id`=s.`group_id`
+			   	AND sd.`is_parent`=1
+			   	AND s.status = 1
+			   	AND s.type_score=1
+		   		AND g.id= $group_id
+		   		AND s.for_semester=$semester
+		   	AND s.exam_type=1 ";
+		   	$where='';
+		   	$order = " GROUP BY sd.`student_id` ORDER BY sd.`student_id`,s.for_academic_year";
+		   	return $db->fetchAll($sql.$where.$order);
+   }
    
    public function getSubjectScoreGroup($group_id){
    	$db = $this->getAdapter();

@@ -66,7 +66,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 	}
 	function getAllSujectName($search=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT id,subject_titlekh,subject_titleen,date,
+		$sql = " SELECT id,subject_titlekh,subject_titleen,shortcut,date,
 		(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id) as user_name
 		,status
 		FROM rms_subject   

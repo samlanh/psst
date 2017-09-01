@@ -282,11 +282,11 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$rows = $_db->getAllSubjectStudy();
-		array_unshift($rows,array('id' => -1,"name"=>"បន្ថែមមុខវិជ្ជាសិក្សា"));
+		array_unshift($rows,array('id' => -1,"name"=>"បន្ថែមមុខវិជ្ជាសិក្សា","shortcut"=>""));
 		if($opt!=null){return $rows;}
 		$options = '<option value="">ជ្រើសរើសរើសមុខវិជ្ជា</option>';
 		if(!empty($rows))foreach($rows as $value){
-			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']."-".$value['shortcut'], ENT_QUOTES).'</option>';
 		}
 		return $options;
 	}

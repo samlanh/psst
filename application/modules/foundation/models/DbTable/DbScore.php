@@ -28,6 +28,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
 					//'reportdate'=>$_data['reportdate'],
+			        'exam_type'=>$_data['exam_type'],
 					'date_input'=>date("Y-m-d"),
 					'note'=>$_data['note'],
 					'user_id'=>$this->getUserId(),
@@ -131,6 +132,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'group_id'=>$_data['group'],
 					//'reportdate'=>$_data['reportdate'],
 					//'date_input'=>date("Y-m-d"),
+					'exam_type'=>$_data['exam_type'],
 					'note'=>$_data['note'],
 					'status'=>$_data['status'],
 					'user_id'=>$this->getUserId(),
@@ -247,7 +249,9 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	
 	function getAllScore($search=null){
 		$db=$this->getAdapter();
-		$sql="SELECT s.id,s.title_score,(SELECT group_code FROM rms_group WHERE id=s.group_id ) AS  group_id,
+		$sql="SELECT s.id,s.title_score,
+			(SELECT name_en FROM `rms_view` WHERE TYPE=14 AND key_code =s.exam_type LIMIT 1) as exam_type,
+			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
 			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
 			(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
 			(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1)AS grade,

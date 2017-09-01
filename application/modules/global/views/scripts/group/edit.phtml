@@ -54,28 +54,28 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							<td><input dojoType="dijit.form.ValidationTextBox" required="true" name="semester" class="fullside" value="<?php echo $this->rs['semester'];?>" type="text"></td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("SESSION")?></td>
-							<td>
-								<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect">
-								<?php $row= new Application_Model_DbTable_DbGlobal();
-								      $rows=$row->getSession();
-									foreach($rows as $key =>$rs){?>
-										<option value='<?php echo $rs['key_code']?>' ><?php echo $rs['view_name'];?></option>
-								<?php 	}?>
-								</select>
-							</td>
 							<td ><?php echo $tr->translate("DEGREE")?></td>
 							<td>
 								<select   name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getallGrade(); getSubjectByDegree();">
 										<?php 
 										if(!empty($this->degree))foreach ($this->degree as $row){?>
-										<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->rs['degree']) echo 'selected="selected"';?> ><?php echo $row['en_name']?></option>
+										<option value="<?php echo $row['dept_id']?>" <?php if($row['dept_id']==$this->rs['degree']) echo 'selected="selected"';?> ><?php echo $row['en_name']?></option>
 										<?php }?>
 								</select>
 							</td>
 							<td style="white-space: nowrap;"><?php echo $tr->translate("GRADE")?></td>
 							<td>
 								<input id="grade" name="grade" class="fullside" value="<?php echo $this->rs['grade']; ?>" />
+							</td>
+							<td><?php echo $tr->translate("SESSION")?></td>
+							<td>
+								<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect">
+								<?php $row= new Application_Model_DbTable_DbGlobal();
+								      $rows=$row->getSession();
+									foreach($rows as $key =>$rs){?>
+										<option value='<?php echo $rs['key_code']?>' <?php if($rs['key_code']==$this->rs['session']) echo 'selected="selected"';?>><?php echo $rs['view_name'];?></option>
+								<?php 	}?>
+								</select>
 							</td>
 						</tr>
 						<tr>

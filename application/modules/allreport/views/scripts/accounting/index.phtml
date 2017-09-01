@@ -61,6 +61,8 @@
   	<ul class="link-rpt">
   		<li><a href="<?php echo $rpt_studentpayment;?>"><?php echo $tr->translate('STUDENT_PAYMENT_REPORT');?></a></li>
   		<li><a href="<?php echo $rpt_studentpaymentdetail;?>"><?php echo $tr->translate('STUDENT_PAYMENT_DETAIL_REPORT');?></a></li>
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpaymenthistory'), null, true);?>"><?php echo $tr->translate('STUDENT_PAYMENT_HISTORY_REPORT');?></a></li>
+  		
   		<li><a href="<?php echo $rpt_student_payment_by_type;?>"><?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></a></li>
   		<li><a href="<?php echo $rpt_student_nearly_end_service;?>"><?php echo $tr->translate('STUDENT_NEARLY_END_REPORT');?></a></li>
   		<li><a href="<?php echo $rpt_student_payment_late;?>"><?php echo $tr->translate('RPT_STUDENT_PAYMENT_LATE');?></a></li>

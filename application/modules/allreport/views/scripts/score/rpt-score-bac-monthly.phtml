@@ -18,7 +18,7 @@
 	$month = array(
 				"01"=>"មករា",
 				"02"=>"កុម្ភៈ",
-				"03"=>"មិនា",
+				"03"=>"មីនា",
 				"04"=>"មេសា",
 				"05"=>"ឧសភា",
 				"06"=>"មិថុនា",
@@ -31,11 +31,7 @@
 			);
 ?>	
 <script type="text/javascript">
-//dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-//dojo.require("dojo.store.Memory");
-//dojo.require("dojo.data.ObjectStore");
-//dojo.require('dojox.form.BusyButton');
 var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
 dojo.ready(function(){
 		new dijit.form.FilteringSelect({
@@ -132,17 +128,17 @@ dojo.ready(function(){
 							<tr style="font-size:12px; height: 18px;white-space: nowrap;"​ align="center" class='padding'>
 							    <td><?php echo $key+1;?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['group_code']; ?></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['group_id']));?>" target="blank"><?php echo $rs['academic_year']; ?></a></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['group_id']));?>" target="blank"><?php echo $rs['degree']; ?></a></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['group_id']));?>" target="blank"><?php echo $rs['grade']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic_year']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['degree']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['grade']; ?></a></td>
 							    <td><?php echo $rs['grade']; ?></td>
 							    <td><?php echo $rs['session']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['title_score']; ?></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['group_id']));?>" target="blank"><?php echo $rs['for_month']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['for_month']; ?></a></td>
 							    <td><?php echo $rs['for_semester']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['group_id']));?>" target="blank"><?php echo $tr->translate("PRINT"); ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
 							  </tr>
 							<?php 
 							 }

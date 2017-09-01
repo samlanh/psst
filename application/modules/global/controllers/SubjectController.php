@@ -30,11 +30,11 @@ class Global_SubjectController extends Zend_Controller_Action {
 			 
 			 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("SUBJECT_IN_KH","SUBJECT_IN_EN","MODIFY_DATE","USER","STATUS");
+			$collumns = array("SUBJECT_IN_KH","SUBJECT_IN_EN","SHORTCUT","MODIFY_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'subject','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('subject_titlekh'=>$link,'subject_titleen'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('shortcut'=>$link,'subject_titlekh'=>$link,'subject_titleen'=>$link));
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");

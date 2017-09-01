@@ -243,6 +243,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // 						'paid_amount'	=>$data['paid_amount'],
 // 						'receive_amount'=>$data['paid_amount'],
 // 						'balance_due'	=>$data['balance'],
+						'scholarship_percent'=>$data['scholarship_percent'],
+						'scholarship_amount'=>$data['scholarship_amount'],
+						'tution_feeperyear'=>$data['tution_peryear'],
+						'total_scholarship'=>$data['total_scholarship'],
 						'note'			=>$data['not'],
 						'student_type'	=>$data['student_type'],  // 1=tested student , 2=new student , 3=old student
 						//'create_date'	=>date('Y-m-d H:i:s'),//check date here 
@@ -555,6 +559,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // 						'paid_amount'	=>$data['paid_amount'],
 // 						'receive_amount'=>$data['paid_amount'],
 // 						'balance_due'	=>$data['balance'],
+						'scholarship_percent'=>$data['scholarship_percent'],
+						'scholarship_amount'=>$data['scholarship_amount'],
+						'tution_feeperyear'=>$data['tution_peryear'],
+						'total_scholarship'=>$data['total_scholarship'],
 						'note'			=>$data['not'],
 						'student_type'	=>$data['student_type'],
 						'create_date'	=>date('Y-m-d H:i:s'),
@@ -685,6 +693,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'credit_memo'	=>$data['credit_memo'],
 						'deduct'		=>$data['deduct'],
 						'net_amount'	=>$data['net_amount'],
+						
+						'scholarship_percent'=>$data['scholarship_percent'],
+						'scholarship_amount'=>$data['scholarship_amount'],
+						'tution_feeperyear'=>$data['tution_peryear'],
+						'total_scholarship'=>$data['total_scholarship'],
 						
 						'create_date'	=> date('Y-m-d'),
 						'user_id'		=>$this->getUserId(),
@@ -1580,7 +1593,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		       
  		       sp.grand_total,sp.fine,sp.credit_memo,sp.deduct,sp.net_amount, sp.create_date ,
  		       (select CONCAT(first_name) from rms_users where rms_users.id = sp.user_id) as user,
- 		       (select name_en from rms_view where type=10 and key_code = sp.is_void) as void
+ 		       (select name_en from rms_view where type=10 and key_code = sp.is_void) as void,'បោះ.អាហារូ'
  			   FROM rms_student AS s,rms_student_payment AS sp WHERE  s.stu_id=sp.student_id $user $branch_id ";
     	$where=" ";
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
@@ -2064,14 +2077,20 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getStudentPaymentByID($id){
     	$db=$this->getAdapter();
-    	$sql="select 
-    			*,
-    		  (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = rms_student_payment.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-    		  (select is_stu_new from rms_student where stu_id = student_id) as is_new_stu            
-    		from
-    		  	rms_student_payment 
+    	$sql="SELECT 
+    			sp.*,
+    		 s.stu_enname,
+    		 s.stu_khname,
+    		 s.sex,
+    		 s.stu_code,
+    		 s.is_stu_new,
+    		 (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id
+    		FROM
+    		  	rms_student_payment as sp,
+    		  	rms_student as s
     		where 
-    			id=$id";
+    			s.stu_id = sp.student_id
+    			AND sp.id=$id ";
     	return $db->fetchRow($sql);
     }
     
@@ -2204,6 +2223,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				  s.stu_khname,
 				  s.stu_enname,
 				  p.title AS service_name,
+				  (SELECT pg.name_kh FROM `rms_pro_category` AS pg WHERE pg.id = (SELECT pp.cat_id FROM `rms_product` AS pp WHERE pp.id = p.ser_cate_id LIMIT 1) LIMIT 1) AS product_category,
 				  (SELECT major_enname FROM `rms_major` WHERE major_id=sp.grade LIMIT 1) As major_name,
 				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 				  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
@@ -2217,7 +2237,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			where 
     				s.stu_id = sp.student_id
     				AND sp.id=spd.payment_id 
-    				AND p.service_id=spd.service_id and sp.student_id= $studentid";
+    				AND p.service_id=spd.service_id and sp.student_id= $studentid ORDER BY create_date DESC";
 			return $db->fetchAll($sql);
 	}
 }

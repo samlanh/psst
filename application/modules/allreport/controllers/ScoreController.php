@@ -56,12 +56,10 @@ public function init()
     				'grade_bac'=> '',
     				'degree_bac'=>'',
     				'session'=> '',
-    				'for_month'=>date('m'),
+    				'for_month'=>'',
     		);
     	}
-    	 
     	$this->view->search=$search;
-    	 
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id);
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
@@ -71,6 +69,78 @@ public function init()
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     }
+    function rptResultbysemesterAction(){
+    	$group_id=$this->getRequest()->getParam("id");
+    	$type=$this->getRequest()->getParam("type");
+    	$search= array();
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$result_semester = $db->getStundetScorebySemester($group_id,$type);
+    	$array_score = array();
+    	if(!empty($result_semester)){
+    		foreach ($result_semester as $key => $row){
+    			$array_score[$key]['score_average'] = ($row['average']+$row['avg_exam'])/2;
+    		}
+    	}
+    	array_multisort($array_score, SORT_DESC, $result_semester);
+    	$this->view->studentgroup = $result_semester;
+    }
+    function rptResultbyyearAction(){
+    	$group_id=$this->getRequest()->getParam("id");
+    	$type=$this->getRequest()->getParam("type");
+
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$result_semester1 = $db->getStundetScorebyYear($group_id,1);
+//     	$main_semester = $result_semester1;
+// 	print_r($result_semester1);
+    	
+    	$result_semester2 = $db->getStundetScorebyYear($group_id,2);
+    	$main_semester = $result_semester2;
+    	$array_score​= array();
+    	if(!empty($result_semester2)){
+    		   foreach ($result_semester2 as $key => $row){
+    		   		$result_semester1[$key]['avage_semester1']= ($result_semester1[$key]['average']+$result_semester1[$key]['avg_exam'])/2;
+    		    	$result_semester1[$key]['avage_semester2']= ($row['average']+$row['avg_exam'])/2;
+    		    	$array_score[$key]['average_year'] = ($result_semester1[$key]['avage_semester1']+$result_semester1[$key]['avage_semester2'])/2;
+    		    	
+    		    }
+       }
+       array_multisort($array_score, SORT_DESC, $result_semester1);
+    		
+//    echo "<br />================<br />";
+//     	print_r($result_semester2);
+//     	exit();
+//     	$result_semester = $result_semester2;
+    	
+//     	$amount_semester1 = count($result_semester1);
+//     	$amount_semester2 = count($result_semester2);
+    	
+//     	if($amount_semester2>$amount_semester1){
+//     		$main_semester=$result_semester2;
+//     		$result_semester =$result_semester1;
+//     	}elseif($amount_semester1>$amount_semester2){
+//     		$main_semester=$result_semester1;
+//     		$result_semester =$result_semester2;
+//     	}
+    	
+//     	$array_score = array();
+//     	if(!empty($result_semester1)){
+//     		foreach ($result_semester1 as $key => $row){
+//     			$result_semester1[$key]['avg_s1']= ($row['average']+$row['avg_exam'])/2;
+//     		}
+//     	}
+    	
+//     	if(!empty($result_semester2)){
+//     		foreach ($result_semester2 as $key => $row){
+//     			$result_semester2[$key]['avg_s2']= ($row['average']+$row['avg_exam'])/2;
+//     		}
+//     	}
+    	
+//     	$arr = array_merge($result_semester1,$result_semester2);
+    	
+//     	array_multisort($array_score, SORT_DESC, $result_semester);
+    	$this->view->studentgroup = $result_semester1;
+    }
+    
     function rptScoreGepAction(){
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();

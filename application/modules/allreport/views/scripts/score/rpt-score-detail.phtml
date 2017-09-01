@@ -95,6 +95,7 @@ dojo.ready(function(){
 				<?php
 							 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
 							 $duplicate=0;$count_pass=0;
+// 							 print_R($this->studentgroup);
 							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
 								if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
 								$subj = $db->getSubjectScoreGroup($rs['group_id']);

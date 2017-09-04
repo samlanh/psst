@@ -20,14 +20,8 @@
 			</tr>
 			<tr> 
 				 <td><input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>" placeholder="Search" type="text" ></td>
-				 <td><?php echo $frm->getElement("start_date");?></td>
-	 			 <td><?php echo $frm->getElement("end_date");?></td>
-				 <td> <?php echo $frm->getElement("user");?></td>
-			</tr>
-			<tr> 
 				 <td> <?php echo $frm->getElement("stu_code");?></td>
 				 <td> <?php echo $frm->getElement("stu_name");?></td>
-				 
 				 <td>
 				 	<select name="pro_name" id="pro_name" dojoType="dijit.form.FilteringSelect" class="fullside" >
 				 		<option value="">select product name</option>
@@ -36,7 +30,11 @@
 				 		<?php }}?>
 				 	</select>
 				 </td>
-				 
+			</tr>
+			<tr> 
+				 <td> <?php echo $frm->getElement("user");?></td>
+				 <td><?php echo $frm->getElement("start_date");?></td>
+				 <td><?php echo $frm->getElement("end_date");?></td>
 				 <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 			</tr>
 		</table>

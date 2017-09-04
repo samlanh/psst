@@ -69,6 +69,8 @@
 									<td><?php echo $tr->translate('SERVICE_NAME');?></td>
 									<td><?php echo $tr->translate('PAID_DATE');?></td>
 									<td><?php echo $tr->translate('RECEIPT_NO');?></td>
+									<td><?php echo $tr->translate('SCHOLARSHIP');?></td>
+									<td><?php echo $tr->translate('SCHOLARSHIP_AMOUNT');?></td>
 									<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
 									<td><?php echo $tr->translate('QTY');?></td>
 									<td><?php echo $tr->translate('PRICE');?></td>
@@ -104,6 +106,8 @@
 							    <td style="text-align:left"><?php echo $rs['service_name']; ?></td>
 							    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 							    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
+							    <td align="center"><?php echo $rs['scholarship_percent']; ?>%</td>
+							    <td align="center"><?php echo $rs['scholarship_amount']; ?></td>
 							    <td align="center"><?php echo $rs['payment_term']; ?></td>
 							    <td><?php echo $rs['qty'];?></td>
 							    <td>$ <?php echo number_format($rs['fee'],2); ?></td>

@@ -55,7 +55,7 @@ class Allreport_Model_DbTable_DbRptProductsold extends Zend_Db_Table_Abstract
     	if(!empty($search['category_id'])){
     		$where.=" AND p.ser_cate_id=".$search['category_id'];
     	}
-    	
+    	echo $sql.$where;
     	return $db->fetchAll($sql.$where);
     }
     

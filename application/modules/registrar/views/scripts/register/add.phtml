@@ -1235,6 +1235,8 @@ function getPaymentHistory(student_id){
 				+'<th class="tdheader"><?php echo $tr->translate('SERVICE_NAME');?></th>'
 				+'<th class="tdheader" ><?php echo $tr->translate('PAID_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('RECEIPT_NO');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('SCHOLARSHIP');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('SCHOLARSHIP_AMOUNT');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('PAYMENT_TERM');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('QTY');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('PRICE');?></th>'
@@ -1253,22 +1255,29 @@ function getPaymentHistory(student_id){
 			no=0;
 			for(i=0;i<respone.length;i++){
 				no++;
+				scholarship_percent='-';
+				scholarship_amount='-';
 				if(respone[i].type==1){//tution fee
 					respone[i].service_cate="Tuition Fee";
-			    	//$rs['service_name']=$rs['major_name'];
 					respone[i].service_name=respone[i].major_name;
+					scholarship_percent=respone[i].scholarship_percent;
+					scholarship_amount=respone[i].scholarship_amount;
 				}else if(respone[i].type==4){//product
 					respone[i].service_cate=respone[i].product_category;
 					respone[i].start_date='';
 					respone[i].validate='';
 					respone[i].payment_term='';
 				}
+				respone[i].scholarship_percent=scholarship_percent;
+				respone[i].scholarship_amount=scholarship_amount;
 				tem+= '<tr id=tr_'+i+' style="background-color:none;font-size:12px;text-align:center;">';
 				tem += '<td>'+no+'</td>';
 				tem += '<td>'+respone[i].service_cate+'</td>';
 				tem += '<td>'+respone[i].service_name+'</td>';
 				tem += '<td>'+respone[i].create_date+'</td>';
 				tem += '<td>'+respone[i].receipt_number+'</td>';
+				tem += '<td>'+respone[i].scholarship_percent+'</td>';
+				tem += '<td>'+respone[i].scholarship_amount+'</td>';
 				tem += '<td>'+respone[i].payment_term+'</td>';
 				tem += '<td>'+respone[i].qty+'</td>';
 				tem += '<td>'+respone[i].fee+'</td>';
@@ -1282,7 +1291,6 @@ function getPaymentHistory(student_id){
 				tem += '<td>'+respone[i].note+'</td>';
 				tem += '<td>'+respone[i].void_status+'</td>';
 				tem += '<td>'+respone[i].user+'</td>';
-				
 				tem+="</tr>";
 			}
 			tem+='</table>';
@@ -1333,6 +1341,9 @@ function getOldStudentInfo(){
 					dijit.byId('sex').attr('value',data.sex);
 					dijit.byId('parent_phone').attr('value',data.tel);
 					dijit.byId('dob').attr('value',data.dob);
+					
+					dijit.byId('scholarship_percent').attr('value',data.scholarship_percent);
+					dijit.byId('scholarship_amount').attr('value',data.scholarship_amount);
 					
 			  }else {
 			  } 

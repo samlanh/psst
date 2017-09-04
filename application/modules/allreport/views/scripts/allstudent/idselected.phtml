@@ -38,23 +38,20 @@ function getKHMonthByNumber(m){
 								</td>
 								<td valign="top" align="center" width="65%" style="line-height: 20px;white-space: nowrap;">
 									<div style="margin-right: 20px;margin-top: 3px;">
-										<span style="font-family: 'Khmer OS Muol Light';">សាលាកម្ពុជា - អូស្ត្រាលី </span><br />
-										CAMBODIA - AUSTRALIA SCHOOL <br />
-										Quality Discipline Morality <br />
+										<span style="font-family: 'Khmer OS Muol Light';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></span><br />
+										<?php echo $tr->translate("SCHOOL_NAME");?><br />
+										<?php echo $tr->translate("SLOGAN_SCHOOL");?><br />
 										<img style="width:40%;" src="<?php echo $this->baseUrl().'/images/style.png'?>">
 									</div>
 								</td>
 								<td width="10%">&nbsp;</td>
 							</tr>
 							<?php 
-								$address_kh='អាសយដ្ឋាន: អាគារលេខ ២D ផ្លូវលេខ៣៧១(សឡា) ភូមិ ទ្រា <br /> 
-											សង្កាត់ ស្ទឹងមានជ័យ ខណ្ឌ មានជ័យ រាជធានីភ្នំពេញ<br />
-											ទូរស័ព្ទលេខ: ០២៣ ៦៣១ ៦៨៥៧ ឫ ០១៧ ៦៨៣ ៤៧៥ <br />
+								$address_kh=$tr->translate("CUSTOMER_ADDRESS").'<br />
+											ទូរស័ព្ទលេខ: '.$tr->translate("CUSTOMER_TEL").'<br />
 											បណ្ណនេះប្រើប្រាស់សម្រាប់កិច្ចការសាលាតែប៉ុណ្ណោះ។';
-								$address_en='Building # 2 D,Street 371(Sola), Trea Village, Meanchey<br />
-										Commune, Stung Meanchey District, Phnom Penh.<br />
-										Telephone: (023) 631 6857; (017) 683 475 <br />
-										This ID Cardis to be used within C.A.S only.';
+								$address_en=$tr->translate("CUSTOMER_ADDRESS").'<br />Telephone: '.$tr->translate("CUSTOMER_TEL").'<br />
+										This ID Card is to be used within school only.';
 							?>
 							<tr>
 								<td align="center" valign="top" colspan="3" style="line-height: 20px;"> 
@@ -206,10 +203,7 @@ function getKHMonthByNumber(m){
 														<?php }?>
 														dojo.byId('create_date<?php echo $i;?>').innerHTML=create_date;
 													</script>
-												
 												</div>
-												<div style="margin-top: -2px;<?php if($row['dept']<=2){echo 'font-family: Khmer OS Muol Light;';}?>"><?php if($row['dept']<=2){echo 'នាយក';}else{echo 'Director';}?></div><br />
-												<div style="margin-top: 10px;<?php if($row['dept']<=2){echo 'font-family: Khmer OS Muol Light;';}?>"><?php if($row['dept']<=2){echo 'ផាន់ សិទ្ធី';}else{echo 'PHAN SOTHY';}?></div>
 											</td>
 										</tr>
 									</table>

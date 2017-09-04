@@ -1844,8 +1844,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getGeneralOldStudentById($stu_id){
     	$db=$this->getAdapter();
-    	$sql="SELECT s.*,(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.stu_id ORDER BY sgh.gd_id DESC LIMIT 1) as group_id FROM rms_student as s    
-    	WHERE s.stu_id=$stu_id LIMIT 1";
+    	$sql="SELECT s.*,
+    		(SELECT scholarship_percent FROM rms_student_payment WHERE student_id=$stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_percent,
+    		(SELECT scholarship_amount FROM rms_student_payment WHERE student_id=$stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_amount,
+    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.stu_id ORDER BY sgh.gd_id DESC LIMIT 1) as group_id
+    			 FROM rms_student as s    
+    		WHERE s.stu_id=$stu_id LIMIT 1";
     	return $db->fetchRow($sql);
     }
     ///select degree searching 
@@ -2200,6 +2204,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$sql = "Select 
     			  spd.id,
     			  spd.type,
+    			  sp.scholarship_percent,
+    			  sp.scholarship_amount,
 				  sp.tuition_fee,
 				  spd.fee,
 				  spd.qty,
@@ -2237,7 +2243,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			where 
     				s.stu_id = sp.student_id
     				AND sp.id=spd.payment_id 
-    				AND p.service_id=spd.service_id and sp.student_id= $studentid ORDER BY create_date DESC";
+    				AND p.service_id=spd.service_id and sp.student_id= $studentid ORDER BY create_date DESC,spd.type ASC";
 			return $db->fetchAll($sql);
 	}
 }

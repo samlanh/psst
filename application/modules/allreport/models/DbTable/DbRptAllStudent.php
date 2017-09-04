@@ -155,7 +155,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	//print_r($search);
     	//echo $search['stu_type'];
     	$db = $this->getAdapter();
-    	if(!empty($search['stu_id'])){
+//     	if(!empty($search['stu_id'])){
 	    	$sql = 'SELECT 
 					  h.`stu_id`,s.`stu_code`,is_subspend,s.`stu_enname`,h.is_finished,h.finished_date,
 					  (SELECT branch_nameen FROM `rms_branch` WHERE br_id=h.branch_id LIMIT 1) AS branch_name,
@@ -169,11 +169,48 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					  `rms_study_history` AS h 
 					WHERE s.`stu_id` = h.`stu_id` 
 	    		   ';
-	    	$where=' and h.stu_id='.$search['stu_id'];
-	    	return $db->fetchAll($sql.$where);
-    	}else{
-    		return 0;
-    	}
+	    	$where="";
+	    	
+	    	$from_date =(empty($search['start_date']))? '1': "h.create_date >= '".$search['start_date']." 00:00:00'";
+	    	$to_date = (empty($search['end_date']))? '1': "h.create_date <= '".$search['end_date']." 23:59:59'";
+	    	$where .= " AND ".$from_date." AND ".$to_date;
+	    	
+	    	$order="  order by s.`stu_id`,h.degree,h.grade,h.academic_year DESC";
+	    	if(empty($search)){
+	    		return $db->fetchAll($sql.$order);
+	    	}
+	    	if(!empty($search['title'])){
+	    		$s_where = array();
+	    		$s_search = addslashes(trim($search['title']));
+	    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
+	    		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
+	    		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
+	    		$s_where[] = " CONCAT(stu_enname,stu_enname) LIKE '%{$s_search}%'";
+	    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+	    	}
+	    	if(!empty($search['study_year'])){
+	    		$where.=' AND h.academic_year='.$search['study_year'];
+	    	}
+	    	if(!empty($search['degree'])){
+	    		$where.=' AND h.degree='.$search['degree'];
+	    	}
+	    	if(!empty($search['branch_id'])){
+	    		$where.=' AND h.branch_id='.$search['branch_id'];
+	    	}
+	    	if(!empty($search['grade_all'])){
+	    		$where.=' AND h.grade='.$search['grade_all'];
+	    	}
+	    	if(!empty($search['session'])){
+	    		$where.=' AND h.session='.$search['session'];
+	    	}
+// 	    	if($search['stu_type']!=-1){
+// 	    		$where.=' AND is_stu_new = '.$search['stu_type'];
+// 	    	}
+	    	echo $sql.$where;
+	    	return $db->fetchAll($sql.$where.$order);
+//     	}else{
+//     		return 0;
+//     	}
     }
     
     function getAllStudentID(){

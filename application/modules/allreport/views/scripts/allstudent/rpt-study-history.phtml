@@ -8,24 +8,25 @@
 .hover:hover{ background:#ccc;}</style>
 <div style="width: 30cm;margin: 0 auto;">
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-study-history')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table width="50%">
-	        <tr>
-	            <td>
-	            	<select name="stu_id" id="stu_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID(1);" >
-	            		<option value=""> select student id</option>
-	            		<?php if(!empty($this->stu_id)){foreach ($this->stu_id as $id){?>
-	            		<option value="<?php echo $id['id']?>"<?php if($id['id']==$this->search['stu_id']){echo 'selected="selected"';}?>><?php echo $id['stu_code']?></option>
-	            		<?php }}?>
-	            	</select>
-	            </td>
-	            <td>
-	            	<select name="stu_name" id="stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID(2);" >
-	            		<option value=""> select student name </option>
-	            		<?php if(!empty($this->stu_name)){foreach ($this->stu_name as $name){?>
-	            		<option value="<?php echo $name['id']?>"<?php if($name['id']==$this->search['stu_name']){echo 'selected="selected"';}?>><?php echo $name['name']?></option>
-	            		<?php }}?>
-	            	</select>
-	            </td>
+		<table width="100%">
+	       <tr>
+	           <td><?php echo $frm->getElement("title");?></td>
+	           <td><?php echo $frm->getElement("branch_id");?></td>
+	           <td><?php echo $frm->getElement("study_year");?></td>
+	           <td><?php echo $frm->getElement("degree");?></td>
+	           <td><?php echo $frm->getElement("grade_all");?></td>
+			</tr>
+			<tr>
+				<td><?php echo $frm->getElement("session");?></td>
+				<td><?php echo $frm->getElement("start_date");?></td>
+				<td><?php echo $frm->getElement("end_date");?></td>
+				<td>
+					<select name="stu_type" id="stu_type" type="text" class="fullside" dojoType="dijit.form.FilteringSelect" >
+						<option value="-1" <?php if($this->search['stu_type']==-1){echo 'selected="selected"';}?>> All Students </option>
+						<option value="0" <?php if($this->search['stu_type']==0){echo 'selected="selected"';}?>> Old Students </option>
+						<option value="1" <?php if($this->search['stu_type']==1){echo 'selected="selected"';}?>> New Students </option>
+					</select>
+				</td>
 				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 		 	</tr>
 		</table>		
@@ -33,79 +34,79 @@
 </div>
 	<div style="border: 1px dotted #000;background: #fff;width:29cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 		<div id="divPrint">
-							<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
-								<tr>
-									<td width="40%" align="right">
-										<img style="width: 18%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-									</td>
-									<td width="60%" colspan="2" align="left">
-									    <strong​​ style="padding-left: 60px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
-										<strong​​ style="padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_HISTORY_REPORT");?></strong><br />
-									</td>
+			<table  style="background:#fff; margin: 0 auto; width: 100%; ">
+				<tr>
+					<td width="20%" align="right">
+						<img style="height: 90px" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+					</td>
+					<td width="60%" align="center">
+					    <strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
+						<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_HISTORY_REPORT");?></strong><br />
+					</td>
+					<td width="20%" align="right">
+					</td>
+				</tr>
+			<style>
+				table tr th{
+					border: 1px solid #000;	
+				}
+			</style>
+				<tr>
+					<td colspan="3">
+						<div id="exportExcel">
+							<table cellpadding="4"​ style=";font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
+								<tr style="font-size:12px; height: 25px;background:#ccc;font-weight: bold;" align="center" >
+									<td><?php echo $tr->translate("NUM");?></td>
+									<td><?php echo $tr->translate("BRANCH_NAME");?></td>
+									<td><?php echo $tr->translate("STUDENT_ID");?></td>
+									<td><?php echo $tr->translate("STUDENT_NAME");?></td>
+									<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+									<td><?php echo $tr->translate("DEGREE");?></td>
+									<td><?php echo $tr->translate("GRADE");?></td>
+									<td><?php echo $tr->translate("SESSION");?></td>
+									<td><?php echo $tr->translate("END_DATE");?></td>
+									<td><?php echo $tr->translate("STATUS");?></td>
 								</tr>
-							<style>
-								table tr th{
-									border: 1px solid #000;	
-								}
-								
-							</style>
-							
-								<tr>
-									<td colspan="3">
-									<div id="exportExcel">
-										<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
-											<tr style="font-size:11px; height: 20px;" align="center" >
-												<td>No.</td>
-												<td>Branch Name</td>
-												<td>Student Code</td>
-												<td>Name</td>
-												<td>Academic Year</td>
-												<td>Degree</td>
-												<td>Grade</td>
-												<td>session</td>
-												<td>Finished Date</td>
-												<td>Status</td>
-											</tr>
-										<?php $i=0;$degree=0;if(!empty($this->rs)){ foreach ($this->rs AS $row) { $i++;?>
-											<tr style="font-size:11px; height: 23px;" align="center" class="hover" >
-												<td ><?php echo $i;?></td>
-												<td ><?php echo $row['branch_name'];?></td>
-												<td ><?php echo $row['stu_code'];?></td>
-												<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_enname'];?>&nbsp;</td>
-												<td ><?php echo $row['academic_year'];?></td>
-												<td ><?php echo $row['degree'];?></td>
-												<td align="left">&nbsp;<?php echo $row['grade'];?></td>
-												<td><?php echo $row['session'];?></td>	
-												<td><?php if(!empty($row['finished_date'])){echo date('d-m-Y',strtotime($row['finished_date']));}?></td>	
-												<?php if($row['is_finished']==1){$status="Finished";$style="style='color:red;'";}else{$status="Studying";$style="";}?>
-												<td <?php echo $style;?>><?php echo $status;?></td>	
-											</tr>
-										<?php }}?>	
-										</table>	
-									</div>	
-									</td>
+								<?php $i=0;$degree=0;if(!empty($this->rs)){ foreach ($this->rs AS $row) { $i++;?>
+								<tr style="font-size:12px; height: 23px;" align="center" class="hover" >
+									<td ><?php echo $i;?></td>
+									<td ><?php echo $row['branch_name'];?></td>
+									<td ><?php echo $row['stu_code'];?></td>
+									<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_enname'];?>&nbsp;</td>
+									<td ><?php echo $row['academic_year'];?></td>
+									<td ><?php echo $row['degree'];?></td>
+									<td align="left">&nbsp;<?php echo $row['grade'];?></td>
+									<td><?php echo $row['session'];?></td>	
+									<td><?php if(!empty($row['finished_date'])){echo date('d-m-Y',strtotime($row['finished_date']));}?></td>	
+									<?php if($row['is_finished']==1){$status="Finished";$style="style='color:red;'";}else{$status="Studying";$style="";}?>
+									<td <?php echo $style;?>><?php echo $status;?></td>	
 								</tr>
-								<tr>
-									<td colspan="3">&nbsp;</td>
-								</tr>
-								<tr >
-									<td colspan="3" width="100%">
-										<table width="100%" style="font-family:'Khmer OS Battambang';">
-											<tr>
-												<td  width="25%" align="center">
-													<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
-												</td>
-												<td  width="50%">
-													&nbsp;
-												</td>
-												<td align="center"  width="25%">
-													<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
-												</td>
-											</tr>
-										</table>
-									</td>
-								</tr>
-							</table>
+							<?php }}?>	
+							</table>	
+						</div>	
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr >
+					<td colspan="3" width="100%">
+						<table width="100%" style="font-family:'Khmer OS Battambang';">
+							<tr>
+								<td  width="25%" align="center">
+									<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+								</td>
+								<td  width="50%">
+									&nbsp;
+								</td>
+								<td align="center"  width="25%">
+									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 	

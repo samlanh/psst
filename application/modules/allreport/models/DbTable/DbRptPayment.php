@@ -187,6 +187,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				  spd.is_start,
 				  spd.is_parent ,
 				  spd.is_complete,
+				  sp.scholarship_percent,
+				  sp.scholarship_amount,
 				  sp.tuition_fee,
 				  sp.student_id,
 				  sp.receipt_number,
@@ -243,7 +245,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$where .= " and sp.user_id = ".$search['user'];
     	}
     	if($order_no==1){
-    		$order=" ORDER BY payment_id DESC ";
+    		$order=" ORDER BY payment_id DESC, spd.type DESC";
     	}elseif($order_no==2){//used order by student 
     		$order=" ORDER BY sp.student_id DESC ";
     	}else{

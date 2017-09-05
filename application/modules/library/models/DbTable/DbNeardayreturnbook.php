@@ -104,6 +104,8 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
+	
+	
 }
 
 

@@ -386,7 +386,12 @@ public function init()
 		$db = new Allreport_Model_DbTable_DbCertify();
 		$result = $db->getStudentCertify($id);
 		$this->view->rs = $result;
-		//print_r($result);
+	}
+	function rptTranscriptAction(){
+	
+	}
+	function academicTranscriptAction(){
+		 
 	}
 	
 }

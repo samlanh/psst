@@ -343,7 +343,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			FROM `rms_group_detail_student` AS gsd,
 			`rms_group` AS g,
 			`rms_student` AS st
-			WHERE g.`id` = gsd.`group_id` AND st.`stu_id` = gsd.`stu_id` AND `g`.`degree` !=2
+			WHERE g.`id` = gsd.`group_id` AND st.`stu_id` = gsd.`stu_id` 
 			";
 //     	$from_date =" (SELECT sa.date_attendence FROM `rms_student_attendence` AS sa WHERE sa.id = sad.`attendence_id` LIMIT 1) >=  '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
 //     	$to_date = "(SELECT sa.date_attendence FROM `rms_student_attendence` AS sa WHERE sa.id = sad.`attendence_id` LIMIT 1)  <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";

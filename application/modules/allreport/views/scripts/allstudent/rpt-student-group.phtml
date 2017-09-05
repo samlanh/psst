@@ -61,6 +61,8 @@
 									<td><?php echo $tr->translate("DATE_OF_BIRTH");?></td>	
 									<td><?php echo $tr->translate("POB");?></td>
 									<td><?php echo $tr->translate("CONTACT_NO");?></td>	
+									<td><?php echo $tr->translate("PRINT");?></td>	
+									<td><?php echo $tr->translate("PRINT");?></td>	
 									<td><?php echo $tr->translate("PRINT");?></td>					
 								</tr>
 								</thead>
@@ -84,6 +86,8 @@
 									<td style="text-align: left;"><?php echo $row['pob'];?></td>
 									<td><?php echo $row['tel'];?></td>
 									<td><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'certify','id'=>$row['gd_id'])); ?>"><?php echo $tr->translate("PRINT_CERTIFY");?></a></td>
+									<td><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'academic-transcript','id'=>$row['gd_id'])); ?>"><?php echo $tr->translate("Academic Transcript");?></a></td>
+									<td><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-transcript','id'=>$row['gd_id'])); ?>"><?php echo $tr->translate("ព្រឹត្តប័ត្រពិន្ទុ");?></a></td>
 								</tr>
 								<?php }?>	
 								<tr>

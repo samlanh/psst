@@ -193,12 +193,7 @@ public function init()
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     }
-    function rptTranscriptAction(){
-    	 
-    }
-    function academicTranscriptAction(){
-    	
-    }
+    
     function veiwAction(){
     	
     }

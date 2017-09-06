@@ -9,9 +9,9 @@ public function init()
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function indexAction()
-	{	
+	{
+			
 	}
-	
 	public function idselectedAction(){
 		$id=$this->getRequest()->getParam('id');
 		//print_r($id);
@@ -388,7 +388,23 @@ public function init()
 		$this->view->rs = $result;
 	}
 	function rptTranscriptAction(){
-	
+		$group_id=$this->getRequest()->getParam("group_id");
+		$student_id=$this->getRequest()->getParam("id");
+		$search= array();
+		$db = new Allreport_Model_DbTable_DbRptStudentScore();
+		$result = $db->getAcadimicByStudentHeader($group_id,$student_id);
+		
+		$this->view->semester1= $db->getStundetExamById($group_id,1,$student_id);//for semester1
+		$this->view->semester2= $db->getStundetExamById($group_id,1,$student_id);//for semester1
+		
+// 		$array_score = array();
+// 		if(!empty($result_semester)){
+// 			foreach ($result_semester as $key => $row){
+// 				$array_score[$key]['score_average'] = ($row['average']+$row['avg_exam'])/2;
+// 			}
+// 		}
+// 		array_multisort($array_score, SORT_DESC, $result_semester);
+		$this->view->result = $result;
 	}
 	function academicTranscriptAction(){
 		 

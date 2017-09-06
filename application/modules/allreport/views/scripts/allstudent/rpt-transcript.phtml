@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8">
 </head>
+<?php  ///print_r($this->result);
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
 <body>
 	<div class="wrapper" style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;" >
 		<div class="contain" id="divPrint">
@@ -54,14 +57,14 @@
 											<td>ខេត្ត-ក្រុង​ ភ្នំពេញ</td>
 										</tr>
 										<tr style="text-align:left;line-height: 15px;">
-											<td>វិទ្យាល័យបញ្ញាសាស្រ្តអន្តរជាតិ សាខាទី១</td>
+											<td><?php echo $tr->translate("CUSTOMER_BRANCH");?> សាខាទី១</td>
 										</tr>
 										<tr style="line-height: 15px;">
-											<td>ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា ២០១៦-២០១៧</td>
+											<td>ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា  <?php if(!empty($this->result)){echo $this->result[0]['academic_year'];}?></td>
 										</tr>
 										<tr style="line-height: 15px;">
 											<td>
-												សិស្សឈ្មោះ ទិត្យរក្សា ថ្នាក់ទី ១០A ចំនួនសិស្ស ១៥​ នាក់
+												សិស្សឈ្មោះ <?php if(!empty($this->result)){echo $this->result[0]['stu_khname'];}?> ថ្នាក់ទី <?php if(!empty($this->result)){echo $this->result[0]['grade'];}?> ចំនួនសិស្ស <?php if(!empty($this->result)){echo $this->result[0]['amount_student'];}?>​ នាក់
 											</td>
 										</tr>
 									</table>
@@ -70,6 +73,9 @@
 						</table>
 					</td>
 				</tr>
+				<?php 
+					$db = new Allreport_Model_DbTable_DbRptStudentScore();
+				?>
 				<tr style="font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
 					<td>
 						<table border="1" style="text-align:center; border-color: #000;font-size: 14px; ">
@@ -83,34 +89,53 @@
 							</tr>
 							<tr style="line-height: 18px;">
 								<td>ពិន្ទុ</td>
-								<td>ធំ.ថ្នាក់</td>
+								<td>ចំ.ថ្នាក់</td>
 								<td>ពិន្ទុ</td>
-								<td>ធំ.ថ្នាក់</td>
+								<td>ចំ.ថ្នាក់</td>
 								<td>ពិន្ទុ</td>
-								<td>ធំ.ថ្នាក់</td>
+								<td>ចំ.ថ្នាក់</td>
 							</tr>
 							 <?php
-							  	for($i=1;$i<=18;$i++){?>
-								  <tr style="line-height:16px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
-									<td><?php echo $i;?></td>
-									<td style="font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;"><?php echo 'ភាសារខ្មែរ';?></td>
-									<td><?php echo '112';?></td>
-									<td> <?php echo '14th';?></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr>
+							 	if(!empty($this->result)){
+							 		$total_score_semester1=0;
+							 		$total_score_semester2=0;
+							 		$amount_subject = count($this->result);
+							  	foreach($this->result as $key =>$rs){?>
+									  <tr style="line-height:16px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+										<td><?php echo $key+1;?></td>
+										<td style="text-align:left;;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;"><?php echo $rs['subject_name'];?></td>
+										<?php 
+											if(!empty($this->result)){
+												$row = $db->getAcadimicByStudentSubject($rs['group_id'],1,$rs['subject_id'],$rs['student_id']);
+												$total_score_semester1=$total_score_semester1+$row['total_score'];
+												$rank = $row['rank'];
+											}
+										?>
+										<td><?php if(!empty($row)){ echo $row['total_score'];}?></td>
+										<td><?php echo $rank;?></td>
+										<?php 
+											if(!empty($this->result)){
+											   $row = $db->getAcadimicByStudentSubject($rs['group_id'],2,$rs['subject_id'],$rs['student_id']);
+											   $total_score_semester2=$total_score_semester2+$row['total_score'];
+											   $rank = $row['rank'];
+											}
+										?>
+										<td><?php if(!empty($row)){ echo $row['total_score'];}?></td>
+										<td><?php echo $rank;?></td>
+										<td><?php if(!empty($row)){ echo number_format(($total_score_semester1+$total_score_semester2)/2,2);}?></td>
+										<td></td>
+										<td></td>
+									</tr>
 							  	<?php
-							  	} ?>
+							  		}
+							 	} ?>
 							  	 <tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
 									<td colspan="2" style="white-space:nowrap;text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">សរុបពិន្ទុប្រឡងឆមាស</td>
+									<td><?php echo number_format($total_score_semester1,2);?></td>
 									<td></td>
+									<td><?php echo number_format($total_score_semester2,2);?></td>
 									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<td><?php echo number_format(($total_score_semester1+$total_score_semester2)/2,2);?></td>
 									<td></td>
 									<td rowspan="7">
 										<table style="text-align:center;font-size:14px;">
@@ -126,29 +151,42 @@
 								</tr>
 								<tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
 									<td colspan="2" style="white-space:nowrap;text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">មធ្យមភាគពិន្ទុប្រឡងឆមាស</td>
+									<td><?php echo number_format(@($total_score_semester1/$amount_subject),2);?></td>
 									<td></td>
+									<td><?php echo number_format(@($total_score_semester2/$amount_subject),2);?></td>
 									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<td><?php echo number_format(@(($total_score_semester1/$amount_subject)+($total_score_semester2/$amount_subject))/2,2);?></td>
 									<td></td>
 								</tr>
-								<tr style="white-space:nowrap;text-align:left;line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
-									<td colspan="2" style="font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">មធ្យមភាគពិន្ទុខែប្រចាំឆមាស</td>
+								<tr style="white-space:nowrap;line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
+									<td colspan="2" style="text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">មធ្យមភាគពិន្ទុខែប្រចាំឆមាស</td>
+									<td><?php if(!empty($this->semester1)){echo number_format($this->semester1['average'],2);}?></td>
 									<td></td>
+									<td><?php if(!empty($this->semester2)){echo number_format($this->semester2['average'],2);}?></td>
 									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<td><?php if(!empty($this->semester2)){echo number_format(($this->semester1['average']+$this->semester2['average'])/2,2);}?></td>
 									<td></td>
 								</tr>
 								<tr style="white-space:nowrap;line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
 									<td colspan="2" style="text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">មធ្យមភាគពិន្ទុប្រចាំឆមាស</td>
+									<td>
+										<?php if(!empty($this->semester1)){
+											$avg_exam1 = ($this->semester1['average']+$this->semester1['avg_exam'])/2;
+											echo number_format($avg_exam1,2);}
+										?>
+										</td>
 									<td></td>
+									<td>
+										<?php if(!empty($this->semester2)){
+											$avg_exam2 = ($this->semester2['average']+$this->semester2['avg_exam'])/2;
+											echo number_format($avg_exam2,2);
+										}?>
+									</td>
 									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<td><?php if(!empty($this->semester2) OR !empty($this->semester1)){
+											echo number_format(($avg_exam1+$avg_exam2)/2,2);
+										}?>
+									</td>
 									<td></td>
 								</tr>
 								<tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
@@ -184,8 +222,8 @@
 									</td>
 									<td colspan="2">
 										<table>
-											<tr style="line-height:13px;white-space: nowrap;"><td>មានច្បាប់​ 03 ដង</td></tr>
-											<tr style="line-height:13px;white-space: nowrap;"><td>ឥតច្បាប់​ 00 ដង</td></tr>
+											<tr style="line-height:13px;white-space: nowrap;"><td>មានច្បាប់​ ....ដង</td></tr>
+											<tr style="line-height:13px;white-space: nowrap;"><td>ឥតច្បាប់​....ដង</td></tr>
 										</table>
 									</td>
 									<td colspan="2">

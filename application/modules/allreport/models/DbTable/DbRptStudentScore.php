@@ -399,7 +399,134 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND s.exam_type=1 ";
 		   	$where='';
 		   	$order = " GROUP BY sd.`student_id` ORDER BY sd.`student_id`,s.for_academic_year";
+// 		   	echo $sql.$where.$order;exit();
 		   	return $db->fetchAll($sql.$where.$order);
+   }
+   public function getAcadimicByStudentHeader($group_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា ក្បាល I+II
+   	$db = $this->getAdapter();
+   	$sql="
+   	SELECT
+   	s.`id`,
+   	sd.`group_id`,
+   	g.`group_code`,
+   	st.`stu_code`,
+   	st.`stu_enname`,
+   	st.`stu_khname`,
+   	st.`sex`,
+	(SELECT COUNT(stu_id) FROM `rms_group_detail_student` WHERE group_id=s.group_id LIMIT 1) AS amount_student,
+   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+   	(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+   	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+	`g`.`semester` AS `semester`,
+   	sd.`student_id`,
+   	sd.subject_id,
+   	(SELECT sj.subject_titleen  AS sj FROM `rms_subject` AS sj WHERE sj.id=sd.subject_id) as subject_name
+   	
+   	FROM 
+   	`rms_score` AS s,
+   	`rms_score_detail` AS sd,
+   	`rms_student` AS st,
+   	`rms_group` AS g
+   	
+   	WHERE
+   	s.`id`=sd.`score_id`
+   	AND st.`stu_id`=sd.`student_id`
+   	AND g.`id`=s.`group_id`
+   	AND sd.`is_parent`=1
+   	AND s.status = 1
+   	AND s.type_score=1
+   	AND g.id= $group_id
+   	AND sd.student_id=$student_id
+   	AND s.exam_type=2 ";
+   	$where='';
+   	$order = " GROUP BY sd.subject_id ORDER BY s.for_semester ASC,sd.subject_id,s.for_academic_year,s.for_semester ASC ";
+   	return $db->fetchAll($sql.$where.$order);
+   }
+   public function getAcadimicByStudentSubject($group_id,$semester_id,$subject_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា I+II លម្អិត
+   	$db = $this->getAdapter();
+   	
+   	$sql="
+   		SELECT 
+   			score,
+			sum(score) as total_score,
+   			 FIND_IN_SET( score, (    
+			SELECT GROUP_CONCAT( score
+			ORDER BY score DESC ) 
+			FROM rms_score_detail AS dd ,rms_score AS ss WHERE  
+				ss.`id`=dd.`score_id` 
+				AND ss.exam_type=2
+				AND ss.exam_type=2
+				AND ss.for_semester= $semester_id
+				AND ss.group_id= $group_id
+				AND dd.subject_id=$subject_id 
+				
+				AND dd.`is_parent`=1
+			 	)
+			) AS rank
+			FROM 
+			
+				`rms_score` AS s,
+			   	`rms_score_detail` AS sd,
+			   	`rms_group` AS g
+			   	
+			WHERE s.`id`=sd.`score_id` 
+				AND g.`id`=s.`group_id`
+			   	AND sd.`is_parent`=1
+			   	AND s.status = 1
+			   	AND s.type_score=1
+			   	
+			   	AND g.id= $group_id
+			   	AND s.for_semester= $semester_id
+			   	AND sd.subject_id= $subject_id
+			   	AND sd.student_id= $student_id
+			   	AND s.exam_type=2
+				GROUP BY sd.subject_id ";
+
+   	$where=' ';
+//    	echo $sql.$where;exit();
+   	return $db->fetchRow($sql.$where);
+   }
+   
+   public function getStundetExamById($group_id,$semester,$student_id){ // ប្រើសំរាប់រកមធ្យមភាគ សម្រាប់សិស្ស ១ ប្រើព្រឹត្តប័ត្រពិន្ទុឆ្នាំ
+   	$db = $this->getAdapter();
+   	$sql="
+	   	SELECT
+		   	s.`id`,
+		   	sd.`group_id`,
+		   	g.`group_code`,
+		   `g`.`semester` AS `semester`,
+		   	s.for_semester,
+		   	SUM(sd.`score`) AS total_score,
+		   	AVG(sd.score) as average,
+		   	
+		   	(SELECT AVG(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc
+		   	WHERE
+		   	sc.id=sdd.score_id
+		   	AND sc.group_id=$group_id
+		   	AND sc.for_semester =$semester
+		   	AND sc.exam_type=2
+		   	AND sdd.`is_parent`=1
+		   	AND sdd.student_id = $student_id
+		   	GROUP BY sdd.student_id LIMIT 1) AS avg_exam
+	
+		   	FROM `rms_score` AS s,
+			   	`rms_score_detail` AS sd,
+			   	`rms_group` AS g
+		   	WHERE
+		   	s.`id`=sd.`score_id`
+		   
+		   	AND g.`id`=s.`group_id`
+		   	AND sd.`is_parent`=1
+		   	AND s.status = 1
+		   	AND s.type_score=1
+		   	AND g.id= $group_id
+		   	AND s.for_semester=$semester
+		   	AND sd.student_id=$student_id
+		   	AND s.exam_type=1 ";
+	   	$where='';
+	   		$order = " GROUP BY sd.`student_id`,s.for_semester ORDER BY sd.`student_id`";
+   		return $db->fetchRow($sql.$where.$order);
    }
    
    public function getSubjectScoreGroup($group_id){

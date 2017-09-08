@@ -65,7 +65,7 @@ class Accounting_ServicesController extends Zend_Controller_Action {
 					if(isset($_data['save_close'])){
 						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/services");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/services/add");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/services");
 					}
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}

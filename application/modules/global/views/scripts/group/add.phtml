@@ -14,19 +14,24 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-                major = dijit.byId('major').get('value');
-                room = dijit.byId('room').get('value');
-
-				if (major=='' || major==-1){
-					alert('Please Select Faculty !');
-                    dijit.byId('major').focus();
-			        return false;
-                }
-               if (room=='' || room==-1){
-					alert('Please Select room !');
-                    dijit.byId('room').focus();
-			        return false;
-                }
+                year=dijit.byId("academic_year").get("value");
+                if(year==-1){
+					alert("Please Selected Year!!!");
+                    return false;
+				}
+    			var rowId = $('#identity1').val();
+				if(rowId!=''){ 
+				var rowIDArray = rowId.split(',');
+				for(var n = 0; n < rowIDArray.length; n++){
+				var row_id = dijit.byId('group_subject_study_'+rowIDArray[n]).get('value');
+				if(row_id==''){
+						alert("Please select subject title!");
+						return false;
+						}
+					}
+				}
+				dijit.byId('save_new').set('disabled',true);
+				dijit.byId('save_close').set('disabled',true);
 				return true;
 			}else {
 				return false;
@@ -44,7 +49,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						
 						<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
 						<td>
-							<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect">
+							<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
 								<option value="-1">select year</option>
 								<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
 									<option value="<?php echo $year['id'];?>"><?php echo $year['years'];?></option>
@@ -114,9 +119,9 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 					<tr>
 						<td colspan="6" align="center">
 							<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+								<input type="button" onclick="submitDataClose();"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" />
-								<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+								<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" />
 						</td>
 					</tr>
@@ -878,4 +883,39 @@ function hideDialogGrade(){
 function hideDialogDegree() {		
 	dijit.byId("popup_add_dept").hide();
 }
+
+function submitDataClose(){
+	year=dijit.byId("academic_year").get("value");
+    if(year==-1){
+		alert("Please Selected Year!!!");
+        return false;
+	}
+    var rowId = $('#identity1').val();
+	if(rowId!=''){ 
+		var rowIDArray = rowId.split(',');
+		for(var n = 0; n < rowIDArray.length; n++){
+		var row_id = dijit.byId('group_subject_study_'+rowIDArray[n]).get('value');
+		if(row_id==''){
+				alert("Please select subject title!");
+				return false;
+			}
+		}
+	}
+	if(dijit.byId('frm_add_tran').validate()) {
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("frm_add_tran"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/global/group";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+
 </script>

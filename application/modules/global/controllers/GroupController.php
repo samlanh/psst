@@ -59,6 +59,8 @@ class Global_GroupController extends Zend_Controller_Action {
 				$db->AddNewGroup($data);
 				if(!empty($data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ ss!", "/global/group/add");
 				}
 				Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
 			} catch (Exception $e) {
@@ -168,6 +170,8 @@ class Global_GroupController extends Zend_Controller_Action {
 				
 				$db->AddNewGroup($data);
 				if(!empty($data['save'])){
+					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group/index");
+				}else{
 					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group/index");
 				}
 				//Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");

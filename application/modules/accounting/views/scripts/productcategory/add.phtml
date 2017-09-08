@@ -9,6 +9,8 @@
 <form id="add_province" action="<?php echo $url_save;?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 	 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+               dijit.byId("save_close").attr("disabled",true);
+               dijit.byId("save_new").attr("disabled",true);
 				return true;
 			} else {
 				return false;
@@ -38,9 +40,9 @@
 									<tr>
 										<td colspan="2" align="center">
 											<input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
-											<input type="submit" value="save_close" name="save_close" label="Save&Close" dojoType="dijit.form.Button" 
+											<input type="button" onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="Save&Close" dojoType="dijit.form.Button" 
 												iconClass="dijitEditorIcon dijitEditorIconSave" />
-										    <input type="submit" value="save_new" name="save_new" label="Save&New" dojoType="dijit.form.Button" 
+										    <input type="submit" value="save_new" name="save_new" id="save_new" label="Save&New" dojoType="dijit.form.Button" 
 												iconClass="dijitEditorIcon dijitEditorIconSave" />
 										</td>
 									</tr>					
@@ -54,3 +56,22 @@
 		
 	</table>	
 </form> 
+<script>
+function submitDataClose(){
+	if(dijit.byId('add_province').validate()) {
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'productcategory','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("add_province"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/productcategory";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+</script>

@@ -48,10 +48,10 @@ class Global_BranchController extends Zend_Controller_Action {
 			$_dbmodel = new Global_Model_DbTable_DbBranch();
 			try {
 				$_dbmodel->addbranch($_data);
-				if(!empty($_data['save_new'])){
-					Application_Form_FrmMessage::message($this->tr->translate("INSERT_SUCCESS"));
-				}else{
+				if(!empty($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),self::REDIRECT_URL ."/branch/index");
+				}else{
+					Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),self::REDIRECT_URL ."/branch/add");
 				}
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));

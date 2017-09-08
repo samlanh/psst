@@ -18,7 +18,10 @@ $frm = $this->frm_credit;
 	if(this.validate()) {
 		student_id = dijit.byId('student_id').get('value');
         if(student_id==0){
-			alert("សូមជ្រើសរើសសិស្ស");dijit.byId('student_id').focus();return false;}
+			alert("សូមជ្រើសរើសសិស្ស");dijit.byId('student_id').focus();return false;
+		}
+        dijit.byId("save_new").set("disabled",true);
+        dijit.byId("save_close").set("disabled",true);
 		return true;
 	}else {
 		return false;
@@ -60,9 +63,9 @@ $frm = $this->frm_credit;
 		<td align="center">
 		<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
 				 iconClass="dijitIconClear"/>
-			<input type="submit" label="<?php echo $tr->translate("SAVECLOSE");?>" name='saveclose' value='saveclose' dojoType="dijit.form.Button"
+			<input type="button"  onclick="submitDataClose()" label="<?php echo $tr->translate("SAVECLOSE");?>" name='save_close' id='save_close' value='save_close' dojoType="dijit.form.Button"
 				 iconClass="dijitIconDelete"/>
-			<input type="submit" label="<?php echo $tr->translate("SAVENEW")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
+			<input type="submit" label="<?php echo $tr->translate("SAVENEW")?>" name='save_new' id='save_new' value='save_new' dojoType="dijit.form.Button"
 				 iconClass="dijitIconNewTask"/>
 		</td>
 	</tr>	
@@ -83,6 +86,30 @@ function setSelected(type){
 	}else{
 		student_id = dijit.byId("student_name").get('value');
 		dijit.byId("student_id").attr('value',student_id);
+	}
+}
+</script>
+
+<script>
+function submitDataClose(){
+	student_id = dijit.byId('student_id').get('value');
+    if(student_id==0){
+		alert("សូមជ្រើសរើសសិស្ស");dijit.byId('student_id').focus();return false;
+	}
+	if(dijit.byId('office_receipt').validate()) {
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'creditmemo','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("office_receipt"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/creditmemo";
+			},
+			error: function(e) {
+			}
+		});
 	}
 }
 </script>

@@ -41,6 +41,8 @@ fieldset{  background:none;}
 <form id='suspend_service' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'productset','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+                dijit.byId("save_close").attr("disabled",true);
+                dijit.byId("save_new").attr("disabled",true);
 				return true;
 			} else {
 				return false;
@@ -98,7 +100,7 @@ fieldset{  background:none;}
 					<tr>
 						<td colspan="4" align="center">
 							<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+							<input type="button" onclick="submitDataClose()" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 							 iconClass="dijitEditorIcon dijitEditorIconSave" />
 							 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 							 iconClass="dijitEditorIcon dijitEditorIconSave" />
@@ -213,3 +215,24 @@ fieldset{  background:none;}
 		</form>
 	</div>
 </div>
+<script>
+
+function submitDataClose(){
+	if(dijit.byId('suspend_service').validate()) {
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'productset','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("suspend_service"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/productset";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+</script>
+</script>

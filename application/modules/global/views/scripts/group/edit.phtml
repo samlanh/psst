@@ -13,14 +13,23 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-                major = dijit.byId('major').get('value');
                 room = dijit.byId('room').get('value');
-
-				if (major=='' || major==-1){
-					alert('Please Select Faculty !');
-                    dijit.byId('major').focus();
-			        return false;
-                }
+				year=dijit.byId("academic_year").get("value");
+                if(year==-1){
+					alert("Please Selected Year!!!");
+                    return false;
+				}
+    			var rowId = $('#identity').val();
+				if(rowId!=''){ 
+				var rowIDArray = rowId.split(',');
+				for(var n = 0; n < rowIDArray.length; n++){
+				var row_id = dijit.byId('subject_study_'+rowIDArray[n]).get('value');
+				if(row_id==''){
+						alert("Please select subject title!");
+						return false;
+						}
+					}
+				}
                if (room=='' || room==-1){
 					alert('Please Select room !');
                     dijit.byId('room').focus();

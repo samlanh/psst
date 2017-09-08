@@ -55,7 +55,7 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 			$db = new Accounting_Model_DbTable_DbCreditmemo();				
 			try {
 				$db->addCreditmemo($data);
-				if(!empty($data['saveclose'])){
+				if(!empty($data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/creditmemo");
 				}else{
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");

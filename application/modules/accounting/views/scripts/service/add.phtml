@@ -36,6 +36,8 @@ dojo.ready(function(){
 <form  id='acc_item' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
+       dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
     	return true;
    }else {
     	return false;
@@ -68,9 +70,9 @@ dojo.ready(function(){
 						<tr>
 							<td colspan="2" align="center">
 								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+								<input type="button" onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" />
-								<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+								<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" />
 							</td>
 						</tr>
@@ -169,3 +171,22 @@ dojo.ready(function(){
 	</div>
 </div>
 
+<script>
+function submitDataClose(){
+	if(dijit.byId('acc_item').validate()) {
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("acc_item"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/service";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+</script>

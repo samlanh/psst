@@ -17,21 +17,28 @@ dojo.require("dijit.form.CheckBox");
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
 </script>
-<form  id='edit-dept' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<form  id='frm_degree' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				var rowId = $('#identity').val();
+				if(rowId!=''){ 
+				var rowIDArray = rowId.split(',');
+				for(var n = 0; n < rowIDArray.length; n++){
+				var row_id = dijit.byId('subject_study_'+rowIDArray[n]).get('value');
+				if(row_id==''){
+						alert("Please select subject title!");
+						return false;
+						}
+					}
+				}
+                dijit.byId("save_new").attr("disabled",true);
+				dijit.byId("save_close").attr("disabled",true);
 				return true;
 			}else {
 				return false;
 			}
 </script>
-<script type="dojo/method" event="onSubmit">   
-   if(this.validate()) {
-    return true;
-   }else {
-    return false;
-   }
-</script>
+
 <table cellspacing="10" width="100%" style="margin: 0 auto;">
 	<tr>
 		<td>
@@ -82,9 +89,9 @@ dojo.require("dijit.form.CheckBox");
 				</tr>
 				<tr>
 					<td colspan="2" align="center"><br />
-					    <input type="submit"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close"
+					    <input type="button" onClick="submitDataClose()"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close"
 						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
-						<input type="submit"  label="<?php echo $tr->translate("SAVE_NEW");?>" id="submitButton" 
+						<input type="submit"  label="<?php echo $tr->translate("SAVE_NEW");?>" id="save_new" name="save_new" 
 						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
 						
 				</tr>
@@ -290,3 +297,36 @@ function deleteRecord(index) {
  			</form>
 	</div>
 </div>
+
+<script>
+
+function submitDataClose(){
+	var rowId = $('#identity').val();
+	if(rowId!=''){ 
+	var rowIDArray = rowId.split(',');
+	for(var n = 0; n < rowIDArray.length; n++){
+	var row_id = dijit.byId('subject_study_'+rowIDArray[n]).get('value');
+	if(row_id==''){
+			alert("Please select subject title!");
+			return false;
+			}
+		}
+	}
+	if(dijit.byId('frm_degree').validate()) {
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("frm_degree"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/global/degree";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+
+</script>

@@ -32,11 +32,11 @@
 				dijit.byId('pro_id').focus();
                 return false;
 				}
-				from_location = dijit.byId('from_location').get('value');
-				to_location = dijit.byId('to_location').get('value');
+				from_location = dijit.byId('f_branch').get('value');
+				to_location = dijit.byId('branch').get('value');
              if(to_location==from_location){
 				alert("ទីតាំងដែលត្រូវផ្ទេរទៅមិនអាចដូចគ្នាបានទេ !");
-				dijit.byId('to_location').focus();
+				dijit.byId('branch').focus();
                 return false;
 			}
 				dijit.byId('save_new').set('disabled',true);

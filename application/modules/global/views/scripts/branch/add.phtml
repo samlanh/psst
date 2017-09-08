@@ -3,9 +3,12 @@
 	echo $this->headTitle($tr->translate('បន្ថែមសាខា')); 
 ?>
 <?php  $frm = $this->frm_branch;?>
-<form action="<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<form id="frm_branch" action="<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+               
+                dijit.byId("save_close").attr("disabled",true);
+				dijit.byId("save_new").attr("disabled",true);
 				return true;
 			} else {
 				return false;
@@ -47,9 +50,9 @@
 									<tr>
 										<td colspan="6" align="center">
 											<input type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" iconClass="dijitIconClear" />
-											<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVECLOSE');?>" dojoType="dijit.form.Button" 
+											<input type="button" onClick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVECLOSE');?>" dojoType="dijit.form.Button" 
 												iconClass="dijitEditorIcon dijitEditorIconSave" />
-											<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVENEW');?>" dojoType="dijit.form.Button" 
+											<input type="submit" value="save_new" name="save_new"  id="save_new" label="<?php echo $tr->translate('SAVENEW');?>" dojoType="dijit.form.Button" 
 												iconClass="dijitEditorIcon dijitEditorIconSave" />
 										</td>
 									</tr>					
@@ -62,3 +65,24 @@
 		</tr>
 	</table>	
 </form>
+
+<script>
+
+function submitDataClose(){
+	if(dijit.byId('frm_branch').validate()) {
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("frm_branch"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/global/branch";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+</script>

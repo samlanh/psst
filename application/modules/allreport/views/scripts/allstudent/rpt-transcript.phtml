@@ -96,9 +96,10 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 								<td>ចំ.ថ្នាក់</td>
 							</tr>
 							 <?php
+							 $total_score_semester1=0;
+							 $total_score_semester2=0;
 							 	if(!empty($this->result)){
-							 		$total_score_semester1=0;
-							 		$total_score_semester2=0;
+							 		
 							 		$amount_subject = count($this->result);
 							  	foreach($this->result as $key =>$rs){?>
 									  <tr style="line-height:16px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">

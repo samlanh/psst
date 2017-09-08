@@ -3,7 +3,6 @@
 	$this->headTitle('របាយការណ៏ សិស្ស'); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
-// 	print_r($this->rs);
 ?>	
 <style>
 .hover:hover{ background:#ccc;}</style>
@@ -78,28 +77,28 @@ function getKHMonthByNumber(m){
 				<td colspan="3">
 				<div id="exportExcel">
 					<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
-						<tr style="font-size:11px; height: 20px;" align="center" >
+						<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
 							<td rowspan="2"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></td>
-							<td rowspan="2">No.</td>
-							<td rowspan="2">Branch Name</td>
-							<td rowspan="2">Student Code</td>
-							<td rowspan="2">Name</td>
-							<td rowspan="2">Sex</td>
-							<td rowspan="2">Nationality</td>
-							<td rowspan="2">Tel</td>
-							<td rowspan="2">Email</td>
-							<td colspan="5">Study Info</td>
+							<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
+							<td rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></td>
+							<td rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></td>
+							<td rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></td>
+							<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
+							<td rowspan="2"><?php echo $tr->translate("NATIONALITY");?></td>
+							<td rowspan="2"><?php echo $tr->translate("PHONE");?></td>
+							<td rowspan="2"><?php echo $tr->translate("EMAIL");?></td>
+							<td colspan="5"><?php echo $tr->translate("STUDY_INFO");?></td>
 						</tr>
 						<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
-						<tr style="font-size:11px; height: 20px;" align="center" >
-							<td >AcademicYear</td>
-							<td >Degree</td>
-							<td >Grade</td>
-							<td >Session</td>
-							<td >Status</td>
+						<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
+							<td ><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+							<td ><?php echo $tr->translate("DEGREE");?></td>
+							<td ><?php echo $tr->translate("GRADE");?></td>
+							<td ><?php echo $tr->translate("SESSION");?></td>
+							<td ><?php echo $tr->translate("STATUS");?></td>
 						</tr>
 					<?php $i=0;$degree=0; foreach ($this->rs AS $row) { $i++;$degree=$row['degree'];?>
-						<tr style="font-size:11px; height: 23px;" align="center" class="hover" >
+						<tr style="font-size:12px; height: 23px;" align="center" class="hover" >
 							<td>
 								<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
 								<input type="hidden" name="stu_id<?php echo $i;?>" id="stu_id<?php echo $i;?>" value="<?php echo $row['stu_id'];?>" dojoType="dijit.form.TextBox" />

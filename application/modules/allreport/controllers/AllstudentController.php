@@ -14,7 +14,6 @@ public function init()
 	}
 	public function idselectedAction(){
 		$id=$this->getRequest()->getParam('id');
-		//print_r($id);
 		$k = 0;
 		$condition = '';
 		$ids = explode(',', $id);
@@ -26,11 +25,8 @@ public function init()
 				$condition .= ' or stu_id = '.$id_stu;
 			}
 		}
-		//echo $condition;
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $db->getAllStudentSelected($condition);
-		
-		
 	}
 	
 	public function rptAllStudentAction(){
@@ -59,7 +55,6 @@ public function init()
 		$this->view->rs = $rs_rows = $group->getAllStudent($search);
 		$this->view->search=$search;
 	}
-	
 	public function rptAllStudentOldAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -112,7 +107,6 @@ public function init()
 		$this->view->rs = $rs_rows = $group->getAllAmountStudent($search);
 		$this->view->search=$search;
 	}
-	
 	public function rptStudyHistoryAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -137,11 +131,8 @@ public function init()
 	
 		$db= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $db->getAllStudyHistory($search);
-		
 	}
-	
 	public function rptStudentAction(){
-	
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
@@ -155,7 +146,6 @@ public function init()
 					'end_date'	=> date('Y-m-d'),
 			);
 		}
-	
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
@@ -226,7 +216,6 @@ public function init()
 		$result= $db_global->getAllgroupStudy();
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
-		
 	}
 	public function rptAttendenceHighschoolAction(){
 		if($this->getRequest()->isPost()){
@@ -258,7 +247,6 @@ public function init()
 		$result= $db_global->getAllgroupStudy();
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
-	
 	}
 	function getSubjectbygroupAction(){
 		if($this->getRequest()->isPost()){
@@ -281,7 +269,6 @@ public function init()
 					'session' =>'',
 					'start_date'=>date("Y-m-d"),
 					'end_date'=>date("Y-m-d")
-					
 			);
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
@@ -327,7 +314,6 @@ public function init()
 					'session' => '',
 			);
 		}
-	
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
@@ -338,7 +324,6 @@ public function init()
 		$this->view->search=$search;
 	}
 	public function rptStudentChangeGroupAction(){
-	
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
@@ -407,8 +392,5 @@ public function init()
 		$this->view->result = $result;
 	}
 	function academicTranscriptAction(){
-		 
 	}
-	
 }
-

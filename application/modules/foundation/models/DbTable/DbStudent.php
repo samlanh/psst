@@ -15,19 +15,16 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 				$sql = "SELECT  s.stu_id,
-				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id) AS branch_name,
+				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,CONCAT(s.stu_khname,' - ',s.stu_enname) as name,
-				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex) AS sex,tel ,
-				
-				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year) AS academic,
-				
-				(SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree) AS degree,
-				
-				(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=s.grade) AS grade,
-				
+				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
+				tel ,
+				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
+				(SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree LIMIT 1) AS degree,
+				(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=s.grade LIMIT 1) AS grade,
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
-				(select room_name from rms_room where room_id=s.room) as room,
-				(SELECT name_kh FROM `rms_view` WHERE TYPE=1 AND key_code = status) AS status
+				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
+				(SELECT name_kh FROM `rms_view` WHERE TYPE=1 AND key_code = status LIMIT 1) AS status
 				FROM rms_student AS s  WHERE  s.is_subspend=0 AND s.status = 1 ";
 		$orderby = " ORDER BY stu_id DESC ";
 		if(empty($search)){
@@ -36,14 +33,25 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
-			$s_where[]="stu_code LIKE '%{$s_search}%'";
-			$s_where[]="(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=s.academic_year) LIKE '%{$s_search}%'";
-			$s_where[]="stu_khname LIKE '%{$s_search}%'";
-			$s_where[]="stu_enname LIKE '%{$s_search}%'";
-			$s_where[]="(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=s.degree) LIKE '%{$s_search}%'";
-			$s_where[]="(SELECT major_enname FROM rms_major WHERE rms_major.major_id=s.grade) LIKE '%{$s_search}%'";
+			$s_where[]=" stu_code LIKE '%{$s_search}%'";
+			$s_where[]=" stu_khname LIKE '%{$s_search}%'";
+			$s_where[]=" stu_enname LIKE '%{$s_search}%'";
+			$s_where[]=" tel LIKE '%{$s_search}%'";
+			$s_where[]=" father_phone LIKE '%{$s_search}%'";
+			$s_where[]=" mother_phone LIKE '%{$s_search}%'";
+			$s_where[]=" guardian_tel LIKE '%{$s_search}%'";
+			
+			$s_where[]=" father_enname LIKE '%{$s_search}%'";
+			$s_where[]=" mother_enname LIKE '%{$s_search}%'";
+			$s_where[]=" guardian_enname LIKE '%{$s_search}%'";
+			$s_where[]=" remark LIKE '%{$s_search}%'";
+			$s_where[]=" home_num LIKE '%{$s_search}%'";
+			$s_where[]=" street_num LIKE '%{$s_search}%'";
+			$s_where[]=" village_name LIKE '%{$s_search}%'";
+			$s_where[]=" commune_name LIKE '%{$s_search}%'";
+			$s_where[]=" district_name LIKE '%{$s_search}%'";
+			
 			$s_where[]="(SELECT	rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session) LIKE '%{$s_search}%'";
-			$s_where[]="(SELECT `major_enname` FROM `rms_major` WHERE `major_id`=grade) LIKE '%{$s_search}%'";
 			$s_where[]="(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
@@ -90,16 +98,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	public function addStudent($_data){
-			//print_r($_data);exit();
 			$id = $this->getStudentExist($_data['name_en'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session']);	
 			if(!empty($id)){
+				Application_Form_FrmMessage::Sucessfull("STUDENT_EXISTRING","/foundation/register/add");
 				return -1;
 			}
 			$code = new Registrar_Model_DbTable_DbRegister();
-			$stu_code = $code->getNewAccountNumber($_data['degree']);
+// 			$stu_code = $code->getNewAccountNumber($_data['degree']);
+			$stu_code=$_data['student_id'];
 			
-	// 	add photo ////////////////////////////////////////////////////	
-		
 			$adapter = new Zend_File_Transfer_Adapter_Http();
 			$part = PUBLIC_PATH.'/images';
 			$adapter->setDestination($part);
@@ -111,9 +118,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}else{
 				$pho_name = '';
 			}
-	//////////////////////		
-			
-			//print_r($data['photo']);exit();
 			
 			if($_data['degree']==4){
 				$stu_type=1;    //  kid
@@ -133,21 +137,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'user_id'		=>$this->getUserId(),
 						'stu_enname'	=>$_data['name_en'],
 						'stu_khname'	=>$_data['name_kh'],
-						
-						
 						'sex'			=>$_data['sex'],
 						'nationality'	=>$_data['studen_national'],
 						'dob'			=>$_data['date_of_birth'],
 						'tel'			=>$_data['phone'],
 						'pob'			=>$_data['pob'],
-				
 						'home_num'		=>$_data['home_note'],
 						'street_num'	=>$_data['way_note'],
 						'village_name'	=>$_data['village_note'],
 						'commune_name'	=>$_data['commun_note'],
 						'district_name'	=>$_data['distric_note'],
 						'province_id'	=>$_data['student_province'],
-						
 						'group_id'		=>$_data['group'],
 						'stu_code'		=>$stu_code,
 						'academic_year'	=>$_data['academic_year'],
@@ -177,7 +177,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'guardian_job'	=>$_data['gu_job'],
 						'guardian_tel'	=>$_data['guardian_phone'],
 						
-						
 						'is_stu_new'	=> 0,
 						'is_setgroup'	=> 1,
 						'status'		=>$_data['status'],
@@ -194,38 +193,36 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'stu_id'	=>$id,
 						'stu_code'	=>$_data['student_id'],
 						'stu_type'	=>$stu_type,
-						
 						'academic_year'	=>$_data['academic_year'],
 						'degree'	=>$_data['degree'],
 						'grade'		=>$_data['grade'],
 						'session'	=>$_data['session'],
 						'room'		=>$_data['room'],
-						
 						'create_date'	=>date("Y-m-d"),
 						'status'		=>$_data['status'],
 						'remark'		=>$_data['remark']
 						);
 				$this->insert($arr);
 				
-				$this->_name='rms_group_detail_student';
-				$arr_group_history= array(
-						'stu_id'	=>$id,
-						'group_id'	=>$_data['group'],
-						'date'		=>date("Y-m-d H:i:s"),
-						'status'	=>$_data['status'],
-						'user_id'	=>$this->getUserId(),
-						);
-				$this->insert($arr_group_history);
-				
-				
-				$this->_name = 'rms_group';
-				$group=array(
-						'is_use'	=>1,
-						'is_pass'	=>2,
-				);
-				$where=" id=".$_data['group'];
-				$this->update($group, $where);
-				
+				if($_data['group']!=-1 AND $_data['group']!='' AND $_data['group']!=0){
+					$this->_name='rms_group_detail_student';
+					$arr_group_history= array(
+							'stu_id'	=>$id,
+							'group_id'	=>$_data['group'],
+							'date'		=>date("Y-m-d H:i:s"),
+							'status'	=>$_data['status'],
+							'user_id'	=>$this->getUserId(),
+							);
+					$this->insert($arr_group_history);
+					
+					$this->_name = 'rms_group';
+					$group=array(
+							'is_use'	=>1,
+							'is_pass'	=>2,
+					);
+					$where=" id=".$_data['group'];
+					$this->update($group, $where);
+				}
 				
 				$this->_name = 'rms_student_id';
 				$arra=array(
@@ -236,7 +233,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$this->insert($arra);
 				
 				$_db->commit();
-				
 			}catch(Exception $e){
 				$_db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -257,7 +253,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}
 			
 	//   photo ////////////////////////////////////////////////
-	
 			$adapter = new Zend_File_Transfer_Adapter_Http();
 			$part = PUBLIC_PATH.'/images';
 			$adapter->setDestination($part);
@@ -329,13 +324,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 			$this->update($_arr, $where);
 			
-			
-			
 			$this->_name = 'rms_study_history';
 				$arr= array(
 						'user_id'		=>$this->getUserId(),
 						'stu_type'		=>$stu_type,
-						
 						'academic_year'	=>$_data['academic_year'],
 						'degree'		=>$_data['degree'],
 						'grade'			=>$_data['grade'],
@@ -346,7 +338,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				);
 			$where=$this->getAdapter()->quoteInto("stu_id = ?", $_data["id"]);
 			$this->update($arr, $where);
-			
 			
 			if(!empty($_data['old_group_id'])){
 				$this->_name='rms_group_detail_student';
@@ -367,6 +358,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'user_id'	=>$this->getUserId(),
 				);
 				$this->insert($arr_group_history);
+				
+				$this->_name = 'rms_group';
+				$group=array(
+						'is_use'	=>1,
+						'is_pass'	=>2,
+				);
+				$where=" id=".$_data['group'];
+				$this->update($group, $where);
 			}
 			
 			$this->_name = 'rms_student_id';
@@ -375,11 +374,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			);
 			$where = " stu_id = ".$_data["id"];
 			$this->update($arra, $where);
-			
-		$db->commit();//if not errore it do....
+			$db->commit();//if not errore it do....
 			
 		}catch(Exception $e){
-			echo $e->getMessage();exit();
+			echo $e->getMessage();
 		}
 	}
 	function getStudyHishotryById($id){
@@ -463,9 +461,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	function getAllgroup(){
 		$db = $this->getAdapter();
+// 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+// 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+// 		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
+		
+		$db = $this->getAdapter();
 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
+ 		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+ 		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
 		return $db->fetchAll($sql);
 	}
 	function getGroupInforByID($group_id){

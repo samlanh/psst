@@ -10,12 +10,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	 
 //     }
     public function getAllStudent($search){
-    	//print_r($search);
-    	//echo $search['stu_type'];
     	$db = $this->getAdapter();
     	$sql ='select stu_id,
     	      (SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-    	       CONCAT(stu_khname," - ",stu_enname) as name,stu_enname,stu_khname,nationality,tel,email,stu_code,home_num,street_num,village_name,
+    	       CONCAT(stu_khname," - ",stu_enname) as name,
+    	       stu_enname,stu_khname,nationality,
+    	       tel,email,stu_code,home_num,street_num,
+    	       village_name,
     		   commune_name,district_name,is_subspend,dob,degree as dept,
     		   (select CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as academic_year,
     		   (select from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as start_year,
@@ -42,7 +43,25 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-    		$s_where[] = " CONCAT(stu_enname,stu_khname) LIKE '%{$s_search}%'";
+    		
+    		$s_where[]=" stu_code LIKE '%{$s_search}%'";
+    		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
+    		$s_where[]=" stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" tel LIKE '%{$s_search}%'";
+    		$s_where[]=" father_phone LIKE '%{$s_search}%'";
+    		$s_where[]=" mother_phone LIKE '%{$s_search}%'";
+    		$s_where[]=" guardian_tel LIKE '%{$s_search}%'";
+    			
+    		$s_where[]=" father_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" mother_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" guardian_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" remark LIKE '%{$s_search}%'";
+    		$s_where[]=" home_num LIKE '%{$s_search}%'";
+    		$s_where[]=" street_num LIKE '%{$s_search}%'";
+    		$s_where[]=" village_name LIKE '%{$s_search}%'";
+    		$s_where[]=" commune_name LIKE '%{$s_search}%'";
+    		$s_where[]=" district_name LIKE '%{$s_search}%'";
+    		
     		$s_where[] = " (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
     		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
     		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
@@ -66,13 +85,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if($search['stu_type']!=-1){
     		$where.=' AND is_stu_new = '.$search['stu_type'];
     	}
-    	//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }
     
     public function getAllStudentSelected($stu_id){
-    	//print_r($search);
-    	//echo $search['stu_type'];
     	$db = $this->getAdapter();
     	$sql ='select stu_id,
     	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,

@@ -7,24 +7,20 @@
 <head>
   <meta charset="utf-8">
 </head>
-
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	//echo $this->headTitle($tr->translate('ADD_FEE')); 
 	$payment_term = $this->payment_term;
 	$rs_sub=$this->rows_sub;
-	
 ?>	
- 
 <script>
-dojo.require("dojo.NodeList-manipulate");
+/*dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.parser");
 dojo.require("dijit.layout.AccordionContainer");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.DateTextBox");*/
 </script>
 <style>
 select{ width:100%;}
@@ -57,11 +53,10 @@ ol{margin: 10px;}
 <script type="text/javascript">
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
-dojo.require("dojo.data.ObjectStore");
-dojo.require('dojox.form.BusyButton');
-dojo.require("dijit.form.Textarea");  
-dojo.require("dijit.form.FilteringSelect");
+//dojo.require("dojo.store.Memory");
+//dojo.require('dojox.form.BusyButton');
+//dojo.require("dijit.form.Textarea");  
+//dojo.require("dijit.form.FilteringSelect");
 dojo.require("dojo.html");
 var subject_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
 dojo.ready(function(){
@@ -86,34 +81,19 @@ dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 		    store:subject_store,
 		    autoComplete: true,                        
-		    required: true,
+		    required: false,
 		    id: "subject",
 		    name: "subject",   
 		    class: 'fullside',  
 		    value:'<?php echo $this->row['subject_id'];?>',
 		    searchAttr: "name",
-		    readOnly:true, 
+		    //readOnly:true, 
 		    placeHolder:"Selected Subject",          
 		    onChange: function() {  
 		    	//filterStudent();
 		    }
 		}, "subject");
 
-		<?php /*?>
-		new dijit.form.FilteringSelect({
-			//store: dept_store,
-			autoComplete: true,                        
-			id: "grade",
-			name: "grade",   
-			readOnly:true,       
-			class: 'fullside', 
-			placeHolder:"Selected Grade",          
-			onChange: function() {
-				//filterStudent();
-			}
-		}, "grade");
-		<?php */?>
-		
 		getInfoBygroup(1);
 		initailize();
 });
@@ -130,12 +110,8 @@ function filterGrade(){
 				},
 			handleAs:"json",
 			load: function(data) {
-				//alert(data);
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);  
-			    //if(a!=""){
-			    //	dijit.byId('grade').attr('value',a);
-		        //}
 			},
 			error: function(err) {
 				//alert(err);
@@ -216,7 +192,6 @@ function filterStudent(){
 					}
 				}
 				document.getElementById("table_row").innerHTML = str;
-				 
 				
 	       }else{
 	    	   $('#identity').val('');
@@ -318,6 +293,17 @@ function gender(sex){
 							<td class="hidden"><input id="subject"></td>
 						</tr>
 						<tr>
+							<td valign="top"><?php echo $tr->translate("FOR_SEMESTER");?></td>
+							<td valign="top">
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+										<option value="1" <?php if($this->row['for_semester']==1){echo"selected";};?>>ទី 1</option>
+										<option value="2" <?php if($this->row['for_semester']==2){echo"selected";};?>>ទី 2</option>
+								</select>
+							</td>
+							<td valign="top"><?php echo $tr->translate("NOTE");?></td>
+							<td colspan="3"><textarea class="fullside"  style=" height: 60px !important;font-family:'Khmer Os Battambang';" tabindex="20" dojoType=""  id="note" name="note"  ><?php echo $this->row['note'];?></textarea></td>
+						</tr>
+						<tr>
 							<td colspan="4">
 								<input type="checkbox" onchange="CheckAll();"  name="check_all" id="check_all" value="1" style=" margin: 0 10px; vertical-align: middle;"/>
 								<label><?php echo $tr->translate("CHECK_ALL_BY");?></label>
@@ -331,7 +317,6 @@ function gender(sex){
 							<labal id="liststudent">
 							</labal>
 							<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-								
 							</table>
 							</td>
 						</tr>
@@ -464,8 +449,8 @@ function getInfoBygroup(type=null){
 			if(data.degree==2){
 				getSubjectByGroup(type);
 			}
-			 dijit.byId('subject').set('readOnly',true);  
-			 dijit.byId('subject').set('required',false); 
+			// dijit.byId('subject').set('readOnly',true);  
+			 //dijit.byId('subject').set('required',false); 
 			 dijit.byId('subject').reset();
 		},
 		error: function(err) {
@@ -486,8 +471,8 @@ function getSubjectByGroup(type=null){
 	   load: function(data){
 		   subject_store  = getDataStorefromJSON('id','name', data);
 		   dijit.byId('subject').set('store',subject_store);  
-		   dijit.byId('subject').set('readOnly',false);  
-		   dijit.byId('subject').set('required',true); 
+		   //dijit.byId('subject').set('readOnly',false);  
+		   //dijit.byId('subject').set('required',true); 
 		   if(type!=null){
 		  	 dijit.byId('subject').set('value','<?php echo $this->row['subject_id'];?>');
 		   }

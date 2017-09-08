@@ -11,7 +11,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-				
 			}
 			else{
 				$search = array(
@@ -26,10 +25,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			}
 			
 			$this->view->adv_search=$search;
-			
 			$db_student= new Foundation_Model_DbTable_DbStudent();
 			$rs_rows = $db_student->getAllStudent($search);
-			 
 			$list = new Application_Form_Frmtable();
 				$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAME","SEX","PHONE","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 				$link=array(
@@ -42,7 +39,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}	
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();

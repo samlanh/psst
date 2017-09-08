@@ -2,22 +2,10 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_STUDENT_ATTENDENCE"));
 	$row_sub=$this->rows_sub;
-	//print_r($this->rows_parent);
 ?>	
 <head>
   <meta charset="utf-8">
 </head>
-
-<script>
-dojo.require("dojo.NodeList-manipulate");
-dojo.require("dojo.parser");
-dojo.require("dijit.layout.AccordionContainer");
-dojo.require("dijit.layout.ContentPane");
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.DateTextBox");
-</script>
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -25,7 +13,6 @@ table tr.head-title{ background: none repeat scroll 0% 0% rgba(213, 249, 244, 1)
 table tr td.null-border{ background: #fff; border-left:none !important;}
 table .set-style td,table .set-style th{ padding: 0px; border:1px solid #ccc;font-size: 12px;}
 table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
-
 div.panel {
     padding: 0 18px;
     display: none;
@@ -39,7 +26,6 @@ table#table_row tr td {
     border: solid 1px #ccc;
     text-align: center;
 }
-
 </style>
 <style>
 ul.blogscoresubject li{list-style: none;width:10%;float: left; }
@@ -49,19 +35,17 @@ ol{margin: 10px;}
 <script type="text/javascript">
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
-dojo.require("dojo.data.ObjectStore");
-dojo.require('dojox.form.BusyButton');
-dojo.require("dijit.form.Textarea");  
-dojo.require("dijit.form.FilteringSelect");
-dojo.require("dojo.html");
+//dojo.require("dojo.data.ObjectStore");
+//dojo.require('dojox.form.BusyButton');
+//dojo.require("dijit.form.Textarea");  
+//dojo.require("dijit.form.FilteringSelect");
+//dojo.require("dojo.html");
 
 	var subject_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
 	var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade));?> );
 	
 	dojo.ready(function(){
-	//control study year
 		new dijit.form.FilteringSelect({
 		    store:years_store,
 		    autoComplete: true,                        
@@ -73,7 +57,6 @@ dojo.require("dojo.html");
 		    required:'true',
 		    placeHolder:"Selected Study Years",          
 		    onChange: function() {  
-		    	//filterStudent();
 		    }
 		}, "year_study");
 
@@ -81,32 +64,17 @@ dojo.require("dojo.html");
 		new dijit.form.FilteringSelect({
 		    store:subject_store,
 		    autoComplete: true,                        
-		    required: true,
+		    required: false,
 		    id: "subject",
 		    name: "subject",   
 		    class: 'fullside',  
-		    readOnly:true, 
+		    //readOnly:true, 
 		    placeHolder:"Selected Subject",          
 		    onChange: function() {  
-		    	//filterStudent();
 		    }
 		}, "subject");
-		<?php /*?>
-		new dijit.form.FilteringSelect({
-			store: grade_store,
-			autoComplete: true,                        
-			id: "grade",
-			name: "grade",   
-			//readOnly:true,       
-			class: 'fullside', 
-			placeHolder:"Selected Grade",          
-			onChange: function() {
-				//filterStudent();
-			}
-		}, "grade");
-		<?php */?>
+		
 });
-
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'get-grade')); ?>';
@@ -122,17 +90,12 @@ function filterGrade(){
 				//alert(data);
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);  
-			    //if(a!=""){
-			    //	dijit.byId('grade').attr('value',a);
-		        //}
 			},
 			error: function(err) {
 				//alert(err);
 			}
 		});
 }
-
-
 var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'get-student')); ?>';
 function filterStudent(){
 	//alert(1);
@@ -205,15 +168,12 @@ function filterStudent(){
 					}
 				}
 				document.getElementById("table_row").innerHTML = str;
-				 
-				
 	       }else{
 	    	   $('#identity').val('');
 	    	   document.getElementById("table_row").innerHTML = '';
 	       }
 	   },		
 	    error: function(err) {
-		 //   alert(err);
 	    }
 	});
 	
@@ -307,6 +267,18 @@ function gender(sex){
 							<td class="hidden"><input id="subject"></td>
 						</tr>
 						<tr>
+							<td valign="top"><?php echo $tr->translate("FOR_SEMESTER");?></td>
+							<td valign="top">
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+										<option value="1">ទី 1</option>
+										<option value="2">ទី 2</option>
+								</select>
+							</td>
+							<td valign="top"><?php echo $tr->translate("NOTE");?></td>
+							<td colspan="3"><textarea class="fullside"  style="font-family:'Khmer Os Battambang';height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea></td>
+							
+						</tr>
+						<tr>
 							<td colspan="4">
 								<input type="checkbox" onchange="CheckAll();"  name="check_all" id="check_all" value="1" style=" margin: 0 10px; vertical-align: middle;"/>
 								<label><?php echo $tr->translate("CHECK_ALL_BY");?></label>
@@ -320,7 +292,6 @@ function gender(sex){
 							<labal id="liststudent">
 							</labal>
 							<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-								
 							</table>
 							</td>
 						</tr>
@@ -368,7 +339,6 @@ function AllowOnlyNumbers(e) {
         112, // p Ctrl + p print
         80 // P Ctrl + P print
     ];
-
     var specialKeys = [
 	    8, // backspace
 	    9, // tab
@@ -385,10 +355,6 @@ function AllowOnlyNumbers(e) {
 
     key = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
 
-    //console.log("e.charCode: " + e.charCode + ", " + "e.which: " + e.which + ", " + "e.keyCode: " + e.keyCode);
-    //console.log(String.fromCharCode(key));
-
-    // check if pressed key is not number 
     if (key && key < 48 || key > 57) {
         //Allow: Ctrl + char for action save, print, copy, ...etc
         if ((e.ctrlKey && charsKeys.indexOf(key) != -1) ||
@@ -436,16 +402,12 @@ function getInfoBygroup(){
 		load: function(data) {
 			dijit.byId('year_study').set('value',data.academic_year);
 			dijit.byId('year_study').set('readOnly',true);
-			
 			dijit.byId('degree').set('value',data.degree);
 			dijit.byId('degree').set('readOnly',true);
-			
 			dijit.byId('grade').set('value',data.grade);
 			dijit.byId('grade').set('readOnly',true);
-			
 			dijit.byId('session').set('value',data.session);
 			dijit.byId('session').set('readOnly',true);
-			
 			dijit.byId('room').set('value',data.room_id);
 			dijit.byId('room').set('readOnly',true);
 			filterStudentBygroup();
@@ -453,8 +415,8 @@ function getInfoBygroup(){
 			if(data.degree==2){
 				getSubjectByGroup();
 			}
-			 dijit.byId('subject').set('readOnly',true);  
-			 dijit.byId('subject').set('required',false); 
+			// dijit.byId('subject').set('readOnly',true);  
+			 //dijit.byId('subject').set('required',false); 
 		},
 		error: function(err) {
 			alert(err);
@@ -473,8 +435,8 @@ function getSubjectByGroup(){
 	   load: function(data){
 		   subject_store  = getDataStorefromJSON('id','name', data);
 		   dijit.byId('subject').set('store',subject_store);  
-		   dijit.byId('subject').set('readOnly',false);  
-		   dijit.byId('subject').set('required',true);  
+		  // dijit.byId('subject').set('readOnly',false);  
+		 //  dijit.byId('subject').set('required',true);  
 	   },		
 	    error: function(err) {
 			   alert(err);
@@ -483,10 +445,8 @@ function getSubjectByGroup(){
 }
 var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(){
-	//alert(1);
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
 	group = dijit.byId('group').get('value');
-
 	if(group==''){
 		return false;
 	}
@@ -544,18 +504,14 @@ function filterStudentBygroup(){
 					}
 				}
 				document.getElementById("table_row").innerHTML = str;
-				 
-				
 	       }else{
 	    	   $('#identity').val('');
 	    	   document.getElementById("table_row").innerHTML = '';
 	       }
 	   },		
 	    error: function(err) {
-		 //   alert(err);
 	    }
 	});
-	
 }
 function CheckAll(){
 	var identity = $('#identity').val();
@@ -576,5 +532,4 @@ function CheckAll(){
 		}
 	}
 }
-</script>
- 
+</script> 

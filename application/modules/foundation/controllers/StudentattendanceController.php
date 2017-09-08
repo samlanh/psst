@@ -16,7 +16,6 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 			
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-				
 			}
 			else{
 				$search = array(
@@ -24,14 +23,11 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 						'study_year'=> '',
 						'grade'=> '',
 						'session'=> '',
-// 						'time'=> '',
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}
 			
 			$this->view->search=$search;
-			
-			
 			$rs_rows = $db->getAllAttendence($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
@@ -44,7 +40,6 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
-			echo $e->getMessage();
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
@@ -69,22 +64,18 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 					 $rs =  $db->addStudentAttendece($_data);
 					 Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/studentattendance");
 				}
-		
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		$this->view->group = $db->getAllgroupStudy();
-		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_year = $db_global->getAllYear();
 		$this->view->session = $db_global->getSession();
 		$this->view->degree = $db_global->getDegree();
 		$this->view->grade = $db_global->getAllGrade();
-		
 		$this->view->room = $db_global->getAllRoom();
-		//get subject id
 	}
 	
 	public	function editAction(){
@@ -94,10 +85,10 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
 			try {
-				if(isset($_data['save_close'])){
+				//if(isset($_data['save_close'])){
 					$rs =  $_model->updateStudentAttendence($_data);
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/studentattendance");
-				} 
+				//} 
 		
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");

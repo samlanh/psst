@@ -55,9 +55,10 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 					'group_id'=>$_data['group'],
 					'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
 					'date_create'=>date("Y-m-d"),
-					
 					'modify_date'=>date("Y-m-d"),
-					'subject_id'=> $_data['subject'],
+					'subject_id'=>$_data['subject'],
+					'for_semester'=> $_data['for_semester'],
+					'note'=>$_data['note'],
 					'status'=>$_data['status'],
 					'user_id'=>$this->getUserId()
 			);
@@ -77,7 +78,6 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 					}
 				}
 			}
-// 			exit();
 		  $db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
@@ -94,10 +94,11 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 					'branch_id'=>$branch_id,
 					'group_id'=>$_data['group'],
 					'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
-					
 					'modify_date'=>date("Y-m-d"),
 					'subject_id'=> $_data['subject'],
 					'status'=>$_data['status'],
+					'for_semester'=> $_data['for_semester'],
+					'note'=>$_data['note'],
 					'user_id'=>$this->getUserId()
 			);
 			$where="id=".$_data['id'];

@@ -226,7 +226,7 @@ function getStudentNo(){
 									<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="studen_national" name="studen_national"  type="text" ></td>
 									<td><?php echo $tr->translate("DOB");?></td>
 									<td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="date_of_birth" id="date_of_birth" dojoType="dijit.form.DateTextBox"  value="<?php echo date("2000-m-d")?>" type="text"/></td>
-									<td><?php echo $tr->translate("PARENT_PHONE");?></td>
+									<td><?php echo $tr->translate("PHONE");?></td>
 									<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="phone" name="phone"  type="text" ></td>
 								</tr>
 					      		<tr>	
@@ -540,7 +540,7 @@ function addJob(){
 				dijit.byId('session').set('value',data.session);
 				dijit.byId('session').set('readOnly',true);
 				dijit.byId('room').set('value',data.room_id);
-				dijit.byId('room').set('readOnly',true);
+				//dijit.byId('room').set('readOnly',true);
 			},
 			error: function(err) {
 				alert(err);

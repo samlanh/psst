@@ -87,7 +87,7 @@
 									<td><?php echo $row['tel'];?></td>
 									<td><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'certify','id'=>$row['gd_id'])); ?>"><?php echo $tr->translate("PRINT_CERTIFY");?></a></td>
 									<td><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'academic-transcript','id'=>$row['gd_id'])); ?>"><?php echo $tr->translate("Academic Transcript");?></a></td>
-									<td><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-transcript','id'=>$row['gd_id'],'group_id'=>$row['group_id'])); ?>"><?php echo $tr->translate("ព្រឹត្តប័ត្រពិន្ទុ");?></a></td>
+									<td><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-transcript','id'=>$row['stu_id'],'group_id'=>$row['group_id'])); ?>"><?php echo $tr->translate("ព្រឹត្តប័ត្រពិន្ទុ");?></a></td>
 								</tr>
 								<?php }?>	
 								<tr>

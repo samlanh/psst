@@ -114,9 +114,9 @@ dojo.ready(function(){
 									$duplicate=0;
 								}
 								?>
-								<td align="center"><strong><?php echo number_format($rs['avage_semester1'],2);?></strong></td>
-								<td align="center"><strong><?php echo number_format($rs['avage_semester2'],2); ?></strong></td>
-								<td align="center"><strong><?php echo number_format(($rs['avage_semester1']+$rs['avage_semester2'])/2,2);?></strong></td>
+								<td align="center"><strong><?php echo empty($rs['avage_semester1'])?"":number_format($rs['avage_semester1'],2);?></strong></td>
+								<td align="center"><strong><?php echo empty($rs['avage_semester1'])?"":number_format($rs['avage_semester2'],2); ?></strong></td>
+								<td align="center"><strong><?php echo empty($rs['avage_semester1'])?"":number_format(($rs['avage_semester1']+$rs['avage_semester2'])/2,2);?></strong></td>
 								<td align="center" style="color:red;"><label id="record<?php echo $i;?>"></label><strong><?php echo $old_rank;?></strong></td>
 								<td align="center"></td>
 							</tr>

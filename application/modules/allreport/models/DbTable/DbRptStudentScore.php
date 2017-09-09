@@ -309,6 +309,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	sd.`group_id`,
    	g.`group_code`,
    	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+   	(SELECT pass_score FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS pass_score,
+   	(SELECT maxi_score FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS maxi_score,
    	(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
    	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
    	`g`.`semester` AS `semester`,
@@ -422,7 +424,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	sd.`student_id`,
    	sd.subject_id,
    	(SELECT sj.subject_titleen  AS sj FROM `rms_subject` AS sj WHERE sj.id=sd.subject_id) as subject_name
-   	
+   	 	
    	FROM 
    	`rms_score` AS s,
    	`rms_score_detail` AS sd,
@@ -499,17 +501,18 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	s.for_semester,
 		   	SUM(sd.`score`) AS total_score,
 		   	AVG(sd.score) as average,
-		   	
-		   	(SELECT AVG(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc
-		   	WHERE
-		   	sc.id=sdd.score_id
-		   	AND sc.group_id=$group_id
-		   	AND sc.for_semester =$semester
-		   	AND sc.exam_type=2
-		   	AND sdd.`is_parent`=1
-		   	AND sdd.student_id = $student_id
-		   	GROUP BY sdd.student_id LIMIT 1) AS avg_exam
-	
+		   	(SELECT 
+		   		AVG(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc
+			   	WHERE
+			   	sc.id=sdd.score_id
+			   	AND sc.group_id=$group_id
+			   	AND sc.for_semester =$semester
+			   	AND sc.exam_type=2
+			   	AND sdd.`is_parent`=1
+			   	AND sdd.student_id = $student_id
+			   	GROUP BY sdd.student_id LIMIT 1
+			) AS avg_exam
+		
 		   	FROM `rms_score` AS s,
 			   	`rms_score_detail` AS sd,
 			   	`rms_group` AS g

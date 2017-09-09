@@ -10,13 +10,13 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				s.stu_code,
     				s.stu_khname,
     				s.stu_enname,
-    				(select name_en from rms_view where type=2 and key_code=s.sex) as sex,
+    				(select name_en from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				s.age,
     				s.nationality,
     				s.dob,
     				s.pob,
-    				(select en_name from rms_dept where dept_id = g.degree) as degree,
-    				(select major_enname from rms_major where major_id = g.grade) as grade,
+    				(select en_name from rms_dept where dept_id = g.degree  LIMIT 1) as degree,
+    				(select major_enname from rms_major where major_id = g.grade  LIMIT 1) as grade,
     				CONCAT(t.from_academic,' - ',t.to_academic) as academic_year,
     				t.generation
     			from 

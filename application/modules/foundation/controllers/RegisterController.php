@@ -23,7 +23,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}
-			
 			$this->view->adv_search=$search;
 			$db_student= new Foundation_Model_DbTable_DbStudent();
 			$rs_rows = $db_student->getAllStudent($search);
@@ -50,16 +49,23 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
-				$exist = $db->addStudent($_data);
-				if($exist==-1){
-					Application_Form_FrmMessage::message("RECORD_EXIST");
+				$id_existing = $db->ifStudentIdExisting($_data['student_id']);
+				if(!empty($id_existing)){
+					print_r("<script type='text/javascript'>
+					    alert('អត្តលេខ សិស្សនេះបានប្រើរួចរាល់ហើយសូមត្រួតពិនិត្យម្តងទៀត!');
+					</script>");
 				}else{
-					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register");
+					$exist = $db->addStudent($_data);
+					if($exist==-1){
+						Application_Form_FrmMessage::message("RECORD_EXIST");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add");
+						if(isset($_data['save_close'])){
+							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register");
+						}else{
+							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add");
+						}
+						Application_Form_FrmMessage::message("INSERT_SUCCESS");
 					}
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -67,7 +73,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			}
 		}
 		$group = $db->getAllgroup();
-		array_unshift($group, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($group,array('id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($group, array ( 'id' =>'','name' => 'ជ្រើសរើសក្រុម'));
 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -114,7 +121,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			}
 		}
 		$group = $db->getAllgroup();
-		array_unshift($group, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($group, array ('id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($group, array ( 'id' =>'','name' => 'ជ្រើសរើសក្រុម'));
 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -224,16 +232,23 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
-				$exist = $db->addStudent($_data);
-				if($exist==-1){
-					Application_Form_FrmMessage::message("RECORD_EXIST");
+				$id_existing = $db->ifStudentIdExisting($_data['student_id']);
+				if(!empty($id_existing)){
+					print_r("<script type='text/javascript'>
+							alert('អត្តលេខ សិស្សនេះបានប្រើរួចរាល់ហើយសូមត្រួតពិនិត្យម្តងទៀត!');
+							</script>");
 				}else{
-					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register");
+					$exist = $db->addStudent($_data);
+					if($exist==-1){
+						Application_Form_FrmMessage::message("RECORD_EXIST");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add");
+						if(isset($_data['save_close'])){
+							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register");
+						}else{
+							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add");
+						}
+						Application_Form_FrmMessage::message("INSERT_SUCCESS");
 					}
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -243,6 +258,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		
 		$group = $db->getAllgroup();
 		array_unshift($group, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($group, array ( 'id' =>'','name' => 'ជ្រើសរើសក្រុម'));
 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -272,12 +288,3 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->frm_techer = $frm_techer;
 	}
 }
-
-
-
-
-
-
-
-
-

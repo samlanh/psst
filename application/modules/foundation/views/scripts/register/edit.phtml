@@ -30,6 +30,10 @@ dojo.ready(function(){
 	    onChange: function() {  
 	    	group_id = dijit.byId('group').get('value');
 	    	if(group_id==-1){
+	    		dijit.byId('academic_year').set('readOnly',false);
+				dijit.byId('degree').set('readOnly',false);
+				dijit.byId('grade').set('readOnly',false);
+				dijit.byId('session').set('readOnly',false);
 	    		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
 			  }else{
 				  getInfoBygroup();
@@ -42,12 +46,10 @@ dojo.ready(function(){
 	    autoComplete: true,                        
 	    id: "grade",
 	    name: "grade",
-	    required : "false",
-	    readOnly: true,            
+	    required : "false",          
 	    class: 'fullside',  
 	    placeHolder:"Selected Grade",          
 	    onChange: function() {  
-	    	make_id = dijit.byId('grade').get('value');
 	    }
 	}, "grade");
 	getallGrade(1);
@@ -462,7 +464,11 @@ function addJob(){
 	function getInfoBygroup(){
 		url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 		group = dijit.byId('group').get('value');
-		if(group==''){
+		if(group=='' || group==-1){
+			dijit.byId('academic_year').set('readOnly',false);
+			dijit.byId('degree').set('readOnly',false);
+			
+			dijit.byId('session').set('readOnly',false);
 			alert("Please Select Group");
 			return false;
 		}
@@ -477,8 +483,6 @@ function addJob(){
 				dijit.byId('academic_year').set('readOnly',true);
 				dijit.byId('degree').set('value',data.degree);
 				dijit.byId('degree').set('readOnly',true);
-				dijit.byId('grade').set('value',data.grade);
-				dijit.byId('grade').set('readOnly',true);
 				dijit.byId('grade_fromgrouop').set('value',data.grade);
 				dijit.byId('session').set('value',data.session);
 				dijit.byId('session').set('readOnly',true);

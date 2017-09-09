@@ -27,11 +27,16 @@ dojo.ready(function(){
 	    autoComplete: true,                        
 	    id: "group",
 	    name: "group",  
-	    class: 'fullside',  
+	    class: 'fullside', 
+	    readonly:false,
 	    placeHolder:"SELECT_GROUP",          
 	    onChange: function() {  
 	    	group_id = dijit.byId('group').get('value');
 	    	if(group_id==-1){
+	    		dijit.byId('academic_year').set('readOnly',false);
+				dijit.byId('degree').set('readOnly',false);
+				dijit.byId('grade').set('readOnly',false);
+				dijit.byId('session').set('readOnly',false);
 	    		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
 			  }else{
 				  getInfoBygroup();
@@ -519,7 +524,11 @@ function addJob(){
 	function getInfoBygroup(){
 		url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 		group = dijit.byId('group').get('value');
-		if(group==''){
+		if(group=='' || group==-1){
+			dijit.byId('academic_year').set('readOnly',false);
+			dijit.byId('degree').set('readOnly',false);
+			dijit.byId('grade').set('readOnly',false);
+			dijit.byId('session').set('readOnly',false);
 			alert("Please Select Group");
 			return false;
 		}

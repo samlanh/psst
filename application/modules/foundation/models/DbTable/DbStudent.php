@@ -82,14 +82,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	public function getDegreeLanguage(){
-		try{
-			$db = $this->getAdapter();
-			$sql ="SELECT id,title FROM rms_degree_language WHERE status =1";
-			//print_r($db->fetchRow($sql)); exit();
-			return $db->fetchAll($sql);
-		}catch(Exception $e){
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
+// 		try{
+// 			$db = $this->getAdapter();
+// 			$sql ="SELECT id,title FROM rms_degree_language WHERE status =1";
+// 			//print_r($db->fetchRow($sql)); exit();
+// 			return $db->fetchAll($sql);
+// 		}catch(Exception $e){
+// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 		}
 	}
 	
 	function getStudentExist($name_en,$sex,$grade,$dob,$session){
@@ -97,15 +97,24 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql = "select * from rms_student where stu_enname="."'$name_en'"." and sex=".$sex." and grade=".$grade." and dob="."'$dob'"." and session=".$session;                          
 		return $db->fetchRow($sql);
 	}
+	function ifStudentIdExisting($stu_code){
+		$db = $this->getAdapter();
+		$sql=" SELECT stu_id FROM rms_student WHERE stu_code='".$stu_code."'";
+		return $db->fetchOne($sql);
+	}
 	public function addStudent($_data){
 			$id = $this->getStudentExist($_data['name_en'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session']);	
 			if(!empty($id)){
 				Application_Form_FrmMessage::Sucessfull("STUDENT_EXISTRING","/foundation/register/add");
 				return -1;
 			}
+			$stu_code=$_data['student_id'];
+// 			$rs_student = $this->ifStudentIdExisting($stu_code);
+// 			if(!empty($rs_student)){
+// 				return 0;
+// 			}
 			$code = new Registrar_Model_DbTable_DbRegister();
 // 			$stu_code = $code->getNewAccountNumber($_data['degree']);
-			$stu_code=$_data['student_id'];
 			
 			$adapter = new Zend_File_Transfer_Adapter_Http();
 			$part = PUBLIC_PATH.'/images';
@@ -129,6 +138,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$_db= $this->getAdapter();
 			$_db->beginTransaction();
 			try{	
+				$is_setgroup=0;
+				if(!empty($_data['group']) AND $_data['group']!=-1){
+					$is_setgroup=1;
+				}
 				$session_user=new Zend_Session_Namespace('authstu');
 				$branch_id = $session_user->branch_id;
 				$_arr= array(
@@ -178,7 +191,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'guardian_tel'	=>$_data['guardian_phone'],
 						
 						'is_stu_new'	=> 0,
-						'is_setgroup'	=> 1,
+						'is_setgroup'	=> $is_setgroup,
 						'status'		=>$_data['status'],
 						'remark'		=>$_data['remark'],
 						'create_date'	=>date("Y-m-d H:i:s"),
@@ -236,7 +249,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}catch(Exception $e){
 				$_db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();exit();
 			}
 	}
 	public function updateStudent($_data){
@@ -268,6 +280,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			
 // 			$session_user=new Zend_Session_Namespace('authstu');
 // 			$branch_id = $session_user->branch_id;
+			$is_setgroup=0;
+			if(!empty($_data['group']) AND $_data['group']!=-1){
+				$is_setgroup=1;
+			}
 			$_arr=array(
 // 					'branch_id'		=>$branch_id,
 					'stu_type'		=>$stu_type,
@@ -314,8 +330,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'guardian_job'	=>$_data['gu_job'],
 					'guardian_tel'	=>$_data['guardian_phone'],
 					
-					'is_setgroup'	=> 1,
-					
+					'is_setgroup'	=> $is_setgroup,
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
 					'photo'			=>$pho_name
@@ -346,7 +361,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'group_id'	=>$_data['group'],
 						'user_id'	=>$this->getUserId(),
 				);
-				$where = "stu_id=".$_data["id"]." AND is_pass=0 and type = 1 ";
+				$where = " stu_id=".$_data["id"]." AND is_pass=0 and type = 1 ";
 				$this->update($arr_group_history, $where);
 			}else{
 				$this->_name='rms_group_detail_student';

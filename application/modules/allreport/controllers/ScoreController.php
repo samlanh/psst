@@ -81,6 +81,9 @@ public function init()
     			$array_score[$key]['score_average'] = ($row['average']+$row['avg_exam'])/2;
     		}
     	}
+    	if(empty($result_semester)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/allstudent/student-group");
+    	}
     	array_multisort($array_score, SORT_DESC, $result_semester);
     	$this->view->studentgroup = $result_semester;
     }
@@ -100,6 +103,9 @@ public function init()
     		    	$result_semester1[$key]['avage_semester2']= ($row['average']+$row['avg_exam'])/2;
     		    	$array_score[$key]['average_year'] = ($result_semester1[$key]['avage_semester1']+$result_semester1[$key]['avage_semester2'])/2;
     		    }
+       }
+       if(empty($result_semester2)){
+       		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/allstudent/student-group");
        }
        array_multisort($array_score, SORT_DESC, $result_semester1);
        $this->view->studentgroup = $result_semester1;

@@ -198,9 +198,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	if(!empty($search['title'])){
 	    		$s_where = array();
 	    		$s_search = addslashes(trim($search['title']));
-	    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-	    		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
-	    		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
+	    		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
+	    		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
+	    		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
 	    		$s_where[] = " CONCAT(stu_enname,stu_enname) LIKE '%{$s_search}%'";
 	    		$where .=' AND ( '.implode(' OR ',$s_where).')';
 	    	}
@@ -353,14 +353,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			`g`.`semester` AS `semester`,
 			(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+				AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 			gsd.`stu_id`,
 			st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`
 			FROM `rms_group_detail_student` AS gsd,
 			`rms_group` AS g,
 			`rms_student` AS st
-			WHERE g.`id` = gsd.`group_id` AND st.`stu_id` = gsd.`stu_id` 
-			";
+			WHERE g.`id` = gsd.`group_id` AND st.`stu_id` = gsd.`stu_id` ";
 //     	$from_date =" (SELECT sa.date_attendence FROM `rms_student_attendence` AS sa WHERE sa.id = sad.`attendence_id` LIMIT 1) >=  '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
 //     	$to_date = "(SELECT sa.date_attendence FROM `rms_student_attendence` AS sa WHERE sa.id = sad.`attendence_id` LIMIT 1)  <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
     	$where='';

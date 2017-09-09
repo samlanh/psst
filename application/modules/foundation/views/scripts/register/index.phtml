@@ -8,7 +8,7 @@
 	$frm =  $this->form_search;
 ?>	
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table style="width:90%">
+	<table style="width:100%">
 	  <tr> 
 			<td style="width: 120px;border:1px solid #ccc;border-radius:10px;background:#eeeeee;"><?php echo $formList->showCopyBuntton($url_copy);?></td>
 			<td><input dojoType="dijit.form.TextBox"   id="adv_search" name="adv_search" placeholder="Search....." value="<?php echo $this->adv_search['adv_search']; ?>" class="fullside" type="text"></td>

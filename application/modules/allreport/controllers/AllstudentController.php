@@ -1,8 +1,6 @@
 <?php
 class Allreport_AllstudentController extends Zend_Controller_Action {
-	
-	
-public function init()
+	public function init()
     {    	
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
@@ -377,10 +375,9 @@ public function init()
 		$student_id=$this->getRequest()->getParam("id");
 		$search= array();
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-		$result = $db->getAcadimicByStudentHeader($group_id,$student_id);
 		
 		$this->view->semester1= $db->getStundetExamById($group_id,1,$student_id);//for semester1
-		$this->view->semester2= $db->getStundetExamById($group_id,1,$student_id);//for semester1
+		$this->view->semester2= $db->getStundetExamById($group_id,2,$student_id);//for semester1
 		
 // 		$array_score = array();
 // 		if(!empty($result_semester)){
@@ -389,6 +386,7 @@ public function init()
 // 			}
 // 		}
 // 		array_multisort($array_score, SORT_DESC, $result_semester);
+		$result = $db->getAcadimicByStudentHeader($group_id,$student_id);
 		$this->view->result = $result;
 	}
 	function academicTranscriptAction(){

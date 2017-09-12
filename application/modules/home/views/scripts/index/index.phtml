@@ -54,6 +54,8 @@ $rpt_expectincome=$this->url(array('module'=>'allreport','controller'=>'accounti
 $rpt_nearly=$this->url(array('module'=>'allreport','controller'=>'loan','action'=>'rptstudentnearlyendservice'), null, true);
 $rpt_paymenlate=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentpaymentlate'), null, true);
 $rpt_calculate = $this->url(array('module'=>'registrar','controller'=>'calculator','action'=>'index'), null, true);
+
+$searching= $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index'), null, true);
 ?>
 <style type="text/css">
 .metro-nav {
@@ -68,6 +70,22 @@ $rpt_calculate = $this->url(array('module'=>'registrar','controller'=>'calculato
             <div class="row-fluid">
                 <!--BEGIN METRO STATES-->
                 <div class="metro-nav metro-fix-view">
+                    
+                    <div class="metro-nav-block double" style="background:#ec920e;">
+                        <a href="<?php echo $searching;?>" style="text-align: center;" class="text-center" data-original-title="">
+                            <span class="value">
+                                <i class="fa fa-graduation-cap"></i>
+                            </span>
+                        </a>
+                         <div class="status" align="center"><?php echo $tr->translate('FINDING_ALL_STUDENT_INFORMATION');?></div>
+                    </div>
+                
+                	<div class="metro-nav-block" style="background: #cd0c32;">
+                        <a href="<?php echo $student_register;?>" data-original-title="" class="text-center">
+                            <i class="icon-star-empty"></i>
+                            <div class="status"><?php echo $tr->translate('REGISTER');?></div>
+                        </a>
+                    </div>
                      <div class="metro-nav-block double" style="background:#ec920e;">
                         <a href="<?php echo $register;?>" style="text-align: center;" class="text-center" data-original-title="">
                             <span class="value">
@@ -111,12 +129,7 @@ $rpt_calculate = $this->url(array('module'=>'registrar','controller'=>'calculato
                             <div class="status"><?php echo $tr->translate('STUDENT_PAYMENT_LATE');?></div>
                         </a>
                     </div>
-                    <div class="metro-nav-block" style="background: #cd0c32;">
-                        <a href="<?php echo $student_register;?>" data-original-title="" class="text-center">
-                            <i class="icon-star-empty"></i>
-                            <div class="status"><?php echo $tr->translate('REGISTER');?></div>
-                        </a>
-                    </div>
+                    
                     <div class="metro-nav-block nav-block-blue" style="background:#be00aa;">
                         <a href="<?php echo $tuition_fee;?>" class="text-center" data-original-title="">
                             <i class="icon-bar-chart"></i>

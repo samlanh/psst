@@ -5,7 +5,6 @@
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	$techer= $this->frm_techer;
 ?>
-
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.Textarea");
@@ -23,97 +22,120 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 		    class: 'fullside',  
 		    placeHolder:" select position ", 
 		    onChange: function() {
-			              
 			   	staff_pos = dijit.byId('staff_position').get('value');
 			    if(staff_pos==-1){
 			   	 	dijit.byId("popup_position").show();
 		     	}
-		     	
 		   } 
 		}, "staff_position");
-	
-		
 	});
-
 </script>
-
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'add')); ?>" 
 dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
+					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
+					dojo.byId('password').value = '';
+					dojo.byId('confirm_password').value = '';
+					dijit.byId('password').focus();
+					return false;
+				}				
 				return true;
 			}else {
 				return false;
 			}
 </script>
-<table width="100%">
-	<tr>
-		<td>
-			<fieldset style="margin-top:-13px;">
-				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_TEACHER");?></strong></legend>
-				<table style="margin: 0 auto; width: 100%;white-space: nowrap;" cellspacing="10">
-					<tr>
-						<td><?php echo $tr->translate("ID_NUMBER")?></td>
-						<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" value="" type="text"></td>
-						
-						<td><?php echo $tr->translate("KH_NAME")?></td>
-						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="kh_name" name="kh_name" value="" type="text"></td>
-						
-						<td><?php echo $tr->translate("EN_NAME")?></td>
-						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="en_name" name="en_name" value="" type="text"></td>
-					</tr>
-					<tr>
-						<td><?php echo $tr->translate("SEX")?></td>
-						<td>
-							<select dojoType="dijit.form.FilteringSelect" value="1" class="fullside" id="sex" name="sex" value="" type="text">
-								<option value="1">Male</option>
-								<option value="2">Female</option>
-							</select>
-						</td>
-						<td><?php echo $tr->translate("DOB")?></td>
-						<td>
-							<input dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" />
-						</td>
-						<td><?php echo $tr->translate("NATIONALITY")?></td>
-						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="nationality" name="nationality" value="" type="text"></td>
-					</tr>
+<fieldset style="margin-top:-13px;">
+	<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_TEACHER");?></strong></legend>
+		<table width="100%">
+			<tr>
+				<td width="33.33%" valign="top">
+					<table width="100%">
+						<tr>
+							<td><?php echo $tr->translate("ID_NUMBER")?></td>
+							<td><input dojoType="dijit.form.ValidationTextBox" required="1" style="color:red;" class="fullside" id="code" name="code" value="" type="text"></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("TEACHER_NAME")?></td>
+							<td><input dojoType="dijit.form.ValidationTextBox" required="1" class="fullside" id="kh_name" name="kh_name" value="" type="text"></td>
+						</tr>
+						<tr>
+							 <td><?php echo $tr->translate("SEX")?></td>
+							 <td>
+								<select dojoType="dijit.form.FilteringSelect" value="1" class="fullside" id="sex" name="sex" value="" type="text">
+									<option value="1">Male</option>
+									<option value="2">Female</option>
+								</select>
+							 </td>
+							 </tr>
+						<tr>
+							<td><?php echo $tr->translate("DOB")?></td>
+							<td><input dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" /></td>
+						</tr>
+					</table>
+				</td>
+				<td width="33.33%" valign="top">
+					<table width="100%">
+						<tr>
+							<td><?php echo $tr->translate("NATIONALITY")?></td>
+							<td><input dojoType="dijit.form.TextBox"  class="fullside" id="nationality" name="nationality" value="" type="text"></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("PHONE")?></td>
+							<td><input dojoType="dijit.form.TextBox"  class="fullside" id="phone" name="phone" value="" type="text"></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("ADDRESS")?></td>
+							<td><input dojoType="dijit.form.TextBox"  class="fullside" id="address" name="address" value="" type="text"></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("NOTE")?></td>
+							<td><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note" value="" type="text"></td>
+						</tr>
+					</table>
+				</td>
+				<td width="33.33%" valign="top">
+					<table style="margin: 0 auto; width: 100%;white-space: nowrap;background:#ffcece">
+							<tr>
+								<td><?php echo $tr->translate("ACCOUNT_NAME")?></td>
+								<td><input dojoType="dijit.form.TextBox"  class="fullside" id="user_name" name="user_name" value="" type="text"></td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate("PASSWORD")?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+								 class="fullside" id="password" name="password" value="" type="password"></td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate("CONFIRM_PASSWORD")?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+								 class="fullside" id="confirm_password" name="confirm_password" value="" type="password"></td>
+							</tr>
+						</table>
 					
-					<tr>
-						<td><?php echo $tr->translate("PHONE")?></td>
-						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="phone" name="phone" value="" type="text"></td>
-						
-						<td><?php echo $tr->translate("ADDRESS")?></td>
-						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="address" name="address" value="" type="text"></td>
-					
-						<td><?php echo $tr->translate("NOTE")?></td>
-						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note" value="" type="text"></td>
-					</tr>
-					<tr>
-						<td colspan="6" align="center">
-							<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
-							<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
-							<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
-						</td>
-					</tr>
-				</table>
-			</fieldset>
-		</td>
-	</tr>
-</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" align="center">
+					<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
+					<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+				</td>
+			</tr>
+		</table>
+</fieldset>
 </form>
 
 <script type="text/javascript">
-
 	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
 	function getTeacherID(){
 		dojo.xhrPost({
 			url:url_get_teacher_id,
 			handleAs:"json",
 			load: function(data) {
-				//alert(data); 
 				dijit.byId('code').attr('value',data);
 			},
 			error: function(err) {
@@ -121,72 +143,4 @@ dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 			}
 		});
 	}
-
-
-	var url_add_position = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"add-position")); ?>';
-	function addPosition(){
-		dojo.xhrPost({
-				url:url_add_position,
-				form: dojo.byId("frm_add_position"),
-				handleAs:"json",
-				load: function(data) {
-					alert(data); 
-					var Itemmake = { 
-					    	 id: data,
-						     name: dijit.byId('title').get('value')
-						   };
-				   addDataToSelectbox(dijit.byId('staff_position'), position_store, Itemmake, data);
-	
-				   dijit.byId('frm_add_position').reset();
-				   dijit.byId("popup_position").hide();
-					
-				},
-				error: function(err) {
-					alert(err);
-				}
-		});
-	}
-	
-	function hidePopup() {		
-		dijit.byId("popup_position").hide();
-	}
-
 </script>
-
-
-<div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:25%;" id="popup_position" >
-		<form style="background-color: buttonface; " id='frm_add_position' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table cellspacing="0" width="100%" style="margin: 0 auto;">
-			<tr>
-				<td>
-					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate('ADD_POSITION');?></legend>
-						<table style="margin: 0 auto; width: 100%; " cellspacing="3" >
-							<tr>
-								<td><?php echo $tr->translate('TITLE');?></td>
-								<td>
-									<input dojoType="dijit.form.ValidationTextBox"   class="fullside" id="title" name="title" value="" type="text">
-								</td>
-							</tr>
-							
-							<tr>
-								<td colspan="4" align="center">
-									<input type="button" value="ចាកចេញ" label="Close" id="close" name="close" dojoType="dijit.form.Button" 
-									​ ​​iconClass="dijitIconUndo" onclick="hidePopup();"/>
-									<input type="button" value="save" label="SAVE" id="save" name="save" dojoType="dijit.form.Button" 
-									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addPosition();"/>
-								</td>
-							</tr>
-							
-						</table>
-				</fieldset>
-				</td>
-			</tr>
-		</table>
-
-		</form>
-	</div>
-</div>
-
-

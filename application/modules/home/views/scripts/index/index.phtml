@@ -38,7 +38,7 @@ $student_register=$this->url(array('module'=>'foundation','controller'=>'registe
 $tuition_fee=$this->url(array('module'=>'accounting','controller'=>'fee','action'=>'index'), null, true);
 $service_fee=$this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'index'), null, true);
 $service_name=$this->url(array('module'=>'accounting','controller'=>'service','action'=>'index'), null, true);
-$stopservice=$this->url(array('module'=>'foundation','controller'=>'suspendservice','action'=>'index'), null, true);
+$stopservice=$this->url(array('module'=>'accounting','controller'=>'suspendservice','action'=>'index'), null, true);
 
 $rpt_dailypayment=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpayment'), null, true);
 $rpt_paymentdetail=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpaymentdetail'), null, true);
@@ -51,11 +51,9 @@ $rpt_suspend =$this->url(array('module'=>'allreport','controller'=>'accounting',
 $rpt_studentbalance=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentbalance'), null, true);
 $rpt_expectincome=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptexpectincome'), null, true);
 
-$rpt_nearly=$this->url(array('module'=>'allreport','controller'=>'loan','action'=>'rptstudentnearlyendservice'), null, true);
+$rpt_nearly=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentnearlyendservice'), null, true);
 $rpt_paymenlate=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentpaymentlate'), null, true);
 $rpt_calculate = $this->url(array('module'=>'registrar','controller'=>'calculator','action'=>'index'), null, true);
-
-$searching= $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index'), null, true);
 ?>
 <style type="text/css">
 .metro-nav {
@@ -70,21 +68,13 @@ $searching= $this->url(array('module'=>'home','controller'=>'searchstudentinfo',
             <div class="row-fluid">
                 <!--BEGIN METRO STATES-->
                 <div class="metro-nav metro-fix-view">
-                    
-                    <div class="metro-nav-block double" style="background:#ec920e;">
-                        <a href="<?php echo $searching;?>" style="text-align: center;" class="text-center" data-original-title="">
+                     <div class="metro-nav-block " style="background:#ec920e;">
+                        <a href="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index'), null, true);;?>" style="text-align: center;" class="text-center" data-original-title="">
                             <span class="value">
-                                <i class="fa fa-graduation-cap"></i>
+                                <i class="icon-user"></i>
                             </span>
                         </a>
-                         <div class="status" align="center"><?php echo $tr->translate('FINDING_ALL_STUDENT_INFORMATION');?></div>
-                    </div>
-                
-                	<div class="metro-nav-block" style="background: #cd0c32;">
-                        <a href="<?php echo $student_register;?>" data-original-title="" class="text-center">
-                            <i class="icon-star-empty"></i>
-                            <div class="status"><?php echo $tr->translate('REGISTER');?></div>
-                        </a>
+                         <div class="status" align="center"><?php echo $tr->translate('STUDENT_BACKGROUND');?></div>
                     </div>
                      <div class="metro-nav-block double" style="background:#ec920e;">
                         <a href="<?php echo $register;?>" style="text-align: center;" class="text-center" data-original-title="">
@@ -94,7 +84,7 @@ $searching= $this->url(array('module'=>'home','controller'=>'searchstudentinfo',
                         </a>
                          <div class="status" align="center"><?php echo $tr->translate('STUDENT_REGISTRATION');?></div>
                     </div>
-                    <div class="metro-nav-block double" style="background:#8d3e03;">
+                    <div class="metro-nav-block" style="background:#8d3e03;">
                         <a href="<?php echo $income;?>" data-original-title="">
                             <i class="icon-user"></i>
                             <div class="info"></div>
@@ -111,7 +101,7 @@ $searching= $this->url(array('module'=>'home','controller'=>'searchstudentinfo',
                     <div class="metro-nav-block double" style="background:#f65108;">
                         <a href="<?php echo $studnetpaymentreport;?>" data-original-title="">
                             <i class="icon-tasks"></i>
-                            <div class="info">$37624</div>
+                            <div class="info"></div>
                             <div class="status"><?php echo $tr->translate('RPT_CASHPAYMENT');?></div>
                         </a>
                     </div>
@@ -129,7 +119,12 @@ $searching= $this->url(array('module'=>'home','controller'=>'searchstudentinfo',
                             <div class="status"><?php echo $tr->translate('STUDENT_PAYMENT_LATE');?></div>
                         </a>
                     </div>
-                    
+                    <div class="metro-nav-block" style="background: #cd0c32;">
+                        <a href="<?php echo $student_register;?>" data-original-title="" class="text-center">
+                            <i class="icon-star-empty"></i>
+                            <div class="status"><?php echo $tr->translate('REGISTER');?></div>
+                        </a>
+                    </div>
                     <div class="metro-nav-block nav-block-blue" style="background:#be00aa;">
                         <a href="<?php echo $tuition_fee;?>" class="text-center" data-original-title="">
                             <i class="icon-bar-chart"></i>
@@ -166,7 +161,7 @@ $searching= $this->url(array('module'=>'home','controller'=>'searchstudentinfo',
                      <div class="metro-nav-block double" style="background:#693d8d;">
                         <a href="<?php echo $rpt_dailypayment;?>" data-original-title="">
                             <i class="icon-external-link"></i>
-                            <div class="info">$53412</div>
+                            <div class="info"></div>
                             <div class="status"><?php echo $tr->translate('STUDENT_PAYMENT_REPORT');?></div>
                         </a>
                     </div>
@@ -187,7 +182,7 @@ $searching= $this->url(array('module'=>'home','controller'=>'searchstudentinfo',
                     <div class="metro-nav-block double" style="background:#b14d03;">
                         <a href="<?php echo $rpt_service_fee;?>" data-original-title="">
                             <i class="icon-external-link"></i>
-                            <div class="info">$53412</div>
+                            <div class="info"></div>
                             <div class="status"><?php echo $tr->translate('RPT_FEE');?></div>
                         </a>
                     </div>
@@ -213,7 +208,7 @@ $searching= $this->url(array('module'=>'home','controller'=>'searchstudentinfo',
                      <div class="metro-nav-block double" style="background: #cd0c32;"> 
                         <a href="<?php echo $rpt_expectincome;?>" data-original-title="">
                             <i class="icon-external-link"></i>
-                            <div class="info">$53412</div>
+                            <div class="info"></div>
                             <div class="status"><?php echo $tr->translate('EXPECT_INCOME_REPORT');?></div>
                         </a>
                     </div>

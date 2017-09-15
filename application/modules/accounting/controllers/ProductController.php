@@ -54,7 +54,6 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			try{
 				$db = new Accounting_Model_DbTable_DbProduct();
 				$row = $db->addProduct($_data);
-				
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product");
 				}else{

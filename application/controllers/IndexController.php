@@ -112,6 +112,62 @@ class IndexController extends Zend_Controller_Action
 			}			
 		}		
     }
+    public function teacherloginAction()
+    {
+    
+    	$this->_helper->layout()->disableLayout();
+    	$form=new Application_Form_FrmLogin();
+    	$form->setAction('index');
+    	$form->setMethod('post');
+    	$form->setAttrib('accept-charset', 'utf-8');
+    	$this->view->form=$form;
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    
+    	if($this->getRequest()->isPost())
+    	{
+    		$formdata=$this->getRequest()->getPost();
+    			
+    		if($form->isValid($formdata))
+    		{
+    			$session_lang=new Zend_Session_Namespace('lang');
+    			$session_lang->lang_id=$formdata["lang"];//for creat session
+    			Application_Form_FrmLanguages::getCurrentlanguage($formdata["lang"]);//for choose lang for when login
+    			$user_name=$form->getValue('txt_user_name');
+    			$password=$form->getValue('txt_password');
+    			$db_user=new Global_Model_DbTable_DbTeacher();
+    			if($db_user->userAuthenticate($user_name,$password)){
+    				$session_user=new Zend_Session_Namespace('authteacher');
+    				$user_id=$db_user->getTeacherid($user_name);
+    				$user_info = $db_user->getTeacherInfo($user_id);
+    					
+    				$session_user->teacher_id=$user_id;
+    				$session_user->teacher_name=$user_info['teacher_name_en'];
+    				$session_user->branch_id= $user_info['branch_id'];
+    				$session_user->lock();
+//     				$session_user->pwd=$password;
+//     				$session_user->level= $user_info['user_type'];
+//     				$session_user->last_name= $user_info['last_name'];
+//     				$session_user->first_name= $user_info['first_name'];
+//     				$session_user->branch_id= $user_info['branch_id'];
+//     				$log=new Application_Model_DbTable_DbUserLog();
+//     				$log->insertLogin($user_id);
+//     				foreach ($arr_module AS $i => $d){
+//     					$url = self::REDIRECT_URL;
+//     					break;
+//     				}
+    				Application_Form_FrmMessage::redirectUrl("/foundation/teacherscore");
+    				exit();
+    			}
+    			else{
+    				$this->view->msg = 'ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់ និង ពាក្យ​​សំងាត់ មិន​ត្រឺម​ត្រូវ​ទេ ';
+    			}
+    		}
+    		else{
+    			$this->view->msg = 'លោកអ្នកមិនមានសិទ្ធិប្រើប្រាស់ទេ!';
+    		}
+    	}
+    }
     
     protected function sortMenu($menus){
     	$menus_order = Array ( 'home','registrar','global','foundation','accounting','library','allreport','rsvacl','setting');
@@ -136,14 +192,19 @@ class IndexController extends Zend_Controller_Action
         	$aut=Zend_Auth::getInstance();
         	$aut->clearIdentity();        	
         	$session_user=new Zend_Session_Namespace('authstu');
-        	
-        	$log=new Application_Model_DbTable_DbUserLog();
-			$log->insertLogout($session_user->user_id);
-			
-        	$session_user->unsetAll();       	
-	           	         	 
-        	Application_Form_FrmMessage::redirectUrl("/");
-        	exit();
+        	if(!empty($session_user->user_id)){
+	        	$log=new Application_Model_DbTable_DbUserLog();
+				$log->insertLogout($session_user->user_id);
+	        	$session_user->unsetAll();       	
+	        	Application_Form_FrmMessage::redirectUrl("/");
+	        	exit();
+        	}else{
+        		$session_teacher=new Zend_Session_Namespace('authteacher');
+        		$session_teacher->teacher_id;
+        		$session_teacher->unsetAll();
+        		Application_Form_FrmMessage::redirectUrl("/index/teacherlogin");
+        		exit();
+        	}
         } 
     }
 

@@ -30,8 +30,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				  (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
 				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
 				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job
-				  
-				FROM rms_student as s WHERE 1 ";
+			FROM rms_student as s WHERE 1 ";
 		
 		if(!empty($search['adv_search'])){
 			$s_where = array();

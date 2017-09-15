@@ -394,7 +394,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if (!empty($subject)){ // high school student
     		$where.=" AND sat.`subject_id`=".$subject;
     	}
-//     	echo $sql.$where.' LIMIT 1';exit();
 		return $db->fetchRow($sql.$where.' LIMIT 1');
     }
     function checkDateAttendence($date_att,$group,$subject=null){

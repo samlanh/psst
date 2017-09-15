@@ -80,20 +80,21 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	    				);
 	    				$this->insert($_arr);
 	    		}
-	    		$this->_name='rms_program_name';
-	    		$array = array(
-		    				'ser_cate_id'	=>$pro_id,
-		    				'title'			=>$_data['product_name'],
-		    				'description'	=>$_data['descript'],
-		    				'price'			=>$_data['pro_price'],
-		    				'status'		=>1,
-		    				'create_date'	=>date("Y-m-d H:i:s"),
-		    				'user_id'		=>$this->getUserId(),
-		    				'type'			=>1, // type=1 => product 
-		    				'pro_type'		=>0, // product not set
-	    				);
-	    		$this->insert($array);
-	    		
+	    		if($_data['pro_type']==1){
+	    			$this->_name='rms_program_name';
+		    		$array = array(
+			    				'ser_cate_id'	=>$pro_id,
+			    				'title'			=>$_data['product_name'],
+			    				'description'	=>$_data['descript'],
+			    				'price'			=>$_data['pro_price'],
+			    				'status'		=>1,
+			    				'create_date'	=>date("Y-m-d H:i:s"),
+			    				'user_id'		=>$this->getUserId(),
+			    				'type'			=>1, // type=1 => product 
+			    				'pro_type'		=>0, // product not set
+		    				);
+		    		$this->insert($array);
+	    		}
     			$db->commit();
 		   	}catch (Exception $e){
 		   		$db->rollBack();
@@ -140,36 +141,37 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	    				$this->insert($_arr);
 	    		}
 	    		
+	    		if($_data['pro_type']==1){
 	    		$result = $this->checkProductExist($_data['id']);
 	    		if(!empty($result)){
-		    		$this->_name='rms_program_name';
-		    		$array = array(
-		    				//'ser_cate_id'	=>$pro_id,
-		    				'title'			=>$_data['product_name'],
-		    				'description'	=>$_data['descript'],
-		    				'price'			=>$_data['pro_price'],
-		    				'status'		=>$_data['status'],
-		    				'user_id'		=>$this->getUserId(),
-		    				'type'			=>1, // type=1 => product 
-		    		);
-		    		$where = " ser_cate_id=".$_data['id'];
-		    		$this->update($array, $where);
-	    		}else{
-	    			$this->_name='rms_program_name';
-	    			$array = array(
-	    					'ser_cate_id'	=>$_data['id'],
-	    					'title'			=>$_data['product_name'],
-	    					'description'	=>$_data['descript'],
-	    					'price'			=>$_data['pro_price'],
-	    					'status'		=>1,
-	    					'create_date'	=>date("Y-m-d H:i:s"),
-	    					'user_id'		=>$this->getUserId(),
-	    					'type'			=>1, // type=1 => product 
-	    					'pro_type'		=>$_data['pro_type'], // 1=cut stock , 2=cut stock later
-	    			);
-	    			$this->insert($array);
+			    		$this->_name='rms_program_name';
+			    		$array = array(
+			    				//'ser_cate_id'	=>$pro_id,
+			    				'title'			=>$_data['product_name'],
+			    				'description'	=>$_data['descript'],
+			    				'price'			=>$_data['pro_price'],
+			    				'status'		=>$_data['status'],
+			    				'user_id'		=>$this->getUserId(),
+			    				'type'			=>1, // type=1 => product 
+			    		);
+			    		$where = " ser_cate_id=".$_data['id'];
+			    		$this->update($array, $where);
+		    		}else{
+		    			$this->_name='rms_program_name';
+		    			$array = array(
+		    					'ser_cate_id'	=>$_data['id'],
+		    					'title'			=>$_data['product_name'],
+		    					'description'	=>$_data['descript'],
+		    					'price'			=>$_data['pro_price'],
+		    					'status'		=>1,
+		    					'create_date'	=>date("Y-m-d H:i:s"),
+		    					'user_id'		=>$this->getUserId(),
+		    					'type'			=>1, // type=1 => product 
+		    					'pro_type'		=>$_data['pro_type'], // 1=cut stock , 2=cut stock later
+		    			);
+		    			$this->insert($array);
+		    		}
 	    		}
-	    		
     			$db->commit();
 		   	}catch (Exception $e){
 		   		//echo $e->getMessage();

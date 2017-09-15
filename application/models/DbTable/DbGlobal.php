@@ -167,11 +167,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $db->fetchAll($sql);
    }
    
-   function getAllgroupStudy(){
+   function getAllgroupStudy($teacher_id=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
    	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
-   	FROM `rms_group` AS `g` WHERE g.status =1 AND group_code!='' ";
+   	FROM `rms_group` AS `g`  ";
+   	if($teacher_id!=null){
+   		$sql.=" ,rms_group_subject_detail AS gsd WHERE g.id =gsd.group_id AND gsd.teacher= ".$teacher_id;
+   	}else{
+   		$sql.=" WHERE 1";
+   	}
+   	$sql.=" AND g.status =1 AND group_code!=''";
    	return $db->fetchAll($sql);
    }
    function getAllgroupStudyNotPass($action=null){
@@ -542,12 +548,20 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    public function getAccessPermission($branch_str='branch_id'){
 	   	$session_user=new Zend_Session_Namespace('authstu');
 	   	$branch_id = $session_user->branch_id;
-	   	$level = $session_user->level;
-	   	if($level==1 OR $level==2){
-	   		$result = "";
-	   		return $result;
+	   	if(!empty($branch_id)){
+		   	$level = $session_user->level;
+		   	if($level==1 OR $level==2){
+		   		$result = "";
+		   		return $result;
+		   	}
+		   	else{
+		   		$result = " AND $branch_str =".$branch_id;
+		   		return $result;
+		   	}
 	   	}
-	   	else{
+	   	$session_teacher=new Zend_Session_Namespace('authteacher');
+	   	$branch_id = $session_teacher->branch_id;
+	   	if(!empty($branch_id)){
 	   		$result = " AND $branch_str =".$branch_id;
 	   		return $result;
 	   	}

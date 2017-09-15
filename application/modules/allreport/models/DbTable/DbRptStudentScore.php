@@ -447,7 +447,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    public function getAcadimicByStudentSubject($group_id,$semester_id,$subject_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា I+II លម្អិត
    	$db = $this->getAdapter();
-   	
    	$sql="
    		SELECT 
    			score,
@@ -458,35 +457,28 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			FROM rms_score_detail AS dd ,rms_score AS ss WHERE  
 				ss.`id`=dd.`score_id` 
 				AND ss.exam_type=2
-				AND ss.exam_type=2
 				AND ss.for_semester= $semester_id
 				AND ss.group_id= $group_id
 				AND dd.subject_id=$subject_id 
-				
 				AND dd.`is_parent`=1
 			 	)
 			) AS rank
 			FROM 
-			
 				`rms_score` AS s,
 			   	`rms_score_detail` AS sd,
 			   	`rms_group` AS g
-			   	
 			WHERE s.`id`=sd.`score_id` 
 				AND g.`id`=s.`group_id`
 			   	AND sd.`is_parent`=1
 			   	AND s.status = 1
 			   	AND s.type_score=1
-			   	
 			   	AND g.id= $group_id
 			   	AND s.for_semester= $semester_id
 			   	AND sd.subject_id= $subject_id
 			   	AND sd.student_id= $student_id
 			   	AND s.exam_type=2
 				GROUP BY sd.subject_id ";
-
    	$where=' ';
-//    	echo $sql.$where;exit();
    	return $db->fetchRow($sql.$where);
    }
    
@@ -518,7 +510,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	`rms_group` AS g
 		   	WHERE
 		   	s.`id`=sd.`score_id`
-		   
 		   	AND g.`id`=s.`group_id`
 		   	AND sd.`is_parent`=1
 		   	AND s.status = 1
@@ -531,7 +522,61 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   		$order = " GROUP BY sd.`student_id`,s.for_semester ORDER BY sd.`student_id`";
    		return $db->fetchRow($sql.$where.$order);
    }
-   
+   function getRankingSemesterByStudent($group_id,$semester_id,$student_id){//ចំណាត់ថ្នាក់សំរាប់ឆមាសនីមួយៗ
+   	//is good for ranks but it now replace duplicate
+// 	   	$sql="SELECT * FROM (
+// 			  SELECT s.*, @rank := @rank + 1 rank FROM (
+// 			    SELECT student_id, SUM(score) totalPoints 
+// 				FROM 
+// 				`rms_score_detail` AS sd,
+// 				 `rms_score` AS s
+// 				WHERE 
+// 						s.`id`=sd.`score_id`
+// 					   	AND s.`group_id`=$group_id
+// 					   	AND sd.`is_parent`=1
+// 					   	AND s.status = 1
+// 					   	AND s.type_score=1
+// 					   	AND s.for_semester=$semester
+// 					   	AND s.exam_type=2
+// 				GROUP BY student_id 	
+// 			  ) s, 
+// 			  (SELECT @rank := 0) init
+// 			  ORDER BY TotalPoints DESC
+// 			) r
+// 			WHERE student_id=$student_id	";
+		$sql="SELECT 
+   			 FIND_IN_SET( total_score, (    
+			SELECT GROUP_CONCAT( total_score
+			ORDER BY total_score DESC ) 
+			FROM rms_score_detail AS dd ,rms_score AS ss WHERE  
+				ss.`id`=dd.`score_id` 
+				AND ss.exam_type=1
+				AND ss.for_semester= $semester_id
+				AND ss.group_id= $group_id
+				AND dd.`is_parent`=1
+			 	)
+			) AS rank,
+			SUM(score) as total_score
+			FROM 
+				`rms_score` AS s,
+			   	`rms_score_detail` AS sd,
+			   	`rms_group` AS g
+			WHERE s.`id`=sd.`score_id` 
+				AND g.`id`=s.`group_id`
+			   	AND sd.`is_parent`=1
+			   	AND s.status = 1
+			   	AND s.type_score=1
+			   	AND g.id=$group_id
+			   	AND s.for_semester= $semester_id
+			   	AND sd.student_id= $student_id
+			   	AND s.exam_type=2
+				GROUP BY sd.student_id ";
+   	echo $sql;
+exit();
+// exit();
+   	$where=' ';
+	   	return $this->getAdapter()->fetchRow($sql);
+   }
    public function getSubjectScoreGroup($group_id){
    	$db = $this->getAdapter();
    	$sql = "SELECT

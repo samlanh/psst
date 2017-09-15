@@ -379,6 +379,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->semester1= $db->getStundetExamById($group_id,1,$student_id);//for semester1
 		$this->view->semester2= $db->getStundetExamById($group_id,2,$student_id);//for semester1
 		
+		$this->view->rsrankingsemester1 = $db->getRankingSemesterByStudent($group_id,1,$student_id);
+		$this->view->rsrankingsemester2 = $db->getRankingSemesterByStudent($group_id,2,$student_id);
+		
 // 		$array_score = array();
 // 		if(!empty($result_semester)){
 // 			foreach ($result_semester as $key => $row){

@@ -175,7 +175,7 @@ public function getGroupDetail($search){
    	AND `rms_view`.`key_code` = `g`.`is_pass`
    	LIMIT 1) AS `status`,
    	(SELECT COUNT(`stu_id`) FROM `rms_group_detail_student` WHERE `group_id`=`g`.`id` LIMIT 1)AS Num_Student
-   	FROM `rms_group` `g`';
+   	FROM `rms_group` `g`' ;
    	$sql.=' WHERE group_code !="" ';
    	$where=" ";
    	

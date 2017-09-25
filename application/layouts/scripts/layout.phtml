@@ -4,8 +4,13 @@ $username = $session_user->first_name;
 $them_style =  $session_user->theme_style;
 $user_id = $session_user->user_id;
 $login_part = $this->baseUrl();
+$session_t=new Zend_Session_Namespace('authteacher');
+$teacher_id = $session_t->teacher_id;
+
 	if(empty($user_id)){
-		Application_Form_FrmMessage::redirectUrl('/');	
+		if(empty($teacher_id)){
+			Application_Form_FrmMessage::redirectUrl('/');	
+		}
 	}
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 	$base_url = $this->baseUrl();
@@ -13,6 +18,12 @@ $login_part = $this->baseUrl();
 	$action=$request->getActionName();
 	$controller=$request->getControllerName();
 	$module=$request->getModuleName();
+	
+	$session_user=new Zend_Session_Namespace('authstu');
+	$arr_module = $session_user->arr_acl;
+	if(empty($username)){
+		$username =  $session_t->teacher_name;
+	}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -102,7 +113,7 @@ dojo.require("dojo.parser");
 							<a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'logout','value'=>'1')); ?>">&nbsp; | &nbsp;<?php echo $tr->translate("SIGN_OUT");?><i class="fa fa-sign-out" aria-hidden="true"></i></a>
 			                 <?php if($action=='index' AND $module!='report' AND $module!='home' AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $controller!='allreports' AND $controller!='calculator' ){?>
 			                 <a class='add-link addsign' style="float:right;" href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?>&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
-							<?php }elseif($action=='add' OR $action=='edit' OR $module=='report'){?>
+							<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='report'){?>
 							 <span style="padding-left: 3px;padding-right: 3px; float: right; font-weight:600;"><a class='add-link addsign' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i><?php echo $tr->translate('GO_BACK');?></a></span>
 							<?php }?>
 							</p>
@@ -110,7 +121,19 @@ dojo.require("dojo.parser");
             </tr>
              <tr>
              	<?php if($module!='home'){?>
-            	<td width="200px" valign="top" style="border:1px solid #ccc;"><?php echo $this->render('menuleft.phtml')?></td>
+            	<td width="200px" valign="top" style="border:1px solid #ccc;">
+            		<?php 
+            		if(!empty($arr_module)){
+            			echo $this->render('menuleft.phtml');
+            		}
+            		if(!empty($teacher_id)){
+            	?>
+            		<div id="header-left">
+						<ul><li><a href="<?php echo $this->url(array("module"=>'foundation','controller'=>'teacherscore','action'=>'index'));?>">Teacher Score</a></li>
+						</ul>
+					</div>
+					<?php }?>
+            	</td>
             	<?php }?>
             	<td valign="top" style="border:1px solid #ccc; background:#DFF7FD">
 	            	<?php if($module=='allreport' ){?>

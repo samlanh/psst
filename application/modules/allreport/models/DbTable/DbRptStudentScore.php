@@ -571,8 +571,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	AND sd.student_id= $student_id
 			   	AND s.exam_type=2
 				GROUP BY sd.student_id ";
-   	echo $sql;
-exit();
+//    	echo $sql;
 // exit();
    	$where=' ';
 	   	return $this->getAdapter()->fetchRow($sql);

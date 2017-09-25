@@ -287,6 +287,8 @@ function gender(sex){
 							<tr>
 								<td colspan="8" align="center">
 								 	<input iconClass="dijitIconClear" type="reset" value="" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+									<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+										iconClass="dijitEditorIcon dijitEditorIconSave" />
 									<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
 								</td>
@@ -440,7 +442,7 @@ function filterStudentBygroup(){
 						str+='<td style="text-align: left;">&nbsp;'+data[i].stu_name+'</td>';
 						str+='<td>'+gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
 						str+='<td>';
-						str+='<input type="checkbox"  name="have_mistake'+inx+'" id="have_mistake'+inx+'"  style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("HAVE_MISTACK");?></label>';
+							str+='<input type="checkbox"  name="have_mistake'+inx+'" onclick="checkmistake('+inx+');" id="have_mistake'+inx+'"  style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("HAVE_MISTACK");?></label>';
 						str+='</td>';
 						str+='<td>';
 							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_types'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("SMALL_MISTACK");?></label>';
@@ -485,7 +487,18 @@ function CheckAll(){
 	    	 for(var i=1;i<= arrays.length;i++) {
 	    		
 	    		 if($("#check_all").is(':checked')){
-	    			 $('input[value="'+check_type+'"]').attr("checked",true);
+	    			 if($('#have_mistake'+i).is(':checked')){
+
+	    				 if(check_type==1){
+	    					 $('#mistake_types'+i).attr('checked', true); 
+	    				 }else if(check_type==2){
+	    					 $('#mistake_typem'+i).attr('checked', true); 
+	    				 }else{
+	    					 $('#mistake_typeb'+i).attr('checked', true); 
+	    				 }
+		    			 
+	    			 	//$('input[value="'+check_type+'"]').attr("checked",true);
+	    			 }
 	    		 }else{
 	    			 $('input[value="'+check_type+'"]').attr("checked",false);
 	    		 }

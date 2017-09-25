@@ -32,9 +32,9 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array( "GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","ATTENDANCE_DATE","SUBJECT","STATUS");
+			$collumns = array( "GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","MISTAKE_DATE","STATUS");
 			$link=array(
-					'module'=>'foundation','controller'=>'studentattendance','action'=>'edit',
+					'module'=>'foundation','controller'=>'discipline','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
 	
@@ -61,7 +61,7 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 					 Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/discipline/add");
 				}else {
 					 $rs =  $db->addDiscipline($_data);
-					 Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/studentattendance");
+					 Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/discipline");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -86,7 +86,7 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 			try {
 				//if(isset($_data['save_close'])){
 					$rs =  $_model->updateStudentAttendence($_data);
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/studentattendance");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/discipline");
 				//} 
 		
 			}catch(Exception $e){
@@ -94,7 +94,7 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$result = 	$_model->getAttendencetByID($id);
+		$result = $_model->getAttendencetByID($id);
 		$this->view->row=$result;
 		$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
 		

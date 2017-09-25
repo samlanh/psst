@@ -13,18 +13,17 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
     	$sql="SELECT sa.`id`,
     	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS group_name,
     	(SELECT (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS academy,
-    	(SELECT (SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS degree,
+    	(SELECT (SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS degree,
     	(SELECT (SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS grade,
     	(SELECT g.semester FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS semester,
     	(SELECT (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS room,
     	(SELECT
     	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS session,
     	sa.`mistake_date`,
-    	(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sa.`subject_id` LIMIT 1) AS subject_name,
     	sa.`status` FROM `rms_student_discipline` AS sa ";
     	$where =' WHERE 1 ';
-    	$from_date =(empty($search['start_date']))? '1': " sa.mistake_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " sa.mistake_date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': " sa.date_create >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " sa.date_create <= '".$search['end_date']." 23:59:59'";
     	$where.= " AND ".$from_date." AND ".$to_date;
     
     	if(!empty($search['group_name'])){
@@ -97,33 +96,34 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 			$_arr = array(
 					'branch_id'=>$branch_id,
 					'group_id'=>$_data['group'],
-					'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
+					'mistake_date'=>date("Y-m-d",strtotime($_data['discipline_date'])),
 					'modify_date'=>date("Y-m-d"),
-					'subject_id'=> $_data['subject'],
-					'status'=>$_data['status'],
 					'for_semester'=> $_data['for_semester'],
 					'note'=>$_data['note'],
+					'status'=>$_data['status'],
 					'user_id'=>$this->getUserId()
 			);
 			$where="id=".$_data['id'];
 			$db->getProfiler()->setEnabled(true);
-			$id=$this->update($_arr, $where);
+			$this->update($_arr, $where);
 			
-		   $this->_name='rms_student_attendence_detail';
-		   $this->delete("attendence_id=".$_data['id']);
+		   $this->_name='rms_student_discipline_detail';
+		   $this->delete("discipline_id=".$_data['id']);
 		  
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
-					if ($_data['attedence'.$i]!=1){
-						$arr = array(
-								'attendence_id'=>$_data['id'],
-								'stu_id'=>$_data['student_id'.$i],
-								'attendence_status'=>$_data['attedence'.$i],
-								'description'=>$_data['comment'.$i],
-						);
-						$this->_name ='rms_student_attendence_detail';
-						$this->insert($arr);
+					if(isset($_data['have_mistake'.$i])){
+						if (!empty($_data['mistake_type'.$i])){
+							$arr = array(
+									'discipline_id'=>$_data['id'],
+									'stu_id'=>$_data['student_id'.$i],
+									'mistake_type'=>$_data['mistake_type'.$i],
+									'description'=>$_data['comment'.$i],
+							);
+							$this->_name ='rms_student_discipline_detail';
+							$this->insert($arr);
+						}
 					}
 				}
 			}
@@ -131,6 +131,7 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 		  $db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
+			echo $e->getMessage();
 		}
    }
 	function getStudyYears(){
@@ -217,7 +218,7 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 	}
 	function getAttendencetByID($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM `rms_student_attendence` sa WHERE  sa.`id`=".$id;
+		$sql="SELECT * FROM `rms_student_discipline` sd WHERE  sd.`id`=".$id;
 		return $db->fetchRow($sql);
 	}
 	function getAttendeceStatus($attendence_id,$stu_id){

@@ -297,22 +297,28 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     function getStudentAttendance($search){
     	$db = $this->getAdapter();
     	$sql="SELECT 
-    	 (SELECT b.branch_namekh FROM `rms_branch` AS b WHERE b.br_id=s.`branch_id` LIMIT 1) AS branch_name,
-	    	s.`stu_id`,
-	    	s.`stu_code`,
-	    	s.`stu_khname`,
-	    	s.`stu_enname`,
-	    	s.`sex`,
-	    	(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-	    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) LIMIT 1) AS group_code, 
-	    	(SELECT kh_name FROM `rms_dept` WHERE `rms_dept`.`dept_id`= s.`degree` LIMIT 1) AS degree,
-	    	s.`degree` as degree_id,
-			(SELECT major_enname FROM `rms_major` WHERE `rms_major`.`major_id`=s.`grade` LIMIT 1) AS grade,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r` WHERE `r`.`room_id` = s.`room`LIMIT 1) AS room,
-	    	s.`group` FROM `rms_student` AS s WHERE s.`status`=1 
-		    	";
+		    	 	(SELECT b.branch_namekh FROM `rms_branch` AS b WHERE b.br_id=s.`branch_id` LIMIT 1) AS branch_name,
+			    	s.`stu_id`,
+			    	s.`stu_code`,
+			    	s.`stu_khname`,
+			    	s.`stu_enname`,
+			    	s.`sex`,
+			    	(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+			    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) LIMIT 1) AS group_code, 
+			    	(SELECT kh_name FROM `rms_dept` WHERE `rms_dept`.`dept_id`= s.`degree` LIMIT 1) AS degree,
+			    	s.`degree` as degree_id,
+					(SELECT major_enname FROM `rms_major` WHERE `rms_major`.`major_id`=s.`grade` LIMIT 1) AS grade,
+					(SELECT `r`.`room_name`	FROM `rms_room` `r` WHERE `r`.`room_id` = s.`room`LIMIT 1) AS room,
+			    	s.`group` 
+			    FROM 
+			    	`rms_student` AS s 
+			    WHERE 
+			    	s.`status`=1 
+		    ";
+    	
     	$where='';
- 		 if(!empty($search['group'])){
+    	
+ 		if(!empty($search['group'])){
     		$where.= " AND (SELECT sgh.group_id FROM `rms_student_group_history` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.id DESC LIMIT 1) =".$search['group'];
     	}
     	if(!empty($search['study_year'])){
@@ -343,27 +349,28 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getStudentAttendence($search){
     	$db = $this->getAdapter();
-    	$sql="
-    	SELECT 
-			g.id as group_id,
-			g.`group_code`,
-			(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-			(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
-			(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-			`g`.`semester` AS `semester`,
-			(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-				AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-			gsd.`stu_id`,
-			st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`
-			FROM `rms_group_detail_student` AS gsd,
-			`rms_group` AS g,
-			`rms_student` AS st
-			WHERE g.`id` = gsd.`group_id` AND st.`stu_id` = gsd.`stu_id` ";
-//     	$from_date =" (SELECT sa.date_attendence FROM `rms_student_attendence` AS sa WHERE sa.id = sad.`attendence_id` LIMIT 1) >=  '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
-//     	$to_date = "(SELECT sa.date_attendence FROM `rms_student_attendence` AS sa WHERE sa.id = sad.`attendence_id` LIMIT 1)  <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
-    	$where='';
-//     	$where.= " AND ".$from_date." AND ".$to_date;
+    	$sql="SELECT 
+					g.id as group_id,
+					g.`group_code`,
+					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+					(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+					`g`.`semester` AS `semester`,
+					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+					gsd.`stu_id`,
+					st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`
+				FROM 
+					`rms_group_detail_student` AS gsd,
+					`rms_group` AS g,
+					`rms_student` AS st
+				WHERE 
+    				g.`id` = gsd.`group_id` 
+    				AND st.`stu_id` = gsd.`stu_id` 
+    		";
+    	
+    	$where = ' ';
+
     	if(!empty($search['group'])){
     		$where.= " AND g.id =".$search['group'];
     	}
@@ -379,9 +386,12 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=" AND `g`.`session`=".$search['session'];
     	}
+    	
     	$order =" ORDER BY `g`.`degree`,g.id DESC";
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
+    
     function getStatusAttendence($stu_id,$date_att,$group,$subject=null){
     	$db = $this->getAdapter();
     	$sql='SELECT
@@ -405,6 +415,112 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=" AND sat.`subject_id`=".$subject;
     	}
 //     	echo $sql.$where.' LIMIT 1';
+    	return $db->fetchRow($sql.$where.' LIMIT 1');
+    }
+    
+    
+	function getStudentMistake($search){
+    	$db = $this->getAdapter();
+    	$sql="SELECT 
+					g.id as group_id,
+					g.`group_code`,
+					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+					(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+					`g`.`semester` AS `semester`,
+					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+					gsd.`stu_id`,
+					st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`
+				FROM 
+					`rms_group_detail_student` AS gsd,
+					`rms_group` AS g,
+					`rms_student` AS st
+				WHERE 
+    				 g.`id` = gsd.`group_id` 
+    				AND st.`stu_id` = gsd.`stu_id` 
+    		";
+    	
+    	$where = ' ';
+
+    	if(!empty($search['group'])){
+    		$where.= " AND g.id =".$search['group'];
+    	}
+    	if(!empty($search['study_year'])){
+    		$where.=" AND g.academic_year =".$search['study_year'];
+    	}
+    	if(!empty($search['degree'])){
+    		$where.=" AND `g`.`degree` =".$search['degree'];
+    	}
+    	if(!empty($search['grade_all'])){
+    		$where.=" AND `g`.`grade`=".$search['grade_all'];
+    	}
+    	if(!empty($search['session'])){
+    		$where.=" AND `g`.`session`=".$search['session'];
+    	}
+    	
+    	$order =" ORDER BY `g`.`degree`,g.id DESC";
+    	
+    	return $db->fetchAll($sql.$where.$order);
+    }
+    
+    function checkDateMistake($mistake_date,$group,$subject=null){
+    	$db = $this->getAdapter();
+    	$sql="SELECT 
+    				sd.`id` 
+    			FROM 
+    				`rms_student_discipline` AS sd
+    			WHERE 
+    				sd.`mistake_date`= $mistake_date  
+    				AND sd.`group_id`=$group
+    		";
+    	$where='';
+    	    	echo $sql.$where.' LIMIT 1';//exit();
+    	return $db->fetchRow($sql.$where.' LIMIT 1');
+    }
+    
+    function getStatusMistake($stu_id,$date_att,$group){
+    	$db = $this->getAdapter();
+    	$sql="SELECT
+			    	sd.`group_id`,
+			    	sdd.`mistake_type`,
+			    	sdd.description,
+			    	sd.`mistake_date`
+			    FROM 
+			    	`rms_student_discipline` AS sd,
+			    	`rms_student_discipline_detail` AS sdd
+			    WHERE 
+			    	sd.`id` = sdd.`discipline_id`
+			    	AND sdd.`stu_id` = $stu_id 
+    				AND sd.`mistake_date` = '".$date_att."' 
+    				AND sd.`group_id` = $group
+    		";
+    	
+    	$where='';
+//     	echo $sql.$where.' LIMIT 1';//exit();
+    	return $db->fetchRow($sql.$where.' LIMIT 1');
+    }
+    
+    
+    function getTotalStatusMistake($stu_id,$date_att,$group){
+    	$db = $this->getAdapter();
+    	$sql="SELECT
+			    	sd.`group_id`,
+			    	sdd.`mistake_type`,
+			    	sdd.description,
+			    	sd.`mistake_date`
+			    FROM 
+			    	`rms_student_discipline` AS sd,
+			    	`rms_student_discipline_detail` AS sdd
+			    WHERE 
+			    	sd.`id` = sdd.`discipline_id`
+			    	AND sdd.`stu_id` = $stu_id 
+    				AND sd.`mistake_date` = '".$date_att."' 
+    				AND sd.`group_id` = $group
+    		";
+    	
+    	$where='';
+//     	echo $sql.$where.' LIMIT 1';//exit();
     	return $db->fetchRow($sql.$where.' LIMIT 1');
     }
     

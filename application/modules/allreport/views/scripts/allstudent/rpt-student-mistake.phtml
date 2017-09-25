@@ -6,7 +6,6 @@
 	$db = new Allreport_Model_DbTable_DbRptAllStudent();
 	$start_date = $this->datasearch['start_date'];
 	$end_date = $this->datasearch['end_date'];
-// 	echo $start_date;exit();
 	$date1 = date("d-m-Y",strtotime($start_date));
 	$date2 = date('d-m-Y',strtotime($end_date));
 	$diff = abs(strtotime($date2) - strtotime($date1));
@@ -21,7 +20,7 @@
 <style>
 .hover:hover{ background:#ccc;}</style>
 <div style="width: 30cm;margin: 0 auto;">
-<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-attendence')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-mistake')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="100%">
 	       <tr>
 	           <td><?php echo $frm->getElement("title");?></td>
@@ -110,17 +109,19 @@
 								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></td>
 								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
 								<?php for($k=0;$k<$amount_day;$k++){?>
-									<?php if(date('D',strtotime(" +$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day")); // $tr->translate(date("D",strtotime($date)));?>
+									<?php if(date('D',strtotime("$start_date +$k day"))=="Sun"){
+										$date = "";
+									}
+									else{ $date = date('d-m-Y',strtotime("$start_date +$k day")); // $tr->translate(date("D",strtotime($date)));?>
 										<td rowspan="2"  class="rotate"><div><span><?php  echo date("D d-M-Y",strtotime($date));?></span></div></td>
 									<?php }?>
 								<?php }?>
-								<td colspan="4" style="font-family: 'Times New Roman','Khmer MEF2';">&nbsp;<?php echo $tr->translate("TOTAL_ATTENDENCE");?>&nbsp;</td>
+								<td colspan="3" style="font-family: 'Times New Roman','Khmer MEF2';">&nbsp;<?php echo $tr->translate("DISCIPLINE_TYPE");?>&nbsp;</td>
 							</tr>
 							<tr style="font-size:14px; line-height: 18px; " align="center">
-								<td style="width: 30px;font-family: 'Times New Roman','Khmer MEF2';">&nbsp;<?php echo $tr->translate("ABSENT");?>&nbsp;</td>
-								<td style="width: 30px;font-family: 'Times New Roman','Khmer MEF2';">&nbsp;<?php echo $tr->translate("PERMISSION");?>&nbsp;</td>
-								<td style="width: 30px;font-family: 'Times New Roman','Khmer MEF2';">&nbsp;<?php echo $tr->translate("LATE");?>&nbsp;</td>
-								<td style="width: 30px;font-family: 'Times New Roman','Khmer MEF2';">&nbsp;<?php echo $tr->translate("EARLY_LEAVE");?>&nbsp;</td>
+								<td style="width: 30px;font-family: 'Times New Roman','Khmer MEF2';">&nbsp;<?php echo $tr->translate("SMALL_MISTACK");?>&nbsp;</td>
+								<td style="width: 30px;font-family: 'Times New Roman','Khmer MEF2';">&nbsp;<?php echo $tr->translate("MEDIUM_MISTACK");?>&nbsp;</td>
+								<td style="width: 30px;font-family: 'Times New Roman','Khmer MEF2';">&nbsp;<?php echo $tr->translate("BIG_MISTACK");?>&nbsp;</td>
 							</tr>
 							<?php } $i++;?>
 							<tr class="style">
@@ -128,37 +129,30 @@
 								<td align="center" style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_code'];?>&nbsp;</td>
 								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
-								<?php $p=0; $a=0;$l=0;$el=0; for($k=0;$k<$amount_day;$k++){?>
-									<?php if(date('D',strtotime(" +$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
+								<?php $s=0; $m=0; $b=0;$el=0; for($k=0;$k<$amount_day;$k++){?>
+									<?php if(date('D',strtotime("$start_date +$k day"))=="Sun"){ }else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<td align="center" >
-										<?php  $check_date = $db->checkDateAttendence(date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
-												print_r($check_date)."";exit();
-											if (!empty($check_date)){
-												
-												$attentence_status = $db->getStatusAttendence($rs['stu_id'], date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
-												
-												if ($attentence_status['attendence_status']==2){ 
-													echo "A"; $a=$a+1;
-												}
-												else if ($attentence_status['attendence_status']==3){
-													echo "P"; $p = $p+1;
-												}
-												else if ($attentence_status['attendence_status']==4){
-													echo "L"; $l = $l+1;
-												}
-												else if ($attentence_status['attendence_status']==5){
-													echo "EL"; $el = $el+1;
-												}
-												else{ echo "&#10004;";}
+										<?php  
+											$mistake_status = $db->getStatusMistake($rs['stu_id'], date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
+											//print_r($mistake_status);
+											if ($mistake_status['mistake_type']==1){ 
+												echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $s=$s+1;
+											}
+											else if ($mistake_status['mistake_type']==2){
+												echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $m = $m+1;
+											}
+											else if ($mistake_status['mistake_type']==3){
+												echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $b = $b+1;
+											}else{
+												echo " ";	
 											}
 										?>
 										</td>
 									<?php }?>
 								<?php }?>
-								<td align="center"><?php echo $a;?></td>
-								<td align="center"><?php echo $p;?></td>
-								<td align="center"><?php echo $l;?></td>
-								<td align="center"><?php echo $el;?></td>
+								<td align="center"><?php echo $s;?></td>
+								<td align="center"><?php echo $m;?></td>
+								<td align="center"><?php echo $b;?></td>
 							</tr>
 							<?php $old_groupid = $rs['group_id'];
 							}?>
@@ -178,12 +172,6 @@
 				</tr>
 				<tr>
 					<td colspan="3">&nbsp;</td>
-				</tr>
-				<tr style="font-size: 12px;">
-					<td colspan="3">
-						<span style="color: red;">Note:</span>
-						A = Absent , P = Permission , L = Late , EL = Early Leave
-					</td>
 				</tr>
 				<tr >
 					<td colspan="3" width="100%">

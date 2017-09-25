@@ -184,6 +184,73 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 	}
+	
+	public function rptStudentMistakeAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'session' 		=>'',
+					'group' 		=>'',
+					'branch_id'		=>0,
+					'degree'		=>0,
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$this->view->student = $rs_rows = $group->getStudentMistake($search);
+		$this->view->search=$search;
+		$this->view->datasearch = $search;
+	
+		$db_global=new Application_Model_DbTable_DbGlobal();
+		$result= $db_global->getAllgroupStudy();
+		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+		$this->view->group = $result;
+	}
+	
+	public function rptTotalStudentMistakeAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'session' 		=>'',
+					'group' 		=>'',
+					'branch_id'		=>0,
+					'degree'		=>0,
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$this->view->student = $rs_rows = $group->getStudentMistake($search);
+		$this->view->search=$search;
+		$this->view->datasearch = $search;
+	
+		$db_global=new Application_Model_DbTable_DbGlobal();
+		$result= $db_global->getAllgroupStudy();
+		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+		$this->view->group = $result;
+	}
+	
 	public function rptAttendenceAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();

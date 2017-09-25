@@ -66,7 +66,7 @@ class Allreport_Model_DbTable_DbRptServiceCharge extends Zend_Db_Table_Abstract
     			p.title AS service_name ,
     			(SELECT pt.title FROM `rms_program_type` AS pt WHERE pt.id=p.ser_cate_id LIMIT 1) as ser_type
     			FROM `rms_servicefee_detail` as sd,rms_program_name p 
-    			WHERE p.service_id=sd.service_id AND sd.service_feeid=".$service_id." ";
+    			WHERE p.service_id=sd.service_id AND sd.service_feeid=".$service_id;
     	if($service_type>0){
     		$sql.=" AND p.ser_cate_id = ".$service_type;
     	}

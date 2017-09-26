@@ -3,6 +3,8 @@
      $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
      $status_view=$this->status_view;
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+     $payment_term = $this->payment_term;
+     $row=$this->invoice;
 ?>
 <style>
 #table tr td{
@@ -16,19 +18,40 @@
 </style>
 <title><?php echo $this->tr->translate("TRANSFERd")?></title>
 <form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-	 <script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				identity = dijit.byId('identity').get('value');
+	<script type="dojo/method" event="onSubmit">   
+	   if(this.validate()) {
+            student_id=dijit.byId("student_id").get("value");
+            if(student_id=="" || student_id==-1){
+               alert("Please Select Student Name or Student Id");
+			   return false;
+			}
+			identity = dijit.byId('identity').get('value');
 			if(identity==''){
 				alert('Please Select service !!! ');
 				addRow();
 				return false;
 			}
+
+			var rowId = $('#identity').val();
+    			if(rowId!=''){ 
+					var rowIDArray = rowId.split(',');
+					for(var n = 0; n < rowIDArray.length; n++){
+					var type = dijit.byId('type_'+rowIDArray[n]).get('value');
+					var service = dijit.byId('service_'+rowIDArray[n]).get('value');
+					if(type=='' || service==''){
+							alert("Please select type title and service title!");
+							return false;
+						}
+					}
+				}
+
+			dijit.byId('save_new').set('disabled',true);
 			dijit.byId('save_close').set('disabled',true);
-				return true;
-			} else {
-				return false;
-			}
+			return true;
+	   }else {
+			return false;
+	   }
+</script>
 	</script>
 	<table cellspacing="20" width="100%" style="margin: 0 auto;">
 		<tr>
@@ -42,34 +65,34 @@
 									<tr>
 										<td><?php echo $tr->translate("STUDENT_ID");?></td>
 										<td> 
-											<select type="text" id="student_id" name="student_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setname();"  >
+											<select type="text" id="student_id" name="student_id" required="true" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setname();"  >
 												<option value="">Select Student Code</option>
 												<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
-												<option value="<?php echo $student_code['stu_id']?>" <?php if($this->invoice['student_id']==$student_code['stu_id']) echo "selected='selected'";?>><?php echo $student_code['stu_code']?></option>
+												<option value="<?php echo $student_code['stu_id']?>" <?php if($row['student_id']==$student_code['stu_id']) echo 'selected="selected"';?>><?php echo $student_code['stu_code']?></option>
 												<?php }}?>
 											</select>
 										</td>
 										<td><?php echo $tr->translate("STUDENT_NAME");?></td>
 										<td>
-											<select type="text" id="student_name" name="student_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
+											<select type="text" id="student_name" required="true" name="student_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
 												<option value="">Select Student Name</option>
 												<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
-												<option value="<?php echo $student_name['stu_id']?>" <?php if($this->invoice['student_id']==$student_name['stu_id']) echo "selected='selected'";?>><?php echo $student_name['name']?></option>
+												<option value="<?php echo $student_name['stu_id']?>" <?php if($row['student_id']==$student_name['stu_id']) echo 'selected="selected"';?>><?php echo $student_name['name']?></option>
 												<?php }}?>
 											</select>
 										</td>
 									</tr>
 									<tr>
 										<td><?php echo $tr->translate("INVOICE_DATE");?></td>
-										<td><input type="text" name="invoice_date" id="invoice_date" value="<?php echo $this->invoice['invoice_date']; ?>" class="fullside" dojoType="dijit.form.DateTextBox"/></td>
+										<td><input type="text" name="invoice_date" id="invoice_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['invoice_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/></td>
 										<td><?php echo $tr->translate("INVOICE_NUMBER");?></td>
-										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="invoice_num" name="invoice_num" value="<?php echo $this->invoice['invoice_num']; ?>" readonly type="text" required="required" ></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="invoice_num" name="invoice_num" value="<?php echo $row['invoice_num']?>" readonly type="text" required="required" ></td>
 									</tr>
 									<tr>
 										<td><?php echo $tr->translate("REMARK");?></td>
-										<td><input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="<?php echo $this->invoice['remark']; ?>" type="text"  ></td>
+										<td><input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="<?php echo $row['remark']?>" type="text"  ></td>
 										<td><?php echo $tr->translate("INPUT_DATE");?></td>
-										<td><input type="text" name="input_date" id="input_date" value="<?php echo $this->invoice['input_date']; ?>" class="fullside" dojoType="dijit.form.DateTextBox"/></td>
+										<td><input type="text" name="input_date" id="input_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['input_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/></td>
 									</tr>
 									<tr>
 									    <td colspan="4">
@@ -77,8 +100,14 @@
 											    <tr style="background:#04a2e0; color:#fff;">
 												    <th width="4%"><?php echo $tr->translate("DELETE");?></th>
 												    <th><?php echo $tr->translate("N_O");?></th>
+												    <th><?php echo $tr->translate("TYPE");?></th>
 													<th><?php echo $tr->translate("SERVICES");?></th>
-													<th><?php echo $tr->translate("PRICE");?></th>
+													<!--  <th><?php echo $tr->translate("PRICE");?></th>-->
+													
+													<?php $s=0; ?>
+													<?php  foreach ($payment_term as $value){?>
+													<?php echo '<th>'.$value.'</th>'; ?>			
+													<?php }?>
 													<th><?php echo $tr->translate("START_DATE");?></th>
 													<th><?php echo $tr->translate("END_DATE");?></th>
 													<th><?php echo $tr->translate("REMARK");?></th>
@@ -89,17 +118,19 @@
 									</tr>
 									<tr>
 										<td colspan="2" align="left">
-										<input type="hidden" id="identity" name="identity" />
+										<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
 											<input type="button" label="<?php echo $tr->translate('ADD_SERVICE');?>" dojoType="dijit.form.Button" 
 												iconClass="dijitIconEditProperty" onclick="addRow();" />
 										</td>
 										<td><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
-										<td><input dojoType="dijit.form.ValidationTextBox" readonly  class="fullside" id="totle_amount" name="totle_amount" value="$&nbsp; <?php echo $this->invoice['totale_amount']; ?>" type="text" required="required" ></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" readonly  class="fullside" id="totle_amount" name="totle_amount" value="<?php echo $row['totale_amount']?>" type="text" required="required" ></td>
 									</tr>
 									<tr>
 										<td colspan="4" align="center">
 											<input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
-											<input type="submit" value="save" id="save_close" name="save_close" label="Save" dojoType="dijit.form.Button" 
+											<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+										    <input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
 												iconClass="dijitEditorIcon dijitEditorIconSave" />
 										</td>
 									</tr>					
@@ -111,70 +142,99 @@
 			</td>			
 		</tr>
 	</table>	
+	  
 </form> 
 <script>
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-	dojo.ready(function(){
-		Initialize();
+
+	$( document ).ready(function() {
+		oldRow();
 	});
-var template = '';
-var service = '';
-var col = 0;
-var no = 0;
-var title = 0;
-tmp = '';
-temp='';
-function Initialize() {
-	<?php if(!empty($this->invoice_service)){ //echo '111111';exit();
-			foreach($this->invoice_service as $key=> $row){ 
-	?>
-	    col='<?php echo $key+1;?>';
-		no='<?php echo $key+1;?>';
-		template='';
-			template+='<td width="4%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td align="center" width="2%">'+no+'</td>';
-			template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
-				template+='<option value="">Select </option>';
-				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
-					template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
-				<?php }}?>
-			template+='</select></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
-		tmp='<tr id="row'+col+'">';
-		tmp+="</tr>";
-		dojo.query("#table_row").append(tmp);
-		if($("#identity").val()!="") {
-			var identity = $("#identity").val();
-			$("#identity").val(identity+','+col);
-		} else {$("#identity").val(col);}
-		dojo.html.set(dojo.byId("row"+col),template , {
-		     parseContent: true,
-		});
-	dijit.byId('service_'+col).attr('value',<?php echo $row['service_id'];?>);
-	dijit.byId('amount_'+col).attr('value',<?php echo $row['amount'];?>);
-	dijit.byId('startdate_'+col).attr('value','<?php echo $row['start_date'];?>');
-	dijit.byId('enddate_'+col).attr('value','<?php echo $row['end_date'];?>');
-	<?php } }?>
+
+
+var col= 0; var no=0;
+
+function oldRow(){
+	 <?php if(!empty($this->invoice_service)) foreach($this->invoice_service  As $row_detail){?>
+	col++;no++;
+	template='';
+		template+='<td width="4%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td align="center" width="2%">'+no+'</td>';
+
+		template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="type_'+col+'" name="type_'+col+'">';
+		template+='<option value="1">Tution Fee </option><option value="2">Service</option>';
+	    template+='</select></td>';	
+		
+		template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
+			template+='<option value="">Select </option>';
+			<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
+				template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
+			<?php }}?>
+			<?php if(!empty($this->all_grade)){foreach($this->all_grade as $rsgrade){?>
+			template+='<option value="'+<?php echo $rsgrade['id']?>+'"><?php echo $rsgrade['name'];?></option>';
+		<?php }}?>
+		template+='</select></td>';	
+		//template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
+		template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
+		template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="term_'+col+'" name="term_'+col+'" value="0" type="text" required="required" ></td>';
+		template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="semester_'+col+'" name="semester_'+col+'" value="0" type="text" required="required" ></td>';
+		template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="year_'+col+'" name="year_'+col+'" value="0" type="text" required="required" ></td>';
+		
+		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
+		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
+		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
+	tmp='<tr id="row'+col+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+col);
+	} else {$("#identity").val(col);}
+	dojo.html.set(dojo.byId("row"+col),template , {
+	     parseContent: true,
+	});
+	      dijit.byId('type_'+col).set('value',<?php echo $row_detail['type']?>);
+	      dijit.byId('service_'+col).set('value',<?php echo $row_detail['service_id']?>);
+	      dijit.byId('amount_'+col).set('value',<?php echo $row_detail['month']?>);
+	      dijit.byId('term_'+col).set('value',<?php echo $row_detail['term']?>);
+	      dijit.byId('semester_'+col).set('value',<?php echo $row_detail['semester']?>);
+	      dijit.byId('year_'+col).set('value',<?php echo $row_detail['year']?>);
+	      dijit.byId('startdate_'+col).set('value','<?php echo $row_detail['start_date']?>');
+	      dijit.byId('enddate_'+col).set('value','<?php echo $row_detail['end_date']?>');
+	      dijit.byId('remark_'+col).set('value','<?php echo $row_detail['remark']?>');
+	<?php }?>
 }
+	
 function addRow() {
+		var payment_term = '<?php echo count($this->payment_term);?>';
 		col++;no++;
 		template='';
 			template+='<td width="4%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td align="center" width="2%">'+no+'</td>';
+
+			template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="type_'+col+'" name="type_'+col+'">';
+			template+='<option value="1">Tution Fee </option><option value="2">Service</option>';
+		    template+='</select></td>';	
+			
 			template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
 				template+='<option value="">Select </option>';
 				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
 					template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
 				<?php }}?>
+				<?php if(!empty($this->all_grade)){foreach($this->all_grade as $rsgrade){?>
+				template+='<option value="'+<?php echo $rsgrade['id']?>+'"><?php echo $rsgrade['name'];?></option>';
+			<?php }}?>
 			template+='</select></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.DateTextBox" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.DateTextBox" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
+			//template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
+			template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
+			template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="term_'+col+'" name="term_'+col+'" value="0" type="text" required="required" ></td>';
+			template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="semester_'+col+'" name="semester_'+col+'" value="0" type="text" required="required" ></td>';
+			template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="year_'+col+'" name="year_'+col+'" value="0" type="text" required="required" ></td>';
+			
+			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
+			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
+			template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -186,6 +246,7 @@ function addRow() {
 		     parseContent: true,
 		});
 }
+
 function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -205,10 +266,12 @@ function calulator(index){
 	var amount= 0;
 	for(var i=0;i<arrays.length;i++) {
 		var  a =  dijit.byId("amount_"+arrays[i]).get('value');
-		amount = amount + parseFloat(a) ;
+		var  term =  dijit.byId("term_"+arrays[i]).get('value');
+		var  semester =  dijit.byId("semester_"+arrays[i]).get('value');
+		var  year =  dijit.byId("year_"+arrays[i]).get('value');
+		amount = amount + parseFloat(a) + parseFloat(term)+ parseFloat(semester)+ parseFloat(year);
 	}
 	dijit.byId("totle_amount").attr('value',amount);
-	
 }
 function setID(){
 	stu_id = dijit.byId('student_name').get('value');

@@ -23,11 +23,11 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 			$rs_rows = $db->getinvoice($search);
 			
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("STUDENT_ID","STUDENT_NAME","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
+    		$collumns = array("STUDENT_ID","STUDENT_NAME","SEX","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'invoice','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('branch'=>$link,'academic'=>$link,'class'=>$link,'generation'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('stu_code'=>$link,'stu_khname'=>$link,'invoice_date'=>$link, ));
 			
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$this->view->all_student_name = $db->getAllGerneralOldStudentName();
@@ -58,13 +58,18 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		$this->view->all_service = $db->getAllService();
 		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 		$this->view->all_student_code = $db->getAllGerneralOldStudent();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->all_grade =  $_db->getAllMajor();
+		
+		$model = new Application_Model_DbTable_DbGlobal();
+		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
     }
 	public function editAction(){
 		$db = new Accounting_Model_DbTable_Dbinvoice();
 		$id=$this->getRequest()->getParam('id');
 		$this->view->invoice = $db->getinvoiceByid($id);
-		$this->view->invoice_service = $db->getinvoiceservice($id);
-		//print_r($this->view->invoice_service);exit();
+		$rs=$this->view->invoice_service = $db->getinvoiceservice($id);
+		 
 		if($this->getRequest()->isPost()){
 	    	try{
 	    		$data = $this->getRequest()->getPost();
@@ -79,5 +84,10 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		$this->view->all_service = $db->getAllService();
 		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 		$this->view->all_student_code = $db->getAllGerneralOldStudent();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->all_grade =  $_db->getAllMajor();
+		
+		$model = new Application_Model_DbTable_DbGlobal();
+		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 	}
 }

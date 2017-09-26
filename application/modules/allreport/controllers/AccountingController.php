@@ -845,7 +845,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'student_name' => '',
 						'form_date'=> date('Y-m-d'),
 						'to_date'=>date('Y-m-d'),
-						'search'=>1,
+						'search'=>'',
 					);
 				}
 				$db = new Accounting_Model_DbTable_Dbinvoice();
@@ -878,7 +878,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 // 		$this->view->all_student_code = $db->getAllGerneralOldStudent();
 		
 		$this->view->invoice = $db->getinvoiceByid($id);
-		$this->view->invoice_service = $db->getinvoiceservice($id);
+		$rs=$this->view->invoice_service = $db->getinvoiceservice($id);
+		//print_r($rs);exit();
+		$model = new Application_Model_DbTable_DbGlobal();
+		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
+		
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}	
     public function rptTransferAction(){
 		$db = new Accounting_Model_DbTable_DbTransferstock();

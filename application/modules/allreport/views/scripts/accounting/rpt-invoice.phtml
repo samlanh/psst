@@ -76,7 +76,7 @@
 							<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
 							<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
 							<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['stu_khname']; ?></a></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo @$gender[$rs['sex']]; ?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['sex']; ?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['invoice_num']; ?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs['input_date'])); ?></td>

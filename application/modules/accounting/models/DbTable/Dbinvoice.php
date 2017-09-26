@@ -10,7 +10,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		$sql="SELECT v.id ,
 					s.stu_code ,
 					s.stu_khname ,
-					v.invoice_date ,
+					(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2) AS sex,
+					DATE_FORMAT(v.invoice_date,'%d-%b-%Y') AS invoice_date,
 					v.invoice_num ,
 					v.input_date ,
 					v.remark ,
@@ -59,7 +60,13 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	}
 	public function getinvoiceservice($id){
 		$db= $this->getAdapter();
-		$sql="SELECT v.* , p.title AS title FROM rms_invoice_account_detail AS v , rms_program_name AS p WHERE vid='".$id."' AND p.service_id = v.service_id";
+		$sql="SELECT v.* ,
+		(SELECT p.title FROM rms_program_name AS p WHERE v.service_id = p.service_id LIMIT 1) as service_name,
+		(SELECT g.major_enname FROM rms_major AS g WHERE v.service_id = g.major_id LIMIT 1) as grade
+	
+		FROM 
+		rms_invoice_account_detail AS v 
+		WHERE vid='".$id."' ";
 		return $db->fetchAll($sql);
 	}
     public function addinviceaccount($data){
@@ -81,7 +88,11 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					$arr_s = array(
 						'vid'=>$_id,
 						'service_id'=>$data['service_'.$i],
-						'amount'=>$data['amount_'.$i],
+						'type'	=>$data['type_'.$i],
+						'month'=>$data['amount_'.$i],
+						'term'=>$data['term_'.$i],
+						'semester'=>$data['semester_'.$i],
+						'year'=>$data['year_'.$i],
 						'start_date'=>$data['startdate_'.$i],
 						'end_date'=>$data['enddate_'.$i],
 						'remark'=>$data['remark_'.$i],
@@ -119,7 +130,11 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					$arr_s = array(
 						'vid'=>$id,
 						'service_id'=>$data['service_'.$i],
-						'amount'=>$data['amount_'.$i],
+						'type'	=>$data['type_'.$i],
+						'month'=>$data['amount_'.$i],
+						'term'=>$data['term_'.$i],
+						'semester'=>$data['semester_'.$i],
+						'year'=>$data['year_'.$i],
 						'start_date'=>$data['startdate_'.$i],
 						'end_date'=>$data['enddate_'.$i],
 						'remark'=>$data['remark_'.$i],

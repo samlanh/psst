@@ -2038,9 +2038,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				  AND p.`service_id`=sfd.`service_id`
 				  or type=1
 				GROUP BY service_id ";
-    	echo $sql;
+    	//echo $sql;
     	return $db->fetchAll($sql);
     }
+    
     function getAllProductName(){
     	$db = $this->getAdapter();
     	$sql="SELECT id,pro_name FROM `rms_product` WHERE STATUS=1 AND pro_name!='' ORDER BY pro_name";

@@ -1,0 +1,439 @@
+
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('REGISTER'));
+	echo $this->headTitle(''); 
+	$url_copy =$this->url(array('module'=>'foundation','controller'=>'register','action'=>'copy'));
+	$formList = new Application_Form_Frmtable();
+	$frm =  $this->form_search;
+	$photo= $this->frm_techer;
+?>
+<style>
+.someElement {
+    
+    margin-left: 20px;
+    margin-right: 20px;
+} 
+ .bold{
+		font-weight:bold;
+		border: 1px solid #000;
+  }
+	 
+</style>	
+<div class="someElement">
+<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
+		   if(this.validate()) {	
+
+				return true;
+			} else {
+				return false;
+			}
+	</script>
+	<!-- 
+	<table style="width:100%">
+	  <tr> 
+			<td><input dojoType="dijit.form.TextBox"   id="adv_search" name="adv_search" placeholder="Search....." value="<?php echo $this->adv_search['adv_search']; ?>" class="fullside" type="text"></td>
+			<td><?php echo $frm->getElement("branch_id");?></td>
+			<td> <?php echo $frm->getElement("study_year");?></td>
+			<td> <?php echo $frm->getElement("degree");?></td>
+			<td> <?php echo $frm->getElement("grade_all");?></td>
+			<td> <?php echo $frm->getElement("session");?></td>
+	  </tr>
+	  <tr>
+	        <td><?php //echo $frm->getElement("stu_name");?></td> 
+	        <td><?php echo $frm->getElement("payment_by");?></td>
+	  		<td><?php echo $frm->getElement("start_date");?></td>
+	 		<td><?php echo $frm->getElement("end_date");?></td>
+			<td> <?php echo $frm->getElement("user");?></td>
+			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+	  </tr>
+	  <input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
+	 </table>
+	  -->
+</form>
+<!-- search form  -->
+
+<form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+		<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				dijit.byId('save_close').set('disabled',true);	
+				return true;
+			}else {
+				return false;
+			}
+		</script>
+		
+		<table width="100%" >
+			<tr>
+				<td>
+				 <div id="mainTabContainer" style="width: 1170px;height: 500px;" dojoType="dijit.layout.TabContainer" region="center" width="1000px !importand" >
+				  <div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("STUDENT_INFO");?>" selected="true">
+					<table  cellspacing="5" style="margin:0 auto;" width="100%">
+						<tr>
+							<td ><?php echo $tr->translate("NAME_KH");?></td>
+							<td class="bold">  &nbsp;<?php echo $this->rs['stu_khname'];?></td>
+							<td ><?php echo $tr->translate("NAME_EN");?></td>
+							<td  class="bold"> &nbsp;<?php echo $this->rs['stu_enname'];?></td>
+							<td ><?php echo $tr->translate("SEX");?></td>
+							<td  class="bold"> &nbsp;
+									  <?php if($this->rs['sex']==1){
+										  	echo $tr->translate("MALE");
+										  }else{
+										  	echo $tr->translate("FEMALE");
+										  }
+									  	?>
+							</td>
+						</tr>
+						<tr>
+							<td title="សញ្ឃាតិ" ><?php echo $tr->translate("NATIONALITY");?></td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['nationality'];?></td>
+							<td ><?php echo $tr->translate("DOB");?></td>
+							<td class="bold"> &nbsp;<?php echo date("d/m/Y",strtotime($this->rs['dob']));?></td>
+							<td><?php echo $tr->translate("PHONE");?></td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['tel'];?></td>
+						</tr>
+						<tr>			
+							<td><?php echo $tr->translate("POB");?></td>
+							<td colspan="3"  class="bold"> &nbsp;<?php echo $this->rs['pob'];?></td>
+							<td ><?php echo $tr->translate("PHOTO");?></td>
+							<td>
+								<img  src="<?php echo $this->baseUrl().'/images/'.$this->rs['photo'];?>" width="70px">
+							</td>
+						</tr>
+							 
+						<tr>
+							<td colspan="6"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("CURRENT_ADDRESS");?></strong></td>
+						</tr>
+						<tr>
+							<td ><?php echo $tr->translate("HOME");?></td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['home_num'];?></td>
+							<td><?php echo $tr->translate("STREET");?></td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['street_num'];?></td>
+							<td><?php echo $tr->translate("VILLAGE");?></td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['village_name'];?></td>
+						</tr>
+						<tr>								
+							<td><?php echo $tr->translate("COMMUNE");?></td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['commune_name'];?></td>
+							<td><?php echo $tr->translate("DISTRICT");?></td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['district_name'];?></td>
+							<td><?php echo $tr->translate("PROVINCE");?></td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['province_name']?> </td>
+						</tr>
+						<tr>
+							<td colspan="6"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("STUDY_INFO");?></strong></td>
+						</tr>
+						<tr>
+						<td ><?php echo $tr->translate("GROUP");?>*</td>
+							<td class="bold"> &nbsp; <?php echo $this->rs['group_name'];?> </td>
+						</tr>
+						<tr>
+							<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("ACADEMIC_YEAR");?>*</td>
+							<td class="bold"> &nbsp; <?php echo $this->rs['year_name']?></td>
+							<td><?php echo $tr->translate("DEGREE");?>*</td>
+							<td  class="bold"> &nbsp; <?php echo $this->rs['degree_name']?></td>
+							<td><?php echo $tr->translate("GRADE");?>*</td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['grade_name']?> </td>
+						</tr>
+						<tr>
+							<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("STUDENT_ID");?>*</td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['stu_code']; ?></td>
+							<td><?php echo $tr->translate("SESSION");?>*</td>
+							<td class="bold">  &nbsp;
+							    <?php if($this->rs['session']==1){
+							    			echo $tr->translate("MORNING");
+							   		  }elseif ($this->rs['session']==2){
+							   		  		echo $tr->translate("AFTERNOON");
+							   		  } elseif ($this->rs['session']==3){
+							   		  		echo $tr->translate("EVERNING");
+							   		  } else{
+							   		  		echo $tr->translate("WEEKEND");
+							   		  }
+							   	 ?>  
+							</td>
+							<td title="កំរិតភាសា"><?php echo $tr->translate("ROOM_NAME");?></td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['room_name']?>	</td>
+						</tr>
+						<tr>
+							<td title="ស្ថានការណ៍"><?php echo $tr->translate("STATUS");?></td>
+							<td class="bold">&nbsp;
+								 <?php if($this->rs['status']==1){ 
+								 	echo $this->translate("Active");
+								  }else{
+								  	echo $this->translate("Deactive");
+								  }
+								 ?>
+							</td>
+							<td title="ពណ៌នា"><?php echo $tr->translate("REMARK");?></td>
+							<td  colspan="3"  class="bold">&nbsp; <?php echo $this->rs['remark'];?> </td>
+						</tr>
+					</table>
+				  </div><!-- end tab 1 -->
+				  <!-- tabe parent's of student -->
+				  <div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("PARENT_INFO");?>" selected="false">
+					<table width="100%" style="margin:0 auto;" cellspacing="5">
+						<tr>
+							<td colspan="6" style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("FATHER_INFO");?></strong></td>
+						</tr>
+						<tr>
+							<td ><?php echo $tr->translate("NAME");?>*</td>
+							<td class="bold"> &nbsp;<?php echo $this->rs['father_enname'];?></td>
+							<td><?php echo $tr->translate("DOB");?></td>
+							<td  class="bold">&nbsp;<?php echo date("d/m/Y",strtotime($this->rs['father_dob']));?></td>
+							<td><?php echo $tr->translate("NATIONALITY");?></td>
+							<td class="bold">&nbsp; <?php echo $this->rs['father_nation'];?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("OCCUPATION");?></td>
+							<td class="bold">&nbsp;<?php echo $this->rs["fath_job"]?></td>
+							<td><?php echo $tr->translate("PHONE");?></td>
+							<td class="bold">&nbsp;<?php echo $this->rs['father_phone'];?></td>
+						</tr>
+						<tr>
+							<td colspan="6" style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("MOTHER_INFO");?></strong></td>
+						</tr>
+						<tr>
+							<td ><?php echo $tr->translate("NAME");?>*</td>
+							<td class="bold">&nbsp;<?php echo $this->rs['mother_enname'];?></td>
+							<td><?php echo $tr->translate("DOB");?></td>
+							<td class="bold"><?php echo date("d/m/Y" ,strtotime($this->rs['mother_dob']));?></td>
+							<td><?php echo $tr->translate("NATIONALITY");?></td>
+							<td class="bold">&nbsp;<?php echo $this->rs['mother_nation'];?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("OCCUPATION");?></td>
+							<td class="bold">&nbsp;<?php echo $this->rs['moth_job']?> </td>
+							<td><?php echo $tr->translate("PHONE");?></td>
+							<td class="bold">&nbsp;<?php echo $this->rs['mother_phone'];?></td>
+						</tr>
+						<tr>
+							<td colspan="6" style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("GUARDIAN_INFO");?></strong></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("NAME");?>*</td>
+							<td class="bold">&nbsp;<?php echo $this->rs['guardian_enname'];?></td>
+							<td><?php echo $tr->translate("DOB");?></td>
+							<td class="bold">&nbsp;<?php echo date("d/m/Y",strtotime($this->rs['guardian_dob']));?></td>
+							<td><?php echo $tr->translate("NATIONALITY");?></td>
+							<td class="bold">&nbsp;<?php echo $this->rs['guardian_nation'];?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("OCCUPATION");?></td>
+							<td class="bold">&nbsp;<?php echo $this->rs['guard_job']?></td>
+							<td><?php echo $tr->translate("PHONE");?>*</td>
+							<td class="bold">&nbsp;<?php echo $this->rs['guardian_tel'];?></td>
+						</tr>
+					</table>
+				  </div>
+				  
+				  <!-- tab student payment  -->
+				  <div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("HISTORY_PAYMENT");?>" selected="false">
+					 <?php 
+							$total=0;
+							$total_balance = 0;
+							$total_receive = 0;
+						?>	
+						<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
+							  <thead>
+								  <tr style="text-align:center;background-color: #ccc;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
+								    <td><?php echo $tr->translate('N_O');?></td>
+								    <td><?php echo $tr->translate('STUDENT_ID');?></td>
+									<td><?php echo $tr->translate('STUDENT_NAME');?></td>
+									<td><?php echo $tr->translate('SERVICE_CATE');?></td>
+									<td><?php echo $tr->translate('SERVICE_NAME');?></td>
+									<td><?php echo $tr->translate('PAID_DATE');?></td>
+									<td><?php echo $tr->translate('RECEIPT_NO');?></td>
+									<td><?php echo $tr->translate('SCHOLARSHIP');?></td>
+									<td><?php echo $tr->translate('SCHOLARSHIP_AMOUNT');?></td>
+									<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
+									<td><?php echo $tr->translate('QTY');?></td>
+									<td><?php echo $tr->translate('PRICE');?></td>
+									<td><?php echo $tr->translate('LATE_FEE');?></td>
+									<td><?php echo $tr->translate('EXTRA_FEE');?></td>
+									<td><?php echo $tr->translate('DISCOUND');?></td>
+									<td><?php echo $tr->translate('DISCOUNT');?></td>
+									<td><?php echo $tr->translate('PAID_AMOUNT');?></td>
+									<td><?php echo $tr->translate('START_DATE');?></td>
+									<td><?php echo $tr->translate('END_DATE');?></td>
+									<td><?php echo $tr->translate('REMARK');?></td>
+									<td><?php echo $tr->translate('STATUS');?></td>
+									<td><?php echo $tr->translate('USER');?></td>
+								  </tr>
+							 </thead>
+							<style> 
+								td{padding:0 2px; }
+								.hover:hover{background: #ccc;}
+							</style>
+							  <?php $i=0;if(!empty($this->row)){foreach($this->row as $rs){ $i++;?>
+							  <tr class="hover" style="font-size:12px; color:#000; height: 18px;"​ align="center">
+							  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
+							  	<td align="center"><?php echo $rs['stu_code']; ?></td>
+							    <td style="text-align:left"><?php echo $rs['stu_khname'].'-'.$rs['stu_enname']; ?></td>
+							    <?php if($rs['type']==1){//tuition fee
+								    	$rs['service_cate']="Tuition Fee";
+								    	$rs['service_name']=$rs['major_name'];
+							    	}elseif($rs['type']==4){//for procut
+							    		$rs['service_cate']=$rs['product_category'];
+							    	}
+							    ?>
+							    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
+							    <td style="text-align:left"><?php echo $rs['service_name']; ?></td>
+							    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
+							    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
+							    <td align="center"><?php echo $rs['scholarship_percent']; ?>%</td>
+							    <td align="center"><?php echo $rs['scholarship_amount']; ?></td>
+							    <td align="center"><?php echo $rs['payment_term']; ?></td>
+							    <td><?php echo $rs['qty'];?></td>
+							    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
+							    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
+							    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
+							    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
+							    <td><?php echo $rs['discount_fix']; ?> </td>
+							    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
+							    <td><?php echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?></td>
+							    <td><?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); ?></td>
+							    <td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
+							   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
+							  	 <td><?php echo $rs['user']; ?></td>
+							  </tr>
+							  <?php 
+							 	if($rs['is_void']==0){
+							 		$total = $rs['paidamount'] + $total;
+							 	}
+							  ?> 
+							  <?php } }?>
+							</table>
+				  </div>
+				  
+				  <!-- tab student Service  -->
+				  <div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("SERVICE_TYPE");?>" selected="false">
+					<?php 
+							$total=0;
+							$total_balance = 0;
+							$total_receive = 0;
+						?>	
+						<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
+							  <thead>
+								  <tr style="text-align:center;background-color: #ccc;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
+								    <td><?php echo $tr->translate('N_O');?></td>
+								    <td><?php echo $tr->translate('STUDENT_ID');?></td>
+									<td><?php echo $tr->translate('STUDENT_NAME');?></td>
+									<td><?php echo $tr->translate('SERVICE_CATE');?></td>
+									<td><?php echo $tr->translate('SERVICE_NAME');?></td>
+									<td><?php echo $tr->translate('PAID_DATE');?></td>
+									<td><?php echo $tr->translate('RECEIPT_NO');?></td>
+									<td><?php echo $tr->translate('SCHOLARSHIP');?></td>
+									<td><?php echo $tr->translate('SCHOLARSHIP_AMOUNT');?></td>
+									<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
+									<td><?php echo $tr->translate('QTY');?></td>
+									<td><?php echo $tr->translate('PRICE');?></td>
+									<td><?php echo $tr->translate('LATE_FEE');?></td>
+									<td><?php echo $tr->translate('EXTRA_FEE');?></td>
+									<td><?php echo $tr->translate('DISCOUND');?></td>
+									<td><?php echo $tr->translate('DISCOUNT');?></td>
+									<td><?php echo $tr->translate('PAID_AMOUNT');?></td>
+									<td><?php echo $tr->translate('START_DATE');?></td>
+									<td><?php echo $tr->translate('END_DATE');?></td>
+									<td><?php echo $tr->translate('REMARK');?></td>
+									<td><?php echo $tr->translate('STATUS');?></td>
+									<td><?php echo $tr->translate('USER');?></td>
+								  </tr>
+							 </thead>
+							<style> 
+								td{padding:0 2px; }
+								.hover:hover{background: #ccc;}
+							</style>
+							  <?php $i=0;if(!empty($this->service)){foreach($this->service as $rs){ $i++;?>
+							  <tr class="hover" style="font-size:12px; color:#000; height: 18px;"​ align="center">
+							  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
+							  	<td align="center"><?php echo $rs['stu_code']; ?></td>
+							    <td style="text-align:left"><?php echo $rs['stu_khname'].'-'.$rs['stu_enname']; ?></td>
+							    <?php if($rs['type']==1){//tuition fee
+								    	$rs['service_cate']="Tuition Fee";
+								    	$rs['service_name']=$rs['major_name'];
+							    	}elseif($rs['type']==4){//for procut
+							    		$rs['service_cate']=$rs['product_category'];
+							    	}
+							    ?>
+							    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
+							    <td style="text-align:left"><?php echo $rs['service_name']; ?></td>
+							    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
+							    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
+							    <td align="center"><?php echo $rs['scholarship_percent']; ?>%</td>
+							    <td align="center"><?php echo $rs['scholarship_amount']; ?></td>
+							    <td align="center"><?php echo $rs['payment_term']; ?></td>
+							    <td><?php echo $rs['qty'];?></td>
+							    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
+							    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
+							    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
+							    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
+							    <td><?php echo $rs['discount_fix']; ?> </td>
+							    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
+							    <td><?php echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?></td>
+							    <td><?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); ?></td>
+							    <td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
+							   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
+							  	 <td><?php echo $rs['user']; ?></td>
+							  </tr>
+							  <?php 
+							 	if($rs['is_void']==0){
+							 		$total = $rs['paidamount'] + $total;
+							 	}
+							  ?> 
+							  <?php } }?>
+							</table>
+				  </div>
+				  
+			   </div>
+			   </td>
+			</tr>
+			
+			<!-- 
+			<tr>
+				<td align="center">
+					<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
+						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"register",'action'=>'index'),null,true); ?>';" />
+					<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+				</td>
+			</tr>
+			 -->
+		</table>
+	
+</form>
+
+</div>
+<script type="text/javascript">
+dojo.require("dijit.form.CheckBox"); 
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.DateTextBox");
+
+	function copyRecord(url){
+		 id = dijit.byId('recordcopy').get('value');
+		 if(id!=''){
+			window.location.href = url+'/id/'+id;
+		 }else{
+			alert('Please select record you want to copy');
+			return false;
+		 }
+	}
+
+	function setValue(index){
+		var recordcopy = $('input[name=copy]:checked').val();
+		dijit.byId('recordcopy').attr('value',recordcopy);
+	}
+
+	function setStuValue(type){ //type=1 set value vy studet code. type =2 by stu name
+	  if(type==1){
+		  stu_code=dijit.byId("stu_code").get("value");
+		  dijit.byId("stu_name").attr("value",stu_code);
+	  }else{
+		  stu_name=dijit.byId("stu_name").get("value");
+		  dijit.byId("stu_code").attr("value",stu_name);
+	  }
+	}
+		
+</script> 

@@ -491,6 +491,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$sql=" SELECT room_id AS id ,room_name As name FROM `rms_room` WHERE is_active=1 AND room_name!='' order by room_id DESC ";
    	return $db->fetchAll($sql);
    }
+   
+   public function getAllGroup(){
+	   	$db = $this->getAdapter();
+	   	$sql=" SELECT id ,group_code As name FROM `rms_group` WHERE status=1 AND group_code != '' order by id DESC ";
+	   	return $db->fetchAll($sql);
+   }
     
    public function getAllTeacherSubject(){
    	$db = $this->getAdapter();

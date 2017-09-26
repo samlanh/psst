@@ -39,6 +39,20 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'];
 		$study_year->setMultiOptions($opt);
 		
+		$_group = new Zend_Dojo_Form_Element_FilteringSelect('group');
+		$_group->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>false
+		));
+		$_group->setValue($request->getParam("group"));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$result = $db->getAllGroup();
+		$opt_group = array(''=>$this->tr->translate("search by group"));
+		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
+		$_group->setMultiOptions($opt_group);
+		
+		
 		$_session = new Zend_Dojo_Form_Element_FilteringSelect('session');
 		$_session->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -347,7 +361,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$payment_by->setMultiOptions($opt);
 		$payment_by->setValue($request->getParam("payment_by"));
 		
-		$this->addElements(array($payment_by,$study_year,$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
+		$this->addElements(array($_group,$payment_by,$study_year,$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 	
 // 		$this->addElements(array($_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 // 		$this->addElements(array($study_year,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));

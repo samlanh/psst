@@ -439,6 +439,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				WHERE 
     				 g.`id` = gsd.`group_id` 
     				AND st.`stu_id` = gsd.`stu_id` 
+    				and st.is_subspend = 0
     		";
     	
     	$where = ' ';

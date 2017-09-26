@@ -166,6 +166,74 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
+    public function getStudentStatistic($search){
+    	$db = $this->getAdapter();
+    	$sql ="SELECT 
+					s.stu_id,
+					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+					CONCAT(stu_enname)AS NAME,
+					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year) AS academic_year_name,
+					(SELECT name_en FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=g.session LIMIT 1)AS `session_name`,
+					(SELECT major_enname FROM rms_major WHERE rms_major.major_id=g.grade LIMIT 1)AS grade_name,
+					(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=g.degree LIMIT 1)AS degree_name,
+					g.academic_year,
+					g.degree,
+					g.grade,
+					g.session
+				FROM 
+					rms_student AS s , 
+					rms_group AS g,
+					rms_group_detail_student AS gds
+				WHERE 
+					g.id = gds.group_id
+					AND s.stu_id = gds.stu_id
+					AND s.`is_subspend`=0
+    		";
+    	
+    	$group_by = " GROUP BY gds.`stu_id`,g.`academic_year`,g.`degree`,g.`grade`,g.`session`";
+		$order_by = " ORDER BY g.`academic_year` ASC,g.`degree` ASC,g.`grade` ASC,g.`session` ASC";	
+    	
+    	$where=' ';
+    
+//     	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
+//     	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
+//     	$where .= " AND ".$from_date." AND ".$to_date;
+    	 
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	 
+    	//$order="  order by academic_year DESC,degree ASC,grade DESC,session ASC,stu_id DESC";
+    	if(empty($search)){
+    		return $db->fetchAll($sql.$group_by.$order_by);
+    	}
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
+    		$s_where[] = " CONCAT(stu_enname,stu_khname) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
+//     		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['study_year'])){
+    		$where.=' AND g.academic_year='.$search['study_year'];
+    	}
+    	if(!empty($search['grade_all'])){
+    		$where.=' AND g.grade='.$search['grade_all'];
+    	}
+    	if(!empty($search['session'])){
+    		$where.=' AND g.session='.$search['session'];
+    	}if(!empty($search['degree'])){
+    		$where.=' AND g.degree='.$search['degree'];
+    	}
+    	if(($search['branch_id'])>0){
+    		$where.=' AND s.branch_id='.$search['branch_id'];
+    	}
+//     	echo $sql.$where;exit();
+    	return $db->fetchAll($sql.$where.$group_by.$order_by);
+    }
+    
     
     public function getAllStudyHistory($search){
     	//print_r($search);
@@ -431,7 +499,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					`g`.`semester` AS `semester`,
 					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 					gsd.`stu_id`,
-					st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`
+					st.`stu_code`,
+					st.`stu_enname`,
+					st.`stu_khname`,
+					st.`sex`
 				FROM 
 					`rms_group_detail_student` AS gsd,
 					`rms_group` AS g,
@@ -444,6 +515,15 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$where = ' ';
 
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " st.stu_code LIKE '%{$s_search}%'";
+    		$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
+    		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	
     	if(!empty($search['group'])){
     		$where.= " AND g.id =".$search['group'];
     	}

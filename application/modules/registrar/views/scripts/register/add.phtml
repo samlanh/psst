@@ -2108,55 +2108,59 @@ function printSave(new_stu_id,new_receipt){
 var url_student_test = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-student-test-info')); ?>";
 function getStudentTestInfo(){
 	stu_test = dijit.byId('stu_test').get('value');
- 	dojo.xhrPost({
- 		url:url_student_test,
- 		content:{
- 			'stu_test_id':stu_test,
- 			},
- 		handleAs:"json",
- 		load: function(data) {
- 			dijit.byId("kh_name").attr("value",data.kh_name);
-			dijit.byId("en_name").attr("value",data.en_name);
-			dijit.byId("sex").attr("value",data.sex);
-			dijit.byId("dob").attr("value",data.dob);
-			dijit.byId("parent_phone").attr("value",data.phone);
-			
-			dijit.byId("dept").attr("value",data.degree_result);
-			dijit.byId("session").attr("value",data.session_result);
-			
-			getallModel(data.degree_result,data.grade_result);
-
-			
- 		},
- 		error: function(err) {
- 			alert(err);
- 		}
- 	});	 
+	if(stu_test != ""){
+	 	dojo.xhrPost({
+	 		url:url_student_test,
+	 		content:{
+	 			'stu_test_id':stu_test,
+	 			},
+	 		handleAs:"json",
+	 		load: function(data) {
+	 			dijit.byId("kh_name").attr("value",data.kh_name);
+				dijit.byId("en_name").attr("value",data.en_name);
+				dijit.byId("sex").attr("value",data.sex);
+				dijit.byId("dob").attr("value",data.dob);
+				dijit.byId("parent_phone").attr("value",data.phone);
+				
+				dijit.byId("dept").attr("value",data.degree_result);
+				dijit.byId("session").attr("value",data.session_result);
+				
+				getallModel(data.degree_result,data.grade_result);
+	
+				
+	 		},
+	 		error: function(err) {
+	 			alert(err);
+	 		}
+	 	});	 
+	}
 }
 var url_creditmemo = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-credit-memo')); ?>";
 function getCreditMemo(){
 	stu_type = dijit.byId('student_type').get('value');
 	if(stu_type==3){
 		stu_id = dijit.byId('old_studens').get('value');
-		dojo.xhrPost({
-			url:url_creditmemo,
-			content:{
-				'stu_id':stu_id,
+		if(stu_id != ""){
+			dojo.xhrPost({
+				url:url_creditmemo,
+				content:{
+					'stu_id':stu_id,
+					},
+				handleAs:"json",
+				load: function(data){
+					if(data){
+						dijit.byId("credit_memo").attr("value",data.total_amountafter);
+						dijit.byId("credit_memo_id").attr("value",data.id);
+					}else{
+						dijit.byId("credit_memo").attr("value",0);
+						dijit.byId("credit_memo_id").attr("value",'');
+					}
 				},
-			handleAs:"json",
-			load: function(data){
-				if(data){
-					dijit.byId("credit_memo").attr("value",data.total_amountafter);
-					dijit.byId("credit_memo_id").attr("value",data.id);
-				}else{
-					dijit.byId("credit_memo").attr("value",0);
-					dijit.byId("credit_memo_id").attr("value",'');
+				error: function(err) {
+					alert(err);
 				}
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});	 
+			});	
+		} 
 	}
 }
 var url_get_start_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date')); ?>';	

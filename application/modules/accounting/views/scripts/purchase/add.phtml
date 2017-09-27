@@ -32,7 +32,7 @@
 			onChange: function() {  
 				pro_id   = dijit.byId('pro_id').get('value');
 				if(pro_id==-1){
-					 $("#location_id").val(dijit.byId("branch_id").get("value"));
+					 $("#location_id").val(dijit.byId("branch").get("value"));
 					dijit.byId("pop_product").show();
 				}else{
 					addRow();
@@ -166,7 +166,7 @@ fieldset{  background:none;}
 							
 							<tr>
 								<td colspan="4">
-									<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+									<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
 											<tr id="head-title" class="head-td" align="right"></tr>
 									</table>
 								</td>

@@ -1638,11 +1638,11 @@ function readMoneyInKhmer(netTotal){
 			handleAs:"json",
 			load: function(data) {
 			    	dijit.byId('service_type_'+index).attr('value',data.type);
-			    	if(data.type==2){
+			    	if(data.type==2){ // service type
 			    		removeAddRowReadOnly(index);
 			    		getservicefee(index);
 						dijit.byId('product_type_'+index).attr('value','');
-			    	}else{
+			    	}else{ // product type
 						getProductFee(index);
 						setAddRowReadOnly(index);
 						dijit.byId('product_type_'+index).attr('value',data.pro_type);

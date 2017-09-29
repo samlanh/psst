@@ -26,7 +26,7 @@ class Accounting_RequestProductController extends Zend_Controller_Action {
 			$db =  new Accounting_Model_DbTable_DbRequestProduct();
 			$rows = $db->getAllRequest($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("REQUEST_NO","REQUEST_NAME","PURPOSE","REQUEST_DATE","TOTAL","DATE","STATUS");
+			$collumns = array("REQUEST_NO","REQUEST_NAME","PURPOSE","REQUEST_DATE","TOTAL","STATUS","DATE");
 			$link=array(
 					'module'=>'accounting','controller'=>'requestproduct','action'=>'edit',
 			);

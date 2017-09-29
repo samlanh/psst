@@ -9,13 +9,13 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     	 
     }
-    function getAllRequest($search=null){
+    function getAllAdjustStock($search=null){
     	$db = $this->getAdapter();
-    	$sql="SELECT id,request_no,request_name,purpose,request_date,
-		       (SELECT SUM(rd.qty_request) FROM rms_request_orderdetail AS rd WHERE rd.request_id=rms_request_order.id)AS total_qty,
-		       (SELECT name_en FROM rms_view WHERE key_code=rms_request_order.status AND rms_view.type=1 LIMIT 1) AS `status`,
-			   (SELECT first_name FROM rms_users WHERE id=rms_request_order.user_id LIMIT 1) AS user_name
-			   FROM rms_request_order WHERE 1";
+    	$sql="SELECT id,adjust_no,request_name,note,request_date,
+    		   (SELECT SUM(rd.qty_after) FROM rms_adjuststock_detail AS rd WHERE rd.adjuststock_id=rms_adjuststock.id)AS total_qty,
+		       (SELECT name_en FROM rms_view WHERE key_code=rms_adjuststock.status AND rms_view.type=1 LIMIT 1) AS `status`,
+			   (SELECT first_name FROM rms_users WHERE id=rms_adjuststock.user_id LIMIT 1) AS user_name
+			   FROM rms_adjuststock WHERE 1";
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " request_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " request_date <= '".$search['end_date']." 23:59:59'";
@@ -23,9 +23,9 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	if(!empty($search['title'])){
     		$s_where=array();
     		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
-    		$s_where[]= " REPLACE(request_no,' ','') LIKE '%{$s_search}%'";
+    		$s_where[]= " REPLACE(adjust_no,' ','') LIKE '%{$s_search}%'";
     		$s_where[]="  REPLACE(request_name,' ','') LIKE '%{$s_search}%'";
-    		$s_where[]= " REPLACE(purpose,' ','') LIKE '%{$s_search}%'";
+    		$s_where[]= " REPLACE(note,' ','') LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if($search['status_search']==1 OR $search['status_search']==0){
@@ -77,7 +77,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 					"request_name"  => 	$data["request_name"],
 					"note"     		=> 	$data["note"],
 					"request_date"  => 	date("Y-m-d"),
-					"create_date"   => 	date("Y-m-d"),
+					"create_date"   => 	date("Y-m-d H:i:s"),
 					"user_id"       => 	$this->getUserId(),
 					"status"        => 	$data['status'],
 			);
@@ -96,7 +96,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 							'qty_befor'		=> 	$data['curr_qty'.$i],
 							'qty_after'		=>  $data['request_qty'.$i],
 							'difference'	=> 	$data['spacing_qty'.$i],
-							'create_date'	=>  date("Y-m-d"),
+							'create_date'	=>  date("Y-m-d H:i:s"),
 							'remark'  		=> 	$data['note_'.$i],
 							'last_usermod'	=> 	$this->getUserId(),
 							'status'		=> 	$data['status'],
@@ -107,7 +107,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 					if($rows){
 							$datatostock= array(
 									'pro_qty' 	=>$data['request_qty'.$i],
-									'date'		=> date("Y-m-d"),
+									'date'		=> date("Y-m-d H:i:s"),
 									'user_id'	=> $this->getUserId()
 							);
 							$this->_name="rms_product_location";
@@ -128,100 +128,99 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 		}
 	}
     
- 	function updateRequest($data){
-		$db = $this->getAdapter();
-		$db->beginTransaction();
-		try{
-			$rows=$this->getRequestDetail($data['id']);
-			if(!empty($rows)){
-				foreach ($rows as $row){
-					$qty=$this->getProQtyByLocation($row['branch_id'], $row['pro_id']); 
-					//print_r($qty);exit();
-					if($qty){
-						$datat= array(
-								'pro_qty' 	=> $qty["pro_qty"]+$row['qty_request'],
-								'date'		=> date("Y-m-d"),
-								'user_id'	=> $this->getUserId()
-						);
-						$this->_name="rms_product_location";
-						$where=" id = ".$qty['id'];
-						$this->update($datat, $where);
-					}else{
-					
-					}
-				}
-			}
-			$arr=array(
-					"request_no"    => 	$data["request_no"],
-					"request_name"  => 	$data["request_name"],
-					"purpose"     	=> 	$data["purpose"],
-					"request_date"  => 	date("Y-m-d",strtotime($data['request_date'])),
-					"create_date"   => 	date("Y-m-d"),
-					"user_id"       => 	$this->getUserId(),
-					"status"        => 	$data['status'],
-			);
-			$this->_name="rms_request_order";
-			$where="id=".$data['id'];
-			$this->update($arr, $where);
-			unset($arr);
-			$this->_name='rms_request_orderdetail';
-			$where=" request_id=".$data['id'];
-			$this->delete($where);
-			
-			if($data['identity']!=""){
-				$ids=explode(',',$data['identity']);
-				foreach ($ids as $i)
-				{
-					$data_item= array(
-							'request_id'	=>  $data['id'],
-							'branch_id'		=> 	$data['branch_id_'.$i],
-							'pro_id'		=>  $data['product_name_'.$i],
-							'qty_curr'		=> 	$data['curr_qty'.$i],
-							'qty_request'	=>  $data['request_qty'.$i],
-							'pro_type'		=> 2,//type product cut stock later
-							'create_date'	=>  	date("Y-m-d"),
-							'remark'  		=> 	$data['note_'.$i],
-							'user_id'		=> 	$this->getUserId(),
-							'status'		=> 	$data['status'],
-					);
-					$this->_name='rms_request_orderdetail';
-					$this->insert($data_item);
-					$rows=$this->getProQtyByLocation($data['branch_id_'.$i], $data['product_name_'.$i], $data['request_qty'.$i]); 
-					if($rows){
-							$datatostock= array(
-									'pro_qty' 	=> $rows["pro_qty"]-$data['request_qty'.$i],
-									'date'		=> date("Y-m-d"),
-									'user_id'	=> $this->getUserId()
-							);
-							$this->_name="rms_product_location";
-							$where=" id = ".$rows['id'];
-							$this->update($datatostock, $where);
-					}else{
-						
-					}
-				 }
-			}
-			$db->commit();
-		}catch(Exception $e){
-			$db->rollBack();
-			Application_Form_FrmMessage::message('INSERT_FAIL');
-			$err =$e->getMessage();
-			echo $err;exit();
-			Application_Model_DbTable_DbUserLog::writeMessageError($err);
-		}
-	}
+ 	function updateAdjustStock($data){
+ 		$db = $this->getAdapter();
+ 		$db->beginTransaction();
+ 		try{//sum qty to current qty in stock
+ 			$rows=$this->getAdjustStockDetail($data['id']);
+ 			if(!empty($rows))foreach ($rows AS $row){
+ 				$qty=$this->getProQtyByLocation($row['branch_id'], $row['pro_id']);
+ 				if($qty){
+ 						$curr= array(
+ 								'pro_qty' 	=>$qty['pro_qty']+$row['difference'],
+ 								'date'		=> date("Y-m-d H:i:s"),
+ 								'user_id'	=> $this->getUserId()
+ 						);
+ 						$this->_name="rms_product_location";
+ 						$where=" id = ".$qty['id'];
+ 						$this->update($curr, $where);
+ 					}else{
+ 		
+ 					}
+ 			}
+ 			
+ 			$arr=array(
+ 					"adjust_no"    	=> 	$data["adjust_no"],
+ 					"request_name"  => 	$data["request_name"],
+ 					"note"     		=> 	$data["note"],
+ 					"request_date"  => 	date("Y-m-d"),
+ 					"create_date"   => 	date("Y-m-d H:i:s"),
+ 					"user_id"       => 	$this->getUserId(),
+ 					"status"        => 	$data['status'],
+ 			);
+ 			$this->_name="rms_adjuststock";
+ 			$where="id=".$data['id'];
+ 			$this->update($arr, $where);
+ 			unset($arr);
+ 			
+ 			$this->_name='rms_adjuststock_detail';
+ 			$where="adjuststock_id=".$data['id'];
+ 			$this->delete($where);
+ 			
+ 			if($data['identity']!=""){
+ 				$ids=explode(',',$data['identity']);
+ 				foreach ($ids as $i)
+ 				{
+ 					$data_item= array(
+ 							'adjuststock_id'=>  $data['id'],
+ 							'branch_id'		=> 	$data['branch_id_'.$i],
+ 							'pro_id'		=>  $data['product_name_'.$i],
+ 							'qty_befor'		=> 	$data['curr_qty'.$i],
+ 							'qty_after'		=>  $data['request_qty'.$i],
+ 							'difference'	=> 	$data['spacing_qty'.$i],
+ 							'create_date'	=>  date("Y-m-d H:i:s"),
+ 							'remark'  		=> 	$data['note_'.$i],
+ 							'last_usermod'	=> 	$this->getUserId(),
+ 							'status'		=> 	$data['status'],
+ 					);
+ 					$this->_name='rms_adjuststock_detail';
+ 					$this->insert($data_item);
+ 					$rows=$this->getProQtyByLocation($data['branch_id_'.$i], $data['product_name_'.$i]);
+ 					if($rows){
+ 						$datatostock= array(
+ 								'pro_qty' 	=>$data['request_qty'.$i],
+ 								'date'		=> date("Y-m-d H:i:s"),
+ 								'user_id'	=> $this->getUserId()
+ 						);
+ 						$this->_name="rms_product_location";
+ 						$where=" id = ".$rows['id'];
+ 						$this->update($datatostock, $where);
+ 					}else{
+ 		
+ 					}
+ 				}
+ 			}
+ 			$db->commit();
+ 		}catch(Exception $e){
+ 			$db->rollBack();
+ 			Application_Form_FrmMessage::message('INSERT_FAIL');
+ 			$err =$e->getMessage();
+ 			echo $err;exit();
+ 			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+ 		}
+ 	}
 	
-	function getRequestById($id){
+	function getAdjustStockById($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM rms_request_order WHERE id=$id";
+		$sql="SELECT * FROM rms_adjuststock WHERE id=$id";
 		return $db->fetchRow($sql);
 	}
 	
-	function getRequestDetail($id){
+	function getAdjustStockDetail($id){
 		$db=$this->getAdapter();
-		$sql="SELECT branch_id,(SELECT p.pro_name FROM rms_product AS p WHERE p.id=pro_id ) AS pro_name,
-			    pro_id,qty_curr,qty_request,remark FROM rms_request_orderdetail 
-				WHERE request_id=$id";
+		$sql="SELECT ad.branch_id,(SELECT p.pro_name FROM rms_product AS p WHERE p.id=ad.pro_id ) AS pro_name,
+			    ad.pro_id,ad.qty_befor,ad.qty_after,ad.difference,ad.remark FROM rms_adjuststock_detail  AS ad
+				WHERE ad.adjuststock_id=$id";
 		return $db->fetchAll($sql);
 	}
 	

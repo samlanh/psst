@@ -46,22 +46,6 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 				 AND   p.id=pl.pro_id   AND   p.pro_type=2";
     	$row = $db->fetchRow($sql);
     	if(empty($row)){
-//     		$session_user=new Zend_Session_Namespace('authstu');
-//     		$userName=$session_user->user_name;
-//     		$GetUserId= $session_user->user_id;
-//     		$array = array(
-//     				'pro_id'	=>$pro_id,
-//     				'brand_id'	=>$branch_id,
-//     				'pro_qty'	=>$qty_req,
-//     				'date'		=>	date("Y-m-d"),
-//     				'status'	=>	1,
-//     				"user_id"   =>  $GetUserId,
-//     		);
-//     		$this->_name="rms_product_location";
-//     		$this->insert($array);
-//     		$sql=" SELECT pl.pro_id,pl.pro_qty  FROM rms_product_location AS pl,rms_product AS p
-//     		WHERE pl.pro_id=$pro_id AND pl.brand_id=$branch_id
-//     		AND   p.id=pl.pro_id   AND   p.pro_type=2";
     		return $row = $db->fetchRow($sql);
     	}else{
     		return $row;
@@ -77,7 +61,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					"request_name"  => 	$data["request_name"],
 					"purpose"     	=> 	$data["purpose"],
 					"request_date"  => 	date("Y-m-d",strtotime($data['request_date'])),
-					"create_date"   => 	date("Y-m-d"),
+					"create_date"   => 	date("Y-m-d H:i:s"),
 					"user_id"       => 	$this->getUserId(),
 					"status"        => 	$data['status'],
 			);
@@ -96,7 +80,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 							'qty_curr'		=> 	$data['curr_qty'.$i],
 							'qty_request'	=>  $data['request_qty'.$i],
 							'pro_type'		=> 2,//type product cut stock later
-							'create_date'	=>  	date("Y-m-d"),
+							'create_date'	=>  	date("Y-m-d H:i:s"),
 							'remark'  		=> 	$data['note_'.$i],
 							'user_id'		=> 	$this->getUserId(),
 							'status'		=> 	$data['status'],
@@ -107,7 +91,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					if($rows){
 							$datatostock= array(
 									'pro_qty' 	=> $rows["pro_qty"]-$data['request_qty'.$i],
-									'date'		=> date("Y-m-d"),
+									'date'		=> date("Y-m-d H:i:s"),
 									'user_id'	=> $this->getUserId()
 							);
 							$this->_name="rms_product_location";
@@ -140,7 +124,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					if($qty){
 						$datat= array(
 								'pro_qty' 	=> $qty["pro_qty"]+$row['qty_request'],
-								'date'		=> date("Y-m-d"),
+								'date'		=> date("Y-m-d H:i:s"),
 								'user_id'	=> $this->getUserId()
 						);
 						$this->_name="rms_product_location";
@@ -156,7 +140,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					"request_name"  => 	$data["request_name"],
 					"purpose"     	=> 	$data["purpose"],
 					"request_date"  => 	date("Y-m-d",strtotime($data['request_date'])),
-					"create_date"   => 	date("Y-m-d"),
+					"create_date"   => 	date("Y-m-d H:i:s"),
 					"user_id"       => 	$this->getUserId(),
 					"status"        => 	$data['status'],
 			);
@@ -179,7 +163,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 							'qty_curr'		=> 	$data['curr_qty'.$i],
 							'qty_request'	=>  $data['request_qty'.$i],
 							'pro_type'		=> 2,//type product cut stock later
-							'create_date'	=>  	date("Y-m-d"),
+							'create_date'	=>  	date("Y-m-d H:i:s"),
 							'remark'  		=> 	$data['note_'.$i],
 							'user_id'		=> 	$this->getUserId(),
 							'status'		=> 	$data['status'],
@@ -190,7 +174,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					if($rows){
 							$datatostock= array(
 									'pro_qty' 	=> $rows["pro_qty"]-$data['request_qty'.$i],
-									'date'		=> date("Y-m-d"),
+									'date'		=> date("Y-m-d H:i:s"),
 									'user_id'	=> $this->getUserId()
 							);
 							$this->_name="rms_product_location";
@@ -346,7 +330,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql = "SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
 		    	WHERE p.id=pl.pro_id AND p.status=1
-		    	AND  pl.brand_id=".$branch_id;
+		    	AND p.pro_type=2 AND pl.brand_id=".$branch_id;
     	$order=' ORDER BY p.id DESC';
     	return $db->fetchAll($sql.$order);
     }

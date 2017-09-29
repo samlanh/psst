@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('PURCHASE')); 
+	echo $this->headTitle($tr->translate('EDIT_REQUEST_PRODUCT')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$row=$this->row;
 	//print_r($row);
@@ -84,7 +84,7 @@ fieldset{  background:none;}
 			<tr>
 				<td valign="top" width="34%" style="white-space: nowrap;">
 				<fieldset>
-					<legend align="center"><strong><?php echo $tr->translate("ADD_REQUEST_PRODUCT");?>​</strong></legend>
+					<legend align="center"><strong><?php echo $tr->translate("EDIT_REQUEST_PRODUCT");?>​</strong></legend>
 					<table style="margin: 0 auto;" cellspacing="10" >
 							<tr>
 							   <td><?php echo $tr->translate("REQUEST_NAME")?>*</td>

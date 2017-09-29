@@ -2,7 +2,7 @@
 $request = Zend_Controller_Front::getInstance ()->getRequest ();
 
 $tr = Application_Form_FrmLanguages::getCurrentlanguage ();
-echo $this->headTitle($tr->translate('PURCHASE'));
+echo $this->headTitle($tr->translate('REQUEST_PRODUCT'));
 $frm = $this->form_search;
 ?>
 <title><?php echo $tr->translate("CATEGORY");?></title>

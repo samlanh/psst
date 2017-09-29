@@ -2,12 +2,12 @@
 $request = Zend_Controller_Front::getInstance ()->getRequest ();
 
 $tr = Application_Form_FrmLanguages::getCurrentlanguage ();
-echo $this->headTitle($tr->translate('PURCHASE'));
+echo $this->headTitle($tr->translate('ADJUST_STOCK'));
 $frm = $this->form_search;
 ?>
 <title><?php echo $tr->translate("CATEGORY");?></title>
 <meta charset="utf-8">
-<form action="<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'index')); ?>"
+<form action="<?php echo $this->url(array('module'=>'accounting','controller'=>'adjuststock','action'=>'index')); ?>"
 	dojoType="dijit.form.Form" method="post">
 	<table style="width: 100%">
 		<tr>
@@ -23,7 +23,7 @@ $frm = $this->form_search;
 	</table>
 </form>
 <?php
-  //echo $this->list;
+  echo $this->list;
 ?>
 
  

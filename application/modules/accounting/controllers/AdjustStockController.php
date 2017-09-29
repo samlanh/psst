@@ -24,11 +24,11 @@ class Accounting_AdjustStockController extends Zend_Controller_Action {
     					);
     		}
 			$db =  new Accounting_Model_DbTable_DbAdjustStock();
-			$rows = $db->getAllRequest($search);
+			$rows = $db->getAllAdjustStock($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("REQUEST_NO","REQUEST_NAME","PURPOSE","REQUEST_DATE","TOTAL","DATE","STATUS");
+			$collumns = array("ADJUST_NO","REQUEST_NAME","NOTE","DATE","TOTAL","STATUS","USER");
 			$link=array(
-					'module'=>'accounting','controller'=>'requestproduct','action'=>'edit',
+					'module'=>'accounting','controller'=>'adjuststock','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rows,array('request_no'=>$link,'request_name'=>$link,'purpose'=>$link,));
 			}catch (Exception $e){
@@ -47,9 +47,9 @@ class Accounting_AdjustStockController extends Zend_Controller_Action {
 					$db = new Accounting_Model_DbTable_DbAdjustStock();
 					$row = $db->addAdjustStock($_data);
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/requestproduct");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/adjuststock");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/requestproduct/add");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/adjuststock/add");
 					}
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}catch(Exception $e){
@@ -82,12 +82,12 @@ class Accounting_AdjustStockController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
 			try{
-					$db = new Accounting_Model_DbTable_DbRequestProduct();
-					$row = $db->updateRequest($_data);
+					$db = new Accounting_Model_DbTable_DbAdjustStock();
+					$row = $db->updateAdjustStock($_data);
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/requestproduct");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/adjuststock");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/requestproduct");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/adjuststock");
 					}
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}catch(Exception $e){
@@ -96,14 +96,14 @@ class Accounting_AdjustStockController extends Zend_Controller_Action {
 					echo $e->getMessage();
 				}
 			}
-			$_pur = new Accounting_Model_DbTable_DbRequestProduct();
+			$_pur = new Accounting_Model_DbTable_DbAdjustStock();
 			$pro=$_pur->getProducCutStockLater();
-			$this->view->row=$_pur->getRequestById($id);
-			$this->view->row_detail=$_pur->getRequestDetail($id);
 			array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
 			$this->view->product= $pro;
+			$this->view->row=$_pur->getAdjustStockById($id);
+			$this->view->row_detail=$_pur->getAdjustStockDetail($id);
 			
-			$this->view->rq_code=$_pur->getRequestCode();
+			$this->view->rq_code=$_pur->getAjustCode();
 			$this->view->bran_name=$_pur->getAllBranch();
 			
 			$db_gr=new Global_Model_DbTable_DbGrade();

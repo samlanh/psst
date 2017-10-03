@@ -1260,8 +1260,7 @@ function addRow() {
 				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
 					template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
 				<?php }}?>
-				template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/>';
-				template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="product_type_'+col+'" id="product_type_'+col+'"/>';
+				
 			template+='</select></td>';	
 			template+='<td width="9%"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';
 				<?php foreach($this->all_paymentterm as $term){?>
@@ -1269,7 +1268,12 @@ function addRow() {
 				<?php }?>
 			template+='</select></td>';
 			column = 0;
-			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'" readonly="readonly" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';	
+			
+			
+			
+			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'" readonly="readonly" value="0" dojoType="dijit.form.NumberTextBox"  />';	
+			template+='</td >';
+			
 			template+='<td width="4%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
 			template+='<td width="6%"> <input type="text" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="late_fee_service_'+col+'" id="late_fee_service_'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
@@ -1279,6 +1283,12 @@ function addRow() {
 			template+="<td width='10%'> <input type='text' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" value='now' name='date_start_"+col+"' onchange='getValidate("+col+");' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
 			template+='<td width="10%"> <input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
 			template+='<td width="8%"> <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ...." style="width:140px;" /></td>';
+		
+			template+='<td width="6%">';	
+				template+='<input type="text" style="width:30px;" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/>';
+				template+='<input type="text" style="width:30px;" dojoType="dijit.form.TextBox" name="product_type_'+col+'" id="product_type_'+col+'"/>';
+			template+='</td >';
+		
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -1503,27 +1513,29 @@ function readMoneyInKhmer(netTotal){
  var url_getservicetype = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-service-type')); ?>';
  function getServiceType(index){
 	 service_id = dijit.byId('service_'+index).get('value');
-	 dojo.xhrPost({
+	 if(service_id != ""){
+		 dojo.xhrPost({
 			url:url_getservicetype,
 			content:{
 				'service_id':service_id,
 				},
 			handleAs:"json",
 			load: function(data) {
-			    	dijit.byId('service_type_'+index).attr('value',data.type);
-			    	if(data.type==2){ // service type
-			    		removeAddRowReadOnly(index);
-			    		getservicefee(index);
+					dijit.byId('service_type_'+index).attr('value',data.type);
+					if(data.type==2){ // service type
+						removeAddRowReadOnly(index);
+						getservicefee(index);
 						dijit.byId('product_type_'+index).attr('value','');
-			    	}else{ // product type
+					}else{ // product type
 						getProductFee(index);
 						setAddRowReadOnly(index);
 						dijit.byId('product_type_'+index).attr('value',data.pro_type);
-			    	}
+					}
 			},
 			error: function(err) {
 			}
 		});
+	 }
  }
 	// Set readonly when service type=1 (product)	
  function setAddRowReadOnly(index){
@@ -2058,24 +2070,26 @@ function getOldVildateToStartDateRegister(){
 				return 0;
 			}
 			service_id = dijit.byId('service_'+index).get('value');
-			dojo.xhrPost({
-				url:url_get_start_date,
-				content:{
-					'service_id':service_id,
-					'stu_id':stu_id
+			if(service_id != ''){
+				dojo.xhrPost({
+					url:url_get_start_date,
+					content:{
+						'service_id':service_id,
+						'stu_id':stu_id
+						},
+					handleAs:"json",
+					load: function(data) {
+						if(data){
+							dijit.byId('date_start_'+index).attr('value',data);
+						}else{
+							dijit.byId('date_start_'+index).attr('value','<?php echo date('Y-m-d');?>');
+						}	
 					},
-				handleAs:"json",
-				load: function(data) {
-					if(data){
-						dijit.byId('date_start_'+index).attr('value',data);
-					}else{
-						dijit.byId('date_start_'+index).attr('value','<?php echo date('Y-m-d');?>');
-					}	
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
+					error: function(err) {
+						alert(err);
+					}
+				});
+			}
 		}
 	}
 	function checkValidateAddRow(){

@@ -21,7 +21,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 						'time'=> '',
 						'degree'=> '',
 						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'));
+						'end_date'=>date('Y-m-d'),
+						'status'=> '',
+					);
+				
 			}
 			$this->view->adv_search=$search;
 			$db_student= new Foundation_Model_DbTable_DbStudent();

@@ -50,6 +50,7 @@ ul.blogscoresubject li{list-style: none;width:10%;float: left; }
 ol.blogscoresubject li{list-style: none;width:10%;float: left; }
 ol{margin: 10px;}
 </style>
+
 <script type="text/javascript">
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
@@ -57,8 +58,8 @@ dojo.require("dojo.data.ItemFileWriteStore");
 //dojo.require('dojox.form.BusyButton');
 //dojo.require("dijit.form.Textarea");  
 //dojo.require("dijit.form.FilteringSelect");
-dojo.require("dojo.html");
-var subject_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
+//dojo.require("dojo.html");
+var subject_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>);
 dojo.ready(function(){
 	//control study year
 		var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
@@ -484,13 +485,13 @@ function getSubjectByGroup(type=null){
 }
 var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(type=null){
-	//alert(1);
+	alert(1);
 	group = dijit.byId('group').get('value');
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
 	if(group==''){
 		return false;
 	}
-	if(type!=null){
+	if(type!= null){
 		return false;
 	}
 	dojo.xhrPost({
@@ -587,6 +588,7 @@ function initailize(){
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
 	<?php if (!empty($this->allstudentBygroup)) { foreach ($this->allstudentBygroup as $key=> $row){
 			$student_att = $_model->getAttendeceStatus($this->row['id'],$row['stu_id']);
+			//print_r($student_att);
 		?>
 			inx = parseFloat(<?php echo $key?>)+1;
 

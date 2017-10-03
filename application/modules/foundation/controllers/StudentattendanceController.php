@@ -95,10 +95,10 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$result = 	$_model->getAttendencetByID($id);
+		$result = $_model->getAttendencetByID($id);
 		$this->view->row=$result;
 		$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
-		
+		//print_r($this->view->allstudentBygroup);exit();
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();

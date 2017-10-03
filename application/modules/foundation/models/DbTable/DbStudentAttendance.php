@@ -193,13 +193,19 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 	function getStudentByGroup($group_id){
 		$db=$this->getAdapter();
 		$sql="SELECT 
-			sgh.`stu_id`,
-			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
-			(SELECT CONCAT(s.stu_enname,' - ',s.stu_khname) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
-			(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
-			FROM `rms_group_detail_student` AS sgh
-			WHERE sgh.`group_id`=".$group_id;
+				sgh.`stu_id`,
+				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
+				(SELECT CONCAT(s.stu_enname,' - ',s.stu_khname) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
+				(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
+			 FROM 
+			 	`rms_group_detail_student` AS sgh
+			WHERE 
+				sgh.`group_id`=".$group_id;
+		
 		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) DESC";
+		
+		//echo $sql.$order;exit();
+		
 		return $db->fetchAll($sql.$order);
 	}
 	
@@ -228,6 +234,23 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 		FROM `rms_group` AS `g` WHERE g.status=1 and g.is_pass!=1";
 
 		return $db->fetchAll($sql);
+	}
+	function getAttendeceStatus($att_id , $stu_id){
+		$db = $this->getAdapter();
+		$sql = "
+				select 
+					attendence_status,
+					description 
+				from 
+					rms_student_attendence_detail as sad,
+					rms_student_attendence as sa 
+				where 
+					sad.attendence_id = sa.id
+					and sa.id = $att_id
+					and sad.stu_id = $stu_id
+			";
+		
+		return $db->fetchRow($sql);
 	}
 }
 

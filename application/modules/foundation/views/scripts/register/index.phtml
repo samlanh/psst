@@ -21,6 +21,13 @@
 	  		<td><?php echo $frm->getElement("start_date");?></td>
 	 		<td><?php echo $frm->getElement("end_date");?></td>
 			<td> <?php echo $frm->getElement("user");?></td>
+			<td>
+				<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+					<option value=""><?php echo $tr->translate('STATUS')?></option>
+					<option value="1"><?php echo $tr->translate('ACTIVE')?></option>
+					<option value="0"><?php echo $tr->translate('DEACTIVE')?></option>
+				</select>			
+			</td>
 			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 	  </tr>
 	  <input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />

@@ -202,6 +202,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			    		$this->insert($arra);
 			    	}
 				}
+				
 			// insert to tbl_student_id for count id to generate new student_id
 				$this->_name='rms_student_id';
 				if($data['student_type']!=3){ 	//	new student
@@ -969,7 +970,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	function updateRegister($data,$payment_id){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-// 		echo $data['void'];exit();
+		//echo $data['void'];exit();
 		
 		if(!empty($data['void'])){  
 			
@@ -2074,7 +2075,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}
     	else{
 	    	$sql="select sfd.price_fee from rms_servicefee_detail as sfd,rms_servicefee as sf where sfd.service_id=$serviceid 
-	    		and sfd.payment_term=$termid  $branch_id  limit 1";
+	    		and sfd.payment_term=$termid  limit 1";
 	    	return $db->fetchRow($sql);
     	}
     }

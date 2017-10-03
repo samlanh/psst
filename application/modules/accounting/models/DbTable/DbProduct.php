@@ -153,8 +153,9 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 			    				'status'		=>$_data['status'],
 			    				'user_id'		=>$this->getUserId(),
 			    				'type'			=>1, // type=1 => product 
+			    				'pro_type'		=>$_data['pro_type'], // 1=cut stock , 2=cut stock later
 			    		);
-			    		$where = " ser_cate_id=".$_data['id'];
+			    		$where = " type = 1 and ser_cate_id=".$_data['id'];
 			    		$this->update($array, $where);
 		    		}else{
 		    			$this->_name='rms_program_name';

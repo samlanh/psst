@@ -110,7 +110,7 @@
 								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></td>
 								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
 								<?php for($k=0;$k<$amount_day;$k++){?>
-									<?php if(date('D',strtotime(" +$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day")); // $tr->translate(date("D",strtotime($date)));?>
+									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day")); // $tr->translate(date("D",strtotime($date)));?>
 										<td rowspan="2"  class="rotate"><div><span><?php  echo date("D d-M-Y",strtotime($date));?></span></div></td>
 									<?php }?>
 								<?php }?>
@@ -129,7 +129,7 @@
 								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php $p=0; $a=0;$l=0;$el=0; for($k=0;$k<$amount_day;$k++){?>
-									<?php if(date('D',strtotime(" +$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
+									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<td align="center" >
 										<?php  $check_date = $db->checkDateAttendence(date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
 												//print_r($check_date)."";exit();

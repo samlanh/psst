@@ -9,6 +9,7 @@
 		<table width="100%" >
 	       <tr>
 	           <td><?php echo $frm->getElement("title");?></td>
+	           <td> <?php echo $frm->getElement("group");?></td>
 	           <td> <?php echo $frm->getElement("study_year");?></td>
 	           <td> <?php echo $frm->getElement("degree");?></td>
 	           <td> <?php echo $frm->getElement("grade");?></td>
@@ -32,18 +33,15 @@
 				</tr>
 				<tr>
 					<td colspan="3" valign="top" id="exportExcel">
-						<style>th,td{ padding:0 1px;}</style>
 							<style type="text/css">
-								table{ border-collapse:collapse; margin:0 auto;
-								border-color:#000; }
-							.padding{ padding: 0 1px !important;}
-							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
-							tr{ page-break-inside:avoid; page-break-after:auto }
-							#header {
-							  display: table-header-group;
-							  page-break-inside:avoid; page-break-after:auto;
-							}
-						</style>
+								th,td{ padding:0 1px;}
+								table{ border-collapse:collapse; margin:0 auto;border-color:#000; }
+								.padding{ padding: 0 1px !important;}
+								table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+								tr{ page-break-inside:avoid; page-break-after:auto }
+								#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
+								.hover:hover{background: #ccc;}
+							</style>
 						<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="white-space:nowrap;">
 							  <thead>
 							  <tr style="font-size:14px; height: 25px; font-weight: bold; background: #ccc;" align="center">
@@ -62,6 +60,7 @@
 								<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("PRINT");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("PRINT");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("RESULT_SEMESTER1");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("RESULT_SEMESTER2");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("YEARLY_EXAM");?>&nbsp;</td>
@@ -69,7 +68,7 @@
 							  </thead>
 							  <?php $i=0; 
 							  if (!empty($this->rs))foreach($this->rs as $rs){ $i++;?>
-							  <tr style="font-size:12px; height: 18px;"​ align="center" class='padding'>
+							  <tr style="font-size:12px; height: 18px;"​ align="center" class='hover padding'>
 							    <td><?php echo $i;?></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic']; ?></a></td>
@@ -78,13 +77,14 @@
 							    <td><?php echo $rs['grade']; ?></td>
 							    <td><?php echo $rs['session']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?></td>
-							    <td align="left">&nbsp;&nbsp;<?php echo $rs['amount_month']; ?></td>
+							    <td align="center"><?php echo $rs['amount_month']; ?></td>
 							    <td><?php echo date('d-M-Y',strtotime($rs['start_date'])); ?></td>
 							    <td><?php echo date('d-M-Y',strtotime($rs['expired_date'])); ?></td>
 							    <td><?php echo $rs['status']; ?></td>
 							    <td><?php echo $rs['Num_Student']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-att-list','id'=>$rs['id']));?>" target="_blank"><?php echo $tr->translate("ATTENDANCE"); ?></a></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-resultbysemester','id'=>$rs['id'],'type'=>1));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-resultbysemester','id'=>$rs['id'],'type'=>2));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-resultbyyear','id'=>$rs['id'],'type'=>3));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>

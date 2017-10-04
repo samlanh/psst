@@ -380,6 +380,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		else{
 			$search = array(
 					'title' 		=> "",
+					'group' 		=> "",
 					'study_year'	=> "",
 					'grade' 		=> "",
 					'session' 		=> "",
@@ -489,4 +490,32 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	function academicTranscriptAction(){
 	}
+	
+	public function rptAttListAction()
+	{
+		$id=$this->getRequest()->getParam("id");
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search = array(
+					'txtsearch' => "",
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+					
+					);
+		}
+		$db = new Allreport_Model_DbTable_DbRptGroup();
+		$row = $db->getStudentGroup($id,$search);
+		$this->view->rs = $row;
+		
+		$rs= $db->getGroupDetailByID($id);
+		$this->view->rr = $rs;
+		
+		$this->view->datasearch = $search;
+	}
+	
+	
+	
+	
 }

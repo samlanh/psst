@@ -972,7 +972,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		//echo $data['void'];exit();
 		
-		if(!empty($data['void'])){  
+		if($data['void']==1){  
 			
 			// if void=1 that mean this record is useless so we only update is_void to 1 no need to update info anymore
 			try{	
@@ -1051,9 +1051,80 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$db->rollBack();
 				echo $e->getMessage();exit();
 			}
+		}else if($data['void']==2){
+					
+			if(!empty($data['credit_memo_id'])){
+				$this->updateCreditMemoBack($data);
+			}		
+			
+			if($data['payment_type']==1){
+				if($data['student_type']==3){ // do when old student 
+				// get id record that we have updated to update it to using again when new record is void
+					$parentIdStuHis = $this->getParentIdStudentHistory($payment_id);
+				// update old study info to using 	
+					if(!empty($parentIdStuHis)){
+						$this->_name="rms_study_history";
+						
+						//update student info back to old info
+						$this->UpdateStudentInfoBack($parentIdStuHis,$payment_id);
+						
+						$where = " id = $parentIdStuHis ";
+						$this->delete($where);
+					}
+				}
+			// update payment and validate of service and tuition fee info back ,  and update stock back to origin	
+				
+				$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
+				
+				if($data['student_type']!=3){  // 3 = old student 
+					$this->deleteFromGroup($data['old_stu_name'],$data['group']);
+					$this->deleteStudent($data['old_stu_name']);
+				}
+					
+			}else if($data['payment_type']==2){
+				if($data['student_type']==3){ // do when old student 	
+					// get id record that we have updated to update it to using again when new record is void
+					$parentIdStuHis = $this->getParentIdStudentHistory($payment_id);
+					// update old study info to using
+					if(!empty($parentIdStuHis)){
+						
+						$this->_name="rms_study_history";
+						$this->UpdateStudentInfoBack($parentIdStuHis,$payment_id);
+						$where = " id = $parentIdStuHis ";
+						$this->delete($array, $where);
+					}
+				}
+				
+				$this->updatePaymentInfoBack($payment_id,2);   // 2 is pay for only tuition fee 
+				
+				if($data['student_type']!=3){  // 3 = old student 
+					$this->deleteFromGroup($data['old_stu_name'],$data['group']);
+					$this->deleteStudent($data['old_stu_name']);
+				}
+				
+				
+			}else if($data['payment_type']==3){
+				
+				$this->updatePaymentInfoBack($payment_id,1);
+			
+			}		
+			
+			$this->_name='rms_student_payment';
+			$where = " id = ".$payment_id;
+			$this->delete($where);
+			
+			$this->_name='rms_student_paymentdetail';
+			$where = " payment_id = ".$payment_id;
+			$this->delete($where);		
+				
+			$db->commit();
+			return 0;				
 		}else{
 			return 0;			
 		}
+		
+		
+		
 		echo 1;exit();
 			try{
 				

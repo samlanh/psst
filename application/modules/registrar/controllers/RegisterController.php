@@ -192,6 +192,73 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$this->view->group = $db->getAllgroup();
     	
     }
+    
+    
+    public function editkentridgeAction(){
+    	$id=$this->getRequest()->getParam('id');
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		//$_data['pay_id']=$id;
+    		//     		if(!empty($_data['void'])){
+    		//     			echo $_data['void'];exit();
+    		// 			}else{
+    		// 				echo 'no void';exit();
+    		// 			}
+    		try {
+    			$db = new Registrar_Model_DbTable_DbRegister();
+    			$db->updateRegister($_data,$id);
+    			if(isset($_data['save_new'])){
+    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/register/index');
+    			}else{
+    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/register/index');
+    			}
+    		} catch (Exception $e) {
+    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+    			echo $e->getMessage();exit();
+    			 
+    		}
+    	}
+    	$db = new Registrar_Model_DbTable_DbRegister();
+    	$form_row=$db->getRegisterById($id);
+    	$is_start=$form_row['is_start'];
+    	if($is_start==0 || $form_row['is_void']>0){
+    		Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can not Edit'), self::REDIRECT_URL . '/register/index');
+    	}
+    
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->all_dept = $_db->getAllDegreeName();
+    	 
+    	$db = new Registrar_Model_DbTable_DbRegister();
+    	 
+    	$this->view->teacher = $db->getTeacherEdit($id);
+    	 
+    	$this->view->payment = $db->getStudentPaymentByID($id);
+    	 
+    	// for loop in initialize
+    	$this->view->payment_detail_service = $db->getStudentPaymentDetailServiceByID($id);
+    	// for information in  register
+    	$this->view->payment_detail_register = $db->getStudentPaymentDetailRegisterByID($id);
+    	 
+    	$this->view->service_only = $db->getServiceOnlyByID($id);
+    	 
+    	$this->view->product_only = $db->getProductOnlyByID($id);
+    	 
+    	$this->view->all_student_code = $db->getAllGerneralOldStudent();
+    	$this->view->all_student_name = $db->getAllGerneralOldStudentName();
+    	$this->view->all_year = $db->getAllYears();
+    	$this->view->all_session = $db->getAllSession();
+    	$this->view->all_paymentterm = $db->getAllpaymentTerm();
+    	$this->view->all_service = $db->getAllService();
+    	$this->view->all_room = $db->getAllRoom();
+    
+    	$test = $this->view->branch_info = $db->getBranchInfo();
+    	 
+    	$db = new Foundation_Model_DbTable_DbStudent();
+    	$this->view->group = $db->getAllgroup();
+    	 
+    }
+    
+    
     function getGradeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

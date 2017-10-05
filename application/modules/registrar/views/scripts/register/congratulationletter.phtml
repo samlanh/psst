@@ -119,7 +119,7 @@
 			  				</tr>
 			  				<tr>
 			  					<td>
-			  						<p><br /><br />We are very pleased to inform you that your tuition fee is <strong><?php echo number_format($this->rs['tution_feeperyear'],2);?></strong> USD/per year. Also, you are required
+			  						<p><br /><br />We are very pleased to inform you that your tuition fee is <strong><?php echo number_format($this->rs['tution_feeperyear']-$this->rs['scholarship_amount'],2);?></strong> USD/per year. Also, you are required
 			  						to pay for other fees (miscellaneous, uniform, school bus, administration and meal fee).
 			  						 Your Matriculation Card number is <strong style="white-space: nowrap;"><?php echo $this->rs['stu_code'];?></strong> </p>
 			  					</td>

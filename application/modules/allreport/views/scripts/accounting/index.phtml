@@ -85,9 +85,19 @@
   		<li><a href="<?php echo $rpt_student_by_teacher;?>"><?php echo $tr->translate('STUDENT_AMOUNTBY_TEACHER_REPORT');?></a></li>
   		<?php */?>
   		
+  		<!-- create new report  --> 
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-stu-enrollment-paymentlist'), null, true);?>"><?php echo $tr->translate('ENGLISH_ENROLLMENT_AND_PAYMENT');?></a></li>
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-kin-enrollment-payment'), null, true);?>"><?php echo $tr->translate('KINDERGARTEN_ENROLLMENT_AND_PAYMENT');?></a></li>
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-receive-service-and-payment'), null, true);?>"><?php echo $tr->translate('បញ្ជីសិស្សចុះឈ្មោះទទួលសេវាកម្មជិះរថ្តយន្ត និងតាមដានការបង់ប្រាក់');?></a></li>
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-student-stayed-and-payment'), null, true);?>"><?php echo $tr->translate('បញ្ជីសិស្សចុះឈ្មោះស្នាក់នៅ/អាហារ និង តាមដានការបង់ប្រាក់');?></a></li>
   		
-  			
-  	
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-rent-and-payment-list'), null, true);?>"><?php echo $tr->translate('បញ្ជីឈ្មោះអ្នកជួលតូប និង តាមដានការបង់ប្រាក់');?></a></li>
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-cus-nearly-end-service'), null, true);?>"><?php echo $tr->translate('របាយការណ៍អតិថិជនជិតដល់ថ្ងៃបញ្ចប់កុងត្រាជួលសេវាកម្ម');?></a></li>
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-bracket-servicelist'), null, true);?>"><?php echo $tr->translate('បញ្ជីកត់ត្រាសេវាកម្មកិបកង់-ម៉ូតូ');?></a></li>
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-result-income'), null, true);?>"><?php echo $tr->translate('របាយការណ៍លទ្ធផលចំណូល');?></a></li>
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-request-productdetail'), null, true);?>"><?php echo $tr->translate('RPT_REQUEST_PRODUCT');?></a></li>
+  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-adjust-stockdetail'), null, true);?>"><?php echo $tr->translate('RPT_ADJUST_STOCK');?></a></li>
+  		<!--//end create new report  --> 
   	</ul>
   </div>
   <div style="clear: both;"></div>

@@ -279,6 +279,43 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->group = $result;
 	}
 	
+	function mistakeCertificateAction(){
+		
+		$group_id=$this->getRequest()->getParam("id");
+		$stu_id=$this->getRequest()->getParam("stu_id");
+		
+		//echo $stu_id;
+		
+		
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'session' 		=>'',
+					'group' 		=>'',
+					'branch_id'		=>0,
+					'degree'		=>0,
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$this->view->search=$search;
+		
+		$db = new Allreport_Model_DbTable_DbMistakeCertificate();
+		$this->view->student_info = $db->getStudentInfo($group_id,$stu_id);
+		$this->view->student_info = $db->getMistakeRecord($group_id,$stu_id);
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	}
+	
+	
 	public function rptAttendenceAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -499,10 +536,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search = array(
-					'txtsearch' => "",
+					'txtsearch' 	=> "",
 					'start_date'	=> date('Y-m-d'),
 					'end_date'		=> date('Y-m-d'),
-					
+					'teacher' 		=> 0,
+					'subject' 		=> 0,
 					);
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();
@@ -513,6 +551,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rr = $rs;
 		
 		$this->view->datasearch = $search;
+		
+		$this->view->all_teacher_by_group = $db->getAllTeacherByGroup($id);
+		$this->view->all_subject_by_group = $db->getAllSubjectByGroup($id);
+		
 	}
 	
 	

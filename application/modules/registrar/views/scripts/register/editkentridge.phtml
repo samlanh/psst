@@ -80,7 +80,7 @@
 	function setValue(){
 		//dijit.byId('student_type').attr('value',3);
 		//dijit.byId('old_studens').attr('value',<?php echo $this->payment['student_id']?>);
-		//dijit.byId('is_new_stu').attr('value',<?php echo $this->payment['is_new']?>);
+		dijit.byId('is_new_stu').attr('value',<?php echo $this->payment['is_new']?>);
 		//dijit.byId('receipt_no').attr('value',<?php echo $this->payment['receipt_number']?>);
 		//dijit.byId('payment_term').attr('value',<?php if(!empty($this->payment_detail_register)){echo $this->payment_detail_register['payment_term'];}else{echo 1;}?>);
 	}
@@ -598,9 +598,22 @@ fieldset{  background:none;}
 						 <tr>
 							<td><?php echo $tr->translate("NOTE");?></td>
 							<td><input type="text" name="not" id="not" class="fullside" value="<?php echo $this->payment['note']?>" dojoType="dijit.form.TextBox"/></td>
-							</tr>
 						
-						</table>
+							
+							
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("IS_VOID");?></td>
+							<td>
+								<select name="void" id="void" dojoType="dijit.form.FilteringSelect" class="fullside">
+									<option value="0">Active</option>
+									<option value="1">Void</option>
+									<option value="2">Delete</option>
+								</select>
+							</td>
+						</tr>
+						
+					</table>
 				</fieldset>
 			</td>
 			<td valign="top" width="33%">
@@ -762,8 +775,9 @@ fieldset{  background:none;}
 							<input type="hidden" dojoType="dijit.form.TextBox" name="br_tel" value="<?php echo $this->branch_info['branch_tel'];?>" id="br_tel" />
 							<input type="hidden" dojoType="dijit.form.TextBox" value="<?php echo $this->branch_info['branch_nameen']?>" name="br_code" id="br_code" />
 							<input type="hidden" dojoType="dijit.form.TextBox" value="<?php echo $this->exchange_rate;?>" name="ex_rate" id="ex_rate" />
-							<input type="hidden" dojoType="dijit.form.TextBox" name="credit_memo_id" id="credit_memo_id" />
+							<input type="hidden" dojoType="dijit.form.TextBox" name="credit_memo_id" id="credit_memo_id" value="<?php echo $this->payment['memo_id']?>"/>
 							<input type="hidden" name="test_fee" id="test_fee" value="<?php echo $this->deduct?>" dojoType="dijit.form.TextBox" />
+							<input type="hidden" name="is_new_stu" id="is_new_stu"  dojoType="dijit.form.TextBox" />
 						</td>
 					</tr>
 					
@@ -773,7 +787,7 @@ fieldset{  background:none;}
 		<tr>
 			<td colspan="3" align="center">
 				<input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
-					iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','');displayNone();"/> 
+					iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave();"/> 
 					
 				<input type="submit"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('GO_EDIT');?>"   dojoType="dijit.form.Button" 
 					iconClass="dijitEditorIcon dijitEditorIconSave"  />
@@ -809,13 +823,11 @@ function SubmitRegister(){
 	}
 }
 
-	function printSave(){		
-		
+	function printSave(new_stu_id,new_receipt){		
 		if(dijit.byId('office_receipt').validate()) {
 			receipt='';
 			degree = dijit.byId('dept').get('value');
 			stu_type = dijit.byId('student_type').get('value');
-			
 
 			var today = new Date();
 			var dd = today.getDate();
@@ -823,11 +835,11 @@ function SubmitRegister(){
 			var yyyy = today.getFullYear();
 			
 			dojo.byId("lb_receipt_no").innerHTML = dijit.byId("receipt_no").attr('displayedValue');
-			dojo.byId("lb_stu_id").innerHTML = dijit.byId("old_studens").attr('displayedValue');		
+			dojo.byId("lb_stu_id").innerHTML = dijit.byId("old_studens").attr('displayedValue');	
 			dojo.byId("lb_sex").innerHTML = dijit.byId("sex").attr('displayedValue');
 			dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
 			dojo.byId("lb_dob").innerHTML = dijit.byId("dob").attr('displayedValue');
-			dojo.byId("lb_name").innerHTML = dijit.byId("kh_name").get('value')+" - "+dijit.byId("en_name").get('value');
+			dojo.byId("lb_name").innerHTML = dijit.byId("en_name").get('value');
 			dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
 			dojo.byId("lb_dept").innerHTML = dijit.byId('dept').attr('displayedValue');
 			dojo.byId("lb_grade").innerHTML = dijit.byId("grade").attr('displayedValue');
@@ -842,12 +854,12 @@ function SubmitRegister(){
 			var payment_type = dijit.byId("payment_type").get("value");
 
 			/*for reciept 1*/
-			dojo.byId("lb_receipt_no1").innerHTML = dijit.byId("receipt_no").attr('displayedValue');
-			dojo.byId("lb_stu_id1").innerHTML = dijit.byId("old_studens").attr('displayedValue');				
+			dojo.byId("lb_receipt_no").innerHTML = dijit.byId("receipt_no").attr('displayedValue');
+			dojo.byId("lb_stu_id").innerHTML = dijit.byId("old_studens").attr('displayedValue');	
 			dojo.byId("lb_sex1").innerHTML = dijit.byId("sex").attr('displayedValue');
 			dojo.byId("lb_date1").innerHTML  = dd+'-'+mon+'-'+yyyy;
 			dojo.byId("lb_dob1").innerHTML = dijit.byId("dob").attr('displayedValue');
-			dojo.byId("lb_name1").innerHTML = dijit.byId("kh_name").get('value')+" - "+dijit.byId("en_name").get('value');
+			dojo.byId("lb_name1").innerHTML = dijit.byId("en_name").get('value');
 			dojo.byId("lb_study_year1").innerHTML = dijit.byId("study_year").attr('displayedValue');
 			dojo.byId("lb_dept1").innerHTML = dijit.byId('dept').attr('displayedValue');
 			dojo.byId("lb_grade1").innerHTML = dijit.byId("grade").attr('displayedValue');
@@ -1090,20 +1102,7 @@ function SubmitRegister(){
 					  temp+='</tr>';
 					}
 				}
-			for(i;i<=8;i++){
-				temp+='<tr style="height: 15px;border:1px solid #000;"​ align="center"><td>&nbsp;'+i+'</td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td></tr>';
-				
-			}
+			
 			temp+='</table>';
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
 			dojo.byId('t_amountmoneytype1').innerHTML = temp;
@@ -1137,8 +1136,8 @@ function getMonthByNumber(m){
 			.hearder_table{height:25px !important;}
 			.defaulheight{line-height: 22px !important;}
 		</style>
-		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+		<div id="PrintReceipt" style="width: 22cm !important;height:13.8cm; padding: 0px; margin-bottom:30px; ">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.7cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
 				<tr height="40px;">
 					<td colspan="10"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
@@ -1164,8 +1163,8 @@ function getMonthByNumber(m){
 				</style>
 				<tr>
 					<td colspan="10" valign="top">
-						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;">
-							<tr>
+						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;height: 100%;">
+							<tr style="height: 22px;">
 								<td>Student's ID </td>
 								<td> : &nbsp;&nbsp;<label id="lb_stu_id" class="one bold"></label></td>
 								<td>Dob</td>
@@ -1173,7 +1172,7 @@ function getMonthByNumber(m){
 								<td >Grade</td>
 								<td> : &nbsp;&nbsp;<label id="lb_grade" class="one bold"></label> </td>
 							</tr>
-							<tr >
+							<tr style="height: 22px;">
 								<td>Student's Name</td>
 								<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
 								<td>Phone</td>
@@ -1181,7 +1180,7 @@ function getMonthByNumber(m){
 								<td>Academic Year</td>
 								<td>  : &nbsp;<label id="lb_study_year" class="one bold"> </label> </td>
 							</tr>
-							<tr >
+							<tr style="height: 22px;">
 								<td>Gender </td>
 								<td> : &nbsp;&nbsp;<label id="lb_sex" class=" one bold"></label></td>
 								<td>Degree</td>
@@ -1225,7 +1224,7 @@ function getMonthByNumber(m){
 										</tr>
 										<tr>
 											<td colspan="2">
-												<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
+												<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:17px;">	
 													<tr>
 														<td width="33%" align="center">Cashier</td>
 														<td width="34%" align="center">Customer</td>
@@ -1238,14 +1237,14 @@ function getMonthByNumber(m){
 													</tr>	
 													<tr style="height:15px;">
 														<td align="center">
-															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 15px;"> 
+															<div style="font-weight:bold;color:#000; font-size: 12px;font-family:'Khmer OS Battambang';margin-top: 10px;"> 
 																<?php 
 																   $session_user=new Zend_Session_Namespace('authstu');
 																   $last_name=$session_user->last_name;
 																   $username = $session_user->first_name;
 																   echo "".$last_name." ".$username;
 																?>
-																<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+																<div style="margin-top:-2px;font-size:11px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
 															</div>
 														</td>
 														<td align="center"></td>
@@ -1264,9 +1263,10 @@ function getMonthByNumber(m){
 				</tr>
 			</table>
 		</div>
-		<div id="PrintReceipt1" style="width: 22cm !important;height:13.9cm; padding: 0px; margin-bottom:30px; ">
+		
+		<div id="PrintReceipt1" style="width: 22cm !important;height:13.9cm; padding: 0px; ">
 			<div style="border-top:2px dashed #000;height: 5px;">&nbsp;</div>
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important;height: 7cm; font-size:11px !important; margin-top:0.07cm;white-space:nowrap;">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.8cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: 3px;white-space:nowrap;">
 				<tr height="40px;">
 					<td colspan="10"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
@@ -1291,9 +1291,9 @@ function getMonthByNumber(m){
 						}
 				</style>
 				<tr>
-					<td colspan="10">
-						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;">
-							<tr>
+					<td colspan="10" valign="top">
+						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;height: 100%;">
+							<tr style="height: 22px;">
 								<td>Student's ID </td>
 								<td> : &nbsp;&nbsp;<label id="lb_stu_id1" class="one bold"></label></td>
 								<td>Dob</td>
@@ -1301,7 +1301,7 @@ function getMonthByNumber(m){
 								<td >Grade</td>
 								<td> : &nbsp;&nbsp;<label id="lb_grade1" class="one bold"></label> </td>
 							</tr>
-							<tr >
+							<tr style="height: 22px;">
 								<td>Student's Name</td>
 								<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name1" class="one bold"></label> </td>
 								<td>Phone</td>
@@ -1309,7 +1309,7 @@ function getMonthByNumber(m){
 								<td>Academic Year</td>
 								<td>  : &nbsp;<label id="lb_study_year1" class="one bold"> </label> </td>
 							</tr>
-							<tr >
+							<tr style="height: 22px;">
 								<td>Gender </td>
 								<td> : &nbsp;&nbsp;<label id="lb_sex1" class=" one bold"></label></td>
 								<td>Degree</td>
@@ -1353,7 +1353,7 @@ function getMonthByNumber(m){
 										</tr>
 										<tr>
 											<td colspan="2">
-												<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
+												<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:17px;">	
 													<tr>
 														<td width="33%" align="center">Cashier</td>
 														<td width="34%" align="center">Customer</td>
@@ -1366,14 +1366,14 @@ function getMonthByNumber(m){
 													</tr>	
 													<tr style="height:15px;">
 														<td align="center">
-															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 15px;"> 
+															<div style="font-weight:bold;color:#000; font-size: 12px;font-family:'Khmer OS Battambang';margin-top: 10px;"> 
 																<?php 
 																   $session_user=new Zend_Session_Namespace('authstu');
 																   $last_name=$session_user->last_name;
 																   $username = $session_user->first_name;
 																   echo "".$last_name." ".$username;
 																?>
-																<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+																<div style="margin-top:-2px;font-size:11px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
 															</div>
 														</td>
 														<td align="center"></td>
@@ -1441,7 +1441,7 @@ function setHourDefault(){
 }
 //save daata when sub button print 
 function printSubmit(){
-	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML+dojo.byId('PrintReceipt1').innerHTML;
+	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML + dojo.byId('PrintReceipt1').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
 	hideDialog1();
@@ -1917,23 +1917,24 @@ function deleteRecord(index) {
  function readMoneyInKhmer(netTotal){
 		var str = netTotal.toString();
         str_cent = 'សេន';
-		
 		first_decimal = str.substr(-2);
-		
-		//alert(first_decimal);
-		
 		last_decimal = str.substr(-1);
-		
         if(first_decimal>0){string='និង';}else{string="";str_cent=""}
-	 
 		if(first_decimal!='00' && first_decimal<10 ){str_zero = "សូន្យ";}else{str_zero='';}
-	 
 	    first_money_decimal = read_in_khmer_from_10_to_99(first_decimal);
-	  
 	    last_money_decimal = read_in_khmer_from_0_to_9(last_decimal)
-	  
-	  money_khmer=read_money_in_khmer(netTotal);
-	  dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់');
+	    money_khmer=read_money_in_khmer(netTotal);
+
+	    if(first_decimal>0){string_en='និង';}else{string_en="";str_cent_en=""}
+		if(first_decimal!='00' && first_decimal<10 ){str_zero_en = "Zero";}else{str_zero_en='';}
+	    first_money_decimal_en = read_in_english_from_10_to_99(first_decimal);
+	    last_money_decimal_en = read_in_english_from_0_to_9(last_decimal)
+	    money_english=read_money_in_english(netTotal);
+	    read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់'
+
+	    read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+' Dollar Only )'
+	    
+	    dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់'+read_eng);
  }
 
  

@@ -1266,6 +1266,8 @@ function addRow() {
 				<?php foreach($this->all_paymentterm as $term){?>
 					template+='<option value="'+<?php echo $term['id']?>+'"><?php echo $term['name'];?></option>';
 				<?php }?>
+			template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/>';
+			template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="product_type_'+col+'" id="product_type_'+col+'"/>';
 			template+='</select></td>';
 			column = 0;
 			
@@ -1284,10 +1286,9 @@ function addRow() {
 			template+='<td width="10%"> <input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
 			template+='<td width="8%"> <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ...." style="width:140px;" /></td>';
 		
-			template+='<td width="6%">';	
-				template+='<input type="text" style="width:30px;" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/>';
-				template+='<input type="text" style="width:30px;" dojoType="dijit.form.TextBox" name="product_type_'+col+'" id="product_type_'+col+'"/>';
-			template+='</td >';
+			//template+='<td width="6%">';	
+				
+			//template+='</td >';
 		
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";

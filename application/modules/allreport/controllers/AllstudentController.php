@@ -292,14 +292,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-					'title' 		=>'',
-					'study_year' 	=>'',
-					'grade_all' 	=>'',
-					'session' 		=>'',
-					'group' 		=>'',
-					'branch_id'		=>0,
-					'degree'		=>0,
-					'start_date'	=> date('Y-m-d'),
+					'start_date'	=> null,
 					'end_date'		=> date('Y-m-d'),
 			);
 		}
@@ -307,7 +300,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		
 		$db = new Allreport_Model_DbTable_DbMistakeCertificate();
 		$this->view->student_info = $db->getStudentInfo($group_id,$stu_id);
-		$this->view->student_mistake = $db->getMistakeRecord($group_id,$stu_id);
+		$this->view->student_mistake = $db->getMistakeRecord($search,$group_id,$stu_id);
 		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
@@ -538,11 +531,15 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$search = array(
 					'txtsearch' 	=> "",
 					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d',strtotime('+1 month')),
 					'teacher' 		=> 0,
 					'subject' 		=> 0,
 					);
 		}
+		
+		
+		//echo $end_date;exit();
+		
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$row = $db->getStudentGroup($id,$search);
 		$this->view->rs = $row;

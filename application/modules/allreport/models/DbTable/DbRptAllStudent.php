@@ -179,7 +179,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					g.academic_year,
 					g.degree,
 					g.grade,
-					g.session
+					g.session,
+					s.is_stu_new
 				FROM 
 					rms_student AS s , 
 					rms_group AS g,

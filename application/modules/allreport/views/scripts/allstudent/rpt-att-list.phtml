@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('RPT_STUDENT_GROUP'); 
+	$this->headTitle($tr->translate("STUDENT_ATTENDANT_LIST")); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
@@ -16,7 +16,11 @@
 	$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
 	$amount_day =$diff/ (60*60*24);
 	
-// 	echo $amount_day;
+	//echo $amount_day;
+	
+	$amount_day = $amount_day + 1;
+	
+	//echo $amount_day;
 	
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 	
@@ -25,6 +29,9 @@
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-att-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="80%">
 			<tr>
+				
+				<td><input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->datasearch['start_date'];?>" type="text"></td>
+				<td><input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date"  value="<?php echo $this->datasearch['end_date'];?>" type="text"></td>
 				<td>
 					<select name="teacher" id="teacher" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setTeacherName();">
 						<option value="0">select teacher</option>
@@ -41,8 +48,6 @@
 						<?php }}?>
 					</select>
 				</td>
-				<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->datasearch['start_date'];?>" type="text"></td>
-				<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="end_date" name="end_date"  value="<?php echo $this->datasearch['end_date'];?>" type="text"></td>
 				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 			</tr>
 		</table>
@@ -104,7 +109,7 @@
 														Class report for Academic Year : <?php echo $this->rr['academic']?>
 													</td>
 													<td width="20%" align="center" style="border-right: 1px solid #000;">
-														<?php echo date("F",strtotime($start_date));?>
+														From <?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> to <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?>
 													</td>
 													<td width="20%" >
 														Room : <?php echo $this->rr['room_name']?>
@@ -142,7 +147,7 @@
 									<tr class="cheader" align="center">
 										<td colspan="5"><?php echo $tr->translate("Month");?></td>
 										<td style="background: none;" align="center" colspan="<?php echo $total_day;?>">
-											<?php echo date("F",strtotime($start_date));?>
+											From &nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> &nbsp;&nbsp;to&nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?>
 										</td>
 									</tr>
 									

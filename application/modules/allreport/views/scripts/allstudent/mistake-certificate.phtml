@@ -1,0 +1,230 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("RPT_TOTAL_STUDENT_MISTAKE"));
+	
+	$frm =  $this->form_search;
+	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+	
+	$start_date = $this->datasearch['start_date'];
+	$end_date = $this->datasearch['end_date'];
+// 	echo $start_date;exit();
+	$date1 = date("d-m-Y",strtotime($start_date));
+	$date2 = date('d-m-Y',strtotime($end_date));
+	$diff = abs(strtotime($date2) - strtotime($date1));
+	$years = floor($diff / (365*60*60*24));
+	$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+	$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+	$amount_day =$diff/ (60*60*24);
+	$amount_day = $amount_day + 1;
+	
+	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+	
+?>	
+	<div style="width: 30cm;margin: 0 auto;">
+		<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'mistake-certificate')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table width="50%">
+				<tr>
+					<td><input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->search['start_date'];?>" type="text"></td>
+					<td><input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date"  value="<?php echo $this->search['end_date'];?>" type="text"></td>
+					<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+			 	</tr>
+			</table>		
+		</form>
+	</div>
+	<div style="border: 1px dotted #000;background: #fff;width:21cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+		<div id="divPrint">
+			<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
+				<style>
+					table tr th{
+						border: 1px solid #000;	
+					}
+					.style{
+						line-height: 20px; font-size: 12px !important;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					.hover:hover{background: #ccc;}
+					
+				</style>
+			
+				<tr>
+					<td style="border:5px solid #000;">
+						<table width="100%" border="0" style="text-align:center;font-family: Khmer OS Muol;padding:15px;">
+							<tr>
+								<td width="12%" rowspan="3" valign="top" style="white-space:nowrap;">
+									<img style="width: 100%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+									<div style="font-size:8px;">សាលាសម្រាប់វរសិស្ស</div>
+									<div style="font-size:13px;font-family:Mistral;">School for the Elite</div>
+								</td>
+								
+								<td width="76%" style="font-size: 17px;">
+									<?php echo $tr->translate("CUSTOMER_BRANCH")?>
+								</td>
+								
+								<td  width="12%" rowspan="3" >
+									<table width="100%">
+										<tr>
+											<td style="border:1px solid #000;height: 100px;">
+												&nbsp;
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							
+							<tr>
+								<td style="font-size: 18px;font-family: Time New Roman;font-weight: bold;">
+									Paññāsāstra International School
+								</td>
+							</tr>
+							
+							<tr>
+								<td style="font-size: 14px;">
+									&nbsp;
+								</td>
+							</tr>
+							
+							<tr>
+								<td align="center" colspan="3" style="font-size: 14px;font-family: Khmer OS Muol;">
+									<div style="margin-top: -30px;">សលាកបត្រព័ត៌មាន<br />
+									ឆ្នាំសិក្សា <span style="font-weight:bold;"><?php echo $this->student_info['academic_year']?><span>
+									</div>
+								</td>
+							</tr>
+							
+							<tr>
+								<td colspan="3" align="left">
+									<table cellpadding="5"​ style="font-family:'Khmer OS Battambang'; margin:0 auto;width:100%;border:0px solid #000; border-collapse: collapse;white-space: nowrap;font-size: 14px;"  border="0" >
+										<tr>
+											<td>
+												<div>
+													ឈ្មោះ &nbsp; <?php echo $this->student_info['stu_khname']?> &nbsp; ជាអក្សរឡាតាំង &nbsp;<?php echo $this->student_info['stu_enname']?> &nbsp;ភេទ &nbsp;<?php echo $this->student_info['sex']?> &nbsp;ថ្ងៃខែឆ្នាំកំណើត &nbsp;<?php echo date("d/m/Y",strtotime($this->student_info['dob']))?> <br />
+													ទីកន្លែងកំណើត &nbsp;<?php echo $this->student_info['pob']?><br />
+													ថ្នាក់ទី &nbsp;<?php echo $this->student_info['grade']?> &nbsp;ឆ្នាំសិក្សា &nbsp;<?php echo $this->student_info['academic_year']?><br />
+													
+													អាសយដ្ឋានបច្ចុប្បន្នផ្ទះលេខ &nbsp;<?php echo $this->student_info['home_num']?> ផ្លូវ <?php echo $this->student_info['street_num']?> សង្កាត់ <?php echo $this->student_info['commune_name']?> ខណ្ឌ <?php echo $this->student_info['district_name']?> រាជធានី <?php echo $this->student_info['province_name']?><br />
+												
+													ឈ្មោះឪពុក &nbsp; <?php echo $this->student_info['father_enname']?> &nbsp; មុខរបរ &nbsp; <?php echo $this->student_info['fa_job']?> &nbsp; លេខទូរស័ព្ទ &nbsp; <?php echo $this->student_info['father_phone']?><br />
+													ឈ្មោះម្តាយ &nbsp; <?php echo $this->student_info['mother_enname']?> &nbsp; មុខរបរ &nbsp; <?php echo $this->student_info['mo_job']?> &nbsp; លេខទូរស័ព្ទ &nbsp; <?php echo $this->student_info['mother_phone']?><br />
+													លេខទូរស័ព្ទផ្ទះ.......................................................................................................<br />
+													ប្រវត្តិសុខភាព ........................................................................................................
+												</div>
+											</td>
+										</tr>
+										
+									</table>	
+								</td>
+							</tr>
+							
+						</table>
+					</td>
+				</tr>
+			
+				<tr>
+					<td>
+						<table width="100%" border="1" style="border-collapse:collapse;border:1px solid #000;font-family: Khmer OS Battambang;">
+							<tr style="font-size:13px;">
+								<td rowspan="2" align="center" style="font-family: Khmer OS Muol;">
+									កាលបរិច្ឆេទ	
+								</td>
+								<td colspan="3" align="center" style="font-family: Khmer OS Muol;">
+									កំហុស
+								</td>
+								<td rowspan="2" align="center" style="font-family: Khmer OS Muol;">
+									របាយបញ្ហា
+								</td>
+								<td rowspan="2" align="center" style="font-family: Khmer OS Muol;">
+									ផ្សេងៗ
+								</td>
+							</tr>
+							<tr style="font-size:12px;">
+								<td align="center">ស្រាល</td>
+								<td align="center">មធ្យម</td>
+								<td align="center">ធ្ងន់</td>
+							</tr>
+						<?php $i=0;$s=0;$m=0;$l=0;if(!empty($this->student_mistake)){foreach($this->student_mistake as $rs){$i++;?>
+							<tr>
+								<td align="center"><?php echo date("d-m-Y",strtotime($rs['mistake_date']))?></td>
+								<td align="center"><?php if($rs['mistake_type']==1){echo "1";$s++;}?></td>
+								<td align="center"><?php if($rs['mistake_type']==2){echo "1";$m++;}?></td>
+								<td align="center"><?php if($rs['mistake_type']==3){echo "1";$l++;}?></td>
+								<td>&nbsp;<?php echo $rs['description']?></td>
+								<td><?php echo "";?></td>
+							</tr>
+						<?php } }?>
+						
+						<?php for($i;$i<8;$i++){?>
+							<tr>
+								<td align="center"></td>
+								<td align="center"></td>
+								<td align="center"></td>
+								<td align="center"></td>
+								<td>&nbsp;</td>
+								<td><?php echo "";?></td>
+							</tr>
+						<?php }?>
+						
+							<tr align="center">
+								<td>
+									សរុប
+								</td>
+								<td>
+									<?php echo $s." ដង";?>
+								</td>
+								<td>
+									<?php echo $m." ដង";?>
+								</td>
+								<td>
+									<?php echo $l." ដង";?>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>
+						<table width="100%">
+							<tr>
+								<td width="40%">
+									&nbsp;
+								</td>
+								<td width="60%">
+									<table width="100%" border="0"  style="font-size:14px;font-family:Khmer OS Battambang;" >
+										<tr>
+											<td colspan="3">
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; រាជធានីភ្នំពេញ ថ្ងៃទី &nbsp;&nbsp;<?php echo date("d");?>&nbsp;&nbsp; ខែ &nbsp;&nbsp;<?php echo date("M");?>&nbsp;&nbsp; ឆ្នាំ &nbsp;&nbsp;<?php echo date("Y");?>
+											</td>
+										</tr>
+										<tr>
+											<td></td>
+											<td colspan="2" style="font-family: Khmer OS Muol;">
+												ប្រធានផ្នែក វិន័យ
+											</td>
+										</tr>
+										<tr>
+											<td colspan="3">&nbsp;</td>
+										</tr>
+										<tr>
+											<td width="30%"></td>
+											<td width="30%" align="right" style="font-family: Khmer OS Muol;">ឈុំ សារិ</td>
+											<td width="40%" colspan="1">
+												
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	

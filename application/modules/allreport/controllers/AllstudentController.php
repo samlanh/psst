@@ -416,6 +416,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'session' 		=> "",
 					'room'=>0,
 					'degree'=>0,
+					'study_status'=>-1,
 			);
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();

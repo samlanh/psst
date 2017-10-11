@@ -168,7 +168,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'grade'			=>$_data['grade'],
 						'room'			=>$_data['room'],
 						'session'		=>$_data['session'],
-				
 						'father_enname'	=>$_data['fa_name_en'],
 						//'father_khname'=>$_data['fa_name_kh'],
 						'father_dob'	=>$_data['fa_dob'],
@@ -291,19 +290,16 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'stu_enname'	=>$_data['name_en'],
 					'stu_khname'	=>$_data['name_kh'],
 					'sex'			=>$_data['sex'],
-					
 					'nationality'	=>$_data['studen_national'],
 					'dob'			=>$_data['date_of_birth'],
 					'tel'			=>$_data['phone'],
 					'pob'			=>$_data['pob'],
-			
 					'home_num'		=>$_data['home_note'],
 					'street_num'	=>$_data['way_note'],
 					'village_name'	=>$_data['village_note'],
 					'commune_name'	=>$_data['commun_note'],
 					'district_name'	=>$_data['distric_note'],
 					'province_id'	=>$_data['student_province'],
-					
 					'group_id'		=>$_data['group'],
 					'academic_year'	=>$_data['academic_year'],
 					'stu_code'		=>$_data['student_id'],

@@ -91,7 +91,7 @@
 							<td title="សញ្ឃាតិ" ><?php echo $tr->translate("NATIONALITY");?></td>
 							<td class="bold"> &nbsp;<?php echo $this->rs['nationality'];?></td>
 							<td ><?php echo $tr->translate("DOB");?></td>
-							<td class="bold"> &nbsp;<?php echo date("d/m/Y",strtotime($this->rs['dob']));?></td>
+							<td class="bold"> &nbsp;<?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></td>
 							<td><?php echo $tr->translate("PHONE");?></td>
 							<td class="bold"> &nbsp;<?php echo $this->rs['tel'];?></td>
 						</tr>
@@ -182,7 +182,7 @@
 							<td ><?php echo $tr->translate("NAME");?>*</td>
 							<td class="bold"> &nbsp;<?php echo $this->rs['father_enname'];?></td>
 							<td><?php echo $tr->translate("DOB");?></td>
-							<td  class="bold">&nbsp;<?php echo date("d/m/Y",strtotime($this->rs['father_dob']));?></td>
+							<td  class="bold">&nbsp;<?php echo date("d",strtotime($this->rs['father_dob'])>0)?"":date("d/m/Y",strtotime($this->rs['father_dob']));?></td>
 							<td><?php echo $tr->translate("NATIONALITY");?></td>
 							<td class="bold">&nbsp; <?php echo $this->rs['father_nation'];?></td>
 						</tr>
@@ -199,7 +199,7 @@
 							<td ><?php echo $tr->translate("NAME");?>*</td>
 							<td class="bold">&nbsp;<?php echo $this->rs['mother_enname'];?></td>
 							<td><?php echo $tr->translate("DOB");?></td>
-							<td class="bold"><?php echo date("d/m/Y" ,strtotime($this->rs['mother_dob']));?></td>
+							<td class="bold"><?php echo date("d",strtotime($this->rs['mother_dob'])>0)?"":date("d/m/Y" ,strtotime($this->rs['mother_dob']));?></td>
 							<td><?php echo $tr->translate("NATIONALITY");?></td>
 							<td class="bold">&nbsp;<?php echo $this->rs['mother_nation'];?></td>
 						</tr>
@@ -216,7 +216,7 @@
 							<td><?php echo $tr->translate("NAME");?>*</td>
 							<td class="bold">&nbsp;<?php echo $this->rs['guardian_enname'];?></td>
 							<td><?php echo $tr->translate("DOB");?></td>
-							<td class="bold">&nbsp;<?php echo date("d/m/Y",strtotime($this->rs['guardian_dob']));?></td>
+							<td class="bold">&nbsp;<?php echo date("d",strtotime($this->rs['guardian_dob'])>0)?"":date("d/m/Y",strtotime($this->rs['guardian_dob']));?></td>
 							<td><?php echo $tr->translate("NATIONALITY");?></td>
 							<td class="bold">&nbsp;<?php echo $this->rs['guardian_nation'];?></td>
 						</tr>

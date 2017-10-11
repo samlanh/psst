@@ -435,8 +435,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					`rms_student` AS st
 				WHERE 
     				g.`id` = gsd.`group_id` 
-    				AND st.`stu_id` = gsd.`stu_id` 
-    		";
+    				AND st.`stu_id` = gsd.`stu_id` ";
     	
     	$where = ' ';
 
@@ -456,7 +455,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=" AND `g`.`session`=".$search['session'];
     	}
     	
-    	$order =" ORDER BY `g`.`degree`,g.id DESC";
+    	$order =" ORDER BY `g`.`degree`,`g`.`grade`,g.id DESC";
     	
     	return $db->fetchAll($sql.$where.$order);
     }

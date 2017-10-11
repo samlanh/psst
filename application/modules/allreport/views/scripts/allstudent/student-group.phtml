@@ -9,9 +9,12 @@
 		<table width="100%" >
 	       <tr>
 	           <td><?php echo $frm->getElement("title");?></td>
+	           <td><?php echo $frm->getElement("study_status");?></td>
+			   <td> <?php echo $frm->getElement("study_year");?></td>
 	           <td> <?php echo $frm->getElement("group");?></td>
-	           <td> <?php echo $frm->getElement("study_year");?></td>
 	           <td> <?php echo $frm->getElement("degree");?></td>
+	        </tr>
+	        <tr>
 	           <td> <?php echo $frm->getElement("grade");?></td>
 			   <td> <?php echo $frm->getElement("session");?></td>
 			   <td> <?php echo $frm->getElement("room");?></td>
@@ -59,7 +62,7 @@
 								<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("PRINT");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("STUDENT_LIST");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("RESULT_SEMESTER1");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("RESULT_SEMESTER2");?>&nbsp;</td>

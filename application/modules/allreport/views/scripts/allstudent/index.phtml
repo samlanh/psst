@@ -21,6 +21,7 @@
   
   $rpt_student_mistake = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-mistake'), null, true);
   $rpt_total_student_mistake = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-total-student-mistake'), null, true);
+  $rpt_score_bac_monthly = $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-bac-monthly'), null, true);
   
   ?>
   <style>
@@ -52,17 +53,18 @@
   		<li><a href="<?php echo $rpt_student_statistic;?>"><?php echo $tr->translate('RPT_STUDENT_STATISTIC');?></a></li>
   		<li><a href="<?php echo $rpt_student_history;?>"><?php echo $tr->translate('STUDENT_HISTORY_REPORT');?></a></li>
   		<li><a href="<?php echo $rpt_student_detail;?>"><?php echo $tr->translate('RPT_STUDENT_DETAIL');?></a></li>
-  		<li><a href="<?php echo $rpt_gep_monthly_score;?>"><?php echo $tr->translate('REPORT_GEP_MONTHLYSCORE');?></a></li>
-  		<li><a href="<?php echo $rpt_gep_semester_score;?>"><?php echo $tr->translate('REPORT_SEMESTER_EVALUATION');?></a></li>
-  		<li><a href="<?php echo $rpt_student_attedence;?>"><?php echo $tr->translate('STUDENT_ATTENDENCE');?></a></li>
-  		<li><a href="<?php echo $rpt_student_attedence_highschool;?>"><?php echo $tr->translate('STUDENT_ATTENDENCE')." ( ".$tr->translate('HIGH_SCHOOL')." )";?></a></li>
-  		<li><a href="<?php echo $rpt_student_drop;?>"><?php echo $tr->translate('RPT_STUDENT_DROPS');?></a></li>
+  		<!-- <li><a href="<?php //echo $rpt_gep_monthly_score;?>"><?php //echo $tr->translate('REPORT_GEP_MONTHLYSCORE');?></a></li>
+  		<li><a href="<?php //echo $rpt_gep_semester_score;?>"><?php //echo $tr->translate('REPORT_SEMESTER_EVALUATION');?></a></li>
+  		<li><a href="<?php //echo $rpt_student_attedence_highschool;?>"><?php //echo $tr->translate('STUDENT_ATTENDENCE')." ( ".$tr->translate('HIGH_SCHOOL')." )";?></a></li>
   		
+  		-->
+  		<li><a href="<?php echo $rpt_student_attedence;?>"><?php echo $tr->translate('STUDENT_ATTENDENCE');?></a></li>
+  		<li><a href="<?php echo $rpt_student_drop;?>"><?php echo $tr->translate('RPT_STUDENT_DROPS');?></a></li>
   		<li><a href="<?php echo $rpt_student_group;?>"><?php echo $tr->translate('RPT_STUDENT_GROUP');?></a></li>
   		<li><a href="<?php echo $rpt_group_student_change_group;?>"><?php echo $tr->translate('RPT_GROUP_STUDENT_CHANGE_GROUP');?></a></li>
   		<li><a href="<?php echo $rpt_studentchangegroup;?>"><?php echo $tr->translate('RPT_STUDENT_CHANGE_GROUP');?></a></li>
-  		
-  		<li><a href="<?php echo $rpt_student_mistake;?>"><?php echo $tr->translate('RPT_STUDENT_MISTAKE');?></a></li>
+  		<li><a href="<?php echo $rpt_score_bac_monthly;?>"><?php echo $tr->translate('STUDENT_SCORE_REPORT');?></a></li>
+  	    <li><a href="<?php echo $rpt_student_mistake;?>"><?php echo $tr->translate('RPT_STUDENT_MISTAKE');?></a></li>
   		<li><a href="<?php echo $rpt_total_student_mistake;?>"><?php echo $tr->translate('RPT_TOTAL_STUDENT_MISTAKE');?></a></li>
   		
   	</ul>

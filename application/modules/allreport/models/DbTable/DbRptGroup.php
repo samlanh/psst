@@ -158,7 +158,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	`g`.`start_date`,
 				   	`g`.`expired_date`,
 				   	`g`.`note`,
-				   	(SELECT `rms_view`.`name_en` FROM `rms_view` WHERE `rms_view`.`type` = 9 AND `rms_view`.`key_code` = `g`.`is_pass` LIMIT 1) AS `status`,
+				   	(SELECT `rms_view`.`name_kh` FROM `rms_view` WHERE `rms_view`.`type` = 9 AND `rms_view`.`key_code` = `g`.`is_pass` LIMIT 1) AS `status`,
 				   	(SELECT COUNT(`stu_id`) FROM `rms_group_detail_student` WHERE `group_id`=`g`.`id` LIMIT 1) AS Num_Student
 				FROM 
 	   				`rms_group` `g`
@@ -195,6 +195,10 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	if(!empty($search['group'])){
 	   		$where.=' AND g.id='.$search['group'];
 	   	}
+	   	if($search['study_status']>=0){
+	   		$where.=' AND g.is_pass='.$search['study_status'];
+	   	}
+	   	
 	   	$order = ' ORDER BY `g`.`id` DESC ';
 	   	return $db->fetchAll($sql.$where.$order);
 	}

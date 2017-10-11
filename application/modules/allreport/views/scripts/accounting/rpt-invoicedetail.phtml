@@ -109,7 +109,7 @@ p.t_shadow {
 											
 											<?php $s=0; ?>
 											<?php  foreach ($payment_term as $value){?>
-											<?php echo '<th style="border:1px solid #000;white-space: nowrap;">'.$value.'</th>'; ?>			
+											<?php echo '<th style="border:1px solid #000;white-space: nowrap;min-width:50px;">'.$value.'</th>'; ?>			
 											<?php }?>
 											
 											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("START_DATE");?></td>
@@ -169,27 +169,30 @@ p.t_shadow {
 							   <td colspan="5" align="center" style="font-weight: 900;line-height: 16px;">
 							   <br>
 							   <p >
-							   		<?php						
-											$address= explode("," , $this->data['branch_add']);						
-											foreach ($address AS $i =>$addres){
-												echo "<p class='t_shadow' style='font-weight:bold;font-size:15px;color:#5F8EC2;line-height:5px;white-space:nowrap; '>".$addres."</p>";
-											}
+							   		<?php	
+							   		echo $tr->translate("CUSTOMER_ADDRESS");
+// 											$address= explode("," , $this->data['branch_add']);						
+// 											foreach ($address AS $i =>$addres){
+// 												echo "<p class='t_shadow' style='font-weight:bold;font-size:15px;color:#5F8EC2;line-height:5px;white-space:nowrap; '>".$addres."</p>";
+// 											}
 										?>
 							   		</p>
 							   		<p > 
-										<?php						
-											$email= explode("," , $this->data['branch_email']);						
-											foreach ($email AS $i =>$emails){
-												echo "<p class='t_shadow' style='font-weight:bold;font-size:15px;color:#5F8EC2;line-height:5px;white-space:nowrap; '>".$emails."</p>";
-											}
+										<?php	
+										echo $tr->translate("CUSTOMER_TEL");
+// 											$email= explode("," , $this->data['branch_email']);						
+// 											foreach ($email AS $i =>$emails){
+// 												echo "<p class='t_shadow' style='font-weight:bold;font-size:15px;color:#5F8EC2;line-height:5px;white-space:nowrap; '>".$emails."</p>";
+// 											}
 										?> 
 										</p>
 										<p  >
-										<?php						
-											$tel= explode("," , $this->data['branch-tel']);						
-											foreach ($tel AS $i =>$tels){
-												echo "<p class='t_shadow' style='font-weight:bold;font-size:15px;color:#5F8EC2;line-height:5px;white-space:nowrap; '>".$tels."</p>";
-											}
+										<?php	
+										echo $tr->translate("CUSTOMER_EMAIL");					
+// 											$tel= explode("," , $this->data['branch-tel']);						
+// 											foreach ($tel AS $i =>$tels){
+// 												echo "<p class='t_shadow' style='font-weight:bold;font-size:15px;color:#5F8EC2;line-height:5px;white-space:nowrap; '>".$tels."</p>";
+// 											}
 										?>
 										</p>
 							   

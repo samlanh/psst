@@ -72,6 +72,12 @@ class IndexController extends Zend_Controller_Action
 					$session_user->first_name= $user_info['first_name'];
 					$session_user->branch_id= $user_info['branch_id'];
 					
+					$session_user->url_report = $db_user->getArrAclReport($user_info['user_type']);
+					
+					//print_r($session_user->url_report);exit();
+					
+					//$session_user->url_report= $report;
+					
 // 					for($i=0; $i<count($arr_acl);$i++){
 // 						$arr_module[$i]=$arr_acl[$i]['module'];
 // 						if($arr_acl[$i]['module'] == 'exchange'){

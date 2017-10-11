@@ -58,6 +58,9 @@
    $rpt_creditmemo =$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-creditmemo'), null, true);
   ?>
   <div style="background:#ccc; width: 100%;">
+  
+  <?php /*?>	
+  	
   	<ul class="link-rpt">
   		<li><a href="<?php echo $rpt_studentpayment;?>"><?php echo $tr->translate('STUDENT_PAYMENT_REPORT');?></a></li>
   		<li><a href="<?php echo $rpt_studentpaymentdetail;?>"><?php echo $tr->translate('STUDENT_PAYMENT_DETAIL_REPORT');?></a></li>
@@ -81,9 +84,6 @@
 		<li><a href="<?php echo $rpt_invoice;?>"><?php echo $tr->translate('INVOICE');?></a></li>
 		<li><a href="<?php echo $rpt_transfer;?>"><?php echo $tr->translate('TRANSFER');?></a></li>
 		<li><a href="<?php echo $rpt_creditmemo;?>"><?php echo $tr->translate('CREDITMENO');?></a></li>
-  		<?php /*?>
-  		<li><a href="<?php echo $rpt_student_by_teacher;?>"><?php echo $tr->translate('STUDENT_AMOUNTBY_TEACHER_REPORT');?></a></li>
-  		<?php */?>
   		
   		<!-- create new report  --> 
   		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-stu-enrollment-paymentlist'), null, true);?>"><?php echo $tr->translate('ENGLISH_ENROLLMENT_AND_PAYMENT');?></a></li>
@@ -99,6 +99,30 @@
   		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-adjust-stockdetail'), null, true);?>"><?php echo $tr->translate('RPT_ADJUST_STOCK');?></a></li>
   		<!--//end create new report  --> 
   	</ul>
+  	<?php */?>
+  	
+  	
+  	<ul class="link-rpt">
+       <?php
+	       $session_user=new Zend_Session_Namespace('authstu');
+	       $report_url = $session_user->url_report;
+	       
+	      //print_r($report_url);
+	       
+	       if(!empty($report_url)){
+		       foreach($report_url as $url){
+		       if($url['controller']=='accounting' AND $url['action']!='index' AND $url['action']!='rpt-paymentrecieptdetail' ){
+	   ?>
+		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+		        <?php echo $tr->translate($url['label']);?></a></li>
+		        
+		        <?php }?>
+		        
+	       <?php }
+       	  }?>
+   </ul>
+  	
+  	
   </div>
   <div style="clear: both;"></div>
   

@@ -37,25 +37,69 @@ hr.style-two {
   
   ?>
   <title><?php echo $tr->translate('LIBRARY_REPORT');?></title>
+  
+  
   <div style=" width: 100%;">
     <h3  style="font-family:'khmer os muol light';font-size:14px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("BOOK_REPORT");?></h3><hr>
   	<ul class="link-rpt">
+  	    
+  	    <?php /*?>
   	    <li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-book-list'), null, true);?>"><?php echo $tr->translate('BOOK_LIST_REPORT');?></a></li>
   		<li><a href="<?php  echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-unavailable'), null, true);?>"><?php echo $tr->translate('BOOK_UNAVAILABLE_REPORT');?></a></li>
   		
   	    <li><a href="<?php  echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-borrowdetail'), null, true);?>"><?php echo $tr->translate('STUDENT_BORROW_BOOK_DETAIL_REPORT');?></a></li>
   	    <li><a href="<?php  echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-returndetail'), null, true);?>"><?php echo $tr->translate('STUDENT_RETURN_BOOK_DETAIL_REPORT');?></a></li>
   	    <li><a href="<?php  echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-borrow-book-byweek'), null, true);?>"><?php echo $tr->translate('STUDENT_BORROW_BOOK_BYWEEK_REPORT');?></a></li>
+  		<?php */?>
+  		
+  		<?php
+	       $session_user=new Zend_Session_Namespace('authstu');
+	       $report_url = $session_user->url_report;
+	       
+	       //print_r($report_url);
+	       
+	       if(!empty($report_url)){
+		       foreach($report_url as $url){
+		       //if($url['action']=='index' OR $url['action']=='receipt' OR $url['action']=='rpt-updatepayment' OR $url['action']=='updatereceipt'){continue;}
+		       if($url['controller']=='library' AND $url['action']!='index' AND $url['action']!='rpt-nealydayreturn' AND $url['action']!='rpt-summarydetail' AND $url['action']!='rpt-purchasedetail' AND $url['action']!='rpt-brokendetail'){
+	   ?>
+		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+		        <?php echo $tr->translate($url['label']);?></a></li>
+		        <?php }?>
+		        
+	       <?php }
+       	  }?>
+  	
   	</ul>
   </div>
   
   <div style=" width: 100%;">
  	<h3  style="font-family:'khmer os muol light';font-size:14px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("PURCHASE_AND_BROKEN_REPORT");?></h3><hr>
   	<ul class="link-rpt">
+  	   <?php /*?>
   	   <li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-nealydayreturn'), null, true);?>"><?php echo $tr->translate('STUDENT_NEARLY_RETURN_BOOK_REPORT');?></a></li>
   	   <li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-summarydetail'), null, true);?>"><?php echo $tr->translate('SUMMARY_DETAIL_REPORT');?></a></li>
   		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-purchasedetail'), null, true);?>"><?php echo $tr->translate('PURCHASE_BOOK_DETAIL_REPORT');?></a></li>
   		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-brokendetail'), null, true);?>"><?php echo $tr->translate('BROKEN_BOOK_DETAIL_REPORT');?></a></li>
+  		<?php */?>
+  	
+  		<?php
+	       $session_user=new Zend_Session_Namespace('authstu');
+	       $report_url = $session_user->url_report;
+	       
+	       //print_r($report_url);
+	       
+	       if(!empty($report_url)){
+		       foreach($report_url as $url){
+		       if($url['controller']=='library' AND $url['action']!='index' AND $url['action']!='rpt-book-list' AND $url['action']!='rpt-unavailable' AND $url['action']!='rpt-borrowdetail' AND $url['action']!='rpt-returndetail' AND $url['action']!='rpt-borrow-book-byweek'){
+	   ?>
+		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+		        <?php echo $tr->translate($url['label']);?></a></li>
+		        <?php }?>
+		        
+	       <?php }
+       	  }?>
+  	
   	</ul>
   </div>
   

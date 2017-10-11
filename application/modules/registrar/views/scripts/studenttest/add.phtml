@@ -58,8 +58,8 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 								<td valign="top" width="33%">
 									<table cellspacing="5"  width="100%">
 										<tr>
-										    <td><?php echo $tr->translate("RECEIPT")?></td>
-											<td><input readonly="readonly" style="color:red;" type="text" name="receipt" id="receipt" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+										    <td><?php echo $tr->translate("STUDENT_ID")?></td>
+											<td><input  style="color:red;" type="text" name="stu_code" id="stu_code" class="fullside" dojoType="dijit.form.TextBox"   /></td>
 										</tr>
 										<tr>
 										    <td><?php echo $tr->translate("SERIAL")?></td>
@@ -84,8 +84,8 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 											 <td><input type="text" name="old_grade" id="old_grade" class="fullside" dojoType="dijit.form.TextBox" /></td>
 										</tr>
 										<tr>
-											 <td><?php echo $tr->translate("PRICE")?></td>
-											 <td><input type="text" name="test_cost" required="true"  id="test_cost" class="fullside" dojoType="dijit.form.NumberTextBox"   /></td>
+											 <td><?php echo $tr->translate("TEST_DATE")?></td>
+											 <td><input type="text" name="test_date" required="true"  id="test_date" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" value="now" dojoType="dijit.form.DateTextBox"   /></td>
 										</tr>
 									</table>
 								</td>
@@ -277,12 +277,12 @@ function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
 
-
+/*
 
 dojo.ready(function(){
 	getReceiptNumber('');
 });
-var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'get-receipt-number')); ?>";
+var url_get_recceipt_number = "<?php //echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'get-receipt-number')); ?>";
 function getReceiptNumber(condition){
 	dojo.xhrPost({
 		url:url_get_recceipt_number,
@@ -301,6 +301,9 @@ function getReceiptNumber(condition){
 		}
 	});
 }
+
+*/
+
 function printReceipt(new_receipt){
 	if(dijit.byId('frm_teststudent').validate()) {
 		if(new_receipt==''){

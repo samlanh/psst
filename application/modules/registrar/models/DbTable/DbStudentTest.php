@@ -13,7 +13,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function addStudentTest($data){
 		$array = array(
 					'branch_id'	=>$this->getBranchId(),
-					'receipt'=>$data['receipt'],
+					'stu_code'	=>$data['stu_code'],
 					'kh_name'	=>$data['kh_name'],
 					'en_name'	=>$data['en_name'],
 					'sex'		=>$data['sex'],
@@ -26,7 +26,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'serial'	=>$data['serial'],
 					'address'	=>$data['address'],
 					'user_id'	=>$this->getUserId(),
-					'total_price'=>$data['test_cost'],
+					'test_date'	=>$data['test_date'],
 					'create_date'=>date('Y-m-d'),
 				);
 		$this->insert($array);
@@ -49,11 +49,13 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'old_grade'	=>$data['old_grade'],
 					'degree'	=>$data['degree'],
 					'note'		=>$data['note'],
-					'serial'	=>$data['serial'],
+					
 					'address'	=>$data['address'],
 					'user_id'	=>$this->getUserId(),
-					'total_price'=>$data['test_cost'],
 					'status'	=>$data['status'],
+				
+					'stu_code'	=>$data['stu_code'],
+					'test_date'	=>$data['test_date'],
 				
 					'degree_result'	=>$data['degree_result'],
 					'grade_result'	=>$data['grade_result'],
@@ -78,21 +80,22 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
 		
 		$where = " and ".$from_date." AND ".$to_date;
+		
 		$sql="  SELECT 
 					id,
-					receipt,
+					stu_code,
 					kh_name,
 					en_name,
 					(select name_kh from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
-					dob,
-					phone,serial,
+					phone,
+					serial,
 					(select en_name from rms_dept where dept_id=degree LIMIT 1) as degree,
 					old_school,
 					old_grade,
 					note,
-					total_price,
+					test_date,
 					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1),
-					(select name_en from rms_view where type=14 and key_code=updated_result) as result_status
+					(select name_en from rms_view where type=15 and key_code=updated_result) as result_status
 				FROM 
 					rms_student_test
 				where
@@ -108,6 +111,9 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$s_where[] = " old_grade LIKE '%{$s_search}%'";
 				$where .=' AND ('.implode(' OR ',$s_where).')';
 		}      
+		if(!empty($search['degree'])){
+			$where .= " and degree = ".$search['degree'];
+		}
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}	

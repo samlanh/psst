@@ -19,7 +19,8 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		else{
     			$search = array(
     					'txtsearch'=>'',
-    					'start_date'=> date('Y-m-d'),
+    					'degree' => '',
+    					'start_date'=> null,
     					'end_date'=>date('Y-m-d'),
     			);
     		}
@@ -27,7 +28,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllStudentTest($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("RECEIPT_NO","NAME_KH","NAME_EN","SEX","DOB","PHONE","SERIAL","DEGREE","OLD_SCHOOL","OLD_GRADE","NOTE","PRICE","BY_USER","STATUS");
+    		$collumns = array("STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","SERIAL","DEGREE","OLD_SCHOOL","OLD_GRADE","NOTE","TEST_DATE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'studenttest','action'=>'edit',
     		);
@@ -36,6 +37,12 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
+    	
+    	
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($form);
+    	$this->view->form_search=$form;
     }
     public function addAction()
     {

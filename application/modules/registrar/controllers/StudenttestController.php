@@ -20,6 +20,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     			$search = array(
     					'txtsearch'=>'',
     					'degree' => '',
+    					'result_status' => '',
     					'start_date'=> null,
     					'end_date'=>date('Y-m-d'),
     			);

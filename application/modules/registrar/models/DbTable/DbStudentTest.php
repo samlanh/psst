@@ -114,6 +114,9 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		if(!empty($search['degree'])){
 			$where .= " and degree = ".$search['degree'];
 		}
+		if(!empty($search['result_status'])){
+			$where .= " and updated_result = ".$search['result_status'];
+		}
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}	

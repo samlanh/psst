@@ -23,9 +23,17 @@
 	<tr> 
 		<td><input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>" placeholder="Search" type="text" ></td>
 		<td> <?php echo $frm->getElement("branch_id");?></td>
+		<td> <?php echo $frm->getElement("degree");?></td>
 		<td> <input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" value="<?php  echo $this->search['start_date']; ?>"  type="text"></td>
 	 	<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text"></td>
 		<td> <?php echo $frm->getElement("user");?></td>
+		<td>
+   			<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
+   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>> Select result status </option>
+   				<option value="0" <?php if($this->search['result_status']==0){echo "selected='selected'";}?>> Result not updated </option>
+   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>> Result updated </option>
+   			</select>
+   		</td>
 		<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 	</tr>
 </table>
@@ -42,7 +50,7 @@
 					</td>
 					<td align="center"  width="70%">
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></strong><br />
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT"); ?></strong><br />
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_TEST"); ?></strong><br />
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong><br /><br />
 					</td>
 					<td width="15%">&nbsp;</td>
@@ -102,15 +110,15 @@
 							 
 								  <tr style="font-size:12px; height: 20px;white-space:nowrap;"​ class="hover">
 								    <td><?php echo $i;?></td>
-								    <td><?php echo $rs['serial']; ?></td>
+								    <td><?php echo $rs['stu_code']; ?></td>
 								    <td><?php echo $rs['kh_name']; ?></td>
 								    <td><?php echo $rs['en_name']; ?></td>
 								    <td><?php echo $rs['sex']; ?></td>
 								    <td><?php echo $rs['phone']; ?></td>
 								    
-								    <td><?php echo $rs['degree_result']; ?></td>
-								    <td><?php echo $rs['grade_result']; ?></td>
-								    <td><?php echo $rs['session_result']; ?></td>
+								    <td><?php echo $rs['degree']; ?></td>
+								    <td><?php echo $rs['grade']; ?></td>
+								    <td><?php echo $rs['session']; ?></td>
 								    
 								   	<td><?php echo $rs['note']; ?></td>
 								    <td><?php echo $rs['user_id'];?></td>

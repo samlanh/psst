@@ -115,7 +115,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		$stu_code = $this->getNewAccountNumber($data['dept']);
-		$receipt_number = $this->getRecieptNo();
+		$receipt_number =$data['receipt_no']; //$this->getRecieptNo();
 		
 		try{
 			if($data['payment_type']==1){//Tuition Fee and Service
@@ -306,6 +306,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				if($data['stu_test']>0){
 					$array = array(
 							'register'=>1,
+							'stu_code'=>$data['stu_id']
 							);
 					$where= " id = ".$data['stu_test'];
 					$this->update($array, $where);

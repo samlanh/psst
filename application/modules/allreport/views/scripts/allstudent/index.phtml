@@ -90,7 +90,7 @@
 	       
 	       if(!empty($report_url)){
 		       foreach($report_url as $url){
-		       if($url['controller']=='allstudent' AND $url['action']!='index' AND $url['action']!='certify' AND $url['action']!='rpt-transcript' AND $url['action']!='academic-transcript' AND $url['action']!='rpt-att-list' ){
+		       if($url['controller']=='allstudent' AND $url['action']!='index' AND $url['action']!='certify' AND $url['action']!='rpt-transcript' AND $url['action']!='academic-transcript' AND $url['action']!='rpt-att-list' AND $url['action']!='student-group' ){
 	   ?>
 		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
 		        <?php echo $tr->translate($url['label']);?></a></li>

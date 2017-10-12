@@ -432,12 +432,18 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				FROM 
 					`rms_group_detail_student` AS gsd,
 					`rms_group` AS g,
-					`rms_student` AS st
+					`rms_student` AS st,
+					rms_student_attendence AS sta
 				WHERE 
-    				g.`id` = gsd.`group_id` 
-    				AND st.`stu_id` = gsd.`stu_id` ";
+    			 g.`id` = gsd.`group_id`
+				 AND sta.group_id = g.id 
+				 AND st.`stu_id` = gsd.`stu_id` 
+				 AND sta.status=1 
+				 AND g.is_pass!=1 ";
     	
-    	$where = ' ';
+    	$from_date =(empty($search['start_date']))? '1': "sta.date_attendence >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "sta.date_attendence <= '".$search['end_date']." 23:59:59'";
+    	$where = " AND ".$from_date." AND ".$to_date;
 
     	if(!empty($search['group'])){
     		$where.= " AND g.id =".$search['group'];
@@ -455,7 +461,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=" AND `g`.`session`=".$search['session'];
     	}
     	
-    	$order =" ORDER BY `g`.`degree`,`g`.`grade`,g.id DESC";
+    	$order =" ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC";
     	
     	return $db->fetchAll($sql.$where.$order);
     }

@@ -482,7 +482,7 @@ fieldset{  background:none;}
 						<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="2" >
 							<tr>
 								<td><?php echo $tr->translate("RECEIPT_NO");?></td>
-								<td><input type="text" style="color: red;" dojoType="dijit.form.TextBox" name="receipt_no" id="receipt_no" class="fullside" readOnly="readOnly"/></td>
+								<td><input type="text" style="color: red;" required="1" dojoType="dijit.form.ValidationTextBox" name="receipt_no" id="receipt_no" class="fullside" /></td>
 							</tr>
 							 <tr>	
 								<td><?php echo $tr->translate("PAYMENT_TERM");?><label class="red">*</label></td>
@@ -553,7 +553,7 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("PAID_DATE");?></td>
-								<td><input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" value="now" name="paid_date" id="paid_date" class="fullside"/></td>
+								<td><input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="" name="paid_date" id="paid_date" class="fullside"/></td>
 							</tr>
 						</table>
 					</fieldset>
@@ -1273,7 +1273,7 @@ function addRow() {
 			
 			
 			
-			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'" readonly="readonly" value="0" dojoType="dijit.form.NumberTextBox"  />';	
+			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  />';	
 			template+='</td >';
 			
 			template+='<td width="4%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
@@ -1678,10 +1678,12 @@ function printSave(new_stu_id,new_receipt){
 		return false;
 	}
 		if(dijit.byId('office_receipt').validate()) {
-			receipt='';
+			//receipt='';
+			receipt=dijit.byId("receipt_no").get("value");
 			degree = dijit.byId('dept').get('value');
 			stu_type = dijit.byId('student_type').get('value');
-			if(stu_type==1){
+
+			/*if(stu_type==1){
 				if(new_stu_id==''){
 					getStudentNo(degree,1);
 				}else{
@@ -1696,9 +1698,10 @@ function printSave(new_stu_id,new_receipt){
 				}else{
 					receipt = new_receipt;
 				}
-			}		
+			}	*/
 
-			var today = new Date();
+			//var today = new Date();
+			today = dijit.byId("paid_date").get("value");
 			var dd = today.getDate();
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
@@ -1885,13 +1888,20 @@ function printSave(new_stu_id,new_receipt){
 							}
 							var y = a.getFullYear();
 							var epx_date = dd + '/' + months + '/' + y ;
+							discount_percent = dijit.byId('discount_percent').get('value');
+							
+							//if(discount_percent=='' && discount_percent==0){}
+							
+							discount_fix = dijit.byId('discount_fix').get('value');
+							//if(discount_fix==0){discount_fix='';}
+							//if(discount_fix!='' && discount_fix>0){discount_fix=discount_fix+'$';}							
 							
 						  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee').get('value')+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('discount_percent').get('value')+' %</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">'+discount_percent+'%+'+discount_fix+'$</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('total_payment').get('value')+'</td>';
 						  
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';

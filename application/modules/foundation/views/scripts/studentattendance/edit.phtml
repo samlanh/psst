@@ -215,6 +215,7 @@ function gender(sex){
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
+	dijit.byId('save_close').set('disabled',true);
     return true;
    }else {
     return false;
@@ -271,14 +272,14 @@ function gender(sex){
 								</select>
 							</td>
 							<td title="បន្ទប់សិក្សា"><?php echo $tr->translate("ROOM_NAME");?>*</td>
-									<td>
-									   <select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" >
-									   		<option value="-1"> Select Room</option>
-									   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
-									   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
-									   		<?php }}?>
-									   </select>
-									</td>
+								<td>
+								   <select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" >
+								   		<option value="-1"> Select Room</option>
+								   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
+								   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
+								   		<?php }}?>
+								   </select>
+								</td>
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("ATTENDANCE_DATE");?></td>
@@ -444,7 +445,7 @@ function getInfoBygroup(type=null){
 			dijit.byId('session').set('readOnly',true);
 			
 			dijit.byId('room').set('value',data.room_id);
-			dijit.byId('room').set('readOnly',true);
+			//dijit.byId('room').set('readOnly',true);
 			filterStudentBygroup(type);
 
 			if(data.degree==2){
@@ -485,7 +486,6 @@ function getSubjectByGroup(type=null){
 }
 var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
 function filterStudentBygroup(type=null){
-	alert(1);
 	group = dijit.byId('group').get('value');
 	var textareastyle=" font-family: 'Khmer OS Battambang'";
 	if(group==''){

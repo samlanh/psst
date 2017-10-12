@@ -28,14 +28,15 @@ class RsvAcl_UserController extends Zend_Controller_Action
         $this->view->activelist =$this->activelist;       
         $this->view->user_typelist =$this->user_typelist;   
         $this->view->active =-1;
-        
-        $_data = array(
-        	'active'=>-1,
-        	'user_type'=>-1,
-        	'txtsearch'=>''
-        );
+       
         if($this->getRequest()->isPost()){     	
         	$_data=$this->getRequest()->getPost();
+        }else{
+        	$_data = array(
+        			'active'=>-1,
+        			'user_type'=>-1,
+        			'txtsearch'=>''
+        	);
         }
         $rs_rows = $db_user->getUserList($_data);
         $_rs = array();
@@ -61,6 +62,9 @@ class RsvAcl_UserController extends Zend_Controller_Action
         		'module'=>'rsvacl','controller'=>'user','action'=>'edit',
         );
         $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('user_type'=>$link,'branch_name'=>$link,'user_name'=>$link,'name'=>$link));
+    	$this->view->user_type = $_data['user_type'];
+    	$this->view->active = $_data['active'];
+    	$this->view->txtsearch = $_data['txtsearch'];
     }
     public function viewUserAction()
     {   

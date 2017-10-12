@@ -475,7 +475,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	{
 		$id=$this->getRequest()->getParam("id");
 		if(empty($id)){
-			$this->_redirect("/allreport/foundation/student-group");
+			$this->_redirect("/allreport/allstudent/student-group");
 		}
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();

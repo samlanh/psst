@@ -107,7 +107,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	
 	function getAllTeacher($search){
 		$db = $this->getAdapter();
-		$sql = 'SELECT id, teacher_code, teacher_name_kh,teacher_name_en, 
+		$sql = 'SELECT id, teacher_code, teacher_name_kh,
 				(select name_kh from rms_view where rms_view.type=2 and rms_view.key_code=rms_teacher.sex) AS sex, 
 				nationality,
 				tel,
@@ -119,7 +119,6 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if(!empty($search['title'])){
 		    $s_where = array();
 			$s_search = addslashes(trim($search['title']));
-			
 			$s_where[] = " teacher_code LIKE '%{$s_search}%'";
 			$s_where[] = " teacher_name_en LIKE '%{$s_search}%'";
 			$s_where[] = " teacher_name_kh LIKE '%{$s_search}%'";

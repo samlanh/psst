@@ -92,7 +92,7 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 									<table cellspacing="5"  width="100%">
 										<tr>
 										    <td><?php echo $tr->translate("STUDENT_ID")?></td>
-											<td><input type="text" name="stu_code" id="stu_code" class="fullside" dojoType="dijit.form.TextBox"  value="<?php echo $this->rs['stu_code']?>"/></td>
+											<td><input type="text" name="stu_code" id="stu_code" readonly class="fullside" dojoType="dijit.form.TextBox"  value="<?php echo $this->rs['stu_code']?>"/></td>
 										</tr>
 										<tr>
 										    <td><?php echo $tr->translate("SERIAL")?></td>
@@ -135,7 +135,7 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 									<table cellspacing="0"  width="100%">
 										<tr>
 											<td valign="top"><?php echo $tr->translate("NOTE")?></td>
-											<td><textarea style="height:100px !important;font-family:'Khmer OS Battambang';font-size: 15px;"  class="fullside" name="note" id="note" dojoType="dijit.form.Textarea" ><?php echo $this->rs['note']?></textarea></td>
+											<td><textarea style="min-height:120px !important;font-family:'Khmer OS Battambang';font-size: 15px;"  class="fullside" name="note" id="note" dojoType="dijit.form.Textarea" ><?php echo $this->rs['note']?></textarea></td>
 										</tr>
 										
 										<tr>

@@ -22,14 +22,13 @@ class Global_LecturerController extends Zend_Controller_Action {
 			$rs_rows= $db->getAllTeacher($search);
 			//print_r($rs_rows);exit();
 			$list = new Application_Form_Frmtable();
-			$collumns = array("ID_NUMBER","NAME_KH","NAME_EN","SEX","NATIONALITY","PHONE","NOTE","STATUS");
+			$collumns = array("ID_NUMBER","TEACHER_NAME","SEX","NATIONALITY","PHONE","NOTE","STATUS");
 			 
 			$link=array(
 					'module'=>'global','controller'=>'lecturer','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link));
 		}catch (Exception $e){
-			echo $e->getMessage();exit();
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			

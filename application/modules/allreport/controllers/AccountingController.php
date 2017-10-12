@@ -958,6 +958,60 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		)->render();
 	
 	}
+	function rptRequestProductdetailAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+					
+			}else{
+				$search = array(
+						'title'	        =>	'',
+						'branch_id'		=>  '',
+						'start_date'	=>	date('Y-m-d'),
+						'end_date'		=>	date('Y-m-d'),
+						'status_search'	=> 1
+				);
+			}
+			$this->view->search = $search;
+			$db=new Allreport_Model_DbTable_DbRequestStock();
+			$ds=$this->view->rows=$db->getAllRequestProductDetail($search);
+	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+	}
+	function rptAdjustStockdetailAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+					
+			}else{
+				$search = array(
+						'title'	        =>	'',
+						'branch_id'		=>  '',
+						'start_date'	=>	date('Y-m-d'),
+						'end_date'		=>	date('Y-m-d'),
+						'status_search'	=> 1
+				);
+			}
+			$this->view->search = $search;
+			$db=new Allreport_Model_DbTable_DbRequestStock();
+			$ds=$this->view->rows=$db->getAllAdjustStockDetail($search);
+	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+	}
 	
 	
 }

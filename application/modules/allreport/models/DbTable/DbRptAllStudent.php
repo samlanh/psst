@@ -418,7 +418,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getStudentAttendence($search){
     	$db = $this->getAdapter();
-    	$sql="SELECT 
+    	$sql=" SELECT 
 					g.id as group_id,
 					g.`group_code`,
 					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
@@ -461,7 +461,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=" AND `g`.`session`=".$search['session'];
     	}
     	
-    	$order =" ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC";
+    	$order =" GROUP BY sta.group_id,gsd.stu_id ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC";
     	
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -512,14 +512,18 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				FROM 
 					`rms_group_detail_student` AS gsd,
 					`rms_group` AS g,
-					`rms_student` AS st
+					`rms_student` AS st,
+					rms_student_discipline as sd
 				WHERE 
-    				 g.`id` = gsd.`group_id` 
+					sd.group_id = g.id 
+					AND sd.status=1
+    				AND g.`id` = gsd.`group_id` 
     				AND st.`stu_id` = gsd.`stu_id` 
     				and st.is_subspend = 0
-    		";
-    	
-    	$where = ' ';
+    			";
+    	$from_date =(empty($search['start_date']))? '1': "sd.mistake_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "sd.mistake_date <= '".$search['end_date']." 23:59:59'";
+    	$where = " AND ".$from_date." AND ".$to_date;
 
     	if(!empty($search['title'])){
     		$s_where = array();
@@ -546,7 +550,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=" AND `g`.`session`=".$search['session'];
     	}
     	
-    	$order =" ORDER BY `g`.`degree`,g.id DESC";
+    	$order =" GROUP BY g.id,gsd.stu_id ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC";
     	
     	return $db->fetchAll($sql.$where.$order);
     }

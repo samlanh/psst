@@ -6,7 +6,6 @@
 	$db = new Allreport_Model_DbTable_DbRptAllStudent();
 	$start_date = $this->datasearch['start_date'];
 	$end_date = $this->datasearch['end_date'];
-// 	echo $start_date;exit();
 	$date1 = date("d-m-Y",strtotime($start_date));
 	$date2 = date('d-m-Y',strtotime($end_date));
 	$diff = abs(strtotime($date2) - strtotime($date1));
@@ -82,7 +81,7 @@
 							<?php if ($key>0){ 
 							?>
 							<tr>
-								<td align="right" colspan="<?php echo $amount_day+5;?>" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+								<td align="right" colspan="<?php echo $amount_day+7;?>" style=" border: 1px solid #fff; border-top: 1px solid #000;">
 									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family: 'Times New Roman','Khmer OS Battambang';">
 									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $i." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 								</td>
@@ -133,11 +132,8 @@
 									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<td align="center" >
 										<?php  $check_date = $db->checkDateAttendence(date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
-												//print_r($check_date)."";exit();
 											if (!empty($check_date)){
-												
 												$attentence_status = $db->getStatusAttendence($rs['stu_id'], date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
-												
 												if ($attentence_status['attendence_status']==2){ 
 													echo "A"; $a=$a+1;
 												}

@@ -95,6 +95,10 @@ dojo.ready(function(){
 								<td style="color:#1949d6;width:90px;" ><?php echo $tr->translate("ប្រចាំឆមាស");?></td>
 								<td style="color:red;style="width:90px;""><?php echo $tr->translate("RANK");?></td>
 								<td style="min-width:130px;"><?php echo $tr->translate("OTHERS");?></td>
+								
+								<input type="hidden" name="group_id" id="group_id" value="<?php echo $rs['group_id'];?>" dojoType="dijit.form.TextBox" />
+								<input type="hidden" name="semester" id="semester" value="<?php echo $rs['for_semester'];?>" dojoType="dijit.form.TextBox" />
+								
 							</tr>
 							<?php }$i++;?>
 							<tr class="style" style="">
@@ -168,6 +172,43 @@ dojo.ready(function(){
 						</table>
 					</td>
 				</tr>
+				
+				
+				
 			</table>
 		</div>
+		
+		<table>
+			<tr>
+				<td colspan="3"><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="button" onclick="printSelected();"><?php echo $tr->translate("OUTSTANDING_STUDENT");?></button></td>
+			</tr>
+		</table>
+		
 	</div>
+	
+	
+<script>
+	function printSelected(){
+
+		group = dijit.byId('group_id').get('value');
+		semester = dijit.byId('semester').get('value');
+		
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			$url_copy =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'semester-outstanding-student'));
+		?>
+	
+		 if(group!='' && semester!=''){
+			window.location.href = '<?php echo $url_copy;?>';
+		 }else{
+			alert('Please select record you want to print');
+			return false;
+		 }
+		
+	}
+</script>	
+	
+	
+	
+	

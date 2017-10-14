@@ -118,7 +118,8 @@ dojo.ready(function(){
 									<td>&nbsp;<?php echo $tr->translate("FOR_MONTH");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("FOR_SEMESTER");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("PRINT");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("RANK");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("OUTSTANDING_STUDENT");?>&nbsp;</td>
 								  </tr>
 							  </thead>
 							<?php
@@ -139,6 +140,9 @@ dojo.ready(function(){
 							    <td><?php echo $rs['for_semester']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
+							    
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'monthly-outstanding-student','id'=>$rs['id']));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>
+							    
 							  </tr>
 							<?php 
 							 }

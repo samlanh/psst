@@ -1,0 +1,369 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate("តារាងកិត្តិយស")); 
+	echo $this->headTitle();
+	$frm =  $this->form_search;
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	$day = array(
+			"Mon" =>'ច័ន្ទ',
+			"Tue" =>'អង្គារ',
+			"Wed" =>'ពុធ',
+			"Thu" =>'ព្រហស្បតិ៍',
+			"Fri" =>'សុក្រ',
+			"Sat" =>'សៅរ៍',
+			"Sun" =>'អាទិត្យ',
+	);
+	$month = array(
+				"01"=>"មករា",
+				"02"=>"កុម្ភៈ",
+				"03"=>"មីនា",
+				"04"=>"មេសា",
+				"05"=>"ឧសភា",
+				"06"=>"មិថុនា",
+				"07"=>"កក្កដា",
+				"08"=>"សីហា",
+				"09"=>"កញ្ញា",
+				"10"=>"តុលា",
+				"11"=>"វិច្ឆិកា",
+				"12"=>"ធ្នូ"
+			);
+?>	
+<body>
+	<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+		<div id="divPrint">
+		<style type="text/css">
+			.style{
+				line-height: 20px; font-size: 12px !important;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+				body{
+				    background:url(../images/logo.png);  
+				}
+			}
+			.padding{ padding: 0 1px !important;}
+			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+			tr{ page-break-inside:avoid; page-break-after:auto }
+			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+		</style>
+		
+	<?php if(!empty($this->studentgroup)){?>	
+		
+		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+			<tr>
+				<td>	
+						<?php
+							 $show=1; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;$female=0;
+							 $duplicate=0;$count_pass=0;
+							 $rank="";
+							 $rank1=0;
+							 $rank2=0;
+							 $rank3=0;
+							 $rank4=0;
+							 $rank5=0;
+							 
+// 							 print_R($this->studentgroup);
+							 if (!empty($this->all_student)){
+							 	foreach($this->all_student as $key=> $rs){
+							 		if($rs['sex']==1){
+							 			$sex = $tr->translate("MALE");
+							 		}else{
+							 			$sex = $tr->translate("FEMALE");
+							 			$female++;
+							 		}
+							 }}
+							 
+							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){
+								if($rs['total_score']==$old_totalscore){
+									if($key==1){
+										$rank2=$old_rank;
+									}
+									if($key==2){
+										$rank3=$old_rank;
+									}
+									if($key==3){
+										$rank4=$old_rank;
+									}
+									if($key==4){
+										$rank5=$old_rank;
+									}
+								}else{
+									if($key==0){
+										$rank1="១";
+										$old_rank = "១";
+									}
+									if($key==1){
+										$rank2="២";
+										$old_rank = "២";
+									}
+									if($key==2){
+										$rank3="៣";
+										$old_rank = "៣";
+									}
+									if($key==3){
+										$rank4="៤";
+										$old_rank = "៤";
+									}
+									if($key==4){
+										$rank5="៥";
+										$old_rank = "៥";
+									}
+								}
+								$old_totalscore = $rs['total_score'];
+						?>
+						<?php }}?>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<td>
+						<table width="100%" border="0" style="background-image: url('logo.png');">
+							<tr>
+								<td colspan="3" align="center" style="font-family: Khmer MEF2;font-size: 20px;">
+									ព្រះរាជាណាចក្រកម្ពុជា <br />
+									ជាតិ សាសនា ព្រះមហាក្សត្រ
+								</td>
+							</r>
+						
+							<tr>
+								<td width="33%">&nbsp;</td>
+								<td width="34%">&nbsp;</td>	
+								<td width="33%">&nbsp;</td>
+							</tr>
+							
+							<tr>
+								<td>
+									<table width="70%">
+										<tr>
+											<td width="100%" align="center">
+												<img style="width: 50%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+												<div style="font-size:10px;">សាលាសម្រាប់វរសិស្ស</div>
+												<div style="font-size:15px;font-family:Mistral;">School for the Elite</div>
+											</td>
+										</tr>
+									</table>
+									
+								</td>
+								<td align="center" style="font-family: Khmer MEF2;font-size: 16px;">
+									<span style="font-size: 18px;">តារាងកិត្តិយស </span><br />
+									ប្រចាំឆ្នាំខែ <?php echo $this->studentgroup[0]['for_month'];?> ឆ្នាំសិក្សា  <label id="academic_year"></label><br />
+									ថ្នាក់ <?php echo $this->studentgroup[0]['grade'];?>
+								</td>
+								
+								<script type="text/javascript">
+									year = convertEnglishToKhmerNumber(' <?php echo $this->studentgroup[0]['start_year'];?>')+' - '+convertEnglishToKhmerNumber('<?php echo $this->studentgroup[0]['end_year'];?>');
+									dojo.byId('academic_year').innerHTML=year;
+								</script>
+								
+								<td></td>
+							</tr>
+							<style>
+								.number{color: red;}
+								.studentname{color:#1318b9;font-size: 16px;}
+							</style>
+							<tr>
+								<td>&nbsp;</td>
+								<td>
+									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 15px;">
+										<tr>
+											<td align="center">
+												<table width="100px" height="115px">
+													<tr>
+														<td style="border:1px solid #000;">
+															<img style="width: 100px;height: 115px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[0])){echo $this->baseUrl().'/images/'.$this->studentgroup[0]['photo'];}?>">
+														</td>
+													</tr>
+												</table>											
+											</td>
+										</tr>
+										<tr align="center">
+											<td colspan="1" class="number">លេខ <?php echo $rank1;?></td>
+										</tr>
+										<tr align="center">
+											<td class="studentname" colspan="1">
+												<?php echo $this->studentgroup[0]['stu_khname']?>
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td>&nbsp;</td>
+							</tr>	
+							
+							<tr>
+								<td>
+									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 15px;">
+										<tr>
+											<td align="center">
+												<table width="100px" height="115px">
+													<tr>
+														<td style="border:1px solid #000;">
+															<img style="width: 100px;height: 115px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[1])){echo $this->baseUrl().'/images/'.$this->studentgroup[1]['photo'];}?>">
+														</td>
+													</tr>
+												</table>											
+											</td>
+										</tr>
+										<tr align="center">
+											<td class="number">លេខ <?php echo $rank2;?></td>
+										</tr>
+										<tr align="center">
+											<td style=""  class="studentname" >
+												<?php echo $this->studentgroup[1]['stu_khname']?>
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td>
+									&nbsp;
+								</td>
+								<td>
+									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 15px;">
+										<tr>
+											<td align="center">
+												<table width="100px" height="115px">
+													<tr>
+														<td style="border:1px solid #000;">
+															<img style="width: 100px;height: 115px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[2])){echo $this->baseUrl().'/images/'.$this->studentgroup[2]['photo'];}?>">
+														</td>
+													</tr>
+												</table>											
+											</td>
+										</tr>
+										<tr align="center">
+											<td class="number">លេខ <?php echo $rank3;?></td>
+										</tr>
+										<tr align="center">
+											<td style=""  class="studentname" >
+												<?php if(!empty($this->studentgroup[2])){echo $this->studentgroup[2]['stu_khname'];}?>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							
+							<tr>
+								<td>
+									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 15px;">
+										<tr>
+											<td align="center">
+												<table width="100px" height="115px">
+													<tr>
+														<td style="border:1px solid #000;">
+															<img style="width: 100px;height: 115px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[3])){echo $this->baseUrl().'/images/'.$this->studentgroup[3]['photo'];}?>">
+														</td>
+													</tr>
+												</table>											
+											</td>
+										</tr>
+										<tr align="center">
+											<td class="number">លេខ <?php echo $rank4;?></td>
+										</tr>
+										<tr align="center">
+											<td style=""  class="studentname" >
+												<?php if(!empty($this->studentgroup[3])){echo $this->studentgroup[3]['stu_khname'];}?>
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td>
+									&nbsp;
+								</td>
+								<td>
+									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 15px;">
+										<tr>
+											<td align="center">
+												<table width="100px" height="115px">
+													<tr>
+														<td style="border:1px solid #000;">
+															<img style="width: 100px;height: 115px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[4])){echo $this->baseUrl().'/images/'.$this->studentgroup[4]['photo'];}?>">
+														</td>
+													</tr>
+												</table>											
+											</td>
+										</tr>
+										<tr align="center">
+											<td class="number">លេខ <?php echo $rank5;?></td>
+										</tr>
+										<tr align="center">
+											<td  class="studentname" >
+												<?php if(!empty($this->studentgroup[4])){echo $this->studentgroup[4]['stu_khname'];}?>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>	
+							<tr>
+								<td colspan="3">
+									&nbsp;
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									&nbsp;&nbsp;&nbsp; បញ្ឈប់បញ្ជីត្រឹមចំនួនសិស្ស <?php echo count($this->all_student)?> នាក់ ស្រី <?php echo $female;?> នាក់ ។
+								</td>
+							</tr>	
+							<tr>
+								<td colspan="1">
+									&nbsp;&nbsp;&nbsp; ភ្នំពេញ ថ្ងៃទី &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ខែ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ឆ្នាំ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								</td>
+								<td colspan="1">
+									&nbsp;
+								</td>
+								<td colspan="1">
+									&nbsp;&nbsp;&nbsp; ភ្នំពេញ ថ្ងៃទី &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ខែ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ឆ្នាំ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								</td>
+							</tr>	
+							<tr>
+								<td colspan="1" align="center">
+									បានឃើញ និង ឯកភាព <br />
+									នាយកសាលា
+								</td>
+								<td colspan="1">
+									&nbsp;
+								</td>
+								<td colspan="1" align="center">
+									គ្រូបន្ទុកថ្នាក់
+								</td>
+							</tr>	
+							<tr>	
+								<td colspan="3">
+									&nbsp;
+								</td>
+							</tr>
+							<tr>	
+								<td colspan="3">
+									&nbsp;
+								</td>
+							</tr>
+							<tr>	
+								<td colspan="2">
+									&nbsp;
+								</td>
+								<td colspan="1" align="center">
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $this->studentgroup[0]['teacher'];?>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				
+				
+			</table>
+		
+		<?php }else{echo "No Result !!!";}?>	
+			
+		</div>
+	</div>
+	
+</body>

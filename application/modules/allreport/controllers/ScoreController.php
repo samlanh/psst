@@ -61,7 +61,7 @@ public function init()
     	}
     	$this->view->search=$search;
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id);
+    	$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id,1);
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
     	$this->view->month = $db->getAllMonth();
     	$form=new Registrar_Form_FrmSearchInfor();
@@ -69,6 +69,35 @@ public function init()
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     }
+    
+    function monthlyOutstandingStudentAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search = array(
+    				'group_name' => '',
+    				'study_year'=> '',
+    				'grade_bac'=> '',
+    				'degree_bac'=>'',
+    				'session'=> '',
+    				'for_month'=>'',
+    		);
+    	}
+    	$this->view->search=$search;
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id,2);
+    	$this->view->all_student = $db->getStundetScoreDetailGroup($search,$id,1);
+    	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
+    	$this->view->month = $db->getAllMonth();
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($form);
+    	$this->view->form_search=$form;
+    }
+    
+    
     function rptResultbysemesterAction(){
     	$group_id=$this->getRequest()->getParam("id");
     	$type=$this->getRequest()->getParam("type");
@@ -87,6 +116,26 @@ public function init()
     	array_multisort($array_score, SORT_DESC, $result_semester);
     	$this->view->studentgroup = $result_semester;
     }
+    
+    function semesterOutstandingStudentAction(){
+    	$group_id=$this->getRequest()->getParam("id");
+    	$type=$this->getRequest()->getParam("type");
+    	$search= array();
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$result_semester = $db->getStundetScorebySemester($group_id,$type);
+    	$array_score = array();
+    	if(!empty($result_semester)){
+    		foreach ($result_semester as $key => $row){
+    			$array_score[$key]['score_average'] = ($row['average']+$row['avg_exam'])/2;
+    		}
+    	}
+    	if(empty($result_semester)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/allstudent/student-group");
+    	}
+    	array_multisort($array_score, SORT_DESC, $result_semester);
+    	$this->view->studentgroup = $result_semester;
+    }
+    
     function rptResultbyyearAction(){
     	$group_id=$this->getRequest()->getParam("id");
     	$type=$this->getRequest()->getParam("type");

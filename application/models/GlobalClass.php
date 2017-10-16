@@ -226,6 +226,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			if($rows){
 				$imgnone='<img src="'.$base_url.'/images/icon/cross.png"/>';
 				$imgtick='<img src="'.$base_url.'/images/icon/apply2.png"/>';
+				$request=Zend_Controller_Front::getInstance()->getRequest();
 				foreach ($rows as $i =>$row){
 					if($row['status'] == 1){
 						$rows[$i]['status']= $imgtick;

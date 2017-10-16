@@ -23,6 +23,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
 
     public function indexAction()
     {
+    	
 		$db_user=new Application_Model_DbTable_DbUsers();
                 
         $this->view->activelist =$this->activelist;       
@@ -65,6 +66,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
     	$this->view->user_type = $_data['user_type'];
     	$this->view->active = $_data['active'];
     	$this->view->txtsearch = $_data['txtsearch'];
+    	
     }
     public function viewUserAction()
     {   

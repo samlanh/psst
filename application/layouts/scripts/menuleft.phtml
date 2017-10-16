@@ -44,11 +44,11 @@
 		  		// 				$lblcontroller='termcondition';
 		  		// 			}
 		  		if($module!=$rs['module']){
-		  			$newarray= array($rs['controller']=>'<li><a href="">'.$tr->translate(strtoupper($lblcontroller)).'</a></li>');
+		  			$newarray= array($rs['controller']=>'<li><a href="">'.$tr->translate(($lblcontroller)).'</a></li>');
 		  			$menu[$rs['module']]= $newarray;
 		  			$old_module=$rs['module'];
 		  		}else{
-		  			$newarray= array_merge($newarray,array($rs['controller']=>'<li><a href="">'.$tr->translate(strtoupper($lblcontroller)).'</a></li>'));
+		  			$newarray= array_merge($newarray,array($rs['controller']=>'<li><a href="">'.$tr->translate(($lblcontroller)).'</a></li>'));
 		  			$menu[$rs['module']] = $newarray;
 		  		}
 		  		$module=$rs['module'];

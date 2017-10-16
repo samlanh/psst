@@ -147,6 +147,7 @@ public function addAction()
     		$imgtick='<img src="'.BASE_URL.'/images/icon/tick.png"/>';
     			
     		$rows= array();
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     		foreach($acl as $com){
     			$img='<img src="'.BASE_URL.'/images/icon/none.png" id="img_'.$com['acl_id'].'" onclick="changeStatus('.$com['acl_id'].','.$id.');" class="pointer"/>';
     			$tmp_status = 0;
@@ -161,7 +162,7 @@ public function addAction()
     			if(!empty($status) || $status === 0){
     				if($tmp_status !== $status) continue;
     			}
-    			$rows[] = array($com['acl_id'],$com['label'], $com['user_access'], $img) ;
+    			$rows[] = array($com['acl_id'],$tr->translate($com['label']), $com['user_access'], $img) ;
     		}
     	
 //     		$list=new Application_Form_Frmlist();

@@ -258,7 +258,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	 
     }
     
-    
     function getGradeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

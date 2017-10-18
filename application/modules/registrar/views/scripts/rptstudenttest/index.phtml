@@ -82,6 +82,7 @@
 							  <tr style="font-size:12px; height: 20px; white-space:nowrap;background: #ccc !important; line-height: 25px; font-weight: bold;" align="center">
 							    <td rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
 							    <td rowspan="2">&nbsp;<?php echo $tr->translate("SERIAL"); ?>&nbsp;</td>
+							    <td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_KH"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_EN"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
@@ -110,6 +111,7 @@
 							 
 								  <tr style="font-size:12px; height: 20px;white-space:nowrap;"​ class="hover">
 								    <td><?php echo $i;?></td>
+								    <td><?php echo $rs['serial']; ?></td>
 								    <td><?php echo $rs['stu_code']; ?></td>
 								    <td><?php echo $rs['kh_name']; ?></td>
 								    <td><?php echo $rs['en_name']; ?></td>

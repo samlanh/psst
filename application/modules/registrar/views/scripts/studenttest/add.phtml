@@ -19,7 +19,7 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 		<tr>
 			<td>
 				<fieldset>
-					<legend><strong><?php echo $tr->translate('ព័ត៏មានសិស្សធ្វើតេស')?></strong></legend>
+					<legend><strong><?php echo $tr->translate('STUDENT_TEST_INFO')?></strong></legend>
 						<table cellspacing="10"  width="100%">
 							<tr>
 								<td width="33%">
@@ -59,7 +59,7 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 									<table cellspacing="5"  width="100%">
 										<tr>
 										    <td><?php echo $tr->translate("STUDENT_ID")?></td>
-											<td><input  style="color:red;" type="text" name="stu_code" id="stu_code" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+											<td><input  style="color:red;" type="text" name="stu_code" id="stu_code" readonly class="fullside" dojoType="dijit.form.TextBox"   /></td>
 										</tr>
 										<tr>
 										    <td><?php echo $tr->translate("SERIAL")?></td>

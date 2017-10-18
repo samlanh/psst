@@ -61,7 +61,7 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 	    		$s_where=array();
 	    		$s_search= addslashes(trim($search['adv_search']));
 	    		$s_where[]= " st.serial LIKE '%{$s_search}%'";
-	    		$s_where[]= " st.receipt LIKE '%{$s_search}%'";
+	    		$s_where[]= " st.stu_code LIKE '%{$s_search}%'";
 	    		$s_where[]= " st.kh_name LIKE '%{$s_search}%'";
 	    		$s_where[]= " st.en_name LIKE '%{$s_search}%'";
 	    		$where.=' AND ('.implode(' OR ', $s_where).')';

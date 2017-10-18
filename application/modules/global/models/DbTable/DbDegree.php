@@ -42,6 +42,7 @@
 		try{
 			$_arr=array(
 					'en_name'	  => $_data['en_name'],
+					'total_score' => $_data['total_score'],
 					'shortcut'    => $_data['shortcut'],
 					'modify_date' => new Zend_Date(),
 					'is_active'   => $_data['status'],
@@ -53,16 +54,17 @@
 				$this->_name='rms_dept_subject_detail';
 				$ids = explode(',', $_data['identity']);
 				foreach ($ids as $i){
-					$arr = array(
-							'dept_id'	=>$id,
-							'subject_id'=>$_data['subject_study_'.$i],
+					$arr = array(								
+							'dept_id'		=>$id,
+							'subject_id'	=>$_data['subject_study_'.$i],
 							'score_in_class'=>$_data['scoreinclass_'.$i],
+							'score_pass'	=>$_data['scorepass_'.$i],
 							'score_out_class'=>$_data['scoreoutclass_'.$i],
-							'score_short'=>$_data['scoreshort_'.$i],
-							'status'    => $_data['status_'.$i],
-							'note'   	=> $_data['note_'.$i],
-							'date' 		=> date("Y-m-d"),
-							'user_id'	=> $this->getUserId()
+							'score_short'	=>$_data['scoreshort_'.$i],
+							'status'    	=> $_data['status_'.$i],
+							'note'   		=> $_data['note_'.$i],
+							'date' 			=> date("Y-m-d"),
+							'user_id'		=> $this->getUserId()
 					);
 					$this->insert($arr);
 				}
@@ -75,6 +77,7 @@
 	public function UpdateDegree($_data){
 		$_arr=array(
 				'en_name'	  => $_data['en_name'],
+				'total_score' => $_data['total_score'],
 				'shortcut'    => $_data['shortcut'],
 				'is_active'   => $_data['status'],
 				'user_id'	  => $this->getUserId()
@@ -91,15 +94,16 @@
 			$ids = explode(',', $_data['identity']);
 			foreach ($ids as $i){
 				$arr = array(
-						'dept_id'	=>$_data['dept_id'],
-						'subject_id'=>$_data['subject_study_'.$i],
+						'dept_id'		=>$_data['dept_id'],
+						'subject_id'	=>$_data['subject_study_'.$i],
 						'score_in_class'=>$_data['scoreinclass_'.$i],
+						'score_pass'	=>$_data['scorepass_'.$i],
 						'score_out_class'=>$_data['scoreoutclass_'.$i],
-						'score_short'=>$_data['scoreshort_'.$i],
-						'status'    => $_data['status_'.$i],
-						'note'   	=> $_data['note_'.$i],
-						'date' 		=> date("Y-m-d"),
-						'user_id'	=> $this->getUserId()
+						'score_short'	=>$_data['scoreshort_'.$i],
+						'status'    	=> $_data['status_'.$i],
+						'note'   		=> $_data['note_'.$i],
+						'date' 			=> date("Y-m-d"),
+						'user_id'		=> $this->getUserId()
 				);
 				$this->insert($arr);
 			}

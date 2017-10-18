@@ -32,40 +32,45 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$this->insert($array);
  	}
 	function updateStudentTest($data,$id){
-		
-		$updated_result = 0;
-		if(!empty($data['degree_result']) && !empty($data['grade_result']) && !empty($data['session_result'])){
-			$updated_result = 1;
-		}
-		
-		$array = array(
-					'branch_id'	=>$this->getBranchId(),
-					'kh_name'	=>$data['kh_name'],
-					'en_name'	=>$data['en_name'],
-					'sex'		=>$data['sex'],
-					'dob'		=>$data['dob'],
-					'phone'		=>$data['phone'],
-					'old_school'=>$data['old_school'],
-					'old_grade'	=>$data['old_grade'],
-					'degree'	=>$data['degree'],
-					'note'		=>$data['note'],
+		try{
+			$updated_result = 0;
+			if(!empty($data['degree_result']) && !empty($data['grade_result']) && !empty($data['session_result'])){
+				$updated_result = 1;
+			}
+			
+			$array = array(
+						'branch_id'	=>$this->getBranchId(),
+						'kh_name'	=>$data['kh_name'],
+						'en_name'	=>$data['en_name'],
+						'sex'		=>$data['sex'],
+						'dob'		=>$data['dob'],
+						'phone'		=>$data['phone'],
+						'old_school'=>$data['old_school'],
+						'old_grade'	=>$data['old_grade'],
+						'degree'	=>$data['degree'],
+						'note'		=>$data['note'],
+
+						'serial'	=>$data['serial'],
 					
-					'address'	=>$data['address'],
-					'user_id'	=>$this->getUserId(),
-					'status'	=>$data['status'],
-				
-					'stu_code'	=>$data['stu_code'],
-					'test_date'	=>$data['test_date'],
-				
-					'degree_result'	=>$data['degree_result'],
-					'grade_result'	=>$data['grade_result'],
-					'session_result'=>$data['session_result'],
-				
-					'updated_result'=>$updated_result,
-				
-				);
-		$where="id = $id";
-		$this->update($array, $where);
+						'address'	=>$data['address'],
+						'user_id'	=>$this->getUserId(),
+						'status'	=>$data['status'],
+					
+						'stu_code'	=>$data['stu_code'],
+						'test_date'	=>$data['test_date'],
+					
+						'degree_result'	=>$data['degree_result'],
+						'grade_result'	=>$data['grade_result'],
+						'session_result'=>$data['session_result'],
+					
+						'updated_result'=>$updated_result,
+					
+					);
+			$where="id = $id";
+			$this->update($array, $where);
+		}catch (Exception $e){
+			echo $e->getMessage();
+		}
 	}
 	
 	function getStudentTestById($id){
@@ -83,12 +88,13 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		
 		$sql="  SELECT 
 					id,
+					serial,
 					stu_code,
 					kh_name,
 					en_name,
 					(select name_kh from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
 					phone,
-					serial,
+					
 					(select en_name from rms_dept where dept_id=degree LIMIT 1) as degree,
 					old_school,
 					old_grade,
@@ -105,6 +111,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		if (!empty($search['txtsearch'])){
 				$s_where = array();
 				$s_search = trim(addslashes($search['txtsearch']));
+				$s_where[] = " serial LIKE '%{$s_search}%'";
 				$s_where[] = " kh_name LIKE '%{$s_search}%'";
 				$s_where[] = " en_name LIKE '%{$s_search}%'";
 				$s_where[] = " old_school LIKE '%{$s_search}%'";

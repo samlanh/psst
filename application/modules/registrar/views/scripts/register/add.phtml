@@ -617,7 +617,7 @@ fieldset{  background:none;}
 				<td valign="top">
 					<table style="margin: 0 auto; width: 100%;" cellspacing="2" >
 						<tr>
-							<td >អានជាខ្មែរ</td>
+							<td ><?php echo $tr->translate("READ_IN_KHMER");?></td>
 							<td colspan="3">
 								<Textarea type="text" name="money_in_khmer" id="money_in_khmer" readonly="readonly" dojoType="dijit.form.TextBox" class="fullside" ></Textarea>
 							</td>
@@ -1462,7 +1462,7 @@ function deleteRecord(index) {
 		
 		netAmount = grandTotal + fine - credit_memo - deduct;
 		
-		dijit.byId('grand_total').attr('value',grandTotal );
+		dijit.byId('grand_total').attr('value',grandTotal);
 		
 		if(netAmount<0){
 			dijit.byId('net_amount').attr('value',0);
@@ -1700,6 +1700,11 @@ function printSave(new_stu_id,new_receipt){
 			degree = dijit.byId('dept').get('value');
 			stu_type = dijit.byId('student_type').get('value');
 
+			if(stu_type==3){
+				stu_id = dijit.byId("old_studens").attr('displayedValue');
+			}else{
+				stu_id = dijit.byId("stu_id").attr('displayedValue');
+			}
 			/*if(stu_type==1){
 				if(new_stu_id==''){
 					getStudentNo(degree,1);
@@ -1724,7 +1729,7 @@ function printSave(new_stu_id,new_receipt){
 			var yyyy = today.getFullYear();
 			
 			dojo.byId("lb_receipt_no").innerHTML = receipt;
-			dojo.byId("lb_stu_id").innerHTML = stu_id ;		
+			dojo.byId("lb_stu_id").innerHTML = stu_id;		
 			dojo.byId("lb_sex").innerHTML = dijit.byId("sex").attr('displayedValue');
 			dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
 			dojo.byId("lb_dob").innerHTML = dijit.byId("dob").attr('displayedValue');

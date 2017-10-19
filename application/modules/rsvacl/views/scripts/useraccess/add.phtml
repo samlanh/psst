@@ -29,8 +29,8 @@ table.user td{
 						<td>User type</td>
 						<td class="add-edit">
 							<input type="text" required="true" name="user_type" id="user_type" placeholder="User Type" 
-										dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs[0]['user_type'];?>"
-										missingMessage="Invalid User type!" class='fullside' disabled/>
+								dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs[0]['user_type'];?>"
+								missingMessage="Invalid User type!" class='fullside' disabled/>
 						</td>				
 					</tr>			
 				</table>
@@ -83,12 +83,13 @@ table.user td{
 	}
 </style>
 <script>
-$(function(){		
-	$('#fmod').val('<?php echo $df['fmod']?>');
-	$('#fcon').val('<?php echo $df['fcon']?>');
-	$('#fact').val('<?php echo $df['fact']?>');
-	$('#fstatus').val('<?php echo $df['fstatus']?>');
-});
+	$(function(){		
+		$('#fmod').val('<?php echo $df['fmod']?>');
+		$('#fcon').val('<?php echo $df['fcon']?>');
+		$('#fact').val('<?php echo $df['fact']?>');
+		$('#fstatus').val('<?php echo $df['fstatus']?>');
+	});
+	
 	function changeStatus(id, user_type){
 		url = "<?php echo BASE_URL;?>/rsvacl/useraccess/update-status";
 		status = "no";

@@ -487,7 +487,29 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$row = $db->getStudentGroup($id,$search);
+		$row = $db->getStudentGroup($id,$search,1);
+		$this->view->rs = $row;
+		$rs= $db->getGroupDetailByID($id);
+		$this->view->rr = $rs;
+	}
+	public function rptStudentListAction()
+	{
+		$id=$this->getRequest()->getParam("id");
+		if(empty($id)){
+			$this->_redirect("/allreport/allstudent/student-group");
+		}
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search = array(
+					'txtsearch' => "",
+					'study_type'=>1
+					);
+		}
+		$this->view->search = $search;
+		$db = new Allreport_Model_DbTable_DbRptGroup();
+		$row = $db->getStudentGroup($id,$search,1);
 		$this->view->rs = $row;
 		$rs= $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
@@ -544,7 +566,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		//echo $end_date;exit();
 		
 		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$row = $db->getStudentGroup($id,$search);
+		$row = $db->getStudentGroup($id,$search,0);
 		$this->view->rs = $row;
 		
 		$rs= $db->getGroupDetailByID($id);

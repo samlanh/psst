@@ -180,7 +180,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					g.degree,
 					g.grade,
 					g.session,
-					s.is_stu_new
+					s.is_stu_new,
+					s.`is_subspend`
 				FROM 
 					rms_student AS s , 
 					rms_group AS g,
@@ -188,7 +189,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				WHERE 
 					g.id = gds.group_id
 					AND s.stu_id = gds.stu_id
-					AND s.`is_subspend`=0
     		";
     	
     	$group_by = " GROUP BY gds.`stu_id`,g.`academic_year`,g.`degree`,g.`grade`,g.`session`";

@@ -360,12 +360,15 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	function getStudentByGroup($group_id){
 		$db=$this->getAdapter();
 		$sql="SELECT
-		sgh.`stu_id`,
-		(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
-		(SELECT CONCAT(s.stu_enname,' - ',s.stu_khname) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
-		(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
-		FROM `rms_group_detail_student` AS sgh
-		WHERE sgh.`group_id`=".$group_id;
+					sgh.`stu_id`,
+					(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
+					(SELECT CONCAT(s.stu_enname,' - ',s.stu_khname) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
+					(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
+				FROM 
+					`rms_group_detail_student` AS sgh
+				WHERE 
+					sgh.type = 1
+					and sgh.`group_id` = ".$group_id;
 		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) DESC";
 		return $db->fetchAll($sql.$order);
 	}

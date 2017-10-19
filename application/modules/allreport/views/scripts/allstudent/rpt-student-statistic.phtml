@@ -47,7 +47,7 @@
 						<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
 							<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
-							<td colspan="8"><?php echo $tr->translate("STUDY_INFO");?></td>
+							<td colspan="7"><?php echo $tr->translate("STUDY_INFO");?></td>
 						</tr>
 						<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
 						<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
@@ -57,9 +57,17 @@
 							<td ><?php echo $tr->translate("SESSION");?></td>
 							<td ><?php echo $tr->translate("AMOUNT_STUDENT");?></td>
 							<td ><?php echo $tr->translate("NEW_STUDENT");?></td>
+							<td ><?php echo $tr->translate("STUDENT_DROP");?></td>
 						</tr>
 						<?php 
-							$i=0;$academic_year=0;$degree=0;$grade=0;$session=0;$amount_student=0;$count=0; $new_student=0;
+							$i=0;$academic_year=0;$degree=0;$grade=0;$session=0;
+							$amount_student=0;
+							$count=0; 
+							$new_student=0;
+							$total_amount_student = 0;
+							$total_amount_student_new = 0;
+							$total_amount_student_drop = 0;
+							$drop_student=0;
 							$academic_name = "";
 							$degree_name = "";
 							$grade_name = "";
@@ -75,11 +83,22 @@
 										<td ><?php echo $session_name;?></td>
 										<td ><?php echo $amount_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 										<td ><?php echo $new_student." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td ><?php echo $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>
 									</tr>
 									<?php 
+										$total_amount_student = $total_amount_student + $amount_student;
+		
 										$amount_student=1;
 										$new_student = 0;
-										if($row['is_stu_new']==1){$new_student++;}
+										$drop_student = 0;
+										
+										if($row['is_stu_new']==1){
+											$new_student++;
+										}
+										
+										if($row['is_subspend']!=0){
+											$drop_student++;
+										}
 									?>
 									
 									
@@ -87,7 +106,14 @@
 								  
 									<?php 
 										$amount_student++;
-										if($row['is_stu_new']==1){$new_student++;}
+										
+										if($row['is_stu_new']==1){
+											$new_student++;
+										}
+										
+										if($row['is_subspend']!=0){
+											$drop_student++;
+										}
 									?>
 									
 							<?php }?>
@@ -112,9 +138,9 @@
 										<td ><?php echo $session_name;?></td>
 										<td ><?php echo $amount_student." ".$tr->translate("STUDENT_UNIT");;?></td>	
 										<td ><?php echo $new_student." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td ><?php echo $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 									</tr>
-						</table>	
-						<?php } ?>	
+						</table> <?php } ?>	
 					</div>	
 					</td>
 				</tr>
@@ -144,3 +170,16 @@
 			</table>
 		</div>
 	</div>	
+
+    <div data-dojo-type="dijit/layout/TabContainer" style="width: 400px; height: 100px;" tabPosition="left-h" tabStrip="true">
+          <div data-dojo-type="dijit/layout/ContentPane" title="My first left tab" selected="true">
+           left1111
+          </div>
+          <div data-dojo-type="dijit/layout/ContentPane" title="My second left tab">
+            left2222
+          </div>
+          <div data-dojo-type="dijit/layout/ContentPane" title="My last left tab">
+            left3333
+          </div>
+    </div>
+	

@@ -135,22 +135,20 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				$sql.=' and g.type=1 ';
 			}  
 			
-			$order= ' ORDER BY stu_id DESC ';
+			$order= ' ORDER BY s.stu_khname ASC,s.stu_enname ASC ';
 		   	if(empty($search)){
 		   		return $db->fetchAll($sql.$order);
 		   	}
 		   	if(!empty($search['txtsearch'])){
 		   		$s_where = array();
 		   		$s_search = addslashes(trim($search['txtsearch']));
-			   		$s_where[] = " en_name LIKE '%{$s_search}%'";
-			   		$s_where[] = " kh_name LIKE '%{$s_search}%'";
-					$s_where[] = " sex LIKE '%{$s_search}%'";
-					$s_where[] = " room LIKE '%{$s_search}%'";
-			   		$s_where[] = " nation LIKE '%{$s_search}%'";
-		    		$s_where[] = " tel LIKE '%{$s_search}%'";
+			   		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
+			   		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
 		   			$s_where[] = " stu_code LIKE '%{$s_search}%'";
 		   		$sql .=' AND ( '.implode(' OR ',$s_where).')';
-		   	
+		   	}
+		   	if(!empty($search['study_type'])){
+		   		$sql.=' and g.type = '.$search['study_type'];
 		   	}
 		 return $db->fetchAll($sql.$order);
 	}

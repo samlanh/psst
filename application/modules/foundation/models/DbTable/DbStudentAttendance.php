@@ -200,7 +200,8 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 			 FROM 
 			 	`rms_group_detail_student` AS sgh
 			WHERE 
-				sgh.`group_id`=".$group_id;
+				sgh.type = 1
+				and sgh.`group_id`=".$group_id;
 		
 		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) DESC";
 		

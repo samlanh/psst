@@ -87,7 +87,9 @@
 									</tr>
 									<?php 
 										$total_amount_student = $total_amount_student + $amount_student;
-		
+										$total_amount_student_new = $total_amount_student_new + $new_student; 
+										$total_amount_student_drop = $total_amount_student_drop + $drop_student;
+										
 										$amount_student=1;
 										$new_student = 0;
 										$drop_student = 0;
@@ -130,6 +132,13 @@
 								$session_name = $row['session_name'];
 							?>
 						<?php } ?>	
+						
+							<?php 
+								$total_amount_student = $total_amount_student + $amount_student;
+								$total_amount_student_new = $total_amount_student_new + $new_student;
+								$total_amount_student_drop = $total_amount_student_drop + $drop_student;
+							?>
+						
 									<tr style="font-size:12px; height: 23px;" align="center" class="hover" >
 										<td ><?php echo ++$i;?></td>
 										<td ><?php echo $academic_name;?></td>
@@ -140,6 +149,14 @@
 										<td ><?php echo $new_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 										<td ><?php echo $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 									</tr>
+									
+									<tr align="center" class="hover">
+										<td colspan="5">Total</td>
+										<td ><?php echo $total_amount_student." ".$tr->translate("STUDENT_UNIT");;?></td>	
+										<td ><?php echo $total_amount_student_new." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td ><?php echo $total_amount_student_drop." ".$tr->translate("STUDENT_UNIT");?></td>
+									</tr>
+									
 						</table> <?php } ?>	
 					</div>	
 					</td>
@@ -171,15 +188,5 @@
 		</div>
 	</div>	
 
-    <div data-dojo-type="dijit/layout/TabContainer" style="width: 400px; height: 100px;" tabPosition="left-h" tabStrip="true">
-          <div data-dojo-type="dijit/layout/ContentPane" title="My first left tab" selected="true">
-           left1111
-          </div>
-          <div data-dojo-type="dijit/layout/ContentPane" title="My second left tab">
-            left2222
-          </div>
-          <div data-dojo-type="dijit/layout/ContentPane" title="My last left tab">
-            left3333
-          </div>
-    </div>
+    
 	

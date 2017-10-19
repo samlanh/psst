@@ -108,15 +108,15 @@ dojo.require("dojo.parser");
         <table style="height: 100%;" width="100%" >
             <tr height="45px" >
             	<td colspan="2" valign="top"> <?php echo $this->render('header.phtml')?>
-            	 <p style="font-size:13px !important; ">
-						    <span style="padding-left: 3px;padding-right: 3px;float: left; font-weight:600;"><?php echo $tr->translate("USING_BY");?>&nbsp;&nbsp;<a style="color:red;" href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'changepassword')); ?>" ><?php echo $username;?></a></span>  
-							<a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'logout','value'=>'1')); ?>">&nbsp; | &nbsp;<?php echo $tr->translate("SIGN_OUT");?><i class="fa fa-sign-out" aria-hidden="true"></i></a>
-			                 <?php if($action=='index' AND $module!='report' AND $module!='home' AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $controller!='allreports' AND $controller!='calculator' ){?>
-			                 <a class='add-link addsign' style="float:right;" href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?>&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
-							<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='report'){?>
-							 <span style="padding-left: 3px;padding-right: 3px; float: right; font-weight:600;"><a class='add-link addsign' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i><?php echo $tr->translate('GO_BACK');?></a></span>
-							<?php }?>
-							</p>
+            	 	<p style="font-size:13px !important; ">
+				    <span style="padding-left: 3px;padding-right: 3px;float: left; font-weight:600;"><?php echo $tr->translate("USING_BY");?>&nbsp;&nbsp;<a style="color:red;" href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'changepassword')); ?>" ><?php echo $username;?></a></span>  
+					<a href="<?php echo $this->url(array('module'=>'','controller'=>'index','action'=>'logout','value'=>'1')); ?>">&nbsp; | &nbsp;<?php echo $tr->translate("SIGN_OUT");?><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+	                 <?php if($action=='index' AND $module!='report' AND $module!='home' AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $controller!='allreports' AND $controller!='calculator' ){?>
+	                 <a class='add-link addsign' style="float:right;" href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?>&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
+					<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='report'){?>
+					 <span style="padding-left: 3px;padding-right: 3px; float: right; font-weight:600;"><a class='add-link addsign' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i><?php echo $tr->translate('GO_BACK');?></a></span>
+					<?php }?>
+					</p>
             	</td>
             </tr>
              <tr>

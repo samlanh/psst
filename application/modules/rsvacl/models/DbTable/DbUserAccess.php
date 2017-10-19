@@ -130,5 +130,21 @@ class RsvAcl_Model_DbTable_DbUserAccess extends Zend_Db_Table_Abstract
     	if(!empty($row)) return true;
     	return false;
     }
+    
+    
+    function getAllModule(){
+    	$db=$this->getAdapter();
+    	$sql="select module from rms_acl_acl group by module ";
+    	return $db->fetchAll($sql);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 ?>

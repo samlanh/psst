@@ -67,46 +67,21 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		     `rms_group`.`group_code`FROM `rms_group` WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1) AS `group_code`,
 		  (SELECT `rms_student`.`stu_code` FROM `rms_student`
 		   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `stu_code`,
-		  (SELECT
-		     `rms_student`.`stu_khname`
-		   FROM `rms_student`
-		   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `kh_name`,
-		  (SELECT
-		     `rms_student`.`stu_enname`
-		   FROM `rms_student`
-		   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `en_name`,
-		  (SELECT
-		     `rms_student`.`nationality`
-		   FROM `rms_student`
-		   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `nation`,
-		  (SELECT
-		     `rms_student`.`address`
-		   FROM `rms_student`
-		   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `pob`,
-		  (SELECT
-		     `rms_student`.`tel`
-		   FROM `rms_student`
-		   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `tel`,
-		   (SELECT
-		     `rms_student`.`sex`
-		   FROM `rms_student`
-		   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `gender`,
-		   
-		  (SELECT
-		     (SELECT
-		        `rms_view`.`name_kh`
+		   `s`.`stu_khname` AS `kh_name`,
+		   `s`.`stu_enname` AS `en_name`,
+		   `s`.`nationality` AS `nation`,
+		   `s`.`address` AS `pob`,
+		   `s`.`tel` AS `tel`,
+		   `s`.`sex` AS `gender`,
+		   `s`.`address` AS `pob`,
+		   `s`.`dob` AS `dob`,
+		 (SELECT
+		      `rms_view`.`name_kh`
 		      FROM `rms_view`
-		      WHERE ((`rms_view`.`type` = 2)
-		             AND (`rms_view`.`key_code` = `rms_student`.`sex`)) LIMIT 1)
-		   FROM `rms_student`
-		   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `sex`,
-		  (SELECT
-		     `rms_student`.`dob`
-		   FROM `rms_student`
-		   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `dob`,
+		      WHERE (`rms_view`.`type` = 2) AND (`rms_view`.`key_code` = `s`.`sex`)) AS sex,
 		  (SELECT
 		     (SELECT
-		        `rms_room`.`room_name`
+		      `rms_room`.`room_name`
 		      FROM `rms_room`
 		      WHERE (`rms_room`.`room_id` = `rms_group`.`room_id`) LIMIT 1)
 		   FROM `rms_group`
@@ -120,27 +95,35 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		   FROM `rms_group`
 		   WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1) AS `session`,
 		  `g`.`status`   AS `status`
-		FROM `rms_group_detail_student` AS g
-		WHERE (`g`.`status` = 1) ";
-				$sql.=' AND group_id='.$id;
-			$order= ' ORDER BY stu_id DESC ';
+		FROM 
+		   `rms_group_detail_student` AS g,
+			rms_student as s
+		WHERE 
+   			`g`.`stu_id` = s.`stu_id`
+   			AND (`g`.`status` = 1) ";
+			$sql.=' AND g.group_id='.$id;
+			$order= ' ORDER BY g.stu_id DESC ';
 		   	if(empty($search)){
 		   		return $db->fetchAll($sql.$order);
 		   	}
 		   	if(!empty($search['txtsearch'])){
 		   		$s_where = array();
 		   		$s_search = addslashes(trim($search['txtsearch']));
-			   		$s_where[] = " en_name LIKE '%{$s_search}%'";
-			   		$s_where[] = " kh_name LIKE '%{$s_search}%'";
-					$s_where[] = " sex LIKE '%{$s_search}%'";
-					$s_where[] = " room LIKE '%{$s_search}%'";
-			   		$s_where[] = " nation LIKE '%{$s_search}%'";
-		    		$s_where[] = " tel LIKE '%{$s_search}%'";
-		   			$s_where[] = " stu_code LIKE '%{$s_search}%'";
+			   		$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
+			   		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
+					$s_where[] = " s.sex LIKE '%{$s_search}%'";
+					//$s_where[] = " room LIKE '%{$s_search}%'";
+			   		$s_where[] = " s.nationality LIKE '%{$s_search}%'";
+		    		$s_where[] = " s.tel LIKE '%{$s_search}%'";
+		   			$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
 		   		$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		   	
 		   	}
-		 return $db->fetchAll($sql.$order);
+		   	$where="";
+		   	if(!empty($search['study_type'])){
+		   		$where.=' AND g.type='.$search['study_type'];
+		   	}
+		 return $db->fetchAll($sql.$where.$order);
 	}
 	 
 	public function getGroupDetail($search){
@@ -163,8 +146,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				FROM 
 	   				`rms_group` `g`
 	   			WHERE 
-	   				 group_code != ""
-	   		  ';
+	   				 group_code != "" ';
 	   	
 	   	$where=" ";
 	   	

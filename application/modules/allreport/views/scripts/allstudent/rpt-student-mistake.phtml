@@ -142,12 +142,15 @@
 											//print_r($mistake_status);
 											if ($mistake_status['mistake_type']==1){ 
 												echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $s=$s+1;
+												//small
 											}
 											else if ($mistake_status['mistake_type']==2){
 												echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $m = $m+1;
+												//medium
 											}
 											else if ($mistake_status['mistake_type']==3){
 												echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $b = $b+1;
+												//big
 											}else{
 												echo " ";	
 											}

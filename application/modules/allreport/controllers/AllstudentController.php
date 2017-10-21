@@ -492,8 +492,21 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$rs= $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
 	}
+	function submitlistAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Allreport_Model_DbTable_DbRptGroup();
+			$db->submitDateList($data);
+// 			Application_Form_FrmMessage::message("INSERT_SUCCESS");
+// 			$this->_redirect("/allreport/allstudent/student-group");
+// 			Application_Form_FrmMessage::redirector("/allreport/allstudent/student-group");
+			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/allreport/allstudent/student-group");
+		}
+	}
 	public function rptStudentListAction()
 	{
+// 		rpt-student-list
+		
 		$id=$this->getRequest()->getParam("id");
 		if(empty($id)){
 			$this->_redirect("/allreport/allstudent/student-group");

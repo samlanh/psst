@@ -128,7 +128,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    public function getOccupation(){
    	$db = $this->getAdapter();
-   	$sql ="SELECT occupation_id as id, occu_name as name FROM rms_occupation WHERE status=1 AND occu_name!='' ";
+   	$sql ="SELECT occupation_id as id, occu_name as name FROM rms_occupation WHERE status=1 AND occu_name!='' 
+   	ORDER BY occu_name ASC ";
    	return $db->fetchAll($sql);
    }
    

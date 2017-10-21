@@ -9,6 +9,18 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 //     	return $session_user->user_id;
     	 
 //     }
+	function submitDateList($data){
+		$db=$this->getAdapter();
+		$this->_name='rms_student';
+		$ids = explode(',', $data['identity']);
+			foreach ($ids as $i){
+				$arr = array(
+						'dob'=>$data['dob_'.$i]
+						);
+				$where=" stu_id = ".$data['stu_id'.$i];
+				$this->update($arr, $where);
+			}
+	} 
     public function getAllGroup($search){
     	$db = $this->getAdapter();
     	$sql = "SELECT `g`.`id`,`g`.`group_code` AS `group_code`,`g`.`semester` AS `semester`,

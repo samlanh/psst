@@ -138,7 +138,29 @@ class RsvAcl_Model_DbTable_DbUserAccess extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     }
     
-    
+    function getUserAccessByType($module_name , $user_type){
+    	$db=$this->getAdapter();
+    	
+    	$sql="select 
+    				acl.label,
+    				acl.acl_id,
+    				CONCAT(acl.module,'/',acl.controller,'/',acl.action) as url
+    			from 
+    				rms_acl_acl as acl,
+    				rms_acl_user_access as ua,
+    				rms_acl_user_type as ut
+    			where
+    				ut.user_type_id = ua.user_type_id
+    				and ua.acl_id = acl.acl_id
+    				and ut.user_type_id = $user_type
+    				and acl.module = '$module_name'
+    			ORDER BY 
+					acl.`controller` ASC,
+					acl.`action` ASC
+    		";
+    	//echo $sql;
+    	return $db->fetchAll($sql);
+    }
     
     
     

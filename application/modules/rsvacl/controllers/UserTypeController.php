@@ -142,9 +142,5 @@ class RsvAcl_UserTypeController extends Zend_Controller_Action
     		exit();
     	}
     }
-    
-   
-
-
 }
 

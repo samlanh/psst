@@ -57,15 +57,14 @@ dojo.require("dijit.form.CheckBox");
 								<td><?php echo $frm_dept->getElement("shortcut");?></td>
 							</tr>
 							<tr>
+								<td><?php echo $tr->translate("MAX_AVERAGE");?></td>
 								<td>
-									<?php echo $tr->translate("STATUS");?>
+									<input name="max_average" id="max_average"  dojoType="dijit.form.TextBox"  class="fullside" />
 								</td>
+								
+								<td><?php echo $tr->translate("PASS_AVERAGE");?></td>
 								<td>
-									<?php echo $frm_dept->getElement("status");?>
-								</td>
-								<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
-								<td>
-									<input name="total_score" id="total_score" dojoType="dijit.form.TextBox" readonly class="fullside" />
+									<input name="pass_average" id="pass_average" dojoType="dijit.form.TextBox"  class="fullside" />
 								</td>
 							</tr>
 						</table>
@@ -132,7 +131,6 @@ function addRow() {
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th id="lbl_titlemetion" width="200px"><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
 		temp+='<th id="lbl_titlemetion" width="50px"><?php echo $tr->translate("SCORE_IN_CLASS");?></th>';
-		temp+='<th id="lbl_titlemetion" width="50px"><?php echo $tr->translate("SCORE_PASS");?></th>';
 		temp+='<th id="lbl_titlemetion" width="50px"><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SCORE_SHORT");?></th>';
 		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
@@ -144,7 +142,6 @@ function addRow() {
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td><select style="width:100%;" dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="popupsubject('+col+');" >'+subject+'</select></td>';
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" onkeyup="calculateTotalScore();" value="" type="text"></td>';	
-		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scorepass_'+col+'" id="scorepass_'+col+'" value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
@@ -248,12 +245,22 @@ function deleteRecord(index) {
 
 function calculateTotalScore() {
 	var total_score = 0;
+	var max_average = 0;
+	var pass_average = 0;
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
 	for(var i=0;i<arrays.length;i++){
-		total_score += dijit.byId('scoreinclass_'+arrays[i]).get('value');
+		total_score += parseFloat(dijit.byId('scoreinclass_'+arrays[i]).get('value'));
 	}
-	dijit.byId('total_score').attr('value',total_score);
+
+	amount_subject = arrays.length;
+	max_average = total_score / amount_subject;
+	pass_average = max_average / 2;
+
+	dijit.byId('max_average').attr('value',max_average.toFixed(2));
+	dijit.byId('pass_average').attr('value',pass_average.toFixed(2));
+	
+	//alert("total score = "+total_score+",amt_sub = "+amount_subject+", max avg = "+max_average+", pass avg = "+pass_average);
 }
 
 </script>

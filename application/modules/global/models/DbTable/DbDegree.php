@@ -42,10 +42,10 @@
 		try{
 			$_arr=array(
 					'en_name'	  => $_data['en_name'],
-					'total_score' => $_data['total_score'],
+					'max_average' => $_data['max_average'],
+					'pass_average'=> $_data['pass_average'],
 					'shortcut'    => $_data['shortcut'],
 					'modify_date' => new Zend_Date(),
-					'is_active'   => $_data['status'],
 					'user_id'	  => $this->getUserId()
 			);
 			$id =  $this->insert($_arr);
@@ -58,7 +58,6 @@
 							'dept_id'		=>$id,
 							'subject_id'	=>$_data['subject_study_'.$i],
 							'score_in_class'=>$_data['scoreinclass_'.$i],
-							'score_pass'	=>$_data['scorepass_'.$i],
 							'score_out_class'=>$_data['scoreoutclass_'.$i],
 							'score_short'	=>$_data['scoreshort_'.$i],
 							'status'    	=> $_data['status_'.$i],
@@ -77,7 +76,8 @@
 	public function UpdateDegree($_data){
 		$_arr=array(
 				'en_name'	  => $_data['en_name'],
-				'total_score' => $_data['total_score'],
+				'max_average' => $_data['max_average'],
+				'pass_average'=> $_data['pass_average'],
 				'shortcut'    => $_data['shortcut'],
 				'is_active'   => $_data['status'],
 				'user_id'	  => $this->getUserId()
@@ -97,7 +97,6 @@
 						'dept_id'		=>$_data['dept_id'],
 						'subject_id'	=>$_data['subject_study_'.$i],
 						'score_in_class'=>$_data['scoreinclass_'.$i],
-						'score_pass'	=>$_data['scorepass_'.$i],
 						'score_out_class'=>$_data['scoreoutclass_'.$i],
 						'score_short'	=>$_data['scoreshort_'.$i],
 						'status'    	=> $_data['status_'.$i],

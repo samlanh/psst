@@ -84,7 +84,7 @@ fieldset{  background:none;}
 						<td>
 							<input id="category_id" />
 						</td>
-						<td style="width: 160px"><?php echo $tr->translate("PRICE");?></td>
+						<td style="width: 160px"><?php echo $tr->translate("SELL_PRICE");?></td>
 						<td ><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="pro_price" value="" name="pro_price"  type="text" required="required"></td>
 					</tr>
 					<tr>
@@ -95,13 +95,8 @@ fieldset{  background:none;}
 								<option value="2" ><?php echo $tr->translate("Cut Stock Later");?></option>
 							</select>
 						</td>
-						<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
-						<td>
-							<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="status" name="status" type="text">								
-									<option value="1" ><?php echo $tr->translate("ACTIVE");?></option>
-									<option value="0" ><?php echo $tr->translate("DEACTIVE");?></option>
-							</select>
-						</td>
+						<td style="width: 160px"><?php echo $tr->translate("UNIT_COST");?></td>
+						<td ><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="cost" value="" name="cost"  type="text" required="required"></td>
 					</tr>
 					<tr>
 						<td style="white-space: nowrap;"><?php echo $tr->translate("BRANCH");?></td>

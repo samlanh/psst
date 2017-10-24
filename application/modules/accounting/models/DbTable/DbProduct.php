@@ -15,6 +15,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 			 (SELECT CONCAT(branch_nameen) FROM rms_branch WHERE rms_branch.br_id=pl.brand_id) AS branch_name,
 				p.pro_name,(SELECT cat.name_kh FROM rms_pro_category AS cat WHERE cat.id=p.cat_id) As cat_name,
 				(select name_en from rms_view where type=11 and key_code=pro_type) as pro_type,
+			    p.cost, 
 			    p.pro_price, 
 				pl.pro_qty,p.date,p.status
 				FROM rms_product AS p,rms_product_location AS pl
@@ -59,10 +60,11 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	    				'pro_name'	=>$_data['product_name'],
 	    				'pro_code'	=>$_data['product_code'],
 	    				'cat_id'	=>$_data['category_id'],
-	    				'pro_price'	=>$_data['pro_price'],
+	    				'pro_price'	=>$_data['pro_price'], // តម្លៃលក់ចេញ
+	    				'cost'		=>$_data['cost'], // តម្លៃដើម
 	    				'pro_des'	=>$_data['descript'],
 	    				'pro_type'	=>$_data['pro_type'],
-	    				'status'	=>$_data['status'],
+	    				'status'	=>1,
 	    				'date'		=>date("Y-m-d"),
 	    				'user_id'	=>$this->getUserId()
 	    				);
@@ -87,6 +89,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 			    				'title'			=>$_data['product_name'],
 			    				'description'	=>$_data['descript'],
 			    				'price'			=>$_data['pro_price'],
+		    					'cost'			=>$_data['cost'], // តម្លៃដើម
 			    				'status'		=>1,
 			    				'create_date'	=>date("Y-m-d H:i:s"),
 			    				'user_id'		=>$this->getUserId(),
@@ -116,7 +119,8 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 	    				'pro_name'	=>$_data['product_name'],
 	    				'pro_code'	=>$_data['product_code'],
 	    				'cat_id'	=>$_data['category_id'],
-	    				'pro_price'	=>$_data['pro_price'],
+	    				'pro_price'	=>$_data['pro_price'], // តម្លៃលក់ចេញ
+	    				'cost'		=>$_data['cost'], // តម្លៃដើម
 	    				'pro_des'	=>$_data['descript'],
 	    				'pro_type'	=>$_data['pro_type'],
 	    				'status'	=>$_data['status'],
@@ -150,6 +154,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 			    				'title'			=>$_data['product_name'],
 			    				'description'	=>$_data['descript'],
 			    				'price'			=>$_data['pro_price'],
+			    				'cost'			=>$_data['cost'], // តម្លៃដើម
 			    				'status'		=>$_data['status'],
 			    				'user_id'		=>$this->getUserId(),
 			    				'type'			=>1, // type=1 => product 
@@ -164,6 +169,7 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
 		    					'title'			=>$_data['product_name'],
 		    					'description'	=>$_data['descript'],
 		    					'price'			=>$_data['pro_price'],
+		    					'cost'			=>$_data['cost'], // តម្លៃដើម
 		    					'status'		=>1,
 		    					'create_date'	=>date("Y-m-d H:i:s"),
 		    					'user_id'		=>$this->getUserId(),

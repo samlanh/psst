@@ -393,9 +393,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$this->_name='rms_saledetail';
 						$arr = array(
 								'payment_id'=>$paymentid,
-								'pro_id'=>$data['service_'.$i],
-								'qty'=>$data['qty_'.$i],
-								'note'=>$data['remark'.$i],
+								'pro_id'	=>$data['service_'.$i],
+								'qty'		=>$data['qty_'.$i],
+								'price'		=>$data['price_'.$i],
+								'cost'		=>$data['cost_'.$i],
+								'note'		=>$data['remark'.$i],
 								'in_receipt'=>1,
 								);
 					    $this->insert($arr);
@@ -723,9 +725,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$this->_name='rms_saledetail';
 						$arr = array(
 								'payment_id'=>$paymentid,
-								'pro_id'=>$data['service_'.$i],
-								'qty'=>$data['qty_'.$i],
-								'note'=>$data['remark'.$i],
+								'pro_id'	=>$data['service_'.$i],
+								'qty'		=>$data['qty_'.$i],
+								'price'		=>$data['price_'.$i],
+								'cost'		=>$data['cost_'.$i],
+								'note'		=>$data['remark'.$i],
 								'in_receipt'=>1,
 						);
 						$this->insert($arr);
@@ -973,7 +977,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		//echo $data['void'];exit();
 		
-		if($data['void']==1){  
+		if($data['void']==1){  // void
 			
 			// if void=1 that mean this record is useless so we only update is_void to 1 no need to update info anymore
 			try{	
@@ -1052,7 +1056,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$db->rollBack();
 				echo $e->getMessage();exit();
 			}
-		}else if($data['void']==2){
+		}else if($data['void']==2){ // delete
 					
 			if(!empty($data['credit_memo_id'])){
 				$this->updateCreditMemoBack($data);
@@ -2153,8 +2157,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getProductFee($service_id){
     	$db=$this->getAdapter();
-    	$sql="select price from rms_program_name where service_id=$service_id";
-    	return $db->fetchOne($sql);
+    	$sql="select price,cost from rms_program_name where service_id=$service_id";
+    	return $db->fetchRow($sql);
     }
     
     function getStudentPaymentByID($id){

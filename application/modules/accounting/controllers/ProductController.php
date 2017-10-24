@@ -33,7 +33,7 @@ class Accounting_ProductController extends Zend_Controller_Action {
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PRODUCT_CODE","BRANCH_NAME","PRODUCT_NAME","PRODUCT_CATEGORY","TYPE","PRICE",
+			$collumns = array("PRODUCT_CODE","BRANCH_NAME","PRODUCT_NAME","PRODUCT_CATEGORY","TYPE","UNIT_COST","SELL_PRICE",
 					"QTY","DATE","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'product','action'=>'edit',

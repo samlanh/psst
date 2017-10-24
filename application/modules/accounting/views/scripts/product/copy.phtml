@@ -92,13 +92,8 @@ fieldset{  background:none;}
 									<option value="2" <?php if($this->pro_row['pro_type']==2){echo 'selected="selected"';}?>><?php echo $tr->translate("Cut Stock Later");?></option>
 								</select>
 							</td>
-							<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
-							<td>
-								<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="status" name="status" type="text">								
-										<option value="1" ><?php echo $tr->translate("ACTIVE");?></option>
-										<option value="0" ><?php echo $tr->translate("DEACTIVE");?></option>
-								</select>
-							</td>
+							<td style="width: 160px"><?php echo $tr->translate("UNIT_COST");?></td>
+							<td ><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="cost" value="<?php echo $this->pro_row['cost'];?>" name="cost"  type="text" required="required"></td>
 						</tr>
 						<tr>
 							<td style="white-space: nowrap;"><?php echo $tr->translate("BRANCH");?></td>
@@ -111,7 +106,7 @@ fieldset{  background:none;}
 						
 						<tr>
 							<td colspan="4">
-								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+								<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
 										<tr id="head-title" class="head-td" align="right"></tr>
 								</table>
 							</td>

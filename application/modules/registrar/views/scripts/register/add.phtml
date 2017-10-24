@@ -1289,7 +1289,7 @@ function addRow() {
 			
 			
 			
-			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  />';	
+			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /> <input type="hidden" class="fullside" name="cost_'+col+'" id="cost_'+col+'"  value="0" dojoType="dijit.form.TextBox"  /> ';	
 			template+='</td >';
 			
 			template+='<td width="4%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
@@ -1679,7 +1679,9 @@ function getservicefee(key){
 	 			},
 	 		handleAs:"json",
 	 		load: function(data) {
-	 			dijit.byId("price_"+index).attr("value",data);
+				//alert(data.cost);
+	 			dijit.byId("price_"+index).attr("value",data.price);
+				dijit.byId("cost_"+index).attr("value",data.cost);
 	 			calculateTotal(index);
 	 		},
 	 		error: function(err) {

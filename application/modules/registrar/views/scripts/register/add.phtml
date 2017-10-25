@@ -487,9 +487,12 @@ fieldset{  background:none;}
 					     <tr>
 							<td><?php echo $tr->translate("NOTE");?></td>
 							<td><input type="text" name="not" id="not" class="fullside"  dojoType="dijit.form.TextBox"/></td>
-							</tr>
-						
-						</table>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("PAID_DATE");?></td>
+							<td><input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="" name="paid_date" id="paid_date" class="fullside"/></td>
+						</tr>	
+					</table>
 				</fieldset>
 			</td>
 			<td valign="top" width="33%">
@@ -500,12 +503,23 @@ fieldset{  background:none;}
 								<td><?php echo $tr->translate("RECEIPT_NO");?></td>
 								<td><input type="text" style="color: red;" required="1" dojoType="dijit.form.ValidationTextBox" name="receipt_no" id="receipt_no" class="fullside" /></td>
 							</tr>
-							 <tr>	
+							<tr>	
 								<td><?php echo $tr->translate("PAYMENT_TERM");?><label class="red">*</label></td>
 								<td>
 									<select type="text" name="payment_term" id="payment_term" onchange="getTuitionFee();getDateTerm();" class="fullside" dojoType="dijit.form.FilteringSelect"  >
 										<?php if(!empty($this->all_paymentterm)){foreach ($this->all_paymentterm as $paymentterm){?>
 										<option value="<?php echo $paymentterm['id']?>"><?php echo $paymentterm['name']?></option>
+										<?php }}?>
+									</select>
+								</td>
+							</tr>
+							<tr>	
+								<td><?php echo $tr->translate("PERIOD");?><label class="red">*</label></td>
+								<td>
+									<select type="text" name="start_end" id="start_end" onchange="setStartAndEndDate();" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+										<option value="-1"> select period </option>
+										<?php if(!empty($this->startdate_enddate)){foreach ($this->startdate_enddate as $rs){?>
+										<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
 										<?php }}?>
 									</select>
 								</td>
@@ -567,10 +581,7 @@ fieldset{  background:none;}
 								<td><?php echo $tr->translate("GRAND_TOTAL");?></td>
 								<td><input type="text" dojoType="dijit.form.NumberTextBox" readonly="true" value="0" name="total_payment" id="total_payment" class="fullside"/></td>
 							</tr>
-							<tr>
-								<td><?php echo $tr->translate("PAID_DATE");?></td>
-								<td><input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="" name="paid_date" id="paid_date" class="fullside"/></td>
-							</tr>
+							
 						</table>
 					</fieldset>
 				</td>
@@ -669,8 +680,10 @@ fieldset{  background:none;}
 				<td colspan="3" align="center">
 				    <input type="button" onclick="submitDataClose();"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
+					 
 					<input type="button" onclick="submitDataAddNew();" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
+					 
 					 <input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','');"/> 
 				</td>
@@ -2145,6 +2158,30 @@ function getOldVildateToStartDateRegister(){
 			return true;
 		}
 	}
+
+	var url_set_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date-end-date')); ?>';	
+	function setStartAndEndDate(){
+		id = dijit.byId('start_end').get('value');
+		dojo.xhrPost({
+			url:url_set_date,
+			content:{
+				'id':id
+				},
+			handleAs:"json",
+			load: function(data) {
+				if(data){
+					dijit.byId('start_date').attr('value',data.start_date);
+					dijit.byId('end_date').attr('value',data.end_date);
+				}else{
+					getDateTerm();
+				}	
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+	
 </script>
 <div class="overlay">
 	<div class="overlay-load">

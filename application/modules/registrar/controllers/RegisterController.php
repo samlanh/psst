@@ -66,6 +66,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
       		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+      		echo $e->getMessage();exit();
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
@@ -85,9 +86,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $this->view->all_service = $db->getAllService();
        $this->view->all_product = $db->getAllProductName();
        $this->view->all_room = $db->getAllRoom();
+       
+       $this->view->startdate_enddate = $db->getAllStartDateEndDate();
+       
 	   $test = $this->view->branch_info = $db->getBranchInfo();
 	   $db = new Foundation_Model_DbTable_DbStudent();
 	   $this->view->group = $db->getAllgroup();
+	   
+	   
+	   
     }
     
     
@@ -398,4 +405,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		$db = new Registrar_Model_DbTable_DbRegister();
 		$this->view->rs = $db->getStudentPaymentByID($id);
 	}
+	
+	function getStartDateEndDateAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$date = $db->getStartDateEndDate($data['id']);
+			print_r(Zend_Json::encode($date));
+			exit();
+		}
+	}
+	
 }

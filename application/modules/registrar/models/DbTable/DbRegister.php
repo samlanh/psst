@@ -301,6 +301,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$this->update($array, $where);					
 					}
 				}
+				
 	/////////////////////// rms_student_test ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 				$this->_name='rms_student_test';
 				if($data['stu_test']>0){
@@ -375,7 +376,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // 		             	$this->insert($arr);
 // 		             }
 // 	             }
-
+	             
 	             $this->_name="rms_student_paymentdetail";
 	             $ids = explode(',', $data['identity']);
 	             $disc = 0;
@@ -419,7 +420,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             	}else{
 	             		$spd_id=0;
 	             	}
-
+	             	
 	             	$complete=1;
              		$status="បង់រួច";
              		$this->_name="rms_student_paymentdetail";
@@ -1650,7 +1651,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			 //$db->commit();//if not errore it do....
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
-				echo $e->getMessage();
+				echo $e->getMessage();exit();
 			}
 					
 	}
@@ -2328,4 +2329,17 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				AND p.service_id=spd.service_id and sp.student_id= $studentid ORDER BY create_date DESC,spd.type ASC";
 			return $db->fetchAll($sql);
 	}
+	
+	function getAllStartDateEndDate(){
+		$db = $this->getAdapter();
+		$sql="select id,CONCAT(note,'(',start_date,' to ',end_date,')') as name from rms_startdate_enddate ";
+		return $db->fetchAll($sql);
+	}
+	
+	function getStartDateEndDate($id){
+		$db = $this->getAdapter();
+		$sql="select start_date,end_date from rms_startdate_enddate where id = $id ";
+		return $db->fetchRow($sql);
+	}
+	
 }

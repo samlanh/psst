@@ -12,7 +12,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	function submitDateList($data){
 		$db=$this->getAdapter();
 		$this->_name='rms_student';
-		$ids = explode(',', $data['identity']);
+		
+		if(!empty($data['identity'])){
+			$ids = explode(',', $data['identity']);
 			foreach ($ids as $i){
 				$arr = array(
 						'dob'=>$data['dob_'.$i]
@@ -20,6 +22,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				$where=" stu_id = ".$data['stu_id'.$i];
 				$this->update($arr, $where);
 			}
+		}
 	} 
     public function getAllGroup($search){
     	$db = $this->getAdapter();

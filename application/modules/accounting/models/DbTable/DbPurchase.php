@@ -132,6 +132,8 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				);
 	    				$this->insert($_arr);
 	    				
+	    				$this->updateProductCost($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i],$_data['amount_'.$i]);
+	    				
 	    				$this->updateStock($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i]);
 	    		}
     			$db->commit();
@@ -140,6 +142,48 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 		   		$db->rollBack();
 		   	}
     }
+    
+    function updateProductCost($pro_id,$branch,$qty,$total_amount_purchase){
+    	$db = $this->getAdapter();
+    	$sql=" 
+    			select 
+    				p.id,
+    				p.cost,
+    				pl.pro_qty
+    			from
+    				rms_product as p,
+    				rms_product_location as pl
+    			where 
+    				p.id = pl.pro_id
+    				and p.status = 1
+    				and p.id = $pro_id
+    				and pl.brand_id = $branch
+    		";
+    	$result = $db->fetchRow($sql);
+    	
+    	if(!empty($result)){
+    		$total_amount_in_stock = $result['pro_qty'] * $result['cost'];
+    		$total_qty_sum = $result['pro_qty'] + $qty;
+    		
+    		$last_cost = ($total_amount_in_stock + $total_amount_purchase)/$total_qty_sum;
+			
+    		$array = array(
+    				"cost"=>$last_cost,
+    				);
+    		
+    		$this->_name = "rms_product";
+    		$where = " id = ".$result['id'];
+			$this->update($array, $where);
+			
+			$this->_name = "rms_program_name";
+			$where1 = " ser_cate_id = ".$result['id']." and type = 1";
+			$this->update($array, $where1);
+    		//echo $last_cost;exit();
+    	}
+    	
+    }
+    
+    
     
     function updateStockBack($id){
     	
@@ -154,7 +198,8 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 				FROM
 				  rms_supplier_product AS sp,
 				  rms_supproduct_detail AS spd 
-				WHERE sp.id = spd.supproduct_id 
+				WHERE 
+				  sp.id = spd.supproduct_id 
 				  AND sp.id = $id  ";
     	$result = $db->fetchAll($sql);
     	//print_r($result);
@@ -334,6 +379,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     			'pro_code'	=>$data['product_code'],
     			'cat_id'	=>$data['category_id'],
     			'pro_price'	=>$data['pro_price'],
+    			'cost'		=>$data['cost'],
     			'pro_des'	=>$data['descript'],
     			'pro_type'	=>$data['pro_type'],
     			'status'	=>$data['p_status'],
@@ -342,6 +388,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	);
     	$this->_name = "rms_product";
     	$pro_id = $this->insert($_arr);
+    	
     	$_arr = array(
     			'pro_id'=>$pro_id,
     			'brand_id'=>$data['location_id'],
@@ -351,11 +398,13 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	);
     	$this->_name='rms_product_location';
     	$this->insert($_arr);
+    	
     	$array = array(
     			'ser_cate_id'	=>$pro_id,
     			'title'			=>$data['product_name'],
     			'description'	=>$data['descript'],
     			'price'			=>$data['pro_price'],
+    			'cost'			=>$data['cost'],
     			'status'		=>1,
     			'create_date'	=>date("Y-m-d H:i:s"),
     			'user_id'		=>$this->getUserId(),

@@ -32,8 +32,14 @@
 			onChange: function() {  
 				pro_id   = dijit.byId('pro_id').get('value');
 				if(pro_id==-1){
-					 $("#location_id").val(dijit.byId("branch").get("value"));
-					dijit.byId("pop_product").show();
+					branch = dijit.byId("branch").get("value");
+					if(branch>0){
+					 	$("#location_id").val(branch);
+						dijit.byId("pop_product").show();
+					}else{
+						alert("Please select branch !!! ");
+						dijit.byId("branch").focus();
+					}
 				}else{
 					addRow();
 				}
@@ -185,7 +191,7 @@ fieldset{  background:none;}
 							<tr>
 								<td colspan="4" align="center">
 									<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-									<input type="button" onclick="submitDataClose()" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+									<input type="button" onclick="" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 									 iconClass="dijitEditorIcon dijitEditorIconSave" />
 									 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 											 iconClass="dijitEditorIcon dijitEditorIconSave" />
@@ -217,8 +223,8 @@ fieldset{  background:none;}
 						<td>
 							<input id="category_id" />
 						</td>
-						<td style="width: 160px"><?php echo $tr->translate("PRICE");?></td>
-						<td ><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="pro_price" value="" name="pro_price"  type="text" required="required"></td>
+						<td style="width: 160px"><?php echo $tr->translate("SELL_PRICE");?></td>
+						<td ><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="pro_price" value="0" name="pro_price"  type="text" required="required"></td>
 					</tr>
 					<tr>
 						<td><?php echo $tr->translate("TYPE");?></td>
@@ -228,13 +234,8 @@ fieldset{  background:none;}
 								<option value="2" ><?php echo $tr->translate("Cut Stock Later");?></option>
 							</select>
 						</td>
-						<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
-						<td>
-							<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="p_status" name="p_status" type="text">								
-									<option value="1" ><?php echo $tr->translate("ACTIVE");?></option>
-									<option value="0" ><?php echo $tr->translate("DEACTIVE");?></option>
-							</select>
-						</td>
+						<td style="width: 160px"><?php echo $tr->translate("UNIT_COST");?></td>
+						<td ><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="cost" value="0" name="cost"  type="text" required="required"></td>
 					</tr>
 					
 					<tr>
@@ -242,7 +243,16 @@ fieldset{  background:none;}
 						<td >
 							<textarea class="fullside" tabindex="8" style=" height: 40px !important;" dojotype="" id="descript" name="descript"></textarea>
 						</td>
-						<td ><input   class="fullside" id="location_id" value="" name="location_id"  type="hidden" required="required"></td>
+						
+						<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
+						<td>
+							<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="p_status" name="p_status" type="text">								
+									<option value="1" ><?php echo $tr->translate("ACTIVE");?></option>
+									<option value="0" ><?php echo $tr->translate("DEACTIVE");?></option>
+							</select>
+						</td>
+						
+						<input class="fullside" id="location_id" value="" name="location_id"  type="hidden" required="required">
 					</tr>
 					<tr>
 						<td colspan="4" align="center" style="padding-left:40px;">
@@ -389,7 +399,7 @@ function addRow() {
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("UNIT_COST");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);

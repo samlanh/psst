@@ -42,6 +42,16 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	
+	function submitlistAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Allreport_Model_DbTable_DbRptPayment();
+			$db->submitPaidDate($data);
+			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/allreport/accounting/rpt-studentpayment");
+		}
+	}
+	
 	function  rptPaymentdetailbytypeAction(){
 		try{
 			if($this->getRequest()->isPost()){

@@ -42,6 +42,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	
 	   	$sql="SELECT 
 	   				sp.id,
+	   				s.stu_id,
 	   				s.stu_code,
 	   				s.stu_khname,
 	   				s.stu_enname,
@@ -279,6 +280,25 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$sql.='WHERE payment_id = '.$id;
 		return $db->fetchAll($sql);    	
     }
+    
+    function submitPaidDate($data){
+    	$db=$this->getAdapter();
+		$this->_name='rms_student_payment';
+		if(!empty($data['identity'])){
+			$ids = explode(',', $data['identity']);
+			foreach ($ids as $i){
+				$arr = array(
+						'create_date'=>$data['create_date_'.$i]
+						);
+				$where=" id = ".$data['payment_id_'.$i];
+				$this->update($arr, $where);
+			}
+		}
+    }
+    
+    
+    
+    
 }
    
     

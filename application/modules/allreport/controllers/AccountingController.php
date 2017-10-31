@@ -64,6 +64,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
 						'service_type'=>'',
+						'payment_by'=>-1,
+						'study_year'=>-1,
+						'degree'=>-1,
+						'grade_all'=>-1,
+						'user'=>-1,
+						'session'=>-1,
 				);
 			}
 // 			print_r($search);exit();
@@ -151,6 +157,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'title' =>'',
 						'branch_id'=>'',
 						'study_year' =>-1,
+						'session'=>-1,
 						'degree'=>-1,
 						'grade_all' =>-1,
 						'user'=>-1,
@@ -939,6 +946,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     					"adv_search"=>'',
     					"payment_type"=>-1,
     					"status"=>-1,
+    					'paid_status'=>'',
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
     			);

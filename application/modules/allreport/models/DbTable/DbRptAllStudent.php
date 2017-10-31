@@ -291,7 +291,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 // 	    	if($search['stu_type']!=-1){
 // 	    		$where.=' AND is_stu_new = '.$search['stu_type'];
 // 	    	}
-	    	echo $sql.$where;
 	    	return $db->fetchAll($sql.$where.$order);
 //     	}else{
 //     		return 0;

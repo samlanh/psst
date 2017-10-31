@@ -71,13 +71,11 @@
 							  </tr>
 								<style> td{padding:0 3px; }</style>
 							 <?php $i=0; $total=0;if(!empty($this->row)){foreach($this->row as $key=>$rs){$i++;
-							 
 									 if($key==0){
 									 	$str=$key+1;
 									 }else{
 									 	$str.=",".($key+1);
 									 }
-							 
 							 ?>
 							  <tr class="hover" style="font-size:11px; height: 18px;"​ align="center">
 								    <td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $i;?></td>
@@ -90,7 +88,6 @@
 								    <td><?php if($rs['deduct']>0){echo '$ '.$rs['deduct'];}?></td>
 								    <td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php if($rs['net_amount']>0){echo '$ '.$rs['net_amount'];}?></td>
 								    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
-								    
 								    <td>
 										<input type="hidden"  name="payment_id_<?php echo $i?>" id="payment_id_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $rs['id'];?>" />
 										<input type="text" constraints="{datePattern:'dd/MM/yyyy'}"  name="create_date_<?php echo $i?>" id="create_date_<?php echo $i?>" dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d",strtotime($rs['create_date']));?>" />
@@ -106,11 +103,8 @@
 							  		}
 							  ?> 
 							  <?php }} ?>
-							  
 							  <input type="hidden" name="identity" id="identity" value="<?php echo $str;?>" />
-							  
 						</table>
-					
 					</td>
 				</tr>
 				<tr>
@@ -144,7 +138,8 @@
 				<?php  }?>
 				
 				<tr style="text-align:center;border:1px solid #fff;">
-					<td colspan="10" align="center"><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SAVE_CLOSE");?></button>
+					<td colspan="10" align="center">
+						<!-- <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php //echo $tr->translate("SAVE_CLOSE");?></button> -->
 					</td>
 				</tr>
 				

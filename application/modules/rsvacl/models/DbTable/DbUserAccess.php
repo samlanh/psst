@@ -134,7 +134,7 @@ class RsvAcl_Model_DbTable_DbUserAccess extends Zend_Db_Table_Abstract
     
     function getAllModule(){
     	$db=$this->getAdapter();
-    	$sql="select module from rms_acl_acl group by module ";
+    	$sql="select module from rms_acl_acl  WHERE status=1 group by module ";
     	return $db->fetchAll($sql);
     }
     

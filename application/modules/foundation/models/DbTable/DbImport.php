@@ -15,29 +15,23 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     	for($i=2; $i<=$count; $i++){
     		$arr = array(
     				'branch_id'=>1,
-    				'user_id'=>$this->getUserId(),
-    				'en_name'=>$data[$i]['B'],
-    				'kh_name'=>$data[$i]['B'],
-    				'serial'=>$data[$i]['D'],
+    				'user_id'=>1,
+    				'stu_enname'=>$data[$i]['B'],
+    				'stu_khname'=>$data[$i]['B'],
     				'sex'=>($data[$i]['C']=="M")?1:2,
-    				'dob'=>date("Y-m-d",strtotime($data[$i]['E'])),
-    				'phone'=>$data[$i]['G'],
-    				'total_price'=>0,
-    				'note'=>$data[$i]['J'].",".$data[$i]['K'].",".$data[$i]['L'],
-    				'address'=>$data[$i]['F'],    				
-					
-//     				'degree_result'=>$data[$i]['H'],
-    				'grade_result'=>$data[$i]['L'],
-//     				'session_result'=>$data[$i]['H'],
-//     				'updated_result'=>$data[$i]['J'],
-//     				'create_date'=>$data[$i]['T'],
-//     				'is_stu_new'=>0,
-//     				'is_subspend'=>0,
-//     				'modify_date'=>date("Y-m-d"),
-//     				'is_setgroup'=>0,
-//     				'password'=>12345,
+    				'tel'=>$data[$i]['F'],
+    				//'note'=>$data[$i]['J'].",".$data[$i]['K'].",".$data[$i]['L'],
     		);
-    		$this->_name='rms_student_test';
+     		$this->_name='rms_student';
+    		$id = $this->insert($arr);
+    		
+    		$arr = array(
+    				'branch_id'=>1,
+    				'stu_id'=>$id,
+    				'degree'=>4,
+    				'status'=>1,
+    		);
+    		$this->_name='rms_student_id';
     		$id = $this->insert($arr);
     		
     		/*$arr = array(

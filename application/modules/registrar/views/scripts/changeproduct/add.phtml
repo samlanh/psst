@@ -132,13 +132,13 @@ $frm = $this->frm_expense;
 									<img style="width: 50%;margin-top:-3px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo_print.png'?>"><br />
 								</td>
 								<td width="40%" align="center" valign="top" style="">
-									<div style="font-size: 14px;text-align:center;font-family: Khmer OS Muol Light;">សាលាបញ្ញាសាស្រ្ត អន្តរជាតិ</div>
-									<div style="font-size: 12px;font-family:Battambang,Arial,Helvetica,sans-serif">Paññāsāstra International School</div> 
+									<div style="font-size: 14px;text-align:center;font-family: Khmer OS Muol Light;"><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></div>
+									<div style="font-size: 12px;font-family:Battambang,Arial,Helvetica,sans-serif"><?php echo $tr->translate("SCHOOL_NAME"); ?></div> 
 									<div style="font-size: 13px;font-family: khmer OS Muol Light;">ប័ណ្ណប្តូរផលិតផល</div> 
 									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:2px;">PAYMENT VOUCHER</div> 
 								</td>
-								<td width="30%">
-									&nbsp;
+								<td width="30%">&nbsp;
+									
 								</td>
 							</tr>
 						</table>
@@ -273,7 +273,6 @@ dojo.ready(function(){
 
 function printSave(new_receipt){	
 	if(dijit.byId('office_receipt').validate()) {
-		
 		if(new_receipt==''){
 			getReceiptNumber(1);
 		}else{
@@ -490,7 +489,6 @@ function getProductPrice(index,type){
 	
 }
  
-
 function submitDataClose(){
 	if(dijit.byId('office_receipt').validate()) {
 		dijit.byId('saveclose').set('disabled',true);
@@ -503,7 +501,6 @@ function submitDataClose(){
 			load: function(data) {
 				document.getElementsByClassName("overlay")[0].style.display="none";		
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				
 				alert(data);
 				
 				window.location.href ="<?php echo $this->baseUrl();?>/registrar/changeproduct";
@@ -517,7 +514,6 @@ function submitDataClose(){
 function submitDataNew(){
 	if(dijit.byId('office_receipt').validate()) {
 		dijit.byId('savenew').set('disabled',true);
-		
 		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'changeproduct','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({
@@ -538,14 +534,12 @@ function submitDataNew(){
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
-
 function doPrintInvoice() {
-	//$('#office_receipt').submit();
 	window.frames["print_frame"].document.body.innerHTML = dojo.byId('printexpense').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
+    $('#office_receipt').submit();
 }
-
 
 function deleteRecord(index) {
 	var identity = $('#identity').val();
@@ -583,7 +577,6 @@ function calculateTotal(index,type){
 }
 
 function calculateDifferent(index){
-
 	old_total = dijit.byId('total_old_'+index).get('value');
 	old_total = isNaN(old_total)?0:old_total;
 	
@@ -591,8 +584,6 @@ function calculateDifferent(index){
 	new_total = isNaN(new_total)?0:new_total;
 	
 	dijit.byId('total_diff_'+index).attr('value',new_total - old_total);
-	
-	
 	netTotal();
 }
 
@@ -614,11 +605,6 @@ function netTotal(){
 		dijit.byId('credit_memo').attr('value',0);
 	}
 }
-
-
-
-
-
 </script>
 
 <div class="overlay">

@@ -360,7 +360,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 	function getStudentTestInfoAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();

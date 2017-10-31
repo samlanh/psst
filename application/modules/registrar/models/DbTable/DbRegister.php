@@ -2332,7 +2332,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	
 	function getAllStartDateEndDate(){
 		$db = $this->getAdapter();
-		$sql="select id,CONCAT(note,'(',start_date,' to ',end_date,')') as name from rms_startdate_enddate ";
+		$sql="select id,start_date,end_date,note,CONCAT(note,'(',start_date,' to ',end_date,')') as name from rms_startdate_enddate ";
 		return $db->fetchAll($sql);
 	}
 	

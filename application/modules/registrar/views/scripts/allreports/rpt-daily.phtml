@@ -8,9 +8,9 @@
 	$frm =  $this->form_search;
 ?>
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'rpt-daily')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<table width="90%" style="margin: 0px; font-family:'khmer os battambang'">
+<table width="100%" style="margin: 0px; font-family:'khmer os battambang';">
    <tr>
-       <td colspan="4">
+       <td colspan="5">
 			<div class="menureport">
 				<ul>
 					<li class="preview"><a title="Preview" href="#" onclick="preview();"></a></li>
@@ -35,14 +35,14 @@
 		<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 	</tr>
 	<tr>
-		<td colspan="4">
+		<td colspan="5">
 			<div style="margin: 10px 0px;">
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="all" id="all_payment" name="all_payment"  <?php if(!empty($this->search['all_payment'])){if($this->search['all_payment']=="all"){echo "checked='checked'";}}?> />All Payment
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/>Student Payment
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="2" id="student_test" name="student_test"  <?php if(!empty($this->search['student_test'])){if($this->search['student_test']==2){echo "checked='checked'";}}?> /> Student Test
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> Income
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /> Expense
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="5" id="change_product" name="change_product"  <?php if(!empty($this->search['change_product'])){if($this->search['change_product']==5){echo "checked='checked'";}}?> /> Change Product
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="all" id="all_payment" name="all_payment"  <?php if(!empty($this->search['all_payment'])){if($this->search['all_payment']=="all"){echo "checked='checked'";}}?> /><?php echo $tr->translate("RPT_ALLPAYMENTREPORT");?>
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="2" id="student_test" name="student_test"  <?php if(!empty($this->search['student_test'])){if($this->search['student_test']==2){echo "checked='checked'";}}?> /><?php echo $tr->translate("STUDENT_TEST");?>
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> <?php echo $tr->translate("OTHER_INCOME");?>
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /><?php echo $tr->translate("OTHER_EXPENSE");?>
+				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="5" id="change_product" name="change_product"  <?php if(!empty($this->search['change_product'])){if($this->search['change_product']==5){echo "checked='checked'";}}?> /><?php echo $tr->translate("CHANGE_PRODUCT");?>
 			</div>
 		</td>
 	</tr>
@@ -53,7 +53,7 @@
 </style>
 <div style="border: 1px dotted #000;background: #fff;width:31cm; margin: 0 auto;">
 		<div id="divPrint" >
-			<table style="background:#fff; margin: 0 auto; width:27cm;white-space: nowrap;" >
+			<table style="background:#fff; margin: 0 auto; width:30cm;white-space: nowrap;" >
 				<tr style="font-size: 13px;">
 					<td width="15%" align="center">
 						<img style="width:60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
@@ -69,7 +69,7 @@
 					<td colspan="3" id="exportExcel">
 						<table style="width:100%;font-family: Khmer OS Battambang,Times New Roman; white-space: nowrap; !important;">
 							<tr style="background:#dadada;">
-								<td><strong>Collect Payment</strong></td>
+								<td><strong><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?></strong></td>
 								<td>
 									<table class="padd" width="100%" border="1" align="center" style="font-family: Khmer OS Battambang,Times new roman;">
 										 <?php 
@@ -269,7 +269,7 @@
 							<?php }?>
 							<?php if(!empty($this->expense)){?>
 							<tr style="background: #fde3ff;">
-								<td><strong style="font-size: 14px;"><div style="margin-top:5px; margin-bottom: -5px;">Other Expense</div></strong></td>
+								<td><strong style="font-size: 14px;"><div style="margin-top:5px; margin-bottom: -5px;"><?php echo $tr->translate("OTHER_EXPENSE");?></div></strong></td>
 								<td>
 									<table class="padd" width="100%" border="1" align="center" style="margin-top:5px;font-family: Khmer OS Battambang,Times new roman;">
 										<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
@@ -307,12 +307,9 @@
 							<?php }?>
 							<?php if(!empty($this->change_product)){?>
 							<tr>
-								<td>Exchange</td>
+								<td><strong><?php echo $tr->translate("CHANGE_PRODUCT");?></strong></td>
 								<td>
 									<table class="padd" width="100%" border="1" align="center" style="margin-top:5px;font-family: Khmer OS Battambang,Times new roman;">
-										<tr style="border-left:none;">
-											<td align="center" colspan="12" ><strong style="font-family: Daunpenh;font-size: 25px;"><div style="margin-bottom: -5px;margin-top: 5px;"> Change Product </div></strong> </td>
-										</tr>
 										<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></td>
@@ -366,7 +363,7 @@
 							<?php }?>
 							<?php if(!empty($this->row) || !empty($this->stu_test) || !empty($this->income) || !empty($this->expense) || !empty($this->change_product)){?>
 							<tr>
-								<td><strong>All Total</strong></td>
+								<td><strong><?php echo $tr->translate("TOTAL_INCOME");?></strong></td>
 								<td>
 								<?php 
 									$final_total_dollar= $net_amount + $total_stu_test + $total_income_dollar + $total_payment_change_product - $total_expense_dollar;
@@ -392,7 +389,7 @@
 							  		</tr>
 							  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
 						  				<td style="font-weight:bold;"> Net Amount ($)</td>
-										<td colspan="4" style=" color:#006d1f; font-weight:bold;font-size: 15px;"> <?php echo $final_total_income;?> $ </td>
+										<td colspan="4" style=" color:#006d1f; font-weight:bold;font-size: 15px;"> <?php echo $final_total_income-$total_expense_dollar;?> $ </td>
 										<td style=" color:#F00; font-weight:bold;font-size: 15px;"> <?php echo $final_total_expense;?> $ </td>
 							  		</tr>
 							    </table>
@@ -423,10 +420,10 @@
 									<table width="100%" style="font-family: 'Khmer OS Battambang';">
 										<tr>
 											<td  width="25%" align="center">
-												<span style="font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('VERIFIED_BY')?></span>
+												<span style="font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('APPROVED_BY')?></span>
 											</td>
-											<td  width="50%">
-												&nbsp;
+											<td  width="50%" align="center">
+												&nbsp;<span style="text-align: right;font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('VERIFIED_BY')?></span>
 											</td>
 											<td align="center"  width="25%">
 												<span style="text-align: right;font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('PREPARED_BY')?></span>

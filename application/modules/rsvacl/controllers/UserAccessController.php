@@ -217,7 +217,6 @@ class RsvAcl_UserAccessController extends Zend_Controller_Action
     {
     	/* Initialize action controller here */
     	if($this->getRequest()->getParam('id')){
-    		 
     		$id = $this->getRequest()->getParam('id');
     		$db = new RsvAcl_Model_DbTable_DbUserType();
     		$userAccessQuery = "SELECT user_type_id, user_type, status from rms_acl_user_type where user_type_id=".$id;

@@ -2275,7 +2275,7 @@ function getOldVildateToStartDateRegister(){
 					dijit.byId('start_date').attr('value',data.start_date);
 					dijit.byId('end_date').attr('value',data.end_date);
 				}else{
-					alert("testing");
+					dijit.byId('start_date').attr('value','<?php echo date('Y-m-d');?>');
 					getDateTerm();
 				}	
 			},

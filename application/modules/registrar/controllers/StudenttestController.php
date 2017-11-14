@@ -29,11 +29,14 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllStudentTest($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("SERIAL","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","DEGREE","OLD_SCHOOL","OLD_GRADE","NOTE","TEST_DATE","BY_USER","STATUS");
+    		$collumns = array("SERIAL","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","TEST_DATE","DEGREE","GRADE","SESSION","TIME","BY_USER","STATUS","PROFILE");
     		$link=array(
     				'module'=>'registrar','controller'=>'studenttest','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('receipt'=>$link,'kh_name'=>$link,'en_name'=>$link));
+    		$link1=array(
+						'module'=>'registrar','controller'=>'studenttest','action'=>'profile'
+			);
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('receipt'=>$link,'kh_name'=>$link,'en_name'=>$link,'Profile'=>$link1));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -49,7 +52,8 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();	
-			$db = new Registrar_Model_DbTable_DbStudentTest();				
+			$db = new Registrar_Model_DbTable_DbStudentTest();	
+// 			print_r($data);exit();			
 			try {
 				$db->addStudentTest($data);
 				if(!empty($data['saveclose'])){
@@ -59,11 +63,12 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 				}				
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				echo $e->getMessage();exit();
 			}
 		}
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $db->getAllDegreeName();
+		$this->view->session = $db->getAllSession();
     }
     public function editAction()
     {
@@ -91,7 +96,12 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		$this->view->session = $db->getAllSession();
     }
     
-    
+    function profileAction(){
+    	$id = $this->getRequest()->getParam('id');
+    	$db = new Registrar_Model_DbTable_DbStudentTest();
+    	$this->view->row = $row = $db->getStudentTestProfileById($id);
+    	//print_r($row);exit();
+    }
     
 
 }

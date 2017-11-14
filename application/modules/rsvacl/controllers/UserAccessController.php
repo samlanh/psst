@@ -312,16 +312,36 @@ class RsvAcl_UserAccessController extends Zend_Controller_Action
     		if(!$usernotparentid){
     			///Display only of his/her parent access	and not have user_type_id of user access in user type parent id
     			//ua.user_type_id != ut.parent_id
-    			$sql_acl = "SELECT acl.acl_id,acl.label, CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access, acl.status, acl.status , acl.is_menu
-    			FROM rms_acl_user_access AS ua
-    			INNER JOIN rms_acl_user_type AS ut ON (ua.user_type_id = ut.user_type_id)
-    			INNER JOIN rms_acl_acl AS acl ON (acl.acl_id = ua.acl_id) WHERE ua.user_type_id =".$id . $where;
+    			$sql_acl = "SELECT 
+    							acl.acl_id,
+    							acl.label, 
+    							CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access, 
+    							acl.status
+    						FROM 
+    							rms_acl_user_access AS ua
+    						INNER JOIN 
+    							rms_acl_user_type AS ut ON (ua.user_type_id = ut.user_type_id)
+    						INNER JOIN 
+    							rms_acl_acl AS acl ON (acl.acl_id = ua.acl_id) 
+    						WHERE 
+    							ua.user_type_id = ".$id . $where;
     		}else{
     			//Display only he / she access in rsv_acl_user_access
-    			$sql_acl = "SELECT acl.acl_id,acl.label, CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access, acl.status, acl.status , acl.is_menu
-    			FROM rms_acl_user_access AS ua
-    			INNER JOIN rms_acl_user_type AS ut ON (ua.user_type_id = ut.parent_id)
-    			INNER JOIN rms_acl_acl AS acl ON (acl.acl_id = ua.acl_id) WHERE ua.user_type_id =".$id . $where;
+    			$sql_acl = "SELECT 
+    							acl.acl_id,
+    							acl.label, 
+    							CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access, 
+    							acl.status, 
+    							acl.status , 
+    							acl.is_menu
+    						FROM 
+    							rms_acl_user_access AS ua
+			    			INNER JOIN 
+			    				rms_acl_user_type AS ut ON (ua.user_type_id = ut.parent_id)
+			    			INNER JOIN 
+    							rms_acl_acl AS acl ON (acl.acl_id = ua.acl_id) 
+    						WHERE 
+    							ua.user_type_id = ".$id . $where;
     		}
     		 
     		$acl_name = $db_acl->getGlobalDb($sql_acl.$order);

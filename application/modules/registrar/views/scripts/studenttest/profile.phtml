@@ -1,0 +1,256 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('Print Student Profile')); 
+	echo $this->headTitle(''); 
+	
+?>	
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+
+<script type="text/javascript">
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.ready(function(){
+		 
+	}); 
+</script>
+ 
+	<table width="100%">
+		<tr>
+			<td>
+				<div class="menureport">
+					<ul>
+						<li class="preview"><a title="Preview" href="#" onclick="preview();"></a></li>
+						<li class="print"><a href="#" title="Print" onclick="doPrint();" ></a></li>
+						<li class="excel"><a href="#"  title="Export"  onclick="exportExcel();"></a></li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+	</table>
+		   
+	<div style="border: 1px dotted #000;background: #fff;width: 21cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+			
+		<div id="divPrint">
+			<table width="100%" border="0" style="font-size:12px;font-family:Tahoma,'Khmer OS Battambang';"> 
+				<tr>
+					<td>
+					   <table width="100%" style="font-family: Times New Roman;">
+				   			<tr>
+								<td width="28%" align="left" >
+									<table width="100%" border="0" style="white-space: nowrap;">
+										<tr>
+											<td width="25%" align="center">
+												<img style="width: 75%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+												<span style="font-family: Brush Script Std;font-size: 11px;">School for the Elite</span>
+											</td>
+											<td width="75%" valign="top" align="left">
+												<strong style="font-family: Khmer MEF2;font-size: 16px;">សាលាបញ្ញាសាស្ត្រអន្តរជាតិ</strong><br />
+												<strong style="font: 15px Times New Roman;">Paññāsāstra International School</strong>
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td align="center" width="44%"  >
+									&nbsp;
+								</td>
+								<td width="28%" align="right">
+								</td>
+							</tr>
+							
+							<tr>
+								<td colspan="3" align="center" style="font-size: 20px;">ENTRY APPLICATION FORM</td>
+							</tr>
+							<tr>
+								<td colspan="2"></td>
+								<td align="center" style="font-size: 16px;" >Serial# : <span style="color:red;"><?php echo $this->row['serial']?></span></td>
+							</tr>
+							
+					   </table>
+				   </td>
+				</tr>
+				
+				<style>
+					.defaultheight{height: 21px;}
+					.border{border:1px solid #000;border-left: none;border-right: none;}
+				</style>
+				
+				<tr>
+					<td>
+						<table width="100%" border="1"  style="font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+							<tr style="height: 24px; background: #9dc4ff;">
+								<td colspan="3" style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp; Student Details</td>
+							</tr>
+							
+							<tr>
+								<td>&nbsp; Name (Khmer) : <?php echo $this->row['kh_name']?></td>
+								<td colspan="2">&nbsp; PUC ID# : <?php echo $this->row['stu_code']?></td>
+							</tr>
+							<tr class="defaultheight">
+								<td width="50%">&nbsp; Name (Latin) : <?php echo $this->row['en_name']?></td>
+								<td width="36%">&nbsp; Sex : <?php echo $this->row['sex']?></td>
+								<td width="14%" rowspan="6" style="border:2px solid #000;"><img  src="<?php echo $this->baseUrl().'/images/'.$this->row['photo'];?>" style="width: 115px;height: 135px;"></td>
+							</tr>
+							<tr class="defaultheight">
+								<td>&nbsp; Date of Birth : <?php echo date("d-M-Y",strtotime($this->row['dob']));?></td>
+								<td>&nbsp; Place of Birth : <?php echo $this->row['pob']?></td>
+							</tr>
+							<tr class="defaultheight">
+								<td>&nbsp; Nationality : <?php echo $this->row['nationality']?></td>
+								<td>&nbsp; Student Status : <?php echo $this->row['student_status']?></td>
+							</tr>
+							
+							<tr class="defaultheight">
+								<td>&nbsp; Tel : <?php echo $this->row['phone']?></td>
+								<td>&nbsp; E-mail : <?php echo $this->row['email']?></td>
+							</tr>
+							<tr class="defaultheight">
+								<td>&nbsp; If employed, where? : <?php echo $this->row['if_employed_where']?></td>
+								<td>&nbsp; Position : <?php echo $this->row['position']?></td>
+							</tr>
+							<tr class="defaultheight">
+								<td>&nbsp; Parent's Name(if under 18) : <?php echo $this->row['parent_name']?></td>
+								<td>&nbsp; Tel : <?php echo $this->row['parent_tel']?></td>
+							</tr>
+							
+							<tr class="defaultheight">
+								<td colspan="3" style="font-size: 11px;">&nbsp; Home Address : <?php echo $this->row['address']?></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+							<tr style="height: 24px; background: #9dc4ff;">
+								<td colspan="2" style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp; Emergency Contact</td>
+							</tr>
+							<tr class="defaultheight">
+								<td colspan="2">&nbsp; List any person whom you would like to be contacted in case of emergency.</td>
+							</tr>
+							<tr class="defaultheight">
+								<td colspan="2">&nbsp; Name : <?php echo $this->row['emergency_name']?></td>
+							</tr>
+							<tr class="defaultheight">
+								<td width="50%">&nbsp; Relationship to student : <?php echo $this->row['relationship_to_student']?></td>
+								<td width="50%">&nbsp; Tel : <?php echo $this->row['emergency_tel']?></td>
+							</tr>
+							<tr class="defaultheight">
+								<td colspan="2">&nbsp; Home Address (if different) : <?php echo $this->row['emergency_address']?></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<td>
+						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+							<tr style="height: 24px; background: #9dc4ff;">
+								<td colspan="2" style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp; Educational Background ( School Name , Grade/Level/Year , Major , Year )</td>
+							</tr>
+							<tr class="defaultheight">
+								<td colspan="2" style="padding: 5px;"><?php echo $this->row['educational_background']?></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+							<tr style="height: 24px; background: #9dc4ff;">
+								<td colspan="4" style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp; Which program/course do you want to study?</td>
+							</tr>
+							<tr class="defaultheight">
+								<td width="25%">&nbsp; Degree : <?php echo $this->row['degree_name']?></td>
+								<td width="25%">&nbsp; Grade : <?php echo $this->row['grade_name']?></td>
+								<td width="25%">&nbsp; Session : <?php echo $this->row['session_name']?></td>
+								<td width="25%">&nbsp; Time : <?php echo $this->row['time_result']?></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<td>
+						<table width="100%" border="0"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+							<tr style="height: 24px; background: #9dc4ff;border: 1px solid #000;">
+								<td colspan="4" style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp; Declaration</td>
+							</tr>
+							<tr class="defaultheight">
+								<td colspan="4" style="padding: 5px;line-height: 22px;">
+									&nbsp; * To the best of my knowledge, the information I have given is true and accurate.<br />
+									&nbsp; ខ្ញុំសូមសន្យាថាពត៌មានខាងលើនេះពិតជាត្រឹមត្រូវពិតប្រាកដមែន។<br />
+									&nbsp; * By signing this application, I agree to abide by the policies and regulations of Paññāsāstra International School(PSIS-Sen Sok).<br />
+									&nbsp; ខ្ញុំយល់ព្រមគោរពតាមបទបញ្ជាផ្ទៃក្នុងរបស់សាលាបញ្ពាសាស្ត្រអន្តរជាតិសែនសុខ។<br />
+								</td>
+							</tr>
+							
+							<tr class="defaultheight">
+								<td width="8%" style="padding: 5px;line-height: 22px;">
+									Signature : 
+								</td>
+								<td width="42%">
+									<u>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									</u>
+								</td>
+								<td width="8%" align="center" style="padding: 5px;line-height: 22px;">
+									Date : 
+								</td>
+								<td width="42%">
+									<u>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									</u>
+								</td>
+							</tr>
+							
+							<tr class="defaultheight">
+								<td colspan="4" style="padding: 5px;line-height: 22px;font-size: 10px;">
+									*** Please advise the school of any changes in the information contained on this form.
+								</td>
+							</tr>
+							
+						</table>
+					</td>
+				</tr>
+				
+			</table>
+	   </div>
+	 </div>
+<script type="text/javascript">
+function doPrint() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+function preview()
+{ 
+  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+      disp_setting+="scrollbars=no,width=1200, height=700, left=100, top=25"; 
+  var content_vlue = document.getElementById("divPrint").innerHTML; 
+  
+  var docprint=window.open("","",disp_setting); 
+   docprint.document.open(); 
+   docprint.document.write('<html><head>'); 
+   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+   docprint.document.write(content_vlue);          
+   docprint.document.write('</center></div></html>'); 
+   docprint.document.close(); 
+   docprint.focus(); 
+}
+function exportExcel(){
+	$('#exportExcel').tableExport({type:'excel',escape:'false'});
+}
+</script>
+

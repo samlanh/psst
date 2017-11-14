@@ -202,13 +202,13 @@ function getStudentNo(){
 </script>
 <form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 		<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
-		if(this.validate()) {	
-	    	dijit.byId('save_new').set('disabled',true);	
-			return true;
-		} else {
-			return false;
-		}
-</script>
+			if(this.validate()) {	
+	    		dijit.byId('save_new').set('disabled',true);	
+				return true;
+			} else {
+				return false;
+			}
+		</script>
 				<table width="100%" >
 					<tr>
 						<td>

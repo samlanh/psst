@@ -11,57 +11,130 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $session_user->branch_id;
 	}
 	function addStudentTest($data){
-		$array = array(
-					'branch_id'	=>$this->getBranchId(),
-					'stu_code'	=>$data['stu_code'],
-					'kh_name'	=>$data['kh_name'],
-					'en_name'	=>$data['en_name'],
-					'sex'		=>$data['sex'],
-					'dob'		=>$data['dob'],
-					'phone'		=>$data['phone'],
-					'old_school'=>$data['old_school'],
-					'old_grade'	=>$data['old_grade'],
-					'degree'	=>$data['degree'],
-					'note'		=>$data['note'],
-					'serial'	=>$data['serial'],
-					'address'	=>$data['address'],
-					'user_id'	=>$this->getUserId(),
-					'test_date'	=>$data['test_date'],
-					'create_date'=>date('Y-m-d'),
-				);
-		$this->insert($array);
- 	}
-	function updateStudentTest($data,$id){
+		
 		try{
-			$updated_result = 0;
-			if(!empty($data['degree_result']) && !empty($data['grade_result']) && !empty($data['session_result'])){
-				$updated_result = 1;
+			
+			$adapter = new Zend_File_Transfer_Adapter_Http();
+			$part = PUBLIC_PATH.'/images';
+			$adapter->setDestination($part);
+			$adapter->receive();
+			$photo = $adapter->getFileInfo();
+				
+			if(!empty($photo['photo']['name'])){
+				$pho_name = $photo['photo']['name'];
+			}else{
+				$pho_name = '';
 			}
 			
 			$array = array(
 						'branch_id'	=>$this->getBranchId(),
+						'stu_code'	=>$data['stu_code'],
 						'kh_name'	=>$data['kh_name'],
 						'en_name'	=>$data['en_name'],
 						'sex'		=>$data['sex'],
+						'nationality'=>$data['nationality'],
 						'dob'		=>$data['dob'],
+						'pob'		=>$data['pob'],
 						'phone'		=>$data['phone'],
+						'email'		=>$data['email'],
+						'address'	=>$data['address'],
+						'student_status'	=>$data['student_status'],
+						'if_employed_where'	=>$data['if_employed_where'],
+						'position'			=>$data['position'],
+						'parent_name'		=>$data['parent_name'],
+						'parent_tel'		=>$data['parent_tel'],
+					
+						'photo'				=>$pho_name,
+					
 						'old_school'=>$data['old_school'],
 						'old_grade'	=>$data['old_grade'],
-						'degree'	=>$data['degree'],
+						//'degree'	=>$data['degree'],
+					
+						'emergency_name'		=>$data['emergency_name'],
+						'relationship_to_student'=>$data['relationship_to_student'],
+						'emergency_tel'			=>$data['emergency_tel'],
+						'emergency_address'		=>$data['emergency_address'],
+					
+						'educational_background'=>$data['edu_background'],
+					
+						'degree_result'	=>$data['degree'],
+						'grade_result'	=>$data['grade'],
+						'session_result'=>$data['session'],
+						'time_result'	=>$data['time'],
+					
 						'note'		=>$data['note'],
-
 						'serial'	=>$data['serial'],
-					
-						'address'	=>$data['address'],
+						
 						'user_id'	=>$this->getUserId(),
-						'status'	=>$data['status'],
-					
-						'stu_code'	=>$data['stu_code'],
 						'test_date'	=>$data['test_date'],
+						'create_date'=>date('Y-m-d'),
+					);
+		}catch (Exception $e){
+			echo $e->getMessage();exit();
+		}
+		$this->insert($array);
+ 	}
+ 	
+	function updateStudentTest($data,$id){
+		try{
+			$updated_result = 0;
+			if(!empty($data['degree']) && !empty($data['grade']) && !empty($data['session'])){
+				$updated_result = 1;
+			}
+			
+			$adapter = new Zend_File_Transfer_Adapter_Http();
+			$part = PUBLIC_PATH.'/images';
+			$adapter->setDestination($part);
+			$adapter->receive();
+			$photo = $adapter->getFileInfo();
+			
+			if(!empty($photo['photo']['name'])){
+				$pho_name = $photo['photo']['name'];
+			}else{
+				$pho_name = $data['old_photo'];
+			}
+			
+			$array = array(
+						'branch_id'	=>$this->getBranchId(),
+						'stu_code'	=>$data['stu_code'],
+						'kh_name'	=>$data['kh_name'],
+						'en_name'	=>$data['en_name'],
+						'sex'		=>$data['sex'],
+						'nationality'=>$data['nationality'],
+						'dob'		=>$data['dob'],
+						'pob'		=>$data['pob'],
+						'phone'		=>$data['phone'],
+						'email'		=>$data['email'],
+						'address'	=>$data['address'],
+						'student_status'	=>$data['student_status'],
+						'if_employed_where'	=>$data['if_employed_where'],
+						'position'			=>$data['position'],
+						'parent_name'		=>$data['parent_name'],
+						'parent_tel'		=>$data['parent_tel'],
 					
-						'degree_result'	=>$data['degree_result'],
-						'grade_result'	=>$data['grade_result'],
-						'session_result'=>$data['session_result'],
+						'photo'				=>$pho_name,
+					
+						'old_school'=>$data['old_school'],
+						'old_grade'	=>$data['old_grade'],
+						//'degree'	=>$data['degree'],
+					
+						'emergency_name'		=>$data['emergency_name'],
+						'relationship_to_student'=>$data['relationship_to_student'],
+						'emergency_tel'			=>$data['emergency_tel'],
+						'emergency_address'		=>$data['emergency_address'],
+					
+						'educational_background'=>$data['edu_background'],
+					
+						'degree_result'	=>$data['degree'],
+						'grade_result'	=>$data['grade'],
+						'session_result'=>$data['session'],
+						'time_result'	=>$data['time'],
+					
+						'note'		=>$data['note'],
+						'serial'	=>$data['serial'],
+						
+						'user_id'	=>$this->getUserId(),
+						'test_date'	=>$data['test_date'],
 					
 						'updated_result'=>$updated_result,
 					
@@ -95,18 +168,22 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					(select name_kh from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
 					phone,
 					
-					(select en_name from rms_dept where dept_id=degree LIMIT 1) as degree,
-					old_school,
-					old_grade,
-					note,
 					test_date,
+					
+					(select en_name from rms_dept where dept_id=degree_result LIMIT 1) as degree,
+					(select major_enname from rms_major where major_id=grade_result LIMIT 1) as grade,
+					(select name_en from rms_view where type=4 and key_code=session_result LIMIT 1) as session,
+					time_result,
+					
 					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1),
-					(select name_en from rms_view where type=15 and key_code=updated_result) as result_status
+					(select name_en from rms_view where type=15 and key_code=updated_result) as result_status,
+					'Profile'
 				FROM 
 					rms_student_test
 				where
 					status=1
-					and register=0 ";
+					and register=0 
+			";
 		
 		if (!empty($search['txtsearch'])){
 				$s_where = array();
@@ -127,4 +204,23 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}	
+	
+	function getStudentTestProfileById($id){
+		$db = $this->getAdapter();
+		$sql=" SELECT 
+					*,
+					(select en_name from rms_dept where dept_id = degree_result) as degree_name,
+					(select major_enname from rms_major where major_id = grade_result) as grade_name,
+					(select name_en from rms_view where type=4 and key_code = session_result) as session_name,
+					(select name_en from rms_view where type=2 and key_code=sex) as sex,
+					(select name_en from rms_view where type=16 and key_code=student_status) as student_status
+				FROM 
+					rms_student_test 
+				where 
+					id=$id 
+			";
+		return $db->fetchRow($sql);
+	}
+	
+	
 }

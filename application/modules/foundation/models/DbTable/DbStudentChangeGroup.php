@@ -5,18 +5,28 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->user_id;
-	}
-	
+	}	
 	public function getAllStudentID(){
 		$_db = $this->getAdapter();
-		$sql = "SELECT st.stu_id as id,st.stu_code FROM `rms_student` as st,rms_group_detail_student as gds where gds.type=1 and gds.is_pass=0 and gds.stu_id=st.stu_id and is_setgroup=1 and st.is_subspend=0 and st.status=1 and st.degree IN(1,2,3,4) group by gds.stu_id";
+		$sql = "SELECT st.stu_id as id,st.stu_code FROM `rms_student` as st,rms_group_detail_student as gds where gds.type=1 and gds.is_pass=0 and gds.stu_id=st.stu_id and is_setgroup=1 and st.is_subspend=0 and st.status=1 group by gds.stu_id";
 		//$orderby = " ORDER BY stu_code ";
 		return $_db->fetchAll($sql);		
 	}
 	
 	public function getAllStudentName(){
 		$_db = $this->getAdapter();
-		$sql = "SELECT st.stu_id as id,CONCAT(st.stu_khname,'-',st.stu_enname) as name FROM `rms_student` as st,rms_group_detail_student as gds where gds.type=1 and gds.is_pass=0 and gds.stu_id=st.stu_id and is_setgroup=1 and st.is_subspend=0 and st.status=1 and st.degree IN(1,2,3,4) group by gds.stu_id";
+		$sql = "SELECT st.stu_id as id,		
+		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name
+		FROM 
+			`rms_student` as st,
+			rms_group_detail_student as gds
+		 WHERE gds.type=1 
+		and gds.is_pass=0 
+		and gds.stu_id=st.stu_id 
+		and is_setgroup=1 
+		and st.is_subspend=0 
+		and st.status=1 
+		group by gds.stu_id";
 		//$orderby = " ORDER BY stu_code ";
 		return $_db->fetchAll($sql);
 	}
@@ -45,7 +55,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 		(SELECT `major_enname` FROM `rms_major` WHERE `major_id`=rms_group.grade ) AS to_grade,
 		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = rms_group.session )) LIMIT 1) AS `to_session`,
 		
-		moving_date,scg.note from `rms_student_change_group` as scg,rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 and rms_group.degree IN(1,2,3,4) and scg.status=1";
+		moving_date,scg.note from `rms_student_change_group` as scg,rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 and scg.status=1";
 		$order_by=" order by id DESC";
 		$where=' ';
 		
@@ -272,7 +282,9 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 	}
 	function getStudentInfoById($stu_id){
 		$db = $this->getAdapter();
-		$sql = "SELECT CONCAT(st.stu_khname,' - ',st.stu_enname) as name , st.`sex`,gds.`group_id` FROM `rms_student` AS st,rms_group_detail_student AS gds WHERE gds.is_pass=0 and  st.stu_id=$stu_id AND st.stu_id=gds.stu_id LIMIT 1";
+		$sql = "SELECT 	
+		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name,
+		 st.`sex`,gds.`group_id` FROM `rms_student` AS st,rms_group_detail_student AS gds WHERE gds.is_pass=0 and  st.stu_id=$stu_id AND st.stu_id=gds.stu_id LIMIT 1";
 // 		echo $sql;exit();
 		return $db->fetchRow($sql);
 	}

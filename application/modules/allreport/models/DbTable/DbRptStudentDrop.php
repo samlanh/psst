@@ -11,7 +11,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 //     }
     public function getAllStudentDrop($search){
     	$db = $this->getAdapter();
-    	$sql = "SELECT st.stu_code as stu_id, CONCAT(st.stu_khname,' - ',st.stu_enname) as name,
+    	$sql = "SELECT st.stu_code as stu_id, 
+		
+		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name,
     	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year) as academic_year,
     	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=st.session limit 1)AS session,
     	(select major_enname from rms_major where rms_major.major_id=st.grade limit 1)AS grade,

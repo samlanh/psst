@@ -274,8 +274,6 @@
 			var y = a.getFullYear();
 			var epx_date = y + '-'+ mm + '-'+dd ;
 			
-			alert("epx_date"+epx_date);
-			
 			dijit.byId('end_date').attr('value',epx_date);	
 	}
 	function getTestFee(){
@@ -369,7 +367,7 @@ fieldset{  background:none;}
 								<td><?php echo $tr->translate("STUDENT_NAME");?></td>
 								<td>
 									<div id="student_old_name">
-										<select type="text" name="old_stu_name" id="old_stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
+										<select type="text" name="old_stu_name"  autoComplete="false" queryExpr="*${0}*" id="old_stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
 											<option value="">Select Student Name</option>
 											<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
 											<option value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
@@ -401,8 +399,8 @@ fieldset{  background:none;}
 								<td><?php echo $tr->translate("SEX");?></td>
 								<td>
 									<select type="text" name="sex" id="sex" class="fullside" dojoType="dijit.form.FilteringSelect" >
-										<option value="1">Male</option>
-										<option value="2">Female</option>
+										<option value="1"><?php echo $tr->translate("MALE");?></option>
+										<option value="2"><?php echo $tr->translate("FEMALE");?></option>
 									</select>
 								</td>
 							</tr>
@@ -488,10 +486,10 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("NOTE");?></td>
 							<td><input type="text" name="not" id="not" class="fullside"  dojoType="dijit.form.TextBox"/></td>
 						</tr>
-						<tr>
-							<td><?php echo $tr->translate("PAID_DATE");?></td>
+						<!-- <tr>
+							<td><?php //echo $tr->translate("PAID_DATE");?></td>
 							<td><input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="" name="paid_date" id="paid_date" class="fullside"/></td>
-						</tr>	
+						</tr> -->	
 					</table>
 				</fieldset>
 			</td>
@@ -1223,6 +1221,9 @@ function setID(){
 var url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
 function getPaymentHistory(student_id){
 	tem='';
+	if(student_id==''){
+		return false;
+	}
 	dojo.xhrPost({
 		url:url_studentpayment,
 		content:{
@@ -1298,6 +1299,7 @@ function getPaymentHistory(student_id){
 			dojo.byId('table_paymenthistory').innerHTML = tem;
 		},
 		error: function(err) {
+			
 		}
 	});
 }
@@ -1821,7 +1823,8 @@ function printSave(new_stu_id,new_receipt){
 			}else{
 				stu_id = dijit.byId("stu_id").attr('displayedValue');
 			}
-			/*if(stu_type==1){
+
+			if(stu_type==1){
 				if(new_stu_id==''){
 					getStudentNo(degree,1);
 				}else{
@@ -1836,10 +1839,10 @@ function printSave(new_stu_id,new_receipt){
 				}else{
 					receipt = new_receipt;
 				}
-			}	*/
+			}	
 
-			//var today = new Date();
-			today = dijit.byId("paid_date").get("value");
+			var today = new Date();
+			//today = dijit.byId("paid_date").get("value");
 			var dd = today.getDate();
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
@@ -2270,8 +2273,6 @@ function getOldVildateToStartDateRegister(){
 			handleAs:"json",
 			load: function(data) {
 				if(data){
-					alert("end"+data.start_date);
-					alert("end"+data.end_date);
 					dijit.byId('start_date').attr('value',data.start_date);
 					dijit.byId('end_date').attr('value',data.end_date);
 				}else{

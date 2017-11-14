@@ -67,10 +67,9 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     	$db= $this->getAdapter();
     	$sql="SELECT 
 				  gds.`stu_id`,
-				  gscg.`from_group`,
-				  
-				  st.stu_code,
-				  CONCAT(st.stu_khname,' - ',st.stu_enname) AS stu_name,
+				  gscg.`from_group`,				  
+				  st.stu_code,				 
+				  (CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS stu_name,
 				  (SELECT name_en FROM rms_view WHERE rms_view.`type`=2 AND rms_view.`key_code`=st.sex) AS sex,
   
 				  (select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(SELECT rms_group.academic_year FROM rms_group WHERE rms_group.id=gscg.`from_group`)) AS academic_year,

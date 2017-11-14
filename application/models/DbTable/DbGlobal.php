@@ -136,12 +136,10 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    public function getAllFecultyNamess($type){
    	$db = $this->getAdapter();
    	if($type==1){
-   		$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE (dept_id=1 OR dept_id=2 OR dept_id=3 OR dept_id=4)
-               AND is_active=1  AND en_name!='' ORDER BY en_name";
+   		$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND (en_name!='' OR kh_name!='') ORDER BY en_name ";
    		return $db->fetchAll($sql);
    	 }else if($type==2){
-        $sql="SELECT dept_id AS id, en_name AS `name`,en_name,dept_id,shortcut FROM rms_dept WHERE dept_id NOT IN(1,2,3,4)
-              AND  is_active=1  AND en_name!='' ORDER BY en_name";
+        $sql="SELECT dept_id AS id, en_name AS `name`,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1  AND (en_name!='' OR kh_name!='') ORDER BY en_name";
         return $db->fetchAll($sql);
    	 }
    }
@@ -158,13 +156,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    		return $db->fetchAll($sql);
    }   public function getGepDept(){
    	$db = $this->getAdapter();
-   	$sql ="SELECT dept_id as id,en_name AS name FROM rms_dept WHERE dept_id NOT IN (1,2,3,4) AND is_active =1";
+   	$sql ="SELECT dept_id as id,en_name AS name FROM rms_dept WHERE (en_name!='' OR kh_name!='') AND is_active =1";
    	return $db->fetchAll($sql);
    }
    
    public function getAllDegreeKindergarten(){
    	$db = $this->getAdapter();
-   	$sql ="SELECT dept_id AS id, en_name AS name FROM rms_dept WHERE is_active=1 AND en_name!='' AND dept_id IN(1) ORDER BY id DESC";
+   	$sql ="SELECT dept_id AS id, en_name AS name FROM rms_dept WHERE is_active=1 AND (en_name!='' OR kh_name!='') ORDER BY id DESC";
    	return $db->fetchAll($sql);
    }
    

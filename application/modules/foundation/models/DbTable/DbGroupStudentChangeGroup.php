@@ -42,8 +42,12 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				(select major_enname from rms_major where rms_major.major_id=rms_group.grade) as to_grade,
 				(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_group.session) as to_session,
 				
-				moving_date,rms_group_student_change_group.note,`rms_group_student_change_group`.status
-				FROM `rms_group_student_change_group`,rms_group where rms_group.id=rms_group_student_change_group.to_group and rms_group.degree IN (1,2,3,4)";
+				moving_date,rms_group_student_change_group.note,
+				`rms_group_student_change_group`.status
+				FROM 
+				`rms_group_student_change_group`,
+				rms_group 
+				WHERE rms_group.id=rms_group_student_change_group.to_group ";
 		$order_by=" order by id DESC";
 		$where=" ";
 		if(empty($search)){

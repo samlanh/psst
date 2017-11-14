@@ -229,7 +229,9 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	}
 	function getStudentInfoById($stu_id){
 		$db = $this->getAdapter();
-		$sql = "SELECT CONCAT(st.stu_khname,' - ',st.stu_enname) as name,st.sex,
+		$sql = "SELECT 		
+		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name,
+		st.sex,		
 			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=st.academic_year) as academic_year, 
 			(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=st.grade ) AS grade,
 			(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE `rms_view`.`type` = 4 AND `rms_view`.`key_code` = st.session ) AS session

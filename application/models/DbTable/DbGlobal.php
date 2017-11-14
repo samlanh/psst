@@ -682,7 +682,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    function getAllStuName(){
    	$db = $this->getAdapter();
-   	$sql=" select stu_id as id , CONCAT(stu_khname,'-',stu_enname) AS name from rms_student where status=1 and is_subspend=0 ";
+   	$sql=" select stu_id as id , CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END AS name from rms_student where status=1 and is_subspend=0 ";
    	return $db->fetchAll($sql);
    }
    function getAllGeneration($opt=null,$option=null){

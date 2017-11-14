@@ -1031,5 +1031,35 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 	
+	public function rptStudentNotPaidAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}else{
+				$search=array(
+						'txtsearch' =>'',
+						'grade_all' =>'',
+						'session' 	=>'',
+						'stu_code' 	=>'',
+						'stu_name' 	=>'',
+						'service'	=>''
+				);
+			}
+			$db = new Allreport_Model_DbTable_DbRptStudentNotPaid();
+			$abc = $this->view->row = $db->getAllStudentNotPaid($search);
+				
+			$form=new Registrar_Form_FrmSearchInfor();
+			$form->FrmSearchRegister();
+			Application_Model_Decorator::removeAllDecorator($form);
+			$this->view->form_search=$form;
+				
+			$this->view->search = $search;
+				
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
+		}
+	}
 	
 }

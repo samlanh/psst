@@ -33,15 +33,15 @@
 			</tr>
 			<tr>
 				<td><?php echo $frm->getElement("session");?></td>
-				<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->datasearch['start_date'];?>" type="text"></td>
-				<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="end_date" name="end_date"  value="<?php echo $this->datasearch['end_date'];?>" type="text"></td>
+				<td><input dojoType="dijit.form.DateTextBox" class="fullside"  constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->datasearch['start_date'];?>" type="text"></td>
+				<td><input dojoType="dijit.form.DateTextBox" class="fullside"  constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date"  value="<?php echo $this->datasearch['end_date'];?>" type="text"></td>
 				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 
 		 	</tr>
 		</table>		
 </form>
 </div>
-	<div style="border: 1px dotted #000;background: #fff;width:29cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+	<div style="border: 1px dotted #000;background: #fff;min-width:29cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 		<div id="divPrint">
 			<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
 			<style>
@@ -88,7 +88,7 @@
 							</tr>
 							<?php }$i=0; ?>
 							<tr>
-								<td align="center" colspan="<?php echo $amount_day+5;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+								<td align="center" colspan="<?php echo $amount_day+9;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 									<!-- <img style="width: 90px;float: left; " alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>"> -->
 									<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("STUDENT_ATTENDENCE");?></strong><br />
 									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
@@ -107,7 +107,8 @@
 							<tr style="font-size:14px; line-height: 18px; " align="center" >
 								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
 								<td rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></td>
-								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></td>
+								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?></td>
+								<td rowspan="2"><?php echo $tr->translate("NAME_ENGLISH");?></td>
 								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
 								<?php for($k=0;$k<$amount_day;$k++){?>
 									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day")); // $tr->translate(date("D",strtotime($date)));?>
@@ -127,6 +128,7 @@
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 								<td align="center" style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_code'];?>&nbsp;</td>
 								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
+								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_enname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php $p=0; $a=0;$l=0;$el=0; for($k=0;$k<$amount_day;$k++){?>
 									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>

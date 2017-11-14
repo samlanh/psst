@@ -89,10 +89,9 @@
 								    <td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php if($rs['net_amount']>0){echo '$ '.$rs['net_amount'];}?></td>
 								    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
 								    <td>
-										<input type="hidden"  name="payment_id_<?php echo $i?>" id="payment_id_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $rs['id'];?>" />
-										<input type="text" constraints="{datePattern:'dd/MM/yyyy'}"  name="create_date_<?php echo $i?>" id="create_date_<?php echo $i?>" dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d",strtotime($rs['create_date']));?>" />
+										<!--  <input type="hidden"  name="payment_id_<?php //echo $i?>" id="payment_id_<?php //echo $i?>" dojoType="dijit.form.TextBox" value="<?php //echo $rs['id'];?>" />
+										<input type="text" constraints="{datePattern:'dd/MM/yyyy'}"  name="create_date_<?php //echo $i?>" id="create_date_<?php //echo $i?>" dojoType="dijit.form.DateTextBox" value="<?php //echo date("Y-m-d",strtotime($rs['create_date']));?>" />-->
 									</td>
-								    
 								    <td><?php echo $rs['user']; ?></td>
 								   	<td><?php echo $rs['note']; ?></td>
 								   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $rs['vois_status']; ?></td>

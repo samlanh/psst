@@ -14,7 +14,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.stu_code,
     				s.stu_khname,
     				s.stu_enname,
-    				(select name_kh from rms_view where type=2 and key_code=s.sex) as sex,
+    				s.tel,
+    				s.dob,
+    				(select name_kh from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				sp.receipt_number,
     				sp.create_date,
     				(select first_name from rms_users where id=sp.user_id LIMIT 1) as user,
@@ -22,7 +24,13 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				sp.credit_memo,
     				sp.deduct,
     				sp.fine,
-    				sp.net_amount
+    				sp.net_amount,
+    				(SELECT CONCAT(from_academic,'-',to_academic) 
+						FROM rms_tuitionfee where rms_tuitionfee.id=sp.year LIMIT 1) AS academic_year,
+    				(select en_name from rms_dept where dept_id = sp.degree LIMIT 1) as degree,
+					(select major_enname from rms_major where major_id = sp.grade LIMIT 1) as grade,
+					(select name_en from rms_view where rms_view.type = 4 and key_code=sp.session LIMIT 1) as session,
+					spd.type
     			from
     				rms_student_payment as sp,
 					rms_student as s,
@@ -256,28 +264,36 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     }
     public function getPaymentReciptDetail($id){
     	$db = $this->getAdapter();
-    	$sql=" SELECT id,
-    	payment_id,
-    	(SELECT receipt_number FROM `rms_student_payment` WHERE id=payment_id LIMIT 1) as receipt_number,
-    	(SELECT (SELECT `rms_student`.`stu_khname`FROM `rms_student` WHERE (`rms_student`.`stu_id` = `rms_student_payment`.`student_id`) LIMIT 1)FROM `rms_student_payment` WHERE id=payment_id LIMIT 1) as kh_name,
-    	(SELECT (SELECT `rms_student`.`stu_enname`FROM `rms_student` WHERE (`rms_student`.`stu_id` = `rms_student_payment`.`student_id`) LIMIT 1)FROM `rms_student_payment` WHERE id=payment_id LIMIT 1) as en_name,
-    	(SELECT (SELECT (SELECT `rms_view`.`name_kh`FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` = `rms_student`.`sex`))) FROM `rms_student` WHERE (`rms_student`.`stu_id` = `rms_student_payment`.`student_id`)LIMIT 1)FROM `rms_student_payment` WHERE id=payment_id LIMIT 1) as sex,
-    	type,fee,qty,subtotal,
-    	
-    	(SELECT title FROM `rms_program_name` WHERE `rms_program_name`.`service_id`= rms_student_paymentdetail.service_id LIMIT 1) as service,
-    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=6 AND key_code= payment_term LIMIT 1)as payment_term,
-    	subtotal,paidamount,
-    	(SELECT `total_payment` FROM `rms_student_payment` WHERE id= payment_id LIMIT 1) as total_payment,
-    	(SELECT `paid_amount` FROM `rms_student_payment` WHERE id= payment_id LIMIT 1) as paid_amount,
-    	(SELECT `balance_due` FROM `rms_student_payment` WHERE id= payment_id LIMIT 1) as balance_due,
-    	(SELECT `return_amount` FROM `rms_student_payment` WHERE id= payment_id LIMIT 1) as return_amount,
-    	(SELECT `amount_in_khmer` FROM `rms_student_payment` WHERE id= payment_id LIMIT 1) as amount_in_khmer,
-    	discount_fix,discount_percent,
-    	(SELECT CONCAT (`last_name`,' ', `first_name`) FROM `rms_users` WHERE `rms_users`.id = user_id LIMIT 1) as user,
-    	note,validate,late_fee,extra_fee 
-    	FROM rms_student_paymentdetail
-    	";
-    	$sql.='WHERE payment_id = '.$id;
+    	$sql=" SELECT 
+    	spd.id,
+    	spd.payment_id,
+    	(SELECT `rms_student`.`stu_khname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS kh_name,
+    	(SELECT `rms_student`.`stu_enname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS en_name,
+    	(SELECT `rms_view`.`name_kh` FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` =(SELECT `rms_student`.`sex` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) )))  as sex,
+    	spd.type,spd.fee,spd.qty,spd.subtotal,
+    	(SELECT title FROM `rms_program_name` WHERE `rms_program_name`.`service_id`= spd.service_id LIMIT 1) as service,
+    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
+    	(SELECT major_enname from rms_major where major_id = sp.grade LIMIT 1) as grade,
+    	spd.subtotal,
+    	spd.paidamount,
+    	sp.receipt_number as receipt_number,
+    	sp.`total_payment` AS total_payment,
+    	sp.`paid_amount` as paid_amount,
+    	sp.`balance_due` as balance_due,
+    	sp.`return_amount` as return_amount,
+    	sp.`amount_in_khmer` as amount_in_khmer,
+    	(SELECT CONCAT (`last_name`,' ', `first_name`) FROM `rms_users` WHERE `rms_users`.id = sp.user_id LIMIT 1) as user,
+    	spd.note,
+    	spd.validate,
+    	spd.late_fee,
+    	spd.extra_fee, 
+    	spd.discount_fix,
+    	spd.discount_percent
+    	FROM 
+    	rms_student_payment as sp,
+    	rms_student_paymentdetail AS spd ";
+    	$sql.='WHERE sp.id=spd.payment_id 
+    		AND spd.payment_id = '.$id;
 		return $db->fetchAll($sql);    	
     }
     

@@ -113,7 +113,7 @@
 										    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>><?php echo $i;?></td>
 										    <td><?php echo $rs['receipt_number']; ?></td>
 										    <td><?php echo $rs['stu_code']; ?></td>
-										    <td style=" white-space:nowrap; text-align:left"> <?php echo $rs['stu_khname'].'-'.$rs['stu_enname']; ?> </td>
+										    <td style=" white-space:nowrap; text-align:left">&nbsp;<a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'rptreceiptdetail','id'=>$rs['id']))?>"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></a></td>
 											<td><?php echo $rs['degree']; ?></td>
 											<td><?php echo $rs['grade']; ?></td>
 											<td><?php echo $rs['session']; ?></td>
@@ -285,7 +285,7 @@
 										<?php $i=0;$total_expense_kh=0;$total_expense_dollar=0;foreach($this->expense as $row){ $i++;?>
 										<tr class="hover" style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $i;?></td>
-											<td style="border: 1px solid #000;"><?php echo $row['title'];?></td>
+											<td style="border: 1px solid #000; text-align: left;">&nbsp;<?php echo $row['title'];?></td>
 											<td style="border: 1px solid #000;"><?php echo $row['invoice'];?></td>
 											<td align="center" style="border: 1px solid #000;"><?php echo $row['payment_type'];?></td>	
 											<td style="border: 1px solid #000;"><?php echo '$ '.$row['total_amount'];?></td>
@@ -295,12 +295,12 @@
 											<?php 
 												$total_expense_dollar = $total_expense_dollar + $row['total_amount'];
 											?> 
+										 <?php } ?>
 										 <tr>
 										 	<td colspan="5"></td>
 										 	<td style="width:120px;background-color: #ccc;font-weight:bold; font-size: 12px;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
 											<td style="width:120px; color:#F00; font-weight:bold; font-size: 12px;">$ <?php echo number_format($total_expense_dollar,2);?></td>
 										 </tr>
-										 <?php } ?>
 									</table>
 								</td>
 							</tr>

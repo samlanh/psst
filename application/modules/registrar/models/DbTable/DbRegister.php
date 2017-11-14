@@ -250,8 +250,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'total_scholarship'=>$data['total_scholarship'],
 						'note'			=>$data['not'],
 						'student_type'	=>$data['student_type'],  // 1=tested student , 2=new student , 3=old student
-						//'create_date'	=>date('Y-m-d H:i:s'),//check date here 
-						'create_date'	=>$data['paid_date'],
+						'create_date'	=>date('Y-m-d H:i:s'),//check date here 
+						//'create_date'	=>$data['paid_date'],
 						//'amount_in_khmer'=>$data['char_price'],
 						'user_id'		=>$this->getUserId(),
 						'branch_id'		=>$this->getBranchId(),
@@ -1663,7 +1663,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql=" SELECT sp.id,sp.receipt_number,
     			s.stu_code,
-    			CONCAT(s.stu_khname,'-',s.stu_enname) as name,
+    			(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name,
     			s.sex,
     			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.year) AS year,
     	        (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree)AS degree,
@@ -1888,7 +1888,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     //select Gep old student by id 
     function getAllGepOldStudentName(){
     	$db=$this->getAdapter();
-    	$sql="SELECT s.stu_id As stu_id,CONCAT(s.stu_khname,'-',s.stu_enname) As name FROM rms_student AS s
+    	$sql="SELECT s.stu_id As stu_id,			
+			(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name	
+		 FROM rms_student AS s
     	WHERE s.stu_type=2 AND s.is_subspend=0 and s.status=1 ORDER BY stu_id DESC ";
     	return $db->fetchAll($sql);
     }
@@ -1916,10 +1918,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
-    	
-    	$sql="SELECT s.stu_id As stu_id,CONCAT(s.stu_enname) as name FROM rms_student AS s
-    	WHERE stu_enname!='' AND s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+    	$branch_id = $_db->getAccessPermission();    	
+    	$sql="SELECT s.stu_id As stu_id,
+    	(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name
+    	FROM rms_student AS s
+    	WHERE (stu_enname!='' OR s.stu_khname!='') AND s.status=1 and s.is_subspend=0 $branch_id ORDER BY stu_type DESC ";
     	return $db->fetchAll($sql);
     }
     //select general  old student by name
@@ -2326,7 +2329,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			where 
     				s.stu_id = sp.student_id
     				AND sp.id=spd.payment_id 
-    				AND p.service_id=spd.service_id and sp.student_id= $studentid ORDER BY create_date DESC,spd.type ASC";
+    				AND p.service_id=spd.service_id 
+    				AND sp.student_id= $studentid ORDER BY create_date DESC,spd.type ASC";
 			return $db->fetchAll($sql);
 	}
 	

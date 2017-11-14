@@ -20,7 +20,7 @@ class Registrar_Model_DbTable_DbProductsold extends Zend_Db_Table_Abstract
 			 sp.note,
 			 (SELECT u.first_name FROM `rms_users` as u WHERE sp.user_id =u.id ) as user_name
 			  FROM `rms_saledetail` AS sd,rms_student_payment AS sp,rms_student as s
-			 WHERE sp.id=sd.payment_id and s.stu_id = sp.student_id ";
+			 WHERE sp.id=sd.payment_id and s.stu_id = sp.student_id AND sp.is_void=0 ";
     	
     	$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";

@@ -128,7 +128,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			$user_type = $this->user_typelist;
 			$this->view->user_typelist =$user_type;
 			
-			array_unshift($user_type, array('id'=>-1,'name'=>'Add New'));
+			array_unshift($user_type, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
 			$this->view->user_type = $user_type;
 			
 	}
@@ -154,7 +154,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			$user_type = $this->user_typelist;
 			$this->view->user_typelist =$user_type;
 				
-			array_unshift($user_type, array('id'=>-1,'name'=>'Add New'));
+			array_unshift($user_type, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
 			$this->view->user_type = $user_type;
 			
 			$db  = new Application_Model_DbTable_DbGlobal();

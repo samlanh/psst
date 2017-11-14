@@ -249,8 +249,8 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 	
 		$sql="select
 					cp.id,
-					receipt_no,
-					CONCAT(s.stu_khname,'-',s.stu_enname) as name,
+					receipt_no,					
+					(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name,					
 					total_payment,
 					credit_memo,
 					cp.create_date,

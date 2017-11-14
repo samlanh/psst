@@ -350,7 +350,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
 	}
-	
 	function getReceiptNoAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();

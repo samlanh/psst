@@ -7,13 +7,13 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
 	$day = array(
-			"Mon" =>'ច័ន្ទ',
-			"Tue" =>'អង្គារ',
-			"Wed" =>'ពុធ',
-			"Thu" =>'ព្រហស្បតិ៍',
-			"Fri" =>'សុក្រ',
-			"Sat" =>'សៅរ៍',
-			"Sun" =>'អាទិត្យ',
+		"Mon" =>'ច័ន្ទ',
+		"Tue" =>'អង្គារ',
+		"Wed" =>'ពុធ',
+		"Thu" =>'ព្រហស្បតិ៍',
+		"Fri" =>'សុក្រ',
+		"Sat" =>'សៅរ៍',
+		"Sun" =>'អាទិត្យ',
 	);
 	$month = array(
 				"01"=>"មករា",
@@ -90,6 +90,7 @@ dojo.ready(function(){
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
+			.hover:hover{background:#ccc;}
 		</style>
 		<table style="width:28cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr>
@@ -126,13 +127,13 @@ dojo.ready(function(){
 							 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_average = 0; $old_rank=0;
 							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
 							?>
-							<tr style="font-size:12px; height: 18px;white-space: nowrap;"​ align="center" class='padding'>
+							<tr style="font-size:12px; height: 18px;white-space: nowrap;"​ align="center" class='padding hover'>
 							    <td><?php echo $key+1;?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['group_code']; ?></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic_year']; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['for_semester']; ?></a></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['degree']; ?></a></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['grade']; ?></a></td>
-							    <td><?php echo $rs['grade']; ?></td>
 							    <td><?php echo $rs['session']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['title_score']; ?></td>

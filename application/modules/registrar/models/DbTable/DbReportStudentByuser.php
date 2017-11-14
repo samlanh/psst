@@ -159,6 +159,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
 			$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
 			$sql=" SELECT
+			            sp.id,
 						sp.receipt_number,
 						s.stu_code,
 						s.stu_khname,
@@ -171,7 +172,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.year LIMIT 1) AS year,
 						(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user_id,
 						(select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status,
-						
 						sp.grand_total as total_payment,
 						sp.fine,
 						sp.credit_memo,
@@ -299,8 +299,8 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				
 			$sql="select
 					cp.id,
-					receipt_no,
-					CONCAT(s.stu_khname,'-',s.stu_enname) as name,
+					receipt_no,					
+					(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name,	
 					total_payment,
 					credit_memo,
 					cp.create_date,

@@ -56,7 +56,6 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		}
     	}catch(Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-    		echo $e->getMessage();
     	}
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
@@ -66,11 +65,16 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     }
     public function addAction(){
     	//$this->_redirect("/registrar/allreports");
-    	
     	$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-    	$data=$this->view->row = $db->getAllService();
-    	//print_r($data);
-    	
+    	$data=$this->view->row = $db->getAllService();    	
+    }
+    function rptreceiptdetailAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	$db = new Allreport_Model_DbTable_DbRptPayment();
+    
+    	$this->view->rr = $db->getStudentPaymentByid($id);
+    	$this->view->row =  $db->getPaymentReciptDetail($id);
+    
     }
     public function rptDailyAction()
     {
@@ -103,11 +107,9 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		$user_type=$db->getUserType();
     		
     		if(!empty($search['all_payment'])){
-    			
     			$data1=$this->view->row = $db->getDailyReport($search);
     			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
     			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
-    			
     			$user_type=$db->getUserType();
     			if($user_type==1){
     				$_db = new Allreport_Model_DbTable_DbRptOtherIncome();

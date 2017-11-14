@@ -7,7 +7,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->user_id;
-	
 	}
 	
 	public function getAllStudent($search){
@@ -17,7 +16,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$where = " AND ".$from_date." AND ".$to_date;
 				$sql = "SELECT  s.stu_id,
 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-				s.stu_code,CONCAT(s.stu_khname,' - ',s.stu_enname) as name,
+				s.stu_code,
+				(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name,
+				
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 				tel ,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,

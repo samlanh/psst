@@ -84,8 +84,7 @@
 						  <?php if(!empty($this->row_detail)) foreach($this->row_detail as $key => $rs){ $i++;
 						  ?>
 						  <?php  
-						  //if($rs['service_cate']!=$service_cate){  
-						  if($rs['type']!=$type){	?>
+							if($rs['type']!=$type){	?>
 							   <?php  if($key>0 ){?>
 							   		</table>
 									<table border="1" align="right" style="font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang'">
@@ -95,21 +94,14 @@
 										  </tr>
 									 </table>
 									<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;">
-							  <?php $i=1;}?>
-							  <?php 
-// 						  		if($rs['service_cate']==null){
-// 						  			$service_cate = "ផលិតផល - Product";
-// 						  		}else{
-// 						  			$service_cate =$rs['service_cate'];
-// 						  		}
+							  <?php $i=1;}
+							  if($rs['type']==4){
+								  $rs['service_cate']="ទំនិញ";
+							  }
+							  else if($rs['type']==3){
+								  $rs['service_cate']="សេវាកម្ម";
+							  }
 							  ?>
-							  <?php if($rs['type']==1){//tuition fee
-								    	$rs['service_cate']="Tuition Fee";
-								    	$rs['service_name']=$rs['major_name'];
-							    	}elseif($rs['type']==4){//for procut
-							    		$rs['service_cate']=$rs['product_category'];
-							    	}
-							    ?>	
 							  <tr style="font-size:10px; color:#000; height: 23px; border-left:1px solid #fff; border-right:1px solid #fff; border-top: 1px solid #fff;"​ align="center">
 							    <td colspan="16" style="text-align:left">
 							    	<strong style="color:#000; font-size: 12px;font-family:'Khmer MEF2';" ><?php echo $tr->translate('TYPE').' : '.$rs['service_cate']; ?></strong>
@@ -119,7 +111,6 @@
 									    <td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
 									    <td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('NAME_KH');?>&nbsp;</td>
-										<td>&nbsp;<?php echo $tr->translate('NAME_EN');?>&nbsp;</td>
 										<td><?php echo $tr->translate('SERVICE_CATE');?></td>
 										<td><?php echo $tr->translate('SERVICE_NAME');?></td>
 										<td><?php echo $tr->translate('PAID_DATE');?></td>
@@ -144,18 +135,22 @@
 						   		$total_receive_amount=0;
 						   		$total_balance=0;
 							 }
-						   
-						 	//$service_cate = $rs['service_cate'];
+						   	  if($rs['type']==1 OR $rs['type']==2){//tuition fee
+								    	$rs['service_cate']="បង់ថ្លៃសិក្សា";
+								    	$rs['service_name']=$rs['major_name'];
+							    	}elseif($rs['type']==4){//for procut
+							    		$rs['service_cate']=$rs['product_category'];
+							    }
+							   						 	
 						 	$type = $rs['type'];
 						 	if($rs['is_void']==0){
 						 		$total = $total + $rs['paidamount'];
 						 	}
 						 	?>
 						   <tr class="hover" style="font-size:10px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang';"​ align="center">
-						  	<td<?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $i;?></td>
+						  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $i;?></td>
 						    <td style="text-align:center;"><?php echo $rs['stu_code']; ?></td>
-						    <td style="text-align:left"><?php echo $rs['stu_khname']; ?></td>
-						    <td style="text-align:left"><?php echo $rs['stu_enname']; ?></td>
+						    <td style="text-align:left"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></td>
 						    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
 							<td style="text-align:left"><?php echo $rs['service_name']; ?></td>
 							<td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>

@@ -25,7 +25,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 
 			return false;
 	</script>
-	<table cellspacing="20" style="margin: 0 auto; width: 500px">
+	<table cellspacing="20" style="margin: 0 auto; width: 530px">
 		<tr>
 			<td>
 				<fieldset>
@@ -35,7 +35,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 							<td align="center" valign="top">
 								<table cellspacing="10">
 									<tr>
-										<td>First Name</td>
+										<td><?php echo $tr->translate("FIRST_NAME");?></td>
 										<td width="250px">
 											<input type="text" required="true" name="first_name" id="first_name" placeholder="នាមខ្លួន" 
 											dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['first_name'];?>"
@@ -43,7 +43,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 										</td>
 									</tr>
 									<tr>
-										<td>Last Name</td>
+										<td><?php echo $tr->translate("LAST_NAME");?></td>
 										<td>
 											<input type="text" required="true" name="last_name" id="last_name" placeholder="នាម​ត្រកូល" 
 											dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['last_name'];?>"
@@ -51,7 +51,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 										</td>
 									</tr>
 									<tr>
-										<td>User Name</td>
+										<td><?php echo $tr->translate("USER_NAME");?></td>
 										<td>
 											<input type="text" required="true" name="user_name" id="user_name" placeholder="ឈ្នោះ​អ្នក​ប្រើ​ប្រាស់" 
 											dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['user_name'];?>" 
@@ -59,7 +59,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 										</td>
 									</tr>
 									<tr>
-										<td>Password</td>							
+										<td><?php echo $tr->translate("PASSWORD");?></td>							
 										<td>
 											<input type="password" required="true" name="password" id="password" placeholder="ពាក្យ​​សំងាត់" 
 											regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
@@ -67,7 +67,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 										</td>
 									</tr>
 									<tr>
-										<td>Confirm Password</td>							
+										<td><?php echo $tr->translate("CONFIRM_PASSWORD");?></td>							
 										<td>
 											<input type="password" required="true" name="con_password" id="con_password" placeholder="បញ្ជាក់ពាក្យ​​សំងាត់" 
 											regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
@@ -75,7 +75,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 										</td>
 									</tr>
 									<tr>
-										<td>Branch Name</td>
+										<td><?php echo $tr->translate("BRANCH");?></td>
 										<td>
 											<select name="branch_id" class='fullside' required="true" id="branch_id" 
 											 missingMessage="អ្នក​ភ្លេច​បំពេញ​  សាខា" dojoType="dijit.form.FilteringSelect"> 
@@ -86,11 +86,11 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 										</td>
 									</tr>
 									<tr>
-										<td>User Type</td>
+										<td><?php echo $tr->translate("USER_TYPE");?></td>
 										<td><input id="user_type" /></td>
 									</tr>	
 									<tr>
-										<td>Status</td>
+										<td><?php echo $tr->translate("STATUS");?></td>
 										<td>
 											<select name="active" required="true" id="active" class='fullside' dojoType="dijit.form.FilteringSelect"  missingMessage="អ្នក​ភ្លេច​បំពេញ​  ស្ថាន​ភាព!"> 
 												<option value="1" <?php if($this->user_edit['active'] == 1) echo 'selected';?> >ប្រើ​ប្រាស់</option>
@@ -115,6 +115,38 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	</table>	
 	<input type="hidden" name="id" value="<?php echo $this->user_edit['id'];?>" />
 </form>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;overflow-y:scroll;" id="popup_usertype" >
+		<form  id='frm_usertype' name='frm_usertype' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="15">
+				<tr>
+					<td><?php echo $tr->translate("USER_TYPE");?></td>
+					<td width="300px">
+						<input type="text" required="true" name="user_typename" id="user_typename" placeholder="User Type" 
+						dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->usertype['user_type'];?>"
+						missingMessage="Invalid User type!" class='fullside'/>
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo $tr->translate("PARENT");?></td>
+					<td>
+						<select class='fullside' id="parent_id"  name="parent_id" required="true" 
+						 missingMessage="Invalid Parent Name!" dojoType="dijit.form.FilteringSelect"> 
+						 	<?php foreach ($this->user_typelist as $key => $ust) : ?>
+								<option value="<?php echo $ust['id'];?>"><?php echo $ust['name'];?></option>
+							<?php endforeach;?>																															
+						</select> 
+					</td>
+				</tr>	
+				<tr>
+					<td colspan="2" align="center">
+						<input type="button" onclick="addUsrType();" value="រក្សាទុក" label="រក្សាទុក" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 							
+					</td>
+				</tr>								
+			</table>
+		</form>
+	</div>
+</div>	
 <script>
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  

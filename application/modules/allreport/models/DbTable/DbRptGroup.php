@@ -72,80 +72,36 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
     }
    public function getStudentGroup($id,$search,$type){
    	$db = $this->getAdapter();
-		// 	   	$sql= 'SELECT * FROM v_getallstudentbygroup '; 
-		$sql="
-				SELECT
-				  g.gd_id,
-				  `g`.`group_id` AS `group_id`,
-				  `g`.`stu_id`   AS `stu_id`,
-				  (SELECT
-				     `rms_group`.`group_code`FROM `rms_group` WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1) AS `group_code`,
-				  (SELECT `rms_student`.`stu_code` FROM `rms_student`
-				   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `stu_code`,
-				  (SELECT
-				     `rms_student`.`stu_khname`
-				   FROM `rms_student`
-				   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `kh_name`,
-				  (SELECT
-				     `rms_student`.`stu_enname`
-				   FROM `rms_student`
-				   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `en_name`,
-				  (SELECT
-				     `rms_student`.`nationality`
-				   FROM `rms_student`
-				   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `nation`,
-				  (SELECT
-				     `rms_student`.`address`
-				   FROM `rms_student`
-				   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `pob`,
-				  (SELECT
-				     `rms_student`.`tel`
-				   FROM `rms_student`
-				   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `tel`,
-				   (SELECT
-				     `rms_student`.`sex`
-				   FROM `rms_student`
-				   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `gender`,
-				   
-				  (SELECT
-				     (SELECT
+		$sql="SELECT
+					 g.gd_id,
+					 `g`.`group_id` AS `group_id`,
+					 `g`.`stu_id`   AS `stu_id`,
+				  	 `s`.`stu_code` AS `stu_code`,
+				     `s`.`stu_khname` AS `kh_name`,
+				     `s`.`stu_enname` AS `en_name`,
+				     `s`.`nationality` AS `nation`,
+				     `s`.`address` AS `pob`,
+				     `s`.`tel` AS `tel`,
+				     `s`.`sex` AS `gender`,
+				     `s`.`dob` AS `dob`,
+				     s.father_enname AS father_name,
+					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job,
+					 s.mother_enname AS mother_name,
+					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job,
+
+				    (SELECT
 				        `rms_view`.`name_kh`
 				      FROM `rms_view`
 				      WHERE ((`rms_view`.`type` = 2)
-				             AND (`rms_view`.`key_code` = `rms_student`.`sex`)) LIMIT 1)
-				   FROM `rms_student`
-				   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `sex`,
-				  (SELECT
-				     `rms_student`.`dob`
-				   FROM `rms_student`
-				   WHERE (`rms_student`.`stu_id` = `g`.`stu_id`) LIMIT 1) AS `dob`,
-				  (SELECT
-				     (SELECT
-				        `rms_room`.`room_name`
-				      FROM `rms_room`
-				      WHERE (`rms_room`.`room_id` = `rms_group`.`room_id`) LIMIT 1)
-				   FROM `rms_group`
-				   WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1 ) AS `room`,
-				  (SELECT
-				     (SELECT
-				        `rms_view`.`name_en`
-				      FROM `rms_view`
-				      WHERE ((`rms_view`.`type` = 4)
-				             AND (`rms_view`.`key_code` = `rms_group`.`session`)) LIMIT 1)
-				   FROM `rms_group`
-				   WHERE (`rms_group`.`id` = `g`.`group_id`) LIMIT 1) AS `session`,
+				             AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`,
 				  `g`.`status`   AS `status`
 				FROM 
 					`rms_group_detail_student` AS g,
 					rms_student as s
 				WHERE 
 					g.stu_id = s.stu_id
-		   			and `g`.`status` = 1
-		   			
-	   		 ";
-   	
+		   			and `g`.`status` = 1 ";
 			$sql.=' AND g.group_id='.$id;
-			
 			if($type == 0){
 				$sql.=' and g.type=1 ';
 			}  
@@ -188,8 +144,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				FROM 
 	   				`rms_group` `g`
 	   			WHERE 
-	   				 group_code != ""
-	   		  ';
+	   				 group_code != "" ';
 	   	
 	   	$where=" ";
 	   	
@@ -224,7 +179,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   		$where.=' AND g.is_pass='.$search['study_status'];
 	   	}
 	   	
-	   	$order = ' ORDER BY `g`.`id` DESC ';
+	   	$order = ' ORDER BY `g`.`is_pass` ASC ,`g`.`id` DESC ';
 	   	return $db->fetchAll($sql.$where.$order);
 	}
    

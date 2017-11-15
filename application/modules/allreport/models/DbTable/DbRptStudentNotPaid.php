@@ -35,7 +35,7 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
 				  AND s.`stu_id` NOT IN (SELECT student_id FROM rms_student_payment AS sp,`rms_student_paymentdetail` AS spd WHERE sp.id=spd.`payment_id` AND spd.`service_id`=4)   
     			  $branch_id ";
     	
-     	$order=" ORDER by s.stu_khname ASC ";
+     	$order=" ORDER by gds.group_id ASC ,s.stu_khname ASC ";
      	$where=" ";
      	if(($search['grade_all']>0)){
      		$where.= " AND g.grade = ".$search['grade_all'];
@@ -48,6 +48,9 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
      	}
      	if(($search['stu_code']>0)){
      		$where.= " AND s.stu_id = ".$search['stu_code'];
+     	}
+     	if(($search['group']>0)){
+     		$where.= " AND gds.group_id = ".$search['group'];
      	}
     		
     	if(!empty($search['txtsearch'])){

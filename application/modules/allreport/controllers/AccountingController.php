@@ -1038,6 +1038,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}else{
 				$search=array(
 						'txtsearch' =>'',
+						'group' 	=>'',
 						'grade_all' =>'',
 						'session' 	=>'',
 						'stu_code' 	=>'',

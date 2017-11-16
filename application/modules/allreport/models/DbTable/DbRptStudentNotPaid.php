@@ -19,6 +19,7 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
 				  s.`stu_code`,
 				  s.`stu_khname`,
 				  s.`stu_enname`,
+				  s.tel,
 				  (SELECT en_name FROM rms_dept WHERE dept_id = g.`degree`) AS degree,
 				  (SELECT major_enname FROM rms_major WHERE major_id = g.grade ) AS grade,
 				  (SELECT name_en FROM rms_view WHERE `type` = 4 AND key_code = g.`session`) AS `session`,

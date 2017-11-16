@@ -112,6 +112,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+//     			echo $e->getMessage();exit();
     		}
     	}
     	$_db = new Application_Model_DbTable_DbGlobal();
@@ -135,6 +136,50 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$db = new Foundation_Model_DbTable_DbStudent();
     	$this->view->group = $db->getAllgroup();
     }
+    
+    public function addnewworldAction(){
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		try {
+    			$db = new Registrar_Model_DbTable_DbRegister();
+    			$db->addRegister($_data);
+    			if(isset($_data['save_new'])){
+    				Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
+    			}else{
+    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/register/index');
+    			}
+    		} catch (Exception $e) {
+    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			echo $e->getMessage();exit();
+    		}
+    	}
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->all_dept = $_db->getAllDegreeName();
+    	$this->view->exchange_rate = $_db->getExchangeRate();
+    	$this->view->deduct = $_db->getDeduct();
+    	 
+    	$db = new Registrar_Model_DbTable_DbRegister();
+    	$this->view->all_student_code = $db->getAllGerneralOldStudent();
+    	$this->view->all_student_name = $db->getAllGerneralOldStudentName();
+    	 
+    	$this->view->all_student_test = $db->getAllStudentTested();
+    	 
+    	$this->view->all_year = $db->getAllYears();
+    	$this->view->all_session = $db->getAllSession();
+    	$this->view->all_paymentterm = $db->getAllpaymentTerm();
+    	$this->view->all_service = $db->getAllService();
+    	$this->view->all_product = $db->getAllProductName();
+    	$this->view->all_room = $db->getAllRoom();
+    	 
+    	$this->view->startdate_enddate = $db->getAllStartDateEndDate();
+    	 
+    	$test = $this->view->branch_info = $db->getBranchInfo();
+    	$db = new Foundation_Model_DbTable_DbStudent();
+    	$this->view->group = $db->getAllgroup();
+    
+    }
+    
     
     public function editAction(){
     	$id=$this->getRequest()->getParam('id');

@@ -188,7 +188,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				    		'group_id'	 	=>$data['group'],
 						);
 				    
-			    	$id= $this->insert($arr);
+			    	$id = $this->insert($arr);
 			    	
 			    	if($data['group']>-1){
 			    		$this->_name='rms_group_detail_student';
@@ -201,18 +201,19 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			    		);
 			    		$this->insert($arra);
 			    	}
+			    	
+			    	// insert to tbl_student_id for count id to generate new student_id
+			    	$this->_name='rms_student_id';
+			    	$arraa = array(
+			    			'branch_id'	=>$this->getBranchId(),
+			    			'stu_id'	=>$id,
+			    			'degree'	=>$data['dept'],
+			    	);
+			    	$this->insert($arraa);
+			    	
+			    	
 				}
 				
-			// insert to tbl_student_id for count id to generate new student_id
-				$this->_name='rms_student_id';
-				if($data['student_type']!=3){ 	//	new student
-					$arra = array(
-							'branch_id'	=>$this->getBranchId(),
-							'stu_id'	=>$id,
-							'degree'	=>$data['dept'],
-					);
-					$this->insert($arra);
-				}
 			//////////////////////////////////////////////////////////////////////	
 				$this->_name='rms_student_payment';
 				
@@ -529,18 +530,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						);
 						$this->insert($arra);
 					}
-				}
-				
-			// insert to tbl_student_id for count id to generate new student_id
-				$this->_name='rms_student_id';
-				if($data['student_type']==1){ 	//	new student
-					$arra = array(
+					
+					// insert to tbl_student_id for count id to generate new student_id
+					$this->_name='rms_student_id';
+					$arraa = array(
 							'branch_id'	=>$this->getBranchId(),
 							'stu_id'	=>$id,
 							'degree'	=>$data['dept'],
 					);
-					$this->insert($arra);
+					$this->insert($arraa);
+					
 				}
+				
 			//////////////////////////////////////////////////////////////////////
 				$this->_name='rms_student_payment';
 				$arr=array(

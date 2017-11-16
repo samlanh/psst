@@ -11,7 +11,7 @@
 	dojo.ready(function(){
 		changControll();
 		getStudentNo(1,'');
-		getReceiptNo('');
+		getReceiptNo('','');
 		addRow();
 		getValidate(1);
 
@@ -117,7 +117,7 @@
 				load: function(data) {
 					  dijit.byId('stu_id').attr('value',data); 
 					  if(condition==1){ // condition =1 because we dont want it to work when we first open register form, we do it only when we onclick printSave button
-						getReceiptNo(data);
+						getReceiptNo(data,'');
 					  }
 				},
 				error: function(err) {

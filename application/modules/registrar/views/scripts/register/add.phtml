@@ -127,7 +127,7 @@
 		}
 	}
 	var url_getreceipt_no = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
-	function getReceiptNo(stu_id){
+	function getReceiptNo(stu_id,submit){
 		dojo.xhrPost({
 			url:url_getreceipt_no,
 			content:{
@@ -138,7 +138,9 @@
 			load: function(data) {
 				  dijit.byId('receipt_no').attr('value',data); 
 				  if(stu_id!=''){
-					  printSave(stu_id,data);
+					  //printSave(stu_id,data);
+					  dojo.byId("lb_receipt_no").innerHTML = data;
+					  printSave(stu_id,data,submit);
 				  }
 			},
 			error: function(err) {
@@ -685,7 +687,7 @@ fieldset{  background:none;}
 					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					 
 					 <input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','');"/> 
+						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','','');"/> 
 				</td>
 			</tr>
 		</table>
@@ -999,10 +1001,14 @@ function getMonthByNumber(m){
 		</div>
 		
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
-		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-				type="button" onclick="hideDialog();">Cancel</button>
-		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-				 type="button" onclick="confirmBeforePrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
+			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+					type="button" onclick="hideDialog();">Cancel</button>
+					
+			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+					 type="button" onclick="confirmBeforePrint();"><?php echo $tr->translate("SAVE_PRINT");?></button>
+					 
+			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconUndo"
+					type="button" onclick="printSave('','','');"><?php echo $tr->translate("REFRESH");?></button>
 	</div>
 </div>
 
@@ -1020,7 +1026,7 @@ function getMonthByNumber(m){
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 						type="button" onclick="hideDialog1();">No</button>
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-						type="button" onclick="printSubmit();"><?php echo $tr->translate("Yes");?></button>
+						type="button" onclick="printSave('','',1)"><?php echo $tr->translate("Yes");?></button>
 				</td>
 			</tr>
 		</table>
@@ -1055,7 +1061,7 @@ function confirmBeforePrint(){
 function displayNone(){
 	document.getElementById('PrintReceipt1').style.display="none";
 }
-function printSubmit(){
+function printSubmit(){	
 	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
@@ -1703,7 +1709,7 @@ function getservicefee(key){
 	 	});	 
 }
 
-function printSave(new_stu_id,new_receipt){		
+function printSave(new_stu_id,new_receipt,submit){		
 	condition = checkValidateAddRow();
 	if(condition==false){
 		alert("Please select service or product !!! ");
@@ -1736,14 +1742,22 @@ function printSave(new_stu_id,new_receipt){
 					receipt = new_receipt;
 				}
 			}	*/
-
+			
+			//alert(1);
+			
+			if(new_receipt==""){
+				//alert(1);
+				getReceiptNo(stu_id,submit);
+				submit=0;
+			}
+			
 			//var today = new Date();
 			today = dijit.byId("paid_date").get("value");
 			var dd = today.getDate();
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
 			
-			dojo.byId("lb_receipt_no").innerHTML = receipt;
+			//dojo.byId("lb_receipt_no").innerHTML = receipt;
 			dojo.byId("lb_stu_id").innerHTML = stu_id;		
 			dojo.byId("lb_sex").innerHTML = dijit.byId("sex").attr('displayedValue');
 			dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
@@ -1762,7 +1776,6 @@ function printSave(new_stu_id,new_receipt){
 			dojo.byId("lb_net_amount").innerHTML = '$ ' + dijit.byId("net_amount").attr('displayedValue');
 			var payment_type = dijit.byId("payment_type").get("value");
 
-			
 			
 			var rowId = $('#identity').val();
 			var rowIDArray = rowId.split(',');
@@ -2018,6 +2031,11 @@ function printSave(new_stu_id,new_receipt){
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
 			//dojo.byId('t_amountmoneytype1').innerHTML = temp;
 			dijit.byId("terms").show();	
+			
+			if(submit==1){
+				printSubmit();
+			}
+			
 		}
 	}
 /////////////// get student test info ////////////////////////////////////////////////////////

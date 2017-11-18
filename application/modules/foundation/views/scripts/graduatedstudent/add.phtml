@@ -1,0 +1,254 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('ADD_GRADUATED_STUDENT')); 
+?>
+
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.NumberTextBox");
+	//dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox");
+
+	dojo.ready(function(){
+	
+	}); 
+
+</script>
+<form action="<?php echo $this->url(array('module'=>'foundation','controller'=>'graduatedstudent','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit" >			
+			if(this.validate()) {
+                from_group=dijit.byId('from_group').get('value');
+                if(from_group==0 || from_group==''){
+                        alert('Please Select Form Group !');
+						dijit.byId('from_group').focus();
+						return false;	
+                }
+				dijit.byId("save_new").set('disabled',true);	
+				dijit.byId("save_close").set('disabled',true);	
+			}else {
+				return false;
+			}
+	</script>
+	<table cellspacing="10" style="margin: 0 auto; width:100%;    font-family: 'Khmer OS Battambang'; ">
+		<tr>
+			<td>
+				<fieldset style=" border: none;">
+					<legend align="center"><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_GRADUATED_STUDENT");?></strong></legend>
+					<table cellspacing="5" width="100%" >
+						<tr>
+							<td width="100%" align="center" valign="top">
+								<table cellspacing="5"​ style="border: 1px solid #ccc;white-space: nowrap;">
+									<tr>
+										<td  style="white-space: nowrap;"><?php echo $tr->translate("GROUP")?></td>
+										<td>
+											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="true"  id="from_group" name="from_group" type="text" placeholder="select group" onchange="toStudentGroup(1);getStudentFromGroup();">
+												<option value="0" > </option>
+												<?php if(!empty($this->row))foreach ($this->row as $_row){?>
+													<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
+												<?php }?>
+											</select>
+										</td>
+										
+										<td  align="center"><?php echo $tr->translate("TYPE")?></td>
+										<td>
+											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="type" name="type" type="text">
+												<?php if(!empty($this->drop_type)){foreach ($this->drop_type as $rs){?>
+													<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+												<?php }}?>
+											</select>
+										</td>
+										
+										<td align="center"><?php echo $tr->translate("NOTE")?></td>
+										<td>
+											<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="note" name="note" type="text" />
+										</td>
+									</tr>
+									</tr>
+									
+									<tr>
+										<td align="left"><?php echo $tr->translate("DETAIL")?></td>
+										<td colspan="3"><label id="lblfromgroup" name="detail_from_group" style="background:#fff;height:70px;display:block; font-size: 14px; padding: 10px; border: solid 1px #ccc;white-space: normal;"></label></td>
+									
+										<td align="center"><?php echo $tr->translate("STATUS")?></td>
+										<td>
+											<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="status" name="status" type="text">
+												<option value="1">Active</option>
+												<option value="0">Deactive</option>
+											</select>
+											<input dojoType="dijit.form.TextBox"  type="hidden" name="identity" id="identity" />
+										</td>
+									</tr>
+									<tr>
+										<td colspan="6"  align="center"> <?php echo $tr->translate("STUDENT_LIST")?> </td>
+									</tr>
+									<tr>
+										<td colspan="6"  > <div id="data_table" style="height: 300px !important;overflow: scroll;"> </div> </td>
+									</tr>
+									
+									<tr>
+										<td colspan="6" align="center">
+											<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" onclick="clear();" dojoType="dijit.form.Button"/>
+											<input type="submit" id="save_close" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+											<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+										</td>
+									</tr>
+									
+								</table>
+							</td>
+						</tr>
+					</table>	
+				</fieldset>
+			</td>			
+		</tr>
+	</table>	
+</form>
+
+
+<script type="text/javascript">
+
+	var url_get_all_student_from_group = "<?php echo $this->url(array('module'=>'foundation','controller'=>'graduatedstudent','action'=>'get-all-student')); ?>";
+	function getStudentFromGroup(){
+		from_group = dijit.byId('from_group').get('value');
+		//alert(from_group);
+		dojo.xhrPost({
+			url:url_get_all_student_from_group,
+			content:{
+				'from_group':from_group
+				},
+			handleAs:"json",
+			load: function(respone) {
+				tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table" >'
+					+'<thead><tr style="background:rgba(97, 191, 248, 0.73);height: 30px;font-size:13px;"><th><?php echo $tr->translate('NUM');?></th>'
+						+'<th><?php echo $tr->translate('CODE');?></th>'
+						+'<th><?php echo $tr->translate('NAME_KH');?></th>'
+						+'<th><?php echo $tr->translate('NAME_EN');?></th>'
+						+'<th colspan="2"><?php echo $tr->translate('SEX');?></th>'
+						+'<th style="white-space:nowrap; border-right: 0px none;" colspan="1"><input style="height: 13px;" type="checkBox" value="0"  name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></th>'
+						+'<th style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></th></tr>'
+					+'</thead>';
+				if(respone!=""){
+					num=0;
+					for(var i=0;i<respone.length;i++){
+						inx = i+1;
+
+							tem += '<tr style="border:1px solid #000;">';
+						
+						    tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
+							tem += '<td>&nbsp;<label>'+respone[i].stu_code+'</label></td>';
+							tem += '<td>&nbsp;<label>'+respone[i].stu_khname+'</label></td>';
+							tem += '<td>&nbsp;<label>'+respone[i].stu_enname+'</label></td>';
+							tem += '<td colspan="2" align="center">&nbsp;<label>'+respone[i].sex+'</label></td>';
+							tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" value="'+inx+'" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
+						    tem += '</tr>';
+
+						    if($("#identity").val()!="") {
+								var identity = $("#identity").val();
+								$("#identity").val(identity+','+inx);
+							} else {$("#identity").val(inx);}
+					}
+				}
+				tem+='</table>';
+				dojo.byId('data_table').innerHTML = tem;
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+
+var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'graduatedstudent','action'=>'get-to-group')); ?>';
+function toStudentGroup(type){
+	//alert(type);
+	if(type==1){
+		togroup = dijit.byId('from_group').get('value');
+
+		if(togroup==0){alert("Please Select Group"); return false;}
+	}else{
+		togroup = dijit.byId('to_group').get('value');
+		if(togroup==0 ){alert("Please Select Group"); return false;}
+		}
+	dojo.xhrPost({
+		url:url_to_group,
+		content:{
+			'to_group':togroup,
+			'type'	  :type,
+			},
+		handleAs:"json",
+		load: function(data) {
+			//alert(data.year);
+			if(type==1){
+				dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<br /><span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
+			}else{
+				dojo.byId('lbltogroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
+			}
+			if(type==1){
+				dijit.byId('identity').attr('value','');
+			}else{
+			}
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+function setValue(i){
+	$('#identity').val('');
+	for(var j=1;j<=i;j++){
+		if(dojo.byId('checkbox'+j).checked){
+			if($("#identity").val()!="") {
+				var iden = $("#identity").val();
+				$("#identity").val(iden+','+j);
+			} else{
+				$("#identity").val(j);
+			}
+		}
+	}
+}
+
+function check(i){
+	if(dojo.byId('checkall').checked){
+		for(var j=1;j<=i;j++){
+			$("#checkbox"+j).attr('checked', 'checked');
+		}
+	}else{
+		for(var j=1;j<=i;j++){
+			$("#checkbox"+j).removeAttr("checked");
+		}
+	}
+}
+
+function clear(){
+	dojo.byId('lblfromgroup').innerHTML='';
+	dojo.byId('lbltogroup').innerHTML='';
+	dijit.byId("studentid").attr("value",'');
+	dijit.byId("from_group").attr("value",'');
+	dijit.byId("studentname").attr("value",'');
+	dijit.byId("to_group").attr("value",'');
+	dijit.byId("moving_date").attr("value",'');
+	dijit.byId("note").attr("value",'');
+	clear1();
+}
+
+
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
+</script>
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

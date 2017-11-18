@@ -64,9 +64,10 @@ class Foundation_studentdropController extends Zend_Controller_Action {
 				}
 			}
 			
-			$_add = new Foundation_Model_DbTable_DbStudentDrop();
-			$this->view->stu_id = $add =$_add->getAllStudentID();
-			$this->view->stu_name = $add =$_add->getAllStudentName();
+			$db = new Foundation_Model_DbTable_DbStudentDrop();
+			$this->view->stu_id = $db->getAllStudentID();
+			$this->view->stu_name = $db->getAllStudentName();
+			$this->view->type = $db->getAllDropType();
 		
 		}catch(Exception $e){
 			echo $e->getMessage();
@@ -94,10 +95,10 @@ class Foundation_studentdropController extends Zend_Controller_Action {
 				}
 			}	
 			
-			$_add = new Foundation_Model_DbTable_DbStudentDrop();
-			$this->view->stu_id = $_add->getAllStudentIDEdit();
-			$this->view->stu_name = $_add->getAllStudentNameEdit();
-			
+			$db = new Foundation_Model_DbTable_DbStudentDrop();
+			$this->view->stu_id = $db->getAllStudentIDEdit();
+			$this->view->stu_name = $db->getAllStudentNameEdit();
+			$this->view->type = $db->getAllDropType();
 			
 		}catch(Exception $e){
 			echo $e->getMessage();

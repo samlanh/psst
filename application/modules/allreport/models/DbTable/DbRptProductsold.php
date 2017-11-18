@@ -11,6 +11,7 @@ class Allreport_Model_DbTable_DbRptProductsold extends Zend_Db_Table_Abstract
 				  (SELECT stu_enname FROM `rms_student` WHERE stu_id = student_id) AS stu_name,
 				  p.title AS pro_name,
 				  spd.`qty`,
+				  sale.cost,
 				  spd.`fee`,
 				  spd.`subtotal`,
 				  spd.`paidamount`,
@@ -20,8 +21,11 @@ class Allreport_Model_DbTable_DbRptProductsold extends Zend_Db_Table_Abstract
 				FROM
 				  `rms_student_payment` AS sp,
 				  `rms_student_paymentdetail` AS spd ,
-				  rms_program_name as p
+				  rms_program_name as p,
+				  rms_saledetail as sale
 				WHERE sp.id = spd.`payment_id` 
+				  and sale.payment_id = sp.id
+				  and sale.pro_id = spd.service_id
 				  AND spd.type = 4  
 				  AND sp.is_void!=1
 				  AND `p`.`service_id` = spd.service_id

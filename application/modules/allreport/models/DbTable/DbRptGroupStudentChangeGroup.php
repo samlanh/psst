@@ -78,7 +78,8 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
 				  gscg.`to_group` ,
 				  (select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year ) AS to_academic_year,
 				  (select major_enname from rms_major where rms_major.major_id=g.grade) AS to_grade,
-				  (select name_en from rms_view where rms_view.type=4 and key_code=g.session) AS to_session
+				  (select name_en from rms_view where rms_view.type=4 and key_code=g.session) AS to_session,
+				  (select name_kh from rms_view where type=17 and key_code=gscg.change_type) as change_type
 				
 				FROM
 				  `rms_group_detail_student` AS gds,
@@ -118,6 +119,9 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     	if(!empty($search['session'])){
     		$where.=' AND g.session='.$search['session'];
     	}
+    	if(!empty($search['change_type'])){
+    		$where.=' AND gscg.change_type='.$search['change_type'];
+    	}
     	
     	$row = $db->fetchAll($sql.$where);
     	if($row){
@@ -139,20 +143,11 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     	}
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public function getChangeType(){
+    	$db=$this->getAdapter();
+    	$sql="SELECT key_code as id, name_kh as name from rms_view where type=17 and status=1 ";
+    	return $db->fetchAll($sql);
+    }
     
 }
+

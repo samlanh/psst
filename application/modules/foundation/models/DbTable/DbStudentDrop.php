@@ -239,7 +239,11 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	
+	function getAllDropType(){
+		$db = $this->getAdapter();
+		$sql = "SELECT key_code as id,name_kh as name from rms_view where type=5 and status=1";
+		return $db->fetchAll($sql);
+	}
 	
 	
 	

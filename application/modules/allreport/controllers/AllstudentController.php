@@ -437,6 +437,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'study_year' => '',
 					'grade_bac' => '',
 					'session' => '',
+					'change_type' => '',
 			);
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
@@ -446,6 +447,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	
 		$db= new Allreport_Model_DbTable_DbRptGroupStudentChangeGroup();
 		$this->view->rs = $db->getAllStu($search);
+		$this->view->change_type = $db->getChangeType();
 		$this->view->search=$search;
 	}
 	public function rptStudentChangeGroupAction(){

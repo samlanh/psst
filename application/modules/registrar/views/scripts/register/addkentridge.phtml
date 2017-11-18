@@ -1401,7 +1401,8 @@ function addRow() {
 				<?php }?>
 			template+='</select></td>';
 			column = 0;
-			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'" readonly="readonly" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';	
+			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'" readonly="readonly" value="0" dojoType="dijit.form.NumberTextBox"  /> <input type="hidden" class="fullside" name="cost_'+col+'" id="cost_'+col+'"  value="0" dojoType="dijit.form.TextBox"  /> </td>';	
+			
 			template+='<td width="4%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
 			template+='<td width="6%"> <input type="text" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="late_fee_service_'+col+'" id="late_fee_service_'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
@@ -1781,7 +1782,8 @@ function getservicefee(key){
 	 			},
 	 		handleAs:"json",
 	 		load: function(data) {
-	 			dijit.byId("price_"+index).attr("value",data);
+	 			dijit.byId("price_"+index).attr("value",data.price);
+				dijit.byId("cost_"+index).attr("value",data.cost);
 	 			calculateTotal(index);
 	 		},
 	 		error: function(err) {

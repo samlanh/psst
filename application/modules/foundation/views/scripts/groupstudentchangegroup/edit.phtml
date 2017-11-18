@@ -136,6 +136,16 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 										<td  ><label id="lbltogroup" readonly="readonly" name="detail_to_group" style="background:#fff;height:100px;display:block; font-size: 14px;  padding: 5px; border: solid 1px #ccc;"></label></td>
 									</tr>
 									
+									<tr style="white-space: nowrap;">
+										<td><?php echo $tr->translate("TYPE")?></td>
+										<td>
+											<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="change_type" name="change_type" type="text">
+												<?php if(!empty($this->change_type)){foreach ($this->change_type as $rs){?>
+													<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->rs['change_type']){echo 'selected="selected"';}?>><?php echo $rs['name']?></option>
+												<?php }}?>
+											</select>
+										</td>
+									</tr>
 									
 									<tr style="white-space: nowrap;">
 										<td><?php echo $tr->translate("MOVING_DATE")?></td>

@@ -75,8 +75,9 @@
 										<td><?php echo $tr->translate("TYPE")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="type" name="type" type="text">
-												<option value="1" <?php if($this->row['type']==1) echo 'selected="selected"';?>>Suspend</option>
-												<option value="2" <?php if($this->row['type']==2) echo 'selected="selected"';?>>Stop</option>
+												<?php if(!empty($this->type)){foreach ($this->type as $rs){?>
+													<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->row['type']){ echo 'selected="selected"';}?> ><?php echo $rs['name']?></option>
+												<?php }}?>
 											</select>
 										</td>
 										

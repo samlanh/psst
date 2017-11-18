@@ -86,8 +86,9 @@ dojo.require("dijit.form.CheckBox");
 										<td><?php echo $tr->translate("TYPE")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="type" name="type" type="text">
-												<option value="1">Suspend</option>
-												<option value="2">Stop</option>
+												<?php if(!empty($this->type)){foreach ($this->type as $rs){?>
+													<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+												<?php }}?>
 											</select>
 										</td>
 										<td><?php echo $tr->translate("STOP_DATE")?></td>

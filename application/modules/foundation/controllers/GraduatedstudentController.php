@@ -1,5 +1,5 @@
 <?php
-class Foundation_groupstudentchangegroupController extends Zend_Controller_Action {
+class Foundation_GraduatedstudentController extends Zend_Controller_Action {
 	
     public function init()
     {    	
@@ -18,8 +18,8 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 					'session' => '',
 			);
 		}
-		$db_student= new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-		$rs_rows = $db_student->selectAllStudentChangeGroup($search);
+		$db_student= new Foundation_Model_DbTable_DbGraduatedStudent();
+		$rs_rows = $db_student->getAllStudentDrop($search);
 		$glClass = new Application_Model_GlobalClass();
 		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		$list = new Application_Form_Frmtable();
@@ -29,9 +29,9 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 		
-		$collumns = array("FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE","STATUS");
+		$collumns = array("FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TYPE","NOTE","CREATE_DATE","USER","STATUS");
 		$link=array(
-				'module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'edit',
+				'module'=>'foundation','controller'=>'graduatedstudent','action'=>'edit',
 		);
 		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('group_code'=>$link,'grade'=>$link,'session'=>$link,'to_group_code'=>$link));
 
@@ -41,19 +41,19 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		if($this->getRequest()->isPost()){
 			try{
 				$data = $this->getRequest()->getPost();
-				$_add = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
- 				$_add->addGroupStudentChangeGroup($data);
+				$_add = new Foundation_Model_DbTable_DbGraduatedStudent();
+ 				$_add->addDropStudent($data);
  				if(!empty($data['save_close'])){
- 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/groupstudentchangegroup");
+ 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/graduatedstudent");
  				}
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				echo $e->getMessage();
 			}
 		}
 		
-		$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+		$db = new Foundation_Model_DbTable_DbGraduatedStudent();
 		
 		$this->view->row = $add =$db->getfromGroup();
 		$this->view->rs = $add =$db->gettoGroup();
@@ -62,7 +62,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$this->view->g_new=$g_new;
 		
 		$this->view->academy = $db->getAllYears();
-		$this->view->change_type = $db->getChangeType();
+		$this->view->drop_type = $db->getDropType();
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $_db->getAllDegreeName();
@@ -81,30 +81,30 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		{
 			try{
 				$data = $this->getRequest()->getPost();
-				//$data["id"]=$id;
-				//print_r($data);exit();
-				$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-				$row=$db->updateStudentChangeGroup($data,$id);
+				$db = new Foundation_Model_DbTable_DbGraduatedStudent();
+				$db->updateDropStudent($data,$id);
 				
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/groupstudentchangegroup/index");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/graduatedstudent/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}	
-		$db= new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-		$result = $db->getAllGroupStudentChangeGroupById($id);
+		$db= new Foundation_Model_DbTable_DbGraduatedStudent();
+		$result = $db->getAllDropById($id);
 		$this->view->rs = $result;
 		
-		$this->view->studentpass = $db->selectStudentPass($result['from_group']);
-		$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+		$this->view->studentpass = $db->selectStudentPass($result['group_id']);
+		$db = new Foundation_Model_DbTable_DbGraduatedStudent();
 		$this->view->row = $db->getfromGroup();
 		$g_new=$db->getGroupNewAll();
 		array_unshift($g_new,array ('id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->g_new=$g_new;
 		$this->view->rows = $db->gettoGroup();
 		$this->view->academy = $db->getAllYears();
-		$this->view->change_type = $db->getChangeType();
+		$this->view->drop_type = $db->getDropType();
+		
+		//$test = $db->getAllStudentFromGroup(4);
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $_db->getAllFecultyName();
@@ -119,7 +119,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 	function getToGroupAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+			$db = new Foundation_Model_DbTable_DbGraduatedStudent();
 			$grade = $db->getGroupStudentChangeGroup1ById($data['to_group'],$data['type']);
 			print_r(Zend_Json::encode($grade));
 			exit();
@@ -129,7 +129,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 	function getAllStudentAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+			$db = new Foundation_Model_DbTable_DbGraduatedStudent();
 			$student = $db->getAllStudentFromGroup($data['from_group']);
 			print_r(Zend_Json::encode($student));
 			exit();
@@ -139,7 +139,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 	function getAllStudentUpdateAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+			$db = new Foundation_Model_DbTable_DbGraduatedStudent();
 			$student = $db->getAllStudentFromGroupUpdate($data['from_group']);
 			print_r(Zend_Json::encode($student));
 			exit();
@@ -149,7 +149,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 	function getGradeAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+			$db = new Foundation_Model_DbTable_DbGraduatedStudent();
 			$student = $db->getGradeByDegree($data['dept_id']);
 			print_r(Zend_Json::encode($student));
 			exit();
@@ -159,7 +159,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
     function addGroupAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+    		$db = new Foundation_Model_DbTable_DbGraduatedStudent();
     		$student = $db->AddNewGroupAjax($data);
     		print_r(Zend_Json::encode($student));
     		exit();

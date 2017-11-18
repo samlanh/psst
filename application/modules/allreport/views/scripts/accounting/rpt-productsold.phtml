@@ -61,7 +61,8 @@
 							<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?></td>
 							<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?></td>
 							<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?></td>
-							<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate('UNIT_COST');?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
 							<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 							<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
 							<td>&nbsp;<?php echo $tr->translate('PAID_AMOUNT');?>&nbsp;</td>
@@ -69,7 +70,7 @@
 							<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
 					   </tr>
 					   </thead>
-					<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->product_sold)) foreach ($this->product_sold AS $rs) { $i++;
+					<?php $i=0;$grand_total=0;$profit=0; if(!empty($this->product_sold)){ foreach ($this->product_sold AS $rs) { $i++;
 					?>
 						<tr class="hover" style="font-size:11px; height: 18px;"​ align="center">
 							    <td> <?php echo $i; ?></td>
@@ -77,19 +78,28 @@
 							    <td><?php echo $rs['stu_name'];?></td>
 							    <td><?php echo $rs['category_name'];?></td>
 							    <td><?php echo $rs['pro_name'];?></td>
-							    <td><?php echo $rs['fee'];?></td>
+							    <td><?php echo "$ ".$rs['cost'];?></td>
+							    <td><?php echo "$ ".$rs['fee'];?></td>
 							    <td><?php echo number_format($rs['qty'],0);?></td>
 							    <td>&nbsp;$&nbsp;<?php echo $rs['subtotal'];?></td>
 							    <td>&nbsp;$&nbsp;<?php echo $rs['paidamount'];?></td>
 							    <td><?php echo date('d/m/Y',strtotime($rs['create_date']));?></td>
 							    <td><?php echo $rs['user']; ?></td>
 						 </tr>
-					  		<?php $totalbalance=$totalbalance+$rs['subtotal'];}?>	  
+					  		<?php 
+					  			$grand_total=$grand_total+$rs['subtotal'];
+					  			$profit = $profit + (($rs['fee']-$rs['cost'])*$rs['qty']);
+							}}
+							?>	  
 					</table>
-					<p>&nbsp;</p><table width="20%" border="1" style="border: 1px solid #000;border-collapse: collapse;float:right"  >
+					<p>&nbsp;</p><table width="30%" border="1" style="border: 1px solid #000;border-collapse: collapse;float:right"  >
 				           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
-				               <td><?php echo $tr->translate('AMOUNT_DUE')?></td>
-				               <td>&nbsp;$&nbsp;<?php echo number_format($totalbalance,2);?>&nbsp;</td>
+				               <td width="50%"><?php echo $tr->translate('GRAND_TOTAL')?></td>
+				               <td width="50%"><?php echo $tr->translate('PROFIT')?></td>
+				           </tr>
+				           <tr align="center" style="font-size:12px; height: 20px;line-height: 30px;font-weight: bold;" align="center">
+				               <td>&nbsp;$&nbsp;<?php echo number_format($grand_total,2);?>&nbsp;</td>
+				               <td>&nbsp;$&nbsp;<?php echo number_format($profit,2);?>&nbsp;</td>
 				           </tr>
 				     </table>
 				     <table width="100%" style="font-family:'Khmer OS Battambang';">

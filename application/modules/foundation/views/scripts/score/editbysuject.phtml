@@ -35,7 +35,34 @@
 		div.panel.show {
 		    display: block;
 		}
-		.header{ font-family:'Khmer os battambang' !important;}
+		.ui-accordion .ui-accordion-content {
+		    min-height: 200px;
+		}
+		.ui-widget {
+		    font-family: Verdana,Arial,sans-serif,'Khmer OS Battambang' !important;
+		}
+		.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+		    color: #212121 !important;
+		    background: #94d3e6 !important;
+		}
+		.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+		    background: #cae694 !important;
+		}
+		.ui-accordion .ui-accordion-header {
+		    margin: 0 !important;
+		}
+		.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+		    border-bottom-right-radius: 0px !important;
+		}
+		.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+		    border-bottom-left-radius: 0px !important;
+		}
+		.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+		    border-top-right-radius: 0px !important;
+		}
+		.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+		    border-top-left-radius: 0px !important;
+		}
 	</style>
 	<style>
 		ul.blogscoresubject li{list-style: none;width:10%;float: left; }
@@ -139,10 +166,21 @@ function filterStudent(){
 					str+='<div >';
 					str+='<div class="blogscoresubject" style="width:100%;">';
 					var no=0;
-                		  
+                		   for(j=0;j<subject.length;j++){
+                			   no++;
+                			   stringsname = subject[j].subject_titleen.replace(' ','');
+                			   str+='<div clss="main" style="width: 50%;display: inline-block; margin: 3px 0; vertical-align: top;">';
+		                			   str+='<div style="  display: inline; white-space: nowrap;text-align:left;padding:0px 5px; width:18%;font-size:12px;margin-top:8px;">'+no+' . '+subject[j].sub_name.substring(20, 0)+'</div>';
+		                               str+='<div style="width: 67%; float: right;"><input   dojoType="dijit.form.validateNumberTextBox" class="fullside" name="'+data[i].stu_id+stringsname+no+'" id="'+data[i].stu_id+stringsname+no+'"   value="" type="text" onkeypress="return AllowOnlyNumbers(event);"></div>';
+
+		                        	str+='<div id="main'+data[i].stu_id+stringsname+no+'" class="child_main" style="clear: both; text-align: right;">';
+	                              	 str+='</div>';
+	                           str+='</div>';
+	                           getChildren(subject[j].subject_id,data[i].stu_id,+data[i].stu_id+stringsname+no);
+                      	 	}
 					str+='</div>';
 					str+='</div>';
-				    if(inx!=1) {
+				    if(inx!=1) {//identity set value 1,2,3,4,5
 						var identity = $('#identity').val();
 						$('#identity').val(identity+','+inx);
 					} else {
@@ -184,35 +222,41 @@ function filterStudentOld(){
 	temp='';
 	str='';
 	column = 0;
-	temp='<table class="collape tablesorter" style="font-size:12px;font-family:Khmer os battambang" id="table" width="100%">'
-		+'<thead><tr><th class="tdheader" ><?php echo $tr->translate('NO');?></th>'
-		+'<th class="tdheader header"><?php echo $tr->translate('STUDENT_ID');?></th>'
-		+'<th class="tdheader header"><?php echo $tr->translate('STUDENT_NAME');?></th>'
-		+'<th class="tdheader header"><?php echo $tr->translate('SEX');?></th>'
-		+'<th class="tdheader header"><?php echo $tr->translate('TOTAL_SCORE');?></th>'
-		+'<th class="tdheader header"><?php echo $tr->translate('AVERAGE');?></th>'
-		+'<th class="tdheader header"><?php echo $tr->translate('NOTE');?></th>'
-		+'</thead>';
-	
+	    str+='<div id="accordion">';
 	    <?php $old_stu = null;$i=0;
 			foreach ($student as $key=>$rs){
 				$i = $i+1;
 			?>
-				inx = '<?php echo $i; ?>';
-				num++;
-				var no=0;
-	        	<?php 
+		inx = '<?php echo $i; ?>';
+		num++;
+		str+='<h3>'+inx+'. <?php echo $tr->translate("STUDENT_CODE")?> (<?php echo $rs["stu_code"] ?>)'+'&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("STUDENT_NAME")?> (<?php echo $rs["student_name"] ?>)&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("SEX")?> ('+gender(<?php echo $rs["sex"]?>)+')&nbsp;|&nbsp;<input   type="hidden" name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="<?php echo $rs["student_id"] ?>"/></h3>';
+		str+='<div >';
+			str+='<div class="blogscoresubject" style="width:100%;">';
+			var no=0;
+	        	<?php $j =0;
+	        	foreach ($score as $rss){
+	        		if($rs["student_id"]==$rss["student_id"]){
 	        	?>
-	        	temp+= '<tr class="hover normal">';
-				temp += '<td align="center">&nbsp;'+inx+'</td>';
-				temp += '<td>&nbsp;<?php echo $rs["stu_code"] ?><input dojoType="dijit.form.TextBox" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+7+'" type="hidden" ></td>';
-				temp+='<td>'+'&nbsp;<?php echo $rs["student_name"]; ?>&nbsp;<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'" value="<?php echo $rs["student_id"] ?>"/></td>';
-				
-				temp += '<td>&nbsp;'+gender(<?php echo $rs["sex"]?>)+'&nbsp;</td>';
-				temp += '<td style="width:100px;"><input  dojoType="dijit.form.validateNumberTextBox" class="fullside" name="total_score'+inx+'" id="total_score'+inx+'"  value="<?php echo $rs["total_score"];?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></td>';
-				temp += '<td style="width:100px;"><input  dojoType="dijit.form.validateNumberTextBox" class="fullside" name="average'+inx+'" id="average'+inx+'"  value="<?php echo $rs["score"];?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></td>';
-				temp += '<td><input dojoType="dijit.form.validateNumberTextBox" class="fullside" name="note_'+inx+'" id="note_'+inx+'"  value="<?php echo $rs["note"];?>" type="text" ></td>';
-				temp+= '</tr>';
+	        	<?php if($rss["is_parent"]== 1){ $j=$j+1;?>
+	        	no = '<?php echo $j;?>';
+	        	
+	            stringsname = '<?php echo str_replace(' ','',$rss['subject_titleen'])?>';
+	            str+='<div clss="main" style="width: 50%;display: inline-block; margin: 3px 0; vertical-align: top;">';
+		       			  str+='<div style="  display: inline; white-space: nowrap;text-align:left;padding:0px 5px; width:18%;font-size:12px;margin-top:8px;"><?php echo $j.".".$rss['subject_titlekh']?></div>';
+		                  str+='<div style="width: 67%; float: right;"><input   dojoType="dijit.form.validateNumberTextBox" class="fullside" name="<?php echo $rs["student_id"] ?>'+stringsname+no+'" id="<?php echo $rs["student_id"] ?>'+stringsname+no+'"   value="<?php echo $rss["score"] ?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></div>';
+		                  str+='<div id="main<?php echo $rs["student_id"] ?>'+stringsname+no+'" class="child_main" style="clear: both; text-align: right;">';
+								<?php $result_score = $db_score->getStudentScoreChildSubj($this->score_id, $rs["student_id"], $rss['subject_id']);
+									if (!empty($result_score)){ $k=0; foreach ($result_score as $child){ $k++;
+								?>
+								  str+='<div style=" width: 25%;  display: inline-block;white-space: nowrap;text-align:left;padding:0px 5px;font-size:12px;margin-top: 14px;"><?php echo $k.". ".str_replace(' ','',$child['subject_titlekh']);?></div>';
+					              str+='<div style="width: 20%;display: inline-block;"><input dojoType="dijit.form.validateNumberTextBox" class="fullside" name="child<?php echo $rs["student_id"].str_replace(' ','',$child['subject_titleen']).$k; ?>" id="child<?php echo $rs["student_id"].str_replace(' ','',$child['subject_titleen']).$k; ?>"   value="<?php echo $child['score'];?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></div>';
+								<?php }}?>
+		                  str+='</div>';
+		       str+='</div>';
+	       	 	<?php }?>
+		<?php }}?>
+			str+='</div>';
+		str+='</div>';
 			    if(inx!=1) {//identity set value 1,2,3,4,5
 					var identity = $('#identity').val();
 					$('#identity').val(identity+','+inx);
@@ -220,8 +264,9 @@ function filterStudentOld(){
 						$('#identity').val(inx);
 					}
 			<?php } ?>
-			temp+='</table>';
-			dojo.byId('liststudent').innerHTML = temp;
+	str+='</div>';
+		document.getElementById("liststudent").innerHTML = str;
+		$( "#accordion" ).accordion();
 }
 </script>
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">

@@ -407,9 +407,10 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql="SELECT 
 		sd.student_id,
-		(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
+		  (SELECT (CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) FROM `rms_student` s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
 		  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-		  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex				
+		  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
+		  total_score,score,note				
 		FROM
 	 	 rms_score_detail AS sd 
 		WHERE sd.score_id =$score_id GROUP BY sd.`student_id` order by (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) DESC";

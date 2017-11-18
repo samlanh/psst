@@ -46,6 +46,7 @@ class Foundation_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 							'group_id'=>$_data['group'],
 							'student_id'=>$_data['student_id'.$i],
 							'subject_id'=> 1,
+							'total_score'=>$_data['total_score'.$i],
 							'score'=>$_data['average'.$i],
 							'note'=>$_data['note_'.$i],
 							'status'=>1,
@@ -67,11 +68,9 @@ class Foundation_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{			
-			$_arr = array(
+				$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
-					//'reportdate'=>$_data['reportdate'],
-					//'date_input'=>date("Y-m-d"),
 					'exam_type'=>$_data['exam_type'],
 					'note'=>$_data['note'],
 					'status'=>$_data['status'],
@@ -79,97 +78,33 @@ class Foundation_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 					'for_academic_year'=>$_data['year_study'],
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],
-			);
-		$where="id=".$_data['score_id'];
-		$db->getProfiler()->setEnabled(true);
-		$this->update($_arr, $where);
+				);
+			$where="id=".$_data['score_id'];
+			$this->update($_arr, $where);
 		
 		$id=$_data['score_id'];
 		$this->_name='rms_score_detail';
 		$this->delete("score_id=".$_data['score_id']);
 		if(!empty($_data['identity'])){
-				$ids = explode(',', $_data['identity']);
-				$k=0;
-				if(!empty($ids))foreach ($ids as $i){
-					$k=$k+1;
-						foreach ($this->getSubjectByGroup($_data['group']) as $index => $rs_parent){
-							$parent_id = $rs_parent["subject_id"];
-							$getChildren= $this->getChildSubject($parent_id);
-								if(!empty($getChildren)){
-									$no = $index + 1;
-// 									$parent_score = 0;
-// 									foreach ($this->getChildSubject($parent_id) as $key => $rs_subs){
-// 										$sub_name = str_replace(' ','',$rs_subs["subject_titleen"]);
-// 										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-// 										$subject_id = $rs_parent['subject_id'];
-// 										$no = $key+1;
-// 										$parent_score = $parent_score + $_data["$sub_name".$no];
-										
-// 									}
-									
-									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
-									$sub_name = $_data['stu_id_'.$k].$sub_name;
-									$subject_id = $rs_parent['subject_id'];
-									
-									
-// 									if(!$_data["$sub_name".$i]==''){
-									$arr=array(
-											'score_id'=>$id,
-											'group_id'=>$_data['group'],
-											'student_id'=>$_data['stu_id_'.$k],
-											'subject_id'=> $subject_id,
-											'score'=> $_data["$sub_name".$no],
-											'status'=>1,
-											'user_id'=>$this->getUserId(),
-											'is_parent'=> $rs_parent["is_parent"]
-									);
-									$this->_name='rms_score_detail';
-									$this->insert($arr);
-// 									}
-									foreach ($this->getChildSubject($parent_id) as $key2 => $rs_sub){  
-										$no2= $key2+1;/////////if parent have subjects
-										$subject_id = $rs_sub["id"];
-										$sub_name = str_replace(' ','',$rs_sub["subject_titleen"]);
-										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-										//if(!$_data["$sub_name".$no2]==''){
-										$arr=array(
-												'score_id'=>$id,
-												'group_id'=>$_data['group'],
-												'student_id'=>$_data['stu_id_'.$k],
-												'subject_id'=> $subject_id,
-												'score'=> $_data["$sub_name".$no2],
-												'status'=>1,
-												'user_id'=>$this->getUserId(),
-												'is_parent'=> $rs_sub["is_parent"]
-										);
-										$this->_name='rms_score_detail';
-										$this->insert($arr);
-									    //}
-									}
-								}else{/////////if parent have not subjects
-									$no3 = $index+1;
-									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
-									$sub_name = $_data['stu_id_'.$k].$sub_name;
-									$subject_id = $rs_parent['subject_id'];
-									//if($_data["$sub_name".$no3]==''){
-									$arr=array(
-											'score_id'=>$id,
-											'group_id'=>$_data['group'],
-											'student_id'=>$_data['stu_id_'.$k],
-											'subject_id'=> $subject_id,
-											'score'=> $_data["$sub_name".$no3],
-											'status'=>1,
-											'user_id'=>$this->getUserId(),
-											'is_parent'=> $rs_parent["is_parent"]
-									);
-									$this->_name='rms_score_detail';
-									$this->insert($arr);
-								    //}
-								}
-						}
-				}
+			$ids = explode(',', $_data['identity']);
+			if(!empty($ids))foreach ($ids as $i){
+					$arr=array(
+							'score_id'=>$id,
+							'group_id'=>$_data['group'],
+							'student_id'=>$_data['student_id'.$i],
+							'subject_id'=> 1,
+							'total_score'=>$_data['total_score'.$i],
+							'score'=>$_data['average'.$i],
+							'note'=>$_data['note_'.$i],
+							'status'=>1,
+							'user_id'=>$this->getUserId(),
+							'is_parent'=> 1
+					);
+				$this->_name='rms_score_detail';
+				$this->insert($arr);
 			}
-		  $db->commit();
+		}
+		$db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
 		}

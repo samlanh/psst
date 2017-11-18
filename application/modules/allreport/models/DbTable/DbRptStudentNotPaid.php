@@ -16,6 +16,7 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
     	$sql="SELECT 
 				  s.stu_id,
 				  (CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) AS name,
+				  s.tel,
 				  s.`stu_code`,
 				  s.`stu_khname`,
 				  s.`stu_enname`,

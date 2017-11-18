@@ -53,9 +53,9 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			if($dbset['scoreresulttye']==1){
-				$db = new Foundation_Model_DbTable_DbScore();
+				$db = new Foundation_Model_DbTable_DbScore();//by subject
 			}else{
-				$db = new Foundation_Model_DbTable_DbScoreaverage();
+				$db = new Foundation_Model_DbTable_DbScoreaverage();//by average 
 			}
 			try {
 				if(isset($_data['save_new'])){
@@ -91,8 +91,15 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$_data['score_id']=$id;
 			try {
+				$key = new Application_Model_DbTable_DbKeycode();
+				$dbset=$key->getKeyCodeMiniInv(TRUE);
+				if($dbset['scoreresulttye']==1){
+					$dbs = new Foundation_Model_DbTable_DbScore();//by subject
+				}else{
+					$dbs = new Foundation_Model_DbTable_DbScoreaverage();//by average
+				}
 				if(isset($_data['save_close'])){
-					$rs =  $_model->updateStudentScore($_data);
+					$rs =  $dbs->updateStudentScore($_data);
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/score");
 				}
 			}catch(Exception $e){

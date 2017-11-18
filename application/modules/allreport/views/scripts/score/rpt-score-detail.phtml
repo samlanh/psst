@@ -104,12 +104,16 @@ dojo.ready(function(){
 				<?php if ($old_groupid!=$rs['group_id']){ $count = count($subj); ?>
 				<?php $i=0; $count_fail=0;?>
 				<tr>
-					<td colspan="3" align="center">
+					<td align="center" width="25%" rowspan="2">
+						<img src="<?php echo $this->baseUrl();?>/images/logo.png" style="max-height:110px;" />
+					</td>
+					<td  align="center">
 						<strong​​ style="font-weight:bold;color:#000; font-size: 18px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong>
 					</td>
+					<td align="center" width="25%"></td>
 				</tr>
 				<tr>
-					<td colspan="3" align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+					<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 						<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?></strong><br />
 						<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
 							<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
@@ -123,6 +127,7 @@ dojo.ready(function(){
 						 	<?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
 						</strong>
 					</td>
+					<td align="center"></td>
 				</tr>
 				<tr>
 				<?php 
@@ -140,8 +145,8 @@ dojo.ready(function(){
 								
 								<?php if($this->data['scoreresulttye']==1){?>
 									<td colspan="<?php echo count($subj); ?>"><?php echo $tr->translate("SUBJECT");?></td>
-									<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<?php }?>
+								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("AVERAGE");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RESULT");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RANK");?></td>
@@ -178,15 +183,18 @@ dojo.ready(function(){
 								</td>
 								<?php }
 								?>
-								<td align="center"><?php echo number_format($rs['total_score'],2);?></td>
+								
 								<?php }
 									if($rs['average']==$old_totalscore){
 										$duplicate=$duplicate+1;
 									}else{
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
-									}
+									}//
+									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
+									
 								?>
+								<td align="center"><?php echo number_format($total_score,2);?></td>
 								<td align="center"><?php echo number_format($rs['average'],2);// Average ?></td>
 								<td align="center" <?php if($rs['average']<$rs['average_pass']){echo 'style=" background: #fdbdbd;"'; $count_fail++;}?>>
 									<?php if($rs['average']>=$rs['average_pass']){echo $tr->translate("STUDENT_PASS");$count_pass++;}else{echo $tr->translate("STUDENT_FAIL");}?>

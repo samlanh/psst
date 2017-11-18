@@ -264,6 +264,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	s.reportdate,
 		   	s.title_score,
 		   	SUM(sd.`score`) AS total_score,
+		   	total_score AS total_scoreallsubject,
 		   	AVG(sd.score) AS average,
 		   	(SELECT pass_average FROM `rms_dept` WHERE dept_id=g.degree LIMIT 1) as average_pass
    		FROM 

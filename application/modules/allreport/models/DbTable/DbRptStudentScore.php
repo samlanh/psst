@@ -342,7 +342,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	SUM(sd.`score`) AS total_score,
 			   	AVG(sd.score) as average,
 			   	(SELECT COUNT(ss.id) FROM `rms_score` AS ss WHERE ss.group_id=$group_id AND ss.exam_type=1 AND for_semester = $semester) AS amount_month
-			   	FROM `rms_score` AS s,
+		    FROM 
+		    	`rms_score` AS s,
 			   	`rms_score_detail` AS sd,
 			   	`rms_student` AS st,
 			   	`rms_group` AS g
@@ -353,7 +354,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	AND sd.`is_parent`=1
 			   	AND s.status = 1
 			   	AND s.type_score=1
-		   		AND g.id= $group_id
+		   		AND g.id = $group_id
 		   		AND s.for_semester=$semester
 		   		AND s.exam_type=1 ";
    	

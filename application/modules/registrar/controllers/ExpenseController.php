@@ -27,7 +27,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		}
     		
     		$this->view->adv_search = $formdata;
-    		
     		$_db = new Application_Model_DbTable_DbGlobal();
     		$user_type=$_db->getUserType();
     		if($user_type!=1){

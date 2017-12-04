@@ -125,7 +125,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 				
 				$this->_name='rms_group';
 				$arra = array(
-						'is_pass'	=> 0,
+						'is_pass'	=> 2,
 						);
 				$where = " id = ".$_data['to_group'];
 				$this->update($arra, $where);

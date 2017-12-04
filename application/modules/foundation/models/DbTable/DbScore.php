@@ -38,25 +38,19 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'for_month'=>$_data['for_month'],
 			);
 			$id=$this->insert($_arr);
-			
+			$dbpush = new Application_Model_DbTable_DbGlobal();
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				$k=0;
 				if(!empty($ids))foreach ($ids as $i){
 					$k=$k+1;
+					$dbpush->pushSendNotification($_data['stu_id_'.$k], 4);//notification for score result 
 						foreach ($this->getSubjectByGroup($_data['group']) as $index => $rs_parent){
 							$parent_id = $rs_parent["subject_id"];
 							$getChildren= $this->getChildSubject($parent_id);
 								if(!empty($getChildren)){
 									$no = $index + 1;
-// 									$parent_score = 0;
-// 									foreach ($this->getChildSubject($parent_id) as $key => $rs_subs){
-// 										$sub_name = str_replace(' ','',$rs_subs["subject_titleen"]);
-// 										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-// 										$subject_id = $rs_parent['subject_id'];
-// 										$no = $key+1;
-// 										$parent_score = $parent_score + $_data["$sub_name".$no];
-// 									}
+
 									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
 									$sub_name = $_data['stu_id_'.$k].$sub_name;
 									$subject_id = $rs_parent['subject_id'];
@@ -80,7 +74,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 										$subject_id = $rs_sub["id"];
 										$sub_name = str_replace(' ','',$rs_sub["subject_titleen"]);
 										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
-										//if(!$_data["$sub_name".$no2]==''){
+										
 										$arr=array(
 												'score_id'=>$id,
 												'group_id'=>$_data['group'],
@@ -93,14 +87,14 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 										);
 										$this->_name='rms_score_detail';
 										$this->insert($arr);
-									    //}
+									    
 									}
 								}else{/////////if parent have not subjects
 									$no3 = $index+1;
 									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
 									$sub_name = $_data['stu_id_'.$k].$sub_name;
 									$subject_id = $rs_parent['subject_id'];
-									//if($_data["$sub_name".$no3]==''){
+									
 									$arr=array(
 											'score_id'=>$id,
 											'group_id'=>$_data['group'],
@@ -113,7 +107,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 									);
 									$this->_name='rms_score_detail';
 									$this->insert($arr);
-								    //}
+								   
 								}
 						}
 				}
@@ -406,14 +400,17 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	function getStudentSccoreforEdit($score_id){
 		$db = $this->getAdapter();
 		$sql="SELECT 
-		sd.student_id,
+			sd.student_id,
 		  (SELECT (CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) FROM `rms_student` s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
 		  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
 		  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
 		  total_score,score,note				
 		FROM
 	 	 rms_score_detail AS sd 
-		WHERE sd.score_id =$score_id GROUP BY sd.`student_id` order by (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) DESC";
+		WHERE sd.score_id =$score_id 
+		GROUP BY sd.`student_id` order by 
+		(SELECT s.`stu_code` FROM `rms_student`AS s 
+		WHERE s.`stu_id`=sd.`student_id`) DESC ";
 		return $db->fetchAll($sql);
 	}
 	function getSubjectById($id){
@@ -437,7 +434,8 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	}
 	function getScoreStudents($id){
 		$db=$this->getAdapter();
-		$sql="SELECT id,score_id,student_id,subject_id,score FROM rms_score_detail WHERE score_id=".$id;
+		$sql="SELECT id,score_id,student_id,subject_id,score 
+		FROM rms_score_detail WHERE score_id=".$id;
 		return $db->fetchAll($sql);
 	}
 	function getGroupStudent($id){

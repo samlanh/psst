@@ -63,10 +63,14 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 					'user_id'=>$this->getUserId()
 			);
 			$id=$this->insert($_arr);
+			$dbpush = new Application_Model_DbTable_DbGlobal();
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
 					if ($_data['attedence'.$i]!=1){
+						if($_data['attedence'.$i]!=1){//ក្រៅពីមក sent all
+							$dbpush->pushSendNotification($_data['student_id'.$i], 2);
+						}
 						$arr = array(
 								'attendence_id'=>$id,
 								'stu_id'=>$_data['student_id'.$i],
@@ -194,18 +198,21 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 		$db=$this->getAdapter();
 		$sql="SELECT 
 				sgh.`stu_id`,
-				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
-				(SELECT CONCAT(s.stu_enname,' - ',s.stu_khname) FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
-				(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
+				 s.stu_code AS stu_code,
+				CONCAT(s.stu_enname,' - ',s.stu_khname) AS stu_name,
+				
+				s.sex AS sex
 			 FROM 
-			 	`rms_group_detail_student` AS sgh
+			 	`rms_group_detail_student` AS sgh,
+			 	rms_student as s
 			WHERE 
-				sgh.type = 1
-				and sgh.`group_id`=".$group_id;
+				sgh.`stu_id`=s.stu_id
+				AND s.status=1
+				AND sgh.status = 1
+				AND sgh.type = 1
+				AND sgh.`group_id`=".$group_id;
 		
-		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) DESC";
-		
-		//echo $sql.$order;exit();
+		$order=" ORDER BY s.stu_code DESC";
 		
 		return $db->fetchAll($sql.$order);
 	}

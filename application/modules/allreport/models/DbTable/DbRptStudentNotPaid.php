@@ -30,11 +30,13 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
 				  `rms_group_detail_student` AS gds,
 				  `rms_group` AS g
 				WHERE 
-				  gds.`stu_id`=s.stu_id
+				  s.status=1
+				  AND gds.`stu_id`=s.stu_id
 				  AND g.id = gds.`group_id`
 				  AND gds.`is_pass`=0
 				  AND gds.`type`=1
-				  AND s.`stu_id` NOT IN (SELECT student_id FROM rms_student_payment AS sp,`rms_student_paymentdetail` AS spd WHERE sp.id=spd.`payment_id` AND spd.`service_id`=4)   
+				  AND s.`stu_id` NOT IN 
+				  (SELECT student_id FROM rms_student_payment AS sp,`rms_student_paymentdetail` AS spd WHERE sp.id=spd.`payment_id` AND spd.`service_id`=4)   
     			  $branch_id ";
     	
      	$order=" ORDER by gds.group_id ASC ,s.stu_khname ASC ";

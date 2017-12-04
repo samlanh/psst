@@ -264,6 +264,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'net_amount'	=>$data['net_amount'],
 				);
 				$paymentid = $this->insert($arr);
+				
+				$dbpush = new  Application_Model_DbTable_DbGlobal();
+				$dbpush->pushSendNotification($id, 1);
+				
 		/////////////// study_history /////////////////////////////////////////////		
 				$this->_name='rms_study_history';
 				if($data['student_type']!=3){

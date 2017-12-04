@@ -311,7 +311,15 @@ class Foundation_Model_DbTable_DbScoreaverage extends Zend_Db_Table_Abstract
 	}
 	function getScoreStudents($id){
 		$db=$this->getAdapter();
-		$sql="SELECT id,score_id,student_id,subject_id,score FROM rms_score_detail WHERE score_id=".$id;
+		$sql="SELECT 
+			id,
+			score_id,
+			student_id,
+			subject_id,
+			score 
+		FROM 
+		rms_score_detail 
+			WHERE score_id=".$id;
 		return $db->fetchAll($sql);
 	}
 	function getGroupStudent($id){

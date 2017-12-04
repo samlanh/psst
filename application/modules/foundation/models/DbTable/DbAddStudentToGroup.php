@@ -175,8 +175,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 					rms_group g 
 				where 
 					g.status=1 
-					and g.is_pass != 1 
-			  ";
+					and g.is_pass != 1  ";
 		
 		$order = " ORDER BY `g`.`id` DESC " ;	
 		

@@ -102,10 +102,12 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							</td>
 							<td ><?php echo $tr->translate("TEACHER_ROOM")?></td>
 							<td><input id="teacher_id" />
-							<td><?php echo $tr->translate("NOTE")?></td>
-							<td><input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="<?php echo $this->rs['note'];?>" type="text"></td>
+							<td ><?php echo $tr->translate("TEACHER_ASSISTANCE")?></td>
+							<td><input id="teacher_ass" />
 						</tr>
 						<tr>
+							<td><?php echo $tr->translate("NOTE")?></td>
+							<td><input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="<?php echo $this->rs['note'];?>" type="text"></td>
 							<td ><?php echo $tr->translate("STATUS")?></td>
 							<td><select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect">
 								    <option value="1" <?php if($this->rs['status']==1) echo 'selected="selected"';?>>ប្រើប្រាស់</option>
@@ -211,6 +213,7 @@ var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enc
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
 var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
+var teacher_storeass  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
 
 dojo.ready(function(){
 			Initailize();
@@ -231,6 +234,24 @@ dojo.ready(function(){
 					}
 				}
 			}, "teacher_id");
+
+			new dijit.form.FilteringSelect({
+				store: teacher_storeass,
+				autoComplete: true,                        
+				required: false,
+				id: "teacher_ass",
+				name: "teacher_ass",
+				value:"<?php echo $this->rs['teacher_assistance'];?>",              
+				class: "fullside", 
+				placeHolder:"Select Teacher",          
+				onChange: function() {  
+					teacher_id = dijit.byId('teacher_ass').get('value');
+					if(teacher_id==-1){
+						$("#tow_value").val(-2)
+						dijit.byId("popup_teacher").show();
+					}
+				}
+			}, "teacher_ass");
 			
 			new dijit.form.FilteringSelect({
 				store: grade_store,
@@ -320,6 +341,7 @@ function addTeacher(){
 					index=$("#tow_value").val();
 					if(index<0){
 						addDataToSelectbox(dijit.byId('teacher_id'), teacher_store, Itemmake, data.id);
+						addDataToSelectbox(dijit.byId('teacher_ass'), teacher_storeass, Itemmake, data.id);
 					}else{
 						 addDataToSelectbox(dijit.byId('teacher_'+index), teacher_store, Itemmake, data.id);
 					}

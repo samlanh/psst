@@ -700,6 +700,75 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}
    
    }
+   /**notification alert*/
+   function gettokenbystudentid($student_id){
+   	$sql="SELECT token FROM `rms_mobile_token` WHERE stu_id=$student_id";
+   	return $this->getAdapter()->fetchAll($sql);
+   }
+   function setTitleTonotification($title_id){
+   	$title_str = array(
+   			1=>"Thanks your payment",
+   			2=>"you got student attendance !",
+   			3=>"you got student mistake !",
+   			4=>"you got score result !",
+   			5=>"you got news/events notification for psis!",
+   	);
+   	return $title_str[$title_id];
+   }
+   function pushSendNotification($student_id,$title_id,$body='',$data=''){//$stu_id
+   	$key = new Application_Model_DbTable_DbKeycode();
+   	$dbset=$key->getKeyCodeMiniInv(TRUE);
+   	if($dbset['notification']==0){return 1;}
+   	$url = "https://fcm.googleapis.com/fcm/send";
+   	$token = "f5-E45BencY:APA91bGLSiLBRH7vEWVvXr9s9vuuSxWnXH8cRvf6EsJUGtwQRjO8yyftsODIGZ7pPzt7CD_63vEbJjcQYSgSUHDaoDIdal46J_Tdi-R1y-Y02wSsJrmZ7v349_-fHy8-Sj34Hurdkwg-";
+   	$serverKey = 'AAAAFUl5wqk:APA91bFktDCO937lkDQ1JnP3fT5xT9YMfdEmBq0GH-QZs-GUGy9YbceyMvLQHNw3LBkgPbV9tZfDmzjti6oaJQyVHzhWrBmvoTdUaNhvD-q5DC3KNunJMVjDRTG3VLPrBVB8c8H9NNb_';
+   	//$title = $req->title;
+   	//$body = $req->message;
+   
+   	$title = $this->setTitleTonotification($title_id);
+   	$rs_appuse = $this->gettokenbystudentid($student_id);
+   	 
+   	$data=array('id'=>1,
+   			'title'=>$title,
+   			'body'=>$body,
+   			'note_type'=>1
+   	);
+   	 
+   	$notification = array(
+   			'title' =>$title ,
+   			'text' => $body,
+   			'data' =>$data,
+   			'sound' => 'default',
+   			'badge' => '1'
+   	);
+   	 
+   	if(!empty($rs_appuse)){
+   		foreach ($rs_appuse as $rs){
+   			
+   			$arrayToSend = array(
+   					'to' => $rs['token'],
+   					'notification' => $notification,
+   					'priority'=>'high'
+   			);
+   			$json = json_encode($arrayToSend);
+   			$headers = array();
+   			$headers[] = 'Content-Type: application/json';
+   			$headers[] = 'Authorization: key='. $serverKey;
+   			$ch = curl_init();
+   			curl_setopt($ch, CURLOPT_URL, $url);
+   			curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+   			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+   			curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+   			//Send the request
+   			$response = curl_exec($ch);
+   			//Close request
+   			if ($response === FALSE) {
+   				//die('FCM Send Error: ' . curl_error($ch));
+   			}
+   			curl_close($ch);
+   		}
+   	}
+   }
    
    
    

@@ -10,6 +10,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	}
 	public function getAllStudent($search){
+		///(CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) AS name,
 		$_db = $this->getAdapter();
 		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
@@ -17,7 +18,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$sql = "SELECT  s.stu_id,
 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
-				(CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) AS name,
+				s.stu_khname,
+				s.stu_enname,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 				tel ,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,

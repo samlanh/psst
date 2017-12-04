@@ -24,8 +24,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'start_date'	=> $_data['start_date'],
 					'expired_date'	=> $_data['end_date'],
 					'date' 			=> date("Y-m-d"),
-					//'status'   		=> $_data['status'],
+					'status'   		=> 1,
 					'teacher_id'   	=> $_data['teacher_id'],
+					'teacher_assistance'   	=> $_data['teacher_ass'],
 					'note'   		=> $_data['note'],
 					'user_id'	 	=> $this->getUserId(),
 					'is_use' 		=> 0
@@ -73,6 +74,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'expired_date'	=>$_data['end_date'],
 					'date' 			=> date("Y-m-d"),
 					'teacher_id'   	=> $_data['teacher_id'],
+					'teacher_assistance'=> $_data['teacher_ass'],
 					'status'   		=> $_data['status'],
 					'note'   		=> $_data['note'],
 					'user_id'	  	=> $this->getUserId()
@@ -105,7 +107,6 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
 	public function getGroupById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_group WHERE id = ".$db->quote($id);
@@ -113,7 +114,6 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$row=$db->fetchRow($sql);
 		return $row;
 	}
-	
 	public function getGroupSubjectById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_group_subject_detail WHERE group_id = ".$db->quote($id);

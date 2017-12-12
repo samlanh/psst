@@ -585,10 +585,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $row;
 		
 		$rs= $db->getGroupDetailByID($id);
-		$this->view->rr = $rs;
-		
-		$this->view->datasearch = $search;
-		
+		$this->view->rr = $rs;		
+		$this->view->datasearch = $search;		
 		$this->view->all_teacher_by_group = $db->getAllTeacherByGroup($id);
 		$this->view->all_subject_by_group = $db->getAllSubjectByGroup($id);
 		

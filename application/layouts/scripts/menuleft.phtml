@@ -175,7 +175,7 @@
 					if($request->getModuleName()!='default' AND $action!='changepassword' ){
 						$dc=new Application_Model_Decorator();					
 						$class="current-left";					
-						$menu=$dc->getMenuLeft($arr_param_menu[$request->getModuleName()],$request->getControllerName(),$request->getModuleName());
+						$menu=@$dc->getMenuLeft($arr_param_menu[$request->getModuleName()],$request->getControllerName(),$request->getModuleName());
 						//print_r($arr_param_menu[$request->getModuleName()]);
 						if($menu) echo $menu;	
 					 }		

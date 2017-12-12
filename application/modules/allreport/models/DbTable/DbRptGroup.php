@@ -180,7 +180,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   		$where.=' AND g.is_pass='.$search['study_status'];
 	   	}
 	   	
-	   	$order = ' ORDER BY `g`.`is_pass` ASC ,`g`.`id` DESC ';
+	   	$order = ' ORDER BY `g`.`is_pass` ASC ,`g`.`group_code` ASC ';
 	   	return $db->fetchAll($sql.$where.$order);
 	}
    

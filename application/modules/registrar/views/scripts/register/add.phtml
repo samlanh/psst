@@ -10,7 +10,7 @@
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
 	dojo.ready(function(){
 		changControll();
-		getStudentNo(1,'','');
+		getStudentNo(1,'');
 		getReceiptNo('');
 		addRow();
 		getValidate(1);
@@ -27,7 +27,7 @@
 				dept_id = dijit.byId('dept').get('value');
 				dijit.byId('grade').attr('value','');
 				getallModel(dept_id,a=''); 
-				getStudentNo(dept_id,'','');
+				getStudentNo(dept_id,'');
 				setHourDefault();
 			}
 		}, "dept");
@@ -104,7 +104,7 @@
 			});
 	}
 	var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
-	function getStudentNo(dept_id,condition,submit){
+	function getStudentNo(dept_id,condition){
 		type = dijit.byId('student_type').get('value'); // old student or new student
 		if(type == 3){
 		}else{
@@ -117,7 +117,7 @@
 				load: function(data) {
 					  dijit.byId('stu_id').attr('value',data); 
 					  if(condition==1){ // condition =1 because we dont want it to work when we first open register form, we do it only when we onclick printSave button
-						getReceiptNo(data,submit);
+						getReceiptNo(data);
 					  }
 				},
 				error: function(err) {
@@ -127,7 +127,7 @@
 		}
 	}
 	var url_getreceipt_no = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
-	function getReceiptNo(stu_id,submit){
+	function getReceiptNo(stu_id){
 		dojo.xhrPost({
 			url:url_getreceipt_no,
 			content:{
@@ -138,7 +138,7 @@
 			load: function(data) {
 				  dijit.byId('receipt_no').attr('value',data); 
 				  if(stu_id!=''){
-					  printSave(stu_id,data,submit);
+					  printSave(stu_id,data);
 				  }
 			},
 			error: function(err) {
@@ -431,6 +431,7 @@ fieldset{  background:none;}
 					    			<option value="<?php echo $group['id']?>"><?php echo $group['name']?></option>
 					    			<?php }}?>
 					    		</select>
+					    		<input type="hidden" name="group_name" id="group_name" class="fullside" dojoType="dijit.form.TextBox"/>
 					    	</td>
 					    </tr>
 					    <tr>
@@ -524,12 +525,12 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("START_DATE");?></td>
-								<td><input type="text" constraints="{datePattern:'dd/MM/yyyy'}" name="start_date" id="start_date" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/>
+								<td><input type="text" onchange="getstudentPaidReady();" constraints="{datePattern:'dd/MM/yyyy'}" name="start_date" id="start_date" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/>
 								</td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("VALIDATE");?></td>
-								<td><input type="text" constraints="{datePattern:'dd/MM/yyyy'}" required="true" name="end_date" id="end_date" class="fullside" dojoType="dijit.form.DateTextBox"/>
+								<td><input type="text" onchange="getstudentPaidReady();" constraints="{datePattern:'dd/MM/yyyy'}" required="true" name="end_date" id="end_date" class="fullside" dojoType="dijit.form.DateTextBox"/>
 								</td>
 							</tr>
 							<tr>
@@ -683,7 +684,7 @@ fieldset{  background:none;}
 					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					 
 					 <input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','','');displayNone();"/> 
+						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','');displayNone();"/> 
 				</td>
 			</tr>
 		</table>
@@ -749,7 +750,6 @@ function getInfoBygroup(){
 		dijit.byId('dept').set('readOnly',false);
 		dijit.byId('grade').set('readOnly',false);
 		dijit.byId('session').set('readOnly',false);
-		//dijit.byId('room').set('readOnly',false);
 		return false;
 	}
 	dojo.xhrPost({
@@ -769,6 +769,7 @@ function getInfoBygroup(){
 			dijit.byId('session').set('value',data.session);
 			dijit.byId('session').set('readOnly',true);
 			dijit.byId('room').set('value',data.room_id);
+			dijit.byId('group_name').attr('value',data.group_code);
 			//dijit.byId('room').set('readOnly',true);
 		},
 		error: function(err) {
@@ -1119,7 +1120,7 @@ function getMonthByNumber(m){
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 						type="button" onclick="hideDialog1();">No</button>
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-						type="button" onclick="printSave('','',1);"><?php echo $tr->translate("Yes");?></button>
+						type="button" onclick="printSubmit();"><?php echo $tr->translate("Yes");?></button>
 				</td>
 			</tr>
 		</table>
@@ -1194,7 +1195,7 @@ function changControll(){
 		 document.getElementById('stu_new').style.display="block";
 		 dept = dijit.byId("dept").get("value");
 		 if(dept==''){return false;}
-		 getStudentNo(dept,'','');
+		 getStudentNo(dept,'');
 	}
 }
 function setReadonlyForOldStudent(){
@@ -1217,6 +1218,7 @@ function setID(){
 	stu_id = dijit.byId('old_stu_name').get('value');
 	dijit.byId('old_studens').attr('value',stu_id);
 	getPaymentHistory(stu_id);
+	getstudentPaidReady();
 }
 var url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
 function getPaymentHistory(student_id){
@@ -1806,7 +1808,7 @@ function getservicefee(key){
 	 	});	 
 }
 
-function printSave(new_stu_id,new_receipt,submit){		
+function printSave(new_stu_id,new_receipt){		
 		condition = checkValidateAddRow();
 		if(condition==false){
 			alert("Please select service or product !!! ");
@@ -1818,33 +1820,28 @@ function printSave(new_stu_id,new_receipt,submit){
 			degree = dijit.byId('dept').get('value');
 			stu_type = dijit.byId('student_type').get('value');
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+			if(stu_type==3){
+				stu_id = dijit.byId("old_studens").attr('displayedValue');
+			}else{
+				stu_id = dijit.byId("stu_id").attr('displayedValue');
+			}
 
-			if(stu_type==3){// old student
-				stu_code = dijit.byId("old_studens").attr('displayedValue');
-				if(new_receipt==''){
-					getReceiptNo(stu_code,submit);
-					submit = 0;
+			if(stu_type==1){
+				if(new_stu_id==''){
+					getStudentNo(degree,1);
+				}else{
+					stu_id = new_stu_id;
+					receipt = new_receipt;
 				}
 			}else{
-				if(new_stu_id==''){
-					getStudentNo(degree,1,submit);
-					submit = 0;
+				stu_id = dijit.byId("old_studens").attr('displayedValue');
+				if(new_receipt==''){
+					getReceiptNo(stu_id);
+					
+				}else{
+					receipt = new_receipt;
 				}
-			}
-			
-			if(new_stu_id != ''){
-				dojo.byId("lb_stu_id").innerHTML = new_stu_id;
-				dojo.byId("lb_stu_id1").innerHTML = new_stu_id;
-			}
-			
-			if(new_receipt != ''){
-				dojo.byId("lb_receipt_no").innerHTML = new_receipt;
-				dojo.byId("lb_receipt_no1").innerHTML = new_receipt;
-			}
-			
-////////////////////////////////////////////////////////////////////////////////////////////////////			
-
+			}	
 
 			var today = new Date();
 			//today = dijit.byId("paid_date").get("value");
@@ -1852,15 +1849,15 @@ function printSave(new_stu_id,new_receipt,submit){
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
 			
-			//dojo.byId("lb_receipt_no").innerHTML = receipt;
-			//dojo.byId("lb_stu_id").innerHTML = stu_id ;		
+			dojo.byId("lb_receipt_no").innerHTML = receipt;
+			dojo.byId("lb_stu_id").innerHTML = stu_id ;		
 			dojo.byId("lb_sex").innerHTML = dijit.byId("sex").attr('displayedValue');
 			dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
 			dojo.byId("lb_dob").innerHTML = dijit.byId("dob").attr('displayedValue');
 			dojo.byId("lb_name").innerHTML = dijit.byId("en_name").get('value');
 			dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
 			dojo.byId("lb_dept").innerHTML = dijit.byId('dept').attr('displayedValue');
-			dojo.byId("lb_grade").innerHTML = dijit.byId("grade").attr('displayedValue');
+			dojo.byId("lb_grade").innerHTML = dijit.byId("grade").attr('displayedValue')+'('+dijit.byId("grade").attr('displayedValue')+')';
 			dojo.byId("lb_phone").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
 			dojo.byId("lb_session").innerHTML = dijit.byId("session").attr('displayedValue');
 			//dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
@@ -1872,15 +1869,15 @@ function printSave(new_stu_id,new_receipt,submit){
 			var payment_type = dijit.byId("payment_type").get("value");
 
 			/*for reciept 1*/
-			//dojo.byId("lb_receipt_no1").innerHTML = receipt;
-			//dojo.byId("lb_stu_id1").innerHTML = stu_id ;		
+			dojo.byId("lb_receipt_no1").innerHTML = receipt;
+			dojo.byId("lb_stu_id1").innerHTML = stu_id ;		
 			dojo.byId("lb_sex1").innerHTML = dijit.byId("sex").attr('displayedValue');
 			dojo.byId("lb_date1").innerHTML  = dd+'-'+mon+'-'+yyyy;
 			dojo.byId("lb_dob1").innerHTML = dijit.byId("dob").attr('displayedValue');
 			dojo.byId("lb_name1").innerHTML = dijit.byId("en_name").get('value');
 			dojo.byId("lb_study_year1").innerHTML = dijit.byId("study_year").attr('displayedValue');
 			dojo.byId("lb_dept1").innerHTML = dijit.byId('dept').attr('displayedValue');
-			dojo.byId("lb_grade1").innerHTML = dijit.byId("grade").attr('displayedValue');
+			dojo.byId("lb_grade1").innerHTML = dijit.byId("grade").attr('displayedValue')+'('+dijit.byId("grade").attr('displayedValue')+')';
 			dojo.byId("lb_phone1").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
 			dojo.byId("lb_session1").innerHTML = dijit.byId("session").attr('displayedValue');
 			//dojo.byId("lb_read_khmer1").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
@@ -2126,10 +2123,6 @@ function printSave(new_stu_id,new_receipt,submit){
 			dojo.byId('t_amountmoneytype1').innerHTML = temp;
 			dijit.byId("terms").show();	
 			
-			if(submit==1){
-				printSubmit();
-		    }
-			
 		}
 	}
 /////////////// get student test info ////////////////////////////////////////////////////////
@@ -2221,7 +2214,48 @@ function getOldVildateToStartDateRegister(){
 		});
 	}
 }	
-	var url_get_start_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date')); ?>';	
+var url_paidexist = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentpaidexist')); ?>';	
+function getstudentPaidReady(){//ត្រួតពិនិត្យមើលថាធ្លាប់បានបង់ហើយរឺនៅ
+		stu_type = dijit.byId('student_type').get('value');
+		start_date = dijit.byId('start_date').get('value');
+		var year = start_date.getFullYear();
+	    var month = start_date.getMonth()+1;
+	    var date = start_date.getDate();
+		var start_date =year+'-'+month+ '-'+date ;
+		
+		end_date = dijit.byId('end_date').get('value');
+		var year = end_date.getFullYear();
+	    var month = end_date.getMonth()+1;
+	    var date = end_date.getDate();
+		var end_date =year+'-'+month+ '-'+date ;
+	    
+		if(stu_type!=3){
+			return false;
+		}
+		stu_id = dijit.byId('old_stu_name').get('value');
+		if(stu_id==''){
+			return 0;
+		}
+		dojo.xhrPost({
+			url:url_paidexist,
+			content:{
+				'start_date':start_date,
+				'end_date':end_date,
+				'stu_id':stu_id
+			},
+			handleAs:"json",
+			load: function(data) {
+				alert("data"+data);
+				if(data>0){
+					alert("សិស្សនេះធ្លាប់បង់ប្រាក់រួមម្តងហើយ សូមពិនិត្យមើលប្រវត្តិបង់ប្រាក់ម្តងទៀត !");
+				}	
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+}
+var url_get_start_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date')); ?>';	
 	function getOldVildateToStartDateService(index){
 		stu_type = dijit.byId('student_type').get('value');
 		if(stu_type==3){
@@ -2285,7 +2319,6 @@ function getOldVildateToStartDateRegister(){
 					dijit.byId('start_date').attr('value',data.start_date);
 					dijit.byId('end_date').attr('value',data.end_date);
 				}else{
-					dijit.byId('start_date').attr('value','<?php echo date('Y-m-d');?>');
 					getDateTerm();
 				}	
 			},

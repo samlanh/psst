@@ -23,7 +23,6 @@ class Foundation_importController extends Zend_Controller_Action {
 				$adapter->setDestination($part);
 				$adapter->receive();
 				$file = $adapter->getFileInfo();
-				//print_r($file['file_excel']['tmp_name']);exit();
 				$inputFileName = $file['file_excel']['tmp_name'];
  				try {
 					$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);

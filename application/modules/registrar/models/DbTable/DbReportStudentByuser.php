@@ -216,13 +216,10 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				$where.= " AND sp.student_id = ".$search['stu_name'];
 			}
 			$order=" ORDER By sp.id DESC ";
-		// 	    	echo $sql.$where.$order;exit();
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
-				echo $e->getMessage();
 		}
 	}   
-	
 	
 	function getAllStudentTest($search=null){
 		try{

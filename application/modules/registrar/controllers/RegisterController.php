@@ -448,13 +448,21 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		$db = new Registrar_Model_DbTable_DbRegister();
 		$this->view->rs = $db->getStudentPaymentByID($id);
 	}
-	
 	function getStartDateEndDateAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$date = $db->getStartDateEndDate($data['id']);
 			print_r(Zend_Json::encode($date));
+			exit();
+		}
+	}
+	function getstudentpaidexistAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$data = $db->getStudentPaidExist($data['stu_id'],$data['start_date'],$data['end_date']);
+			print_r(Zend_Json::encode($data));
 			exit();
 		}
 	}

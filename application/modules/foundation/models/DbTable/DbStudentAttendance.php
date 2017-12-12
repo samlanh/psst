@@ -189,7 +189,11 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 	function getStudent($year,$grade,$session){
 		$db=$this->getAdapter();
 		$sql="SELECT stu_id,stu_code,CONCAT(stu_enname,' - ',stu_khname) AS stu_name,sex
-	    	FROM rms_student AS s WHERE academic_year = $year and grade=$grade and session=$session";
+	    	FROM rms_student AS s 
+		WHERE 
+			academic_year = $year 
+			and grade=$grade 
+			and session=$session";
 		$order=" ORDER BY stu_code DESC";
 		return $db->fetchAll($sql.$order);
 	}
@@ -212,7 +216,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 				AND sgh.type = 1
 				AND sgh.`group_id`=".$group_id;
 		
-		$order=" ORDER BY s.stu_code DESC";
+		$order=" ORDER BY s.stu_khname ASC";
 		
 		return $db->fetchAll($sql.$order);
 	}
@@ -239,7 +243,12 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 		$db = $this->getAdapter();
 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name 
-		FROM `rms_group` AS `g` WHERE g.status=1 and g.is_pass!=1";
+		FROM 
+			`rms_group` AS `g` 
+			WHERE 
+			g.status=1 
+			AND g.is_pass!=1
+			ORDER BY group_code ASC,g.degree ASC ";
 
 		return $db->fetchAll($sql);
 	}

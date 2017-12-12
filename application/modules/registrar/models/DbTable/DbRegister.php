@@ -2350,5 +2350,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$sql="select start_date,end_date from rms_startdate_enddate where id = $id ";
 		return $db->fetchRow($sql);
 	}
+	function getStudentPaidExist($student_id,$start_date,$end_date){//សម្រាប់ត្រួតពិនិត្យមើល ថាតើ សិស្សធ្លាប់បង់ប្រាក់ម្តងរឺនៅក្នុងអំឡុង Date នឹង
+		$sql="SELECT
+		sp.id
+		FROM
+		rms_student_payment AS sp,
+		`rms_student_paymentdetail` spd
+		WHERE
+		sp.student_id=$student_id
+		AND service_id=4
+		AND sp.id = spd.payment_id ";
+		$start_date = date("Y-m-d",strtotime($start_date));
+		$end_date = date("Y-m-d",strtotime($end_date));
+		$from_date =(empty($start_date))? '1': "spd.start_date = '".$start_date."'";
+		$to_date = (empty($end_date))? '1': "spd.validate = '".$end_date."'";
+		$sql.=" AND ".$from_date." AND ".$to_date;
+		return $this->getAdapter()->fetchOne($sql);
+	}
 	
 }

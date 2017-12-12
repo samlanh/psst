@@ -128,7 +128,7 @@ fieldset{  background:none;}
 							<tr>
 								<td><?php echo $tr->translate("DEGREE")?></td>
 								<td>
-									<select name="degree" id="degree" class="fullside" readonly dojoType="dijit.form.FilteringSelect"  >
+									<select name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect"  >
 										<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
 											<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
 										<?php }}?>
@@ -486,7 +486,7 @@ function printSave(new_stu_id,new_receipt){
 		temp+='</tr>';
 		temp+='<tr style="font-size:12px !important;height: 10px;border:1px solid #000; ">';
 		  temp+='<td align="center" style="border:1px solid #000;">1</td>';
-		  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Student Test Payment</td>';
+		  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Test Fee</td>';
 		  temp+='<td align="center" style="border:1px solid #000;"> </td>';
 		  temp+='<td align="center" style="border:1px solid #000;"> </td>';
 		  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('price').get('value')+'</td>';
@@ -538,8 +538,7 @@ function getStudentTestInfo(){
 				dijit.byId("sex").attr("value",data.sex);
 				dijit.byId("dob").attr("value",data.dob);
 				dijit.byId("parent_phone").attr("value",data.phone);
-				
-				dijit.byId("degree").attr("value",data.degree);
+				dijit.byId("degree").attr("value",data.degree_result);
 				dijit.byId("serial").attr("value",data.serial);
 				dijit.byId("test_date").attr("value",data.test_date);
 				dijit.byId("note").attr("value",data.note);

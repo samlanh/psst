@@ -17,8 +17,11 @@
 	$amount_day =$diff/ (60*60*24);
 	$amount_day = $amount_day + 1;
 	
-	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-	
+	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ");
+	$number = array(0=>"០",1=>"១",2=>"២",3=>"៣",4=>"៤",5=>"៥",6=>"៦",7=>"៧",8=>"៨",9=>"៩","."=>".",","=>",");
+	$db_mistack = new Allreport_Model_DbTable_DbMistakeCertificate();
+	$stu_id = $this->stu_id;
+	$group_id = $this->group_id;
 ?>	
 	<div style="width: 30cm;margin: 0 auto;">
 		<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'mistake-certificate')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -121,13 +124,16 @@
 			
 				<tr>
 					<td>
-						<table width="100%" border="1" style="border-collapse:collapse;border:1px solid #000;font-family: Khmer OS Battambang;">
+						<table width="100%" border="1" style="border-collapse:collapse; border:1px solid #000; font-family: Khmer OS Battambang; ">
 							<tr style="font-size:13px;">
 								<td rowspan="2" align="center" style="font-family: Khmer OS Muol;">
 									កាលបរិច្ឆេទ	
 								</td>
 								<td colspan="3" align="center" style="font-family: Khmer OS Muol;">
 									កំហុស
+								</td>
+								<td colspan="2" align="center" style="font-family: Khmer OS Muol;">
+									អវត្តមាន
 								</td>
 								<td rowspan="2" align="center" style="font-family: Khmer OS Muol;">
 									របាយបញ្ហា
@@ -140,20 +146,96 @@
 								<td align="center">ស្រាល</td>
 								<td align="center">មធ្យម</td>
 								<td align="center">ធ្ងន់</td>
+								<td align="center">ច្បាប់</td>
+								<td align="center">ឥតច្បាប់</td>
 							</tr>
-						<?php $i=0;$s=0;$m=0;$l=0;if(!empty($this->student_mistake)){foreach($this->student_mistake as $rs){$i++;?>
-							<tr>
-								<td align="center"><?php echo date("d-m-Y",strtotime($rs['mistake_date']))?></td>
-								<td align="center"><?php if($rs['mistake_type']==1){echo "1";$s++;}?></td>
-								<td align="center"><?php if($rs['mistake_type']==2){echo "1";$m++;}?></td>
-								<td align="center"><?php if($rs['mistake_type']==3){echo "1";$l++;}?></td>
-								<td>&nbsp;<?php echo $rs['description']?></td>
-								<td><?php echo "";?></td>
-							</tr>
-						<?php } }?>
+							<?php 
+							$i=0;$s=0;$m=0;$l=0;
+							$at=0;
+							$p=0;
+							if (!empty($this->search['start_date'])){
+								
+								$your_date = strtotime($this->search['start_date']);
+								$datediff = strtotime($this->search['end_date']) - $your_date;
+								$amount_da =  floor($datediff / (60 * 60 * 24));
+								
+								$start_date = date("Y-m-d",strtotime($this->search['start_date']));
+								for ($b=0; $b<=$amount_da; $b++){
+									$date = date("d-m-Y",strtotime("$start_date $b day"));
+									$mistack = $db_mistack->getMistakeRecordByDate($date, $group_id, $stu_id);
+									$attendence = $db_mistack->getAttendenceBydate($date, $group_id, $stu_id);
+								?>	
+									<?php if (!empty($attendence)){?>
+									<tr style="font-size:13px;">
+										<td align="center"><?php echo $date;?></td>
+										<td align="center"></td>
+										<td align="center"></td>
+										<td align="center"></td>
+										<td align="center"><?php if($attendence['attendence_status']==3){echo "1";$p++;}?></td>
+										<td align="center"><?php if($attendence['attendence_status']==2){echo "1";$at++;}?></td>
+										<td>&nbsp;<?php echo $attendence['description']?></td>
+										<td><?php echo "";?></td>
+									</tr>
+									<?php }?>
+									<?php if (!empty($mistack)) foreach ($mistack as $rs){?>
+									<tr style="font-size:13px;">
+										<td align="center"><?php echo $date;?></td>
+										<td align="center"><?php if($rs['mistake_type']==1){echo "1";$s++;}?></td>
+										<td align="center"><?php if($rs['mistake_type']==2){echo "1";$m++;}?></td>
+										<td align="center"><?php if($rs['mistake_type']==3){echo "1";$l++;}?></td>
+										<td align="center"></td>
+										<td align="center"></td>
+										<td>&nbsp;<?php echo $rs['description']?></td>
+										<td><?php echo "";?></td>
+									</tr>
+									<?php }?>
+							<?php }
+							}else{
+								$date = date("Y-m-d");
+								$mistack = $db_mistack->getMistakeRecordByDate($date, $group_id, $stu_id);
+								$attendence = $db_mistack->getAttendenceBydate($date, $group_id, $stu_id);?>
+								<?php if (!empty($attendence)){?>
+									<tr style="font-size:13px;">
+										<td align="center"><?php echo $date;?></td>
+										<td align="center"></td>
+										<td align="center"></td>
+										<td align="center"></td>
+										<td align="center"><?php if($attendence['attendence_status']==3){echo "1";$p++;}?></td>
+										<td align="center"><?php if($attendence['attendence_status']==2){echo "1";$at++;}?></td>
+										<td>&nbsp;<?php echo $attendence['description']?></td>
+										<td><?php echo "";?></td>
+									</tr>
+									<?php }?>
+									<?php if (!empty($mistack)) foreach ($mistack as $rs){?>
+									<tr style="font-size:13px;">
+										<td align="center"><?php echo $date;?></td>
+										<td align="center"><?php if($rs['mistake_type']==1){echo "1";$s++;}?></td>
+										<td align="center"><?php if($rs['mistake_type']==2){echo "1";$m++;}?></td>
+										<td align="center"><?php if($rs['mistake_type']==3){echo "1";$l++;}?></td>
+										<td align="center"></td>
+										<td align="center"></td>
+										<td>&nbsp;<?php echo $rs['description']?></td>
+										<td><?php echo "";?></td>
+									</tr>
+									<?php }?>
+						<?php }?>
+						<?php //$i=0;$s=0;$m=0;$l=0;if(!empty($this->student_mistake)){foreach($this->student_mistake as $rs){$i++;?>
+							<!-- <tr style="font-size:13px;">
+								<td align="center"><?php //echo date("d-m-Y",strtotime($rs['mistake_date']))?></td>
+								<td align="center"><?php //if($rs['mistake_type']==1){echo "1";$s++;}?></td>
+								<td align="center"><?php //if($rs['mistake_type']==2){echo "1";$m++;}?></td>
+								<td align="center"><?php //if($rs['mistake_type']==3){echo "1";$l++;}?></td>
+								<td align="center"></td>
+								<td align="center"></td>
+								<td>&nbsp;<?php //echo $rs['description']?></td>
+								<td><?php //echo "";?></td>
+							</tr> -->
+						<?php //} }?>
 						
 						<?php for($i;$i<8;$i++){?>
 							<tr>
+								<td align="center"></td>
+								<td align="center"></td>
 								<td align="center"></td>
 								<td align="center"></td>
 								<td align="center"></td>
@@ -163,7 +245,7 @@
 							</tr>
 						<?php }?>
 						
-							<tr align="center">
+							<tr align="center" style="font-size:13px;">
 								<td>
 									សរុប
 								</td>
@@ -176,6 +258,8 @@
 								<td>
 									<?php echo $l." ដង";?>
 								</td>
+								<td><?php echo $p." ដង";?></td>
+								<td><?php echo $at." ដង";?></td>
 							</tr>
 						</table>
 					</td>

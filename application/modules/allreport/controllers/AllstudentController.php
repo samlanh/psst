@@ -297,6 +297,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			);
 		}
 		$this->view->search=$search;
+		$this->view->stu_id = $stu_id;
+		$this->view->group_id = $group_id;
 		
 		$db = new Allreport_Model_DbTable_DbMistakeCertificate();
 		$this->view->student_info = $db->getStudentInfo($group_id,$stu_id);

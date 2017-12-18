@@ -93,5 +93,69 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
     	
 		return $db->fetchAll($sql.$where);
 	}
-    
+	
+	public function getMistakeRecordByDate($date,$group_id,$stu_id){
+		$db = $this->getAdapter();
+		$sql="SELECT
+		sdd.`stu_id`,
+		s.`stu_khname`,
+		s.`stu_enname`,
+		s.sex,
+		s.`dob`,
+		s.`pob`,
+		s.`home_num`,
+		s.`street_num`,
+		s.`village_name`,
+		s.`commune_name`,
+		s.`district_name`,
+		s.`province_id`,
+	
+		s.`father_enname`,
+		s.`father_job`,
+		s.`father_phone`,
+	
+		s.`mother_enname`,
+		s.`mother_job`,
+		s.`mother_phone`,
+	
+		g.`academic_year`,
+		g.`degree`,
+		g.`grade`,
+		g.`session`,
+		sd.`mistake_date`,
+		sdd.`mistake_type`,
+		sdd.`description`
+		FROM
+		`rms_student_discipline` AS sd,
+		`rms_student_discipline_detail` AS sdd,
+		`rms_student` AS s,
+		`rms_group` AS g
+		WHERE
+		sd.`id` = sdd.`discipline_id`
+		AND sdd.`stu_id`=s.`stu_id`
+		AND g.`id` = sd.`group_id`
+		AND sdd.`stu_id` = $stu_id
+		AND sd.`group_id` = $group_id
+		";
+	
+		$where = " ";
+		$date = date("Y-m-d",strtotime($date));
+		$where.=" AND sd.mistake_date = '$date'";
+// 		$from_date =(empty($search['start_date']))? '1': "sd.mistake_date >= '".$search['start_date']." 00:00:00'";
+// 		$to_date = (empty($search['end_date']))? '1': "sd.mistake_date <= '".$search['end_date']." 23:59:59'";
+// 		$where .= " AND ".$from_date." AND ".$to_date;
+		 
+		return $db->fetchAll($sql.$where);
+	}
+    function getAttendenceBydate($date,$group_id,$stu_id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT sade.*,sta.`date_attendence`,sta.`group_id`
+			FROM rms_student_attendence_detail AS sade,
+			`rms_student_attendence` AS sta
+			WHERE sta.`id` = sade.`attendence_id`";
+    	$date = date("Y-m-d",strtotime($date));
+    	$where = "";
+    	$where.=" AND sta.`date_attendence` = '$date' AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id LIMIT 1";
+    	return $db->fetchRow($sql.$where);
+    }
 }

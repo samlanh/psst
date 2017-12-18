@@ -6,12 +6,41 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
     {    	
         /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
-    	
+    	 defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 
     public function indexAction()
     {
-        # code...
+        try{
+			$db = new Mobileapp_Model_DbTable_DbNotification();
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'adv_search' => '',
+						'search_status' => -1,
+						'start_date'=> date('Y-m-01'),
+						'end_date'=>date('Y-m-d'));
+			}
+			$rs_rows= $db->getAllNotification($search);
+			$glClass = new Application_Model_GlobalClass();
+			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
+			$list = new Application_Form_Frmtable();
+			$collumns = array("TITLE","DATE","STATUS");
+			$link=array(
+					'module'=>'mobileapp','controller'=>'notification','action'=>'edit',
+			);
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link));
+		}catch (Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	
+		$frm = new Application_Form_FrmSearch();
+		$frm = $frm->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm = $frm;
     }
   
     public function addAction()

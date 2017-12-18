@@ -1,58 +1,145 @@
 <?php
-$row = $this->row;
-
-?>
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('EDIT_HOLIDAY'));
+$dept='';
+if(!empty($this->row['dept'])){
+$dept =  explode(",",$this->row['dept']);
+}
+$array = array();
+if (!empty($dept)) {
+    foreach ($dept as $ss) {
+        $array[$ss] = $ss;
+    }
+}
+?>	
+<?php  $holiday= $this->frm_holiday;?>
 <script>
-dojo.require("dijit/Editor");
+       dojo.require("dijit.form.DateTextBox");
+       dojo.require("dijit/form/NumberTextBox");
 </script>
 
-<style>
- #dijitEditorBody {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    background: white;
-}
-</style>
-
-<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
+<form  id='add_techer' action="" dojoType="dijit.form.Form" method="post"
+ enctype="application/x-www-form-urlencoded">
+ <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-                dijit.byId("save_close").attr("disabled",true);
-				dijit.byId("save_new").attr("disabled",true);
+                dijit.byId("save_new").set("disabled",true);
+				dijit.byId("save_close").set("disabled",true);
 				return true;
-			}else {
+			} else {
 				return false;
 			}
 </script>
-<input type="hidden" name="id" value="<?= $row['id'] ?>">
-<table cellspacing="10" width="80%" style="margin: 0 auto;">
+<table cellspacing="10" width="100%" style="margin: 0 auto;">
 	<tr>
 		<td>
-		<fieldset style="background-color:menu;">
-					<legend align="center" ><strong>Calender</strong></legend>
-					<table style="margin: 0 auto; width: 95%;" cellspacing="10">
-						<tr>
-							<td style="width: 100px">ចំណងជើង</td>
-							<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="title" value="<?= $row['title'] ?>" name="title" value="" type="text"></td>
-						</tr>						             
-                        <tr>
-							<td style="width: 100px">ពណ៍នា</td>
-							<td><textarea data-dojo-type="dijit/Editor" id="description" name="description">
-								<?= $row['description'] ?>							
-							</textarea></td>
-						</tr>                        
+		<fieldset>
+				<legend align="center" ><strong><?php echo $tr->translate("EDIT_HOLIDAY");?></strong></legend>
+				<table style="margin: 0 auto; width: 100%;" cellspacing="10">
+					<tr>
+						<td  width="70%" style=" vertical-align: top;">
+							<table style="margin: 0 auto; width: 100%;" cellspacing="10">
+								<tr>
+									<td><?php echo $tr->translate("HOLIDAY_NAME")?></td>
+									<td><?php  echo $holiday->getElement('holiday_name');?><?php  echo $holiday->getElement('id');?></td>
+								</tr>
+								<tr>
+									<td><?php echo $tr->translate("START_DATE")?></td>
+									<td><?php  echo $holiday->getElement('start_date');?></td>
+								</tr>
+								<tr>
+									<td><?php echo $tr->translate("AMOUNT_DAY")?></td>
+									<td><?php  echo $holiday->getElement('amount_day');?></td>
+								</tr>
+								<tr>
+									<td><?php echo $tr->translate("END_DATE")?></td>
+									<td><?php  echo $holiday->getElement('end_date');?></td>
+								</tr>
+								<tr>
+									<td><?php echo $tr->translate("NOTE")?></td>
+									<td><?php  echo $holiday->getElement('note');?></td>
+								</tr>
+								<tr>
+									<td><?php echo $tr->translate("STATUS")?></td>
+									<td><?php  echo $holiday->getElement('status');?></td>
+								</tr>
+								
+							</table>
+						</td>
+						<td  width="30%" style=" vertical-align: top;">
+							<table style="margin: 0 auto; width: 100%;" cellspacing="1">
+								<tr>
+									<td>
+										<?php echo $tr->translate("DEGREE")?>
+									</td>
+								</tr>
+								<tr>
+									<td><input style="  height: 15px; margin-right: 10px;" onchange="checkall();" type="checkbox"  class="checkbox" id="check_all"  name="check_all"/><?php echo $tr->translate("CHECK_ALL")?></td>
+								<tr>
+								<?php 
+								if (!empty($this->faculty)) foreach ($this->faculty as $rs){
+								?>
+								<tr>
+									<td><input style="  height: 15px; margin-right: 10px;" <?php if (in_array($rs['dept_id'], $array)) { echo 'checked="checked"';}?> type="checkbox"  class="checkbox" id="depts<?php echo $rs['dept_id'];?>" value="<?php echo $rs['dept_id'];?>"  name="selector[]"/><?php echo $rs['en_name'];?></span></td>
+								</tr>
+								<?php } ?>
+							</table>
+						</td>
 						<tr>
 							<td colspan="2" align="center">
-								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
-								<input type="button" value="save_close" name="save_close" id="save_close" label="រក្សាទុក&ចាកចេញ" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
-								<input type="submit" value="save_new" name="save_new" id="save_new" label="រក្សាទុក&បន្ថែមថ្មី" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
+									<input type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
+									<input type="submit" value="" label="<?php echo $tr->translate('SAVECLOSE');?>" id="submitButton" dojoType="dijit.form.Button" 
+								 iconClass="dijitEditorIcon dijitEditorIconSave"/>
 							</td>
 						</tr>
-					</table>	
+					</tr>
+				</table>
+				
+									
 		</fieldset>		
 		</td>
 	</tr>
 </table>	
 </form>
+<?php $base_url = Application_Form_FrmMessage::getUrl("/"); ?>
+​
+<script>
+function checkall(){
+	if ($('#check_all').is(':checked')) {
+		$(".checkbox").prop('checked', true);
+	}else{
+		$(".checkbox").prop('checked', false);
+	}
+}
+function checkall(){
+	if ($('#check_all').is(':checked')) {
+		$(".checkbox").prop('checked', true);
+	}else{
+		$(".checkbox").prop('checked', false);
+	}
+}
+function CalculateDate(){
+	pay_type = dijit.byId('start_date').value;
+	amount_day = dijit.byId('amount_day').get('value');
+	
+	if(isNaN(amount_day)){
+		//alert('សូមបញ្ចលចំនួនរយៈពេល​ !');
+		dijit.byId('amount_day').focus();
+	}else{
+		start_date = dijit.byId("start_date").value;
+		var a = new Date(start_date);
+		
+		var mm = a.getMonth() + 1;
+		var dd = a.getDate()+parseInt(amount_day)-1;
+		 if(dd<10){
+			 dd = "0"+dd;
+		}
+		 if(mm<10){
+			 mm = "0"+mm;
+		}
+		var y = a.getFullYear();
+		var epx_date = y + '-'+ mm + '-'+dd ;
+		dijit.byId('end_date').attr('value',epx_date);
+}
+}
+
+</script>

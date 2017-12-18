@@ -89,6 +89,7 @@
 	  		'allreport'=>'<i class="fa  fa-file-text" aria-hidden="true"></i>',
 	  		'rsvacl'=>'<i class="fa  fa-cog" aria-hidden="true"></i>',
 	  		'setting'=>'<i class="fa  fa-cogs" aria-hidden="true"></i>',
+	  		'mobileapp'=>'<i class="fa fa-apple" aria-hidden="true"></i>',
 	  		);
 // 	if($level>2){
 // 		unset($item_arr['accounting']);
@@ -147,6 +148,10 @@
 			elseif($rs=='library'){
 				$controller='index';
 				$label="library";
+			}
+			elseif($rs=='mobileapp'){
+				$controller='index';
+				$label="mobileapp";
 			}
 			
 			

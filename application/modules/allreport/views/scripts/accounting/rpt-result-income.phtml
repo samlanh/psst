@@ -1,0 +1,170 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm =  $this->frm_search;
+?>	
+<title><?php echo $tr->translate('RESULT_INCOME_REPORT');?></title>
+<div style="width: 28cm;margin: 0 auto;">
+<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-borrowdetail')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table width="100%">
+	    <tr>
+	    	<td><?php //echo $frm->getElement('start_date');?></td>
+	    	<td><?php //echo $frm->getElement('end_date');?></td>
+	    	<td><?php //echo $frm->getElement('is_full');?></td>
+	    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
+	    </tr>
+	</table>
+</form>	
+</div>
+<style>
+.hover:hover{background: #ddd;}
+</style>
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+<div id="divPrint">
+<style>
+	table{ page-break-inside:auto }
+    tr{ page-break-inside:avoid; page-break-after:auto }
+	#header {
+		display: table-header-group;
+		page-break-inside:avoid; page-break-after:auto;
+	}
+	.bor{
+		border-right: 1px solid #000;	
+		border-bottom: 1px solid #000;
+		font-size:13px;
+	}
+	.bor_r{
+		border-right: 1px solid #000;	
+		font-size:13px;
+	}
+	.padd{
+		padding: 3px;	
+	}
+	#row{ font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';  }
+</style>
+		<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
+		<tr>
+			<td width="15%" align="center">
+				<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+			</td>
+			<td align="center" width="70%" style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​">
+				<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​"><?php echo $tr->translate("របាយការណ៍លទ្ធផលចំណូល"); ?></strong><br />
+				<strong  style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer OS Muol';​"><?php echo $tr->translate("Income Statement (AR) From 1 To 31 Aug 2017");?></strong><br />
+				<span style="font-weight: bold;font-size: 12px; font-family:'Khmer OS Battambang';​">&nbsp;<?php echo $tr->translate("DATE"); ?>&nbsp; <?php echo date("d-M-Y");?></span><br />
+			</td>
+			<td width="15%" > </td>
+		</tr>
+		<tr>
+			<td colspan="3" id="exportExcel">
+				<table cellpadding="8"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
+				<thead>
+					<tr style=" font-size:12px; height: 20px;  line-height: 30px; font-weight: bold;background: rgba(101, 177, 70, 0.82);" align="center" >
+						<td class="bor"><?php echo $tr->translate("លេខគណនី"); ?>/Account Code</td>
+						<td class="bor" ><?php echo $tr->translate("ឈ្មោះគណនីជាខ្មែរ"); ?>/Account in Khmer</td>
+						<td class="bor"  ><?php echo $tr->translate("ឈ្មោះគណនីជាអង់គ្គេស"); ?>/Account in English</td>
+						<td class="bor"><?php echo $tr->translate("សរុប"); ?>/Amount</td>
+				    </tr>
+				</thead>
+ 					<tr id="row" align="center" >
+						<td> </td>
+						<td  class="padd"  style="background:#4682B4;">ចំណូល</td>
+						<td  class="padd"  style="background:#81BEF7;">Revenue</td>
+						<td> </td>
+ 					</tr>
+ 					<tr id="row"  class="hover" >
+						<td class="padd">A001</td>
+						<td class="padd">ចំណូលពីថ្ងៃសិក្សា</td>
+						<td class="padd" >Study Fee</td>
+						<td class="padd">$ 1000</td>
+ 					</tr>
+ 					<tr id="row"  class="hover" >
+						<td class="padd">A002</td>
+						<td class="padd">ចំណូលពីថ្លៃសម្ភារ</td>
+						<td class="padd" >Material Fee</td>
+						<td class="padd">$ 20</td>
+ 					</tr>
+ 					<tr id="row"  class="hover" >
+						<td class="padd">A003</td>
+						<td class="padd">ចំណូលពីថ្ងៃរថយ​ន្ត</td>
+						<td class="padd" >Transportation Fee</td>
+						<td class="padd">$ 1000</td>
+ 					</tr>
+ 					<tr id="row"  class="hover" >
+						<td class="padd">A004</td>
+						<td class="padd">ចំណូលពីថ្លៃអាហារនិង ស្នាក់នៅ</td>
+						<td class="padd" >Food and Stay Fee</td>
+						<td class="padd">$ 1000</td>
+ 					</tr>
+ 					<tr id="row"  class="hover" >
+						<td class="padd">A005</td>
+						<td class="padd">ចំណូលពីចំណតកង់ ម៉ូតូ និងការជួលតូប​ន្ត</td>
+						<td class="padd" >Parking& Canteen Rental Fee</td>
+						<td class="padd">$ 1000</td>
+ 					</tr>
+ 					<tr id="row"  class="hover" >
+						<td class="padd">A006</td>
+						<td class="padd">ចំណូលផ្សេងៗ</td>
+						<td class="padd" >Other Revenue</td>
+						<td class="padd">$ 1000</td>
+ 					</tr>
+	 				<tr id="row" >
+						<td  style="border-left: 1px solid #fff;border-bottom:  1px solid #fff;"> </td>
+						<td  style="border-left: 1px solid #fff;border-bottom:  1px solid #fff;"> </td>
+						<td class="padd" style="background: #F5D0A9;"> Total</td>
+						<td class="padd" style="background: #F5D0A9;"> $&nbsp;<?php echo number_format(1790,2);?> </td>
+ 					</tr>
+				 </table>	
+				<table width="100%">
+					<tr><td colspan="3">&nbsp;</td></tr>
+					<tr >
+						<td align="center" width="25%">
+							<span style="font-size: 14px;"><?php echo $tr->translate("បានឃើញនិង ឯកភាព"); ?></span><br/>
+							<span style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer OS Muol';​">លោកអគ្គនាយក</span>
+						</td>
+						<td  width="20%">
+							&nbsp;
+						</td>
+						<td align="center"  width="30%">
+							<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("VERIFIED_BY"); ?></span><br/>
+							<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("ប្រធានគណនេយ្យ"); ?></span>
+						</td>
+						<td align="center"  width="25%">
+							<span style="font-size: 14px;text-align: right;">ភ្នំពេញ, ថ្ងៃទី…..ខែ…..ឆ្នាំ……..</span><br/>
+							<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("គណនេយ្យករ"); ?></span>
+						</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+		</table>
+	</div>		
+</div>
+<script type="text/javascript">
+function doPrint() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+function preview()
+{ 
+  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+      disp_setting+="scrollbars=no,width=1200, height=700, left=100, top=25"; 
+  var content_vlue = document.getElementById("divPrint").innerHTML; 
+  
+  var docprint=window.open("","",disp_setting); 
+   docprint.document.open(); 
+   docprint.document.write('<html><head>'); 
+   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+   docprint.document.write(content_vlue);          
+   docprint.document.write('</center></div></html>'); 
+   docprint.document.close(); 
+   docprint.focus(); 
+}
+function exportExcel(){
+	$('#exportExcel').tableExport({type:'excel',escape:'false'});
+}
+</script>
+
+
+
+

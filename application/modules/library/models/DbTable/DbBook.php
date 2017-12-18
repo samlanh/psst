@@ -15,7 +15,8 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 			      (SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id) AS cat_name,
 			        b.qty_after,b.unit_price,b.date,
 			      (SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
-			      (SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`
+			      (SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`,
+			      REPLACE(b.book_no,' ', '') As book_code,REPLACE(b.title,' ', '')AS book_title
 			      FROM rms_book AS b 
 			      WHERE b.title!='' ";
     	$where = '';
@@ -45,7 +46,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
     	    $where.=' AND b.`status`='.$search["status_search"];
     	}
     	
-    	$order=" ORDER BY id DESC";
+    	$order=" ORDER BY REPLACE(b.book_no,' ', '') DESC ";
     	//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }

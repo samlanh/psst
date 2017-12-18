@@ -14,6 +14,7 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
 				'required'=>'true',
+				"autocomplete"=>'on',
 				'placeholder'=>$this->tr->translate("Book Name")
 		        ));
 		

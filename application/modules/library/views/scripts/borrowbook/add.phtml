@@ -105,7 +105,10 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							<td><input dojoType="dijit.form.DateTextBox" name="borrow_date" id="borrow_date" onchange="" value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}" type="text"></td>
 							
 							<td nowrap="nowrap"><?php echo $tr->translate("AMOUNT_WEEK")?></td>
-							<td><input dojoType="dijit.form.NumberTextBox"   name="amountweek" id="amountweek" value="" onkeyup="setEndDate();" type="text"></td>
+							<td><input dojoType="dijit.form.NumberTextBox"   name="amountweek" id="amountweek" value="" onkeyup="setEndDate();" type="text" style="width: 100px;"  class="fullside">
+								<?php echo $tr->translate("HOUR")?>
+								<input dojoType="dijit.form.NumberTextBox"   name="amount_hour" id="amount_hour" value="" onkeyup="setEndDate();" type="text" style="width: 100px;" class="fullside">
+							</td>
 							
 							<td nowrap="nowrap"><?php echo $tr->translate("RETURN_DATE")?></td>
 							<td><input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text"  value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}"></td>

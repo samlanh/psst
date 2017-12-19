@@ -33,8 +33,8 @@
 				<tr>
 		            <td><?php echo $frm->getElement("grade_all");?></td>
 					<td><?php echo $frm->getElement("session");?></td>
-					<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->datasearch['start_date'];?>" type="text"></td>
-					<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="end_date" name="end_date"  value="<?php echo $this->datasearch['end_date'];?>" type="text"></td>
+					<!-- <td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="start_date" name="start_date" placeholder="Search....." value="<?php //echo $this->datasearch['start_date'];?>" type="text"></td>
+					<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="end_date" name="end_date"  value="<?php //echo $this->datasearch['end_date'];?>" type="text"></td> -->
 					<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 		
 			 	</tr>
@@ -129,17 +129,30 @@
 									<?php if(date('D',strtotime("$start_date +$k day"))=="Sun"){ }else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<?php  
 											$mistake_status = $db->getTotalStatusMistake($rs['stu_id'], date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
-											//print_r($mistake_status);
-											if ($mistake_status['mistake_type']==1){ 
-												$s=$s+1;
-											}
-											else if ($mistake_status['mistake_type']==2){
-												$m = $m+1;
-											}
-											else if ($mistake_status['mistake_type']==3){
-												$b = $b+1;
-											}else{
-												echo " ";	
+// 											//print_r($mistake_status);
+// 											if ($mistake_status['mistake_type']==1){ 
+// 												$s=$s+1;
+// 											}
+// 											else if ($mistake_status['mistake_type']==2){
+// 												$m = $m+1;
+// 											}
+// 											else if ($mistake_status['mistake_type']==3){
+// 												$b = $b+1;
+// 											}else{
+// 												echo " ";	
+// 											}
+											if (!empty($mistake_status)) foreach ($mistake_status as $sta){
+												if ($sta['mistake_type']==1){
+													$s=$sta['count_mistack'];
+												}
+												else if ($sta['mistake_type']==2){
+													$m = $sta['count_mistack'];
+												}
+												else if ($sta['mistake_type']==3){
+													$b = $sta['count_mistack'];
+												}else{
+													echo " ";
+												}
 											}
 										?>
 									<?php }?>

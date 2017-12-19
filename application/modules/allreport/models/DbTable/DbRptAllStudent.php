@@ -523,10 +523,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				AND st.`stu_id` = gsd.`stu_id` 
     				and st.is_subspend = 0
     			";
-    	$from_date =(empty($search['start_date']))? '1': "sd.mistake_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "sd.mistake_date <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
-
+//     	$from_date =(empty($search['start_date']))? '1': "sd.mistake_date >= '".$search['start_date']." 00:00:00'";
+//     	$to_date = (empty($search['end_date']))? '1': "sd.mistake_date <= '".$search['end_date']." 23:59:59'";
+//     	$where = " AND ".$from_date." AND ".$to_date;
+    	$where ="";
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
@@ -597,24 +597,41 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getTotalStatusMistake($stu_id,$date_att,$group){
     	$db = $this->getAdapter();
-    	$sql="SELECT
+//     	$sql="SELECT
+// 			    	sd.`group_id`,
+// 			    	sdd.`mistake_type`,
+// 			    	sdd.description,
+// 			    	sd.`mistake_date`
+// 			    FROM 
+// 			    	`rms_student_discipline` AS sd,
+// 			    	`rms_student_discipline_detail` AS sdd
+// 			    WHERE 
+// 			    	sd.`id` = sdd.`discipline_id`
+// 			    	AND sdd.`stu_id` = $stu_id 
+//     				AND sd.`mistake_date` = '".$date_att."' 
+//     				AND sd.`group_id` = $group
+//     		";
+    	
+//     	$where='';
+// //     	echo $sql.$where.' LIMIT 1';//exit();
+//     	return $db->fetchRow($sql.$where.' LIMIT 1');
+		$sql="SELECT
 			    	sd.`group_id`,
 			    	sdd.`mistake_type`,
 			    	sdd.description,
-			    	sd.`mistake_date`
+			    	sd.`mistake_date`,
+			    	sdd.`stu_id`,
+			    	COUNT(sdd.`mistake_type`) AS count_mistack			    	
 			    FROM 
 			    	`rms_student_discipline` AS sd,
 			    	`rms_student_discipline_detail` AS sdd
 			    WHERE 
 			    	sd.`id` = sdd.`discipline_id`
 			    	AND sdd.`stu_id` = $stu_id 
-    				AND sd.`mistake_date` = '".$date_att."' 
     				AND sd.`group_id` = $group
-    		";
-    	
-    	$where='';
-//     	echo $sql.$where.' LIMIT 1';//exit();
-    	return $db->fetchRow($sql.$where.' LIMIT 1');
+    			GROUP BY mistake_type
+			";
+		return $db->fetchAll($sql);
     }
     
     function getStudentAttendenceHighschool($search){

@@ -139,8 +139,11 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 		";
 	
 		$where = " ";
-		$date = date("Y-m-d",strtotime($date));
-		$where.=" AND sd.mistake_date = '$date'";
+// 		$date = date("Y-m-d",strtotime($date));
+// 		$where.=" AND sd.mistake_date = '$date'";
+		$start_year = date("Y-01-01");
+		$end_year = date("Y-12-31");
+		$where.=" AND sd.mistake_date BETWEEN '$start_year' AND '$end_year'";
 // 		$from_date =(empty($search['start_date']))? '1': "sd.mistake_date >= '".$search['start_date']." 00:00:00'";
 // 		$to_date = (empty($search['end_date']))? '1': "sd.mistake_date <= '".$search['end_date']." 23:59:59'";
 // 		$where .= " AND ".$from_date." AND ".$to_date;
@@ -153,9 +156,14 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 			FROM rms_student_attendence_detail AS sade,
 			`rms_student_attendence` AS sta
 			WHERE sta.`id` = sade.`attendence_id`";
-    	$date = date("Y-m-d",strtotime($date));
+    	//$date = date("Y-m-d",strtotime($date));
     	$where = "";
-    	$where.=" AND sta.`date_attendence` = '$date' AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id LIMIT 1";
-    	return $db->fetchRow($sql.$where);
+    	//$where.=" AND sta.`date_attendence` = '$date' AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id LIMIT 1";
+    	$start_year = date("Y-01-01");
+    	$end_year = date("Y-12-31");
+    	$where.=" AND sta.`date_attendence` BETWEEN '$start_year' AND '$end_year'";
+    	$where.=" AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id ";
+//     	return $db->fetchRow($sql.$where);
+    	return $db->fetchAll($sql.$where);
     }
 }

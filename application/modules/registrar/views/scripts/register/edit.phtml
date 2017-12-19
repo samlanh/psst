@@ -692,7 +692,7 @@ fieldset{  background:none;}
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("PAID_DATE");?></td>
-							<td><input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $this->payment['create_date']?>" name="paid_date" id="paid_date" class="fullside"/></td>
+							<td><input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo date("Y-m-d",strtotime($this->payment['create_date']))?>" name="paid_date" id="paid_date" class="fullside"/></td>
 						</tr>
 					</table>
 				</fieldset>

@@ -52,8 +52,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(commune_name,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(district_name,' ','')  LIKE '%{$s_search}%'";
 			
-			$s_where[]="(SELECT	rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session) LIKE '%{$s_search}%'";
-			$s_where[]="(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) LIKE '%{$s_search}%'";
+			//$s_where[]="(SELECT	rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session) LIKE '%{$s_search}%'";
+			//$s_where[]="(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['study_year'])){
@@ -73,6 +73,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();
+// 		echo $sql.$where.$orderby;exit();
 		return $_db->fetchAll($sql.$where.$orderby);
 	}
 	

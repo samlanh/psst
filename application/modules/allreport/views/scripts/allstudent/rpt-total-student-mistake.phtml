@@ -97,7 +97,7 @@
 									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol light';">
 										<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
 										<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
-										<?php echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $month[date("m",strtotime($end_date))]." ".date("Y",strtotime($end_date));?></span>
+										<!-- <?php //echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php //echo $month[date("m",strtotime($end_date))]." ".date("Y",strtotime($end_date));?></span>-->
 										<br />
 										<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
 										<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
@@ -129,6 +129,11 @@
 									<?php if(date('D',strtotime("$start_date +$k day"))=="Sun"){ }else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<?php  
 											$mistake_status = $db->getTotalStatusMistake($rs['stu_id'], date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
+											$lateAttedence = $db->getAttendenceFoul($rs['group_id'],$rs['stu_id']);
+											$late_foul = 0;
+											if (!empty($lateAttedence)){
+												$late_foul = $lateAttedence['count_foul_att'];
+											}
 // 											//print_r($mistake_status);
 // 											if ($mistake_status['mistake_type']==1){ 
 // 												$s=$s+1;
@@ -143,7 +148,7 @@
 // 											}
 											if (!empty($mistake_status)) foreach ($mistake_status as $sta){
 												if ($sta['mistake_type']==1){
-													$s=$sta['count_mistack'];
+													$s=$sta['count_mistack']+$late_foul;
 												}
 												else if ($sta['mistake_type']==2){
 													$m = $sta['count_mistack'];
@@ -157,7 +162,7 @@
 										?>
 									<?php }?>
 								<?php }?>
-								<td align="center"><?php echo $s;?></td>
+								<td align="center"><?php echo $s+$late_foul;?></td>
 								<td align="center"><?php echo $m;?></td>
 								<td align="center"><?php echo $b;?></td>
 							</tr>

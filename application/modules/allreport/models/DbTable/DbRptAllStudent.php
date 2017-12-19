@@ -633,7 +633,17 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchAll($sql);
     }
-    
+    function getAttendenceFoul($group_id,$stu_id){//កំហុស មកយឺត និងចេញមុន
+    	$db = $this->getAdapter();
+    	$sql="SELECT sade.*,sta.`date_attendence`,sta.`group_id`,COUNT(sade.`attendence_status`) AS count_foul_att
+    	FROM rms_student_attendence_detail AS sade,
+    	`rms_student_attendence` AS sta
+    	WHERE sta.`id` = sade.`attendence_id`
+    	AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id AND sade.`attendence_status` IN (4,5) LIMIT 1
+			";
+    	$where="";
+    	return $db->fetchRow($sql.$where);
+    }
     function getStudentAttendenceHighschool($search){
     	$db = $this->getAdapter();
     	$sql="

@@ -35,6 +35,7 @@ class Accounting_Model_DbTable_DbStartdateEnddate extends Zend_Db_Table_Abstract
 	
 	
     public function addStartdateEnddate($data){
+    	 
     	$db= $this->getAdapter();
     	try{
     		if(!empty($data['identity'])){

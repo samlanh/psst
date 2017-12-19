@@ -1,0 +1,179 @@
+<?php 
+     $url_save = $this->url(array('module'=>'accounting','controller'=>'productcategory','action'=>'add'));
+     $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
+     $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+     
+?>
+<style>
+#table tr td{
+	border:1px solid #cccccc;
+	text-align: center;
+}
+#table tr th{
+	background: #cccccc;
+	border:1px solid #ddd;
+}
+</style>
+<title><?php echo $this->tr->translate("ADD_START_DATE_AND_END_DATE")?></title>
+<form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+<script type="dojo/method" event="onSubmit">   
+   if(this.validate()) {
+	var rowId = $('#identity').val();
+    			if(rowId!=''){ 
+					var rowIDArray = rowId.split(',');
+					for(var n = 0; n < rowIDArray.length; n++){
+					var book_id = dijit.byId('stu_id_'+rowIDArray[n]).get('value');
+					var term = dijit.byId('term_'+rowIDArray[n]).get('value');
+					if(book_id=='' || book_id==0 ){
+							alert("Please select student name!!!");
+							dijit.byId('stu_id_'+rowIDArray[n]).focus();
+							return false;
+						}
+					}
+				}
+	dijit.byId('save_close').set('disabled',true);
+	dijit.byId('save_new').set('disabled',true);
+    return true;
+   }else {
+    return false;
+   }
+</script>
+	
+	<table cellspacing="20" width="100%" style="margin: 0 auto;">
+		<tr>
+			<td>
+				<fieldset>
+					<legend align="center"><strong><?php echo $tr->translate("ADD_START_DATE_AND_END_DATE");?></strong></legend>
+					<table cellspacing="20" width="100%" >
+						<tr>
+							<td align="center" valign="top">
+								<table style="margin: 0 auto; width:100%;" cellspacing="10">
+									<tr>
+									    <td colspan="4">
+										    <table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;">
+										    	<tr id="head-title" class="head-td" align="right"></tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" align="left">
+											<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+											<input type="button" label="<?php echo $tr->translate('ADD_TERM');?>" dojoType="dijit.form.Button" 
+												iconClass="dijitIconEditProperty" onclick="addRow();" />
+										</td>
+									</tr>
+									<tr>
+										<td colspan="4" align="center">
+											<input type="reset" value="Clear" label="<?php echo $tr->translate("CLEAR");?>"   dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
+											<input type="button" onclick="submitDataClose()" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+											<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
+											iconClass="dijitEditorIcon dijitEditorIconSave" />
+										</td>
+									</tr>					
+								</table>
+							</td>							
+						</tr>
+					</table>	
+				</fieldset>
+			</td>			
+		</tr>
+	</table>	
+</form> 
+
+<script>
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+
+	dojo.ready(function(){ 
+		addRow();
+	});
+
+	var col= 0; var no=0;
+	var title = 0;
+	var all_stu = '<?php echo $this->all_stu; ?>';
+	function addRow() {
+		col++;no++;
+		template='';
+		temp = "";
+	
+		if(title!=1){
+			temp+='<td><?php echo $tr->translate("DEL");?></td>';
+			temp+='<td><?php echo $tr->translate("N_O");?></td>';
+			temp+='<td><?php echo $tr->translate("STUDENT_NAME");?></td>';
+			temp+='<td><?php echo $tr->translate("PAYMENT_TERM");?></td>';
+			temp+='<td><?php echo $tr->translate("START_DATE");?></td>';
+			temp+='<td><?php echo $tr->translate("END_DATE");?></td>';
+			temp+='<td><?php echo $tr->translate("NOTE");?></td>';
+			dojo.query("#head-title").append(temp);
+			title=1;
+		}
+			
+		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td align="center" width="2%">'+no+'</td>';
+		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" id="stu_id_'+col+'" class="fullside"  name="stu_id_'+col+'" onChange="showAddBlock('+col+');"  autoComplete="false"​​ queryExpr="*${0}*" required>'+all_stu+'</select></td>';
+		template+='<td width="10%"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="term_'+col+'" >';
+			<?php foreach($this->all_paymentterm as $term){?>
+				template+='<option value="'+<?php echo $term['id']?>+'"><?php echo $term['name'];?></option>';
+			<?php }?>
+		template+='</select></td>';
+			
+		template+='<td width="10%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
+		template+='<td width="10%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
+		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
+		tmp='<tr id="row'+col+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+col);
+		} else {$("#identity").val(col);}
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
+	}
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		
+		if(arrays[i] == index) arrays.splice(i,1);
+			
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
+	}
+
+	function submitDataClose(){
+		var rowId = $('#identity').val();
+		if(rowId!=''){ 
+			var rowIDArray = rowId.split(',');
+			for(var n = 0; n < rowIDArray.length; n++){
+			var book_id = dijit.byId('stu_id_'+rowIDArray[n]).get('value');
+			var term = dijit.byId('term_'+rowIDArray[n]).get('value');
+			if(book_id=='' || book_id==0 ){
+					alert("Please select student name!!!");
+					dijit.byId('stu_id_'+rowIDArray[n]).focus();
+					return false;
+				}
+			}
+		}
+
+		if(dijit.byId('add_province').validate()) {
+			dijit.byId('save_close').set('disabled',true);
+			dijit.byId('save_new').set('disabled',true);
+			var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'startdateenddatestu','action'=>'add')); ?>';
+			dojo.xhrPost({
+			    url: url_submit,	
+				form: dojo.byId("add_province"),		    
+				load: function(data) {
+					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+					window.location.href ="<?php echo $this->baseUrl();?>/accounting/startdateenddatestu";
+				},
+				error: function(e) {
+				}
+			});
+		}
+	}
+</script>

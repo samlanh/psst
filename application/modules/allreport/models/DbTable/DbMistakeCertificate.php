@@ -122,6 +122,7 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 		g.`degree`,
 		g.`grade`,
 		g.`session`,
+		sd.`for_session`,
 		sd.`mistake_date`,
 		sdd.`mistake_type`,
 		sdd.`description`

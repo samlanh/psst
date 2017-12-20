@@ -219,6 +219,7 @@
 									<?php }
 									}?>
 									<?php if (!empty($mistack)) foreach ($mistack as $rs){
+										$descri_added='';
 										$msk_year='';
 										$sp_msk_year = str_split(date("Y",strtotime($rs['mistake_date'])));
 										foreach ($sp_msk_year as $cos){
@@ -234,6 +235,11 @@
 										foreach ($sp_msk_d as $cos){
 											$msk_d.=$number[$cos];
 										}
+										if ($rs['for_session']==1){
+											$descri_added = "(ពេលព្រឹក)";
+										}else if ($rs['for_session']==2){
+											$descri_added = "(ពេលល្ងាច)";
+										}
 									?>
 									<tr style="font-size:13px;">
 										<td align="center"><?php echo $msk_d."-".$msk_m."-".$msk_year;?></td>
@@ -242,7 +248,7 @@
 										<td align="center"><?php if($rs['mistake_type']==3){echo $number['1'];$l++;}?></td>
 										<td align="center"></td>
 										<td align="center"></td>
-										<td>&nbsp;<?php echo $rs['description']?></td>
+										<td>&nbsp;<?php echo $rs['description']." ".$descri_added;?></td>
 										<td><?php echo "";?></td>
 									</tr>
 									<?php }?>

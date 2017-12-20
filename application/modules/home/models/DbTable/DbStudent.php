@@ -27,7 +27,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=1 AND key_code = status LIMIT 1) AS status
 				FROM rms_student AS s  WHERE  s.is_subspend=0 AND s.status = 1 ";
-		$orderby = " ORDER BY stu_id DESC ";
+		$orderby = " ORDER BY s.stu_enname,s.stu_khname ASC ";
 		if(empty($search)){
 			return $_db->fetchAll($sql.$orderby);
 		}
@@ -42,10 +42,10 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(guardian_tel,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(father_enname,' ','')  LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(mother_enname,' ','')  LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(guardian_enname,' ','')LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(remark,' ','')  		LIKE '%{$s_search}%'";
+// 			$s_where[]=" REPLACE(father_enname,' ','')  LIKE '%{$s_search}%'";
+// 			$s_where[]=" REPLACE(mother_enname,' ','')  LIKE '%{$s_search}%'";
+// 			$s_where[]=" REPLACE(guardian_enname,' ','')LIKE '%{$s_search}%'";
+// 			$s_where[]=" REPLACE(remark,' ','')  		LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(home_num,' ','')  		LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(street_num,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(village_name,' ','')  	LIKE '%{$s_search}%'";

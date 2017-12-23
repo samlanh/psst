@@ -302,6 +302,7 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
 				'onChange'=>'getDateTerm();',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'required'=>true));
 		$start_date->setValue($date);
 		
@@ -311,6 +312,7 @@ Class Registrar_Form_FrmRegister extends Zend_Dojo_Form {
 				'dojoType'=>"dijit.form.DateTextBox",
 				'class'=>'fullside',
 				//'onChange'=>'getDateTerm();',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'required'=>true));
 		$end_date->setValue($date);
 		

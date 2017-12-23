@@ -60,10 +60,10 @@ Class Registrar_Form_FrmRecept extends Zend_Dojo_Form {
 		$_tel->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside',));
 		
 		$_start_date= new Zend_Dojo_Form_Element_TextBox('start_date');
-		$_start_date->setAttribs(array('dojoType'=>$this->t_date,'class'=>'fullside',));
+		$_start_date->setAttribs(array('dojoType'=>$this->t_date,'class'=>'fullside','constraints'=>"{datePattern:'dd/MM/yyyy'}"));
 		
 		$_end_date= new Zend_Dojo_Form_Element_TextBox('end_date');
-		$_end_date->setAttribs(array('dojoType'=>$this->t_date,'class'=>'fullside',));
+		$_end_date->setAttribs(array('dojoType'=>$this->t_date,'class'=>'fullside','constraints'=>"{datePattern:'dd/MM/yyyy'}"));
 		
 		$_session = new Zend_Dojo_Form_Element_FilteringSelect('session');
 		$_session->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));

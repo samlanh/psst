@@ -13,7 +13,7 @@
 		<td><?php echo $frm->getElement("cood_book");?> </td>
 		</tr>
 		<tr>
-		<td><input dojoType="dijit.form.DateTextBox"    id="end_date" name="end_date" value="<?php echo date('Y-m-d',strtotime($this->search['end_date'])); ?>" class="fullside" type="text"> </td>
+		<td><?php echo $frm->getElement("end_date");?> </td>
 		<td><?php echo $frm->getElement('status_search');?></td> 
 		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
 		</tr>

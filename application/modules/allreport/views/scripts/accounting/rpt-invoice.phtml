@@ -3,6 +3,10 @@
 	$this->headTitle('SRMS | Report Student Receivable'); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$form=new Registrar_Form_FrmSearchInfor();
+	$form->FrmSearchRegister();
+	Application_Model_Decorator::removeAllDecorator($form);
+	$frm=$form;
 ?>
 <form
 	action=" "
@@ -26,8 +30,8 @@
 					<?php }}?>
 				</select>
 			</td>
-			<td><input type="text" name="form_date" value="<?php echo date("Y/m/d",strtotime($this->rssearch['form_date']));?>" constraints="{datePattern:'dd/MM/yyyy'}" id="from_date" class="fullside" placeholder="<?php echo $tr->translate("From Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
-			<td><input type="text" name="to_date" value="<?php echo date("Y/m/d",strtotime($this->rssearch['to_date']));?>" constraints="{datePattern:'dd/MM/yyyy'}" id="to_date" class="fullside" placeholder="<?php echo $tr->translate("to Date");  ?>" dojoType="dijit.form.DateTextBox"/></td>
+			<td><?php echo $frm->getElement("start_date");?></td>
+			<td><?php echo $frm->getElement("end_date");?></td>		
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>

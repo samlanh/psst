@@ -380,6 +380,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
+
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+
 	}
     public function rptIncomeExpenseDetailAction(){
 		$id 	=	 $this	->	getRequest()->getParam("id");

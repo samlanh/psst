@@ -348,5 +348,63 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			
 			return $options;
 		}
+		
+		public function getAllDays(){
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			$hours ='<option value="1">'.$tr->translate('MO').'</option>'.
+					'<option value="2">'.$tr->translate('TU').'</option>'.
+					'<option value="3">'.$tr->translate('WE').'</option>'.
+					'<option value="4">'.$tr->translate('TH').'</option>'.
+					'<option value="5">'.$tr->translate('FR').'</option>'.
+					'<option value="6">'.$tr->translate('SA').'</option>'.
+					'<option value="7">'.$tr->translate('SU').'</option>';
+			return  $hours;
+		}
+		
+		public function getHoursStudy(){
+			// 		$hours='';
+			// 		$time = 7;
+		
+			// 		echo $hours;exit();
+			$hours ='<option value="07.00">07:00 AM </option>'.
+					'<option value="07.15">07:15 AM </option>'.
+					'<option value="07.30">07:30 AM </option>'.
+					'<option value="08.00">08:00 AM </option>'.
+					'<option value="08.15">08:15 AM </option>'.
+					'<option value="08.30">08:30 AM </option>'.
+					'<option value="09.00">09:00 AM </option>'.
+					'<option value="09.15">09:15 AM </option>'.
+					'<option value="09.30">09:30 AM </option>'.
+					'<option value="10.00">10:00 AM </option>'.
+					'<option value="10.15">10:15 AM </option>'.
+					'<option value="10.30">10:30 AM </option>'.
+					'<option value="11.00">11:00 AM </option>'.
+					'<option value="11.15">11:15 AM </option>'.
+					'<option value="11.30">11:30 AM </option>'.
+					'<option value="12.00">12:00 AM </option>'.
+					'<option value="12.30">12:30 AM </option>'.
+					'<option value="13.00">01:00 PM </option>'.
+					'<option value="13.30">01:30 PM </option>'.
+					'<option value="14.00">02:00 PM </option>'.
+					'<option value="14.30">02:30 PM </option>'.
+					'<option value="15.00">03:00 PM </option>'.
+					'<option value="15.30">03:30 PM </option>'.
+					'<option value="15.45">03:45 PM </option>'.
+					'<option value="16.00">04:00 PM </option>'.
+					'<option value="16.30">04:30 PM </option>'.
+					'<option value="17.00">05:00 PM </option>'.
+					'<option value="17.30">05:30 PM </option>'.
+					'<option value="18.00">06:00 PM </option>'.
+					'<option value="18.30">06:30 PM </option>'.
+					'<option value="19.00">07:00 PM </option>'.
+					'<option value="19.30">07:30 PM </option>'.
+					'<option value="20.00">08:00 PM </option>'.
+					'<option value="20.15">08:15 PM </option>'.
+					'<option value="20.30">08:30 PM </option>'.
+					'<option value="21.00">09:00 PM </option>'.
+					'<option value="21:30">09:30 PM </option>';
+		
+			return  $hours;
+		}
 }
 

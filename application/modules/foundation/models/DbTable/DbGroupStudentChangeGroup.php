@@ -104,16 +104,11 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					$array_checkbox=explode(',', $con['array_checkbox']);
 					$result = array_merge($array_checkbox,$identity);
 					$final_array = implode(",", $result);
-					//print_r($final_array);exit();
-					
 					$arra=array(
 						'array_checkbox'	=>	$final_array,
 							);
-					
 					$where = ' from_group='.$_data['from_group'].' and to_group='.$_data['to_group'];
-					
 					$this->update($arra, $where);
-					
 				}else{
 					$_arr= array(
 							'user_id'		=>$this->getUserId(),
@@ -182,7 +177,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					
 				$this->_name = 'rms_group';
 					$group=array(
-							'is_use'	=>0,
+							'is_use'	=>1,
 							'is_pass'	=>1,
 							);
 					$where=" id=".$_data['from_group'];

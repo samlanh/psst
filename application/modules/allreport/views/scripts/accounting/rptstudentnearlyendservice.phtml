@@ -5,10 +5,6 @@
 	$frm =  $this->form_search;
 ?>	
 <?php
-// 			$date1=date_create("2013-03-15");
-// 			$date2=date_create("2013-04-15");
-// 			$diff=date_diff($date1,$date2);
-// 			echo $diff->format("%R%a days");exit();
 ?>
 <div style="width: 28cm;margin: 0 auto;">
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentnearlyendservice')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -73,14 +69,11 @@
 								
 							</tr>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
-												
-													$date1=date_create($row['end']);
-													$date2=date_create($this->search['end_date']);
-													$diff=date_diff($date1,$date2);
-													$day=$diff->format("%R%a");
-// 													echo $diff->format('%R'); // use for point out relation: smaller/greater
-// 													echo $diff->days;
-												?>
+													
+							$end_dat=$row['end'];//date("Y-m-d");
+							$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
+							$day=(int)($total_day/(60*60*24));
+						?>
 							<tr class="hover" style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $i;?></td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['code'];?>&nbsp;</td>

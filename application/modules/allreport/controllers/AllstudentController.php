@@ -594,7 +594,27 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		
 	}
 	
-	
-	
+	public function rptRescheduleGroupAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' =>'',
+					'study_year' =>'',
+					'group' =>'',
+					'session' =>'',
+					'start_date'=>date("Y-m-d"),
+					'end_date'=>date("Y-m-d")
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
+		$this->view->rs = $rs_rows = $group->getAllRescheduleGroup($search);
+		$this->view->search=$search;
+	}
 	
 }

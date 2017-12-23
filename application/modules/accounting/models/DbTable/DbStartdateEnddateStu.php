@@ -15,7 +15,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 			     (SELECT  name_en  FROM rms_view WHERE  rms_view.key_code = se.term AND TYPE=6 AND STATUS=1 LIMIT 1)AS term,
 			      DATE_FORMAT(se.start_date, '%d-%m-%Y'),DATE_FORMAT(se.end_date, '%d-%m-%Y'),se.note,se.create_date,
 			      (SELECT first_name FROM `rms_users` WHERE id=se.user_id LIMIT 1) AS user_name 
-			    FROM  rms_startdate_enddate AS se
+			    FROM  rms_startdate_enddate_stu AS se
 			    WHERE 1";
 		$where = "";
     	if(!empty($search['search'])){
@@ -52,7 +52,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 							'status'	=>1,
 							'user_id'	=>$this->getUserId(),
 						);
-					$this->_name='rms_startdate_enddate';	
+					$this->_name='rms_startdate_enddate_stu';	
 					$this->insert($arr);
 				}
     		}
@@ -64,7 +64,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 	public function editStartdateEnddate($data,$id){
 		$db= $this->getAdapter();
 		try{
-			$this->_name="rms_startdate_enddate";
+			$this->_name="rms_startdate_enddate_stu";
 			$where = " status=1 ";
 			$this->delete($where);
 			
@@ -81,7 +81,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 							'status'	=>1,
 							'user_id'=>$this->getUserId(),
 						);
-					$this->_name='rms_startdate_enddate';	
+					$this->_name='rms_startdate_enddate_stu';	
 					$this->insert($arr);
 				}
 			}
@@ -92,7 +92,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 	
 	function getAllStartDateEndDate(){
 		$db = $this->getAdapter();
-		$sql=" select * from rms_startdate_enddate ";
+		$sql=" select * from rms_startdate_enddate_stu";
 		return $db->fetchAll($sql);
 	}
 	

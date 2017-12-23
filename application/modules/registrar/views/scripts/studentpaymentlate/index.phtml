@@ -75,10 +75,9 @@
 										                <td>&nbsp;<?php echo $tr->translate("AMOUNT_LATE"); ?>&nbsp;</td>
 													</tr>
 												<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
-													$date1=date_create($row['end']);
-													$date2=date_create($this->search['end_date']);
-													$diff=date_diff($date1,$date2);
-													$day=$diff->format("%R%a");
+													$end_dat=$row['end'];//date("Y-m-d");
+													$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
+													$day=(int)($total_day/(60*60*24));
 												?>
 													<tr style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
 														<td style="border: 1px solid #000;"><?php echo $i;?></td>

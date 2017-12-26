@@ -434,7 +434,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					`rms_student` AS st,
 					rms_student_attendence AS sta
 				WHERE 
-				gsd.status=1
+				sta.type=1
+				AND gsd.status=1
 				AND gsd.type=1
     			AND g.`id` = gsd.`group_id`
 				 AND sta.group_id = g.id 
@@ -515,9 +516,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					`rms_group_detail_student` AS gsd,
 					`rms_group` AS g,
 					`rms_student` AS st,
-					rms_student_discipline as sd
+					rms_student_attendence as sd
 				WHERE 
-					sd.group_id = g.id 
+					sd.type = 1 
+					AND sd.group_id = g.id 
 					AND sd.status=1
     				AND g.`id` = gsd.`group_id` 
     				AND st.`stu_id` = gsd.`stu_id` 
@@ -574,20 +576,35 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getStatusMistake($stu_id,$date_att,$group){
     	$db = $this->getAdapter();
+//     	$sql="SELECT
+// 			    	sd.`group_id`,
+// 			    	sdd.`mistake_type`,
+// 			    	sdd.description,
+// 			    	sd.`mistake_date`
+// 			    FROM 
+// 			    	`rms_student_discipline` AS sd,
+// 			    	`rms_student_discipline_detail` AS sdd
+// 			    WHERE 
+// 			    	sd.`id` = sdd.`discipline_id`
+// 			    	AND sdd.`stu_id` = $stu_id 
+//     				AND sd.`mistake_date` = '".$date_att."' 
+//     				AND sd.`group_id` = $group
+//     		";
     	$sql="SELECT
-			    	sd.`group_id`,
-			    	sdd.`mistake_type`,
-			    	sdd.description,
-			    	sd.`mistake_date`
-			    FROM 
-			    	`rms_student_discipline` AS sd,
-			    	`rms_student_discipline_detail` AS sdd
-			    WHERE 
-			    	sd.`id` = sdd.`discipline_id`
-			    	AND sdd.`stu_id` = $stu_id 
-    				AND sd.`mistake_date` = '".$date_att."' 
-    				AND sd.`group_id` = $group
-    		";
+	    	sd.`group_id`,
+	    	sdd.`attendence_status` as mistake_type,
+	    	sdd.description,
+	    	sd.`date_attendence` as mistake_date
+	    	FROM
+	    	`rms_student_attendence` AS sd,
+	    	`rms_student_attendence_detail` AS sdd
+	    	WHERE
+	    	sd.type=2
+	    	AND sd.`id` = sdd.`attendence_id`
+	    	AND sdd.`stu_id` = $stu_id
+	    	AND sd.`date_attendence` = '".$date_att."'
+	    	AND sd.`group_id` = $group
+    	";
     	
     	$where='';
 //     	echo $sql.$where.' LIMIT 1';//exit();
@@ -597,7 +614,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getTotalStatusMistake($stu_id,$date_att,$group){
     	$db = $this->getAdapter();
-//     	$sql="SELECT
+// old    	$sql="SELECT
 // 			    	sd.`group_id`,
 // 			    	sdd.`mistake_type`,
 // 			    	sdd.description,
@@ -615,22 +632,39 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 //     	$where='';
 // //     	echo $sql.$where.' LIMIT 1';//exit();
 //     	return $db->fetchRow($sql.$where.' LIMIT 1');
-		$sql="SELECT
-			    	sd.`group_id`,
-			    	sdd.`mistake_type`,
-			    	sdd.description,
-			    	sd.`mistake_date`,
-			    	sdd.`stu_id`,
-			    	COUNT(sdd.`mistake_type`) AS count_mistack			    	
-			    FROM 
-			    	`rms_student_discipline` AS sd,
-			    	`rms_student_discipline_detail` AS sdd
-			    WHERE 
-			    	sd.`id` = sdd.`discipline_id`
-			    	AND sdd.`stu_id` = $stu_id 
-    				AND sd.`group_id` = $group
-    			GROUP BY mistake_type
-			";
+// 		$sql="SELECT
+// 			    	sd.`group_id`,
+// 			    	sdd.`mistake_type`,
+// 			    	sdd.description,
+// 			    	sd.`mistake_date`,
+// 			    	sdd.`stu_id`,
+// 			    	COUNT(sdd.`mistake_type`) AS count_mistack			    	
+// 			    FROM 
+// 			    	`rms_student_discipline` AS sd,
+// 			    	`rms_student_discipline_detail` AS sdd
+// 			    WHERE 
+// 			    	sd.`id` = sdd.`discipline_id`
+// 			    	AND sdd.`stu_id` = $stu_id 
+//     				AND sd.`group_id` = $group
+//     			GROUP BY mistake_type
+// 			";
+    	$sql="SELECT
+	    	sd.`group_id`,
+	    	sdd.`attendence_status` as mistake_type,
+	    	sdd.description,
+	    	sd.`date_attendence` as mistake_date,
+	    	sdd.`stu_id`,
+	    	COUNT(sdd.`attendence_status`) AS count_mistack
+	    	FROM
+	    	`rms_student_attendence` AS sd,
+	    	`rms_student_attendence_detail` AS sdd
+	    	WHERE
+	    	sd.`type` =2
+	    	AND sd.`id` = sdd.`attendence_id`
+	    	AND sdd.`stu_id` = $stu_id
+	    	AND sd.`group_id` = $group
+	    	GROUP BY attendence_status
+    	";
 		return $db->fetchAll($sql);
     }
     function getAttendenceFoul($group_id,$stu_id){//កំហុស មកយឺត និងចេញមុន

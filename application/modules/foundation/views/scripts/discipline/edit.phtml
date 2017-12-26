@@ -281,7 +281,7 @@ function gender(sex){
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("MISTAKE_DATE");?></td>
-							<td><input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="discipline_date" constraints="{datePattern:'dd/MM/yyyy'}" name="discipline_date" type="text" value="<?php echo $this->row['mistake_date'];?>"></td>
+							<td><input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="discipline_date" constraints="{datePattern:'dd/MM/yyyy'}" name="discipline_date" type="text" value="<?php echo $this->row['date_attendence'];?>"></td>
 						    <td ><?php echo $tr->translate("STATUS");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
@@ -592,12 +592,12 @@ function initailize(){
 				str+='<td style="text-align: left;">&nbsp;<?php echo $row['stu_name'];?></td>';
 				str+='<td><?php echo $gender;?><input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="<?php echo $row['stu_id'];?>" ></td>';
 				str+='<td>';
-					str+='<input type="checkbox" <?php if (!empty($discipline_type['mistake_type'])){echo 'checked="checked"';}?> onclick="checkmistake('+inx+');" name="have_mistake'+inx+'" id="have_mistake'+inx+'"  style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("HAVE_MISTACK");?></label>';
+					str+='<input type="checkbox" <?php if (!empty($discipline_type['attendence_status'])){echo 'checked="checked"';}?> onclick="checkmistake('+inx+');" name="have_mistake'+inx+'" id="have_mistake'+inx+'"  style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("HAVE_MISTACK");?></label>';
 				str+='</td>';
 				str+='<td>';
-					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['mistake_type']==1){echo 'checked="checked"';}?>  name="mistake_type'+inx+'" id="mistake_types'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("SMALL_MISTACK");?></label>';
-					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['mistake_type']==2){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typem'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("MEDIUM_MISTACK");?></label>';
-					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['mistake_type']==3){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("BIG_MISTACK");?></label>';
+					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==1){echo 'checked="checked"';}?>  name="mistake_type'+inx+'" id="mistake_types'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("SMALL_MISTACK");?></label>';
+					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==2){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typem'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("MEDIUM_MISTACK");?></label>';
+					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==3){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("BIG_MISTACK");?></label>';
 				str+='</td>';
 				str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="<?php echo $discipline_type['description']; ?>" style="'+textareastyle+'"></td>';
 			str+='</tr>';

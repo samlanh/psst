@@ -20,7 +20,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
     	(SELECT
     	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS session,
     	sa.`date_attendence`,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sa.`subject_id` LIMIT 1) AS subject_name,sa.`status` FROM `rms_student_attendence` AS sa ";
-    	$where =' WHERE 1 ';
+    	$where =' WHERE sa.`type` = 1 ';
     	$from_date =(empty($search['start_date']))? '1': " sa.date_attendence >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sa.date_attendence <= '".$search['end_date']." 23:59:59'";
     	$where.= " AND ".$from_date." AND ".$to_date;
@@ -60,7 +60,8 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 					'for_semester'=> $_data['for_semester'],
 					'note'=>$_data['note'],
 					'status'=>$_data['status'],
-					'user_id'=>$this->getUserId()
+					'user_id'=>$this->getUserId(),
+					'type'=>1, //for attendence
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
@@ -103,7 +104,8 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 					'status'=>$_data['status'],
 					'for_semester'=> $_data['for_semester'],
 					'note'=>$_data['note'],
-					'user_id'=>$this->getUserId()
+					'user_id'=>$this->getUserId(),
+					'type'=>1, //for attendence
 			);
 			$where="id=".$_data['id'];
 			$db->getProfiler()->setEnabled(true);
@@ -130,6 +132,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 // 			exit();
 		  $db->commit();
 		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
 		}
    }
@@ -231,12 +234,13 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 	}
 	function getAttendencetByID($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM `rms_student_attendence` sa WHERE  sa.`id`=".$id;
+		$sql="SELECT * FROM `rms_student_attendence` sa WHERE  sa.`id`=".$id." AND sa.type=1";
 		return $db->fetchRow($sql);
 	}
 	function getDisciplineStatus($discipline_id,$stu_id){
 		$db = $this->getAdapter();
-		$sql="SELECT sdd.`mistake_type`,sdd.`stu_id`,sdd.`description`  FROM `rms_student_discipline_detail` AS sdd WHERE sdd.`discipline_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
+// 		$sql="SELECT sdd.`mistake_type`,sdd.`stu_id`,sdd.`description`  FROM `rms_student_discipline_detail` AS sdd WHERE sdd.`discipline_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
+		$sql="SELECT sdd.`attendence_status`,sdd.`stu_id`,sdd.`description`  FROM `rms_student_attendence_detail` AS sdd WHERE sdd.`attendence_id`=$discipline_id AND sdd.`stu_id`=$stu_id";
 		return $db->fetchRow($sql);
 	}
 	function getAllgroupStudy(){
@@ -263,6 +267,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 					rms_student_attendence as sa 
 				where 
 					sad.attendence_id = sa.id
+					and sa.type = 1
 					and sa.id = $att_id
 					and sad.stu_id = $stu_id
 			";

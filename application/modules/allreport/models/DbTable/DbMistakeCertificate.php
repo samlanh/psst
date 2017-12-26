@@ -144,7 +144,7 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 // 		$where.=" AND sd.mistake_date = '$date'";
 		$start_year = date("Y-01-01");
 		$end_year = date("Y-12-31");
-		$where.=" AND sd.mistake_date BETWEEN '$start_year' AND '$end_year'";
+// 		$where.=" AND sd.mistake_date BETWEEN '$start_year' AND '$end_year'";new
 // 		$from_date =(empty($search['start_date']))? '1': "sd.mistake_date >= '".$search['start_date']." 00:00:00'";
 // 		$to_date = (empty($search['end_date']))? '1': "sd.mistake_date <= '".$search['end_date']." 23:59:59'";
 // 		$where .= " AND ".$from_date." AND ".$to_date;
@@ -153,16 +153,18 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 	}
     function getAttendenceBydate($date,$group_id,$stu_id){
     	$db = $this->getAdapter();
-    	$sql="SELECT sade.*,sta.`date_attendence`,sta.`group_id`
+    	$sql="SELECT sade.*,sta.`date_attendence`,sta.`group_id`,
+			(SELECT st.`type` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `type`,
+			(SELECT st.`for_session` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `for_session`
 			FROM rms_student_attendence_detail AS sade,
 			`rms_student_attendence` AS sta
 			WHERE sta.`id` = sade.`attendence_id`";
     	//$date = date("Y-m-d",strtotime($date));
     	$where = "";
     	//$where.=" AND sta.`date_attendence` = '$date' AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id LIMIT 1";
-    	$start_year = date("Y-01-01");
-    	$end_year = date("Y-12-31");
-    	$where.=" AND sta.`date_attendence` BETWEEN '$start_year' AND '$end_year'";
+//     	$start_year = date("Y-01-01");
+//     	$end_year = date("Y-12-31");
+//     	$where.=" AND sta.`date_attendence` BETWEEN '$start_year' AND '$end_year'";
     	$where.=" AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id ";
 //     	return $db->fetchRow($sql.$where);
     	return $db->fetchAll($sql.$where);

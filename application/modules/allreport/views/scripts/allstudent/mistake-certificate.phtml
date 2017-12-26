@@ -185,10 +185,11 @@
 // 								$start_date = date("Y-m-d",strtotime($this->search['start_date']));
 // 								for ($b=0; $b<=$amount_da; $b++){
 // 									$date = date("d-m-Y",strtotime("$start_date $b day"));
-									$mistack = $db_mistack->getMistakeRecordByDate(null, $group_id, $stu_id);
+									//$mistack = $db_mistack->getMistakeRecordByDate(null, $group_id, $stu_id);
 									$attendences = $db_mistack->getAttendenceBydate(null, $group_id, $stu_id);
 								?>	
-									<?php if (!empty($attendences)){
+									<?php 
+									if (!empty($attendences)){
 										foreach ($attendences as $attendence){
 										$attendence_year='';
 										$sp_attendence_year = str_split(date("Y",strtotime($attendence['date_attendence'])));
@@ -205,53 +206,85 @@
 										foreach ($sp_att_d as $cos){
 											$att_d.=$number[$cos];
 										}
+										$permission = "";
+										$absent = "";
+										$small = "";
+										$medium = "";
+										$big = "";
+										$descri_added="";
+										if ($attendence['type']==1){ // attendence
+											if($attendence['attendence_status']==3){
+												$permission = $number['1'];$p++;
+											}
+											if($attendence['attendence_status']==2){
+												$absent = $number['1'];$at++;
+											}
+											if($attendence['attendence_status']==4 OR $attendence['attendence_status']==5){
+												$small = $number['1'];$s++;
+											}
+										}else{
+											if($attendence['attendence_status']==1){
+												$small = $number['1'];$s++;
+											}
+											if($attendence['attendence_status']==2){
+												$medium = $number['1'];$m++;
+											}
+											if($attendence['attendence_status']==3){
+												$big = $number['1'];$l++;
+											}
+											if ($attendence['for_session']==1){
+												$descri_added = "(ពេលព្រឹក)";
+											}else if ($attendence['for_session']==2){
+												$descri_added = "(ពេលល្ងាច)";
+											}
+										}
 									?>
 									<tr style="font-size:13px;">
 										<td align="center"><?php echo $att_d."-".$att_m."-".$attendence_year;?></td>
-										<td align="center"><?php if($attendence['attendence_status']==4 OR $attendence['attendence_status']==5){echo $number['1'];$s++;}?></td>
-										<td align="center"></td>
-										<td align="center"></td>
-										<td align="center"><?php if($attendence['attendence_status']==3){echo $number['1'];$p++;}?></td>
-										<td align="center"><?php if($attendence['attendence_status']==2){echo $number['1'];$at++;}?></td>
-										<td>&nbsp;<?php echo $attendence['description']?></td>
+										<td align="center"><?php echo $small;?></td>
+										<td align="center"><?php echo $medium;?></td>
+										<td align="center"><?php echo $big;?></td>
+										<td align="center"><?php echo $permission;?></td>
+										<td align="center"><?php echo $absent; ?></td>
+										<td>&nbsp;<?php echo $attendence['description']." ".$descri_added;?></td>
 										<td><?php echo "";?></td>
-									</tr>
+									</tr> 
 									<?php }
 									}?>
-									<?php if (!empty($mistack)) foreach ($mistack as $rs){
-										$descri_added='';
-										$msk_year='';
-										$sp_msk_year = str_split(date("Y",strtotime($rs['mistake_date'])));
-										foreach ($sp_msk_year as $cos){
-											$msk_year.=$number[$cos];
-										}
-										$msk_m='';
-										$sp_msk_m = str_split(date("m",strtotime($rs['mistake_date'])));
-										foreach ($sp_msk_m as $cos){
-											$msk_m.=$number[$cos];
-										}
-										$msk_d='';
-										$sp_msk_d = str_split(date("d",strtotime($rs['mistake_date'])));
-										foreach ($sp_msk_d as $cos){
-											$msk_d.=$number[$cos];
-										}
-										if ($rs['for_session']==1){
-											$descri_added = "(ពេលព្រឹក)";
-										}else if ($rs['for_session']==2){
-											$descri_added = "(ពេលល្ងាច)";
-										}
+									<?php //if (!empty($mistack)) foreach ($mistack as $rs){
+										//$descri_added='';
+										//$msk_year='';
+										//$sp_msk_year = str_split(date("Y",strtotime($rs['mistake_date'])));
+										//foreach ($sp_msk_year as $cos){
+											//$msk_year.=$number[$cos];
+										//}
+										//$msk_m='';
+										//$sp_msk_m = str_split(date("m",strtotime($rs['mistake_date'])));
+										//foreach ($sp_msk_m as $cos){
+											//$msk_m.=$number[$cos];
+										//}
+										//$msk_d='';
+										//$sp_msk_d = str_split(date("d",strtotime($rs['mistake_date'])));
+										//foreach ($sp_msk_d as $cos){
+											//$msk_d.=$number[$cos];
+										//}
+										//if ($rs['for_session']==1){
+											//$descri_added = "(ពេលព្រឹក)";
+										//}else if ($rs['for_session']==2){
+											//$descri_added = "(ពេលល្ងាច)";
+										//}
 									?>
-									<tr style="font-size:13px;">
-										<td align="center"><?php echo $msk_d."-".$msk_m."-".$msk_year;?></td>
-										<td align="center"><?php if($rs['mistake_type']==1){echo $number['1'];$s++;}?></td>
-										<td align="center"><?php if($rs['mistake_type']==2){echo $number['1'];$m++;}?></td>
-										<td align="center"><?php if($rs['mistake_type']==3){echo $number['1'];$l++;}?></td>
+									<!-- <tr style="font-size:13px;">
+										<td align="center"><?php //echo $msk_d."-".$msk_m."-".$msk_year;?></td>
+										<td align="center"><?php //if($rs['mistake_type']==1){echo $number['1'];$s++;}?></td>
+										<td align="center"><?php //if($rs['mistake_type']==2){echo $number['1'];$m++;}?></td>
+										<td align="center"><?php //if($rs['mistake_type']==3){echo $number['1'];$l++;}?></td>
 										<td align="center"></td>
 										<td align="center"></td>
-										<td>&nbsp;<?php echo $rs['description']." ".$descri_added;?></td>
-										<td><?php echo "";?></td>
-									</tr>
-									<?php }?>
+										<td>&nbsp;<?php //echo $rs['description']." ".$descri_added;?></td>
+										<td><?php //echo "";?></td>
+									</tr> -->
+									<?php //}?>
 							<?php //}?>
 						<?php //$i=0;$s=0;$m=0;$l=0;if(!empty($this->student_mistake)){foreach($this->student_mistake as $rs){$i++;?>
 							<!-- <tr style="font-size:13px;">

@@ -54,8 +54,8 @@
 							</style>
 								<tr>
 									<td colspan="3">
-									<?php $title=0;$year='';$group='';$hour=''; if(!empty($this->rs)) foreach ($this->rs As $rs){
-									    
+									<?php $title=0; $titles=0; $year='';$group='';$hour=''; if(!empty($this->rs)) foreach ($this->rs As $rs){
+										$schedule =	$db_sub->getSubleByYGS($rs['year_id'],$rs['group_id']);
 										?>
 										<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
 										<thead>
@@ -75,19 +75,24 @@
 											</tr>
 										</thead>
 										
-										<?php $session='';foreach($db_sub->getSubleByYGS($rs['year_id'],$rs['group_id']) As $rs_sub){
-										       if($rs_sub['from_hour']<=12){
-										       	  $session=$tr->translate("Morning");
-										       }else{
-										       	$session=$tr->translate("Afternoon");
-										       }
+										<?php $session='';foreach($schedule As $rs_sub){
 											?>
-											<?php if($title==0){?>
-											<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
-												<th colspan="6"><?php echo  $session?></th>
-											</tr>
-									        <?php 	$title=1;}
-									        
+											
+											<?php 
+											if($rs_sub['from_hour']<=12){
+												if($title==0){?>
+												<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
+													<th colspan="6"><?php echo  $tr->translate("Morning");?></th>
+												</tr>
+										        <?php $title=1;}
+											}else{
+												if($titles==0){
+									        ?>
+									        	<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
+													<th colspan="6"><?php echo  $tr->translate("Afternoon");?></th>
+												</tr>
+									        <?php $titles=1;}
+												}
 									        ?>
 										       <?php if($rs_sub['times']!=$hour){?>
 												<tr class="hover" style="font-size:11px; height: 20px;" align="center" >

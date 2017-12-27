@@ -29,13 +29,15 @@
 </div>
 	<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">	
 		<div id="divPrint">
-							<table style="background:#fff; margin: 0 auto;width: 100%">
+							<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
 								<tr>
 									<td width="25%" align="left">
 										<img style="width: 40%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 									</td>
 									<td align="center">
-										<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong><br />
+										<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("សាលាបញ្ញាសាស្រ្តអន្តរជាតិ សាខាសែនសុខ");?></strong><br />
+										<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family:initial;">Paññāsāstra International School-Sen Sok Campus</strong><br />
+										<strong style="font-weight:bold;color:#000; font-size: 13px;font-family:'Arial Black','Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong><br />
 									</td>
 									<td width="25%" align="right">
 									</td>
@@ -51,45 +53,47 @@
 								  display: table-header-group;
 								  page-break-inside:avoid; page-break-after:auto;
 								}
+								tr.head_schedule th {
+								    padding: 5px 0;
+								    text-align: center;
+								}
 							</style>
 								<tr>
 									<td colspan="3">
 									<?php $title=0; $titles=0; $year='';$group='';$hour=''; if(!empty($this->rs)) foreach ($this->rs As $rs){
 										$schedule =	$db_sub->getSubleByYGS($rs['year_id'],$rs['group_id']);
 										?>
-										<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
-										<thead>
-											<tr><th align="left" colspan="7" style="border:1px solid #fff;">Room:&nbsp;<?php echo $rs['room_name']?></th></tr>
-											<tr><th align="left" colspan="7" style="border-right:1px solid #fff;border-left:1px solid #fff;">Grade:&nbsp;<?php echo $rs['grade_name']?></th></tr>
-											<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
-												<th rowspan="2" width="15%"><?php echo $tr->translate("TIME");?></th>
-												<th colspan="5"><?php echo $tr->translate("DAYS");?></th>
-											</tr>
-											
-											<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
-												<th ><?php echo $tr->translate("Monday");?></th>
-												<th ><?php echo $tr->translate("Tuesday");?></th>
-												<th ><?php echo $tr->translate("Wednesday");?></th>
-												<th ><?php echo $tr->translate("Thursday");?></th>
-												<th ><?php echo $tr->translate("Friday");?></th>
-											</tr>
-										</thead>
+										<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;" >
+											<thead>
+												<tr><th align="left" colspan="7" style="border:1px solid #fff;">Room:&nbsp;<?php echo $rs['room_name']?></th></tr>
+												<tr><th align="left" colspan="7" style="border-right:1px solid #fff;border-left:1px solid #fff;">Grade:&nbsp;<?php echo $rs['grade_name']?></th></tr>
+												<tr class="head_schedule" style="font-size:12px;" align="center" >
+													<th rowspan="2" width="15%"><?php echo $tr->translate("TIME");?></th>
+													<th colspan="5"><?php echo $tr->translate("DAYS");?></th>
+												</tr>
+												
+												<tr class="head_schedule" style="font-size:12px;" align="center" >
+													<th ><?php echo $tr->translate("Monday");?></th>
+													<th ><?php echo $tr->translate("Tuesday");?></th>
+													<th ><?php echo $tr->translate("Wednesday");?></th>
+													<th ><?php echo $tr->translate("Thursday");?></th>
+													<th ><?php echo $tr->translate("Friday");?></th>
+												</tr>
+											</thead>
 										
-										<?php $session='';foreach($schedule As $rs_sub){
-											?>
-											
+										<?php $session='';foreach($schedule As $rs_sub){?>
 											<?php 
 											if($rs_sub['from_hour']<=12){
 												if($title==0){?>
-												<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
-													<th colspan="6"><?php echo  $tr->translate("Morning");?></th>
+												<tr  align="center" >
+													<th colspan="6" style="font-size:12px; padding: 5px 2px; text-decoration: underline;"><?php echo  $tr->translate("Morning");?></th>
 												</tr>
 										        <?php $title=1;}
 											}else{
 												if($titles==0){
 									        ?>
-									        	<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
-													<th colspan="6"><?php echo  $tr->translate("Afternoon");?></th>
+									        	<tr  align="center" >
+													<th colspan="6" style="font-size:12px; padding: 5px 2px; text-decoration: underline;"><?php echo  $tr->translate("Afternoon");?></th>
 												</tr>
 									        <?php $titles=1;}
 												}
@@ -98,7 +102,11 @@
 												<tr class="hover" style="font-size:11px; height: 20px;" align="center" >
 												<td align="center"><?php echo $rs_sub['times']?></td>
 												<?php foreach($db_sub->getSubleByHour($rs['year_id'],$rs['group_id'],$rs_sub['times']) As $rs_hour){?>
-													<td align="center"><?php echo  $rs_hour['teacher_name']."<br/>".$rs_hour['teacher_phone']."<br/>(".$rs_hour['subject_name'].")";?></td>
+													<td align="center" style="padding: 5px 2px;">
+													<?php if (!empty($rs_hour['teacher_name'])){echo $rs_hour['teacher_name'];}?>
+													<?php if (!empty($rs_hour['teacher_phone'])){echo "<br/>".$rs_hour['teacher_phone'];}?>
+													<?php if (!empty($rs_hour['subject_name'])){echo "<br/>(".$rs_hour['subject_name'].")";}?>
+													</td>
 												<?php }?>
 												</tr>
 												<?php }$hour=$rs_sub['times'];?>

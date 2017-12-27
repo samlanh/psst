@@ -1,97 +1,194 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
-
-<body>
-
-<table width="100%%" border="0">
-  <tr>
-    <td scope="col"><img src="logo.png" />	</td>
-    <td scope="col" style="text-align:center;color:#B02D99"><h1 style="margin-bottom: 2px;"><strong>KENT RIDGE INTERNATIONAL SCHOOL</strong></h1>
-   
-   <h2 style="margin-top: 0px;"><strong>Continual Assessment 2 Report 2017</strong></h2></td>
-  </tr>
-</table>
-
-<table width="100%%" border="0" style="margin-top:10px;">
-<tr>
-    <td scope="col">
-     <strong>Name</strong> : Huang Tianfu Ryan<br />
-     <strong>Class</strong> : Primary 6 </td>
-    <td scope="col" style="text-align:right"><strong>Date</strong> : 07-Oct-2017 <br />
-    <strong>Matriculation Card Number</strong> : 2016013</td>
-  </tr>
-</table>
-
-<hr width="100%" style="height: 2px; border-color: white; background: black;"/>
-
-<table width="100%" border="1" style="border-collapse: collapse;">
-  <tr style="background:#DAD1C0">
-    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">Subject</th>
-    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">CA2 Grade</th>
-    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">Behavior</th>
-    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">HomeWork</th>
-    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">Class Participation</th>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td style="text-align:center">&nbsp;</td>
-    <td style="text-align:center">&nbsp;</td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-</table>
-</body>
-</html>
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate("STUDENT_RESULT_SCORE_LIST")); 
+	$this->headTitle($tr->translate("STUDENT_RESULT_SCORE_LIST")); 
+	echo $this->headTitle();
+	$frm =  $this->form_search;
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	$day = array(
+		"Mon" =>'ច�?ន្ទ',
+		"Tue" =>'អង្គារ',
+		"Wed" =>'ពុធ',
+		"Thu" =>'ព្រហស្ប�?ិ�?',
+		"Fri" =>'សុក្រ',
+		"Sat" =>'សៅរ�?',
+		"Sun" =>'អាទិ�?្យ',
+	);
+	$month = array(
+				"01"=>"មករា",
+				"02"=>"កុម្ភៈ",
+				"03"=>"មីនា",
+				"04"=>"ម�?សា",
+				"05"=>"ឧសភា",
+				"06"=>"មិ�?ុនា",
+				"07"=>"កក្កដា",
+				"08"=>"សីហា",
+				"09"=>"កញ្ញា",
+				"10"=>"�?ុលា",
+				"11"=>"វិច្ឆិកា",
+				"12"=>"ធ្នូ"
+			);
+?>	
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
+dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+		    store:group_store,
+		    autoComplete: true,                        
+		    required:false,
+		    id: "group_name",
+		    name: "group_name",
+		    class:'fullside',  
+		    value:'<?php echo $this->search['group_name'];?>',         
+		    required:'true',
+		    placeHolder:"Selected Group Name",          
+		    onChange: function() {  
+		    }
+		}, "group_name");
+});
+</script>
+<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-list-monthly')); ?>" dojoType="dijit.form.Form" method="post">
+	<table style="width:28cm;margin: 0 auto;">
+		<tr> 
+			<td><?php echo $frm->getElement("title");?></td>
+			<td><?php echo $frm->getElement("study_year");?></td>
+			<td><input id="group_name" /></td>
+			<td><?php echo $frm->getElement("degree");?></td>
+			<td><?php echo $frm->getElement("grade");?></td>
+		</tr>
+		<tr>
+			<td><?php echo $frm->getElement("session");?></td>
+			<td><?php echo $frm->getElement("room");?></td>
+			<td>
+				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+					<option><?php echo $tr->translate("CHOOSE");?></option>
+					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+						<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+					<?php }}?>
+				</select>
+			</td>
+			<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+		</tr>
+	</table>
+</form>
+	<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+		<div id="divPrint">
+		<style type="text/css">
+			.style{
+				line-height: 20px; font-size: 12px !important;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+				
+			}
+			.padding{ padding: 0 1px !important;}
+			.padding td{padding: 0 1px !important;}
+			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+			tr{ page-break-inside:avoid; page-break-after:auto }
+			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+			.hover:hover{background:#ccc;}
+		</style>
+		
+		
+		
+		<table style="width:28cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+				<tr>
+					<td width="28%" align="left">
+						<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+					</td>
+					<td width="44%" align="center">
+						<h1 style="margin-bottom: 2px;"><strong>KENT RIDGE INTERNATIONAL SCHOOL</strong></h1>
+   							<h2 style="margin-top: 0px;"><strong>Continual Assessment 2 Report 2017</strong></h2> 
+					</td>
+					<td align="right" width="28%"></td>
+				</tr>
+				<tr>
+					<td colspan="3" id="exportExcel">
+					
+					<table width="100%%" border="0" style="margin-top:10px;">
+					<tr>
+					    <td scope="col">
+					     <strong>Name</strong> : Huang Tianfu Ryan<br />
+					     <strong>Class</strong> : Primary 6 </td>
+					    <td scope="col" style="text-align:right"><strong>Date</strong> : 07-Oct-2017 <br />
+					    <strong>Matriculation Card Number</strong> : 2016013</td>
+					  </tr>
+					</table>
+					
+					<hr width="100%" style="height: 2px; border-color: white; background: black;"/>
+					<br/>
+					
+						 <table width="100%" border="1" style="border-collapse: collapse;">
+							  <tr style="background:#DAD1C0">
+							    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">Subject</th>
+							    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">CA2 Grade</th>
+							    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">Behavior</th>
+							    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">HomeWork</th>
+							    <th  style="width:20%;padding-top:10px;padding-bottom:10px;">Class Participation</th>
+							  </tr>
+							  <tr>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td style="text-align:center">&nbsp;</td>
+							    <td style="text-align:center">&nbsp;</td>
+							  </tr>
+							  <tr>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							  </tr>
+							  <tr>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							  </tr>
+							  <tr>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							  </tr>
+							  <tr>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							  </tr>
+							  <tr>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							  </tr>
+							  <tr>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							  </tr>
+							  <tr>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							    <td>&nbsp;</td>
+							  </tr>
+							</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>

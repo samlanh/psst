@@ -230,7 +230,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
    	if($search['room']>0){
-   		$where.=" AND `g`.`room` =".$search['room'];
+   		$where.=" AND `g`.`room_id` =".$search['room'];
    	}
    	if($search['for_month']>0){
    		$where.= " AND s.for_month =".$search['for_month'];
@@ -238,6 +238,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
    	return $db->fetchAll($sql.$where.$order);
    }
+   
    public function getStundetScoreDetailGroup($search,$id,$limit){ // fro rpt-score
    	$db = $this->getAdapter();
    	$sql="SELECT
@@ -793,6 +794,58 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
    	$order = "  GROUP BY sd.`student_id` ORDER BY s.`reportdate`,sd.`group_id`,sd.`student_id` ASC";
+   	return $db->fetchAll($sql.$where.$order);
+   }
+   
+   public function getStundetScoreList($search){ // fro rpt-score
+   	$db = $this->getAdapter();
+   	$sql="SELECT s.`id`, s.`group_id`, g.`group_code`,title_score,s.for_month,s.for_semester,s.note,
+	   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')')
+	   	FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year
+	   	,(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+	   	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+	   	`g`.`semester` AS `semester`,
+	   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+	   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`, (SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month, s.for_semester,
+	   	s.reportdate
+	   	FROM `rms_teacherscore` AS s, `rms_group` AS g WHERE  g.`id`=s.`group_id` AND s.status = 1 AND s.type_score=1 ";
+   	$where='';
+   	//    	$from_date =(empty($search['for_month']))? '1': " s.formonth >= '".$search['for_month']." 00:00:00'";
+   	//    	$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
+   	//    	$where = " AND ".$from_date;
+   	if(!empty($search['title'])){
+   		$s_where=array();
+   		$s_search=addslashes(trim($search['title']));
+   		$s_where[]= " s.title_score LIKE '%{$s_search}%'";
+   		$s_where[]=" s.note LIKE '%{$s_search}%'";
+   		$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
+   		$where.=' AND ('.implode(' OR ', $s_where).')';
+   	}
+   	if(!empty($search['group_name'])){
+   		$where.= " AND g.id =".$search['group_name'];
+   	}
+   	if($search['degree']>0){
+   		$where.=" AND `g`.`degree` =".$search['degree'];
+   	}
+   	if($search['for_month']>0){
+   		$where.=" AND s.for_month =".$search['for_month'];
+   	}
+   	if($search['study_year']>0){
+   		$where.=" AND s.for_academic_year =".$search['study_year'];
+   	}
+   	if($search['grade']>0){
+   		$where.=" AND `g`.`grade` =".$search['grade'];
+   	}
+   	if($search['session']>0){
+   		$where.=" AND `g`.`session` =".$search['session'];
+   	}
+   	if($search['room']>0){
+   		$where.=" AND `g`.`room_id` =".$search['room'];
+   	}
+   	if($search['for_month']>0){
+   		$where.= " AND s.for_month =".$search['for_month'];
+   	}
+   	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
    	return $db->fetchAll($sql.$where.$order);
    }
   

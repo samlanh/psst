@@ -848,5 +848,62 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
    	return $db->fetchAll($sql.$where.$order);
    }
-  
+   public function getStundetInfo($id,$group_id){ // fro student score by teacher input
+   	$db = $this->getAdapter();
+   	$sql="SELECT tsd.*,
+	   	ts.`academic_id`,
+	   	ts.`group_id`,
+	   	g.`group_code`,
+	   	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+	   	ts.`for_academic_year`,
+	   	(SELECT month_kh FROM rms_month WHERE rms_month.id = ts.for_month LIMIT 1) AS for_month,
+	   	ts.`for_month`,ts.`for_semester`,ts.`for_year`,
+	   	ts.`date_input`,
+	   	(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS stu_khname,
+	   	(CASE WHEN sj.`subject_titlekh` IS NULL THEN sj.`subject_titleen` ELSE sj.`subject_titlekh` END) AS subject_title
+	   	FROM `rms_teacherscore_detail` AS tsd,
+	   	`rms_teacherscore` AS ts,
+	   	`rms_student` AS st,
+	   	`rms_group` AS g,
+	   	`rms_subject` AS sj
+	   	WHERE ts.`id`=tsd.`score_id`
+	   	AND st.`stu_id`=tsd.`student_id`
+	   	AND g.`id`=ts.`group_id`
+	   	AND sj.`id` = tsd.`subject_id`
+	   	AND tsd.`student_id` = $id and tsd.group_id = $group_id";
+   	$where='';
+   	$order = "  GROUP BY sj.id ASC 	LIMIT 1";
+   	return $db->fetchRow($sql.$where.$order);
+   }
+   public function getStundetScoreDetail($id,$group_id){ // fro student score by teacher input
+   	$db = $this->getAdapter();
+   	$sql="SELECT tsd.*,
+		ts.`academic_id`,
+		ts.`group_id`,
+		g.`group_code`,
+		ts.`for_academic_year`,
+		(SELECT month_kh FROM rms_month WHERE rms_month.id = ts.for_month LIMIT 1) AS for_month,
+		ts.`for_month`,ts.`for_semester`,ts.`for_year`,
+		ts.`date_input`,
+		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS stu_khname,
+		(CASE WHEN sj.`subject_titlekh` IS NULL THEN sj.`subject_titleen` ELSE sj.`subject_titlekh` END) AS subject_title
+		FROM `rms_teacherscore_detail` AS tsd,
+		`rms_teacherscore` AS ts,
+		`rms_student` AS st,
+		`rms_group` AS g,
+		`rms_subject` AS sj
+		WHERE ts.`id`=tsd.`score_id`
+		AND st.`stu_id`=tsd.`student_id`
+		AND g.`id`=ts.`group_id`
+		AND sj.`id` = tsd.`subject_id`
+		AND tsd.`student_id` = $id and tsd.group_id = $group_id";
+   	$where='';
+   	$order = "  GROUP BY sj.id ASC 	";
+//    	if($limit==2){
+//    		$limit = " limit 5";
+//    	}else{
+//    		$limit = " ";
+//    	}
+   	return $db->fetchAll($sql.$where.$order);
+   }
 }

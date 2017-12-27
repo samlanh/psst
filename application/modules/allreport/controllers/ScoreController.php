@@ -272,8 +272,12 @@ public function init()
     	}
     	
     	$this->view->search=$search;
+    	$stu_id=$this->getRequest()->getParam("id");
+    	$group_id=$this->getRequest()->getParam("group");
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundetScoreList($search);
+//     	$this->view->studentgroup = $db->getStundetScoreList($search);
+    	$this->view->scoreByStudent = $db->getStundetScoreDetail($stu_id,$group_id);
+    	$this->view->studentinfo = $db->getStundetInfo($stu_id,$group_id);
     	
     	$group = $db->getAllgroupStudyNotPass();
     	array_unshift($group, array ( 'id' => 0,'name' => 'ជ្រើសរើស'));

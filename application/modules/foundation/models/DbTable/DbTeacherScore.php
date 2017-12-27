@@ -471,6 +471,9 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 	
 	function getAllTeacherScore($search=null){
 		$db=$this->getAdapter();
+		
+		$session_t=new Zend_Session_Namespace('authteacher');
+		$teacher_id = $session_t->teacher_id;
 		$sql="SELECT s.id,s.title_score,
 		(SELECT name_en FROM `rms_view` WHERE TYPE=14 AND key_code =s.exam_type LIMIT 1) as exam_type,
 		(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
@@ -481,6 +484,9 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 		s.status
 		FROM rms_teacherscore AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1";
+		if (!empty($teacher_id)){
+			$sql.=" AND s.teacher_id=$teacher_id";
+		}
 		//before add more =>AND g.degree IN(1,2)
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
@@ -513,16 +519,17 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order);
 	}
 	
-	function existingReadyinputExamScore($group_id,$exam_type,$for_semster,$for_month){
-		$sql="SELECT id FROM `rms_teacherscore` WHERE group_id=$group_id AND exam_type=$exam_type AND for_semester=$for_semster AND for_month=$for_month";
+	function existingReadyinputExamScore($group_id,$exam_type,$for_semster,$for_month,$teacher_id){
+		$sql="SELECT id FROM `rms_teacherscore` WHERE group_id=$group_id AND exam_type=$exam_type AND for_semester=$for_semster AND for_month=$for_month AND teacher_id=$teacher_id";
 		return $this->getAdapter()->fetchOne($sql);
 	}
 	public function addTeacherStudentScore($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			
-			$id = $this->existingReadyinputExamScore($_data['group'], $_data['exam_type'], $_data['for_semester'], $_data['for_month']);
+			$session_t=new Zend_Session_Namespace('authteacher');
+			$teacher_id = $session_t->teacher_id;
+			$id = $this->existingReadyinputExamScore($_data['group'], $_data['exam_type'], $_data['for_semester'], $_data['for_month'],$teacher_id);
 			if(empty($id)){
 				$_arr = array(
 						'title_score'=>$_data['title'],
@@ -535,14 +542,14 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 						'for_academic_year'=>$_data['year_study'],
 						'for_semester'=>$_data['for_semester'],
 						'for_month'=>$_data['for_month'],
+						'teacher_id'=>$teacher_id,
 				);
 				$this->_name='rms_teacherscore';
 				$id=$this->insert($_arr);
 			}else{
 				return 1;
 			}
-			$session_t=new Zend_Session_Namespace('authteacher');
-			$teacher_id = $session_t->teacher_id;
+			
 				
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
@@ -678,6 +685,9 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			$session_t=new Zend_Session_Namespace('authteacher');
+			$teacher_id = $session_t->teacher_id;
+			
 			$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
@@ -690,14 +700,14 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 					'for_academic_year'=>$_data['year_study'],
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],
+					'teacher_id'=>$teacher_id,
 			);
 			$this->_name='rms_teacherscore';
 			$where="id=".$_data['score_id'];
 			$db->getProfiler()->setEnabled(true);
 			$this->update($_arr, $where);
 	
-			$session_t=new Zend_Session_Namespace('authteacher');
-			$teacher_id = $session_t->teacher_id;
+			
 			
 			$id=$_data['score_id'];
 			$this->_name='rms_teacherscore_detail';

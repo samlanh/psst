@@ -12,13 +12,7 @@
   <script src="<?php echo $this->baseUrl()."/collap/jquery-ui.js";?>"></script>
   <link rel="stylesheet" href="/resources/demos/style.css">
 </head>
-	<script>
-		dojo.require("dojo.NodeList-manipulate");
-		dojo.require("dijit.form.NumberTextBox");
-		dojo.require("dijit.form.DateTextBox");
-		dojo.require("dojo.data.ItemFileWriteStore");  
-		dojo.require("dijit.form.DateTextBox");
-	</script>
+	
 	<style>
 		select{ width:100%;}
 		fieldset{  background:none;}
@@ -26,7 +20,6 @@
 		table tr td.null-border{ background: #fff; border-left:none !important;}
 		table .set-style td,table .set-style th{ padding: 0px; border:1px solid #ccc;font-size: 12px;}
 		table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
-		
 		div.panel {
 		    padding: 0 18px;
 		    display: none;
@@ -42,11 +35,11 @@
 		    font-family: Verdana,Arial,sans-serif,'Khmer OS Battambang' !important;
 		}
 		.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-		    color: #212121 !important;
-		    background: #94d3e6 !important;
+		    color: #ffffff !important;
+		    background: #4f4f4f !important;
 		}
 		.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
-		    background: #cae694 !important;
+		    background: #607D8B !important;
 		}
 		.ui-accordion .ui-accordion-header {
 		    margin: 0 !important;
@@ -63,18 +56,45 @@
 		.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
 		    border-top-left-radius: 0px !important;
 		}
-	</style>
-	<style>
 		ul.blogscoresubject li{list-style: none;width:10%;float: left; }
 		ol.blogscoresubject li{list-style: none;width:10%;float: left; }
 		ol{margin: 10px;}
-	</style>
+		
+		.dijitPlaceHolder {
+		    font-size: 12px;
+		    line-height: 28px;
+		}
+		
+		.label_tit {
+		    font-size: 12px;
+		}
+		.fullside.smallf {
+		    font-size: 12px;
+		    height: 24px;
+		}
+		.fullside.smallf .dijitTextBox, 
+		.fullside.smallf .dijitValidationTextBox, 
+		.fullside.smallf .dijitInputField, .dijitInputContainer,
+		.fullside.smallf .dijitInputInner, 
+		.fullside.smallf dijitReset, 
+		.fullside.smallf .dijitRight, 
+		.fullside.smallf .dijitButtonNode, 
+		.fullside.smallf .dijitArrowButton, 
+		.fullside.smallf .dijitDownArrowButton, 
+		.fullside.smallf .dijitArrowButtonContainer {
+		    height: 25px;
+		}
+		</style>
 <script type="text/javascript">
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.store.Memory");
 dojo.require("dojo.data.ObjectStore");
 dojo.require('dojox.form.BusyButton');
+dojo.require("dijit.form.TextArea");
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.store.Memory");
+dojo.require("dijit.form.TextBox");
 dojo.ready(function(){
 	 getInfoBygroup();
 	 getSubjectByGroup();
@@ -90,7 +110,7 @@ dojo.ready(function(){
 		    required:'true',
 		    placeHolder:"Selected Study Years",          
 		    onChange: function() {  
-		    	filterStudentByCondition();
+		    	//filterStudentByCondition();
 		    }
 		}, "year_study");
 		new dijit.form.FilteringSelect({
@@ -164,19 +184,61 @@ function filterStudent(){
 					num++;
 					str+='<h3>'+inx+'. <?php echo $tr->translate("STUDENT_CODE")?> ('+data[i].stu_code+')'+'&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("STUDENT_NAME")?> ('+data[i].stu_name+')&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("SEX")?> ('+gender(data[i].sex)+')&nbsp;|&nbsp;<input   type="hidden" name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+data[i].stu_id+'"/></h3>';
 					str+='<div >';
-					str+='<div class="blogscoresubject" style="width:100%;">';
+					str+='<div class="blogscoresubject" style="width:100%; text-align: center;">';
 					var no=0;
                 		   for(j=0;j<subject.length;j++){
                 			   no++;
                 			   stringsname = subject[j].subject_titleen.replace(' ','');
-                			   str+='<div clss="main" style="width: 50%;display: inline-block; margin: 3px 0; vertical-align: top;">';
-		                			   str+='<div style="  display: inline; white-space: nowrap;text-align:left;padding:0px 5px; width:18%;font-size:12px;margin-top:8px;">'+no+' . '+subject[j].sub_name.substring(20, 0)+'</div>';
-		                               str+='<div style="width: 67%; float: right;"><input   dojoType="dijit.form.validateNumberTextBox" class="fullside" name="'+data[i].stu_id+stringsname+no+'" id="'+data[i].stu_id+stringsname+no+'"   value="" type="text" onkeypress="return AllowOnlyNumbers(event);"></div>';
-
-		                        	str+='<div id="main'+data[i].stu_id+stringsname+no+'" class="child_main" style="clear: both; text-align: right;">';
-	                              	 str+='</div>';
-	                           str+='</div>';
-	                           getChildren(subject[j].subject_id,data[i].stu_id,+data[i].stu_id+stringsname+no);
+                			   str+='<div clss="main" style="text-align: left; width: 45%;display: inline-block; margin: 3px 0; vertical-align: top; margin-right:15px;">';
+              			   		str+='<fieldset style=" padding: 10px; background: #fff;   border: solid 1px #008;"><legend align="left" style="font-size: 12px; color: #008;"><strong>'+no+' . '+subject[j].sub_name.substring(20, 0)+'</strong></legend>';
+   	                               str+='<div style="width: 45%;display: inline-block;margin-right: 15px;">';
+   	                              	 str+='<input dojoType="dijit.form.NumberTextBox" class="fullside" placeholder="Score" name="'+data[i].stu_id+stringsname+no+'" id="'+data[i].stu_id+stringsname+no+'"   value="" type="text" onkeypress="return AllowOnlyNumbers(event);">';
+   		                           str+='</div>';
+   		                           str+='<div style="width: 47%; display: inline-block;">';
+   		                         	  str+='<input dojoType="dijit.form.TextBox" class="fullside" placeholder="Comment" name="comment'+data[i].stu_id+stringsname+no+'" id="comment'+data[i].stu_id+stringsname+no+'" value="" type="text" >';
+   		                           str+='</div>';
+   		                           str+='<div style="width: 100%; clear:both; margin-top: 15px;">';
+   		                          		str+='<div class="label_tit" style="width: 30%; float:left; padding-right: 5px;">Behavior</div>';
+   		                          		str+='<div class="label_tit" style="width: 30%; float:left; padding-right: 5px;">Home Work</div>';
+   		                          		str+='<div class="label_tit" style="width: 30%; float:left; padding-right: 5px;">Class Participation</div>';
+   		                           str+='</div>';
+   		                           str+='<div style="width: 100%; clear:both; margin-top: 20px;">';
+   		                          	 	str+='<div style="width: 30%; float:left; padding-right: 5px;">';
+   			                          	 	str+='<select class="fullside smallf" dojoType="dijit.form.FilteringSelect" placeholder="Behavior" id="behavior'+data[i].stu_id+stringsname+no+'" name="behavior'+data[i].stu_id+stringsname+no+'">';
+   				                          	 	str+='<option value="1">Poor</option>';
+   				                          	 	str+='<option value="2">Very Poor</option>';
+   				                          	 	str+='<option value="3" selected="selected">Good</option>';
+   				                          	 	str+='<option value="4">Very Good</option>';
+   				                          	 	str+='<option value="5">Excellent</option>';
+   			                          	 	str+='</select>';
+   		                          	 	//str+='<input dojoType="dijit.form.TextBox" class="fullside" placeholder="Behavior" name="behavior'+data[i].stu_id+stringsname+no+'" id="behavior'+data[i].stu_id+stringsname+no+'" value="" type="text" >';
+   			                          	str+='</div>';
+   			                          	str+='<div style="width: 30%; float:left; padding-right: 5px;">';
+   				                          	str+='<select class="fullside smallf" dojoType="dijit.form.FilteringSelect" placeholder="Home Work" id="homework'+data[i].stu_id+stringsname+no+'" name="homework'+data[i].stu_id+stringsname+no+'">';
+   				                          	 	str+='<option value="1">Poor</option>';
+   				                          	 	str+='<option value="2">Very Poor</option>';
+   				                          	 	str+='<option value="3" selected="selected">Good</option>';
+   				                          	 	str+='<option value="4">Very Good</option>';
+   				                          	 	str+='<option value="5">Excellent</option>';
+   			                          	 	str+='</select>';
+   		                          	 		//str+='<input dojoType="dijit.form.TextBox" class="fullside" placeholder="Home Work" name="homework'+data[i].stu_id+stringsname+no+'" id="homework'+data[i].stu_id+stringsname+no+'" value="" type="text" >';
+   			                          	str+='</div>';
+   			                          	str+='<div style="width: 30%; float:left; padding-right: 5px;">';
+   				                        	str+='<select class="fullside smallf" dojoType="dijit.form.FilteringSelect" placeholder="Class Participation" id="classprticipate'+data[i].stu_id+stringsname+no+'" name="classprticipate'+data[i].stu_id+stringsname+no+'">';
+   				                          	 	str+='<option value="1">Poor</option>';
+   				                          	 	str+='<option value="2">Very Poor</option>';
+   				                          	 	str+='<option value="3" selected="selected">Good</option>';
+   				                          	 	str+='<option value="4">Very Good</option>';
+   				                          	 	str+='<option value="5">Excellent</option>';
+   			                          	 	str+='</select>';
+   		                          	 		//str+='<input dojoType="dijit.form.TextBox" class="fullside" placeholder="Class Participation" name="classprticipate'+data[i].stu_id+stringsname+no+'" id="classprticipate'+data[i].stu_id+stringsname+no+'" value="" type="text" >';
+   			                          	str+='</div>';
+   			                          	
+   		                           str+='</div>';
+   		                           str+='<div id="main'+data[i].stu_id+stringsname+no+'" class="child_main" style="clear: both; text-align: right;">';
+                                	   str+='</div>';
+                             str+='</div>';
+	                           getChildren(subject[j].subject_id , data[i].stu_id , +data[i].stu_id+stringsname+no , stringsname , no);
                       	 	}
 					str+='</div>';
 					str+='</div>';
@@ -188,8 +250,13 @@ function filterStudent(){
 					}
 				}
 				str+='</div>';
-				document.getElementById("liststudent").innerHTML = str;
-				 $( "#accordion" ).accordion();
+				dojo.query("#liststudent").append(str);
+				dojo.html.set(dojo.byId("liststudent"),str , {
+				     parseContent: true,
+				});
+				//document.getElementById("liststudent").innerHTML = str;
+				
+				 $("#accordion").accordion();
 	       }else{
 	    	   $('#identity').val('');
 	    	   document.getElementById("liststudent").innerHTML = '';
@@ -206,12 +273,17 @@ function gender(sex){
 	return sex;
 }
 var old_group = '<?php echo $this->row_g['group_id'];?>';
+var firstinitail=1;
 function filterStudentByCondition(){
 	
 	var new_group = dijit.byId('group').get('value');
 
 	if(old_group == new_group){
-		filterStudentOld();
+		if(firstinitail!==1){
+			filterStudentOld();
+		}else{
+			firstinitail=2;
+		}
 	}else{
 		filterStudent();
 	}
@@ -231,19 +303,58 @@ function filterStudentOld(){
 		num++;
 		str+='<h3>'+inx+'. <?php echo $tr->translate("STUDENT_CODE")?> (<?php echo $rs["stu_code"] ?>)'+'&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("STUDENT_NAME")?> (<?php echo $rs["student_name"] ?>)&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("SEX")?> ('+gender(<?php echo $rs["sex"]?>)+')&nbsp;|&nbsp;<input   type="hidden" name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="<?php echo $rs["student_id"] ?>"/></h3>';
 		str+='<div >';
-			str+='<div class="blogscoresubject" style="width:100%;">';
+			str+='<div class="blogscoresubject" style="width:100%; text-align: center;">';
 			var no=0;
 	        	<?php $j =0;
 	        	foreach ($score as $rss){
 	        		if($rs["student_id"]==$rss["student_id"]){
 	        	?>
 	        	<?php if($rss["is_parent"]== 1){ $j=$j+1;?>
-	        	no = '<?php echo $j;?>';
+	        	var no = '<?php echo $j;?>';
 	        	
 	            stringsname = '<?php echo str_replace(' ','',$rss['subject_titleen'])?>';
 	            str+='<div clss="main" style="width: 50%;display: inline-block; margin: 3px 0; vertical-align: top;">';
-		       			  str+='<div style="  display: inline; white-space: nowrap;text-align:left;padding:0px 5px; width:18%;font-size:12px;margin-top:8px;"><?php echo $j.".".$rss['subject_titlekh']?></div>';
-		                  str+='<div style="width: 67%; float: right;"><input   dojoType="dijit.form.validateNumberTextBox" class="fullside" name="<?php echo $rs["student_id"] ?>'+stringsname+no+'" id="<?php echo $rs["student_id"] ?>'+stringsname+no+'"   value="<?php echo $rss["score"] ?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></div>';
+	           		 str+='<fieldset style=" padding: 10px; background: #fff;   border: solid 1px #008;"><legend align="left" style="font-size: 12px; color: #008;"><strong><?php echo $j.".".$rss['subject_titlekh']?></strong></legend>';
+		                 	str+='<div style="width: 45%;display: inline-block;margin-right: 15px; font-size:12px;">';
+		                 		str+='<input dojoType="dijit.form.NumberTextBox" class="fullside" name="<?php echo $rs["student_id"] ?>'+stringsname+no+'" id="<?php echo $rs["student_id"] ?>'+stringsname+no+'"   value="<?php echo $rss["score"] ?>" type="text" onkeypress="return AllowOnlyNumbers(event);">';
+	                    	str+='</div>';
+	                     	str+='<div style="width: 47%; display: inline-block; font-size:12px;">';
+	                    	  str+='<input dojoType="dijit.form.TextBox" class="fullside" placeholder="Comment" name="comment<?php echo $rs["student_id"] ?>'+stringsname+no+'" id="comment<?php echo $rs["student_id"] ?>'+stringsname+no+'" value="<?php echo $rss["comment"] ?>" type="text" >';
+	                     	str+='</div>';
+	                      	str+='<div style="width: 100%; clear:both; margin-top: 15px;">';
+		                  		str+='<div class="label_tit" style="width: 30%; float:left; padding-right: 5px;">Behavior</div>';
+		                  		str+='<div class="label_tit" style="width: 30%; float:left; padding-right: 5px;">Home Work</div>';
+		                  		str+='<div class="label_tit" style="width: 30%; float:left; padding-right: 5px;">Class Participation</div>';
+		                   str+='</div>';
+		                   str+='<div style="width: 100%; clear:both; margin-top: 20px;">';
+                    	 	str+='<div style="width: 30%; float:left; padding-right: 5px;">';
+                        	 	str+='<select class="fullside smallf" dojoType="dijit.form.FilteringSelect" placeholder="Behavior" id="behavior<?php echo $rs["student_id"] ?>'+stringsname+no+'" name="behavior<?php echo $rs["student_id"] ?>'+stringsname+no+'">';
+	                        	 	str+='<option value="1" <?php if ($rss["behavior_comment"]==1){ echo 'selected="selected"';} ?> >Poor</option>';
+	                          	 	str+='<option value="2" <?php if ($rss["behavior_comment"]==2){ echo 'selected="selected"';} ?> >Very Poor</option>';
+	                          	 	str+='<option value="3" <?php if ($rss["behavior_comment"]==3){ echo 'selected="selected"';} ?> >Good</option>';
+	                          	 	str+='<option value="4" <?php if ($rss["behavior_comment"]==4){ echo 'selected="selected"';} ?> >Very Good</option>';
+	                          	 	str+='<option value="5" <?php if ($rss["behavior_comment"]==5){ echo 'selected="selected"';} ?> >Excellent</option>';
+                        	 	str+='</select>';
+                        	str+='</div>';
+                        	str+='<div style="width: 30%; float:left; padding-right: 5px;">';
+	                          	str+='<select class="fullside smallf" dojoType="dijit.form.FilteringSelect" placeholder="Home Work" id="homework<?php echo $rs["student_id"] ?>'+stringsname+no+'" name="homework<?php echo $rs["student_id"] ?>'+stringsname+no+'">';
+		                          	str+='<option value="1" <?php if ($rss["homework_comment"]==1){ echo 'selected="selected"';} ?> >Poor</option>';
+	                          	 	str+='<option value="2" <?php if ($rss["homework_comment"]==2){ echo 'selected="selected"';} ?> >Very Poor</option>';
+	                          	 	str+='<option value="3" <?php if ($rss["homework_comment"]==3){ echo 'selected="selected"';} ?> >Good</option>';
+	                          	 	str+='<option value="4" <?php if ($rss["homework_comment"]==4){ echo 'selected="selected"';} ?> >Very Good</option>';
+	                          	 	str+='<option value="5" <?php if ($rss["homework_comment"]==5){ echo 'selected="selected"';} ?> >Excellent</option>';
+                        	 	str+='</select>';
+                        	str+='</div>';
+                        	str+='<div style="width: 30%; float:left; padding-right: 5px;">';
+	                        	str+='<select class="fullside smallf" dojoType="dijit.form.FilteringSelect" placeholder="Class Participation" id="classprticipate<?php echo $rs["student_id"] ?>'+stringsname+no+'" name="classprticipate<?php echo $rs["student_id"] ?>'+stringsname+no+'">';
+		                        	str+='<option value="1" <?php if ($rss["class_participate_comment"]==1){ echo 'selected="selected"';} ?> >Poor</option>';
+	                          	 	str+='<option value="2" <?php if ($rss["class_participate_comment"]==2){ echo 'selected="selected"';} ?> >Very Poor</option>';
+	                          	 	str+='<option value="3" <?php if ($rss["class_participate_comment"]==3){ echo 'selected="selected"';} ?> >Good</option>';
+	                          	 	str+='<option value="4" <?php if ($rss["class_participate_comment"]==4){ echo 'selected="selected"';} ?> >Very Good</option>';
+	                          	 	str+='<option value="5" <?php if ($rss["class_participate_comment"]==5){ echo 'selected="selected"';} ?> >Excellent</option>';
+                        	 	str+='</select>';
+                        	str+='</div>';
+                     str+='</div>';
 		                  str+='<div id="main<?php echo $rs["student_id"] ?>'+stringsname+no+'" class="child_main" style="clear: both; text-align: right;">';
 								<?php $result_score = $db_score->getStudentScoreChildSubj($this->score_id, $rs["student_id"], $rss['subject_id']);
 									if (!empty($result_score)){ $k=0; foreach ($result_score as $child){ $k++;
@@ -255,7 +366,7 @@ function filterStudentOld(){
 		       str+='</div>';
 	       	 	<?php }?>
 		<?php }}?>
-			str+='</div>';
+			str+='</div></fieldset>	';
 		str+='</div>';
 			    if(inx!=1) {//identity set value 1,2,3,4,5
 					var identity = $('#identity').val();
@@ -265,7 +376,11 @@ function filterStudentOld(){
 					}
 			<?php } ?>
 	str+='</div>';
-		document.getElementById("liststudent").innerHTML = str;
+	dojo.query("#liststudent").append(str);
+	dojo.html.set(dojo.byId("liststudent"),str , {
+	     parseContent: true,
+	});
+		//document.getElementById("liststudent").innerHTML = str;
 		$( "#accordion" ).accordion();
 }
 </script>
@@ -280,114 +395,127 @@ function filterStudentOld(){
 <table cellspacing="10" style="margin: 0 auto;width:100%;" >
 	<tr>
 		<td>
-		<fieldset>
-					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("EDIT_STUDENT_SCORE");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%; background:#DFF7FD;" cellspacing="10" broder 1>
+			<fieldset style=" background: #fff;   border: solid 1px #008;">
+					<legend align="center" style="font-size: 14px; color: #008;"><strong><?php echo $tr->translate("EDIT_STUDENT_SCORE");?></strong></legend>
+					<table style="margin: 0 auto; width: 100%; " cellspacing="10" broder 1>
 						<tr>
-							<td><?php echo $tr->translate("TITLE");?></td>
-							<td>
-								<input type="text" name="title" id="title" class="fullside" value="<?php echo $this->score['title_score'];?>" required="1" dojoType="dijit.form.ValidationTextBox" />
+							<td style="vertical-align: top;">
+								<table style="margin: 0 auto; width: 100%;" cellspacing="5">
+									<tr>
+										<td><?php echo $tr->translate("TITLE");?></td>
+										<td>
+											<input type="text" name="title" id="title" class="fullside" value="<?php echo $this->score['title_score'];?>" required="1" dojoType="dijit.form.ValidationTextBox" />
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("GROUP");?>*</td>
+										<td>
+											<select class="fullside" tabindex="15" name="group" id="group" readOnly="readOnly" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup(); getInfoBygroup();">
+												<?php if(!empty($this->group))foreach ($this->group as $row){?>
+												<option value="<?php echo $row['id']?>" <?php if ($row['id']==$this->score['group_id']){ echo "selected='selected'";}?>><?php echo $row['name']?></option>
+												<?php }?>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td ><?php echo $tr->translate("STUDY_YEAR");?></td>
+										<td>
+											<input id="year_study" />
+										</td>
+									</tr>
+									<tr>
+										<td ><?php echo $tr->translate("DEGREE");?></td>
+										<td>
+											<select id="degree" name="degree" onchange="filterGrade();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+												<option value="-1"> ------ select degree---------</option>
+											<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
+												<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
+											<?php }}?>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td ><?php echo $tr->translate("GRADE");?></td>
+										<td>
+											<input id="grade" />
+											 <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("SESSION");?></td>
+										<td>
+											<select id="session" name="session" onchange="filterStudentByCondition();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+												<option value="-1"> ------ select session---------</option>
+											<?php if(!empty($this->session)){foreach ($this->session as $session){?>
+												<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
+											<?php }}?>
+											</select>
+										</td>
+									</tr>
+								</table>
 							</td>
-							<td><?php echo $tr->translate("GROUP");?>*</td>
-							<td>
-								<select class="fullside" tabindex="15" name="group" id="group" readOnly="readOnly" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup(); getInfoBygroup();">
-									<?php if(!empty($this->group))foreach ($this->group as $row){?>
-									<option value="<?php echo $row['id']?>" <?php if ($row['id']==$this->score['group_id']){ echo "selected='selected'";}?>><?php echo $row['name']?></option>
-									<?php }?>
-								</select>
-							</td>
-							<td ><?php echo $tr->translate("STUDY_YEAR");?></td>
-							<td>
-								<input id="year_study" />
+							<td style="vertical-align: top;">
+								<table style="margin: 0 auto; width: 100%;" cellspacing="5">
+									<tr>
+										<td><?php echo $tr->translate("EXAM_TYPE");?></td>
+										<td>
+										   <select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
+										   		<option value="1" <?php if($this->score['exam_type']==1){echo "selected";} ?>>ប្រចាំខែ</option>
+										   		<option value="2" <?php if($this->score['exam_type']==2){echo "selected";} ?>>ប្រលងឆមាស</option>
+										   </select>
+										</td>
+									</tr>
+									<tr>
+										<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
+										<td>
+											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+												<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+													<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->score['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+												<?php }}?>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
+										<td>
+											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+												<option value="1" <?php if ($this->score['for_semester']==1){ echo "Selected='selected'";}?>>ទី 1</option>
+												<option value="2" <?php if ($this->score['for_semester']==2){ echo "Selected='selected'";}?>>ទី 2</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("NOTE");?></td>
+										<td>
+											<input tabindex="20"  class="fullside" dojoType="dijit.form.Textarea"  id="note" name="note" value="<?php echo $this->score['note'];?>" type="text" style="min-height: 70px;" >
+										</td>
+									</tr>
+									<tr>
+										<td style="white-space: nowrap;"><?php echo $tr->translate("STATUS");?></td>
+										<td>
+											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
+													<option value="1" <?php if ($this->score['status']==1){ echo "Selected='selected'";}?>>ប្រើប្រាស់</option>
+													<option value="0" <?php if ($this->score['status']==0){ echo "Selected='selected'";}?>>មិនប្រើប្រាស់</option>
+											</select>
+										</td>
+									</tr>
+								</table>
 							</td>
 						</tr>
 						<tr>
-							<td ><?php echo $tr->translate("DEGREE");?></td>
-							<td>
-								<select id="degree" name="degree" onchange="filterGrade();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
-									<option value="-1"> ------ select degree---------</option>
-								<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
-									<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
-								<?php }}?>
-								</select>
-							</td>
-							<td ><?php echo $tr->translate("GRADE");?></td>
-							<td>
-								<input id="grade" />
-								 <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
-							</td>
-							<td><?php echo $tr->translate("SESSION");?></td>
-							<td>
-								<select id="session" name="session" onchange="filterStudentByCondition();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
-									<option value="-1"> ------ select session---------</option>
-								<?php if(!empty($this->session)){foreach ($this->session as $session){?>
-									<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
-								<?php }}?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("EXAM_TYPE");?></td>
-							<td>
-							   <select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
-							   		<option value="1" <?php if($this->score['exam_type']==1){echo "selected";} ?>>ប្រចាំខែ</option>
-							   		<option value="2" <?php if($this->score['exam_type']==2){echo "selected";} ?>>ប្រលងឆមាស</option>
-							   		<?php //if(!empty($this->room)){foreach ($this->room as $room){?>
-							   		<!-- <option value="<?php //echo $room['id'];?>"><?php //echo $room['name'];?></option> -->
-							   		<?php //}}?>
-							   </select>
-							</td>
-							<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
-							<td>
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
-									<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-										<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->score['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
-									<?php }}?>
-								</select>
-							</td>
-							<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
-							<td>
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
-									<option value="1" <?php if ($this->score['for_semester']==1){ echo "Selected='selected'";}?>>ទី 1</option>
-									<option value="2" <?php if ($this->score['for_semester']==2){ echo "Selected='selected'";}?>>ទី 2</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("NOTE");?></td>
-							<td colspan="3"><textarea class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea></td>
-							<td style="white-space: nowrap;"><?php echo $tr->translate("STATUS");?></td>
-							<td>
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
-										<option value="1" <?php if ($this->score['status']==1){ echo "Selected='selected'";}?>>ប្រើប្រាស់</option>
-										<option value="0" <?php if ($this->score['status']==0){ echo "Selected='selected'";}?>>មិនប្រើប្រាស់</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="8">
+							<td colspan="2">
 								<label id="liststudent"></label>
 							</td>
 						</tr>
-					</table>
-					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
-						<thead>
-							<tr>
-								<td colspan="8" align="left">
-									<input type="hidden" name="identity" id="identity"  value="" >
-								 </td>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<td colspan="8" align="center">
-								 	<input iconClass="dijitIconClear" type="reset" value="" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+						<tr>
+							<td colspan="2" style="text-align: center;">
+								<input type="hidden" name="identity" id="identity"  value="" >
+								<input iconClass="dijitIconClear" type="reset" value="" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 									<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
-								</td>
-							</tr>
-						</tfoot>
-				 </table>
+							</td>
+						</tr>
+					</table>
 		</fieldset>		
 		</td>
 	</tr>

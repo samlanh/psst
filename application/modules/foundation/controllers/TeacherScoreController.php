@@ -7,7 +7,7 @@ class Foundation_TeacherScoreController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-			$db = new Foundation_Model_DbTable_DbScore();
+			$db = new Foundation_Model_DbTable_DbTeacherScore();
 			$this->view->g_all_name=$db->getGroupSearch();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
@@ -25,13 +25,13 @@ class Foundation_TeacherScoreController extends Zend_Controller_Action {
 						'end_date'=>date('Y-m-d'));
 			}
 			$this->view->search = $search;
-			$rs_rows = $db->getAllScore($search);
+			$rs_rows = $db->getAllTeacherScore($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("TITLE","EXAM_TYPE","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 			$link=array(
-					'module'=>'foundation','controller'=>'score','action'=>'edit',
+					'module'=>'foundation','controller'=>'teacherscore','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('exam_type'=>$link,'title_score'=>$link,'student_no'=>$link,'student_id'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
 		
@@ -45,6 +45,83 @@ class Foundation_TeacherScoreController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 	public	function addAction(){
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$db = new Foundation_Model_DbTable_DbTeacherScore();
+			try {
+				$rs =  $db->addTeacherStudentScore($_data);
+				if(isset($_data['save_new'])){
+					if ($rs==1){
+						Application_Form_FrmMessage::Sucessfull("Can't Input Score. It's already input.","/foundation/teacherscore/add");
+					}
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/teacherscore/add");
+				}else {
+					if ($rs==1){
+						Application_Form_FrmMessage::Sucessfull("Can't Input Score. It's already input.","/foundation/teacherscore");
+					}
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/teacherscore");
+				}
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->row_year=$db_global->getAllYear();
+		$this->view->session=$db_global->getSession();
+		$this->view->degree=$db_global->getDegree();
+	
+		$db_global=new Application_Model_DbTable_DbGlobal();
+	
+		$session_t=new Zend_Session_Namespace('authteacher');
+		$teacher_id = $session_t->teacher_id;
+	
+		$result= $db_global->getAllgroupStudy($teacher_id);
+		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+		$this->view->group = $result;
+		$this->view->room = $row =$db_global->getAllRoom();
+			
+		$db = new Foundation_Model_DbTable_DbScore();
+		$this->view->month = $db->getAllMonth();
+	}
+	public	function editAction(){
+		$id=$this->getRequest()->getParam('id');
+		$_model = new Foundation_Model_DbTable_DbTeacherScore();
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$_data['score_id']=$id;
+			try {
+				if(isset($_data['save_close'])){
+					$rs =  $_model->updateTeacherStudentScore($_data);
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/teacherscore");
+				}
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		$this->view->score_id = $id;
+		$this->view->score = $_model->getScoreTeacherById($id);
+		$this->view->student= $_model->getStudentSccoreforEditTeacherScore($id);
+		$this->view->rows_scor=$_model->getScoreStudentsTeacherscore($id);
+		$data=$this->view->rows_detail=$_model->getSubjectByIdTeacherScore($id);
+		$this->view->row_g=$_model->getGroupStudentTeacherScore($id);
+	
+		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->row_year=$db_global->getAllYear();
+		$this->view->session=$db_global->getSession();
+		$this->view->degree=$db_global->getDegree();
+	
+		$db_global=new Application_Model_DbTable_DbGlobal();
+		$result = $db_global->getAllgroupStudy();
+		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+		$this->view->group = $result;
+		$this->view->room = $row =$db_global->getAllRoom();
+	
+		$db = new Foundation_Model_DbTable_DbScore();
+		$this->view->month = $db->getAllMonth();
+	}
+	public	function addscoreAction(){
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			$db = new Foundation_Model_DbTable_DbTeacherScore();
@@ -79,7 +156,7 @@ class Foundation_TeacherScoreController extends Zend_Controller_Action {
 		$db = new Foundation_Model_DbTable_DbScore();
 		$this->view->month = $db->getAllMonth();
 	}
-	public	function editAction(){
+	public	function editscoreAction(){
 		$id=$this->getRequest()->getParam('id');
 		$_model = new Foundation_Model_DbTable_DbTeacherScore();
 		if($this->getRequest()->isPost()){

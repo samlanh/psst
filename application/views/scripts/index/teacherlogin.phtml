@@ -13,12 +13,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 <link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/dojo-1.6.1/dijit/themes/tundra/tundra.css"/>
 	
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<style type="text/css">
-	.btn{
-		height: 40px;
-		min-width: 100px;	
-	}
-</style>
+
 <link rel="stylesheet" href="<?php echo $this->baseUrl();?>/css/stylelogin.css"/>
 <link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>
 <script type="text/javascript">	
@@ -27,15 +22,48 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 	dojo.require('dijit.form.Button');
 	
 </script>
+<style type="text/css">
+	.btn{
+		height: 40px;
+		min-width: 100px;	
+	}
+	#header {
+	    background-color: #36034b;
+	    width: 100%;
+	    margin: 0;
+	    padding: 0;
+	    border-bottom: 4px solid rgb(255, 215, 0);
+	}
+#footer {
+    clear: both;
+    background-color: #36034b;
+    width: 100%;
+    margin-top: 30px;
+}
+.textwithe {
+    color: #ffc631;
+}
+#content div#login {
+    background-color: #36034b;
+}
+#footer table tr td dl {
+    line-height: 20px;
+    color: #ffffff;
+    display: block;
+}
+</style>
 </head>
-<body class="tundra">
+<body class="tundra" style="font-family: 'Arial','Khmer MEF2'; font-size:12px;">
 <div id="header">
 	<table width="100%">
 		<tr>
 			<td class="title" width="33%"><label class="textgreen footertitle"​ style="font:bold 22px 'Khmer OS Muol Light'; text-align: center;"><img src="<?php echo $this->baseUrl()."/images/logo.png"?>" height="100px" /></label></td>
 			<td class="textblue" align="center">
 				<div class="textgreen footertitle"​ style="text-align: center; font-weight:bold;font-family: Arial Black;color:#BDC5CD; font-size: 22px;font-family:'Khmer MEF2'">ប្រព័ន្ធគ្រប់គ្រង ការចុះឈ្មោះសិស្ស</div>
-				<label class="textgreen footertitle"​ style="text-align: right; font-weight:bold;font-family: Arial Black;color:#BDC5CD; font-size: 22px;line-height: 17px;"><strong>S</strong>tudent <strong>M</strong>anagement <strong>S</strong>ystem</label></td>
+				<label class="textgreen footertitle"​ style="text-align: right; font-weight:bold;font-family: Arial Black;color:#BDC5CD; font-size: 22px;line-height: 17px;"><strong>S</strong>tudent <strong>M</strong>anagement <strong>S</strong>ystem</label>
+				<div class="textgreen footertitle"​ style="text-align: center; font-weight:bold;font-family: Arial Black;color:#BDC5CD; font-size: 22px;font-family:'Khmer MEF2'">ប្រព័ន្ធសុវត្ថិភាព(សម្រាប់ គ្រូ)</div>
+				</td>
+				
 			<td class="textblue" align="center" width="33%">
 			<img src="<?php echo $this->baseUrl()."/images/camapp.png"?>" height="45px" /></td>
 		</tr>
@@ -46,14 +74,11 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 		<marquee behavior="scroll" direction="left" onmouseout="this.start()" onmouseover="this.stop()" scrollamount="5"><?php echo $this->data["label_animation"];?></marquee>
 </div>
 </div>
-<div id="content" style="position:absolute;bottom: 42%;" >
+<div id="content" style="bottom: 42%;" >
 	
 	<table cellpadding="0" cellspacing="0" id="main">
 		<tr>
-			<td style="width:50%;padding-left:50px;" >				
-				<img alt="<?php ?>" src="<?php //echo $base_url.$this->data['logo-path-name']?>">
-			</td>
-			<td align="right">
+			<td align="left">
 				<div id="login">
 					<form id="frmLogin" dojoType="dijit.form.Form" method="post" action="">
 						<script type="dojo/method" event="onSubmit">				
@@ -106,6 +131,9 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 					</form>
 				</div>
 			</td>
+			<td style="width:50%;padding-left:50px;" >				
+				<img alt="<?php ?>" src="<?php //echo $base_url.$this->data['logo-path-name']?>">
+			</td>
 		</tr>
 	</table>	
 </div>
@@ -113,34 +141,26 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 	<table id="main">
 		<tr>
 			<td valign="top">
-			<span style="font-weight: bold;font-family: Arial Black;color: #BDC5CD;font-size: 22px;">Our Services</span>
-			<?php						
-						$services= explode("," , $this->data['camappservices']);						
-						foreach ($services AS $i =>$service){
-							echo "<p class='t_shadow' style='font-weight:bold;font-size:15px;color:#5F8EC2;line-height:5px;white-space:nowrap; '>".$service."</p>";
-						}
-					?>	
-			</td>
-			<td align="right" class="textwithe" valign="middle" style="padding-top:10px;">
-			<span style="font-weight: bold;font-family: Arial Black;color: #BDC5CD;font-size: 18px;">Cam App Technology&nbsp;</span><span style="text-align: center; font-weight:bold;
-					color:gold;font-size: 18px;font-family:'Khmer MEF2'"><?php echo $this->data['camappservice']?></span>
-			<dl style="margin-top:-2px;">
+					<dl >
 				   <lable class="f_style"><b><?php echo $this->data['camappadress']?></b></lable><br />
 				  	<?php						
 						$tels = explode("," , $this->data['camapptel']);						
 						foreach ($tels AS $i =>$tel){
-							echo "<span class='t_shadow' style='font-weight:bold;font-size:20px;'>".$tel."<span><br />";
+							echo "<span class='t_shadow' style='font-weight:bold;font-size:14px;'>".$tel."<span><br />";
 						}
 					?>	
-					<lable class='t_shadow' style='font-weight:bold; font-size:21px;'><a target="_blank" href="http://<?php echo $this->data['website']?>"><?php echo $this->data['website']?></a></lable><br />
+					<lable class='t_shadow' style='font-weight:bold; font-size:14px;'><a target="_blank" href="http://<?php echo $this->data['website']?>"><?php echo $this->data['website']?></a></lable>
 				</dl>
-				<label class="textgreen footertitle">បង្កើតនិងរក្សាសិទ្ធ&copy ដោយ៖</label>
+				<span style="font-weight: bold;font-family: 'Arial Black';color: #BDC5CD;font-size: 14px;">Cam App Technology&nbsp;</span><span style="text-align: center; font-weight:bold;
+					color:gold;font-family:'Khmer MEF2'"><?php echo $this->data['camappservice']?></span>
+			</td>
+			<td align="right" class="textwithe" valign="middle" style="padding-top:10px;  vertical-align: bottom;">
+				<label class="textgreen footertitle">បង្កើតនិងរក្សាសិទ្ធ &copy ដោយ៖</label>
 				<a href="http://cam-app.com/" target="_blank"><label class="textyellow footertitle">
 					<?php echo $this->data['power_by']?>
-				</label>				
+				</label></a>
 			</td>
 		</tr>
-		
 	</table>
 </div>
 </body>

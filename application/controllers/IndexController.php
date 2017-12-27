@@ -120,7 +120,10 @@ class IndexController extends Zend_Controller_Action
     }
     public function teacherloginAction()
     {
-    
+    	$session_user=new Zend_Session_Namespace('authteacher');
+    	if (!empty($session_user->teacher_id)){
+    		$this->_redirect("/foundation/teacherscore");
+    	}
     	$this->_helper->layout()->disableLayout();
     	$form=new Application_Form_FrmLogin();
     	$form->setAction('index');
@@ -143,7 +146,7 @@ class IndexController extends Zend_Controller_Action
     			$password=$form->getValue('txt_password');
     			$db_user=new Global_Model_DbTable_DbTeacher();
     			if($db_user->userAuthenticate($user_name,$password)){
-    				$session_user=new Zend_Session_Namespace('authteacher');
+    				
     				$user_id=$db_user->getTeacherid($user_name);
     				$user_info = $db_user->getTeacherInfo($user_id);
     					

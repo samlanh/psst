@@ -828,6 +828,21 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	$sql=" SELECT key_code as id ,name_en AS name FROM `rms_view` WHERE status=1 AND name_en!= '' AND TYPE=18";
   	return $db->fetchAll($sql);
   }
-   
+
+  function getAllStudentConcat(){
+  	$db=$this->getAdapter();
+  	$_db = new Application_Model_DbTable_DbGlobal();
+  	$branch_id = $_db->getAccessPermission();
+  	$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` FROM rms_student AS s
+  	WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+  	return $db->fetchAll($sql);
+  }
+  
+  function getAllTerm(){
+  	$db = $this->getAdapter();
+  	$SQL="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
+  	return $db->fetchAll($SQL);
+  }
+  
 }
 ?>

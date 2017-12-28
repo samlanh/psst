@@ -509,6 +509,7 @@ function filterStudentBygroup(type = null){
 							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_types'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("SMALL_MISTACK");?></label>';
 							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_typem'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("MEDIUM_MISTACK");?></label>';
 							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("BIG_MISTACK");?></label>';
+							str+='<input type="radio" onclick="checkmistake('+inx+');"  name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("OTHER");?></label>';
 						str+='</td>';
 						str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="" style="'+textareastyle+'"></td>';
 					str+='</tr>';
@@ -589,6 +590,7 @@ function initailize(){
 					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==1){echo 'checked="checked"';}?>  name="mistake_type'+inx+'" id="mistake_types'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("SMALL_MISTACK");?></label>';
 					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==2){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typem'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("MEDIUM_MISTACK");?></label>';
 					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==3){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("BIG_MISTACK");?></label>';
+					str+='<input type="radio" onclick="checkmistake('+inx+');" <?php if ($discipline_type['attendence_status']==4){echo 'checked="checked"';}?> name="mistake_type'+inx+'" id="mistake_typeb'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("OTHER");?></label>';
 				str+='</td>';
 				str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="<?php echo $discipline_type['description']; ?>" style="'+textareastyle+'"></td>';
 			str+='</tr>';

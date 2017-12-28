@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate("STUDENT_RESULT_SCORE_LIST")); 
-	$this->headTitle($tr->translate("STUDENT_RESULT_SCORE_LIST")); 
+	$this->headTitle($tr->translate("Continual Assessment Report")); 
 	echo $this->headTitle();
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
@@ -101,8 +100,8 @@ dojo.ready(function(){
 						<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 					</td>
 					<td width="44%" align="center">
-						<h1 style="margin-bottom: 2px;"><strong>KENT RIDGE INTERNATIONAL SCHOOL</strong></h1>
-   							<h2 style="margin-top: 0px;"><strong>Continual Assessment 2 Report 2017</strong></h2> 
+						<h2 style="margin-bottom: 2px;"><strong>KENT RIDGE INTERNATIONAL SCHOOL</strong></h2>
+   						<h3 style="margin-top: 0px;font-size: 22px;"><strong>Continual Assessment <?php echo $this->studentinfo['for_semester'];?> Report <?php echo $this->studentinfo['academic_year'];?></strong></h3> 
 					</td>
 					<td align="right" width="28%"></td>
 				</tr>
@@ -115,7 +114,7 @@ dojo.ready(function(){
 					     <strong>Name</strong> : <?php echo $this->studentinfo['stu_khname'];?><br />
 					     <strong>Class</strong> : <?php echo $this->studentinfo['grade'];?> </td>
 					    <td scope="col" style="text-align:right"><strong>Date</strong> : <?php echo date("d-M-Y");?> <br />
-					    <strong>Matriculation Card Number</strong> : 2016013</td>
+					    <strong>Matriculation Card Number</strong> : <?php echo $this->studentinfo['stu_code'];?></td>
 					  </tr>
 					</table>
 					<hr width="100%" style="height: 2px; border-color: white; background: black;"/>

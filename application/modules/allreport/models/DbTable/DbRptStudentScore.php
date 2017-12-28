@@ -859,6 +859,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   	(SELECT month_kh FROM rms_month WHERE rms_month.id = ts.for_month LIMIT 1) AS for_month,
 	   	ts.`for_month`,ts.`for_semester`,ts.`for_year`,
 	   	ts.`date_input`,
+	   	(SELECT CONCAT(from_academic,'-',to_academic)
+	   	FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+	   	st.`stu_code`,
 	   	(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS stu_khname,
 	   	(CASE WHEN sj.`subject_titlekh` IS NULL THEN sj.`subject_titleen` ELSE sj.`subject_titlekh` END) AS subject_title
 	   	FROM `rms_teacherscore_detail` AS tsd,

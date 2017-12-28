@@ -177,9 +177,9 @@ function gender(sex){
 <table cellspacing="10" style="margin: 0 auto;width:100%;" >
 	<tr>
 		<td>
-		<fieldset>
-					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("ADD_STUDENT_MISTAKE");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%; background:#DFF7FD;" cellspacing="10" broder 1>
+			<fieldset style=" background: #fff;   border: solid 1px #008;">
+				<legend align="center" style="font-size: 14px; color: #008;"><strong><?php echo $tr->translate("ADD_STUDENT_MISTAKE");?></strong></legend>
+					<table style="margin: 0 auto; width: 100%;" cellspacing="10" broder 1>
 						<tr>
 							<td><?php echo $tr->translate("GROUP");?>*</td>
 							<td>
@@ -190,10 +190,39 @@ function gender(sex){
 									<?php }?>
 								</select>
 							</td>
+							<td><?php echo $tr->translate("MISTAKE_DATE");?></td>
+							<td><input dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="discipline_date" name="discipline_date" type="text" value="<?php echo date("Y-m-d");?>"></td>
+							<td title="បន្ទប់សិក្សា"><?php echo $tr->translate("ROOM_NAME");?>*</td>
+							<td>
+							   <select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" >
+							   		<option value="-1"> Select Room</option>
+							   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
+							   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
+							   		<?php }}?>
+							   </select>
+							</td>
+						</tr>
+						<tr>
 							<td ><?php echo $tr->translate("STUDY_YEAR");?></td>
 							<td>
 								<input id="year_study" />
 							</td>
+							<td valign="top"><?php echo $tr->translate("FOR_SEMESTER");?></td>
+							<td valign="top">
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+										<option value="1">ទី 1</option>
+										<option value="2">ទី 2</option>
+								</select>
+							</td>
+							<td ><?php echo $tr->translate("STATUS");?></td>
+							<td>
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
+										<option value="1">ប្រើប្រាស់</option>
+										<option value="0">មិនប្រើប្រាស់</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
 							<td ><?php echo $tr->translate("DEGREE");?></td>
 							<td>
 								<select id="degree" name="degree" onchange="" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
@@ -203,6 +232,8 @@ function gender(sex){
 								<?php }}?>
 								</select>
 							</td>
+							<td valign="top"><?php echo $tr->translate("NOTE");?></td>
+							<td colspan="3" rowspan="2"><textarea class="fullside"  style="font-family:'Khmer Os Battambang';height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea></td>
 						</tr>
 						<tr>
 							<td ><?php echo $tr->translate("GRADE");?></td>
@@ -214,6 +245,10 @@ function gender(sex){
 									<?php }}?>
 								</select>
 							</td>
+							 	
+							
+						</tr>
+						<tr>
 							<td ><?php echo $tr->translate("SESSION");?></td>
 							<td>
 								<!-- <select id="session" name="session" onchange="filterStudent();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  > -->
@@ -224,38 +259,6 @@ function gender(sex){
 								<?php }}?>
 								</select>
 							</td>
-							<td title="បន្ទប់សិក្សា"><?php echo $tr->translate("ROOM_NAME");?>*</td>
-								<td>
-								   <select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" >
-								   		<option value="-1"> Select Room</option>
-								   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
-								   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
-								   		<?php }}?>
-								   </select>
-								</td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("MISTAKE_DATE");?></td>
-							<td><input dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="discipline_date" name="discipline_date" type="text" value="<?php echo date("Y-m-d");?>"></td>
-						    <td ><?php echo $tr->translate("STATUS");?></td>
-							<td>
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
-										<option value="1">ប្រើប្រាស់</option>
-										<option value="0">មិនប្រើប្រាស់</option>
-								</select>
-							</td>	
-							<td valign="top"><?php echo $tr->translate("FOR_SEMESTER");?></td>
-							<td valign="top">
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
-										<option value="1">ទី 1</option>
-										<option value="2">ទី 2</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td valign="top"><?php echo $tr->translate("NOTE");?></td>
-							<td colspan="3"><textarea class="fullside"  style="font-family:'Khmer Os Battambang';height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea></td>
-							
 						</tr>
 						<tr>
 							<td colspan="4">
@@ -274,18 +277,9 @@ function gender(sex){
 							</table>
 							</td>
 						</tr>
-					</table>
-					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
-						<thead>
-							<tr>
-								<td colspan="8" align="left">
-									<input type="hidden" name="identity" id="identity"  value="" >
-								 </td>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
+						<tr>
 								<td colspan="8" align="center">
+									<input type="hidden" name="identity" id="identity"  value="" >
 								 	<input iconClass="dijitIconClear" type="reset" value="" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 									<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
@@ -293,8 +287,7 @@ function gender(sex){
 										iconClass="dijitEditorIcon dijitEditorIconSave" />
 								</td>
 							</tr>
-						</tfoot>
-				 </table>
+					</table>
 		</fieldset>		
 		</td>
 	</tr>

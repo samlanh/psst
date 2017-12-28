@@ -27,11 +27,11 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 					dijit.byId("academic_year").focus();
                     return false;
 				}
-                if(group_code==$("#old_group").val() && year==$("#old_year").val()){
+               /* if(group_code==$("#old_group").val() && year==$("#old_year").val()){
 					alert("Group code can not be duplicated!!!");
 					dijit.byId("group_code").focus();
                     return false;
-				}
+				}*/
 				
     			var rowId = $('#identity1').val();
 				if(rowId!=''){ 
@@ -48,7 +48,13 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 					alert("Please teacher name !!!");
 					dijit.byId('teacher_'+rowIDArray[n]).focus();
 					return false;
-				}}}
+				}
+				if(dijit.byId('from_hour_'+rowIDArray[n]).get('value') > dijit.byId('to_hour_'+rowIDArray[n]).get('value')){
+					alert("Start hour can't bigger then end hour!!!");
+					dijit.byId('to_hour_'+rowIDArray[n]).focus();
+					return false;
+				}
+				}}
 				dijit.byId('save_close').set('disabled',true);
 				return true;
 			}else {
@@ -314,7 +320,7 @@ function addRow() {
 		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="day_id_'+col+'" name="day_id_'+col+'">'+opt_day+'</select></td>';
 		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="from_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="from_hour_'+col+'" >'+opttime+'</select></td>';
 		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="to_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="to_hour_'+col+'" >'+opttime+'</select></td>';
-		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'" autoComplete="false"​​ queryExpr="*${0}*">'+subject+'</select></td>';
+		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'" autoComplete="false"​​ queryExpr="*${0}*"  onchange="popUpsubject('+col+')">'+subject+'</select></td>';
 		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" >';
 		template+=teacher_option;  
 		template+='</select></td>';
@@ -360,7 +366,7 @@ function oldaddRow() {
 		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="day_id_'+col+'" name="day_id_'+col+'">'+opt_day+'</select></td>';
 		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="from_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="from_hour_'+col+'" >'+opttime+'</select></td>';
 		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="to_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="to_hour_'+col+'" >'+opttime+'</select></td>';
-		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'" autoComplete="false"​​ queryExpr="*${0}*">'+subject+'</select></td>';
+		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" onchange="popUpsubject('+col+')">'+subject+'</select></td>';
 		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" >';
 		template+=teacher_option;  
 		template+='</select></td>';
@@ -636,6 +642,7 @@ function deleteRecord1(index) {
 						<input name="shortcut_sub" id="shortcut_sub" dojoType="dijit.form.TextBox" class="fullside" />
 					</td>
 				</tr>
+				<input type="hidden" name="old_sub" id="old_sub" value=""/>
 				<tr>
 					<td colspan="2" align="center">
 						<input type="button" value="save_subject" id="save_subject" onclick="addSubjectajax();" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
@@ -825,7 +832,7 @@ function addSubjectajax(){
 					    	 id: data,
 						     name: dijit.byId('subject_kh').get('value')
 						   };
-				   addDataToSelectbox(dijit.byId('subject_id'), subject_store, Itemmake, data);
+				   addDataToSelectbox(dijit.byId('group_subject_study_'+$("#old_sub").val()), subject_store, Itemmake, data);
 				   dijit.byId('frm_subject').reset();
 				   dijit.byId("popupsubject").hide();
 				   dijit.byId('save_subject').set('disabled',false);		
@@ -959,6 +966,14 @@ function submitDataClose(){
 			error: function(e) {
 			}
 		});
+	}
+}
+
+function popUpsubject(r){
+	subject_id=dijit.byId("group_subject_study_"+r).get("value");
+	if(subject_id==-1){
+		dijit.byId("popupsubject").show();
+		$("#old_sub").val(r);
 	}
 }
 

@@ -603,7 +603,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'title' =>'',
 					'study_year' =>'',
 					'group' =>'',
+					'subject' =>'',
 					'session' =>'',
+					'teacher' =>'',
+					'day' =>'',
 					'start_date'=>date("Y-m-d"),
 					'end_date'=>date("Y-m-d")
 			);
@@ -615,6 +618,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
 		$this->view->rs = $rs_rows = $group->getAllRescheduleGroup($search);
 		$this->view->search=$search;
+		$db_glob = new Application_Model_GlobalClass();
+		$this->view->opttime = $db_glob->getHoursStudy();
 	}
 	
 	public function rptReschedulebygroupAction(){

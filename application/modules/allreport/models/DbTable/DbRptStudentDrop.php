@@ -81,8 +81,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1)AS days,
     	gr.from_hour,gr.to_hour,(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id )AS session_id,
     	(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AND v.type=4 LIMIT 1)AS `session`,
-    	(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.status = 1 AND subject_titlekh!='' LIMIT 1) AS subject_name,
-    	(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.status=1 AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
+    	(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
+    	(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.id=gr.techer_id AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
+    	
     	DATE_FORMAT(gr.create_date,'%d-%m-%Y')As create_date, (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS USER,
     	(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.status AND rms_view.type=1 LIMIT 1) AS STATUS
     	FROM rms_group_reschedule AS gr  WHERE gr.status=1";
@@ -104,10 +105,21 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		$where.=' AND gr.group_id='.$search['group'];
     	}
     	if(!empty($search['session'])){
-    		$where.=' AND (SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id )='.$search['session'];
+    		$where.=' AND  gr.from_hour '.$search['session'];
     	}
+    	if(!empty($search['subject'])){
+    		$where.=' AND  gr.subject_id ='.$search['subject'];
+    	}
+    	if(!empty($search['teacher'])){
+    		$where.=' AND  gr.techer_id ='.$search['teacher'];
+    	}
+    	if(!empty($search['day'])){
+    		$where.=' AND  gr.day_id ='.$search['day'];
+    	}
+    	 
     	return $db->fetchAll($sql.$where.$order);
     }
+    
     //reschedule by group
     function getAllReschedulebygroup($search=null){
     	$db=$this->getAdapter();

@@ -3,7 +3,57 @@
 	$this->headTitle('Report Student Drop'); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
-	//print_r($this->rs);
+	$session = array(
+			"<=12" =>'Morning',
+			">12" =>'Afternoon',
+	);
+	
+	$arr = array(
+			'07.00'=>"07:00 AM",
+			'07.15'=>"07:15 AM",
+			'07.30'=>"07:30 AM",
+			'08.00'=>"08:00 AM",
+			'08.15'=>"08:15 AM",
+			'08:20'=>"08:20 AM",
+			'08.30'=>"08:30 AM",
+			'08.40'=>"08.40 AM",
+			'09.00'=>"09:00 AM",
+			'09.15'=>"09:15 AM",
+			'09.30'=>"09:30 AM",
+			'09.40'=>"09:40 AM",
+			'10.00'=>"10:00 AM",
+			'10.15'=>"10:15 AM",
+			'10.30'=>"10:30 AM",
+			'10.40'=>"10:40 AM",
+			'11.00'=>"11:00 AM",
+			'11.15'=>"11:15 AM",
+			'11.30'=>"11:30 AM",
+			'12.00'=>"12:00 AM",
+			'12.30'=>"12:30 AM",
+			'13.00'=>"01:00 PM",
+			'13.30'=>"01:30 PM",
+			'13.50'=>"01:50 PM",
+			'14.00'=>"02:00 PM",
+			'14.30'=>"02:30 PM",
+			'14.50'=>"02:50 PM",
+			'15.00'=>"03:00 PM",
+			'15.10'=>"03:10 PM",
+			'15.30'=>"03:30 PM",
+			'15.45'=>"03:45 PM",
+			'16.00'=>"04:00 PM",
+			'16.30'=>"04:30 PM",
+			'17.00'=>"05:00 PM",
+			'17.30'=>"05:30 PM",
+			'18.00'=>"06:00 PM",
+			'18.30'=>"06:30 PM",
+			'19.00'=>"07:00 PM",
+			'19.30'=>"07:30 PM",
+			'20.00'=>"08:00 PM",
+			'20.15'=>"08:15 PM",
+			'20.30'=>"08:30 PM",
+			'21.00'=>"09:00 PM",
+			'21:30'=>"09:30 PM",
+	);
 ?>	
 <div style="width: 28cm;margin: 0 auto;">
 <form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -13,10 +63,22 @@
 	           <td><?php echo $frm->getElement("title");?></td>
 	           <td> <?php echo $frm->getElement("study_year");?></td>
 	           <td> <?php echo $frm->getElement("group");?></td>
-			   <td> <?php echo $frm->getElement("session");?></td>
-			    <td> <?php echo $frm->getElement("start_date");?></td>
+	           <td> <?php echo $frm->getElement("teacher");?></td>
+			   <td> <?php echo $frm->getElement("subject");?></td>
+			   
+	       </tr>
+	       <tr>
+	       	   <td>
+				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="session" name="session" type="text">								
+					<option value=''><?php echo $tr->translate("CHOOSE_SESSION");?></option>
+					<option value="<=12"><?php echo $tr->translate("MORNING");?> </option>
+					<option value=">12"><?php echo $tr->translate("AFTERNOON");?> </option>
+				</select>
+				</td>
+			   <td> <?php echo $frm->getElement("day");?></td>
+			   <td> <?php echo $frm->getElement("start_date");?></td>
 			   <td> <?php echo $frm->getElement("end_date");?></td>
-			   <td>
+			    <td>
 			   		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 	       	   </td>
 	       </tr>
@@ -41,11 +103,19 @@
 									border: 1px solid #000;	
 								}
 								.hover:hover{background: #ccc;}
+								table { page-break-inside:auto }
+								  tr{ page-break-inside:avoid; page-break-after:auto; }
+								#header {
+								  display: table-header-group;
+								  page-break-inside:avoid; page-break-after:auto;
+								}
+								
 							</style>
 								<tr>
 									<td colspan="3">
 										<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
-											<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
+											<thead>
+											<tr style="font-size:13px; height: 20px;background: #ccc;" align="center" >
 												<th >No.</th>
 												<th ><?php echo $tr->translate("STUDY_YEAR");?></th>
 												<th ><?php echo $tr->translate("GROUP");?></th>
@@ -56,24 +126,30 @@
 												<th ><?php echo $tr->translate("TEACHER");?></th>
 												<th ><?php echo $tr->translate("DATE");?></th>
 												<th ><?php echo $tr->translate("USER");?></th>
-												<th ><?php echo $tr->translate("STATUS");?></th>
+												 
 											</tr>
-										<?php $i=0;  foreach ($this->rs AS $row) { $i++;
-										
-										       
+											</thead>
+										<?php  $i=0;  foreach ($this->rs AS $row) { $i++;
+										          if($row['from_hour']<=12){
+										          	$session="Morning";
+										          }else{
+										          	$session="Afternoon";
+										          }
+										          
+										          
 										?>
-											<tr class="hover" style="font-size:11px; height: 20px;" align="center" >
+											<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 												<td ><?php echo $i;?></td>
 												<td ><?php echo $row['years'];?></td>
 												<td align="left">&nbsp;&nbsp;<?php echo $row['group_code'];?></td>
-												<td ><?php echo $row['session'];?></td>
+												<td ><?php echo $session;?></td>
 												<td ><?php echo $row['days'];?></td>
-												<td ><?php echo $row['from_hour'];?>&nbsp;-&nbsp;<?php echo $row['to_hour'];?></td>
-												<td ><?php echo $row['subject_name'];?></td>
+												<td ><?php   if (!empty($arr[$row['from_hour']])) {echo $arr[$row['from_hour']];}?>&nbsp;-&nbsp;<?php if (!empty($arr[$row['from_hour']])) {echo $arr[$row['to_hour']];}?></td>
+												<td align="left">&nbsp;<?php echo $row['subject_name'];?></td>
 												<td ><?php echo $row['teacher_name'];?></td>
 												<td ><?php echo $row['create_date'];?></td>
 												<td ><?php echo $row['USER'];?></td>
-												<td ><?php echo $row['STATUS'];?></td>
+												 
 											</tr>
 										<?php }?>	
 										</table>	
@@ -99,3 +175,12 @@
 							</table>
 		</div>		
 	</div>
+	
+<script>
+$( document ).ready(function() {
+	if('<?php echo $this->search['session']?>'){
+	 dijit.byId("session").set("value","<?php echo $this->search['session']?>");
+	}
+});
+
+</script>

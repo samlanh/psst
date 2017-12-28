@@ -372,7 +372,54 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$payment_by->setMultiOptions($opt);
 		$payment_by->setValue($request->getParam("payment_by"));
 		
-		$this->addElements(array($study_status,$_group,$payment_by,$study_year,$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
+		//day 
+		$_subject = new Zend_Dojo_Form_Element_FilteringSelect('subject');
+		$_subject->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$_subject->setValue($request->getParam("subject"));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$result = $db->getAllSubjectName();
+		$opt_group = array(''=>$this->tr->translate("SELECT_SUBJECT"));
+		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
+		$_subject->setMultiOptions($opt_group);
+		
+		//teacher 
+		$_teacher = new Zend_Dojo_Form_Element_FilteringSelect('teacher');
+		$_teacher->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$_teacher->setValue($request->getParam("teacher"));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$result = $db->getAllTeahcerName();
+		$opt_group = array(''=>$this->tr->translate("SELECT_TEACHER"));
+		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
+		$_teacher->setMultiOptions($opt_group);
+		
+		//day
+		$_day= new Zend_Dojo_Form_Element_FilteringSelect('day');
+		$_day->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$_day->setValue($request->getParam("day"));
+		$result = $db->getAllDayName();
+		$opt_group = array(''=>$this->tr->translate("SELECT_DAY"));
+		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
+		$_day->setMultiOptions($opt_group);
+		
+		$this->addElements(array($_day,$_teacher,$_subject,$study_status,$_group,$payment_by,$study_year,$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 	
 // 		$this->addElements(array($_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 // 		$this->addElements(array($study_year,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));

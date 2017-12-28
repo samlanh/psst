@@ -810,8 +810,24 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
       
   }
    
+  
+  public function getAllSubjectName(){
+  	$db = $this->getAdapter();
+  	$sql=" SELECT id ,subject_titlekh AS name FROM `rms_subject` WHERE STATUS=1 AND subject_titlekh != '' order by id DESC ";
+  	return $db->fetchAll($sql);
+  }
    
+  public function getAllTeahcerName(){
+  	$db = $this->getAdapter();
+  	$sql=" SELECT id ,teacher_name_kh AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != '' order by id DESC ";
+  	return $db->fetchAll($sql);
+  }
    
+  public function getAllDayName(){
+  	$db = $this->getAdapter();
+  	$sql=" SELECT key_code as id ,name_en AS name FROM `rms_view` WHERE status=1 AND name_en!= '' AND TYPE=18";
+  	return $db->fetchAll($sql);
+  }
    
 }
 ?>

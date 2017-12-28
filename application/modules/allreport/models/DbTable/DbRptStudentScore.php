@@ -889,7 +889,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		ts.`for_month`,ts.`for_semester`,ts.`for_year`,
 		ts.`date_input`,
 		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS stu_khname,
-		(CASE WHEN sj.`subject_titlekh` IS NULL THEN sj.`subject_titleen` ELSE sj.`subject_titlekh` END) AS subject_title
+		(CASE WHEN sj.`subject_titlekh` IS NULL THEN sj.`subject_titleen` ELSE sj.`subject_titlekh` END) AS subject_title,
+		(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id= ts.`teacher_id` LIMIT 1) AS teacher_name
 		FROM `rms_teacherscore_detail` AS tsd,
 		`rms_teacherscore` AS ts,
 		`rms_student` AS st,

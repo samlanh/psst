@@ -298,15 +298,6 @@ function gender(sex){
 							</td>
 						</tr>
 						<tr>
-							<td ><?php echo $tr->translate("FOR_SESSION");?></td>
-							<td>
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="session_type" name="session_type" type="text">								
-										<option value="1" <?php if($this->row['for_session']==1){echo"selected";};?>><?php echo $tr->translate("MORNING");?></option>
-										<option value="2" <?php if($this->row['for_session']==2){echo"selected";};?>><?php echo $tr->translate("EVENING");?></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
 							
 							<td valign="top"><?php echo $tr->translate("NOTE");?></td>
 							<td colspan="3"><textarea class="fullside"  style=" height: 60px !important;font-family:'Khmer Os Battambang';" tabindex="20" dojoType=""  id="note" name="note"  ><?php echo $this->row['note'];?></textarea></td>

@@ -61,6 +61,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 					'note'=>$_data['note'],
 					'status'=>$_data['status'],
 					'user_id'=>$this->getUserId(),
+					'for_session'=>$_data['session_type'],
 					'type'=>1, //for attendence
 			);
 			$id=$this->insert($_arr);
@@ -105,6 +106,7 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 					'for_semester'=> $_data['for_semester'],
 					'note'=>$_data['note'],
 					'user_id'=>$this->getUserId(),
+					'for_session'=>$_data['session_type'],
 					'type'=>1, //for attendence
 			);
 			$where="id=".$_data['id'];

@@ -279,18 +279,6 @@ public function init()
     	$this->view->scoreByStudent = $db->getStundetScoreDetail($stu_id,$group_id);
     	$this->view->studentinfo = $db->getStundetInfo($stu_id,$group_id);
     	
-    	$group = $db->getAllgroupStudyNotPass();
-    	array_unshift($group, array ( 'id' => 0,'name' => 'ជ្រើសរើស'));
-    	
-    	$this->view->g_all_name=$group;
-    	$this->view->month = $db->getAllMonth();
-    	
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($form);
-    	$this->view->form_search=$form;
-    	
-    	
     }
     
     

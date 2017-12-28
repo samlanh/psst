@@ -222,6 +222,11 @@
 											if($attendence['attendence_status']==4 OR $attendence['attendence_status']==5){
 												$small = $number['1'];$s++;
 											}
+											if ($attendence['for_session']==1){
+												$descri_added = "(ពេលព្រឹក)";
+											}else if ($attendence['for_session']==2){
+												$descri_added = "(ពេលល្ងាច)";
+											}
 										}else{
 											if($attendence['attendence_status']==1){
 												$small = $number['1'];$s++;
@@ -232,11 +237,7 @@
 											if($attendence['attendence_status']==3){
 												$big = $number['1'];$l++;
 											}
-											if ($attendence['for_session']==1){
-												$descri_added = "(ពេលព្រឹក)";
-											}else if ($attendence['for_session']==2){
-												$descri_added = "(ពេលល្ងាច)";
-											}
+											
 										}
 									?>
 									<tr style="font-size:13px;">

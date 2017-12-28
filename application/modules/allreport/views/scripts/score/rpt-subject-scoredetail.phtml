@@ -29,49 +29,7 @@
 				"12"=>"ធ្នូ"
 			);
 ?>	
-<script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
-dojo.ready(function(){
-		new dijit.form.FilteringSelect({
-		    store:group_store,
-		    autoComplete: true,                        
-		    required:false,
-		    id: "group_name",
-		    name: "group_name",
-		    class:'fullside',  
-		    value:'<?php echo $this->search['group_name'];?>',         
-		    required:'true',
-		    placeHolder:"Selected Group Name",          
-		    onChange: function() {  
-		    }
-		}, "group_name");
-});
-</script>
-<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-list-monthly')); ?>" dojoType="dijit.form.Form" method="post">
-	<table style="width:28cm;margin: 0 auto;">
-		<tr> 
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement("study_year");?></td>
-			<td><input id="group_name" /></td>
-			<td><?php echo $frm->getElement("degree");?></td>
-			<td><?php echo $frm->getElement("grade");?></td>
-		</tr>
-		<tr>
-			<td><?php echo $frm->getElement("session");?></td>
-			<td><?php echo $frm->getElement("room");?></td>
-			<td>
-				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
-					<option><?php echo $tr->translate("CHOOSE");?></option>
-					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-						<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
-					<?php }}?>
-				</select>
-			</td>
-			<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
-</form>
+
 	<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 		<div id="divPrint">
 		<style type="text/css">
@@ -185,3 +143,123 @@ dojo.ready(function(){
 			</table>
 		</div>
 	</div>
+	<div class="menureport" style=" display: block;    margin: 10px;">
+		<ul>
+			<li class="preview"><a title="Preview" href="#" onclick="preview1();"></a></li>
+			<li class="print"><a href="#" title="Print" onclick="doPrint1();" ></a></li>
+			<li class="excel"><a href="#"  title="Export"  onclick="exportExcel()1;"></a></li>
+		</ul>
+	</div>
+	<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+		<div id="divPrint1">
+		<style type="text/css">
+			.style{
+				line-height: 20px; font-size: 12px !important;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+				
+			}
+			.padding{ padding: 0 1px !important;}
+			.padding td{padding: 0 1px !important;}
+			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+			tr{ page-break-inside:avoid; page-break-after:auto }
+			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+			.hover:hover{background:#ccc;}
+		</style>
+		
+		
+		
+		<table style="width:28cm;margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+				<tr>
+					<td width="28%" align="left">
+						<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+					</td>
+					<td width="44%" align="center">
+						<h2 style="margin-bottom: 2px;"><strong>KENT RIDGE INTERNATIONAL SCHOOL</strong></h2>
+   						<h3 style="margin-top: 0px;font-size: 22px;"><strong>Continual Assessment <?php echo $this->studentinfo['for_semester'];?> Report <?php echo $this->studentinfo['academic_year'];?></strong></h3> 
+					</td>
+					<td align="right" width="28%"></td>
+				</tr>
+				<tr>
+					<td colspan="3" id="exportExcel1">
+					
+					<table width="100%%" border="0" style="margin-top:10px;">
+					<tr>
+					    <td scope="col">
+					     <strong>Attendance:</strong> Number of schooldays: 0
+					     </td>
+					     <td scope="col" >
+					    	<strong>Absenteeism:</strong> 0
+					    </td>
+					    <td scope="col">
+					    	<strong>Tardiness:</strong> 0 
+					    </td>
+					  </tr>
+					</table>
+					<hr width="100%" style="height: 2px; border-color: white; background: black;"/>
+					<br/>
+					
+						 <table width="100%" border="1" style="border-collapse: collapse;">
+							  <tr style="background:#DAD1C0;text-align: center;font-weight: 700;">
+							    <td style="width:20%;padding-top:10px;padding-bottom:10px;">Teachers</td>
+							    <td  style="width:20%;padding-top:10px;padding-bottom:10px;">Subjects</td>
+							    <td  style="width:20%;padding-top:10px;padding-bottom:10px;">Comments</td>
+							  </tr>
+							  <?php if (!empty($this->scoreByStudent)) foreach ($this->scoreByStudent as $rs){?>
+							  <tr>
+							    <td align="center">&nbsp;<?php echo $rs['teacher_name'];?>&nbsp;</td>
+							    <td align="center">&nbsp;<?php echo $rs['subject_title'];?>&nbsp;</td>
+							    <td align="center">
+							    	&nbsp;
+							    	<?php if ($rs['behavior_comment']==1){
+							    			echo "Poor";
+										}else if ($rs['behavior_comment']==2){
+											echo "Very Poor";
+										}else if ($rs['behavior_comment']==3){
+											echo "Good ";
+										}else if ($rs['behavior_comment']==4){
+											echo "Very Good";
+										}else if ($rs['behavior_comment']==5){
+											echo "Excellent";
+										}?>
+							    	&nbsp;
+							    </td>
+							  </tr>
+							  <?php }?>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+function doPrint1() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+function preview1()
+{ 
+  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+      disp_setting+="scrollbars=no,width=1100, height=700, left=100, top=25"; 
+  var content_vlue = document.getElementById("divPrint1").innerHTML; 
+  
+  var docprint=window.open("","",disp_setting); 
+   docprint.document.open(); 
+   docprint.document.write('<html><head>'); 
+   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+   docprint.document.write(content_vlue);          
+   docprint.document.write('</center></div></html>'); 
+   docprint.document.close(); 
+   docprint.focus(); 
+}
+function exportExcel1(){
+	$('#exportExcel1').tableExport({type:'excel',escape:'false'});
+}
+
+</script>

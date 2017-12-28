@@ -152,22 +152,46 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	 
     }
     
-    function getSubleByYGS($year,$group){
+//     function getSubleByYGS($year,$group){//old
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
+//     	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
+//     	(SELECT s.subject_titleen FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
+//     	(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
+//     	(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
+//     	FROM rms_group_reschedule AS gr
+    	 
+//     	WHERE gr.year_id=$year
+//     	AND gr.group_id=$group
+    	 
+//     	ORDER BY times ASC ";
+//     	return $db->fetchAll($sql);
+//     }
+    function getTimeSchelduleByYGS($year,$group){ /* get Time for show in schedule VD*/
     	$db=$this->getAdapter();
-    	$sql="SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
-    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
-    	(SELECT s.subject_titleen FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
-    	(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
-    	(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
-    	FROM rms_group_reschedule AS gr
-    	 
-    	WHERE gr.year_id=$year
-    	AND gr.group_id=$group
-    	 
-    	ORDER BY times ASC ";
-    	return $db->fetchAll($sql);
+    	$sql="
+    		SELECT gr.from_hour,
+			REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times
+			FROM rms_group_reschedule AS gr 
+			WHERE gr.year_id=$year AND gr.group_id=$group
+			GROUP BY REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','')
+			ORDER BY times ASC";
+    	$row = $db->fetchAll($sql);
+    	return $row;
     }
-    
+    function getSubjectTeacherByScheduleAndGroup($year,$group,$time,$day){
+    	$db=$this->getAdapter();
+    	$sql="SELECT gr.from_hour,
+			REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
+			(SELECT s.subject_titleen FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
+			(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
+			(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
+			FROM rms_group_reschedule AS gr 
+			WHERE gr.year_id=$year AND gr.group_id=$group
+			AND REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') ='$time'
+			AND gr.`day_id` =$day LIMIT 1";
+    	return $db->fetchRow($sql);
+    }
     function getSubleByHour($year,$group,$hour){
     $db=$this->getAdapter();
     $sql="SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,

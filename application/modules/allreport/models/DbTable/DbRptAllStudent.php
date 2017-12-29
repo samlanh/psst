@@ -592,6 +592,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 //     		";
     	$sql="SELECT
 	    	sd.`group_id`,
+	    	sd.`type`,
 	    	sdd.`attendence_status` as mistake_type,
 	    	sdd.description,
 	    	sd.`date_attendence` as mistake_date
@@ -599,7 +600,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	`rms_student_attendence` AS sd,
 	    	`rms_student_attendence_detail` AS sdd
 	    	WHERE
-	    	sd.type=2
+	    	(sd.type=2 OR sdd.`attendence_status` IN (4,5))
 	    	AND sd.`id` = sdd.`attendence_id`
 	    	AND sdd.`stu_id` = $stu_id
 	    	AND sd.`date_attendence` = '".$date_att."'
@@ -607,7 +608,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	";
     	
     	$where='';
-//     	echo $sql.$where.' LIMIT 1';//exit();
     	return $db->fetchRow($sql.$where.' LIMIT 1');
     }
     

@@ -140,19 +140,28 @@
 										<?php  
 											$mistake_status = $db->getStatusMistake($rs['stu_id'], date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
 											//print_r($mistake_status);
-											if ($mistake_status['mistake_type']==1){ 
-												echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $s=$s+1;
-												//small
-											}
-											else if ($mistake_status['mistake_type']==2){
-												echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $m = $m+1;
-												//medium
-											}
-											else if ($mistake_status['mistake_type']==3){
-												echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $b = $b+1;
-												//big
+											if ($mistake_status['type']==2){
+												if ($mistake_status['mistake_type']==1){ 
+													echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $s=$s+1;
+													//small
+												}
+												else if ($mistake_status['mistake_type']==2){
+													echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $m = $m+1;
+													//medium
+												}
+												else if ($mistake_status['mistake_type']==3){
+													echo $tr->translate("HAVE_MISTACK")."(".$mistake_status['description'].")"; $b = $b+1;
+													//big
+												}else{
+													echo " ";	
+												}
 											}else{
-												echo " ";	
+													if ($mistake_status['mistake_type']==4){
+														echo $tr->translate("HAVE_MISTACK")."( 'មកយឺត' ".$mistake_status['description'].")"; $s=$s+1;
+													}elseif ($mistake_status['mistake_type']==5){
+														echo $tr->translate("HAVE_MISTACK")."( 'ចេញមុន' ".$mistake_status['description'].")"; $s=$s+1;
+													}
+													//small
 											}
 										?>
 										</td>

@@ -369,11 +369,11 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	function getSubjectByGroup($group_id,$teacher_id=null){
 		$db=$this->getAdapter();
 		$sql="SELECT *,
-		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
-		(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
-		(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
-		(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen
-		 FROM rms_group_subject_detail AS gsjd WHERE gsjd.group_id = ".$group_id;
+			(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
+			(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
+			(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
+			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen
+			 FROM rms_group_subject_detail AS gsjd WHERE gsjd.group_id = ".$group_id;
 		if($teacher_id!=null){
 			$sql.=" AND teacher = ".$teacher_id;
 		}

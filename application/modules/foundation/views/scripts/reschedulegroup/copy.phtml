@@ -27,11 +27,20 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 					dijit.byId("academic_year").focus();
                     return false;
 				}
+<<<<<<< .mine
+||||||| .r390
+                if(group_code==$("#old_group").val() && year==$("#old_year").val()){
+					alert("Group code can not be duplicated!!!");
+					dijit.byId("group_code").focus();
+                    return false;
+				}
+=======
                /* if(group_code==$("#old_group").val() && year==$("#old_year").val()){
 					alert("Group code can not be duplicated!!!");
 					dijit.byId("group_code").focus();
                     return false;
 				}*/
+>>>>>>> .r393
 				
     			var rowId = $('#identity1').val();
 				if(rowId!=''){ 
@@ -48,6 +57,18 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 					alert("Please teacher name !!!");
 					dijit.byId('teacher_'+rowIDArray[n]).focus();
 					return false;
+<<<<<<< .mine
+				}
+				if(dijit.byId('from_hour_'+rowIDArray[n]).get('value') > dijit.byId('to_hour_'+rowIDArray[n]).get('value')){
+					alert("Start hour can't bigger then end hour!!!");
+					dijit.byId('to_hour_'+rowIDArray[n]).focus();
+					return false;
+				}
+
+				}}
+||||||| .r390
+				}}}
+=======
 				}
 				if(dijit.byId('from_hour_'+rowIDArray[n]).get('value') > dijit.byId('to_hour_'+rowIDArray[n]).get('value')){
 					alert("Start hour can't bigger then end hour!!!");
@@ -55,6 +76,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 					return false;
 				}
 				}}
+>>>>>>> .r393
 				dijit.byId('save_close').set('disabled',true);
 				return true;
 			}else {

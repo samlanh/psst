@@ -1924,10 +1924,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();    	
-    	$sql="SELECT s.stu_id As stu_id,
-    	(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name
+    	$sql="SELECT s.stu_id AS stu_id,
+    	(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name
     	FROM rms_student AS s
-    	WHERE (stu_enname!='' OR s.stu_khname!='') AND s.status=1 and s.is_subspend=0 $branch_id ORDER BY stu_type DESC ";
+    	WHERE (stu_enname!='' OR s.stu_khname!='') AND s.status=1 AND s.is_subspend=0  $branch_id ORDER BY stu_type DESC ";
     	return $db->fetchAll($sql);
     }
     //select general  old student by name

@@ -259,8 +259,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'group' 		=>'',
 					'branch_id'		=>0,
 					'degree'		=>0,
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d'),
+// 					'start_date'	=> date('Y-m-d'),
+// 					'end_date'		=> date('Y-m-d'),
 			);
 		}
 		$form=new Registrar_Form_FrmSearchInfor();

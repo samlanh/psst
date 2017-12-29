@@ -5,17 +5,17 @@
 	$frm =  $this->form_search;
 	$db = new Allreport_Model_DbTable_DbRptAllStudent();
 	
-	$start_date = $this->datasearch['start_date'];
-	$end_date = $this->datasearch['end_date'];
-// 	echo $start_date;exit();
-	$date1 = date("d-m-Y",strtotime($start_date));
-	$date2 = date('d-m-Y',strtotime($end_date));
-	$diff = abs(strtotime($date2) - strtotime($date1));
-	$years = floor($diff / (365*60*60*24));
-	$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
-	$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
-	$amount_day =$diff/ (60*60*24);
-	$amount_day = $amount_day + 1;
+// 	$start_date = $this->datasearch['start_date'];
+// 	$end_date = $this->datasearch['end_date'];
+// // 	echo $start_date;exit();
+// 	$date1 = date("d-m-Y",strtotime($start_date));
+// 	$date2 = date('d-m-Y',strtotime($end_date));
+// 	$diff = abs(strtotime($date2) - strtotime($date1));
+// 	$years = floor($diff / (365*60*60*24));
+// 	$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+// 	$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+// 	$amount_day =$diff/ (60*60*24);
+// 	$amount_day = $amount_day + 1;
 	
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 	
@@ -125,10 +125,11 @@
 								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_code'];?></a></td>
 								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_khname'];?>&nbsp;</a></td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
-								<?php $s=0; $m=0; $b=0;$el=0; for($k=0;$k<$amount_day;$k++){?>
-									<?php if(date('D',strtotime("$start_date +$k day"))=="Sun"){ }else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
+								<?php $s=0; $m=0; $b=0;$el=0; 
+								//for($k=0;$k<$amount_day;$k++){?>
+									<?php //if(date('D',strtotime("$start_date +$k day"))=="Sun"){ }else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<?php  
-											$mistake_status = $db->getTotalStatusMistake($rs['stu_id'], date('Y-m-d',strtotime("$start_date +$k day")), $rs['group_id']);
+											$mistake_status = $db->getTotalStatusMistake($rs['stu_id'], null, $rs['group_id']);
 											$lateAttedence = $db->getAttendenceFoul($rs['group_id'],$rs['stu_id']);
 											$late_foul = 0;
 											if (!empty($lateAttedence)){
@@ -160,8 +161,8 @@
 												}
 											}
 										?>
-									<?php }?>
-								<?php }?>
+									<?php //}?>
+								<?php //}?>
 								<td align="center"><?php echo $s+$late_foul;?></td>
 								<td align="center"><?php echo $m;?></td>
 								<td align="center"><?php echo $b;?></td>

@@ -30,7 +30,6 @@
 	           <td><?php echo $frm->getElement("group");?></td>
 	           <td><?php echo $frm->getElement("study_year");?></td>
 	           <td><?php echo $frm->getElement("degree");?></td>
-	           
 			</tr>
 			<tr>
 				<td><?php echo $frm->getElement("grade_all");?></td>
@@ -187,11 +186,10 @@
 // 													$description = "( 'ចេញមុន' ".$rs['description'].")";
 													$s=$s+1;
 												}
-												//small
 											}
 										?>
 										<tr style="font-size:13px;">
-											<td align="center"><?php echo date("Y-m-d",strtotime($rs['mistake_date']));?></td>
+											<td align="center"><?php echo date("d-m-Y",strtotime($rs['mistake_date']));?></td>
 											<td align="center"><?php echo $small;?></td>
 											<td align="center"><?php echo $medium;?></td>
 											<td align="center"><?php echo $big;?></td>
@@ -216,7 +214,6 @@
 								</td>
 							</tr>
 							<?php }?>
-							
 							<?php $old_groupid = $rs['group_id'];
 							}?>
 							<tr>
@@ -253,12 +250,6 @@
 						</table>
 					</td>
 				</tr>
-							</table>
+			</table>
 		</div>
 	</div>
-	
-	
-	
-	
-	
-	

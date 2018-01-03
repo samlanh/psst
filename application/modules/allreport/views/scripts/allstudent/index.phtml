@@ -85,12 +85,9 @@
        <?php
 	       $session_user=new Zend_Session_Namespace('authstu');
 	       $report_url = $session_user->url_report;
-	       
-	       //print_r($report_url);
-	       
 	       if(!empty($report_url)){
 		       foreach($report_url as $url){
-		       if($url['controller']=='allstudent' AND $url['action']!='index' AND $url['action']!='certify' AND $url['action']!='rpt-transcript' AND $url['action']!='academic-transcript' AND $url['action']!='rpt-att-list' AND $url['action']!='rpt-student-group' ){
+		       if($url['controller']=='allstudent' AND $url['action']!='index' AND $url['action']!='certify' AND $url['action']!='rpt-transcript' AND $url['action']!='academic-transcript' AND $url['action']!='rpt-att-list' AND $url['action']!='rpt-student-group' AND $url['action']!='mistake-certificate' ){
 	   ?>
 		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
 		        <?php echo $tr->translate($url['label']);?></a></li>

@@ -69,6 +69,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			$this->view->adv_search=$search;
 			$this->view->rs =$db->getStudentById($id);
 			$rs=$this->view->row = $db->getStudentPaymentDetail($id);
+			$re=$this->view->re_row=$db->getRescheduleByGroupId($id);
 			$this->view->service=$db->getStudentServiceUsing($id,$search, 1);
 				
 		}catch (Exception $e){

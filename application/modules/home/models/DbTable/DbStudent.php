@@ -352,6 +352,22 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	 
+	function getRescheduleByGroupId($id){
+		$db=$this->getAdapter();
+		$sql=" SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
+    	(SELECT room_name AS NAME FROM `rms_room` WHERE is_active=1 AND room_name!='' AND rms_room.room_id=(SELECT g.room_id FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) )AS room_name,
+    	(SELECT CONCAT(m.major_enname,' (',(SELECT d.en_name FROM rms_dept AS d WHERE m.dept_id=d.dept_id ),')')
+    	FROM rms_major AS m WHERE 1 AND major_enname!='' AND m.major_id=(SELECT g.grade FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1))AS grade_name,
+    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times ,
+    	gd.stu_id
+    	FROM rms_group_reschedule AS gr,rms_group_detail_student AS gd
+    	WHERE gr.group_id=gd.group_id
+    	 AND   gd.stu_id=$id
+    	    	 
+    	GROUP BY gr.year_id,gr.group_id
+    	ORDER BY gr.year_id,gr.group_id,times DESC";
+		return $db->fetchAll($sql);
+	}
 	
 }
 

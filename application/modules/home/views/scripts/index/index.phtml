@@ -54,6 +54,9 @@ $rpt_expectincome=$this->url(array('module'=>'allreport','controller'=>'accounti
 $rpt_nearly=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentnearlyendservice'), null, true);
 $rpt_paymenlate=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentpaymentlate'), null, true);
 $rpt_calculate = $this->url(array('module'=>'registrar','controller'=>'calculator','action'=>'index'), null, true);
+
+$rpt_reschedule_bygroup=$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-reschedulebygroup'), null, true);
+$rpt_reschedule_byteacher=$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-reschedule-group'), null, true);
 ?>
 <style type="text/css">
 .metro-nav {
@@ -138,8 +141,8 @@ $rpt_calculate = $this->url(array('module'=>'registrar','controller'=>'calculato
                         </a>
                     </div>
                     
-                    <div class="metro-nav-block nav-block-purple">
-                        <a href="<?php echo $service_name;?>" data-original-title="">
+                    <div class="metro-nav-block double" style="background:#693d8d;">
+                        <a href="<?php echo $service_name;?>" data-original-title="" >
                             <i class="icon-eye-open"></i>
                             <div class="info"></div>
                             <div class="status"><?php echo $tr->translate('SERVICES_CHARGE');?> </div>
@@ -152,7 +155,7 @@ $rpt_calculate = $this->url(array('module'=>'registrar','controller'=>'calculato
                             <div class="status"><?php echo $tr->translate('STUDENT_SUSPEND_SERVICE');?></div>
                         </a>
                     </div>
-                    <div class="metro-nav-block nav-block-blue" style="background:#530be6;">
+                    <div class="metro-nav-block double" style="background:#530be6;">
                         <a href="<?php echo $rpt_calculate;?>" class="text-center" data-original-title="">
                             <i class="icon-dashboard"></i>
                             <div class="status"><?php echo $tr->translate('CALCULATE_LIST');?></div>
@@ -222,6 +225,21 @@ $rpt_calculate = $this->url(array('module'=>'registrar','controller'=>'calculato
                         <a href="<?php echo $rpt_paymenlate;?>" data-original-title="" class="text-center">
                             <i class="icon-cogs"></i>
                             <div class="status"><?php echo $tr->translate('RPT_STUDENT_PAYMENT_LATE');?></div>
+                        </a>
+                    </div>
+                    
+                     <div class="metro-nav-block double" style="background:#693d8d;">
+                        <a href="<?php echo $rpt_reschedule_bygroup;?>" data-original-title="">
+                            <i class="icon-dashboard"></i>
+                            <div class="info"></div>
+                            <div class="status"><?php echo $tr->translate('RPT_RESCHEDULE_BYGROUP');?></div>
+                        </a>
+                    </div>
+                     <div class="metro-nav-block double" style="background:#693d8d;">
+                        <a href="<?php echo $rpt_reschedule_byteacher;?>" data-original-title="">
+                            <i class="icon-dashboard"></i>
+                            <div class="info"></div>
+                            <div class="status"><?php echo $tr->translate('RPT_RESCHEDULE_GROUP');?></div>
                         </a>
                     </div>
                 </div>

@@ -165,7 +165,7 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 //     	$start_year = date("Y-01-01");
 //     	$end_year = date("Y-12-31");
 //     	$where.=" AND sta.`date_attendence` BETWEEN '$start_year' AND '$end_year'";
-    	$where.=" AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id ";
+    	$where.=" AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id ORDER BY sta.`date_attendence` ASC";
 //     	return $db->fetchRow($sql.$where);
     	return $db->fetchAll($sql.$where);
     }

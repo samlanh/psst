@@ -45,7 +45,7 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 			}
 		}, "grade_result");
 		
-		getAllGrade();
+		 
 	});
 
 
@@ -97,6 +97,8 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 					dijit.byId("grade").focus();
 					return false;
 				}
+				dijit.byId("savenew").attr("disabled", true);;
+				dijit.byId("saveclose").attr("disabled",true);
 				return true;
 			}else {
 				return false;
@@ -364,7 +366,7 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 			<td align="center">
 				<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
 					 iconClass="dijitIconClear"/>
-				<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="submit"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
+				<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="button" onclick="submitDataClose()" iconClass="dijitEditorIcon dijitEditorIconSave"/>
 				<input label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' dojoType="dijit.form.Button" type="submit" iconClass="dijitEditorIcon dijitEditorIconSave"/>
 			</td>
 		</tr>	
@@ -663,6 +665,35 @@ function hideDialog(){
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
+	}
+
+	function submitDataClose(){
+		if(dijit.byId("degree").get("value")==''){
+            alert("Please Select Degree Name");
+			dijit.byId("degree").focus();
+			return false;
+		}
+		if(dijit.byId("grade").get("value")==''){
+            alert("Please Select Grade Name");
+			dijit.byId("grade").focus();
+			return false;
+		}
+		 
+		if(dijit.byId('frm_teststudent').validate()) {
+			dijit.byId("savenew").attr("disabled", true);
+			dijit.byId("saveclose").attr("disabled",true);
+			var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'add')); ?>';
+			dojo.xhrPost({
+			    url: url_submit,	
+				form: dojo.byId("frm_teststudent"),		    
+				load: function(data) {
+					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+					window.location.href ="<?php echo $this->baseUrl();?>/registrar/studenttest";
+				},
+				error: function(e) {
+				}
+			});
+		}
 	}
 </script>
  

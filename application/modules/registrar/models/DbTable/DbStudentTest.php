@@ -50,7 +50,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'relationship_to_student'=>$data['relationship_to_student'],
 						'emergency_tel'			=>$data['emergency_tel'],
 						'emergency_address'		=>$data['emergency_address'],
-						'educational_background'=>$data['edu_background'],
+						//'educational_background'=>$data['edu_background'],
 					
 						'degree_result'	=>$data['degree'],
 						'grade_result'	=>$data['grade_result'],
@@ -92,6 +92,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
  	}
  	
 	function updateStudentTest($data,$id){
+		$db=$this->getAdapter();
 		try{
 			$updated_result = 0;
 			if(!empty($data['degree']) && !empty($data['grade']) && !empty($data['session'])){
@@ -127,36 +128,56 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'position'			=>$data['position'],
 						'parent_name'		=>$data['parent_name'],
 						'parent_tel'		=>$data['parent_tel'],
-					
 						'photo'				=>$pho_name,
 					
 						'old_school'=>$data['old_school'],
 						'old_grade'	=>$data['old_grade'],
-						//'degree'	=>$data['degree'],
+						'degree'	=>$data['degree'],
+						'grade'		=>$data['grade'],
 					
 						'emergency_name'		=>$data['emergency_name'],
 						'relationship_to_student'=>$data['relationship_to_student'],
 						'emergency_tel'			=>$data['emergency_tel'],
 						'emergency_address'		=>$data['emergency_address'],
-					
-						'educational_background'=>$data['edu_background'],
+						//'educational_background'=>$data['edu_background'],
 					
 						'degree_result'	=>$data['degree'],
-						'grade_result'	=>$data['grade'],
+						'grade_result'	=>$data['grade_result'],
 						'session_result'=>$data['session'],
 						'time_result'	=>$data['time'],
+						'date_result'   =>$data['date_result'],
+						'term_test'		=>$data['term_test'],
 					
 						'note'		=>$data['note'],
 						'serial'	=>$data['serial'],
-						
 						'user_id'	=>$this->getUserId(),
 						'test_date'	=>$data['test_date'],
-					
 						'updated_result'=>$updated_result,
 					
 					);
 			$where="id = $id";
 			$this->update($array, $where);
+			$sql = "DELETE FROM rms_student_testdetail WHERE stutest_id=".$id;
+			$db->query($sql);
+			
+			if(!empty($data['identity'])){
+				$ids = explode(',', $data['identity']);
+				foreach ($ids as $i){
+					$arr = array(
+							'stutest_id'	=>$id,
+							'school_name'	=>$data['school_name'.$i],
+							'level'			=>$data['level'.$i],
+							'year'			=>$data['year'.$i],
+							'major'			=>$data['major'.$i],
+							'note'			=>$data['remark_'.$i],
+							'creat_date'	=>date("Y-m-d"),
+							'status'		=>1,
+							'user_id'		=>$this->getUserId(),
+					);
+					$this->_name='rms_student_testdetail';
+					$this->insert($arr);
+				}
+			}
 		}catch (Exception $e){
 			echo $e->getMessage();
 		}
@@ -167,6 +188,13 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$sql=" SELECT * FROM rms_student_test where id=$id ";
 		return $db->fetchRow($sql);
 	}	
+	
+	function getStudentTestDetail($id){
+		$db = $this->getAdapter();
+		$sql=" SELECT * FROM rms_student_testdetail WHERE stutest_id=$id";
+		return $db->fetchAll($sql);
+	}
+	
 	function getAllStudentTest($search=null){
 		$db = $this->getAdapter();
 		$session_user=new Zend_Session_Namespace('authstu');

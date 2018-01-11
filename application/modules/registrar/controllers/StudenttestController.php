@@ -87,6 +87,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		$id = $this->getRequest()->getParam('id');
 		$db = new Registrar_Model_DbTable_DbStudentTest();
 		$this->view->rs = $row  = $db->getStudentTestById($id);
+		$this->view->row_detail=$db->getStudentTestDetail($id);
 		if($row['register']==1){
 			Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/registrar/studenttest");
 		}

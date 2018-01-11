@@ -1,34 +1,5 @@
-  <?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-  // report
-  
+  <?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();  
   echo $this->headTitle($tr->translate("ALL_STUDENT_REPORT"));
-  
-  $rpt_all_student = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student'), null, true);
-  $rpt_all_amount_student = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-amount-student'), null, true);
-  $rpt_student_statistic = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-statistic'), null, true);
-  $rpt_student_history = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-study-history'), null, true);
-  $rpt_student_detail = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student'), null, true);
-  
-  $rpt_student_drop = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-drop'), null, true);
-  
-  $rpt_student_attedence = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-attendence'), null, true);
-  $rpt_student_attedence_highschool = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-attendence-highschool'), null, true);
-  
-  $rpt_student_group = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'student-group'), null, true);
-  
-  $rpt_group_student_change_group = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rptgroupstudentchangegroup'), null, true);
-  $rpt_studentchangegroup = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-change-group'), null, true);
-  
-  $rpt_student_mistake = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-mistake'), null, true);
-  $rpt_total_student_mistake = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-total-student-mistake'), null, true);
-  
-  $rpt_student_score = $this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'rpt-score'), null, true);
-  $rpt_gep_monthly_score = $this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'rpt-gep-monthlyscore'), null, true);
-  $rpt_gep_semester_score = $this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'rpt-semester-evaluation'), null, true);
-  
-  
-  $rpt_score_bac_monthly = $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-bac-monthly'), null, true);
-  
   ?>
   <style>
   ul.link-rpt li a {
@@ -53,32 +24,7 @@
   }
   </style>
   <div style="background:#ccc; width: 100%;">
-  	
   	<?php /*?>
-  	
-  	<ul class="link-rpt">
-  		<li><a href="<?php echo $rpt_all_student;?>"><?php echo $tr->translate('RPT_ALL_STUDENT');?></a></li>
-  		<li><a href="<?php echo $rpt_all_amount_student;?>"><?php echo $tr->translate('RPT_ALL_AMOUNT_STUDENT');?></a></li>
-  		<li><a href="<?php echo $rpt_student_statistic;?>"><?php echo $tr->translate('RPT_STUDENT_STATISTIC');?></a></li>
-  		<li><a href="<?php echo $rpt_student_history;?>"><?php echo $tr->translate('STUDENT_HISTORY_REPORT');?></a></li>
-  		<li><a href="<?php echo $rpt_student_detail;?>"><?php echo $tr->translate('RPT_STUDENT_DETAIL');?></a></li>
-  		
-  		<!-- <li><a href="<?php //echo $rpt_gep_monthly_score;?>"><?php //echo $tr->translate('REPORT_GEP_MONTHLYSCORE');?></a></li>
-  		<li><a href="<?php //echo $rpt_gep_semester_score;?>"><?php //echo $tr->translate('REPORT_SEMESTER_EVALUATION');?></a></li>
-  		<li><a href="<?php //echo $rpt_student_attedence_highschool;?>"><?php //echo $tr->translate('STUDENT_ATTENDENCE')." ( ".$tr->translate('HIGH_SCHOOL')." )";?></a></li>
-  		-->
-  		
-  		<li><a href="<?php echo $rpt_student_attedence;?>"><?php echo $tr->translate('STUDENT_ATTENDENCE');?></a></li>
-  		<li><a href="<?php echo $rpt_student_drop;?>"><?php echo $tr->translate('RPT_STUDENT_DROPS');?></a></li>
-  		<li><a href="<?php echo $rpt_student_group;?>"><?php echo $tr->translate('RPT_STUDENT_GROUP');?></a></li>
-  		<li><a href="<?php echo $rpt_group_student_change_group;?>"><?php echo $tr->translate('RPT_GROUP_STUDENT_CHANGE_GROUP');?></a></li>
-  		<li><a href="<?php echo $rpt_studentchangegroup;?>"><?php echo $tr->translate('RPT_STUDENT_CHANGE_GROUP');?></a></li>
-  		<li><a href="<?php echo $rpt_score_bac_monthly;?>"><?php echo $tr->translate('STUDENT_SCORE_REPORT');?></a></li>
-  	    <li><a href="<?php echo $rpt_student_mistake;?>"><?php echo $tr->translate('RPT_STUDENT_MISTAKE');?></a></li>
-  		<li><a href="<?php echo $rpt_total_student_mistake;?>"><?php echo $tr->translate('RPT_TOTAL_STUDENT_MISTAKE');?></a></li>
-  		
-  	</ul>
-  	
   	<?php */?>
   	
   	<ul class="link-rpt">

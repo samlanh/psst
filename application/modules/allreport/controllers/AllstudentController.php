@@ -416,6 +416,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'study_year'	=> "",
 					'grade' 		=> "",
 					'session' 		=> "",
+					'teacher' 		=> "",
 					'room'=>0,
 					'degree'=>0,
 					'study_status'=>-1,
@@ -428,6 +429,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+		
+		$_db = new Global_Model_DbTable_DbGroup();
+		$teacher = $_db->getAllTeacher();
+		$this->view->teacher = $teacher;
 	}
 	public function rptgroupstudentchangegroupAction()
 	{

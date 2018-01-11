@@ -161,6 +161,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	if(!empty($search['study_year'])){
 	   		$where.=' AND g.academic_year='.$search['study_year'];
 	   	}
+	   	if(!empty($search['teacher'])){
+	   		$where.=' AND g.teacher_id='.$search['teacher'];
+	   	}
 	   	if(!empty($search['grade'])){
 	   		$where.=' AND g.grade='.$search['grade'];
 	   	}

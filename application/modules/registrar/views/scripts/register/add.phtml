@@ -1820,27 +1820,16 @@ function printSave(new_stu_id,new_receipt){
 			degree = dijit.byId('dept').get('value');
 			stu_type = dijit.byId('student_type').get('value');
 
-			if(stu_type==3){
+			if(stu_type==3){	
 				stu_id = dijit.byId("old_studens").attr('displayedValue');
 			}else{
-				stu_id = dijit.byId("stu_id").attr('displayedValue');
-			}
-
-			if(stu_type==1){
 				if(new_stu_id==''){
 					getStudentNo(degree,1);
 				}else{
 					stu_id = new_stu_id;
 					receipt = new_receipt;
 				}
-			}else{
-				stu_id = dijit.byId("old_studens").attr('displayedValue');
-				if(new_receipt==''){
-					getReceiptNo(stu_id);
-					
-				}else{
-					receipt = new_receipt;
-				}
+				
 			}	
 
 			var today = new Date();

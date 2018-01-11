@@ -437,6 +437,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				sta.type=1
 				AND gsd.status=1
 				AND gsd.type=1
+				AND sta.type=1
     			AND g.`id` = gsd.`group_id`
 				 AND sta.group_id = g.id 
 				 AND st.`stu_id` = gsd.`stu_id` 
@@ -476,6 +477,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		FROM `rms_student_attendence` AS sat,
 		`rms_student_attendence_detail` AS satd 
 		WHERE sat.`id`= satd.`attendence_id`
+		AND sat.type=1
 		AND satd.`stu_id`='.$stu_id.' AND sat.`date_attendence`="'.$date_att.'" AND sat.`group_id`='.$group;
     	$where='';
     	if (!empty($subject)){ // high school student

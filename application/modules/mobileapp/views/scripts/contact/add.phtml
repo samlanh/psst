@@ -3,11 +3,13 @@ dojo.require("dijit/Editor");
 </script>
 
 <style>
- #dijitEditorBody {
+
+body, #dijitEditorBody {
     height: 100%;
-    width: 100%;
-    overflow: hidden;
-    background: white;
+    width: 102%;
+    overflow: auto;
+    background: #fff !important;
+    border: 1px solid #bcf;
 }
 </style>
 
@@ -33,7 +35,7 @@ dojo.require("dijit/Editor");
 						</tr>						             
                         <tr>
 							<td style="width: 100px">ពណ៍នា</td>
-							<td><textarea data-dojo-type="dijit/Editor" id="description" name="description"></textarea></td>
+							<td style="background: #fff;"><textarea data-dojo-type="dijit/Editor" id="description" name="description" ></textarea></td>
 						</tr>                        
 						<tr>
 							<td colspan="2" align="center">

@@ -59,8 +59,9 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 				if(!empty($data['saveclose'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest");
 				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				}				
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
+				}		
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				echo $e->getMessage();exit();

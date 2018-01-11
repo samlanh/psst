@@ -11,21 +11,17 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $session_user->branch_id;
 	}
 	function addStudentTest($data){
-		
 		try{
-			
 			$adapter = new Zend_File_Transfer_Adapter_Http();
 			$part = PUBLIC_PATH.'/images';
 			$adapter->setDestination($part);
 			$adapter->receive();
 			$photo = $adapter->getFileInfo();
-				
 			if(!empty($photo['photo']['name'])){
 				$pho_name = $photo['photo']['name'];
 			}else{
 				$pho_name = '';
 			}
-			
 			$array = array(
 						'branch_id'	=>$this->getBranchId(),
 						'stu_code'	=>$data['stu_code'],
@@ -43,36 +39,56 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'position'			=>$data['position'],
 						'parent_name'		=>$data['parent_name'],
 						'parent_tel'		=>$data['parent_tel'],
-					
 						'photo'				=>$pho_name,
 					
 						'old_school'=>$data['old_school'],
 						'old_grade'	=>$data['old_grade'],
-						//'degree'	=>$data['degree'],
+						'degree'	=>$data['degree'],
+						'grade'		=>$data['grade'],
 					
 						'emergency_name'		=>$data['emergency_name'],
 						'relationship_to_student'=>$data['relationship_to_student'],
 						'emergency_tel'			=>$data['emergency_tel'],
 						'emergency_address'		=>$data['emergency_address'],
-					
 						'educational_background'=>$data['edu_background'],
 					
 						'degree_result'	=>$data['degree'],
-						'grade_result'	=>$data['grade'],
+						'grade_result'	=>$data['grade_result'],
 						'session_result'=>$data['session'],
 						'time_result'	=>$data['time'],
+					    'date_result'   =>$data['date_result'],
+					    'term_test'		=>$data['term_test'],
 					
 						'note'		=>$data['note'],
 						'serial'	=>$data['serial'],
-						
 						'user_id'	=>$this->getUserId(),
 						'test_date'	=>$data['test_date'],
 						'create_date'=>date('Y-m-d'),
 					);
+					$stutest_id=$this->insert($array);
+					if(!empty($data['identity'])){
+						$ids = explode(',', $data['identity']);
+						foreach ($ids as $i){
+							$arr = array(
+									'stutest_id'	=>$stutest_id,
+									'school_name'	=>$data['school_name'.$i],
+									'level'			=>$data['level'.$i],
+									'year'			=>$data['year'.$i],
+									'major'			=>$data['major'.$i],
+									'note'			=>$data['remark_'.$i],
+									'creat_date'	=>date("Y-m-d"),
+									'status'		=>1,
+									'user_id'		=>$this->getUserId(),
+							);
+							$this->_name='rms_student_testdetail';
+							$this->insert($arr);
+						}
+					}
+					
 		}catch (Exception $e){
 			echo $e->getMessage();exit();
 		}
-		$this->insert($array);
+		
  	}
  	
 	function updateStudentTest($data,$id){

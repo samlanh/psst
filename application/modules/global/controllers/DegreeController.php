@@ -79,7 +79,7 @@ class Global_DegreeController extends Zend_Controller_Action {
     		try {
     			$_data = $this->getRequest()->getPost();
     			$db->UpdateDegree($_data);
-    			Application_Form_FrmMessage::Sucessfull("ការកៃប្រែដោយជោគជ័យ !", "/global/degree/index");
+    			Application_Form_FrmMessage::Sucessfull("EDIT_FAIL", "/global/degree/index");
     			//$this->_redirect("");
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("Application Error!");

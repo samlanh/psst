@@ -48,12 +48,12 @@ class Global_LecturerController extends Zend_Controller_Action {
 				$db = new Global_Model_DbTable_DbTeacher();
 				$id = $db->AddNewStaff($_data);
 				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", '/global/lecturer');
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/global/lecturer');
 				}
-					Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				 
 			}catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 				echo $e->getMessage();
 			}
 		}
@@ -67,9 +67,9 @@ class Global_LecturerController extends Zend_Controller_Action {
 		$this->view->branch_id = $_db->getAllBranch();
 		
 		$db = new Global_Model_DbTable_DbTeacher();
-		$position = $db->getAllPosition();
-		array_unshift($position, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
-		$this->view->position = $position;
+// 		$position = $db->getAllPosition();
+// 		array_unshift($position, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
+// 		$this->view->position = $position;
 	}
 	public function editAction()
 	{
@@ -89,7 +89,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 				echo $e->getMessage();
 			}
 		}
-		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$db=new Global_Model_DbTable_DbTeacher();
 		$row=$db->getTeacherById($id);
 		$this->view->rs = $row;
@@ -103,12 +103,12 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
 		$db = new Global_Model_DbTable_DbTeacher();
 		$position = $db->getAllPosition();
-		array_unshift($position, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
+		array_unshift($position, array('id'=>-1,'name'=>$tr->translate("ADD_NEW")));
 		$this->view->position = $position;
 		
 		$db = new Global_Model_DbTable_DbTeacher();
 		$position = $db->getAllPosition();
-		array_unshift($position, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
+		array_unshift($position, array('id'=>-1,'name'=>$tr->translate("ADD_NEW")));
 		$this->view->position = $position;
 	}
 	function addPositionAction(){

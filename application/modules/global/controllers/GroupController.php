@@ -60,7 +60,7 @@ class Global_GroupController extends Zend_Controller_Action {
 				if(!empty($data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ ss!", "/global/group/add");
+					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group/add");
 				}
 				Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
 			} catch (Exception $e) {
@@ -108,10 +108,10 @@ class Global_GroupController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$db->updateGroup($data);
 				if(!empty($data['save'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group/index");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/global/group/index");
 				}
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 				echo $e->getMessage();
 			}
 		}
@@ -121,7 +121,7 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->rs = $group_info = $db->getGroupById($id);
 		
 		if($group_info['is_pass']==1){
-			Application_Form_FrmMessage::Sucessfull(" ក្រុមសិក្សាត្រូវបានបញ្ចប់ មិនអាចកែបានទេ !!! ", "/global/group/index");
+			Application_Form_FrmMessage::Sucessfull("ក្រុមសិក្សាត្រូវបានបញ្ចប់ មិនអាចកែបានទេ !!! ", "/global/group/index");
 		}
 		
 		$this->view->row = $db->getGroupSubjectById($id);

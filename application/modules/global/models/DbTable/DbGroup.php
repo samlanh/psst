@@ -362,7 +362,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	
 	function getAllTeacher(){
 		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT(teacher_name_kh,'-',teacher_name_en) as name FROM rms_teacher WHERE status=1 and teacher_name_kh!='' ";
+		$sql = "SELECT id,teacher_name_kh  as name FROM rms_teacher WHERE status=1 and teacher_name_kh!='' ";
 		return $db->fetchAll($sql);
 	}
 	
@@ -379,7 +379,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$arr = array(
 					'teacher_code' => $teacher_code,
 					'teacher_name_kh' => $_data['kh_name'],
-					'teacher_name_en' => $_data['en_name'],
+					//'teacher_name_en' => $_data['en_name'],
 					'sex' => $_data['sex'],
 					'dob' => $_data['dob'],
 					'nationality'  => $_data['nationality'],

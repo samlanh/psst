@@ -41,7 +41,9 @@ dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 					dojo.byId('confirm_password').value = '';
 					dijit.byId('password').focus();
 					return false;
-				}				
+				}	
+                dijit.byId("save_new").attr("disabled",true);	
+				dijit.byId("save_close").attr("disabled",true);		
 				return true;
 			}else {
 				return false;
@@ -119,9 +121,9 @@ dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 			<tr>
 				<td colspan="3" align="center">
 					<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
-					<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+					<input type="button" onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
-					<input type="submit" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 				</td>
 			</tr>
@@ -142,5 +144,31 @@ dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 				alert(err);
 			}
 		});
+	}
+
+	function submitDataClose(){
+		if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
+			alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
+			dojo.byId('password').value = '';
+			dojo.byId('confirm_password').value = '';
+			dijit.byId('password').focus();
+			return false;
+		}	
+        
+		if(dijit.byId('frm_add_tran').validate()) {
+			dijit.byId("save_new").attr("disabled",true);	
+			dijit.byId("save_close").attr("disabled",true);		
+			var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'add')); ?>';
+			dojo.xhrPost({
+			    url: url_submit,	
+				form: dojo.byId("frm_add_tran"),		    
+				load: function(data) {
+					alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+					window.location.href ="<?php echo $this->baseUrl();?>/global/lecturer";
+				},
+				error: function(e) {
+				}
+			});
+		}
 	}
 </script>

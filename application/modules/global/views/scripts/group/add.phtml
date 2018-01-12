@@ -110,7 +110,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 					</tr>
 					<tr>
 						<td colspan="4" align="left">
-								<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+								<input type="button" label="<?php echo $tr->translate('ADD_SUBJECT_STUDY');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitIconEditProperty" onclick="addRow();" />
 						</td>
 						<input type="hidden" name="identity1" id="identity1"  />
@@ -503,7 +503,7 @@ function deleteRecord1(index) {
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate("ADD_NEW_ROOM")?></legend>
+					<legend align="center" ><?php echo $tr->translate("ADD_ROOM")?></legend>
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("ROOM_NAME")?></td>
@@ -520,8 +520,8 @@ function deleteRecord1(index) {
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save" id="save_room" label="<?php echo $tr->translate("SAVE");?>" dojoType="dijit.form.Button" 
+								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("CANCEL");?>" dojoType="dijit.form.Button" onclick="hideDialog();"/>
+								<input type="button" value="save" id="save_room" label="<?php echo $tr->translate("SAVECLOSE");?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addRoom();"/>
 							</td>
 						</tr>
@@ -680,8 +680,8 @@ function deleteRecord1(index) {
 									<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" value="" readonly type="text"></td>
 									<td><?php echo $tr->translate("KH_NAME")?></td>
 									<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="kh_name" name="kh_name" value="" type="text"></td>
-									<td><?php echo $tr->translate("EN_NAME")?></td>
-									<td><input dojoType="dijit.form.TextBox" class="fullside" id="en_name" name="en_name" value="" type="text"></td>
+									 
+									 
 								</tr>
 								<tr>
 									<td><?php echo $tr->translate("SEX")?></td>
@@ -844,7 +844,7 @@ function addTeacher(){
 			load: function(data) {
 			  var Itemmake = { 
 				        id: data.id,
-				        name: dijit.byId('kh_name').get('value')+'-'+dijit.byId('en_name').get('value')
+				        name: dijit.byId('kh_name').get('value')
 				         };
 					index=$("#tow_value").val();
 					if(index<0){

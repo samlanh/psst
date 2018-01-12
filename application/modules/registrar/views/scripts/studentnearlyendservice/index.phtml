@@ -92,7 +92,7 @@
 							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['grade'];?></td>
 							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['session'];?></td>
 							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['service_type'];?></td>
-							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['service'];?></td>
+							<td align="left" style="border: 1px solid #000;">&nbsp;<?php if ($row['type']==1){ echo $row['grade'];}else{ echo $row['service'];}?></td>
 							<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
 							<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['start']));?>&nbsp;</td>
 							<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-M-Y",strtotime($row['end']));?>&nbsp;</td>

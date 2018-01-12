@@ -25,7 +25,8 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  spd.`start_date` as start,
 				  spd.`validate` as end,
 				  sp.create_date,
-				  (SELECT title FROM `rms_program_type` WHERE id=pn.ser_cate_id LIMIT 1) AS service_type
+				  (SELECT title FROM `rms_program_type` WHERE id=pn.ser_cate_id LIMIT 1) AS service_type,
+				  spd.type
 				FROM
 				  `rms_student_paymentdetail` AS spd,
 				  `rms_student_payment` AS sp,

@@ -23,15 +23,19 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  spd.`validate` as end,
 				  sp.create_date,
 				  (select major_enname from rms_major where major_id = s.grade) as grade,
-				  (select name_en from rms_view where type=4 and key_code =s.session) as session
+				  (select name_en from rms_view where type=4 and key_code =s.session) as session,
+				  (SELECT title FROM rms_program_type WHERE rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate,
+				   spd.`type`
 				FROM
 				  `rms_student_paymentdetail` AS spd,
 				  `rms_student_payment` AS sp,
 				  `rms_program_name` AS pn,
-				  rms_student as s
+				  rms_student as s,
+				   rms_program_name AS p
 				WHERE spd.`is_start` = 1 
 				  AND sp.id=spd.`payment_id`
 				  AND spd.`service_id`=pn.`service_id`
+				    AND p.service_id=spd.service_id 
     			  AND sp.is_void!=1  $branch_id
     			  and s.stu_id = sp.student_id
     			  and sp.is_suspend = 0
@@ -43,7 +47,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	$str_next = '+1 week';
      	$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
      	
-     	$to_date = (empty($search['end_date']))? '1': "spd.validate <= '".$search['end_date']." 23:59:59'";
+     	$to_date = (empty($search['end_date']))? '1': "spd.validate >= '".$search['end_date']." 23:59:59'";
      	$where .= " AND ".$to_date;
      	
      	if(!empty($search['service'])){

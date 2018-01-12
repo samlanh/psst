@@ -54,17 +54,17 @@
 				<td colspan="3">
 					<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 						<tr style="font-size:12px; height: 20px;border: 1px solid #000;background: #ccc;" align="center" >
-							<td style="border: 1px solid #000;">&nbsp;No.&nbsp;</td>
-							<td style="border: 1px solid #000;">Code</td>
-							<td style="border: 1px solid #000;">&nbsp;Student Name&nbsp;</td>
-							<td style="border: 1px solid #000;">&nbsp;Sex&nbsp;</td>
-							<td style="border: 1px solid #000;">&nbsp;Grade&nbsp;</td>
-							<td style="border: 1px solid #000;">&nbsp;Session&nbsp;</td>
-							<td style="border: 1px solid #000;">Service Name</td>
-							<td style="border: 1px solid #000;">Paid Date</td>
-							<td style="border: 1px solid #000;">Start Date</td>
-							<td style="border: 1px solid #000;">Validate</td>
-							<td style="border: 1px solid #000;">Late (Days)</td>
+							<td style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
+							<td style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_ID"); ?></td>
+							<td style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</td>
+							<td style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SEX");?>&nbsp;</td>
+							<td style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
+							<td style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
+							<td style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_NAME"); ?></td>
+							<td style="border: 1px solid #000;"><?php echo $tr->translate("PAID_DATE"); ?></td>
+							<td style="border: 1px solid #000;"><?php echo $tr->translate("START_DATE"); ?></td>
+							<td style="border: 1px solid #000;"><?php echo $tr->translate("VALIDATE"); ?></td>
+							<td style="border: 1px solid #000;"><?php echo $tr->translate("AMOUNT_LATE"); ?></td>
 							
 						</tr>
 					<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
@@ -79,7 +79,7 @@
 							<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo $row['sex'];?></td>
 							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['grade'];?></td>
 							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['session'];?></td>
-							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['service'];?></td>
+							<td align="left" style="border: 1px solid #000;">&nbsp;<?php if ($row['type']==1){ echo $row['grade'];}else{ echo $row['service'];}?></td>
 							<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
 							<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['start']));?>&nbsp;</td>
 							<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-M-Y",strtotime($row['end']));?>&nbsp;</td>

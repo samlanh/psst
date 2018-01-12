@@ -26,7 +26,8 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  (select name_en from rms_view where type=4 and key_code =s.session) as session,
 				  spd.`start_date` as start,
 				  spd.`validate` as end,
-				  sp.create_date
+				  sp.create_date,
+				  spd.type
 				FROM
 				  `rms_student_paymentdetail` AS spd,
 				  `rms_student_payment` AS sp,

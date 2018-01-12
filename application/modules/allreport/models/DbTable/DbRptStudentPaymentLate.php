@@ -23,14 +23,18 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  spd.`validate` as end,
 				   sp.create_date,
 				  (select major_enname from rms_major where major_id = s.grade) as grade,
-				  (select name_en from rms_view where type=4 and key_code =s.session) as session
+				  (select name_en from rms_view where type=4 and key_code =s.session) as session,
+				  (SELECT title FROM rms_program_type WHERE rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate,
+				   spd.`type`
 				FROM
 				  `rms_student_paymentdetail` AS spd,
 				  `rms_student_payment` AS sp,
 				  `rms_program_name` AS pn,
-				  rms_student as s
+				  rms_student as s,
+				  rms_program_name AS p
 				WHERE spd.`is_start` = 1 
 				  AND sp.id=spd.`payment_id`
+				  AND p.service_id=spd.service_id 
 				  AND spd.`service_id`=pn.`service_id`
     			  $branch_id	
     			  and sp.is_void=0

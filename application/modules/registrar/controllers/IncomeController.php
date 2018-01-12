@@ -39,7 +39,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQE_NO","NOTE","FOR_DATE","STATUS");
+    		$collumns = array("INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQE_NO","NOTE","PAID_DATE","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'income','action'=>'edit',
     		);
@@ -64,8 +64,9 @@ class Registrar_IncomeController extends Zend_Controller_Action
 				if(!empty($data['saveclose'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/income");
 				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/income/add");
 				}				
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/income/add");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

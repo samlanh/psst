@@ -289,7 +289,7 @@ dojo.require("dojo.store.Memory");
 							</tr>
 							<tr style="font-size: 15px;">
 								<td colspan="2" align="center"></td>
-								<td colspan="2" align="center">
+								<td colspan="2" align="center" style="line-height: 13px;">
 									<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';margin-top: -15px;"> 
 								        <?php 
 										   $session_user=new Zend_Session_Namespace('authstu');
@@ -298,9 +298,9 @@ dojo.require("dojo.store.Memory");
 										   echo "".$last_name." ".$username;
 										?>
 					        		</h4>
-					        		<div style="font-size: 12px;margin-top: -20px;">
+					        		<span style="font-size: 12px;margin-top:0px;">
 					        			<?php  $today = date("F j, Y, g:i a");echo $today; ?>
-					        		</div>
+					        		</span>
 					        	</td>
 							</tr>
 						</table>
@@ -310,7 +310,7 @@ dojo.require("dojo.store.Memory");
 		</div>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-				type="button" onclick="dijit.byId('payment_transaction').hide();">Cancel</button>
+				type="button" onclick="dijit.byId('payment_transaction').hide();"><?php echo $tr->translate("CANCEL");?></button>
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
 				 type="button" onclick="printSubmit();"><?php echo $tr->translate("PRINT");?></button>
 	</div>
@@ -337,8 +337,8 @@ dojo.require("dojo.store.Memory");
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save" name="save" label="Save" dojoType="dijit.form.Button" 
+								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("GO_BACK")?>" dojoType="dijit.form.Button" onclick="hideDialog();"/>
+								<input type="button" value="save" name="save" label="<?php echo $tr->translate("SAVECLOSE")?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addCateIncome();"/>
 							</td>
 						</tr>

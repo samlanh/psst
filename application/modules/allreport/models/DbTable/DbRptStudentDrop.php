@@ -247,7 +247,8 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			(SELECT s.stu_code FROM rms_student AS s WHERE s.stu_id=se.stu_id LIMIT 1)AS stu_code,
 			(SELECT  name_en AS NAME FROM rms_view WHERE rms_view.type=6 AND rms_view.key_code=se.term LIMIT 1 ) AS term,
 			(SELECT first_name FROM `rms_users` WHERE rms_users.id=se.user_id LIMIT 1) AS user_name ,
-			(SELECT name_en FROM rms_view WHERE rms_view.key_code=se.status AND rms_view.type=1 LIMIT 1) AS STATUS
+			(SELECT name_en FROM rms_view WHERE rms_view.key_code=se.status AND rms_view.type=1 LIMIT 1) AS STATUS,
+			(SELECT m.major_enname FROM rms_major AS m WHERE m.major_id=(SELECT s.grade FROM rms_student AS s WHERE s.stu_id=se.stu_id ) LIMIT 1)AS grade
         	 FROM rms_startdate_enddate_stu AS se ";
     	$where =' where 1';
     	$from_date =(empty($search['start_date']))? '1': "se.create_date >= '".$search['start_date']." 00:00:00'";

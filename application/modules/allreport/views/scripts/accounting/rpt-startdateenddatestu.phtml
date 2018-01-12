@@ -63,6 +63,7 @@
 												<th >No.</th>
 												<th ><?php echo $tr->translate("STUDENT_ID");?></th>
 												<th ><?php echo $tr->translate("STUDENT_NAME");?></th>
+												<th ><?php echo $tr->translate("GRADE");?></th>
 												<th ><?php echo $tr->translate("PAYMENT_TERM");?></th>
 												<th ><?php echo $tr->translate("START_DATE");?></th>
 												<th ><?php echo $tr->translate("END_DATE");?></th>
@@ -76,6 +77,7 @@
 												<td ><?php echo $key+1;?></td>
 												<td ><?php echo $rs['stu_code'];?></td>
 												<td ><?php echo $rs['stu_name'];?></td>
+												<td align="center"><?php echo $rs['grade'];?></td>
 												<td align="left">&nbsp;<?php echo $rs['term'];?></td>
 												<td ><?php echo date('d-M-Y',strtotime($rs['start_date']));?></td>
 												<td ><?php echo date('d-M-Y',strtotime($rs['end_date']));?></td>

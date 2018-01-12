@@ -96,11 +96,13 @@
 							<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
 							<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['start']));?>&nbsp;</td>
 							<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-M-Y",strtotime($row['end']));?>&nbsp;</td>
-							<?php if($day>=0){
-								$daylate ="Late ".abs($day);
-							}else{
-								$daylate ="Remain ".abs($day);
-							}?>
+							<?php 
+							$daylate =$tr->translate("Remain")." ".abs($day);
+							//if($day>=0){
+								//$daylate ="Late ".abs($day);
+							//}else{
+								//$daylate ="Remain ".abs($day);
+							//}?>
 							<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo ($daylate);?> days</td>
  													</tr>
 												<?php }}?>	 

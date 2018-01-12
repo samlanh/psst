@@ -44,7 +44,7 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$order=" ORDER by spd.`validate` DESC ";
     	$str_next = '+1 week';
      	$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
-      	$to_date = (empty($search['end_date']))? '1': " spd.validate <= '".$search['end_date']." 23:59:59'";
+      	$to_date = (empty($search['end_date']))? '1': " spd.validate >= '".$search['end_date']." 23:59:59'";
       	$where .= " AND ".$to_date;
     		if(!empty($search['adv_search'])){
     			$s_where = array();

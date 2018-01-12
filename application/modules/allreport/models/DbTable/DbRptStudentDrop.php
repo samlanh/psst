@@ -18,7 +18,8 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=st.session limit 1)AS session,
     	(select major_enname from rms_major where rms_major.major_id=st.grade limit 1)AS grade,
 		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex )AS sex,
-		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,stdp.note,stdp.date_stop,
+		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
+		stdp.note,stdp.date_stop,stdp.reason,
 		(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
 		 from rms_student_drop as stdp,rms_student as st where stdp.stu_id=st.stu_id and stdp.status=1 ";
 

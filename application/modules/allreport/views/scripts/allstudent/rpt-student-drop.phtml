@@ -45,16 +45,16 @@
 									<td colspan="3">
 										<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
 											<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
-												<th >No.</th>
-												<th >Student ID</th>
-												<th >Student Name</th>
-												<th >Gender</th>
-												<th >AcademicYear</th>
-												<th >Grade</th>
-												<th >Session</th>
-												<th >Type</th>
-												<th >Date Stop</th>
-												<th >Note</th>
+												<th ><?php echo $tr->translate("NUM")?></th>
+												<th ><?php echo $tr->translate("STUDENT_ID")?></th>
+												<th ><?php echo $tr->translate("STUDENT_NAME")?></th>
+												<th ><?php echo $tr->translate("GENDER")?></th>
+												<th ><?php echo $tr->translate("ACADEMIC_YEAR")?></th>
+												<th ><?php echo $tr->translate("GRADE")?></th>
+												<th ><?php echo $tr->translate("SESSION")?></th>
+												<th ><?php echo $tr->translate("TYPE")?></th>
+												<th ><?php echo $tr->translate("STOP_DATE")?></th>
+												<th ><?php echo $tr->translate("REASON")?></th>
 												
 											</tr>
 										<?php $i=0; foreach ($this->rs AS $row) { $i++;?>
@@ -68,7 +68,7 @@
 												<th ><?php echo $row['session'];?></th>
 												<th ><?php echo $row['type'];?></th>
 												<th ><?php echo $row['date_stop'];?></th>
-												<th ><?php echo $row['note'];?></th>
+												<th ><?php echo $row['reason'];?></th>
 											</tr>
 										<?php }?>	
 										</table>	

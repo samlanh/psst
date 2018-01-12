@@ -246,6 +246,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					st.old_school,
 					st.old_grade,
 					st.total_price,
+					st.price,
 					st.note
 				FROM
 					rms_student_test AS st

@@ -367,7 +367,7 @@ function loading(){
 			<tr>
 				<td align="center">
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-						type="button" onclick="hideDialog1();">No</button>
+						type="button" onclick="hideDialog1(),dijit.byId('office_receipt').submit();">No</button>
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
 						type="button" onclick="printSubmit();"><?php echo $tr->translate("Yes");?></button>
 				</td>
@@ -390,7 +390,7 @@ function printSubmit(){
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
 	hideDialog1();
-    //dijit.byId('office_receipt').submit();
+    dijit.byId('office_receipt').submit();
 }
 function hideDialog(){
 	dijit.byId('terms').hide();

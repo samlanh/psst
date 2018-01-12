@@ -24,7 +24,7 @@ select{ width:100%;}
 fieldset{  background:none;}
 .red{ color: red; padding-left:5px;}
 </style>
-<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttestpayment','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttestpayment','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
     	stu_test = dijit.byId('stu_test').get('value');
@@ -33,7 +33,6 @@ fieldset{  background:none;}
          	return false;
     	}
 		dijit.byId('save_new').set('disabled',true);	
-		dijit.byId('save_close').set('disabled',true);
     	return true;
    }else {
     	return false;
@@ -305,7 +304,7 @@ fieldset{  background:none;}
 			<tr>
 				<td align="center">
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-						type="button" onclick="hideDialog1();">No</button>
+						type="button" onclick="hideDialog1(), dijit.byId('office_receipt').submit();">No</button>
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
 						type="button" onclick="printSubmit();"><?php echo $tr->translate("Yes");?></button>
 				</td>
@@ -327,7 +326,7 @@ function printSubmit(){
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
 	hideDialog1();
-    //dijit.byId('office_receipt').submit();
+    dijit.byId('office_receipt').submit();
 }
 function hideDialog(){
 	dijit.byId('terms').hide();
@@ -422,7 +421,7 @@ function printSave(new_stu_id,new_receipt){
 		temp+='</tr>';
 		temp+='<tr style="font-size:12px !important;height: 10px;border:1px solid #000; ">';
 		  temp+='<td align="center" style="border:1px solid #000;">1</td>';
-		  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Student Test Payment</td>';
+		  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Test Fee</td>';
 		  temp+='<td align="center" style="border:1px solid #000;"> </td>';
 		  temp+='<td align="center" style="border:1px solid #000;"> </td>';
 		  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('price').get('value')+'</td>';

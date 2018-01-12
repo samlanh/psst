@@ -69,8 +69,10 @@
 					<td colspan="3" id="exportExcel">
 						<table style="width:100%;font-family: Khmer OS Battambang,Times New Roman; white-space: nowrap; !important;">
 							<tr style="background:#dadada;">
-								<td><strong><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?></strong></td>
-								<td>
+								<td colspan="2"><strong><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?></strong></td>
+							</tr>
+							<tr style="background:#dadada;">
+								<td colspan="2">
 									<table class="padd" width="100%" border="1" align="center" style="font-family: Khmer OS Battambang,Times new roman;">
 										 <?php 
 										 	$i=0; $total=0;$total_paid=0;$total_balance=0;
@@ -167,12 +169,12 @@
 							</tr>
 							<?php if(!empty($this->stu_test)){ ?>
 							<tr style="background:#eee;">
-								<td ><strong style="font-size: 14px;"><div style="margin-bottom: -5px;margin-top: 5px;"> Student Tested </div></strong></td>
-								<td >
+								<td colspan="2"><strong style="font-size: 14px;">Student Tested</strong></td>
+							</tr>
+							<tr style="background:#eee;">
+								<td colspan="2">
 									<table class="padd" border="1" width="100%" align="center" style="margin-top:5px;font-family: Khmer OS Battambang,Times new roman;">
-										<tr style="border-left:none;">
-											<td align="center" colspan="13" > </td>
-										</tr>
+									
 										<tr style=" white-space: nowrap;font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 											<td><?php echo $tr->translate("RECEIPT_NO");?></td>
@@ -228,8 +230,10 @@
 							<?php }?>
 							<?php if(!empty($this->income)){?>
 							<tr style="background:#d3caff;">
-								<td><strong style="font-size: 14px;"><div style="margin-bottom: -5px;margin-top: 5px;"> Other Income </div></strong> </td>
-								<td>
+								<td colspan="2"><strong style="font-size: 14px;">Other Income</strong> </td>
+							</tr>
+							<tr style="background:#d3caff;">
+								<td colspan="2">
 									<table class="padd" width="100%" border="1" align="center" style="margin-top:5px;font-family: Khmer OS Battambang,Times new roman;">
 										<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
@@ -244,7 +248,6 @@
 										 <style> td{padding:0 3px; }</style>
 									<?php $i=0;$total_income_kh=0;foreach($this->income as $row){ $i++;?>
 										<tr class="hover" style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" >
-											<td style="border: 1px solid #000;"><?php echo $i;?></td>
 											<td style="border: 1px solid #000;"><?php echo $row['title'];?></td>
 											<td style="border: 1px solid #000;"><?php echo $row['invoice'];?></td>
 											<td style="border: 1px solid #000;"><?php echo $row['income_category'];?></td>
@@ -269,8 +272,10 @@
 							<?php }?>
 							<?php if(!empty($this->expense)){?>
 							<tr style="background: #fde3ff;">
-								<td><strong style="font-size: 14px;"><div style="margin-top:5px; margin-bottom: -5px;"><?php echo $tr->translate("OTHER_EXPENSE");?></div></strong></td>
-								<td>
+								<td  colspan="2"><strong style="font-size: 14px;"><?php echo $tr->translate("OTHER_EXPENSE");?></strong></td>
+							</tr>
+							<tr style="background: #fde3ff;">
+								<td colspan="2">
 									<table class="padd" width="100%" border="1" align="center" style="margin-top:5px;font-family: Khmer OS Battambang,Times new roman;">
 										<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
@@ -307,8 +312,10 @@
 							<?php }?>
 							<?php if(!empty($this->change_product)){?>
 							<tr>
-								<td><strong><?php echo $tr->translate("CHANGE_PRODUCT");?></strong></td>
-								<td>
+								<td colspan="2"><strong><?php echo $tr->translate("CHANGE_PRODUCT");?></strong></td>
+							</tr>
+							<tr>
+								<td colspan="2">
 									<table class="padd" width="100%" border="1" align="center" style="margin-top:5px;font-family: Khmer OS Battambang,Times new roman;">
 										<tr style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
@@ -363,8 +370,11 @@
 							<?php }?>
 							<?php if(!empty($this->row) || !empty($this->stu_test) || !empty($this->income) || !empty($this->expense) || !empty($this->change_product)){?>
 							<tr>
-								<td><strong><?php echo $tr->translate("TOTAL_INCOME");?></strong></td>
-								<td>
+								<td colspan="2"><strong><?php echo $tr->translate("TOTAL_INCOME");?></strong></td>
+							</tr>
+							<tr>
+								
+								<td colspan="2">
 								<?php 
 									$final_total_dollar= $net_amount + $total_stu_test + $total_income_dollar + $total_payment_change_product - $total_expense_dollar;
 									$final_total_income = $net_amount + $total_stu_test + $total_income_dollar + $total_payment_change_product;

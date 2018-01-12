@@ -77,13 +77,14 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 								$type_name='';
 								$sum_up = 0;
 								$net_total=0;
+								$no=0;
 							  ?>
 							  <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
 							  
 								  <?php if($rs['type']!=$type){	?>
-									   <?php  if($key>0 ){?>
+									   <?php  if($key>0 ){ $no++;?>
 												<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-												  <td><?php echo $no;?></td>
+												  <td style="text-align: center;"><?php echo $no;?></td>
 											 	  <td width="50%" style=" font-weight:bold;">&nbsp;&nbsp;</td>
 												  <td width="50%" style=" color:#F00; font-weight:bold;"></td>
 											 	  <td width="50%" style="  background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</td>
@@ -96,31 +97,44 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 									 	$grand_total = $grand_total + $rs['paidamount'];
 									 	if($type==1 || $type==2){
 									 		$type_name = "ថ្លៃសិក្សា";
-									 		$no=1;
+// 									 		$no=1;
 									 	}else if($type==3){
 									 		$type_name = "ថ្លៃសេវាកម្ម";
-									 		$no=2;
+// 									 		$no=2;
 									 	}else if($type==4){
 									 		$type_name = "ថ្លៃលក់ផលិតផល";
-									 		$no=3;
+// 									 		$no=3;
 									 	}
 							 	 	?>
 							  
-							  	<?php }$sum_up = $sum_up + $grand_total; ?>
+							  	<?php }
+							  	$sum_up = $sum_up + $grand_total; $no++; ?>
 								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								 		<td><?php echo $no."";?></td>
+								 		<td style="text-align: center;"><?php echo $no."";?></td>
 							 			<td width="50%" style=" font-weight:bold;">&nbsp;</th>
 										<td width="50%" style=" color:#F00; font-weight:bold; "></td>
 								  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</th>
 										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($grand_total,2);?></td>
 								  </tr>
-							 <?php }?>	  
+							 <?php }?>	
+							 <?php $income_stu_test =0; 
+							 if (!empty($this->studenttestincome)) { $no++; 
+							 	   $income_stu_test=$this->studenttestincome['total_test'];
+							 ?>
+							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+								  		<td style="text-align: center;"><?php echo $no;?></td>
+							 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+							 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+							 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Test Income");?>&nbsp;</td>
+										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($this->studenttestincome['total_test'],2);?></td>
+								  </tr>
+							 <?php }?> 
 							 <?php 
 									$i=0; 
 									$payment_id=0;
 									$fine=0;
 							 ?>
-							  <?php if(!empty($this->rs)){ foreach($this->rs as $key => $rs){ $i++;?>
+							  <?php if(!empty($this->rs)){ $no++; foreach($this->rs as $key => $rs){ $i++; ?>
 								  <?php 
 								  		if($rs['payment_id']!=$payment_id){	
 											$fine = $fine + $rs['fine'];
@@ -129,7 +143,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 							 	  ?>
 							  	  <?php }?>
 								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								  		<td><?php echo 4;?></td>
+								  		<td style="text-align: center;"><?php echo $no;?></td>
 							 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
 							 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
 							 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("FINE");?>&nbsp;</td>
@@ -141,7 +155,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 									$payment_id=0;
 									$credit_memo=0;
 							    ?>
-							  <?php if(!empty($this->rs)){ foreach($this->rs as $key => $rs){ $i++;?>
+							  <?php if(!empty($this->rs)){ $no++; foreach($this->rs as $key => $rs){ $i++; ?>
 								  	<?php 
 								  		if($rs['payment_id']!=$payment_id){	
 											$credit_memo = $credit_memo + $rs['credit_memo'];
@@ -150,7 +164,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 							 	  	?>
 							  	  <?php } ?>
 								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								  		<td><?php echo 5;?></td>
+								  		<td style="text-align: center;"><?php echo $no;?></td>
 								  		<td width="50%" style="font-weight:bold;">&nbsp;&nbsp;</td>
 										<td width="50%" style=" color:#F00; font-weight:bold; "></td>
 										<td width="50%" style=" background-color: #efefef; font-weight:bold; ">&nbsp;<?php echo $tr->translate("CREDIT_MEMO");?>&nbsp;</td>
@@ -162,7 +176,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 									$payment_id=0;
 									$deduct=0;
 							   ?>
-							  <?php if(!empty($this->rs)){ foreach($this->rs as $key => $rs){ $i++;?>
+							  <?php if(!empty($this->rs)){ $no++; foreach($this->rs as $key => $rs){ $i++; ?>
 								  <?php 
 								  		if($rs['payment_id']!=$payment_id){	
 											$deduct = $deduct + $rs['deduct'];
@@ -171,7 +185,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 							 	  ?>
 							  	  <?php }?>
 								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								  		<td><?php echo 6;?></td>
+								  		<td style="text-align: center;"><?php echo $no;?></td>
 							 			<td width="50%" style="font-weight:bold; ">&nbsp;&nbsp;</th>
 										<td width="50%" style=" color:#F00; font-weight:bold; "></td>
 								  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate("DEDUCT");?>&nbsp;</th>
@@ -179,7 +193,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 								  </tr>
 							  <?php }
 							  ?>
-							  <?php $net_total = $sum_up + $fine - $credit_memo - $deduct; ?>
+							  <?php $net_total = $sum_up + $fine +$income_stu_test - $credit_memo - $deduct; ?>
 							  	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
 								  		<td colspan="3" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"> </td>
 								  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;&nbsp;សរុបរួម / Total</td>

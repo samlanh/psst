@@ -23,6 +23,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 		$arr = array(
 			'receipt_no'=>$receipt_number,
 			'price'	 	=>$data['price'],
+			'total_price'	 	=>$data['price'],
 			'is_paid'	=>1,
 			'paid_date'	=>$data['paid_date'],
 		);
@@ -35,10 +36,11 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 	function updateRegister($data,$id){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$receipt_number = $data['receipt_no']; //$this->getRecieptNo();
-		if($data['is_void'] == 1){
+		if(empty($data['is_void'])){
 			$arr = array(
 					'receipt_no'=>$receipt_number,
 					'price'	 	=>$data['price'],
+					'total_price'	 	=>$data['price'],
 					'is_paid'	=>1,
 					'paid_date'	=>$data['paid_date'],
 			);

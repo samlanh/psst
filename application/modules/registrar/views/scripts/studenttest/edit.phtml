@@ -82,97 +82,108 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 			<td>
 				<fieldset>
 					<legend><strong><?php echo $tr->translate('STUDENT_DETAIL')?></strong></legend>
-						<table cellspacing="10"  width="100%" style="white-space: nowrap;">
+						<table cellspacing="0"  width="100%" style="white-space: nowrap;">
 							<tr>
-								<td valign="top" width="33%">
-									<table cellspacing="5" width="100%" >
-										<tr>
-											<td><?php echo $tr->translate("NAME_KH")?></td>
-											<td><input type="text" name="kh_name" id="kh_name" value="<?php echo $this->rs['kh_name']?>" required="true" class="fullside" dojoType="dijit.form.ValidationTextBox"   /></td>
-										</tr>
-										<tr>
-											<td style="white-space: nowrap;"><?php echo $tr->translate("NAME_EN")?></td>
-											<td><input type="text" name="en_name" id="en_name" value="<?php echo $this->rs['en_name']?>" required="true"  class="fullside" dojoType="dijit.form.ValidationTextBox" /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("SEX")?></td>
-											<td>
-												<select name="sex" id="sex" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-													<option value="1" <?php if($this->rs['sex']==1){echo "selected='selected'";}?>><?php echo $tr->translate('MALE')?></option>
-													<option value="2" <?php if($this->rs['sex']==2){echo "selected='selected'";}?>><?php echo $tr->translate('FEMALE')?></option>
-												</select>
-											</td>						
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("NATIONALITY")?></td>
-											<td><input type="text" name="nationality" id="nationality" value="<?php echo $this->rs['nationality']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("DOB")?></td>
-											<td><input type="text" name="dob" value="<?php echo $this->rs['dob']?>" id="dob" class="fullside"  value="now" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("POB")?></td>
-											<td><input type="text" name="pob" id="pob" value="<?php echo $this->rs['pob']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("PHONE")?></td>
-											<td><input type="text" name="phone" id="phone" value="<?php echo $this->rs['phone']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("EMAIL")?></td>
-											<td><input type="text" name="email" id="email" value="<?php echo $this->rs['email']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										
-									</table>
-								</td>
-								<td valign="top" width="33%">
-									<table cellspacing="5"  width="100%">
-										
-										<tr>
-											<td><?php echo $tr->translate("STUDENT_STATUS")?></td>
-											<td>
-												<select name="student_status" id="student_status" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-													<option value="1" <?php if($this->rs['student_status']==1){echo "selected='selected'";}?>><?php echo $tr->translate('SINGLE')?></option>
-													<option value="2" <?php if($this->rs['student_status']==2){echo "selected='selected'";}?>><?php echo $tr->translate('MARRIED')?></option>
-													<option value="3" <?php if($this->rs['student_status']==3){echo "selected='selected'";}?>><?php echo $tr->translate('MONK')?></option>
-												</select>
-											</td>						
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("IF_EMPLOYED_WHERE")?></td>
-											<td><input type="text" name="if_employed_where" id="if_employed_where" value="<?php echo $this->rs['if_employed_where']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("POSITION")?></td>
-											<td><input type="text" name="position" id="position" value="<?php echo $this->rs['position']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("PARENT_NAME")?></td>
-											<td><input type="text" name="parent_name" id="parent_name" value="<?php echo $this->rs['parent_name']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("PARENT_TEL")?></td>
-											<td><input type="text" name="parent_tel" id="parent_tel" value="<?php echo $this->rs['parent_tel']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										
-										<tr>
-											<td><?php echo $tr->translate("OLD_SCHOOL")?></td>
-											<td><input type="text" name="old_school" id="old_school" value="<?php echo $this->rs['old_school']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											 <td><?php echo $tr->translate("OLD_GRADE")?></td>
-											 <td><input type="text" name="old_grade" id="old_grade" value="<?php echo $this->rs['old_grade']?>" class="fullside" dojoType="dijit.form.TextBox" /></td>
-										</tr>
-										
-										<tr>
-										    <td><?php echo $tr->translate("ADDRESS")?></td>
-											<td colspan="1"><textarea style="min-height:60px;font-family:'Khmer OS Battambang';font-size: 15px;" value="<?php echo $this->rs['address']?>" class="fullside" name="address" id="address" dojoType="dijit.form.Textarea" ></textarea></td>
-										</tr>
-										
-									</table>
+								<td valign="top" width="66%" colspan="2">
+								<fieldset>
+									<legend align="center"><strong><?php echo $tr->translate('STUDENT_PROFILE')?></strong></legend>
+										<table cellspacing="0"  width="100%" style="white-space: nowrap;">
+											<tr>
+												<td valign="top" width="33%">
+													<table cellspacing="5" width="100%" >
+														<tr>
+															<td><?php echo $tr->translate("NAME_KH")?></td>
+															<td><input type="text" name="kh_name" id="kh_name" value="<?php echo $this->rs['kh_name']?>" required="true" class="fullside" dojoType="dijit.form.ValidationTextBox"   /></td>
+														</tr>
+														<tr>
+															<td style="white-space: nowrap;"><?php echo $tr->translate("NAME_EN")?></td>
+															<td><input type="text" name="en_name" id="en_name" value="<?php echo $this->rs['en_name']?>" required="true"  class="fullside" dojoType="dijit.form.ValidationTextBox" /></td>
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("SEX")?></td>
+															<td>
+																<select name="sex" id="sex" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+																	<option value="1" <?php if($this->rs['sex']==1){echo "selected='selected'";}?>><?php echo $tr->translate('MALE')?></option>
+																	<option value="2" <?php if($this->rs['sex']==2){echo "selected='selected'";}?>><?php echo $tr->translate('FEMALE')?></option>
+																</select>
+															</td>						
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("NATIONALITY")?></td>
+															<td><input type="text" name="nationality" id="nationality" value="<?php echo $this->rs['nationality']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("DOB")?></td>
+															<td><input type="text" name="dob" value="<?php echo $this->rs['dob']?>" id="dob" class="fullside"  value="now" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox"   /></td>
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("POB")?></td>
+															<td><input type="text" name="pob" id="pob" value="<?php echo $this->rs['pob']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("PHONE")?></td>
+															<td><input type="text" name="phone" id="phone" value="<?php echo $this->rs['phone']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("EMAIL")?></td>
+															<td><input type="text" name="email" id="email" value="<?php echo $this->rs['email']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+														</tr>
+														
+													</table>
+												</td>
+												<td valign="top" width="33%">
+													<table cellspacing="5"  width="100%">
+														
+														<tr>
+															<td><?php echo $tr->translate("STUDENT_STATUS")?></td>
+															<td>
+																<select name="student_status" id="student_status" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+																	<option value="1" <?php if($this->rs['student_status']==1){echo "selected='selected'";}?>><?php echo $tr->translate('SINGLE')?></option>
+																	<option value="2" <?php if($this->rs['student_status']==2){echo "selected='selected'";}?>><?php echo $tr->translate('MARRIED')?></option>
+																	<option value="3" <?php if($this->rs['student_status']==3){echo "selected='selected'";}?>><?php echo $tr->translate('MONK')?></option>
+																</select>
+															</td>						
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("IF_EMPLOYED_WHERE")?></td>
+															<td><input type="text" name="if_employed_where" id="if_employed_where" value="<?php echo $this->rs['if_employed_where']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("POSITION")?></td>
+															<td><input type="text" name="position" id="position" value="<?php echo $this->rs['position']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("PARENT_NAME")?></td>
+															<td><input type="text" name="parent_name" id="parent_name" value="<?php echo $this->rs['parent_name']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+														</tr>
+														<tr>
+															<td><?php echo $tr->translate("PARENT_TEL")?></td>
+															<td><input type="text" name="parent_tel" id="parent_tel" value="<?php echo $this->rs['parent_tel']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+														</tr>
+														
+														<tr>
+															<td><?php echo $tr->translate("OLD_SCHOOL")?></td>
+															<td><input type="text" name="old_school" id="old_school" value="<?php echo $this->rs['old_school']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+														</tr>
+														<tr>
+															 <td><?php echo $tr->translate("OLD_GRADE")?></td>
+															 <td><input type="text" name="old_grade" id="old_grade" value="<?php echo $this->rs['old_grade']?>" class="fullside" dojoType="dijit.form.TextBox" /></td>
+														</tr>
+														
+														<tr>
+														    <td><?php echo $tr->translate("ADDRESS")?></td>
+															<td colspan="1"><textarea style="min-height:60px;font-family:'Khmer OS Battambang';font-size: 15px;" value="<?php echo $this->rs['address']?>" class="fullside" name="address" id="address" dojoType="dijit.form.Textarea" ></textarea></td>
+														</tr>
+														
+													</table>
+												</td>
+											</tr>
+										</table>
+								</fieldset>
 								</td>
 								<td valign="top"  width="33%">
+								<fieldset>
+								<legend align="center"><strong><?php echo $tr->translate('STUDENT_TEST_INFORMATION')?></strong></legend>
 									<table cellspacing="5"  width="100%">
 										<tr>
 										    <td><?php echo $tr->translate("STUDENT_ID")?></td>
@@ -212,8 +223,8 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 											 	<input type="hidden" name="old_photo" name="old_photo" value="<?php echo $this->rs['photo'];?>" dojoType="dijit.form.TextBox" />
  											 </td>
 										</tr>
-										
 									</table>
+								</fieldset>
 								</td>
 							</tr>
 							

@@ -109,98 +109,107 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 			<td>
 				<fieldset>
 					<legend><strong><?php echo $tr->translate('STUDENT_DETAIL')?></strong></legend>
-						<table cellspacing="10"  width="100%" style="white-space: nowrap;">
+						<table cellspacing="0"  width="100%" style="white-space: nowrap;">
 							<tr>
-								<td valign="top" width="33%">
-									<table cellspacing="5" width="100%">
-									
-										<tr>
-											<td><?php echo $tr->translate("NAME_KH")?></td>
-											<td><input type="text" name="kh_name" id="kh_name" required="true" class="fullside" dojoType="dijit.form.ValidationTextBox"   /></td>
+							<td valign="top" width="66%" colspan="2">
+								<fieldset>
+									<legend align="center"><strong><?php echo $tr->translate('STUDENT_PROFILE')?></strong></legend>
+										<table cellspacing="0"  width="100%" style="white-space: nowrap;">
+											<tr>
+												<td valign="top" width="33%">
+												<table cellspacing="5" width="100%">
+													<tr>
+														<td><?php echo $tr->translate("NAME_KH")?></td>
+														<td><input type="text" name="kh_name" id="kh_name" required="true" class="fullside" dojoType="dijit.form.ValidationTextBox"   /></td>
+													</tr>
+													<tr>
+														<td style="white-space: nowrap;"><?php echo $tr->translate("NAME_EN")?></td>
+														<td><input type="text" name="en_name" id="en_name"  class="fullside" dojoType="dijit.form.TextBox" /></td>
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("SEX")?></td>
+														<td>
+															<select name="sex" id="sex" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+																<option value="1"><?php echo $tr->translate('MALE')?></option>
+																<option value="2"><?php echo $tr->translate('FEMALE')?></option>
+															</select>
+														</td>						
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("NATIONALITY")?></td>
+														<td><input type="text" name="nationality" id="nationality" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("DOB")?></td>
+														<td><input type="text" name="dob" id="dob" class="fullside"  value="now" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox"   /></td>
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("POB")?></td>
+														<td><input type="text" name="pob" id="pob" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("PHONE")?></td>
+														<td><input type="text" name="phone" id="phone" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("EMAIL")?></td>
+														<td><input type="text" name="email" id="email" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+													</tr>
+												</table>
+											</td>
+											<td valign="top" width="33%">
+												<table cellspacing="5"  width="100%">
+													
+													<tr>
+														<td><?php echo $tr->translate("STUDENT_STATUS")?></td>
+														<td>
+															<select name="student_status" id="student_status" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+																<option value="1"><?php echo $tr->translate('SINGLE')?></option>
+																<option value="2"><?php echo $tr->translate('MARRIED')?></option>
+																<option value="3"><?php echo $tr->translate('MONK')?></option>
+															</select>
+														</td>						
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("IF_EMPLOYED_WHERE")?></td>
+														<td><input type="text" name="if_employed_where" id="if_employed_where" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("POSITION")?></td>
+														<td><input type="text" name="position" id="position" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("PARENT_NAME")?></td>
+														<td><input type="text" name="parent_name" id="parent_name" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+													</tr>
+													<tr>
+														<td><?php echo $tr->translate("PARENT_TEL")?></td>
+														<td><input type="text" name="parent_tel" id="parent_tel" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+													</tr>
+													
+													<tr>
+														<td><?php echo $tr->translate("OLD_SCHOOL")?></td>
+														<td><input type="text" name="old_school" id="old_school" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+													</tr>
+													<tr>
+														 <td><?php echo $tr->translate("OLD_GRADE")?></td>
+														 <td><input type="text" name="old_grade" id="old_grade" class="fullside" dojoType="dijit.form.TextBox" /></td>
+													</tr>
+													
+													<tr>
+													    <td><?php echo $tr->translate("ADDRESS")?></td>
+														<td colspan="1"><textarea style="min-height:70px;font-family:'Khmer OS Battambang';font-size: 15px;" class="fullside" name="address" id="address" dojoType="dijit.form.Textarea" ></textarea></td>
+													</tr>
+												</table>
+											</td>
 										</tr>
-										<tr>
-											<td style="white-space: nowrap;"><?php echo $tr->translate("NAME_EN")?></td>
-											<td><input type="text" name="en_name" id="en_name"  class="fullside" dojoType="dijit.form.TextBox" /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("SEX")?></td>
-											<td>
-												<select name="sex" id="sex" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-													<option value="1"><?php echo $tr->translate('MALE')?></option>
-													<option value="2"><?php echo $tr->translate('FEMALE')?></option>
-												</select>
-											</td>						
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("NATIONALITY")?></td>
-											<td><input type="text" name="nationality" id="nationality" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("DOB")?></td>
-											<td><input type="text" name="dob" id="dob" class="fullside"  value="now" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("POB")?></td>
-											<td><input type="text" name="pob" id="pob" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("PHONE")?></td>
-											<td><input type="text" name="phone" id="phone" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("EMAIL")?></td>
-											<td><input type="text" name="email" id="email" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										
 									</table>
-								</td>
-								<td valign="top" width="33%">
-									<table cellspacing="5"  width="100%">
-										
-										<tr>
-											<td><?php echo $tr->translate("STUDENT_STATUS")?></td>
-											<td>
-												<select name="student_status" id="student_status" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-													<option value="1"><?php echo $tr->translate('SINGLE')?></option>
-													<option value="2"><?php echo $tr->translate('MARRIED')?></option>
-													<option value="3"><?php echo $tr->translate('MONK')?></option>
-												</select>
-											</td>						
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("IF_EMPLOYED_WHERE")?></td>
-											<td><input type="text" name="if_employed_where" id="if_employed_where" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("POSITION")?></td>
-											<td><input type="text" name="position" id="position" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("PARENT_NAME")?></td>
-											<td><input type="text" name="parent_name" id="parent_name" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("PARENT_TEL")?></td>
-											<td><input type="text" name="parent_tel" id="parent_tel" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										
-										<tr>
-											<td><?php echo $tr->translate("OLD_SCHOOL")?></td>
-											<td><input type="text" name="old_school" id="old_school" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											 <td><?php echo $tr->translate("OLD_GRADE")?></td>
-											 <td><input type="text" name="old_grade" id="old_grade" class="fullside" dojoType="dijit.form.TextBox" /></td>
-										</tr>
-										
-										<tr>
-										    <td><?php echo $tr->translate("ADDRESS")?></td>
-											<td colspan="1"><textarea style="min-height:70px;font-family:'Khmer OS Battambang';font-size: 15px;" class="fullside" name="address" id="address" dojoType="dijit.form.Textarea" ></textarea></td>
-										</tr>
-										
-									</table>
-								</td>
+								</fieldset>
+							   </td>
+							 
 								<td valign="top"  width="33%">
+								<fieldset>
+									<legend align="center"><strong><?php echo $tr->translate('STUDENT_TEST_INFORMATION')?></strong></legend>
 									<table cellspacing="5"  width="100%">
 										<tr>
 										    <td><?php echo $tr->translate("STUDENT_ID")?></td>
@@ -236,8 +245,8 @@ echo $this->headTitle($tr->translate('ADD_STUDENT_TEST'));
 											 <td><?php echo $tr->translate("PHOTO")?></td>
 											 <td><input type="file" name="photo"  id="photo" class="fullside"  /></td>
 										</tr>
-										
 									</table>
+									</fieldset>
 								</td>
 							</tr>
 							

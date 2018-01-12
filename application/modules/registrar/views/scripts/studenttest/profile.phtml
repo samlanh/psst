@@ -26,7 +26,7 @@
 			</td>
 		</tr>
 	</table>
-		   
+<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">	   
 	<div style="border: 1px dotted #000;background: #fff;width: 21cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 			
 		<div id="divPrint">
@@ -149,7 +149,28 @@
 								<td colspan="2" style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp; Educational Background ( School Name , Grade/Level/Year , Major , Year )</td>
 							</tr>
 							<tr class="defaultheight">
-								<td colspan="2" style="padding: 5px;"><?php echo $this->row['educational_background']?></td>
+							 <td colspan="2" style="padding: 5px;">
+								<table width="100%" border="1"  style="font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+									<tr style="height: 24px;" class="defaultheight">
+										<td   style="font-size: 13px; " width="4%">&nbsp; <?php echo $tr->translate("N_O");?></td>
+										<td   style="font-size: 13px; ">&nbsp; <?php echo $tr->translate("SCHOOL_AND_NAME");?></td>
+										<td   style="font-size: 13px; ">&nbsp; <?php echo $tr->translate("GRADE_LAVEL");?></td>
+										<td   style="font-size: 13px; ">&nbsp; <?php echo $tr->translate("YEAR");?></td>
+										<td   style="font-size: 13px; ">&nbsp;<?php echo $tr->translate("MAJOR");?></td>
+										<td   style="font-size: 13px; ">&nbsp;<?php echo $tr->translate("NOTE");?></td>
+									</tr>
+									<?php if(!empty($this->row_detail)) foreach($this->row_detail As $key=>$rs){?>
+									<tr class="defaultheight">
+										<td   style="font-size: 13px; ">&nbsp;<?php echo  $key+1;?> </td>
+										<td   style="font-size: 13px; ">&nbsp;<?php echo $rs['school_name']?> </td>
+										<td   style="font-size: 13px; ">&nbsp;<?php echo $rs['level']?>  </td>
+										<td   style="font-size: 13px; ">&nbsp;<?php echo $rs['year']?> </td>
+										<td   style="font-size: 13px; ">&nbsp;<?php echo $rs['major']?>  </td>
+										<td   style="font-size: 13px; ">&nbsp;<?php echo $rs['note']?>  </td>
+									</tr>
+									<?php }?>
+								</table>
+							 </td>
 							</tr>
 						</table>
 					</td>
@@ -227,6 +248,7 @@
 			</table>
 	   </div>
 	 </div>
+</div>
 <script type="text/javascript">
 function doPrint() {
 	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;

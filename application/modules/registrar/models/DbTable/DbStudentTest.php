@@ -266,5 +266,4 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	
 }

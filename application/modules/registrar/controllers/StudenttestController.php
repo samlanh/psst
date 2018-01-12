@@ -29,7 +29,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllStudentTest($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("SERIAL","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","TEST_DATE","DEGREE","GRADE","SESSION","TIME","BY_USER","STATUS","PROFILE");
+    		$collumns = array("SERIAL","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","TEST_DATE","DEGREE","GRADE","SESSION","TIME","BY_USER","STATUS","PRINT_PROFILE");
     		$link=array(
     				'module'=>'registrar','controller'=>'studenttest','action'=>'edit',
     		);

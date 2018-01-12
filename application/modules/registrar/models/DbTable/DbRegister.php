@@ -1664,7 +1664,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$user = $_db->getUserAccessPermission('sp.user_id');
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
-    	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	$print=$tr->translate("PRINT_SCHO");
     	$db=$this->getAdapter();
     	$sql=" SELECT sp.id,sp.receipt_number,
     			s.stu_code,
@@ -1676,7 +1677,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		       
  		       sp.grand_total,sp.fine,sp.credit_memo,sp.deduct,sp.net_amount, sp.create_date ,
  		       (select CONCAT(first_name) from rms_users where rms_users.id = sp.user_id) as user,
- 		       (select name_en from rms_view where type=10 and key_code = sp.is_void) as void,'បោះ.អាហារូ'
+ 		       (select name_en from rms_view where type=10 and key_code = sp.is_void) as void,'$print'
  			   FROM rms_student AS s,rms_student_payment AS sp WHERE  s.stu_id=sp.student_id $user $branch_id ";
     	$where=" ";
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";

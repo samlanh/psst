@@ -198,6 +198,8 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function getAllStudentTest($search=null){
 		$db = $this->getAdapter();
 		$session_user=new Zend_Session_Namespace('authstu');
+		$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+		$print=$tr->translate("PRINT_PROFILE");
 		$from_date =(empty($search['start_date']))? '1': " create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
 		
@@ -221,7 +223,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					
 					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1),
 					(select name_en from rms_view where type=15 and key_code=updated_result) as result_status,
-					'Profile'
+					'$print'
 				FROM 
 					rms_student_test
 				where

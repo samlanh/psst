@@ -50,7 +50,9 @@ class Global_LecturerController extends Zend_Controller_Action {
 				if(!empty($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/global/lecturer');
 				}
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+ 
+				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", '/global/lecturer/add');
+ 
 				 
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");

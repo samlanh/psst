@@ -60,7 +60,10 @@
 									<td><?php echo $tr->translate("BRANCH_NAME");?></td>
 									<td><?php echo $tr->translate("STUDENT_ID");?></td>
 									<td><?php echo $tr->translate("STUDENT_NAME");?></td>
+									<td><?php echo $tr->translate("STUDENT_NAME");?></td>
+									<td><?php echo $tr->translate("GENDER");?></td>
 									<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+									<td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
 									<td><?php echo $tr->translate("DEGREE");?></td>
 									<td><?php echo $tr->translate("GRADE");?></td>
 									<td><?php echo $tr->translate("SESSION");?></td>
@@ -72,8 +75,11 @@
 									<td ><?php echo $i;?></td>
 									<td ><?php echo $row['branch_name'];?></td>
 									<td ><?php echo $row['stu_code'];?></td>
+									<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_khname'];?>&nbsp;</td>
 									<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_enname'];?>&nbsp;</td>
+									<td align="center">&nbsp;<?php if ($row['sex']==1){ echo $tr->translate("MALE");}else if($row['sex']==2){ echo $tr->translate("FEMALE");}?>&nbsp;</td>
 									<td ><?php echo $row['academic_year'];?></td>
+									<td ><?php echo $row['group_code'];?></td>
 									<td ><?php echo $row['degree'];?></td>
 									<td align="left">&nbsp;<?php echo $row['grade'];?></td>
 									<td><?php echo $row['session'];?></td>	

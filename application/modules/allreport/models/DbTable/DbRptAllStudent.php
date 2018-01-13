@@ -242,7 +242,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
 //     	if(!empty($search['stu_id'])){
 	    	$sql = 'SELECT 
-					  h.`stu_id`,s.`stu_code`,is_subspend,s.`stu_enname`,h.is_finished,h.finished_date,
+					  h.`stu_id`,s.`stu_code`,is_subspend,s.`stu_enname`,
+					  s.`stu_khname`,s.`sex`,s.`group_id`,
+						(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = s.`group_id` LIMIT 1) AS group_code,
+					  h.is_finished,h.finished_date,
 					  (SELECT branch_nameen FROM `rms_branch` WHERE br_id=h.branch_id LIMIT 1) AS branch_name,
 					  (SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=h.academic_year LIMIT 1) AS academic_year,
 					  (SELECT name_en FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=h.session LIMIT 1)AS session,
@@ -269,7 +272,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    		$s_search = addslashes(trim($search['title']));
 	    		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
 	    		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
-	    		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
+	    		$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
+	    		$s_where[] = " (SELECT g.group_code FROM `rms_group` AS g WHERE g.id = s.`group_id` LIMIT 1) LIKE '%{$s_search}%'";
 	    		$s_where[] = " CONCAT(stu_enname,stu_enname) LIKE '%{$s_search}%'";
 	    		$where .=' AND ( '.implode(' OR ',$s_where).')';
 	    	}

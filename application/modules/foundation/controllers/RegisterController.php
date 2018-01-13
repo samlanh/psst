@@ -6,7 +6,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-	}
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    }
 	public function indexAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -76,14 +77,14 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			}
 		}
 		$group = $db->getAllgroup();
-		array_unshift($group,array('id' => -1,'name' => 'បន្ថែមថ្មី'));
-		array_unshift($group, array ( 'id' =>'','name' => 'ជ្រើសរើសក្រុម'));
+		array_unshift($group,array('id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+		array_unshift($group, array ( 'id' =>'','name' => $this->tr->translate("SELECT_GROUP")));
 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
-		array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-		array_unshift($row, array ( 'id' => 0,'name' => 'Select Job'));
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_JOB")));
 		$this->view->occupation = $row;
 		
 		$this->view->row = $db->getDegreeLanguage();
@@ -124,14 +125,14 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			}
 		}
 		$group = $db->getAllgroup();
-		array_unshift($group, array ('id' => -1,'name' => 'បន្ថែមថ្មី'));
-		array_unshift($group, array ( 'id' =>'','name' => 'ជ្រើសរើសក្រុម'));
+		array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
-		array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-		array_unshift($row, array ( 'id' => 0,'name' => 'Select Job'));
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_JOB")));
 		$this->view->occupation = $row;
 		
 		$this->view->degree = $db->getAllFecultyName();
@@ -260,14 +261,14 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		}
 		
 		$group = $db->getAllgroup();
-		array_unshift($group, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-		array_unshift($group, array ( 'id' =>'','name' => 'ជ្រើសរើសក្រុម'));
+		array_unshift($group, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($group, array ( 'id' =>'','name' => $this->tr->translate("SELECT_GROUP")));
 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
-		array_unshift($row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-		array_unshift($row, array ( 'id' => 0,'name' => 'Select Job'));
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_JOB")));
 		$this->view->occupation = $row;
 		
 		$this->view->degree = $db->getAllFecultyName();

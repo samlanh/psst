@@ -115,18 +115,18 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 								</select>
 							</td>
 						</tr>
-				    	<tr>
-							<td colspan="4" align="left">
-									<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-								 		iconClass="dijitIconEditProperty" onclick="addRow();" />
-								 		<input type="hidden" name="identity" id="identity"  />
-							</td>
-						</tr>
 						<tr>
 							<td colspan="6">
 								<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
 										<tr id="head-title" class="head-td" align="right"></tr>
 								</table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" align="left">
+									<input type="button" label="<?php echo $tr->translate('ADD_SUBJECT_STUDY');?>" dojoType="dijit.form.Button" 
+								 		iconClass="dijitIconEditProperty" onclick="addRow();" />
+								 		<input type="hidden" name="identity" id="identity"  />
 							</td>
 						</tr>
 						<tr>
@@ -158,8 +158,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 									<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" value="" readonly type="text"></td>
 									<td><?php echo $tr->translate("KH_NAME")?></td>
 									<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="kh_name" name="kh_name" value="" type="text"></td>
-									<td><?php echo $tr->translate("EN_NAME")?></td>
-									<td><input dojoType="dijit.form.TextBox" class="fullside" id="en_name" name="en_name" value="" type="text"></td>
+									
 								</tr>
 								<tr>
 									<td><?php echo $tr->translate("SEX")?></td>
@@ -336,7 +335,7 @@ function addTeacher(){
 			load: function(data) {
 			  var Itemmake = { 
 				        id: data.id,
-				        name: dijit.byId('kh_name').get('value')+'-'+dijit.byId('en_name').get('value')
+				        name: dijit.byId('kh_name').get('value')
 				         };
 					index=$("#tow_value").val();
 					if(index<0){
@@ -579,7 +578,7 @@ function getSubjectByDegree(){
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate("ADD_NEW_ROOM")?></legend><br />
+					<legend align="center" ><?php echo $tr->translate("ADD_ROOM")?></legend><br />
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("ROOM_NAME")?></td>
@@ -596,8 +595,8 @@ function getSubjectByDegree(){
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save" name="save" label="Save" dojoType="dijit.form.Button" 
+								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("CANCEL");?>" dojoType="dijit.form.Button" onclick="hideDialog();"/>
+								<input type="button" value="save" name="save" label="<?php echo $tr->translate("SAVECLOSE");?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addRoom();"/>
 							</td>
 						</tr>
@@ -678,8 +677,8 @@ function getSubjectByDegree(){
 					</tr>
 						<tr>
 							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialogGrade();"/>
-								<input type="button" value="save" id="save_grade" label="<?php echo $tr->translate("SAVE");?>" dojoType="dijit.form.Button" 
+								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("CANCEL");?>" dojoType="dijit.form.Button" onclick="hideDialogGrade();"/>
+								<input type="button" value="save" id="save_grade" label="<?php echo $tr->translate("SAVECLOSE");?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addGrade();"/>
 							</td>
 						</tr>

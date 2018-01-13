@@ -32,7 +32,7 @@
 </script>
 
 <form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
-	<table style="width:80%" style="width:100 px;">
+	<table style="width:100%" style="width:100 px;">
 		  <tr> 
 		  	 <td style="width: 95px;"><?php echo $formList->showCopyBuntton($url_copy);?></td>
 			 <td ><input dojoType="dijit.form.TextBox"   id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text" class="fullside"></td>
@@ -40,11 +40,13 @@
 			 <td> <?php echo $frm->getElement("branch_id");?></td>
 			 <td>
 			 	<select name="finished_status" id="finished_status" dojoType="dijit.form.FilteringSelect" class="fullside" >
-			 		<option value="" <?php if($this->adv_search['finished_status']==""){echo 'selected="selected"';}?>>Finished Status</option>
-			 		<option value="0" <?php if($this->adv_search['finished_status']==0){echo 'selected="selected"';}?>>Not Finished</option>
-			 		<option value="1" <?php if($this->adv_search['finished_status']==1){echo 'selected="selected"';}?>>Finished</option>
+			 		<option value="" <?php if($this->adv_search['finished_status']==""){echo 'selected="selected"';}?>><?php echo $tr->translate("PROCESS_TYPE");?></option>
+			 		<?php if(!empty($this->pro_type)) foreach ($this->pro_type As $rs){?>
+			 		<option value="<?php echo $rs['id']?>" <?php if($this->adv_search['finished_status']==$rs['id']){echo 'selected="selected"';}?>><?php echo $rs['name']?></option>
+			 	    <?php }?>
 			 	</select>
 			 </td>
+			  <td> <?php echo $frm->getElement("status_search");?></td>
 			 <td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 	   	  </tr>
 	   	  <input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />

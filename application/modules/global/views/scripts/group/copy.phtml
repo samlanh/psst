@@ -920,13 +920,13 @@ function addTeacher(){
 	
 	
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:100%;" id="popup_room" >
+	<div data-dojo-type="dijit.Dialog" style="width:50%;" id="popup_room" >
 		<form style="background-color: buttonface; width:15cm;" id='form_add_room' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate("ADD_NEW_ROOM")?></legend>
+					<legend align="center" ><?php echo $tr->translate("ADD_ROOM")?></legend>
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("ROOM_NAME")?></td>
@@ -944,8 +944,8 @@ function addTeacher(){
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save_room" name="save_room" id="save_room" label="Save" dojoType="dijit.form.Button" 
+								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("CANCEL")?>" dojoType="dijit.form.Button" onclick="hideDialog();"/>
+								<input type="button" value="save_room" name="save_room" id="save_room" label="<?php echo $tr->translate("SAVECLOSE")?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addRoom();"/>
 							</td>
 						</tr>

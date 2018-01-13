@@ -18,13 +18,15 @@ class Accounting_FeeController extends Zend_Controller_Action {
 	    					'year' => '',
 	    					'branch_id'=>'',
     						'finished_status' => '',
+    						'status_search' => 1,
     					);
     		}
     		$db = new Accounting_Model_DbTable_DbTuitionFee();
+    		$this->view->pro_type=$db->getProcessTypeView();
     		$rs_rows= $db->getAllTuitionFee($search);
     		
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE","CREATED_DATE","STATUS","BY_USER");
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE","CREATED_DATE","PROCESS_TYPE","STATUS","BY_USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'fee','action'=>'edit',
     		);
@@ -178,6 +180,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 			   
 			   $db = new Accounting_Model_DbTable_DbTuitionFee();
 			   $this->view->branch = $db->getAllBranch();
+			   $this->view->pro_type=$db->getProcessTypeView();
 			   
 			   $db_gr=new Global_Model_DbTable_DbGrade();
 			   $d_row=$db_gr->getNameGradeAll();

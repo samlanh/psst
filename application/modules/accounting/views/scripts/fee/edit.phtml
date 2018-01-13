@@ -60,11 +60,12 @@ table .set-style td, table .set-style th {
 						</td>
 						<td><?php echo $tr->translate("NOTE");?></td>
 						<td><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note"  value="<?php echo $this->rs['note']; ?>" type="text"></td>
-						<td ><?php echo $tr->translate("FINISHED");?></td>
+						<td ><?php echo $tr->translate("PROCESS_TYPE");?></td>
 						<td>
 							<select dojoType="dijit.form.FilteringSelect"  id="is_finished" class="fullside" name="is_finished" type="text">		
-								<option value="0" <?php if($this->rs['is_finished']==0){ echo "selected='selected'";}?>>Not Yet Finished</option>						
-								<option value="1" <?php if($this->rs['is_finished']==1){ echo "selected='selected'";}?>>Finished</option>
+							<?php if(!empty($this->pro_type)) foreach($this->pro_type As $p){?>
+								<option value="<?php echo $p['id']?>" <?php if($this->rs['is_finished']==$p['id']){ echo "selected='selected'";}?>><?php echo $p['name']?></option>						
+							<?php }?>
 							</select>
 						</td>	
 					</tr>

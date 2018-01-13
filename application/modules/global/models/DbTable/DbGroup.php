@@ -379,7 +379,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$arr = array(
 					'teacher_code' => $teacher_code,
 					'teacher_name_kh' => $_data['kh_name'],
-					//'teacher_name_en' => $_data['en_name'],
+					'teacher_name_en' => $_data['kh_name'],
 					'sex' => $_data['sex'],
 					'dob' => $_data['dob'],
 					'nationality'  => $_data['nationality'],

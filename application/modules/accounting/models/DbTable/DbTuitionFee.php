@@ -15,9 +15,10 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 					  CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
 					  t.create_date,  
 					  (select name_en from rms_view where type=12 and key_code=t.is_finished) as is_finished,
+					   (SELECT name_en FROM rms_view WHERE key_code=t.status AND TYPE=1) AS `status`,
 					  (select CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user
 					  FROM `rms_tuitionfee` AS t
-					 WHERE t.status=1	";
+					 WHERE 1	";
     	$where =" ";
     	
 	    if(!empty($search['txtsearch'])){
@@ -38,6 +39,10 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 	    
 	    if($search['finished_status']!=""){
 	    	$where.=" AND t.is_finished=".$search['finished_status'];
+	    }
+	    
+	    if($search['status_search']!=""){
+	    	$where.=" AND t.status=".$search['status_search'];
 	    }
 	    
 	    $dbp = new Application_Model_DbTable_DbGlobal();
@@ -216,5 +221,10 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     } 
     
+    function getProcessTypeView(){
+    	$db = $this->getAdapter();
+    	$sql="SELECT key_code AS id , name_en AS `name` FROM rms_view  WHERE `status`=1 AND type=12";
+    	return $db->fetchAll($sql);
+    }
     
 }

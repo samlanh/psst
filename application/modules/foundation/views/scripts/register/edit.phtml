@@ -125,7 +125,7 @@ dojo.ready(function(){
 	    name: "mo_job",  
 	    tabindex: "17",         
 	    class: 'fullside',  
-	    placeHolder:"Selected job", 
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
 	    onChange: function() {          
 	   	mo_job = dijit.byId('mo_job').get('value');
 	    if(mo_job==-1){
@@ -149,7 +149,7 @@ dojo.ready(function(){
 	    name: "gu_job",  
 	    tabindex: "17",         
 	    class: 'fullside',  
-	    placeHolder:"Selected job", 
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
 	    onChange: function() {          
 	   	mo_job = dijit.byId('gu_job').get('value');
 	    if(mo_job==-1){

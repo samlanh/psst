@@ -78,7 +78,7 @@ Class Global_Form_Frmbranch extends Zend_Dojo_Form {
 		$branch_id->setValue($request->getParam("main_branch_id"));
 		$db = new Accounting_Model_DbTable_DbTuitionFee();
 		$rows= $db->getAllBranch();
-		array_unshift($rows, array('id'=>'','name'=>"Select Branch"));
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_BRANCH")));
 		$opt=array();
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$branch_id->setMultiOptions($opt);
@@ -130,7 +130,7 @@ Class Global_Form_Frmbranch extends Zend_Dojo_Form {
 				'class'=>'fullside',
 // 				'readonly'=>true
 				));
-		$options = array(1=>"ប្រើប្រាស់", 2=>"មិនប្រើប្រាស់");
+		$options = array(1=>$this->tr->translate("ACTIVE"), 2=>$this->tr->translate("DEACTIVE"));
 		$branch_status->setMultiOptions($options);
 		
 		$branch_display = new Zend_Dojo_Form_Element_FilteringSelect('branch_display');

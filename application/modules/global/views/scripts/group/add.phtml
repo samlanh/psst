@@ -50,7 +50,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
 						<td>
 							<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
-								<option value="-1">select year</option>
+								<option value="-1"><?php echo $tr->translate("SELECT_YEAR");?></option>
 								<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
 									<option value="<?php echo $year['id'];?>"><?php echo $year['years'];?></option>
 								<?php }}?>
@@ -154,7 +154,7 @@ dojo.ready(function(){
 		id: "teacher_id",
 		name: "teacher_id",           
 		class: "fullside", 
-		placeHolder:"Select Teacher",          
+		placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
 		onChange: function() {  
 			teacher_id = dijit.byId('teacher_id').get('value');
 			if(teacher_id==-1){
@@ -171,7 +171,7 @@ dojo.ready(function(){
 		id: "teacher_ass",
 		name: "teacher_ass",           
 		class: "fullside", 
-		placeHolder:"Select Teacher",          
+		placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
 		onChange: function() {  
 			teacher_id = dijit.byId('teacher_ass').get('value');
 			if(teacher_id==-1){
@@ -188,7 +188,7 @@ dojo.ready(function(){
 		id: "subject_id",
 		name: "subject_id",           
 		class: "fullside", 
-		placeHolder:"Select Degree",          
+		placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
 		onChange: function() {  
 			subject_id = dijit.byId('subject_id').get('value');
 			if(subject_id==-1){
@@ -206,7 +206,7 @@ dojo.ready(function(){
 		id: "degree",
 		name: "degree",           
 		class: "fullside", 
-		placeHolder:"Select Degree",          
+		placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
 		onChange: function() {  
 			dept_id = dijit.byId('degree').get('value');
 			if(dept_id==-1){
@@ -239,7 +239,7 @@ dojo.ready(function(){
 		id: "grade",
 		name: "grade",           
 		class: 'fullside',  
-		placeHolder:"Select Grade",          
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
 			make_id = dijit.byId('grade').get('value');
 			grade = dijit.byId('grade').get('value');
@@ -256,7 +256,7 @@ dojo.ready(function(){
 		id: "room",
 		name: "room",
 		class: "fullside", 		
-		placeHolder:"Select Room",          
+		placeHolder:"<?php echo $tr->translate("SELECT_ROOM");?>",          
 		onChange: function() {  
 			room = dijit.byId('room').get('value');
 			if(room==-1){

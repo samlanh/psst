@@ -53,7 +53,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						    <td><?php echo $tr->translate("YEARS")?></td>
 							<td>
 								<select name="academic_year" id="academic_year" placeholder="Select Year" class="fullside" type="text" dojoType="dijit.form.FilteringSelect">
-									<option value="-1">select year</option>
+									<option value="-1"><?php echo $tr->translate("SELECT_YEAR");?></option>
 									<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
 										<option value="<?php echo $year['id'];?>"<?php if($year['id']==$this->rs['academic_year']) echo 'selected="selected"';?>><?php echo $year['years'];?></option>
 									<?php }}?>

@@ -29,8 +29,8 @@
 							<td><?php echo $tr->translate('STATUS');?></td>
 							<td>
 								<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
-    								<option value="1" label="active">Active</option>
-    								<option value="0" label="deactive">Deactive</option>
+    								<option value="1" label="<?php echo $tr->translate('ACTIVE');?>"><?php echo $tr->translate('ACTIVE');?></option>
+    								<option value="0" label="<?php echo $tr->translate('DEACTIVE');?>"><?php echo $tr->translate('DEACTIVE');?></option>
 								</select>
 							</td>
 						</tr>

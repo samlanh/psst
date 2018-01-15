@@ -72,8 +72,8 @@ dojo.ready(function(){
 					<td><?php echo $tr->translate("STATUS")?></td>
 					<td>
 						<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true"  class="full height-text">
-						    <option value="1" <?php if($this->rs['is_active']==1){echo 'selected="selected"';}?>>ប្រើប្រាស់</option>
-						    <option value="0" <?php if($this->rs['is_active']==0){echo 'selected="selected"';}?>>មិនប្រើប្រាស់</option>
+						    <option value="1" <?php if($this->rs['is_active']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("ACTIVE")?></option>
+						    <option value="0" <?php if($this->rs['is_active']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("DEACTIVE")?></option>
 						</select>
 					</td>
 				</tr>

@@ -5,7 +5,7 @@ class Global_GroupController extends Zend_Controller_Action {
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	public function indexAction(){
 		try{
@@ -58,13 +58,13 @@ class Global_GroupController extends Zend_Controller_Action {
 				$db= new Global_Model_DbTable_DbGroup();
 				$db->AddNewGroup($data);
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group/add");
 				}
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
+				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 				$err =$e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
@@ -79,24 +79,24 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->subject = $_db->getAllSubjectStudy();
 		
 		$teacher = $_db->getAllTeacher();
-		array_unshift($teacher, array('id'=>-1,'name'=>'Add New'));
+		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 		$this->view->teacher = $teacher;
 		
 		$this->view->teacher_option = $_db->getAllTeacherOption();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();
-		array_unshift($room, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($room, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($room, array ( 'id' => 0,'name' => 'Select Room'));
 		$this->view->room = $room;
 		
 		$db=new Global_Model_DbTable_DbGrade();
 		$d_row=$db->getNameGradeAll();
-		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
 		
 		$dept = $db->getAllDept();
-		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->dept = $dept;
 		
 		
@@ -134,7 +134,7 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();
-		array_unshift($room, Array('id'=> -1 ,'name' =>'Add New'));
+		array_unshift($room, Array('id'=> -1 ,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->room =$room;
 	
 		
@@ -144,18 +144,18 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$db=new Global_Model_DbTable_DbGrade();
 		$grade=$db->getNameGradeAll();
-		array_unshift($grade, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($grade, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$grade;
 		
 		$dept = $db->getAllDept();
-		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->dept = $dept;
 		
 		$this->view->teacher_option = $_db->getAllTeacherOption();
 		
 		
 		$teacher = $_db->getAllTeacher();
-		array_unshift($teacher, array('id'=>-1,'name'=>'Add New'));
+		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 		$this->view->teacher = $teacher;
 		
 	}
@@ -170,13 +170,13 @@ class Global_GroupController extends Zend_Controller_Action {
 				
 				$db->AddNewGroup($data);
 				if(!empty($data['save'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group/index");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group/index");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group/index");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group/index");
 				}
 				//Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 				$err =$e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
@@ -188,7 +188,7 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();
-		array_unshift($room, Array('id'=> -1 ,'name' =>'Add New'));
+		array_unshift($room, Array('id'=> -1 ,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->room =$room;
 
 		$_db = new Global_Model_DbTable_DbGroup();
@@ -199,18 +199,18 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$db = new Global_Model_DbTable_DbGrade();
 		$dept = $db->getAllDept();
-		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->degree = $dept;
 		
 		$grade=$db->getNameGradeAll();
-		array_unshift($grade, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($grade, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$grade;
 		
 		
 		$this->view->teacher_option = $_db->getAllTeacherOption();
 		
 		$teacher = $_db->getAllTeacher();
-		array_unshift($teacher, array('id'=>-1,'name'=>'Add New'));
+		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 		$this->view->teacher = $teacher;
 		
 	}
@@ -258,11 +258,11 @@ class Global_GroupController extends Zend_Controller_Action {
     		$db = new Foundation_Model_DbTable_DbStudent();
     		$group = $db->getAllgroup();
     		$degree = $db->getAllFecultyName();    		
-    		array_unshift($group, array ('id' => -1, 'name' => 'Add New'));
+    		array_unshift($group, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
     		
     		$model = new Application_Model_DbTable_DbGlobal();
     		$room = $model->getAllRoom();
-    		array_unshift($room, array ( 'id' => 0,'name' => 'Select Room'));
+    		array_unshift($room, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_ROOM")));
     		
     		$result = array('group'=>$group,'degree'=>$degree,'room'=>$room);
     		print_r(Zend_Json::encode($result));

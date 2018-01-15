@@ -282,9 +282,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$rows = $_db->getAllSubjectStudy();
-		array_unshift($rows,array('id' => -1,"name"=>"បន្ថែមមុខវិជ្ជាសិក្សា","shortcut"=>""));
+		array_unshift($rows,array('id' => -1,"name"=>$tr->translate("ADD_NEW_SUBJECT"),"shortcut"=>""));
 		if($opt!=null){return $rows;}
-		$options = '<option value="">ជ្រើសរើសរើសមុខវិជ្ជា</option>';
+		$options = '<option value="">'.$tr->translate("CHOOSE_SUJECT").'</option>';
 		if(!empty($rows))foreach($rows as $value){
 			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']."-".$value['shortcut'], ENT_QUOTES).'</option>';
 		}
@@ -295,8 +295,8 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$teacher = $this->getAllTeacher();
-		array_unshift($teacher,array('id' => -1,"name"=>"Add New"));
-		$teacher_options = '<option value="">Select Teacher</option>';
+		array_unshift($teacher,array('id' => -1,"name"=>$tr->translate("ADD_NEW")));
+		$teacher_options = '<option value="">'.$tr->translate("SELECT_TEACHER").'</option>';
 		if(!empty($teacher))foreach($teacher as $value){
 			$teacher_options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
 		}

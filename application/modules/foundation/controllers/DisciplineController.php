@@ -4,6 +4,7 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
     public function init()
     {    	
      /* Initialize action controller here */
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -48,7 +49,7 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$result= $db_global->getAllgroupStudy();
-		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
 	}
 	public	function addAction(){

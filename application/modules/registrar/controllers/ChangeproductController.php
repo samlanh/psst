@@ -80,7 +80,7 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
 			try {
 				$db->editChangeProduct($data,$id);
 				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/changeproduct");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/registrar/changeproduct");
 				}else{
 					Application_Form_FrmMessage::message("EDIT_SUCCESS");
 				}				

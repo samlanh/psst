@@ -55,9 +55,9 @@ class Accounting_CustomerPaymentController extends Zend_Controller_Action {
     		try {
     			$db->addCusPayment($_data);
     			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), "/accounting/customerpayment/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/accounting/customerpayment/index");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), "/accounting/customerpayment/add");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/accounting/customerpayment/add");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
@@ -81,9 +81,9 @@ class Accounting_CustomerPaymentController extends Zend_Controller_Action {
     		try {
     			$db->editCustomerPayment($_data);
     			if(!empty($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), "/accounting/customerpayment/index");
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/accounting/customerpayment/index");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), "/accounting/customerpayment/index");
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/accounting/customerpayment/index");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
@@ -110,9 +110,9 @@ class Accounting_CustomerPaymentController extends Zend_Controller_Action {
     		try {
     			$db->editCustomerPayment($_data);
     			if(!empty($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), "/accounting/customerpayment/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/accounting/customerpayment/index");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), "/accounting/customerpayment/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/accounting/customerpayment/index");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));

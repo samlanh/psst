@@ -100,7 +100,7 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 				}
 				if(isset($_data['save_close'])){
 					$rs =  $dbs->updateStudentScore($_data);
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/score");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/score");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");

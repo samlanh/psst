@@ -71,7 +71,7 @@ class Accounting_TransferController extends Zend_Controller_Action {
 			try{
 				$data = $this->getRequest()->getPost();
 				$db->updateTransferStock($data);
-				Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", "/accounting/transfer");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/accounting/transfer");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("APPLICATION_ERROR");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

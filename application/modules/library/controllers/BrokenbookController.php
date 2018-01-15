@@ -50,9 +50,9 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$db = new Library_Model_DbTable_DbBrokenbook();
     			$db->addBrokenBook($_data);
     			if(!empty($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/brokenbook/add");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/brokenbook/add");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/brokenbook/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/brokenbook/index");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
@@ -78,9 +78,9 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$db = new Library_Model_DbTable_DbBrokenbook();
     			$db->editBrokenBook($_data);
     			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/brokenbook/index");
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/brokenbook/index");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/brokenbook/index");
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/brokenbook/index");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");

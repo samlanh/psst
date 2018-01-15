@@ -56,7 +56,7 @@ class Registrar_StudentTestPaymentController extends Zend_Controller_Action {
 		      		if(isset($_data['save_new'])){
 		      			Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
 		      		}else{
-		      			Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/studenttestpayment/index');
+		      			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/studenttestpayment/index');
 		      		}
 		      	} catch (Exception $e) {
 		      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
@@ -77,9 +77,9 @@ class Registrar_StudentTestPaymentController extends Zend_Controller_Action {
     			$db = new Registrar_Model_DbTable_DbStudentTestPayment();
     			$db->updateRegister($_data,$id);
 //     			if(isset($_data['save_new'])){
-//     				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/studenttestpayment/index');
+//     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/studenttestpayment/index');
 //     			}else{
-    				Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL . '/studenttestpayment/index');
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/studenttestpayment/index');
 //     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));

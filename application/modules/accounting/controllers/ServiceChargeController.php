@@ -147,7 +147,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 				$_data['id']=$id;
 				$_model = new Accounting_Model_DbTable_DbServiceCharge();
 				$rs =  $_model->updateServiceCharge($_data);
-				if(!empty($rs))Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/servicecharge/index");
+				if(!empty($rs))Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/servicecharge/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

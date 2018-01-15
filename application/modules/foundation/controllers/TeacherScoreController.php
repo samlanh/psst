@@ -93,7 +93,7 @@ class Foundation_TeacherScoreController extends Zend_Controller_Action {
 			try {
 				if(isset($_data['save_close'])){
 					$rs =  $_model->updateTeacherStudentScore($_data);
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/teacherscore");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/teacherscore");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");

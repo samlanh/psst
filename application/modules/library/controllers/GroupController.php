@@ -58,7 +58,7 @@ class Library_GrouController extends Zend_Controller_Action {
 				$db= new Global_Model_DbTable_DbGroup();
 				$db->AddNewGroup($data);
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group");
 				}
 				Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
 			} catch (Exception $e) {
@@ -97,11 +97,11 @@ class Library_GrouController extends Zend_Controller_Action {
 				
 				$db->updateGroup($data);
 				if(!empty($data['save'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/group/index");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/global/group/index");
 				}
 				//Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 				$err =$e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}

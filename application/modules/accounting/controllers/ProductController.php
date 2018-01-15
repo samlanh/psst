@@ -98,12 +98,12 @@ class Accounting_ProductController extends Zend_Controller_Action {
 					$row = $db->updateProduct($_data);
 					
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/product");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/product/add");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/product/add");
 					}
 					
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::message("EDIT_SUCCESS");
 				}catch(Exception $e){
 					Application_Form_FrmMessage::message("INSERT_FAIL");
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

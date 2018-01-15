@@ -55,11 +55,11 @@ class Foundation_RescheduleGroupController extends Zend_Controller_Action {
 				$db= new Foundation_Model_DbTable_DbRescheduleGroup();
 				$db->addRescheduleGroup($data);
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/reschedulegroup");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/foundation/reschedulegroup");
 				}else{
 					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ ss!", "/foundation/reschedulegroup/add");
 				}
-				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/reschedulegroup/add");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/foundation/reschedulegroup/add");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
 				$err =$e->getMessage();
@@ -110,11 +110,11 @@ class Foundation_RescheduleGroupController extends Zend_Controller_Action {
 				$db= new Foundation_Model_DbTable_DbRescheduleGroup();
 				$db->updateRescheduleGroup($data,$id);
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/reschedulegroup");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/foundation/reschedulegroup");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/reschedulegroup/");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/foundation/reschedulegroup/");
 				}
-				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/reschedulegroup/");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/foundation/reschedulegroup/");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
 				$err =$e->getMessage();
@@ -167,11 +167,11 @@ class Foundation_RescheduleGroupController extends Zend_Controller_Action {
 				$db= new Foundation_Model_DbTable_DbRescheduleGroup();
 				$db->addRescheduleGroup($data);
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/reschedulegroup");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/foundation/reschedulegroup");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/reschedulegroup/");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/foundation/reschedulegroup/");
 				}
-				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/foundation/reschedulegroup/");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/foundation/reschedulegroup/");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
 				$err =$e->getMessage();

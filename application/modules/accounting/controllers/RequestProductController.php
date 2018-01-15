@@ -85,9 +85,9 @@ class Accounting_RequestProductController extends Zend_Controller_Action {
 					$db = new Accounting_Model_DbTable_DbRequestProduct();
 					$row = $db->updateRequest($_data);
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/requestproduct");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/requestproduct");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/requestproduct");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/requestproduct");
 					}
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}catch(Exception $e){

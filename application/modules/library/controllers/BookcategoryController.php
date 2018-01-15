@@ -44,9 +44,9 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$db = new Library_Model_DbTable_DbCategory();
     			$db->add($_data);
     			if(!empty($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/bookcategory/add");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/bookcategory/add");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/bookcategory/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/bookcategory/index");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
@@ -70,9 +70,9 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		try {
     			$db->edit($_data);
     			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/bookcategory/index");
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/bookcategory/index");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/bookcategory/index");
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/bookcategory/index");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");

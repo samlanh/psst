@@ -85,11 +85,11 @@ class Accounting_AdjustStockController extends Zend_Controller_Action {
 					$db = new Accounting_Model_DbTable_DbAdjustStock();
 					$row = $db->updateAdjustStock($_data);
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/adjuststock");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/adjuststock");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/adjuststock");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/adjuststock");
 					}
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::message("EDIT_SUCCESS");
 				}catch(Exception $e){
 					Application_Form_FrmMessage::message("INSERT_FAIL");
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

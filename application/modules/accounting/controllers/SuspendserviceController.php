@@ -47,9 +47,9 @@ public function addAction(){
 				$db = new Foundation_Model_DbTable_DbSuspendservice();
 				$row = $db->addSuspendservice($_data);
 				if(!empty($_data['save_new'])){
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/accounting/suspendservice/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/accounting/suspendservice/add");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/accounting/suspendservice/index");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/accounting/suspendservice/index");
 				}
 				
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");

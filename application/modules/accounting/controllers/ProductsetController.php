@@ -90,12 +90,12 @@ class Accounting_ProductsetController extends Zend_Controller_Action {
 					$row = $db->updateProductSetDetail($_data);
 					
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/productset");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/productset");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/productset/add");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/productset/add");
 					}
 					
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::message("EDIT_SUCCESS");
 				}catch(Exception $e){
 					Application_Form_FrmMessage::message("INSERT_FAIL");
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

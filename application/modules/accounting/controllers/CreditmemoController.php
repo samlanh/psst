@@ -80,7 +80,7 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 			$db = new Accounting_Model_DbTable_DbCreditmemo();				
 			try {
 				$db->updatcreditMemo($data);				
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL);		
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);		
 			} catch (Exception $e) {
 				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
 			}

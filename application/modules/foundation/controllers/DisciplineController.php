@@ -86,7 +86,7 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 			try {
 				//if(isset($_data['save_close'])){
 					$rs =  $_model->updateStudentAttendence($_data);
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/discipline");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/discipline");
 				//} 
 		
 			}catch(Exception $e){

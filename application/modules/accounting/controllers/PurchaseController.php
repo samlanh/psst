@@ -108,9 +108,9 @@ public function addAction(){
 				$row = $db->updateProduct($_data,$id);
 		
 				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/purchase");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/purchase");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/purchase");
 				}
 		
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");

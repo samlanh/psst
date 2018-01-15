@@ -44,9 +44,9 @@ protected $tr;
     			$db = new Library_Model_DbTable_DbBook();
     			$db->addBook($_data);
     			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/book/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/book/index");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/book/add");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/book/add");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
@@ -85,9 +85,9 @@ protected $tr;
     		try {
     			$db->editBook($_data);
     			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/book/index");
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/book/index");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/book/index");
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/book/index");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
@@ -146,9 +146,9 @@ protected $tr;
     			$db = new Library_Model_DbTable_DbBook();
     			$db->addBook($_data);
     			if(!empty($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/book/add");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/book/add");
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/library/book/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/book/index");
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");

@@ -88,7 +88,7 @@ class Foundation_GepscoreController extends Zend_Controller_Action {
 			try {
 				if(isset($_data['save_close'])){
 					$rs =  $_model->updateStudentScore($_data);
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/gepscore");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/gepscore");
 				}
 	
 			}catch(Exception $e){

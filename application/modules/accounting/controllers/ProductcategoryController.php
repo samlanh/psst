@@ -71,12 +71,12 @@ class Accounting_ProductcategoryController extends Zend_Controller_Action {
 					$row = $db->addCategory($_data);
 					
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/productcategory");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/productcategory");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/productcategory");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/productcategory");
 					}
 					
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::message("EDIT_SUCCESS");
 				}catch(Exception $e){
 					Application_Form_FrmMessage::message("INSERT_FAIL");
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

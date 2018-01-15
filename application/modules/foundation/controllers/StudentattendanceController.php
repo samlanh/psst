@@ -87,7 +87,7 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 			try {
 				//if(isset($_data['save_close'])){
 					$rs =  $_model->updateStudentAttendence($_data);
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/studentattendance");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/studentattendance");
 				//} 
 		
 			}catch(Exception $e){

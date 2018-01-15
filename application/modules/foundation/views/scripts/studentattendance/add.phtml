@@ -49,7 +49,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		    readOnly:true,           
 		    class: 'fullside',  
 		    required:'true',
-		    placeHolder:"Selected Study Years",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
 		    onChange: function() {  
 		    }
 		}, "year_study");
@@ -63,7 +63,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		    name: "subject",   
 		    class: 'fullside',  
 		    //readOnly:true, 
-		    placeHolder:"Selected Subject",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_SUBJECT");?>",          
 		    onChange: function() {  
 		    }
 		}, "subject");
@@ -211,7 +211,7 @@ function gender(sex){
 						  	 <td title="បន្ទប់សិក្សា"><?php echo $tr->translate("ROOM_NAME");?>*</td>
 									<td>
 									   <select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" >
-									   		<option value="-1"> Select Room</option>
+									   		<option value="-1"><?php echo $tr->translate("SELECT_ROOM");?></option>
 									   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
 									   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
 									   		<?php }}?>
@@ -238,7 +238,7 @@ function gender(sex){
 							<td ><?php echo $tr->translate("DEGREE");?></td>
 							<td>
 								<select id="degree" name="degree" onchange="" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
-									<option value="-1"> ------ select degree---------</option>
+									<option value="-1"><?php echo $tr->translate("SELECT_DEGREE");?></option>
 								<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
 									<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
 								<?php }}?>
@@ -254,8 +254,8 @@ function gender(sex){
 							 <td ><?php echo $tr->translate("STATUS");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
-										<option value="1">ប្រើប្រាស់</option>
-										<option value="0">មិនប្រើប្រាស់</option>
+										<option value="1"><?php echo $tr->translate("ACTIVE");?></option>
+										<option value="0"><?php echo $tr->translate("DEACTIVE");?></option>
 								</select>
 							</td>	
 							
@@ -264,7 +264,7 @@ function gender(sex){
 							<td ><?php echo $tr->translate("GRADE");?></td>
 							<td>
 								<select id="grade" name="grade" onchange="" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
-									<option value="-1"> ------ select grade---------</option>
+									<option value="-1"><?php echo $tr->translate("SELECT_GRADE");?></option>
 									<?php if(!empty($this->grade)){foreach ($this->grade as $grade){?>
 										<option value="<?php echo $grade['id'];?>"><?php echo $grade['name'];?></option>
 									<?php }}?>
@@ -279,7 +279,7 @@ function gender(sex){
 							<td>
 								<!-- <select id="session" name="session" onchange="filterStudent();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  > -->
 								<select id="session" name="session"  class="fullside" dojoType="dijit.form.FilteringSelect" type="text" readonly="readonly" >
-									<option value="-1"> ------ select session---------</option>
+									<option value="-1"><?php echo $tr->translate("CHOOSE_SESSION");?></option>
 								<?php if(!empty($this->session)){foreach ($this->session as $session){?>
 									<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
 								<?php }}?>
@@ -319,7 +319,6 @@ function gender(sex){
 	</tr>
 </table>	
 </form>
-
 <script> //validate controll form 
 function AllowOnlyNumbers(e) {
 

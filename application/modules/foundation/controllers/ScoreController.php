@@ -2,6 +2,7 @@
 class Foundation_ScoreController extends Zend_Controller_Action {
     public function init()
     {    	
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -77,7 +78,7 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$result= $db_global->getAllgroupStudy();
-		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
 			
@@ -103,7 +104,7 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/score");
 				}
 			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
@@ -121,7 +122,7 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$result = $db_global->getAllgroupStudy();
-		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		
 		

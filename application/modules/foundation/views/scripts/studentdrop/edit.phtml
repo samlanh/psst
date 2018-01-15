@@ -77,15 +77,15 @@ dojo.require("dijit.form.CheckBox");
 										<td><?php echo $tr->translate("SEX")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect"  readonly="readonly" class="fullside" id="gender" name="gender" type="text">
-												<option value="1">Male</option>
-												<option value="2">Female</option>
+												<option value="1"><?php echo $tr->translate("MALE")?></option>
+												<option value="2"><?php echo $tr->translate("FEMALE")?></option>
 											</select>
 										</td>
 										<td><?php echo $tr->translate("STATUS")?></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">
-												<option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>>Active</option>
-												<option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>>Deactive</option>
+												<option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE")?></option>
+												<option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE")?></option>
 											</select>
 										</td>
 									</tr>

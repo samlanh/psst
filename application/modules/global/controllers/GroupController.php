@@ -19,6 +19,7 @@ class Global_GroupController extends Zend_Controller_Action {
 						'grade' => '',
 						'time' => '',
 						'session' =>'',
+						'status_search'=>1,
 						'start_date'=>date("Y-m-d"),
 						'end_date' => date("Y-m-d")
 						);
@@ -29,7 +30,7 @@ class Global_GroupController extends Zend_Controller_Action {
 			//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
 			$list = new Application_Form_Frmtable();
 			
-			$collumns = array("GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","START_DATE","END_DATE","NOTE","STATUS");
+			$collumns = array("GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","START_DATE","END_DATE","NOTE","PROCESS_TYPE","STATUS");
 			
 			$link=array(
 					'module'=>'global','controller'=>'group','action'=>'edit',

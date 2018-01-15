@@ -226,7 +226,8 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 		`g`.`start_date`,`g`.`expired_date`,`g`.`note`,
-		(select name_en from rms_view where type=9 and key_code=is_pass) as group_status
+		(select name_en from rms_view where type=9 and key_code=is_pass) as group_status,
+		(SELECT name_en FROM rms_view WHERE key_code=g.status AND TYPE=1) AS `status`
 		FROM `rms_group` AS `g`";
 		$where =' WHERE 1 ';
 // 		$from_date =(empty($search['start_date']))? '1': "g.start_date >= '".$search['start_date']." 00:00:00'";
@@ -258,7 +259,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		if(!empty($search['session'])){
 			$where.=' AND g.session='.$search['session'];
 		}
-		
+		if($search['status_search']!=""){
+			$where.=' AND g.status='.$search['status_search'];
+		}
 		//print_r($sql.$where);
 		return $db->fetchAll($sql.$where.$order);
 	}

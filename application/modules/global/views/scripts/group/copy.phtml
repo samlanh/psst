@@ -111,8 +111,8 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							<td><input dojoType="dijit.form.TextBox"  class="fullside" name="note" value="<?php echo $this->rs['note'];?>" type="text"></td>
 							<td><?php echo $tr->translate("STATUS")?></td>
 							<td><select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect">
-								    <option value="1" <?php if($this->rs['status']==1) echo 'selected="selected"';?>>ប្រើប្រាស់</option>
-								    <option value="0" <?php if($this->rs['status']==0) echo 'selected="selected"';?>>មិនប្រើប្រាស់</option>
+								    <option value="1" <?php if($this->rs['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE");?></option>
+								    <option value="0" <?php if($this->rs['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE");?></option>
 								</select>
 							</td>
 						</tr>
@@ -896,8 +896,8 @@ function addTeacher(){
 						<td><?php echo $tr->translate("STATUS")?></td>
 						<td>
 							<select name="grade_status" id="grade_status" dojoType="dijit.form.FilteringSelect"  class="full height-text">
-							    <option value="1" label="ប្រើប្រាស់" selected="selected">ប្រើប្រាស់</option>
-							    <option value="0" label="មិនប្រើប្រាស់">មិនប្រើប្រាស់</option>
+							    <option value="1" label="<?php echo $tr->translate("ACTIVE");?>" selected="selected"><?php echo $tr->translate("ACTIVE");?></option>
+							    <option value="0" label="<?php echo $tr->translate("DEACTIVE");?>"><?php echo $tr->translate("DEACTIVE");?></option>
 							</select>
 						</td>
 					</tr>
@@ -971,29 +971,29 @@ function addTeacher(){
 								<tr>
 									<td><?php echo $tr->translate("ID_NUMBER")?></td>
 									<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" value="" readonly type="text"></td>
-									<td><?php echo $tr->translate("KH_NAME")?></td>
+									<td><?php echo $tr->translate("NAME")?></td>
 									<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="kh_name" name="kh_name" value="" type="text"></td>
-									<td><?php echo $tr->translate("EN_NAME")?></td>
-									<td><input dojoType="dijit.form.TextBox" class="fullside" id="en_name" name="en_name" value="" type="text"></td>
 								</tr>
 								<tr>
 									<td><?php echo $tr->translate("SEX")?></td>
 									<td>
 										<select dojoType="dijit.form.FilteringSelect" value="1" class="fullside" id="sex" name="sex" value="" type="text">
-											<option value="1">Male</option>
-											<option value="2">Female</option>
+											<option value="1"><?php echo $tr->translate("MALE");?></option>
+											<option value="2"><?php echo $tr->translate("FEMALE");?></option>
 										</select>
-									</td>
-									<td><?php echo $tr->translate("DOB")?></td>
-									<td>
-										<input dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" />
 									</td>
 									<td><?php echo $tr->translate("NATIONALITY")?></td>
 									<td><input dojoType="dijit.form.TextBox"  class="fullside" id="nationality" name="nationality" value="" type="text"></td>
 								</tr>
 								<tr>
+									<td><?php echo $tr->translate("DOB")?></td>
+									<td>
+										<input dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" />
+									</td>
 									<td><?php echo $tr->translate("PHONE")?></td>
 									<td><input dojoType="dijit.form.TextBox" class="fullside" id="phone" name="phone" value="" type="text"></td>
+								</tr>
+								<tr>
 									
 									<td><?php echo $tr->translate("ADDRESS")?></td>
 									<td><input dojoType="dijit.form.TextBox"  class="fullside" id="address" name="address" value="" type="text"></td>

@@ -156,9 +156,8 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 								<tr>
 									<td><?php echo $tr->translate("ID_NUMBER")?></td>
 									<td><input dojoType="dijit.form.TextBox" style="color:red;" class="fullside" id="code" name="code" value="" readonly type="text"></td>
-									<td><?php echo $tr->translate("KH_NAME")?></td>
+									<td><?php echo $tr->translate("NAME")?></td>
 									<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="kh_name" name="kh_name" value="" type="text"></td>
-									
 								</tr>
 								<tr>
 									<td><?php echo $tr->translate("SEX")?></td>
@@ -168,16 +167,19 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 											<option value="2"><?php echo $tr->translate("FEMALE");?></option>
 										</select>
 									</td>
-									<td><?php echo $tr->translate("DOB")?></td>
-									<td>
-										<input dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" />
-									</td>
 									<td><?php echo $tr->translate("NATIONALITY")?></td>
 									<td><input dojoType="dijit.form.TextBox"  class="fullside" id="nationality" name="nationality" value="" type="text"></td>
 								</tr>
 								<tr>
+									
+									<td><?php echo $tr->translate("DOB")?></td>
+									<td>
+										<input dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" />
+									</td>
 									<td><?php echo $tr->translate("PHONE")?></td>
 									<td><input dojoType="dijit.form.TextBox" class="fullside" id="phone" name="phone" value="" type="text"></td>
+								</tr>
+								<tr>
 									
 									<td><?php echo $tr->translate("ADDRESS")?></td>
 									<td><input dojoType="dijit.form.TextBox"  class="fullside" id="address" name="address" value="" type="text"></td>

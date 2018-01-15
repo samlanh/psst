@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title>Add Change Product</title>
+<title><?php echo $tr->translate("ADD_CHANGE_PRODUCT")?></title>
 <style>	
 .fullside {
 	width: 100%;
@@ -48,7 +48,7 @@ $frm = $this->frm_expense;
 						<td><?php echo $tr->translate("STUDENT_ID")?></td>
 						<td>
 							<select name="stu_id" id="stu_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID(1);" >
-								<option value="-1">----- select student id -----</option>
+								<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
 								<?php if(!empty($this->stu_code)){foreach ($this->stu_code as $stu_code){?>
 									<option value="<?php echo $stu_code['id']?>"><?php echo $stu_code['stu_code']?></option>
 								<?php }}?>
@@ -57,7 +57,7 @@ $frm = $this->frm_expense;
 						<td><?php echo $tr->translate("STUDENT_NAME")?></td>
 						<td>
 							<select name="stu_name" id="stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID(2);" >
-								<option value="-1">----- select student name -----</option>
+								<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 								<?php if(!empty($this->stu_name)){foreach ($this->stu_name as $stu_name){?>
 									<option value="<?php echo $stu_name['id']?>"><?php echo $stu_name['name']?></option>
 								<?php }}?>
@@ -414,7 +414,7 @@ function addRow() {
 		template+='<input style="width:10px;" type="hidden" name="old_pro_id_'+col+'" id="old_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
 		
 		template+='<select onchange="getProductPrice('+col+',1);" dojoType="dijit.form.FilteringSelect" class="fullside" id="product_old_'+col+'" name="product_old_'+col+'">';
-		template+='<option value="">----- Select product -----</option>';
+		template+='<option value=""><?php echo $tr->translate("SELECT_PRODUCT")?></option>';
 					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
 						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';
 					<?php }}?>
@@ -428,7 +428,7 @@ function addRow() {
 		template+='<td width=20%"><input style="width:10px;" type="hidden" name="new_pro_type_'+col+'" id="new_pro_type_'+col+'" dojoType="dijit.form.TextBox"  />';
 		template+='<input style="width:10px;" type="hidden" name="new_pro_id_'+col+'" id="new_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
 		template+='<select class="fullside" onchange="getProductPrice('+col+',2);" dojoType="dijit.form.FilteringSelect" id="product_new_'+col+'" name="product_new_'+col+'">';
-		template+='<option value="">----- Select product -----</option>';
+		template+='<option value=""><?php echo $tr->translate("SELECT_PRODUCT")?></option>';
 					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
 						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';
 					<?php }}?>

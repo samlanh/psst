@@ -6,6 +6,7 @@ class Registrar_CateExpenseController extends Zend_Controller_Action
 	
     public function init()
     {
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
@@ -78,9 +79,9 @@ class Registrar_CateExpenseController extends Zend_Controller_Action
 			$db = new Registrar_Model_DbTable_DbCateExpense();				
 			try {
 				$db->updateCateExpense($data);				
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', "/registrar/cateexpense");		
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/registrar/cateexpense");		
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				$this->view->msg = 'EDIT_FAIL';
 			}
 		}
 		

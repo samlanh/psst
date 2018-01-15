@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title>Edit Change Product</title>
+<title><?php echo $tr->translate("EDIT_CHANGE_PRODUCT")?></title>
 <style>	
 .fullside {
 	width: 100%;
@@ -35,7 +35,7 @@ $frm = $this->frm_expense;
 						<td><?php echo $tr->translate("STUDENT_ID")?></td>
 						<td>
 							<select name="stu_id" id="stu_id" class="fullside" dojoType="dijit.form.FilteringSelect" readonly="readonly" onchange="setID(1);" >
-								<option value="-1">----- select student id -----</option>
+								<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
 								<?php if(!empty($this->stu_code)){foreach ($this->stu_code as $stu_code){?>
 									<option value="<?php echo $stu_code['id']?>" <?php if($stu_code['id']==$this->row['stu_id']){echo "selected='selected'";}?>><?php echo $stu_code['stu_code']?></option>
 								<?php }}?>
@@ -44,7 +44,7 @@ $frm = $this->frm_expense;
 						<td><?php echo $tr->translate("STUDENT_NAME")?></td>
 						<td>
 							<select name="stu_name" id="stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" readonly="readonly" onchange="setID(2);" >
-								<option value="-1">----- select student name -----</option>
+								<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 								<?php if(!empty($this->stu_name)){foreach ($this->stu_name as $stu_name){?>
 									<option value="<?php echo $stu_name['id']?>" <?php if($stu_name['id']==$this->row['stu_id']){echo "selected='selected'";}?>><?php echo $stu_name['name']?></option>
 								<?php }}?>
@@ -60,8 +60,8 @@ $frm = $this->frm_expense;
 						</td>
 						<td>
 							<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-								<option value="1" <?php if($this->row['is_void']==0){echo 'selected="selected"';}?>>Using</option>
-								<option value="0" <?php if($this->row['is_void']==1){echo 'selected="selected"';}?>>Void</option>
+								<option value="1" <?php if($this->row['is_void']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("USING")?></option>
+								<option value="0" <?php if($this->row['is_void']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("VOID")?></option>
 							</select>
 						</td>
 					</tr>

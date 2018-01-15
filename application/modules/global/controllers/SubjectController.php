@@ -6,6 +6,7 @@ class Global_SubjectController extends Zend_Controller_Action {
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	public function start(){
 		return ($this->getRequest()->getParam('limit_satrt',0));
@@ -76,7 +77,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 		$this->view->rs = $is_parent;
 		$db = new Global_Model_DbTable_DbGrade();
     	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree_store = $dept;
 	}
 	function addsubjectAction(){//At callecteral when click client
@@ -100,7 +101,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 				$_dbmodel->updateSubjectExam($_data,$id);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/subject/index");
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 				$err =$e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}

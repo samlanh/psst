@@ -51,7 +51,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/global/lecturer');
 				}
  
-				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", '/global/lecturer/add');
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/global/lecturer/add');
  
 				 
 			}catch (Exception $e) {

@@ -6,6 +6,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
     public function indexAction()
     {
@@ -48,12 +49,12 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			$db = new Global_Model_DbTable_DbGrade();
     			$db->AddGrade($_data);
     			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !", "/global/grade/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/grade/index");
     			}else{
     				Application_Form_FrmMessage::message("INSERT_SUCCESS");
     			}
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}
@@ -63,7 +64,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	
     	$db = new Global_Model_DbTable_DbGrade();
     	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->dept = $dept;
 		
 		$this->view->teacher= $db->getTeacher();
@@ -83,7 +84,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    		$_data = $this->getRequest()->getPost();
 	    		$db = new Global_Model_DbTable_DbGrade();
 	    		$db->updateGrade($_data,$id);
-	    		Application_Form_FrmMessage::Sucessfull("ការកែប្រែដោយជោគជ័យ", "/global/grade/index");
+	    		Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/global/grade/index");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("Application Error");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -96,7 +97,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	
     	$db = new Global_Model_DbTable_DbGrade();
     	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->dept = $dept;
 		
 		//$this->view->teacher= $db->getTeacher();
@@ -126,7 +127,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	 
     	$db = new Global_Model_DbTable_DbGrade();
     	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->dept = $dept;
     }
     function addDeptAction(){

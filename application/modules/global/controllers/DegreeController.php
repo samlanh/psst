@@ -44,9 +44,9 @@ class Global_DegreeController extends Zend_Controller_Action {
     			$db = new Global_Model_DbTable_DbDegree();
     			$db->AddDegree($_data);
     			if(isset($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("ការបន្ថែមជោគជ័យ !", "/global/degree/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/degree/index");
     			}
-    			Application_Form_FrmMessage::Sucessfull("ការបន្ថែមជោគជ័យ !", "/global/degree/add");
+    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/degree/add");
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("Application Error!");
     			echo $e->getMessage();
@@ -79,7 +79,7 @@ class Global_DegreeController extends Zend_Controller_Action {
     		try {
     			$_data = $this->getRequest()->getPost();
     			$db->UpdateDegree($_data);
-    			Application_Form_FrmMessage::Sucessfull("EDIT_FAIL", "/global/degree/index");
+    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/global/degree/index");
     			//$this->_redirect("");
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("Application Error!");

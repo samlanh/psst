@@ -49,13 +49,13 @@ class Global_RoomController extends Zend_Controller_Action {
    			$_dbmodel = new Global_Model_DbTable_DbRoom();
    			$_major_id = $_dbmodel->addNewRoom($_data);
    			if(isset($_data['save_close'])){
-   				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !","/global/room/index");
+   				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/room/index");
    			}else{
-   				Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !","/global/room/add");
+   				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/room/add");
    			}
    
    		} catch (Exception $e) {
-   			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+   			Application_Form_FrmMessage::message("INSERT_FAIL");
    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
    		}
    

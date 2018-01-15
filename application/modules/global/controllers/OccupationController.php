@@ -59,7 +59,7 @@ class Global_OccupationController extends Zend_Controller_Action {
 				
 					
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		

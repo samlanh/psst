@@ -66,7 +66,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
       		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-      		echo $e->getMessage();exit();
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
@@ -185,12 +184,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		//$_data['pay_id']=$id;
-//     		if(!empty($_data['void'])){
-//     			echo $_data['void'];exit();
-// 			}else{
-// 				echo 'no void';exit();
-// 			}
     		try {
     			$db = new Registrar_Model_DbTable_DbRegister();
     			$db->updateRegister($_data,$id);
@@ -201,7 +194,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     			}
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-    			echo $e->getMessage();exit();
+    			echo $e->getMessage();
     			
     		}
     	}

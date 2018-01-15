@@ -16,7 +16,7 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 	function getAllStudentTest($search=null){
 		try{
 	    	$_db = new Application_Model_DbTable_DbGlobal();
-	    	$branch_id = $_db->getAccessPermission('sp.branch_id');
+	    	$branch_id = $_db->getAccessPermission('st.branch_id');
 	    	
 	    	$db=$this->getAdapter();
 
@@ -29,23 +29,20 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 					  st.stu_code,
 					  st.kh_name,
 					  st.en_name,
-					  (select name_en from rms_view where type=2 and key_code=st.sex) as sex,
+					  (SELECT name_en from rms_view where type=2 and key_code=st.sex LIMIT 1) as sex,
 					  st.dob,
 					  st.phone,
-					  
-					  st.create_date,
-					  
+					  st.create_date,					  
 					  st.degree_result,
 					  st.grade_result,
-					  st.session_result,
-					  
+					  st.session_result,					  
 					  (SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=st.degree_result) LIMIT 1) AS degree,
 		   			  (SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=st.grade_result) LIMIT 1 )AS grade,
 		   			  (SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = st.session_result))LIMIT 1) AS `session`,
-					  
 					  st.note,
-					  (select name_en from rms_view where type=15 and key_code = updated_result) as updated_result,
-					  (SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = st.user_id) AS user_id
+					  (SELECT first_name FROM rms_users WHERE rms_users.id = st.user_id limit 1) AS user_id,
+					  (select name_en from rms_view where type=15 and key_code = updated_result LIMIT 1) as updated_result
+					  
 					FROM
 					  rms_student_test AS st
 					WHERE 

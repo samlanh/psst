@@ -222,7 +222,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					time_result,
 					
 					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1),
-					(select name_en from rms_view where type=15 and key_code=updated_result) as result_status,
+					(select name_en from rms_view where type=14 and key_code=updated_result) as result_status,
 					'$print'
 				FROM 
 					rms_student_test

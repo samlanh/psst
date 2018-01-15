@@ -981,10 +981,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	function updateRegister($data,$payment_id){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-		//echo $data['void'];exit();
 		
 		if($data['void']==1){  // void
-			
 			// if void=1 that mean this record is useless so we only update is_void to 1 no need to update info anymore
 			try{	
 				$this->_name='rms_student_payment';
@@ -1060,7 +1058,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				return 0;
 			}catch (Exception $e){
 				$db->rollBack();
-				echo $e->getMessage();exit();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}else if($data['void']==2){ // delete
 					
@@ -1133,10 +1131,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		}else{
 			return 0;			
 		}
-		
-		
-		
-		echo 1;exit();
 			try{
 				
 			//update is_void=0 ,if this record already set is_void=1 for last time so we update it to is_void=0	so this record is use

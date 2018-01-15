@@ -434,12 +434,12 @@ fieldset{  background:none;}
    }
 </script>
 
-	<table  cellspacing="1" style="margin: 0 auto; width: 100%;">
+	<table  cellspacing="5" style="margin: 0 auto; width: 100%;">
 		<tr>
 			<td width="33%;" valign="top">
 				<fieldset style="margin-top: -10px;"> 
 					<legend align="center"><strong><?php echo $tr->translate("STUDENT_INFO");?></strong></legend> 
-						<table style="margin: 0 auto; width: 100%;" cellspacing="2" >
+						<table style="margin: 0 auto; width: 100%;" cellspacing="5" >
 								<tr>
 									<td><?php echo $tr->translate("PAYMENT_TYPE");?></td>
 									<td>
@@ -534,7 +534,7 @@ fieldset{  background:none;}
 			<td width="33%;" valign="top">
 				<fieldset style="margin-top: -10px;"> 
 					<legend align="center"><strong><?php echo $tr->translate("STUDY_INFO");?></strong></legend> 
-						<table style="margin: 0 auto; width: 100%;" cellspacing="2" >
+						<table style="margin: 0 auto; width: 100%;" cellspacing="5" >
 							<tr>
 							<td><?php echo $tr->translate("GROUP");?></td>
 							<td>
@@ -618,7 +618,7 @@ fieldset{  background:none;}
 			<td valign="top" width="33%">
 				<fieldset style="margin-top: -10px;"> 
 					<legend align="center"><strong><?php echo $tr->translate("OFFICIAL_RECEIPT");?></strong></legend> 
-					<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="2" >
+					<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="5" >
 						<tr>
 							<td><?php echo $tr->translate("RECEIPT_NO");?></td>
 							<td><input type="text" style="color: red;" dojoType="dijit.form.TextBox" name="receipt_no" id="receipt_no" value="<?php echo $this->payment['receipt_number']?>" class="fullside" readOnly="readOnly"/></td>
@@ -734,7 +734,7 @@ fieldset{  background:none;}
 			<td valign="top">
 				<table style="margin: 0 auto; width: 100%;" cellspacing="2" >
 					<tr>
-						<td >អានជាខ្មែរ</td>
+						<td ><?php echo $tr->translate("READ_IN_KHMER");?></td>
 						<td colspan="3">
 							<Textarea type="text" name="money_in_khmer" id="money_in_khmer" readonly="readonly" dojoType="dijit.form.TextBox" class="fullside" ></Textarea>
 						</td>

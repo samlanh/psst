@@ -108,7 +108,6 @@
 							 </style>
 							 
 							 <?php foreach($this->row as $rs){ $i++;?>
-							 
 								  <tr style="font-size:12px; height: 20px;white-space:nowrap;"​ class="hover">
 								    <td><?php echo $i;?></td>
 								    <td><?php echo $rs['serial']; ?></td>
@@ -117,19 +116,13 @@
 								    <td><?php echo $rs['en_name']; ?></td>
 								    <td><?php echo $rs['sex']; ?></td>
 								    <td><?php echo $rs['phone']; ?></td>
-								    
 								    <td><?php echo $rs['degree']; ?></td>
 								    <td><?php echo $rs['grade']; ?></td>
 								    <td><?php echo $rs['session']; ?></td>
-								    
-								   	<td><?php echo $rs['note']; ?></td>
-								    <td><?php echo $rs['user_id'];?></td>
+								    <td><?php echo $rs['note']; ?></td>
 								    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
-								    
-								    <td><?php echo $rs['updated_result']; ?></td>
-								          
-								    
-								    
+									<td><?php echo $rs['user_id'];?></td>								    
+								    <td><?php echo $rs['updated_result']; ?></td>								    
 								  </tr>
 							  <?php } }?>
 						</table>

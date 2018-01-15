@@ -252,7 +252,7 @@ function getStudentNo(){
 				<table width="100%" >
 					<tr>
 						<td>
-						 <div id="mainTabContainer" style="width: 1150px;height: 500px;" dojoType="dijit.layout.TabContainer" region="center" width="1000px !importand" >
+						 <div id="mainTabContainer" style="width: 1150px; height:500px;" dojoType="dijit.layout.TabContainer" region="center" width="1000px !importand" >
 					      <div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("STUDENT_INFO");?>" selected="true">
 					      	<table cellspacing="5" style="margin:0 auto;" width="100%">
 					      		<tr>
@@ -455,6 +455,14 @@ function getStudentNo(){
 					</tr>
 				</table>
 </form>
+<style>
+ @media (min-width: 1201px) and (max-width: 1601px){
+	#mainTabContainer{
+	width: 1400px !important;
+   	 display: block;
+	}
+}
+</style>
 <script>
 var url_add_lang = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"submit")); ?>';
 function addLanguage(){

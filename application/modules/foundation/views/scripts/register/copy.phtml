@@ -432,7 +432,14 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 			</tr>
 		</table>
 </form>
-
+<style>
+ @media (min-width: 1201px) and (max-width: 1601px){
+	#mainTabContainer{
+	width: 1400px !important;
+   	 display: block;
+	}
+}
+</style>
 <script>
 function hideDialog1() {		
 	dijit.byId("popup_dept2").hide();

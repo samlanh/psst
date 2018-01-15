@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title>Edit Other Incomes</title>
+<title><?php echo $tr->translate("EDIT_OTHER_INCOME")?></title>
 <style>	
 .fullside {
 	width: 100%;
@@ -12,7 +12,7 @@ $frm = $this->frm_expense;
  <script>
 		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
  </script>
-<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'edit')); ?>" 
+<form id="frm_add_tran" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'edit')); ?>" 
 				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
@@ -38,52 +38,45 @@ $frm = $this->frm_expense;
 	<table cellspacing="10" class='fullside' >
 		<tr>
 			<td>
-				<fieldset>
-					<legend><strong>ចំណូលផ្សេងៗ</strong></legend>
-					<table cellspacing="10"  width="100%">
+				<fieldset style=" background: #fff;   border: solid 1px #008;">
+					<legend style=" color:#008;"><strong><?php echo $tr->translate("OTHER_INCOME")?></strong></legend>
+					<table cellspacing="5"  width="100%">
+						<tr>
+							 <td><?php echo $tr->translate("RECEIPT_NO")?></td>
+							<td>
+								<input type="text" style="color:red;" name="invoice"  value="<?php echo $this->rs['invoice'];?>"  id="invoice" dojoType="dijit.form.TextBox" readonly="1" class="fullside"  />
+							</td>
+							<td><?php echo $tr->translate("FOR_DATE")?></td>
+							<td>
+								<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->rs['date'];?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" />
+							</td>
+						</tr>
 						<tr>
 							<td><?php echo $tr->translate("INCOME_CATEGORY")?></td>
 							<td>
 								<input id="cate_income" />
 							</td>
-							<td><?php echo $tr->translate("INCOME_TITLE")?></td>
-							<td><input type="text" name="title" id="title" value="<?php echo $this->rs['title'];?>" dojoType="dijit.form.TextBox" class="fullside" /></td>
-							
-							<td><?php echo $tr->translate("PAYMENT_METHOD")?></td>
-							<td>
-								<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
-									<option value="-1">ជ្រើសរើសប្រភេទបង់ប្រាក់</option>
-									<?php if(!empty($this->payment_method)){foreach ($this->payment_method as $payment_method){?>
-										<option value="<?php echo $payment_method['id']?>" <?php if($payment_method['id']==$this->rs['payment_method']){echo 'selected="selected"';}?>><?php echo $payment_method['name']?></option>
-									<?php }}?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-						    <td><?php echo $tr->translate("RECEIPT_NO")?></td>
-							<td>
-								<input type="text" style="color:red;" name="invoice"  value="<?php echo $this->rs['invoice'];?>"  id="invoice" dojoType="dijit.form.TextBox" readonly="1" class="fullside"  />
-							</td>
 							<td><?php echo $tr->translate("TOTAL_INCOME")?></td>
 							<td>
 								<input type="text" name="total_income" id="total_income" required="true" value="<?php echo $this->rs['total_amount'];?>" dojoType="dijit.form.NumberTextBox" class="fullside" />
 							</td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("INCOME_TITLE")?></td>
+							<td><input type="text" name="title" id="title" value="<?php echo $this->rs['title'];?>" dojoType="dijit.form.TextBox" class="fullside" /></td>
 							<td><?php echo $tr->translate("CHEQE_NO")?></td>
 							<td>
 								<input type="text" name="cheqe_no" id="cheqe_no"  value="<?php echo $this->rs['cheqe_no'];?>" dojoType="dijit.form.TextBox" class="fullside" />
 							</td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("FOR_DATE")?></td>
+							<td><?php echo $tr->translate("PAYMENT_METHOD")?></td>
 							<td>
-								<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->rs['date'];?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" />
-							</td>
-							
-							<td><?php echo $tr->translate("STATUS")?></td>
-							<td>
-								<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-									<option value="1" <?php if($this->rs['status']==1){echo 'selected="selected"';}?>>Active</option>
-									<option value="0" <?php if($this->rs['status']==0){echo 'selected="selected"';}?>>Deactive</option>
+								<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
+									<option value="-1"><?php echo $tr->translate("SELECT_PAYMENT_METHOD");//ជ្រើសរើសប្រភេទបង់ប្រាក់?></option>
+									<?php if(!empty($this->payment_method)){foreach ($this->payment_method as $payment_method){?>
+										<option value="<?php echo $payment_method['id']?>" <?php if($payment_method['id']==$this->rs['payment_method']){echo 'selected="selected"';}?>><?php echo $payment_method['name']?></option>
+									<?php }}?>
 								</select>
 							</td>
 							<td><?php echo $tr->translate("NOTE")?></td>
@@ -91,20 +84,31 @@ $frm = $this->frm_expense;
 								<textarea name="note" id="note" class="fullside"  value="<?php echo $this->rs['description'];?>" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:40px;" ></textarea>							
 							</td>
 						</tr>
+						<tr>
+							<td colspan="2"></td>
+							<td><?php echo $tr->translate("STATUS")?></td>
+							<td>
+								<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
+									<option value="1" <?php if($this->rs['status']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("ACTIVE")?></option>
+									<option value="0" <?php if($this->rs['status']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("DEACTIVE")?></option>
+								</select>
+							</td>
+							
+						</tr>
+						<tr>
+							<td colspan="4" align="center">
+								<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
+									 iconClass="dijitIconClear"/>
+								<input type="button" onClick="submitDataClose();" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
+									 iconClass="dijitEditorIcon dijitEditorIconSave"/>
+							   <input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button"
+								 iconClass="dijitIconNewTask"  onclick="printReceipt('');"   />
+							</td>
+						</tr>	
 					</table>
 				</fieldset>
 			</td>
 		</tr>		
-		<tr>
-			<td align="center">
-				<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
-					 iconClass="dijitIconClear"/>
-				<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button"
-					 iconClass="dijitEditorIcon dijitEditorIconSave"/>
-			   <input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button"
-				 iconClass="dijitIconNewTask"  onclick="printReceipt('');"   />
-			</td>
-		</tr>	
 	</table>
 </form>
 <script type="text/javascript">
@@ -125,7 +129,7 @@ dojo.require("dojo.store.Memory");
 		    tabindex: "1",  
 		    value:0,       
 		    class: 'fullside',  
-		    placeHolder:"Selecte Category", 
+		    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY")?>", 
 		    onChange: function() {          
 			   	service_id = dijit.byId('cate_income').get('value');
 			    if(service_id==-1){
@@ -216,6 +220,7 @@ dojo.require("dojo.store.Memory");
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
+	    loading();
 	    dijit.byId('frm_add_tran').submit();
 	}
 	function setReadonlyCheqe(){
@@ -226,6 +231,19 @@ dojo.require("dojo.store.Memory");
 			dijit.byId('cheqe_no').attr('value','');
 			dijit.byId("cheqe_no").set('readOnly',true);
 		}
+	}
+	function submitDataClose(){
+		if(dijit.byId('frm_add_tran').validate()) {
+			dijit.byId('submitButton').set('disabled',true);
+			
+			loading();
+			dijit.byId('frm_add_tran').submit();
+			document.getElementsByClassName("overlay")[0].style.display="none";	
+			
+		}
+	}
+	function loading(){
+		document.getElementsByClassName("overlay")[0].style.display="block";
 	}
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
@@ -350,3 +368,18 @@ dojo.require("dojo.store.Memory");
 		</form>
 	</div>
 </div>
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>	
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

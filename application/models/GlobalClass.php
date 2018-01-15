@@ -355,10 +355,11 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 		}
 		public function getAllExpenseIncomeType($type){
 			$_db = new Application_Model_DbTable_DbGlobal();
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			$rows = $_db->getExpenseIncome($type);
 			$options = '';
-			$options .= '<option Value="0">ជ្រើសរើសប្រភេទ</option>';
-			$options .= '<option Value="-1">Add New</option>';
+			$options .= '<option Value="0">'.$tr->translate("SELECT_CATEGORY").'</option>';
+			$options .= '<option Value="-1">'.$tr->translate("ADD_NEW").'</option>';
 			if(!empty($rows))foreach($rows as $value){
 				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']).'</option>';
 			}

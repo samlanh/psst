@@ -5,6 +5,7 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 	
     public function init()
     {
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
@@ -59,10 +60,10 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 			$db = new Registrar_Model_DbTable_DbExpense();				
 			try {
 				$db->addExpense($data);
-				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/expense");
+				if(!empty($data['savenew'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/expense/add");
 				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/expense");
 				}				
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -83,7 +84,7 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	
     	$_db = new Registrar_Model_DbTable_DbExpense();
     	$cate_expense = $_db->getAllCateExpense(5);
-    	array_unshift($cate_expense, array('id'=>-1 , 'name'=>'Add New'));
+    	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
     	$this->view->cate_expense = $cate_expense;
     }
  
@@ -96,9 +97,9 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 			$db = new Registrar_Model_DbTable_DbExpense();				
 			try {
 				$db->updatExpense($data);				
-				Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL);		
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);		
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				$this->view->msg = 'EDIT_FAIL';
 			}
 		}
 		
@@ -124,7 +125,7 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	
     	$_db = new Registrar_Model_DbTable_DbExpense();
     	$cate_expense = $_db->getAllCateExpense(5);
-    	array_unshift($cate_expense, array('id'=>-1 , 'name'=>'Add New'));
+    	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
     	$this->view->cate_expense = $cate_expense;
     }
     function getReceiptNumberAction(){

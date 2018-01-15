@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title>Add Other Expense</title>
+<title><?php echo $tr->translate("ADD_OTHER_EXPENSE")?></title>
 <style>	
 .fullside {
 	width: 100%;
@@ -24,60 +24,68 @@ $frm = $this->frm_expense;
 <table cellspacing="10" class='fullside' >
 	<tr>
 		<td>
-			<fieldset>
-				<legend><strong><?php echo $tr->translate('EXPENSE');?></strong></legend>
-				<table cellspacing="10"  width="100%">
+			<fieldset style=" background: #fff;   border: solid 1px #008;">
+				<legend style=" color:#008;"><strong><?php echo $tr->translate("OTHER_EXPENSE")?></strong></legend>
+				<table cellspacing="5"  width="100%">
 					<tr>
 					    <td><?php echo $tr->translate("BRANCH_NAME")?></td>
 						<td><?php echo $frm->getElement('branch_id');?></td>
-						<td><?php echo $tr->translate("EXPENSE_TITLE")?></td>
-						<td><?php echo $frm->getElement('title');?></td>
-						<td><?php echo $tr->translate("Payment Method")?></td>
-						<td><?php echo $frm->getElement('payment_method');?></td>
+						<td><?php echo $tr->translate("CREATED_DATE")?></td>
+						<td><?php echo $frm->getElement('Date');?></td>
+						
 					</tr>
 					<tr>
-					    <td><?php echo $tr->translate("CHEQUE_NO")?></td>
-						<td><?php echo $frm->getElement('cheque_num');?></td>
-					    <td><?php echo $tr->translate("RECEIPT_NO")?></td>
+						<td><?php echo $tr->translate("RECEIPT_NO")?></td>
 						<td><?php echo $frm->getElement('invoice');?></td>
+						<td><?php echo $tr->translate("CHEQUE_NO")?></td>
+						<td><?php echo $frm->getElement('cheque_num');?></td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("EXPENSE_TITLE")?></td>
+						<td><?php echo $frm->getElement('title');?></td>
 						<td><?php echo $tr->translate("TOTAL_EXPENSE")?></td>
 						<td><?php echo $frm->getElement('total_amount');?></td>
 					</tr>
 					<tr>
-						<td><?php echo $tr->translate("CREATED_DATE")?></td>
-						<td><?php echo $frm->getElement('Date');?></td>
-						<td valign="top"><?php echo $tr->translate("STATUS")?></td>
-						<td valign="top"><?php echo $frm->getElement('Stutas');?></td>
+						<td valign="top"><?php echo $tr->translate("PAYMENT_METHOD")?></td>
+						<td valign="top"><?php echo $frm->getElement('payment_method');?></td>
 						<td valign="top"><?php echo $tr->translate("NOTE")?><input type="hidden" id="identity" name="identity" /></td>
 						<td><?php echo $frm->getElement('Description');?></td>
 					</tr>
 					<tr>
-						<td colspan="6">
+						<td colspan="2"></td>
+						<td valign="top"><?php echo $tr->translate("STATUS")?></td>
+						<td valign="top"><?php echo $frm->getElement('Stutas');?></td>
+						
+					</tr>
+					<tr>
+						<td colspan="4">
 							<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;width:100%;">
 								<tr id="head-title" class="head-td" align="right"></tr>
 							</table>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="6" align="left">
+						<td colspan="4" align="left">
 							<input type="button" label="<?php echo $tr->translate('ADD_EXPENSE');?>" dojoType="dijit.form.Button" 
 						 	   iconClass="dijitIconEditProperty" onclick="addRow();" />
 						</td>
 					</tr>
+					<tr>
+						<td colspan="4" align="center">
+						<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
+								 iconClass="dijitIconClear"/>
+							<input type="button" onclick="submitData();" label="<?php echo $tr->translate("SAVECLOSE");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
+								 iconClass="dijitIconDelete"/>
+							<input type="button" onclick='printSave("");' label="<?php echo $tr->translate("SAVE_PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
+								 iconClass="dijitIconNewTask"/>
+						</td>
+					</tr>	
 				</table>
 			</fieldset>
 		</td>
 	</tr>		
-	<tr>
-		<td align="center">
-		<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
-				 iconClass="dijitIconClear"/>
-			<input type="button" onclick="submitData();" label="<?php echo $tr->translate("SAVECLOSE");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
-				 iconClass="dijitIconDelete"/>
-			<input type="button" onclick='printSave("");' label="<?php echo $tr->translate("SAVEPRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
-				 iconClass="dijitIconNewTask"/>
-		</td>
-	</tr>	
+	
 </table>
 </form>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
@@ -288,7 +296,7 @@ function addRow() {
 		if(title!=1){
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("ប្រភេទចំណាយ");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CATE_EXPENSE");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
 			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
 			dojo.query("#head-title").append(temp);

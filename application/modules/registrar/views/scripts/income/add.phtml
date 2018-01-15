@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title>Add Other Income</title>
+<title><?php echo $tr->translate("ADD_OTHER_INCOME")?></title>
 <style>	
 .fullside {
 	width: 100%;
@@ -30,78 +30,83 @@ $frm = $this->frm_expense;
 <table cellspacing="10" class='fullside' >
 	<tr>
 		<td>
-				<fieldset>
-					<legend><strong>ចំណូលផ្សេងៗ</strong></legend>
-					<table cellspacing="10"  width="100%" border="0">
+				<fieldset style=" background: #fff;   border: solid 1px #008;">
+					<legend style=" color:#008;"><strong><?php echo $tr->translate("OTHER_INCOME")?></strong></legend>
+					<table cellspacing="5"  width="100%" border="0">
+						<tr>
+							<td><?php echo $tr->translate("RECEIPT_NO")?></td>
+							<td>
+								<input type="text" style="color:red;" name="invoice" id="invoice" dojoType="dijit.form.TextBox" readonly="1" class="fullside"  />
+							</td>
+							<td><?php echo $tr->translate("DATE")?></td>
+							<td>
+								<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" />
+							</td>
+						</tr>
 						<tr>
 							<td><?php echo $tr->translate("INCOME_CATEGORY")?></td>
 							<td>
 								<input id="cate_income" />
-							</td>
-							<td><?php echo $tr->translate("INCOME_TITLE")?></td>
-							<td><input type="text" name="title" id="title" dojoType="dijit.form.TextBox" class="fullside" /></td>
-							<td><?php echo $tr->translate("PAYMENT_METHOD")?></td>
-							<td>
-								<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
-									<option value="-1">ជ្រើសរើសប្រភេទបង់ប្រាក់</option>
-									<?php if(!empty($this->payment_method)){foreach ($this->payment_method as $payment_method){?>
-										<option value="<?php echo $payment_method['id']?>"><?php echo $payment_method['name']?></option>
-									<?php }}?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-						    <td><?php echo $tr->translate("RECEIPT_NO")?></td>
-							<td>
-								<input type="text" style="color:red;" name="invoice" id="invoice" dojoType="dijit.form.TextBox" readonly="1" class="fullside"  />
 							</td>
 							<td><?php echo $tr->translate("TOTAL_INCOME")?></td>
 							<td>
 								<input type="text" name="total_income" id="total_income" required="true" dojoType="dijit.form.NumberTextBox" class="fullside" />
 							</td>
 							
+						</tr>
+						<tr>
+						    <td><?php echo $tr->translate("INCOME_TITLE")?></td>
+							<td><input type="text" name="title" id="title" dojoType="dijit.form.TextBox" class="fullside" /></td>
 							<td><?php echo $tr->translate("CHEQE_NO")?></td>
 							<td>
 								<input type="text" name="cheqe_no" id="cheqe_no" dojoType="dijit.form.TextBox" class="fullside" />
 							</td>
+							
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("DATE")?></td>
+							<td><?php echo $tr->translate("PAYMENT_METHOD")?></td>
 							<td>
-								<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" />
-							</td>
-							
-							<td><?php echo $tr->translate("STATUS")?></td>
-							<td>
-								<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-									<option value="1">Active</option>
-									<option value="0">Deactive</option>
+								<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
+									<option value="-1"><?php echo $tr->translate("SELECT_PAYMENT_METHOD");//ជ្រើសរើសប្រភេទបង់ប្រាក់?></option>
+									<?php if(!empty($this->payment_method)){foreach ($this->payment_method as $payment_method){?>
+										<option value="<?php echo $payment_method['id']?>"><?php echo $payment_method['name']?></option>
+									<?php }}?>
 								</select>
 							</td>
-							
 							<td><?php echo $tr->translate("NOTE")?></td>
 							<td colspan="1">
 								<textarea name="note" id="note" class="fullside" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:40px;" ></textarea>							
 							</td>
+							
 						</tr>
+						<tr>
+							<td colspan="2"></td>
+							<td><?php echo $tr->translate("STATUS")?></td>
+							<td>
+								<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
+									<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
+									<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" align="center">
+								<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
+									 iconClass="dijitIconClear"/>
+								<input  label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' id='saveclose' value='saveclose' type="button" onclick="submitDataClose();" dojoType="dijit.form.Button"
+									 iconClass="dijitIconNewTask"/>
+								<input  label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' type="button" onclick="submitDataAddNew();" dojoType="dijit.form.Button"
+									 iconClass="dijitIconNewTask"/>
+									 
+								<input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button"
+									 iconClass="dijitIconNewTask"  onclick="printReceipt('');"   />
+									 
+							</td>
+						</tr>	
 					</table>
 				</fieldset>
 		</td>
 	</tr>		
-	<tr>
-		<td align="center">
-			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
-				 iconClass="dijitIconClear"/>
-			<input  label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' id='saveclose' value='saveclose' type="button" onclick="submitDataClose();" dojoType="dijit.form.Button"
-				 iconClass="dijitIconNewTask"/>
-			<input  label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' type="button" onclick="submitDataAddNew();" dojoType="dijit.form.Button"
-				 iconClass="dijitIconNewTask"/>
-				 
-			<input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button"
-				 iconClass="dijitIconNewTask"  onclick="printReceipt('');"   />
-				 
-		</td>
-	</tr>	
 </table>
 </form>
 
@@ -125,7 +130,7 @@ dojo.require("dojo.store.Memory");
 		    tabindex: "1",  
 		    value:0,       
 		    class: 'fullside',  
-		    placeHolder:"Selecte Category", 
+		    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY")?>", 
 		    onChange: function() {          
 			   	service_id = dijit.byId('cate_income').get('value');
 			    if(service_id==-1){

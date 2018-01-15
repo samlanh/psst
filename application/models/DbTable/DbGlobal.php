@@ -597,7 +597,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$db=$this->getAdapter();
    	$sql="SELECT key_code,name_kh AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 ";
    	$rows = $db->fetchAll($sql);
-   	$options= array(-1=>"ជ្រើសរើសប្រភេទ");
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+   	$options= array(-1=>$tr->translate("CHOOSE"));
    	if($is_opt!=null){
    		if(!empty($rows))foreach($rows AS $row){
    			$options[$row['key_code']]=$row['view_name'];

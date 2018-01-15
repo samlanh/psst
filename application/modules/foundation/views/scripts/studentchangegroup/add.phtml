@@ -53,16 +53,18 @@ dojo.require("dijit.form.CheckBox");
 												<tr>
 													<td ><?php echo $tr->translate("STUDENT_ID")?></td>
 													<td>
-														<select class="fullside" name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" placeholder="Select Student" onchange="getStudentInfo(1);" >
+														<select class="fullside" name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" onchange="getStudentInfo(1);" >
 													    	<option value="0" > </option>
 													    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $stu_id){?>
 																<option value="<?php echo $stu_id['id']?>"><?php echo $stu_id['stu_code']?></option>
 															<?php }?>
 														</select>
 													</td>
+												</tr>
+												<tr>
 													<td ><?php echo $tr->translate("STUDENT_NAME")?></td>
 													<td >
-														<select class="fullside" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" placeholder="Select Student" onchange="getStudentInfo(2);" >
+														<select class="fullside" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="getStudentInfo(2);" >
 													    	<option value="0" > </option>
 													    	<?php if(!empty($this->stu_name)){foreach ($this->stu_name as $stu_name){?>
 																<option value="<?php echo $stu_name['id'];?>"><?php echo $stu_name['name'];?></option>
@@ -74,10 +76,12 @@ dojo.require("dijit.form.CheckBox");
 													<td ><?php echo $tr->translate("SEX")?></td>
 													<td>
 														<select dojoType="dijit.form.FilteringSelect"  readonly="readonly" class="fullside" id="gender" name="gender" type="text">
-															<option value="1">Male</option>
-															<option value="2">Female</option>
+															<option value="1"><?php echo $tr->translate("MALE")?></option>
+															<option value="2"><?php echo $tr->translate("FEMALE")?></option>
 														</select>
 													</td>
+												</tr>
+												<tr>
 													<td><?php echo $tr->translate("FROM_GROUP")?></td>
 													<td>
 														<select dojoType="dijit.form.FilteringSelect" required="true" readonly="readonly" class="fullside" id="from_group" name="from_group" type="text" placeholder="select group" onchange="toStudentGroup(1);">
@@ -100,28 +104,31 @@ dojo.require("dijit.form.CheckBox");
 												<tr>
 													<td><?php echo $tr->translate("TO_GROUP")?></td>
 													<td>
-														<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" placeholder="to group" onchange="toStudentGroup(2);">
+														<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" placeholder="<?php echo $tr->translate("TO_GROUP")?>" onchange="toStudentGroup(2);">
 															<option value="0" > </option>
 															<?php if(!empty($this->row))foreach ($this->row as $_row){?>
 																<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
 															<?php }?>
 														</select>
 													</td>
+												</tr>
+												<tr>
 													<td><?php echo $tr->translate("MOVING_DATE")?></td>
 													<td><input dojoType="dijit.form.DateTextBox"  class="fullside" id="moving_date" name="moving_date" value="now" type="text"></td>
 												</tr>
 												<tr>
-													<td align="right"><?php echo $tr->translate("NOTE")?></td>
+													<td align="left"><?php echo $tr->translate("NOTE")?></td>
 													<td>
 														<input dojoType="dijit.form.TextBox" class="fullside" id="note" name="note" type="text" />
 															
 													</td>
-												
-													<td align="right"><?php echo $tr->translate("STATUS")?></td>
+												</tr>
+												<tr>
+													<td align="left"><?php echo $tr->translate("STATUS")?></td>
 													<td>
 														<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="status" name="status" type="text">
-															<option value="1">Active</option>
-															<option value="0">Deactive</option>
+															<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
+															<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
 														</select>
 													</td>
 												</tr>

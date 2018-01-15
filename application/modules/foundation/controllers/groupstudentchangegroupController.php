@@ -4,6 +4,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
     public function init()
     {    	
      /* Initialize action controller here */
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -58,7 +59,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$this->view->row = $add =$db->getfromGroup();
 		$this->view->rs = $add =$db->gettoGroup();
 		$g_new=$db->getGroupNewAll();
-		array_unshift($g_new,array ('id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($g_new,array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->g_new=$g_new;
 		
 		$this->view->academy = $db->getAllYears();
@@ -71,7 +72,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$this->view->rs_session=$db->getSession();
 		
 		$room =  $db->getRoom();
-		array_unshift($room, array ( 'room_id' => 0, 'room_name' => 'Select Room') );
+		array_unshift($room, array ( 'room_id' => 0, 'room_name' =>$this->tr->translate("SELECT_ROOM")) );
 		$this->view->room = $room;
 		
 	}
@@ -100,7 +101,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 		$this->view->row = $db->getfromGroup();
 		$g_new=$db->getGroupNewAll();
-		array_unshift($g_new,array ('id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($g_new,array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->g_new=$g_new;
 		$this->view->rows = $db->gettoGroup();
 		$this->view->academy = $db->getAllYears();
@@ -111,7 +112,7 @@ class Foundation_groupstudentchangegroupController extends Zend_Controller_Actio
 		$db=new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_session=$db->getSession();
 		$room =  $db->getRoom();
-		array_unshift($room, array ( 'room_id' => 0, 'room_name' => 'Select Room') );
+		array_unshift($room, array ( 'room_id' => 0, 'room_name' =>$this->tr->translate("SELECT_ROOM")) );
 		$this->view->room = $room;
 	}
 	

@@ -164,8 +164,8 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 										<td><?php echo $tr->translate("STATUS")?></td>
 										<td>
 											<select class="fullside" dojoType="dijit.form.FilteringSelect"   class="fullside" id="status" name="status" type="text">
-												<option value="1" <?php if($this->rs['status']==1) echo 'selected="selected"';?>>Active</option>
-												<option value="0" <?php if($this->rs['status']==0) echo 'selected="selected"';?>>Deactive</option>
+												<option value="1" <?php if($this->rs['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE")?></option>
+												<option value="0" <?php if($this->rs['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE")?></option>
 											</select>
 											<input dojoType="dijit.form.TextBox"  type="hidden" name="identity" id="identity" value="<?php echo $this->rs['array_checkbox'];?>" />
 											<input dojoType="dijit.form.TextBox"  type="hidden" name="old_array_checkbox" id="old_array_checkbox" value="<?php echo $this->rs['array_checkbox'];?>" />
@@ -217,7 +217,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 								    <td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
 									<td>
 										<select name="academic_year" id="academic_year" type="text" dojoType="dijit.form.FilteringSelect">
-											<option value="0">Select AcademicYear</option>
+											<option value="0"><?php echo $tr->translate("SELECT_YEAR")?></option>
 											<?php if(!empty($this->academy)){ foreach ($this->academy as $row){?>
 												<option value="<?php echo $row['id'];?>"><?php echo $row['years']; ?></option>
 											<?php }}?>
@@ -272,7 +272,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 									<td><?php echo $tr->translate("TIME")?></td>
 									<td>
 										<select name="time" id="time" dojoType="dijit.form.FilteringSelect" >
-											<option value="-1">Select Time</option>
+											<option value="-1"><?php echo $tr->translate("SELECT_TIME")?></option>
 											<option value="1">Part Time</option>
 											<option value="2">Full Time</option>
 										</select>

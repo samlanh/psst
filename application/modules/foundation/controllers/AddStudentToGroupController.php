@@ -5,6 +5,7 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
     public function init()
     {    	
      /* Initialize action controller here */
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -77,7 +78,7 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 		$this->view->degree = $db->getAllFecultyName();
 		
 		$group_option = $db->getGroup();
-		array_unshift($group_option, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
+		array_unshift($group_option, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")) );
 		$this->view->group = $group_option;
 		
 		$this->view->room = $db->getRoom();
@@ -168,7 +169,7 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 		
 		$group = new Foundation_Model_DbTable_DbAddStudentToGroup();
 		$group_option = $group->getGroupToEdit();
-		array_unshift($group_option, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
+		array_unshift($group_option, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")) );
 		$this->view->group = $group_option;
 		$this->view->room = $group->getRoom();
 		
@@ -181,7 +182,7 @@ class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
 			$db = new Foundation_Model_DbTable_DbStudent();
 			$grade = $db->getAllGrade($data['dept_id']);
 			//print_r($grade);exit();
-			array_unshift($grade, array ( 'id' => '', 'name' => 'Select Grade') );
+			array_unshift($grade, array ( 'id' => '', 'name' => $this->tr->translate("SELECT_GRADE")) );
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

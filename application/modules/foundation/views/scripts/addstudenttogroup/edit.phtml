@@ -40,7 +40,7 @@ dojo.ready(function(){
 	    id: "grade",
 	    name: "grade",           
 	    class: 'fullside',  
-	    placeHolder:"Selected Grade",          
+	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 	    onChange: function() {  
 	    	make_id = dijit.byId('grade').get('value');
 	    	paymentTerm();
@@ -97,13 +97,13 @@ $frm_set_price = $this->frm_set_charge;?>
 		<td valign="top">
 		<form id='addstudenttogroup' dojoType="dijit.form.Form"  dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<fieldset style="width: 50%;float: left;">
-					<legend align="center"><strong>Search Group</strong></legend>
+					<legend align="center"><strong><?php echo $tr->translate("SEARCH_GROUP");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%; background:#DFF7FD;white-space: nowrap;" cellspacing="10" broder 1>
 						<tr>
 							<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 							<td>
 								<select class="fullside" dojoType="dijit.form.FilteringSelect" required="true"  id="academy" name="academy" type="text">
-									<option value="">Select AcademicYear</option>
+									<option value=""><?php echo $tr->translate("SELECT_YEAR");?></option>
 									<?php if(!empty($this->academy)) foreach($this->academy as $row){?>
 										<option value="<?php echo $row['id'];?>"><?php echo $row['years']; ?></option>
 									<?php }?>
@@ -112,7 +112,7 @@ $frm_set_price = $this->frm_set_charge;?>
 							<td><?php echo $tr->translate("DEGREE");?></td>
 							<td >
 								<select class="fullside"  name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getallGrade();">
-									<option value="">Select Degree</option>		
+									<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>		
 									<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
 										<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->value['degree']) echo "selected='selected'"?>><?php echo $row['en_name']?></option>
 									<?php }?>
@@ -127,7 +127,7 @@ $frm_set_price = $this->frm_set_charge;?>
 							<td><?php echo $tr->translate("SESSION");?></td>
 							<td>
 								 <select class="fullside"  tabindex="24" name="session" id="session" dojoType="dijit.form.FilteringSelect" >
-								      <option value="">Select Session</option>
+								      <option value=""><?php echo $tr->translate("SELECT_SESSION");?></option>
 								       <?php if(!empty($this->rs_session)) foreach ($this->rs_session As $rs_sesion){?>
 										    <option value="<?php echo $rs_sesion['key_code'];?>" <?php if($rs_sesion['key_code']==$this->value['session']) echo "selected='selected'"?> ><?php echo $rs_sesion['view_name'];?></option>
 								       <?php }?>			
@@ -137,8 +137,8 @@ $frm_set_price = $this->frm_set_charge;?>
 						<tr>
 							
 							<td align="center" colspan="6">
-								 	<input type="submit" dojoType="dijit.form.Button"  label="SEARCH" id="search"
-								 		iconClass="dijitEditorIcon dijitEditorIconSearch"/>
+								 	<input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH");?>" id="search"
+								 		iconClass="dijitIconSearch"/>
 							</td>
 						</tr>
 					
@@ -170,14 +170,14 @@ $frm_set_price = $this->frm_set_charge;?>
 							<td><?php echo $tr->translate("STATUS");?></td>
 							<td>
 								<select class="fullside" dojoType="dijit.form.FilteringSelect" required="true"  id="status" name="status" type="text">		
-									<option value="1"<?php if($this->id['status']==1) echo "selected='selected'"?>><?php echo $tr->translate("Active");?></option>						
-									<option value="0"<?php if($this->id['status']==0) echo "selected='selected'"?>><?php echo $tr->translate("Deactive");?></option>
+									<option value="1"<?php if($this->id['status']==1) echo "selected='selected'"?>><?php echo $tr->translate("ACTIVE");?></option>						
+									<option value="0"<?php if($this->id['status']==0) echo "selected='selected'"?>><?php echo $tr->translate("DEACTIVE");?></option>
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<td align="center" colspan="8">
-								<input type="submit" dojoType="dijit.form.Button"  label="SAVE" id="save"
+								<input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE");?>" id="save"
 										iconClass="dijitEditorIcon dijitEditorIconSave"/>
 							</td>
 						</tr>

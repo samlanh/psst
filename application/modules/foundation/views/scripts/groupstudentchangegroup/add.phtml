@@ -92,7 +92,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 									<tr>
 										<td width="100px" style="white-space: nowrap;"><?php echo $tr->translate("FROM_GROUP")?></td>
 										<td>
-											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="true"  id="from_group" name="from_group" type="text" placeholder="select group" onchange="toStudentGroup(1);getStudentFromGroup();">
+											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="true"  id="from_group" name="from_group" type="text" placeholder="<?php echo $tr->translate("SELECT_GROUP")?>" onchange="toStudentGroup(1);getStudentFromGroup();">
 												<option value="0" > </option>
 												<?php if(!empty($this->row))foreach ($this->row as $_row){?>
 													<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
@@ -118,7 +118,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 										<td width="10px" ><?php echo $tr->translate("TO_GROUP")?></td>
 										<td>
 											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="required"  id="to_group" name="to_group" type="text" placeholder="to group" onchange="toStudentGroup(2);popupAddGroup();">
-												<option value="0" >Select Group</option>
+												<option value="0" ><?php echo $tr->translate("SELECT_GROUP")?></option>
 												<option value="-1" ><?php echo $tr->translate("ADD_NEW")?></option>
 												<?php if(!empty($this->rs))foreach ($this->rs as $_row){?>
 													<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
@@ -157,8 +157,8 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 										<td><?php echo $tr->translate("STATUS")?></td>
 										<td>
 											<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="status" name="status" type="text">
-												<option value="1">Active</option>
-												<option value="0">Deactive</option>
+												<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
+												<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
 											</select>
 											<input dojoType="dijit.form.TextBox"  type="hidden" name="identity" id="identity" />
 										</td>
@@ -249,7 +249,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 										<td><?php echo $tr->translate("TIME")?></td>
 										<td>
 											<select name="time" id="time" dojoType="dijit.form.FilteringSelect" >
-												<option value="-1">Select Time</option>
+												<option value="-1"><?php echo $tr->translate("SELECT_TIME")?></option>
 												<option value="1">Part Time</option>
 												<option value="2">Full Time</option>
 											</select>

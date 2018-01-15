@@ -9,6 +9,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     }
     public function getServiceType($type=null,$option=null){
     	$db = $this->getAdapter();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql ="SELECT DISTINCT title as name,id FROM rms_program_type WHERE title!='' AND status=1 ";
     	if(!empty($type)){
     		$sql.=" AND type=$type";
@@ -18,7 +19,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	if($option==null){
     		return $rs;
     	}else{
-    		$opt=array(-1=>'Select Service Type');
+    		$opt=array(-1=>$tr->translate("SELECT_SERVICE_TYPE"));
     		if(!empty($rs))foreach($rs AS $row) $opt[$row['id']]=$row['name'];
     		return $opt;
     	}

@@ -333,7 +333,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$branch_id->setValue($request->getParam("branch_id"));
 		$db = new Accounting_Model_DbTable_DbTuitionFee();
 		$rows= $db->getAllBranch();
-		array_unshift($rows, array('id'=>'','name'=>"Select Branch"));
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_LOCATION")));
 		$opt=array();
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$branch_id->setMultiOptions($opt);
@@ -350,7 +350,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_stu_code->setValue($request->getParam("stu_code"));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$result = $db->getAllStuCode();
-		$opt_stu_code = array(''=>$this->tr->translate("----- select student id -----"));
+		$opt_stu_code = array(''=>$this->tr->translate("SELECT_STUDENT_ID"));
 		if(!empty($result))foreach ($result As $rs)$opt_stu_code[$rs['id']]=$rs['stu_code'];
 		$_stu_code->setMultiOptions($opt_stu_code);
 		
@@ -365,7 +365,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_stu_name->setValue($request->getParam("stu_name"));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$result = $db->getAllStuName();
-		$opt_stu_name = array(''=>$this->tr->translate("----- select student name -----"));
+		$opt_stu_name = array(''=>$this->tr->translate("SELECT_STUDENT_NAME"));
 		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
 		$_stu_name->setMultiOptions($opt_stu_name);
 		
@@ -381,7 +381,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$stuname_con->setValue($request->getParam("stuname_con"));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$result = $db->getAllStudentConcat();
-		$opt_stu_name = array(''=>$this->tr->translate("----- select student name -----"));
+		$opt_stu_name = array(''=>$this->tr->translate("SELECT_STUDENT_NAME"));
 		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
 		$stuname_con->setMultiOptions($opt_stu_name);
 		

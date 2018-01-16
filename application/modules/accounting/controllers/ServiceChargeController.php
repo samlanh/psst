@@ -4,6 +4,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
     {    	
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	public function start(){
 		return ($this->getRequest()->getParam('limit_satrt',0));
@@ -87,7 +88,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
     	$this->view->adv_search = $search;
     	
     	$year = $db->getAceYear();
-    	array_unshift($year,array ( 'id' => -1, 'name' => 'select year'));
+    	array_unshift($year,array ( 'id' => -1, 'name' => $this->tr->translate("SELECT_YEAR")));
     	$this->view->rows_year = $year;
     }
     public function headAddRecordTuitionFee($rs,$key){
@@ -135,7 +136,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 		
 		$db = new Accounting_Model_DbTable_DbService();
 		$rs= $db->getServiceType(1);
-		array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->service = $rs;
 		
 	}
@@ -213,7 +214,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 			   $this->view->all_service=$db_g->getAllstudentRequest(2);
 			   $db = new Accounting_Model_DbTable_DbService();
 			   $rs= $db->getServiceType(1);
-			   array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			   $this->view->service = $rs;
 	
 	}
@@ -294,7 +295,7 @@ class Accounting_ServiceChargeController extends Zend_Controller_Action {
 		
 		$db = new Accounting_Model_DbTable_DbService();
 		$rs= $db->getServiceType(1);
-		array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->service = $rs;
 	}
 	

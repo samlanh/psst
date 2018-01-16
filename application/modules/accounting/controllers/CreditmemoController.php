@@ -82,7 +82,7 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 				$db->updatcreditMemo($data);				
 				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);		
 			} catch (Exception $e) {
-				$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+				$this->view->msg = 'EDIT_FAIL';
 			}
 		}
 		

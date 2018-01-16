@@ -35,7 +35,7 @@ dojo.ready(function(){
 		style:'height:40px !important',         
 		class: 'fullside',  
 		required:false,
-		placeHolder:"Select Grade",          
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
 			grade   = dijit.byId('grade').get('value');
 			if(grade==-1){
@@ -52,7 +52,7 @@ dojo.ready(function(){
 		id: "degree_popup1",
 		name: "degree_popup1",           
 		class: "fullside", 
-		placeHolder:"Select Degree",          
+		placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
 		onChange: function() {  
 			degree_id = dijit.byId('degree_popup1').get('value');
 			if(degree_id==-1){
@@ -70,7 +70,7 @@ dojo.ready(function(){
 		id: "branch",
 		name: "branch",           
 		class: "full", 
-		placeHolder:"Select Branch",          
+		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>",          
 		onChange: function() {  
 			branch_id = dijit.byId('branch').get('value');
 			if(branch_id==-1){

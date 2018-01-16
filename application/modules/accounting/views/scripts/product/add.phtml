@@ -19,7 +19,7 @@
 		    name: "category_id",  
 		    tabindex: "1",         
 		    class: 'fullside',  
-		    placeHolder:"Select Category", 
+		    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY");?>", 
 		    onChange: function() {          
 		    	category_id = dijit.byId('category_id').get('value');
 			    if(category_id==-1){
@@ -34,7 +34,7 @@
 			id: "branch",
 			name: "branch",           
 			class: "full", 
-			placeHolder:"Selected Branch",          
+			placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>",          
 			onChange: function() {  
 				branch_id = dijit.byId('branch').get('value');
 				if(branch_id==-1){

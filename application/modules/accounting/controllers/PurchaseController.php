@@ -4,6 +4,7 @@ class Accounting_PurchaseController extends Zend_Controller_Action {
 	private $type = array(1=>'service',2=>'program');
 	public function init()
 	{
+		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -48,7 +49,6 @@ class Accounting_PurchaseController extends Zend_Controller_Action {
 public function addAction(){
 	if($this->getRequest()->isPost()){
 		$_data = $this->getRequest()->getPost();
-		
 		try{
 				$db = new Accounting_Model_DbTable_DbPurchase();
 				$row = $db->addPurchase($_data);
@@ -67,7 +67,7 @@ public function addAction(){
 		}
 		$_pur = new Accounting_Model_DbTable_DbPurchase();
 		$pro=$_pur->getProductName();
-		array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
+		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->product= $pro;
 		
 		$this->view->pu_code=$_pur->getPurchaseCode();
@@ -76,18 +76,18 @@ public function addAction(){
 		
 		$db_gr=new Global_Model_DbTable_DbGrade();
 		$d_row=$db_gr->getNameGradeAll();
-		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
 		
 		$_pro = new Accounting_Model_DbTable_DbProduct();
 		$this->view->pro_code=$_pro->getProCode();
 		$pro_cate = $_pro->getProductCategory();
-		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>'Add New'));
+		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>$this->tr->translate("ADD_NEW")));
 		$this->view->cat_rows = $pro_cate;
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$branch = $model->getAllBranchName();
-		array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($branch, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->branchopt = $branch;
 		
 		$fm = new Global_Form_Frmbranch();
@@ -123,7 +123,7 @@ public function addAction(){
 		$_pur = new Accounting_Model_DbTable_DbPurchase();
 		$this->view->product= $_pur->getProductNames();
 		$pro=$_pur->getProductName();
-		array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
+		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->products= $pro;
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
@@ -134,7 +134,7 @@ public function addAction(){
 		$_pro = new Accounting_Model_DbTable_DbProduct();
 		$this->view->pro_code=$_pro->getProCode();
 		$pro_cate = $_pro->getProductCategory();
-		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>'Add New'));
+		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>$this->tr->translate("ADD_NEW")));
 		$this->view->cat_rows = $pro_cate;
 	}
 

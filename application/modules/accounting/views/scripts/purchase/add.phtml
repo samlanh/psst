@@ -28,7 +28,7 @@
 			style:'height:40px !important',         
 			class: 'fullside',  
 			required:false,
-			placeHolder:"Select Product",          
+			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
 			onChange: function() {  
 				pro_id   = dijit.byId('pro_id').get('value');
 				if(pro_id==-1){
@@ -53,7 +53,7 @@
 		id: "branch",
 		name: "branch",           
 		class: "full", 
-		placeHolder:"Selected branch",          
+		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>​",          
 		onChange: function() {  
 			branch_id = dijit.byId('branch').get('value');
 			if(branch_id==-1){
@@ -70,7 +70,7 @@
 		    name: "category_id",  
 		    tabindex: "1",         
 		    class: 'fullside',  
-		    placeHolder:"Select Category", 
+		    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY");?>​", 
 		    onChange: function() {          
 		    	category_id = dijit.byId('category_id').get('value');
 			    if(category_id==-1){

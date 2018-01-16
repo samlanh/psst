@@ -27,7 +27,7 @@
 			id: "branch",
 			name: "branch",           
 			class: "full", 
-			placeHolder:"Selected Branch",          
+			placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>",          
 			onChange: function() {  
 				branch_id = dijit.byId('branch').get('value');
 				if(branch_id==-1){

@@ -75,7 +75,7 @@ dojo.ready(function(){
 							<td style="white-space: nowrap;"><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" class="fullside" id="academic_year" name="academic_year" type="text">
-									<option value="">Select academic year</option>
+									<option value=""><?php echo $tr->translate("SELECT_YEAR");?></option>
 									<?php if(!empty($this->year)){ foreach ($this->year as $year){?>	
 										<option value="<?php echo $year['id'];?>"><?php echo $year['year'];?></option>
 									<?php }}?>
@@ -86,8 +86,8 @@ dojo.ready(function(){
 							<td style="white-space: nowrap;text-align: right;"><?php echo $tr->translate("STATUS");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" class="fullside" id="status" name="status" type="text">								
-										<option value="1">Active</option>
-										<option value="0">Deactive</option>
+										<option value="1"><?php echo $tr->translate("ACTIVE");?></option>
+										<option value="0"><?php echo $tr->translate("DEACTIVE");?></option>
 								</select>
 							</td>	
 						</tr>
@@ -189,7 +189,7 @@ function addRow() {
 				}
 				template+='<td width="11%"><input type="text" class="fullside" value="'+value+'" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			}
-			template+='<td> <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="ផ្សេងៗ"style=""/><input type="hidden" class="fullside" name="one_value'+col+'" id="one_value'+col+'" value="'+col+'" dojoType="dijit.form.TextBox" /></td>';
+			template+='<td> <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("OTHER");?>"style=""/><input type="hidden" class="fullside" name="one_value'+col+'" id="one_value'+col+'" value="'+col+'" dojoType="dijit.form.TextBox" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);

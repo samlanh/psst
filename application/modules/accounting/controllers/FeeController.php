@@ -2,6 +2,7 @@
 class Accounting_FeeController extends Zend_Controller_Action {
 	public function init()
     {    	
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -39,7 +40,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$this->view->adv_search = $search;
     	
     	$year=$db->getAceYear();
-    	array_unshift($year, array('id'=>'','name'=>"Select Year"));
+    	array_unshift($year, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
     	$this->view->rows_year=$year;
     	
     	$form=new Registrar_Form_FrmSearchInfor();
@@ -94,7 +95,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 		
 		$branch = $model->getAllBranchName();
-    	array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($branch, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->branchopt = $branch;
     	
     	$frm = new Application_Form_FrmOther();
@@ -109,11 +110,11 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		
     	$db_gr=new Global_Model_DbTable_DbGrade();
 		$d_row=$db_gr->getNameGradeAll();
-		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
 		
 		$dept = $db_gr->getAllDept();
-		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->dept = $dept;
     }
  	
@@ -184,11 +185,11 @@ class Accounting_FeeController extends Zend_Controller_Action {
 			   
 			   $db_gr=new Global_Model_DbTable_DbGrade();
 			   $d_row=$db_gr->getNameGradeAll();
-			   array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			   $this->view->grade_name=$d_row;
 			   
 			   $dept = $db_gr->getAllDept();
-			   array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			   array_unshift($dept, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			   $this->view->dept = $dept;
 			   
 	}
@@ -258,11 +259,11 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		
 		$db_gr=new Global_Model_DbTable_DbGrade();
 		$d_row=$db_gr->getNameGradeAll();
-		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
 		
 		$dept = $db_gr->getAllDept();
-		array_unshift($dept, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		array_unshift($dept, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 		$this->view->dept = $dept;
 	}	
     

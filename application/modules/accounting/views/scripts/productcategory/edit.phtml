@@ -6,7 +6,7 @@
     // print_r($this->row);
      
 ?>
-<title><?php echo $this->tr->translate("CATEGORY")?></title>
+<title><?php echo $this->tr->translate("EDIT_PRODUCT_CATEGORY")?></title>
 <form id="add_province" action="<?php echo $url_save;?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 	 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
@@ -19,7 +19,7 @@
 		<tr>
 			<td>
 				<fieldset>
-					<legend align="center"><strong><?php echo $tr->translate("Edit Product Category");?></strong></legend>
+					<legend align="center"><strong><?php echo $tr->translate("EDIT_PRODUCT_CATEGORY");?></strong></legend>
 					<table cellspacing="20" width="50%" >
 						<tr>
 							<td align="center" valign="top">
@@ -40,8 +40,8 @@
 									 
 									<tr>
 										<td colspan="2" align="center">
-											<input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
-											<input type="submit" value="save_close" name="save_close" label="Save&Close" dojoType="dijit.form.Button" 
+											<input type="reset" value="Clear" label="<?php echo $tr->translate("CLEAR");?>"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
+											<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
 												iconClass="dijitEditorIcon dijitEditorIconSave" />
 										</td>
 									</tr>					

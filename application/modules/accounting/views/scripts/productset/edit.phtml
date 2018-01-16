@@ -50,7 +50,7 @@ fieldset{  background:none;}
 				<tr>
 					<td ><?php echo $tr->translate("PRODUCT_CATEGORY");?></td>
 					<td>
-						<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="category_id" name="category_id" type="text"  placeholder="<?php echo $tr->translate("CHOOSE_CATEGORY_PRODUCT");?>">								
+						<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="category_id" name="category_id" type="text"  placeholder="<?php echo $tr->translate("SELECT_CATEGORY");?>">								
 							<option value="" ></option>
 							<?php if(!empty($this->cat_rows)) foreach ($this->cat_rows As $rs_cat){?>
 							<option value="<?php echo $rs_cat['id']?>" <?php if($rs_cat['id']==$this->pro_row['cat_id']){ echo 'selected="selected"';} ?>><?php echo $rs_cat['name']?></option>

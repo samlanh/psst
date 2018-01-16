@@ -4,6 +4,7 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 	private $type = array(1=>'service',2=>'program');
 	public function init()
 	{
+		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -63,7 +64,7 @@ public function addAction(){
 		
 	$db = new Accounting_Model_DbTable_DbService();
 	$rs= $db->getServiceType(1);
-	array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+	array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 	$this->view->service = $rs;
 		
 	$frm=new Accounting_Form_FrmProgram();
@@ -89,7 +90,7 @@ public function editAction(){
 	}
 	$db = new Accounting_Model_DbTable_DbService();
 	$rs= $db->getServiceType(1);
-	array_unshift($rs, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+	array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 	$this->view->service = $rs;
 	
 	$obj=new Accounting_Form_FrmProgram();

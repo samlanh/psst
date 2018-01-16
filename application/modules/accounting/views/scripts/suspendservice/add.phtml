@@ -17,7 +17,7 @@
 		    id: "studentid",
 		    name: "studentid",           
 		    class: 'fullside',  
-		    placeHolder:"Selected Student id",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_ID")?>",          
 		    onChange: function() {  
 		    	setID(1);
 		    	getStudentService();
@@ -31,7 +31,7 @@
 		    id: "student_name",
 		    name: "student_name",           
 		    class: 'fullside',  
-		    placeHolder:"Selected Student Name",          
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>",          
 		    onChange: function() {  
 		    	setID(2); 
 		    }

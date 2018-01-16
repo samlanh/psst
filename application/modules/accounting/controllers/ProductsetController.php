@@ -4,6 +4,7 @@ class Accounting_ProductsetController extends Zend_Controller_Action {
 	private $type = array(1=>'service',2=>'program');
 	public function init()
 	{
+		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -75,7 +76,7 @@ class Accounting_ProductsetController extends Zend_Controller_Action {
 			
 			$pro_cate = $_pro->getProductCategory();
 			
-			array_unshift($pro_cate, array('id'=>'-1' , 'name'=>'Add New'));
+			array_unshift($pro_cate, array('id'=>'-1' , 'name'=>$this->tr->translate("ADD_NEW")));
 			
 			$this->view->cat_rows = $pro_cate;
 			

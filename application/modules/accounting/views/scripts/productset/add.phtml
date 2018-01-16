@@ -20,7 +20,7 @@
 		    name: "category_id",  
 		    tabindex: "1",         
 		    class: 'fullside',  
-		    placeHolder:"Select Category", 
+		    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY");?>", 
 		    onChange: function() {          
 		    	category_id = dijit.byId('category_id').get('value');
 			    if(category_id==-1){

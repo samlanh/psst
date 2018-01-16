@@ -640,10 +640,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    function getAllStudent($opt=null,$type){
    	$db = $this->getAdapter();
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$sql=" SELECT stu_id As id,stu_code,CONCAT(stu_khname,'-',stu_enname) as name FROM `rms_student` WHERE stu_khname!='' AND STATUS=1 AND is_subspend=0 ";
    	$rows = $db->fetchAll($sql);
    	if($opt!=null){
-   		$options=array(0=>"ជ្រើសរើសសិស្ស");
+   		$options=array(0=>$tr->translate("CHOOSE"));
    		if(!empty($rows))foreach($rows AS $row){
    			$lable = $row['stu_code'];
    			if($type==2){$lable = $row['name'];}

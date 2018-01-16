@@ -22,7 +22,7 @@ dojo.ready(function(){
 	    name: "title",  
 	    tabindex: "1",         
 	    class: 'fullside',  
-	    placeHolder:"Selecte Category", 
+	    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY")?>", 
 	    onChange: function() {          
 		   	service_id = dijit.byId('title').get('value');
 		    if(service_id==-1){

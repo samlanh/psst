@@ -238,7 +238,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_cate_name = new Zend_Dojo_Form_Element_FilteringSelect('cate_name');
 		$action = $request->getActionName();
 		if($action=='index'){
-			$_cate_opt=array(-1=>'Select Category');
+			$_cate_opt=array(-1=>$this->tr->translate("SELECT_CATEGORY"));
 		}
 		if(!empty($row)){
 			foreach($row as $rs)$_cate_opt[$rs['id']]=$rs['title'];

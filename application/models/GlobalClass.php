@@ -231,8 +231,8 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			$rows = $_db->getAllstudentRequest($type);
-			array_unshift($rows,array('id' => '-1',"name"=>"Add New"));
-			array_unshift($rows,array('id' => '',"name"=>"Select Service", ));
+			array_unshift($rows,array('id' => '-1',"name"=>$tr->translate("ADD_NEW")));
+			array_unshift($rows,array('id' => '',"name"=>$tr->translate("SELECT_SERVICE"), ));
 			$options = '';
 			if(!empty($rows))foreach($rows as $value){
 				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';

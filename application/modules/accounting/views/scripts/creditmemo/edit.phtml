@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_credit;
 ?>
-<title>Credit Memo</title>
+<title><?php echo $tr->translate("Credit Memo");?></title>
 <style>	
 .fullside {
 	width: 100%;
@@ -28,7 +28,7 @@ $frm = $this->frm_credit;
 	<tr>
 		<td>
 			<fieldset>
-				<legend><strong>Credit Memo</strong></legend>
+				<legend><strong><?php echo $tr->translate("Credit Memo");?></strong></legend>
 				<table cellspacing="10"  width="100%">
 					<tr>
 					    <td><?php echo $tr->translate("BRANCH_NAME")?></td>

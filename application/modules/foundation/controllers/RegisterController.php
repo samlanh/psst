@@ -156,7 +156,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			$db = new Foundation_Model_DbTable_DbStudent();
 			$grade = $db->getAllGrade($data['dept_id']);
 			//print_r($grade);exit();
-			array_unshift($grade, array ( 'id' => -1, 'name' => 'Add New'));
+			array_unshift($grade, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")));
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

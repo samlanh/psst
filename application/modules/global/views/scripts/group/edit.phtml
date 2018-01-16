@@ -226,7 +226,7 @@ dojo.ready(function(){
 				name: "teacher_id", 
 				value:"<?php echo $this->rs['teacher_id'];?>",          
 				class: "fullside", 
-				placeHolder:"Select Teacher",          
+				placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
 				onChange: function() {  
 					teacher_id = dijit.byId('teacher_id').get('value');
 					if(teacher_id==-1){
@@ -244,7 +244,7 @@ dojo.ready(function(){
 				name: "teacher_ass",
 				value:"<?php echo $this->rs['teacher_assistance'];?>",              
 				class: "fullside", 
-				placeHolder:"Select Teacher",          
+				placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
 				onChange: function() {  
 					teacher_id = dijit.byId('teacher_ass').get('value');
 					if(teacher_id==-1){
@@ -260,7 +260,7 @@ dojo.ready(function(){
 			    id: "grade",
 			    name: "grade",           
 			    class: 'fullside',  
-			    placeHolder:"Selected Grade",          
+			    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 			    onChange: function() {  
 			    	make_id = dijit.byId('grade').get('value');
 			    	grade = dijit.byId('grade').get('value');
@@ -278,7 +278,7 @@ dojo.ready(function(){
 			    id: "room",
 			    name: "room", 
 				class: 'fullside',				
-			    placeHolder:"Select Room",          
+			    placeHolder:"<?php echo $tr->translate("SELECT_ROOM");?>",          
 			    onChange: function() {  
 			    	room = dijit.byId('room').get('value');
 			    	if(room==-1){
@@ -296,7 +296,7 @@ dojo.ready(function(){
 			    id: "degree_popup1",
 			    name: "degree_popup1",           
 			    class: "full height-text", 
-			    placeHolder:"Select Degree",          
+			    placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
 			    onChange: function() {  
 			    	dept_id = dijit.byId('degree_popup1').get('value');
 			    	if(dept_id==-1){

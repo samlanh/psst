@@ -29,7 +29,7 @@ class Mobileapp_NewseventController extends Zend_Controller_Action
 			$list = new Application_Form_Frmtable();
 			$collumns = array("TITLE","DATE","STATUS");
 			$link=array(
-					'module'=>'mobileapp','controller'=>'about','action'=>'edit',
+					'module'=>'mobileapp','controller'=>'newsevent','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link));
 		}catch (Exception $e){

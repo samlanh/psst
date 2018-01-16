@@ -11,16 +11,14 @@ dojo.require("dijit/Editor");
 <style>
 body, #dijitEditorBody {
     height: 100%;
-    width: 102%;
+    width: 100%;
     overflow: auto;
     background: #fff !important;
-    border: 1px solid #bcf;
 }
 .dijitEditor {
     border: solid 1px #ccd9ff;
 }
 </style>
-
 <form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
@@ -31,7 +29,6 @@ body, #dijitEditorBody {
 				return false;
 			}
 </script>
-
 <table cellspacing="10" width="80%" style="margin: 0 auto;">
 	<tr>
 		<td>
@@ -44,7 +41,8 @@ body, #dijitEditorBody {
 						</tr>						             
                         <tr>
 							<td style="width: 100px"><?php echo $tr->translate('DESCRIPTION');?></td>
-							<td><textarea data-dojo-type="dijit/Editor" id="description" name="description" style=" border: solid 1px #ccd9ff;">
+							<td style="background:#fff;">
+							<textarea data-dojo-type="dijit/Editor" id="description" name="description" style=" border: solid 1px #ccd9ff;">
 							</textarea></td>
 						</tr>                        
 						<tr>

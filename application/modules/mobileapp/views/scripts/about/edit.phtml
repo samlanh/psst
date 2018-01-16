@@ -11,7 +11,7 @@ dojo.require("dijit/Editor");
 <style>
 body, #dijitEditorBody {
     height: 100%;
-    width: 102%;
+    width: 100%;
     overflow: auto;
     background: #fff !important;
     border: 1px solid #bcf;
@@ -43,7 +43,7 @@ body, #dijitEditorBody {
 						</tr>						             
                         <tr>
 							<td style="width: 100px"><?php echo $tr->translate('DESCRIPTION');?></td>
-							<td><textarea data-dojo-type="dijit/Editor" id="description" name="description" style=" border: solid 1px #ccd9ff;">
+							<td style="background: #fff;"><textarea data-dojo-type="dijit/Editor" id="description" name="description" style=" border: solid 1px #ccd9ff;">
 								<?php echo  $row['description'] ?>							
 							</textarea></td>
 						</tr>                        

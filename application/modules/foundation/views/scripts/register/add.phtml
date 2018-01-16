@@ -326,27 +326,24 @@ function getStudentNo(){
 					      		<tr>
 					      			<td><?php echo $tr->translate("STUDENT_ID");?>*</td>
 									<td><input  style="color: red;" class="fullside" tabindex="14" dojoType="dijit.form.TextBox"  id="student_id" name="student_id" value=""  type="text" ></td>
-					      			<td><?php echo $tr->translate("GRADE");?>*</td>
-									<td><input id="grade" />
-									    <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
+					      			<td><?php echo $tr->translate("DEGREE");?>*</td>
+									<td>
+										<select class="fullside" tabindex="15" name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getallGrade(); getStudentNo();">
+											<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
+											<option value="<?php echo $row['dept_id']?>"><?php echo $row['en_name']?></option>
+											<?php }?>
+										</select>
 									</td>
-					      			
 					      		</tr>
 					      		<tr>
 					      			<td><?php echo $tr->translate("GROUP");?>* <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/></td>
 									<td>
 										<input id="group" />
 									</td>
-									<td><?php echo $tr->translate("SESSION");?></td>
-									<td>
-									    <select class="fullside"  tabindex="18" name="session" id="session" dojoType="dijit.form.FilteringSelect" >
-										    <option value="1" label="morning"><?php echo $tr->translate("MORNING");?></option>
-										    <option value="2" label="afternoon"><?php echo $tr->translate("AFTERNOON");?></option>
-										    <option value="3" label="night"><?php echo $tr->translate("EVERNING");?></option>
-										    <option value="4" label="weekend"><?php echo $tr->translate("WEEKEND");?></option>
-										</select>
+									<td><?php echo $tr->translate("GRADE");?>*</td>
+									<td><input id="grade" />
+									    <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
 									</td>
-									
 					      		</tr>
 					      		<tr>
 					      			<td><?php echo $tr->translate("ACADEMIC_YEAR");?>*</td>
@@ -368,12 +365,13 @@ function getStudentNo(){
 									</td>
 								</tr>
 								<tr>
-									<td><?php echo $tr->translate("DEGREE");?>*</td>
+									<td><?php echo $tr->translate("SESSION");?></td>
 									<td>
-										<select class="fullside" tabindex="15" name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getallGrade(); getStudentNo();">
-											<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
-											<option value="<?php echo $row['dept_id']?>"><?php echo $row['en_name']?></option>
-											<?php }?>
+									    <select class="fullside"  tabindex="18" name="session" id="session" dojoType="dijit.form.FilteringSelect" >
+										    <option value="1" label="morning"><?php echo $tr->translate("MORNING");?></option>
+										    <option value="2" label="afternoon"><?php echo $tr->translate("AFTERNOON");?></option>
+										    <option value="3" label="night"><?php echo $tr->translate("EVERNING");?></option>
+										    <option value="4" label="weekend"><?php echo $tr->translate("WEEKEND");?></option>
 										</select>
 									</td>
 									<td><?php echo $tr->translate("STATUS");?></td>

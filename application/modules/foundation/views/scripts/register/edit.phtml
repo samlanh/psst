@@ -289,10 +289,13 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						<tr>
 							<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("STUDENT_ID");?>*</td>
 							<td><input class="fullside"  style="color: red;" tabindex="15" dojoType="dijit.form.TextBox"  id="student_id" name="student_id" value="<?php echo $this->rs['stu_code']; ?>" type="text" ></td>
-							<td><?php echo $tr->translate("GRADE");?>*</td>
+							<td><?php echo $tr->translate("DEGREE");?>*</td>
 							<td>
-								<input class="fullside" tabindex="17" id="grade" value="<?php echo $this->rs['grade'];?>" />
-								<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
+								<select class="fullside" tabindex="16" name="degree" id="degree" readonly="readonly"  dojoType="dijit.form.FilteringSelect" onchange="getallGrade(0);">
+									<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
+									<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->rs['degree']) echo 'selected="selected"'?>><?php echo $row['en_name']?></option>
+									<?php }?>
+								</select>
 							</td>
 						</tr>
 						<tr>
@@ -301,14 +304,10 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 								<input id="group" />
 								<input class="fullside" dojoType="dijit.form.TextBox"  id="old_group_id" name="old_group_id" value="<?php echo $this->rs['group_id'];?>" type="hidden"  >
 							</td>
-							<td><?php echo $tr->translate("SESSION");?>*</td>
+							<td><?php echo $tr->translate("GRADE");?>*</td>
 							<td>
-								<select class="fullside" tabindex="19" readonly="readonly"  name="session" id="session" dojoType="dijit.form.FilteringSelect" >
-									<option value="1" <?php if($this->rs['session']==1){ echo "selected='selected'"; } ?>><?php echo $tr->translate("MORNING")?></option>
-									<option value="2" <?php if($this->rs['session']==2){ echo "selected='selected'"; } ?>><?php echo $tr->translate("AFTERNOON")?></option>
-									<option value="3" <?php if($this->rs['session']==3){ echo "selected='selected'"; } ?>><?php echo $tr->translate("EVERNING")?></option>
-									<option value="4" <?php if($this->rs['session']==4){ echo "selected='selected'"; }?>><?php echo $tr->translate("WEEKEND")?></option>
-								</select>
+								<input class="fullside" tabindex="17" id="grade" value="<?php echo $this->rs['grade'];?>" />
+								<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
 							</td>
 						</tr>
 						<tr>
@@ -331,12 +330,13 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							</td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("DEGREE");?>*</td>
+							<td><?php echo $tr->translate("SESSION");?>*</td>
 							<td>
-								<select class="fullside" tabindex="16" name="degree" id="degree" readonly="readonly"  dojoType="dijit.form.FilteringSelect" onchange="getallGrade(0);">
-									<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
-									<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->rs['degree']) echo 'selected="selected"'?>><?php echo $row['en_name']?></option>
-									<?php }?>
+								<select class="fullside" tabindex="19" readonly="readonly"  name="session" id="session" dojoType="dijit.form.FilteringSelect" >
+									<option value="1" <?php if($this->rs['session']==1){ echo "selected='selected'"; } ?>><?php echo $tr->translate("MORNING")?></option>
+									<option value="2" <?php if($this->rs['session']==2){ echo "selected='selected'"; } ?>><?php echo $tr->translate("AFTERNOON")?></option>
+									<option value="3" <?php if($this->rs['session']==3){ echo "selected='selected'"; } ?>><?php echo $tr->translate("EVERNING")?></option>
+									<option value="4" <?php if($this->rs['session']==4){ echo "selected='selected'"; }?>><?php echo $tr->translate("WEEKEND")?></option>
 								</select>
 							</td>
 							<td title="ស្ថានការណ៍"><?php echo $tr->translate("STATUS");?></td>

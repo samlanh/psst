@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('EDIT_REQUEST_PRODUCT')); 
+	echo $this->headTitle($tr->translate('EDIT_REQUEST_STOCK')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$row=$this->row;
 	//print_r($row);
@@ -30,7 +30,7 @@
 			//style:'height:40px !important',         
 			class: 'fullside',  
 			required:false,
-			placeHolder:"Select Product",          
+			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
 			onChange: function() {  
 				pro_id   = dijit.byId('pro_id').get('value');
 				branch_id = dijit.byId('branch').get('value');
@@ -84,7 +84,7 @@ fieldset{  background:none;}
 			<tr>
 				<td valign="top" width="34%" style="white-space: nowrap;">
 				<fieldset>
-					<legend align="center"><strong><?php echo $tr->translate("EDIT_REQUEST_PRODUCT");?>​</strong></legend>
+					<legend align="center"><strong><?php echo $tr->translate("EDIT_REQUEST_STOCK");?>​</strong></legend>
 					<table style="margin: 0 auto;" cellspacing="10" >
 							<tr>
 							   <td><?php echo $tr->translate("TITLE")?>*</td>

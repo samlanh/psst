@@ -4,6 +4,7 @@ class Accounting_RequestProductController extends Zend_Controller_Action {
 	private $type = array(1=>'service',2=>'program');
 	public function init()
 	{
+		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -60,7 +61,7 @@ class Accounting_RequestProductController extends Zend_Controller_Action {
 			}
 			$_pur = new Accounting_Model_DbTable_DbRequestProduct();
 			$pro=$_pur->getProducCutStockLater();
-			array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
+			array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 			$this->view->product= $pro;
 			
 			$this->view->rq_code=$_pur->getRequestCode();
@@ -68,7 +69,7 @@ class Accounting_RequestProductController extends Zend_Controller_Action {
 			
 			$db_gr=new Global_Model_DbTable_DbGrade();
 			$d_row=$db_gr->getNameGradeAll();
-			array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			$this->view->grade_name=$d_row;
 			 
 			$model = new Application_Model_DbTable_DbGlobal();
@@ -100,7 +101,7 @@ class Accounting_RequestProductController extends Zend_Controller_Action {
 			$pro=$_pur->getProducCutStockLater();
 			$this->view->row=$_pur->getRequestById($id);
 			$this->view->row_detail=$_pur->getRequestDetail($id);
-			array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
+			array_unshift($pro, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			$this->view->product= $pro;
 			
 			$this->view->rq_code=$_pur->getRequestCode();
@@ -108,7 +109,7 @@ class Accounting_RequestProductController extends Zend_Controller_Action {
 			
 			$db_gr=new Global_Model_DbTable_DbGrade();
 			$d_row=$db_gr->getNameGradeAll();
-			array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			$this->view->grade_name=$d_row;
 			 
 			$model = new Application_Model_DbTable_DbGlobal();

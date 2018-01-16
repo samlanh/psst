@@ -81,8 +81,8 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 							<td><input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text" constraints="{datePattern:'dd/MM/yyyy'}"  value="<?php echo $this->rs_return['return_date']?>" ></td>
 							<td ><?php echo $tr->translate("STATUS")?></td>
 							<td><select name="status" id="status" dojoType="dijit.form.FilteringSelect">
-								    <option value="1" <?php if($this->rs_return['status']==1) echo 'selected="selected"';?>>ប្រើប្រាស់</option>
-								     <option value="0" <?php if($this->rs_return['status']==0) echo 'selected="selected"';?>>មិនប្រើប្រាស់</option>
+								    <option value="1" <?php if($this->rs_return['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE")?></option>
+								     <option value="0" <?php if($this->rs_return['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE")?></option>
 								</select>
 							</td>
 						</tr>

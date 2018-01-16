@@ -2,10 +2,10 @@
 $request = Zend_Controller_Front::getInstance ()->getRequest ();
 
 $tr = Application_Form_FrmLanguages::getCurrentlanguage ();
-echo $this->headTitle($tr->translate('REQUEST_PRODUCT'));
+echo $this->headTitle($tr->translate('REQUEST_STOCK'));
 $frm = $this->form_search;
 ?>
-<title><?php echo $tr->translate("CATEGORY");?></title>
+<title><?php //echo $tr->translate("CATEGORY");?></title>
 <meta charset="utf-8">
 <form action="<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'index')); ?>"
 	dojoType="dijit.form.Form" method="post">

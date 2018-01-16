@@ -21,7 +21,7 @@
     dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 </script>
-<title><?php echo $this->tr->translate("PRODUCT_TRANSFER")?></title>
+<title><?php echo $this->tr->translate("EDIT_TRANSFER_PRODUCT")?></title>
 <form id="add_province" action="<?php echo $url_save;?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 	 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
@@ -48,7 +48,7 @@
 		<tr>
 			<td>
 				<fieldset>
-					<legend align="center"><strong><?php echo $tr->translate("PRODUCT_TRANSFER");?></strong></legend>
+					<legend align="center"><strong><?php echo $tr->translate("EDIT_TRANSFER_PRODUCT");?></strong></legend>
 					<table cellspacing="20" width="100%" >
 						<tr>
 							<td align="center" valign="top">
@@ -64,11 +64,11 @@
 										<td><input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="<?php echo date("Y-m-d",strtotime($result['transfer_date']));?>" type="text" required="required" ></td>
 									</tr>
 									<tr>
-										<td><?php echo $tr->translate("FORM_LOCATION");?></td>
+										<td><?php echo $tr->translate("FROM_LOCATION");?></td>
 										<td>
 											<select name="from_location" id="from_location" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
 											   <?php 
-											    print_r($this->rsbranch);
+// 											    print_r($this->rsbranch);
 											    if(!empty($this->rsbranch)){
 											    foreach($this->rsbranch as $rs){?>
 											    	<option <?php if($result['from_location']==$rs['id']){echo "selected";}?> value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
@@ -96,7 +96,7 @@
 										</td>
 									</tr>
 									<tr>
-									    <td><?php echo $tr->translate("CHOOSE_PRODUCT");?></td>
+									    <td><?php echo $tr->translate("SELECT_PRODUCT");?></td>
 									    <td colspan="3">
 										    <div style="background: #04a2e0;padding: 1px;">
 												<select onchange="getProductName();" style="height:35px;" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">

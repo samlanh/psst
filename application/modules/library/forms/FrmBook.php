@@ -15,14 +15,14 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>'true',
 				"autocomplete"=>'on',
-				'placeholder'=>$this->tr->translate("Book Name")
+				'placeholder'=>$this->tr->translate("BOOK_NAME")
 		        ));
 		
 		$book_id = new Zend_Dojo_Form_Element_ValidationTextBox('book_id');
 		$book_id->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("Book No"),
+				'placeholder'=>$this->tr->translate("BOOK_NO"),
 				'required'=>'true',
 				));
 // 		$db_book=new Library_Model_DbTable_DbBook();
@@ -33,21 +33,21 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		$author_name->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("Author Name")
+				'placeholder'=>$this->tr->translate("AUTHOR_NAME")
 		         ));
 
 		$serial_no = new Zend_Dojo_Form_Element_ValidationTextBox('serial_no');
 		$serial_no->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("Serial Number")
+				'placeholder'=>$this->tr->translate("SERIAL_NO")
 		        ));
 		
 		$publisher = new Zend_Dojo_Form_Element_ValidationTextBox('publisher');
 		$publisher->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("Publisher Number")
+				'placeholder'=>$this->tr->translate("PUBLISHER")
 		        ));
 		
 		$qty = new Zend_Dojo_Form_Element_NumberTextBox('qty');

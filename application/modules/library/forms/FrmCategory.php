@@ -13,7 +13,7 @@ Class Library_Form_FrmCategory extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
 				'required'=>'true',
-				'placeholder'=>$this->tr->translate("Category Name")
+				'placeholder'=>$this->tr->translate("CATEGORY_NAME")
 		));
 		$cat_name->setValue($request->getParam("cat_name"));
 		

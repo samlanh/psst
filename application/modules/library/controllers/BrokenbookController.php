@@ -4,6 +4,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     public function init()
     {    	
      /* Initialize action controller here */
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -55,7 +56,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/brokenbook/index");
     			}
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}
@@ -83,7 +84,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/brokenbook/index");
     			}
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+    			Application_Form_FrmMessage::message("EDIT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}

@@ -22,7 +22,7 @@ $formList = new Application_Form_Frmtable();
 			<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="search" name="search" value="" type="text" ></td>
 			<td> 
 				<select type="text" id="student_id" name="student_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setname();"  >
-					<option value="">Select Student Code</option>
+					<option value=""><?php echo $tr->translate("SELECT_STUDENT_ID");?></option>
 					<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
 					<option value="<?php echo $student_code['stu_id']?>"><?php echo $student_code['stu_code']?></option>
 					<?php }}?>
@@ -30,7 +30,7 @@ $formList = new Application_Form_Frmtable();
 			</td>
 			<td>
 				<select type="text" id="student_name" name="student_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
-					<option value="">Select Student Name</option>
+					<option value=""><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
 					<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
 					<option value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
 					<?php }}?>

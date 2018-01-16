@@ -2,6 +2,7 @@
 class Accounting_TransferController extends Zend_Controller_Action {
 	public function init()
     {    	
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -56,7 +57,7 @@ class Accounting_TransferController extends Zend_Controller_Action {
 		$this->view->rsproduct = $db->getallProductName();
 		
 		$branch = $db->getAllBranchName();
-    	array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+    	array_unshift($branch, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
     	$this->view->branchopt = $branch;
 		
 		$fm = new Global_Form_Frmbranch();

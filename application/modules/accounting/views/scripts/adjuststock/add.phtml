@@ -29,7 +29,7 @@
 			//style:'height:40px !important',         
 			class: 'fullside',  
 			required:false,
-			placeHolder:"Select Product",          
+			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
 			onChange: function() {  
 				pro_id   = dijit.byId('pro_id').get('value');
 				branch_id= dijit.byId('branch').get('value');

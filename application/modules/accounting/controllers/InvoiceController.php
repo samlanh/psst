@@ -2,6 +2,7 @@
 class Accounting_InvoiceController extends Zend_Controller_Action {
 	public function init()
     {    	
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}

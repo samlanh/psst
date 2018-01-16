@@ -117,8 +117,8 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							</td>
 							<td style="width: 5px"><?php echo $tr->translate("STATUS")?></td>
 							<td><select name="status" id="status" dojoType="dijit.form.FilteringSelect">
-								     <option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>>ប្រើប្រាស់</option>
-								     <option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>>មិនប្រើប្រាស់</option>
+								     <option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE")?></option>
+								     <option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE")?></option>
 								</select>
 							</td>
 						</tr>

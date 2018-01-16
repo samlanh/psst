@@ -58,7 +58,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/library/borrowbook/index");
     			}
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}
@@ -94,7 +94,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/borrowbook/index");
     			}
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+    			Application_Form_FrmMessage::message("EDIT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}

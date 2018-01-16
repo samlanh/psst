@@ -16,7 +16,7 @@
 	border:1px solid #ddd;
 }
 </style>
-<title><?php echo $this->tr->translate("TRANSFERd")?></title>
+<title><?php echo $this->tr->translate("TRANSFER")?></title>
 <form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 	<script type="dojo/method" event="onSubmit">   
 	   if(this.validate()) {
@@ -66,7 +66,7 @@
 										<td><?php echo $tr->translate("STUDENT_ID");?></td>
 										<td> 
 											<select type="text" id="student_id" name="student_id" required="true" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setname();"  >
-												<option value="">Select Student Code</option>
+												<option value=""><?php echo $tr->translate("SELECT_STUDENT_ID");?></option>
 												<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
 												<option value="<?php echo $student_code['stu_id']?>" <?php if($row['student_id']==$student_code['stu_id']) echo 'selected="selected"';?>><?php echo $student_code['stu_code']?></option>
 												<?php }}?>
@@ -75,7 +75,7 @@
 										<td><?php echo $tr->translate("STUDENT_NAME");?></td>
 										<td>
 											<select type="text" id="student_name" required="true" name="student_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
-												<option value="">Select Student Name</option>
+												<option value=""><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
 												<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
 												<option value="<?php echo $student_name['stu_id']?>" <?php if($row['student_id']==$student_name['stu_id']) echo 'selected="selected"';?>><?php echo $student_name['name']?></option>
 												<?php }}?>
@@ -167,7 +167,7 @@ function oldRow(){
 	    template+='</select></td>';	
 		
 		template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
-			template+='<option value="">Select </option>';
+			template+='<option value=""><?php echo $tr->translate("CHOOSE");?></option>';
 			<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
 				template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
 			<?php }}?>
@@ -218,7 +218,7 @@ function addRow() {
 		    template+='</select></td>';	
 			
 			template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
-				template+='<option value="">Select </option>';
+				template+='<option value=""><?php echo $tr->translate("CHOOSE");?></option>';
 				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
 					template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
 				<?php }}?>

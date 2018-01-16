@@ -22,7 +22,7 @@
 			id: "dept",
 			name: "dept",           
 			class: 'fullside',  
-			placeHolder:"Selected Degree",          
+			placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
 			onChange: function() {  
 				dept_id = dijit.byId('dept').get('value');
 				dijit.byId('grade').attr('value','');
@@ -37,7 +37,7 @@
 			id: "grade",
 			name: "grade",           
 			class: 'fullside', 
-			placeHolder:"Selected Grade",          
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 			onChange: function() {
 				getTuitionFee();
 				dijit.byId('discount_percent').attr('value','0');
@@ -50,7 +50,7 @@
 			id: "teacher_id",
 			name: "teacher_id",           
 			class: 'fullside', 
-			placeHolder:"Select Teacher",          
+			placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
 			onChange: function() {  
 			}
 		}, "teacher_id");
@@ -352,7 +352,7 @@ fieldset{  background:none;}
 								<td>
 									<div id="student_old">
 										<select type="text" name="old_studens" id="old_studens" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getOldStudentInfo();getCreditMemo();getOldVildateToStartDateRegister();"  >
-											<option value="">Select Student Code</option>
+											<option value=""><?php echo $tr->translate("SELECT_STUDENT_ID");?></option>
 											<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
 											<option value="<?php echo $student_code['stu_id']?>"><?php echo $student_code['stu_code']?></option>
 											<?php }}?>
@@ -368,7 +368,7 @@ fieldset{  background:none;}
 								<td>
 									<div id="student_old_name">
 										<select type="text" name="old_stu_name"  autoComplete="false" queryExpr="*${0}*" id="old_stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
-											<option value="">Select Student Name</option>
+											<option value=""><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
 											<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
 											<option value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
 											<?php }}?>
@@ -376,7 +376,7 @@ fieldset{  background:none;}
 									</div>
 									<div id="stu_tested">
 										<select type="text" name="stu_test" id="stu_test" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getStudentTestInfo();"  >
-											<option value="0">--- Select Student Tested ---</option>
+											<option value="0"><?php echo $tr->translate("SELECT_STUDENT_TESTED");?></option>
 											<?php if(!empty($this->all_student_test)){foreach ($this->all_student_test as $all_student_test){?>
 											<option value="<?php echo $all_student_test['id']?>"><?php echo $all_student_test['name']?></option>
 											<?php }}?>
@@ -426,7 +426,7 @@ fieldset{  background:none;}
 					    	<td><?php echo $tr->translate("GROUP");?></td>
 					    	<td>
 					    		<select name="group" id="group" type="text"  onchange="getInfoBygroup();"  class="fullside" dojoType="dijit.form.FilteringSelect" >
-					    			<option value="-1"> ----- select group ----- </option>
+					    			<option value="-1"><?php echo $tr->translate("SELECT_GROUP");?></option>
 					    			<?php if(!empty($this->group)){foreach ($this->group as $group){?>
 					    			<option value="<?php echo $group['id']?>"><?php echo $group['name']?></option>
 					    			<?php }}?>
@@ -438,7 +438,7 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 							<td>
 								<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="study_year" id="study_year" onchange="getTuitionFee();" >
-									<option value="">Select AcademicYear</option>
+									<option value=""><?php echo $tr->translate("SELECT_YEAR");?></option>
 									<?php if(!empty($this->all_year)){foreach ($this->all_year as $year){?>
 									<option value="<?php echo $year['id']?>"><?php echo $year['years']?></option>
 									<?php }}?>
@@ -476,7 +476,7 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("ROOM_NAME");?></td>
 							<td>
 								<select type="text" name="room" id="room"  class="fullside" dojoType="dijit.form.FilteringSelect"  >
-									<option value="0"> Select Room </option>
+									<option value="0"><?php echo $tr->translate("SELECT_ROOM");?></option>
 									<?php if(!empty($this->all_room)){foreach ($this->all_room as $room){?>
 									<option value="<?php echo $room['id']?>"><?php echo $room['name']?></option>
 									<?php }}?>
@@ -516,7 +516,7 @@ fieldset{  background:none;}
 								<td><?php echo $tr->translate("PERIOD");?><label class="red">*</label></td>
 								<td>
 									<select type="text" name="start_end" id="start_end" onchange="setStartAndEndDate();" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-										<option value="-1"> select period </option>
+										<option value="-1"><?php echo $tr->translate("SELECT_PERIOD");?></option>
 										<?php if(!empty($this->startdate_enddate)){foreach ($this->startdate_enddate as $rs){?>
 										<option value="<?php echo $rs['id']?>"><?php echo $rs['note'].'('.date("d-m-Y",strtotime($rs['start_date'])).' To '.date("d-m-Y",strtotime($rs['end_date'])).')';?></option>
 										<?php }}?>

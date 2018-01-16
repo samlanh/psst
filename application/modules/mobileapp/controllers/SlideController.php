@@ -7,6 +7,9 @@ class Mobileapp_slideController extends Zend_Controller_Action {
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
+	public function addAction(){
+		$this->_redirect("/mobileapp/slide");
+	}
 	public function indexAction(){
 		try{
 			$db = new Mobileapp_Model_DbTable_DbSlide();

@@ -61,56 +61,61 @@ img.image_view {
 			}
 			return false;
 	</script>
-		
-	<table  style="margin: 0 auto; width: 100%">
-		<tr class="header">
-			<td><strong><i class="fa fa-file-image-o" aria-hidden="true"></i><?php echo $tr->translate('SLIDE_MANAGEMENT')?> (1640px X 486px)</strong></td>
-		</tr>
-		<tr>
-			<td>
-				<table width="100%">
-					<tr>
-						<td width="50%" class="blog-right">
-							<table cellspacing="5" width="100%">
-								
-								<tr>
-									<td>
-										<table id="table_parent" class="set-style" style="margin: 0 auto; width: 100%;  " >
-											<thead>
-												<tr>
-													<td colspan="8">
-													  <table  style="margin: 0 auto; width: 100%; border-collapse: collapse; border: 1px #ccc solid;">
-															<tr id="head-title" class="head-td" align="right"></tr>
-														</table>
-														<table id="table_row" style="margin: 0 auto; width: 100%; border-collapse: collapse; border: 1px #ccc solid;">
-														</table>
-													</td>
-												</tr>
-												<tr>
-													<td align="left">
-														<input type="button" label="<?php echo $tr->translate('ADD_MORE');?>" dojoType="dijit.form.Button" 
-															 	iconClass="dijitIconEditProperty" onclick="addRow();" />
-														<input type="hidden" name="identity" id="identity"  value="" >
-													</td>
-												</tr>
-											</thead>
-										</table>
-									</td>
-								</tr>
-							</table>
-						</td>								
-					</tr>
-					<tr>
-						<td colspan="2" align="center">
-							<input type="button" value="GO_BACK" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-							iconClass="dijitIconUndo" onclick="window.history.back();" />
-							<input class="button_success" type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE');?>" id="save_close" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 	
-						</td>
-					</tr>
-				</table>	
-			</td>			
-		</tr>
-	</table>	
+	<table cellspacing="10" width="95%" style="margin: 0 auto;">
+	<tr>
+		<td>	
+			<table  style="margin: 0 auto; width: 100%; background: #fff; ">
+				<tr class="header" style="  background: #008;   color: #fff;  text-align: center;  padding: 5px 0;">
+					<td><strong><?php echo $tr->translate('SLIDE_MANAGEMENT')?> <!-- (1640px X 486px) --></strong></td>
+				</tr>
+				<tr>
+					<td>
+						<table width="100%">
+							<tr>
+								<td width="50%" class="blog-right">
+									<table cellspacing="5" width="100%">
+										
+										<tr>
+											<td>
+												<table id="table_parent" class="set-style" style="margin: 0 auto; width: 100%;  " >
+													<thead>
+														<tr>
+															<td colspan="8">
+															  <table  style="margin: 0 auto; width: 100%; border-collapse: collapse; border: 1px #ccc solid;">
+																	<tr id="head-title" class="head-td" align="right"></tr>
+																</table>
+																<table id="table_row" style="margin: 0 auto; width: 100%; border-collapse: collapse; border: 1px #ccc solid;">
+																</table>
+															</td>
+														</tr>
+														<tr>
+															<td align="left">
+																<input type="button" label="<?php echo $tr->translate('ADD_MORE');?>" dojoType="dijit.form.Button" 
+																	 	iconClass="dijitIconEditProperty" onclick="addRow();" />
+																<input type="hidden" name="identity" id="identity"  value="" >
+															</td>
+														</tr>
+													</thead>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>								
+							</tr>
+							<tr>
+								<td colspan="2" align="center">
+									<input type="button" value="GO_BACK" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
+									iconClass="dijitIconUndo" onclick="window.history.back();" />
+									<input class="button_success" type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE');?>" id="save_close" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 	
+								</td>
+							</tr>
+						</table>	
+					</td>			
+				</tr>
+			</table>
+		</td>
+	</tr>	
+	</table>
 </form>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate("DO_YOU_WANT_TO_DEL")?>'"  id="deleteForm" style="width:350px;" >

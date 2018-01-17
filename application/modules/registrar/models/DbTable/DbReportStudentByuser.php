@@ -275,8 +275,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			
 			$order=" ORDER By st.id DESC ";
 			
-// 				    	echo $sql.$where.$order;exit();
-			
 			return $db->fetchAll($sql.$where.$order);
 			
 		}catch(Exception $e){

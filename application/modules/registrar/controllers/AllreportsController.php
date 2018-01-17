@@ -110,6 +110,7 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		if(!empty($search['all_payment'])){
     			$data1=$this->view->row = $db->getDailyReport($search);
     			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
+//     			print_r($db->getAllStudentTest($search));
     			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
     			$user_type=$db->getUserType();
     			if($user_type==1){

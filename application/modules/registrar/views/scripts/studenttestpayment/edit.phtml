@@ -436,20 +436,6 @@ function printSave(new_stu_id,new_receipt){
 		  
 	  temp+='</tr>';
 	  
-		for(i=2;i<=8;i++){
-			temp+='<tr style="height: 15px;border:1px solid #000;"​ align="center"><td>&nbsp;'+i+'</td>';
-			temp+='<td style="border:1px solid #000;"></td>';
-			temp+='<td style="border:1px solid #000;"></td>';
-			temp+='<td style="border:1px solid #000;"></td>';
-			temp+='<td style="border:1px solid #000;"></td>';
-			temp+='<td style="border:1px solid #000;"></td>';
-			temp+='<td style="border:1px solid #000;"></td>';
-			temp+='<td style="border:1px solid #000;"></td>';
-			temp+='<td style="border:1px solid #000;"></td>';
-			temp+='<td style="border:1px solid #000;"></td>';
-			temp+='<td style="border:1px solid #000;"></td></tr>';
-			
-		}
 		temp+='</table>';
 		dojo.byId('t_amountmoneytype').innerHTML = temp;
 		dijit.byId("terms").show();	

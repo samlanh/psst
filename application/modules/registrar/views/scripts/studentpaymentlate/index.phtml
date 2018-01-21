@@ -58,7 +58,7 @@
 										<tr>
 											<td colspan="3" id="exportExcel">
 												<table cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;"  border="1" >
-													<tr style="font-size:12px;font-weight:bold; height: 20px;background: #ccc; line-height: 30px;" align="center" >
+													<tr style="font-size:12px;font-weight:bold; height: 20px;background: #ccd9ff; line-height: 30px;" align="center" >
 														<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
 										                <td>&nbsp;<?php echo $tr->translate("BRANCH_NAME"); ?>&nbsp;</td>
 										                <td>&nbsp;<?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
@@ -78,8 +78,13 @@
 													$end_dat=$row['end'];//date("Y-m-d");
 													$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
 													$day=(int)($total_day/(60*60*24));
+													if($row['type']==1){
+														$row['service_type']="Tuition Fee";
+													}else if($row['type']==4){//product
+														$row['service_type']="ទំនិញ";
+													}
 												?>
-													<tr style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
+													<tr style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
 														<td style="border: 1px solid #000;"><?php echo $i;?></td>
 														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
 														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['code'];?>&nbsp;</td>

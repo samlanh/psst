@@ -28,7 +28,6 @@ class Registrar_StudentTestPaymentController extends Zend_Controller_Action {
     		$rs_rows= $db->getAllStudentTestPayment($search);
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
-    		//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
     		$list = new Application_Form_Frmtable();
     		$collumns = array("SERIAL","RECEIPT_NO","STUDENT_NAME","SEX","PHONE","DEGREE","PRICE","PAID_DATE","USER");
     		$link=array('module'=>'registrar','controller'=>'studenttestpayment','action'=>'edit',);

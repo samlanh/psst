@@ -35,6 +35,7 @@ class Registrar_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				   rms_student as s
 				WHERE spd.`is_start` = 1 
 				  AND sp.id=spd.`payment_id`
+				  AND spd.is_onepayment=0
 				  AND spd.`service_id`=pn.`service_id` 
 				  AND sp.is_void != 1  
 				  and s.stu_id = sp.student_id

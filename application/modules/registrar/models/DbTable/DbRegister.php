@@ -118,6 +118,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$receipt_number =$data['receipt_no']; //$this->getRecieptNo();
 		
 		try{
+			
 			if($data['payment_type']==1){//Tuition Fee and Service
 				if($data['student_type']==3){//old
 					$this->_name = "rms_student";
@@ -210,7 +211,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			    			'degree'	=>$data['dept'],
 			    	);
 			    	$this->insert($arraa);
-			    	
 			    	
 				}
 				
@@ -392,9 +392,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             	$validate='';
 	             	if($data['service_type_'.$i]==1){ // product type
 	             		$payfor_type = 4; // product payment
-	             		$start_date = null; 
-	             		$validate = null; // no need validate
+// 	             		$start_date = null; 
+// 	             		$validate = null; // no need validate
 						
+	             		$start_date = $data['date_start_'.$i];
+	             		$validate = $data['validate_'.$i];
+	             		
 						$this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
 						$this->_name='rms_saledetail';
 						$arr = array(
@@ -410,8 +413,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						
 	             	}else{
 	             		$payfor_type = 3; // service payment
-	             		$start_date = $data['date_start_'.$i];
-	             		$validate = $data['validate_'.$i];
+// 	             		$start_date = $data['date_start_'.$i];
+// 	             		$validate = $data['validate_'.$i];
 	             	}
 	             	// update old record to finish if old student
 	             	$spd_id = $this->getStudentPaymentStart($id, $data['service_'.$i],$payfor_type);
@@ -442,6 +445,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             			'discount_fix'	=>0,
 	             			'paidamount'	=>$data['paidamount_'.$i],
 	             			'balance'		=>0,
+	             			'is_onepayment'=>$data['onepayment_'.$i],
 	             			'start_date'	=>$start_date,
 	             			'validate'		=>$validate,
 	             			'note'			=>$data['remark'.$i],
@@ -708,7 +712,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'scholarship_amount'=>$data['scholarship_amount'],
 						'tution_feeperyear'=>$data['tution_peryear'],
 						'total_scholarship'=>$data['total_scholarship'],
-						
 						'create_date'	=> date('Y-m-d'),
 						'user_id'		=>$this->getUserId(),
 						'branch_id'=>$this->getBranchId(),
@@ -723,8 +726,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$validate='';
 					if($data['service_type_'.$i]==1){
 						$payfor_type = 4; // product payment
-						$start_date = null;
-						$validate = null; // no need validate
+						$start_date = $data['date_start_'.$i];
+						$validate = $data['validate_'.$i];
 						
 						$this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
 						
@@ -742,8 +745,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						
 					}else{
 						$payfor_type = 3; // service payment
-						$start_date = $data['date_start_'.$i];
-						$validate = $data['validate_'.$i];
+// 						$start_date = $data['date_start_'.$i];
+// 						$validate = $data['validate_'.$i];
 					}
 					// update old record to finish if old student
 					$this->_name="rms_student_paymentdetail";
@@ -774,7 +777,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'extra_fee'		=>$data['additional_fee_'.$i],
 							'discount_percent' =>$data['discount_'.$i],
 							'discount_fix'	=>0,
-							
+							'is_onepayment'=>$data['onepayment_'.$i],
 							
 							'paidamount'	=>$data['paidamount_'.$i],
 							'balance'		=>0,
@@ -805,11 +808,20 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}
 				}
 			}
+			if(!empty($data['group']) AND $data['group']>0){
+				$this->_name = 'rms_group';
+				$group=array(
+						'is_use'	=>1,
+						'is_pass'	=>2,
+				);
+				$where=" id=".$data['group'];
+				$this->update($group, $where);
+			}
 			$db->commit();//if not errore it do....
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
+// 				echo $e->getMessage();
 			}
 	}
 	

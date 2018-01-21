@@ -70,6 +70,8 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $db->getAllDegreeName();
 		$this->view->session = $db->getAllSession();
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->serailno= $db->getTestStudentId();
     }
     public function editAction()
     {

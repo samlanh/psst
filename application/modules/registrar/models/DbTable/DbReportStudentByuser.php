@@ -232,7 +232,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			$to_date = (empty($search['end_date']))? '1': "st.create_date <= '".$search['end_date']." 23:59:59'";
 			
 			$sql="SELECT
-					st.receipt,
+					st.receipt_no,
 					st.kh_name,
 					st.en_name,
 					(select name_en from rms_view where type=2 and key_code=st.sex) as sex,
@@ -251,20 +251,20 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				FROM
 					rms_student_test AS st
 				WHERE 
-					status=1  
-					$branch_id 
-			";
+				total_price>0
+				AND status=1  
+					$branch_id ";
 	
 			$where = " AND ".$from_date." AND ".$to_date;
 	
 			if(!empty($search['adv_search'])){
-			$s_where=array();
-			$s_search= addslashes(trim($search['adv_search']));
-			$s_where[]= " st.receipt LIKE '%{$s_search}%'";
-			$s_where[]= " st.kh_name LIKE '%{$s_search}%'";
-			$s_where[]= " st.en_name LIKE '%{$s_search}%'";
-			$s_where[]= " st.serial LIKE '%{$s_search}%'";
-			$where.=' AND ('.implode(' OR ', $s_where).')';
+				$s_where=array();
+				$s_search= addslashes(trim($search['adv_search']));
+				$s_where[]= " st.receipt_no LIKE '%{$s_search}%'";
+				$s_where[]= " st.kh_name LIKE '%{$s_search}%'";
+				$s_where[]= " st.en_name LIKE '%{$s_search}%'";
+				$s_where[]= " st.serial LIKE '%{$s_search}%'";
+				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
 			if(!empty($search['degree'])){
 				$where.= " AND st.degree = ".$search['degree'];
@@ -272,9 +272,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			if(!empty($search['user'])){
 				$where.=" AND user_id = ".$search['user'] ;
 			}
-			
 			$order=" ORDER By st.id DESC ";
-			
 			return $db->fetchAll($sql.$where.$order);
 			
 		}catch(Exception $e){

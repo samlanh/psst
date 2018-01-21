@@ -854,26 +854,6 @@ function SubmitRegister(){
 			dojo.byId("lb_net_amount").innerHTML = '$ ' + dijit.byId("net_amount").attr('displayedValue');
 			var payment_type = dijit.byId("payment_type").get("value");
 
-			/*for reciept 1
-			dojo.byId("lb_receipt_no1").innerHTML = dijit.byId("receipt_no").attr('displayedValue');
-			dojo.byId("lb_stu_id1").innerHTML = dijit.byId("old_studens").attr('displayedValue');				
-			dojo.byId("lb_sex1").innerHTML = dijit.byId("sex").attr('displayedValue');
-			dojo.byId("lb_date1").innerHTML  = dd+'-'+mon+'-'+yyyy;
-			dojo.byId("lb_dob1").innerHTML = dijit.byId("dob").attr('displayedValue');
-			dojo.byId("lb_name1").innerHTML = dijit.byId("kh_name").get('value')+" - "+dijit.byId("en_name").get('value');
-			dojo.byId("lb_study_year1").innerHTML = dijit.byId("study_year").attr('displayedValue');
-			dojo.byId("lb_dept1").innerHTML = dijit.byId('dept').attr('displayedValue');
-			dojo.byId("lb_grade1").innerHTML = dijit.byId("grade").attr('displayedValue');
-			dojo.byId("lb_phone1").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
-			dojo.byId("lb_session1").innerHTML = dijit.byId("session").attr('displayedValue');
-			dojo.byId("lb_read_khmer1").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
-			dojo.byId("lb_total_payment1").innerHTML = '$ ' + dijit.byId("grand_total").attr('displayedValue');
-			dojo.byId("lb_fine1").innerHTML = '$ ' + dijit.byId("fine").attr('displayedValue');			
-			dojo.byId("lb_credit_memo1").innerHTML = '$ ' + dijit.byId("credit_memo").attr('displayedValue');
-			dojo.byId("lb_deduct1").innerHTML = '$ ' + dijit.byId("deduct").attr('displayedValue');
-			dojo.byId("lb_net_amount1").innerHTML = '$ ' + dijit.byId("net_amount").attr('displayedValue');
-			/*for reciept 1*/
-			
 			var rowId = $('#identity').val();
 			var rowIDArray = rowId.split(',');
 			template="";
@@ -1103,20 +1083,7 @@ function SubmitRegister(){
 					  temp+='</tr>';
 					}
 				}
-			for(i;i<=8;i++){
-				temp+='<tr style="height: 15px;border:1px solid #000;"​ align="center"><td>&nbsp;'+i+'</td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td>';
-				temp+='<td style="border:1px solid #000;"></td></tr>';
-				
-			}
+			
 			temp+='</table>';
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
 			//dojo.byId('t_amountmoneytype1').innerHTML = temp;
@@ -1152,15 +1119,16 @@ function getMonthByNumber(m){
 		</style>
 		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
+				<tr height="100px;">
+					<td colspan="10">&nbsp;</td>
+				</tr>
 				<tr height="40px;">
 					<td colspan="10"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
 							<tr>
 								<td width="30%">
-									<img style="height: 80px" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 								</td>
-								<td width="40%" align="center" valign="top" style="font-size: 16px;font-weight: bold;">OFFICIAL RECEIPT
-									<div><img height="20px" style="margin-top: -2px" src="<?php echo $this->baseUrl().'/images/fonttateng.png'?>"></div>
+								<td width="40%" align="center" valign="top" style="font-size: 16px;font-weight: bold;">
 								</td>
 								<td width="30%" valign="center" align="center">
 									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 

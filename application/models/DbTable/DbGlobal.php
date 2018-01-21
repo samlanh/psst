@@ -845,6 +845,20 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	$SQL="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
   	return $db->fetchAll($SQL);
   }
+  function getTestStudentId(){
+  	$db = $this->getAdapter();
+  	$sql ="SELECT id AS number FROM `rms_student_test` ORDER BY id DESC LIMIT 1 ";
+  	$acc_no = $db->fetchOne($sql);
+  	 
+  	$new_acc_no= (int)$acc_no+1;
+  	$acc_no= strlen((int)$acc_no+1);
+  	$pre="";
+  	for($i = $acc_no;$i<6;$i++){
+  		$pre.='0';
+  	}
+  	$last = '';
+  	return $pre.$new_acc_no.$last;
+  }
   
 }
 ?>

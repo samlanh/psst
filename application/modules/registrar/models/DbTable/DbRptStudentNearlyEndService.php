@@ -36,6 +36,7 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  AND s.stu_id=sp.student_id 
 				  AND sp.id=spd.`payment_id`
 				  AND spd.`service_id` = pn.`service_id` 
+				  AND spd.is_onepayment=0
     			  AND sp.is_void != 1  
     			  and sp.is_suspend = 0
     			  $branch_id ";
@@ -45,15 +46,15 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$order=" ORDER by spd.`validate` DESC ";
     	$str_next = '+1 week';
      	$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
-      	$to_date = (empty($search['end_date']))? '1': " spd.validate >= '".$search['end_date']." 23:59:59'";
+      	$to_date = (empty($search['end_date']))? '1': " spd.validate <= '".$search['end_date']." 23:59:59'";
       	$where .= " AND ".$to_date;
     		if(!empty($search['adv_search'])){
     			$s_where = array();
     			$s_search = addslashes(trim($search['adv_search']));
     			$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
-    			$s_where[] = " (select stu_code from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select CONCAT(stu_khname,stu_enname) from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
+    			$s_where[] = " (select stu_code from rms_student where rms_student.stu_id=sp.student_id LIMIT 1) LIKE '%{$s_search}%'";
+    			$s_where[] = " (select CONCAT(stu_khname,stu_enname) from rms_student where rms_student.stu_id=sp.student_id LIMIT 1) LIKE '%{$s_search}%'";
+    			$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id LIMIT 1) LIKE '%{$s_search}%'";
     			$s_where[] = " spd.comment LIKE '%{$s_search}%'";
     			$where .=' AND ( '.implode(' OR ',$s_where).')';
     		}
@@ -75,6 +76,7 @@ class Registrar_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     		if($search['stu_code']>0){
     			$where.=" AND s.stu_id=".$search['stu_code'];
     		}
+    		echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
     

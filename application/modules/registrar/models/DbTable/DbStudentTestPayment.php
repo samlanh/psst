@@ -176,7 +176,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 		if($type==0){
 			$is_paid = " and is_paid=0";
 		}
-		$sql="select id,CONCAT(en_name,'-',kh_name)as name from rms_student_test where en_name!='' AND status=1 and register=0 $is_paid $branch_id  ORDER BY id DESC ";
+		$sql="select id,CONCAT(en_name,'-',kh_name)as name from rms_student_test where en_name!='' AND status=1 and register=1 $is_paid $branch_id  ORDER BY id DESC ";
 		return $db->fetchAll($sql);
 	}
 	

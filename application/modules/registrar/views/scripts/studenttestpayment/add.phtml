@@ -10,6 +10,7 @@
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
 	dojo.ready(function(){
 		getReceiptNo('');
+		getDefaultTutionfee();
 	});	
 	
 	var url_getreceipt_no = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
@@ -128,7 +129,7 @@ fieldset{  background:none;}
 							<tr>
 								<td><?php echo $tr->translate("DEGREE")?></td>
 								<td>
-									<select name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+									<select onchange="getDefaultTutionfee();" name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect"  >
 										<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
 											<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
 										<?php }}?>
@@ -533,6 +534,14 @@ function getStudentTestInfo(){
 	 			alert(err);
 	 		}
 	 	});	 
+	}
+}
+function getDefaultTutionfee(){
+	degree = dijit.byId("degree").get("value");
+	if(degree==1 || degree==2 || degree==3){
+		dijit.byId("price").attr("value",50);
+	}else{
+		dijit.byId("price").attr("value",2.5);
 	}
 }
 </script>

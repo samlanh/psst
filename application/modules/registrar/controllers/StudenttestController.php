@@ -36,7 +36,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		$link1=array(
 						'module'=>'registrar','controller'=>'studenttest','action'=>'profile'
 			);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('receipt'=>$link,'kh_name'=>$link,'en_name'=>$link,'Profile'=>$link1));
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('receipt'=>$link,'kh_name'=>$link,'en_name'=>$link,'Print Profile'=>$link1,'បោះពុម្ពទម្រង់'=>$link1));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -53,7 +53,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     	if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();	
 			$db = new Registrar_Model_DbTable_DbStudentTest();	
-// 			print_r($data);exit();			
 			try {
 				$db->addStudentTest($data);
 				if(!empty($data['saveclose'])){

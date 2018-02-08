@@ -52,11 +52,11 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'emergency_address'		=>$data['emergency_address'],
 						//'educational_background'=>$data['edu_background'],
 					
-						'degree_result'	=>$data['degree'],
+						'degree_result'	=>$data['degree_result'],
 						'grade_result'	=>$data['grade_result'],
 						'session_result'=>$data['session'],
 						'time_result'	=>$data['time'],
-					    'date_result'   =>$data['date_result'],
+					    //'date_result'   =>$data['date_result'],
 					    'term_test'		=>$data['term_test'],
 					
 						'note'		=>$data['note'],
@@ -110,7 +110,6 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			}else{
 				$pho_name = $data['old_photo'];
 			}
-			
 			$array = array(
 						'branch_id'	=>$this->getBranchId(),
 						'stu_code'	=>$data['stu_code'],
@@ -141,11 +140,11 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'emergency_address'		=>$data['emergency_address'],
 						//'educational_background'=>$data['edu_background'],
 					
-						'degree_result'	=>$data['degree'],
+						'degree_result'	=>$data['degree_result'],
 						'grade_result'	=>$data['grade_result'],
 						'session_result'=>$data['session'],
 						'time_result'	=>$data['time'],
-						'date_result'   =>$data['date_result'],
+						//'date_result'   =>$data['date_result'],
 						'term_test'		=>$data['term_test'],
 					
 						'note'		=>$data['note'],
@@ -263,8 +262,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				FROM 
 					rms_student_test 
 				where 
-					id=$id 
-			";
+					id=$id ";
 		return $db->fetchRow($sql);
 	}
 	

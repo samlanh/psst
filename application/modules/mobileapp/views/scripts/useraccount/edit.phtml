@@ -1,0 +1,363 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
+	echo $this->headTitle(''); 
+	$photo= $this->frm_techer;
+?>	
+<style>
+.image-box {
+    text-align: center;
+}
+.image-box img {
+    width: 140px;
+    border-radius: 60%;
+    height: 140px;
+    margin-top: 10px;
+    border: solid 1px #eee;
+}
+.button_browse {
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    height: 38px;
+    background: #fbf9f9;
+    border: 1px solid #e8e8e8;
+}
+.button_browse span {
+    line-height: 33px;
+    font-weight: 600;
+    cursor: pointer;
+}
+input.btn_borwse_image {
+    position: absolute;
+    width: 100%;
+    height: 38px;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+}
+.account-image {
+    border: solid 1px #eee;
+}
+</style>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.form.DateTextBox");
+
+var job_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+var job_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+var job_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+
+dojo.ready(function(){
+	
+	new dijit.form.FilteringSelect({
+		store: job_store,
+		autoComplete: true,                        
+	    id: "fa_job",
+	    name: "fa_job",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
+	    onChange: function() {          
+	   	fa_job = dijit.byId('fa_job').get('value');
+	    if(fa_job==-1){
+	   	 	dijit.byId("popup_dept2").show();
+		   	dijit.byId('value_j').attr('value',1);
+	    }
+	    else {
+	    }  
+	   } 
+	}, "fa_job");
+	dijit.byId('fa_job').attr('value',"<?php echo $this->rs['father_job']?>");
+	fa = dijit.byId('fa_job').get('value');
+	if(fa==''){
+		dijit.byId('fa_job').attr('value',0);
+	}
+
+	new dijit.form.FilteringSelect({
+		store: job_store,
+		autoComplete: true,                        
+	    id: "mo_job",
+	    name: "mo_job",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
+	    onChange: function() {          
+	   	mo_job = dijit.byId('mo_job').get('value');
+	    if(mo_job==-1){
+	   	 dijit.byId("popup_dept2").show();
+		   	dijit.byId('value_j').attr('value',2);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "mo_job");
+	
+	dijit.byId('mo_job').attr('value',"<?php echo $this->rs['mother_job']?>");
+	mo = dijit.byId('mo_job').get('value');
+	if(mo==''){
+		dijit.byId('mo_job').attr('value',0);
+	}
+	new dijit.form.FilteringSelect({
+		store: job_store,
+		autoComplete: true,                        
+	    id: "gu_job",
+	    name: "gu_job",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
+	    onChange: function() {          
+	   	mo_job = dijit.byId('gu_job').get('value');
+	    if(mo_job==-1){
+	   	 dijit.byId("popup_dept2").show();
+		   	dijit.byId('value_j').attr('value',3);
+	     }
+	    else {}  
+	   } 
+	}, "gu_job");
+	dijit.byId('gu_job').attr('value',"<?php echo $this->rs['guardian_job']?>");
+	fa = dijit.byId('gu_job').get('value');
+	if(fa==''){
+		dijit.byId('gu_job').attr('value',0);
+	}
+}); 
+
+</script>
+<form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+		<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+
+                 if(dojo.byId('new_password').value != dojo.byId('new_con_password').value ){
+					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
+					dojo.byId('new_password').value = '';
+					dojo.byId('new_con_password').value = '';
+					dijit.byId('new_password').focus();
+					return false;
+				}		
+				dijit.byId('save_close').set('disabled',true);	
+				return true;
+			}else {
+				return false;
+			}
+		</script>
+		<table width="100%" >
+			<tr>
+				<td>
+				 <div id="mainTabContainer" style="width: 1150px;height: 500px;" dojoType="dijit.layout.TabContainer" region="center" width="1000px !importand" >
+				  <div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("STUDENT_INFO");?>" selected="true">
+					<table  cellspacing="5" style="margin:0 auto;" width="100%">
+						<tr>
+			      			<td colspan="3"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("STUDENT_INFO");?></strong></td>
+			      			<td colspan="2"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("CURRENT_ADDRESS");?></strong></td>
+			      		</tr>
+			      		<tr>
+			      			<td ><?php echo $tr->translate("NAME_KH");?></td>
+							<td><input class="fullside" tabindex="2" dojoType="dijit.form.ValidationTextBox"  id="name_kh" name="name_kh" value="<?php echo $this->rs['stu_khname'];?>" type="text"  ></td>
+							<td rowspan="6" valign="top">
+								<div class="account-image">
+									<div class="image-box">
+										<?php if (!empty($this->rs['photo'])){?>
+											<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/'.$this->rs['photo'];?>">
+										<?php }else {?>
+											<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+										<?php }?>
+									</div>
+									<div class="button_browse">
+									<div id='preview'></div>	
+											<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+											<input class="btn_borwse_image" type="file" id="photo" name="photo"  onchange="loadFile(event)"/>
+											<input type="hidden" name="old_photo" value="<?php echo $this->rs['photo'];?>" id="old_photo" dojoType="dijit.form.TextBox" />
+									</div>
+								</div>
+							</td>
+							<td><span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("HOME");?></span>&nbsp;&nbsp;&nbsp;
+								<input style=" width: 70%;" class="fullside" tabindex="9" dojoType="dijit.form.TextBox"  id="home_note" name="home_note" value="<?php echo $this->rs['home_num'];?>" >
+							</td>
+			      		</tr>
+			      		<tr>
+			      			<td><?php echo $tr->translate("NAME_EN");?></td>
+							<td><input class="fullside" tabindex="2" required="true" dojoType="dijit.form.ValidationTextBox" id="name_en" name="name_en" value="<?php echo $this->rs['stu_enname'];?>" type="text"  ></td>
+			      			<td><span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("STREET");?></span>&nbsp;&nbsp;&nbsp;
+			      				<input  style=" width: 70%;" class="fullside" tabindex="10" dojoType="dijit.form.TextBox"  id="way_note" name="way_note" value="<?php echo $this->rs['street_num'];?>" type="text" >
+							</td>
+			      		</tr>
+						<tr>
+							<td ><?php echo $tr->translate("SEX");?></td>
+							<td>
+								<select class="fullside"   tabindex="3" name="sex" id="sex" dojoType="dijit.form.FilteringSelect" >
+									<option value="1" <?php if($this->rs['sex']==1){{ echo "selected='selected'"; }} ?> ><?php echo $tr->translate("MALE")?></option>
+									<option value="2"<?php if($this->rs['sex']==2){{ echo "selected='selected'"; }} ?> ><?php echo $tr->translate("FEMALE")?></option>
+								</select>
+							</td>
+							<td><span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("VILLAGE");?></span>&nbsp;&nbsp;&nbsp;
+								<input  style=" width: 70%;" class="fullside" tabindex="11" dojoType="dijit.form.TextBox"  id="village_note" name="village_note" value="<?php echo $this->rs['village_name'];?>" type="text" >
+							</td>
+						</tr>
+						<tr>
+							<td title="សញ្ឃាតិ"><?php echo $tr->translate("NATIONALITY");?></td>
+							<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="studen_national" name="studen_national" value="<?php echo $this->rs['nationality'];?>" type="text" ></td>
+							<td><span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("COMMUNE");?></span>&nbsp;&nbsp;&nbsp;
+								<input style=" width: 70%;" class="fullside" tabindex="12" dojoType="dijit.form.TextBox"  id="commun_note" name="commun_note" value="<?php echo $this->rs['commune_name'];?>" type="text" >
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("PHONE");?></td>
+							<td><input class="fullside" tabindex="4" dojoType="dijit.form.TextBox"  id="phone" name="phone" value="<?php echo $this->rs['tel'];?>" type="text" ></td>
+							<td><span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("DISTRICT");?></span>&nbsp;&nbsp;&nbsp;
+								<input style=" width: 70%;" class="fullside" tabindex="13" dojoType="dijit.form.TextBox"  id="distric_note" name="distric_note" value="<?php echo $this->rs['district_name'];?>" type="text" >
+							</td>
+						</tr>
+						<tr>
+							<td ><?php echo $tr->translate("DOB");?></td>
+							<td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="date_of_birth" id="date_of_birth" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->rs['dob'];?>" type="text"/></td>
+							<td> <span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("PROVINCE");?></span>&nbsp;&nbsp;&nbsp;
+								<select style=" width: 70%;" class="fullside" tabindex="14" name="student_province" id="student_province" dojoType="dijit.form.FilteringSelect"">
+									<?php if(!empty($this->province))foreach ($this->province as $row){?>
+									<option value="<?php echo $row['id']?>"<?php if($row['id']==$this->rs['province_id']) echo 'selected="selected"';?>><?php echo $row['name']?></option>
+									<?php }?>
+								</select>
+							</td>
+						</tr>
+						<tr>			
+							<td><?php echo $tr->translate("POB");?></td>
+							<td colspan="2"><textarea class="fullside"  style=" height: 60px !important;" tabindex="20" id="pob" name="pob"  ><?php echo $this->rs['pob'];?></textarea></td>
+						</tr>
+						<tr>
+							<td colspan="6"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("STUDY_INFO");?></strong></td>
+						</tr>
+					</table>
+				  </div><!-- end tab 1 -->
+				  <div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("PARENT_INFO");?>" selected="false">
+					<table width="100%" style="margin:0 auto;" cellspacing="5">
+						<tr>
+							<td colspan="2" style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("FATHER_INFO");?></strong></td>
+							<td colspan="2" style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("MOTHER_INFO");?></strong></td>
+							<td colspan="2" style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("GUARDIAN_INFO");?></strong></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("NAME");?>*</td>
+							<td><input class="fullside"  tabindex="23" dojoType="dijit.form.ValidationTextBox"  id="fa_name_en" name="fa_name_en" value="<?php echo $this->rs['father_enname'];?>" type="text" ></td>
+							<td><?php echo $tr->translate("NAME");?>*</td>
+							<td><input class="fullside"  tabindex="29" dojoType="dijit.form.ValidationTextBox"  id="mom_name_en" name="mom_name_en" value="<?php echo $this->rs['mother_enname'];?>" type="text"  ></td>
+							<td><?php echo $tr->translate("NAME");?>*</td>
+							<td><input class="fullside"  tabindex="35" dojoType="dijit.form.ValidationTextBox"  id="guardian_name_en" name="guardian_name_en" value="<?php echo $this->rs['guardian_enname'];?>" type="text"  ></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("DOB");?></td>
+							<td><input class="fullside" tabindex="24" dojoType="dijit.form.DateTextBox"  id="fa_dob" name="fa_dob" value="<?php echo $this->rs['father_dob'];?>" type="text" ></td>
+							<td><?php echo $tr->translate("DOB");?></td>
+							<td><input class="fullside"  tabindex="30" dojoType="dijit.form.DateTextBox"  id="mo_dob" name="mo_dob" value="<?php echo $this->rs['mother_dob'];?>" type="text" ></td>
+							<td><?php echo $tr->translate("DOB");?></td>
+							<td><input class="fullside"  tabindex="36" dojoType="dijit.form.DateTextBox"  id="guardian_dob" name="guardian_dob" value="<?php echo $this->rs['guardian_dob'];?>" type="text" ></td>
+							
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("NATIONALITY");?></td>
+							<td><input class="fullside"  tabindex="25" dojoType="dijit.form.TextBox"  id="fa_national" name="fa_national" value="<?php echo $this->rs['father_nation'];?>" type="text"  ></td>
+							<td><?php echo $tr->translate("NATIONALITY");?></td>
+							<td><input class="fullside" tabindex="31" dojoType="dijit.form.TextBox"  id="mom_nation" name="mom_nation" value="<?php echo $this->rs['mother_nation'];?>" type="text" ></td>
+							<td><?php echo $tr->translate("NATIONALITY");?></td>
+							<td><input class="fullside"  tabindex="37" dojoType="dijit.form.TextBox"  id="guardian_national" name="guardian_national" value="<?php echo $this->rs['guardian_nation'];?>" type="text"  ></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("OCCUPATION");?></td>
+							<td><input id="fa_job" /></td>
+							<td><?php echo $tr->translate("OCCUPATION");?></td>
+							<td><input id="mo_job" /></td>
+							<td><?php echo $tr->translate("OCCUPATION");?></td>
+							<td><input id="gu_job" /></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("PHONE");?>*</td>
+							<td><input class="fullside"  tabindex="27" dojoType="dijit.form.ValidationTextBox"  id="fa_phone" name="fa_phone" value="<?php echo $this->rs['father_phone'];?>" type="text"  ></td>
+							<td><?php echo $tr->translate("PHONE");?>*</td>
+							<td><input class="fullside"  tabindex="33" dojoType="dijit.form.ValidationTextBox"  id="mon_phone" name="mon_phone" value="<?php echo $this->rs['mother_phone'];?>" type="text"   ></td>
+							<td><?php echo $tr->translate("PHONE");?>*</td>
+							<td><input class="fullside"  tabindex="40" dojoType="dijit.form.ValidationTextBox"  id="guardian_phone" name="guardian_phone" value="<?php echo $this->rs['guardian_tel'];?>" type="text"  ></td>
+						</tr>
+					</table>
+				  </div>
+				   <div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("CHANGE_PWD_INFO");?>" selected="false"><fieldset>
+					<legend><strong><?php echo $tr->translate("CHANGE_PWD_INFO");?></strong></legend>
+					  <table cellspacing="20" width="100%">
+						<tr>
+							<td align="center" valign="top">
+								<table width="100%">
+									<tr>
+										<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("ACCOUNT_NAME");?>*</td>
+										<td><input class="fullside" readonly style="color: red;" tabindex="15" dojoType="dijit.form.TextBox"  id="student_id" name="student_id" value="<?php echo $this->rs['stu_code']; ?>" type="text" ></td>
+									</tr>
+									<tr>
+										<td><?php echo$tr->translate("NEW_PWD");?></td>							
+										<td>
+											<input type="password" required="true" name="new_password" id="new_password" placeholder="ពាក្យ​​សំងាត់ ថ្មី" 
+											regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+											dojoType="dijit.form.ValidationTextBox" missingMessage="អ្នក​ភ្លេច​បំពេញ​ ពាក្យ​​សំងាត់ ថ្មី!" style="width: 100%;"/>
+										</td>
+									</tr>
+									<tr>
+										<td><?php echo$tr->translate("CONFIRM_PASSWORD");?></td>							
+										<td><input type="password" required="true" name="new_con_password" id="new_con_password" placeholder="បញ្ជាក់ពាក្យ​​សំងាត់  ថ្មី"
+											regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ" 
+											dojoType="dijit.form.ValidationTextBox"  missingMessage="អ្នក​ភ្លេច​បំពេញ​ បញ្ជាក់ ពាក្យ​​សំងាត់ ថ្មី!" style="width: 100%;"/>
+										</td>
+									</tr>	
+									<tr>
+										<td colspan="3" align="center">
+											<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
+												iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'mobileapp','controller'=>"useraccount",'action'=>'index'),null,true); ?>';" />
+											<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+										</td>
+									</tr>																
+								</table>
+							</td>							
+						 </tr>
+					  </table>	
+				    </fieldset>
+				   </div>
+			   </div>
+			   </td>
+			</tr>
+		</table>
+</form>
+<style>
+ @media (min-width: 1401px) and (max-width: 1601px){
+	#mainTabContainer{
+	width: 1400px !important;
+   	 display: block;
+	}
+}
+</style>
+<script>
+</script>
+<script type="text/javascript">
+	function loading(){
+	    document.getElementsByClassName("overlay")[0].style.display="block";
+	}
+	var loadFile = function(event) {
+	    var output = document.getElementById('profile_wiew');
+	    output.src = URL.createObjectURL(event.target.files[0]);
+	  };
+</script>
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

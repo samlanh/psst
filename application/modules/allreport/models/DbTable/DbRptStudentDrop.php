@@ -75,9 +75,10 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
    
     function getAllRescheduleGroup($search){
     	$db = $this->getAdapter();
-    	$sql = "SELECT gr.group_id,
+    	$sql = "SELECT 
+    		gr.group_id,
     	(SELECT CONCAT(rms_tuitionfee.from_academic,'-',rms_tuitionfee.to_academic,'(',rms_tuitionfee.generation,')')
-    	FROM rms_tuitionfee WHERE rms_tuitionfee.status=1 AND rms_tuitionfee.is_finished=0 AND rms_tuitionfee.id=gr.year_id LIMIT 1) AS years,
+    	 FROM rms_tuitionfee WHERE rms_tuitionfee.status=1 AND rms_tuitionfee.is_finished=0 AND rms_tuitionfee.id=gr.year_id LIMIT 1) AS years,
     	(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
     	(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1)AS days,
     	gr.from_hour,gr.to_hour,(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id )AS session_id,
@@ -87,7 +88,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	
     	DATE_FORMAT(gr.create_date,'%d-%m-%Y')As create_date, (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS USER,
     	(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.status AND rms_view.type=1 LIMIT 1) AS STATUS
-    	FROM rms_group_reschedule AS gr  WHERE gr.status=1";
+    	FROM 
+    		rms_group_reschedule AS gr  
+    	WHERE gr.status=1";
     	$where =' ';
     			$from_date =(empty($search['start_date']))? '1': "gr.create_date >= '".$search['start_date']." 00:00:00'";
     			$to_date = (empty($search['end_date']))? '1': "gr.create_date <= '".$search['end_date']." 23:59:59'";
@@ -117,7 +120,6 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	if(!empty($search['day'])){
     		$where.=' AND  gr.day_id ='.$search['day'];
     	}
-    	 
     	return $db->fetchAll($sql.$where.$order);
     }
     

@@ -423,7 +423,7 @@ fieldset{  background:none;}
 					<legend align="center"><strong><?php echo $tr->translate("STUDY_INFO");?></strong></legend> 
 						<table style="margin: 0 auto; width: 100%;" cellspacing="5" >
 							<tr>
-					    	<td><?php echo $tr->translate("GROUP");?></td>
+					    	<td><?php echo $tr->translate("");?></td>
 					    	<td>
 					    		<select name="group" id="group" type="text"  onchange="getInfoBygroup();"  class="fullside" dojoType="dijit.form.FilteringSelect" >
 					    			<option value="-1"><?php echo $tr->translate("SELECT_GROUP");?></option>
@@ -1846,7 +1846,7 @@ function printSave(new_stu_id,new_receipt){
 			dojo.byId("lb_name").innerHTML = dijit.byId("en_name").get('value');
 			dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
 			dojo.byId("lb_dept").innerHTML = dijit.byId('dept').attr('displayedValue');
-			dojo.byId("lb_grade").innerHTML = dijit.byId("grade").attr('displayedValue')+'('+dijit.byId("grade").attr('displayedValue')+')';
+			dojo.byId("lb_grade").innerHTML = dijit.byId("grade").attr('displayedValue')+'('+dijit.byId("group_name").attr('displayedValue')+')';
 			dojo.byId("lb_phone").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
 			dojo.byId("lb_session").innerHTML = dijit.byId("session").attr('displayedValue');
 			//dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
@@ -1866,7 +1866,7 @@ function printSave(new_stu_id,new_receipt){
 			dojo.byId("lb_name1").innerHTML = dijit.byId("en_name").get('value');
 			dojo.byId("lb_study_year1").innerHTML = dijit.byId("study_year").attr('displayedValue');
 			dojo.byId("lb_dept1").innerHTML = dijit.byId('dept').attr('displayedValue');
-			dojo.byId("lb_grade1").innerHTML = dijit.byId("grade").attr('displayedValue')+'('+dijit.byId("grade").attr('displayedValue')+')';
+			dojo.byId("lb_grade1").innerHTML = dijit.byId("grade").attr('displayedValue')+'('+dijit.byId("group_name").attr('displayedValue')+')';
 			dojo.byId("lb_phone1").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
 			dojo.byId("lb_session1").innerHTML = dijit.byId("session").attr('displayedValue');
 			//dojo.byId("lb_read_khmer1").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');

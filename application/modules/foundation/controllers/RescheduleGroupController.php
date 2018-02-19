@@ -57,11 +57,11 @@ class Foundation_RescheduleGroupController extends Zend_Controller_Action {
 				if(!empty($data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/foundation/reschedulegroup");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ ss!", "/foundation/reschedulegroup/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/foundation/reschedulegroup/add");
 				}
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/foundation/reschedulegroup/add");
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+				Application_Form_FrmMessage::message("INSERT_FAILE");
 				$err =$e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}

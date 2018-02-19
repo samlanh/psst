@@ -554,7 +554,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	
     	$order =" GROUP BY g.id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC";
-//     	echo $sql.$where.$order;exit();
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -626,8 +625,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	(sd.type=2 OR sdd.`attendence_status` IN (4,5))
     	AND sd.`id` = sdd.`attendence_id`
     	AND sdd.`stu_id` = $stu_id
-    	AND sd.`group_id` = $group
-    	";
+    	AND sd.`group_id` = $group ";
     	$from_date =(empty($start_date))? '1': " sd.`date_attendence` >= '".$start_date." 00:00:00'";
     	$to_date = (empty($end_date))? '1': " sd.`date_attendence` <= '".$end_date." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;

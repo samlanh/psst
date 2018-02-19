@@ -63,7 +63,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				echo $e->getMessage();exit();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		$db = new Application_Model_DbTable_DbGlobal();
@@ -71,6 +71,11 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		$this->view->session = $db->getAllSession();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->serailno= $db->getTestStudentId();
+		
+		$rs = $db->getallTermtest();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		array_unshift($rs, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+		$this->view->startdate_enddate= $rs;
     }
     public function editAction()
     {
@@ -104,7 +109,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     	$db = new Registrar_Model_DbTable_DbStudentTest();
     	$this->view->row = $row = $db->getStudentTestProfileById($id);
     	$this->view->row_detail=$db->getStudentTestDetail($id);
-    	//print_r($row);exit();
     }
     
 

@@ -15,7 +15,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 			     (SELECT  name_en  FROM rms_view WHERE  rms_view.key_code = se.term AND TYPE=6 AND STATUS=1 LIMIT 1)AS term,
 			      DATE_FORMAT(se.start_date, '%d-%m-%Y'),DATE_FORMAT(se.end_date, '%d-%m-%Y'),se.note,se.create_date,
 			      (SELECT first_name FROM `rms_users` WHERE id=se.user_id LIMIT 1) AS user_name 
-			    FROM  rms_startdate_enddate_stu AS se
+			    	FROM  rms_startdate_enddate_stu AS se
 			    WHERE 1";
 		$where = "";
     	if(!empty($search['search'])){
@@ -33,17 +33,17 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 		$order=" ORDER BY id DESC";
 		return $db->fetchAll($sql.$where.$order);
 	}
-	
-	
     public function addStartdateEnddate($data){
-    	 
     	$db= $this->getAdapter();
     	try{
+//     		print_r($data);exit();
     		if(!empty($data['identity'])){
 				$ids = explode(',', $data['identity']);
 				foreach ($ids as $i){
 					$arr = array(
 							'stu_id'	=>$data['stu_id_'.$i],
+							'service_id'=>$data['service_'.$i],
+							'is_firstpayment'=>$data['onepayment_'.$i],
 							'term'		=>$data['term_'.$i],
 							'start_date'=>$data['startdate_'.$i],
 							'end_date'	=>$data['enddate_'.$i],
@@ -73,6 +73,8 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 				foreach ($ids as $i){
 					$arr = array(
 							'stu_id'	=>$data['stu_id_'.$i],
+							'service_id'=>$data['service_'.$i],
+							'is_firstpayment'=>$data['onepayment_'.$i],
 							'term'		=>$data['term_'.$i],
 							'start_date'=>$data['startdate_'.$i],
 							'end_date'	=>$data['enddate_'.$i],

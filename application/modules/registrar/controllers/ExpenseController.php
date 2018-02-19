@@ -45,7 +45,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'title'=>$link,'invoice'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-    		echo $e->getMessage();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
 		$frm = new Registrar_Form_FrmSearchexpense();

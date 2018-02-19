@@ -43,14 +43,12 @@ class Mobileapp_AboutController extends Zend_Controller_Action
 		$this->view->frm = $frm;
     }
 
-
     public function addAction()
     {
        try{
         $db = new Mobileapp_Model_DbTable_DbAbout();
         if($this->getRequest()->isPost()){
             $_data = $this->getRequest()->getPost();
-            print_r($_data);exit();
             $db->add($_data);
             if(!empty($_data['save_close'])){
                 $this->_redirect("mobileapp/about");

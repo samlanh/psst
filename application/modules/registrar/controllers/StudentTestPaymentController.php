@@ -4,7 +4,6 @@ class Registrar_StudentTestPaymentController extends Zend_Controller_Action {
 	const REDIRECT_URL ='/registrar';
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
@@ -45,7 +44,6 @@ class Registrar_StudentTestPaymentController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     }
-  
     public function addAction(){
 	      if($this->getRequest()->isPost()){
 		      	$_data = $this->getRequest()->getPost();
@@ -63,7 +61,7 @@ class Registrar_StudentTestPaymentController extends Zend_Controller_Action {
 		      	}
 	      }
 	      $db = new Registrar_Model_DbTable_DbStudentTestPayment();
-	      $this->view->all_student_test = $db->getAllStudentTested(0);
+	      $this->view->all_student_test = $db->getAllStudentTested(1);
 	      $this->view->degree = $db->getAllDegree();
     }
     

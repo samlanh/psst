@@ -37,12 +37,12 @@
 	   }
 </script>
 	</script>
-	<table cellspacing="20" width="100%" style="margin: 0 auto;">
+	<table cellspacing="10" width="100%" style="margin: 0 auto;">
 		<tr>
 			<td>
 				<fieldset>
 					<legend align="center"><strong><?php echo $tr->translate("EDIT_START_DATE_AND_END_DATE");?></strong></legend>
-					<table cellspacing="20" width="100%" >
+					<table cellspacing="0" width="100%" >
 						<tr>
 							<td align="center" valign="top">
 								<table style="margin: 0 auto; width:100%;" cellspacing="10">
@@ -99,7 +99,9 @@
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
 			temp+='<td><?php echo $tr->translate("STUDENT_NAME");?></td>';
+			temp+='<td><?php echo $tr->translate("SERVICES");?></td>';
 			temp+='<td><?php echo $tr->translate("PAYMENT_TERM");?></td>';
+			temp+='<td><?php echo $tr->translate("VALIDATE");?></td>';
 			temp+='<td><?php echo $tr->translate("START_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("END_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("NOTE");?></td>';
@@ -111,13 +113,24 @@
 		template+='<td align="center" width="2%">'+no+'</td>';
 
 		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" id="stu_id_'+col+'" class="fullside"  name="stu_id_'+col+'" onChange="showAddBlock('+col+');"  autoComplete="false"​​ queryExpr="*${0}*" required>'+all_stu+'</select></td>';
+		template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
+		template+='<option value=""><?php echo $tr->translate("CHOOSE");?></option>';
+			<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
+				template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
+			<?php }}?>
+			<?php if(!empty($this->all_grade)){foreach($this->all_grade as $rsgrade){?>
+			template+='<option value="'+<?php echo $rsgrade['id']?>+'"><?php echo $rsgrade['name'];?></option>';
+		<?php }}?>
+		template+='</select></td>';	
 		template+='<td width="10%"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="term_'+col+'" >';
 			<?php foreach($this->all_paymentterm as $term){?>
 				template+='<option value="'+<?php echo $term['id']?>+'"><?php echo $term['name'];?></option>';
 			<?php }?>
 		template+='</select></td>';
-		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
-		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
+		template+='<td width="8%"><select dojoType="dijit.form.FilteringSelect" id="onepayment_'+col+'" name="onepayment_'+col+'"><option value="0">Normal</option><option value="1">1 Payment only</option></select>';
+		template+='</select></td>';	
+		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="false" ></td>';	
+		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="false" ></td>';	
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -140,30 +153,39 @@
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
 			temp+='<td><?php echo $tr->translate("STUDENT_NAME");?></td>';
+			temp+='<td><?php echo $tr->translate("SERVICES");?></td>';
 			temp+='<td><?php echo $tr->translate("PAYMENT_TERM");?></td>';
+			temp+='<td><?php echo $tr->translate("VALIDATE");?></td>';
 			temp+='<td><?php echo $tr->translate("START_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("END_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("NOTE");?></td>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-		
 		 <?php if(!empty($this->row)) foreach($this->row  As $row_detail){?>
-		 
 			col++;no++;
 			template='';
 			template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td align="center" width="2%">'+no+'</td>';
-
-			template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" id="stu_id_'+col+'" class="fullside"  name="stu_id_'+col+'" onChange="showAddBlock('+col+');"  autoComplete="false"​​ queryExpr="*${0}*" required>'+all_stu+'</select></td>';
+			template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect" id="stu_id_'+col+'" class="fullside"  name="stu_id_'+col+'" onChange="showAddBlock('+col+');"  autoComplete="false"​​ queryExpr="*${0}*" required>'+all_stu+'</select></td>';
+			template+='<td width="15%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
+			template+='<option value=""><?php echo $tr->translate("CHOOSE");?></option>';
+				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
+					template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
+				<?php }}?>
+				<?php if(!empty($this->all_grade)){foreach($this->all_grade as $rsgrade){?>
+				template+='<option value="'+<?php echo $rsgrade['id']?>+'"><?php echo $rsgrade['name'];?></option>';
+			<?php }}?>
+			template+='</select></td>';	
 			template+='<td width="10%"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="term_'+col+'" >';
 				<?php foreach($this->all_paymentterm as $term){?>
 					template+='<option value="'+<?php echo $term['id']?>+'"><?php echo $term['name'];?></option>';
 				<?php }?>
 			template+='</select></td>';
-			
-			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
+			template+='<td width="6%"><select dojoType="dijit.form.FilteringSelect" id="onepayment_'+col+'" name="onepayment_'+col+'"><option value="0">Normal</option><option value="1">1 Payment only</option></select>';
+			template+='</select></td>';	
+			template+='<td width="9%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="false" ></td>';	
+			template+='<td width="9%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="false" ></td>';	
 			template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
 
 			tmp='<tr id="row'+col+'">';
@@ -177,6 +199,8 @@
 			     parseContent: true,
 			});
 		    dijit.byId('stu_id_'+col).set('value','<?php echo $row_detail['stu_id']?>');
+		    dijit.byId('service_'+col).set('value','<?php echo $row_detail['service_id']?>');
+		    dijit.byId('onepayment_'+col).set('value','<?php echo $row_detail['is_firstpayment']?>');
 		    dijit.byId('term_'+col).set('value','<?php echo $row_detail['term']?>');
 		    dijit.byId('startdate_'+col).set('value','<?php echo $row_detail['start_date']?>');
 		    dijit.byId('enddate_'+col).set('value','<?php echo $row_detail['end_date']?>');

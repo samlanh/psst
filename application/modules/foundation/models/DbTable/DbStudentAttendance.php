@@ -86,6 +86,9 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 			}
 		  $db->commit();
 		}catch (Exception $e){
+			
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("INSERT_FAIL");
 			$db->rollBack();
 		}
    }

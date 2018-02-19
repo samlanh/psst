@@ -53,6 +53,9 @@ class Accounting_StartdateEnddateStuController extends Zend_Controller_Action {
     	}
     	$this->view->all_stu = $db->getAllGerneralOldStudent();
     	$this->view->all_paymentterm = $db->getAllpaymentTerm();
+    	
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->all_grade =  $_db->getAllMajor();
     }
 	public function editAction(){
 		$db = new Accounting_Model_DbTable_DbStartdateEnddateStu();
@@ -73,7 +76,8 @@ class Accounting_StartdateEnddateStuController extends Zend_Controller_Action {
     	$this->view->all_stu = $db->getAllGerneralOldStudent();
     	$this->view->all_paymentterm = $db->getAllpaymentTerm();
     	
-    	
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->all_grade =  $_db->getAllMajor();
 	}
 	
 }

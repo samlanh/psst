@@ -270,7 +270,6 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		ON (ua.acl_id=aa.acl_id) WHERE ua.user_type_id='".$user_type_id."'
 		GROUP BY  aa.module ,aa.controller,aa.action
 		ORDER BY aa.module ,aa.is_menu ASC ,aa.rank ASC ";
-// 		echo $sql;exit();
 		$rows = $db->fetchAll($sql);
 		return $rows;
 	}
@@ -279,10 +278,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		$sql = "SELECT aa.label,aa.module, aa.controller, aa.action FROM rms_acl_user_access AS ua  INNER JOIN rms_acl_acl AS aa
 		ON (ua.acl_id=aa.acl_id) WHERE aa.status=1 AND ua.user_type_id='".$user_type_id."'
 		AND aa.module='allreport' GROUP BY  aa.module ,aa.controller,aa.action
-		ORDER BY aa.module ,aa.controller ASC , aa.acl_id ASC ";
-		
-// 		echo $sql;exit();
-		
+		ORDER BY aa.module ,aa.controller ASC , aa.acl_id ASC ";		
 		$rows = $db->fetchAll($sql);
 		return $rows;
 	}
@@ -296,4 +292,3 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		return $rows;
 	}
 }
-

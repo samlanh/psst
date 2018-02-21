@@ -1,0 +1,55 @@
+<?php 
+     $url_save = $this->url(array('module'=>'stock','controller'=>'productcategory','action'=>'edit'));
+     $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
+     $status_view=$this->status_view;
+     $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<title><?php echo $this->tr->translate("EDIT_PRODUCT_CATEGORY")?></title>
+<form id="add_province" action="<?php echo $url_save;?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+	 <script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			} else {
+				return false;
+			}
+	</script>
+	<table cellspacing="20" style="margin: 0 auto; width: 600px">
+		<tr>
+			<td>
+				<fieldset>
+					<legend align="center"><strong><?php echo $tr->translate("EDIT_PRODUCT_CATEGORY");?></strong></legend>
+					<table cellspacing="20" width="50%" >
+						<tr>
+							<td align="center" valign="top">
+								<table style="margin: 0 auto; width:100%;" cellspacing="10">
+									<tr>
+										<td><?php echo $tr->translate("NAME");?></td>
+										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="name_kh" name="name_kh" value="<?php echo $this->row['name_kh']?>" type="text" ></td>
+									</tr>
+									<tr>
+										<td><?php echo $tr->translate("STATUS");?></td>
+										<td>
+											<select name="status" id="status" dojoType="dijit.form.FilteringSelect" class="fullside">
+										        <option value="1"><?php echo $tr->translate("ACTIVE");?></option>
+										        <option value="0"><?php echo $tr->translate("DEACTIVE");?></option>
+											</select>
+										</td>
+									</tr>
+									 
+									<tr>
+										<td colspan="2" align="center">
+											<input type="reset" value="Clear" label="<?php echo $tr->translate("CLEAR");?>"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
+											<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
+												iconClass="dijitEditorIcon dijitEditorIconSave" />
+										</td>
+									</tr>					
+								</table>
+							</td>							
+						</tr>
+					</table>	
+				</fieldset>
+			</td>			
+		</tr>
+		
+	</table>	
+</form> 

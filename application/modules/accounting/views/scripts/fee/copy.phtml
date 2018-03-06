@@ -218,13 +218,13 @@ function hideAlert(){
 
 function submitDataClose(){
 	
-	if(dijit.byId('office_receipt').validate()) {
+	if(dijit.byId('frm_fee').validate()) {
 		dijit.byId('save_close').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>';
 		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
-			form: dojo.byId("office_receipt"),		    
+			form: dojo.byId("frm_fee"),		    
 			load: function(data) {
 				document.getElementsByClassName("overlay")[0].style.display="none";	
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');

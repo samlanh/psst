@@ -42,6 +42,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 				foreach ($ids as $i){
 					$arr = array(
 							'stu_id'	=>$data['stu_id_'.$i],
+							'type'=>$data['type_'.$i],
 							'service_id'=>$data['service_'.$i],
 							'is_firstpayment'=>$data['onepayment_'.$i],
 							'term'		=>$data['term_'.$i],
@@ -73,6 +74,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 				foreach ($ids as $i){
 					$arr = array(
 							'stu_id'	=>$data['stu_id_'.$i],
+							'type'=>$data['type_'.$i],
 							'service_id'=>$data['service_'.$i],
 							'is_firstpayment'=>$data['onepayment_'.$i],
 							'term'		=>$data['term_'.$i],

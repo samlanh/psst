@@ -457,8 +457,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    public function getAcadimicByStudentSubject($group_id,$semester_id,$subject_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា I+II លម្អិត
    	$db = $this->getAdapter();
-   	$sql="
-   		SELECT 
+   	$sql="SELECT 
    			score,
 			sum(score) as total_score,
    			 FIND_IN_SET( score, (    

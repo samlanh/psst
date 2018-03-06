@@ -16,9 +16,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getStudentPaymentStart($studentid,$service_id,$type){
     	$db = $this->getAdapter();
-    	$sql="select spd.id from rms_student_payment AS sp,rms_student_paymentdetail AS spd where
-    	sp.id=spd.payment_id and is_start=1 and service_id= $service_id and sp.student_id=$studentid and spd.type=$type limit 1 ";
-    	//echo $sql;exit();
+    	$sql="select spd.id 
+    		FROM rms_student_payment AS sp,
+    		rms_student_paymentdetail AS spd where
+    		sp.id=spd.payment_id and is_start=1 
+    		and service_id= $service_id 
+    		and sp.student_id=$studentid 
+    		and spd.type=$type limit 1 ";
     	return $db->fetchOne($sql);
     }
     function getStuidExist($stu_code){
@@ -34,14 +38,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$branch = $_db->getAccessPermission('brand_id');
     	
     	try{
-	    	$sql="select ser_cate_id from rms_program_name where service_id = $service_id "; // to get product id 
+	    	$sql="SELECT ser_cate_id FROM 
+	    		rms_program_name WHERE service_id = $service_id "; // to get product id 
 	    	$pro_id =  $db->fetchOne($sql);
 	   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	    	
 	    	if($pro_type==0){ // product រាយ  
+	    		
 		    	$sql1="select id,pro_qty from rms_product_location where pro_id = $pro_id $branch ";
 		    	$qty_in_stock =  $db->fetchRow($sql1);
-		    	//print_r($qty_in_stock);exit();
 		    	
 		    	$this->_name="rms_product_location";
 		    	if(!empty($qty_in_stock)){
@@ -60,7 +64,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		    		$this->insert($array);
 		    	}
 		    	
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		///////////////////////////ទំនិញជា Set///////////////////////
 		    	
 	    	}else{ // product set 
 	    		
@@ -97,7 +101,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql = "select id from rms_study_history where stu_id = $stu_id and is_finished=0 ";
     	
     }
-    
     function getStudentExist($data){
     	$db = $this->getAdapter();
     	
@@ -110,7 +113,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql = "select stu_enname from rms_student where stu_enname = '$name' and academic_year = $year and grade = $grade and session = $session and room = $room ";
     	return $db->fetchOne($sql);
     }
-    
 	function addRegister($data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
@@ -118,27 +120,28 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$receipt_number =$data['receipt_no']; //$this->getRecieptNo();
 		
 		try{
-			
-			if($data['payment_type']==1){//Tuition Fee and Service
-				if($data['student_type']==3){//old
+			$stu_type='';
+			$payfor_type='';
+			if($data['dept']==1 || $data['dept']==2){
+				$stu_type=1;// kid - Grade6
+				$payfor_type=1; // kid  - Grade 12
+			}else if($data['dept']==3){
+				$stu_type=2; // Grade7 - Grade 12
+				$payfor_type=1; // kid  - Grade 12
+			}else{
+				$stu_type=3; // eng
+				$payfor_type=2; // eng and other subject
+			}
+			if($data['payment_type']==1){//បង់ជា ថ្ងៃសិក្សា សេវាកម្ម និង ផលិតផល
+				if($data['student_type']==3){//ការណីសិស្សចាស់
 					$this->_name = "rms_student";
-					$stu_type='';
-					$payfor_type='';
-					if($data['dept']==1 || $data['dept']==2){
-						$stu_type=1;// kid - Grade6
-						$payfor_type=1; // kid  - Grade 12 
-					}else if($data['dept']==3){
-						$stu_type=2; // Grade7 - Grade 12
-						$payfor_type=1; // kid  - Grade 12 
-					}else{
-						$stu_type=3; // eng 
-						$payfor_type=2; // eng and other subject
-					}
-					// update student information to grade that input	
+					// កែប្រែពត៍មានចាស់របស់សិស្ស ករណី ឈ្មោះសរសេមិនត្រូវ	
 					$this->_name='rms_student';
 					$id=$data['old_studens'];
 					$arr = array(
 							'academic_year'=>$data['study_year'],
+							'stu_khname'	=>$data['kh_name'],
+							'stu_enname'	=>$data['en_name'],
 							'degree'	 =>$data['dept'],
 							'grade'		 =>$data['grade'],
 							'session'	 =>$data['session'],
@@ -151,19 +154,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							);
 					$where = ' stu_id = '.$id;
 					$this->update($arr, $where);
-				}else {
-					$stu_type='';
-					$payfor_type='';
-					if($data['dept']==1 || $data['dept']==2){
-						$stu_type=1;// kid - Grade6
-						$payfor_type=1; // kid  - Grade 12 
-					}else if($data['dept']==3){
-						$stu_type=2; // Grade7 - Grade 12
-						$payfor_type=1; // kid  - Grade 12 
-					}else{
-						$stu_type=3; // eng 
-						$payfor_type=2; // eng and other subject
-					}
+				}else {//ករណីសិស្សថ្មីត្រូវបញ្ចូលថ្មី
+					
 					$isset_group = 0;
 					if($data['group']>-1){
 						$isset_group=1;
@@ -191,7 +183,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				    
 			    	$id = $this->insert($arr);
 			    	
-			    	if($data['group']>-1){
+			    	if($data['group']>-1){//សិស្សថ្មីបញ្ចូលសិស្សចូលក្រុម
 			    		$this->_name='rms_group_detail_student';
 			    		$arra = array(
 			    				'group_id'	=>$data['group'],
@@ -203,7 +195,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			    		$this->insert($arra);
 			    	}
 			    	
-			    	// insert to tbl_student_id for count id to generate new student_id
+			    	// បញ្ចូលអាយដីថ្មី
 			    	$this->_name='rms_student_id';
 			    	$arraa = array(
 			    			'branch_id'	=>$this->getBranchId(),
@@ -214,9 +206,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			    	
 				}
 				
-			//////////////////////////////////////////////////////////////////////	
+			///////បញ្ចូល ក្នុងតារាងបង់ប្រាក់មេ/////////////////////	
 				$this->_name='rms_student_payment';
-				
 				if($data['credit_memo_after']>0){
 					//$credit_memo_after = $data['credit_memo_after'];
 					$cut_credit_memo = $data['credit_memo'] - $data['credit_memo_after'];
@@ -236,15 +227,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'session'		=>$data['session'],
 						'time'			=>$data['study_hour'],
 						'room_id'		=>$data['room'],
-// 						'payment_term'	=>$data['payment_term'],
-// 						'tuition_fee'	=>$data['tuitionfee'],
-// 						'discount_percent'=>$data['discount'],
-// 						'admin_fee'		=>$data['admin_fee'],
-// 						'total'			=>$data['total_payment'],
-// 						'total_payment'	=>$data['total_payment'],
-// 						'paid_amount'	=>$data['paid_amount'],
-// 						'receive_amount'=>$data['paid_amount'],
-// 						'balance_due'	=>$data['balance'],
 						'scholarship_percent'=>$data['scholarship_percent'],
 						'scholarship_amount'=>$data['scholarship_amount'],
 						'tution_feeperyear'=>$data['tution_peryear'],
@@ -254,6 +236,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'create_date'	=>date('Y-m-d H:i:s'),//check date here 
 						//'create_date'	=>$data['paid_date'],
 						//'amount_in_khmer'=>$data['char_price'],
+// 						'payment_term'	=>$data['payment_term'],
+// 						'tuition_fee'	=>$data['tuitionfee'],
+// 						'discount_percent'=>$data['discount'],
+// 						'admin_fee'		=>$data['admin_fee'],
+// 						'total'			=>$data['total_payment'],
+// 						'total_payment'	=>$data['total_payment'],
+// 						'paid_amount'	=>$data['paid_amount'],
+// 						'receive_amount'=>$data['paid_amount'],
+// 						'balance_due'	=>$data['balance'],
 						'user_id'		=>$this->getUserId(),
 						'branch_id'		=>$this->getBranchId(),
 						'grand_total'	=>$data['grand_total'],
@@ -264,11 +255,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'net_amount'	=>$data['net_amount'],
 				);
 				$paymentid = $this->insert($arr);
-				
+			    /*alert ទៅទូរសព្ទដៃអាណាព្យាបាលសិស្ស*/
 				$dbpush = new  Application_Model_DbTable_DbGlobal();
 				$dbpush->pushSendNotification($id, 1);
 				
-		/////////////// study_history /////////////////////////////////////////////		
+		/////////////// បញ្ចូលប្រវត្តិសិក្សារបស់សិស្ស /////////////////////////////////////////////		
 				$this->_name='rms_study_history';
 				if($data['student_type']!=3){
 					$array = array(
@@ -288,7 +279,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					);
 					$this->insert($array);
 				}
-	////////////////// rms_creditmemo /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
+	////////////////// ករណីសិស្សចាស់គណនារក credit memo/////////////////			
 				$this->_name='rms_creditmemo';
 				if($data['student_type']==3){ // only old_student can have credit_memo
 					if(!empty($data['credit_memo_id'])){
@@ -307,9 +298,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}
 				}
 				
-	/////////////////////// rms_student_test ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
-				$this->_name='rms_student_test';
+	/////////////////////// ករណីសិស្សមកពីធ្វើតេស ត្រូវupdate ថាបានចូលរៀនហើយ //////////////			
 				if($data['stu_test']>0){
+					$this->_name='rms_student_test';
 					$array = array(
 							'register'=>1,
 							'stu_code'=>$data['stu_id']
@@ -317,7 +308,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$where= " id = ".$data['stu_test'];
 					$this->update($array, $where);
 				}
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
 				//update is_start=0 ដើម្បីអោយដឹងថា Service និង ឈប់ប្រើ រឺ  expired នៅពេលដែលសិស្សចាស់បង់លុយម្តងទៀត រួច store ID record that updated in is_parent of new record
 	            $service = 4; // លេខ 4 ជាសេវាកម្មចុះឈ្មោះចូលរៀន
 				$type=$payfor_type; // លេខ 1 ជាប្រភេទសិស្សពី kindergarten ដល់ ទី12 , 2 GEP Student
@@ -334,14 +324,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				
 				$complete=1;
 				$comment="បង់រួច";
-	            if($data){
-// 					$service_id=4; // tuition_fee service
-// 					$fee = $data["tuitionfee"];
-// 					$subtotal=$data["total_payment"] + $data["admin_fee"];
-// 					//$subtotal = $subtotal + $data["remark"]+$data["addmin_fee"] ;
-// 					$discount=$data['discount'];
-// 					$paidamount=$data['paid_amount'] + $data["admin_fee"];
-// 					//$balance= $subtotal - $paidamount;
+	            if($data){//បញ្ចូលបង់លុយលម្អិត លើការបង់ថ្លៃសិក្សា
 					 $arr=array(
 	             			'payment_id'	=>$paymentid,
 	             			'type'			=>$payfor_type,
@@ -367,37 +350,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             	$this->insert($arr);
 	             }
 	             
-// 	             if(!empty($data['identitystock'])){
-// 		             $idpro = explode(',', $data['identitystock']);
-// 		             foreach ($idpro as $j){
-// 		             	$this->_name='rms_saledetail';
-// 		             	$arr = array(
-// 		             			'payment_id'=>$paymentid,
-// 		             			'pro_id'=>$data['produc_id'.$j],
-// 		             			'qty'=>$data['pro_qty'.$j],
-// 		             			'note'=>$data['remarkpro'.$j],
-// 		             			'in_receipt'=>0,
-// 		             	);
-// 		             	$this->insert($arr);
-// 		             }
-// 	             }
-	             
 	             $this->_name="rms_student_paymentdetail";
 	             $ids = explode(',', $data['identity']);
 	             $disc = 0;
 	             $total = 0;
 	             foreach ($ids as $i){
 	             	$payfor_type=0;
-	             	$start_date = '';
-	             	$validate='';
-	             	if($data['service_type_'.$i]==1){ // product type
-	             		$payfor_type = 4; // product payment
-// 	             		$start_date = null; 
-// 	             		$validate = null; // no need validate
-						
-	             		$start_date = $data['date_start_'.$i];
-	             		$validate = $data['validate_'.$i];
-	             		
+	             	$start_date = $data['date_start_'.$i];
+	             	$validate = $data['validate_'.$i];
+
+	             	if($data['service_type_'.$i]==1){ // បង់លើផលិតផល
+	             		$payfor_type = 4; // បញ្ជាថាលេខ៤បង់លើផលិតផល
+	             		//ទៅដកស្តុកចេញ
 						$this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
 						$this->_name='rms_saledetail';
 						$arr = array(
@@ -410,11 +374,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'in_receipt'=>1,
 								);
 					    $this->insert($arr);
-						
 	             	}else{
-	             		$payfor_type = 3; // service payment
-// 	             		$start_date = $data['date_start_'.$i];
-// 	             		$validate = $data['validate_'.$i];
+	             		$payfor_type = 3; // បង់លើសេវាកម្មផ្សេងៗ
 	             	}
 	             	// update old record to finish if old student
 	             	$spd_id = $this->getStudentPaymentStart($id, $data['service_'.$i],$payfor_type);
@@ -457,7 +418,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	             	$this->insert($_arr);
 	             } 
 			} 
-// ================================ pay for tuition fee only ============================================================================================
+// ================ បង់តែថ្លៃសិក្សា only ==================
 			else if($data['payment_type']==2){
 				if($data['student_type']==3){//old
 					$this->_name = "rms_student";
@@ -476,6 +437,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					// update student information to grade that input
 					$id=$data['old_studens'];
 					$arr = array(
+							'stu_khname'	=>$data['kh_name'],
+							'stu_enname'	=>$data['en_name'],
 							'session'	=>$data['session'],
 							'degree'	=>$data['dept'],
 							'grade'		=>$data['grade'],
@@ -583,10 +546,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						//'amount_in_khmer'=>$data['char_price'],
 						'user_id'		=>$this->getUserId(),
 						'branch_id'		=>$this->getBranchId(),
-						
 						'grand_total'	=>$data['grand_total'],
 						'fine'			=>$data['fine'],
-						
 						'memo_id'		=>$data['credit_memo_id'],
 						'credit_memo'	=>$data['credit_memo'],
 						'deduct'		=>$data['deduct'],
@@ -657,13 +618,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$complete=1;
 				$comment="បង់រួច";
 				if($data){
-// 					$service_type=4; // tuition_fee service
-// 					$fee = $data["tuitionfee"];
-// 					$subtotal=$data["total_payment"] + $data["admin_fee"] ;
-// 					//$subtotal = $subtotal + $data["remark"]+$data["addmin_fee"] ;
-// 					$discount=$data['discount'];
-// 					$paidamount=$data['paid_amount'] + $data["admin_fee"] ;
-// 					$balance= $subtotal - $paidamount;
+
 					$arr=array(
 							'payment_id'	=>$paymentid,
 							'type'			=>$payfor_type,
@@ -691,7 +646,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				
 			}
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&			
-			else if($data['payment_type']==3){ // pay for service and product only for old studnet
+			else if($data['payment_type']==3){ // បង់តែថ្លៃសេវាកម្ម និង ផលិតផល
 				$this->_name="rms_student_payment";
 				$array=array(
 						'student_id'	=> $data['old_studens'],		
@@ -724,11 +679,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$payfor_type=0;
 					$start_date = '';
 					$validate='';
+					$start_date = $data['date_start_'.$i];
+					$validate = $data['validate_'.$i];
 					if($data['service_type_'.$i]==1){
 						$payfor_type = 4; // product payment
-						$start_date = $data['date_start_'.$i];
-						$validate = $data['validate_'.$i];
-						
 						$this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
 						
 						$this->_name='rms_saledetail';
@@ -745,8 +699,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						
 					}else{
 						$payfor_type = 3; // service payment
-// 						$start_date = $data['date_start_'.$i];
-// 						$validate = $data['validate_'.$i];
 					}
 					// update old record to finish if old student
 					$this->_name="rms_student_paymentdetail";
@@ -778,7 +730,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'discount_percent' =>$data['discount_'.$i],
 							'discount_fix'	=>0,
 							'is_onepayment'=>$data['onepayment_'.$i],
-							
 							'paidamount'	=>$data['paidamount_'.$i],
 							'balance'		=>0,
 							'start_date'	=>$start_date,
@@ -808,7 +759,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}
 				}
 			}
-			if(!empty($data['group']) AND $data['group']>0){
+			if(!empty($data['group']) AND $data['group']>0 AND $data['student_type']!=3){//ករណីសិស្សថ្មី បញ្ជាក់ថាក្រុមថ្មីនឹងបានកំពុងប្រើ
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>1,
@@ -854,7 +805,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						
 						if(!empty($result)){
 							$qty = $result['pro_qty'] + $i['qty'];
-							//echo $qty ; exit();
 							
 							$this->_name="rms_product_location";
 							
@@ -1726,7 +1676,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}
     	//$order=" ORDER By stu_id DESC ";
     	$order=" ORDER BY sp.id DESC";
-//     	echo $sql.$where.$order;exit();
     	return $db->fetchAll($sql.$where.$order);
     }
     function getRegisterById($id){
@@ -1817,8 +1766,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				";
     	$order=' ORDER BY id DESC';
     	
-    	//echo $sql;exit();
-    	
     	return $db->fetchAll($sql.$order);
     }
     
@@ -1838,10 +1785,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$length = '';
     	$pre = '';
-    	$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE 1  ";    	
-//     	if($dept_id==4){//Kindergarten
-//     		$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (4) and status=1 ";
-//     		$pre = 'K';
+    	$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree=$dept_id";    	
+//     	if($dept_id==1){//Kindergarten
+//     		$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (1) and status=1 ";
+//     		//$pre = 'K';
 //     	}else if($dept_id==1  || $dept_id==2 || $dept_id==3){
 //     		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (1,2,3) and status=1 ";
 //     		$pre = 'G';
@@ -1852,8 +1799,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$pre = $this->getPrefixByDegree($dept_id);
     	$pre.='';
     	
-    	
     	$acc_no = $db->fetchOne($sql);
+        if($dept_id==1){//primary
+    		$acc_no = $acc_no-12;
+    	}elseif($dept_id==4){//kid
+    		$acc_no = $acc_no-9;
+    	}elseif($dept_id==2){//second
+    		$acc_no = $acc_no-5;
+    	}elseif($dept_id==3){//high
+    		$acc_no = $acc_no-1;
+    	}elseif($dept_id==6){  //gesl
+    		$acc_no = $acc_no+493;
+    	}
     	$new_acc_no= (int)$acc_no+1;
     	$length = strlen((int)$new_acc_no);
     	
@@ -1929,10 +1886,17 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     function getAllGerneralOldStudentName(){
     	$db=$this->getAdapter();
     	
+//     	$_db = new Application_Model_DbTable_DbGlobal();
+//     	$branch_id = $_db->getAccessPermission();    	
+//     	$sql="SELECT s.stu_id AS stu_id,
+//     	(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name
+//     	FROM rms_student AS s
+//     	WHERE (stu_enname!='' OR s.stu_khname!='') AND s.status=1 AND s.is_subspend=0  $branch_id ORDER BY stu_type DESC ";
+//     	return $db->fetchAll($sql);
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();    	
+    	$branch_id = $_db->getAccessPermission();
     	$sql="SELECT s.stu_id AS stu_id,
-    	(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name
+    	CONCAT(s.stu_khname,'-',s.stu_enname) AS name
     	FROM rms_student AS s
     	WHERE (stu_enname!='' OR s.stu_khname!='') AND s.status=1 AND s.is_subspend=0  $branch_id ORDER BY stu_type DESC ";
     	return $db->fetchAll($sql);
@@ -2351,7 +2315,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$sql="select id,start_date,end_date,note,CONCAT(note,'(',start_date,' to ',end_date,')') as name from rms_startdate_enddate ";
 		return $db->fetchAll($sql);
 	}
-	
 	function getStartDateEndDate($id){
 		$db = $this->getAdapter();
 		$sql="select start_date,end_date from rms_startdate_enddate where id = $id ";
@@ -2359,14 +2322,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	}
 	function getStudentPaidExist($student_id,$start_date,$end_date){//សម្រាប់ត្រួតពិនិត្យមើល ថាតើ សិស្សធ្លាប់បង់ប្រាក់ម្តងរឺនៅក្នុងអំឡុង Date នឹង
 		$sql="SELECT
-		sp.id
-		FROM
-		rms_student_payment AS sp,
-		`rms_student_paymentdetail` spd
-		WHERE
-		sp.student_id=$student_id
-		AND service_id=4
-		AND sp.id = spd.payment_id ";
+			sp.id
+			FROM
+			rms_student_payment AS sp,
+			`rms_student_paymentdetail` spd
+			WHERE
+			sp.student_id=$student_id
+			AND service_id=4
+			AND sp.id = spd.payment_id ";
 		$start_date = date("Y-m-d",strtotime($start_date));
 		$end_date = date("Y-m-d",strtotime($end_date));
 		$from_date =(empty($start_date))? '1': "spd.start_date = '".$start_date."'";

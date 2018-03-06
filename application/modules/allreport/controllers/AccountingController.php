@@ -870,8 +870,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					$search=array(
 						'student_id' => '',
 						'student_name' => '',
-						'form_date'=> date('Y-m-d'),
-						'to_date'=>date('Y-m-d'),
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
 						'search'=>'',
 					);
 				}

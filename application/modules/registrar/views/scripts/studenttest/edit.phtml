@@ -13,7 +13,8 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
  <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
-	
+	var term_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->startdate_enddate));?> );
+
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
 			store: grade_store,
@@ -44,6 +45,22 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 				
 			}
 		}, "grade_result");
+
+		new dijit.form.FilteringSelect({
+			store: term_store,
+			autoComplete: true,                        
+			required: false,
+			id: "term_test",
+			name: "term_test",           
+			class: "fullside", 
+			value:'<?php echo $this->rs['term_test']?>',
+			onChange: function() {  
+				term_test = dijit.byId("term_test").get("value");
+				if(term_test==-1){
+					dijit.byId("popterm_test").show();
+				}
+			}
+		}, "term_test");
 		
 		getAllGrade();
 
@@ -204,7 +221,7 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 										</tr>
 										<tr>
 										    <td><?php echo $tr->translate("TERM_TEST")?></td>
-											<td><input type="text" name="term_test" id="term_test" class="fullside" dojoType="dijit.form.TextBox"  value="<?php echo $this->rs['term_test']?>" /></td>
+											<td><input type="text" id="term_test" /></td>
 										</tr>
 										<tr>
 											 <td><?php echo $tr->translate("TEST_DATE")?></td>
@@ -368,7 +385,43 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 <style>
 .headerreceipt{height: 0px !important;}
 </style>
-
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popterm_test" >
+		<form style="background-color: buttonface;" id='frm_testterm' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="5" style="margin: 0 auto; width:100%;">
+			<tr>
+				<td>
+					<fieldset style="background-color: buttonface;">
+					<legend align="center" ><?php echo $tr->translate("TEST_TERM");?></legend><br />
+					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("START_DATE");?></td>
+							<td><input class="fullside" tabindex="1" value="" constraints="{datePattern:'dd/MM/yyyy'}"  dojoType="dijit.form.DateTextBox" name="start_date" id="start_date" type="text" /></td>
+						</tr>
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("END_DATE");?></td>
+							<td><input class="fullside" tabindex="1" value="" constraints="{datePattern:'dd/MM/yyyy'}"  dojoType="dijit.form.DateTextBox" name="end_date" id="end_date" type="text" required="required" /></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("NOTE");?></td>
+							<td>
+								<input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="term_note" id="term_note" type="text" required="required" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">
+								<input type="button" value="save" id="saveterm" name="saveterm" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
+									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="saveTerm();"/>
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+				</td>
+			</tr>
+		</table>
+	</form>
+	</div>
+</div>
 <script>
 function submitData(){
 	if(dijit.byId('frm_teststudent').validate()) {
@@ -380,6 +433,34 @@ function submitData(){
 	if(dijit.byId('frm_teststudent').validate()) {
 		dijit.byId('savenew').set('disabled',true);
 		dijit.byId('frm_teststudent').submit();
+	}
+}
+function saveTerm(){
+	if(dijit.byId('frm_testterm').validate()) {
+		dijit.byId('saveterm').set('disabled',true);
+		var url_submitterm = '<?php echo $this->url(array('module'=>'registrar','controller'=>'term','action'=>'addterm')); ?>';
+		dojo.xhrPost({
+		    url: url_submitterm,	
+			form: dojo.byId("frm_testterm"),	
+			handleAs:"json",	    
+			load: function(data) {
+			   //term_store  = getDataStorefromJSON('id','name', data);
+			   // dijit.byId('term_note').set('store',term_store); 
+				var Itemmake = { 
+			    		id: data,
+				        name: dijit.byId('start_date').get('value')
+				};
+				addDataToSelectbox(dijit.byId('term_note'), term_store, Itemmake, data);
+				    
+			    
+			    dijit.byId("popterm_test").hide();
+			    dijit.byId('saveterm').set('disabled',false);
+			},
+			error: function(e) {
+				alert("a"+e);
+				dijit.byId("popterm_test").hide();
+			}
+		});
 	}
 }
 var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';

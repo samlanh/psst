@@ -321,7 +321,6 @@ var title = 0;
 tmp = '';
 temp='';
 function addRow() {
-	//var grade = '<?php //echo $this->all_grade; ?>';
 	grade=dijit.byId("grade").get("value");
 	if(grade==''){return false;}
 		col++;no++;
@@ -342,7 +341,6 @@ function addRow() {
 			template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="50px" align="center">'+no+'</td>';
 			template+='<td width="20%">&nbsp;'+label_grade+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="class_'+col+'" name="class_'+col+'" value="'+grade+'" /></td>';
-			//template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
 			column = 0;
 			for(j=0;j<payment_term;j++){ column++;
 				template+='<td width="11%"><input type="text" value="0" required="true" class="fullside" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
@@ -443,8 +441,6 @@ function initailize(){
 	dijit.byId('fee'+col+'_3').attr('value',<?php echo $row['semester']?>);
 	dijit.byId('fee'+col+'_4').attr('value',<?php echo $row['year']?>);
 	dijit.byId('remark'+col).attr('value','<?php echo $row['note']?>');
-	//dijit.byId('status_'+col).attr('value','<?php //echo $row['status']?>');
-	//dijit.byId('session_'+col).attr('value','<?php //echo $row['session_id']?>');
 	<?php } }?>
 }
  function deleteRecord(index) {

@@ -40,7 +40,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'parent_name'		=>$data['parent_name'],
 						'parent_tel'		=>$data['parent_tel'],
 						'photo'				=>$pho_name,
-					
+
 						'old_school'=>$data['old_school'],
 						'old_grade'	=>$data['old_grade'],
 						'degree'	=>$data['degree'],
@@ -202,51 +202,48 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$from_date =(empty($search['start_date']))? '1': " create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
 		
-		$where = " and ".$from_date." AND ".$to_date;
-		
+		$where = " AND ".$from_date." AND ".$to_date;
 		$sql="  SELECT 
 					id,
 					serial,
 					stu_code,
 					kh_name,
 					en_name,
-					(select name_kh from rms_view where type=2 and key_code=sex LIMIT 1) as sex,
-					phone,
-					
-					test_date,
-					
-					(select en_name from rms_dept where dept_id=degree_result LIMIT 1) as degree,
-					(select major_enname from rms_major where major_id=grade_result LIMIT 1) as grade,
-					(select name_en from rms_view where type=4 and key_code=session_result LIMIT 1) as session,
-					time_result,
-					
-					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1),
-					(select name_en from rms_view where type=14 and key_code=updated_result) as result_status,
+					(SELECT name_kh from rms_view WHERE type=2 and key_code=sex LIMIT 1) as sex,
+					phone,test_date,
+					(SELECT en_name from rms_dept WHERE dept_id=degree_result LIMIT 1) as degree,
+					(SELECT major_enname from rms_major where major_id=grade_result LIMIT 1) as grade,
+					(SELECT name_en from rms_view WHERE type=4 and key_code=session_result LIMIT 1) as session,
+					term_test,note,
+					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1) aS user_name,
+					(select name_en from rms_view WHERE type=14 and key_code=updated_result LIMIT 1) as result_status,
 					'$print'
 				FROM 
 					rms_student_test
-				where
-					status=1
-					and register=0 
-			";
+				WHERE
+					status=1";
 		
 		if (!empty($search['txtsearch'])){
-				$s_where = array();
-				$s_search = trim(addslashes($search['txtsearch']));
-				$s_where[] = " serial LIKE '%{$s_search}%'";
-				$s_where[] = " kh_name LIKE '%{$s_search}%'";
-				$s_where[] = " en_name LIKE '%{$s_search}%'";
-				$s_where[] = " old_school LIKE '%{$s_search}%'";
-				$s_where[] = " old_grade LIKE '%{$s_search}%'";
-				$where .=' AND ('.implode(' OR ',$s_where).')';
+			$s_where = array();
+			$s_search = trim(addslashes($search['txtsearch']));
+			$s_where[] = " serial LIKE '%{$s_search}%'";
+			$s_where[] = " kh_name LIKE '%{$s_search}%'";
+			$s_where[] = " en_name LIKE '%{$s_search}%'";
+			$s_where[] = " old_school LIKE '%{$s_search}%'";
+			$s_where[] = " old_grade LIKE '%{$s_search}%'";
+			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}      
 		if(!empty($search['degree'])){
 			$where .= " and degree = ".$search['degree'];
+		}
+		if(!empty($search['term_test'])){
+			$where .= " AND term_test ='".$search['term_test']."'";
 		}
 		if(!empty($search['result_status'])){
 			$where .= " and updated_result = ".$search['result_status'];
 		}
 		$order=" order by id desc ";
+
 		return $db->fetchAll($sql.$where.$order);
 	}	
 	

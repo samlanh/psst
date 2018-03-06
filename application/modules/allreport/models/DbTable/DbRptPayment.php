@@ -267,6 +267,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$sql=" SELECT 
     	spd.id,
     	spd.payment_id,
+    	spd.is_onepayment,
     	(SELECT `rms_student`.`stu_khname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS kh_name,
     	(SELECT `rms_student`.`stu_enname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS en_name,
     	(SELECT `rms_view`.`name_kh` FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` =(SELECT `rms_student`.`sex` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) )))  as sex,
@@ -284,6 +285,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	sp.`amount_in_khmer` as amount_in_khmer,
     	(SELECT CONCAT (`last_name`,' ', `first_name`) FROM `rms_users` WHERE `rms_users`.id = sp.user_id LIMIT 1) as user,
     	spd.note,
+    	spd.start_date,
     	spd.validate,
     	spd.late_fee,
     	spd.extra_fee, 

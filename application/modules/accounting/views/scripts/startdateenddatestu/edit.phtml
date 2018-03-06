@@ -99,6 +99,7 @@
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
 			temp+='<td><?php echo $tr->translate("STUDENT_NAME");?></td>';
+			temp+='<td><?php echo $tr->translate("TYPE");?></td>';
 			temp+='<td><?php echo $tr->translate("SERVICES");?></td>';
 			temp+='<td><?php echo $tr->translate("PAYMENT_TERM");?></td>';
 			temp+='<td><?php echo $tr->translate("VALIDATE");?></td>';
@@ -111,8 +112,10 @@
 			
 		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
-
 		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" id="stu_id_'+col+'" class="fullside"  name="stu_id_'+col+'" onChange="showAddBlock('+col+');"  autoComplete="false"​​ queryExpr="*${0}*" required>'+all_stu+'</select></td>';
+		template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="type_'+col+'" name="type_'+col+'">';
+		template+='<option value="1">Tution Fee </option><option value="2">Service</option><option value="3">Product</option>';
+	    template+='</select></td>';	
 		template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
 		template+='<option value=""><?php echo $tr->translate("CHOOSE");?></option>';
 			<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
@@ -142,10 +145,7 @@
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-		
 	}
-
-
 	function Initialize(){
 		template='';
 		temp = "";
@@ -153,6 +153,7 @@
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
 			temp+='<td><?php echo $tr->translate("STUDENT_NAME");?></td>';
+			temp+='<td><?php echo $tr->translate("TYPE");?></td>';
 			temp+='<td><?php echo $tr->translate("SERVICES");?></td>';
 			temp+='<td><?php echo $tr->translate("PAYMENT_TERM");?></td>';
 			temp+='<td><?php echo $tr->translate("VALIDATE");?></td>';
@@ -168,6 +169,9 @@
 			template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td align="center" width="2%">'+no+'</td>';
 			template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect" id="stu_id_'+col+'" class="fullside"  name="stu_id_'+col+'" onChange="showAddBlock('+col+');"  autoComplete="false"​​ queryExpr="*${0}*" required>'+all_stu+'</select></td>';
+			template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="type_'+col+'" name="type_'+col+'">';
+			template+='<option value="1">Tution Fee </option><option value="2">Service</option><option value="3">Product</option>';
+		    template+='</select></td>';	
 			template+='<td width="15%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
 			template+='<option value=""><?php echo $tr->translate("CHOOSE");?></option>';
 				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
@@ -198,6 +202,7 @@
 			dojo.html.set(dojo.byId("row"+col),template , {
 			     parseContent: true,
 			});
+			 dijit.byId('type_'+col).set('value','<?php echo $row_detail['type']?>');
 		    dijit.byId('stu_id_'+col).set('value','<?php echo $row_detail['stu_id']?>');
 		    dijit.byId('service_'+col).set('value','<?php echo $row_detail['service_id']?>');
 		    dijit.byId('onepayment_'+col).set('value','<?php echo $row_detail['is_firstpayment']?>');

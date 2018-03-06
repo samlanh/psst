@@ -26,6 +26,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 			'total_price'	 	=>$data['price'],
 			'is_paid'	=>1,
 			'paid_date'	=>$data['paid_date'],
+			'account_userid'=>$this->getUserId()
 		);
 		
 		$where = ' id = '.$data['stu_test'];
@@ -43,6 +44,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 					'total_price'	 	=>$data['price'],
 					'is_paid'	=>1,
 					'paid_date'	=>$data['paid_date'],
+					'account_userid'=>$this->getUserId()
 			);
 		
 			$where = " id = $id ";
@@ -63,8 +65,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 	
     function getAllStudentTestPayment($search=null){
     	$_db  = new Application_Model_DbTable_DbGlobal();
-    	$user = $_db->getUserAccessPermission('sp.user_id');
-    	$branch_id = $_db->getAccessPermission('sp.branch_id');
+        $branch_id = $_db->getAccessPermission('st.branch_id');
     	
     	$db=$this->getAdapter();
     	$sql=" select 
@@ -74,20 +75,17 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
     				CONCAT(kh_name,'-',en_name) as name,
     				sex,
     				phone,
-    				(select en_name from rms_dept where dept_id = st.degree) as degree_name,
-    				
+    				(select en_name from rms_dept where dept_id = st.degree LIMIT 1) as degree_name,
     				price,
     				paid_date,
-    				(select first_name from rms_users where id = st.user_id) as user
+    				(select first_name from rms_users where id = st.user_id LIMIT 1) as user
     				
-    			from
+    			From
     				rms_student_test as st
     			where 
     				status = 1
     				and is_paid = 1
-    				$user 
-    				$branch_id 
-    		";
+    				$branch_id ";
     	
     	$where=" ";
     	$from_date =(empty($search['start_date']))? '1': " st.paid_date >= '".$search['start_date']." 00:00:00'";
@@ -115,9 +113,8 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
     	}
     	$order=" ORDER BY st.id DESC";
     	return $db->fetchAll($sql.$where.$order);
-    }
-
-    public function getRecieptNo(){
+}
+public function getRecieptNo(){
     	$db = $this->getAdapter();
     	
     	$_db = new Application_Model_DbTable_DbGlobal();

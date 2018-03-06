@@ -527,7 +527,7 @@ function addRow(){
 		if(title!=1){    
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
+			temp+='<th><?php echo $tr->translate("GRADE");?></th>';
 			<?php $s=0; ?>
 			<?php  foreach ($payment_term as $value){?>
 			<?php echo"temp+='<th>$value</th>';"; ?>			
@@ -539,7 +539,6 @@ function addRow(){
 			template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="50px" align="center">'+no+'</td>';
 			template+='<td width="20%">&nbsp;'+label_grade+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="class_'+col+'" name="class_'+col+'" value="'+grade+'" /></td>';
-			//template+='<td width="20%"><select dojoType="dijit.form.FilteringSelect" id="class_'+col+'" class="fullside" name="class_'+col+'">'+grade+'</select></td>';
 			column = 0;
 			for(j=0;j<payment_term;j++){ column++; 
 				template+='<td width="11%"><input type="text" required="true" id="fee'+col+'_'+column+'" class="fullside" name="fee'+col+'_'+column+'" value="0" dojoType="dijit.form.NumberTextBox" /></td>';

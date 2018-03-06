@@ -45,7 +45,7 @@ select{ width:100%;}
 fieldset{  background:none;}
 .red{ color: red; padding-left:5px;}
 </style>
-<form id='suspend_service' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'product','action'=>'copy')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+<form id='suspend_service' action="<?php echo $this->url(array('module'=>'stock','controller'=>'product','action'=>'copy')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
 				identity = dijit.byId('identity').get('value');

@@ -21,15 +21,16 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     					'txtsearch'=>'',
     					'degree' => '',
     					'result_status' => '',
-    					'start_date'=> null,
+    					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
+    					'term_test'=>''
     			);
     		}
     		$this->view->adv_search = $search;
     		
 			$rs_rows= $db->getAllStudentTest($search);//call frome model
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("SERIAL","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","TEST_DATE","DEGREE","GRADE","SESSION","TIME","BY_USER","STATUS","PRINT_PROFILE");
+    		$collumns = array("SERIAL","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","TEST_DATE","DEGREE","GRADE","SESSION","TEST_TERM","NOTE","BY_USER","STATUS","PRINT_PROFILE");
     		$link=array(
     				'module'=>'registrar','controller'=>'studenttest','action'=>'edit',
     		);
@@ -41,7 +42,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-    	
     	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
@@ -74,8 +74,8 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		
 		$rs = $db->getallTermtest();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		array_unshift($rs, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
-		$this->view->startdate_enddate= $rs;
+		array_unshift($rs,array('id' => -1,'name'=>$tr->translate("ADD_NEW")));
+		$this->view->startdate_enddate = $rs;
     }
     public function editAction()
     {
@@ -95,13 +95,18 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		$this->view->rs = $row  = $db->getStudentTestById($id);
 		$this->view->row_detail=$db->getStudentTestDetail($id);
 		if($row['register']==1){
-			Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/registrar/studenttest");
+			//Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/registrar/studenttest");
 		}
 		
 		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $db->getAllDegreeName();
 		$this->view->session = $db->getAllSession();
+		
+		$rs = $db->getallTermtest();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		array_unshift($rs, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+		$this->view->startdate_enddate= $rs;
     }
     
     function profileAction(){

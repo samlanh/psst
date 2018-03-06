@@ -27,7 +27,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=s.grade LIMIT 1) AS grade,
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
-				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group LIMIT 1 ) AS group_name,
+				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
 				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status
 				FROM rms_student AS s  WHERE  s.is_subspend=0 ";
 		$orderby = " ORDER BY stu_id DESC ";

@@ -44,9 +44,9 @@
 										<img style="width: 40%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 									</td>
 									<td align="center">
-										<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("សាលាបញ្ញាសាស្រ្តអន្តរជាតិ សាខាសែនសុខ");?></strong><br />
-										<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family:initial;">Paññāsāstra International School-Sen Sok Campus</strong><br />
-										<strong style="font-weight:bold;color:#000; font-size: 13px;font-family:'Arial Black','Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong><br />
+										<strong​​ style="font-weight:bold;color:#000; font-size: 18px;font-family:'Khmer MEF2';"><?php echo $tr->translate("សាលាបញ្ញាសាស្រ្តអន្តរជាតិ សាខាសែនសុខ");?></strong><br />
+										<strong​​ style="font-weight:bold;color:#000; font-size: 18px;font-family:initial;">Paññāsāstra International School-Sen Sok Campus</strong><br />
+										<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:'Arial Black','Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong><br />
 									</td>
 									<td width="25%" align="right">
 									</td>
@@ -63,9 +63,11 @@
 								  page-break-inside:avoid; page-break-after:auto;
 								}
 								tr.head_schedule th {
-								    padding: 5px 0;
+								    padding:0;
 								    text-align: center;
 								}
+								.head_schedule{background:#9db5fb;}
+								ul.subject{list-style: none;line-height: 20px;}
 							</style>
 								<tr>
 									<td colspan="3">
@@ -73,18 +75,24 @@
 										foreach ($this->rs As $rs){
 										$timestudy = $db_sub->getTimeSchelduleByYGS($rs['year_id'],$rs['group_id']);
 										?>
-										<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;" >
+										<table border="1" cellpadding="2"​ style="font-family:'Khmer os battambang';margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;border:1px solid #000;" >
 											<thead>
-												<tr><th align="left" colspan="7" style="border:1px solid #fff;">Room:&nbsp;<?php echo $rs['room_name']?></th></tr>
-												<tr><th align="left" colspan="7" style="border-right:1px solid #fff;border-left:1px solid #fff;">Grade:&nbsp;<?php echo $rs['grade_name']?></th></tr>
-												<tr class="head_schedule" style="font-size:12px;" align="center" >
-													<th rowspan="2" width="15%"><?php echo $tr->translate("TIME");?></th>
-													<th colspan="5"><?php echo $tr->translate("DAYS");?></th>
+												<tr>
+													<th align="left" colspan="7" style="border:1px solid #fff;">
+													<ul class="subject">
+														<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
+														<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>
+														
+													</ul>
+													</th>
 												</tr>
-												
-												<tr class="head_schedule" style="font-size:12px;" align="center" >
+												<tr class="head_schedule" style="font-size:14px;border-top:2px solid #000 !important;" align="center" >
+													<th rowspan="2" style="border:1px solid #000 !important;"><?php echo $tr->translate("TIME");?></th>
+													<th colspan="5" style="border:1px solid #000 !important;"><?php echo $tr->translate("DAYS");?></th>
+												</tr>
+												<tr class="head_schedule" style="font-size:14px;" align="center" >
 												<?php foreach ($day as $key => $days){?>
-													<th ><?php echo $tr->translate($days);?></th>
+													<th style="width:18%;"><?php echo $tr->translate($days);?></th>
 												<?php }?>
 												</tr>
 											</thead>
@@ -92,7 +100,7 @@
 											if($time['from_hour']<=12){
 												if($title==0){?>
 												<tr  align="center" >
-													<th colspan="6" style="font-size:12px; padding: 5px 2px; text-decoration: underline;"><?php echo  $tr->translate("Morning");?></th>
+													<th colspan="6" style="font-size:12px; padding: 0px 2px; text-decoration: underline;"><?php echo  $tr->translate("Morning");?></th>
 												</tr>
 										        <?php $title=1;}
 											}else{
@@ -104,18 +112,22 @@
 									        <?php $titles=1;}
 												}
 									        ?>
-												<tr class="hover" style="font-size:11px; height: 20px;" align="center" >
-													<td align="center"><?php echo $time['times'];?></td>
+												<tr class="hover" style="font-size:13px; height: 20px;" align="center" >
+													<td align="center" style="min-width:50px;white-space: nowrap;"><strong><?php echo $time['times'];?></strong></td>
 													<?php foreach ($day as $key => $days){
 														$subjecNteacher = $db_sub->getSubjectTeacherByScheduleAndGroup($rs['year_id'],$rs['group_id'],$time['times'], $key)
 													?>
 													<td>
+													   <ul class="subject">
 														<?php 
 													 	if (!empty($subjecNteacher)){
-															 if (!empty($subjecNteacher['teacher_name'])){echo $subjecNteacher['teacher_name'];}
-															 if (!empty($subjecNteacher['teacher_phone'])){echo "<br/>".$subjecNteacher['teacher_phone'];}
-															 if (!empty($subjecNteacher['subject_name'])){echo "<br/>(".$subjecNteacher['subject_name'].")";}
-														}?>
+													 		if (!empty($subjecNteacher['subject_name'])){
+													 			echo "<li>(".$subjecNteacher['subject_name'].")</li>";
+													 		}
+													 		if (!empty($subjecNteacher['teacher_name'])){echo "<li>".$subjecNteacher['teacher_name']."</li>";}
+															if (!empty($subjecNteacher['teacher_phone'])){echo "<li>".$subjecNteacher['teacher_phone']."</li>";}
+													   }?>
+													   </ul>
 													</td>
 													<?php }?>
 												</tr>
@@ -129,7 +141,7 @@
 										 	}
 										 	?>
 										 <tr>
-										    <td style="border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 25px;"><?php echo $key+1?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $rs_list['total_hour'].''.$h_label?></td>
+										    <td style="border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 20px;" colspan="2"><?php echo $key+1?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $rs_list['total_hour'].''.$h_label?></td>
 										 </tr>
 										 <?php }?>
 										  <tr >

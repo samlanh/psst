@@ -119,10 +119,17 @@
 <script>
 	index=0;
 	function getProductName() {
-		index++;
+		
 		grade=dijit.byId("pro_id").get("value");
 		if(grade==''){return false;}
+		index++;
 		location_id = dijit.byId("f_branch").get("value");
+		if(location_id<0){
+			return false;}
+		if(location_id=='' || location_id==-1){
+			alert("Please Select Branch");
+			dijit.byId("f_branch").focus()();
+			return false;}
 		pro_id=dijit.byId("pro_id").get("value");
 		getcurrentproduct(pro_id,location_id,index);
 				if(index==1){
@@ -166,6 +173,8 @@
 	}
 	var url_getproduct = '<?php echo $this->url(array('module'=>'accounting','controller'=>'transfer','action'=>'getcurrentproduct')); ?>';
 	function getcurrentproduct(pro_id,location_id,index){
+		if(location_id=='' || location_id==-1){
+			return false;}
 		dojo.xhrPost({
 			url:url_getproduct,
 			content:{

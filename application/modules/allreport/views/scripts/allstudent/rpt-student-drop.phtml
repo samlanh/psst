@@ -30,7 +30,7 @@
 										<img style="width: 40%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 									</td>
 									<td align="center">
-										<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';">របាយការណ៏  សិស្សឈប់សិក្សា</strong><br />
+										<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 18px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_DROPS");?></strong><br />
 									</td>
 									<td width="25%" align="right">
 									</td>
@@ -44,12 +44,13 @@
 								<tr>
 									<td colspan="3">
 										<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
-											<tr style="font-size:12px; height: 20px;background: #ccc;" align="center" >
+											<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
 												<th ><?php echo $tr->translate("NUM")?></th>
 												<th ><?php echo $tr->translate("STUDENT_ID")?></th>
 												<th ><?php echo $tr->translate("STUDENT_NAME")?></th>
 												<th ><?php echo $tr->translate("GENDER")?></th>
 												<th ><?php echo $tr->translate("ACADEMIC_YEAR")?></th>
+												<th ><?php echo $tr->translate("GROUP")?></th>
 												<th ><?php echo $tr->translate("GRADE")?></th>
 												<th ><?php echo $tr->translate("SESSION")?></th>
 												<th ><?php echo $tr->translate("TYPE")?></th>
@@ -58,12 +59,13 @@
 												
 											</tr>
 										<?php $i=0; foreach ($this->rs AS $row) { $i++;?>
-											<tr class="hover" style="font-size:11px; height: 20px;" align="center" >
+											<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 												<th ><?php echo $i;?></th>
 												<th ><?php echo $row['stu_id'];?></th>
 												<th align="left">&nbsp;&nbsp;<?php echo $row['name'];?></th>
 												<th ><?php echo $row['sex'];?></th>
 												<th ><?php echo $row['academic_year'];?></th>
+												<th ><?php echo $row['group_name'];?></th>
 												<th ><?php echo $row['grade'];?></th>
 												<th ><?php echo $row['session'];?></th>
 												<th ><?php echo $row['type'];?></th>
@@ -84,8 +86,8 @@
 									<td align="center" width="25%">
 										<span style="font-weight: bold;font-size: 14px;">Verified by</span>
 									</td>
-									<td  width="50%">
-										&nbsp;
+									<td  width="50%">&nbsp;
+										
 									</td>
 									<td align="center"  width="25%">
 										<span style="font-weight: bold;font-size: 14px;text-align: right;">Prepared by</span>

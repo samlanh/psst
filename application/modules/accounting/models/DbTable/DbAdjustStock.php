@@ -253,12 +253,14 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     
     function getProducCutStockLater(){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
-		    	WHERE p.id=pl.pro_id AND p.status=1
-		    	AND p.pro_type=2";
+    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` 
+    		FROM rms_product AS p,
+    			rms_product_location AS pl
+		    	WHERE p.id=pl.pro_id AND p.status=1";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('brand_id');
     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
+//     	echo $sql;exit();
     	return $db->fetchAll($sql);
     }
 

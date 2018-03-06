@@ -86,19 +86,19 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		else{
     			$search = array(
     					'adv_search' =>'',
-    					'degree' =>'',
-    					'grade_all' =>'',
-    					'session' =>'',
+    					'degree'     =>'',
+    					'grade_all'  =>'',
+    					'session'    =>'',
     					'all_payment'=>'all',
     					'student_payment'=>'',
     					'student_test'=>'',
-    					'income'=>'',
-    					'stu_code'=>'',
-    					'stu_name'=>'',
-    					'expense'=>'',
+    					'income'    =>'',
+    					'stu_code'  =>'',
+    					'stu_name'  =>'',
+    					'expense'   =>'',
     					'change_product'=>'',
     					'start_date'=> date('Y-m-d'),
-    					'end_date'=>date('Y-m-d'),
+    					'end_date'  => date('Y-m-d'),
     			);
     		}
     		
@@ -110,7 +110,7 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		if(!empty($search['all_payment'])){
     			$data1=$this->view->row = $db->getDailyReport($search);
     			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
-//     			print_r($db->getAllStudentTest($search));
+    			
     			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
     			$user_type=$db->getUserType();
     			if($user_type==1){
@@ -143,45 +143,6 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		if(!empty($search['change_product'])){
     			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
     		}
-    		
-//     		if($search['type']==1){
-//     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-//     			$data1=$this->view->row = $db->getDailyReport($search);
-    			
-//     			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
-// //     			print_r($data);
-    			
-//     			
-    			
-//     			$user_type=$db->getUserType();
-    			 
-//     			
-//     		}else if($search['type']==2){
-    			 
-//     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-//     			$data=$this->view->row = $db->getDailyReport($search);
-    			 
-//     		}else if($search['type']==3){
-    			 
-//     			$_db = new Registrar_Model_DbTable_DbReportStudentByuser();
-//     			$user_type=$_db->getUserType();
-    			 
-//     			if($user_type==1){
-    	
-//     				$db = new Allreport_Model_DbTable_DbRptOtherIncome();
-//     				$this->view->income = $db->getAllOtherIncome($search);
-    				 
-//     				$db = new Allreport_Model_DbTable_DbRptOtherExpense();
-//     				$this->view->expense = $db->getAllOtherExpense($search);
-//     			}
-//     		}
-    		
-//     		if($search['type']==4){
-    			
-//     			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
-//     			$data=$this->view->stu_test = $db->getAllStudentTest($search);
-    			
-//     		}
     		
     	}catch(Exception $e){
     		Application_Form_FrmMessage::message("Application Error");

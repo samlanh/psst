@@ -26,7 +26,7 @@ class Stock_AdjustStockController extends Zend_Controller_Action {
 			$db =  new Accounting_Model_DbTable_DbAdjustStock();
 			$rows = $db->getAllAdjustStock($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("ADJUST_NO","REQUEST_NAME","NOTE","DATE","TOTAL","STATUS","USER");
+			$collumns = array("ADJUST_NO","TITLE","NOTE","DATE","TOTAL","STATUS","USER");
 			$link=array(
 					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',
 			);
@@ -62,6 +62,7 @@ class Stock_AdjustStockController extends Zend_Controller_Action {
 			$pro=$_pur->getProducCutStockLater();
 			array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
 			$this->view->product= $pro;
+// 			print_r($pro);exit();
 			
 			$this->view->rq_code=$_pur->getAjustCode();
 			$this->view->bran_name=$_pur->getAllBranch();

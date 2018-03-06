@@ -7,7 +7,7 @@
 <style>
 #footer{display: none;}
 table tr td strong{
-	padding-left: 10px;
+	padding-left: 0px;
 }
 </style>
 <table width="100%" style="margin: 0px; font-family:'khmer os battambang';">
@@ -109,7 +109,7 @@ table tr td strong{
 							    <?php if($rs["type"]==1){$rs['service']="Tuition Fee (".$rs['grade'].')';}?>
 							    <td style="text-align: left;"><?php echo $rs['service'];?></td>
 							    <td><?php echo $rs['payment_term']; ?></td>
-							    <td><?php echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?><?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); ?></td>
+							    <td><?php if($rs['is_onepayment']!=1){echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?>-<?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); }?></td>
 							    <td>$ <?php echo $rs['fee']; if(empty($rs['fee'])) echo '0.00';?></td>
 							    <td><?php echo $rs['qty']; if(empty($rs['qty'])) echo '00';?></td>
 							    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
@@ -119,22 +119,7 @@ table tr td strong{
 							    <td><?php echo $rs['note'];?></td>
 							  </tr> <?php $total = $total + $rs['subtotal']; ?>
 							  <?php } 
-							  	//for ($i;$i<=7;$i++){
 							  ?>
-							  <!-- <tr style="height:18px;font-size: 12px;">
-						  		<td><?php //echo $i;?></td>
-							    <td align="left"></td>
-							    <td></td>
-							    <td></td>
-							    <td></td>
-							    <td></td>
-							    <td></td>
-						   		<td></td>
-							    <td></td>
-							    <td></td>
-							    <td></td>
-							  </tr> -->
-							  <?php //}?>
 							  <tr style="font-size:12px;height: 18px;border: 1px solid #fff;border-top: 1px solid #000;"​>
 								  	<td style="" colspan="9"></td>
 								  	<td style="text-align: left;"><?php echo $tr->translate('Total Payment');?></td>
@@ -165,7 +150,7 @@ table tr td strong{
 											</tr>
 										</table>	
 								  	</td>
-								  	<td  style="text-align: left;"><strong><?php echo $tr->translate('Net Amount');?></strong></td>
+								  	<td style="text-align: left !important;"><strong style="text-align: left !important;"><?php echo $tr->translate('Net Amount');?></strong></td>
 								  	<td>
 								  	<strong>$ <?php echo $this->rr['net_amount'];?></strong></td>
 							  </tr>

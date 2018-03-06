@@ -21,6 +21,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 				tel ,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
+				(SELECT group_code FROM `rms_group` WHERE id=s.group_id) AS group_name,
 				(SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree LIMIT 1) AS degree,
 				(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=s.grade LIMIT 1) AS grade,
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
@@ -58,6 +59,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['study_year'])){
 			$where.=" AND s.academic_year=".$search['study_year'];
+		}
+		if(!empty($search['group'])){
+			$where.=" AND s.group_id=".$search['group'];
 		}
 		if(!empty($search['degree'])){
 			$where.=" AND s.degree=".$search['degree'];

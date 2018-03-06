@@ -8,7 +8,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	public function indexAction()
 	{
-			
 	}
 	public function idselectedAction(){
 		$id=$this->getRequest()->getParam('id');

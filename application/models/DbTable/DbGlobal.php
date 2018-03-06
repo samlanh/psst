@@ -540,7 +540,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    function getallProductName(){
    	$db = $this->getAdapter();
-   	$sql=" SELECT id ,pro_name as name FROM `rms_product` WHERE status=1 AND pro_name!='' ORDER BY pro_name,sale_set ";
+   	$sql=" SELECT id ,pro_name as name FROM `rms_product` 
+   		WHERE status=1 AND pro_name!='' ORDER BY pro_name,sale_set ";
    	return $db->fetchAll($sql);
    }
    

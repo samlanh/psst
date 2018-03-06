@@ -20,6 +20,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 						'grade'=> '',
 						'session'=> '',
 						'time'=> '',
+						'group'=>'',
 						'degree'=> '',
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
@@ -28,7 +29,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			$db_student= new Home_Model_DbTable_DbStudent();
 			$rs_rows = $db_student->getAllStudent($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAME","SEX","PHONE","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+			$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAME","SEX","PHONE","ACADEMIC_YEAR","GROUP","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 			$link=array(
 					'module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail',
 			);

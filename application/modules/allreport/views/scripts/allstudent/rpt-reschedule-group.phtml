@@ -9,12 +9,12 @@
 	);
 	
 	$arr = array(
-			'07.w00'=>"07:00 AM",
+			'07.00'=>"07:00 AM",
 			'07.15'=>"07:15 AM",
 			'07.30'=>"07:30 AM",
 			'08.00'=>"08:00 AM",
 			'08.15'=>"08:15 AM",
-			'08:20'=>"08:20 AM",
+			'08.20'=>"08:20 AM",
 			'08.30'=>"08:30 AM",
 			'08.40'=>"08.40 AM",
 			'09.00'=>"09:00 AM",
@@ -32,12 +32,15 @@
 			'12.30'=>"12:30 AM",
 			'13.00'=>"01:00 PM",
 			'13.30'=>"01:30 PM",
+			'13.40'=>"01:40 PM",
 			'13.50'=>"01:50 PM",
 			'14.00'=>"02:00 PM",
 			'14.30'=>"02:30 PM",
+			'14.40'=>"02:40 PM",
 			'14.50'=>"02:50 PM",
 			'15.00'=>"03:00 PM",
 			'15.10'=>"03:10 PM",
+			'15.20'=>"03:20 PM",
 			'15.30'=>"03:30 PM",
 			'15.45'=>"03:45 PM",
 			'16.00'=>"04:00 PM",
@@ -113,7 +116,7 @@
 							</style>
 								<tr>
 									<td colspan="3">
-										<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
+										<table border="1" cellpadding="5"​ style="border:1px solid #000;margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
 											<thead>
 											<tr style="font-size:13px; height: 20px;background: #ccc;" align="center" >
 												<th >No.</th>
@@ -135,8 +138,6 @@
 										          }else{
 										          	$session="Afternoon";
 										          }
-										          
-										          
 										?>
 											<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 												<td ><?php echo $i;?></td>

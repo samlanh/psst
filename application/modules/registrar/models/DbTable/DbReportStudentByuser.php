@@ -124,27 +124,8 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				  AND sf.`branch_id` = ".$this->getBranchId()."
 				  AND p.`service_id`=sfd.`service_id`
 				  or type=1
-				GROUP BY service_id 
-			";
-		//echo $sql;
-		return $db->fetchAll($sql);
-		
-// 		$i=0;
-// 		$result=array('');
-		
-// 		if(!empty($service)){
-// 			foreach ($service as $service_id){$i++;
-// 				//echo $result['id']."<br />";
-// 				$sql1 = "select service_id as id , title from rms_program_name where service_id=".$service_id['id'];
-// 				$result = $db->fetchRow($sql1);
-				
-				
-// 				//print_r($result);
-// 				//return $result;
-// 			}
-// 			//return $result;
-// 		}
-		
+				GROUP BY service_id ";
+		return $db->fetchAll($sql);		
 	}
 	   
 	function getDailyReport($search=null){
@@ -182,8 +163,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				  FROM
 						rms_student AS s,
 						rms_student_payment AS sp
-				  WHERE s.stu_id = sp.student_id  $branch_id  $user_level
-			";
+				  WHERE s.stu_id = sp.student_id  $branch_id  ";
 	
 			$where = " AND ".$from_date." AND ".$to_date;
 	
@@ -228,11 +208,12 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 	
 			$db=$this->getAdapter();
 	
-			$from_date =(empty($search['start_date']))? '1': "st.create_date >= '".$search['start_date']." 00:00:00'";
-			$to_date = (empty($search['end_date']))? '1': "st.create_date <= '".$search['end_date']." 23:59:59'";
+			$from_date =(empty($search['start_date']))? '1': "st.paid_date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': "st.paid_date <= '".$search['end_date']." 23:59:59'";
 			
 			$sql="SELECT
 					st.receipt_no,
+					st.paid_date,
 					st.kh_name,
 					st.en_name,
 					(select name_en from rms_view where type=2 and key_code=st.sex) as sex,
@@ -240,7 +221,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					st.phone,
 					(select en_name from rms_dept where dept_id = st.degree) as degree,
 					st.create_date,
-					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = st.user_id) AS user,
+					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = st.account_userid) AS user,
 					st.serial,
 					st.register,
 					st.old_school,
@@ -270,7 +251,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				$where.= " AND st.degree = ".$search['degree'];
 			}
 			if(!empty($search['user'])){
-				$where.=" AND user_id = ".$search['user'] ;
+				$where.=" AND account_userid = ".$search['user'] ;
 			}
 			$order=" ORDER By st.id DESC ";
 			return $db->fetchAll($sql.$where.$order);

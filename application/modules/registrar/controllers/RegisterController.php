@@ -32,7 +32,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$rs_rows= $db->getAllStudentRegister($search);
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
-    		//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
     		$list = new Application_Form_Frmtable();
     		$collumns = array("RECEIPT","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","TOTAL_PAYMENT","FINE","CREDIT_MEMO","DEDUCT","NET_AMOUNT","DATE_PAY","USER","STATUS","PRINT_SCHOLARSHIP");
     		$link=array('module'=>'registrar','controller'=>'register','action'=>'edit',);

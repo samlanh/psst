@@ -785,11 +785,10 @@ fieldset{  background:none;}
 		</tr>
 		<tr>
 			<td colspan="3" align="center">
-				<input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
-					iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave();"/> 
-					
 				<input type="submit"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('GO_EDIT');?>"   dojoType="dijit.form.Button" 
 					iconClass="dijitEditorIcon dijitEditorIconSave"  />
+				<input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
+					iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave();"/>
 			</td>
 		</tr>
 	</table>	

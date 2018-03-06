@@ -108,6 +108,9 @@
 	}
 	var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
 	function getStudentNo(dept_id,condition){
+		if(dept_id==''){
+			return false;
+		}
 		type = dijit.byId('student_type').get('value'); // old student or new student
 		if(type == 3){
 		}else{
@@ -279,9 +282,7 @@
 			var y = a.getFullYear();
 			var epx_date = y + '-'+ mm + '-'+dd ;
 			
-			//alert(epx_date);
-			
-			dijit.byId('end_date').attr('value',epx_date);	
+			//dijit.byId('end_date').attr('value',epx_date);	
 	}
 	function getTestFee(){
 		student_type = dijit.byId('student_type').get('value');
@@ -460,6 +461,7 @@ fieldset{  background:none;}
 							<td>
 								<input id="grade" /> 
 							 	<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
+							 <input type="hidden" name="group_name" id="group_name" class="fullside" dojoType="dijit.form.TextBox"/>
 							 </td>
 						</tr>
 						<tr>
@@ -495,7 +497,7 @@ fieldset{  background:none;}
 						</tr>
 						<tr>
 							<td><strong><?php echo $tr->translate("PAID_DATE");?></strong></td>
-							<td><input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="" name="paid_date" id="paid_date" class="fullside"/></td>
+							<td><input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="<?php echo date("Y-m-d");?>" name="paid_date" id="paid_date" class="fullside"/></td>
 						</tr>	
 					</table>
 				</fieldset>
@@ -521,7 +523,7 @@ fieldset{  background:none;}
 							<tr>	
 								<td><?php echo $tr->translate("PERIOD");?><label class="red">*</label></td>
 								<td>
-									<select type="text" name="start_end" id="start_end" onchange="setStartAndEndDate();" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+									<select name="start_end" id="start_end" onchange="setStartAndEndDate();" class="fullside" dojoType="dijit.form.FilteringSelect"  >
 										<option value="-1"> select period </option>
 										<?php if(!empty($this->startdate_enddate)){foreach ($this->startdate_enddate as $rs){?>
 										<option value="<?php echo $rs['id']?>"><?php echo $rs['note'].'('.date("d-m-Y",strtotime($rs['start_date'])).' To '.date("d-m-Y",strtotime($rs['end_date'])).')';?></option>
@@ -536,7 +538,7 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("VALIDATE");?></td>
-								<td><input type="text" constraints="{datePattern:'dd/MM/yyyy'}" required="true" name="end_date" id="end_date" class="fullside" dojoType="dijit.form.DateTextBox"/>
+								<td><input type="text" constraints="{datePattern:'dd/MM/yyyy'}" name="end_date" id="end_date" class="fullside" dojoType="dijit.form.DateTextBox"/>
 								</td>
 							</tr>
 							<tr>
@@ -683,7 +685,7 @@ fieldset{  background:none;}
 			</tr>
 			<tr>
 				<td colspan="3" align="center">
-				    <input type="button" onclick="submitDataClose();"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
+				    <input type="submit"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					 
 					<input type="button" onclick="submitDataAddNew();" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
@@ -776,7 +778,7 @@ function getInfoBygroup(){
 			dijit.byId('session').set('value',data.session);
 			dijit.byId('session').set('readOnly',true);
 			dijit.byId('room').set('value',data.room_id);
-			//dijit.byId('room').set('readOnly',true);
+			dijit.byId('group_name').attr('value',data.group_code);
 		},
 		error: function(err) {
 			alert(err);
@@ -877,7 +879,7 @@ function getMonthByNumber(m){
 		</style>
 		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
-				<tr height="85px;">
+				<tr height="90px;">
 					<td colspan="10"  style="" align="center" valign="top">
 					</td>
 				</tr>
@@ -1769,7 +1771,7 @@ function printSave(new_stu_id,new_receipt,submit){
 			dojo.byId("lb_name").innerHTML = dijit.byId("kh_name").get('value')+" - "+dijit.byId("en_name").get('value');
 			dojo.byId("lb_study_year").innerHTML = dijit.byId("study_year").attr('displayedValue');
 			dojo.byId("lb_dept").innerHTML = dijit.byId('dept').attr('displayedValue');
-			dojo.byId("lb_grade").innerHTML = dijit.byId("grade").attr('displayedValue');
+			dojo.byId("lb_grade").innerHTML = dijit.byId("grade").attr('displayedValue')+"("+dijit.byId("group_name").attr('displayedValue')+")";
 			dojo.byId("lb_phone").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
 			dojo.byId("lb_session").innerHTML = dijit.byId("session").attr('displayedValue');
 			dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
@@ -1864,7 +1866,7 @@ function printSave(new_stu_id,new_receipt,submit){
 					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId("service_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
 					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;">'+dijit.byId("term_"+rowIDArray[n]).attr('displayedValue')+'</td>';
 				///////////////////    format date 	//////////////////////// 
-				
+					 	
 					  var b = new Date(dijit.byId("date_start_"+rowIDArray[n]).get('value'));
 					  mm = b.getMonth()+1;
 					  var dd = b.getDate();
@@ -1899,6 +1901,8 @@ function printSave(new_stu_id,new_receipt,submit){
 					  if(service_type==1){
 						  epx_date = '';
 					  }
+					  s_startdate = dijit.byId("date_start_"+rowIDArray[n]).get('value');
+					  if(s_startdate==null){start_date='';epx_date='';}
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
 					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
@@ -1944,11 +1948,7 @@ function printSave(new_stu_id,new_receipt,submit){
 							var epx_date = dd + '/' + months + '/' + y ;
 							discount_percent = dijit.byId('discount_percent').get('value');
 							
-							//if(discount_percent=='' && discount_percent==0){}
-							
 							discount_fix = dijit.byId('discount_fix').get('value');
-							//if(discount_fix==0){discount_fix='';}
-							//if(discount_fix!='' && discount_fix>0){discount_fix=discount_fix+'$';}							
 							
 						  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
@@ -2005,6 +2005,8 @@ function printSave(new_stu_id,new_receipt,submit){
 					  if(service_type==1){
 						  epx_date = '';
 					  }
+					  s_startdate = dijit.byId("date_start_"+rowIDArray[n]).get('value');
+					  if(s_startdate==null){start_date='';epx_date='';}
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
 					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
@@ -2182,7 +2184,7 @@ function getOldVildateToStartDateRegister(){
 					dijit.byId('start_date').attr('value',data.start_date);
 					dijit.byId('end_date').attr('value',data.end_date);
 				}else{
-					getDateTerm();
+					//getDateTerm();
 				}	
 			},
 			error: function(err) {

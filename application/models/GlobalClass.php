@@ -403,12 +403,15 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 					'<option value="12.30">12:30 AM </option>'.
 					'<option value="13.00">01:00 PM </option>'.
 					'<option value="13.30">01:30 PM </option>'.
+					'<option value="13.40">01:40 PM </option>'.
 					'<option value="13.50">01:50 PM </option>'.
 					'<option value="14.00">02:00 PM </option>'.
 					'<option value="14.30">02:30 PM </option>'.
+					'<option value="14.40">02:40 PM </option>'.
 					'<option value="14.50">02:50 PM </option>'.
 					'<option value="15.00">03:00 PM </option>'.
 					'<option value="15.10">03:10 PM </option>'.
+					'<option value="15.30">03:20 PM </option>'.
 					'<option value="15.30">03:30 PM </option>'.
 					'<option value="15.45">03:45 PM </option>'.
 					'<option value="16.00">04:00 PM </option>'.

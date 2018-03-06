@@ -58,51 +58,7 @@
    $rpt_creditmemo =$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-creditmemo'), null, true);
   ?>
   <div style="background:#ccc; width: 100%;">
-  
-  <?php /*?>	
-  	
-  	<ul class="link-rpt">
-  		<li><a href="<?php echo $rpt_studentpayment;?>"><?php echo $tr->translate('STUDENT_PAYMENT_REPORT');?></a></li>
-  		<li><a href="<?php echo $rpt_studentpaymentdetail;?>"><?php echo $tr->translate('STUDENT_PAYMENT_DETAIL_REPORT');?></a></li>
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpaymenthistory'), null, true);?>"><?php echo $tr->translate('STUDENT_PAYMENT_HISTORY_REPORT');?></a></li>
-  		
-  		<li><a href="<?php echo $rpt_student_payment_by_type;?>"><?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></a></li>
-  		<li><a href="<?php echo $rpt_student_nearly_end_service;?>"><?php echo $tr->translate('STUDENT_NEARLY_END_REPORT');?></a></li>
-  		<li><a href="<?php echo $rpt_student_payment_late;?>"><?php echo $tr->translate('RPT_STUDENT_PAYMENT_LATE');?></a></li>
-  		
-  		
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-suspendservice'), null, true);?>"><?php echo $tr->translate('STUDENT_STOP_SERVICE_REPORT');?></a></li>
-  		<li><a href="<?php echo $rpt_tuitionfee;?>"><?php echo $tr->translate('RPT_FEE');?></a></li>
-  		<li><a href="<?php echo $rpt_servicecharge;?>"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></a></li>
-  	    <li><a href="<?php echo $rpt_product_location;?>"><?php echo $tr->translate('RPT_PRODUCT_LOCATION');?></a></li>
-  		<li><a href="<?php echo $rpt_purchaseall;?>"><?php echo $tr->translate('RPT_PURCHASE_ALL');?></a></li>
-  		<li><a href="<?php echo $rpt_purchase;?>"><?php echo $tr->translate('RPT_PURCHASE');?></a></li>  
-  		
-  		<li><a href="<?php echo $rpt_product_sold;?>"><?php echo $tr->translate('RPT_PRODUCT_SOLD');?></a></li>
-  		<li><a href="<?php echo $rpt_income_expense;?>"><?php echo $tr->translate('RPT_OTHER_INCOME_EXPENSE');?></a></li>
-		
-		<li><a href="<?php echo $rpt_invoice;?>"><?php echo $tr->translate('INVOICE');?></a></li>
-		<li><a href="<?php echo $rpt_transfer;?>"><?php echo $tr->translate('TRANSFER');?></a></li>
-		<li><a href="<?php echo $rpt_creditmemo;?>"><?php echo $tr->translate('CREDITMENO');?></a></li>
-  		
-  		<!-- create new report  --> 
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-stu-enrollment-paymentlist'), null, true);?>"><?php echo $tr->translate('ENGLISH_ENROLLMENT_AND_PAYMENT');?></a></li>
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-kin-enrollment-payment'), null, true);?>"><?php echo $tr->translate('KINDERGARTEN_ENROLLMENT_AND_PAYMENT');?></a></li>
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-receive-service-and-payment'), null, true);?>"><?php echo $tr->translate('បញ្ជីសិស្សចុះឈ្មោះទទួលសេវាកម្មជិះរថ្តយន្ត និងតាមដានការបង់ប្រាក់');?></a></li>
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-student-stayed-and-payment'), null, true);?>"><?php echo $tr->translate('បញ្ជីសិស្សចុះឈ្មោះស្នាក់នៅ/អាហារ និង តាមដានការបង់ប្រាក់');?></a></li>
-  		
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-rent-and-payment-list'), null, true);?>"><?php echo $tr->translate('បញ្ជីឈ្មោះអ្នកជួលតូប និង តាមដានការបង់ប្រាក់');?></a></li>
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-cus-nearly-end-service'), null, true);?>"><?php echo $tr->translate('របាយការណ៍អតិថិជនជិតដល់ថ្ងៃបញ្ចប់កុងត្រាជួលសេវាកម្ម');?></a></li>
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-bracket-servicelist'), null, true);?>"><?php echo $tr->translate('បញ្ជីកត់ត្រាសេវាកម្មកិបកង់-ម៉ូតូ');?></a></li>
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-result-income'), null, true);?>"><?php echo $tr->translate('របាយការណ៍លទ្ធផលចំណូល');?></a></li>
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-request-productdetail'), null, true);?>"><?php echo $tr->translate('RPT_REQUEST_PRODUCT');?></a></li>
-  		<li><a href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-adjust-stockdetail'), null, true);?>"><?php echo $tr->translate('RPT_ADJUST_STOCK');?></a></li>
-  		<!--//end create new report  --> 
-  	</ul>
-  	<?php */?>
-  	
-  	
-  	<ul class="link-rpt">
+  <ul class="link-rpt">
        <?php
 	       $session_user=new Zend_Session_Namespace('authstu');
 	       $report_url = $session_user->url_report;

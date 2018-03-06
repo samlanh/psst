@@ -56,6 +56,8 @@ class Accounting_StartdateEnddateStuController extends Zend_Controller_Action {
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$this->view->all_grade =  $_db->getAllMajor();
+    	$db = new Registrar_Model_DbTable_DbRegister();
+    	$this->view->all_service = $db->getAllService();
     }
 	public function editAction(){
 		$db = new Accounting_Model_DbTable_DbStartdateEnddateStu();
@@ -78,6 +80,9 @@ class Accounting_StartdateEnddateStuController extends Zend_Controller_Action {
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$this->view->all_grade =  $_db->getAllMajor();
+    	
+    	$db = new Registrar_Model_DbTable_DbRegister();
+    	$this->view->all_service = $db->getAllService();
 	}
 	
 }

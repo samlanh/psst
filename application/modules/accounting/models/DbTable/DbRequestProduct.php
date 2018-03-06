@@ -330,7 +330,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql = "SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
 		    	WHERE p.id=pl.pro_id AND p.status=1
-		    	AND p.pro_type=2 AND pl.brand_id=".$branch_id;
+		    	AND pl.brand_id=".$branch_id;
     	$order=' ORDER BY p.id DESC';
     	return $db->fetchAll($sql.$order);
     }

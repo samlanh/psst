@@ -18,7 +18,12 @@ class IndexController extends Zend_Controller_Action
     	
     	
         /* set this to login page to change the character charset of browsers to Utf-8  ...*/    	  	
-		
+    	$session_user=new Zend_Session_Namespace('authstu');
+    	$username = $session_user->first_name;
+    	$user_id = $session_user->user_id;
+    	if (!empty($user_id)){
+    		$this->_redirect("/home");
+    	}
     	$this->_helper->layout()->disableLayout();
 		$form=new Application_Form_FrmLogin();				
 		$form->setAction('index');		

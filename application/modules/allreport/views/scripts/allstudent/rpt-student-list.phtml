@@ -15,8 +15,7 @@
 		<table>
 			<tr>
 				<td><input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="Search by student name....." value="" type="text"></td>
-				<td>
-					<select dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
+				<td><select dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
 						<option value="">ជ្រើសរើសប្រភេទសិស្ស</option>
 						<option value="1" <?php if($this->search['study_type']==1){echo "selected";}?>>សិស្សនៅរៀន</option>
 						<option value="2" <?php if($this->search['study_type']==2){echo "selected";}?>>សិស្សឈប់</option>
@@ -50,9 +49,9 @@
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table  cellpadding="5"​ style="font-size:14px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;"  border="1" >
+						<table  cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;"  border="1" >
 							<style> td{padding:0 3px; }
-							.cheader{font-weight: bold; background: #ccc; white-space: nowrap;}
+							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
 							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 							tr{ page-break-inside:avoid; page-break-after:auto }
 							#header {
@@ -62,21 +61,18 @@
 							
 							</style>
 							<thead>
-								<tr class="cheader" align="center" >
-									<td><?php echo $tr->translate("NUM");?></td>
-									<td><?php echo $tr->translate("STUDENT_ID");?></td>
-									<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
-									<td><?php echo $tr->translate("NAME_ENGLISH");?></td>
-									<td><?php echo $tr->translate("SEX");?></td>
-									<td><?php echo $tr->translate("NATIONALITY");?></td>
-									<td><?php echo $tr->translate("DATE_OF_BIRTH");?></td>	
-									<td><?php echo $tr->translate("POB");?></td>
-									<td><?php echo $tr->translate("CONTACT_NO");?></td>	
-									<td><?php echo $tr->translate("FATHER_NAME");?></td>	
-									<td><?php echo $tr->translate("OCCUPATION");?></td>	
-									<td><?php echo $tr->translate("MOTHER_NAME");?></td>	
-									<td><?php echo $tr->translate("OCCUPATION");?></td>	
-								</tr>
+							<tr class="cheader" align="center" >
+								<td><?php echo $tr->translate("NUM");?></td>
+								<td><?php echo $tr->translate("STUDENT_ID");?></td>
+								<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+								<td><?php echo $tr->translate("NAME_ENGLISH");?></td>
+								<td><?php echo $tr->translate("SEX");?></td>
+								<td><?php echo $tr->translate("NATIONALITY");?></td>
+								<td><?php echo $tr->translate("DATE_OF_BIRTH");?></td>	
+								<td><?php echo $tr->translate("DATE_OF_BIRTH");?></td>	
+								<td><?php echo $tr->translate("POB");?></td>
+								<td><?php echo $tr->translate("CONTACT_NO");?></td>	
+							</tr>
 							</thead>
 							<?php  $i=0;
 								$male=0;$femle=0;
@@ -87,9 +83,9 @@
 								$str.=",".($key+1);
 							}
 							?>
-							<tr style="font-size:14px;height: 23px;"​ align="center">
+							<tr style="font-size:12px;height: 23px;"​ align="center">
 								<td><?php echo $i;?></td>
-								<td><?php echo $row['stu_code'];?></td>
+								<td><input type="text" name="student_<?php echo $i?>" id="student_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_code']?>" /></td>
 								<td align="left"><?php echo $row['kh_name'];?></td>
 								<td align="left"><?php echo $row['en_name'];?></td>
 								<td><?php echo $row['sex'];
@@ -100,27 +96,29 @@
 									}
 								?></td>
 								<td><?php echo $row['nation'];?></td>
-								<td><?php echo date("Y",strtotime($row['dob']))!=1970?date("d-m-Y",strtotime($row['dob'])):"";?></td>
+								<td><?php echo date("d-m-Y",strtotime($row['dob']));?></td>
+								<td>
+								<input type="hidden"  name="stu_id<?php echo $i?>" id="stu_id<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_id'];?>" />
+								<input type="text" constraints="{datePattern:'dd/MM/yyyy'}"  name="dob_<?php echo $i?>" id="dob_<?php echo $i?>" dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d",strtotime($row['dob']));?>" /></td>
 								<td style="text-align: left;"><?php echo $row['pob'];?></td>
 								<td><?php echo $row['tel'];?></td>
-								<td align="left">&nbsp;<?php echo $row['father_name'];?></td>
-								<td align="left">&nbsp;<?php echo $row['father_job'];?></td>
-								<td align="left">&nbsp;<?php echo $row['mother_name'];?></td>
-								<td align="left">&nbsp;<?php echo $row['mother_job'];?></td>
 							</tr>
 							<?php }?>	
 							<tr>
+								<input type="hidden" name="identity" id="identity" value="<?php echo $str;?>" />
 								<td colspan="2" style="border:1px solid #fff;border-top:1px solid #000;"><strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?></strong></td>
 								<td colspan="8" style="border:1px solid #fff;border-top:1px solid #000;"><strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT")."  <br />";?><?php echo $tr->translate("MALE")." ".$male;?><?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
 							</tr>
 							<tr>
-								<td colspan="3" style="text-align:center;border:1px solid #fff;border-top:1px solid #000;"><strong style="color:#000; font-size: 14px;font-family:'khmer os battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></strong><br />
-									<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("PRINCIPAL");?></strong>
-								</td><td colspan="5" style="border:1px solid #fff;"></td>
-								<td colspan="2" style="text-align:right;border:1px solid #fff;text-align: center;"><strong style="color:#000; font-size: 14px;font-family:'khmer os battambang';">ភ្នំពេញ.ថ្ងៃទី.........ខែ..........ឆ្នាំ.....</strong><br />
+								<td colspan="3" style="text-align:center;border:1px solid #fff;border-top:1px solid #000;"><strong style="color:#000; font-size: 14px;font-family:'khmer os battambang';">បានឃើញនិងឯកភាព</strong><br />
+									<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';">នាយក</strong>
+								</td><td colspan="5"></td>
+								<td colspan="2" style="text-align:right;border:1px solid #fff;border-top:1px solid #000;text-align: center;"><strong style="color:#000; font-size: 14px;font-family:'khmer os battambang';">ភ្នំពេញ.ថ្ងៃទី.........ខែ..........ឆ្នាំ.....</strong><br />
 								<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';">គ្រូប្រចាំថ្នាក់</strong>
 								</td>
 							</tr>
+							<tr style="text-align:center;border:1px solid #fff;"><td colspan="10" align="center"><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SAVE_CLOSE");?></button>
+							</td></tr>
 						</table>	
 					</td>
 				</tr>

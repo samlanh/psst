@@ -107,7 +107,7 @@
 							    	<strong style="color:#000; font-size: 12px;font-family:'Khmer MEF2';" ><?php echo $tr->translate('TYPE').' : '.$rs['service_cate']; ?></strong>
 							    </td>
 							  </tr>
-								   <tr class="hover" style="background-color: #ccc;line-height: 30px;font-weight: bold;font-size:12px; height: 22px;font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang';" align="center" >
+								   <tr class="hover" style="background-color:#ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 22px;font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang';" align="center" >
 									    <td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
 									    <td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</td>
 										<td>&nbsp;<?php echo $tr->translate('NAME_KH');?>&nbsp;</td>
@@ -163,8 +163,8 @@
 						    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
 						    <td><?php echo $rs['discount_fix']; ?> </td>
 						    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
-						    <td><?php echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?></td>
-						    <td><?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); ?></td>
+						    <td><?php if($rs['type']!=4){echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); }?></td>
+						    <td><?php if($rs['type']!=4){echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate']));}?></td>
 						    <td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
 						   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
 							<td><?php echo $rs['user']; ?></td>

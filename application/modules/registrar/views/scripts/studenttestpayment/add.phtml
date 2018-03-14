@@ -484,7 +484,7 @@ function printSave(new_stu_id,new_receipt){
 		
 		dojo.byId("lb_phone").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
 
-		dojo.byId("lb_net_amount").innerHTML = " $ "+dijit.byId("price").get('value');
+		dojo.byId("lb_net_amount").innerHTML = " $ "+dojo.number.format(dijit.byId("price").get('value'),{places:2});
 		
 		temp = "";
 		temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important;  " id="table">'
@@ -506,15 +506,15 @@ function printSave(new_stu_id,new_receipt){
 		  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Test Fee</td>';
 		  temp+='<td align="center" style="border:1px solid #000;"> </td>';
 		  temp+='<td align="center" style="border:1px solid #000;"> </td>';
-		  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('price').get('value')+'</td>';
+		  temp+='<td align="center" style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
 		  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
 		  
 		  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
 		  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
 		  
 		  temp+='<td align="center" style="border:1px solid #000;">0</td>';
-		  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('price').get('value')+'</td>';
-		  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('note').get('value')+'</td>';
+		  temp+='<td align="center" style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
+		  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
 		  
 	  temp+='</tr>';
 		
@@ -555,9 +555,9 @@ function getStudentTestInfo(){
 function getDefaultTutionfee(){
 	degree = dijit.byId("degree").get("value");
 	if(degree==1 || degree==2 || degree==3){
-		dijit.byId("price").attr("value",50);
+		dijit.byId("price").attr("value",50.00);
 	}else{
-		dijit.byId("price").attr("value",2.5);
+		dijit.byId("price").attr("value",2.50);
 	}
 }
 </script>

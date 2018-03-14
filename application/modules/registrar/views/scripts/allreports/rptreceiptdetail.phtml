@@ -88,7 +88,7 @@ table tr td strong{
 								.padd tr td{  text-align:center}
 								.padd tr th{  background-color: #ccc; }
 							</style>
-						<table border="1" class="padd" width="99%" border="1" align="center" style="white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;">
+						<table border="1" class="padd" width="99%" border="1" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;">
 							  <tr style="font-size:12px; height: 20px;" align="center" >
 							    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('Item Name');?>&nbsp;</th>
@@ -120,39 +120,58 @@ table tr td strong{
 							  </tr> <?php $total = $total + $rs['subtotal']; ?>
 							  <?php } 
 							  ?>
-							  <tr style="font-size:12px;height: 18px;border: 1px solid #fff;border-top: 1px solid #000;"​>
+							  <tr style="font-size:12px;height:15px;border: 1px solid #fff;border-top: 1px solid #000;"​>
 								  	<td style="" colspan="9"></td>
 								  	<td style="text-align: left;"><?php echo $tr->translate('Total Payment');?></td>
 								  	<td>$ <?php echo $this->rr['grand_total'];?></td>
 							  </tr>
-							  <!-- <tr style="font-size:12px;height: 18px; border: 1px solid #fff;"​>
+							 <tr style="font-size:12px;height: 15px; border: 1px solid #fff;"​>
 								  	<td style=" " colspan="9"><label id="lbl_moneykhmer"></label></td>
-								  	<td style="text-align: left;"><?php //echo $tr->translate('Fine');?></td>
-								  	<td>$ <?php //echo $this->rr['fine'];?></td>
+								  	<td style="text-align: left;"><?php echo $tr->translate('Fine');?></td>
+								  	<td>$ <?php echo $this->rr['fine'];?></td>
 							  </tr> 
-							  <tr style="font-size:12px;height: 18px;border: 1px solid #fff;"​>
+							  <tr style="font-size:12px;height: 15px;border: 1px solid #fff;"​>
 								  	<td style="" colspan="9"></td>
-								  	<td style="text-align: left;"><?php //echo $tr->translate('Credit Memo');?></td>
-								  	<td>$ <?php // echo $this->rr['credit_memo'];?></td>
-							  </tr>-->
-							  <tr style="font-size:12px;height:18px;border: 1px solid #fff;"​>
+								  	<td style="text-align: left;"><?php echo $tr->translate('Credit Memo');?></td>
+								  	<td>$ <?php echo $this->rr['credit_memo'];?></td>
+							  </tr>
+							  <tr style="font-size:12px;height:15px;border: 1px solid #fff;"​>
 								  	<td style="" colspan="9"></td>
 								  	<td style="text-align: left;"><?php echo $tr->translate('Deduct');?></td>
 								  	<td>$ <?php echo $this->rr['deduct'];?></td>
 							  </tr>
-							  <tr style="font-size:12px;height: 18px;border: 1px solid #fff;"​>
+							  <tr style="font-size:12px;height: 15px;border: 1px solid #fff;"​>
 								  	<td style=" border: 1px solid #fff;" colspan="9">
 								  		<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
+											<tr>
+												<td width="33%" align="center">Cashier</td>
+												<td width="34%" align="center">Customer</td>
+												<td width="33%" align="center">Verified By</td>
+											</tr>	
 											<tr>
 												<td width="33%" align="center"></td>
 												<td width="34%" align="center"></td>
 												<td width="33%" align="center"> </td>
 											</tr>
+											<tr style="height:15px;">
+														<td align="center">
+															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 5px;"> 
+																<?php 
+// 																   $session_user=new Zend_Session_Namespace('authstu');
+// 																   $last_name=$session_user->last_name;
+// 																   $username = $session_user->first_name;
+																   echo "".$this->rr['last_name']." ".$this->rr['user'];
+																?>
+																<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime($this->rr['create_date']));?></div>
+															</div>
+														</td>
+														<td align="center"></td>
+														<td align="center"></td>
+													</tr>	
 										</table>	
 								  	</td>
-								  	<td style="text-align: left !important;"><strong style="text-align: left !important;"><?php echo $tr->translate('Net Amount');?></strong></td>
-								  	<td>
-								  	<strong>$ <?php echo $this->rr['net_amount'];?></strong></td>
+								  	<td style="text-align: left !important;" valign="top"><strong style="text-align: left !important;"><?php echo $tr->translate('Net Amount');?></strong></td>
+								  	<td valign="top"><strong >$ <?php echo $this->rr['net_amount'];?></strong></td>
 							  </tr>
 							</table>
 						</td>

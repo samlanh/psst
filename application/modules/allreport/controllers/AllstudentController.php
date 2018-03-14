@@ -514,13 +514,14 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function rptStudentListAction()
 	{
 // 		rpt-student-list
-		
+		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$id=$this->getRequest()->getParam("id");
 		if(empty($id)){
 			$this->_redirect("/allreport/allstudent/student-group");
 		}
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
+			$db->submitDateList($search);
 		}
 		else{
 			$search = array(
@@ -529,7 +530,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					);
 		}
 		$this->view->search = $search;
-		$db = new Allreport_Model_DbTable_DbRptGroup();
+		
 		$row = $db->getStudentGroup($id,$search,1);
 		$this->view->rs = $row;
 		$rs= $db->getGroupDetailByID($id);

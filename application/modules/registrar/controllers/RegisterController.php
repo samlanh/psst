@@ -201,7 +201,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
         $form_row=$db->getRegisterById($id);
         $is_start=$form_row['is_start'];
         if($is_start==0 || $form_row['is_void']>0){
-        	Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can not Edit'), self::REDIRECT_URL . '/register/index');
+        	//Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can not Edit'), self::REDIRECT_URL . '/register/index');
         }
         
     	$_db = new Application_Model_DbTable_DbGlobal();

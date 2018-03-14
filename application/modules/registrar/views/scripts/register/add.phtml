@@ -1231,13 +1231,13 @@ function getOldStudentInfo(){
 		handleAs:"json",
 		load: function(data) {
 			   if(data){
-					//alert(data.group_id);
-					if(data.group_id != null){
+				   if(data.group_id!= null && data.group_id>0){
 						dijit.byId('group').attr('value',data.group_id);
 						getInfoBygroup();
 					}else{
-						//alert(data.degree);
-						//alert(data.grade);
+						if(student_id==516){
+							alert("alert data please contact administrator");
+						}
 						dijit.byId('group').attr('value','-1');
 						dijit.byId('study_year').attr('value',data.academic_year);
 						dijit.byId('dept').attr('value',data.degree);

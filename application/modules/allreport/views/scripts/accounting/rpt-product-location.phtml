@@ -61,7 +61,9 @@
 								<!-- <td>&nbsp;<?php //echo $tr->translate('BAR_CODE');?>&nbsp;</td> -->
 								<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('UNIT_PRICE');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
@@ -71,12 +73,14 @@
 						<?php 
 							$branch_name =''; 
 						
-							$i=0;$total=0;
+							$i=0;
+							$total_sell=0;
+							$total_cost=0;
 							if(!empty($this->pro_loc)) foreach ($this->pro_loc AS $rs) { $i++;
 						   if($branch_name!=$rs['brand_name']){
 						  ?>
 							<tr class="hover" style="font-size:15px; height: 18px;"​ align="center">
-							    <td colspan="10" ><strong><?php echo $rs['brand_name']; ?></strong></td>
+							    <td colspan="12" ><strong><?php echo $rs['brand_name']; ?></strong></td>
 							</tr>
 							<?php } $branch_name=$rs['brand_name'];?>
 							<tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
@@ -88,9 +92,12 @@
 							    <td align="left">&nbsp;<?php echo $rs['pro_name'];?></td>
 							    <td><?php echo number_format($rs['pro_qty'],0); ?></td>
 							    <td>&nbsp;&nbsp;<?php echo number_format($rs['pro_price'],3);?></td>
-							    <td><span style="float: right;"><?php echo number_format($rs['pro_qty']*$rs['pro_price'],2);?>&nbsp;</span></td>
+							    <td><span style="float: right;"><?php echo number_format($rs['pro_qty']*$rs['cost'],2);?>&nbsp;</span></td>
+								<td><span style="float: right;"><?php echo number_format($rs['pro_price'],2);?>&nbsp;</span></td>
+								<td><span style="float: right;"><?php echo number_format($rs['pro_qty']*$rs['pro_price'],2);?>&nbsp;</span></td>
 								    <?php 
-								    	$total = $total+($rs['pro_qty']*$rs['pro_price'])
+								    $total_cost = $total_cost+($rs['pro_qty']*$rs['cost']);
+								    $total_sell = $total_sell+($rs['pro_qty']*$rs['pro_price']);
 								    ?>
 							    <td><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
 							    <td><?php echo $rs['note']; ?></td>
@@ -100,9 +107,14 @@
 									} 
 								?>
 							<tr>
-								<td colspan="8"></td>
-								<td>&nbsp;<strong><?php echo $tr->translate("TOTAL");?></strong></td>
-								<td>&nbsp;$&nbsp;<?php echo number_format($total,2);?></td>
+								<td colspan="9" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"></td>
+								<td colspan="2">&nbsp;<strong><?php echo $tr->translate("TOTAL_UNIT_PRICE");?></strong></td>
+								<td>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?></td>
+							</tr>
+							<tr>
+								<td colspan="9" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"></td>
+								<td colspan="2">&nbsp;<strong><?php echo $tr->translate("TOTAL_SELL_PRICE");?></strong></td>
+								<td>&nbsp;$&nbsp;<?php echo number_format($total_sell,2);?></td>
 							</tr>
 						</table>	
 					</td>

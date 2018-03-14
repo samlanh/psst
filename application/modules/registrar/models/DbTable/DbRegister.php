@@ -116,7 +116,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	function addRegister($data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-		$stu_code = $this->getNewAccountNumber($data['dept']);
+		$stu_code = $data['stu_id'];//$this->getNewAccountNumber($data['dept']);
 		$receipt_number =$data['receipt_no']; //$this->getRecieptNo();
 		
 		try{
@@ -1810,6 +1810,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$acc_no = $acc_no-1;
     	}elseif($dept_id==6){  //gesl
     		$acc_no = $acc_no+493;
+    	}elseif($dept_id==8){  //gesl
+    		$acc_no = $acc_no+493;
     	}
     	$new_acc_no= (int)$acc_no+1;
     	$length = strlen((int)$new_acc_no);
@@ -1910,7 +1912,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		(SELECT scholarship_amount FROM rms_student_payment WHERE student_id=$stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_amount,
     		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.stu_id ORDER BY sgh.gd_id DESC LIMIT 1) as group_id
     			 FROM rms_student as s    
-    		WHERE s.stu_id=$stu_id LIMIT 1";
+    		WHERE s.stu_id=$stu_id LIMIT 1 ";
     	return $db->fetchRow($sql);
     }
     ///select degree searching 

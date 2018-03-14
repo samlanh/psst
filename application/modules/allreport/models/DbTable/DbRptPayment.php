@@ -19,6 +19,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				(select name_kh from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				sp.receipt_number,
     				sp.create_date,
+    				(select last_name from rms_users where id=sp.user_id LIMIT 1) as last_name,
     				(select first_name from rms_users where id=sp.user_id LIMIT 1) as user,
     				sp.grand_total,
     				sp.credit_memo,
@@ -258,7 +259,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	}elseif($order_no==2){//used order by student 
     		$order=" ORDER BY sp.student_id DESC ";
     	}else{
-    		$order=" ORDER BY spd.type DESC, p.ser_cate_id DESC ";
+    		$order=" ORDER BY spd.type DESC, p.ser_cate_id DESC,sp.id DESC ";
     	}
     	return $db->fetchAll($sql.$where.$order);
     }

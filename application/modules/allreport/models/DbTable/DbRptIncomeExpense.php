@@ -9,7 +9,6 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
     }
     function getAllIncomeExpense($search){
     	$db=$this->getAdapter();
-    	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	
@@ -38,21 +37,37 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
     		$s_where[] = " invoice LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-
     	return $db->fetchAll($sql.$where.$order);
     }
-	public function getAllexspan(){
+	public function getAllexspan($search){//report expense
 	   $db=$this->getAdapter();
 	   $sql="SELECT e.* ,
 				b.branch_namekh AS branch ,
-				u.user_name ,
-				(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type) AS pay
+				u.user_name ,u.first_name,
+				(select name_en from rms_view where rms_view.type=8 and key_code=payment_type) as payment_type,
+				(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type LIMIT 1) AS pay
 				
 			FROM ln_expense AS e ,
-			 rms_branch AS b ,
+				rms_branch AS b ,
 				 rms_users AS u 
-			WHERE b.br_id=e.branch_id AND e.user_id=u.id";
-	   return $db->fetchAll($sql);
+			WHERE b.br_id=e.branch_id 
+	   			AND e.user_id=u.id
+	   			AND e.status=1 ";
+	   
+	   $where="";
+	   $from_date =(empty($search['start_date']))? '1': " e.date  >= '".$search['start_date']." 00:00:00'";
+	   $to_date = (empty($search['end_date']))? '1': " e.date <= '".$search['end_date']." 23:59:59'";
+	   $where = " AND ".$from_date." AND ".$to_date;
+	   
+	   if(!empty($search['txtsearch'])){
+	   	$s_where = array();
+	   	$s_search = addslashes(trim($search['txtsearch']));
+	   	$s_where[] = " e.invoice LIKE '%{$s_search}%'";
+	   	$s_where[] = " e.title LIKE '%{$s_search}%'";
+	   	$s_where[] = " e.description LIKE '%{$s_search}%'";
+	   	$where .=' AND ( '.implode(' OR ',$s_where).')';
+	   }
+	   return $db->fetchAll($sql.$where);
 	}
 	public function getAllexspanByid($id){
 	    $db=$this->getAdapter();

@@ -15,8 +15,9 @@ class Allreport_Model_DbTable_DbRptProductsold extends Zend_Db_Table_Abstract
 				  spd.`fee`,
 				  spd.`subtotal`,
 				  spd.`paidamount`,
+				  sp.receipt_number,
 				  sp.`create_date`,
-				  (SELECT name_kh FROM `rms_pro_category` WHERE rms_pro_category.id=p.ser_cate_id ) as category_name,
+				  (SELECT name_kh FROM `rms_pro_category` WHERE rms_pro_category.id=p.ser_cate_id LIMIT 1) as category_name,
 				  (select first_name from rms_users where rms_users.id = sp.`user_id` LIMIT 1) as user
 				FROM
 				  `rms_student_payment` AS sp,
@@ -39,14 +40,12 @@ class Allreport_Model_DbTable_DbRptProductsold extends Zend_Db_Table_Abstract
     	if(!empty($search['title'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['title']));
+    		$s_where[]= " receipt_number LIKE '%{$s_search}%'";
     		$s_where[]= " (SELECT stu_code FROM `rms_student` WHERE stu_id = student_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]= " (SELECT stu_enname FROM `rms_student` WHERE stu_id = student_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]=" (SELECT title FROM `rms_program_name` WHERE `rms_program_name`.`service_id` = spd.service_id LIMIT 1) LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-//     	if(!empty($search['branch_id'])){
-//     		$where.=" AND sp.branch_id=".$search['branch_id'];
-//     	}
     	if(!empty($search['study_year'])){
     		$where.=" AND sp.year=".$search['study_year'];
     	}

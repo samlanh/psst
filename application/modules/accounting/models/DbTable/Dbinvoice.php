@@ -22,14 +22,15 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					rms_student AS s ,
 					rms_users AS u 
 				WHERE 
-				        stu_id = student_id 
-					AND 
-					    v.user_id=u.id";
+				    stu_id = student_id 
+					AND v.user_id=u.id
+					AND s.status=1 ";
 		
 		$where="";
     	$from_date =(empty($search['form_date']))? '1': " v.input_date >= '".$search['form_date']." 00:00:00'";
     	$to_date = (empty($search['to_date']))? '1': " v.input_date <= '".$search['to_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
+    	
     	if(!empty($search['search'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['search']));
@@ -41,11 +42,23 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$s_where[]= " v.totale_amount LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-    	if($search['student_id'] !=""){
-    		$where.=" AND v.student_id=".$search['student_id'];
+    	
+    	
+    	if($search['stu_code']!=""){
+    		$where.=" AND v.student_id=".$search['stu_code'];
     	}
-    	if($search['student_name'] !=""){
-    		$where.=" AND v.student_id=".$search['student_name'];
+    	if($search['stu_name'] !=""){
+    		$where.=" AND v.student_id=".$search['stu_name'];
+    	}
+    	if($search['group']!=""){
+    		$where.=" AND s.group_id=".$search['group'];
+    	}
+    	
+    	if($search['degree']!=""){
+    		$where.=" AND s.degree=".$search['degree'];
+    	}
+    	if($search['grade'] !=""){
+    		$where.=" AND s.grade=".$search['grade'];
     	}
 		$order=" ORDER BY v.id DESC";
 		return $db->fetchAll($sql.$where.$order);

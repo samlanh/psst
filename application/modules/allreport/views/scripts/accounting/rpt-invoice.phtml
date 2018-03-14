@@ -14,22 +14,13 @@
 	<table style="width: 100%">
 		<tr>
 			<td><input dojoType="dijit.form.TextBox" class="fullside" id="search" name="search" value="<?php echo $this->rssearch['search'];?>" type="text" ></td>
-			<td> 
-				<select type="text" id="student_id" name="student_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setname();"  >
-					<option value="">Select Student Code</option>
-					<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
-					<option <?php if($this->rssearch['student_id']==$student_code['stu_id']){echo "selected";}?> value="<?php echo $student_code['stu_id'];?>"><?php echo $student_code['stu_code']?></option>
-					<?php }}?>
-				</select>
-			</td>
-			<td>
-				<select type="text" id="student_name" name="student_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
-					<option value="">Select Student Name</option>
-					<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
-					<option <?php if($this->rssearch['student_name']==$student_name['stu_id']){echo "selected";}?> value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
-					<?php }}?>
-				</select>
-			</td>
+			<td><?php echo $frm->getElement("stu_code");?></td>
+			<td><?php echo $frm->getElement("stu_name");?></td>
+			<td><?php echo $frm->getElement("group");?></td>
+			<td><?php echo $frm->getElement("degree");?></td>
+		</tr>
+		<tr>	
+			<td><?php echo $frm->getElement("grade");?></td>	
 			<td><?php echo $frm->getElement("start_date");?></td>
 			<td><?php echo $frm->getElement("end_date");?></td>		
 			<td>
@@ -53,8 +44,9 @@
 					<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> 
 				</td>
 				<td align="center" width="70%">
+					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
 					<strong style="padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_INVOICE');?></strong> 
-					<div><?php echo date("d/m/Y",strtotime($this->rssearch['start_date'])).' '.$tr->translate('TO').' ';echo date("d/m/Y",strtotime($this->rssearch['end_date']));?></div>
+					<?php if(!empty($this->search['start_date'])){?><div><?php echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';echo date("d/m/Y",strtotime($this->search['end_date']));?></div><?php }?>
 				</td>
 				<td width="15%" align="center">
 				</td>
@@ -62,34 +54,53 @@
 			<tr>
 				<td colspan="3">
 					<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
-						<tr style="background: #ccc;font-size: 14px;"">
+						<tr style="background: #ccd9ff;font-size: 13px;font-weight: bold;">
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_ID");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("SEX");?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_DATE");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_NUM");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_DATE");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INPUT_DATE");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("REMARK");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></td>
 						</tr>
 						<?php 
 						$gender=array(1=>"Male",2=>"Female");
 						if(!empty($this->all_invoice)){ foreach($this->all_invoice as $key=>$rs){ $key=$key+1; ?>
 						<tr style="font-size: 12px;">
 							<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
-							<td style="border:1px solid #000;text-align: center;"><a href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['stu_khname']; ?></a></td>
+							<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
+							<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['stu_khname']; ?></a></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['sex']; ?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['invoice_num']; ?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs['input_date'])); ?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['remark']; ?></td>
 							<td style="border:1px solid #000;text-align: center;">$ <?php echo number_format($rs['totale_amount'],2); ?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['first_name'] ?></td>
 						</tr>
 						<?php
 						}}
 						?>
+					</table>
+				</td>
+			</tr>
+			<tr >
+				<td colspan="3" width="100%">
+					<table width="100%" style="font-family:'Khmer OS Battambang';">
+						<tr>
+							<td  width="25%" align="center">
+								<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+							</td>
+							<td  width="50%">
+								&nbsp;
+							</td>
+							<td align="center"  width="25%">
+								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+							</td>
+						</tr>
 					</table>
 				</td>
 			</tr>

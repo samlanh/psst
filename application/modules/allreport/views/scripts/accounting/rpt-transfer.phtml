@@ -1,0 +1,80 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('SRMS | Report Student Receivable'); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm =  $this->form_search;
+	$formList = new Application_Form_Frmtable();
+?>
+<form
+	action=" "
+	dojoType="dijit.form.Form" method="post">
+	<table style="width:80%" style="width:100 px;">
+	  <tr> 
+		 <td><?php echo $frm->getElement("title");?></td>
+		 <td><?php echo $frm->getElement("start_date");?></td>
+		 <td><?php echo $frm->getElement("end_date");?></td>
+		 <td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+   	  </tr>
+	</table>
+</form>
+<style>
+#footer{display: none;}
+</style>	
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;padding: 15px;">
+	<div id="divPrint " id="exportExcel">
+		<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
+			<tr >
+				<td width="15%" align="center">
+					<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+				</td>
+				<td width="70%" align="center">
+					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
+				    <strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('TRANSFER')?></strong><br />
+					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+				</td>
+				<td width="15%" align="center">
+				</td>
+			</tr>
+		</table>
+		<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+			<tr style="background: #ccd9ff; white-space: bold; font-size: 13px;font-weight: bold;">
+				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></th>
+				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TRANSFER_NUMBER");?></th>
+				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TRANSFER_DATE");?></th>
+				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("FROM_LOCATION");?></th>
+				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TO_LOCATION");?></th>
+				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("NOTE");?></th>
+				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></th>
+				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STATUS");?></th>
+			</tr>
+			<?php if(!empty($this->all_transfer)){ foreach($this->all_transfer as $key=>$rs){ $key=$key+1; ?>
+			<tr style="font-size: 12px;">
+				<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-transferdetail/id/<?php echo $rs['id'];?>"><?php echo $rs['transfer_no']; ?></a></td>
+				<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-transferdetail/id/<?php echo $rs['id'];?>"><?php echo $rs['transfer_date']; ?></a></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['fromlocation']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['tolocation']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['note']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['user_name']; ?></td>
+				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['status']; ?></td>
+			</tr>
+			<?php
+			}}
+			?>
+		</table>
+		<table width="100%" style="font-family:'Khmer OS Battambang';">
+			<tr>
+				<td  width="25%" align="center">
+					<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+				</td>
+				<td  width="50%">
+					&nbsp;
+				</td>
+				<td align="center"  width="25%">
+					<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+				</td>
+			</tr>
+		</table>
+	</div>	
+</div>

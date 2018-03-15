@@ -392,8 +392,10 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 					'<option value="09.15">09:15 AM </option>'.
 					'<option value="09.30">09:30 AM </option>'.
 					'<option value="09.40">09:40 AM </option>'.
+					'<option value="09.50">09:50 AM </option>'.
 					'<option value="10.00">10:00 AM </option>'.
 					'<option value="10.15">10:15 AM </option>'.
+					'<option value="10.20">10:20 AM </option>'.
 					'<option value="10.30">10:30 AM </option>'.
 					'<option value="10.40">10:40 AM </option>'.
 					'<option value="11.00">11:00 AM </option>'.

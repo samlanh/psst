@@ -2,16 +2,6 @@
 	$request=Zend_Controller_Front::getInstance()->getRequest();
 	$action = $request->getActionName();
 	$baseurl  = $this->baseUrl();
-	$other=$acl=$this->url(array('module'=>'allreport','controller'=>'other','action'=>'index'), null, true);
-	$registrar=$acl=$this->url(array('module'=>'allreport','controller'=>'receiptionist','action'=>'index'), null, true);
-	$accoutning=$acl=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'index'), null, true);
-	$fundation=$acl=$this->url(array('module'=>'allreport','controller'=>'foundation','action'=>'index'), null, true);
-	$allstudent=$acl=$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'index'), null, true);
-	$otherExpense = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-other-expense'), null, true);
-	$otherIncome = $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-other-income'), null, true);
-	$library=$acl=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'index'), null, true);
-	
-	$dailyReport = $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'rpt-daily'), null, true);
 	
 	/*--------------------URLs link display--------------------------*/
 		  $tr=Application_Form_FrmLanguages::getCurrentlanguage();
@@ -26,21 +16,6 @@
 		  	foreach ($arr_module as $key => $rs){
 		  		
 		  		$lblcontroller = $rs['label'];
-		  		// 			if($rs['controller']=='index' AND $rs['module']=='group' ){
-		  		// 				$lblcontroller='CLIENT_INFO';
-		  		// 			}
-		  		// 			if($rs['controller']=='index' AND $rs['module']=='loan' ){
-		  		// 				$lblcontroller='IL_DISBURSE';
-		  		// 			}
-		  		// 			if($rs['controller']=='index' AND $rs['module']=='other' ){
-		  		// 				$lblcontroller='province';
-		  		// 			}
-		  		// 			if($rs['controller']=='loantype' AND $rs['module']=='other' ){
-		  		// 				$lblcontroller='OTHER';
-		  		// 			}
-		  		// 			if($rs['controller']=='term' AND $rs['module']=='other' ){
-		  		// 				$lblcontroller='termcondition';
-		  		// 			}
 		  		if($module!=$rs['module']){
 		  			$newarray= array($rs['controller']=>'<li><a href="">'.$tr->translate(($lblcontroller)).'</a></li>');
 		  			$menu[$rs['module']]= $newarray;
@@ -53,14 +28,11 @@
 		  	}
 		  }
 		  $arr_param_menu = $menu;
-		
-	
 
 	?>
 	<div id="header-left">
 		<ul>
 			<?php 
-	// 				$request=Zend_Controller_Front::getInstance()->getRequest();
 				if($request->getModuleName()!='report'){
 					if($request->getModuleName()!='default' AND $action!='changepassword' ){
 						$dc=new Application_Model_Decorator();					

@@ -213,6 +213,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			$to_date = (empty($search['end_date']))? '1': "st.paid_date <= '".$search['end_date']." 23:59:59'";
 			
 			$sql="SELECT
+					st.*,
 					st.receipt_no,
 					st.paid_date,
 					st.kh_name,
@@ -317,7 +318,21 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		
 	}
 	
-	   
+	function getStudentTestPaymentById($id){
+		$db=$this->getAdapter();
+		$sql="select 
+					*,
+					(select name_en from rms_view where type=2 and key_code=sex) as sex,
+					(select en_name from rms_dept where dept_id = degree) as degree, 
+					(select CONCAT(first_name,'-',last_name) from rms_users as u where u.id = user_id) as user
+				from 
+					rms_student_test 
+				where 
+					id = $id 
+				limit 1
+			";
+		return $db->fetchRow($sql);
+	}
 }
 
 

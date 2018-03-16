@@ -202,12 +202,13 @@
 									<?php $i=0;foreach($this->stu_test as $stu_test){ $i++;?>
 										<tr class="hover" style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $i;?></td>
-											<td style="border: 1px solid #000;"><?php echo $stu_test['receipt_no'];?></td>
-											<td style="border: 1px solid #000;"><?php echo $stu_test['paid_date'];?></td>
-											<td style="border: 1px solid #000;text-align: left;"><?php echo $stu_test['kh_name'].'-'.$stu_test['en_name'];?></td>
+											<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-test-payment','id'=>$stu_test['id']));?>" target="blank"><?php echo $stu_test['receipt_no']; ?></a></td>
+											
+											<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-test-payment','id'=>$stu_test['id']));?>" target="blank"><?php echo $stu_test['paid_date']; ?></a></td>
+											<td style="border: 1px solid #000;text-align: left;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-test-payment','id'=>$stu_test['id']));?>" target="blank"><?php echo $stu_test['kh_name'].'-'.$stu_test['en_name']; ?></a></td>
 											<td style="border: 1px solid #000;"><?php echo $stu_test['sex'];?></td>	
 											<td style="border: 1px solid #000;"><?php echo $stu_test['phone'];?></td>
-											<td style="border: 1px solid #000;"><?php echo $stu_test['serial'];?></td>
+											<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-test-payment','id'=>$stu_test['id']));?>" target="blank"><?php echo $stu_test['serial']; ?></a></td>
 											<td style="border: 1px solid #000;"><?php echo $stu_test['degree'];?></td>
 											<td style="border: 1px solid #000;"><?php echo $stu_test['old_school'];?></td>
 											<td style="border: 1px solid #000;"><?php echo $stu_test['old_grade'];?></td>
@@ -299,9 +300,9 @@
 										<?php $i=0;$total_expense_kh=0;$total_expense_dollar=0;foreach($this->expense as $row){ $i++;?>
 										<tr class="hover" style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $i;?></td>
-											<td style="border: 1px solid #000; text-align: left;">&nbsp;<?php echo $row['title'];?></td>
-											<td style="border: 1px solid #000;"><?php echo $row['invoice'];?></td>
-											<td align="center" style="border: 1px solid #000;"><?php echo $row['payment_type'];?></td>	
+											<td style="border: 1px solid #000; text-align: left;">&nbsp;<a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['title']; ?></a></td>
+											<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice']; ?></a></td>
+											<td align="center" style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['payment_type']; ?></a></td>	
 											<td style="border: 1px solid #000;"><?php echo '$ '.$row['total_amount'];?></td>
 											<td style="border: 1px solid #000;"><?php echo date('d-M-Y',strtotime($row['date']));?></td>
 											<td style="border: 1px solid #000;"><?php echo $row['name'];?></td>

@@ -18,7 +18,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 					'date'=>$data['Date'],
 					'status'=>$data['Stutas'],
 					'user_id'=>$this->getUserId(),
-					'create_date'=>date('Y-m-d'),
+					'create_date'=>date('Y-m-d H:i:s'),
 				);
 		$expend_id = $this->insert($arr);
 		$ids = explode(',', $data['identity']);
@@ -46,7 +46,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 					'cheque_no'=>$data['cheque_num'],
 					'status'=>$data['Stutas'],
 					'user_id'=>$this->getUserId(),
-					'create_date'=>date('Y-m-d'),
+					//'create_date'=>date('Y-m-d H:i:s'),
 				);
 	$where=" id = ".$data['id'];
 	$this->update($arr, $where);

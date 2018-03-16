@@ -29,9 +29,16 @@
 		<td> <?php echo $frm->getElement("user");?></td>
 		<td>
    			<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>> Select result status </option>
-   				<option value="0" <?php if($this->search['result_status']==0){echo "selected='selected'";}?>> Result not updated </option>
-   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>> Result updated </option>
+   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>>ប្រភេទលទ្ធផល </option>
+   				<option value="0" <?php if($this->search['result_status']==0){echo "selected='selected'";}?>> មិនទាន់បាន </option>
+   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>> បានទទួល </option>
+   			</select>
+   		</td>
+   		<td>
+   			<select name="register_status" id="register_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
+   				<option value="" <?php if($this->search['register_status']==""){echo "selected='selected'";}?>>ប្រភេទចុះឈ្មោះ </option>
+   				<option value="0" <?php if($this->search['register_status']==0){echo "selected='selected'";}?>> មិនទាន់ចុះឈ្មោះ </option>
+   				<option value="1" <?php if($this->search['register_status']==1){echo "selected='selected'";}?>> បានចុះឈ្មោះ </option>
    			</select>
    		</td>
 		<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
@@ -94,6 +101,7 @@
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("CREATE_DATE"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
+								<td rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
 							  </tr>
 							 <tr style="font-size:12px; height: 20px; white-space:nowrap;background: #ccd9ff !important; line-height: 20px; font-weight: bold;" align="center">
@@ -122,7 +130,8 @@
 								    <td><?php echo $rs['note']; ?></td>
 								    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
 									<td><?php echo $rs['user_id'];?></td>								    
-								    <td><?php echo $rs['updated_result']; ?></td>								    
+								    <td <?php if($rs['updated_result']==0){echo "style='color:red'";}?>><?php echo $rs['result_status']; ?></td>
+								    <td <?php if($rs['register']==0){echo "style='color:red'";}?>><?php echo $rs['register_status'];?></td>								    
 								  </tr>
 							  <?php } }?>
 						</table>

@@ -88,8 +88,8 @@ fieldset{  background:none;}
 							<td><?php echo $tr->translate("TYPE");?></td>
 							<td >
 								<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="pro_type" name="pro_type" type="text">								
-									<option value="1" <?php if($this->pro_row['pro_type']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("Cut Stock");?></option>
-									<option value="2" <?php if($this->pro_row['pro_type']==2){echo 'selected="selected"';}?>><?php echo $tr->translate("Cut Stock Later");?></option>
+									<option value="1" <?php if($this->pro_row['pro_type']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("PRODUCT_FOR_SELL");?></option>
+									<option value="2" <?php if($this->pro_row['pro_type']==2){echo 'selected="selected"';}?>><?php echo $tr->translate("OFFICE_MATERIAL");?></option>
 								</select>
 							</td>
 							<td style="width: 160px"><?php echo $tr->translate("UNIT_COST");?></td>

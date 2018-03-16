@@ -24,6 +24,7 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 	    	$to_date = (empty($search['end_date']))? '1': "st.create_date <= '".$search['end_date']." 23:59:59'";
 	    	
 	    	$sql=" SELECT 
+	    			  st.*,
 					  st.id,
 					  st.serial,
 					  st.stu_code,
@@ -41,14 +42,14 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 		   			  (SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = st.session_result))LIMIT 1) AS `session`,
 					  st.note,
 					  (SELECT first_name FROM rms_users WHERE rms_users.id = st.user_id limit 1) AS user_id,
-					  (select name_en from rms_view where type=15 and key_code = updated_result LIMIT 1) as updated_result
+					  (select name_kh from rms_view where type=15 and key_code = updated_result LIMIT 1) as result_status,
+					  (select name_kh from rms_view where type=16 and key_code = register LIMIT 1) as register_status
 					  
 					FROM
 					  rms_student_test AS st
 					WHERE 
 						status=1  
 						and st.kh_name!=''
-						and register=0
 						$branch_id  
 	    		";
 	    	
@@ -72,7 +73,10 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 	    	if(!empty($search['degree'])){
 	    		$where .= " and degree = ".$search['degree'];
 	    	}
-	    	if(!empty($search['result_status'])){
+	    	if($search['register_status']!=''){
+	    		$where .= " and register = ".$search['register_status'];
+	    	}
+	    	if($search['result_status']!=''){
 	    		$where .= " and updated_result = ".$search['result_status'];
 	    	}
 	    	$order=" ORDER By st.id DESC ";

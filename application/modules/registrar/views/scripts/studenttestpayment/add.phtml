@@ -232,32 +232,38 @@ function loading(){
 		</style>
 		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:10.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
-				<!-- <tr height="40px;">
-					<td colspan="10"  style="" align="center" valign="top">
-						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
-							<tr>
-								<td width="30%">
-									<img style="height: 80px" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-								</td>
-								<td width="40%" align="center" valign="top" style="font-size: 16px;font-weight: bold;">OFFICIAL RECEIPT
-									<div><img height="20px" style="margin-top: -2px" src="<?php echo $this->baseUrl().'/images/fonttateng.png'?>"></div>
-								</td>
-								<td width="30%" valign="center" align="center">
-									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
-									<span style="font-size: 14px;font-weight: bold;font-family: arail">Pmt Date : <label id="lb_date" class=" one bold"></label></span>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr> -->
+				
+				<?php if($this->data['show_header_receipt']==1){?>
+					<tr height="40px;">
+						<td colspan="10"  style="" align="center" valign="top">
+							<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
+								<tr>
+									<td width="30%">
+										<img style="height: 80px" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+									</td>
+									<td width="40%" align="center" valign="top" style="font-size: 16px;font-weight: bold;">OFFICIAL RECEIPT
+										<div><img height="20px" style="margin-top: -2px" src="<?php echo $this->baseUrl().'/images/fonttateng.png'?>"></div>
+									</td>
+									<td width="30%" valign="center" align="center">
+										<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
+										<span style="font-size: 14px;font-weight: bold;font-family: arail">Pmt Date : <label id="lb_date" class=" one bold"></label></span>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr> 
+				<?php }else{?>
+					<tr height="115px;" >
+						<td colspan="10"  style="" align="center" valign="top"></td>
+					</tr>
+				<?php }?>
+				
 				<style>
 					.bold{
 						font-weight:bold;
 						}
 				</style>
-				<tr height="115px;" >
-					<td colspan="10"  style="" align="center" valign="top"></td>
-				</tr>
+				
 				<tr height="40px;">
 					<td colspan="10"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >

@@ -259,8 +259,11 @@
 	}
 //calculator date by select term_payment
 	function getDateTerm() {
-		payment_term=dijit.byId('payment_term').get('value');
-		start_date=dijit.byId('start_date').get('value');
+		start_end=dijit.byId('start_end').get('value');
+		//alert(start_end);
+		if(start_end==-1){
+			payment_term=dijit.byId('payment_term').get('value');
+			start_date=dijit.byId('start_date').get('value');
 			var a = new Date(start_date);
 			if(payment_term==1){
 				var mm = a.getMonth() +1+ 1;
@@ -282,7 +285,8 @@
 			var y = a.getFullYear();
 			var epx_date = y + '-'+ mm + '-'+dd ;
 			
-			//dijit.byId('end_date').attr('value',epx_date);	
+			dijit.byId('end_date').attr('value',epx_date);
+		}			
 	}
 	function getTestFee(){
 		student_type = dijit.byId('student_type').get('value');
@@ -2214,9 +2218,7 @@ function getOldVildateToStartDateRegister(){
 				if(data){
 					dijit.byId('start_date').attr('value',data.start_date);
 					dijit.byId('end_date').attr('value',data.end_date);
-				}else{
-					//getDateTerm();
-				}	
+				}
 			},
 			error: function(err) {
 				alert(err);

@@ -16,6 +16,7 @@ class Registrar_RptStudentTestController extends Zend_Controller_Action {
     					'user'=>'',
     					'branch_id'=>0,
     					'result_status' => '',
+    					'register_status' => '',
     					'start_date'=> null,
     					'end_date'=>date('Y-m-d'),
     			);
@@ -28,7 +29,6 @@ class Registrar_RptStudentTestController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::message("Application Error");
     		echo $e->getMessage();
     	}
-    	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);

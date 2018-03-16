@@ -32,7 +32,8 @@
 					<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> 
 				</td>
 				<td align="center" width="70%">
-					<strong style="padding-left: 20px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_REQUEST_PRODUCT_DETAIL');?></strong> 
+					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
+					<strong style="padding-left: 10px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_REQUEST_PRODUCT_DETAIL');?></strong> 
 					<div><?php echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';echo date("d/m/Y",strtotime($this->search['end_date']));?></div>
 				</td>
 				<td width="15%" align="center">
@@ -41,7 +42,7 @@
 			<tr>
 				<td colspan="3">
 					<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
-						<tr style="background: #ccc;font-size: 14px;"">
+						<tr style="background: #CCD9FF;font-size: 12px; line-height: 30px;font-weight: bold;" align="center">
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
 							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("BRANCH");?></td>
 							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("REQUEST_NO");?></td>
@@ -72,6 +73,19 @@
 						<?php
 						}
 						?>
+					</table>
+					<table width="100%" style="font-family:'Khmer OS Battambang';">
+					<tr>
+						<td  width="25%" align="center">
+							<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+						</td>
+						<td  width="50%">
+							&nbsp;
+						</td>
+						<td align="center"  width="25%">
+							<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+						</td>
+					</tr>
 					</table>
 				</td>
 			</tr>

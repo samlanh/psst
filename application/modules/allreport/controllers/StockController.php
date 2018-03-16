@@ -190,7 +190,7 @@ class Allreport_StockController extends Zend_Controller_Action {
     					'end_date' =>date("Y-m-d"),
     			);
     		}
-    		$this->view->row_ace=$search;
+    		$this->view->search=$search;
     		$this-> view->all_transfer = $db->getAllTransfer($search);	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");

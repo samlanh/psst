@@ -369,11 +369,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	
     public function rptIncomeExpenseDetailAction(){
-		$id 	=	 $this	->	getRequest()->getParam("id");
-		$db 	= 	new Allreport_Model_DbTable_DbRptIncomeExpense();
-		$this	->	view	->	row = $db	->	getAllexspanByid($id);	
-		$this	->	view	->	all_row = $db	->getAllexspandetailByid($id);
+		$id = $this->getRequest()->getParam("id");
+		$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
+		$this->view->row = $db->getAllexspanByid($id);	
+		$this->view->detail = $db->getAllexspandetailByid($id);
 	}
 	public function rptOtherIncomeAction(){
 		try{

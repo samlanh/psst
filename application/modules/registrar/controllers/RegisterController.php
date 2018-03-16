@@ -33,7 +33,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("RECEIPT","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","TOTAL_PAYMENT","FINE","CREDIT_MEMO","DEDUCT","NET_AMOUNT","DATE_PAY","USER","STATUS","PRINT_SCHOLARSHIP");
+    		
+    		$collumns = array("RECEIPT","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","TOTAL_PAYMENT","FINE","CREDIT_MEMO",
+    							"DEDUCT","NET_AMOUNT","DATE_PAY","USER","STATUS","VOID_BY","PRINT_SCHOLARSHIP");
+    		
     		$link=array('module'=>'registrar','controller'=>'register','action'=>'edit',);
     		$letter=array('module'=>'registrar','controller'=>'register','action'=>'congratulationletter',);
     		
@@ -91,10 +94,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $db = new Foundation_Model_DbTable_DbStudent();
 	   $this->view->group = $db->getAllgroup();
 	   
-	   
+	   $key = new Application_Model_DbTable_DbKeycode();
+	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	   
     }
-    
     
     public function addkentridgeAction(){
     	if($this->getRequest()->isPost()){

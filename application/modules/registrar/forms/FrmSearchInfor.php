@@ -311,6 +311,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
+		
 		//date 
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$start_date->setAttribs(array(
@@ -335,7 +336,6 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_date = $request->getParam("end_date");
 		if(empty($_date)){
 			$_date = date("Y-m-d");
-			
 		}
 		$end_date->setValue($_date);
 		

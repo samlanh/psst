@@ -598,20 +598,17 @@ fieldset{  background:none;}
 						 <tr>
 							<td><?php echo $tr->translate("NOTE");?></td>
 							<td><input type="text" name="not" id="not" class="fullside" value="<?php echo $this->payment['note']?>" dojoType="dijit.form.TextBox"/></td>
-						
-							
-							
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("IS_VOID");?></td>
 							<td>
-								<select name="void" id="void" dojoType="dijit.form.FilteringSelect" class="fullside">
-									<option value="0"><?php echo $tr->translate("ACTIVE");?></option>
-									<option value="1"><?php echo $tr->translate("VOID");?></option>
+								<select name="void" id="void" dojoType="dijit.form.FilteringSelect" class="fullside" <?php if($this->payment['is_void'] == 1){echo "readonly";}?>>
+									<option value="0" <?php if($this->payment['is_void'] == 0){echo "selected='selected'";}?>><?php echo $tr->translate("ACTIVE");?></option>
+									<option value="1" <?php if($this->payment['is_void'] == 1){echo "selected='selected'";}?>><?php echo $tr->translate("VOID");?></option>
 								</select>
 							</td>
 						</tr>
-						
+						<?php //echo "here=".$this->payment['is_void'];exit();?>
 					</table>
 				</fieldset>
 			</td>

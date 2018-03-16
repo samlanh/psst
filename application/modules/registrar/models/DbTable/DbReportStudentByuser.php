@@ -63,7 +63,8 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					  (SELECT pg.title FROM rms_program_name AS pg WHERE pg.service_id=spd.service_id) AS service_id,
 					  (SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS user_id,
 					  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term) AS payment_term,
-					  (select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status
+					  (select name_en from rms_view where type=10 and key_code=sp.is_void) as void_status,
+					  (SELECT CONCAT(last_name,' - ',first_name) FROM rms_users WHERE rms_users.id = sp.void_by) AS void_by
 					FROM
 					  rms_student AS s,
 					  rms_student_payment AS sp,
@@ -96,7 +97,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 	    		$where.= " AND sp.user_id = ".$search['user'];
 	    	}
 	    	$order=" ORDER By sp.id DESC ";
-// 	    	echo $sql.$where.$order;exit();
+	    	echo $sql.$where.$order;exit();
 	    	return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 			echo $e->getMessage();
@@ -158,8 +159,8 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						sp.credit_memo,
 						sp.deduct,
 						sp.net_amount,
-						sp.note
-			
+						sp.note,
+						(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by) AS void_by
 				  FROM
 						rms_student AS s,
 						rms_student_payment AS sp

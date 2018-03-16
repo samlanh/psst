@@ -869,7 +869,12 @@ function getMonthByNumber(m){
 		];
 		return (monthName[m-1]);
 }
+
+
+
 </script>
+
+
 
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
@@ -878,20 +883,46 @@ function getMonthByNumber(m){
 			.defaulheight{line-height: 22px !important;}
 		</style>
 		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
-				<tr height="90px;">
-					<td colspan="10"  style="" align="center" valign="top">
-					</td>
-				</tr>
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;">
+				<?php if($this->data['show_header_receipt']==1){?>
+					<tr height="90px;">
+						<td colspan="10"  style="" align="center" valign="top">
+							<table width="100%" style="white-space:nowrap;">
+								<tr>
+									<td width="17%" valign="top">
+										<img style="width: 70%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+									</td>
+									<td width="83%" valign="top" style="font-size:11px;line-height: 18px;">
+										<div style="font-size:22px;margin-top: 10px;"><?php echo $tr->translate("SCHOOL_NAME");?></div>
+										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_ADDRESS");?></div>
+										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_TEL");?></div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				<?php }else{?>
+					<tr height="90px;">
+						<td colspan="10"  style="" align="center" valign="top">
+							&nbsp;
+						</td>
+					</tr>
+				<?php }?>
+				
 				<tr height="40px;">
 					<td colspan="10"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
 							<tr>
-								<td width="30%">
+								<td width="25%">
+									&nbsp;
 								</td>
-								<td width="30%" valign="center" align="center">
+								<td width="50%" valign="top" align="center" style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;line-height: 20px">
+									<div>បង្កាន់ដៃបង់ប្រាក់</div>
+									<div>Official Receipt</div>
+								</td>
+								<td width="25%" valign="top" align="left">
 									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
-									<span style="font-size: 14px;font-weight: bold;font-family: arail">Pmt Date : <label id="lb_date" class=" one bold"></label></span>
+									<div style="font-size: 14px;font-weight: bold;font-family: arail">Pmt Date : <label id="lb_date" class=" one bold"></label></div>
 								</td>
 							</tr>
 						</table>
@@ -1069,7 +1100,7 @@ function printSubmit(){
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
 	hideDialog1();
-    dijit.byId('office_receipt').submit();
+    //dijit.byId('office_receipt').submit();
 }
 function hideDialog(){
 	dijit.byId('terms').hide();

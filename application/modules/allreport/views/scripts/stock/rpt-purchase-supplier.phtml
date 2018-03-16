@@ -4,13 +4,10 @@
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$rpt=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-list-product'), null, true);
 	$frm = $this->form_search;
 ?>	
 <div style="width: 28cm;margin: 0 auto;">
-<form
-	action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-purchase-supplier')); ?>"
-	dojoType="dijit.form.Form" method="post">
+<form action="" dojoType="dijit.form.Form" method="post">
 	<table style="width: 50%">
 		<tr>
 			<td><?php echo $frm->getElement("title");?></td>
@@ -18,13 +15,12 @@
 			<td> <?php echo $frm->getElement("status_search");?></td>
 			<td>
 				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
-					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+				showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			</td>
 		</tr>
 	</table>
 </form>
 </div>
-<?php //print_r($this->pur_code); ?>
 <div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 	<div id="divPrint">
 					<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">

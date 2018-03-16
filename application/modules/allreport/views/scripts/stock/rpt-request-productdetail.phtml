@@ -57,18 +57,18 @@
 						$gender=array(1=>"Male",2=>"Female");
 						if(!empty($rows)) foreach($rows As $key=> $rs_row){
 						?>
-						<tr style="font-size: 12px;">
-							<td style="border:1px solid #000;text-align: center;"><?php echo $key+1; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['branch_name']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['request_no']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['request_name']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_name']; ?><?php //echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['qty']; ?> </td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['purpose']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs_row['request_date'])); ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['user_name']; ?> </td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['status']; ?> </td>
-						</tr>
+							<tr style="font-size: 12px;">
+								<td style="border:1px solid #000;text-align: center;"><?php echo $key+1; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['branch_name']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['request_no']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['request_name']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_name']; ?><?php //echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['qty']; ?> </td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['purpose']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs_row['request_date'])); ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['user_name']; ?> </td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['status']; ?> </td>
+							</tr>
 						<?php
 						}
 						?>

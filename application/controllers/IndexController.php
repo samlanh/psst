@@ -9,15 +9,10 @@ class IndexController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');  
-    	
     }
 
     public function indexAction()
     {
-        // action body
-    	
-    	
-        /* set this to login page to change the character charset of browsers to Utf-8  ...*/    	  	
     	$session_user=new Zend_Session_Namespace('authstu');
     	$username = $session_user->first_name;
     	$user_id = $session_user->user_id;
@@ -32,13 +27,10 @@ class IndexController extends Zend_Controller_Action
 		$this->view->form=$form;
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);		
-		
         
 		if($this->getRequest()->isPost())		
 		{
-			
 			$formdata=$this->getRequest()->getPost();
-			
 			if($form->isValid($formdata))
 			{
 				$session_lang=new Zend_Session_Namespace('lang');
@@ -48,8 +40,6 @@ class IndexController extends Zend_Controller_Action
 				$password=$form->getValue('txt_password');
 				$db_user=new Application_Model_DbTable_DbUsers();
 				if($db_user->userAuthenticate($user_name,$password)){					
-// 					$this->view->msg = 'Authentication Sucessful!';
-// 					$this->view->err="0";
 					
 					$session_user=new Zend_Session_Namespace('authstu');
 					$user_id=$db_user->getUserID($user_name);
@@ -77,12 +67,7 @@ class IndexController extends Zend_Controller_Action
 					$session_user->first_name= $user_info['first_name'];
 					$session_user->branch_id= $user_info['branch_id'];
 					
-					$session_user->url_report = $db_user->getArrAclReport($user_info['user_type']);
-					
-					//print_r($session_user->url_report);exit();
-					
-					//$session_user->url_report= $report;
-					
+// 					$session_user->url_report = $db_user->getArrAclReport($user_info['user_type']);
 // 					for($i=0; $i<count($arr_acl);$i++){
 // 						$arr_module[$i]=$arr_acl[$i]['module'];
 // 						if($arr_acl[$i]['module'] == 'exchange'){
@@ -99,7 +84,6 @@ class IndexController extends Zend_Controller_Action
 // 					$session_user->arr_actin = $arr_actin;
 						
 					$session_user->lock();
-					
 					$log=new Application_Model_DbTable_DbUserLog();
 					$log->insertLogin($user_id);
 					foreach ($arr_module AS $i => $d){

@@ -574,9 +574,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    
    public function getUserAccessPermission($user_id='user_id'){
-   	
 	   	$user = $this->getUserId();
-	   	
 	   	$session_user=new Zend_Session_Namespace('authstu');
 	   	$level = $session_user->level;
 	   	if($level==1){

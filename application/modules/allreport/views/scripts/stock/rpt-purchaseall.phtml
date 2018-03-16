@@ -4,14 +4,11 @@
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$rpt=$this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-list-product'), null, true);
 	$frm = $this->form_search;
 ?>	
 <meta charset="utf-8">
 <div style="width: 28cm;margin: 0 auto;">
-<form
-	action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-purchaseall')); ?>"
-	dojoType="dijit.form.Form" method="post">
+<form action="" dojoType="dijit.form.Form" method="post">
 	<table style="width: 100%">
 		<tr>
 			<td><?php echo $frm->getElement("title");?></td>
@@ -105,7 +102,7 @@
 			<tr>
 				<td colspan="3">&nbsp;</td>
 			</tr>
-			<tr >
+			<tr>
 				<td colspan="3" width="100%">
 					<table width="100%" style="font-family:'Khmer OS Battambang';">
 						<tr>

@@ -178,7 +178,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     
     }
     
-    
     public function editAction(){
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
@@ -211,7 +210,16 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	
     	$this->view->teacher = $db->getTeacherEdit($id);
     	
-    	$this->view->payment = $db->getStudentPaymentByID($id);
+	    $rspayment =  $db->getStudentPaymentByID($id);
+	    $this->view->payment =$rspayment;
+    	
+    	$session_user=new Zend_Session_Namespace('authstu');
+    	$user_type_id = $session_user->level;
+    	$payment_date = date("Y-m-d",strtotime($rspayment['create_date']));
+    	$current_date = date("Y-m-d");
+    	if($user_type_id!=1 AND $current_date>$payment_date){
+    		Application_Form_FrmMessage::Sucessfull("you data is more then a day.so can not edit", self::REDIRECT_URL . '/register/index');
+    	}
     	
     	// for loop in initialize
     	$this->view->payment_detail_service = $db->getStudentPaymentDetailServiceByID($id);

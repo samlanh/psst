@@ -262,4 +262,29 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	public function alertstockAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'title' =>'',
+						'location' =>'',
+						'status_search'=>1,
+						'category_id'=>0,
+				);
+			}
+			$db = new Registrar_Model_DbTable_DbReportProductNearOutStock();
+			$this->view->pro_loc = $db->getProductLocation($search);
+	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$form=new Accounting_Form_FrmSearchProduct();
+		$form->FrmSearchProduct();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+	}
 }

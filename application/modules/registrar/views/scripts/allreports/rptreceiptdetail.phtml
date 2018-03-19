@@ -40,7 +40,7 @@ table tr td strong{
 								<td width="30%"></td>
 								<td width="40%" align="center" valign="top" style="font-size: 16px;font-weight: bold;"></td>
 								<td width="30%" valign="bottom">
-									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u><?php echo $this->rr['receipt_number'];?></div> 
+									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u><?php echo $this->rr['receipt_number'];?><?php if($this->rr['is_void']==1){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></div> 
 									<span style="font-size: 14px;font-weight: bold;font-family: arail"><?php echo $tr->translate('Pmt Date');?> : <?php echo date('d-M-Y',strtotime($this->rr['create_date']));?></span>
 								</td>
 							</tr>

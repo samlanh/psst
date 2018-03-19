@@ -202,7 +202,7 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 										</tr>
 										<tr>
 										    <td><?php echo $tr->translate("SERIAL")?></td>
-											<td><input type="text" name="serial" id="serial" value="<?php echo $this->rs['serial']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
+											<td><input type="text" name="serial" id="serial" value="<?php echo $this->rs['serial'];?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
 										</tr>
 										<tr>
 											<td><strong><?php echo $tr->translate("DEGREE")?></strong></td>
@@ -210,7 +210,7 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 												<select name="degree_result" id="degree_result" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGradeResult();" >
 													<option value="">select degree</option>
 													<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
-														<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
+														<option value="<?php echo $rs['id'];?>" <?php if($rs['id']==$this->rs['degree_result']){echo "selected='selected'";}?>><?php echo $rs['name'];?></option>
 													<?php }}?>
 												</select>
 											</td>
@@ -326,7 +326,7 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 												<select name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGrade();" >
 													<option value="">select degree</option>
 													<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
-														<option value="<?php echo $rs['id'];?>" <?php if($rs['id']==$this->rs['degree_result']){echo "selected='selected'";}?>><?php echo $rs['name'];?></option>
+														<option value="<?php echo $rs['id'];?>" <?php if($rs['id']==$this->rs['degree']){echo "selected='selected'";}?>><?php echo $rs['name'];?></option>
 													<?php }}?>
 												</select>
 											</td>

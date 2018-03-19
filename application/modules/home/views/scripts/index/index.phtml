@@ -2,18 +2,12 @@
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate("Dashboard Student Registration Management System"));
 	echo $this->headTitle();
-	
-// 	$db = new Home_Model_DbTable_DbDashboard();
-	?>
- 
- <!--Morris Chart CSS -->
+?>
 <link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
-
  <!-- Bootstrap core CSS -->
  <link href="<?php echo $this->baseUrl()."/"?>dashboard/css/bootstrap.min.css" rel="stylesheet">
 <!-- Icons CSS -->
 <link href="<?php echo $this->baseUrl()."/"?>dashboard/css/icons.css" rel="stylesheet">
-
 <!-- Custom styles for this template -->
 <link href="<?php echo $this->baseUrl()."/"?>dashboard/css/style.css" rel="stylesheet">
 <div id="page-wrapper">
@@ -59,9 +53,15 @@
 						<div class="card-box">
 							<div class="col-lg-12">
 								<div class="accounting-management text-center">
-									<div class="col-lg-12 capital-box" style="width: 100%; background: #203864; color: #fff">
+									<div class="col-lg-6 capital-box" style="background:#17418e;; color: #fff">
+										<a href="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index'), null, true);?>">
+											<span data-bind="text: txnRecorded"><h3><?php echo $tr->translate("FINDING_ALL_STUDENT_INFORMATION")?></h3></span>
+											<p class="month" style="text-align: center; margin: 0 auto;" data-bind="text: lang.lang.transactions_recorded">&nbsp;<?php //echo $tr->translate("STUDENT_BACKGROUND")?></p>
+										</a>
+									</div>
+									<div class="col-lg-6 capital-box" style="background: #203864; color: #fff">
 										<span data-bind="text: txnRecorded"><?php if ($this->netIncome<0){ echo "$ ".number_format(abs($this->netIncome),2);}else{ echo "$ ".number_format($this->netIncome,2);}?></span>
-										<p class="month" style="width: 70%; text-align: center; margin: 0 auto;" data-bind="text: lang.lang.transactions_recorded"><?php echo $tr->translate("Net Income")?></p>
+										<p class="month" style="text-align: center; margin: 0 auto;" data-bind="text: lang.lang.transactions_recorded"><?php echo $tr->translate("Net Income")?></p>
 									</div>
 									<div class="col-lg-12" style="padding: 0;">
 										<div class="col-lg-6 capital-box" style="background: #0077c5;">

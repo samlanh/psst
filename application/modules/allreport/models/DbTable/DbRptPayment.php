@@ -21,6 +21,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				sp.create_date,
     				(select last_name from rms_users where id=sp.user_id LIMIT 1) as last_name,
     				(select first_name from rms_users where id=sp.user_id LIMIT 1) as user,
+    				sp.is_void,
     				sp.grand_total,
     				sp.credit_memo,
     				sp.deduct,

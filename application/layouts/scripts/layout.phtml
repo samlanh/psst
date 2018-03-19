@@ -37,7 +37,8 @@ $teacher_id = $session_t->teacher_id;
 	<link rel="stylesheet" href="<?php echo $base_url;?>/css/font-awesome.min.css"/>
 	<link href="<?php echo $this->baseUrl()?>/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
 	<link href="<?php echo $base_url;?>/cssmenu/template.css" media="screen" rel="stylesheet" type="text/css">
-<?php if($module!='home'){?>
+	<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
+<?php //if($module!='home'){?>
 	<script src="<?php echo $base_url;?>/js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/dojo-1.6.1/dijit/themes/soria/soria.css"/>
 	<!--  <link rel="stylesheet" type="text/css" href="<?php //echo $base_url;?>/js/dojo-1.6.1/dijit/themes/claro/claro.css"/>-->
@@ -46,10 +47,9 @@ $teacher_id = $session_t->teacher_id;
 	<script src="<?php echo $base_url;?>/js/pdbs_js.js"  type="text/javascript"></script>
 
 	<!-- table  -->
-	<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery.tablesorter.js"> </script>
 	<script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery.tablesorter.pager.js"> </script>
-<?php }?>
+<?php //}?>
 	<?php if($module=='allreport' OR $action=='allreports' OR $action=='studentnearlyendservice' OR 
 			$action=='studentpaymentlate' OR $controller=='allreports' OR $controller=='rptproductsold' OR
 			$controller=='studentnearlyendservice' OR $controller=='studentpaymentlate' ){?>
@@ -81,7 +81,7 @@ $teacher_id = $session_t->teacher_id;
 			    padding: 2px 19px;}
 	</style>	
 </head>
-<?php if($module!='home'){?>
+<?php //if($module!='home'){?>
 <script>
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.ValidationTextBox");
@@ -103,7 +103,7 @@ dojo.require("dijit.layout.ContentPane");
 dojo.require("dojo.parser");
 
 </script>
-<?php }?>
+<?php //}?>
     <?php $class='soria';
    
     $them_style='soria';
@@ -157,12 +157,11 @@ dojo.require("dojo.parser");
             			<?php 
 							$db = new Application_Model_DbTable_DbUsers();
 	            			$rs = $db->getAccessUrl($module,$controller,$action);
-	            			echo $this->layout()->content;
-	            			/*if(!empty($rs) OR $action=='changepassword'){
+	            			if(!empty($rs) OR $action=='changepassword'){
 	            				echo $this->layout()->content;
 	            			}else{
 	            				echo $this->render('pagenotfund.phtml');
-	            			}*/
+	            			}
 	            			
             			 ?>
             	</td>

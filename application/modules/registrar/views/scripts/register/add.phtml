@@ -487,7 +487,7 @@ fieldset{  background:none;}
 						<tr>
 							<td><?php echo $tr->translate("ROOM_NAME");?></td>
 							<td>
-								<select type="text" name="room" id="room"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
+								<select required="false" type="text" name="room" id="room"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
 									<option value="0"> Select Room </option>
 									<?php if(!empty($this->all_room)){foreach ($this->all_room as $room){?>
 									<option value="<?php echo $room['id']?>"><?php echo $room['name']?></option>
@@ -512,7 +512,7 @@ fieldset{  background:none;}
 						<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="5" >
 							<tr>
 								<td><?php echo $tr->translate("RECEIPT_NO");?></td>
-								<td><input type="text" style="color: red;" required="1" dojoType="dijit.form.ValidationTextBox" name="receipt_no" id="receipt_no" class="fullside" /></td>
+								<td><input readonly type="text" style="color: red;" required="1" dojoType="dijit.form.ValidationTextBox" name="receipt_no" id="receipt_no" class="fullside" /></td>
 							</tr>
 							<tr>	
 								<td><strong><?php echo $tr->translate("PAYMENT_TERM");?></strong><label class="red">*</label></td>
@@ -985,7 +985,7 @@ function getMonthByNumber(m){
 										</tr>
 										<tr>
 											<td colspan="2"></td>
-											<td><div>Fine</div></td>
+											<td><div><?php echo $tr->translate("FINE");?></div></td>
 											<td> : &nbsp;&nbsp; <label id="lb_fine" ></label></td>
 										</tr>
 										<tr>
@@ -995,7 +995,7 @@ function getMonthByNumber(m){
 										</tr>
 										<tr>
 											<td colspan="2"></td>
-											<td><div>Deduct</div></td>
+											<td><div><?php echo $tr->translate("DEDUCT");?></div></td>
 											<td> : &nbsp;&nbsp; <label id="lb_deduct" ></label></td>
 										</tr>
 										<tr>
@@ -1104,7 +1104,7 @@ function printSubmit(){
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
 	hideDialog1();
-    //dijit.byId('office_receipt').submit();
+    dijit.byId('office_receipt').submit();
 }
 function hideDialog(){
 	dijit.byId('terms').hide();
@@ -1829,7 +1829,7 @@ function printSave(new_stu_id,new_receipt,submit){
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Unit Price</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Late Fee</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Deduct</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Extra Fee</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Discount</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';

@@ -117,7 +117,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		$stu_code = $data['stu_id'];//$this->getNewAccountNumber($data['dept']);
-		$receipt_number =$data['receipt_no']; //$this->getRecieptNo();
+		$receipt_number =$this->getRecieptNo();
 		
 		try{
 			$stu_type='';

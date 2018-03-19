@@ -17,6 +17,7 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	$sql = "SELECT id,CONCAT(from_academic,' - ',to_academic) AS academic,note,generation,
     			(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
     		    (select name_en from `rms_view` where `rms_view`.`type`=7 and `rms_view`.`key_code`=`rms_tuitionfee`.`time`)AS time,
+    		    (SELECT name_en FROM `rms_view` WHERE `rms_view`.`type`=12 AND `rms_view`.`key_code`=`rms_tuitionfee`.`is_finished`)AS is_process,
     			create_date ,status FROM `rms_tuitionfee`  WHERE 1  $branch_id  ";
     	$where= ' ';
     	$order=" ORDER BY id DESC ";
@@ -32,6 +33,11 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	if(!empty($search['branch_id'])){
     		$where.=" AND branch_id = ".$search['branch_id'] ;
     	}
+    	
+    	if($search['finished_status']>-1){
+    		$where.=" AND `rms_tuitionfee`.`is_finished` = ".$search['finished_status'] ;
+    	}
+    	
     	if(!empty($search['generation']) AND $search['generation']!=-1){
     		$where.=" AND generation = '".$search['generation']."'" ;
     	}

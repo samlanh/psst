@@ -384,6 +384,7 @@ function doPrintInvoice() {
 }
 
 function popupCateExpense(index){
+	dijit.byId("ex_save_new").attr("disabled",false);
 	expense_id = dijit.byId("expense_id"+index).get('value');
 	$("#tow_value").val(index);
 	if(expense_id==-1){
@@ -395,6 +396,7 @@ var cate_expense_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Js
 var url_add_cate_expense = '<?php echo $this->url(array("module"=>"registrar","controller"=>"expense","action"=>"add-cate-expense")); ?>';
 function addCateExpense(){
 	if(dijit.byId('add_cate_expense').validate()) {
+		dijit.byId("ex_save_new").attr("disabled",true);
 		dojo.xhrPost({
 			url:url_add_cate_expense,
 			form: dojo.byId("add_cate_expense"),
@@ -445,7 +447,7 @@ function addCateExpense(){
 										
 										<tr>
 											<td colspan="2" align="center">
-												<input type="button" onclick="addCateExpense();" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+												<input type="button" onclick="addCateExpense();" value="save_new" name="ex_save_new"  id="ex_save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 													iconClass="dijitEditorIcon dijitEditorIconSave" />
 											</td>
 										</tr>

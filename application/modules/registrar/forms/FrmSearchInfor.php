@@ -41,6 +41,21 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['years'];
 		$study_year->setMultiOptions($opt);
 		
+		$finished_status = new Zend_Dojo_Form_Element_FilteringSelect('finished_status');
+		$finished_status->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$finish_opt = new Accounting_Model_DbTable_DbTuitionFee();
+    	$fin_row=$finish_opt->getProcessTypeView();
+		$opt = array('-1'=>$this->tr->translate("PROCESS_TYPE"));
+		if(!empty($fin_row))foreach($fin_row AS $row) $opt[$row['id']]=$row['name'];
+		$finished_status->setMultiOptions($opt);
+		$finished_status->setValue($request->getParam("finished_status"));
+		
 		$_group = new Zend_Dojo_Form_Element_FilteringSelect('group');
 		$_group->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -513,7 +528,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
 		$_day->setMultiOptions($opt_group);
 		
-		$this->addElements(array($term_test,$term,$stuname_con,$_day,$_teacher,$_subject,$study_status,$_group,$payment_by,$study_year,$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
+		$this->addElements(array($finished_status,$term_test,$term,$stuname_con,$_day,$_teacher,$_subject,$study_status,$_group,$payment_by,$study_year,$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,$user,$end_date,$sess_gep,$_title,$_degree_gep,$generation,$_session,$_time,$_degree,$_grade,$_grade_all,$_grade_bac,$_grade_kid,$_status,$_grade_gep,$service,$pay_term));
 	
 		return $this;
 	} 

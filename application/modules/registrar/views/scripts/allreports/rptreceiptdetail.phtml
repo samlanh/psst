@@ -29,7 +29,7 @@ table tr td strong{
 			$amount_print = $this->data['receipt_print'];
 			for($prin=0;$prin<$amount_print;$prin++){?>
 			<table style="margin: 0 auto; width:100%;height:13.97cm;" >
-				<tr height="140px;">
+				<tr height="100px;">
 				    <td colspan="3"  style="" align="center" valign="top">
 				    </td>
 				</tr>
@@ -37,9 +37,12 @@ table tr td strong{
 				    <td colspan="3"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
 							<tr>
-								<td width="30%"></td>
-								<td width="40%" align="center" valign="top" style="font-size: 16px;font-weight: bold;"></td>
-								<td width="30%" valign="bottom">
+								<td width="25%"></td>
+								<td width="50%" valign="top" align="center" style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;line-height: 20px">
+									<div>បង្កាន់ដៃបង់ប្រាក់</div>
+									<div>Official Receipt</div>
+								</td>
+								<td width="25%" valign="bottom">
 									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u><?php echo $this->rr['receipt_number'];?><?php if($this->rr['is_void']==1){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></div> 
 									<span style="font-size: 14px;font-weight: bold;font-family: arail"><?php echo $tr->translate('Pmt Date');?> : <?php echo date('d-M-Y',strtotime($this->rr['create_date']));?></span>
 								</td>
@@ -49,7 +52,7 @@ table tr td strong{
 				</tr>
 				<tr height="50px">
 					<td colspan="3">
-						<table width="100%" border="0" style="font-family: Khmer OS Battambang; font-size: 12px;white-space: nowrap;">
+						<table width="100%" border="0" style="font-family: Khmer OS Battambang; font-size: 12px;white-space: nowrap;margin-bottom: 5px;">
 							<tr style="line-height: 16px;">
 							<td>Student's ID</td>
 							<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['stu_code'];?></strong></td>
@@ -67,7 +70,7 @@ table tr td strong{
 							<td>Academic Year</td>
 							<td>  : &nbsp;<?php echo $this->rr['academic_year'];?></td>
 						</tr>
-						<tr>
+						<tr style="line-height: 16px;">
 							<td >Gender</td>
 							<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['sex'];?></strong></td>
 							<td >Degree</td>
@@ -96,7 +99,7 @@ table tr td strong{
 								<th>&nbsp;<?php echo $tr->translate('Period');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('Unit Price');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('Qty');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Late Fee');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('Deduct');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('Extra Fee');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('Discount');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('Amount');?>&nbsp;</th>

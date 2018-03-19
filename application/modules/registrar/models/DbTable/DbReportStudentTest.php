@@ -79,13 +79,13 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 	    	if($search['result_status']!=''){
 	    		$where .= " and updated_result = ".$search['result_status'];
 	    	}
-	    	$order=" ORDER By st.id DESC ";
+	    	$order=" ORDER By updated_result DESC,degree_result ASC,grade_result ASC,session_result ASC ";
 // 	    	echo $sql.$where.$order;exit();
 	    	return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 			echo $e->getMessage();
 		}
-	  }
+	}
 	    
 	    
 	  

@@ -58,7 +58,7 @@
 					<td align="center"  width="70%">
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></strong><br />
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_TEST"); ?></strong><br />
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong><br /><br />
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';">For Date <?php if(!empty($this->search["start_date"])){echo date("d-M-Y",strtotime($this->search["start_date"]))." to ";}?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong><br /><br />
 					</td>
 					<td width="15%">&nbsp;</td>
 				</tr>
@@ -115,25 +115,52 @@
 								tr{ page-break-inside:avoid; page-break-after:auto }
 							 </style>
 							 
-							 <?php foreach($this->row as $rs){ $i++;?>
+							 <?php $updated_result=0;$register=0; foreach($this->row as $rs){ $i++;?>
 								  <tr style="font-size:12px; height: 20px;white-space:nowrap;"​ class="hover">
-								    <td><?php echo $i;?></td>
-								    <td><?php echo $rs['serial']; ?></td>
-								    <td><?php echo $rs['stu_code']; ?></td>
-								    <td><?php echo $rs['kh_name']; ?></td>
-								    <td><?php echo $rs['en_name']; ?></td>
-								    <td><?php echo $rs['sex']; ?></td>
-								    <td><?php echo $rs['phone']; ?></td>
-								    <td><?php echo $rs['degree']; ?></td>
-								    <td><?php echo $rs['grade']; ?></td>
-								    <td><?php echo $rs['session']; ?></td>
-								    <td><?php echo $rs['note']; ?></td>
-								    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
-									<td><?php echo $rs['user_id'];?></td>								    
-								    <td <?php if($rs['updated_result']==0){echo "style='color:red'";}?>><?php echo $rs['result_status']; ?></td>
-								    <td <?php if($rs['register']==0){echo "style='color:red'";}?>><?php echo $rs['register_status'];?></td>								    
+									    <td><?php echo $i;?></td>
+									    <td><?php echo $rs['serial']; ?></td>
+									    <td><?php echo $rs['stu_code']; ?></td>
+									    <td><?php echo $rs['kh_name']; ?></td>
+									    <td><?php echo $rs['en_name']; ?></td>
+									    <td><?php echo $rs['sex']; ?></td>
+									    <td><?php echo $rs['phone']; ?></td>
+									    <td><?php echo $rs['degree']; ?></td>
+									    <td><?php echo $rs['grade']; ?></td>
+									    <td><?php echo $rs['session']; ?></td>
+									    <td><?php echo $rs['note']; ?></td>
+									    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
+										<td><?php echo $rs['user_id'];?></td>								    
+									    <td <?php if($rs['updated_result']==0){echo "style='color:red'";}?>><?php echo $rs['result_status']; ?></td>
+									    <td <?php if($rs['register']==0){echo "style='color:red'";}?>><?php echo $rs['register_status'];?></td>								    
 								  </tr>
-							  <?php } }?>
+								  
+								  <?php 
+								  	if($rs['updated_result']==1){
+										$updated_result = $updated_result + 1;
+								  	}
+								  	if($rs['register']==1){
+										$register = $register + 1;		
+								  	}					
+								  	  
+								  ?>
+								  
+							  <?php }}?>
+							  
+						</table>
+						
+						<table width="40%" border="1" align="right" style="border:1px solid #000; white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;font-size: 12px;margin-top: 10px;">
+							<tr align="center" style="background: #ccd9ff;">
+								<td><?php echo $tr->translate("សិស្សសរុប");?></td>
+								<td><?php echo $tr->translate("បានទទួលលទ្ធផល");?></td>
+								<td><?php echo $tr->translate("មិនទាន់បានទទួលលទ្ធផល");?></td>
+								<td><?php echo $tr->translate("បានចុះឈ្មោះ");?></td>
+							</tr>
+							<tr align="center">
+								<td><?php echo $i." នាក់";?></td>
+								<td><?php echo $updated_result." នាក់";?></td>
+								<td><?php echo ($i-$updated_result)." នាក់";?></td>
+								<td><?php echo $register." នាក់";?></td>
+							</tr>
 						</table>
 					</td>
 				</tr>

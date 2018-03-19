@@ -324,7 +324,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					*,
 					(select name_en from rms_view where type=2 and key_code=sex) as sex,
 					(select en_name from rms_dept where dept_id = degree) as degree, 
-					(select CONCAT(first_name,'-',last_name) from rms_users as u where u.id = user_id) as user
+					(select CONCAT(first_name,'-',last_name) from rms_users as u where u.id = account_userid) as user
 				from 
 					rms_student_test 
 				where 

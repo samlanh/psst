@@ -87,6 +87,17 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     
+    function reprintChangeproductAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+    	$this->view->row = $db->getChangeProductById($id);
+
+    	$this->view->detail = $db->getChangeProductDetailById($id);
+    	
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    }
+    
     public function rptDailyAction()
     {
     	try{

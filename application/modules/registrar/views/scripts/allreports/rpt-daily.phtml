@@ -343,8 +343,8 @@
 									<?php $i=0;foreach($this->change_product as $row){ $i++;?>
 										<tr class="hover" style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
 											<td><?php echo $i;?></td>
-											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php echo $row['receipt_no'];?></td>
-											<td><?php echo $row['name'];?></td>
+											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$row['id']))?>"><?php echo $row['receipt_no'];?></a></td>
+											<td><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$row['id']))?>"><?php echo $row['name'];?></a></td>
 											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php if($row['total_payment']>0){echo '$ '.$row['total_payment'];}?></td>	
 											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php if($row['credit_memo']>0){echo '$ '.$row['credit_memo'];}?></td>
 											<td><?php echo date('d-M-Y',strtotime($row['create_date']));?></td>

@@ -43,38 +43,41 @@ class Stock_RequestProductController extends Zend_Controller_Action {
 	}
 	public function addAction(){
 		if($this->getRequest()->isPost()){
-			$_data = $this->getRequest()->getPost();
-			try{
-					$db = new Accounting_Model_DbTable_DbRequestProduct();
-					$row = $db->addRequest($_data);
-					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/requestproduct");
-					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/requestproduct/add");
-					}
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				}catch(Exception $e){
-					Application_Form_FrmMessage::message("INSERT_FAIL");
-					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-					echo $e->getMessage();
+		$_data = $this->getRequest()->getPost();
+		try{
+				$db = new Accounting_Model_DbTable_DbRequestProduct();
+				$row = $db->addRequest($_data);
+				if(isset($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/requestproduct");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/requestproduct/add");
 				}
+				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				echo $e->getMessage();
 			}
-			$_pur = new Accounting_Model_DbTable_DbRequestProduct();
-			$pro=$_pur->getProducCutStockLater();
-			array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-			$this->view->product= $pro;
-			
-			$this->view->rq_code=$_pur->getRequestCode();
-			$this->view->bran_name=$_pur->getAllBranch();
-			
-			$db_gr=new Global_Model_DbTable_DbGrade();
-			$d_row=$db_gr->getNameGradeAll();
-			array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-			$this->view->grade_name=$d_row;
-			 
-			$model = new Application_Model_DbTable_DbGlobal();
-			$branch = $model->getAllBranchName();
-			$this->view->branchopt = $branch;
+		}
+		
+		$_pur = new Accounting_Model_DbTable_DbRequestProduct();
+		$pro=$_pur->getProducCutStockLater();
+		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$this->view->product= $pro;
+		
+		$this->view->rq_code=$_pur->getRequestCode();
+		$this->view->bran_name=$_pur->getAllBranch();
+		
+		$this->view->rq_for=$_pur->getAllRequestFor();
+		
+		$db_gr=new Global_Model_DbTable_DbGrade();
+		$d_row=$db_gr->getNameGradeAll();
+		array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+		$this->view->grade_name=$d_row;
+		 
+		$model = new Application_Model_DbTable_DbGlobal();
+		$branch = $model->getAllBranchName();
+		$this->view->branchopt = $branch;
 	}
 	
 	public function editAction(){

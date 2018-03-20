@@ -68,21 +68,22 @@ select{ width:100%;}
 fieldset{  background:none;}
 .red{ color: red; padding-left:5px;}
 </style>
-<form id='suspend_service' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-<script type="dojo/method" event="onSubmit">			
+<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+		<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
- 				pro_id=dijit.byId("pro_id").get('value');
+				pro_id=dijit.byId("pro_id").get('value');
 				if(pro_id=='' || pro_id==null){
 					dijit.byId("pro_id").focus();
 					return false;
 				}
-                dijit.byId("save_close").attr("disabled",true);
+				dijit.byId("save_close").attr("disabled",true);
 				dijit.byId("save_new").attr("disabled",true);
 				return true;
 			} else {
 				return false;
 			}
-</script>
+		</script>
+		
 		<table style=" width: 100%">
 			<tr>
 				<td valign="top" width="34%" style="white-space: nowrap;">
@@ -90,9 +91,15 @@ fieldset{  background:none;}
 					<legend align="center"><strong><?php echo $tr->translate("ADD_REQUEST_STOCK");?>​</strong></legend>
 					<table style="margin: 0 auto;" cellspacing="10" >
 							<tr>
-							   <td><?php echo $tr->translate("TITLE")?>*</td>
+							   <td><?php echo $tr->translate("REQUEST_FOR")?></td>
 							   <td>
-							   		<input type="text" dojoType="dijit.form.ValidationTextBox" name="request_name"  id="request_name" value="" class="fullside" required="required">
+							   		<?php /*?>
+									<select type="text" dojoType="dijit.form.FilteringSelect" name="request_for" id="request_for" class="fullside" >
+										<option value="-1">select</option>
+										<option value="0"><?php echo $tr->translate("ADD_NEW")?></option>
+									</select>
+									<?php */?>
+									<input type="text" dojoType="dijit.form.TextBox" name="request_for" id="request_for" class="fullside" />
 							   	</td>
 							    <td><?php echo $tr->translate("PURPOSE")?></td>
 					   			<td colspan="" rowspan="2"><textarea class="fullside"  style=" height: 70px !important;" tabindex="20" dojoType=""  id="purpose" name="purpose"  ></textarea></td>
@@ -131,7 +138,7 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td colspan="4">
-									<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+									<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
 											<tr id="head-title" class="head-td" align="right"></tr>
 									</table>
 								</td>
@@ -142,21 +149,221 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td colspan="4" align="center">
-									<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-									<input type="button" onclick="submitDataClose()" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-									 iconClass="dijitEditorIcon dijitEditorIconSave" />
+									 <input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+									 <input type="button" onclick="submitDataClose()" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+										iconClass="dijitEditorIcon dijitEditorIconSave" />
 									 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-											 iconClass="dijitEditorIcon dijitEditorIconSave" />
-										</td>
-									</tr>
-							</table>
-						</fieldset>
+										iconClass="dijitEditorIcon dijitEditorIconSave" />
+									 <input type="button" onclick='printSave("");' label="<?php echo $tr->translate("SAVE_PRINT")?>" name='savenew' value='savenew' dojoType="dijit.form.Button"
+										iconClass="dijitIconNewTask"/>	
+								</td>
+							</tr>
+						</table>
+					</fieldset>
 				</td>
 			</tr>
 		</table>
 </form>
 
+<div class="dijitHidden" style="padding: 0px; margin: 0px;">
+	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
+		<div id="print_request" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+				<tr>
+				    <td colspan="10"  style="" align="center">
+						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
+							<tr>
+								<td width="30%">
+									<img style="width: 55%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo_print.png'?>"><br />
+								</td>
+								<td width="40%" align="center" valign="top" style="">
+									<div style="font-size: 14px;text-align:center;font-family: Khmer OS Muol Light;"><?php echo $tr->translate('CUSTOMER_BRANCH');?></div>
+									<div style="font-size: 12px;font-family:Battambang,Arial,Helvetica,sans-serif"><?php echo $tr->translate('SCHOOL_NAME');?></div> 
+									<div style="font-size: 13px;font-family: khmer OS Muol Light;">ប័ណ្ណស្នើស្តុក</div> 
+									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:2px;">REQUEST STOCK VOUCHER</div> 
+								</td>
+								<td width="30%">
+									<div style="font-size: 16px;font-weight:bold;text-align:center;">
+										N<sup>o</sup> : <label id="lb_receipt_no"></label>
+									</div>
+								</td>
+							</tr>
+						</table>
+				    </td>
+				</tr>
+				<tr>
+					<td colspan="10">
+						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
+							<tr >
+								<td width="10%"></td>
+								<td width="18%"></td>
+								<td width="9%"></td>
+								<td width="18%"></td>
+								<td width="4%"></td>
+								<td width="8%"></td>
+								<td width="4%"></td>
+								<td width="5%"></td>
+								<td width="3%"></td>
+								<td width="8%"></td>
+							</tr>
+							<tr style="line-height:15px;">
+								<td align="left">សាខា </br />Branch</td>
+								<td valign="top"> :&nbsp; <label id="lb_branch"></label> </td>
+								<td class="one ">ស្នើសម្រាប់<br />Request for</td>
+								<td valign="top"> :&nbsp; <label id="lb_request_for"></label> </td>
+								<td colspan="3"><label id="" >ថ្ងៃស្នើ </br >Request Date</label></td>
+								<td colspan="3" valign="top">:&nbsp;<label id="lb_request_date"></label></td>
+							</tr>
+							<tr style="line-height:15px;">
+								<td>គោលបំណង</br />Purpose</td>
+								<td colspan="9" valign="top"> :&nbsp; <label id="lb_purpose"></label></td>
+							</tr>
+							<tr>
+								<td colspan="10">
+									<div id="t_amountmoneytype"></div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="10">
+									&nbsp;
+								</td>
+							</tr>
+							<tr>
+								<td colspan="10" valign="bottom">
+									<table width="100%"   style="font-family:'Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:0px;">
+										<tr>
+											<td width="33%"></td>
+											<td width="33%"></td>
+											<td width="33%"></td>
+										</tr>
+										<tr >
+											<td align="center" valign="top">
+												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+													<?php 
+													   // $session_user=new Zend_Session_Namespace('authstu');
+													   // $last_name=$session_user->last_name;
+													   // $username = $session_user->first_name;
+													   echo "រៀបចំ​ដោយ";
+													?>
+												</div>
+											</td>
+											<td align="center" valign="top">
+												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+													<?php 
+													   echo"ទទួលដោយ";
+													?>
+												</div>
+											</td>
+											<td align="center" valign="top">
+												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+													<?php 
+													   echo"ពិនិត្យ និង អនុម័តដោយ";
+													?>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="3">
+												&nbsp;
+											</td>
+										</tr>
+										<tr>
+											<td colspan="3">
+												&nbsp;
+											</td>
+										</tr>
+										<tr>
+											<td colspan="3">
+												&nbsp;
+											</td>
+										</tr>
+										<tr>
+											<td align="center" >
+												<div style="width:70%;border-bottom:1px solid #000;"></div>
+												<div style="margin-top:0px;font-size: 12px;">Date : <?php echo date('d / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+											</td>
+											<td colspan="2" align="center">
+											
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+			type="button" onclick="hideReceiptDialog();">Cancel</button>
+		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+			type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
+	</div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
+
 <script type="text/javascript">
+function doPrintInvoice() {
+	window.frames["print_frame"].document.body.innerHTML = dojo.byId('print_request').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+	$('#office_receipt').submit();
+}
+function printSave(){	
+	if(dijit.byId('office_receipt').validate()) {
+		
+		paid_date = dijit.byId("request_date").get('value')
+		var today = new Date(paid_date);
+		var dd = today.getDate();
+		var mon = today.toDateString().substr(4,3); //January is 0!
+		var yyyy = today.getFullYear();
+		dojo.byId("lb_request_date").innerHTML  = dd+'/'+mon+'/'+yyyy;
+		
+		dojo.byId("lb_receipt_no").innerHTML = dijit.byId("request_no").get('value');
+		dojo.byId("lb_request_for").innerHTML = dijit.byId("request_for").attr('displayedValue');
+		dojo.byId("lb_branch").innerHTML = dijit.byId("branch").attr('displayedValue');
+		dojo.byId("lb_purpose").innerHTML = $('#purpose').val();
+		
+		var rowId = $('#identity').val();
+		var rowIDArray = rowId.split(',');
+		template="";
+			 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
+				  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
+				  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">ល.រ</strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ឈ្មោះផលិតផល</strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួននៅសល់</strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">តម្លៃរាយ</strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនស្នើ</strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">សម្គាល់</strong></td>';
+				  temp+='</tr>';
+				  n=0;
+				i=1;  for(var n = 0; n < rowIDArray.length; n++) {
+				  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+				  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("label_product_name_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
+				  temp+='<td style="border:1px solid #000;">'+dijit.byId("curr_qty"+rowIDArray[n]).get('value')+'</td>';
+				  temp+='<td style="border:1px solid #000;">'+"$ "+dijit.byId("cost_"+rowIDArray[n]).get('value')+'</td>';
+				  temp+='<td style="border:1px solid #000;">'+dijit.byId("request_qty"+rowIDArray[n]).get('value')+'</td>';
+				  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId("note_"+rowIDArray[n]).get('value')+'</td>';
+				  i++;
+				  temp+='</tr>';
+				}
+				for(row = n+1;row<6;row++){
+					 temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
+					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
+					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
+					  temp+='<td style="border:1px solid #000;"></td>';
+					  temp+='<td style="border:1px solid #000;"></td>';
+					  temp+='<td style="border:1px solid #000;"></td>';
+					  temp+='</tr>';
+				}
+			temp+='</table>';
+		dojo.byId('t_amountmoneytype').innerHTML = temp;
+		dijit.byId("terms").show();	
+	}
+}
+function hideReceiptDialog(){
+	dijit.byId('terms').hide();
+}
 var template = '';
 var product_name = '<?php //echo $this->product; ?>';
 var col = 0;
@@ -177,6 +384,7 @@ function addRow() {
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CURR_QTY");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("REQUEST_QTY");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
@@ -184,10 +392,11 @@ function addRow() {
 		}
 			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="'+branch_id+'" /></td>';
-			template+='<td width="20%">&nbsp;'+label_proname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="product_name_'+col+'" name="product_name_'+col+'" value="'+pro_id+'" /></td>';
+			template+='<td width="20%">&nbsp;<input type="hidden" dojoType="dijit.form.TextBox" id="label_product_name_'+col+'" name="label_product_name_'+col+'" value="'+label_proname+'" />'+label_proname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="product_name_'+col+'" name="product_name_'+col+'" value="'+pro_id+'" /></td>';
 			//template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" id="product_name_'+col+'" name="product_name_'+col+'" onChange="sumAmountDue();">'+''+'</select></td>';			
 
-			template+='<td> <input type="text" required="true" name="curr_qty'+col+'" id="curr_qty'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
+			template+='<td> <input type="text" name="curr_qty'+col+'" id="curr_qty'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
+			template+='<td> <input type="text" name="cost_'+col+'" id="cost_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
 			template+='<td> <input type="text" required="true" name="request_qty'+col+'" id="request_qty'+col+'" onkeyup="getCurrQty('+col+');" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
 			template+='<td> <input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
 		tmp='<tr align="center" id="row'+col+'">';
@@ -275,26 +484,27 @@ function getQtyById(index){
 		dijit.byId('curr_qty'+index).attr("value",0);
 		return  false;
 	}
-		dojo.xhrPost({
-			url:url_qty,
-			content:{
-				'pro_id':pro_id,
-				'branch_id':branch_id
-				},
-			handleAs:"json",
-			load: function(data) {
-				if(data==0 || data==''){
-					dijit.byId('pro_id').attr('value','');
-					alert('Empty item qty!');
-					dijit.byId('request_qty'+index).attr("value",''); 
-					
-				}
-			    dijit.byId('curr_qty'+index).attr("value",data);   
+	dojo.xhrPost({
+		url:url_qty,
+		content:{
+			'pro_id':pro_id,
+			'branch_id':branch_id
 			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+		handleAs:"json",
+		load: function(data) {
+			if(data==0 || data==''){
+				dijit.byId('pro_id').attr('value','');
+				alert('Empty item qty!');
+				dijit.byId('request_qty'+index).attr("value",''); 
+			}else{
+				dijit.byId('curr_qty'+index).attr("value",data.pro_qty);
+				dijit.byId('cost_'+index).attr("value",data.cost);				
+			}			
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 
 var pro_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );

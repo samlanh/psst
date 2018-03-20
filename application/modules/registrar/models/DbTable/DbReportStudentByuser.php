@@ -333,6 +333,37 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			";
 		return $db->fetchRow($sql);
 	}
+	
+	function getChangeProductById($id){
+		$db=$this->getAdapter();
+		$sql="select
+					*,
+					(select name_en from rms_view where type=2 and key_code=s.sex) as sex,
+					(select CONCAT(first_name,'-',last_name) from rms_users as u where u.id = cp.user_id) as user
+				from
+					rms_student as s,
+					rms_change_product as cp
+				where
+					cp.stu_id = s.stu_id
+					and cp.id = $id
+					limit 1
+			";
+		return $db->fetchRow($sql);
+	}
+	
+	function getChangeProductDetailById($id){
+		$db=$this->getAdapter();
+		$sql="select
+					*,
+					(select title from rms_program_name as p where p.service_id = cpd.service_id_old) as old_product,
+					(select title from rms_program_name as p where p.service_id = cpd.service_id_new) as new_product
+				from
+					rms_change_product_detail as cpd
+				where
+					cpd.change_id = $id
+			";
+		return $db->fetchAll($sql);
+	}
 }
 
 

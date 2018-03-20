@@ -206,9 +206,20 @@ class Allreport_StockController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$this->view->rs = $db->getTransferById($id);
 		$this->view->rsdetail = $db->getTransferByIdDetail($id);
-		print_r($this->view->rsdetail);
+// 		print_r($this->view->rsdetail);
 	}
-	function rptRequestProductdetailAction(){
+	
+	public function rptRequestProductDetailAction(){
+		$db = new Allreport_Model_DbTable_DbRequestStock();
+		$id=$this->getRequest()->getParam("id");
+		
+		$this->view->req = $db->getRequestProductById($id);
+		
+		$this->view->req_detail = $db->getAllRequestProductDetail($id);
+		
+	}
+	
+	function rptRequestProductAction(){
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
@@ -224,7 +235,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 			}
 			$this->view->search = $search;
 			$db=new Allreport_Model_DbTable_DbRequestStock();
-			$ds=$this->view->rows=$db->getAllRequestProductDetail($search);
+			$ds=$this->view->rows=$db->getAllRequestProduct($search);
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -235,6 +246,8 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	
+	
 	function rptAdjustStockdetailAction(){
 		try{
 			if($this->getRequest()->isPost()){

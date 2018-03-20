@@ -95,6 +95,7 @@
 								<td align="center" colspan="<?php echo $amount_day+5;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 									<!-- <img style="width: 90px;float: left; " alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>"> -->
 									<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_MISTAKE");?></strong><br />
+									<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?>&nbsp  <?php echo date('d-M-Y',strtotime($this->search['start_date']));?>  ដល់   <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong><br>
 									<strong​​ style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol light';">
 										<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
 										<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
@@ -125,7 +126,7 @@
 							<tr style="border: solid 1px #fff;">
 								<td>
 									<table cellpadding="5"​ border="1" style="font-family:'Khmer OS Battambang' ; border:1px solid #000; border-collapse: collapse; margin:0 auto; width:100%; white-space: nowrap;" >
-										<tr style="font-size:13px;">
+										<tr style="font-size:13px; font-weight:bold; background: #ccd9ff;">
 											<td rowspan="2" align="center">
 												<?php echo $tr->translate("DATE");?>	
 											</td>
@@ -136,7 +137,7 @@
 												<?php echo $tr->translate("DESCRIPTION");?>
 											</td>
 										</tr>
-										<tr style="font-size:12px;">
+										<tr style="font-size:12px; font-weight:bold; background: #ccd9ff;">
 											<td align="center"><?php echo $tr->translate("SMALL_MISTACK");?></td>
 											<td align="center"><?php echo $tr->translate("MEDIUM_MISTACK");?></td>
 											<td align="center"><?php echo $tr->translate("BIG_MISTACK");?></td>

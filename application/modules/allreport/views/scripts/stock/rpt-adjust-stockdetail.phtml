@@ -34,8 +34,8 @@
 				</td>
 				<td align="center" width="70%">
 					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
-					<strong style="padding-left: 0px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_ADJUST_STOCK');?></strong> 
-					<div><?php echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';echo date("d/m/Y",strtotime($this->search['end_date']));?></div>
+					<strong style="padding-left: 0px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_ADJUST_STOCK');?></strong><br>
+					<span style="font-weight: bold;font-size: 12px; "><?php if(!empty($this->search['start_date'])){?>&nbsp;<?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;ដល់&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));}?></span>
 				</td>
 				<td width="15%" align="center">
 				</td>
@@ -80,6 +80,12 @@
 						?>
 					</table>
 					<table width="100%" style="font-family:'Khmer OS Battambang';">
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
 						<tr>
 							<td  width="25%" align="center">
 								<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>

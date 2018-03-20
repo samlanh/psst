@@ -30,7 +30,9 @@
 										<img style="width: 40%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 									</td>
 									<td align="center">
-										<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 18px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_DROPS");?></strong><br />
+										<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
+										<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_DROPS");?></strong><br />
+										<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?>&nbsp <?php echo date('d-M-Y',strtotime($this->search['start_date']));?>  ដល់   <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 									</td>
 									<td width="25%" align="right">
 									</td>

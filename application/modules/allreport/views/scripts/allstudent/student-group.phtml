@@ -31,7 +31,8 @@
 						<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 					</td>
 					<td width="44%" align="center">
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><u>បញ្ជីរាយឈ្មោះក្រុម</u></strong>
+						<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><p>បញ្ជីរាយឈ្មោះក្រុម</p></strong>
 					</td>
 					<td align="right" width="28%"></td>
 				</tr>
@@ -48,7 +49,7 @@
 							</style>
 						<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="white-space:nowrap;">
 							  <thead>
-							  <tr style="font-size:14px; height: 25px; font-weight: bold; background: #ccc;" align="center">
+							  <tr style="font-size:14px; height: 25px; font-weight: bold; background: #ccd9ff;" align="center">
 							    <td><?php echo $tr->translate("NUM");?></td>
 							    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
@@ -98,6 +99,29 @@
 							  <?php } ?>
 							</table>
 						</td>
+					</tr>
+					<tr >
+					<td colspan="3" width="100%">
+						<table width="100%" style="font-family:'Khmer OS Battambang';">
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td  width="25%" align="center">
+									<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+								</td>
+								<td  width="50%">
+									&nbsp;
+								</td>
+								<td align="center"  width="25%">
+									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+								</td>
+							</tr>
+						</table>
+					</td>
 					</tr>
 				</table>
 	</div>	

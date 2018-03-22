@@ -138,7 +138,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
+		$this->view->form_search=$form;		
 	}
 	function rptStudentpaymenthistoryAction(){
 		try{

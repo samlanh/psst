@@ -328,4 +328,41 @@ class Allreport_StockController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 	}
+	
+	function rptSummaryStockAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+					
+			}else{
+				$search = array(
+						'title'	        =>	'',
+						'branch_id'		=>  '',
+						'pro_name'		=>  '',
+						'pro_type'		=>  '',
+						'start_date'	=>	date('Y-m-d'),
+						'end_date'		=>	date('Y-m-d'),
+						'status_search'	=> 1
+				);
+			}
+			$this->view->search = $search;
+			$db=new Allreport_Model_DbTable_DbRptSummaryStock();
+			$ds=$this->view->rows=$db->getAllProduct($search);
+	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		
+		$db=new Allreport_Model_DbTable_DbRptSummaryStock();
+		$this->view->pro_name=$db->getAllProductName();
+		
+		$this->view->pro_type=$db->getAllProductType();
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+	}
+	
 }

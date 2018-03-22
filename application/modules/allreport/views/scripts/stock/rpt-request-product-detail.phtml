@@ -71,6 +71,7 @@
 										<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួននៅសល់</strong></td>
 										<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">តម្លៃរាយ</strong></td>
 										<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនស្នើ</strong></td>
+										<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនទទួលបាន</strong></td>
 										<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">សម្គាល់</strong></td>
 									</tr>
 									<?php $i=0;if(!empty($this->req_detail)){foreach ($this->req_detail as $detail){$i++;?>
@@ -80,12 +81,14 @@
 											<td style="border:1px solid #000;"><?php echo $detail['qty_curr'];?></td>
 											<td style="border:1px solid #000;"><?php echo $detail['price'];?></td>
 											<td style="border:1px solid #000;"><?php echo $detail['qty_request'];?></td>
+											<td style="border:1px solid #000;"><?php echo $detail['qty_receive'];?></td>
 											<td style="border:1px solid #000;"><?php echo $detail['remark'];?></td>
 										</tr>
 									<?php }}?>
 									<?php for($i++;$i<=5;$i++){?>
 										<tr style=" font-size:12px; text-align:center; height:20px;">
 											<td><?php echo $i;?></td>
+											<td></td>
 											<td></td>
 											<td></td>
 											<td></td>

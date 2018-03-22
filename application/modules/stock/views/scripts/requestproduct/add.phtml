@@ -19,7 +19,11 @@
 	var pro_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->product));?> );
 	var pro_cate_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cat_rows));?> );
 	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
-	dojo.ready(function(){ 
+	
+	var request_for_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->rq_for));?> );
+	var for_section_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->for_section));?> );
+	
+	dojo.ready(function(){
 		getProByBranch();
 		new dijit.form.FilteringSelect({
 			store: pro_store,
@@ -61,6 +65,39 @@
 				}
 			}
 		}, "pro_id");
+
+		new dijit.form.FilteringSelect({
+			store: request_for_store,
+			autoComplete: true,                        
+			id: "request_for",
+			name: "request_for",  
+			class: 'fullside',  
+			required:false,
+			placeHolder:"<?php echo $tr->translate("REQUEST_FOR");?>",          
+			onChange: function() { 
+				 request_for = dijit.byId('request_for').get('value');
+				 if(request_for==-1){
+					 dijit.byId("popup_request_for").show();
+				 }
+			}
+		}, "request_for");
+		
+		new dijit.form.FilteringSelect({
+			store: for_section_store,
+			autoComplete: true,                        
+			id: "for_section",
+			name: "for_section",  
+			class: 'fullside',  
+			required:false,
+			placeHolder:"<?php echo $tr->translate("FOR_SECTION");?>",          
+			onChange: function() { 
+				 for_section = dijit.byId('for_section').get('value');
+				 if(for_section==-1){
+					 dijit.byId("popup_for_section").show();
+				 }
+			}
+		}, "for_section");
+		
 	});	
 </script>
 <style>
@@ -91,23 +128,21 @@ fieldset{  background:none;}
 					<legend align="center"><strong><?php echo $tr->translate("ADD_REQUEST_STOCK");?>​</strong></legend>
 					<table style="margin: 0 auto;" cellspacing="10" >
 							<tr>
-							   <td><?php echo $tr->translate("REQUEST_FOR")?></td>
-							   <td>
-							   		<?php /*?>
-									<select type="text" dojoType="dijit.form.FilteringSelect" name="request_for" id="request_for" class="fullside" >
-										<option value="-1">select</option>
-										<option value="0"><?php echo $tr->translate("ADD_NEW")?></option>
-									</select>
-									<?php */?>
-									<input type="text" dojoType="dijit.form.TextBox" name="request_for" id="request_for" class="fullside" />
+							    <td><?php echo $tr->translate("REQUEST_FOR")?></td>
+							    <td>
+							    	<input id="request_for"/>
 							   	</td>
-							    <td><?php echo $tr->translate("PURPOSE")?></td>
-					   			<td colspan="" rowspan="2"><textarea class="fullside"  style=" height: 70px !important;" tabindex="20" dojoType=""  id="purpose" name="purpose"  ></textarea></td>
+							    
+								<td><?php echo $tr->translate("FOR_SECTION")?></td>
+							    <td>
+							    	<input id="for_section"/>
+							   	</td>
 							</tr>
 							<tr>
 							   <td><?php echo $tr->translate("REQUEST_NO")?></td>
 							   <td><input type="text" dojoType="dijit.form.TextBox"   name="request_no"  id="request_no" value="<?php echo $this->rq_code;?>" class="fullside" readOnly="true"></td>
-							   
+							   <td><?php echo $tr->translate("PURPOSE")?></td>
+					   		<td colspan=""><textarea class="fullside"  style=" height: 30px !important;" tabindex="20" dojoType=""  id="purpose" name="purpose"  ></textarea></td>
 							</tr>
 							
 							<tr>
@@ -334,6 +369,7 @@ function printSave(){
 				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួននៅសល់</strong></td>';
 				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">តម្លៃរាយ</strong></td>';
 				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនស្នើ</strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនទទួលបាន</strong></td>';
 				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">សម្គាល់</strong></td>';
 				  temp+='</tr>';
 				  n=0;
@@ -343,6 +379,7 @@ function printSave(){
 				  temp+='<td style="border:1px solid #000;">'+dijit.byId("curr_qty"+rowIDArray[n]).get('value')+'</td>';
 				  temp+='<td style="border:1px solid #000;">'+"$ "+dijit.byId("cost_"+rowIDArray[n]).get('value')+'</td>';
 				  temp+='<td style="border:1px solid #000;">'+dijit.byId("request_qty"+rowIDArray[n]).get('value')+'</td>';
+				  temp+='<td style="border:1px solid #000;">'+dijit.byId("receive_qty"+rowIDArray[n]).get('value')+'</td>';
 				  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId("note_"+rowIDArray[n]).get('value')+'</td>';
 				  i++;
 				  temp+='</tr>';
@@ -351,6 +388,7 @@ function printSave(){
 					 temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
 					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
 					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
+					  temp+='<td style="border:1px solid #000;"></td>';
 					  temp+='<td style="border:1px solid #000;"></td>';
 					  temp+='<td style="border:1px solid #000;"></td>';
 					  temp+='<td style="border:1px solid #000;"></td>';
@@ -386,6 +424,7 @@ function addRow() {
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CURR_QTY");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("REQUEST_QTY");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("RECEIVE_QTY");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -398,6 +437,7 @@ function addRow() {
 			template+='<td> <input type="text" name="curr_qty'+col+'" id="curr_qty'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
 			template+='<td> <input type="text" name="cost_'+col+'" id="cost_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
 			template+='<td> <input type="text" required="true" name="request_qty'+col+'" id="request_qty'+col+'" onkeyup="getCurrQty('+col+');" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
+			template+='<td> <input type="text" required="true" name="receive_qty'+col+'" id="receive_qty'+col+'" onkeyup="" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
 			template+='<td> <input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
 		tmp='<tr align="center" id="row'+col+'">';
 		tmp+="</tr>";
@@ -429,7 +469,7 @@ var b_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(
 var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
 	function addBranch(){
 		if(dijit.byId('frm_addbranch').validate()){
-		dojo.xhrPost({
+			dojo.xhrPost({
 				url:url_addbranch,
 				form: dojo.byId("frm_addbranch"),
 				handleAs:"json",
@@ -438,15 +478,15 @@ var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'
 							 id: data,
 							 name: dijit.byId('branch_nameen').get('value')
 						   };
-			   addDataToSelectbox(dijit.byId('branch'), b_store, Itemmake, data);
-			   dijit.byId('frm_addbranch').reset();
-			   dijit.byId("popup_add_branch").hide();	
-			},
-			error: function(err) {
-			}
-	});
-}
-}
+				   addDataToSelectbox(dijit.byId('branch'), b_store, Itemmake, data);
+				   dijit.byId('frm_addbranch').reset();
+				   dijit.byId("popup_add_branch").hide();	
+				},
+				error: function(err) {
+				}
+			});
+		}
+	}
 function hideDialog(){
 	dijit.byId('frm_addbranch').reset();
 	dijit.byId("popup_add_branch").hide();
@@ -540,6 +580,126 @@ function getCurrQty(r){
 		dijit.byId("request_qty"+r).attr("value",curr_qty);
 	}
 }
+
+var url_request_for = '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'add-request-for')); ?>';
+function addRequestFor(){
+	if(dijit.byId('frm_add_request_for').validate()){
+		dojo.xhrPost({
+			url:url_request_for,
+			form: dojo.byId("frm_add_request_for"),
+			handleAs:"json",
+			load: function(data) {
+				var Itemmake = { 
+						 id: data,
+						 name: dijit.byId('title').get('value')
+					   };
+			   addDataToSelectbox(dijit.byId('request_for'), request_for_store, Itemmake, data);
+			   
+			   hideDialogRequestFor();
+			},
+			error: function(err) {
+				alert(err)
+			}
+		});
+	}
+}
+
+function hideDialogRequestFor(){
+	dijit.byId('frm_add_request_for').reset();
+	dijit.byId("popup_request_for").hide();
+}
+
+var url_for_section = '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'add-for-section')); ?>';
+function addForSection(){
+	if(dijit.byId('frm_add_for_section').validate()){
+		dojo.xhrPost({
+			url:url_for_section,
+			form: dojo.byId("frm_add_for_section"),
+			handleAs:"json",
+			load: function(data) {
+				var Itemmake = { 
+						 id: data,
+						 name: dijit.byId('title_for_section').get('value')
+					   };
+			   addDataToSelectbox(dijit.byId('for_section'), for_section_store, Itemmake, data);
+			   
+			   hideDialogForSection();
+			},
+			error: function(err) {
+				alert(err)
+			}
+		});
+	}
+}
+
+function hideDialogForSection(){
+	dijit.byId('frm_add_for_section').reset();
+	dijit.byId("popup_for_section").hide();
+}
+
+
 </script>
 
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:400px" id="popup_request_for" >
+		<form  id='frm_add_request_for' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					return true;
+				} else {
+					return false;
+				}
+			</script>
+			<fieldset>
+				<legend align="center"><strong><?php echo $tr->translate("REQUEST_FOR");?></strong></legend>
+				<table cellspacing="10" width="100%" >
+					<tr>
+						<td><?php echo $tr->translate("TITLE")?></td>
+						<td><input name="title" id="title" class="fullside" dojoType="dijit.form.ValidationTextBox" required="true" /></td>
+					</tr>	
+					<tr>
+						<td colspan="2" align="center" >
+							<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialogRequestFor();"/>
+							<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addRequestFor();"/>
+						</td>
+					</tr>
+				</table>	
+			</fieldset>
+		</form>
+	</div>
+</div>
 
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:400px" id="popup_for_section" >
+		<form  id='frm_add_for_section' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					return true;
+				} else {
+					return false;
+				}
+			</script>
+			<fieldset>
+				<legend align="center"><strong><?php echo $tr->translate("FOR_SECTION");?></strong></legend>
+				<table cellspacing="10" width="100%" >
+					<tr>
+						<td><?php echo $tr->translate("TITLE")?></td>
+						<td><input name="title_for_section" id="title_for_section" class="fullside" dojoType="dijit.form.ValidationTextBox" required="true" /></td>
+					</tr>	
+					<tr>
+						<td colspan="2" align="center" >
+							<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancel_for_section" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialogForSection();"/>
+							<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submit_for_section" 
+							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addForSection();"/>
+						</td>
+					</tr>
+				</table>	
+			</fieldset>
+		</form>
+	</div>
+</div>

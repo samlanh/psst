@@ -1,0 +1,14 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
+	$formList = new Application_Form_Frmtable();
+	echo $this->headTitle($tr->translate("REQUEST_FOR"));
+?>
+<form action="" dojoType="dijit.form.Form" method="post">
+	<table width="30%" >
+	    <tr>
+	        <td><input name="title" id="title" class="fullside" value="<?php echo $this->search['title']?>" dojoType="dijit.form.TextBox" /></td>
+	    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
+	    </tr>
+	</table>
+</form>
+<?php echo $this->list; ?>

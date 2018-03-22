@@ -1,0 +1,62 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("FOR_SECTION"));
+?>	
+<style>
+ 
+</style>
+<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+<script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.CheckBox");
+    dojo.require("dojox.form.BusyButton");
+</script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script>
+dojo.require("dojo.data.ItemFileWriteStore");
+</script>
+<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
+<form  id='frm_customer' action="" dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data" >
+	<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
+		if(this.validate()) {
+        	dijit.byId('save_new').set('disabled',true);
+			dijit.byId('save_close').set('disabled',true);
+			return true;
+		} else {
+			return false;
+		}
+	</script>
+	<table cellspacing="2" width="100%" style="margin: 0 auto; ">
+		<tr>
+			<td width="33%;" valign="top">
+				&nbsp;
+			</td>
+			
+			<td width="33%;" valign="top">
+				<fieldset>
+					<legend style="text-align: center;">Add New</legend>
+					<table style="margin: 0 auto; width: 100%;text-align: center;" cellspacing="2"  >
+						<tr>
+							<td><?php echo $tr->translate("TITLE");?></td>
+							<td><input type="text" name="title" class="fullside" id="title" dojoType="dijit.form.TextBox" required="required" /> </td> 
+						</tr>
+						<tr>
+							<td colspan="2" align="center" >
+								<input type="submit" value="save_new" name="save_new"  id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+									 iconClass="dijitEditorIcon dijitEditorIconSave" />
+							</td>
+					    </tr>
+					</table>
+				</fieldset>	
+			</td>
+			
+			<td width="33%;" valign="top">
+				&nbsp;
+			</td>
+		</tr>
+		
+	</table>	
+</form>
+</script>

@@ -126,7 +126,7 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td colspan="4">
-									<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+									<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
 											<tr id="head-title" class="head-td" align="right"></tr>
 									</table>
 								</td>
@@ -176,7 +176,9 @@ function oldRow() {
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CURR_QTY");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("REQUEST_QTY");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("RECEIVE_QTY");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -187,7 +189,9 @@ function oldRow() {
 			//template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" id="product_name_'+col+'" name="product_name_'+col+'" onChange="sumAmountDue();">'+''+'</select></td>';			
 
 			template+='<td> <input type="text" required="true" name="curr_qty'+col+'" id="curr_qty'+col+'" dojoType="dijit.form.NumberTextBox"  style="width:100%;" readonly="true"/></td>';
+			template+='<td> <input type="text" name="cost_'+col+'" id="cost_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
 			template+='<td> <input type="text" required="true" name="request_qty'+col+'" id="request_qty'+col+'" onkeyup="getCurrQty('+col+');" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
+			template+='<td> <input type="text" required="true" name="receive_qty'+col+'" id="receive_qty'+col+'" onkeyup="" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
 			template+='<td> <input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" value="<?php echo $detail['remark']?>" /></td>';
 		tmp='<tr align="center" id="row'+col+'">';
 		tmp+="</tr>";
@@ -202,7 +206,9 @@ function oldRow() {
 		});
 		getQtyById(col);
 		dijit.byId("curr_qty"+col).attr('value',<?php echo $detail['qty_curr']?>);
+		dijit.byId("cost_"+col).attr('value',<?php echo $detail['price']?>);
 		dijit.byId("request_qty"+col).attr('value',<?php echo $detail['qty_request']?>);
+		dijit.byId("receive_qty"+col).attr('value',<?php echo $detail['qty_receive']?>);
 		<?php }?>
  }
 
@@ -219,7 +225,9 @@ function addRow() {
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRODUCT_NAME");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CURR_QTY");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("COST");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("REQUEST_QTY");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("RECEIVE_QTY");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -230,7 +238,9 @@ function addRow() {
 			//template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" id="product_name_'+col+'" name="product_name_'+col+'" onChange="sumAmountDue();">'+''+'</select></td>';			
 
 			template+='<td> <input type="text" required="true" name="curr_qty'+col+'" id="curr_qty'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
+			template+='<td> <input type="text" name="cost_'+col+'" id="cost_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
 			template+='<td> <input type="text" required="true" name="request_qty'+col+'" id="request_qty'+col+'" onkeyup="getCurrQty('+col+');" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
+			template+='<td> <input type="text" required="true" name="receive_qty'+col+'" id="receive_qty'+col+'" onkeyup="" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
 			template+='<td> <input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
 		tmp='<tr align="center" id="row'+col+'">';
 		tmp+="</tr>";
@@ -329,9 +339,10 @@ function getQtyById(index){
 					dijit.byId('pro_id').attr('value','');
 					alert('Empty item qty!');
 					dijit.byId('request_qty'+index).attr("value",''); 
-					
+				}else{
+					dijit.byId('curr_qty'+index).attr("value",data.pro_qty);
+					dijit.byId('cost_'+index).attr("value",data.cost);	
 				}
-			    dijit.byId('curr_qty'+index).attr("value",data);   
 			},
 			error: function(err) {
 				alert(err);

@@ -68,7 +68,13 @@ class Stock_RequestProductController extends Zend_Controller_Action {
 		$this->view->rq_code=$_pur->getRequestCode();
 		$this->view->bran_name=$_pur->getAllBranch();
 		
-		$this->view->rq_for=$_pur->getAllRequestFor();
+		$req_for = $_pur->getAllRequestFor();
+		array_unshift($req_for, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->rq_for = $req_for;
+		
+		$for_section = $_pur->getAllForSection();
+		array_unshift($for_section, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+		$this->view->for_section = $for_section;
 		
 		$db_gr=new Global_Model_DbTable_DbGrade();
 		$d_row=$db_gr->getNameGradeAll();
@@ -78,6 +84,8 @@ class Stock_RequestProductController extends Zend_Controller_Action {
 		$model = new Application_Model_DbTable_DbGlobal();
 		$branch = $model->getAllBranchName();
 		$this->view->branchopt = $branch;
+		
+		
 	}
 	
 	public function editAction(){
@@ -157,6 +165,26 @@ class Stock_RequestProductController extends Zend_Controller_Action {
     		$db = new Accounting_Model_DbTable_DbRequestProduct();
     		$gty= $db->getAllProductBybranch($data['branch_id']);
     		print_r(Zend_Json::encode($gty));
+    		exit();
+    	}
+    }
+    
+    function addRequestForAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Accounting_Model_DbTable_DbRequestProduct();
+    		$request_for = $db->addNewRequestFor($data);
+    		print_r(Zend_Json::encode($request_for));
+    		exit();
+    	}
+    }
+    
+    function addForSectionAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Accounting_Model_DbTable_DbRequestProduct();
+    		$for_section = $db->addNewForSection($data);
+    		print_r(Zend_Json::encode($for_section));
     		exit();
     	}
     }

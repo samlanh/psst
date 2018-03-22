@@ -80,6 +80,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 							'pro_id'		=>  $data['product_name_'.$i],
 							'qty_curr'		=> 	$data['curr_qty'.$i],
 							'qty_request'	=>  $data['request_qty'.$i],
+							'qty_receive'	=>  $data['receive_qty'.$i],
 							'price'			=> 	$data['cost_'.$i],
 							'pro_type'		=>  2,//type product cut stock later
 							'create_date'	=>  date("Y-m-d H:i:s"),
@@ -92,7 +93,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					$rows=$this->getProQtyByLocation($data['branch_id_'.$i], $data['product_name_'.$i]); 
 					if($rows){
 							$datatostock= array(
-									'pro_qty' 	=> $rows["pro_qty"]-$data['request_qty'.$i],
+									'pro_qty' 	=> $rows["pro_qty"]-$data['receive_qty'.$i],
 									'date'		=> date("Y-m-d H:i:s"),
 									'user_id'	=> $this->getUserId()
 							);
@@ -165,6 +166,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 							'pro_id'		=>  $data['product_name_'.$i],
 							'qty_curr'		=> 	$data['curr_qty'.$i],
 							'qty_request'	=>  $data['request_qty'.$i],
+							'qty_receive'	=>  $data['receive_qty'.$i],
 							'price'			=> 	$data['cost_'.$i],
 							'pro_type'		=> 2,//type product cut stock later
 							'create_date'	=>  	date("Y-m-d H:i:s"),
@@ -177,7 +179,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					$rows=$this->getProQtyByLocation($data['branch_id_'.$i], $data['product_name_'.$i], $data['request_qty'.$i]); 
 					if($rows){
 							$datatostock= array(
-									'pro_qty' 	=> $rows["pro_qty"]-$data['request_qty'.$i],
+									'pro_qty' 	=> $rows["pro_qty"]-$data['receive_qty'.$i],
 									'date'		=> date("Y-m-d H:i:s"),
 									'user_id'	=> $this->getUserId()
 							);
@@ -207,7 +209,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 	
 	function getRequestDetail($id){
 		$db=$this->getAdapter();
-		$sql="SELECT branch_id,(SELECT p.pro_name FROM rms_product AS p WHERE p.id=pro_id ) AS pro_name,
+		$sql="SELECT *,branch_id,(SELECT p.pro_name FROM rms_product AS p WHERE p.id=pro_id ) AS pro_name,
 			    pro_id,qty_curr,qty_request,remark FROM rms_request_orderdetail 
 				WHERE request_id=$id";
 		return $db->fetchAll($sql);
@@ -349,14 +351,49 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     function getAllRequestFor(){
     	$db=$this->getAdapter();
     	$sql="SELECT
-			    	ro.request_name
+			    	id,
+			    	title as name
     			FROM
-			    	rms_request_order AS ro
+			    	rms_request_for AS rf
     			WHERE
     				status=1
-    				and request_name != ''
+    				and title != ''
     		";
     	return $db->fetchAll($sql);
+    }
+    
+    function getAllForSection(){
+    	$db=$this->getAdapter();
+    	$sql="SELECT
+			    	id,
+			    	title as name
+    			FROM
+    				rms_for_section AS fs
+    			WHERE
+			    	status=1
+			    	and title != ''
+    		";
+    	return $db->fetchAll($sql);
+    }
+    
+    function addNewRequestFor($data){
+    	$this->_name="rms_request_for";
+    	$arr = array(
+    			'title'=>$data['title'],
+    			'create_date'=>date("Y-m-d"),
+    			'user_id'=>$this->getUserId(),
+    		);
+    	return $this->insert($arr);
+    }
+    
+    function addNewForSection($data){
+    	$this->_name="rms_for_section";
+    	$arr = array(
+    			'title'=>$data['title_for_section'],
+    			'create_date'=>date("Y-m-d"),
+    			'user_id'=>$this->getUserId(),
+    	);
+    	return $this->insert($arr);
     }
     
 }

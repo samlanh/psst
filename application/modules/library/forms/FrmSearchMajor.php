@@ -131,7 +131,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$start_date->setAttribs(array(
 				'dojoType'=>"dijit.form.DateTextBox",'class'=>'fullside',
-				'required'=>false,
+				//'required'=>false,
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				));
 		$_date = $request->getParam("start_date");

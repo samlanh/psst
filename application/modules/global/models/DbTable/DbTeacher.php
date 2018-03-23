@@ -144,11 +144,11 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-// 	function getAllPosition(){
-// 		$db=$this->getAdapter();
-// 		$sql="select id ,title as name from rms_staff_position where status = 1 ";
-// 		return $db->fetchAll($sql);
-// 	}
+	function getAllPosition(){
+		$db=$this->getAdapter();
+		$sql="select id ,title as name from rms_staff_position where status = 1 ";
+		return $db->fetchAll($sql);
+	}
 	
 	function getTeacherCode(){
 		$db=$this->getAdapter();

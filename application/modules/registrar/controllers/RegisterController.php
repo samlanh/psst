@@ -43,7 +43,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('បោះ.អាហារូ'=>$letter,'branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();
     	}
     	$data = new Registrar_Model_DbTable_DbRegister();
     	$db=$this->view->rows_degree=$data->getDegree();
@@ -52,8 +51,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
+    	
+//     	$db = new Registrar_Model_DbTable_DbRegister();
+//     	$db->resetReceipt();
     }
-  
     public function addAction(){
       if($this->getRequest()->isPost()){
       	$_data = $this->getRequest()->getPost();

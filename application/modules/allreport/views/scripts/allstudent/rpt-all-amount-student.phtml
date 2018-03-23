@@ -37,7 +37,7 @@
 						<ul>
 							<li><strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong></li>
 							<li><strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("ALL_STUDENT_REPORT");?></strong></li>
-							<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?>From  <?php echo date('d-M-Y',strtotime($this->search['start_date']));?>  To   <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+							<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 						</ul>
 					</td>
 					<td width="15%" align="center">

@@ -271,6 +271,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 		$frm_search = $frm_major->FrmMajors();
 		Application_Model_Decorator::removeAllDecorator($frm_search);
 		$this->view->frm_search = $frm_search;
+		$this->view->search=$search;
 	}
 	
 	function rptRecieptsAction(){

@@ -35,7 +35,7 @@ dojo.ready(function(){
 	    id: "grade",
 	    name: "grade",           
 	    class: 'fullside',  
-	    placeHolder:"Selecte Grade",          
+	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 	}, "grade");
 	dijit.byId('grade').attr('value','');
 
@@ -46,7 +46,7 @@ dojo.ready(function(){
 	    id: "group",
 	    name: "group",           
 	    class: 'fullside',
-	    placeHolder:"Selecte Group",    
+	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",    
 	    onChange: function() { 
 	    	group_id = dijit.byId('group').get('value');
 		    if(group_id==-1){
@@ -87,13 +87,13 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 		<td valign="top">
 			<form id='studentgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<fieldset style="width: 50%;float: left;">
-						<legend align="center"><strong>Search Group</strong></legend>
+						<legend align="center"><strong><?php echo $tr->translate("SEARCH_GROUP");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%;float: left; background:#DFF7FD;white-space: nowrap;" cellspacing="10" broder="1">
 						<tr>
 							<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 							<td>
 								<select class="fullside" dojoType="dijit.form.FilteringSelect" required="true"  id="academy" name="academy" type="text">
-									<option value="">Select AcademicYear</option>
+									<option value=""><?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?></option>
 									<?php if(!empty($this->academy)) foreach($this->academy as $row){?>
 										<option value="<?php echo $row['id'];?>" <?php if($row['id']==$this->value['academy']) echo "selected='selected'"?>><?php echo $row['years']; ?></option>
 									<?php }?>
@@ -102,7 +102,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							<td><?php echo $tr->translate("DEGREE");?></td>
 							<td >
 								<select class="fullside"  name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getallGrade();">
-									<option value="">Select Degree</option>
+									<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
 									<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
 										<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->value['degree']) echo "selected='selected'"?>><?php echo $row['en_name']?></option>
 									<?php }?>
@@ -117,7 +117,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							<td><?php echo $tr->translate("SESSION");?></td>
 							<td>
 								 <select class="fullside"  tabindex="24" name="session" id="session" dojoType="dijit.form.FilteringSelect" >
-								  	<option value="">Select Session</option>
+								  	<option value=""><?php echo $tr->translate("SELECT_SESSION");?></option>
 								    <?php if(!empty($this->rs_session)) foreach ($this->rs_session As $rs_sesion){?>
 										<option value="<?php echo $rs_sesion['key_code'];?>" <?php if($rs_sesion['key_code']==$this->value['session']) echo "selected='selected'"?> ><?php echo $rs_sesion['view_name'];?></option>
 								    <?php }?>		
@@ -149,7 +149,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 	   				}
 				</script>	
 					<fieldset style="width: 49%;">
-						<legend align="center"><strong>To Group</strong></legend>
+						<legend align="center"><strong><?php echo $tr->translate("TO_GROUP");?></strong></legend>
 							<table style="margin: 0 auto; width: 100%; background:#DFF7FD;white-space: nowrap;" cellspacing="10" border="0">
 								<tr>
 									<td width="20%"><?php echo $tr->translate("GROUP_CODE");?></td>
@@ -197,8 +197,8 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							</table>				
 					</fieldset>
 					<div align="center">
-						<a id="select-all" href="#"><span style="font-size: 15px;">Select all</span></a> <span style="font-size: 16px;"> | </span>
-						<a id="deselect-all" href="#"><span style="font-size: 15px;">Deselect all</span></a> <span style="font-size: 16px;"> </span>
+						<a id="select-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("SELECT_ALL");?></span></a> <span style="font-size: 16px;"> | </span>
+						<a id="deselect-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("DESELECT_ALL");?></span></a> <span style="font-size: 16px;"> </span>
 					</div>
 					<select multiple id="public-methods" name="public-methods[]">
 						<?php $no=0; if(!empty($this->rs)) foreach($this->rs as $row){ $no++;?>

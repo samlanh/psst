@@ -84,7 +84,7 @@ dojo.require("dijit.form.CheckBox");
 												<tr>
 													<td><?php echo $tr->translate("FROM_GROUP")?></td>
 													<td>
-														<select dojoType="dijit.form.FilteringSelect" required="true" readonly="readonly" class="fullside" id="from_group" name="from_group" type="text" placeholder="select group" onchange="toStudentGroup(1);">
+														<select dojoType="dijit.form.FilteringSelect" required="true" readonly="readonly" class="fullside" id="from_group" name="from_group" type="text" placeholder="<?php echo $tr->translate("SELECT_GROUP")?>" onchange="toStudentGroup(1);">
 															<option value="0" > </option>
 															<?php if(!empty($this->row))foreach ($this->row as $_row){?>
 																<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>

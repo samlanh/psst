@@ -22,7 +22,7 @@ dojo.ready(function(){
 	    id: "dept",
 	    name: "dept",           
 	    class: "full height-text", 
-	    placeHolder:"Select Degree",          
+	    placeHolder:"<?php echo $tr->translate("SELECT_DEGREE")?>",          
 	    onChange: function() {  
 	    	dept_id = dijit.byId('dept').get('value');
 	    	if(dept_id==-1){

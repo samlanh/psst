@@ -43,7 +43,7 @@
 					<td align="center" width="50%">
 						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
 						<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></strong><br />
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 					</td>
 					<td width="25%"></td>
 				</tr>
@@ -224,9 +224,29 @@
 								<td><span style="color: red;">$ <?php echo number_format($net_amount,2)?></span></td>
 							</tr>
 						</table>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
 					</td>
 				</tr>
 				<?php }?>
+				 <tr >
+				<td colspan="3" width="100%">
+					<table width="100%" style="font-family:'Khmer OS Battambang';">
+						<tr>
+							<td  width="25%" align="center">
+								<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+							</td>
+							<td  width="50%">
+								&nbsp;
+							</td>
+							<td align="center"  width="25%">
+								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
 		</table>
 	</div>	
 </div>

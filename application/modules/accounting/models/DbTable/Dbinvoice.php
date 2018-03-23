@@ -26,9 +26,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					AND v.user_id=u.id
 					AND s.status=1 ";
 		
-		$where="";
-    	$from_date =(empty($search['form_date']))? '1': " v.input_date >= '".$search['form_date']." 00:00:00'";
-    	$to_date = (empty($search['to_date']))? '1': " v.input_date <= '".$search['to_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': " v.input_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " v.input_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
     	
     	if(!empty($search['search'])){
@@ -42,8 +41,6 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$s_where[]= " v.totale_amount LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-    	
-    	
     	if($search['stu_code']!=""){
     		$where.=" AND v.student_id=".$search['stu_code'];
     	}

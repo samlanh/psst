@@ -13,12 +13,15 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-					'student_id' => '',
-					'student_name' => '',
-					'form_date'=> date('Y-m-d'),
-					'to_date'=>date('Y-m-d'),
-					'search'=>1,
-				);
+						'search'=>'',
+						'stu_code' => '',
+						'stu_name' => '',
+						'group'=>'',
+						'degree'=>'',
+						'grade'=>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+					);
     		}
 			$db = new Accounting_Model_DbTable_Dbinvoice();
 			$rs_rows = $db->getinvoice($search);
@@ -36,6 +39,10 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->frm = $form;
 	}
     public function addAction()
     {	

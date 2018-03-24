@@ -42,7 +42,7 @@
 									<tr>
 										<td  style="white-space: nowrap;"><?php echo $tr->translate("GROUP")?></td>
 										<td>
-											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="true"  id="from_group" name="from_group" type="text" placeholder="select group" onchange="toStudentGroup(1);getStudentFromGroup();">
+											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="true"  id="from_group" name="from_group" type="text" placeholder="<?php echo $tr->translate("SELECT_GROUP");?>" onchange="toStudentGroup(1);getStudentFromGroup();">
 												<option value="0" > </option>
 												<?php if(!empty($this->row))foreach ($this->row as $_row){?>
 													<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
@@ -73,8 +73,8 @@
 										<td align="center"><?php echo $tr->translate("STATUS")?></td>
 										<td>
 											<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="status" name="status" type="text">
-												<option value="1">Active</option>
-												<option value="0">Deactive</option>
+												<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
+												<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
 											</select>
 											<input dojoType="dijit.form.TextBox"  type="hidden" name="identity" id="identity" />
 										</td>

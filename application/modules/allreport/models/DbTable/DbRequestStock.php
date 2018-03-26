@@ -12,6 +12,8 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql="SELECT 
 					re.*,
+					(select title from rms_request_for as rf where rf.id = request_for) as request_for,
+    				(select title from rms_for_section as fs where fs.id = for_section) as for_section,
 					(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
 					(select first_name from rms_users as u where u.id = re.user_id) as user,
 					(select name_en from rms_view where type=1 and key_code = re.status) as status
@@ -39,6 +41,13 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 			$where.=" AND re.status=".$search['status_search'];
 		}
 		
+		if($search['request_for']>0){
+			$where.=" AND request_for=".$search['request_for'];
+		}
+		if($search['for_section']>0){
+			$where.=" AND for_section=".$search['for_section'];
+		}
+		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('branch_id');
 		$order=" ORDER BY re.id DESC";
@@ -50,6 +59,8 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql="SELECT
 					re.*,
+					(select title from rms_request_for as rf where rf.id = request_for) as request_for,
+    				(select title from rms_for_section as fs where fs.id = for_section) as for_section,
 					(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
 					(select first_name from rms_users as u where u.id = re.user_id) as user,
 					(select name_en from rms_view where type=1 and key_code = re.status) as status

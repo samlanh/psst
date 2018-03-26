@@ -227,13 +227,15 @@ class Allreport_StockController extends Zend_Controller_Action {
 			}else{
 				$search = array(
 						'title'	        =>	'',
+						'request_for' 	=> -1,
+						'for_section' 	=> -1,
 						'branch_id'		=>  '',
 						'start_date'	=>	date('Y-m-d'),
 						'end_date'		=>	date('Y-m-d'),
 						'status_search'	=> 1
 				);
 			}
-			$this->view->search = $search;
+			
 			$db=new Allreport_Model_DbTable_DbRequestStock();
 			$ds=$this->view->rows=$db->getAllRequestProduct($search);
 	
@@ -241,6 +243,16 @@ class Allreport_StockController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+		
+		$_pur =  new Accounting_Model_DbTable_DbRequestProduct();
+		$req_for = $_pur->getAllRequestFor();
+		$this->view->rq_for = $req_for;
+		
+		$for_section = $_pur->getAllForSection();
+		$this->view->for_section = $for_section;
+		
+		$this->view->search = $search;
+		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);

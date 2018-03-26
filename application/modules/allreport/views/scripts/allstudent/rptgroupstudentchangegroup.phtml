@@ -25,7 +25,7 @@
 			   <td> <?php echo $frm->getElement("session");?></td>
 			   <td>
 			   		<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="change_type" name="change_type" type="text">
-						<option value="">select type</option>
+						<option value=""><?php echo $tr->translate("SELECT_TYPE");?></option>
 						<?php if(!empty($this->change_type)){foreach ($this->change_type as $rs){?>
 							<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->search['change_type']){echo 'selected="selected"';}?>><?php echo $rs['name']?></option>
 						<?php }}?>

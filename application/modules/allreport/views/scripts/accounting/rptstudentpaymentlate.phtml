@@ -11,7 +11,7 @@
 	<table>	
 		<tr>
 			<td>
-				<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
+				<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
 			</td>
 			<td> <?php echo $frm->getElement("service_type");?></td>
 			<td> <?php echo $frm->getElement("service");?></td>

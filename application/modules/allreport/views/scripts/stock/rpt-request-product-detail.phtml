@@ -54,13 +54,15 @@
 							<td align="left">សាខា </br >Branch</td>
 							<td valign="top"> :&nbsp; <?php echo $this->req['branch_name']?> </td>
 							<td class="one ">ស្នើសម្រាប់<br />Request for</td>
-							<td valign="top"> :&nbsp; <?php echo $this->req['request_name']?> </td>
-							<td colspan="3"><label id="" >ថ្ងៃស្នើ </br >Request Date</label></td>
-							<td colspan="3" valign="top">:&nbsp;<?php echo date("d-M-Y",strtotime($this->req['request_date']));?></td>
+							<td valign="top"> :&nbsp; <?php echo $this->req['request_for']?> </td>
+							<td colspan="2"><label id="" >សម្រាប់ផ្នែក </br >For Department</label></td>
+							<td colspan="4" valign="top">:&nbsp;<?php echo $this->req['for_section'];?></td>
 						</tr>
 						<tr style="line-height:15px;">
+							<td colspan="1"><label id="" >ថ្ងៃស្នើ </br >Request Date</label></td>
+							<td colspan="1" valign="top">:&nbsp;<?php echo date("d-M-Y",strtotime($this->req['request_date']));?></td>
 							<td>គោលបំណង</br />Purpose</td>
-							<td colspan="9" valign="top"> :&nbsp; <?php echo $this->req['purpose']?></td>
+							<td colspan="7" valign="top"> :&nbsp; <?php echo $this->req['purpose']?></td>
 						</tr>
 						<tr>
 							<td colspan="10">

@@ -71,10 +71,8 @@ class Registrar_IncomeController extends Zend_Controller_Action
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();
 			}
 		}
-		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$user_type=$_db->getUserType();
 		if($user_type!=1){
@@ -106,16 +104,24 @@ class Registrar_IncomeController extends Zend_Controller_Action
 		}
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
-		$user_type=$_db->getUserType();
-		if($user_type!=1){
-			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-		}
+// 		$user_type=$_db->getUserType();
+// 		if($user_type!=1){
+// 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
+// 		}
 		
 		$id = $this->getRequest()->getParam('id');
 		$db = new Registrar_Model_DbTable_DbIncome();
 		$row  = $db->getIncomeById($id);
-		$this->view->rs = $row;
 		
+		$session_user=new Zend_Session_Namespace('authstu');
+		$user_type_id = $session_user->level;
+		$payment_date = date("Y-m-d",strtotime($row['date']));
+		$current_date = date("Y-m-d");
+		if($user_type_id!=1 AND $current_date>$payment_date){
+			Application_Form_FrmMessage::Sucessfull("you data is more then a day.so can not edit",'/registrar/income');
+		}
+		
+		$this->view->rs = $row;
 		
     	$db = new Registrar_Model_DbTable_DbIncome();
     	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type

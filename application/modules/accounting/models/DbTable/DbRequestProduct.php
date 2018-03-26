@@ -11,11 +11,21 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     }
     function getAllRequest($search=null){
     	$db = $this->getAdapter();
-    	$sql="SELECT id,request_no,request_name,purpose,request_date,
-		       (SELECT SUM(rd.qty_request) FROM rms_request_orderdetail AS rd WHERE rd.request_id=rms_request_order.id)AS total_qty,
-		       (SELECT name_en FROM rms_view WHERE key_code=rms_request_order.status AND rms_view.type=1 LIMIT 1) AS `status`,
-			   (SELECT first_name FROM rms_users WHERE id=rms_request_order.user_id LIMIT 1) AS user_name
-			   FROM rms_request_order WHERE 1";
+    	$sql="SELECT 
+    				id,
+    				request_no,
+    				(select title from rms_request_for as rf where rf.id = request_for) as request_for,
+    				(select title from rms_for_section as fs where fs.id = for_section) as for_section,
+    				purpose,
+    				request_date,
+			       (SELECT SUM(rd.qty_request) FROM rms_request_orderdetail AS rd WHERE rd.request_id=rms_request_order.id)AS total_qty,
+			       (SELECT first_name FROM rms_users WHERE id=rms_request_order.user_id LIMIT 1) AS user_name,
+			       (SELECT name_en FROM rms_view WHERE key_code=rms_request_order.status AND rms_view.type=1 LIMIT 1) AS `status`
+			   FROM 
+    				rms_request_order 
+    			WHERE 
+    				1
+    		";
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " request_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " request_date <= '".$search['end_date']." 23:59:59'";
@@ -32,6 +42,13 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     		$where.=" AND status=".$search['status_search'];
     	}
     	
+    	if($search['request_for']>0){
+    		$where.=" AND request_for=".$search['request_for'];
+    	}
+    	if($search['for_section']>0){
+    		$where.=" AND for_section=".$search['for_section'];
+    	}
+    	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('branch_id');
     	$order=" ORDER BY id DESC";
@@ -41,9 +58,19 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 
     public function getProQtyByLocation($branch_id,$pro_id){
     	$db=$this->getAdapter();
-    	$sql=" SELECT pl.id,pl.pro_id,pl.pro_qty  FROM rms_product_location AS pl,rms_product AS p
-				 WHERE pl.pro_id=$pro_id AND pl.brand_id=$branch_id
-				 AND   p.id=pl.pro_id   AND   p.pro_type=2";
+    	$sql=" SELECT 
+    				pl.id,
+    				pl.pro_id,
+    				pl.pro_qty 
+    			FROM 
+    				rms_product_location AS pl,
+    				rms_product AS p
+				WHERE 
+					pl.pro_id=$pro_id 
+					AND pl.brand_id=$branch_id
+				 	AND p.id=pl.pro_id 
+    				AND p.pro_type=2
+    		";
     	$row = $db->fetchRow($sql);
     	if(empty($row)){
     		return $row = $db->fetchRow($sql);
@@ -58,7 +85,8 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 		try{
 			$arr=array(
 					"request_no"    => 	$data["request_no"],
-					"request_name"  => 	$data["request_for"],
+					"request_for"   => 	$data["request_for"],
+					"for_section"   => 	$data["for_section"],
 					"purpose"     	=> 	$data["purpose"],
 					"branch_id"     => 	$data["branch"],
 					"request_date"  => 	date("Y-m-d",strtotime($data['request_date'])),
@@ -140,7 +168,8 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 			}
 			$arr=array(
 					"request_no"    => 	$data["request_no"],
-					"request_name"  => 	$data["request_for"],
+					"request_for"   => 	$data["request_for"],
+					"for_section"   => 	$data["for_section"],
 					"purpose"     	=> 	$data["purpose"],
 					"branch_id"     => 	$data["branch"],
 					"request_date"  => 	date("Y-m-d",strtotime($data['request_date'])),

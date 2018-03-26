@@ -74,6 +74,7 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     
     	$this->view->rr = $db->getStudentPaymentByid($id);
     	$this->view->row =  $db->getPaymentReciptDetail($id);
+    	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }

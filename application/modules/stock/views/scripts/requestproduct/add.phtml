@@ -139,24 +139,23 @@ fieldset{  background:none;}
 							   	</td>
 							</tr>
 							<tr>
-							   <td><?php echo $tr->translate("REQUEST_NO")?></td>
-							   <td><input type="text" dojoType="dijit.form.TextBox"   name="request_no"  id="request_no" value="<?php echo $this->rq_code;?>" class="fullside" readOnly="true"></td>
-							   <td><?php echo $tr->translate("PURPOSE")?></td>
-					   		<td colspan=""><textarea class="fullside"  style=" height: 30px !important;" tabindex="20" dojoType=""  id="purpose" name="purpose"  ></textarea></td>
+							    <td><?php echo $tr->translate("REQUEST_NO")?></td>
+							    <td><input type="text" dojoType="dijit.form.TextBox"   name="request_no"  id="request_no" value="<?php echo $this->rq_code;?>" class="fullside" readOnly="true"></td>
+							    <td><?php echo $tr->translate("PURPOSE")?></td>
+								<td colspan=""><textarea class="fullside"  style=" height: 30px !important;" tabindex="20" dojoType=""  id="purpose" name="purpose"  ></textarea></td>
 							</tr>
 							
 							<tr>
 								<td><?php echo $tr->translate("BRANCH")?></td>
 						    	<td>
-						    	<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); ">								
-									<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
-											<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
-									<?php }?> 
-								 </select>
+									<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); ">								
+										<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
+												<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
+										<?php }?> 
+									 </select>
 						    	 </td>
-							   <td><?php echo $tr->translate("REQUEST_DATE")?></td>
-							   <td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="request_date" id="request_date" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/></td>
-								
+								 <td><?php echo $tr->translate("REQUEST_DATE")?></td>
+								 <td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="request_date" id="request_date" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/></td>
 							</tr>
 							
 							<tr>
@@ -228,7 +227,7 @@ fieldset{  background:none;}
 				</tr>
 				<tr>
 					<td colspan="10">
-						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
+						<table width="100%" border="0" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
 							<tr >
 								<td width="10%"></td>
 								<td width="18%"></td>
@@ -246,12 +245,15 @@ fieldset{  background:none;}
 								<td valign="top"> :&nbsp; <label id="lb_branch"></label> </td>
 								<td class="one ">ស្នើសម្រាប់<br />Request for</td>
 								<td valign="top"> :&nbsp; <label id="lb_request_for"></label> </td>
-								<td colspan="3"><label id="" >ថ្ងៃស្នើ </br >Request Date</label></td>
-								<td colspan="3" valign="top">:&nbsp;<label id="lb_request_date"></label></td>
+								<td colspan="2"><label id="" >សម្រាប់ផ្នែក </br >For Department</label></td>
+								<td colspan="4" valign="top">:&nbsp;<label id="lb_for_section"></label></td>
 							</tr>
 							<tr style="line-height:15px;">
+								<td colspan="1"><label id="" >ថ្ងៃស្នើ </br >Request Date</label></td>
+								<td colspan="1" valign="top">:&nbsp;<label id="lb_request_date"></label></td>
+								
 								<td>គោលបំណង</br />Purpose</td>
-								<td colspan="9" valign="top"> :&nbsp; <label id="lb_purpose"></label></td>
+								<td colspan="7" valign="top"> :&nbsp; <label id="lb_purpose"></label></td>
 							</tr>
 							<tr>
 								<td colspan="10">
@@ -356,6 +358,7 @@ function printSave(){
 		
 		dojo.byId("lb_receipt_no").innerHTML = dijit.byId("request_no").get('value');
 		dojo.byId("lb_request_for").innerHTML = dijit.byId("request_for").attr('displayedValue');
+		dojo.byId("lb_for_section").innerHTML = dijit.byId("for_section").attr('displayedValue');
 		dojo.byId("lb_branch").innerHTML = dijit.byId("branch").attr('displayedValue');
 		dojo.byId("lb_purpose").innerHTML = $('#purpose').val();
 		
@@ -498,13 +501,13 @@ function submitDataClose(){
 		dijit.byId("pro_id").focus();
 		return false;
 	}
-	if(dijit.byId('suspend_service').validate()) {
+	if(dijit.byId('office_receipt').validate()) {
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'add')); ?>';
 		dojo.xhrPost({
 		    url: url_submit,	
-			form: dojo.byId("suspend_service"),		    
+			form: dojo.byId("office_receipt"),		    
 			load: function(data) {
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
 				window.location.href ="<?php echo $this->baseUrl();?>/stock/requestproduct";

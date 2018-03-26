@@ -18,27 +18,38 @@ class Stock_RequestProductController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    							'title' => '',
-    							'start_date'=> date('Y-m-d'),
-    							'end_date'=>date('Y-m-d'),
-    							'status_search'=>1,
-    					);
+    					'title' => '',
+    					'request_for' => -1,
+    					'for_section' => -1,
+    					'start_date'=> date('Y-m-d'),
+    					'end_date'=>date('Y-m-d'),
+    					'status_search'=>1,
+    				);
     		}
 			$db =  new Accounting_Model_DbTable_DbRequestProduct();
 			$rows = $db->getAllRequest($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("REQUEST_NO","REQUEST_NAME","PURPOSE","REQUEST_DATE","TOTAL","STATUS","DATE");
+			$collumns = array("REQUEST_NO","REQUEST_FOR","FOR_SECTION","PURPOSE","REQUEST_DATE","TOTAL","USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'requestproduct','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rows,array('request_no'=>$link,'request_name'=>$link,'purpose'=>$link,));
-			}catch (Exception $e){
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-			$form=new Accounting_Form_FrmSearchProduct();
-			$form=$form->FrmSearchProduct();
-			Application_Model_Decorator::removeAllDecorator($form);
-			$this->view->form_search=$form;
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$_pur =  new Accounting_Model_DbTable_DbRequestProduct();
+		$req_for = $_pur->getAllRequestFor();
+		$this->view->rq_for = $req_for;
+		
+		$for_section = $_pur->getAllForSection();
+		$this->view->for_section = $for_section;
+			
+		$this->view->search = $search;
+		
+		$form=new Accounting_Form_FrmSearchProduct();
+		$form=$form->FrmSearchProduct();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
 		
 	}
 	public function addAction(){
@@ -117,6 +128,14 @@ class Stock_RequestProductController extends Zend_Controller_Action {
 			
 			$this->view->rq_code=$_pur->getRequestCode();
 			$this->view->bran_name=$_pur->getAllBranch();
+			
+			$req_for = $_pur->getAllRequestFor();
+			array_unshift($req_for, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			$this->view->rq_for = $req_for;
+			
+			$for_section = $_pur->getAllForSection();
+			array_unshift($for_section, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			$this->view->for_section = $for_section;
 			
 			$db_gr=new Global_Model_DbTable_DbGrade();
 			$d_row=$db_gr->getNameGradeAll();

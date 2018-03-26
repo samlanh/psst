@@ -22,9 +22,9 @@
 				<td><?php echo $frm->getElement("end_date");?></td>
 				<td>
 					<select name="stu_type" id="stu_type" type="text" class="fullside" dojoType="dijit.form.FilteringSelect" >
-						<option value="-1" <?php if($this->search['stu_type']==-1){echo 'selected="selected"';}?>> All Students </option>
-						<option value="0" <?php if($this->search['stu_type']==0){echo 'selected="selected"';}?>> Old Students </option>
-						<option value="1" <?php if($this->search['stu_type']==1){echo 'selected="selected"';}?>> New Students </option>
+						<option value="-1" <?php if($this->search['stu_type']==-1){echo 'selected="selected"';}?>><?php echo $tr->translate("ALL_STUDENT");?></option>
+						<option value="0" <?php if($this->search['stu_type']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("OLD_STUDENTS");?></option>
+						<option value="1" <?php if($this->search['stu_type']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("NEW_STUDENT");?></option>
 					</select>
 				</td>
 				
@@ -147,8 +147,8 @@ function getKHMonthByNumber(m){
 		<tr>
 			<td align="center">
 				<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
-					type="button" onclick="printSelected();">Print Selected</button>
-				<input type="button" dojoType="dijit.form.Button" label="Print ID Card" iconClass="dijitEditorIcon dijitEditorIconPrint"  onclick="printIDCard();" />
+					type="button" onclick="printSelected();"><?php echo $tr->translate("PRINTED");?></button>
+				<input type="button" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint"  onclick="printIDCard();" />
 			</td>
 		</tr>
 	</table>

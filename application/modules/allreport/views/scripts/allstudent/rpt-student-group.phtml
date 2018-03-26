@@ -14,7 +14,7 @@
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table>
 			<tr>
-				<td><input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="Search by student name....." value="" type="text"></td>
+				<td><input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH_STUDENT_NAME");?>" value="" type="text"></td>
 				<td><select dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
 						<option value="">ជ្រើសរើសប្រភេទសិស្ស</option>
 						<option value="1" <?php if($this->search['study_type']==1){echo "selected";}?>>សិស្សនៅរៀន</option>

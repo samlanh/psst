@@ -71,35 +71,43 @@ function getKHMonthByNumber(m){
 			table tr th{
 				border: 1px solid #000;	
 			}
+			table {page-break-inside:auto }
+			tr{ page-break-inside:avoid; page-break-after:auto; }
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
 		</style>
 		
 			<tr>
 				<td colspan="3">
 				<div id="exportExcel">
 					<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
-						<tr style="font-size:12px; height: 20px;background: #ccd9ff; font-weight: bold" align="center" >
-							<td rowspan="2"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></td>
-							<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
-							<td rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></td>
-							<td rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></td>
-							<td rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></td>
-							<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
-							<td rowspan="2"><?php echo $tr->translate("NATIONALITY");?></td>
-							<td rowspan="2"><?php echo $tr->translate("PHONE");?></td>
-							<td rowspan="2"><?php echo $tr->translate("EMAIL");?></td>
-							<td colspan="5"><?php echo $tr->translate("STUDY_INFO");?></td>
-						</tr>
-						<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
-						<tr style="font-size:12px; height: 20px;background: #ccd9ff; font-weight: bold;" align="center" >
-							<td ><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
-							<td ><?php echo $tr->translate("DEGREE");?></td>
-							<td ><?php echo $tr->translate("GRADE");?></td>
-							<td ><?php echo $tr->translate("SESSION");?></td>
-							<td ><?php echo $tr->translate("STATUS");?></td>
-						</tr>
-					<?php $i=0;$degree=0; foreach ($this->rs AS $row) { $i++;$degree=$row['degree'];?>
+						<thead>
+							<tr style="font-size:12px; height: 20px;background: #ccd9ff; font-weight: bold" align="center" >
+								<td rowspan="2" class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></td>
+								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
+								<td rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></td>
+								<td rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></td>
+								<td rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></td>
+								<td rowspan="2"><?php echo $tr->translate("SEX");?></td>
+								<td rowspan="2"><?php echo $tr->translate("NATIONALITY");?></td>
+								<td rowspan="2"><?php echo $tr->translate("PHONE");?></td>
+								<td rowspan="2"><?php echo $tr->translate("EMAIL");?></td>
+								<td colspan="5"><?php echo $tr->translate("STUDY_INFO");?></td>
+							</tr>
+							<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
+							<tr style="font-size:12px; height: 20px;background: #ccd9ff; font-weight: bold;" align="center" >
+								<td ><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+								<td ><?php echo $tr->translate("DEGREE");?></td>
+								<td ><?php echo $tr->translate("GRADE");?></td>
+								<td ><?php echo $tr->translate("SESSION");?></td>
+								<td ><?php echo $tr->translate("STATUS");?></td>
+							</tr>
+						</thead>
+					<?php $i=0;$degree=0;foreach ($this->rs AS $row) { $i++;$degree=$row['degree'];?>
 						<tr style="font-size:12px; height: 23px;" align="center" class="hover" >
-							<td>
+							<td class="hidden">
 								<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
 								<input type="hidden" name="stu_id<?php echo $i;?>" id="stu_id<?php echo $i;?>" value="<?php echo $row['stu_id'];?>" dojoType="dijit.form.TextBox" />
 							</td>
@@ -125,7 +133,7 @@ function getKHMonthByNumber(m){
 			<tr>
 				<td colspan="3">&nbsp;</td>
 			</tr>
-			<tr >
+			<tr>
 				<td colspan="3" width="100%">
 					<table width="100%" style="font-family:'Khmer MEF2';">
 						<tr>
@@ -177,10 +185,10 @@ function getKHMonthByNumber(m){
 							</tr>
 							<?php 
 								$address_kh=$tr->translate("CUSTOMER_ADDRESS").'<br />
-											ទូរស័ព្ទលេខ: '.$tr->translate("CUSTOMER_TEL").'<br />
-											បណ្ណនេះប្រើប្រាស់សម្រាប់កិច្ចការសាលាតែប៉ុណ្ណោះ។';
+								ទូរស័ព្ទលេខ: '.$tr->translate("CUSTOMER_TEL").'<br />
+								បណ្ណនេះប្រើប្រាស់សម្រាប់កិច្ចការសាលាតែប៉ុណ្ណោះ។';
 								$address_en=$tr->translate("CUSTOMER_ADDRESS").'<br />Telephone: '.$tr->translate("CUSTOMER_TEL").'<br />
-										This ID Card is to be used within school only.';
+								This ID Card is to be used within school only.';
 							?>
 							<tr>
 								<td align="center" valign="top" colspan="3" style="line-height: 20px;"> 
@@ -195,11 +203,8 @@ function getKHMonthByNumber(m){
 											<?php } ?>
 											
 											dojo.byId('academic_year<?php echo $i;?>').innerHTML=year;
-											
 										</script>
-									
 										<?php if($row['dept']<=2){echo $address_kh;}else{echo $address_en;}?>
-										
 									</div>
 								</td>
 							</tr>
@@ -214,14 +219,12 @@ function getKHMonthByNumber(m){
 							$sex_kh = "ស្រី";
 						}
 					?>
-					
 					<td width="50%">
 						<table style="border: 3px solid #FFC107;height: 5.9cm;width: 8.5cm;font-size:11px;font-family: 'Khmer OS Battambang',Arial,sans-serif;color:#00007b;" cellspacing="0" cellpadding="0">
 							<tr style="height: 0;">
 								<td colspan="4" align="center" valign="top">
 									<div style="font-family: 'Khmer OS Muol Light';margin-top: 5px;">អត្តសញ្ញាណបណ្ណសិស្ស</div>
 									<div style="margin-top: -4px;"><?php if($row['dept']<=2){echo 'អត្តលេខ';}else{echo 'ID N<sup>o</sup>';}?>: <label id="stu_code<?php echo $i;?>"></label></div>
-									
 									<script type="text/javascript">
 										<?php if($row['dept']<=2){?>
 												test1 = convertEnglishToKhmerNumber('<?php echo $row['stu_code']?>');
@@ -247,7 +250,6 @@ function getKHMonthByNumber(m){
 									<?php echo $sex_kh;?>
 								</td>
 							</tr>
-							
 							<tr style="height: 0;line-height: 18px">
 								<td >
 									&nbsp;&nbsp;Name
@@ -258,12 +260,10 @@ function getKHMonthByNumber(m){
 								<td >
 									Sex : 
 								</td>
-								
 								<td >
 									<?php echo $sex_en;?>&nbsp;&nbsp;&nbsp;
 								</td>
 							</tr>
-							
 							<tr style="height: 0;line-height: 18px">
 								<td >
 									&nbsp;&nbsp;<?php if($row['dept']<=2){echo 'កាលកំណើត';}else{echo 'D.O.B';}?>
@@ -284,7 +284,6 @@ function getKHMonthByNumber(m){
 									
 								</td>
 							</tr>
-							
 							<tr style="height: 0;line-height: 18px">
 								<td >
 									&nbsp;&nbsp;<?php if($row['dept']<=2){echo 'សិស្សថ្នាក់';}else{echo 'Level';}?>
@@ -293,7 +292,6 @@ function getKHMonthByNumber(m){
 									: <?php  echo $row['grade'];?>
 								</td>
 							</tr>
-							
 							<tr style="height: 0;line-height: 18px">
 								<td >
 									&nbsp;&nbsp;<?php if($row['dept']<=2){echo 'ផុតកំណត់';}else{echo 'Expired Date';}?>
@@ -310,7 +308,6 @@ function getKHMonthByNumber(m){
 									</script>
 								</td>
 							</tr>
-							
 							<tr>
 								<td colspan="4">
 									<table width="100%" style="font-size:11px;font-family: 'Khmer OS Battambang';color:#00007b;">

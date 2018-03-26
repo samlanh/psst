@@ -206,19 +206,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$this->view->rs = $db->getTransferById($id);
 		$this->view->rsdetail = $db->getTransferByIdDetail($id);
-// 		print_r($this->view->rsdetail);
 	}
-	
-	public function rptRequestProductDetailAction(){
-		$db = new Allreport_Model_DbTable_DbRequestStock();
-		$id=$this->getRequest()->getParam("id");
-		
-		$this->view->req = $db->getRequestProductById($id);
-		
-		$this->view->req_detail = $db->getAllRequestProductDetail($id);
-		
-	}
-	
 	function rptRequestProductAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -258,8 +246,12 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
-	
-	
+	public function rptRequestProductDetailAction(){
+		$db = new Allreport_Model_DbTable_DbRequestStock();
+		$id=$this->getRequest()->getParam("id");
+		$this->view->req = $db->getRequestProductById($id);
+		$this->view->req_detail = $db->getAllRequestProductDetail($id);
+	}
 	function rptAdjustStockdetailAction(){
 		try{
 			if($this->getRequest()->isPost()){

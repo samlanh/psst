@@ -85,7 +85,7 @@ dojo.ready(function(){
 			.padding{ padding: 0 1px !important;}
 			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 			tr{ page-break-inside:avoid; page-break-after:auto }
-			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
+			.cheader{height: 30px;font-weight: bold; background: #8ba7fb; white-space: nowrap;}
 			#header {
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
@@ -193,7 +193,6 @@ dojo.ready(function(){
 								</td>
 								<?php }
 								?>
-								
 								<?php }
 									if($rs['average']==$old_totalscore){
 										$duplicate=$duplicate+1;
@@ -202,7 +201,7 @@ dojo.ready(function(){
 										$duplicate=0;
 									}//
 									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
-								//if($this->data['scoreresulttye']==1){?>
+								?>
 								<td align="center"><?php echo number_format($total_score,2);?></td>
 								<?php //}?>
 								<td align="center"><?php echo number_format($rs['average'],2);// Average ?></td>

@@ -96,8 +96,7 @@
 									width: 20px;
 								}
 								</style>
-								<thead>
-									
+								<thead>									
 									<tr>
 										<td colspan="<?php echo 5+$total_day;?>">
 											<table width="100%" border="0" style="border-collapse: collapse;font-family: Times New Roman, Khmer OS Battambang;font-size: 14px;font-weight: bold;line-height: 25px;">
@@ -134,7 +133,7 @@
 										</td>
 									</tr>
 									
-									<tr align="center" style="height: 65px;">
+									<tr align="center" style="height: 65px; background: #ccd9ff;">
 										<td colspan="5" style="font-weight: bold;"><?php echo $tr->translate("Instructor's Signature");?></td>
 										
 										<?php for($k=0;$k<$amount_day;$k++){?>
@@ -144,14 +143,14 @@
 										<?php }?>
 									</tr>
 								
-									<tr class="cheader" align="center">
+									<tr class="cheader" align="center" style="background: #ccd9ff;">
 										<td colspan="5"><?php echo $tr->translate("Month");?></td>
 										<td style="background: none;" align="center" colspan="<?php echo $total_day;?>">
 											From &nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> &nbsp;&nbsp;to&nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?>
 										</td>
 									</tr>
 									
-									<tr class="cheader" align="center" >
+									<tr class="cheader" align="center" style="background: #ccd9ff;" >
 										<td colspan="5"><?php echo $tr->translate("Weekday");?></td>
 										
 										<?php for($k=0;$k<$amount_day;$k++){?>
@@ -160,7 +159,7 @@
 										<?php }?>
 									<?php }?>
 									</tr>
-									<tr class="cheader" align="center" >
+									<tr class="cheader" align="center" style="background: #ccd9ff;" >
 										<td colspan="5"><?php echo $tr->translate("Today's Date");?></td>
 										
 										<?php for($k=0;$k<$amount_day;$k++){?>

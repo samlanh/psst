@@ -191,14 +191,18 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	$db = $this->getAdapter();
    	$sql="SELECT s.`id`, s.`group_id`, g.`group_code`,title_score,s.for_month,s.for_semester,s.note,
    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') 
-	FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year
+		FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year
  	,(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree, 
  	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
  	`g`.`semester` AS `semester`, 
  	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
- 	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`, (SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month, s.for_semester,
-  	s.reportdate 
-   		FROM `rms_score` AS s, `rms_group` AS g WHERE  g.`id`=s.`group_id` AND s.status = 1 AND s.type_score=1 ";
+ 	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
+ 	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month,
+ 	s.exam_type,
+ 	s.for_semester,
+  	s.reportdate
+   		FROM `rms_score` AS s, `rms_group` AS g 
+   		WHERE  g.`id`=s.`group_id` AND s.status = 1 AND s.type_score=1 ";
    			$where='';
 //    	$from_date =(empty($search['for_month']))? '1': " s.formonth >= '".$search['for_month']." 00:00:00'";
 //    	$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
@@ -235,7 +239,10 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	if($search['for_month']>0){
    		$where.= " AND s.for_month =".$search['for_month'];
    	}
-   	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
+   	if($search['exam_type']>0){
+   		$where.= " AND s.exam_type =".$search['exam_type'];
+   	}
+   	$order = "  ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
    	return $db->fetchAll($sql.$where.$order);
    }
    

@@ -11,7 +11,6 @@ public function init()
 	public function indexAction(){	
 		
 	}
-	
     function rptScoreBacMonthlyAction(){
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
@@ -20,6 +19,7 @@ public function init()
     		$search = array(
     				'title',
     				'room'=>0,
+    				'exam_type'=>-1,
     				'group_name' => 0,
     				'study_year'=> 0,
     				'grade'=> 0,

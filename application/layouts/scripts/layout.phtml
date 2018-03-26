@@ -157,10 +157,11 @@ dojo.require("dojo.parser");
             			<?php 
 							$db = new Application_Model_DbTable_DbUsers();
 	            			$rs = $db->getAccessUrl($module,$controller,$action);
+	            			echo $this->layout()->content;
 	            			if(!empty($rs) OR $action=='changepassword'){
-	            				echo $this->layout()->content;
+	            				//echo $this->layout()->content;
 	            			}else{
-	            				echo $this->render('pagenotfund.phtml');
+	            				//echo $this->render('pagenotfund.phtml');
 	            			}
 	            			
             			 ?>

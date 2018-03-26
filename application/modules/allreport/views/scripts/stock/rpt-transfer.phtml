@@ -49,8 +49,8 @@
 			<?php if(!empty($this->all_transfer)){ foreach($this->all_transfer as $key=>$rs){ $key=$key+1; ?>
 			<tr style="font-size: 12px;">
 				<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
-				<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-transferdetail/id/<?php echo $rs['id'];?>"><?php echo $rs['transfer_no']; ?></a></td>
-				<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-transferdetail/id/<?php echo $rs['id'];?>"><?php echo $rs['transfer_date']; ?></a></td>
+				<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/stock/rpt-transferdetail/id/<?php echo $rs['id'];?>"><?php echo $rs['transfer_no']; ?></a></td>
+				<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/stock/rpt-transferdetail/id/<?php echo $rs['id'];?>"><?php echo $rs['transfer_date']; ?></a></td>
 				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['fromlocation']; ?></td>
 				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['tolocation']; ?></td>
 				<td style="border:1px solid #000;text-align: center;"><?php echo $rs['note']; ?></td>

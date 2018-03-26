@@ -1,0 +1,501 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("ADD_NEW_STUDENT_SCORE"));
+	$current_month = date("m");
+?>	
+<head>
+	<meta charset="utf-8">
+	<title></title>
+    <link rel="stylesheet" href="<?php echo $this->baseUrl()."/collap/jquery-ui.css";?>">
+    <script src="<?php echo $this->baseUrl()."/collap/jquery-1.10.2.js";?>"></script>
+    <script src="<?php echo $this->baseUrl()."/collap/jquery-ui.js";?>"></script>
+</head>
+<style>
+	select{ width:100%;}
+	fieldset{  background:none;}
+	table tr.head-title{ background: none repeat scroll 0% 0% rgba(213, 249, 244, 1); padding:2px;}
+	table tr td.null-border{ background: #fff; border-left:none !important;}
+	table .set-style td,table .set-style th{ padding: 0px; border:1px solid #ccc;font-size: 12px;}
+	table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
+	div.panel {
+	    padding: 0 18px;
+	    display: none;
+	    background-color: white;
+	}
+	div.panel.show {
+	    display: block;
+	}
+	.ui-accordion .ui-accordion-content {
+	    min-height: 200px;
+	}
+	.hover:hover{background: #ccc;}
+	.ui-widget {
+	    font-family: Verdana,Arial,sans-serif,'Khmer OS Battambang' !important;
+	}
+	.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+	    color: #212121 !important;
+	    background: #94d3e6 !important;
+	}
+	.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+	    background: #cae694 !important;
+	}
+	.ui-accordion .ui-accordion-header {
+	    margin: 0 !important;
+	}
+	.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+	    border-bottom-right-radius: 0px !important;
+	}
+	.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+	    border-bottom-left-radius: 0px !important;
+	}
+	.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+	    border-top-right-radius: 0px !important;
+	}
+	.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+	    border-top-left-radius: 0px !important;
+	}
+</style>
+<style>
+	ul.blogscoresubject li{list-style: none;width:10%;float: left; }
+	ol.blogscoresubject li{list-style: none;width:10%;float: left; }
+	ol{margin: 10px;}
+	.header{font-family:'Khmer os Battambang' !important;}
+</style>
+<script type="text/javascript">
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.ready(function(){
+	var subject = [];
+		var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
+		new dijit.form.FilteringSelect({
+		    store:years_store,
+		    autoComplete: true,                        
+		    required: true,
+		    id: "year_study",
+		    name: "year_study",           
+		    class: 'fullside',  
+		    required:'true',
+		    placeHolder:"Selected Study Years",          
+		    onChange: function() {  
+		    	filterStudent();
+		    }
+		}, "year_study");
+		
+		new dijit.form.FilteringSelect({
+			autoComplete: true,                        
+			id: "grade",
+			name: "grade",           
+			class: 'fullside', 
+			placeHolder:"Selected Grade",          
+			onChange: function() {
+				filterStudent();
+			}
+		}, "grade");
+	});
+	
+</script>
+<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<script type="dojo/method" event="onSubmit">   
+  	if(this.validate()) {
+		dijit.byId('save_new').set('disabled',true);
+    	return true;
+  	}else {
+    	return false;
+  	}
+	</script>
+	<table cellspacing="10" style="margin: 0 auto;width:100%;" >
+		<tr>
+			<td width="50%" valign="top">
+				<fieldset>
+					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("STUDENT_SCORE");?></strong></legend>
+					<table style="margin: 0 auto; width: 100%;" cellspacing="5">
+						<tr>
+							<td><strong><?php echo $tr->translate("SUBJECT_TITLE");?></strong></td>
+							<td>
+								<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" />
+							</td>
+						</tr>
+						<tr>
+							<td><strong><?php echo $tr->translate("GROUP");?>*</strong></td>
+							<td>
+								<select class="fullside" tabindex="15" name="group" id="group" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup();getInfoBygroup();">
+									<?php if(!empty($this->group))foreach ($this->group as $row){?>
+									<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
+									<?php }?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("EXAM_TYPE");?></td>
+							<td>
+							   <select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
+							   		<option value="1">ប្រចាំខែ</option>
+							   		<option value="2">ប្រលងឆមាស</option>
+							   </select>
+							</td>
+						</tr>
+						<tr>
+							<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
+							<td>
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+									<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+										<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+									<?php }}?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
+							<td>
+								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+									<option value="1">ទី 1</option>
+									<option value="2">ទី 2</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+			</td>
+		    <td width="50%" valign="top">
+		    	<fieldset>
+					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("STUDENT_SCORE");?></strong></legend>
+				    	<table width="100%">
+				    		<tr>
+				    			<td><?php echo $tr->translate("STUDY_YEAR");?></td>
+								<td><input id="year_study" /></td>
+				    		</tr>
+				    		<tr>
+				    			<td><?php echo $tr->translate("DEGREE");?></td>
+								<td>
+									<select id="degree" name="degree" onchange="filterGrade();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+										<option value="-1"> ------ select degree---------</option>
+									<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
+										<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
+									<?php }}?>
+									</select>
+								</td>
+				    		 </tr>
+				    		 <tr>
+				    		 	<td><?php echo $tr->translate("GRADE");?></td>
+								<td>
+									<input id="grade" />
+									 <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
+								</td>
+				    		 </tr>
+				    		 <tr>
+				    		 	<td><?php echo $tr->translate("SESSION");?></td>
+								<td>
+									<select id="session" name="session" onchange="filterStudent();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+										<option value="-1"> ------ select session---------</option>
+									<?php if(!empty($this->session)){foreach ($this->session as $session){?>
+										<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
+									<?php }}?>
+									</select>
+								</td>
+				    		 </tr>
+				    		 <tr>
+								<td><?php echo $tr->translate("NOTE");?></td>
+								<td colspan="3"><textarea class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea>
+									<input type="hidden" name="identity" id="identity"  value="" >
+								</td>
+							</tr>
+				    	</table>
+				  </fieldset>
+		    </td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<label id="liststudent"></label>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+			 	<input iconClass="dijitIconClear" type="reset" value="" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+				<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+					iconClass="dijitEditorIcon dijitEditorIconSave" />
+			</td>
+		</tr>
+	</table>	
+</form>
+<script> //validate controll form 
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-grade')); ?>';
+function filterGrade(){
+degree = dijit.byId('degree').get('value');
+dojo.xhrPost({
+	url:url_dept,
+	content:{
+		'degree':degree
+		},
+	handleAs:"json",
+	load: function(data) {
+		grade_store  = getDataStorefromJSON('id','name', data);
+	    dijit.byId('grade').set('store',grade_store);  
+	    dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
+	},
+	error: function(err) {
+	}
+});
+}
+var url_getSubject= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-subjectbygroup')); ?>';
+function getSubjectByGroup(){
+	group = dijit.byId('group').get('value');
+	if(group==''){
+		return false;
+	}
+	dojo.xhrPost({
+	    url: url_getSubject,
+	    content : { 
+			'group':group,
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		   subject = data;
+	   },		
+	    error: function(err) {
+		
+	    }
+	});
+}
+var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
+function filterStudent(){
+	year = dijit.byId('year_study').get('value');
+	grade = dijit.byId('grade').get('value');
+	session = dijit.byId('session').get('value');
+	group = dijit.byId('group').get('value');
+	if(year==''){
+		return false;
+	}
+	if(grade==''){
+		return false;
+	}
+	if(session==''){
+		return false;
+	}
+	if(group==''){
+		return false;
+	}
+	dojo.xhrPost({
+	    url: url_getStudent,
+	    content : { 
+			'group':group,
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		   tem="";
+	       if(data!=""){
+				num =0;
+				title=0;
+				temp='';
+				str='';
+				column = 0;
+				temp='<table class="collape tablesorter" style="font-size:12px;" id="table" width="100%">'
+					+'<thead><tr><th class="tdheader" ><?php echo $tr->translate('NO');?></th>'
+					+'<th class="tdheader header"><?php echo $tr->translate('STUDENT_ID');?></th>'
+					+'<th class="tdheader header"><?php echo $tr->translate('STUDENT_NAME');?></th>'
+					+'<th class="tdheader header"><?php echo $tr->translate('SEX');?></th>'
+				   no=0;
+				  for(j=0;j<subject.length;j++){
+	      			  no++;
+	      			  stringsname = subject[j].subject_titleen.replace(' ','');
+		      	      temp+='<th th class="tdheader header">'+stringsname+no+'</th>';
+	              }
+				  temp+='<th class="tdheader header"><?php echo $tr->translate('NOTE');?></th>'
+				  +'</thead>';
+				rowspan=data.length;
+				first_row=0;
+				for(i=0;i<data.length;i++){ //alert(data[i].stu_id);
+					inx = i+1;
+					num++;
+					temp+= '<tr class="hover normal">';
+					temp += '<td align="center">&nbsp;'+inx+'</td>';
+					temp += '<td>&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" type="hidden" ></td>';
+					temp += '<td style="min-width:100px;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
+					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
+					for(j=0;j<subject.length;j++){
+						if(first_row==0){
+							temp += '<td style="max-width:100%" rowspan="'+rowspan+'" id="datacollum'+j+'"><input type="hidden" id="converted_'+j+'" name="converted_'+j+'" value="0" /><textarea style="height:100%;" class="fullside" name="scorevalue_'+j+'" id="scorevalue_'+j+'" place="Past your excel" ></textarea></td>';
+						}
+					}
+					first_row=1;
+					temp += '<td><input dojoType="dijit.form.validateNumberTextBox" class="fullside" name="note_'+inx+'" id="note_'+inx+'"  value="" type="text" ></td>';
+					temp+= '</tr>';
+					
+				var no=0;
+				    if(inx!=1) {//identity set value 1,2,3,4,5
+						var identity = $('#identity').val();
+						$('#identity').val(identity+','+inx);
+					} else {
+						$('#identity').val(inx);
+					}
+				}
+				temp+= '<tr class="hover normal">';
+				temp += '<td align="center" colspan="4"></td>';
+				for(j=0;j<subject.length;j++){
+					temp += '<td align="center" ><input onclick="createTable('+j+');"  type="button" value="convert to Excel"  /></td>';
+				}
+				temp += '<td align="center" ></td>';
+			    temp+= '</tr>';
+				temp+='</table>';
+				dojo.byId('liststudent').innerHTML = temp;
+	       }else{
+	    	   $('#identity').val('');
+	    	   document.getElementById("liststudent").innerHTML = '';
+	       }
+	   },		
+	    error: function(err) {
+	    }
+	});
+}
+function gender(sex){
+	if(sex==1){
+		sex='ប្រុស';
+	}else sex='ស្រី';
+	return sex;
+}
+function checkExamType(){
+	exam_type = dijit.byId("exam_type").get("value");
+	dijit.byId('for_month').set("readOnly",false);
+	if(exam_type==2){
+		dijit.byId('for_month').set("readOnly",true);
+	}
+}
+function AllowOnlyNumbers(e) {
+    e = (e) ? e : window.event;
+    var key = null;
+    var charsKeys = [
+        97, // a  Ctrl + a Select All
+        65, // A Ctrl + A Select All
+        99, // c Ctrl + c Copy
+        67, // C Ctrl + C Copy
+        118, // v Ctrl + v paste
+        86, // V Ctrl + V paste
+        115, // s Ctrl + s save
+        83, // S Ctrl + S save
+        112, // p Ctrl + p print
+        80 // P Ctrl + P print
+    ];
+    var specialKeys = [
+	    8, // backspace
+	    9, // tab
+	    27, // escape
+	    13, // enter
+	    35, // Home & shiftKey +  #
+	    36, // End & shiftKey + $
+	    37, // left arrow &  shiftKey + %
+	    39, //right arrow & '
+	    46, // delete & .
+	    109,//.
+	    45 //Ins &  -
+    ];
+    key = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+    //console.log("e.charCode: " + e.charCode + ", " + "e.which: " + e.which + ", " + "e.keyCode: " + e.keyCode);
+    //console.log(String.fromCharCode(key));
+    // check if pressed key is not number 
+    if (key && key < 48 || key > 57) {
+        //Allow: Ctrl + char for action save, print, copy, ...etc
+        if ((e.ctrlKey && charsKeys.indexOf(key) != -1) ||
+            //Fix Issue: f1 : f12 Or Ctrl + f1 : f12, in Firefox browser
+            (navigator.userAgent.indexOf("Firefox") != -1 && ((e.ctrlKey && e.keyCode && e.keyCode > 0 && key >= 112 && key <= 123) || (e.keyCode && e.keyCode > 0 && key && key >= 112 && key <= 123)))) {
+            return true
+        }
+ // Allow: Special Keys
+     else if (specialKeys.indexOf(key) != -1) {
+            //Fix Issue: right arrow & Delete & ins in FireFox
+            if ((key == 39 || key == 45 || key == 46 || key == 109)) {
+                //return (navigator.userAgent.indexOf("Firefox") != -1 && e.keyCode != undefined && e.keyCode > 0);
+                return true
+            }
+ //DisAllow : "#" & "$" & "%"
+            else if (e.shiftKey && (key == 35 || key == 36 || key == 37)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        return true;
+       }
+    }
+
+function getInfoBygroup(){
+	url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
+	group = dijit.byId('group').get('value');
+	if(group==''){
+		alert("Please Select Group");
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_group,	
+		content:{ 
+			'group_id': group
+		},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId('year_study').set('value',data.academic_year);
+			dijit.byId('year_study').set('readOnly',true);
+			
+			dijit.byId('degree').set('value',data.degree);
+			dijit.byId('degree').set('readOnly',true);
+			
+			dijit.byId('grade').set('value',data.grade);
+			dijit.byId('grade').set('readOnly',true);
+			dijit.byId('grade_fromgrouop').set('value',data.grade);
+			
+			dijit.byId('session').set('value',data.session);
+			dijit.byId('session').set('readOnly',true);
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+function createTable(subjectid) {
+	dojo.require('dijit.form.NumberTextBox');
+	document.getElementById('converted_'+subjectid).value=1;
+	var excelData = document.getElementById('scorevalue_'+subjectid).value;
+	if(excelData==''){return false;}
+    // split into rows
+    excelRow = excelData.split(String.fromCharCode(10));
+    // split rows into columns
+    for (i=0; i<excelRow.length; i++) {
+        excelRow[i] = excelRow[i].split(String.fromCharCode(9));
+    }
+	// start to create the HTML table
+	var myTable = document.createElement("table");
+	var myTbody = document.createElement("tbody");
+	// Loop over the rows
+	row_id=0;
+    for (i=0; i<excelRow.length - 1; i++) {
+		// create a row in the HTML table
+    	row_id++;
+		var myRow = document.createElement("tr");
+		// Loop over the columns and add TD to the TR
+		col_id=0;
+		for (j=0; j<excelRow[i].length; j++) {
+			// Loop over the row columns
+			col_id++;
+			if (excelRow[i][j].length != 0) {
+					var myCell = document.createElement("td");
+					var myCell = document.createElement("input");
+					myCell.setAttribute("type", "text");
+					myCell.setAttribute("name", 'score_'+subjectid+"_"+row_id);
+					myCell.setAttribute("id", 'score_'+subjectid+"_"+row_id);
+					myCell.setAttribute("dojoType", 'dijit.form.NumberTextBox');
+					myCell.setAttribute("value", excelRow[i][j]);
+            }			
+			myRow.appendChild(myCell);			
+		}
+		myTbody.appendChild(myRow);	
+	}
+	myTable.appendChild(myTbody);
+	document.getElementById('scorevalue_'+subjectid).remove();
+	document.getElementById('datacollum'+subjectid).appendChild(myTable); 
+	dojo.require('dijit.form.NumberTextBox');
+}
+</script>

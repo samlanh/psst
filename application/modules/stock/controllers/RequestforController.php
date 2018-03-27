@@ -27,10 +27,9 @@ class Stock_RequestforController extends Zend_Controller_Action {
     				'module'=>'stock','controller'=>'requestfor','action'=>'edit',
     		);
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('title'=>$link));
-			
     		$this->view->search = $search;
 		}catch (Exception $e){
-			echo $e->getMessage();
+			
 		}
 	}
 	

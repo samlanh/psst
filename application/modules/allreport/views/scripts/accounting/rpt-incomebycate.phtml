@@ -9,20 +9,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 	dojo.require("dijit.form.DateTextBox");
 </script>
 	<div style="padding:20px;border: 1px dotted #000;width:28cm;background: #fff; margin: 0 auto;min-height: 27cm;">
-		<table width="100%">
-	   <tr>
-	       <td colspan="4">
-				<div class="menureport">
-					<ul>
-						<li class="preview"><a title="Preview" href="#" onclick="preview();"></a></li>
-						<li class="print"><a href="#" title="Print" onclick="doPrint();" ></a></li>
-						<li class="excel"><a href="#"  title="Export"  onclick="exportExcel();"></a></li>
-					</ul>
-				</div>
-	      </td>
-		</tr>
-	 </table> 
-		<form id="list" name="list" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'rptbytype','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+		<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
 		<table width="50%" align="left"​ style="width:27cm;margin: 0 auto;"> 
 		   <tr>
 		   		<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="start_date" name="start_date" value="<?php echo $this->search['start_date']; ?>"  type="text"></td>
@@ -53,7 +40,6 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 								.padd tr td{  text-align:left}
 								.padd tr th{  background-color: #ccc; }
 							</style>
-
 						<table class="padd" width="100%" border="1" align="left" style="white-space:nowrap;font-family: Khmer OS Battambang;">
 							<tr style="background:#efefef;text-align:center;color:#000; font-size: 14px;font-family:'Khmer MEF2';">
 								<td style="text-align:center">លរ</td>
@@ -80,7 +66,6 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 								$no=0;
 							  ?>
 							  <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
-							  
 								  <?php if($rs['type']!=$type){	?>
 									   <?php  if($key>0 ){ $no++;?>
 												<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
@@ -97,24 +82,21 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 									 	$grand_total = $grand_total + $rs['paidamount'];
 									 	if($type==1 || $type==2){
 									 		$type_name = "ថ្លៃសិក្សា";
-// 									 		$no=1;
 									 	}else if($type==3){
 									 		$type_name = "ថ្លៃសេវាកម្ម";
-// 									 		$no=2;
 									 	}else if($type==4){
 									 		$type_name = "ថ្លៃលក់ផលិតផល";
-// 									 		$no=3;
 									 	}
 							 	 	?>
 							  
 							  	<?php }
 							  	$sum_up = $sum_up + $grand_total; $no++; ?>
 								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								 		<td style="text-align: center;"><?php echo $no."";?></td>
-							 			<td width="50%" style=" font-weight:bold;">&nbsp;</th>
-										<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-								  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</th>
-										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($grand_total,2);?></td>
+							 		<td style="text-align: center;"><?php echo $no."";?></td>
+						 			<td width="50%" style=" font-weight:bold;">&nbsp;</th>
+									<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+							  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</th>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($grand_total,2);?></td>
 								  </tr>
 							 <?php }?>	
 							 <?php $income_stu_test =0; 
@@ -122,11 +104,11 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 							 	   $income_stu_test=$this->studenttestincome['total_test'];
 							 ?>
 							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								  		<td style="text-align: center;"><?php echo $no;?></td>
-							 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
-							 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-							 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Test Income");?>&nbsp;</td>
-										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($this->studenttestincome['total_test'],2);?></td>
+							  		<td style="text-align: center;"><?php echo $no;?></td>
+						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Test Income");?>&nbsp;</td>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($this->studenttestincome['total_test'],2);?></td>
 								  </tr>
 							 <?php }?> 
 							 <?php 
@@ -143,11 +125,11 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 							 	  ?>
 							  	  <?php }?>
 								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								  		<td style="text-align: center;"><?php echo $no;?></td>
-							 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
-							 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-							 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("FINE");?>&nbsp;</td>
-										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($fine,2);?></td>
+							  		<td style="text-align: center;"><?php echo $no;?></td>
+						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("FINE");?>&nbsp;</td>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($fine,2);?></td>
 								  </tr>
 							  <?php }?>
 								<?php 
@@ -185,19 +167,19 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 							 	  ?>
 							  	  <?php }?>
 								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								  		<td style="text-align: center;"><?php echo $no;?></td>
-							 			<td width="50%" style="font-weight:bold; ">&nbsp;&nbsp;</th>
-										<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-								  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate("DEDUCT");?>&nbsp;</th>
-										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($deduct,2);?></td>
+							  		<td style="text-align: center;"><?php echo $no;?></td>
+						 			<td width="50%" style="font-weight:bold; ">&nbsp;&nbsp;</th>
+									<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+							  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate("DEDUCT");?>&nbsp;</th>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($deduct,2);?></td>
 								  </tr>
 							  <?php }
 							  ?>
 							  <?php $net_total = $sum_up + $fine +$income_stu_test - $credit_memo - $deduct; ?>
 							  	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								  		<td colspan="3" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"> </td>
-								  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;&nbsp;សរុបរួម / Total</td>
-										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($net_total,2);?></td>
+							  		<td colspan="3" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"> </td>
+							  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;&nbsp;សរុបរួម / Total</td>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($net_total,2);?></td>
 								  </tr>
 						</table>
 					</td>	

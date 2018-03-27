@@ -55,9 +55,7 @@ input.btn_borwse_image {
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.NumberTextBox");
-//dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
-//dojo.require("dijit.form.CheckBox");
 
 var language_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->language));?> );
 var job_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
@@ -94,7 +92,6 @@ dojo.ready(function(){
 	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 	    onChange: function() {  
 	    	make_id = dijit.byId('grade').get('value');
-	    	//paymentTerm();
 	    }
 	}, "grade");
 	getallGrade(1);
@@ -219,7 +216,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 			      			<td colspan="2"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("CURRENT_ADDRESS");?></strong></td>
 			      		</tr>
 			      		<tr>
-			      			<td><?php echo $tr->translate("NAME_KH");?></td>
+			      			<td><strong><?php echo $tr->translate("NAME_KH");?></strong></td>
 							<td><input class="fullside"  tabindex="2" dojoType="dijit.form.ValidationTextBox"  id="name_kh" name="name_kh" value="<?php echo $this->rs['stu_khname'];?>" type="text"  ></td>
 			      			<td rowspan="6" valign="top">
 								<div class="account-image">
@@ -243,7 +240,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							</td>
 			      		</tr>
 						<tr>
-							<td><?php echo $tr->translate("NAME_EN");?></td>
+							<td><strong><?php echo $tr->translate("NAME_EN");?></strong></td>
 							<td><input class="fullside" tabindex="2" required="1" dojoType="dijit.form.ValidationTextBox"  id="name_en" name="name_en" value="<?php echo $this->rs['stu_enname'];?>" type="text"  ></td>
 							<td> <span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("STREET");?></span>&nbsp;&nbsp;&nbsp;
 								<input style=" width: 70%;" class="fullside" tabindex="10" dojoType="dijit.form.TextBox"  id="way_note" name="way_note" value="<?php echo $this->rs['street_num'];?>" type="text" >
@@ -295,7 +292,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							<td colspan="6"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("STUDY_INFO");?></strong></td>
 						</tr>
 						<tr>
-							<td title="បញ្ជូលលេខសំគាល់និស្សិត"><?php echo $tr->translate("STUDENT_ID");?>*</td>
+							<td title="បញ្ជូលលេខសំគាល់និស្សិត"><strong><?php echo $tr->translate("STUDENT_ID");?>*</strong></td>
 							<td><input class="fullside"  style="color: red;" tabindex="15" dojoType="dijit.form.TextBox" id="student_id" name="student_id" value="<?php echo $this->rs['stu_code']; ?>" type="text" ></td>
 							<td><?php echo $tr->translate("DEGREE");?>*</td>
 							<td><select class="fullside" tabindex="16" name="degree" id="degree" readonly="readonly"  dojoType="dijit.form.FilteringSelect" onchange="getallGrade(0);">
@@ -306,7 +303,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							</td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("GROUP");?>* <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/></td>
+							<td><strong><?php echo $tr->translate("GROUP");?>*</strong><input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/></td>
 							<td>
 								<input id="group" />
 								<!-- <select class="fullside" tabindex="15" name="group" id="group" dojoType="dijit.form.FilteringSelect" onchange="getInfoBygroup();">

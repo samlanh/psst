@@ -2,7 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('PURCHASE')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	
 ?>	
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
@@ -80,15 +79,12 @@
 		}, "category_id");
 		 
 		$('#old_cu').hide();
-		//addRow();
 	});	
-
-	
 </script>
 <style>
-select{ width:100%;}
-fieldset{  background:none;}
-.red{ color: red; padding-left:5px;}
+	select{ width:100%;}
+	fieldset{  background:none;}
+	.red{ color: red; padding-left:5px;}
 </style>
 <form id='suspend_service' action="<?php echo $this->url(array('module'=>'stock','controller'=>'purchase','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 <script type="dojo/method" event="onSubmit">			
@@ -108,7 +104,7 @@ fieldset{  background:none;}
 		<table style=" width: 100%">
 			<tr>
 				<td valign="top" width="34%" style="white-space: nowrap;">
-				<fieldset>
+				<fieldset style=" background: #fff;   border: solid 1px #008;">
 					<legend align="center"><strong><?php echo $tr->translate("ADD_PURCHASE");?>​</strong></legend>
 					<table style="margin: 0 auto;" cellspacing="10">
 						<tr>
@@ -118,7 +114,7 @@ fieldset{  background:none;}
 						    <td><input id="branch"/></td>
 						</tr>
 							<tr>
-							   <td><?php echo $tr->translate("SUPPLIER_NAME")?>*</td>
+							   <td><strong><?php echo $tr->translate("SUPPLIER_NAME")?>*</strong></td>
 							   <td>
 							   		<span id="new_cu">
 							   			<input type="text" dojoType="dijit.form.ValidationTextBox" name="supplier_name"  id="supplier_name" value="" class="fullside" required="required">
@@ -154,7 +150,7 @@ fieldset{  background:none;}
 							</tr>
 							
 							<tr>
-								<td><?php echo $tr->translate("AMOUNT_DUE")?></td>
+								<td><strong><?php echo $tr->translate("AMOUNT_DUE")?></strong></td>
 								<td><input type="text" dojoType="dijit.form.ValidationTextBox" value=""   id="amount_due" name="amount_due" class="fullside" readOnly="true"/></td>
 								<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
 								<td>
@@ -165,7 +161,7 @@ fieldset{  background:none;}
 								</td>
 							</tr>
 							<tr>
-								<td><?php echo $tr->translate("PRODUCT_NAME");?></td>
+								<td><strong><?php echo $tr->translate("PRODUCT_NAME");?></strong></td>
 								<td colspan="1"><input id="pro_id" name="pro_id" /></td>
 								<td></td>
 							</tr>

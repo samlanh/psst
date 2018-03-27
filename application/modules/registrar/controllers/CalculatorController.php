@@ -44,7 +44,7 @@ class Registrar_CalculatorController extends Zend_Controller_Action {
     			$_dbmodel = new Registrar_Model_DbTable_Dbcashcount();
     			$_dbmodel->addCashCount($_data);
     			if(!empty($_data['saveclose'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/Calculator");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/calculator");
     			}else{
     				Application_Form_FrmMessage::message("INSERT_SUCCESS");
     			}
@@ -65,7 +65,7 @@ class Registrar_CalculatorController extends Zend_Controller_Action {
     		$_data = $this->getRequest()->getPost();
     		try {
     			$_dbmodel->addCashCount($_data);
-    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/registrar/Calculator");
+    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/registrar/calculator");
     		}catch (Exception $e) {
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

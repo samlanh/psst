@@ -247,7 +247,7 @@
 											<td><strong><?php echo $tr->translate("DEGREE")?></strong></td>
 											<td>
 												<select name="degree_result" id="degree_result" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGradeResult();" >
-													<option value="">select degree</option>
+													<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
 													<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
 														<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
 													<?php }}?>
@@ -268,10 +268,6 @@
 											 <td><?php echo $tr->translate("TEST_DATE")?></td>
 											 <td><input type="text" name="test_date" required="true"  id="test_date" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" value="now" dojoType="dijit.form.DateTextBox"   /></td>
 										</tr>
-										<!--<tr>
-											 <td><?php //echo $tr->translate("DATE_RESULT")?></td>
-											 <td><input type="text" name="date_result" required="true"  id="date_result" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" value="now" dojoType="dijit.form.DateTextBox"   /></td>
-										</tr>-->
 										<tr>
 											<td valign="top"><?php echo $tr->translate("NOTE")?></td>
 											<td><input type="text" name="note"  id="note" class="fullside" dojoType="dijit.form.TextBox"   /></td>
@@ -356,7 +352,7 @@
 											<td><strong><?php echo $tr->translate("DEGREE")?></strong></td>
 											<td>
 												<select name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGrade();" >
-													<option value="">select degree</option>
+													<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
 													<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
 														<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
 													<?php }}?>

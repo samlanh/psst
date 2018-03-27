@@ -26,7 +26,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 	    	$s_search = addslashes(trim($search['txtsearch']));
 		 	$s_where[] = " CONCAT(from_academic,'-',to_academic) LIKE '%{$s_search}%'";
 	    	$s_where[] = " t.generation LIKE '%{$s_search}%'";
-// 	    	$s_where[] = " en_name LIKE '%{$s_search}%'";
 	    	$where .=' AND ( '.implode(' OR ',$s_where).')';
 	    }
 	    if(!empty($search['year'])){
@@ -41,7 +40,7 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 	    	$where.=" AND t.is_finished=".$search['finished_status'];
 	    }
 	    
-	    if($search['status_search']!=""){
+	    if($search['status_search']>0){
 	    	$where.=" AND t.status=".$search['status_search'];
 	    }
 	    
@@ -50,7 +49,6 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
 	    
 	    $order=" GROUP BY t.branch_id,t.from_academic,t.to_academic,t.generation,t.time ORDER BY t.id DESC  ";
 	    
-// 	    echo ($sql.$where.$order);
     	return $db->fetchAll($sql.$where.$order);
     }
     function getFeebyOther($fee_id){

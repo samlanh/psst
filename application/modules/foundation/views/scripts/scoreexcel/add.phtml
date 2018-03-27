@@ -103,12 +103,12 @@
     	return false;
   	}
 	</script>
+	<fieldset style="background: #fff;   border: solid 1px #008;">
+		<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("STUDENT_SCORE");?></strong></legend>
 	<table cellspacing="10" style="margin: 0 auto;width:100%;" >
 		<tr>
 			<td width="50%" valign="top">
-				<fieldset>
-					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("STUDENT_SCORE");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%;" cellspacing="5">
+				<table style="margin: 0 auto; width: 100%;" cellspacing="5">
 						<tr>
 							<td><strong><?php echo $tr->translate("SUBJECT_TITLE");?></strong></td>
 							<td>
@@ -154,12 +154,9 @@
 							</td>
 						</tr>
 					</table>
-				</fieldset>
 			</td>
 		    <td width="50%" valign="top">
-		    	<fieldset>
-					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("STUDENT_SCORE");?></strong></legend>
-				    	<table width="100%">
+				   <table width="100%">
 				    		<tr>
 				    			<td><?php echo $tr->translate("STUDY_YEAR");?></td>
 								<td><input id="year_study" /></td>
@@ -200,7 +197,6 @@
 								</td>
 							</tr>
 				    	</table>
-				  </fieldset>
 		    </td>
 		</tr>
 		<tr>
@@ -215,7 +211,8 @@
 					iconClass="dijitEditorIcon dijitEditorIconSave" />
 			</td>
 		</tr>
-	</table>	
+	</table>
+	</fieldset>	
 </form>
 <script> //validate controll form 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
@@ -497,5 +494,8 @@ function createTable(subjectid) {
 	document.getElementById('scorevalue_'+subjectid).remove();
 	document.getElementById('datacollum'+subjectid).appendChild(myTable); 
 	dojo.require('dijit.form.NumberTextBox');
+	dojo.html.set('','' , {
+	     parseContent: true,
+	});
 }
 </script>

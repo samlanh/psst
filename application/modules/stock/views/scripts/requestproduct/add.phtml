@@ -2,7 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_REQUEST_STOCK')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	
 ?>	
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
@@ -30,7 +29,6 @@
 			autoComplete: true,                        
 			id: "pro_id",
 			name: "pro_id",  
-			//style:'height:40px !important',         
 			class: 'fullside',  
 			required:false,
 			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
@@ -97,7 +95,6 @@
 				 }
 			}
 		}, "for_section");
-		
 	});	
 </script>
 <style>
@@ -124,27 +121,26 @@ fieldset{  background:none;}
 		<table style=" width: 100%">
 			<tr>
 				<td valign="top" width="34%" style="white-space: nowrap;">
-				<fieldset>
+				<fieldset style=" background: #fff;   border: solid 1px #008;">
 					<legend align="center"><strong><?php echo $tr->translate("ADD_REQUEST_STOCK");?>​</strong></legend>
 					<table style="margin: 0 auto;" cellspacing="10" >
 							<tr>
-							    <td><?php echo $tr->translate("REQUEST_FOR")?></td>
+							    <td><strong><?php echo $tr->translate("REQUEST_FOR")?></strong></td>
 							    <td>
 							    	<input id="request_for"/>
 							   	</td>
 							    
-								<td><?php echo $tr->translate("FOR_SECTION")?></td>
+								<td><strong><?php echo $tr->translate("FOR_SECTION")?></strong></td>
 							    <td>
 							    	<input id="for_section"/>
 							   	</td>
 							</tr>
 							<tr>
-							    <td><?php echo $tr->translate("REQUEST_NO")?></td>
+							    <td><strong><?php echo $tr->translate("REQUEST_NO")?></strong></td>
 							    <td><input type="text" dojoType="dijit.form.TextBox"   name="request_no"  id="request_no" value="<?php echo $this->rq_code;?>" class="fullside" readOnly="true"></td>
 							    <td><?php echo $tr->translate("PURPOSE")?></td>
 								<td colspan=""><textarea class="fullside"  style=" height: 30px !important;" tabindex="20" dojoType=""  id="purpose" name="purpose"  ></textarea></td>
 							</tr>
-							
 							<tr>
 								<td><?php echo $tr->translate("BRANCH")?></td>
 						    	<td>
@@ -157,9 +153,8 @@ fieldset{  background:none;}
 								 <td><?php echo $tr->translate("REQUEST_DATE")?></td>
 								 <td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="request_date" id="request_date" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/></td>
 							</tr>
-							
 							<tr>
-								<td><?php echo $tr->translate("PRODUCT_NAME");?></td>
+								<td><strong><?php echo $tr->translate("PRODUCT_NAME");?></strong></td>
 								<td colspan="1"><input id="pro_id" name="pro_id" /></td>
 								<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
 								<td>
@@ -168,7 +163,6 @@ fieldset{  background:none;}
 											<option value="0" ><?php echo $tr->translate("DEACTIVE");?></option>
 									</select>
 								</td>
-								
 							</tr>
 							<tr>
 								<td colspan="4">
@@ -177,7 +171,6 @@ fieldset{  background:none;}
 									</table>
 								</td>
 							</tr>
-							
 							<tr>
 								<td colspan="2"><input type="hidden" id="identity" name="identity" /></td>
 							</tr>
@@ -277,9 +270,6 @@ fieldset{  background:none;}
 											<td align="center" valign="top">
 												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
 													<?php 
-													   // $session_user=new Zend_Session_Namespace('authstu');
-													   // $last_name=$session_user->last_name;
-													   // $username = $session_user->first_name;
 													   echo "រៀបចំ​ដោយ";
 													?>
 												</div>
@@ -435,7 +425,6 @@ function addRow() {
 			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="'+branch_id+'" /></td>';
 			template+='<td width="20%">&nbsp;<input type="hidden" dojoType="dijit.form.TextBox" id="label_product_name_'+col+'" name="label_product_name_'+col+'" value="'+label_proname+'" />'+label_proname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="product_name_'+col+'" name="product_name_'+col+'" value="'+pro_id+'" /></td>';
-			//template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" id="product_name_'+col+'" name="product_name_'+col+'" onChange="sumAmountDue();">'+''+'</select></td>';			
 
 			template+='<td> <input type="text" name="curr_qty'+col+'" id="curr_qty'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
 			template+='<td> <input type="text" name="cost_'+col+'" id="cost_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
@@ -455,7 +444,6 @@ function addRow() {
 		});
 		getQtyById(col);
  }
-
 function deleteRecord(index) {
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
@@ -494,7 +482,6 @@ function hideDialog(){
 	dijit.byId('frm_addbranch').reset();
 	dijit.byId("popup_add_branch").hide();
 }
-
 function submitDataClose(){
 	pro_id=dijit.byId("pro_id").get('value');
 	if(pro_id=='' || pro_id==null){
@@ -517,10 +504,8 @@ function submitDataClose(){
 		});
 	}
 }
-
 var url_qty = '<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'get-productqty')); ?>';
-function getQtyById(index){
-	 
+function getQtyById(index){	 
 	pro_id = dijit.byId('pro_id').get('value');
 	branch_id=dijit.byId("branch").get("value");
 	if(pro_id==0 || pro_id=='' || branch_id==0 || branch_id==''){
@@ -549,7 +534,6 @@ function getQtyById(index){
 		}
 	});
 }
-
 var pro_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_pro_branch= '<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'get-pro-bylocation')); ?>';
 function getProByBranch(){
@@ -574,7 +558,6 @@ function getProByBranch(){
 			}
 		});
 }
-
 function getCurrQty(r){
 	curr_qty=dijit.byId("curr_qty"+r).get("value");
 	request_qty=dijit.byId("request_qty"+r).get("value");
@@ -583,7 +566,6 @@ function getCurrQty(r){
 		dijit.byId("request_qty"+r).attr("value",curr_qty);
 	}
 }
-
 var url_request_for = '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'add-request-for')); ?>';
 function addRequestFor(){
 	if(dijit.byId('frm_add_request_for').validate()){
@@ -606,12 +588,10 @@ function addRequestFor(){
 		});
 	}
 }
-
 function hideDialogRequestFor(){
 	dijit.byId('frm_add_request_for').reset();
 	dijit.byId("popup_request_for").hide();
 }
-
 var url_for_section = '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'add-for-section')); ?>';
 function addForSection(){
 	if(dijit.byId('frm_add_for_section').validate()){
@@ -634,15 +614,11 @@ function addForSection(){
 		});
 	}
 }
-
 function hideDialogForSection(){
 	dijit.byId('frm_add_for_section').reset();
 	dijit.byId("popup_for_section").hide();
 }
-
-
 </script>
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:400px" id="popup_request_for" >
 		<form  id='frm_add_request_for' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -674,11 +650,9 @@ function hideDialogForSection(){
 		</form>
 	</div>
 </div>
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:400px" id="popup_for_section" >
 		<form  id='frm_add_for_section' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
 					return true;

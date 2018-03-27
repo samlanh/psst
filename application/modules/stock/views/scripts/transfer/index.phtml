@@ -5,11 +5,6 @@
 	$formList = new Application_Form_Frmtable();
 	$url_barcode = $this->url(array("module"=>"accounting","controller"=>"transfer","action"=>"generatebarcode","loan_code"=>"Hello"),null,true);
 ?>	
-<script type="text/javascript">
-	
-});
-</script>
-<img src="<?php echo $url_barcode;?>" />
 <form id="list" name="list" action="<?php echo $this->url(array('module'=>'stock','controller'=>'transfer','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
 	<table style="width:80%" style="width:100 px;">
 	  <tr> 
@@ -22,10 +17,10 @@
 </form>
 <?php echo $this->list; ?>
 <script type="text/javascript">
-dojo.require("dijit.form.CheckBox"); 
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox"); 
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
 </script> 
  
  

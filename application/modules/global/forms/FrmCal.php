@@ -6,7 +6,6 @@ Class Global_Form_FrmCal extends Zend_Dojo_Form {
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	public function FrmCalculator($data=null){
-		
 		$_hundred = new Zend_Dojo_Form_Element_TextBox('d_hundred');
 		$_hundred->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
@@ -132,8 +131,6 @@ Class Global_Form_FrmCal extends Zend_Dojo_Form {
 		$_rate->setAttribs(array('dojoType'=>'dijit.form.NumberTextBox','class'=>'fullside',
 				'onkeyup'=>'Calfiftyhousend()'
 				));
-// 		$key = new Application_Model_DbTable_DbKeycode();
-// 		$datavalue=$key->getKeyCodeMiniInv(TRUE);
 		$db = new Accounting_Model_DbTable_DbExchangeRate();
 		$datavalue = $db->getExchangeRate();
 		$_rate->setValue($datavalue['reil']);		
@@ -149,7 +146,7 @@ Class Global_Form_FrmCal extends Zend_Dojo_Form {
 		$date->setAttribs(array('dojoType'=>'dijit.form.DateTextBox','class'=>'fullside','constraints'=>"{datePattern:'dd/MM/yyyy'}"));
 		$id = new Zend_Form_Element_Hidden('id');
 		if($data!=null){
-			$_rate->setValue($datavalue['exchange_rate']);
+			$_rate->setValue($data['exchange_rate']);
 			$_hundred->setValue($data['dollar_100']);
 			$_fifty->setValue($data['dollar_50']);
 			$_tweenty->setValue($data['dollar_20']);
@@ -189,7 +186,6 @@ Class Global_Form_FrmCal extends Zend_Dojo_Form {
 			$note->setValue($data['note']);
 			$id->setValue($data['id']);
 		}
-		
 		$this->addElements(array($date,$note,$id,
 			  $_hundred, $_fifty, $_tweenty, $_ten,$_five, $_one,
 			  $rs_hundred, $rs_fifty, $rs_tweenty, $rs_ten,$rs_five, $rs_one,
@@ -197,9 +193,6 @@ Class Global_Form_FrmCal extends Zend_Dojo_Form {
 			  $rs_fiftyhousend,$rs_tenthousend, $rs_fivehousend, $rs_tweentyhousend, $rs_thousend, $rs_fivehundred, $rs_onehundred,
 			  $rs_totalkh, $rs_dollar_total,$reil_to_dollar,$_rate,$amount_total
 			  ));
-		
 		return $this;
-		
 	}
-	
 }

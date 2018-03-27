@@ -29,7 +29,6 @@ table tr td strong{
 			$amount_print = $this->data['receipt_print'];
 			for($prin=0;$prin<$amount_print;$prin++){?>
 			<table style="margin: 0 auto; width:100%;height:13.97cm;" >
-				
 				<?php if($this->data['show_header_receipt']==1){?>
 					<tr height="90px;">
 						<td colspan="10"  style="" align="center" valign="top">
@@ -54,7 +53,6 @@ table tr td strong{
 						</td>
 					</tr>
 				<?php }?>
-				
 				<tr height="40px;">
 				    <td colspan="3"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
@@ -75,7 +73,6 @@ table tr td strong{
 				<tr height="50px">
 					<td colspan="3">
 						<table width="100%" border="0" style="font-family: Khmer OS Battambang; font-size: 12px;white-space: nowrap;margin-bottom: 5px;">
-							
 							<tr>
 								<td width="10%"></td>
 								<td width="25%"></td>
@@ -84,7 +81,6 @@ table tr td strong{
 								<td width="12%"></td>
 								<td width="25%"></td>
 							</tr>
-							
 							<tr style="line-height: 16px;">
 								<td>Student's ID</td>
 								<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['stu_code'];?></strong></td>
@@ -189,12 +185,8 @@ table tr td strong{
 											<tr style="height:15px;">
 												<td align="center">
 													<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 5px;"> 
-														<?php 
-// 																   $session_user=new Zend_Session_Namespace('authstu');
-// 																   $last_name=$session_user->last_name;
-// 																   $username = $session_user->first_name;
-																   echo "".$this->rr['last_name']." ".$this->rr['user'];
-																?>
+														<?php echo "".$this->rr['last_name']." ".$this->rr['user'];
+														?>
 														<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime($this->rr['create_date']));?></div>
 													</div>
 												</td>
@@ -210,9 +202,7 @@ table tr td strong{
 						</td>
 					</tr>
 				</table>
-				<?php //if($print==0){?>
-					<!-- <hr style="border:1px dotted #000;" /> -->
-				<?php //}
+<?php
 }?>
 	</div>	
 </div>

@@ -27,7 +27,7 @@ table .set-style td, table .set-style th {
 		<td>
 			<fieldset>
 				<legend align="center" style="font-size: 20px;"><strong><?php echo $tr->translate("EDIT_FEE");?></strong></legend>
-				<table style="margin: 0 auto; width: 100%; background:#DFF7FD;" cellspacing="10" broder 1>
+				<table style="margin: 0 auto; width: 100%; " cellspacing="10" broder 1>
 					<tr>
 						<td><?php echo $tr->translate("YEARS");?><input type="hidden" name="id" value="<?php echo $this->rs['id'];?>" /> </td>
 						<td>
@@ -70,7 +70,7 @@ table .set-style td, table .set-style th {
 						</td>	
 					</tr>
 					<tr>
-						<td><?php echo $tr->translate("GRADE");?></td>
+						<td><strong><?php echo $tr->translate("GRADE");?></strong></td>
 						<td colspan="3"><input id="grade" name="grade" /></td>
 						<td ><?php echo $tr->translate("STATUS");?></td>
 						<td>
@@ -87,7 +87,7 @@ table .set-style td, table .set-style th {
 						</td>
 					</tr>
 				</table>
-				<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
+				<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%;" >
 					<thead>
 						<tr>
 							<td colspan="8" align="left">

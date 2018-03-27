@@ -19,7 +19,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 	    					'year' => '',
 	    					'branch_id'=>'',
     						'finished_status' => '',
-    						'status_search' => 1,
+    						'status_search' =>-1,
     					);
     		}
     		$db = new Accounting_Model_DbTable_DbTuitionFee();
@@ -38,7 +38,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	}
     	
     	$this->view->adv_search = $search;
-    	
     	$year=$db->getAceYear();
     	array_unshift($year, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
     	$this->view->rows_year=$year;
@@ -47,7 +46,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	  
     }
     public function headAddRecordTuitionFee($rs,$key){
     	$result[$key] = array(

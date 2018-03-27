@@ -1,9 +1,7 @@
 <?php
-
 class Registrar_StudenttestController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/registrar/studenttest';
-	
     public function init()
     {
     	header('content-type: text/html; charset=utf8');
@@ -28,7 +26,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		}
     		$this->view->adv_search = $search;
     		
-			$rs_rows= $db->getAllStudentTest($search);//call frome model
+			$rs_rows= $db->getAllStudentTest($search);
     		$list = new Application_Form_Frmtable();
     		$collumns = array("SERIAL","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","TEST_DATE","DEGREE","GRADE","SESSION","TEST_TERM","NOTE","BY_USER","STATUS","PRINT_PROFILE");
     		$link=array(
@@ -42,7 +40,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-    	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
@@ -97,8 +94,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		if($row['register']==1){
 			//Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/registrar/studenttest");
 		}
-		
-		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $db->getAllDegreeName();
 		$this->view->session = $db->getAllSession();
@@ -108,20 +103,10 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 		array_unshift($rs, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
 		$this->view->startdate_enddate= $rs;
     }
-    
     function profileAction(){
     	$id = $this->getRequest()->getParam('id');
     	$db = new Registrar_Model_DbTable_DbStudentTest();
     	$this->view->row = $row = $db->getStudentTestProfileById($id);
     	$this->view->row_detail=$db->getStudentTestDetail($id);
     }
-    
-
 }
-
-
-
-
-
-
-

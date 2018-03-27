@@ -96,9 +96,9 @@ dojo.ready(function(){
 <table cellspacing="10" style="margin: 0 auto;width:100%;" >
 	<tr>
 		<td>
-		<fieldset>
+		<fieldset style="background: #fff;   border: solid 1px #008;">
 					<legend align="center" style="font-size: 20px;"><strong><?php echo $tr->translate("ADD_FEE");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%; background:#DFF7FD;" cellspacing="10">
+					<table style="margin: 0 auto; width: 100%;" cellspacing="10">
 						<tr>
 							<td style="white-space: nowrap;"><?php echo $tr->translate("YEARS");?></td>
 							<td>
@@ -126,12 +126,12 @@ dojo.ready(function(){
 							<td ><input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note"  type="text"></td>
 						</tr>
 						<tr>
-							<td><?php echo $tr->translate("GRADE");?></td>
+							<td><strong><?php echo $tr->translate("GRADE");?></strong></td>
 							<td colspan="3"><input id="grade" name="grade" /></td>
 							<td></td>
 						</tr>
 					</table>
-					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
+					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#fff;" >
 						<thead>
 							<tr>
 								<td colspan="8" align="left">
@@ -516,12 +516,10 @@ var title = 0;
 tmp = '';
 temp='';
 function addRow(){ 
-	//var grade = '<?php //echo $this->all_grade; ?>';
 	grade=dijit.byId("grade").get("value");
 	if(grade==''){return false;}
 	var payment_term = '<?php echo count($this->payment_term);?>';
 		col++;no++;
-		
 		label_grade = dijit.byId("grade").attr('displayedValue');
 		template='';
 		if(title!=1){    

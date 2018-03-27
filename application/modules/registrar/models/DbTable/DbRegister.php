@@ -2225,6 +2225,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		 s.sex,
 	    		 s.stu_code,
 	    		 s.is_stu_new,
+	    		 (SELECT en_name FROM rms_dept WHERE dept_id=s.degree)AS degree,
 	    		 (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id
     		FROM
     		  	rms_student_payment as sp,

@@ -84,11 +84,11 @@ fieldset{  background:none;}
 		<table style=" width: 100%">
 			<tr>
 				<td valign="top" width="34%" style="white-space: nowrap;">
-				<fieldset>
+				<fieldset style=" background: #fff;   border: solid 1px #008;">
 					<legend align="center"><strong><?php echo $tr->translate("EDIT_ADJUST_STOCK");?>​</strong></legend>
 					<table style="margin: 0 auto;" cellspacing="10" >
 							<tr>
-							   <td><?php echo $tr->translate("TITLE")?>*</td>
+							   <td><strong><?php echo $tr->translate("TITLE")?>*</strong></td>
 							   <td>
 							   		<input type="text" dojoType="dijit.form.ValidationTextBox" name="request_name"  id="request_name" value="<?php echo $row['request_name'];?>" class="fullside" required="required">
 							   	</td>
@@ -112,11 +112,9 @@ fieldset{  background:none;}
 						    	 </td>
 							   <td><?php echo $tr->translate("DATE")?></td>
 							   <td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="create_date" id="create_date" dojoType="dijit.form.DateTextBox"  value="<?php echo $row['request_date'];?>" type="text"/></td>
-								
 							</tr>
-							
 							<tr>
-								<td><?php echo $tr->translate("PRODUCT_NAME");?></td>
+								<td><strong><?php echo $tr->translate("PRODUCT_NAME");?></strong></td>
 								<td colspan="1"><input id="pro_id" name="pro_id" /></td>
 								<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
 								<td>
@@ -125,7 +123,6 @@ fieldset{  background:none;}
 											<option value="0" <?php if($row['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE");?></option>
 									</select>
 								</td>
-								
 							</tr>
 							<tr>
 								<td colspan="4">
@@ -134,7 +131,6 @@ fieldset{  background:none;}
 									</table>
 								</td>
 							</tr>
-							
 							<tr>
 								<td colspan="2"><input type="hidden" id="identity" name="identity" /></td>
 							</tr>
@@ -167,10 +163,8 @@ temp='';
 function oldRow() {
 	<?php if(!empty($row_detail)) foreach($row_detail As $rows){?>
 	label_proname = dijit.byId("pro_id").attr('displayedValue');
-	//alert(label_proname);
 	pro_id=dijit.byId("pro_id").get("value");
 	branch_id=dijit.byId("branch").get("value");
-	//alert(label_grade);
 		col++;no++;
 		template='';
 		if(title!=1){
@@ -187,7 +181,6 @@ function oldRow() {
 			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="" /></td>';
 			template+='<td width="20%">&nbsp;<?php echo $rows['pro_name'] ?><input type="hidden" dojoType="dijit.form.TextBox" required="true" id="product_name_'+col+'" name="product_name_'+col+'" value="" /></td>';
-			//template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" id="product_name_'+col+'" name="product_name_'+col+'" onChange="sumAmountDue();">'+''+'</select></td>';			
 
 			template+='<td> <input type="text" required="true" name="curr_qty'+col+'" id="curr_qty'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
 			template+='<td> <input type="text" required="true" name="request_qty'+col+'" id="request_qty'+col+'" onkeyup="getCurrQty('+col+');" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
@@ -216,10 +209,8 @@ function oldRow() {
  
 function addRow() {
 	label_proname = dijit.byId("pro_id").attr('displayedValue');
-	//alert(label_proname);
 	pro_id=dijit.byId("pro_id").get("value");
 	branch_id=dijit.byId("branch").get("value");
-	//alert(label_grade);
 		col++;no++;
 		template='';
 		if(title!=1){
@@ -236,7 +227,6 @@ function addRow() {
 			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="15px" align="center"  >'+no+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="branch_id_'+col+'" name="branch_id_'+col+'" value="'+branch_id+'" /></td>';
 			template+='<td width="20%">&nbsp;'+label_proname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="product_name_'+col+'" name="product_name_'+col+'" value="'+pro_id+'" /></td>';
-			//template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" id="product_name_'+col+'" name="product_name_'+col+'" onChange="sumAmountDue();">'+''+'</select></td>';			
 
 			template+='<td> <input type="text" required="true" name="curr_qty'+col+'" id="curr_qty'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" readonly="true"/></td>';
 			template+='<td> <input type="text" required="true" name="request_qty'+col+'" id="request_qty'+col+'" onkeyup="getCurrQty('+col+');" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';

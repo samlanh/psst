@@ -175,8 +175,7 @@ function filterStudent(){
 				for(i=0;i<data.length;i++){ //alert(data[i].stu_id);
 					inx = i+1;
 					num++;
-					str+='<h3>'+inx+'. <?php echo $tr->
-					("STUDENT_CODE")?> ('+data[i].stu_code+')'+'&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("STUDENT_NAME")?> ('+data[i].stu_name+')&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("SEX")?> ('+gender(data[i].sex)+')&nbsp;|&nbsp;<input   type="hidden" name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+data[i].stu_id+'"/></h3>';
+					str+='<h3>'+inx+'. <?php echo $tr->translate("STUDENT_CODE")?> ('+data[i].stu_code+')'+'&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("STUDENT_NAME")?> ('+data[i].stu_name+')&nbsp;|&nbsp;&nbsp;<?php echo $tr->translate("SEX")?> ('+gender(data[i].sex)+')&nbsp;|&nbsp;<input   type="hidden" name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+data[i].stu_id+'"/></h3>';
 					str+='<div >';
 					str+='<div class="blogscoresubject" style="width:100%; text-align: center;">';
 					var no=0;
@@ -248,8 +247,6 @@ function filterStudent(){
 				dojo.html.set(dojo.byId("liststudent"),str , {
 				     parseContent: true,
 				});
-				//document.getElementById("liststudent").innerHTML = str;
-				
 				 $("#accordion").accordion();
 	       }else{
 	    	   $('#identity').val('');
@@ -286,13 +283,13 @@ function gender(sex){
 							<td style="vertical-align: top;">
 								<table style="margin: 0 auto; width: 100%;" cellspacing="5">
 									<tr>
-										<td><?php echo $tr->translate("TITLE");?></td>
+										<td><strong><?php echo $tr->translate("SUBJECT_TITLE");?></strong></td>
 										<td>
 											<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" />
 										</td>
 									</tr>
 									<tr>
-										<td><?php echo $tr->translate("GROUP");?>*</td>
+										<td><strong><?php echo $tr->translate("GROUP");?>*</strong></td>
 										<td>
 											<select class="fullside" tabindex="15" name="group" id="group" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup(); getInfoBygroup();">
 												<?php if(!empty($this->group))foreach ($this->group as $row){?>
@@ -339,7 +336,7 @@ function gender(sex){
 							<td style="vertical-align: top;">
 								<table style="margin: 0 auto; width: 100%;" cellspacing="5">
 									<tr>
-										<td><?php echo $tr->translate("EXAM_TYPEEXAM_TYPE");?></td>
+										<td><strong><?php echo $tr->translate("EXAM_TYPE");?></strong></td>
 										<td>
 										   <select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
 										   		<option value="1">ប្រចាំខែ</option>
@@ -348,7 +345,7 @@ function gender(sex){
 										</td>
 									</tr>
 									<tr>
-										<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
+										<td style="white-space: nowrap;"><strong><?php echo $tr->translate("FOR_MONTH");?></strong></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
 												<?php if(!empty($this->month)){foreach ($this->month as $month){?>
@@ -358,7 +355,7 @@ function gender(sex){
 										</td>
 									</tr>
 									<tr>
-										<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
+										<td><strong><?php echo $tr->translate("FOR_SEMESTER");?></strong></td>
 										<td>
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
 													<option value="1">ទី 1</option>

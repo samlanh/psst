@@ -790,4 +790,31 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows = $group->getAllStudentBepay($search);
 		$this->view->search=$search;
 	}
+	public function rptIncomebycateAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'adv_search' =>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+				);
+			}
+	
+			$db = new Registrar_Model_DbTable_DbRptByType();
+			$this->view->row = $db->getAllStudentPaymentByType($search,1);
+			$this->view->rs = $db->getAllStudentPaymentByType($search,2);
+			$this->view->studenttestincome = $db->getTotalStudentTestPayment($search);
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			echo $e->getMessage();
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
+	}
 }

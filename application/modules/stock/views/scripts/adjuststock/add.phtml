@@ -26,7 +26,6 @@
 			autoComplete: true,                        
 			id: "pro_id",
 			name: "pro_id",  
-			//style:'height:40px !important',         
 			class: 'fullside',  
 			required:false,
 			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
@@ -87,11 +86,11 @@ fieldset{  background:none;}
 		<table style=" width: 100%">
 			<tr>
 				<td valign="top" width="34%" style="white-space: nowrap;">
-				<fieldset>
+				<fieldset style=" background: #fff;   border: solid 1px #008;">
 					<legend align="center"><strong><?php echo $tr->translate("ADD_ADJUST_STOCK");?>​</strong></legend>
 					<table style="margin: 0 auto;" cellspacing="10" >
 							<tr>
-							   <td><?php echo $tr->translate("TITLE")?>*</td>
+							   <td><strong><?php echo $tr->translate("TITLE")?>*</strong></td>
 							   <td>
 							   		<input type="text" dojoType="dijit.form.ValidationTextBox" name="request_name"  id="request_name" value="" class="fullside" required="required">
 							   	</td>
@@ -101,9 +100,7 @@ fieldset{  background:none;}
 							<tr>
 							   <td><?php echo $tr->translate("ADJUST_NO")?></td>
 							   <td><input type="text" dojoType="dijit.form.TextBox"   name="adjust_no"  id="adjust_no" value="<?php echo $this->rq_code;?>" class="fullside" readOnly="true"></td>
-							   
 							</tr>
-							
 							<tr>
 								<td><?php echo $tr->translate("BRANCH")?></td>
 						    	<td>
@@ -115,11 +112,9 @@ fieldset{  background:none;}
 						    	 </td>
 							   <td><?php echo $tr->translate("DATE")?></td>
 							   <td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="create_date" id="create_date" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/></td>
-								
 							</tr>
-							
 							<tr>
-								<td><?php echo $tr->translate("PRODUCT_NAME");?></td>
+								<td><strong><?php echo $tr->translate("PRODUCT_NAME");?></strong></td>
 								<td colspan="1"><input id="pro_id" name="pro_id" /></td>
 								<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
 								<td>
@@ -128,7 +123,6 @@ fieldset{  background:none;}
 											<option value="0" ><?php echo $tr->translate("DEACTIVE");?></option>
 									</select>
 								</td>
-								
 							</tr>
 							<tr>
 								<td colspan="4">
@@ -137,7 +131,6 @@ fieldset{  background:none;}
 									</table>
 								</td>
 							</tr>
-							
 							<tr>
 								<td colspan="2"><input type="hidden" id="identity" name="identity" /></td>
 							</tr>
@@ -156,7 +149,6 @@ fieldset{  background:none;}
 			</tr>
 		</table>
 </form>
-
 <script type="text/javascript">
 var template = '';
 var product_name = '<?php //echo $this->product; ?>';
@@ -167,10 +159,8 @@ tmp = '';
 temp='';
 function addRow() {
 	label_proname = dijit.byId("pro_id").attr('displayedValue');
-	//alert(label_proname);
 	pro_id=dijit.byId("pro_id").get("value");
 	branch_id=dijit.byId("branch").get("value");
-	//alert(label_grade);
 		col++;no++;
 		template='';
 		if(title!=1){
@@ -324,7 +314,6 @@ function getProByBranch(){
 			}
 		});
 }
-
 function getCurrQty(r){
 	curr_qty=dijit.byId("curr_qty"+r).get("value");
 	request_qty=dijit.byId("request_qty"+r).get("value");
@@ -339,5 +328,3 @@ function getCurrQty(r){
 	}
 }
 </script>
-
-

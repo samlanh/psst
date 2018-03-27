@@ -8,8 +8,6 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
  <script>
 		require(["dijit/form/DateTextBox","dijit/form/Textarea"]);
  </script>
- 
- 
  <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
@@ -25,13 +23,8 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 			class: "fullside", 
 			placeHolder:"Select grade",          
 			onChange: function() {  
-				// dept_id = dijit.byId('grade_result').get('value');
-				// if(dept_id==-1){
-					// dijit.byId("popup_add_dept").show();
-				// }
 			}
 		}, "grade");
-
 		new dijit.form.FilteringSelect({
 			store: grade_store,
 			autoComplete: true,                        
@@ -42,7 +35,6 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 			class: "fullside", 
 			placeHolder:"Select Level Result",          
 			onChange: function() {  
-				
 			}
 		}, "grade_result");
 
@@ -61,19 +53,12 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 				}
 			}
 		}, "term_test");
-		
 		getAllGrade();
-
 		dijit.byId('time').attr('value','<?php echo $this->rs['time_result']?>');
-		
-		
 	});
-	
 </script>
- 
- 
 <form id='frm_teststudent' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'edit')); ?>" 
-				dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+	dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 	<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
 			if(this.validate()) {
 				if(dijit.byId("degree").get("value")==''){
@@ -81,13 +66,11 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 					dijit.byId("degree").focus();
 					return false;
 				}
-				 
 				return true;
 			}else {
 				return false;
 			}
 	</script>
-	
 	<table cellspacing="10" class='fullside' >
 		<tr>
 			<td>
@@ -139,12 +122,10 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 															<td><?php echo $tr->translate("EMAIL")?></td>
 															<td><input type="text" name="email" id="email" value="<?php echo $this->rs['email']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
 														</tr>
-														
 													</table>
 												</td>
 												<td valign="top" width="33%">
 													<table cellspacing="5"  width="100%">
-														
 														<tr>
 															<td><?php echo $tr->translate("STUDENT_STATUS")?></td>
 															<td>
@@ -171,7 +152,6 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 															<td><?php echo $tr->translate("PARENT_TEL")?></td>
 															<td><input type="text" name="parent_tel" id="parent_tel" value="<?php echo $this->rs['parent_tel']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
 														</tr>
-														
 														<tr>
 															<td><?php echo $tr->translate("OLD_SCHOOL")?></td>
 															<td><input type="text" name="old_school" id="old_school" value="<?php echo $this->rs['old_school']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
@@ -180,12 +160,10 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 															 <td><?php echo $tr->translate("OLD_GRADE")?></td>
 															 <td><input type="text" name="old_grade" id="old_grade" value="<?php echo $this->rs['old_grade']?>" class="fullside" dojoType="dijit.form.TextBox" /></td>
 														</tr>
-														
 														<tr>
 														    <td><?php echo $tr->translate("ADDRESS")?></td>
 															<td colspan="1"><textarea style="min-height:60px;font-family:'Khmer OS Battambang';font-size: 15px;" value="<?php echo $this->rs['address']?>" class="fullside" name="address" id="address" dojoType="dijit.form.Textarea" ></textarea></td>
 														</tr>
-														
 													</table>
 												</td>
 											</tr>
@@ -208,7 +186,7 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 											<td><strong><?php echo $tr->translate("DEGREE")?></strong></td>
 											<td>
 												<select name="degree_result" id="degree_result" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGradeResult();" >
-													<option value="">select degree</option>
+													<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
 													<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
 														<option value="<?php echo $rs['id'];?>" <?php if($rs['id']==$this->rs['degree_result']){echo "selected='selected'";}?>><?php echo $rs['name'];?></option>
 													<?php }}?>
@@ -227,10 +205,6 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 											 <td><?php echo $tr->translate("TEST_DATE")?></td>
 											 <td><input type="text" name="test_date" required="true" value="<?php echo $this->rs['test_date']?>"  id="test_date" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" value="now" dojoType="dijit.form.DateTextBox"   /></td>
 										</tr>
-										<!-- <tr>
-											 <td><?php //echo $tr->translate("DATE_RESULT")?></td>
-											 <td><input type="text" name="date_result" required="true"  id="date_result" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $this->rs['date_result']?>" dojoType="dijit.form.DateTextBox"   /></td>
-										</tr> -->
 										<tr>
 											<td valign="top"><?php echo $tr->translate("NOTE")?></td>
 											<td><input type="text" name="note"  id="note" class="fullside" value="<?php echo $this->rs['note']?>" dojoType="dijit.form.TextBox"   /></td>
@@ -247,14 +221,12 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 								</fieldset>
 								</td>
 							</tr>
-							
 							<tr>
 								<td colspan="3" style="border-bottom:1px solid #ccc;font-size: 16px;"><strong><?php echo $tr->translate("EMERGENCY_CONTACT")?></strong></td>
 							</tr>
 							<tr>
 								<td colspan="3" style="font-size: 15px;">List any person whom you would like to be contacted in case of emergency.</td>
 							</tr>
-							
 							<tr>
 								<td colspan="3" width="100%">
 									<table width="100%" border="0">
@@ -264,45 +236,35 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 											<td width="10%"></td>
 											<td width="40%"></td>
 										</tr>
-									
 										<tr>
 											<td><?php echo $tr->translate("NAME")?></td>
 											<td colspan="3" >
 												<input type="text" name="emergency_name" id="emergency_name" value="<?php echo $this->rs['emergency_name']?>" class="fullside" dojoType="dijit.form.TextBox"   />
 											</td>
 										</tr>
-										
 										<tr>
-											<td ><?php echo $tr->translate("RELATIONSHIP_TO_STUDENT")?></td>
-											<td >
+											<td><?php echo $tr->translate("RELATIONSHIP_TO_STUDENT")?></td>
+											<td>
 												<input type="text" name="relationship_to_student" value="<?php echo $this->rs['relationship_to_student']?>" id="relationship_to_student" class="fullside" dojoType="dijit.form.TextBox"   />
 											</td>
-											
 											<td align="center"><?php echo $tr->translate("PHONE")?></td>
-											<td >
+											<td>
 												<input type="text" name="emergency_tel" id="emergency_tel" value="<?php echo $this->rs['emergency_tel']?>" class="fullside" dojoType="dijit.form.TextBox"   />
 											</td>
 										</tr>
-										
 										<tr>
 											<td width="20%"><?php echo $tr->translate("ADDRESS")?></td>
 											<td colspan="3" width="80%">
 												<input type="text" name="emergency_address" id="emergency_address" value="<?php echo $this->rs['emergency_address']?>" class="fullside" dojoType="dijit.form.TextBox"   />
 											</td>
 										</tr>
-										
 									</table>
 								</td>
 							</tr>
-								
 							<tr>
 								<td colspan="3" style="border-bottom:1px solid #ccc;font-size: 16px;"><strong><?php echo $tr->translate("EDUCATIONAL_BACKGROUND")?>(SchoolName , Grade/Level/Year , Major , Year)</strong></td>
 							</tr>	
-							 
 							<tr>
-								<!-- <td colspan="3" width="100%">
-									<textarea class="ckeditor"  rows="1"   id="edu_background" name="edu_background"></textarea>
-								</td> -->
 								<td colspan="3">
 								    <table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;">
 								    	<tr id="head-title" class="head-td" align="right"></tr>
@@ -312,11 +274,9 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 									<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
 								</td>
 							</tr>
-							
 							<tr>
 								<td colspan="3" style="border-bottom:1px solid #ccc;font-size: 16px;"><strong><?php echo $tr->translate("COUSE_WANT_STUDY");?></strong></td>
 							</tr>
-							
 							<tr>
 								<td colspan="3" width="100%">
 									<table width="100%" >
@@ -324,18 +284,14 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 											<td><strong><?php echo $tr->translate("DEGREE")?></strong></td>
 											<td>
 												<select name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGrade();" >
-													<option value="">select degree</option>
+													<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
 													<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
 														<option value="<?php echo $rs['id'];?>" <?php if($rs['id']==$this->rs['degree']){echo "selected='selected'";}?>><?php echo $rs['name'];?></option>
 													<?php }}?>
 												</select>
 											</td>
-											
-											<td ><strong><?php echo $tr->translate("GRADE")?></strong></td>
-											<td >
-												<input input id="grade" />
-											</td>
-											
+											<td><strong><?php echo $tr->translate("GRADE")?></strong></td>
+											<td><input input id="grade" /></td>
 											<td align="center"><?php echo $tr->translate("SESSION")?></td>
 											<td>
 												<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect"  >
@@ -345,7 +301,6 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 													<?php }}?>
 												</select>
 											</td>
-											
 											<td><?php echo $tr->translate("TIME")?></td>
 											<td>
 												<select required="false" name="time" id="time" class="fullside" dojoType="dijit.form.FilteringSelect" >
@@ -366,7 +321,6 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 												</select>	
 											</td>
 										</tr>
-										
 									</table>
 								</td>
 							</tr>
@@ -374,7 +328,6 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 				</fieldset>
 			</td>
 		</tr>
-		
 		<tr>
 			<td align="center">
 				<input label="<?php echo $tr->translate("GO_EDIT")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="submit"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
@@ -404,9 +357,7 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("NOTE");?></td>
-							<td>
-								<input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="term_note" id="term_note" type="text" required="required" />
-							</td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="term_note" id="term_note" type="text" required="required" /></td>
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
@@ -444,20 +395,16 @@ function saveTerm(){
 			form: dojo.byId("frm_testterm"),	
 			handleAs:"json",	    
 			load: function(data) {
-			   //term_store  = getDataStorefromJSON('id','name', data);
-			   // dijit.byId('term_note').set('store',term_store); 
 				var Itemmake = { 
 			    		id: data,
 				        name: dijit.byId('start_date').get('value')
 				};
 				addDataToSelectbox(dijit.byId('term_note'), term_store, Itemmake, data);
 				    
-			    
 			    dijit.byId("popterm_test").hide();
 			    dijit.byId('saveterm').set('disabled',false);
 			},
 			error: function(e) {
-				alert("a"+e);
 				dijit.byId("popterm_test").hide();
 			}
 		});
@@ -493,9 +440,7 @@ function getAllGrade(){
 	if(dept_id==''){
 		return false;
 	}
-	
 	old_grade = '<?php echo $this->rs['grade_result']?>';
-	
 	dojo.xhrPost({
 		url:url_get_grade,
 		content:{
@@ -518,8 +463,6 @@ function getAllGrade(){
 		}
 	});
 }
-
-
  </script>
  <script>
  dojo.require("dojo.data.ItemFileWriteStore");  
@@ -568,7 +511,7 @@ function getAllGrade(){
 		});
 	}
 
-	function oldRow() {
+function oldRow() {
 		<?php if(!empty($this->row_detail)) foreach($this->row_detail As $rs_detail){?>
 		col++;no++;
 		template='';
@@ -611,14 +554,13 @@ function getAllGrade(){
 		dijit.byId("remark_"+col).attr("value",'<?php echo $rs_detail['note']?>');
 	<?php }?>
 	}
-	
 	function deleteRecord(index) {
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
 		for(var i=0;i<arrays.length;i++) {
 		
 		if(arrays[i] == index) arrays.splice(i,1);
-			
+	
 		}
 		var strings = arrays.join(',');
 		$('#identity').val(strings);

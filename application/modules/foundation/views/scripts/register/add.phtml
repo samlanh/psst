@@ -261,7 +261,7 @@ function getStudentNo(){
 					      			<td colspan="2"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("CURRENT_ADDRESS");?></strong></td>
 					      		</tr>
 					      		<tr>
-					      			<td><?php echo $tr->translate("NAME_KH");?></td>
+					      			<td><strong><?php echo $tr->translate("NAME_KH");?></strong></td>
 									<td><input class="fullside"  tabindex="2" dojoType="dijit.form.ValidationTextBox"  id="name_kh" name="name_kh" value="" type="text" ></td>
 					      			<td rowspan="6" valign="top">
 										<div class="account-image">
@@ -278,7 +278,7 @@ function getStudentNo(){
 									<td> <span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("HOME");?></span>&nbsp;&nbsp;&nbsp;<input style=" width: 70%;" class="fullside" tabindex="9" dojoType="dijit.form.TextBox"  id="home_note" name="home_note" value="" ></td>
 					      		</tr>
 					      		<tr>
-									<td><?php echo $tr->translate("NAME_EN");?></td>
+									<td><strong><?php echo $tr->translate("NAME_EN");?></strong></td>
 									<td><input class="fullside" required="1" tabindex="2" dojoType="dijit.form.ValidationTextBox"  id="name_en" name="name_en" value="" type="text" ></td>
 									<td><span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("STREET");?></span>&nbsp;&nbsp;&nbsp;<input style=" width: 70%;" class="fullside" tabindex="10" dojoType="dijit.form.TextBox"  id="way_note" name="way_note" value="" type="text" ></td>
 					      		</tr>
@@ -318,14 +318,14 @@ function getStudentNo(){
 									</td>
 								</tr>
 					      		<tr>	
-									<td><?php echo $tr->translate("POB");?></td>
+									<td><strong><?php echo $tr->translate("POB");?></strong></td>
 									<td colspan="2" ><textarea class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="pob" name="pob"  ></textarea></td>
 					      		</tr>
 					      		<tr>
 					      			<td colspan="6"​ style="border-bottom:1px solid #ccc;"><strong><?php echo $tr->translate("STUDY_INFO");?></strong></td>
 					      		</tr>
 					      		<tr>
-					      			<td><?php echo $tr->translate("STUDENT_ID");?>*</td>
+					      			<td><strong><?php echo $tr->translate("STUDENT_ID");?>*</strong></td>
 									<td><input  style="color: red;" class="fullside" tabindex="14" dojoType="dijit.form.TextBox"  id="student_id" name="student_id" value=""  type="text" ></td>
 					      			<td><?php echo $tr->translate("DEGREE");?>*</td>
 									<td>
@@ -337,7 +337,7 @@ function getStudentNo(){
 									</td>
 					      		</tr>
 					      		<tr>
-					      			<td><?php echo $tr->translate("GROUP");?>* <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/></td>
+					      			<td><strong><?php echo $tr->translate("GROUP");?>*</strong><input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/></td>
 									<td>
 										<input id="group" />
 									</td>

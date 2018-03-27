@@ -6,15 +6,15 @@
 	 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
 <style>
-#table tr td{
-	border:1px solid #cccccc;
-	text-align: center;
-}
-#table tr th{
-	background: #cccccc;
-	border:1px solid #ddd;
-}
-.center{border:1px solid #000;}
+	#table tr td{
+		border:1px solid #cccccc;
+		text-align: center;
+	}
+	#table tr th{
+		background: #cccccc;
+		border:1px solid #ddd;
+	}
+	.center{border:1px solid #000;}
 </style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
@@ -48,7 +48,7 @@
 	<table cellspacing="20" width="100%" style="margin: 0 auto;">
 		<tr>
 			<td>
-				<fieldset>
+				<fieldset style=" background: #fff;   border: solid 1px #008;">
 					<legend align="center"><strong><?php echo $tr->translate("ADD_TRANSFER_PRODUCT");?></strong></legend>
 					<table cellspacing="20" width="100%" >
 						<tr>
@@ -61,9 +61,9 @@
 										<td><input dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d");?>" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="date" name="date" value="" type="text" required="required" ></td>
 									</tr>
 									<tr>
-										<td><?php echo $tr->translate("FROM_LOCATION");?></td>
+										<td><strong><?php echo $tr->translate("FROM_LOCATION");?></strong></td>
 										<td><input id="f_branch" /></td>
-										<td><?php echo $tr->translate("TO_LOCATION");?></td>
+										<td><strong><?php echo $tr->translate("TO_LOCATION");?></strong></td>
 										<td><input id="branch" /></td>
 									</tr>
 									<tr>
@@ -77,7 +77,7 @@
 										</td>
 									</tr>
 									<tr>
-									    <td><?php echo $tr->translate("SELECT_PRODUCT");?></td>
+									    <td><strong><?php echo $tr->translate("SELECT_PRODUCT");?></strong></td>
 									    <td colspan="3">
 										    <div style="background: #04a2e0;padding: 1px;">
 												<select onchange="getProductName();" style="height:35px;" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
@@ -119,17 +119,18 @@
 <script>
 	index=0;
 	function getProductName() {
-		
 		grade=dijit.byId("pro_id").get("value");
 		if(grade==''){return false;}
-		index++;
 		location_id = dijit.byId("f_branch").get("value");
-		if(location_id<0){
+		if(location_id<0 || location_id==''){
+			alert("Please select from branch");
+			dijit.byId("f_branch").focus();
 			return false;}
 		if(location_id=='' || location_id==-1){
 			alert("Please Select Branch");
 			dijit.byId("f_branch").focus()();
 			return false;}
+		index++;
 		pro_id=dijit.byId("pro_id").get("value");
 		getcurrentproduct(pro_id,location_id,index);
 				if(index==1){
@@ -259,10 +260,8 @@
 			error: function(err) {
 			}
 	});
-
 	}
 	function Caltweenty(){
-		
 	}
 </script>
 <?php  $frm = $this->frm_branch;?>
@@ -290,7 +289,7 @@
 											<td><?php echo $frm->getElement("branch_code");?></td>
 										</tr>
 										<tr>
-											<td><?php echo $tr->translate("BRANCH_NAME")?></td>
+											<td><strong><?php echo $tr->translate("BRANCH_NAME")?></strong></td>
 											<td><?php echo $frm->getElement("branch_nameen");?></td>
 										</tr>
 										<tr>

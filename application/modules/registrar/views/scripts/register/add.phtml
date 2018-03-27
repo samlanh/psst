@@ -260,7 +260,6 @@
 //calculator date by select term_payment
 	function getDateTerm() {
 		start_end=dijit.byId('start_end').get('value');
-		//alert(start_end);
 		if(start_end==-1){
 			payment_term=dijit.byId('payment_term').get('value');
 			start_date=dijit.byId('start_date').get('value');
@@ -820,7 +819,6 @@ function submitDataClose(){
 	}
 }
 function submitDataAddNew(){
-	
 	condition = checkValidateAddRow();
 	if(condition==false){
 		alert("Please select service or product !!! ");
@@ -1159,7 +1157,7 @@ function setReadonlyForOldStudent(){
 	}
 }
 function setID(){
-	alert("new set"+stu_id);
+	//alert("new set"+stu_id);
 	stu_id = dijit.byId('old_stu_name').get('value');
 	dijit.byId('old_studens').attr('value',stu_id);
 	getPaymentHistory(stu_id);
@@ -1688,7 +1686,6 @@ function getservicefee(key){
 	 					calculateTotal(key);
  				},
  				error: function(err) {
- 					//alert(err);
  				}
  			});
 	 	}else{
@@ -1705,7 +1702,6 @@ function getservicefee(key){
 			}else{
 				dijit.byId("price_"+key).set('readOnly',true);
 			}
-			
 			if(service_id==''){
 				service_id=0;
 			}
@@ -1740,7 +1736,6 @@ function getservicefee(key){
 	 			},
 	 		handleAs:"json",
 	 		load: function(data) {
-				//alert(data.cost);
 	 			dijit.byId("price_"+index).attr("value",data.price);
 				dijit.byId("cost_"+index).attr("value",data.cost);
 	 			calculateTotal(index);
@@ -1750,7 +1745,6 @@ function getservicefee(key){
 	 		}
 	 	});	 
 }
-
 function printSave(new_stu_id,new_receipt,submit){		
 	condition = checkValidateAddRow();
 	if(condition==false){
@@ -1797,7 +1791,6 @@ function printSave(new_stu_id,new_receipt,submit){
 			var dd = today.getDate();
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
-			
 			//dojo.byId("lb_receipt_no").innerHTML = receipt;
 			dojo.byId("lb_stu_id").innerHTML = stu_id;		
 			dojo.byId("lb_sex").innerHTML = dijit.byId("sex").attr('displayedValue');
@@ -1817,7 +1810,6 @@ function printSave(new_stu_id,new_receipt,submit){
 			dojo.byId("lb_net_amount").innerHTML = '$ ' + dijit.byId("net_amount").attr('displayedValue');
 			var payment_type = dijit.byId("payment_type").get("value");
 
-			
 			var rowId = $('#identity').val();
 			var rowIDArray = rowId.split(',');
 			template="";
@@ -1994,9 +1986,7 @@ function printSave(new_stu_id,new_receipt,submit){
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('total_payment').get('value')+'</td>';
 						  
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';
-
 					temp+='</tr>';
-					
 				}
 				else if(payment_type==3){
 					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
@@ -2057,9 +2047,7 @@ function printSave(new_stu_id,new_receipt,submit){
 			
 			temp+='</table>';
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
-			//dojo.byId('t_amountmoneytype1').innerHTML = temp;
 			dijit.byId("terms").show();	
-			
 			if(submit==1){
 				printSubmit();
 			}
@@ -2086,10 +2074,7 @@ function getStudentTestInfo(){
 				
 				dijit.byId("dept").attr("value",data.degree_result);
 				dijit.byId("session").attr("value",data.session_result);
-				
 				getallModel(data.degree_result,data.grade_result);
-	
-				
 	 		},
 	 		error: function(err) {
 	 			alert(err);
@@ -2185,46 +2170,44 @@ function getOldVildateToStartDateRegister(){
 			}
 		}
 	}
-	function checkValidateAddRow(){
-		payment_type = dijit.byId('payment_type').get('value');
-		if(payment_type!=2)	{
-			var rowId = $('#identity').val();
-			//alert(rowId);
-			if(rowId!=''){
-				var rowIDArray = rowId.split(',');
-				for(var n = 0; n < rowIDArray.length; n++) {
-					service_id = dijit.byId('service_'+rowIDArray[n]).get('value');
-					if(service_id==''){
-						return false;
-					}
+function checkValidateAddRow(){
+	payment_type = dijit.byId('payment_type').get('value');
+	if(payment_type!=2)	{
+		var rowId = $('#identity').val();
+		//alert(rowId);
+		if(rowId!=''){
+			var rowIDArray = rowId.split(',');
+			for(var n = 0; n < rowIDArray.length; n++) {
+				service_id = dijit.byId('service_'+rowIDArray[n]).get('value');
+				if(service_id==''){
+					return false;
 				}
 			}
-		}else{
-			return true;
 		}
+	}else{
+		return true;
 	}
-
-	var url_set_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date-end-date')); ?>';	
-	function setStartAndEndDate(){
-		id = dijit.byId('start_end').get('value');
-		dojo.xhrPost({
-			url:url_set_date,
-			content:{
-				'id':id
-				},
-			handleAs:"json",
-			load: function(data) {
-				if(data){
-					dijit.byId('start_date').attr('value',data.start_date);
-					dijit.byId('end_date').attr('value',data.end_date);
-				}
+}
+var url_set_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date-end-date')); ?>';	
+function setStartAndEndDate(){
+	id = dijit.byId('start_end').get('value');
+	dojo.xhrPost({
+		url:url_set_date,
+		content:{
+			'id':id
 			},
-			error: function(err) {
-				alert(err);
+		handleAs:"json",
+		load: function(data) {
+			if(data){
+				dijit.byId('start_date').attr('value',data.start_date);
+				dijit.byId('end_date').attr('value',data.end_date);
 			}
-		});
-	}
-	
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
 </script>
 <div class="overlay">
 	<div class="overlay-load">

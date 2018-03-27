@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_SERVICE')); 
-//print_r($this->service); exit();
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
@@ -47,7 +46,7 @@ dojo.ready(function(){
 	<table cellspacing="10" width="50%" style="margin: 0 auto;">
 		<tr>
 			<td>
-				<fieldset >
+				<fieldset style=" background: #fff;   border: solid 1px #008;" >
 					<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_SERVICE");?></strong></legend><br />
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>

@@ -5,7 +5,9 @@
 	$frm =  $this->form_search;
 ?>	
 <style>
-.hover:hover{ background:#ccc;}</style>
+.hover:hover{ background:#ccc;}
+.hidden{visibility: visible !important;}
+</style>
 <div style="width: 30cm;margin: 0 auto;">
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="100%">
@@ -27,7 +29,6 @@
 						<option value="1" <?php if($this->search['stu_type']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("NEW_STUDENT");?></option>
 					</select>
 				</td>
-				
 				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 		 	</tr>
 		</table>		
@@ -67,23 +68,24 @@ function getKHMonthByNumber(m){
 				<td width="15%" align="center">
 				</td>
 			</tr>
-		<style>
-			table tr th{
-				border: 1px solid #000;	
-			}
-			table {page-break-inside:auto }
-			tr{ page-break-inside:avoid; page-break-after:auto; }
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
-			}
-		</style		
+			<style>
+				table tr th{
+					border: 1px solid #000;	
+				}
+				table {page-break-inside:auto }
+				tr{ page-break-inside:avoid; page-break-after:auto; }
+				#header {
+				  display: table-header-group;
+				  page-break-inside:avoid; page-break-after:auto;
+				}
+				.hidden{visibility: hidden;}
+			</style>
 			<tr>
 				<td colspan="3">
 				<div id="exportExcel">
 					<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 						<thead>
-							<tr style="font-size:12px; height: 20px;background: #ccd9ff; font-weight: bold" align="center" >
+							<tr style="font-size:14px; height: 20px;background: #ccd9ff; font-weight: bold" align="center" >
 								<td rowspan="2" class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></td>
 								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
 								<td rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></td>
@@ -105,7 +107,7 @@ function getKHMonthByNumber(m){
 							</tr>
 						</thead>
 					<?php $i=0;$degree=0;foreach ($this->rs AS $row) { $i++;$degree=$row['degree'];?>
-						<tr style="font-size:12px; height: 23px;" align="center" class="hover" >
+						<tr style="font-size:13px;line-height:18px;" align="center" class="hover" >
 							<td class="hidden">
 								<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
 								<input type="hidden" name="stu_id<?php echo $i;?>" id="stu_id<?php echo $i;?>" value="<?php echo $row['stu_id'];?>" dojoType="dijit.form.TextBox" />
@@ -357,16 +359,7 @@ function getKHMonthByNumber(m){
 
 
 <script type="text/javascript">
-
 	function printIDCard(){
-
-		//dijit.byId('print_income').show();
-		
-		//window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint1').innerHTML;
-	   // window.frames["print_frame"].window.focus();
-	    //window.frames["print_frame"].window.print();
-
-	    //dijit.byId("terms").hide();
 	    print();
 	}
 	function printSelected(){
@@ -377,27 +370,20 @@ function getKHMonthByNumber(m){
     	?>
 
     	 id_selected = dijit.byId('id_selected').get('value');
-    	 //alert(id_selected);
 		 if(id_selected!=''){
 			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
 		 }else{
 			alert('Please select record you want to print');
 			return false;
 		 }
-    	
 	}
 	function print(){
 		window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint1').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
-
-	    //dijit.byId("terms").hide();
 	}
-
 	function checkAllStudent(array_length){
-		//alert(array_length);
 		dijit.byId('id_selected').attr('value','');
-		
 		if(dojo.byId('checkall').checked){
 			for(var j=1;j<=array_length;j++){
 				$("#check_box"+j).attr('checked', 'checked');
@@ -410,10 +396,8 @@ function getKHMonthByNumber(m){
 			}
 		}
 	}
-	
 	function checked_id(index){
 		stu_id = dijit.byId('stu_id'+index).get('value');
-		
 		if(dojo.byId('check_box'+index).checked){
 			
 			if($("#id_selected").val()!="") {
@@ -422,9 +406,7 @@ function getKHMonthByNumber(m){
 			}else{
 				$("#id_selected").val(stu_id);
 			}
-			
 		}else{
-			
 			var identity = $('#id_selected').val();
 			var arrays = identity.split(',');
 			for(var i=0;i<arrays.length;i++) {
@@ -432,15 +414,6 @@ function getKHMonthByNumber(m){
 			}
 			var strings = arrays.join(',');
 			$('#id_selected').val(strings);
-			//dojo.query("#row"+index).remove();
-			
 		}
 	}
-
-
-	
 </script>
-	
-	
-	
-	

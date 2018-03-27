@@ -48,7 +48,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					  spd.extra_fee,
 					  spd.discount_percent,
 					  spd.discount_fix,
-					  
 					  spd.paidamount,
 					  spd.balance,
 					  sp.create_date,

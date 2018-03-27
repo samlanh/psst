@@ -155,7 +155,7 @@ function getKHMonthByNumber(m){
 		<tr>
 			<td align="center">
 				<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
-					type="button" onclick="printSelected();"><?php echo $tr->translate("PRINTED");?></button>
+					type="button" onclick="printSelected();"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
 				<input type="button" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint"  onclick="printIDCard();" />
 			</td>
 		</tr>
@@ -186,7 +186,7 @@ function getKHMonthByNumber(m){
 							<?php 
 								$address_kh=$tr->translate("CUSTOMER_ADDRESS").'<br />
 								ទូរស័ព្ទលេខ: '.$tr->translate("CUSTOMER_TEL").'<br />
-								បណ្ណនេះប្រើប្រាស់សម្រាប់កិច្ចការសាលាតែប៉ុណ្ណោះ។';
+								ប័ណ្ណនេះប្រើប្រាស់សម្រាប់កិច្ចការសាលាតែប៉ុណ្ណោះ។';
 								$address_en=$tr->translate("CUSTOMER_ADDRESS").'<br />Telephone: '.$tr->translate("CUSTOMER_TEL").'<br />
 								This ID Card is to be used within school only.';
 							?>
@@ -223,16 +223,17 @@ function getKHMonthByNumber(m){
 						<table style="border: 3px solid #FFC107;height: 5.9cm;width: 8.5cm;font-size:11px;font-family: 'Khmer OS Battambang',Arial,sans-serif;color:#00007b;" cellspacing="0" cellpadding="0">
 							<tr style="height: 0;">
 								<td colspan="4" align="center" valign="top">
-									<div style="font-family: 'Khmer OS Muol Light';margin-top: 5px;">អត្តសញ្ញាណបណ្ណសិស្ស</div>
+									<div style="font-family: 'Khmer OS Muol Light';margin-top: 5px;">អត្តសញ្ញាណប័ណ្ណសិស្ស</div>
 									<div style="margin-top: -4px;"><?php if($row['dept']<=2){echo 'អត្តលេខ';}else{echo 'ID N<sup>o</sup>';}?>: <label id="stu_code<?php echo $i;?>"></label></div>
 									<script type="text/javascript">
-										<?php if($row['dept']<=2){?>
-												test1 = convertEnglishToKhmerNumber('<?php echo $row['stu_code']?>');
-										<?php }else{?>
+										<?php //if($row['dept']<=2){?>
+												//test1 = convertEnglishToKhmerNumber('<?php //echo $row['stu_code']?>');
+										<?php //}else{?>
 												test1 = '<?php echo $row['stu_code'];?>';
-										<?php }?>
+										<?php //}
+											
+										?>
 										dojo.byId('stu_code<?php echo $i;?>').innerHTML=test1;
-										//alert(test1);
 									</script>
 								</td>
 							</tr>
@@ -240,14 +241,11 @@ function getKHMonthByNumber(m){
 								<td width="25%">
 									&nbsp;&nbsp;ឈ្មោះ
 								</td>
-								<td width="50%">
+								<td width="45%">
 									: <span style="font-family: 'Khmer OS Muol Light';"><?php echo $row['stu_khname'];?></span>
 								</td>
-								<td width="15%">
-									ភេទ : 
-								</td>
-								<td width="12%">
-									<?php echo $sex_kh;?>
+								<td width="30%" colspan="4" rowspan="4">
+									<img style="margin-right:20px;width:92%;height: 73px;border: 1px solid #000" src="<?php echo $this->baseUrl().'/images/'.$row['photo'];?>">
 								</td>
 							</tr>
 							<tr style="height: 0;line-height: 18px">
@@ -257,18 +255,16 @@ function getKHMonthByNumber(m){
 								<td >
 									: <span style="font-family: 'Khmer OS Muol Light';"><?php echo $row['stu_enname'];?></span>
 								</td>
-								<td >
-									Sex : 
-								</td>
-								<td >
-									<?php echo $sex_en;?>&nbsp;&nbsp;&nbsp;
-								</td>
+							</tr>
+							<tr style="height: 0;line-height: 18px">
+								<td>&nbsp;&nbsp;ភេទ/Gender</td>
+								<td>: <?php echo $sex_kh."/".$sex_en;?></td>
 							</tr>
 							<tr style="height: 0;line-height: 18px">
 								<td >
-									&nbsp;&nbsp;<?php if($row['dept']<=2){echo 'កាលកំណើត';}else{echo 'D.O.B';}?>
+									&nbsp;&nbsp;<?php if($row['dept']<=2){echo 'ថ្ងៃខែឆ្នាំកំណើត';}else{echo 'D.O.B';}?>
 								</td>
-								<td colspan="3">
+								<td>
 									: <label id="dob<?php echo $i;?>"></label>
 									<script type="text/javascript">
 									<?php if($row['dob']==null || $row['dob']==''){ ?>
@@ -281,7 +277,6 @@ function getKHMonthByNumber(m){
 											dojo.byId('dob<?php echo $i;?>').innerHTML=dob;
 									<?php }?>
 									</script>
-									
 								</td>
 							</tr>
 							<tr style="height: 0;line-height: 18px">
@@ -294,13 +289,14 @@ function getKHMonthByNumber(m){
 							</tr>
 							<tr style="height: 0;line-height: 18px">
 								<td >
-									&nbsp;&nbsp;<?php if($row['dept']<=2){echo 'ផុតកំណត់';}else{echo 'Expired Date';}?>
+									&nbsp;&nbsp;<?php if($row['dept']<=2){
+										echo 'ផុតកំណត់';}else{echo 'Expired Date';}?>
 								</td>
 								<td colspan="3">
 								: <label id="year<?php echo $i;?>"></label>
 									<script type="text/javascript">
 										<?php if($row['dept']<=2){?>
-											kh_date = 'ថ្ងៃទី ' + convertEnglishToKhmerNumber('<?php echo date('d',strtotime($row['end_date']));?>')+' ខែ '+getKHMonthByNumber('<?php echo date('m',strtotime($row['end_date']));?>')+' ឆ្នាំ '+ convertEnglishToKhmerNumber('<?php echo date('Y',strtotime($row['end_date']));?>');
+											kh_date = 'ថ្ងៃទី ' + convertEnglishToKhmerNumber('<?php echo 30 //date('d',strtotime($row['end_date']));?>')+' ខែ '+getKHMonthByNumber('<?php echo 12;//date('m',strtotime($row['end_date']));?>')+' ឆ្នាំ '+ convertEnglishToKhmerNumber('<?php echo date('Y',strtotime($row['end_date']));?>');
 										<?php }else{?>
 											kh_date = '<?php echo date('F d , Y',strtotime($row['end_date']));?>';
 										<?php }?>
@@ -309,16 +305,10 @@ function getKHMonthByNumber(m){
 								</td>
 							</tr>
 							<tr>
-								<td colspan="4">
+								<td colspan="4" valign="top">
 									<table width="100%" style="font-size:11px;font-family: 'Khmer OS Battambang';color:#00007b;">
 										<tr>
-											<td width="20%">
-												&nbsp;
-											</td>
-											<td width="22%" >
-												<img style="width:100%;height: 73px;border: 1px solid rgba(0, 0, 0, 0.1);" src="<?php echo $this->baseUrl().'/images/'.$row['photo'];?>">
-											</td>
-											<td width="58%" align="center" valign="top" colspan="2">
+											<td width="58%">
 												<div style="margin-top: -3px;">
 													<?php if($row['dept']<=2){echo 'ធ្វើនៅថ្ងៃទី ';}else{echo 'Date : ';}?><label id="create_date<?php echo $i;?>"></label>
 													<script type="text/javascript">
@@ -329,10 +319,12 @@ function getKHMonthByNumber(m){
 														<?php }?>
 														dojo.byId('create_date<?php echo $i;?>').innerHTML=create_date;
 													</script>
-												
 												</div>
-												<div style="margin-top: -2px;<?php if($row['dept']<=2){echo 'font-family: Khmer OS Muol Light;';}?>"><?php if($row['dept']<=2){echo 'នាយក';}else{echo 'Director';}?></div><br />
-												<div style="margin-top: 10px;<?php if($row['dept']<=2){echo 'font-family: Khmer OS Muol Light;';}?>"><?php if($row['dept']<=2){}?></div>
+											</td>
+											<td width="4%" >
+											</td>
+											<td width="38%" align="center" valign="top" colspan="2">
+												<div style="margin-top:-20px;font-family: 'Khmer OS Muol Light';">នាយក</div><br /><br /><?php echo $tr->translate("PRINCIPAL_NAME");?>
 											</td>
 										</tr>
 									</table>

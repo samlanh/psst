@@ -69,6 +69,7 @@ dojo.ready(function(){
 	    name: "group",  
 	    class: 'fullside', 
 	    readonly:false,
+	    required:false,
 	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 	    onChange: function() {  
 	    	group_id = dijit.byId('group').get('value');

@@ -1,4 +1,10 @@
 <?php
+	$session_lang=new Zend_Session_Namespace('lang');
+	$lang_id=$session_lang->lang_id;//1 kh,2 en
+	$gender = array(
+			1=>'Male',
+			2=>'Female');
+	
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate("STUDENT_ATTENDANT_LIST")); 
 	echo $this->headTitle();
@@ -16,20 +22,13 @@
 	$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
 	$amount_day =$diff/ (60*60*24);
 	
-	//echo $amount_day;
-	
 	$amount_day = $amount_day + 1;
-	
-	//echo $amount_day;
-	
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-	
 ?>	
 <div style="width: 30cm;margin: 0 auto;">
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-att-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="80%">
 			<tr>
-				
 				<td><input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->datasearch['start_date'];?>" type="text"></td>
 				<td><input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date"  value="<?php echo $this->datasearch['end_date'];?>" type="text"></td>
 				<td>
@@ -64,6 +63,7 @@
 										<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 									</td>
 									<td width="70%" align="center">
+										<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:Arial,'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
 										<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></strong>
 									</td>
 									<td width="15%">
@@ -73,13 +73,11 @@
 							</table>
 						</td>
 					</tr>
-					
 					<?php $total_day=0;for($k=0;$k<$amount_day;$k++){?>
 						<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));
 							$total_day++;
 						}?>
-					<?php }?>
-					
+					<?php }?>					
 					<tr>
 						<td colspan="3" id="exportExcel">
 							<table cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;"  border="1" >
@@ -98,7 +96,7 @@
 								</style>
 								<thead>									
 									<tr>
-										<td colspan="<?php echo 5+$total_day;?>">
+										<td colspan="<?php echo 4+$total_day;?>">
 											<table width="100%" border="0" style="border-collapse: collapse;font-family: Times New Roman, Khmer OS Battambang;font-size: 14px;font-weight: bold;line-height: 25px;">
 												<tr>
 													<td width="20%" style="border-right: 1px solid #000;">
@@ -117,9 +115,8 @@
 											</table>
 										</td>
 									</tr>
-									
 									<tr>
-										<td colspan="<?php echo 5+$total_day;?>">
+										<td colspan="<?php echo 4+$total_day;?>">
 											<table width="100%" border="0" style="border-collapse: collapse;font-family: Times New Roman, Khmer OS Battambang;font-size: 14px;font-weight: bold;line-height: 25px;">
 												<tr>
 													<td width="50%" style="border-right: 1px solid #000;">
@@ -132,26 +129,23 @@
 											</table>
 										</td>
 									</tr>
-									
 									<tr align="center" style="height: 65px; background: #ccd9ff;">
-										<td colspan="5" style="font-weight: bold;"><?php echo $tr->translate("Instructor's Signature");?></td>
-										
+										<td colspan="4" style="font-weight: bold;"><?php echo $tr->translate("Instructor's Signature");?></td>
 										<?php for($k=0;$k<$amount_day;$k++){?>
 											<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 												<td class="rotate"></td>
 											<?php }?>
 										<?php }?>
 									</tr>
-								
 									<tr class="cheader" align="center" style="background: #ccd9ff;">
-										<td colspan="5"><?php echo $tr->translate("Month");?></td>
+										<td colspan="4"><?php echo $tr->translate("Month");?></td>
 										<td style="background: none;" align="center" colspan="<?php echo $total_day;?>">
 											From &nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['start_date']));?> &nbsp;&nbsp;to&nbsp;&nbsp; <?php echo date("d-m-Y",strtotime($this->datasearch['end_date']));?>
 										</td>
 									</tr>
 									
 									<tr class="cheader" align="center" style="background: #ccd9ff;" >
-										<td colspan="5"><?php echo $tr->translate("Weekday");?></td>
+										<td colspan="4"><?php echo $tr->translate("Weekday");?></td>
 										
 										<?php for($k=0;$k<$amount_day;$k++){?>
 										<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
@@ -160,8 +154,7 @@
 									<?php }?>
 									</tr>
 									<tr class="cheader" align="center" style="background: #ccd9ff;" >
-										<td colspan="5"><?php echo $tr->translate("Today's Date");?></td>
-										
+										<td colspan="4"><?php echo $tr->translate("Today's Date");?></td>
 										<?php for($k=0;$k<$amount_day;$k++){?>
 											<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 												<td class=""><div><span><?php  echo date("d",strtotime($date));?></span></div></td>
@@ -177,9 +170,14 @@
 								<tr style="font-size:12px;height: 23px;"​ align="center">
 									<td><?php echo $i;?></td>
 									<td><?php echo $row['stu_code'];?></td>
-									<td align="left"><?php echo $row['kh_name'];?></td>
-									<td align="left"><?php echo $row['en_name'];?></td>
-									<td><?php echo $row['sex'];
+									<td align="left"><?php echo ($lang_id==1)?$row['kh_name']:$row['en_name'];?></td>
+									<td><?php 
+										if($lang_id==2){
+											echo $gender[$row['gender']];
+										}
+										else{
+											echo $row['sex'];
+										}
 										if($row['gender']==1){
 											$male=$male+1;
 										}else{
@@ -190,12 +188,9 @@
 									<?php $p=0; $a=0;$l=0;$el=0; for($k=0;$k<$amount_day;$k++){?>
 									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
 										<td align="center" >
-										
 										</td>
 										<?php }?>
 									<?php }?>
-									
-									
 								</tr>
 								<?php }?>	
 								<tr>
@@ -208,7 +203,6 @@
 			</table>
 	</div>
 </div>
-
 <script>
 	function setTeacherName(){
 		teacher = dijit.byId('teacher').attr('displayedValue');
@@ -219,4 +213,3 @@
 		dojo.byId("subject_name").innerHTML = subject;	
 	}
 </script>
-

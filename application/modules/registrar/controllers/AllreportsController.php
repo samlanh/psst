@@ -22,9 +22,7 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     					'end_date'=>date('Y-m-d'),
     			);
     		}
-    		
-    		$this->_redirect("/registrar/allreports/rpt-daily");
-    		
+    		$this->_redirect("/registrar/allreports/rpt-daily");    		
     		if($search['type']==1){
 	    		$db = new Registrar_Model_DbTable_DbReportStudentByuser();
 	    		$this->view->row = $db->getAllStudentPayment($search);

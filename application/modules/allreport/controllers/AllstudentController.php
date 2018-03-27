@@ -25,7 +25,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $db->getAllStudentSelected($condition);
 	}
-	
 	public function rptAllStudentAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -181,37 +180,37 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows = $group->getAllStudentDetail($search);
 		$this->view->search=$search;
 	}
-	public function rptStudentattendenceAction(){
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search=array(
-					'title' 		=>'',
-					'study_year' 	=>'',
-					'grade_all' 	=>'',
-					'session' 		=>'',
-					'group' 		=>'',
-					'branch_id'=>0,
-					'degree'=>0,
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d'),
-			);
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
+// 	public function rptStudentattendenceAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$search=$this->getRequest()->getPost();
+// 		}
+// 		else{
+// 			$search=array(
+// 					'title' 		=>'',
+// 					'study_year' 	=>'',
+// 					'grade_all' 	=>'',
+// 					'session' 		=>'',
+// 					'group' 		=>'',
+// 					'branch_id'=>0,
+// 					'degree'=>0,
+// 					'start_date'	=> date('Y-m-d'),
+// 					'end_date'		=> date('Y-m-d'),
+// 			);
+// 		}
+// 		$form=new Registrar_Form_FrmSearchInfor();
+// 		$forms=$form->FrmSearchRegister();
+// 		Application_Model_Decorator::removeAllDecorator($forms);
+// 		$this->view->form_search=$form;
 	
-		$group= new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->rs = $rs_rows = $group->getStudentAttendance($search);
-		$this->view->search=$search;
+// 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+// 		$this->view->rs = $rs_rows = $group->getStudentAttendance($search);
+// 		$this->view->search=$search;
 		
-		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result= $db_global->getAllgroupStudy();
-		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
-		$this->view->group = $result;
-	}
+// 		$db_global=new Application_Model_DbTable_DbGlobal();
+// 		$result= $db_global->getAllgroupStudy();
+// 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+// 		$this->view->group = $result;
+// 	}
 	
 	public function rptStudentMistakeAction(){
 		if($this->getRequest()->isPost()){
@@ -342,37 +341,37 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 	}
-	public function rptAttendenceHighschoolAction(){
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search=array(
-					'title' 		=>'',
-					'study_year' 	=>'',
-					'grade_highschool' 	=>'',
-					'session' 		=>'',
-					'group' 		=>'',
-					'branch_id'=>0,
-// 					'degree'=>0,
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d'),
-			);
-		}
-		$this->view->datasearch = $search;
-		$db = new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->student = $db->getStudentAttendenceHighschool($search);
-		$this->view->g_all_name=$db->getGroupHighschoolSearch();
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister(null,"action");
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
+// 	public function rptAttendenceHighschoolAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$search=$this->getRequest()->getPost();
+// 		}
+// 		else{
+// 			$search=array(
+// 					'title' 		=>'',
+// 					'study_year' 	=>'',
+// 					'grade_highschool' 	=>'',
+// 					'session' 		=>'',
+// 					'group' 		=>'',
+// 					'branch_id'=>0,
+// // 					'degree'=>0,
+// 					'start_date'	=> date('Y-m-d'),
+// 					'end_date'		=> date('Y-m-d'),
+// 			);
+// 		}
+// 		$this->view->datasearch = $search;
+// 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
+// 		$this->view->student = $db->getStudentAttendenceHighschool($search);
+// 		$this->view->g_all_name=$db->getGroupHighschoolSearch();
+// 		$form=new Registrar_Form_FrmSearchInfor();
+// 		$forms=$form->FrmSearchRegister(null,"action");
+// 		Application_Model_Decorator::removeAllDecorator($forms);
+// 		$this->view->form_search=$form;
 	
-		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result= $db_global->getAllgroupStudy();
-		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
-		$this->view->group = $result;
-	}
+// 		$db_global=new Application_Model_DbTable_DbGlobal();
+// 		$result= $db_global->getAllgroupStudy();
+// 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
+// 		$this->view->group = $result;
+// 	}
 	function getSubjectbygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -583,11 +582,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'teacher' 		=> 0,
 					'subject' 		=> 0,
 					);
-		}
-		
-		
-		//echo $end_date;exit();
-		
+		}		
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$row = $db->getStudentGroup($id,$search,0);
 		$this->view->rs = $row;
@@ -597,7 +592,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->datasearch = $search;		
 		$this->view->all_teacher_by_group = $db->getAllTeacherByGroup($id);
 		$this->view->all_subject_by_group = $db->getAllSubjectByGroup($id);
-		
 	}
 	
 	public function rptRescheduleGroupAction(){

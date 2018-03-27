@@ -51,7 +51,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	
 //     	$db = new Registrar_Model_DbTable_DbRegister();
 //     	$db->resetReceipt();
     }

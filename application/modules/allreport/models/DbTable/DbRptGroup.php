@@ -90,7 +90,6 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job,
 					 s.mother_enname AS mother_name,
 					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job,
-
 				    (SELECT
 				        `rms_view`.`name_kh`
 				      FROM `rms_view`
@@ -215,13 +214,13 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	function getAllTeacherByGroup($group_id){
 		$db = $this->getAdapter();
 		$sql=" SELECT 
-					t.id,
-					CONCAT(t.`teacher_name_kh`,'-',t.`teacher_name_en`) AS name
+					t.id,t.`teacher_name_kh` AS name
 				FROM
 					rms_group_subject_detail AS gsd,
 					rms_teacher AS t
 				WHERE 
 					gsd.teacher = t.id
+					AND t.teacher_name_kh!=''
 					AND gsd.group_id =  $group_id	
 		
 			";

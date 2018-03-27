@@ -114,6 +114,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchOne($sql);
     }
 	function addRegister($data){
+		
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		$stu_code = $data['stu_id'];//$this->getNewAccountNumber($data['dept']);
@@ -138,6 +139,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					// កែប្រែពត៍មានចាស់របស់សិស្ស ករណី ឈ្មោះសរសេមិនត្រូវ	
 					$this->_name='rms_student';
 					$id=$data['old_studens'];
+					
 					$arr = array(
 							'academic_year'=>$data['study_year'],
 							'stu_khname'	=>$data['kh_name'],
@@ -254,6 +256,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'deduct'		=>$data['deduct'],
 						'net_amount'	=>$data['net_amount'],
 				);
+				
 				$paymentid = $this->insert($arr);
 			    /*alert ទៅទូរសព្ទដៃអាណាព្យាបាលសិស្ស*/
 				$dbpush = new  Application_Model_DbTable_DbGlobal();
@@ -434,8 +437,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$stu_type=3; // eng 
 						$payfor_type=2; // eng and other subject
 					}
+					
 					// update student information to grade that input
 					$id=$data['old_studens'];
+					//echo $id;exit();
 					$arr = array(
 							'stu_khname'	=>$data['kh_name'],
 							'stu_enname'	=>$data['en_name'],
@@ -449,9 +454,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'is_stu_new'=>0,
 							'group_id'	=>$data['group'],
 					);
-					$where = ' stu_id = '.$id;
+					$where = 'stu_id = '.$id;
+					//echo $where;exit();
 					$this->update($arr, $where);
+					//echo 333;exit();
 				}else {
+					
 					$stu_type='';
 					$payfor_type='';
 					if($data['dept']==1 || $data['dept']==2){
@@ -772,7 +780,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 				echo $e->getMessage();
+				echo $e->getMessage();exit();
 			}
 	}
 	
@@ -1631,7 +1639,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				sp.id,
     				sp.receipt_number,
 	    			s.stu_code,
-	    			(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS name,
+	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name,
 	    			s.sex,
 	    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.year) AS year,
 	    	        (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree)AS degree,

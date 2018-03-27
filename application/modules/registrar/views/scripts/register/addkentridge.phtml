@@ -677,18 +677,12 @@ function calCulateScholarship(type){
 			scholarship_percent = dijit.byId("scholarship_percent").get("value");
 			amount_dollar = parseInt(totaltuitionfee*scholarship_percent/100);
 			dijit.byId("scholarship_amount").attr("value",amount_dollar);
-			
 		}else{//dollar->percent
 				amount_dollar = dijit.byId("scholarship_amount").get("value");
 				discount_percent = parseFloat((amount_dollar*100/totaltuitionfee));
 				discount_percent = discount_percent.toFixed(2);
 				dijit.byId("scholarship_percent").attr("value",discount_percent);
 		}
-	
-	//tuitionfee = dijit.byId("tution_peryear").get("value");
-	//scholarship_amount = dijit.byId("scholarship_amount").get("value");
-	//remain_peryear = parseFloat(tuitionfee-scholarship_amount);
-	//dijit.byId("tution_peryear").attr("value",remain_peryear);
 	getTotale();
 }
 function getTuitionFeePerYear(){
@@ -724,7 +718,6 @@ function getInfoBygroup(){
 		dijit.byId('dept').set('readOnly',false);
 		dijit.byId('grade').set('readOnly',false);
 		dijit.byId('session').set('readOnly',false);
-		//dijit.byId('room').set('readOnly',false);
 		return false;
 	}
 	dojo.xhrPost({
@@ -1625,12 +1618,12 @@ function readMoneyInKhmer(netTotal){
 	    dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់'+read_eng);
 }
  function alerterror(index){	
-		subtotal = dijit.byId('subtotal_'+index).get('value');
-		paid = dijit.byId('paidamount_'+index).get('value');
-		if(paid>subtotal){
-			alert("Paid amount must be equal or smaller than subtotal");
-			dijit.byId('paidamount_'+index).attr('value',subtotal);
-		}
+	subtotal = dijit.byId('subtotal_'+index).get('value');
+	paid = dijit.byId('paidamount_'+index).get('value');
+	if(paid>subtotal){
+		alert("Paid amount must be equal or smaller than subtotal");
+		dijit.byId('paidamount_'+index).attr('value',subtotal);
+	}
  }
  //get service type ?????????????????? ???????? ?? ?????,????????
  var url_getservicetype = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-service-type')); ?>';
@@ -1658,16 +1651,16 @@ function readMoneyInKhmer(netTotal){
 			}
 		});
  }
-	// Set readonly when service type=1 (product)	
- function setAddRowReadOnly(index){
-		dijit.byId('term_'+index).attr('value','');
-		dijit.byId('date_start_'+index).attr('value',null);
-		dijit.byId('validate_'+index).attr('value',null);
-		dijit.byId("date_start_"+index).set('readOnly',true);
-		dijit.byId("validate_"+index).set('readOnly',true);
-		dijit.byId("term_"+index).set('readOnly',true);
-	}
-// Remove field readonly when balance <= 0 for get all old information of student
+// Set readonly when service type=1 (product)	
+function setAddRowReadOnly(index){
+	dijit.byId('term_'+index).attr('value','');
+	dijit.byId('date_start_'+index).attr('value',null);
+	dijit.byId('validate_'+index).attr('value',null);
+	dijit.byId("date_start_"+index).set('readOnly',true);
+	dijit.byId("validate_"+index).set('readOnly',true);
+	dijit.byId("term_"+index).set('readOnly',true);
+}
+//Remove field readonly when balance <= 0 for get all old information of student
 function removeAddRowReadOnly(index){
 		term = dijit.byId('term_'+index).get('value');
 		if(term==''){
@@ -1680,7 +1673,7 @@ function removeAddRowReadOnly(index){
 		dijit.byId("validate_"+index).set('readOnly',false);
 		dijit.byId("term_"+index).set('readOnly',false);
 	}
- //get service fee or balance fee that student not yet pay
+//get service fee or balance fee that student not yet pay
 var url_service_fee = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-service-fee')); ?>";
 function getservicefee(key){
 	service_type = dijit.byId('service_type_'+key).get('value');
@@ -1690,13 +1683,11 @@ function getservicefee(key){
 		// if old student ?????????????????????? ???????????????????? ????????????????????????
 	 	if(stu_type==3){
  			studentid = dijit.byId('old_studens').get('value');
-			
 			if(studentid==''){
 				alert("Please select student !!!");
 				dijit.byId('old_studens').focus();
 				return false;
 			}
-			
  			service_id = dijit.byId('service_'+key).get('value');
  			term = dijit.byId('term_'+key).get('value');
 			
@@ -1708,7 +1699,6 @@ function getservicefee(key){
 			}else{
 				dijit.byId("price_"+key).set('readOnly',true);
 			}
-			
  			dojo.xhrPost({
  				url:url_service_fee,
  				content:{
@@ -1720,7 +1710,6 @@ function getservicefee(key){
  				load: function(data) {
 	 					dijit.byId("remark"+key).attr("value",'');
 	 					dijit.byId("old_service_"+key).attr("value",'');
-	 					//dijit.byId("validate_"+key).attr("value",<?php Zend_Date::now()?>); 					
 	 					if(data.sms!=''){
 	 						dijit.byId("remark"+key).attr("value",data.sms);
 	 						dijit.byId("old_service_"+key).attr("value",data.id);

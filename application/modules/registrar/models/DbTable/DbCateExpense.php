@@ -55,8 +55,7 @@ class Registrar_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
 					rms_account_name as ac 
 				where 
 					account_type=5
-					and account_name!=''
-			 ";
+					and account_name!=''";
 		$where = " ";
 		if (!empty($search['adv_search'])){
 			$s_where = array();

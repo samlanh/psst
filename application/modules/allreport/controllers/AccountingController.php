@@ -403,21 +403,21 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 	}
-	public function rptOtherExpenseAction(){
+	public function rptExpenseBycateAction(){
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
-						'txtsearch' =>'',
-						'branch_id'	=>'',
-						'user'	=>'',
-						'start_date'=>date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
+					'txtsearch' =>'',
+					'branch_id'	=>'',
+					'user'	=>'',
+					'start_date'=>date('Y-m-d'),
+					'end_date'=>date('Y-m-d'),
 				);
 			}
 			$db = new Allreport_Model_DbTable_DbRptOtherExpense();
-			$abc = $this->view->row = $db->getAllOtherExpense($search);
+			$abc = $this->view->row = $db->getAllExpensebycate($search);
 			$form=new Registrar_Form_FrmSearchInfor();
 			$form->FrmSearchRegister();
 			Application_Model_Decorator::removeAllDecorator($form);
@@ -763,5 +763,31 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows = $group->getStartDateEndDateStu($search);
 		$this->view->search=$search;
 		$db_glob = new Application_Model_GlobalClass();
+	}
+	public function rptStudentBepayAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'session' 		=>'',
+					'branch_id'=>0,
+					'degree'=>0,
+					'group'=>'',
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		
+		$group= new Allreport_Model_DbTable_DbRptPayment();
+		$this->view->rs = $rs_rows = $group->getAllStudentBepay($search);
+		$this->view->search=$search;
 	}
 }

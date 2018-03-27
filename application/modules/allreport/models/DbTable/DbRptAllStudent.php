@@ -25,11 +25,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		   (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
     		   (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1)AS grade,
     		   (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1)AS degree,
-    		   (select name_en from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
+    		   (select name_kh from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
     		   (select province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,	   	
     		   (select name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,photo
     		   from rms_student ';
-    	$where=' where 1 ';
+    	$where=' where status=1 ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
@@ -86,8 +86,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=' AND is_stu_new = '.$search['stu_type'];
     	}
     	return $db->fetchAll($sql.$where.$order);
-    }
-    
+    }    
     public function getAllStudentSelected($stu_id){
     	$db = $this->getAdapter();
     	$sql ='SELECT stu_id,
@@ -121,7 +120,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
 		    	(select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1)AS grade,
 		    	(select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1)AS degree,    
-		    	(select name_en from rms_view where type=5 and key_code=is_subspend) as status,    
+		    	(select name_kh from rms_view where type=5 and key_code=is_subspend) as status,    
 		    	(select province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,
 		    	(select name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex
     	FROM rms_student ';

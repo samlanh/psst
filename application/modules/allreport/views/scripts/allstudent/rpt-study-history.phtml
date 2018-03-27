@@ -51,11 +51,18 @@
 				table tr th{
 					border: 1px solid #000;	
 				}
+				table {page-break-inside:auto }
+				tr{ page-break-inside:avoid; page-break-after:auto; }
+				#header {
+				  display: table-header-group;
+				  page-break-inside:avoid; page-break-after:auto;
+				}
 			</style>
 				<tr>
 					<td colspan="3">
 						<div id="exportExcel">
 							<table cellpadding="4"​ style=";font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
+								<thead>
 								<tr style="font-size:12px; height: 25px;background:#ccd9ff;font-weight: bold;" align="center" >
 									<td><?php echo $tr->translate("NUM");?></td>
 									<td><?php echo $tr->translate("BRANCH_NAME");?></td>
@@ -71,7 +78,8 @@
 									<td><?php echo $tr->translate("END_DATE");?></td>
 									<td><?php echo $tr->translate("STATUS");?></td>
 								</tr>
-								<?php $i=0;$degree=0;if(!empty($this->rs)){ foreach ($this->rs AS $row) { $i++;?>
+								</thead>
+								<?php $i=0;$degree=0; if(!empty($this->rs)){ foreach ($this->rs AS $row) { $i++;?>
 								<tr style="font-size:12px; height: 23px;" align="center" class="hover" >
 									<td ><?php echo $i;?></td>
 									<td ><?php echo $row['branch_name'];?></td>

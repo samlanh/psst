@@ -28,6 +28,12 @@
 </form>
 <style>
 #footer{display: none;}
+table {page-break-inside:auto }
+	tr{ page-break-inside:avoid; page-break-after:auto; }
+	#header {
+	  display: table-header-group;
+	  page-break-inside:avoid; page-break-after:auto;
+	}	
 </style>	
 <div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;padding:0.5cm;">
 	<div id="divPrint">
@@ -46,6 +52,7 @@
 			<tr>
 				<td colspan="3">
 					<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+						<thead>
 						<tr style="background: #ccd9ff;font-weight: bold; font-size: 13px;">
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH_NAME");?></td>
@@ -57,6 +64,7 @@
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STATUS");?></td>
 						</tr>
+						</thead>
 						<?php if(!empty($this->all_memo)){ foreach($this->all_memo as $key=>$rs){ $key=$key+1; ?>
 						<tr>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>

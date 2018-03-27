@@ -19,8 +19,8 @@
 <style>
 #footer{display: none;}
 </style>	
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;padding: 15px;">
-	<div id="divPrint " id="exportExcel">
+<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">	
+		<div id="divPrint">
 		<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 			<tr >
 				<td width="15%" align="center">
@@ -34,8 +34,23 @@
 				<td width="15%" align="center">
 				</td>
 			</tr>
+			<tr>
+			<td colspan="3" >
+			<style>
+				table tr th{
+				border: 1px solid #000;	
+				}
+				table {page-break-inside:auto }
+				tr{ page-break-inside:avoid; page-break-after:auto; }
+				#header {
+				  display: table-header-group;
+				  page-break-inside:avoid; page-break-after:auto;
+				}
+				.hover:hover{background:#eee;}					
+			</style>
 		</table>
 		<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+			<thead>
 			<tr style="background: #ccd9ff; white-space: bold; font-size: 13px;font-weight: bold;">
 				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></th>
 				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TRANSFER_NUMBER");?></th>
@@ -46,6 +61,7 @@
 				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></th>
 				<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STATUS");?></th>
 			</tr>
+			<thead>
 			<?php if(!empty($this->all_transfer)){ foreach($this->all_transfer as $key=>$rs){ $key=$key+1; ?>
 			<tr style="font-size: 12px;">
 				<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
@@ -61,6 +77,8 @@
 			}}
 			?>
 		</table>
+		</td>
+		</tr>
 		<table width="100%" style="font-family:'Khmer OS Battambang';">
 			<tr>
 				<td colspan="3">&nbsp;</td>

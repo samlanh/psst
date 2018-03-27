@@ -42,10 +42,17 @@
 									border: 1px solid #000;	
 								}
 								.hover:hover{background: #ccc;}
+								table {page-break-inside:auto }
+								tr{ page-break-inside:avoid; page-break-after:auto; }
+								#header {
+								  display: table-header-group;
+								  page-break-inside:avoid; page-break-after:auto;
+								}	
 							</style>
 								<tr>
 									<td colspan="3">
 										<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
+											<thead>
 											<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
 												<th ><?php echo $tr->translate("NUM")?></th>
 												<th ><?php echo $tr->translate("STUDENT_ID")?></th>
@@ -57,10 +64,10 @@
 												<th ><?php echo $tr->translate("SESSION")?></th>
 												<th ><?php echo $tr->translate("TYPE")?></th>
 												<th ><?php echo $tr->translate("STOP_DATE")?></th>
-												<th ><?php echo $tr->translate("REASON")?></th>
-												
+												<th ><?php echo $tr->translate("REASON")?></th>										
 											</tr>
-										<?php $i=0; foreach ($this->rs AS $row) { $i++;?>
+											</thead>
+										<?php $i=0;foreach ($this->rs AS $row) { $i++;?>
 											<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 												<th ><?php echo $i;?></th>
 												<th ><?php echo $row['stu_id'];?></th>

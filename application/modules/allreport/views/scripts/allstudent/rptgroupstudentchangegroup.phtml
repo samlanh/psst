@@ -38,7 +38,9 @@
 </div>
 		<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 			<div id="divPrint">
-							<style> th{border-top:1px solid #000;border-collapse: collapse;}</style>
+							<style> 
+							th{border-top:1px solid #000;border-collapse: collapse;}
+							</style>
 							<table style="width:27cm;background:#fff; margin: 0 auto;border-collapse: collapse;">
 								<tr style="font-size: 18px;">
 									<td colspan="2"></td>
@@ -59,16 +61,12 @@
 								</tr>
 								<tr>
 									<td colspan="4">
-										<table cellpadding="5"​ style="margin:0 auto;width:90%; border-collapse: collapse;padding-buttom: 10px;"  border="1" >
+										<table cellpadding="5"​ style="margin:0 auto;width:90%; border-collapse: collapse;padding-buttom: 10px;"  border="1" >									
 										
-																			
-										<?php $total_stu=0; if(!empty($this->rs))foreach ($this->rs as $key =>$stu){
-											
+										<?php $total_stu=0; if(!empty($this->rs))foreach ($this->rs as $key =>$stu){										
 											//$ac=$stu["academic_year"];
 										?>
-											<?php if((($ad!=$stu["academic_year"] OR $session!=$stu["session"] OR $grade!=$stu["grade"]) OR ($to_ad!=$stu["to_academic_year"] OR $to_session!=$stu["to_session"] OR $to_grade!=$stu["to_grade"])) AND  $key>0 ){?>
-											
-											
+											<?php if((($ad!=$stu["academic_year"] OR $session!=$stu["session"] OR $grade!=$stu["grade"]) OR ($to_ad!=$stu["to_academic_year"] OR $to_session!=$stu["to_session"] OR $to_grade!=$stu["to_grade"])) AND  $key>0 ){?>											
 											<tr> 
 												<td align="right" colspan="3" style="font-size: 12px;font-weight: bold;">Total Students &nbsp;</td>
 												<td align="center"><?php echo number_format($i,0);?></td>

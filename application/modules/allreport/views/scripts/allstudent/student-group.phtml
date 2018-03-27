@@ -73,7 +73,7 @@
 							  </tr>
 							  </thead>
 							  <?php $i=0; 
-							  if (!empty($this->rs))foreach($this->rs as $rs){ $i++;?>
+							  foreach($this->rs as $rs)if (!empty($this->rs)){ $i++;?>
 							  <tr style="font-size:12px; height: 18px;"​ align="center" class='hover padding'>
 							    <td><?php echo $i;?></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>

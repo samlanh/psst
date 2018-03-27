@@ -36,11 +36,18 @@
 				</tr>
 				<style>
 					table tr th{background-color: #ccc;}
-					.hover:hover{background: #ccc;}									
+					.hover:hover{background: #ccc;}	
+					table {page-break-inside:auto }
+					tr{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					}	
 				</style>
 				<tr>
 					<td colspan="3" id="exportExcel">
 						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
+							<thead>
 							<tr style="font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('EXPENSE_TITLE')?></td>
@@ -50,7 +57,8 @@
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('DESCRIPTION')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('FOR_DATE')?></td>
 								<td style="border: 1px solid #000;"><?php echo $tr->translate('USER')?></td>
-							</tr>	
+							</tr>
+							</thead>
 							<?php 
 								$total_expense = 0;
 							if(!empty($this->row)){foreach ($this->row AS $key=>$row) { $key=$key+1;

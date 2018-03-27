@@ -40,9 +40,21 @@
 							<td width="15%" align="center">
 							</td>
 						</tr>
-						<tr>
+							<style>
+								table tr th{
+									border: 1px solid #000;	
+								}
+								table {page-break-inside:auto }
+								tr{ page-break-inside:avoid; page-break-after:auto; }
+								#header {
+								  display: table-header-group;
+								  page-break-inside:avoid; page-break-after:auto;
+								}							
+							</style>
+							<tr>
 							<td colspan="3">
 								<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
+									<thead>
 									<tr style="font-size:12px; height: 20px;background-color: #CCD9FF;line-height: 30px;font-weight: bold;" align="center">
 											<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?>&nbsp;</td>
@@ -54,8 +66,8 @@
 											<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate('PRINT');?>&nbsp;</td>
 								   </tr>
-									
-								<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_code)) foreach ($this->pur_code AS $rs) { $i++;
+									</thead>
+								<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_code))foreach ($this->pur_code AS $rs) { $i++;
 								       
 								  ?>
 									<tr class="hover" style="font-size:11px; height: 18px;"​ align="center">

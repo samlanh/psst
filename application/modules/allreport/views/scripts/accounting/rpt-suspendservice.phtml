@@ -27,8 +27,7 @@
 </style>	
 <div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
 		<div id="divPrint">
-		<div id="exportExcel" >
-			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm; ">
+			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm;">
 							<tr>
 								<td width="15%" align="center">
 									<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
@@ -42,21 +41,21 @@
 								</td>
 							</tr>
 							<tr>
-								<td colspan="3" id="exportExcel">
-									<style> th,td{ padding:0 1px;}</style>
-										<style type="text/css">
-											body{font-family: "Times New Roman",Arial; }
-											table{ border-collapse:collapse; margin:0 auto;
-											border-color:#000; }
-											.padd tr td{  }
-											.padd tr th{  background-color: #ccc; }
-											table {page-break-inside:auto }
-											tr{ page-break-inside:avoid; page-break-after:auto; }
-											#header {
-											  display: table-header-group;
-											  page-break-inside:avoid; page-break-after:auto;
-											}	
-										</style>
+								<style> th,td{ padding:0 1px;}</style>
+								<style type="text/css">
+										body{font-family: "Times New Roman",Arial; }
+										table{ border-collapse:collapse; margin:0 auto;
+										border-color:#000; }
+										.padd tr td{  }
+										.padd tr th{  background-color: #ccc; }
+										table {page-break-inside:auto }
+										tr{ page-break-inside:avoid; page-break-after:auto; }
+										#header {
+										  display: table-header-group;
+										  page-break-inside:avoid; page-break-after:auto;
+										}	
+								</style>
+								<td colspan="3" id="exporteExcel">
 									<table class="padd" width="99%" border="1" align="center" style="font-size:14px;white-space:nowrap;font-family: 'khmer os battambang',Arial,serif !important;">
 												<style> td{padding:0 3px; }</style>
 										  <?php
@@ -96,7 +95,7 @@
 										  <?php } }?>
 									</table>
 								</td>
-						</tr>
+							</tr>
 						<tr>
 							<td colspan="3">&nbsp;</td>
 						</tr>
@@ -120,8 +119,7 @@
 								</table>
 							</td>
 						</tr>
-					</table>
-	</div>	
-	</div>
+				</table>
+		</div>
 </div>
 

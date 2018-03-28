@@ -50,23 +50,22 @@
 							table{ border-collapse:collapse; margin:0 auto;
 							border-color:#000; }
 							.padd tr td{  text-align:center}
-							.padd tr th{  background-color: #ccc; }
 						</style>
 						<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family: 'Khmer OS Battambang';">
 							  <tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
-							    <td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-							    <td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('TOTAL_PAYMENT');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('FINE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('CREDIT_MEMO');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('DEDUCT');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('NET_AMOUNT');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('PAID_DATE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+							    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+							    <th>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('TOTAL_PAYMENT');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('FINE');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('CREDIT_MEMO');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('DEDUCT');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('NET_AMOUNT');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('PAID_DATE');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</th>
 							  </tr>
 								<style> td{padding:0 3px; }</style>
 							 <?php $i=0; $total=0;if(!empty($this->row)){foreach($this->row as $key=>$rs){$i++;

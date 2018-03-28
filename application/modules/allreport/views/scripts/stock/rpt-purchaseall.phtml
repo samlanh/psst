@@ -45,7 +45,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3">
+				<td colspan="3" id="exportExcel">
 					<style>
 						table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 						tr{ page-break-inside:avoid; page-break-after:auto }
@@ -59,18 +59,18 @@
 					<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 						<thead>
 							<tr style="font-size:12px; height: 20px;background-color: #CCD9FF;line-height: 30px;font-weight: bold;" align="center">
-								<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?></td>
-								<td>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?></td>
-								<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?></td>
-								<td>&nbsp;<?php echo $tr->translate('TEL');?></td>
-								<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+								<th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?></th>
+								<th>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?></th>
+								<th>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?></th>
+								<th>&nbsp;<?php echo $tr->translate('TEL');?></th>
+								<th>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('COST');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</th>
 						   </tr>
 					   </thead>
 					<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_all))foreach ($this->pur_all AS $rs) { $i++; ?>

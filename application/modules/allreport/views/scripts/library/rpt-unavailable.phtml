@@ -20,15 +20,16 @@
 .hover:hover{background: #ddd;}
 </style>
 <div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
-	<div id="divPrint">
-	  <style>
-				table { page-break-inside:auto }
-                tr{ page-break-inside:avoid; page-break-after:auto }
-			   #header {
-					  display: table-header-group;
-					  page-break-inside:avoid; page-break-after:auto;
-					}
-		</style>
+			<div id="divPrint">
+						<style>
+							table { page-break-inside:auto }
+							tr{ page-break-inside:avoid; page-break-after:auto }
+						   #header 
+						   {
+							  display: table-header-group;
+							  page-break-inside:avoid; page-break-after:auto;
+							}
+							</style>
 									<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
 										<tr>
 											<td width="15%" align="center">
@@ -49,19 +50,19 @@
 												<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
 													<thead>
 													<tr style="font-size:12px; height: 20px;border: 1px solid #000; background: #CCD9FF; line-height: 30px; font-weight: bold;" align="center" >
-														<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
-														<td>&nbsp;<?php echo $tr->translate("BOOK_NO"); ?>&nbsp;</td>
-														<td>&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</td>
-														<td>&nbsp;<?php echo $tr->translate("AUTHOR"); ?>&nbsp;</td>
-														<td style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("PUBLISHER"); ?>&nbsp;</td>
-														<td>&nbsp;<?php echo $tr->translate("CATEGORY"); ?>&nbsp;</td>
-														<td>&nbsp;<?php echo $tr->translate("CURRENT_QTY"); ?>&nbsp;</td>
-														<td>&nbsp;<?php echo $tr->translate("QTY_AFTER"); ?>&nbsp;</td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate("UNIT_PRICE"); ?></td>
+														<th>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</th>
+														<th>&nbsp;<?php echo $tr->translate("BOOK_NO"); ?>&nbsp;</th>
+														<th>&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</th>
+														<th>&nbsp;<?php echo $tr->translate("AUTHOR"); ?>&nbsp;</th>
+														<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("PUBLISHER"); ?>&nbsp;</th>
+														<th>&nbsp;<?php echo $tr->translate("CATEGORY"); ?>&nbsp;</th>
+														<th>&nbsp;<?php echo $tr->translate("CURRENT_QTY"); ?>&nbsp;</th>
+														<th>&nbsp;<?php echo $tr->translate("QTY_AFTER"); ?>&nbsp;</th>
+														<th style="border: 1px solid #000;"><?php echo $tr->translate("UNIT_PRICE"); ?></th>
 														
-														<td style="border: 1px solid #000;"><?php echo $tr->translate("DATE"); ?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate("USER"); ?></td>
-														<td style="border: 1px solid #000;"><?php echo $tr->translate("STATUS"); ?></td>
+														<th style="border: 1px solid #000;"><?php echo $tr->translate("DATE"); ?></th>
+														<th style="border: 1px solid #000;"><?php echo $tr->translate("USER"); ?></th>
+														<th style="border: 1px solid #000;"><?php echo $tr->translate("STATUS"); ?></th>
 													</tr>
 													</thead>
 													<?php  $qty_curr=0;$qty_after=0;?> 

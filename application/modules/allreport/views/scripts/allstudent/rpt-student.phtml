@@ -22,8 +22,6 @@
 		</table>
 	</form>
 </div>
-
-
 	<div style="border: 1px dotted #000;background: #fff;width:32cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 		<div id="divPrint">
 							<table width="100%" style="background:#fff; margin: 0 auto;">
@@ -53,6 +51,7 @@
 								</style>
 								<tr>
 									<td colspan="3">
+									<div id="exportExcel">
 										<table cellpadding="4"​ style="font-family:'Khmer OS Battambang'; margin:0 auto;width:100%;border1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 											<thead>
 											<tr style="font-size:12px; font-weight: bold; background: #ccd9ff; height: 20px;" align="center" >
@@ -62,8 +61,7 @@
 												<th rowspan="2">Sex</th>
 												<th rowspan="2">Nationality</th>
 												<th rowspan="2">Tel</th>
-												<th rowspan="2">Email</th>
-												
+												<th rowspan="2">Email</th>												
 												<th colspan="6">Address</th>
 												<th colspan="3">Study Info</th>
 												<th colspan="3">Father Info</th>					
@@ -77,20 +75,16 @@
 												<th >Vil.</th>
 												<th >Comm.</th>
 												<th >Distr.</th>
-												<th >Prov.</th>
-											
+												<th >Prov.</th>											
 												<th >Deg.</th>
 												<th >Grade</th>
-												<th >Sess.</th>
-											
+												<th >Sess.</th>											
 												<th >Name</th>
 												<th >Job</th>
-												<th >Phone</th>
-												
+												<th >Phone</th>											
 												<th >Name</th>
 												<th >Job</th>
-												<th >Phone</th>
-												
+												<th >Phone</th>											
 												<th >Name</th>
 												<th >Job</th>
 												<th >Phone</th>											
@@ -98,41 +92,36 @@
 											</thead>
 										<?php $i=0; foreach ($this->rs AS $row) { $i++;?>
 											<tr style="font-size:9px; height: 23px;" align="center" >
-												<th ><?php echo $i;?></th>
-												<th ><?php echo $row['stu_code'];?></th>
-												<th align="left">&nbsp;<?php echo $row['name'];?>&nbsp;</th>
-												<th ><?php echo $row['sex'];?></th>	
-												<th ><?php echo $row['nationality'];?></th>
-												<th ><?php echo $row['tel'];?></th>
-												<th align="left"><?php echo $row['email'];?></th>
-												
-												<th ><?php echo $row['home_num'];?></th>
-												<th ><?php echo $row['street_num'];?></th>
-												<th ><?php echo $row['village_name'];?></th>					
-												<th ><?php echo $row['commune_name'];?></th>
-												<th ><?php echo $row['district_name'];?></th>
-												<th ><?php echo $row['province'];?></th>	
-												
-												<th ><?php echo $row['degree'];?></th>
-												<th align="left"><?php echo $row['grade'];?></th>
-												<th ><?php echo $row['session'];?></th>	
-												
-												<th align="left"><?php echo $row['father_name'];?></th>
-												<th align="left"><?php echo $row['father_job'];?></th>
-												<th ><?php echo $row['father_phone'];?></th>	
-												
-												<th align="left"><?php echo $row['mother_name'];?></th>
-												<th align="left"><?php echo $row['mother_job'];?></th>
-												<th ><?php echo $row['mother_phone'];?></th>	
-												
-												<th align="left"><?php echo $row['guardian_name'];?></th>
-												<th align="left"><?php echo $row['guardian_job'];?></th>
-												<th ><?php echo $row['guardian_tel'];?></th>
-												
-												<th style="color: red;"><?php echo $row['status'];?></th>
+												<td ><?php echo $i;?></td>
+												<td ><?php echo $row['stu_code'];?></td>
+												<td align="left">&nbsp;<?php echo $row['name'];?>&nbsp;</td>
+												<td ><?php echo $row['sex'];?></td>	
+												<td ><?php echo $row['nationality'];?></td>
+												<td ><?php echo $row['tel'];?></td>
+												<td align="left"><?php echo $row['email'];?></td>							
+												<td ><?php echo $row['home_num'];?></td>
+												<td ><?php echo $row['street_num'];?></td>
+												<td ><?php echo $row['village_name'];?></td>					
+												<td ><?php echo $row['commune_name'];?></td>
+												<td ><?php echo $row['district_name'];?></td>
+												<td ><?php echo $row['province'];?></td>													
+												<td ><?php echo $row['degree'];?></td>
+												<td align="left"><?php echo $row['grade'];?></td>
+												<td ><?php echo $row['session'];?></td>													
+												<td align="left"><?php echo $row['father_name'];?></td>
+												<td align="left"><?php echo $row['father_job'];?></td>
+												<td ><?php echo $row['father_phone'];?></td>													
+												<td align="left"><?php echo $row['mother_name'];?></td>
+												<td align="left"><?php echo $row['mother_job'];?></td>
+												<td ><?php echo $row['mother_phone'];?></td>													
+												<td align="left"><?php echo $row['guardian_name'];?></td>
+												<td align="left"><?php echo $row['guardian_job'];?></td>
+												<td ><?php echo $row['guardian_tel'];?></td>												
+												<td style="color: red;"><?php echo $row['status'];?></td>
 											</tr>
 										<?php }?>	
-										</table>	
+										</table>
+									</div>										
 									</td>
 								</tr>
 								<tr>

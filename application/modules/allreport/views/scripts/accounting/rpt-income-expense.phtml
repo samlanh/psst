@@ -20,7 +20,6 @@
 </div>
 <div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 	<div id="divPrint">
-		<div id="exportExcel">	
 			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 				<tr>
 					<td width="15%" align="center">
@@ -35,7 +34,6 @@
 					</td>
 				</tr>
 				<style>
-					table tr th{background-color: #ccc;}
 					.hover:hover{background: #ccc;}	
 					table {page-break-inside:auto }
 					tr{ page-break-inside:avoid; page-break-after:auto; }
@@ -49,14 +47,14 @@
 						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
 							<thead>
 							<tr style="font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('EXPENSE_TITLE')?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('PAYMENT_METHOD')?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL')?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('DESCRIPTION')?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('FOR_DATE')?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate('USER')?></td>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('EXPENSE_TITLE')?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('PAYMENT_METHOD')?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL')?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('DESCRIPTION')?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('FOR_DATE')?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('USER')?></th>
 							</tr>
 							</thead>
 							<?php 
@@ -92,7 +90,6 @@
 						</table>
 					</td>
 				</tr>
-			</table>
-		</div>
+		</table>
 	</div>		
 </div>

@@ -29,7 +29,6 @@
 </div>
 <div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 	<div id="divPrint">
-		<div id="exportExcel">
 			<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;">
 				
 				<tr>
@@ -47,26 +46,26 @@
 				</tr>
 				<style>
 					.hover:hover{background: #ccc;}
-table { page-break-inside:auto }
-  tr{ page-break-inside:avoid; page-break-after:auto; }
-#header {
-  display: table-header-group;
-  page-break-inside:avoid; page-break-after:auto;
-}
+					table { page-break-inside:auto }
+					  tr{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					}
 				</style>
 				<tr>
-					<td colspan="3">
+					<td colspan="3" id="exportExcel">
 						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
 							<tr style="font-family:'Khmer MEF2';font-size:12px; height: 20px;border: 1px solid #000;background: #ccd9ff;" align="center"  >
-								<td style="border: 1px solid #000;"><?php echo $tr->translate("NUM");?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_CODE");?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate("TEL");?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate("GROUP_CODE");?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate("DEGREE");?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate("GRADE");?></td>
-								<td style="border: 1px solid #000;"><?php echo $tr->translate("SESSION");?></td>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("NUM");?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_CODE");?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("TEL");?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("GROUP_CODE");?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("DEGREE");?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("GRADE");?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("SESSION");?></th>
 							</tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
@@ -109,8 +108,7 @@ table { page-break-inside:auto }
 					</td>
 						
 				</tr>
-			</table>
-		</div>			
+		</table>		
 	</div>		
 </div>
 

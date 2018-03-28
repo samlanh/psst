@@ -34,8 +34,8 @@
 			   <td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 	       </tr>
 		</table>
-</form>
-</div>
+		</form>
+		</div>
 		<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 			<div id="divPrint">
 							<style> 
@@ -60,9 +60,8 @@
 									</td>
 								</tr>
 								<tr>
-									<td colspan="4">
-										<table cellpadding="5"​ style="margin:0 auto;width:90%; border-collapse: collapse;padding-buttom: 10px;"  border="1" >									
-										
+									<td colspan="4" id="exportExcel">								
+										<table cellpadding="5"​ style="margin:0 auto;width:90%; border-collapse: collapse;padding-buttom: 10px;"  border="1" >																			
 										<?php $total_stu=0; if(!empty($this->rs))foreach ($this->rs as $key =>$stu){										
 											//$ac=$stu["academic_year"];
 										?>
@@ -146,12 +145,10 @@
 										<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY");?></span>
 									</td>
 								</tr>
-								
-							</table>
-						
-				</div>
-			</div>
-			
+							</table>			
+						</div>
+					</div>
+					
 			
 			
 			

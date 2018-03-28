@@ -284,7 +284,6 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 				AND aa.controller ='".$str_controller."'
 			GROUP BY  aa.module ,aa.controller,aa.action
 		ORDER BY aa.module ,aa.controller ASC , aa.acl_id ASC ";	
-// 		print_r($db->fetchAll($sql));exit();	
 		return $db->fetchAll($sql);
 	}
 	function getAccessUrl($module,$controller,$action){

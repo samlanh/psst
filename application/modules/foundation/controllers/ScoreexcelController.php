@@ -90,15 +90,9 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 			try {
 				$key = new Application_Model_DbTable_DbKeycode();
 				$dbset=$key->getKeyCodeMiniInv(TRUE);
-				if($dbset['scoreresulttye']==1){
-					$dbs = new Foundation_Model_DbTable_DbScore();//by subject
-				}else{
-					$dbs = new Foundation_Model_DbTable_DbScoreaverage();//by average
-				}
-				if(isset($_data['save_close'])){
-					$rs =  $dbs->updateStudentScore($_data);
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/scoreexcel");
-				}
+				$dbs = new Foundation_Model_DbTable_DbScoreexcel();//by subject
+				$rs =  $dbs->updateStudentScore($_data);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/scoreexcel");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

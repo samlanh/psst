@@ -96,9 +96,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
-	   
     }
-    
     public function addkentridgeAction(){
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
@@ -137,7 +135,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$db = new Foundation_Model_DbTable_DbStudent();
     	$this->view->group = $db->getAllgroup();
     }
-    
     public function addnewworldAction(){
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
@@ -178,9 +175,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$test = $this->view->branch_info = $db->getBranchInfo();
     	$db = new Foundation_Model_DbTable_DbStudent();
     	$this->view->group = $db->getAllgroup();
-    
     }
-    
     public function editAction(){
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
@@ -205,7 +200,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
         if($is_start==0 || $form_row['is_void']>0){
         	//Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can not Edit'), self::REDIRECT_URL . '/register/index');
         }
-        
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$this->view->all_dept = $_db->getAllDegreeName();
     	
@@ -223,7 +217,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	if($user_type_id!=1 AND $current_date>$payment_date){
     		Application_Form_FrmMessage::Sucessfull("you data is more then a day.so can not edit", self::REDIRECT_URL . '/register/index');
     	}
-    	
     	// for loop in initialize
     	$this->view->payment_detail_service = $db->getStudentPaymentDetailServiceByID($id);
     	// for information in  register
@@ -242,23 +235,13 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$this->view->all_room = $db->getAllRoom();
 
     	$test = $this->view->branch_info = $db->getBranchInfo();
-    	
     	$db = new Foundation_Model_DbTable_DbStudent();
     	$this->view->group = $db->getAllgroup();
-    	
     }
-    
-    
     public function editkentridgeAction(){
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		//$_data['pay_id']=$id;
-    		//     		if(!empty($_data['void'])){
-    		//     			echo $_data['void'];exit();
-    		// 			}else{
-    		// 				echo 'no void';exit();
-    		// 			}
     		try {
     			$db = new Registrar_Model_DbTable_DbRegister();
     			$db->updateRegister($_data,$id);
@@ -270,7 +253,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			echo $e->getMessage();exit();
-    			 
     		}
     	}
     	$db = new Registrar_Model_DbTable_DbRegister();
@@ -310,9 +292,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	 
     	$db = new Foundation_Model_DbTable_DbStudent();
     	$this->view->group = $db->getAllgroup();
-    	 
     }
-    
     function getGradeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -377,7 +357,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
     function getProductFeeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -387,7 +366,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-	
 	function getTeacherAction(){
 		if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -416,7 +394,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-    
 	function getCreditMemoAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
@@ -426,7 +403,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 	function getStartDateAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -469,5 +445,4 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 }

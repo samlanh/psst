@@ -34,7 +34,9 @@ function getKHMonthByNumber(m){
 		<?php $con=4;$margin=5;$i=0;
 			$r=0;
 		if(!empty($this->rs)){foreach ($this->rs AS $row){?>	
-			<?php if($r==4){$r=0;?>
+			<?php 
+			$row['dept']=1;
+			if($r==4){$r=0;?>
 				<table class="page-break"><tr class="page-break"><td></td></tr></table>
 			<?php }$i++;$r++;?>
 			<table  width="100%" style="white-space: nowrap;font-size:10px;font-family: 'Khmer OS Battambang';" class="print" cellspacing="1"  cellpadding="0">

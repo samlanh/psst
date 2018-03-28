@@ -174,10 +174,12 @@ function getKHMonthByNumber(m){
 				}
 		</style>
 		<?php $con=4;$margin=5;$r=0;$i=0;if(!empty($this->rs)){foreach ($this->rs AS $row){?>	
-			<?php if($r==4){$r=0;?>
+			<?php 
+			$row['dept']=1;
+			if($r==4){$r=0;?>
 				<table class="page-break"><tr class="page-break"><td></td></tr></table>
 			<?php }$i++;$r++;?>
-			<table width="100%" style="white-space: nowrap;font-size:10px;font-family: 'Khmer OS Battambang';" class="print" cellspacing="1"  cellpadding="0">
+			<table  width="100%" style="white-space: nowrap;font-size:10px;font-family: 'Khmer OS Battambang';" class="print" cellspacing="1"  cellpadding="0">
 				<tr>
 					<td width="50%" align="right">
 						<table style="border: 3px solid #FFC107;<?php if($row['dept']<=2){ echo 'height: 5.9cm;';}else{echo 'height: 5.95cm;';}?> width: 8.5cm;font-size:11px;font-family: 'Khmer OS Battambang';color:#00007b;">
@@ -206,6 +208,7 @@ function getKHMonthByNumber(m){
 								<td align="center" valign="top" colspan="3" style="line-height: 20px;"> 
 									<div style="margin-top: -20px;"><?php if($row['dept']<=2){echo 'ឆ្នាំសិក្សា';}else{echo 'Academic Year';}?> &nbsp;<label id="academic_year<?php echo$i;?>"></label><br />
 										<script type="text/javascript">
+											<?php //echo $row['academic_year'];?>
 											<?php if($row['dept']<=2){?>
 												year = convertEnglishToKhmerNumber('<?php echo $row['start_year']?>')+'-'+convertEnglishToKhmerNumber('<?php echo $row['end_year']?>');
 												
@@ -237,7 +240,12 @@ function getKHMonthByNumber(m){
 									<div style="font-family: 'Khmer OS Muol Light';margin-top: 5px;">អត្តសញ្ញាណប័ណ្ណសិស្ស</div>
 									<div style="margin-top: -4px;"><?php if($row['dept']<=2){echo 'អត្តលេខ';}else{echo 'ID N<sup>o</sup>';}?>: <label id="stu_code<?php echo $i;?>"></label></div>
 									<script type="text/javascript">
-										test1 = '<?php echo $row['stu_code'];?>';
+										<?php //if($row['dept']<=2){?>
+												//test1 = convertEnglishToKhmerNumber('<?php //echo $row['stu_code']?>');
+										<?php //}else{?>
+												test1 = '<?php echo $row['stu_code'];?>';
+										<?php //}
+										?>
 										dojo.byId('stu_code<?php echo $i;?>').innerHTML=test1;
 									</script>
 								</td>

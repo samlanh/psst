@@ -8,8 +8,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-			$db = new Foundation_Model_DbTable_DbScore();
-			$this->view->g_all_name=$db->getGroupSearch();
+			$db = new Foundation_Model_DbTable_DbScoreexcel();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}
@@ -18,6 +17,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 						'title'=>'',
 						'group_name' => '',
 						'study_year'=> '',
+						'group'=>'',
 						'degree'=>0,
 						'grade'=> 0,
 						'session'=> 0,
@@ -30,11 +30,12 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","EXAM_TYPE","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+			$collumns = array("TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'scoreexcel','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('exam_type'=>$link,'title_score'=>$link,'student_no'=>$link,'student_id'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('exam_type'=>$link,'title_score'=>$link,
+						'for_semester'=>$link,'for_month'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
 		
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
@@ -44,6 +45,7 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+// 		$this->view->g_all_name=$db->getGroupSearch();
 	}
 	public function fullResultAction(){
 		
@@ -124,8 +126,6 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 			$data=$this->getRequest()->getPost();
 			$db = new Foundation_Model_DbTable_DbScore();
 			$grade = $db->getAllGrade($data['degree']);
-			//print_r($grade);exit();
-			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

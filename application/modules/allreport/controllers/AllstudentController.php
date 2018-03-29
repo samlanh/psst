@@ -127,10 +127,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $group->getStudentStatistic($search);
-// 		print_r($rs_rows);
 		$this->view->search=$search;
-	}
-	
+	}	
 	public function rptStudyHistoryAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();

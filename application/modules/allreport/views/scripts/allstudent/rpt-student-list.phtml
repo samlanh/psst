@@ -98,8 +98,7 @@
 								?></td>
 								<td><?php echo $row['nation'];?></td>
 								<td><?php echo date("d-m-Y",strtotime($row['dob']));?></td>
-								<td>
-								<input type="hidden"  name="stu_id<?php echo $i?>" id="stu_id<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_id'];?>" />
+								<td><input type="hidden"  name="stu_id<?php echo $i?>" id="stu_id<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_id'];?>" />
 								<input type="text" constraints="{datePattern:'dd/MM/yyyy'}"  name="dob_<?php echo $i?>" id="dob_<?php echo $i?>" dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d",strtotime($row['dob']));?>" /></td>
 								<td style="text-align: left;"><?php echo $row['pob'];?></td>
 								<td><?php echo $row['tel'];?></td>

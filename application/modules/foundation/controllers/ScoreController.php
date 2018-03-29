@@ -30,11 +30,12 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","EXAM_TYPE","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+			$collumns = array("TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'score','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('exam_type'=>$link,'title_score'=>$link,'student_no'=>$link,'student_id'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('exam_type'=>$link,'title_score'=>$link,
+					'for_semester'=>$link,'for_month'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
 		
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");

@@ -329,7 +329,7 @@ function filterStudent(){
 				temp+= '<tr class="hover normal">';
 				temp += '<td align="center" colspan="4"></td>';
 				for(j=0;j<subject.length;j++){
-					temp += '<td align="center" ><input onclick="createTable('+j+');"  type="button" value="convert to Excel"  /></td>';
+					temp += '<td align="center" ><input onclick="createTable('+j+');"  type="button" value="convert to Excel" dojoType="dijit.form.Button"  /></td>';
 				}
 				temp += '<td align="center" ></td>';
 			    temp+= '</tr>';

@@ -440,7 +440,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 					// update student information to grade that input
 					$id=$data['old_studens'];
-					//echo $id;exit();
+// 					echo $id;exit();
 					$arr = array(
 							'stu_khname'	=>$data['kh_name'],
 							'stu_enname'	=>$data['en_name'],
@@ -455,7 +455,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'group_id'	=>$data['group'],
 					);
 					$where = 'stu_id = '.$id;
-					//echo $where;exit();
+					
 					$this->update($arr, $where);
 					//echo 333;exit();
 				}else {

@@ -244,7 +244,10 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	function getAllScore($search=null){
 		$db=$this->getAdapter();
 		$sql="SELECT s.id,s.title_score,
-			(SELECT name_en FROM `rms_view` WHERE TYPE=14 AND key_code =s.exam_type LIMIT 1) as exam_type,
+			(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
+			s.for_semester,
+			(SELECT month_kh FROM `rms_month` WHERE id=s.for_month) as for_month,
+			
 			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
 			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
 			(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
@@ -280,6 +283,9 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['room'])){
 			$where.=" AND `g`.`room_id` =".$search['room'];
+		}
+		if(!empty($search['group'])){
+			$where.=" AND `s`.`group_id` =".$search['group'];
 		}
 		$order=" ORDER BY id DESC ";
 		return $db->fetchAll($sql.$where.$order);

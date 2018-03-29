@@ -86,7 +86,56 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=' AND is_stu_new = '.$search['stu_type'];
     	}
     	return $db->fetchAll($sql.$where.$order);
-    }    
+    }
+    public function getAmountStudent(){//count to dashboard
+    	$db = $this->getAdapter();
+    	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
+    	$where=' WHERE status=1 AND is_subspend=0 ';
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	return $db->fetchOne($sql.$where);
+    }
+    public function getAmountNewStudent(){//count to dashboard
+    	$db = $this->getAdapter();
+    	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
+    	$where=' WHERE status=1 AND is_stu_new=1 AND is_subspend=0 ';
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	return $db->fetchOne($sql.$where);
+    }   
+    public function getAmountDropStudent(){//count to dashboard
+    	$db = $this->getAdapter();
+    	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
+    	$where=' WHERE status=1 AND is_subspend!=0 ';
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	return $db->fetchOne($sql.$where);
+    }
+    public function getAmountStudentTest(){//count to dashboard
+    	$db = $this->getAdapter();
+    	$sql ='SELECT COUNT(id) FROM `rms_student_test` ';
+    	$where=" WHERE status=1 AND (kh_name!='' OR en_name!='')";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	return $db->fetchOne($sql.$where);
+    }
+    public function getAmountStudentTestRegistered(){//count to dashboard
+    	$db = $this->getAdapter();
+    	$sql ='SELECT COUNT(id) FROM `rms_student_test` ';
+    	$where=" WHERE is_paid=1 AND status=1 AND (kh_name!='' OR en_name!='')";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	return $db->fetchOne($sql.$where);
+    } 
+    public function getAmountStudentUpdateresult(){//count to dashboard
+    	$db = $this->getAdapter();
+    	$sql ='SELECT COUNT(id) FROM `rms_student_test` ';
+    	$where=" WHERE updated_result=1 AND status=1 AND (kh_name!='' OR en_name!='')";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	return $db->fetchOne($sql.$where);
+    }
+    
     public function getAllStudentSelected($stu_id){
     	$db = $this->getAdapter();
     	$sql ='SELECT stu_id,

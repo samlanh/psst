@@ -1,10 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ក្រុមសិក្សា"));
-	
 	$url_copy =$this->url(array('module'=>'global','controller'=>'group','action'=>'copy'));
-	$formList = new Application_Form_Frmtable();
-	
+	$formList = new Application_Form_Frmtable();	
     $frm =  $this->form_search;
 ?>
 <form id="list" name="list" action="<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
@@ -12,26 +10,22 @@
 	       <tr>
 				<td style="width: 95px;border:1px solid #ccc;border-radius:10px;background:#eeeeee;"><?php echo $formList->showCopyBuntton($url_copy);?></td>
 	            <td><?php echo $frm->getElement("title");?></td>
-	            <td> <?php echo $frm->getElement("study_year");?></td>
-	            <td> <?php echo $frm->getElement("grade");?></td>
-			    <td> <?php echo $frm->getElement("session");?></td>
-			     <td> <?php echo $frm->getElement("status_search");?></td>
+	            <td><?php echo $frm->getElement("study_year");?></td>
+	            <td><?php echo $frm->getElement("degree");?></td>
+	            <td><?php echo $frm->getElement("grade");?></td>
+			    <td><?php echo $frm->getElement("session");?></td>
+			    <td><?php echo $frm->getElement("status_search");?></td>
 	            <td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 	       </tr>
-		   
-		   <input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
-		   
+		   <input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />		   
 	</table>
 <?php echo $this->list?>
 </form>
-
- 
 <script type="text/javascript">
-dojo.require("dijit.form.CheckBox"); 
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
-
+	dojo.require("dijit.form.CheckBox"); 
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
 	function copyRecord(url){
 		 id = dijit.byId('recordcopy').get('value');
 		 if(id!=''){
@@ -41,14 +35,8 @@ dojo.require("dijit.form.DateTextBox");
 			return false;
 		 }
 	}
-
 	function setValue(index){
 		var recordcopy = $('input[name=copy]:checked').val();
 		dijit.byId('recordcopy').attr('value',recordcopy);
 	}
-	
 </script> 
-
-
-
-

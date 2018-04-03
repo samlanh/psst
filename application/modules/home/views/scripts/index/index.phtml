@@ -78,17 +78,17 @@
 									<table class="performance">
 										<tbody>
 											<tr>
-												<td><a href="<?php echo $this->baseUrl()."/report/paramater/rpt-properties";?>"><span data-bind="text: lang.lang.income"><?php echo $tr->translate("All Student")?></span></a></td>
+												<td><a href="<?php echo $this->baseUrl()."/report/paramater/rpt-properties";?>"><span data-bind="text: lang.lang.income"><?php echo $tr->translate("STUDENT_TOTAL")?></span></a></td>
 												<td></td>
 												<td align="right"><span data-bind="text: obj.income"><?php echo $this->rsamountstudent; echo $tr->translate("STUDENT_UNIT");?></span></td>
 											</tr>
 											<tr>
-												<td><span data-bind="text: lang.lang.expense"><?php echo $tr->translate("New Student")?></span></td>
+												<td><span data-bind="text: lang.lang.expense"><?php echo $tr->translate("NEW_STUDENT")?></span></td>
 												<td></td>
 												<td align="right"><span data-bind="text: obj.expense"><?php echo $this->rsnewstudent; echo $tr->translate("STUDENT_UNIT");?></span></td>
 											</tr>
 											<tr>
-												<td><b><span data-bind="text: lang.lang.net_income"><?php echo $tr->translate("Student Drop")?></span></b></td>
+												<td><b><span data-bind="text: lang.lang.net_income"><?php echo $tr->translate("STUDENT_DROP")?></span></b></td>
 												<td></td>
 												<td align="right"><b data-bind="text: obj.net_income"><?php echo $this->rsdropstudent; echo $tr->translate("STUDENT_UNIT");?></b></td>
 											</tr>

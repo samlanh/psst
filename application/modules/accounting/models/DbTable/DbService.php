@@ -56,7 +56,7 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	$sql = "SELECT service_id FROM `rms_program_name` WHERE title= '".$service_name."' AND ser_cate_id=$_type";
     	return $db->fetchRow($sql);
     }
-    public function updateservice($_data){
+public function updateservice($_data){
     	$_arr=array(
 	    			'title'=>$_data['add_title'],
 	    			'ser_cate_id'=>$_data['title'],
@@ -67,14 +67,13 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	$where=$this->getAdapter()->quoteInto("service_id=?", $_data["id"]);
     	$this->update($_arr, $where);
     }
-    public function getServiceById($id){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT *
-    	 FROM rms_program_name WHERE service_id = ".$id;
-    	return $db->fetchRow($sql);
-    }	
-    
-    public function getAllServiceNames($search=''){
+public function getServiceById($id){
+    $db = $this->getAdapter();
+    $sql = "SELECT *
+    FROM rms_program_name WHERE service_id = ".$id;
+    return $db->fetchRow($sql);
+}	
+ public function getAllServiceNames($search=''){
     	$db = $this->getAdapter();
     	$where='';
     	$sql = "SELECT 
@@ -100,11 +99,8 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
 	    	$s_search = addslashes(trim($search['txtsearch']));
 		 	$s_where[] = " p.title LIKE '%{$s_search}%'";
 	    	$s_where[] = " (SELECT title FROM `rms_program_type` WHERE id=ser_cate_id LIMIT 1) LIKE '%{$s_search}%'";
-// 	    	$s_where[] = " kh_name LIKE '%{$s_search}%'";
-// 	    	$s_where[] = " en_name LIKE '%{$s_search}%'";
 	    	$where .=' AND ( '.implode(' OR ',$s_where).')';
 	    }
-	    //print_r($search);//exit();
 	    if($search['cate_name']>0){
 	    	$sql.=" AND ser_cate_id=".$search['cate_name'];
 	    }
@@ -114,22 +110,21 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     	try{
     	$this->_name='rms_program_type';
     	$_db = $this->getAdapter();
-	    	$_arr = array(
-	    			'code'=>$_data['code'],
-	    			'title'=>$_data['p_title'],
-	    			'item_desc'=>$_data['note'],
-	    			'status'=>$_data['status_p'],
-	    			'type'=>$_data['type'],
-	    			'create_date'=> new Zend_Date(),
-	    			'user_id' => $this->getUserId(),
-	    	);
-    		return $this->insert($_arr);
-    	}catch(Exception $e){
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    	}
-    }
-
-    public function AddServiceAjax($_data){
+	    $_arr = array(
+    			'code'=>$_data['code'],
+    			'title'=>$_data['p_title'],
+    			'item_desc'=>$_data['note'],
+    			'status'=>$_data['status_p'],
+    			'type'=>$_data['type'],
+    			'create_date'=> new Zend_Date(),
+    			'user_id' => $this->getUserId(),
+	    );
+    	return $this->insert($_arr);
+    }catch(Exception $e){
+    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+   }
+}
+public function AddServiceAjax($_data){
     	if(empty($_data['service_type'])){
     		$_data['service_type']=2;
     	}
@@ -150,8 +145,4 @@ class Accounting_Model_DbTable_DbService extends Zend_Db_Table_Abstract
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
-    
 }
-
-
-

@@ -215,13 +215,10 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	function getAllGroups($search){
 		$db = $this->getAdapter();
 		$sql = "SELECT `g`.`id`,`g`.`group_code` AS `group_code`,
-		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS tuitionfee_id,
-		 
+		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS tuitionfee_id,		 
 		 `g`.`semester` AS `semester`, 
-		 
 		(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
 		(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
-		
 		(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
 		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
@@ -230,9 +227,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1) AS `status`
 		FROM `rms_group` AS `g`";
 		$where =' WHERE 1 ';
-// 		$from_date =(empty($search['start_date']))? '1': "g.start_date >= '".$search['start_date']." 00:00:00'";
-// 		$to_date = (empty($search['end_date']))? '1': "g.start_date <= '".$search['end_date']." 23:59:59'";
-// 		$where.= " AND ".$from_date." AND ".$to_date;
+		$from_date =(empty($search['start_date']))? '1': "g.date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': "g.date <= '".$search['end_date']." 23:59:59'";
+		$where.= " AND ".$from_date." AND ".$to_date;
 		$order =  ' ORDER BY `g`.`id` DESC ' ;
 		if(empty($search)){
 			return $db->fetchAll($sql.$order);
@@ -256,13 +253,15 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		if(!empty($search['grade'])){
 			$where.=' AND g.grade='.$search['grade'];
 		}
+		if(!empty($search['degree'])){
+			$where.=' AND `g`.`degree`='.$search['degree'];
+		}
 		if(!empty($search['session'])){
 			$where.=' AND g.session='.$search['session'];
 		}
-		if($search['status_search']!=""){
+		if($search['status_search']>-1){
 			$where.=' AND g.status='.$search['status_search'];
 		}
-		//print_r($sql.$where);
 		return $db->fetchAll($sql.$where.$order);
 	}
 	

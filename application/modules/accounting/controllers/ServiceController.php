@@ -108,7 +108,6 @@ function submitAction(){
 			$result = array("id"=>$row);
 			print_r(Zend_Json::encode($row));
 			exit();
-			//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

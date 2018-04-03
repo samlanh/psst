@@ -8,14 +8,13 @@
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
 </script>
-
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.CheckBox"); 
-	
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox"); 
+		
 var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?> );
 dojo.ready(function(){	
 
@@ -264,26 +263,26 @@ function showAddBlock(r){
 	}
 }
  var url_add_service_type = '<?php echo $this->url(array("module"=>"accounting","controller"=>"service","action"=>"submit")); ?>';
-	function addCategory(){
-		if(dijit.byId('frm_add_service').validate()){
-		language = dijit.byId('p_title').get('value');
-		dojo.xhrPost({
-				url:url_add_service_type,
-				form: dojo.byId("frm_add_service"),
-				handleAs:"json",
-				load: function(data) {
-					var Itemmake = { 
-					     id: data,
-						         name: dijit.byId('p_title').get('value')
-						   };
-			 	addDataToSelectbox(dijit.byId('title'), service_store, Itemmake, data);
-			   dijit.byId('frm_add_service').reset();
-			   hideDialog();
+function addCategory(){
+	if(dijit.byId('frm_add_service').validate()){
+			language = dijit.byId('p_title').get('value');
+			dojo.xhrPost({
+					url:url_add_service_type,
+					form: dojo.byId("frm_add_service"),
+					handleAs:"json",
+					load: function(data) {
+						var Itemmake = { 
+						    id: data,
+							name: dijit.byId('p_title').get('value')
+					    };
+				     addDataToSelectbox(dijit.byId('title'), service_store, Itemmake, data);
+				     dijit.byId('frm_add_service').reset();
+				     hideDialog();
 				},
-				error: function(err) {
+					error: function(err) {
 				}
-		});
-		}
+			});
+	}
 }
 	function hideDialog() {		
 		dijit.byId("popup_dept").hide();
@@ -324,7 +323,11 @@ function addStudentService(){
 					<legend align="center" ><?php echo $tr->translate("បន្ថែមប្រភេទសេវាកម្ម");?></legend><br />
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("Title")?></td>
+							<td style="width:100px"><?php echo $tr->translate("ACC_CODE")?></td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.TextBox" name="code" id="code" type="text" /></td>
+						</tr>
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("TITLE")?></td>
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="p_title" id="p_title" type="text" required="required" /></td>
 						</tr>
 						<tr>
@@ -335,7 +338,7 @@ function addStudentService(){
 							</td>
 						</tr>
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("Type")?></td>
+							<td style="width:100px"><?php echo $tr->translate("TYPE")?></td>
 							<td>
 								<select class="fullside"  readonly tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
 									    <option value="1" selected="selected"><?php echo $tr->translate("SERVICE")?></option>
@@ -344,7 +347,7 @@ function addStudentService(){
 							</td>
 						</tr>
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("Status")?></td>
+							<td style="width:100px"><?php echo $tr->translate("STATUS")?></td>
 							<td>
 								<select class="fullside"  tabindex="3" name="status_p" id="status_p" dojoType="dijit.form.FilteringSelect" >
 									    <option value="1"><?php echo $tr->translate("ACTIVE")?></option>
@@ -354,8 +357,8 @@ function addStudentService(){
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save" name="save" label="Save" dojoType="dijit.form.Button" 
+								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("CLOSE");?>" dojoType="dijit.form.Button" onclick="hideDialog();"/>
+								<input type="button" value="save" name="save" label="<?php echo $tr->translate("SAVE");?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addCategory();"/>
 							</td>
 						</tr>

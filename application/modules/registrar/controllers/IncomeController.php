@@ -10,7 +10,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
-
     public function indexAction()
     {
     	try{
@@ -73,11 +72,11 @@ class Registrar_IncomeController extends Zend_Controller_Action
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$user_type=$_db->getUserType();
-		if($user_type!=1){
-			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-		}
+// 		$_db = new Application_Model_DbTable_DbGlobal();
+// 		$user_type=$_db->getUserType();
+// 		if($user_type!=1){
+// 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
+// 		}
     	$db = new Registrar_Model_DbTable_DbIncome();
     	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type
     	$this->view->payment_method = $payment_method;
@@ -87,7 +86,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
     }
- 
     public function editAction()
     {
     	if($this->getRequest()->isPost()){
@@ -122,7 +120,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
 		}
 		
 		$this->view->rs = $row;
-		
     	$db = new Registrar_Model_DbTable_DbIncome();
     	$payment_method = $db->getPaymentMethod(8); // 8 = rms_view type
     	$this->view->payment_method = $payment_method;
@@ -131,9 +128,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	array_unshift($cate_income, array('id'=>'-1','name'=>$this->tr->translate("ADD_NEW")));
     	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
-    	
     }
-    
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
@@ -144,8 +139,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
 	    	exit();
     	}
     }
-    
-    
     function addCateIncomeAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
@@ -155,13 +148,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		exit();
     	}
     }
-    
-
 }
-
-
-
-
-
 
 

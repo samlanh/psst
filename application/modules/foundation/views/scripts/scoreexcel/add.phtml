@@ -54,6 +54,7 @@
 	.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
 	    border-top-left-radius: 0px !important;
 	}
+	.subject{width:50px !important;}
 </style>
 <style>
 	ul.blogscoresubject li{list-style: none;width:10%;float: left; }
@@ -311,7 +312,7 @@ function filterStudent(){
 					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){
 						if(first_row==0){
-							temp += '<td style="max-width:100%" rowspan="'+rowspan+'" id="datacollum'+j+'"><input type="hidden" id="converted_'+j+'" name="converted_'+j+'" value="0" /><textarea style="height:100%;" class="fullside" name="scorevalue_'+j+'" id="scorevalue_'+j+'" place="Past your excel" ></textarea></td>';
+							temp += '<td style="max-width:40px" rowspan="'+rowspan+'" id="datacollum'+j+'"><input type="hidden" id="converted_'+j+'" name="converted_'+j+'" value="0" /><textarea style="height:100%;" class="fullside" name="scorevalue_'+j+'" id="scorevalue_'+j+'" place="Past your excel" ></textarea></td>';
 						}
 					}
 					first_row=1;
@@ -465,7 +466,9 @@ function createTable(subjectid) {
     }
 	// start to create the HTML table
 	var myTable = document.createElement("table");
+	myTable.setAttribute("class", "subject");
 	var myTbody = document.createElement("tbody");
+	
 	// Loop over the rows
 	row_id=0;
     for (i=0; i<excelRow.length - 1; i++) {

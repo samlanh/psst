@@ -14,9 +14,7 @@
 
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
 	dojo.ready(function(){
-
 		setValue();
-		
 		new dijit.form.FilteringSelect({
 		    store: dept_store,
 		    autoComplete: true,                        
@@ -861,7 +859,7 @@ function SubmitRegister(){
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Unit Price</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
-						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Late Fee</strong></td>';
+						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Deduct</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Extra Fee</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Discount</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
@@ -871,7 +869,7 @@ function SubmitRegister(){
 				if(payment_type==1){
 					  temp+='<tr style="font-size:12px !important;height: 10px;border:1px solid #000; ">';
 						  temp+='<td align="center" style="border:1px solid #000;">1</td>';
-						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId('grade').attr('displayedValue')+'</td>';
+						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Tuition Fee('+dijit.byId('grade').attr('displayedValue')+')</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('payment_term').attr('displayedValue')+'</td>';
 					///////////////////    format date 	//////////////////////// 
 						  var b = new Date(dijit.byId("start_date").get('value'));
@@ -983,7 +981,7 @@ function SubmitRegister(){
 					i=2;
 					temp+='<tr style="font-size:12px;border:1px solid #000;height:10px; ">';
 						  temp+='<td align="center" style="border:1px solid #000;">1</td>';
-						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId('grade').attr('displayedValue')+'</td>';
+						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Tuition Fee('+dijit.byId('grade').attr('displayedValue')+')</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('payment_term').attr('displayedValue')+'</td>';
 						  
 						  var b = new Date(dijit.byId("start_date").get('value'));

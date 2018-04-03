@@ -9,7 +9,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
-
     public function indexAction()
     {
     	try{
@@ -69,11 +68,11 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$user_type=$_db->getUserType();
-		if($user_type!=1){
-			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-		}
+// 		$_db = new Application_Model_DbTable_DbGlobal();
+// 		$user_type=$_db->getUserType();
+// 		if($user_type!=1){
+// 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
+// 		}
     	$pructis=new Registrar_Form_Frmexpense();
     	$frm = $pructis->FrmAddExpense();
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -86,7 +85,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
     	$this->view->cate_expense = $cate_expense;
     }
- 
     public function editAction()
     {
     	$id = $this->getRequest()->getParam('id');
@@ -101,13 +99,11 @@ class Registrar_ExpenseController extends Zend_Controller_Action
 				$this->view->msg = 'EDIT_FAIL';
 			}
 		}
-		
 // 		$_db = new Application_Model_DbTable_DbGlobal();
 // 		$user_type=$_db->getUserType();
 // 		if($user_type!=1){
 // 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/expense');
 // 		}
-		
 		$id = $this->getRequest()->getParam('id');
 		$db = new Registrar_Model_DbTable_DbExpense();
 		$row  = $db->getexpensebyid($id);
@@ -145,7 +141,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		exit();
     	}
     }
-    
     function addCateExpenseAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
@@ -155,13 +150,4 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		exit();
     	}
     }
-    
-    
 }
-
-
-
-
-
-
-

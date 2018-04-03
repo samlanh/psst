@@ -496,8 +496,54 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				GROUP BY sd.subject_id ";
    	$where=' ';
    	return $db->fetchRow($sql.$where);
-   }
-   
+}
+function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំណាត់ថ្នាក់ប្រឡង ឆមាសទី១/២ តាមសិស្ស(transcript)
+	$sql="SELECT 
+			SUM(score) AS total_score,
+   			 FIND_IN_SET( score, (    
+			SELECT GROUP_CONCAT( score
+			ORDER BY score DESC ) 
+			FROM rms_score_detail AS dd ,rms_score AS ss WHERE  
+				ss.`id`=dd.`score_id` 
+				AND ss.exam_type=2
+				AND ss.for_semester=$semester
+				AND ss.group_id= $group_id
+				AND dd.`is_parent`=1
+			 	)
+			) AS rank
+			FROM 
+				`rms_score` AS s,
+			   	`rms_score_detail` AS sd,
+			   	`rms_group` AS g
+			WHERE s.`id`=sd.`score_id` 
+				AND g.`id`=s.`group_id`
+			   	AND sd.`is_parent`=1
+			   	AND s.status = 1
+			   	AND s.type_score=1
+			   	AND g.id= $group_id
+			   	AND s.for_semester=$semester
+			   	AND sd.student_id= $student_id
+			   	AND s.exam_type=2";
+	// 	$sql='SET @rnk=0; SET @rank=0; SET @curscore=0;
+//  		SELECT score,student_id,rank FROM
+//     	(
+//         SELECT AA.*,BB.student_id,
+//         (@rnk:=@rnk+1) rnk,
+//         (@rank:=IF(@curscore=score,@rank,@rnk)) rank,
+//         (@curscore:=score) newscore
+//         FROM
+//         (
+//            SELECT * FROM
+//            (SELECT COUNT(1) scorecount,score
+//            FROM (SELECT SUM(score) AS score,score_id,group_id,student_id FROM `rms_score_detail` WHERE 
+//            score_id=2 GROUP BY student_id) AS ST WHERE score_id=2  GROUP BY score
+//         ) AAA
+//          ORDER BY score DESC
+//          ) AA LEFT JOIN (SELECT SUM(score) AS score,score_id,group_id,student_id FROM `rms_score_detail` WHERE score_id=2 GROUP BY student_id) BB USING (score) WHERE score_id=2 
+//          ) A WHERE student_id=3';//return 
+	$db = $this->getAdapter();
+	return $db->fetchRow($sql);
+}
    public function getStundetExamById($group_id,$semester,$student_id){ // ប្រើសំរាប់រកមធ្យមភាគ សម្រាប់សិស្ស ១ ប្រើព្រឹត្តប័ត្រពិន្ទុឆ្នាំ
    	$db = $this->getAdapter();
    	$sql="
@@ -539,7 +585,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		return $db->fetchRow($sql.$where.$order);
    }
    function getRankingSemesterByStudent($group_id,$semester_id,$student_id){//ចំណាត់ថ្នាក់សំរាប់ឆមាសនីមួយៗ
-   	//is good for ranks but it now replace duplicate
+   	//is good for ranks but it now replace duplicate rank
 // 	   	$sql="SELECT * FROM (
 // 			  SELECT s.*, @rank := @rank + 1 rank FROM (
 // 			    SELECT student_id, SUM(score) totalPoints 
@@ -587,9 +633,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	AND sd.student_id= $student_id
 			   	AND s.exam_type=2
 				GROUP BY sd.student_id ";
-//    	echo $sql;
-// exit();
-   	$where=' ';
 	   	return $this->getAdapter()->fetchRow($sql);
    }
    public function getSubjectScoreGroup($group_id){

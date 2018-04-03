@@ -99,8 +99,7 @@
 							 $total_score_semester1=0;
 							 $total_score_semester2=0;
 							 $avg_exam2=0;
-							 	if(!empty($this->result)){
-							 		
+							 if(!empty($this->result)){
 							 	$amount_subject = count($this->result);
 							  	foreach($this->result as $key =>$rs){?>
 									  <tr style="line-height:16px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
@@ -134,9 +133,9 @@
 							  	 <tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
 									<td colspan="2" style="white-space:nowrap;text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">សរុបពិន្ទុប្រឡងឆមាស</td>
 									<td><?php echo number_format($total_score_semester1,2);?></td>
-									<td><?php echo $this->rsrankingsemester1['rank'];?></td>
+									<td><strong><?php echo $this->rsrankingsemester1['rank'];?></strong></td>
 									<td><?php echo number_format($total_score_semester2,2);?></td>
-									<td></td>
+									<td><strong><?php echo $this->rsrankingsemester2['rank'];?></strong></td>
 									<td><?php echo number_format(($total_score_semester1+$total_score_semester2)/2,2);?></td>
 									<td></td>
 									<td rowspan="7">
@@ -154,9 +153,9 @@
 								<tr style="line-height:17px;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">
 									<td colspan="2" style="white-space:nowrap;text-align:left;font-family:'Kh Battambang','Khmer Battambang',Arial,Helvetica,sans-serif;">មធ្យមភាគពិន្ទុប្រឡងឆមាស</td>
 									<td><?php echo number_format(@($total_score_semester1/$amount_subject),2); //echo "---".$this->semester1['rank'];?></td>
-									<td><?php echo $this->rsrankingsemester1['rank'];?></td>
+									<td><strong><?php echo $this->rsrankingsemester1['rank'];?></strong></td>
 									<td><?php echo number_format(@($total_score_semester2/$amount_subject),2);?></td>
-									<td></td>
+									<td><strong><?php echo $this->rsrankingsemester2['rank'];?></strong></td>
 									<td><?php echo number_format(@(($total_score_semester1/$amount_subject)+($total_score_semester2/$amount_subject))/2,2);?></td>
 									<td></td>
 								</tr>

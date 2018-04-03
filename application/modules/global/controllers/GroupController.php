@@ -16,6 +16,7 @@ class Global_GroupController extends Zend_Controller_Action {
 				$search = array(
 						'title' => '',
 						'study_year' => '',
+						'degree'=>'',
 						'grade' => '',
 						'time' => '',
 						'session' =>'',
@@ -27,7 +28,6 @@ class Global_GroupController extends Zend_Controller_Action {
 			$db = new Global_Model_DbTable_DbGroup();
 			$rs_rows= $db->getAllGroups($search);
 			$glClass = new Application_Model_GlobalClass();
-			//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
 			$list = new Application_Form_Frmtable();
 			
 			$collumns = array("GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","START_DATE","END_DATE","NOTE","PROCESS_TYPE","STATUS");

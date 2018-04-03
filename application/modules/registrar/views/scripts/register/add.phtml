@@ -1328,7 +1328,7 @@ function addRow() {
 			template+='<td width="40px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="40px" align="center">'+no+'</td>';
 			template+='<td width="20%"><input type="hidden" dojoType="dijit.form.TextBox" name="old_service_'+col+'" id="old_service_'+col+'"/>';
-			template+='<select  width="20%" class="fullside" onchange="getServiceType('+col+');getValidate('+col+');getOldVildateToStartDateService('+col+');" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
+			template+='<select queryExpr="*${0}*" autoComplete="false" width="20%" class="fullside" onchange="getServiceType('+col+');getValidate('+col+');getOldVildateToStartDateService('+col+');" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
 				template+='<option value="">Select </option>';
 				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
 					template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
@@ -1831,7 +1831,7 @@ function printSave(new_stu_id,new_receipt,submit){
 				if(payment_type==1){
 					  temp+='<tr style="font-size:12px !important;height: 10px;border:1px solid #000; ">';
 						  temp+='<td align="center" style="border:1px solid #000;">1</td>';
-						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId('grade').attr('displayedValue')+'</td>';
+						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Tuition Fee('+dijit.byId('grade').attr('displayedValue')+')</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('payment_term').attr('displayedValue')+'</td>';
 					///////////////////    format date 	//////////////////////// 
 						  var b = new Date(dijit.byId("start_date").get('value'));
@@ -1945,7 +1945,7 @@ function printSave(new_stu_id,new_receipt,submit){
 					i=2;
 					temp+='<tr style="font-size:12px;border:1px solid #000;height:10px; ">';
 						  temp+='<td align="center" style="border:1px solid #000;">1</td>';
-						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId('grade').attr('displayedValue')+'</td>';
+						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Tuition Fee('+dijit.byId('grade').attr('displayedValue')+')</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('payment_term').attr('displayedValue')+'</td>';
 						  
 						  var b = new Date(dijit.byId("start_date").get('value'));

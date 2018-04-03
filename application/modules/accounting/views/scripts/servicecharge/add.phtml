@@ -227,30 +227,28 @@ function addRow() {
 			}
 		}
 	 
-	 var url_add_service_type = '<?php echo $this->url(array("module"=>"accounting","controller"=>"service","action"=>"submit")); ?>';
-		function addCategory(){
-			if(dijit.byId('frm_add_service').validate()){
-			language = dijit.byId('p_title').get('value');
-			dojo.xhrPost({
-					url:url_add_service_type,
-					form: dojo.byId("frm_add_service"),
-					handleAs:"json",
-					load: function(data) {
-						var Itemmake = { 
-						     id: data,
-							         name: dijit.byId('p_title').get('value')
-							   };
+var url_add_service_type = '<?php echo $this->url(array("module"=>"accounting","controller"=>"service","action"=>"submit")); ?>';
+function addCategory(){
+	if(dijit.byId('frm_add_service').validate()){
+		language = dijit.byId('p_title').get('value');
+		dojo.xhrPost({
+				url:url_add_service_type,
+				form: dojo.byId("frm_add_service"),
+				handleAs:"json",
+				load: function(data) {
+					var Itemmake = { 
+					     id: data,
+						         name: dijit.byId('p_title').get('value')
+						   };
 				 	addDataToSelectbox(dijit.byId('title'), service_store, Itemmake, data);
 				   dijit.byId('frm_add_service').reset();
 				   hideDialog();
-						
-					},
-					error: function(err) {
-						//alert(err);
-					}
-			});
-		}
-	}	
+				},
+				error: function(err) {
+				}
+		});
+	}
+}	
 		function hideDialog() {		
 			dijit.byId("popup_dept").hide();
 		}
@@ -293,39 +291,43 @@ function addStudentService(){
 					<legend align="center" ><?php echo $tr->translate("បន្ថែមប្រភេទសេវាកម្ម");?></legend><br />
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("Title")?></td>
+							<td style="width:100px"><?php echo $tr->translate("ACC_CODE")?></td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.TextBox" name="code" id="code" type="text" /></td>
+						</tr>
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("TITLE")?></td>
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="p_title" id="p_title" type="text" required="required" /></td>
 						</tr>
 						<tr>
 							<td>ពណ៌នា</td>
 							<td>
 								<textarea class="fullside"   style=" height: 40px !important;"
-										tabindex="2" dojoType=""  id="note" name=note ></textarea>
+								tabindex="2" dojoType=""  id="note" name=note ></textarea>
 							</td>
 						</tr>
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("Type")?></td>
+							<td style="width:100px"><?php echo $tr->translate("TYPE")?></td>
 							<td>
 								<select class="fullside" readonly tabindex="3" name="type" id="type" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1" selected="selected"><?php echo $tr->translate("SERVICE")?></option>
-									    <option value="2"><?php echo $tr->translate("PROGRAM")?></option>
+								    <option value="1" selected="selected"><?php echo $tr->translate("SERVICE")?></option>
+								    <option value="2"><?php echo $tr->translate("PROGRAM")?></option>
 								</select>
 							</td>
 						</tr>
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("Status")?></td>
+							<td style="width:100px"><?php echo $tr->translate("STATUS")?></td>
 							<td>
 								<select class="fullside"  tabindex="3" name="status_p" id="status_p" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("Active")?></option>
-									    <option value="0"><?php echo $tr->translate("Deactive")?></option>
+								    <option value="1"><?php echo $tr->translate("Active")?></option>
+								    <option value="0"><?php echo $tr->translate("Deactive")?></option>
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
 								<input iconClass="dijitIconUndo" type="button" value="close" label="Close" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save" name="save" label="Save" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addCategory();"/>
+								<input type="button" value="save" name="save" label="<?php echo $tr->translate("SAVE");?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addCategory();"/>
 							</td>
 						</tr>
 					</table>
@@ -363,7 +365,7 @@ function addStudentService(){
 								<td nowrap="nowrap"><?php echo $tr->translate("DISCRIPTION")?></td>
 								    <td>
 										<textarea class="fullside"   style=" height: 40px !important;"
-											tabindex="2" dojoType=""  id="description" name="description" ></textarea>
+										tabindex="2" dojoType=""  id="description" name="description" ></textarea>
 									</td>
 							</tr>
 							<tr>

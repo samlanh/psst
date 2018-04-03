@@ -548,10 +548,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		
 		$this->view->semester1= $db->getStundetExamById($group_id,1,$student_id);//for semester1
+// 		print_r($db->getStundetExamById($group_id,1,$student_id));exit();
 		$this->view->semester2= $db->getStundetExamById($group_id,2,$student_id);//for semester1
-		
-		$this->view->rsrankingsemester1 = $db->getRankingSemesterByStudent($group_id,1,$student_id);
-		$this->view->rsrankingsemester2 = $db->getRankingSemesterByStudent($group_id,2,$student_id);
+// 		print_r($db->getRankStudentbyGroupSemester($group_id,1,$student_id));exit();
+		$this->view->rsrankingsemester1 = $db->getRankStudentbyGroupSemester($group_id,1,$student_id);
+		$this->view->rsrankingsemester2 = $db->getRankStudentbyGroupSemester($group_id,2,$student_id);
 		
 // 		$array_score = array();
 // 		if(!empty($result_semester)){

@@ -31,7 +31,7 @@
 	       $report_url=$db->getArrAclReport(1,'accounting');
 	       if(!empty($report_url)){
 		       foreach($report_url as $url){
-		       if($url['controller']=='accounting' AND $url['action']!='index' AND $url['action']!='rpt-paymentrecieptdetail' ){
+		       if($url['controller']=='accounting' AND $url['action']!='index' AND $url['action']!='rpt-paymentrecieptdetail' AND $url['action']!='rpt-income-expense-detail' ){
 	   ?>
 		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
 		        <?php echo $tr->translate($url['label']);?></a></li>

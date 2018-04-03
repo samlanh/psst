@@ -817,4 +817,38 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		$this->view->search = $search;
 	}
+	function  rptPaymentbydegreeAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+					'txtsearch' =>'',
+					'branch_id' =>'',
+					'start_date'=> date('Y-m-d'),
+					'end_date'=>date('Y-m-d'),
+					'service_type'=>'',
+					'payment_by'=>-1,
+					'study_year'=>-1,
+					'degree'=>-1,
+					'grade_all'=>-1,
+					'user'=>-1,
+					'session'=>-1,
+				);
+			}
+			$db = new Allreport_Model_DbTable_DbRptPayment();
+			$this->view->row_detail = $db->getStudentPaymentbyDegree($search,3);
+			$this->view->service = $db->getService();
+			$this->view->search = $search;
+			$form=new Registrar_Form_FrmSearchInfor();
+			$form->FrmSearchRegister();
+			Application_Model_Decorator::removeAllDecorator($form);
+			$this->view->form_search=$form;
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
+		}
+	}
 }

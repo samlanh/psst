@@ -382,6 +382,8 @@ function setEndDate(){
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 function getallGrade(){
 	dept_id = dijit.byId('degree').get('value');
+	if(dept_id=='' || dept_id==null || dept_id==-1){
+		return false;}
 		dojo.xhrPost({
 			url:url_dept,
 			content:{
@@ -445,9 +447,9 @@ function Initailize() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td width="40%"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
 		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
-		template+='<td width="24%"><select dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
+		template+='<td width="24%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
 		template+='</select></td>';
 		
@@ -482,9 +484,9 @@ function addRow() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td width="40%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect"  class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
 		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
-		template+='<td width="24%"><select dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
+		template+='<td width="24%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
 		template+='</select></td>';
 	tmp='<tr id="row'+col+'">';
@@ -547,7 +549,7 @@ function getSubjectByDegree(){
 							}
 								template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 								template+='<td width="4%" align="center">'+no+'</td>';
-								template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
+								template+='<td><select style="width:100%;" queryExpr="*${0}*" autoComplete="false"  dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
 								template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
 								template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" id="status_'+col+'" name="status_'+col+'" style="width:100%;"><option value="1">Active</option><option value="0">Deactive</option></select></td>';
 							tmp='<tr id="row'+col+'">';

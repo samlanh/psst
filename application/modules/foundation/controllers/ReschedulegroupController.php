@@ -1,5 +1,5 @@
 <?php
-class Foundation_RescheduleGroupController extends Zend_Controller_Action {
+class Foundation_ReschedulegroupController extends Zend_Controller_Action {
     public function init()
     {    	
      /* Initialize action controller here */

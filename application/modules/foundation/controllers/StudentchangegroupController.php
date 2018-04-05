@@ -1,5 +1,5 @@
 <?php
-class Foundation_studentchangegroupController extends Zend_Controller_Action {
+class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 	
     public function init()
     {    	

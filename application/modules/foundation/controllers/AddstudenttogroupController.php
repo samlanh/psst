@@ -1,6 +1,6 @@
 
 <?php
-class Foundation_AddStudentToGroupController extends Zend_Controller_Action {
+class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 	
     public function init()
     {    	

@@ -1,6 +1,6 @@
 <?php
 
-class Registrar_CateExpenseController extends Zend_Controller_Action
+class Registrar_CateexpenseController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/registrar/expense';
 	

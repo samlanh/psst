@@ -1,5 +1,5 @@
 <?php
-class Registrar_StudentTestPaymentController extends Zend_Controller_Action {
+class Registrar_StudenttestpaymentController extends Zend_Controller_Action {
 	protected $tr;
 	const REDIRECT_URL ='/registrar';
     public function init()

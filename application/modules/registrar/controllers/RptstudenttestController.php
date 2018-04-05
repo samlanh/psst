@@ -1,5 +1,5 @@
 <?php
-class Registrar_RptStudentTestController extends Zend_Controller_Action {
+class Registrar_RptstudenttestController extends Zend_Controller_Action {
     public function init()
     {    	
      /* Initialize action controller here */
@@ -34,5 +34,8 @@ class Registrar_RptStudentTestController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
     	$this->view->search = $search;
+    }
+    function addAction(){
+    	$this->_redirect("/registrar/rptstudenttest");
     }
 }

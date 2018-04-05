@@ -1,6 +1,6 @@
 <?php
 
-class Registrar_CateIncomeController extends Zend_Controller_Action
+class Registrar_CateincomeController extends Zend_Controller_Action
 {
 	const REDIRECT_URL = '/registrar/cateincome';
 	

@@ -73,6 +73,8 @@ Class Global_Form_Frmbranch extends Zend_Dojo_Form {
 		$branch_id->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("SERVIC"),
 				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
 		$branch_id->setValue($request->getParam("main_branch_id"));

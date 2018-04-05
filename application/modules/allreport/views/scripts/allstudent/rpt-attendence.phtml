@@ -91,7 +91,7 @@
 					<div id="exportExcel">
 						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
-							<?php $i=0; $old_groupid=0;for($j=0;$j<=20;$j++) if (!empty($this->student)) for($j=0;$j<=20;$j++) foreach ($this->student as $key => $rs){
+							<?php $i=0; $old_groupid=0;if (!empty($this->student))foreach ($this->student as $key => $rs){
 								if ($rs['sex']==1){$sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
 							?>
 							<?php if ($old_groupid!=$rs['group_id']){ ?>

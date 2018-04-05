@@ -73,7 +73,7 @@ public function addAction(){
 }
 public function editAction(){
 	$id=$this->getRequest()->getParam("id");
-	$db = new Accounting_Model_DbTable_Dbservice();
+	$db = new Accounting_Model_DbTable_DbService();
 	$row = $db->getServiceById($id);
 	if($this->getRequest()->isPost())
 	{

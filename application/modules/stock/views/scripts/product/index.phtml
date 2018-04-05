@@ -2,7 +2,7 @@
 $request = Zend_Controller_Front::getInstance ()->getRequest ();
 $tr = Application_Form_FrmLanguages::getCurrentlanguage ();
 $frm = $this->form_search;
-$url_copy =$this->url(array('module'=>'accounting','controller'=>'product','action'=>'copy'));
+$url_copy =$this->url(array('module'=>'stock','controller'=>'product','action'=>'copy'));
 $formList = new Application_Form_Frmtable();
 ?>
 <title><?php echo $tr->translate("PRODUCT");?></title>

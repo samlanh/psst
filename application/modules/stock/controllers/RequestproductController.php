@@ -1,5 +1,5 @@
 <?php
-class Stock_RequestProductController extends Zend_Controller_Action {
+class Stock_RequestproductController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	private $type = array(1=>'service',2=>'program');
 	public function init()

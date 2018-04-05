@@ -1,9 +1,10 @@
 <?php
-class Stock_AdjustStockController extends Zend_Controller_Action {
+class Accounting_RequestproducController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	private $type = array(1=>'service',2=>'program');
 	public function init()
 	{
+		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -23,12 +24,12 @@ class Stock_AdjustStockController extends Zend_Controller_Action {
     							'status_search'=>1,
     					);
     		}
-			$db =  new Accounting_Model_DbTable_DbAdjustStock();
-			$rows = $db->getAllAdjustStock($search);
+			$db =  new Accounting_Model_DbTable_DbRequestProduct();
+			$rows = $db->getAllRequest($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("ADJUST_NO","TITLE","NOTE","DATE","TOTAL","STATUS","USER");
+			$collumns = array("REQUEST_NO","REQUEST_NAME","PURPOSE","REQUEST_DATE","TOTAL","STATUS","DATE");
 			$link=array(
-					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',
+					'module'=>'accounting','controller'=>'requestproduct','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rows,array('request_no'=>$link,'request_name'=>$link,'purpose'=>$link,));
 			}catch (Exception $e){
@@ -44,12 +45,12 @@ class Stock_AdjustStockController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
-					$db = new Accounting_Model_DbTable_DbAdjustStock();
-					$row = $db->addAdjustStock($_data);
+					$db = new Accounting_Model_DbTable_DbRequestProduct();
+					$row = $db->addRequest($_data);
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/adjuststock");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/requestproduct");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/adjuststock/add");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/requestproduct/add");
 					}
 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}catch(Exception $e){
@@ -58,18 +59,17 @@ class Stock_AdjustStockController extends Zend_Controller_Action {
 					echo $e->getMessage();
 				}
 			}
-			$_pur = new Accounting_Model_DbTable_DbAdjustStock();
+			$_pur = new Accounting_Model_DbTable_DbRequestProduct();
 			$pro=$_pur->getProducCutStockLater();
-			array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
+			array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 			$this->view->product= $pro;
-// 			print_r($pro);exit();
 			
-			$this->view->rq_code=$_pur->getAjustCode();
+			$this->view->rq_code=$_pur->getRequestCode();
 			$this->view->bran_name=$_pur->getAllBranch();
 			
 			$db_gr=new Global_Model_DbTable_DbGrade();
 			$d_row=$db_gr->getNameGradeAll();
-			array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			$this->view->grade_name=$d_row;
 			 
 			$model = new Application_Model_DbTable_DbGlobal();
@@ -83,33 +83,33 @@ class Stock_AdjustStockController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
 			try{
-					$db = new Accounting_Model_DbTable_DbAdjustStock();
-					$row = $db->updateAdjustStock($_data);
+					$db = new Accounting_Model_DbTable_DbRequestProduct();
+					$row = $db->updateRequest($_data);
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/adjuststock");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/requestproduct");
 					}else{
-						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/adjuststock");
+						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/requestproduct");
 					}
-					Application_Form_FrmMessage::message("EDIT_SUCCESS");
+					Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}catch(Exception $e){
 					Application_Form_FrmMessage::message("INSERT_FAIL");
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 					echo $e->getMessage();
 				}
 			}
-			$_pur = new Accounting_Model_DbTable_DbAdjustStock();
+			$_pur = new Accounting_Model_DbTable_DbRequestProduct();
 			$pro=$_pur->getProducCutStockLater();
-			array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
+			$this->view->row=$_pur->getRequestById($id);
+			$this->view->row_detail=$_pur->getRequestDetail($id);
+			array_unshift($pro, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			$this->view->product= $pro;
-			$this->view->row=$_pur->getAdjustStockById($id);
-			$this->view->row_detail=$_pur->getAdjustStockDetail($id);
 			
-			$this->view->rq_code=$_pur->getAjustCode();
+			$this->view->rq_code=$_pur->getRequestCode();
 			$this->view->bran_name=$_pur->getAllBranch();
 			
 			$db_gr=new Global_Model_DbTable_DbGrade();
 			$d_row=$db_gr->getNameGradeAll();
-			array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
+			array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
 			$this->view->grade_name=$d_row;
 			 
 			$model = new Application_Model_DbTable_DbGlobal();

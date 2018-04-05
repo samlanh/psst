@@ -1,5 +1,5 @@
 <?php 
-Class Foundation_Form_FrmServicesuspend extends Zend_Dojo_Form {
+Class Foundation_Form_Frmservicesuspend extends Zend_Dojo_Form {
 	protected $tr=null;
 	protected $tvalidate=null ;//text validate
 	protected $filter=null;
@@ -117,7 +117,7 @@ Class Foundation_Form_FrmServicesuspend extends Zend_Dojo_Form {
 				//	'constraints'=>'{datePattern:"dd/MM/yyyy"'
 		));
 	}
-	public function FrmServiceSuspend($data=null){
+	public function FrmServicesuspend($data=null){
 		$_degree = $this->_degree;
 		$_khname = $this->_khname;
 		$_enname = $this->_enname;

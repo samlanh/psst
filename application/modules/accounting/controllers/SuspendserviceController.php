@@ -59,8 +59,8 @@ public function addAction(){
 				echo $e->getMessage();
 			}
 		}
-		$frm = new Foundation_Form_FrmServicesuspend();
-		$frm_servicesuspend=$frm->FrmServiceSuspend();
+		$frm = new Foundation_Form_Frmservicesuspend();
+		$frm_servicesuspend=$frm->FrmServicesuspend();
 		Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
 		$this->view->frm_servicesuspend = $frm_servicesuspend;
 		 
@@ -89,7 +89,7 @@ public function editAction(){
 		}
 	}
 	
-	$frm = new Foundation_Form_FrmServicesuspend();
+	$frm = new Foundation_Form_Frmservicesuspend();
 	$frm_servicesuspend=$frm->FrmServiceSuspend();
 	Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
 	$this->view->frm_servicesuspend = $frm_servicesuspend;

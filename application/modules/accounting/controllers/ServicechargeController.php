@@ -1,5 +1,5 @@
 <?php
-class Accounting_ServiceChargeController extends Zend_Controller_Action {
+class Accounting_ServicechargeController extends Zend_Controller_Action {
 	public function init()
     {    	
     	header('content-type: text/html; charset=utf8');

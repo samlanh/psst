@@ -1,5 +1,5 @@
 <?php
-class Accounting_StartdateEnddateStuController extends Zend_Controller_Action {
+class Accounting_StartdateenddatestuController extends Zend_Controller_Action {
 	public function init()
     {    	
     	header('content-type: text/html; charset=utf8');

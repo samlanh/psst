@@ -210,7 +210,7 @@ function gender(sex){
 							<td><input dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="attendence_date" name="attendence_date" type="text" value="<?php echo date("Y-m-d");?>"></td>
 						  	 <td title="បន្ទប់សិក្សា"><?php echo $tr->translate("ROOM_NAME");?>*</td>
 									<td>
-									   <select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" >
+									   <select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" >
 									   		<option value="-1"><?php echo $tr->translate("SELECT_ROOM");?></option>
 									   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
 									   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>

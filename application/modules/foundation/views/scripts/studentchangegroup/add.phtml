@@ -36,7 +36,7 @@
 	<table cellspacing="10" style="margin: 0 auto; width:100%">
 		<tr>
 			<td>
-				<fieldset>
+				<fieldset style="background: #fff;   border: solid 1px #008;">
 					<legend align="center"><strong><?php echo $tr->translate("ADD_STUDENT_CHANGE_GROUP");?></strong></legend>
 					<table cellspacing="10" width="100%" >
 						<tr>
@@ -48,7 +48,7 @@
 												<tr>
 													<td ><?php echo $tr->translate("STUDENT_ID")?></td>
 													<td>
-														<select class="fullside" name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" onchange="getStudentInfo(1);" >
+														<select class="fullside" name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" onchange="getStudentInfo(1);" >
 													    	<option value="0" > </option>
 													    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $stu_id){?>
 																<option value="<?php echo $stu_id['id']?>"><?php echo $stu_id['stu_code']?></option>
@@ -59,7 +59,7 @@
 												<tr>
 													<td ><?php echo $tr->translate("STUDENT_NAME")?></td>
 													<td >
-														<select class="fullside" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="getStudentInfo(2);" >
+														<select class="fullside" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="getStudentInfo(2);" >
 													    	<option value="0" > </option>
 													    	<?php if(!empty($this->stu_name)){foreach ($this->stu_name as $stu_name){?>
 																<option value="<?php echo $stu_name['id'];?>"><?php echo $stu_name['name'];?></option>
@@ -99,7 +99,7 @@
 												<tr>
 													<td><?php echo $tr->translate("TO_GROUP")?></td>
 													<td>
-														<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" placeholder="<?php echo $tr->translate("TO_GROUP")?>" onchange="toStudentGroup(2);">
+														<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("TO_GROUP")?>" onchange="toStudentGroup(2);">
 															<option value="0" > </option>
 															<?php if(!empty($this->row))foreach ($this->row as $_row){?>
 																<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>

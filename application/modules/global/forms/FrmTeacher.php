@@ -55,14 +55,18 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_email->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
 		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
-		$_degree->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
-		
+		$_degree->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SERVIC"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));		
 		$_note =  new Zend_Dojo_Form_Element_TextBox('note');
 		$_note->setAttribs(array('dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside'));
 		
-		$_degree=  new Zend_Dojo_Form_Element_FilteringSelect('degree');
-		$_degree->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		
 		
 		$degree_opt = $db->getAllDegree();
 		$_degree->setMultiOptions($degree_opt);

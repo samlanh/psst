@@ -6,7 +6,6 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.NumberTextBox");
-	//dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dijit.form.CheckBox");
 </script>
@@ -92,7 +91,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 									<tr>
 										<td width="100px" style="white-space: nowrap;"><?php echo $tr->translate("FROM_GROUP")?></td>
 										<td>
-											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="true"  id="from_group" name="from_group" type="text" placeholder="<?php echo $tr->translate("SELECT_GROUP")?>" onchange="toStudentGroup(1);getStudentFromGroup();">
+											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="true"  id="from_group" name="from_group" type="text"  queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_GROUP")?>" onchange="toStudentGroup(1);getStudentFromGroup();">
 												<option value="0" > </option>
 												<?php if(!empty($this->row))foreach ($this->row as $_row){?>
 													<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
@@ -117,7 +116,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 									<tr>
 										<td width="10px" ><?php echo $tr->translate("TO_GROUP")?></td>
 										<td>
-											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="required"  id="to_group" name="to_group" type="text" placeholder="to group" onchange="toStudentGroup(2);popupAddGroup();">
+											<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="required"  id="to_group" name="to_group" type="text"   queryExpr="*${0}*" autoComplete="false" placeholder="to group" onchange="toStudentGroup(2);popupAddGroup();">
 												<option value="0" ><?php echo $tr->translate("SELECT_GROUP")?></option>
 												<option value="-1" ><?php echo $tr->translate("ADD_NEW")?></option>
 												<?php if(!empty($this->rs))foreach ($this->rs as $_row){?>

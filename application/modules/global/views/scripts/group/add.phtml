@@ -40,7 +40,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 <table width="100%">
 	<tr>
 		<td>
-			<fieldset style="margin-top:-13px;">
+			<fieldset style="margin-top:-13px; background: #fff;   border: solid 1px #008;">
 				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_STUDY_GROUP");?></strong></legend>
 				<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="10">
 					<tr>
@@ -149,8 +149,9 @@ var teacher_storeass= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: teacher_store,
-		autoComplete: true,                        
-		required: false,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
 		id: "teacher_id",
 		name: "teacher_id",           
 		class: "fullside", 
@@ -166,7 +167,9 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: teacher_storeass,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                        
 		required: false,
 		id: "teacher_ass",
 		name: "teacher_ass",           
@@ -183,7 +186,8 @@ dojo.ready(function(){
 	
 	new dijit.form.FilteringSelect({
 		store: subject_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: true,                  
 		required: false,
 		id: "subject_id",
 		name: "subject_id",           
@@ -201,7 +205,8 @@ dojo.ready(function(){
 	}, "subject_id");
 	new dijit.form.FilteringSelect({
 		store: dept_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
 		required: true,
 		id: "degree",
 		name: "degree",           
@@ -235,7 +240,8 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: grade_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                                           
 		id: "grade",
 		name: "grade",           
 		class: 'fullside',  
@@ -252,7 +258,9 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: room_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                     
 		id: "room",
 		name: "room",
 		class: "fullside", 		

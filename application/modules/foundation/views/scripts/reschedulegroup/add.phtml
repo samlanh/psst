@@ -60,13 +60,13 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 <table width="100%">
 	<tr>
 		<td>
-			<fieldset style="margin-top:-13px;">
+			<fieldset style="margin-top:-13px; background: #fff;   border: solid 1px #008;">
 				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_RESCHEDULE_GROUP");?></strong></legend>
 				<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="10">
 					<tr>
 						<td><?php echo $tr->translate("GROUP_CODE")?></td>
 						<td>
-							<select name="group_code" class="fullside" id="group_code" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="" onChange="getSubjectajax()">
+							<select name="group_code" class="fullside" id="group_code" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="" onChange="getSubjectajax()">
 								<option value="-1"><?php echo $tr->translate("SELECT_GROUP")?></option>
 								<?php if(!empty($this->group_code)){foreach($this->group_code as $name){?>
 									<option value="<?php echo $name['id'];?>"><?php echo $name['name'];?></option>

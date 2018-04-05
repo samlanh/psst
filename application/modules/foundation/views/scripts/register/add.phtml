@@ -64,7 +64,9 @@ dojo.ready(function(){
 	getStudentNo();
 	new dijit.form.FilteringSelect({
 		store: group_store,
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                      
 	    id: "group",
 	    name: "group",  
 	    class: 'fullside', 
@@ -85,7 +87,9 @@ dojo.ready(function(){
 	    }
 	}, "group");
 	new dijit.form.FilteringSelect({
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                        
 	    id: "grade",
 	    name: "grade",  
 	    tabindex: "16",  
@@ -99,6 +103,9 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: job_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
 	    id: "fa_job",
 	    name: "fa_job",  
 	    queryExpr: "*${0}*",
@@ -120,7 +127,8 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		queryExpr: "*${0}*",
-		autoComplete: true,                 
+		autoComplete: false,                     
+		required: true,              
 	    id: "mo_job",
 	    name: "mo_job",  
 	    tabindex: "17",         
@@ -141,7 +149,8 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		queryExpr: "*${0}*",
-		autoComplete: true,                     
+		autoComplete: false,                     
+		required: true,                     
 	    id: "gu_job",
 	    name: "gu_job",  
 	    tabindex: "17",         
@@ -161,7 +170,9 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 		store: language_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                        
 	    id: "level",
 	    name: "level",  
 	    tabindex: "17",         
@@ -310,7 +321,7 @@ function getStudentNo(){
 									<td valign="top">
 										<span style="width: 23%;display: inline-block;"><?php echo $tr->translate("PROVINCE");?></span>
 										&nbsp;&nbsp;&nbsp;
-										<select style=" width: 70%;" class="fullside" tabindex="13" name="student_province" id="student_province" dojoType="dijit.form.FilteringSelect"">
+										<select style=" width: 70%;" class="fullside" tabindex="13" name="student_province" id="student_province" dojoType="dijit.form.FilteringSelect"   queryExpr="*${0}*" autoComplete="false">
 											<?php if(!empty($this->province))foreach ($this->province as $row){?>
 											<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
 											<?php }?>
@@ -329,7 +340,7 @@ function getStudentNo(){
 									<td><input  style="color: red;" class="fullside" tabindex="14" dojoType="dijit.form.TextBox"  id="student_id" name="student_id" value=""  type="text" ></td>
 					      			<td><?php echo $tr->translate("DEGREE");?>*</td>
 									<td>
-										<select class="fullside" tabindex="15" name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getallGrade(); getStudentNo();">
+										<select class="fullside" tabindex="15" name="degree" id="degree" dojoType="dijit.form.FilteringSelect"   queryExpr="*${0}*" autoComplete="false" onchange="getallGrade(); getStudentNo();">
 											<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
 											<option value="<?php echo $row['dept_id']?>"><?php echo $row['en_name']?></option>
 											<?php }?>

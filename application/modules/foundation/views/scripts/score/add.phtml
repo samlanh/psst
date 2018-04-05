@@ -203,9 +203,9 @@ function gender(sex){
 <table cellspacing="10" style="margin: 0 auto;width:100%;" >
 	<tr>
 		<td>
-		<fieldset>
+		<fieldset style="background: #fff;   border: solid 1px #008;">
 					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("STUDENT_SCORE");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%; background:#DFF7FD;" cellspacing="10" broder 1>
+					<table style="margin: 0 auto; width: 100%;" cellspacing="10" broder 1>
 						<tr>
 							<td><?php echo $tr->translate("TITLE");?></td>
 							<td>
@@ -225,7 +225,7 @@ function gender(sex){
 						<tr>
 							<td ><?php echo $tr->translate("DEGREE");?></td>
 							<td>
-								<select id="degree" name="degree" onchange="filterGrade();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+								<select id="degree" name="degree" onchange="filterGrade();" class="fullside" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" type="text"  >
 									<option value="-1"><?php echo $tr->translate("SELECT_DEGREE");?></option>
 								<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
 									<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
@@ -283,7 +283,7 @@ function gender(sex){
 							</td>
 						</tr>
 					</table>
-					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; background:#DFF7FD;" >
+					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%; " >
 						<thead>
 							<tr>
 								<td colspan="8" align="left">

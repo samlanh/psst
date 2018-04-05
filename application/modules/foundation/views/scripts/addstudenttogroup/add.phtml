@@ -31,7 +31,9 @@ var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::enc
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
-	    autoComplete: true,                        
+	    queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                        
 	    id: "grade",
 	    name: "grade",           
 	    class: 'fullside',  
@@ -41,8 +43,9 @@ dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
 	    store: group_store,
-	    autoComplete: true,                        
-	    required: true,
+	    queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,    
 	    id: "group",
 	    name: "group",           
 	    class: 'fullside',
@@ -86,9 +89,9 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 	<tr>
 		<td valign="top">
 			<form id='studentgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-				<fieldset style="width: 50%;float: left;">
+				<fieldset style="width: 50%;float: left; background: #fff;   border: solid 1px #008;">
 						<legend align="center"><strong><?php echo $tr->translate("SEARCH_GROUP");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%;float: left; background:#DFF7FD;white-space: nowrap;" cellspacing="10" broder="1">
+					<table style="margin: 0 auto; width: 100%;float: left; white-space: nowrap;" cellspacing="10" broder="1">
 						<tr>
 							<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 							<td>
@@ -148,9 +151,9 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						return false;
 	   				}
 				</script>	
-					<fieldset style="width: 49%;">
+					<fieldset style="width: 49%; background: #fff;   border: solid 1px #008;">
 						<legend align="center"><strong><?php echo $tr->translate("TO_GROUP");?></strong></legend>
-							<table style="margin: 0 auto; width: 100%; background:#DFF7FD;white-space: nowrap;" cellspacing="10" border="0">
+							<table style="margin: 0 auto; width: 100%; white-space: nowrap;" cellspacing="10" border="0">
 								<tr>
 									<td width="20%"><?php echo $tr->translate("GROUP_CODE");?></td>
 									<td width="80%">

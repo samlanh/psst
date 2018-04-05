@@ -17,8 +17,9 @@ var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 	    store: dept_store,
-	    autoComplete: true,                        
-	    required: true,
+	    queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
 	    id: "dept",
 	    name: "dept",           
 	    class: "full height-text", 
@@ -67,7 +68,7 @@ dojo.ready(function(){
 <table cellspacing="10" width="40%" style="margin: 0 auto;">
 	<tr>
 		<td>
-			<fieldset>
+			<fieldset style="background: #fff;   border: solid 1px #008;">
 				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_GRADE")?></strong></legend>
 				<table style="margin: 0 auto; width: 100%;" cellspacing="10">
 					<tr>

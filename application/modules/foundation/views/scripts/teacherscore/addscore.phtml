@@ -224,7 +224,7 @@ function gender(sex){
 						<tr>
 							<td ><?php echo $tr->translate("DEGREE");?></td>
 							<td>
-								<select id="degree" name="degree" onchange="filterGrade();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+								<select id="degree" name="degree" onchange="filterGrade();" class="fullside" dojoType="dijit.form.FilteringSelect"  type="text">
 									<option value="-1"> ------ select degree---------</option>
 								<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
 									<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
@@ -259,7 +259,7 @@ function gender(sex){
 							</td>
 							<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
 							<td>
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+								<select dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" required="true" class="fullside" id="for_month" name="for_month" type="text">								
 									<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 										<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
 									<?php }}?>

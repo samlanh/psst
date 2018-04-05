@@ -44,7 +44,7 @@ dojo.require("dijit.form.CheckBox");
 									<tr>
 										<td><?php echo $tr->translate("STUDENT_ID")?></td>
 										<td>
-											<select class="fullside"  name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" onchange="getStudentInfo();" >
+											<select class="fullside"  name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" queryExpr="*${0}*" autoComplete="false" onchange="getStudentInfo();" >
 										    	<option value="-1"> </option>
 										    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $row){?>
 													<option value="<?php echo $row['stu_id']?>"><?php echo $row['stu_code']?></option>
@@ -64,7 +64,7 @@ dojo.require("dijit.form.CheckBox");
 									<tr>
 										<td><?php echo $tr->translate("STUDENT_NAME")?></td>
 										<td>
-											<select class="fullside" required="true" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="setID();" >
+											<select class="fullside" required="true" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="setID();" >
 										    	<option value="-1"> </option>
 										    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
 													<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>

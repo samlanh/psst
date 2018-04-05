@@ -37,7 +37,7 @@ $frm = $this->frm_expense;
 <table cellspacing="10" class='fullside' >
 	<tr>
 		<td>
-			<fieldset>
+			<fieldset style="background: #fff;   border: solid 1px #008;">
 				<legend><strong><?php echo $tr->translate("CHANGE_PRODUCT")?></strong></legend>
 				<table cellspacing="10"  width="100%">
 					<tr>
@@ -47,7 +47,7 @@ $frm = $this->frm_expense;
 						</td>
 						<td><?php echo $tr->translate("STUDENT_ID")?></td>
 						<td>
-							<select name="stu_id" id="stu_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID(1);" >
+							<select name="stu_id" id="stu_id" class="fullside" queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="setID(1);" >
 								<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
 								<?php if(!empty($this->stu_code)){foreach ($this->stu_code as $stu_code){?>
 									<option value="<?php echo $stu_code['id']?>"><?php echo $stu_code['stu_code']?></option>
@@ -56,7 +56,7 @@ $frm = $this->frm_expense;
 						</td>
 						<td><?php echo $tr->translate("STUDENT_NAME")?></td>
 						<td>
-							<select name="stu_name" id="stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID(2);" >
+							<select name="stu_name" id="stu_name" class="fullside" queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="setID(2);" >
 								<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 								<?php if(!empty($this->stu_name)){foreach ($this->stu_name as $stu_name){?>
 									<option value="<?php echo $stu_name['id']?>"><?php echo $stu_name['name']?></option>

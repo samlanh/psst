@@ -11,24 +11,39 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 //     }
     public function getAllStudent($search){
     	$db = $this->getAdapter();
-    	$sql ='select stu_id,
-    	      (SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-    	       CONCAT(stu_khname," - ",stu_enname) as name,
-    	       stu_enname,stu_khname,nationality,
-    	       tel,email,stu_code,home_num,street_num,
-    	       village_name,
-    		   commune_name,district_name,is_subspend,dob,degree as dept,
-    		   (select CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as academic_year,
-    		   (select from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as start_year,
-    		   (select to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_year,
-    		   (select end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_date,
-    		   (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
-    		   (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1)AS grade,
-    		   (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1)AS degree,
-    		   (select name_kh from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
-    		   (select province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,	   	
-    		   (select name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,photo
-    		   from rms_student ';
+    	$sql ='select 
+	    			*,
+	    			stu_id,
+	    	       (SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
+	    	       CONCAT(stu_khname," - ",stu_enname) as name,
+	    	       stu_enname,
+	    	       stu_khname,
+	    	       nationality,
+	    	       tel,
+	    	       email,
+	    	       stu_code,
+	    	       home_num,
+	    	       street_num,
+	    	       village_name,
+	    		   commune_name,
+	    		   district_name,
+	    		   is_subspend,
+	    		   dob,
+	    		   degree as dept,
+	    		   (select CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as academic_year,
+	    		   (select from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as start_year,
+	    		   (select to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_year,
+	    		   (select end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_date,
+	    		   (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
+	    		   (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1)AS grade,
+	    		   (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1)AS degree,
+	    		   (select name_kh from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
+	    		   (select province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,	   	
+	    		   (select name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
+	    		   photo
+    		   from 
+    				rms_student 
+    		';
     	$where=' where status=1 ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
@@ -138,21 +153,40 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     public function getAllStudentSelected($stu_id){
     	$db = $this->getAdapter();
-    	$sql ='SELECT stu_id,
-    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-    	CONCAT(stu_khname," - ",stu_enname) as name,stu_enname,stu_khname,nationality,tel,email,stu_code,home_num,street_num,village_name,
-    	commune_name,district_name,is_subspend,dob,degree as dept,
-    	(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as academic_year,
-    	(SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as start_year,
-    	(SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_year,
-    	(SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_date,
-    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) AS session,
-    	(SELECT major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) AS grade,
-    	(SELECT en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) AS degree,
-    	(SELECT name_en from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
-    	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,
-    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,photo
-    	from rms_student where stu_id ='.$stu_id;
+    	$sql ='SELECT 
+    				*,
+    				stu_id,
+			    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
+			    	CONCAT(stu_khname," - ",stu_enname) as name,
+			    	stu_enname,
+			    	stu_khname,
+			    	nationality,
+			    	tel,
+			    	email,
+			    	stu_code,
+			    	home_num,
+			    	street_num,
+			    	village_name,
+			    	commune_name,
+			    	district_name,
+			    	is_subspend,
+			    	dob,
+			    	degree as dept,
+			    	(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as academic_year,
+			    	(SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as start_year,
+			    	(SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_year,
+			    	(SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_date,
+			    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) AS session,
+			    	(SELECT major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) AS grade,
+			    	(SELECT en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) AS degree,
+			    	(SELECT name_en from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
+			    	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,
+			    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
+			    	photo
+    			from 
+    				rms_student 
+    			where 
+    				stu_id ='.$stu_id;
 
     	return $db->fetchAll($sql);
     }

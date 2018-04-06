@@ -1,0 +1,177 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+// 	print_r($this->rs);exit();
+?>	
+<script type="text/javascript">
+function getKHMonthByNumber(m){
+	//alert(Number(m));
+	var monthName=[
+		"មករា",
+		"កុម្ភៈ",
+		"មីនា",
+		"មេសា",
+		"ឧសភា",
+		"មិថុនា",
+		"កក្កដា",
+		"សីហា",
+		"កញ្ញា",
+		"តុលា",
+		"វិច្ឆិកា",
+		"ធ្នូ",
+		];
+		return (monthName[m-1]);
+}	
+</script>
+
+
+<div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
+	<div data-dojo-type="dijit.Dialog" style="width:22cm;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
+		<div id="PickupCard" style="width: 21cm !important; height: 13cm ; padding: 0px; margin: 0px;">
+		<?php $i=0;$margin_work =2;if(!empty($this->rs)){foreach ($this->rs as $row){$i++;?>	
+			<table  width="100%" style="white-space: nowrap;font-size:10px;font-family: 'Khmer OS Battambang';margin-bottom:80px;<?php if($i==0){echo "margin-top:25px;";}?>" <?php if($margin_work == 2){echo "margin-top:25px;";}?>class="print" cellspacing="1"  cellpadding="0">
+				<tr>
+					<td width="100%" align="center">
+						<table style="border: 3px solid blue;height: 5.9cm;width: 95%;font-size:11px;font-family: 'Khmer OS Battambang',Arial,sans-serif;padding:10px;" cellspacing="0" cellpadding="0">
+							<tr>
+								<td colspan="4" align="left">
+									<img style="width:53%;height: 90px;" src="<?php echo $this->baseUrl().'/images/psis_full_logo.png';?>">
+								</td>
+							</tr>
+							<tr style="height: 0;">
+								<td colspan="4" align="center" valign="top">
+									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
+										<tr>
+											<td width="25%" valign="top">
+												<div style="font-size:20px;font-family: 'Times New Roman';margin-top: 5px;padding-left: 15px;font-weight:bold;"></div>
+											</td>
+											<td width="50%" align="center" valign="top">
+												<div style="font-size:22px;font-family: 'Khmer OS Muol Light';margin-top: 5px;color: red;">ប័ណ្ណទទួលសិស្ស</div>
+											</td>
+											<td width="25%" align="center" valign="top">
+												<img style="width:60%;height: 110px;border: 1px solid rgba(0, 0, 0, 0.1);margin-top: -60px;" src="<?php echo $this->baseUrl().'/images/'.$row['photo'];?>">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr style="height: 0;line-height: 18px" >
+								<td colspan="4" align="center" valign="top">
+									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
+										<tr>
+											<td width="75%">
+												<div style="font-size:20px;font-family: Khmer OS Muol Light, Times New Roman;padding-left: 15px;">Name : <?php if($row['stu_khname']!=''){echo $row['stu_khname'];}else{echo $row['stu_enname'];}?></div>
+											</td>
+											<td width="25%" align="center" valign="top">
+												<div style="font-size:18px;font-family: 'Times New Roman';color: red;"><?php echo $row['stu_code'];?></div>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4">
+									&nbsp;
+								</td>
+							</tr>	
+							<tr>
+								<td width="30%">
+									&nbsp;
+								</td>
+								<td width="20%" align="center">
+									<img style="width:70%;height: 110px;border: 1px solid #333232;" src="<?php //echo $this->baseUrl().'/images/'.$row['fa_photo'];?>">
+								</td>
+								<td width="20%" align="center">
+									<img style="width:70%;height: 110px;border: 1px solid #333232;" src="<?php //echo $this->baseUrl().'/images/'.$row['mo_photo'];?>">
+								</td>
+								<td width="30%" >
+									&nbsp;
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4">
+									&nbsp;
+								</td>
+							</tr>
+							
+							<tr style="height: 0;line-height: 18px" >
+								<td colspan="4" align="center" valign="top">
+									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
+										<tr>
+											<td width="10%" align="center" valign="top">
+												<div style="font-size:15px;font-family: 'Khmer OS Muol Light';color:#000;">បញ្ជាក់ៈ</div>
+											</td>
+											<td width="70%"  valign="top" style="font-size:13px;font-family: 'Khmer OS Battambang';color:#000;">
+												<div>
+													- ក្នុងករណីបាត់បង់ អាណាព្យាបាលត្រូវជូនដំណឹងមកកាន់ការិយាល័យសិក្សាជាបន្ទាន់
+												</div>
+												<div>
+													- អាណាព្យាបាលត្រូវបង្ហាញបណ្ណនេះទៅបុគ្គលិកសាលា ពេលមកទទួលយកសិស្ស
+												</div>
+												<div>
+													- អ្នកដែលមកទទួលយកសិស្សត្រូវជាបុគ្គលដែលមានបិទរូបថតនៅខាងលើ
+												</div>
+												<div>
+													- រាល់ការបាត់បង់ ឫ ផ្លាស់ប្តូរបណ្ណថ្មីត្រូវបង់ប្រាក់ ៣ដុល្លារ
+												</div>
+											</td>
+											<td width="20%" align="center" style="border:1px solid blue;color:blue;">
+												<div style="font-size:15px;font-family: 'Khmer OS Muol Light';">
+													ព័ត៌មានលម្អិត
+												</div>
+												<div style="font-size:13px;font-family: 'Times New Roman';">
+													015 62 6789
+												</div>
+												<div style="font-size:13px;font-family: 'Times New Roman';">
+													093 62 6789
+												</div>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		<?php }}?>
+		</div>
+		<table width="100%">
+			<tr>
+				<td align="center">
+					<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+					<button dojoType="dijit.form.Button" id="print_pickup" iconClass="dijitEditorIcon dijitEditorIconPrint"
+						type="button" onclick="printPickupCard();">Print Pickup Card</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+
+	dojo.ready(function(){
+		print();
+	});
+	
+	function print(){
+
+		window.frames["print_frame"].document.body.innerHTML=dojo.byId('PickupCard').innerHTML;
+	    window.frames["print_frame"].window.focus();
+	    window.frames["print_frame"].window.print();
+	    <?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student'),null,true);
+    	?>
+    	window.location.href = '<?php echo $url_copy;?>';
+	    //dijit.byId("terms").hide();
+	}
+
+
+</script>
+	
+	
+	
+	

@@ -25,6 +25,24 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $db->getAllStudentSelected($condition);
 	}
+	
+	public function pickupselectedAction(){
+		$id=$this->getRequest()->getParam('id');
+		$k = 0;
+		$condition = '';
+		$ids = explode(',', $id);
+		foreach ($ids as $id_stu){
+			if($k==0){
+				$condition .= $id_stu;
+				$k=1;
+			}else{
+				$condition .= ' or stu_id = '.$id_stu;
+			}
+		}
+		$db = new Allreport_Model_DbTable_DbRptAllStudent();
+		$this->view->rs = $rs_rows = $db->getAllStudentSelected($condition);
+	}
+	
 	public function rptAllStudentAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();

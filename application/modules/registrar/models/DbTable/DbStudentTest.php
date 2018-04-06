@@ -12,6 +12,12 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	}
 	function addStudentTest($data){
 		try{
+			
+			$updated_result = 0;
+			if(!empty($data['degree_result']) && !empty($data['grade_result']) ){
+				$updated_result = 1;
+			}
+			
 			$adapter = new Zend_File_Transfer_Adapter_Http();
 			$part = PUBLIC_PATH.'/images';
 			$adapter->setDestination($part);
@@ -63,6 +69,9 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'serial'	=>$data['serial'],
 						'user_id'	=>$this->getUserId(),
 						'test_date'	=>$data['test_date'],
+					
+						'updated_result'=>$updated_result,
+					
 						'create_date'=>date('Y-m-d'),
 					);
 					$stutest_id=$this->insert($array);

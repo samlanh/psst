@@ -60,7 +60,7 @@ public function addAction(){
 			}
 		}
 		$frm = new Foundation_Form_Frmservicesuspend();
-		$frm_servicesuspend=$frm->FrmServicesuspend();
+		$frm_servicesuspend=$frm->Frmsuspendservice();
 		Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
 		$this->view->frm_servicesuspend = $frm_servicesuspend;
 		 
@@ -90,7 +90,7 @@ public function editAction(){
 	}
 	
 	$frm = new Foundation_Form_Frmservicesuspend();
-	$frm_servicesuspend=$frm->FrmServiceSuspend();
+	$frm_servicesuspend=$frm->Frmsuspendservice();
 	Application_Model_Decorator::removeAllDecorator($frm_servicesuspend);
 	$this->view->frm_servicesuspend = $frm_servicesuspend;
 	

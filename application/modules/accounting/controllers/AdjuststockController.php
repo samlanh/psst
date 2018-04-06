@@ -1,5 +1,5 @@
 <?php
-class Accounting_AdjustStockController extends Zend_Controller_Action {
+class Accounting_AdjuststockController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	private $type = array(1=>'service',2=>'program');
 	public function init()

@@ -117,7 +117,7 @@ Class Foundation_Form_Frmservicesuspend extends Zend_Dojo_Form {
 				//	'constraints'=>'{datePattern:"dd/MM/yyyy"'
 		));
 	}
-	public function FrmServicesuspend($data=null){
+	public function Frmsuspendservice($data=null){
 		$_degree = $this->_degree;
 		$_khname = $this->_khname;
 		$_enname = $this->_enname;

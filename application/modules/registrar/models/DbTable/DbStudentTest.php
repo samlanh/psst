@@ -95,7 +95,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		try{
 			$updated_result = 0;
-			if(!empty($data['degree']) && !empty($data['grade']) && !empty($data['session'])){
+			if(!empty($data['degree_result']) && !empty($data['grade_result']) ){
 				$updated_result = 1;
 			}
 			
@@ -210,11 +210,12 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					kh_name,
 					en_name,
 					(SELECT name_kh from rms_view WHERE type=2 and key_code=sex LIMIT 1) as sex,
-					phone,test_date,
+					phone,
+					test_date,
 					(SELECT en_name from rms_dept WHERE dept_id=degree_result LIMIT 1) as degree,
 					(SELECT major_enname from rms_major where major_id=grade_result LIMIT 1) as grade,
-					(SELECT name_en from rms_view WHERE type=4 and key_code=session_result LIMIT 1) as session,
-					term_test,note,
+					term_test,
+					note,
 					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1) aS user_name,
 					(select name_en from rms_view WHERE type=14 and key_code=updated_result LIMIT 1) as result_status,
 					'$print'

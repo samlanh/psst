@@ -83,6 +83,8 @@
 							 	$total_income_kh = 0;
 							 	$total_expense_dollar = 0;
 							 	$total_expense_kh =0;
+							 	$updated_result=0;
+							 	$register=0;
 							 	if (!empty($this->row)){  
 							 ?>
 							 
@@ -95,7 +97,7 @@
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
 								
-								<td colspan="3">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
+								<td colspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
 								
 								
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
@@ -107,7 +109,6 @@
 							 <tr style="font-size:12px; height: 20px; white-space:nowrap;background: #ccd9ff !important; line-height: 20px; font-weight: bold;" align="center">
 							 	<td>&nbsp;<?php echo $tr->translate("DEGREE"); ?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("SESSION"); ?>&nbsp;</td>
 							 </tr>
 							 <style> 
 								td{padding:0 3px; }
@@ -115,7 +116,7 @@
 								tr{ page-break-inside:avoid; page-break-after:auto }
 							 </style>
 							 
-							 <?php $updated_result=0;$register=0; foreach($this->row as $rs){ $i++;?>
+							 <?php foreach($this->row as $rs){ $i++;?>
 								  <tr style="font-size:12px; height: 20px;white-space:nowrap;"​ class="hover">
 									    <td><?php echo $i;?></td>
 									    <td><?php echo $rs['serial']; ?></td>
@@ -126,7 +127,6 @@
 									    <td><?php echo $rs['phone']; ?></td>
 									    <td><?php echo $rs['degree']; ?></td>
 									    <td><?php echo $rs['grade']; ?></td>
-									    <td><?php echo $rs['session']; ?></td>
 									    <td><?php echo $rs['note']; ?></td>
 									    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
 										<td><?php echo $rs['user_id'];?></td>								    

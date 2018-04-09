@@ -24,10 +24,11 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 						    rms_supplier_product AS pu 
 						  WHERE pu.id = pd.supproduct_id 
 						    AND pd.pro_id = p.id 
-						    AND pu.date >= '2018-03-21 00:00:00' 
-						    AND pu.date <= '2018-03-21 23:59:59' 
+						    AND pu.branch_id = pl.`brand_id`
+						    AND pu.date >= '$from_date' 
+						    AND pu.date <= '$to_date' 
 						    AND pu.status = 1 
-						  GROUP BY pd.pro_id 
+						  GROUP BY pd.pro_id
 						  LIMIT 1
 					   ) AS purchaseQty,
 					  
@@ -37,16 +38,31 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 						    rms_saledetail AS sal,
 						    rms_student_payment AS sp,
 						    rms_program_name AS pn 
-						  WHERE pn.service_id = sal.pro_id 
+						  WHERE 
+						  	pn.service_id = sal.pro_id 
 						    AND sp.id = sal.payment_id 
 						    AND pn.ser_cate_id = p.id 
-						    AND sp.create_date >= '2018-03-21 00:00:00' 
-						    AND sp.create_date <= '2018-03-21 23:59:59' 
+						    and sp.branch_id = pl.brand_id
+						    AND sp.create_date >= '$from_date' 
+						    AND sp.create_date <= '$to_date' 
 						    AND sp.is_void = 0 
 						  GROUP BY sal.pro_id
 					  	LIMIT 1
 					  ) AS stockOut,
 					  
+					  (SELECT 
+					    	SUM(qty_receive) 
+					  	FROM
+						    rms_request_order AS req,
+						    rms_request_orderdetail AS req_d 
+					  	WHERE 
+					  		req.id = req_d.request_id 
+					  		and req_d.pro_id = p.id
+					  		and req_d.branch_id = pl.brand_id
+					  		AND req.request_date >= '$from_date' 
+						    AND req.request_date <= '$to_date'
+						    and req.status=1
+					  	LIMIT 1) AS request,
 					  pl.pro_qty 
 				from 
 					rms_product as p,
@@ -57,6 +73,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		";
     	
     	$where=' ';
+    	$group_by = " ";
     	$order=" order by pl.brand_id ASC,p.id ASC";
     	
     	if(empty($search)){
@@ -80,8 +97,8 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		$where .=' AND p.id = '.$search['pro_name'];
     	}
     	
-    	//echo $sql.$where.$order;exit();
-    	return $db->fetchAll($sql.$where.$order);
+    	echo $sql.$where.$group_by.$order;//exit();
+    	return $db->fetchAll($sql.$where.$group_by.$order);
     }
    
     function getAllProductName(){

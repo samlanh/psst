@@ -8,6 +8,14 @@
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="100%">	
 			<tr> 
+				<td>
+				 	<select name="pro_cate" id="pro_cate" dojoType="dijit.form.FilteringSelect" class="fullside" >
+				 		<option value=""><?php echo $tr->translate("PRODUCT_CATEGORY")?></option>
+				 		<?php if(!empty($this->pro_cate)){foreach ($this->pro_cate as $pro_cate){?>
+				 		<option value="<?php echo $pro_cate['id']?>" <?php if($pro_cate['id']==$this->search['pro_cate']){echo "selected='selected'";}?>><?php echo $pro_cate['name']?></option>
+				 		<?php }}?>
+				 	</select>
+				 </td>
 				 <td>
 				 	<select name="pro_name" id="pro_name" dojoType="dijit.form.FilteringSelect" class="fullside" >
 				 		<option value=""><?php echo $tr->translate("SELECT_PRODUCT")?></option>
@@ -34,7 +42,7 @@
 				<td align="center"  width="70%">
 					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2'; "><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></strong><br />
 					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2'; "><?php echo $tr->translate("RPT_STATISTIC_PRODUCT_SOLD"); ?></strong><br />
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?>&nbsp <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> ដល់ <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?>&nbsp;<?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> ដល់ <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 				</td>
 				<td width="15%" align="right">&nbsp;</td>
 			</tr>
@@ -43,18 +51,22 @@
 					<table cellpadding="5"​ style="font-family:Khmer OS Battambang,Times New Roman; border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 						<tr style="font-size:14px;font-weight:bold; height: 20px;border: 1px solid #000; background: #ccd9ff; line-height: 30px;" align="center" >
 							<td>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("PRODUCT_CODE");?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $tr->translate("PRODUCT_NAME");?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $tr->translate("PRICE");?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $tr->translate("QTY");?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $tr->translate("TOTAL");?>&nbsp;</td>
 						</tr>
-					<?php $pro_qty=0;$pro_id=0;$total=0;$i=0; $pro_name="";$grand_total=0;
+					<?php $pro_qty=0;$pro_id=0;$total=0;$i=0; $pro_name="";$pro_code="";$grand_total=0;
 						if(!empty($this->rspro)){foreach ($this->rspro AS $key => $row) { 
 							if($key>0 && $pro_id!=$row['pro_id']){$i++;
 								
 						?>
 								<tr style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
 									<td style="border: 1px solid #000;"><?php echo $i;?></td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $pro_name;?></td>	
+									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $pro_code;?></td>
+									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $pro_name;?></td>
+									<td align="center" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo "$ ".number_format($total/$pro_qty,2);?></td>	
 									<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo number_format($pro_qty);?></td>
 									<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo "$ ".number_format($total,2);?></td>
 		 						</tr>
@@ -62,12 +74,14 @@
 	 						<?php 
 	 							$pro_id=$row['pro_id'];
 								$pro_name = $row['pro_name'];
+								$pro_code = $row['pro_code'];
 								$pro_qty = $row['qty'];
 								$total = $row['total'];
 
 							}else{
  								$pro_id=$row['pro_id'];
  								$pro_name = $row['pro_name'];
+ 								$pro_code = $row['pro_code'];
  								$pro_qty = $pro_qty+$row['qty'];
  								$total = $total + $row['total'];
 							}
@@ -76,16 +90,18 @@
 								  
  							?>
  						
-					<?php }}?>	
+					<?php }?>	
 						<tr style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
 							<td style="border: 1px solid #000;"><?php echo $i+1;?></td>
-							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $pro_name;?></td>	
+							<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $pro_code;?></td>
+							<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $pro_name;?></td>
+							<td align="center" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo "$ ".number_format($total/$pro_qty,2);?></td>	
 							<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo number_format($pro_qty);?></td>
 							<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo "$ ".number_format($total,2);?></td>
  						</tr>
- 						
+ 					<?php }?>	
  						<tr style="font-size:13px; height: 20px;border: 1px solid #000;font-weight: bold;" align="center" class="hover" >
-							<td colspan="3" style="border: 1px solid #000;">Grand Total </td>
+							<td colspan="5" style="border: 1px solid #000;">Grand Total </td>
 							<td align="center" style="border: 1px solid #000;font-weight: bolder;">&nbsp;<?php echo "$ ".number_format($grand_total,2);?></td>
  						</tr>
 					</table>

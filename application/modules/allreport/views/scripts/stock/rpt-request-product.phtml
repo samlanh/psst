@@ -78,9 +78,9 @@
 							<tr style="font-size: 12px;" class="hover">
 								<td style="border:1px solid #000;text-align: center;"><?php echo $i; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['branch_name'];; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'rpt-request-product-detail','id'=>$rs_row['id']))?>"><?php echo $rs_row['request_no']; ?></a></td>
-								<td style="border:1px solid #000;text-align: center;"><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'rpt-request-product-detail','id'=>$rs_row['id']))?>"><?php echo $rs_row['request_for']; ?></a></td>
-								<td style="border:1px solid #000;text-align: center;"><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'rpt-request-product-detail','id'=>$rs_row['id']))?>"><?php echo $rs_row['for_section']; ?></a></td>   
+								<td style="border:1px solid #000;text-align: center;"><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'reprint-request-product','id'=>$rs_row['id']))?>"><?php echo $rs_row['request_no']; ?></a></td>
+								<td style="border:1px solid #000;text-align: center;"><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'reprint-request-product','id'=>$rs_row['id']))?>"><?php echo $rs_row['request_for']; ?></a></td>
+								<td style="border:1px solid #000;text-align: center;"><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'reprint-request-product','id'=>$rs_row['id']))?>"><?php echo $rs_row['for_section']; ?></a></td>   
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['purpose']; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php echo date("d-M-Y",strtotime($rs_row['request_date'])); ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['user']; ?> </td>

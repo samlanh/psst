@@ -16,7 +16,7 @@
 	        
 	        <td>
 	        	<select name="pro_type" id="pro_type" class="fullside" dojoType="dijit.form.FilteringSelect">
-	        		<option value="">select product code</option>
+	        		<option value="">select product type</option>
 	        		<?php if(!empty($this->pro_type)){foreach ($this->pro_type as $pro_type){?>
 	        			<option value="<?php echo $pro_type['id']?>" <?php if($pro_type['id']==$this->search['pro_type']){echo "selected='selected'";}?>><?php echo $pro_type['name']?></option>
 	        		<?php }}?>
@@ -68,6 +68,7 @@
 							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("PRODUCT_NAME");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("PURCHASE_IN");?></td>
 							<td style="border:1px solid #000;text-align: center;" ><?php echo $tr->translate("SELL_OUT");?></td>
+							<td style="border:1px solid #000;text-align: center;" ><?php echo $tr->translate("REQUEST_QTY");?></td>
 							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("CURR_QTY");?></td>
 						</tr>
 						<?php 
@@ -83,6 +84,7 @@
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_name']; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);} ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['stockOut']>0){echo number_format($rs_row['stockOut']);} ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['request']>0){echo number_format($rs_row['request']);} ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);} ?> </td>
 							</tr>
 						<?php

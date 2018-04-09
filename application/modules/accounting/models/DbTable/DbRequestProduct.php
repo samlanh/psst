@@ -69,7 +69,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					pl.pro_id=$pro_id 
 					AND pl.brand_id=$branch_id
 				 	AND p.id=pl.pro_id 
-    				AND p.pro_type=2
+    			LIMIT 1	
     		";
     	$row = $db->fetchRow($sql);
     	if(empty($row)){
@@ -129,7 +129,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 							$where=" id = ".$rows['id'];
 							$this->update($datatostock, $where);
 					}else{
-						
+						echo "heer";exit();
 					}
 				 }
 			}
@@ -154,7 +154,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					//print_r($qty);exit();
 					if($qty){
 						$datat= array(
-								'pro_qty' 	=> $qty["pro_qty"]+$row['qty_request'],
+								'pro_qty' 	=> $qty["pro_qty"]+$row['qty_receive'],
 								'date'		=> date("Y-m-d H:i:s"),
 								'user_id'	=> $this->getUserId()
 						);
@@ -205,7 +205,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 					);
 					$this->_name='rms_request_orderdetail';
 					$this->insert($data_item);
-					$rows=$this->getProQtyByLocation($data['branch_id_'.$i], $data['product_name_'.$i], $data['request_qty'.$i]); 
+					$rows=$this->getProQtyByLocation($data['branch_id_'.$i], $data['product_name_'.$i]); 
 					if($rows){
 							$datatostock= array(
 									'pro_qty' 	=> $rows["pro_qty"]-$data['receive_qty'.$i],
@@ -370,9 +370,18 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     
     function getAllProductBybranch($branch_id){
     	$db = $this->getAdapter();
-    	$sql = "SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
-		    	WHERE p.id=pl.pro_id AND p.status=1
-		    	AND pl.brand_id=".$branch_id;
+    	$sql = "SELECT 
+				  p.id,
+				  pl.brand_id,
+				  p.pro_name AS `name` 
+				FROM
+				  rms_product AS p,
+				  rms_product_location AS pl 
+				WHERE 
+				  p.id = pl.pro_id 
+				  AND p.status = 1 
+				  AND pl.brand_id = $branch_id
+    		";
     	$order=' ORDER BY p.id DESC';
     	return $db->fetchAll($sql.$order);
     }

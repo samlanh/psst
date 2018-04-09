@@ -113,6 +113,8 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$product->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
 		

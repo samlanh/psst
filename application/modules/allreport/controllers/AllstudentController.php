@@ -663,4 +663,17 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$this->view->rs = $rs_rows = $group->getAllReschedulebygroup($search);
 			$this->view->search=$search;
 	}
+	public function rptCertificateAction()
+	{
+		
+		$group_id=$this->getRequest()->getParam("group_id");
+		$student_id=$this->getRequest()->getParam("id");
+		$search= array();
+		$db = new Allreport_Model_DbTable_DbRptStudentScore();
+		$this->view->rsscore = $db->getSubjectScorebystudentandgroup($group_id,$student_id);
+		//$this->view->semester1= $db->getStundetExamById($group_id,1,$student_id);//for semester1
+		
+		$result = $db->getAcadimicByStudentHeader($group_id,$student_id);
+		$this->view->result = $result;
+	}
 }

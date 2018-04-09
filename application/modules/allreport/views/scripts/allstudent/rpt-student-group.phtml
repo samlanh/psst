@@ -57,7 +57,7 @@
 							  display: table-header-group;
 							  page-break-inside:avoid; page-break-after:auto;
 							}
-							
+							.hover:hover{ background: #ccc;}
 							</style>
 							<thead>
 							<tr style="background: #ccd9ff;" class="cheader" align="center" >
@@ -72,13 +72,14 @@
 								<td><?php echo $tr->translate("CONTACT_NO");?></td>	
 								<td class="hide"><?php echo $tr->translate("PRINT");?></td>	
 								<td class="hide"><?php echo $tr->translate("PRINT");?></td>	
+								<td class="hide"><?php echo $tr->translate("PRINT");?></td>
 								<td class="hide"><?php echo $tr->translate("PRINT");?></td>					
 							</tr>
 							</thead>
 							<?php  $i=0;
 								$male=0;$femle=0;
 							foreach ($this->rs as $row){ $i++;?>
-							<tr style="font-size:12px;height: 23px;"​ align="center">
+							<tr style="font-size:12px;height: 23px;"​ align="center" class="hover">
 								<td><?php echo $i;?></td>
 								<td><?php echo $row['stu_code'];?></td>
 								<td align="left"><?php echo $row['kh_name'];?></td>
@@ -97,6 +98,7 @@
 								<td class="hide"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'certify','id'=>$row['gd_id'])); ?>"><?php echo $tr->translate("PRINT_CERTIFY");?></a></td>
 								<td class="hide"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'academic-transcript','id'=>$row['stu_id'],'group_id'=>$row['group_id'])); ?>"><?php echo $tr->translate("Academic Transcript");?></a></td>
 								<td class="hide"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-transcript','id'=>$row['stu_id'],'group_id'=>$row['group_id'])); ?>"><?php echo $tr->translate("ព្រឹត្តប័ត្រពិន្ទុ");?></a></td>
+								<td class="hide"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-certificate','id'=>$row['stu_id'],'group_id'=>$row['group_id'])); ?>"><?php echo $tr->translate("វិញ្ញាបនបត្រឆ្នាំសិក្សាមូលដ្ឋាន");?></a></td>
 							</tr>
 							<?php }?>	
 							<tr>

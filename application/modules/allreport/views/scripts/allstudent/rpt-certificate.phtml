@@ -1,0 +1,327 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Currency Smart | Transfer Report page'); 
+	$this->headTitle('SRMS | Student Exam Fundation Year'); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+?>	
+<script>
+dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.layout.ContentPane");
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+	#footer{ display: none;}
+	.doth{width: 100%;}
+	.value{ }
+</style>
+<div style="width:100%; background:none repeat scroll 0% 0% rgba(234, 255, 253, 1);">
+		<table style="margin: 0 auto;">
+			<tr>
+				<td>
+					<fieldset style="background: none;">
+						<legend align="center" ><strong><?php echo $tr->translate("ទម្រង់បត្រសញ្ញាឆ្នាំសិក្សាមូលដ្ឋាន");?></strong></legend>
+							<div id="mainTabContainer" style="height:18cm;width: 1170px;margin:0 auto;" dojoType="dijit.layout.TabContainer" region="center" >
+					      		<div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("CERTI_FRONT");?>" selected="true">
+										<input type="button" label="" id="saveprint" dojoType="dijit.form.Button" 
+											iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="doPrint();"/>
+											<div style="padding:10px;border:1px dotted #000;;min-height: 16px;width:30cm;background:#fff;font-size:14px;letter-spacing:1px;margin: 0 auto;">
+												<div id="divPrint" style="min-height: 16px;">
+												<style>
+												.bordervalue{width: 100%;border-bottom: 1px dotted #000;line-height: 11px;}
+												</style>
+												<table width="100%" style="padding-left:1cm;margin-top:2.5cm;font-family:'khmer os battambang';font-size: 13px;">
+													<tr>
+														<td width="45%" colspan="4" align="center"  style="font-size: 16px;font-family:Arial,'Khmer OS Muol light';">សាកលវិទ្យាធិការ</td>
+														<td></td>
+														<td width="45%" colspan="2" align="center"  style='font-size: 16px;'><strong>THE RECTOR</strong></td>
+													</tr>
+													<tr>
+														<td colspan="4" align="center"  style="font-size: 16px;font-family:Arial,'Khmer OS Muol light';"><br />បញ្ជាក់ថាៈ<br /><br /></td>
+														<td></td>
+														<td colspan="2" align="center" style='font-size:16px;'><br />Certifies that<br /><br /></td>
+													</tr>
+													<tr>
+														<td style="padding:font-size: 13px;">និស្សិតឈ្មោះ </td>
+														<td class="value" width="130px;" style="font-family:Arial,'Khmer OS Muol light'"><div class="bordervalue">:  <?php if(!empty($this->result)){echo $this->result[0]['stu_khname'];}?></div></td>
+														<td style="min-width:20px;white-space: nowrap;"​>ភេទ </td>
+														<td class="value" style="font-family:Arial,'Khmer OS Muol light'"><div class="bordervalue">: <?php if(!empty($this->result)){echo getsexKh($this->result[0]['sex']);}?></div></td>
+														<td></td>
+														<td style="white-space: nowrap;">
+															<table width="100%">
+																<tr>
+																	<td style="width:10%;white-space: nowrap;">Name  : </td>
+																	<td width="90%"><label class="doth"><div class="bordervalue"><strong><?php if(!empty($this->result)){echo $this->result[0]['stu_enname'];}?></strong></div></label></td>
+																</tr>
+															</table>
+														</td>
+														<td>
+															<table width="100%">
+																<tr>
+																	<td style="width:10%;white-space: nowrap;">Sex  : </td>
+																	<td width="90%"><label class="doth"><div class="bordervalue"><strong><?php if(!empty($this->result)){echo getsexEng($this->result[0]['sex']);}?></strong></div></label></td>
+																</tr>
+															</table>
+														 </td>
+													</tr>
+													<tr>
+														<td style="">កើតថ្ងៃទី </td>
+														<td colspan="3"><div class="bordervalue">: <?php if(!empty($this->result)){echo date("d-m-Y",strtotime($this->result[0]['dob']));}?></div></td>
+														<td></td>
+														<td colspan="2" style="white-space: nowrap;">
+															<table width="100%">
+																	<tr>
+																		<td width="20%" style="white-space: nowrap;">Date of Birth :</td>
+																		<td width="80%"><div style="border-bottom: 1px dotted #000;line-height:11px;"><?php if(!empty($this->result)){echo date("d-M-Y",strtotime($this->result[0]['dob']));}?></div></td>
+																	</tr>
+																</table>
+														</td>
+													</tr>
+													<tr>
+														<td colspan="7">&nbsp;</td>
+													</tr>
+													<tr>
+														<td colspan="4" style=" ">បានបញ្ចប់ថ្នាក់ឆ្នាំសិក្សាមូលដ្ឋានដោយជោគជ័យនៅ <span style="font-size: 14px;font-family:Arial,'Khmer OS Muol light';">សាកលវិទ្យាល័យ</span><br /></td>
+														<td></td>
+														<td colspan="2" style="">has successfully completed Fundation Year Course at  <br /></td>
+													</tr>
+													<tr>
+														<td colspan="4" style=""><span style="font-size: 14px;font-family:Arial,'Khmer OS Muol light';">វេស្ទើន</span> ក្នុងឆ្នាំសិក្សា <span style="border-bottom: 1px dotted #000;line-height: 11px;font-size: 14px;font-family:Arial,'Khmer OS Muol light';">
+														<?php if(!empty($this->result)){?>  .
+															<label id="academic_year"></label>
+															<script>
+																year = convertEnglishToKhmerNumber('<?php echo $this->rsscore[0]['from_academic'];?>')+'-'+convertEnglishToKhmerNumber('<?php echo $this->rsscore[0]['to_academic'];?>');
+															dojo.byId('academic_year').innerHTML=year;</script>
+														<?php }?>
+														 ។</span> <br /></td>
+														<td></td>
+														<td colspan="2" style=" "><strong>Western University</strong> in academic year <span style="border-bottom: 1px dotted #000;line-height:11px;"><?php if(!empty($this->result)){?>  .
+															<?php echo $this->rsscore[0]['from_academic']."-".$this->rsscore[0]['to_academic'];?>
+														<?php }?></span><br /></td>
+													</tr>
+													<tr>
+														<td colspan="7">&nbsp;</td>
+													</tr>
+													<tr>
+														<td colspan="4" style=" ">វិញ្ញាបនបត្រនេះប្រគល់ជូនសាម៉ីជន ដើម្បីយកទៅប្រើប្រាស់តាម <br />
+															ដែលអាចប្រើបាន ។
+														<br /></td>
+														<td></td>
+														<td colspan="2" style=" ">This certificate is presented to the bearer with all rights<br />
+															and privileges pertaining thereto.<br /></td>
+													</tr>
+													<tr>
+														<td><br /><label style="width:78px; height:99px; display:block;text-align:center; border: 1px solid #000;"></label></td>
+														<td colspan="3" align="center"><br />ធ្វើនៅ ភ្នំពេញ ថ្ងៃទី 
+																<label id="lbl_createdate"></label>
+																<script>
+																	kh_date = 'ថ្ងៃទី ' + convertEnglishToKhmerNumber('<?php echo date('d');?>')+' ខែ '+'<?php echo getKHMonthByNumber(date('m'));?>'+' ឆ្នាំ '+ convertEnglishToKhmerNumber('<?php echo date('Y');?>');
+																	dojo.byId('lbl_createdate').innerHTML=kh_date;
+															</script><br />
+															<span style="font-size: 14px;font-family:Arial,'Khmer OS Muol light';">ជ.សាកលវិទ្យាធិការ</span><br />
+															<span style="font-size: 14px;font-family:Arial,'Khmer OS Muol light';">សាកលវិទ្យាធិការរង</span>
+														</td>
+														<td></td>
+														<td align="center" colspan="2"><br />Issued at Phnom Penh,<?php echo date('F');?> <?php echo date('d');?>,<?php echo date('Y');?><br /><br />
+															<strong>F-RECTOR</strong><br />
+															<strong>VICE RECTOR</strong>
+														</td>
+													</tr>
+												</table>
+										</div>	
+									</div><!-- tab1 -->
+								</div>
+					     		<div class="tabContentSection" dojoType="dijit.layout.ContentPane" title="<?php echo $tr->translate("CERTI_BACE");?>" selected="false">
+									<input type="button" dojoType="dijit.form.Button" 
+									iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="doPrintback();"/>
+									<div style="width:30cm;background:#fff;font-size:14px;letter-spacing:1px; margin: 0 auto; border: 1px dotted #ccc;">
+										<div id="divPrint1" style="min-height: 16px;">
+										<style>
+										ul li{line-height:5px;}
+										</style>
+										<table width="100%">
+											<tr>
+												<td width="48%" valign="top">
+													<table width="100%" style="margin-top:2cm;" >
+														<tr>
+															<td colspan="4" align="center"  style='font-size: 14px;​font-family:"kh moul"'>
+																<span  style="font-size: 16px;font-family:Arial,'Khmer OS Muol light';color: #040473;">ព្រឹត្តិបត្រពិន្ទុ</span><br />
+																<strong>Academic Transcript</strong>
+															</td>
+														</tr>
+														<tr>
+															<td style="width:50px;">Name</td>
+															<td><div class="bordervalue">: <?php if(!empty($this->result)){echo $this->result[0]['stu_enname'];}?></div></td>
+															<td style="width:20px;">ID</td>
+															<td><div class="bordervalue">:<?php if(!empty($this->result)){echo $this->result[0]['stu_code'];}?></div></td>
+														</tr>
+														<tr>
+															<td colspan="4">
+																<table width="100%" style="font-family:'khmer os battambang','Times New Roman' !important;">
+																	<tr style="color: #040473;">
+																		<td style="font-size: 12px;font-family:'Khmer OS Muol light';">&nbsp;&nbsp;មុខវិជ្ជាទូទៅ</td>
+																		<td><strong style="font-size: 14px;font-family:'Times New Roman' !important;">&nbsp;&nbsp;General Subjects</strong></td>
+																		<td style="width:50px;"><strong>Credits</strong></td>
+																		<td style="width:50px;text-align: left;"><strong>Grade</strong></td>
+																	</tr>
+																	<?php if(!empty($this->rsscore))foreach($this->rsscore AS $rs){?>
+																	<tr style="line-height: 20px;">
+																		<td style="line-height: 20px;font-family:'khmer os battambang';font-size: 12px;"><ul><li style="list-style: inside;"><?php echo $rs['subject_titlekh'];?></li></ul> </td>
+																		<td style="line-height: 20px;font-family:'khmer os battambang';font-size: 12px;"><ul><li style="list-style: inside; list-style: none;"><?php echo $rs['subject_titleen'];?></li></ul></td>
+																		<td style="line-height: 20px;width:70px;text-align:center;">3</td>
+																		<td style="line-height: 20px;width:70px;text-align:justify;"><?php echo calCulateGrade($rs['score']);?></td>
+																	</tr>
+																	<?php }?>
+																</table>
+															</td>
+														</tr>
+														<tr style="line-height: 25px;">
+															<td colspan="4"><strong>GPA :</strong></td>
+														</tr>
+														<tr>
+															<td colspan="4"><strong>Note:</strong></td>
+														</tr>
+														<tr>
+															<td colspan="4">
+																<table width="100%" style="font-size:12px;font-family:'khmer os battambang';">
+																	<tr style="line-height: 15px;">
+																		<td colspan="2" style="line-height: 15px;"><strong>A &nbsp;= ៨៥%​ - ១០០% : ប្រសើរ</strong></td>
+																		<td colspan="2" style="line-height: 15px;"><strong>C = ៥០%​ - ៦៤% : មធ្យម</strong></td>
+																	</tr>
+																	<tr style="line-height: 15px;">
+																		<td colspan="2" style="line-height: 15px;"><strong>B+ = ៨០%​ - ៨៤% : ល្អណាស់</strong></td>
+																		<td colspan="2" style="line-height: 15px;"><strong>D = ៤៥%​ - ៤៩% : ខ្សោយ</strong></td>
+																	</tr>
+																	<tr style="line-height: 15px;">
+																		<td colspan="2" style="line-height: 15px;"><strong>B = ៧០%​ - ៧៩% : ល្អ</strong></td>
+																		<td colspan="2" style="line-height: 15px;"><strong>E = ៤០%​ - ៤៤% : ខ្សោយណាស់</strong></td>
+																	</tr>
+																	<tr style="line-height: 15px;">
+																		<td colspan="2" style="line-height: 15px;"><strong>C+ = ៦៥%​ - ៦៩% : ល្អបង្គួរ</strong></td>
+																		<td colspan="2" style="line-height: 15px;"><strong>F < ៤០% : ធ្លាក់</strong></td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="4"><strong style="padding-left: 10px;font-size:14px;font-family:'khmer os battambang'">វិញ្ញាបនបត្រនេះមិនចេញជូនជាលើកទី២ទេ ។</strong></td>
+														</tr>
+													</table>
+												</td>
+												<td width="4%"></td>
+												<td width="48%" valign="top">
+													<table width="100%" style="margin-top:2cm; font-family:'Times New Roman'">
+														<tr height="30px">
+															<td></td>
+															<td align="center" valign="top" rowspan="2">
+																<style>
+																	.lblcambodia li{list-style: none; }
+																	.lblcambodia li{line-height: 22px;}
+																</style>
+																<ul class="lblcambodia" style="font-size: 14px;font-family:Arial,'Khmer OS Muol light';color: #040473;">
+																	<li >ព្រះរាជាណាចក្រកម្ពុជា</li>
+																	<li >KINGDOM OF CAMBODIA</li>
+																	<li>ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
+																	<li>Nation Religion King</li>
+																	<li><img src="<?php echo $this->baseUrl();?>/images/fontkingdom.png" style="height:15px;" /></li>
+																</ul>
+															</td>
+														</tr>
+														<tr height="30px">
+															<td align="center" valign="top">
+																<img style="width: 40%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+															</td>
+															
+														</tr>
+														<tr>
+															<td align="center">
+																<span style="line-height:20px;font-size: 14px;font-family:Arial,'Khmer OS Muol light';color: #040473;">សាកលវិទ្យាល័យ វេស្ទើន</span><br />
+																<span style="line-height:20px;font-size: 14px;font-family:Arial;color: #040473;text-transform: uppercase;">Western University</span>
+															</td>
+															<td align="center"></td>
+														</tr>
+														<tr height="400px">
+															<td colspan="2" align="center">
+																<span style="line-height:50px;font-size: 22px;font-family:Arial,'Khmer OS Muol light';color: #040473;">វិញ្ញាបនបត្រឆ្នាំសិក្សាមូលដ្ឋាន</span><br />
+																<strong style="line-height:50px;font-size: 22px;font-family:Arial;color: #040473;">Certificate of Foundation Year Course</strong><br />
+																<strong style="line-height:50px;font-size: 18px;font-family:Arial;color: #040473;"><?php  echo $this->rsscore[0]['from_academic']."-".$this->rsscore[0]['to_academic'];?></strong>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+					</fieldset>		
+				</td>
+			</tr>
+		</table>
+	</div>	
+	<div style="clear: both;"></div>
+<?php 
+function getsexEng($sex){
+	if($sex==1){
+		$str="M";
+	}else{
+		$str="F";
+	}
+	return $str;
+}
+function getsexKH($sex){
+	if($sex==1){
+		$str="ប្រុស";
+	}else{
+		$str="ស្រី";
+	}
+	return $str;
+}
+function calCulateGrade($score){
+	$grade="";
+	if($score>=85){
+		$grade="A";
+	}else if($score>=80){
+		$grade="B+";
+	}else if($score>=70){
+		$grade="B";
+	}else if($score>=65){
+		$grade="C+";
+	}else if($score>=50){
+		$grade="C";
+	}else if($score>=45){
+		$grade="D";
+	}else if($score>=40){
+		$grade="E";
+	}else if($score<40){
+		$grade="F";
+	}
+	return $grade;
+}
+function getKHMonthByNumber($m){
+	 $month=array(
+			'01'=>"មករា",
+			'02'=>"កុម្ភៈ",
+			'03'=>"មីនា",
+			'04'=>"មេសា",
+			'05'=>"ឧសភា",
+			'06'=>"មិថុនា",
+			'07'=>"កក្កដា",
+			'08'=>"សីហា",
+			'09'=>"កញ្ញា",
+			'10'=>"តុលា",
+			'11'=>"វិច្ឆិកា",
+			'12'=>"ធ្នូ",
+	);
+	return $month[$m];
+}
+?>
+<script>
+
+function doPrintback() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint1').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+</script>

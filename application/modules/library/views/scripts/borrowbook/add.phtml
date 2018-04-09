@@ -51,13 +51,13 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 <table width="100%" style="padding-top: 10px;">
 	<tr>
 		<td>
-				<fieldset style="margin-top:-13px;">
+				<fieldset style="margin-top:-13px; background: #fff;   border: solid 1px #008;">
 					<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_BORROW_BOOK");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%;" cellspacing="10" >
 						<tr> 
 						    <td><?php echo $tr->translate("CHOOSE_ONE")?></td>
 						    <td>
-						        <select name="type" id="type" dojoType="dijit.form.FilteringSelect" onchange="hideControll()" >
+						        <select name="type" id="type" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" onchange="hideControll()" >
 						             <option value="1"><?php echo $tr->translate("Student")?></option>
 						             <option value="2"><?php echo $tr->translate("Teacher")?> </option>
 						             <option value="3"> <?php echo $tr->translate("Parents of student")?></option>
@@ -83,7 +83,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 							<td nowrap="nowrap"><span id="student_name_lbl"><?php echo $tr->translate("STUDENT_NAME")?></span><span id="name_lbl"><?php echo $tr->translate("NAME")?></span></td>
 							<td>
 							   <span id="span_stu_name">
-								<select   name="stu_name" id="stu_name" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();setControll();">
+								<select   name="stu_name" id="stu_name"  queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();setControll();">
 									<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 									<?php 
 									if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
@@ -242,7 +242,7 @@ function addRow() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;" onchange="getQtyById('+col+')"  dojoType="dijit.form.FilteringSelect" class="fullside" id="book_id'+col+'" name="book_id'+col+'">'+subject+'</select></td>';
+		template+='<td><select style="width:100%;" onchange="getQtyById('+col+')"  queryExpr="*${0}*" autoComplete="false"  dojoType="dijit.form.FilteringSelect" class="fullside" id="book_id'+col+'" name="book_id'+col+'">'+subject+'</select></td>';
 		template+='<td nowrap="nowrap"><input  type="number" style="width:100%;color:#000;font-weight:900;text-align:center;" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="curr_qty'+col+'" id="curr_qty'+col+'" readonly="readonly" value="0" type="text"> </td>';	
 		template+='<td><input style="width:100%;text-align:center;"  onkeyup="getCheckQty('+col+')" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="borr_qty'+col+'" id="borr_qty'+col+'" value="" type="text" required="required"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';	

@@ -11,40 +11,26 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 //     }
     public function getAllStudent($search){
     	$db = $this->getAdapter();
-    	$sql ='select 
-	    			*,
-	    			stu_id,
-	    	       (SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-	    	       CONCAT(stu_khname," - ",stu_enname) as name,
-	    	       stu_enname,
-	    	       stu_khname,
-	    	       nationality,
-	    	       tel,
-	    	       email,
-	    	       stu_code,
-	    	       home_num,
-	    	       street_num,
-	    	       village_name,
-	    		   commune_name,
-	    		   district_name,
-	    		   is_subspend,
-	    		   dob,
-	    		   degree as dept,
-	    		   (select CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as academic_year,
-	    		   (select from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as start_year,
-	    		   (select to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_year,
-	    		   (select end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_date,
-	    		   (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
-	    		   (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1)AS grade,
-	    		   (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1)AS degree,
-	    		   (select name_kh from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
-	    		   (select province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,	   	
-	    		   (select name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
-	    		   photo
-    		   from 
-    				rms_student 
-    		';
-    	$where=' where status=1 ';
+    	$sql ='SELECT stu_id,
+    	      (SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
+    	       CONCAT(stu_khname," - ",stu_enname) as name,
+    	       stu_enname,stu_khname,nationality,
+    	       tel,email,stu_code,home_num,street_num,
+    	       village_name,
+    		   commune_name,district_name,is_subspend,dob,degree as dept,
+    		   (SELECT CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
+    		   (SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as start_year,
+    		   (SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as end_year,
+    		   (SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as end_date,
+    		   (SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session LIMIT 1)AS session,
+    		   (SELECT major_enname from rms_major where rms_major.major_id=rms_student.grade LIMIT 1)AS grade,
+    		   (SELECT en_name from rms_dept where rms_dept.dept_id=rms_student.degree LIMIT 1)AS degree,
+    		   (SELECT name_kh from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
+    		   (SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id LIMIT 1)AS province,	   	
+    		   (SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex LIMIT 1) AS sex,photo
+    		   FROM rms_student ';
+    	$where=' WHERE status=1 ';
+
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
@@ -58,7 +44,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-    		
     		$s_where[]=" stu_code LIKE '%{$s_search}%'";
     		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" stu_enname LIKE '%{$s_search}%'";
@@ -66,7 +51,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" father_phone LIKE '%{$s_search}%'";
     		$s_where[]=" mother_phone LIKE '%{$s_search}%'";
     		$s_where[]=" guardian_tel LIKE '%{$s_search}%'";
-    			
     		$s_where[]=" father_enname LIKE '%{$s_search}%'";
     		$s_where[]=" mother_enname LIKE '%{$s_search}%'";
     		$s_where[]=" guardian_enname LIKE '%{$s_search}%'";
@@ -76,10 +60,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" village_name LIKE '%{$s_search}%'";
     		$s_where[]=" commune_name LIKE '%{$s_search}%'";
     		$s_where[]=" district_name LIKE '%{$s_search}%'";
-    		
-    		$s_where[] = " (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['study_year'])){
@@ -105,15 +85,15 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     public function getAmountStudent(){//count to dashboard
     	$db = $this->getAdapter();
     	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
-    	$where=' WHERE status=1 AND is_subspend=0 ';
+    	$where=' WHERE status=1 ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
     }
     public function getAmountNewStudent(){//count to dashboard
     	$db = $this->getAdapter();
-    	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
-    	$where=' WHERE status=1 AND is_stu_new=1 AND is_subspend=0 ';
+    	$sql ='SELECT COUNT(stu_id) FROM rms_student';
+    	$where=' WHERE status=1 AND is_stu_new=1 ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
@@ -187,10 +167,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     				rms_student 
     			where 
     				stu_id ='.$stu_id;
-
     	return $db->fetchAll($sql);
     }
-    
     public function getAllAmountStudent($search){
     	$db = $this->getAdapter();
     	$sql ='SELECT stu_id,
@@ -225,9 +203,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " CONCAT(stu_enname,stu_khname) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['study_year'])){
@@ -249,82 +227,48 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchAll($sql.$where.$order);
     }
-    
     public function getStudentStatistic($search){
     	$db = $this->getAdapter();
     	$sql ="SELECT 
-					s.stu_id,
+					 s.stu_id,
 					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-					CONCAT(stu_enname)AS NAME,
-					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year) AS academic_year_name,
-					(SELECT name_en FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=g.session LIMIT 1)AS `session_name`,
-					(SELECT major_enname FROM rms_major WHERE rms_major.major_id=g.grade LIMIT 1)AS grade_name,
-					(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=g.degree LIMIT 1)AS degree_name,
-					g.academic_year,
-					g.degree,
-					g.grade,
-					g.session,
+					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic_year_name,
+					(SELECT name_en FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=s.session LIMIT 1) AS `session_name`,
+					(SELECT major_enname FROM rms_major WHERE rms_major.major_id=s.grade LIMIT 1) AS grade_name,
+					(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1) AS degree_name,
+					s.academic_year,
+					s.degree,
+					s.grade,
+					s.session,
 					s.is_stu_new,
 					s.`is_subspend`
 				FROM 
-					rms_student AS s , 
-					rms_group AS g,
-					rms_group_detail_student AS gds
+					rms_student AS s 
 				WHERE 
-					g.id = gds.group_id
-					AND s.stu_id = gds.stu_id
-    		";
-    	
-    	$group_by = " GROUP BY gds.`stu_id`,g.`academic_year`,g.`degree`,g.`grade`,g.`session`";
-		$order_by = " ORDER BY g.`academic_year` ASC,g.`degree` ASC,g.`grade` ASC,g.`session` ASC";	
-    	
+				 	s.status=1";
+    	$group_by = " ";
+		$order_by = " ORDER BY s.`academic_year` ASC,s.`degree` ASC,s.`grade` ASC,s.`session` ASC";	
     	$where=' ';
-    
-//     	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
-//     	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
-//     	$where .= " AND ".$from_date." AND ".$to_date;
-    	 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
-    	 
-    	//$order="  order by academic_year DESC,degree ASC,grade DESC,session ASC,stu_id DESC";
-    	if(empty($search)){
-    		return $db->fetchAll($sql.$group_by.$order_by);
-    	}
-    	if(!empty($search['title'])){
-    		$s_where = array();
-    		$s_search = addslashes(trim($search['title']));
-    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-    		$s_where[] = " CONCAT(stu_enname,stu_khname) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
-//     		$where .=' AND ( '.implode(' OR ',$s_where).')';
-    	}
     	if(!empty($search['study_year'])){
-    		$where.=' AND g.academic_year='.$search['study_year'];
+    		$where.=' AND s.academic_year='.$search['study_year'];
     	}
     	if(!empty($search['grade_all'])){
-    		$where.=' AND g.grade='.$search['grade_all'];
+    		$where.=' AND s.grade='.$search['grade_all'];
     	}
     	if(!empty($search['session'])){
-    		$where.=' AND g.session='.$search['session'];
+    		$where.=' AND s.session='.$search['session'];
     	}if(!empty($search['degree'])){
-    		$where.=' AND g.degree='.$search['degree'];
+    		$where.=' AND s.degree='.$search['degree'];
     	}
     	if(($search['branch_id'])>0){
     		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
-//     	echo $sql.$where;exit();
     	return $db->fetchAll($sql.$where.$group_by.$order_by);
     }
-    
-    
     public function getAllStudyHistory($search){
-    	//print_r($search);
-    	//echo $search['stu_type'];
     	$db = $this->getAdapter();
-//     	if(!empty($search['stu_id'])){
 	    	$sql = 'SELECT 
 					  h.`stu_id`,s.`stu_code`,is_subspend,s.`stu_enname`,
 					  s.`stu_khname`,s.`sex`,s.`group_id`,
@@ -376,13 +320,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	if(!empty($search['session'])){
 	    		$where.=' AND h.session='.$search['session'];
 	    	}
-// 	    	if($search['stu_type']!=-1){
-// 	    		$where.=' AND is_stu_new = '.$search['stu_type'];
-// 	    	}
 	    	return $db->fetchAll($sql.$where.$order);
-//     	}else{
-//     		return 0;
-//     	}
     }
     
     function getAllStudentID(){
@@ -395,8 +333,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$sql="select stu_id as id,stu_enname as name from rms_student ";
     	return $db->fetchAll($sql);
     }
-    
-    
     public function getAllStudentDetail($search){
     	$db = $this->getAdapter();
     	$sql ='select stu_id,CONCAT(stu_khname," - ",stu_enname)AS name,nationality,tel,email,stu_code,home_num,street_num,village_name,
@@ -815,9 +751,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['study_year'])){
     		$where.=" AND g.academic_year =".$search['study_year'];
     	}
-//     	if(!empty($search['degree'])){
-//     		$where.=" AND `g`.`degree` =".$search['degree'];
-//     	}
     	if(!empty($search['grade_highschool'])){
     		$where.=" AND `g`.`grade`=".$search['grade_highschool'];
     	}
@@ -843,6 +776,3 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $rs;
     }
 }
-
-
-

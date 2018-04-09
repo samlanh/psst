@@ -56,7 +56,6 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 						'grade' => $_data['grade'],
 						'session' => $_data['session'],
 						'academy'=> $_data['academy']);
-				
 				$rs =$db->getSearchStudent($search);
 				$this->view->rs = $rs;
 			}else{
@@ -65,11 +64,8 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 						'grade' => '',
 						'session' => '',
 						'academy'=> '');
-				//$rs = $db->getSearchStudent($search);
 			}
-			
 			$this->view->value=$search;
-	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -80,9 +76,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		$group_option = $db->getGroup();
 		array_unshift($group_option, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")) );
 		$this->view->group = $group_option;
-		
 		$this->view->room = $db->getRoom();
-		
 		$db=new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_session=$db->getSession();
 	}

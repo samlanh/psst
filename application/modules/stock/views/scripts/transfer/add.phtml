@@ -80,7 +80,7 @@
 									    <td><strong><?php echo $tr->translate("SELECT_PRODUCT");?></strong></td>
 									    <td colspan="3">
 										    <div style="background: #04a2e0;padding: 1px;">
-												<select onchange="getProductName();" style="height:35px;" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+												<select onchange="getProductName();"queryExpr="*${0}*" autoComplete="false" style="height:35px;" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
 													<option></option>
 													<?php 
 												    if(!empty($this->rsproduct)){

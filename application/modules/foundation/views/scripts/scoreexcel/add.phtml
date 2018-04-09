@@ -122,7 +122,7 @@
 						<tr>
 							<td><strong><?php echo $tr->translate("GROUP");?>*</strong></td>
 							<td>
-								<select class="fullside" tabindex="15" name="group" id="group" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup();getInfoBygroup();">
+								<select class="fullside" tabindex="15" name="group" id="group"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup();getInfoBygroup();">
 									<?php if(!empty($this->group))foreach ($this->group as $row){?>
 									<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
 									<?php }?>

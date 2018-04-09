@@ -13,7 +13,9 @@
 		addRow();
 		new dijit.form.FilteringSelect({
 			store: pro_cate_store,
-			autoComplete: true,                        
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,                        
 			required: true,                      
 		    id: "category_id",
 		    name: "category_id",  
@@ -130,7 +132,7 @@ fieldset{  background:none;}
 			}
 				template+='<td width="35px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="35px" align="center">'+no+'</td>';
-				template+='<td><select class="fullside" dojoType="dijit.form.FilteringSelect" id="pro_id'+col+'" name="pro_id'+col+'">'+productopt+'</select></td>';			
+				template+='<td><select class="fullside"queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" id="pro_id'+col+'" name="pro_id'+col+'">'+productopt+'</select></td>';			
 				template+='<td> <input class="fullside" type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" onKeyup="getTotalePricePro('+col+');"/></td>';
 				template+='<td> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';
 			tmp='<tr id="row'+col+'">';

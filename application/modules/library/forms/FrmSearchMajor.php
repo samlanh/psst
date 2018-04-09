@@ -60,6 +60,8 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_cateory_parent->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true','class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
 				));
 		$option = array("0"=>$this->tr->translate("SELECT_CATEGORY"));
 		$result = $db->getCategory();
@@ -76,6 +78,8 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$cood_book->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true','class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
 		));
 		$option = array("0"=>$this->tr->translate("SELECT_BOOK"));
 		$result = $db_s->getBookIdName();
@@ -172,6 +176,8 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$student_name->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true','class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
 		));
 		$option = array("0"=>$this->tr->translate("SELECT_STUDEN_NAME"));
 		$db_stuname=new Library_Model_DbTable_DbCategory();

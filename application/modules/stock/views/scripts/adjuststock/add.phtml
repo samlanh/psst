@@ -23,7 +23,9 @@
 		getProByBranch();
 		new dijit.form.FilteringSelect({
 			store: pro_store,
-			autoComplete: true,                        
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,                      
 			id: "pro_id",
 			name: "pro_id",  
 			class: 'fullside',  

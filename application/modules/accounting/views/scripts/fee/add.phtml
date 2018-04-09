@@ -29,12 +29,14 @@ dojo.ready(function(){
 	
 	new dijit.form.FilteringSelect({
 		store: grade_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                        
 		id: "grade",
 		name: "grade",  
 		style:'height:40px !important',         
 		class: 'fullside',  
-		required:false,
+
 		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
 			grade   = dijit.byId('grade').get('value');
@@ -96,6 +98,8 @@ dojo.ready(function(){
 <table cellspacing="10" style="margin: 0 auto;width:100%;" >
 	<tr>
 		<td>
+		<fieldset style="background: #fff;   border: solid 1px #008;">
+		<fieldset style="background: #fff;   border: solid 1px #008;">
 		<fieldset style="background: #fff;   border: solid 1px #008;">
 					<legend align="center" style="font-size: 20px;"><strong><?php echo $tr->translate("ADD_FEE");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%;" cellspacing="10">

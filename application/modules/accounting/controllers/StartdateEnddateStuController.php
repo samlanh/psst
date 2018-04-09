@@ -76,11 +76,9 @@ class Accounting_StartdateenddatestuController extends Zend_Controller_Action {
     	
     	$this->view->row = $db->getAllStartDateEndDate();
     	$this->view->all_stu = $db->getAllGerneralOldStudent();
-    	$this->view->all_paymentterm = $db->getAllpaymentTerm();
-    	
+    	$this->view->all_paymentterm = $db->getAllpaymentTerm();  	
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->all_grade =  $_db->getAllMajor();
-    	
+    	$this->view->all_grade =  $_db->getAllMajor();  	
     	$db = new Registrar_Model_DbTable_DbRegister();
     	$this->view->all_service = $db->getAllService();
 	}

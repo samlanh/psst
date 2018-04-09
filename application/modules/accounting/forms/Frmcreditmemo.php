@@ -11,6 +11,8 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$student_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
 				'onchange'=>'setSelected(1)'
 				));
 		$optstu = $db->getAllStudent(1,1);
@@ -20,6 +22,8 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$student_name->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				'autoComplete'=>"true",
+				'queryExpr'=>'*${0}*',
 				'onchange'=>'setSelected(2)'
 		));
 		$optstu = $db->getAllStudent(1,2);

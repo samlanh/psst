@@ -47,7 +47,7 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 <table width="100%" style="padding-top: 10px;">
 	<tr>
 		<td>
-				<fieldset style="margin-top:-13px;">
+				<fieldset style="margin-top:-13px; background: #fff;   border: solid 1px #008;">
 					<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_BOOK_PURCHASE");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%;" cellspacing="10" >
 						<tr >
@@ -188,7 +188,7 @@ function addRow() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;"   dojoType="dijit.form.FilteringSelect" class="fullside" id="book_id'+col+'" name="book_id'+col+'"​ onchange="addPurchase('+col+')">'+subject+'</select></td>';
+		template+='<td><select style="width:100%;" queryExpr="*${0}*" autoComplete="false"  dojoType="dijit.form.FilteringSelect" class="fullside" id="book_id'+col+'" name="book_id'+col+'"​ onchange="addPurchase('+col+')">'+subject+'</select></td>';
 		template+='<td><input style="width:100%;text-align:center;" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="qty_'+col+'" id="qty_'+col+'" value="" type="text" required="required" onKeyup="getTotalePricePro('+col+');sumAmountDue();"/></td>';
 		template+='<td><input style="width:100%;text-align:center;" dojoType="dijit.form.NumberTextBox"   class="fullside" name="cost_'+col+'" id="cost_'+col+'" value="" type="text" required="required" onKeyup="getTotalePricePro('+col+');sumAmountDue();"/></td>';	
 		template+='<td><input style="width:100%;text-align:center;" dojoType="dijit.form.NumberTextBox"   class="fullside" name="amount_'+col+'" id="amount_'+col+'" value="" type="text" readonly="true"></td>';		

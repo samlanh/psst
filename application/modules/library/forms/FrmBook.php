@@ -98,6 +98,8 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		$_cateory_parent->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
 				'class'=>'fullside',
 				'onChange'=>'showAddCat()'
 				));

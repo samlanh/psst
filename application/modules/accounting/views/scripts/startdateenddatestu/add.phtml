@@ -42,7 +42,7 @@
 	<table cellspacing="10" width="100%" style="margin: 0 auto;">
 		<tr>
 			<td>
-				<fieldset>
+				<fieldset style="background: #fff; border:solid 1px #008;">
 					<legend align="center"><strong><?php echo $tr->translate("ADD_START_DATE_AND_END_DATE");?></strong></legend>
 					<table cellspacing="0" width="100%" >
 						<tr>
@@ -118,7 +118,7 @@
 		template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="type_'+col+'" name="type_'+col+'">';
 		template+='<option value="1">Tution Fee </option><option value="2">Service</option><option value="3">Product</option>';
 	    template+='</select></td>';	
-		template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
+		template+='<td width="12%"><select class="fullside" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" id="service_'+col+'" name="service_'+col+'">';
 		template+='<option value=""><?php echo $tr->translate("CHOOSE");?></option>';
 			<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
 		template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';

@@ -413,7 +413,7 @@ function addRow() {
 		template+='<td width="20%"><input style="width:10px;" type="hidden" name="old_pro_type_'+col+'" id="old_pro_type_'+col+'" dojoType="dijit.form.TextBox"  /> ';
 		template+='<input style="width:10px;" type="hidden" name="old_pro_id_'+col+'" id="old_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
 		
-		template+='<select onchange="getProductPrice('+col+',1);" dojoType="dijit.form.FilteringSelect" class="fullside" id="product_old_'+col+'" name="product_old_'+col+'">';
+		template+='<select onchange="getProductPrice('+col+',1);"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" id="product_old_'+col+'" name="product_old_'+col+'">';
 		template+='<option value=""><?php echo $tr->translate("SELECT_PRODUCT")?></option>';
 					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
 						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';
@@ -427,7 +427,7 @@ function addRow() {
 		
 		template+='<td width=20%"><input style="width:10px;" type="hidden" name="new_pro_type_'+col+'" id="new_pro_type_'+col+'" dojoType="dijit.form.TextBox"  />';
 		template+='<input style="width:10px;" type="hidden" name="new_pro_id_'+col+'" id="new_pro_id_'+col+'" dojoType="dijit.form.TextBox"  /> ';
-		template+='<select class="fullside" onchange="getProductPrice('+col+',2);" dojoType="dijit.form.FilteringSelect" id="product_new_'+col+'" name="product_new_'+col+'">';
+		template+='<select class="fullside" onchange="getProductPrice('+col+',2);"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" id="product_new_'+col+'" name="product_new_'+col+'">';
 		template+='<option value=""><?php echo $tr->translate("SELECT_PRODUCT")?></option>';
 					<?php if(!empty($this->all_product)){foreach($this->all_product as $product){?>
 						template+='<option value="'+<?php echo $product['id']?>+'"><?php echo $product['name'];?></option>';

@@ -29,6 +29,7 @@
 		       		<button onclick="getResultsemester1();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("PRINT").$tr->translate("RESULT_SEMESTER1");?></button>
 		      		<button onclick="getResultsemester2();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("PRINT").$tr->translate("RESULT_SEMESTER2");?></button>
 		     		<button onclick="getResultyearly();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("PRINT").$tr->translate("YEARLY_EXAM");?></button>
+		     		<button onclick="getCertificate();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("PRINT").$tr->translate("Foundation Certificate");?></button>
 	       			<input type="hidden" name="group_id" id="group_id" dojoType="dijit.form.TextBox" />
 	       		</td>
 	       </tr>
@@ -168,5 +169,10 @@ function getResultyearly(){
 	id = dijit.byId('group_id').get('value');
 	if(id==''){alert("Please select record first!");return false;}
 	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-resultbyyear'));?>'+'/id/'+id+'/type/3','_blank');
+}
+function getCertificate(){
+	id = dijit.byId('group_id').get('value');
+	if(id==''){alert("Please select record first!");return false;}
+	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-certificate'));?>'+'/id/'+id+'/type/3','_blank');
 }
 </script>

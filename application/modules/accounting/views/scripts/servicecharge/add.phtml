@@ -27,7 +27,9 @@ var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 dojo.ready(function(){	
 	new dijit.form.FilteringSelect({
 		store: service_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                        
 		required: true,                      
 	    id: "title",
 	    name: "title",  
@@ -68,7 +70,7 @@ dojo.ready(function(){
 <table cellspacing="10" style="margin: 0 auto;width:100%;" >
 	<tr>
 		<td>
-		<fieldset>
+		<fieldset style="background: #fff;   border: solid 1px #008;">
 					<legend align="center" style="font-size: 20px;"><strong><?php echo $tr->translate("ADD_SERVICE_FEE");?></strong></legend>
 					<table style="margin: 0 auto; width: 100%;" cellspacing="10" broder 1>
 						<tr>
@@ -180,7 +182,7 @@ function addRow() {
 		}
 			template+='<td width="40px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="40px" align="center">'+no+'</td>';
-			template+='<td width="22%"><select dojoType="dijit.form.FilteringSelect" id="class_'+col+'" class="fullside"  name="class_'+col+'" onChange="showAddBlock('+col+');"  required>'+faculty+'</select></td>';			
+			template+='<td width="22%"><select dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" id="class_'+col+'" class="fullside"  name="class_'+col+'" onChange="showAddBlock('+col+');"  required>'+faculty+'</select></td>';			
 			column = 0;
 			value='';
 			for(j=0;j<payment_term;j++){ column++;
@@ -287,7 +289,7 @@ function addStudentService(){
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
-					<fieldset style="background-color: buttonface;">
+				<fieldset>
 					<legend align="center" ><?php echo $tr->translate("បន្ថែមប្រភេទសេវាកម្ម");?></legend><br />
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
@@ -335,7 +337,6 @@ function addStudentService(){
 				</td>
 			</tr>
 		</table>
-
 		</form>
 	</div>
 </div>

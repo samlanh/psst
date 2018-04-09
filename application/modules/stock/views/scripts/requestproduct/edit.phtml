@@ -524,7 +524,7 @@ function submitDataClose(){
 	if(dijit.byId('suspend_service').validate()) {
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'purchase','action'=>'add')); ?>';
+		var url_submit = '<?php echo $this->url(array('module'=>'stock','controller'=>'purchase','action'=>'add')); ?>';
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("suspend_service"),		    
@@ -538,7 +538,7 @@ function submitDataClose(){
 	}
 }
 
-var url_qty = '<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'get-productqty')); ?>';
+var url_qty = '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'get-productqty')); ?>';
 function getQtyById(index){
 	pro_id = dijit.byId('pro_id').get('value');
 	branch_id=dijit.byId("branch").get("value");
@@ -569,7 +569,7 @@ function getQtyById(index){
 		});
 }
 var pro_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_pro_branch= '<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'get-pro-bylocation')); ?>';
+var url_pro_branch= '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'get-pro-bylocation')); ?>';
 function getProByBranch(){
 	    branch_id=dijit.byId("branch").get("value");
 	    if(branch_id=='' || branch_id==-1){

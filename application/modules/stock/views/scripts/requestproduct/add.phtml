@@ -124,6 +124,21 @@ fieldset{  background:none;}
 				<fieldset style=" background: #fff;   border: solid 1px #008;">
 					<legend align="center"><strong><?php echo $tr->translate("ADD_REQUEST_STOCK");?>​</strong></legend>
 					<table style="margin: 0 auto;" cellspacing="10" >
+							
+							<tr>
+								<td><?php echo $tr->translate("BRANCH")?></td>
+						    	<td>
+									<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); ">								
+										<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
+												<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
+										<?php }?> 
+									 </select>
+						    	</td>
+								
+							    <td><strong><?php echo $tr->translate("REQUEST_NO")?></strong></td>
+							    <td><input type="text" dojoType="dijit.form.TextBox"   name="request_no"  id="request_no" value="<?php echo $this->rq_code;?>" class="fullside" readOnly="true"></td>
+							</tr>
+							
 							<tr>
 							    <td><strong><?php echo $tr->translate("REQUEST_FOR")?></strong></td>
 							    <td>
@@ -135,27 +150,18 @@ fieldset{  background:none;}
 							    	<input id="for_section"/>
 							   	</td>
 							</tr>
+							
 							<tr>
-							    <td><strong><?php echo $tr->translate("REQUEST_NO")?></strong></td>
-							    <td><input type="text" dojoType="dijit.form.TextBox"   name="request_no"  id="request_no" value="<?php echo $this->rq_code;?>" class="fullside" readOnly="true"></td>
-							    <td><?php echo $tr->translate("PURPOSE")?></td>
+								<td><?php echo $tr->translate("REQUEST_DATE")?></td>
+								<td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="request_date" id="request_date" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/></td>
+
+								<td><?php echo $tr->translate("PURPOSE")?></td>
 								<td colspan=""><textarea class="fullside"  style=" height: 30px !important;" tabindex="20" dojoType=""  id="purpose" name="purpose"  ></textarea></td>
-							</tr>
-							<tr>
-								<td><?php echo $tr->translate("BRANCH")?></td>
-						    	<td>
-									<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); ">								
-										<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
-												<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
-										<?php }?> 
-									 </select>
-						    	 </td>
-								 <td><?php echo $tr->translate("REQUEST_DATE")?></td>
-								 <td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="request_date" id="request_date" dojoType="dijit.form.DateTextBox"  value="<?php echo date('Y-m-d');?>" type="text"/></td>
 							</tr>
 							<tr>
 								<td><strong><?php echo $tr->translate("PRODUCT_NAME");?></strong></td>
 								<td colspan="1"><input id="pro_id" name="pro_id" /></td>
+								
 								<td style="width: 160px"><?php echo $tr->translate("STATUS");?></td>
 								<td>
 									<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="status" name="status" type="text">								
@@ -491,7 +497,7 @@ function submitDataClose(){
 	if(dijit.byId('office_receipt').validate()) {
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'add')); ?>';
+		var url_submit = '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'add')); ?>';
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("office_receipt"),		    
@@ -504,7 +510,7 @@ function submitDataClose(){
 		});
 	}
 }
-var url_qty = '<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'get-productqty')); ?>';
+var url_qty = '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'get-productqty')); ?>';
 function getQtyById(index){	 
 	pro_id = dijit.byId('pro_id').get('value');
 	branch_id=dijit.byId("branch").get("value");
@@ -535,28 +541,31 @@ function getQtyById(index){
 	});
 }
 var pro_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-var url_pro_branch= '<?php echo $this->url(array('module'=>'accounting','controller'=>'requestproduct','action'=>'get-pro-bylocation')); ?>';
+var url_pro_branch= '<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'get-pro-bylocation')); ?>';
 function getProByBranch(){
-	    branch_id=dijit.byId("branch").get("value");
-	    if(branch_id=='' || branch_id==-1){
-		    alert("Please Selected Branch Name!");
-		    return false ;
-	    }
-		dojo.xhrPost({
-			url:url_pro_branch,
-			content:{
-				'branch_id':branch_id
-				},
-			handleAs:"json",
-			load: function(data) {
-					dijit.byId('pro_id').set('value','');
-					pro_store  = getDataStorefromJSON('id','name', data);
-			    	dijit.byId('pro_id').set('store',pro_store); 
+	
+    branch_id=dijit.byId("branch").get("value");
+    if(branch_id=='' || branch_id==-1){
+	    alert("Please Selected Branch Name!");
+	    return false ;
+    }
+    
+	dojo.xhrPost({
+		url:url_pro_branch,
+		content:{
+			'branch_id':branch_id
 			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+		handleAs:"json",
+		load: function(data) {
+				//alert(1);
+				dijit.byId('pro_id').set('value','');
+				pro_store  = getDataStorefromJSON('id','name', data);
+		    	dijit.byId('pro_id').set('store',pro_store); 
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 function getCurrQty(r){
 	curr_qty=dijit.byId("curr_qty"+r).get("value");

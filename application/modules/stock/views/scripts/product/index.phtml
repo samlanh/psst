@@ -9,16 +9,12 @@ $formList = new Application_Form_Frmtable();
 <meta charset="utf-8">
 <form action=""
 	dojoType="dijit.form.Form" method="post">
-	<table style="width: 80%">
+	<table style="width: 100%">
 		<tr>
 		    <td style="width: 95px;background:#e8e7e7;border-radius:5px;"><?php echo $formList->showCopyBuntton($url_copy);?></td>
 			<td><?php echo $frm->getElement("title");?></td>
 			<td><?php echo $frm->getElement("location");?></td>
 			<td> <?php echo $frm->getElement("category_id");?></td>
-		</tr>
-		
-		<tr>
-			<td></td>
 			<td><?php echo $frm->getElement("start_date");?></td>
 			<td><?php echo $frm->getElement("end_date");?></td>
 			<td> <?php echo $frm->getElement("status_search");?></td>

@@ -137,7 +137,6 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 				</fieldset>				
 			</form>
 			
-			
 			<form id='submitgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'addstudenttogroup','action'=>'submit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<script type="dojo/method" event="onSubmit">			
 					if(this.validate()) {
@@ -146,6 +145,9 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 							alert('Please select group !!! ');
 							return false;
 						}
+					dijit.byId('save_close').set('disabled',true);	
+					dijit.byId('save_new').set('disabled',true);	
+
 						return true;
 	   				}else {
 						return false;
@@ -172,13 +174,11 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 								<tr>
 									<td><?php echo $tr->translate("DETAIL")?></td>
 									<td><label id="lbldetail" name=lbldetail style="border: 1px solid #ccc; background:#fff;height:100px;display:block;"></label></td>
-								
 									<input type="hidden" name="academic_year_group" id="academic_year_group" dojoType="dijit.form.TextBox" /> 
 									<input type="hidden" name="degree_group" id="degree_group" dojoType="dijit.form.TextBox" />
 									<input type="hidden" name="grade_group" id="grade_group" dojoType="dijit.form.TextBox" />
 									<input type="hidden" name="session_group" id="session_group" dojoType="dijit.form.TextBox" />
 									<input type="hidden" name="room_group" id="room_group" dojoType="dijit.form.TextBox" />
-								
 								</tr> 
 								<tr>
 									<td><?php echo $tr->translate("STATUS");?></td>
@@ -191,9 +191,9 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 								</tr>
 								<tr>
 									<td colspan="2" align="center">
-										<input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" id="save" name="save"
+										<input type="submit" id="save_close" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_CLOSE");?>"
 											iconClass="dijitEditorIcon dijitEditorIconSave"/>
-										<input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close"
+										<input type="submit" id="save_new" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" 
 											iconClass="dijitEditorIcon dijitEditorIconSave"/>
 									</td>
 								</tr>
@@ -218,11 +218,7 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 		</td>
 	</tr>
 </table>	
-
-
 <script type="text/javascript">
-
-
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-to-group')); ?>';
 function toStudentGroup(){
 		group = dijit.byId('group').get('value');
@@ -238,10 +234,7 @@ function toStudentGroup(){
 			},
 		handleAs:"json",
 		load: function(data) {
-			//alert(data.academic_year_id);
-
 			dojo.byId('lbldetail').innerHTML='<span style="color:red;">Academic :  </span>'+data.year+'<span style="color:red;"> , Degree :  </span>'+data.degree+'<br /><span style="color:red;">  Grade :  </span>'+data.grade+'<span style="color:red;"> , Session :  </span>'+data.session+'<span style="color:red;"> , Room :  </span>'+data.room+'<br /><span style="color:red;">  Start Date :  </span>'+data.start_date+'<span style="color:red;"> , Expired Date :  </span>'+data.expired_date;   
-
 			dijit.byId('academic_year_group').attr('value',data.academic_year_id);
 			dijit.byId('degree_group').attr('value',data.degree_id);
 			dijit.byId('grade_group').attr('value',data.grade_id);
@@ -270,13 +263,10 @@ function getRefreshGroup(){
 		}
 	});
 }
-
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
-
 </script>
-
 <div class="overlay">
 	<div class="overlay-load">
 		<div class="overlay-msg">
@@ -292,4 +282,3 @@ function loading(){
 }
 .overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
 </style>
-

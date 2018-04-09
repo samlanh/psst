@@ -532,6 +532,7 @@ fieldset{  background:none;}
 										<option value="<?php echo $rs['id']?>"><?php echo $rs['note'].'('.date("d-m-Y",strtotime($rs['start_date'])).' To '.date("d-m-Y",strtotime($rs['end_date'])).')';?></option>
 										<?php }}?>
 									</select>
+									<input type="hidden"  name="term_lable" id="term_lable" class="fullside" dojoType="dijit.form.TextBox"/>
 								</td>
 							</tr>
 							<tr>
@@ -905,8 +906,8 @@ function getMonthByNumber(m){
 					</tr>
 				<?php }else{?>
 					<tr height="90px;">
-						<td colspan="10"  style="" align="center" valign="top">
-							&nbsp;
+						<td colspan="10"  style="" align="center" valign="top">&nbsp;
+							
 						</td>
 					</tr>
 				<?php }?>
@@ -915,8 +916,8 @@ function getMonthByNumber(m){
 					<td colspan="10"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
 							<tr>
-								<td width="25%">
-									&nbsp;
+								<td width="25%">&nbsp;
+									
 								</td>
 								<td width="50%" valign="top" align="center" style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;line-height: 20px">
 									<div>បង្កាន់ដៃបង់ប្រាក់</div>
@@ -1566,11 +1567,11 @@ function readMoneyInKhmer(netTotal){
 	    first_money_decimal_en = read_in_english_from_10_to_99(first_decimal);
 	    last_money_decimal_en = read_in_english_from_0_to_9(last_decimal)
 	    money_english=read_money_in_english(netTotal);
-	    read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់'
+	    read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'
 
 	    read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+' Dollar Only )'
 	    
-	    dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់'+read_eng);
+	    dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'+read_eng);
 }
  function alerterror(index){	
 		subtotal = dijit.byId('subtotal_'+index).get('value');
@@ -1834,6 +1835,7 @@ function printSave(new_stu_id,new_receipt,submit){
 						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Tuition Fee('+dijit.byId('grade').attr('displayedValue')+')</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('payment_term').attr('displayedValue')+'</td>';
 					///////////////////    format date 	//////////////////////// 
+						  var lbl_termname = dijit.byId("term_lable").get('value');
 						  var b = new Date(dijit.byId("start_date").get('value'));
 							mm = b.getMonth()+1;
 							var dd = b.getDate();
@@ -1859,7 +1861,7 @@ function printSave(new_stu_id,new_receipt,submit){
 							}
 							var y = a.getFullYear();
 							var epx_date = dd + '/' +months + '/' + y ;
-						  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
+						  temp+='<td align="center" style="border:1px solid #000;"> '+lbl_termname+' </td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
 						  
@@ -1947,7 +1949,7 @@ function printSave(new_stu_id,new_receipt,submit){
 						  temp+='<td align="center" style="border:1px solid #000;">1</td>';
 						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Tuition Fee('+dijit.byId('grade').attr('displayedValue')+')</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('payment_term').attr('displayedValue')+'</td>';
-						  
+						  var lbl_termname = dijit.byId("term_lable").get('value');
 						  var b = new Date(dijit.byId("start_date").get('value'));
 							mm = b.getMonth()+1;
 							var dd = b.getDate();
@@ -1976,8 +1978,7 @@ function printSave(new_stu_id,new_receipt,submit){
 							discount_percent = dijit.byId('discount_percent').get('value');
 							
 							discount_fix = dijit.byId('discount_fix').get('value');
-							
-						  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
+						  temp+='<td align="center" style="border:1px solid #000;"> '+lbl_termname+' </td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee').get('value')+'</td>';
@@ -2190,6 +2191,7 @@ function checkValidateAddRow(){
 }
 var url_set_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date-end-date')); ?>';	
 function setStartAndEndDate(){
+	dijit.byId('term_lable').attr('value','');
 	id = dijit.byId('start_end').get('value');
 	dojo.xhrPost({
 		url:url_set_date,
@@ -2199,6 +2201,7 @@ function setStartAndEndDate(){
 		handleAs:"json",
 		load: function(data) {
 			if(data){
+				dijit.byId('term_lable').attr('value',data.note);
 				dijit.byId('start_date').attr('value',data.start_date);
 				dijit.byId('end_date').attr('value',data.end_date);
 			}

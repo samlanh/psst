@@ -48,6 +48,11 @@
 					</select>
 				</td>
 				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+				<td><select name="showsign" id="showsign" dojoType="dijit.form.FilteringSelect" class="fullside">
+						<option value="1" <?php if($this->datasearch['showsign']==1){echo"selected";}?>>Print Show Signature</option>
+						<option value="0" <?php if($this->datasearch['showsign']==0){echo"selected";}?>>Print Hide Signature</option>
+					</select>
+				</td>
 			</tr>
 		</table>
 	</form>
@@ -129,7 +134,8 @@
 											</table>
 										</td>
 									</tr>
-									<tr align="center" style="height: 65px; background: #ccd9ff;">
+									<?php if($this->datasearch['showsign']==1){?>
+									<tr align="center" style="height: 65px; background: #ccd9ff;" class="signnature">
 										<td colspan="4" style="font-weight: bold;"><?php echo $tr->translate("Instructor's Signature");?></td>
 										<?php for($k=0;$k<$amount_day;$k++){?>
 											<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
@@ -137,6 +143,7 @@
 											<?php }?>
 										<?php }?>
 									</tr>
+									<?php }?>
 									<tr class="cheader" align="center" style="background: #ccd9ff;">
 										<td colspan="4"><?php echo $tr->translate("Month");?></td>
 										<td style="background: none;" align="center" colspan="<?php echo $total_day;?>">

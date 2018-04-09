@@ -48,8 +48,8 @@ table tr td strong{
 					</tr>
 				<?php }else{?>
 					<tr height="90px;">
-						<td colspan="3"  style="" align="center" valign="top">
-							&nbsp;
+						<td colspan="3"  style="" align="center" valign="top">&nbsp;
+							
 						</td>
 					</tr>
 				<?php }?>
@@ -226,9 +226,9 @@ function readMoneyInKhmer(netTotal){
     first_money_decimal_en = read_in_english_from_10_to_99(first_decimal);
     last_money_decimal_en = read_in_english_from_0_to_9(last_decimal)
     money_english=read_money_in_english(netTotal);
-    read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់'
+    read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'
 
     read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+' Dollar Only )'
-    dojo.byId("lbl_moneykhmer").innerHTML = money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លាគត់'+read_eng
+    dojo.byId("lbl_moneykhmer").innerHTML = money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'+read_eng
 }
 </script>

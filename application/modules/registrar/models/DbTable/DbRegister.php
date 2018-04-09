@@ -2393,7 +2393,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	}
 	function getStartDateEndDate($id){
 		$db = $this->getAdapter();
-		$sql="select start_date,end_date from rms_startdate_enddate where id = $id ";
+		$sql="select start_date,end_date,note from rms_startdate_enddate where id = $id ";
 		return $db->fetchRow($sql);
 	}
 	function getStudentPaidExist($student_id,$start_date,$end_date){//សម្រាប់ត្រួតពិនិត្យមើល ថាតើ សិស្សធ្លាប់បង់ប្រាក់ម្តងរឺនៅក្នុងអំឡុង Date នឹង

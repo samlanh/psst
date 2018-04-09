@@ -383,6 +383,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 				  AND pl.brand_id = $branch_id
     		";
     	$order=' ORDER BY p.id DESC';
+    	return $sql;
     	return $db->fetchAll($sql.$order);
     }
     

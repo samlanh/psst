@@ -440,6 +440,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	
     	$order=" GROUP BY sp.degree ASC ,spd.type ASC
     	ORDER BY sp.degree DESC,spd.type ASC, spd.service_id DESC ";
+//     	echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
 }   

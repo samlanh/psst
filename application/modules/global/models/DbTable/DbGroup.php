@@ -26,7 +26,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'date' 			=> date("Y-m-d"),
 					'status'   		=> 1,
 					'teacher_id'   	=> $_data['teacher_id'],
-					'teacher_assistance'   	=> $_data['teacher_ass'],
+					'teacher_assistance'=> $_data['teacher_ass'],
 					'note'   		=> $_data['note'],
 					'user_id'	 	=> $this->getUserId(),
 					'is_use' 		=> 0
@@ -41,6 +41,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'	=> $id,
 							'subject_id'=> $_data['group_subject_study_'.$i],
+							'amount_subject'=>$_data['amount_subject'.$i],
 							'teacher'   => $_data['teacher_'.$i],
 							'note'   	=> $_data['group_note_'.$i],
 							'date' 		=> date("Y-m-d"),
@@ -92,6 +93,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$arr = array(
 							'group_id'	=> $_data['id'],
 							'subject_id'=> $_data['subject_study_'.$i],
+							'amount_subject'=>$_data['amount_subject'.$i],
 							'teacher'   => $_data['teacher_'.$i],
 							'note'   	=> $_data['note_'.$i],
 							'date' 		=> date("Y-m-d"),

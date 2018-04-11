@@ -326,11 +326,6 @@ tmp = '';
 temp='';
 
 function refreshSubject(){
-	<?php 				
-		//$_db = new Global_Model_DbTable_DbGroup();
-		//$refreshSubject = $_db->getAllSubjectStudy();
-		//print_r($refreshSubject)
-	?>
 }
 
 function addRow() {
@@ -340,6 +335,7 @@ function addRow() {
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
+		temp+='<th><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 		temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
 		dojo.query("#head-title").append(temp);
@@ -348,6 +344,7 @@ function addRow() {
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td width="40px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';	
 		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 		template+='<td width="24%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
@@ -474,8 +471,6 @@ function addRowDegree(){
 	}
 		template1+='<td width="4%" align="center"><img onclick="deleteRecord1('+col1+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template1+='<td width="4%" align="center">'+no1+'</td>';
-		//template1+='<td width="25%"><label id="subject_label'+col1+'"><select dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col1+'" name="subject_study_'+col1+'">'+subject+'</select></label></td>';
-		
 		template1+='<td width="25%">&nbsp;<label id="subject_label'+col1+'">'+subject_label+'</label><input dojoType="dijit.form.TextBox" value="'+subject_id+'" name="subject_study_'+col1+'" id="subject_study_'+col1+'" type="hidden"></td>';
 		template1+='<td width="10%"><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col1+'" id="scoreinclass_'+col1+'" value="" type="text"></td>';	
 		template1+='<td width="10%"><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col1+'" id="scoreoutclass_'+col1+'" value="" type="text"></td>';
@@ -942,5 +937,4 @@ function submitDataClose(){
 		});
 	}
 }
-
 </script>

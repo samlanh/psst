@@ -1,6 +1,10 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
+	
+	$session_lang=new Zend_Session_Namespace('lang');
+	$lang_id=$session_lang->lang_id;
+	
 	echo $this->headTitle();
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
@@ -30,13 +34,9 @@
 			);
 ?>	
 <script type="text/javascript">
-//dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore");  
-//dojo.require("dojo.store.Memory");
-dojo.require("dojo.data.ObjectStore");
-//dojo.require('dojox.form.BusyButton');
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.data.ObjectStore");
 dojo.ready(function(){
-	//control study year
 		var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
 		new dijit.form.FilteringSelect({
 		    store:group_store,
@@ -108,7 +108,6 @@ dojo.ready(function(){
 				<?php $i=0; $count_fail=0;?>
 				<tr>
 					<td align="center" width="32%" rowspan="2">
-						<!-- <img src="<?php //echo $this->baseUrl();?>/images/logo.png" style="max-height:110px;" /> -->
 						<strong​​ style="font-weight:bold;color:#000; font-size: 15px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("MINISTRY_INPHNOMPENH");?>
 						<?php echo $tr->translate("OFFICE_MINISTRY");?><br />
 						<?php echo $tr->translate("CUSTOMER_BRANCH");?>
@@ -138,7 +137,6 @@ dojo.ready(function(){
 						</strong>
 					</td>
 					<td align="center" valign="top">
-					
 					</td>
 				</tr>
 				<tr>
@@ -159,6 +157,7 @@ dojo.ready(function(){
 								<?php }?>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("AVERAGE");?></td>
+								<td style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("MENTION");?></td>
 								<td style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RANK");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RESULT");?></td>
 							</tr>
@@ -176,7 +175,7 @@ dojo.ready(function(){
 							<tr class="style hover" style=" line-height: 18px;">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 								<!-- <td align="center" style="white-space:nowrap;">&nbsp;<?php //echo $rs['stu_code'];?>&nbsp;</td> -->
-								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
+								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?$rs['stu_khname']:$rs['stu_enname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
 									if($this->data['scoreresulttye']==1){
@@ -187,8 +186,10 @@ dojo.ready(function(){
 								<td align="center">
 									<?php 
 										$score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); 
-										echo number_format($score['score'],2); 
-										$total_score = $total_score + $score['score'];
+										$tscore_subject = number_format($score['score'],2);
+										echo str_replace(".00", "", $tscore_subject);
+
+										$total_score = $total_score + $tscore_subject;
 									?>
 								</td>
 								<?php }
@@ -202,12 +203,16 @@ dojo.ready(function(){
 									}//
 									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
 								?>
-								<td align="center"><?php echo number_format($total_score,2);?></td>
-								<?php //}?>
-								<td align="center"><?php echo number_format($rs['average'],2);// Average ?></td>
+								<td align="center"><?php 
+								$total_score = number_format($total_score,2);
+								echo str_replace(".00", "", $total_score);?></td>
+								<?php $average = number_format($rs['total_score']/$rs['amount_subject'],2);
+								?>
+								<td align="center"><?php echo str_replace(".00", "", $average);?></td>
+								<td align="center"><?php echo calCulateGrade($average);?></td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<td align="center" <?php if($rs['average']<$rs['average_pass']){echo 'style=" background: #fdbdbd;"'; $count_fail++;}?>>
-									<?php if($rs['average']>=$rs['average_pass']){
+									<?php if($average>=$rs['average_pass']){
 										echo $tr->translate("STUDENT_PASS");
 										$count_pass++;
 										if($rs['sex']==2){$pass_female=$pass_female+1;}//femail
@@ -225,7 +230,7 @@ dojo.ready(function(){
 									<td align="left" colspan="<?php echo $default_col+8;?>" style="  border: 1px solid #fff;border-top: 1px solid #000;  ">
 										<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Fasthand';font-size: 14px">
 											<tr>
-												<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;">ចំនួនសិស្សសរុប  : <?php echo $i." ".$tr->translate("STUDENT_UNIT");?></td>
+												<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;"><?php echo $tr->translate("TOTAL_STUDENT");?>  : <?php echo $i." ".$tr->translate("STUDENT_UNIT");?></td>
 												<td width="33%" valign="top" style="font-family:'Khmer os battambang';"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php echo $f." ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
 												<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
 											</tr>
@@ -262,10 +267,10 @@ dojo.ready(function(){
 						<?php
 						if($this->data['scoreresulttye']==1){
 							$string=",";
-								if (!empty($subj)) foreach ($subj as $key =>$subject){?>
-								<?php 
-								if($key+1==count($subj)){$string="";}
-								echo $subject['shortcut']."=".$subject['subject_titleen'].$string;?>
+							if (!empty($subj)) foreach ($subj as $key =>$subject){?>
+							<?php 
+							if($key+1==count($subj)){$string="";}
+							echo $subject['shortcut']."=".$subject['subject_titleen'].$string;?>
 							<?php }
 						}	
 						?>
@@ -274,3 +279,22 @@ dojo.ready(function(){
 			</table>
 		</div>
 	</div>
+<?php 
+function calCulateGrade($score){
+	$grade="";
+	if($score>=90){
+		$grade="A";
+	}else if($score>=80){
+		$grade="B";
+	}else if($score>=70){
+		$grade="C";
+	}else if($score>=60){
+		$grade="D";
+	}else if($score>=50){
+		$grade="E";
+	}else{
+		$grade="F";
+	}
+	return $grade;
+}
+?>

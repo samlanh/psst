@@ -37,7 +37,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				WHERE spd.`is_start` = 1 
 				  AND sp.id=spd.`payment_id`
 				  AND spd.`service_id`=pn.`service_id`
-				    AND p.service_id=spd.service_id 
+				  AND p.service_id=spd.service_id 
     			  AND sp.is_void!=1  $branch_id
     			  and s.stu_id = sp.student_id
     			  and sp.is_suspend = 0 ";
@@ -45,13 +45,12 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	$order=" ORDER by spd.type ASC ";
      	$where=" ";
      	$from_date = (empty($search['end_date']))? '1': "spd.validate >= '".$search['end_date']." 00:00:00'";
-     	
+     	     	
      	$str_next = '+1 week';
      	$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
      	$to_date = (empty($search['end_date']))? '1': "spd.validate <= '".$search['end_date']." 23:59:59'";
      	
      	$where .= " AND ".$from_date." AND ".$to_date;
-     	
      	if(!empty($search['service'])){
      		$where .=" and spd.service_id=".$search['service'];
      	}
@@ -87,8 +86,4 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	}    		
     	return $db->fetchAll($sql.$where.$order);
     }
-    
-}
-   
-    
-   
+} 

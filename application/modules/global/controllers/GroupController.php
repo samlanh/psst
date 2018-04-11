@@ -2,7 +2,6 @@
 class Global_GroupController extends Zend_Controller_Action {
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -99,8 +98,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		$dept = $db->getAllDept();
 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->dept = $dept;
-		
-		
 	}
 	function editAction(){
 		$db= new Global_Model_DbTable_DbGroup();
@@ -108,9 +105,7 @@ class Global_GroupController extends Zend_Controller_Action {
 			try {
 				$data = $this->getRequest()->getPost();
 				$db->updateGroup($data);
-				if(!empty($data['save'])){
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/global/group/index");
-				}
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/global/group/index");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				echo $e->getMessage();
@@ -126,9 +121,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		}
 		
 		$this->view->row = $db->getGroupSubjectById($id);
-		
-// 		print_r($this->view->row);exit();
-		
 		
 		$db = new Global_Model_DbTable_DbGroup();
 		$this->view->degree = $rows = $db->getAllFecultyName();
@@ -154,35 +146,24 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$this->view->teacher_option = $_db->getAllTeacherOption();
 		
-		
 		$teacher = $_db->getAllTeacher();
 		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 		$this->view->teacher = $teacher;
-		
 	}
-	
-	
 	function copyAction(){
 		$db= new Global_Model_DbTable_DbGroup();
 		
 		if($this->getRequest()->isPost()){
 			try {
 				$data = $this->getRequest()->getPost();
-				
 				$db->AddNewGroup($data);
-				if(!empty($data['save'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group/index");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group/index");
-				}
-				//Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group/index");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				$err =$e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
-		
 		$id=$this->getRequest()->getParam("id");
 		$this->view->rs = $db->getGroupById($id);
 		$this->view->row = $db->getGroupSubjectById($id);
@@ -207,13 +188,11 @@ class Global_GroupController extends Zend_Controller_Action {
 		array_unshift($grade, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$grade;
 		
-		
 		$this->view->teacher_option = $_db->getAllTeacherOption();
 		
 		$teacher = $_db->getAllTeacher();
 		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 		$this->view->teacher = $teacher;
-		
 	}
 	function addRoomAction(){
 		if($this->getRequest()->isPost()){
@@ -227,7 +206,6 @@ class Global_GroupController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-			
 		}
 	}
 	function getsubjectbydegreeAction(){
@@ -270,7 +248,6 @@ class Global_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
     function addTeacherPopupAction(){
     	if($this->getRequest()->isPost()){
     		try{
@@ -285,7 +262,4 @@ class Global_GroupController extends Zend_Controller_Action {
     		}
     	}
     }
-    
-    
 }
-

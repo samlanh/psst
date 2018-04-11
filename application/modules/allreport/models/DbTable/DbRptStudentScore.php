@@ -263,8 +263,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	(select teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
 		   	sd.`student_id`,
 		   	st.`stu_code`,
-		   	st.`stu_enname`,		   
-			(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS stu_khname,			
+			st.stu_khname,
+			st.stu_enname,		
 		   	st.`sex`,
 		   	st.photo,
 		   	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
@@ -274,6 +274,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	SUM(sd.`score`) AS total_score,
 		   	total_score AS total_scoreallsubject,
 		   	AVG(sd.score) AS average,
+		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE group_id=1 LIMIT 1) AS amount_subject,
 		   	(SELECT pass_average FROM `rms_dept` WHERE dept_id=g.degree LIMIT 1) as average_pass
    		FROM 
    			`rms_score` AS s,

@@ -364,23 +364,25 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$where = " stu_id=".$_data["id"]." AND is_pass=0 and type = 1 ";
 				$this->update($arr_group_history, $where);
 			}else{
-				$this->_name='rms_group_detail_student';
-				$arr_group_history= array(
-						'stu_id'	=>$_data["id"],
-						'group_id'	=>$_data['group'],
-						'date'		=>date("Y-m-d"),
-						'status'	=>$_data['status'],
-						'user_id'	=>$this->getUserId(),
-				);
-				$this->insert($arr_group_history);
-				
-				$this->_name = 'rms_group';
-				$group=array(
-						'is_use'	=>1,
-						'is_pass'	=>2,
-				);
-				$where=" id=".$_data['group'];
-				$this->update($group, $where);
+				if($_data['group']>0){
+					$this->_name='rms_group_detail_student';
+					$arr_group_history= array(
+							'stu_id'	=>$_data["id"],
+							'group_id'	=>$_data['group'],
+							'date'		=>date("Y-m-d"),
+							'status'	=>$_data['status'],
+							'user_id'	=>$this->getUserId(),
+					);
+					$this->insert($arr_group_history);
+					
+					$this->_name = 'rms_group';
+					$group=array(
+							'is_use'	=>1,
+							'is_pass'	=>2,
+					);
+					$where=" id=".$_data['group'];
+					$this->update($group, $where);
+				}
 			}
 			
 			$this->_name = 'rms_student_id';
@@ -392,6 +394,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$db->commit();//if not errore it do....
 			
 		}catch(Exception $e){
+			$db->rollBack();
 			echo $e->getMessage();
 		}
 	}

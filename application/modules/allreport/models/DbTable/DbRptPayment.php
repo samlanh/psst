@@ -326,6 +326,12 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	(SELECT name_kh from rms_view where type=5 and key_code=is_subspend) as status,
     	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
     	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
+    	
+    	(SELECT sp.create_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.type=4 AND sp.student_id=rms_student.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS create_date,
+    	(SELECT spd.fee FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.type=4 AND sp.student_id=rms_student.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS fee,
+    	(SELECT spd.start_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.type=4 AND sp.student_id=rms_student.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS start_date,
+    	(SELECT spd.validate FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.type=4 AND sp.student_id=rms_student.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1 ) AS validate,
+    	
     	(SELECT scholarship_percent FROM rms_student_payment WHERE student_id=rms_student.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_percent,
     	(SELECT scholarship_amount FROM rms_student_payment WHERE student_id=rms_student.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_amount,
     	(SELECT tfd.tuition_fee FROM rms_tuitionfee_detail AS tfd WHERE academic_year = tfd.fee_id AND tfd.class_id=rms_student.grade AND tfd.payment_term =4 LIMIT 1) AS tuition_fee
@@ -348,9 +354,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " CONCAT(stu_enname,stu_khname) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['study_year'])){

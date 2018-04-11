@@ -68,11 +68,9 @@ public function init()
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
-    
     function monthlyOutstandingStudentAction(){
     	$id=$this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){

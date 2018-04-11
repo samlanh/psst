@@ -851,4 +851,52 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 	}
+	
+	function rptReceiptVoidAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'title' 	=>'',
+						'branch_id'	=>'',
+						'type'		=>-1,
+						'start_date'=> date('Y-m-d'),
+						'end_date'	=>date('Y-m-d'),
+				);
+			}
+			$this->view->search = $search;
+			$db = new Allreport_Model_DbTable_DbRptReceiptVoid();
+			
+			if($search['type']==-1){
+				$this->view->void_stu = $db->getAllStudentVoid($search);
+				//$this->view->void_test = $db->getAllTestVoid($search);
+				$this->view->void_chang_product = $db->getAllChangeProductVoid($search);
+				$this->view->void_income = $db->getAllIncomeVoid($search);
+				$this->view->void_expense = $db->getAllExpenseVoid($search);
+			}else if($search['type']==1){
+				$this->view->void_stu = $db->getAllStudentVoid($search);
+			}else if($search['type']==2){
+				//$this->view->void_test = $db->getAllTestVoid($search);
+			}else if($search['type']==3){
+				$this->view->void_chang_product = $db->getAllChangeProductVoid($search);
+			}else if($search['type']==4){
+				$this->view->void_income = $db->getAllIncomeVoid($search);
+			}else if($search['type']==5){
+				$this->view->void_expense = $db->getAllExpenseVoid($search);
+			}
+			
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			echo $e->getMessage();
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+	}
+	
+	
+	
 }

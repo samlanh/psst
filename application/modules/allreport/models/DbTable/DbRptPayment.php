@@ -205,6 +205,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				  s.stu_code,
 				  s.stu_khname,
 				  s.stu_enname,
+				  s.create_date as date_start_study,
 				  p.title AS service_name,
 				  (SELECT pg.name_kh FROM `rms_pro_category` AS pg WHERE pg.id = (SELECT pp.cat_id FROM `rms_product` AS pp WHERE pp.id = p.ser_cate_id LIMIT 1) LIMIT 1) AS product_category,
 				  (SELECT major_enname FROM `rms_major` WHERE major_id=sp.grade LIMIT 1) As major_name,

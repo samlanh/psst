@@ -1,0 +1,289 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('STUDENT_PAYMENT_REPORT')); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm = $this->form_search;
+	$str="";
+?>
+<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<table width="100%" align="left" style="font-family:'Khmer os Battambang'">
+		<tr> 
+			<td><?php echo $frm->getElement("title");?></td>
+			<td><?php echo $frm->getElement("branch_id");?></td>
+			<td>
+				<select name="type" id="type" dojoType="dijit.form.FilteringSelect" class="fullside"  >
+					<option value="-1" <?php if($this->search['type']==-1){echo "selected='selected'";}?>>select type</option>
+					<option value="1" <?php if($this->search['type']==1){echo "selected='selected'";}?>>Student Payment</option>
+					<option value="2" <?php if($this->search['type']==2){echo "selected='selected'";}?>>Student Test</option>
+					<option value="3" <?php if($this->search['type']==3){echo "selected='selected'";}?>>Change Product</option>
+					<option value="4" <?php if($this->search['type']==4){echo "selected='selected'";}?>>Other Income</option>
+					<option value="5" <?php if($this->search['type']==5){echo "selected='selected'";}?>>Other Expense</option>
+				</select>
+			</td>
+	  		<td><?php echo $frm->getElement("start_date");?></td>
+	 		<td><?php echo $frm->getElement("end_date");?></td>
+			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+	  	</tr>
+	</table>	
+</form>
+<style>
+#footer{display: none;}
+</style>	
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+	<div id="divPrint">
+		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-receipt-void')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">	
+			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm; font-family:'Khmer OS Battambang';">
+				<tr>
+					<td width="25%" align="left">
+						<img style="height: 90px" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /><br />
+					</td>
+					<td align="center" width="50%">
+						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('STUDENT_RECEIPT_VOID_REPORT');?></strong><br >
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO')?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+					</td>
+					<td align="right" width="25%">&nbsp;</td>
+				</tr>
+				<tr> 
+					<td colspan="3" id="exportExcel" >
+						<style> th,td{ padding:0 1px;}</style>
+						<style type="text/css">
+							body{font-family: "Times New Roman",Arial; }
+							table{ border-collapse:collapse; margin:0 auto;
+							border-color:#000; }
+							.padd tr td{text-align:center}
+						</style>
+						<?php if(!empty($this->void_stu)){?>
+							<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family: 'Khmer OS Battambang';margin-bottom: 30px;">
+								  
+								  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
+								  	<td colspan="13" align="left" style="text-align:left;">Student Payment</td>
+								  </tr>
+								  
+								  <tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+								    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+								    <th>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('TOTAL_PAYMENT');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('FINE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('CREDIT_MEMO');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('DEDUCT');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('NET_AMOUNT');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('PAID_DATE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</th>
+								  </tr>
+									<style> td{padding:0 3px; }</style>
+								 <?php $i=0; $total=0;foreach($this->void_stu as $key=>$rs){
+								 		$i++;
+								 		$stu_name = $rs['stu_enname'];
+								 		if($stu_name==""){
+								 			$stu_name=$rs['stu_khname'];
+								 		}
+								 ?>
+								  <tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
+									    <td ><?php echo $i;?></td>
+									    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['stu_code']; ?></a></td>
+									    <td style=" white-space:nowrap; text-align:left"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $stu_name; ?></a></td>
+									    <td><a style=" text-decoration: none;color:#000; " href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['receipt_number']; ?></a></td>
+									    <td><?php if($rs['grand_total']>0){echo '$ '.$rs['grand_total'];} ?></td>
+									    <td><?php if($rs['fine']>0){echo '$ '.$rs['fine'];} ?></td>
+									    <td><?php if($rs['credit_memo']>0){echo '$ '.$rs['credit_memo'];}?></td>
+									    <td><?php if($rs['deduct']>0){echo '$ '.$rs['deduct'];}?></td>
+									    <td><?php if($rs['net_amount']>0){echo '$ '.$rs['net_amount'];}?></td>
+									    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
+									    <td><?php echo $rs['user']; ?></td>
+									   	<td><?php echo $rs['note']; ?></td>
+									   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $rs['vois_status']; ?></td>
+								  </tr>
+								 <?php } ?>
+							</table>
+						<?php } ?>
+						
+						
+						<?php if(!empty($this->void_test)){?>
+							<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family: 'Khmer OS Battambang';">
+								  
+								  <tr>
+								  	<td colspan="13" align="left" style="text-align:left;">Student Payment</td>
+								  </tr>
+								  
+								  <tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+								    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+								    <th>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('TOTAL_PAYMENT');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('FINE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('CREDIT_MEMO');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('DEDUCT');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('NET_AMOUNT');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('PAID_DATE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</th>
+								  </tr>
+									<style> td{padding:0 3px; }</style>
+								 <?php $i=0; $total=0;foreach($this->void_test as $key=>$rs){$i++;
+								 ?>
+								  <tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
+									    <td ><?php echo $i;?></td>
+									    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['stu_code']; ?></a></td>
+									    <td style=" white-space:nowrap; text-align:left"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['stu_khname'].'-'.$rs['stu_enname']; ?></a></td>
+									    <td><a style=" text-decoration: none;color:#000; " href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-paymentrecieptdetail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['receipt_number']; ?></a></td>
+									    <td><?php if($rs['grand_total']>0){echo '$ '.$rs['grand_total'];} ?></td>
+									    <td><?php if($rs['fine']>0){echo '$ '.$rs['fine'];} ?></td>
+									    <td><?php if($rs['credit_memo']>0){echo '$ '.$rs['credit_memo'];}?></td>
+									    <td><?php if($rs['deduct']>0){echo '$ '.$rs['deduct'];}?></td>
+									    <td><?php if($rs['net_amount']>0){echo '$ '.$rs['net_amount'];}?></td>
+									    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
+									    <td><?php echo $rs['user']; ?></td>
+									   	<td><?php echo $rs['note']; ?></td>
+									   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $rs['vois_status']; ?></td>
+								  </tr>
+								 <?php } ?>
+							</table>
+						<?php } ?>
+						
+						
+						<?php if(!empty($this->void_chang_product)){?>
+							<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family: 'Khmer OS Battambang';margin-bottom: 30px;">
+								  
+								  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
+								  	<td colspan="13" align="left" style="text-align:left;">Change Product</td>
+								  </tr>
+								  
+								  <tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+								    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+								    <th>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('TOTAL_PAYMENT');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('CREDIT_MEMO');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('CREATE_DATE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</th>
+								  </tr>
+									<style> td{padding:0 3px; }</style>
+								 <?php $i=0; $total=0;foreach($this->void_chang_product as $key=>$rs){
+								 		$i++;
+								 		$stu_name = $rs['stu_enname'];
+								 		if($stu_name==""){
+								 			$stu_name=$rs['stu_khname'];
+								 		}
+								 ?>
+								  <tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
+									    <td ><?php echo $i;?></td>
+									    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$rs['id']));?>" target="blank"><?php echo $rs['stu_code']; ?></a></td>
+									    <td style=" white-space:nowrap; text-align:left"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$rs['id']));?>" target="blank"><?php echo $stu_name; ?></a></td>
+									    <td><a style=" text-decoration: none;color:#000; " href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$rs['id']));?>" target="blank"><?php echo $rs['receipt_no']; ?></a></td>
+									    <td><?php if($rs['total_payment']>0){echo '$ '.$rs['total_payment'];} ?></td>
+									    <td><?php if($rs['credit_memo']>0){echo '$ '.$rs['credit_memo'];}?></td>
+									    <td><?php echo date('d-M-Y', strtotime($rs['create_date'])); ?></td>
+									    <td><?php echo $rs['user']; ?></td>
+									   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $rs['vois_status']; ?></td>
+								  </tr>
+								 <?php } ?>
+							</table>
+						<?php } ?>
+						
+						
+						<?php if(!empty($this->void_income)){?>
+							<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family: 'Khmer OS Battambang';margin-bottom: 30px;">
+								  
+								  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
+								  	<td colspan="13" align="left" style="text-align:left;">Other Income</td>
+								  </tr>
+								  
+								  <tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+								    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+								    <th>&nbsp;<?php echo $tr->translate('INCOME_CATEGORY');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('INCOME_TITLE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('TOTAL_INCOME');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('FOR_DATE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</th>
+								  </tr>
+									<style> td{padding:0 3px; }</style>
+								 <?php $i=0; $total=0;foreach($this->void_income as $key=>$rs){
+								 		$i++;
+								 ?>
+								  <tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
+									    <td ><?php echo $i;?></td>
+									    <td><?php echo $rs['cate_income']; ?></td>
+									    <td><?php echo $rs['title']; ?></td>
+									    <td><?php echo $rs['invoice']; ?></td>
+									    <td><?php if($rs['total_amount']>0){echo '$ '.$rs['total_amount'];} ?></td>
+									    <td><?php echo $rs['description']; ?></td>
+									    <td><?php echo date('d-M-Y', strtotime($rs['date'])); ?></td>
+									    <td><?php echo $rs['user']; ?></td>
+									   	<td style="color:red;"><?php echo "Void"; ?></td>
+								  </tr>
+								 <?php } ?>
+							</table>
+						<?php } ?>
+						
+						
+						
+						<?php if(!empty($this->void_expense)){?>
+							<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family: 'Khmer OS Battambang';">
+								  
+								  <tr style="border-top: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;">
+								  	<td colspan="13" align="left" style="text-align:left;">Other Expense</td>
+								  </tr>
+								  
+								  <tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+								    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('EXPENSE_TITLE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('TOTAL_EXPENSE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('FOR_DATE');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</th>
+								  </tr>
+									<style> td{padding:0 3px; }</style>
+								 <?php $i=0; $total=0;foreach($this->void_expense as $key=>$rs){
+								 		$i++;
+								 ?>
+								  <tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
+									    <td ><?php echo $i;?></td>
+									    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['title']; ?></a></td>
+									    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$rs['id']));?>" target="blank"><?php echo $rs['invoice']; ?></a></td>
+									    <td><?php if($rs['total_amount']>0){echo '$ '.$rs['total_amount'];} ?></td>
+									    <td><?php echo $rs['description']; ?></td>
+									    <td><?php echo date('d-M-Y', strtotime($rs['date'])); ?></td>
+									    <td><?php echo $rs['user']; ?></td>
+									   	<td style="color:red;"><?php echo "Void"; ?></td>
+								  </tr>
+								 <?php } ?>
+							</table>
+						<?php } ?>
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				
+				<tr>
+					<td align="center" width="25%">
+						<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY');?></span>
+					</td>
+					<td  width="50%">
+						&nbsp;
+					</td>
+					<td align="center"  width="25%">
+						<span style=" font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY');?></span>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>	
+</div>
+

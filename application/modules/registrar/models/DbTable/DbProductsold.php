@@ -15,6 +15,7 @@ class Registrar_Model_DbTable_DbProductsold extends Zend_Db_Table_Abstract
 					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
 					sd.`pro_id`,
 					pn.title as pro_name,
+					(select pro_code from rms_product as p where p.id = pn.ser_cate_id LIMIT 1) as pro_code,
 					sd.qty,
 					sd.`cost`,
 					sd.`price`,
@@ -44,6 +45,9 @@ class Registrar_Model_DbTable_DbProductsold extends Zend_Db_Table_Abstract
     	if(!empty($search['pro_name'])){
     		$where.= " AND sd.pro_id = ".$search['pro_name'];
     	}
+    	if(!empty($search['pro_cate'])){
+    		$where.= " AND (select cat_id from rms_product as p where p.id = pn.ser_cate_id ) = ".$search['pro_cate'];
+    	}
 //     	echo $sql.$where.$order_by;
     	return $db->fetchAll($sql.$where.$order_by);
     }	
@@ -54,7 +58,11 @@ class Registrar_Model_DbTable_DbProductsold extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     }
     
-    
+    function getAllProductCategory(){
+    	$db = $this->getAdapter();
+    	$sql="select id,name_kh as name from rms_pro_category where status=1 ";
+    	return $db->fetchAll($sql);
+    }
     
     
 }

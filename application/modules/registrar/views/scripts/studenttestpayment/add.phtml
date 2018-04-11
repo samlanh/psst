@@ -10,6 +10,7 @@
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
 	dojo.ready(function(){
 		getReceiptNo('');
+		setReadOnly();
 		getDefaultTutionfee();
 	});	
 	
@@ -49,11 +50,14 @@ fieldset{  background:none;}
 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttestpayment','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
+		stu_type = dijit.byId('stu_type').get('value');
     	stu_test = dijit.byId('stu_test').get('value');
-    	if(stu_test==0){
-         	dijit.byId("stu_test").focus();
-         	return false;
-    	}
+		if(stu_type==1){
+    		if(stu_test==0){
+         		dijit.byId("stu_test").focus();
+         		return false;
+    		}
+		}
 		dijit.byId('save_new').set('disabled',true);	
 		dijit.byId('save_close').set('disabled',true);
     	return true;
@@ -68,6 +72,15 @@ fieldset{  background:none;}
 					<td width="45%;" valign="top">
 						<table style="margin: 0 auto; width: 100%;" cellspacing="2" >
 							<tr>
+								<td><?php echo $tr->translate("STUDENT_TYPE");?></td>
+								<td>
+									<select type="text" name="stu_type" id="stu_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setReadOnly();" >
+										<option value="0"><?php echo $tr->translate("NEW_STUDENT");?></option>
+										<option value="1"><?php echo $tr->translate("STUDENT_HAVE_DATA");?></option>
+									</select>
+								</td>
+							</tr>
+							<tr>
 								<td><?php echo $tr->translate("STUDENT_NAME");?></td>
 								<td>
 									<select type="text" name="stu_test" id="stu_test" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getStudentTestInfo();"  >
@@ -80,16 +93,16 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("NAME_KH");?></td>
-								<td><input type="text" name="kh_name" readonly id="kh_name" class="fullside" dojoType="dijit.form.TextBox"/></td>
+								<td><input type="text" name="kh_name"  id="kh_name" class="fullside" dojoType="dijit.form.TextBox"/></td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("NAME_EN");?></td>
-								<td><input type="text" name="en_name" id="en_name" readonly class="fullside" required="1" dojoType="dijit.form.ValidationTextBox"/></td>
+								<td><input type="text" name="en_name" id="en_name"  class="fullside" required="1" dojoType="dijit.form.ValidationTextBox"/></td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("SEX");?></td>
 								<td>
-									<select type="text" name="sex" id="sex" readonly class="fullside" dojoType="dijit.form.FilteringSelect" >
+									<select type="text" name="sex" id="sex"  class="fullside" dojoType="dijit.form.FilteringSelect" >
 										<option value="1">Male</option>
 										<option value="2">Female</option>
 									</select>
@@ -98,17 +111,20 @@ fieldset{  background:none;}
 							<tr>
 								<td><?php echo $tr->translate("DOB");?></td>
 								<td>
-									<input name="dob" id="dob" constraints="{datePattern:'dd/MM/yyyy'}" readonly dojoType="dijit.form.DateTextBox" value="now" class="fullside" type="text" />
+									<input name="dob" id="dob" constraints="{datePattern:'dd/MM/yyyy'}"  dojoType="dijit.form.DateTextBox" value="now" class="fullside" type="text" />
 								</td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("PARENT_PHONE");?></td>
-								<td><input type="text" name="parent_phone" id="parent_phone" readonly class="fullside" dojoType="dijit.form.TextBox"/></td>
+								<td><input type="text" name="parent_phone" id="parent_phone"  class="fullside" dojoType="dijit.form.TextBox"/></td>
 							</tr>
+							
+							<?php /*?>
 							<tr>
 								 <td><?php echo $tr->translate("TEST_DATE")?></td>
-								 <td><input type="text" name="test_date" required="true" readonly id="test_date" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" value="now" dojoType="dijit.form.DateTextBox"   /></td>
+								 <td><input type="text" name="test_date" required="true"  id="test_date" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" value="now" dojoType="dijit.form.DateTextBox"   /></td>
 							</tr>
+							<?php */?>
 						</table>
 					</td>
 					
@@ -124,7 +140,7 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("SERIAL")?></td>
-								<td><input type="text" name="serial" id="serial" readonly class="fullside" dojoType="dijit.form.TextBox"   /></td>
+								<td><input type="text" name="serial" id="serial"  class="fullside" dojoType="dijit.form.TextBox"   /></td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("DEGREE")?></td>
@@ -139,7 +155,7 @@ fieldset{  background:none;}
 							
 							<tr>
 								<td valign="top"><?php echo $tr->translate("NOTE")?></td>
-								<td><input type="text" name="note" id="note" readonly class="fullside" dojoType="dijit.form.TextBox"   /></td>
+								<td><input type="text" name="note" id="note"  class="fullside" dojoType="dijit.form.TextBox"   /></td>
 							</tr>
 							<tr>
 								<td><?php echo $tr->translate("PAID_DATE");?></td>
@@ -181,6 +197,16 @@ fieldset{  background:none;}
 function submitDataClose(){
 	
 	if(dijit.byId('office_receipt').validate()) {
+
+		stu_type = dijit.byId('stu_type').get('value');
+    	stu_test = dijit.byId('stu_test').get('value');
+		if(stu_type==1){
+    		if(stu_test==0){
+    			alert('please select student !!!');
+         		dijit.byId("stu_test").focus();
+         		return false;
+    		}
+		}
 		
 		dijit.byId('save_close').set('disabled',true);
 	
@@ -201,6 +227,17 @@ function submitDataClose(){
 }
 function submitDataAddNew(){
 	if(dijit.byId('office_receipt').validate()) {
+
+		stu_type = dijit.byId('stu_type').get('value');
+    	stu_test = dijit.byId('stu_test').get('value');
+		if(stu_type==1){
+    		if(stu_test==0){
+        		alert('please select student !!!');
+         		dijit.byId("stu_test").focus();
+         		return false;
+    		}
+		}
+		
 		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttestpayment','action'=>'add')); ?>';
 		loading();
@@ -220,6 +257,16 @@ function submitDataAddNew(){
 
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
+}
+
+function setReadOnly(){
+	stu_type = dijit.byId('stu_type').get('value');
+	if(stu_type==0){
+		dijit.byId("stu_test").set('readOnly',true);
+		dijit.byId('stu_test').attr('value',stu_type);
+	}else{
+		dijit.byId("stu_test").set('readOnly',false);
+	}
 }
 
 </script>
@@ -390,7 +437,7 @@ function loading(){
 			<tr>
 				<td align="center">
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-						type="button" onclick="hideDialog1(),dijit.byId('office_receipt').submit();">No</button>
+						type="button" onclick="hideDialog1()">No</button>
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
 						type="button" onclick="printSubmit();"><?php echo $tr->translate("Yes");?></button>
 				</td>
@@ -467,6 +514,17 @@ function alerterror(index){
 
 function printSave(new_stu_id,new_receipt){		
 	if(dijit.byId('office_receipt').validate()) {
+
+		stu_type = dijit.byId('stu_type').get('value');
+    	stu_test = dijit.byId('stu_test').get('value');
+		if(stu_type==1){
+    		if(stu_test==0){
+    			alert('please select student !!!');
+         		dijit.byId("stu_test").focus();
+         		return false;
+    		}
+		}
+		
 		//receipt='';
 		receipt=dijit.byId("receipt_no").get("value");
 		degree = dijit.byId('degree').get('value');
@@ -492,39 +550,39 @@ function printSave(new_stu_id,new_receipt){
 
 		dojo.byId("lb_net_amount").innerHTML = " $ "+dojo.number.format(dijit.byId("price").get('value'),{places:2});
 		
-		temp = "";
-		temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important;  " id="table">'
-			temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
-			temp+='<td style="border:1px solid #000;">No</td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Unit Price</strong></td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Late Fee</strong></td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Extra Fee</strong></td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Discount</strong></td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
-			temp+='<td style="border:1px solid #000;><strong style="color:#000;">Note</strong></td>';
-		temp+='</tr>';
-		temp+='<tr style="font-size:12px !important;height: 10px;border:1px solid #000; ">';
-		  temp+='<td align="center" style="border:1px solid #000;">1</td>';
-		  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Test Fee</td>';
-		  temp+='<td align="center" style="border:1px solid #000;"> </td>';
-		  temp+='<td align="center" style="border:1px solid #000;"> </td>';
-		  temp+='<td align="center" style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
-		  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
-		  
-		  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
-		  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
-		  
-		  temp+='<td align="center" style="border:1px solid #000;">0</td>';
-		  temp+='<td align="center" style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
-		  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
-		  
-	  temp+='</tr>';
-		
-		temp+='</table>';
+			temp = "";
+			temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important;  " id="table">'
+				temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
+				temp+='<td style="border:1px solid #000;">No</td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Term</strong></td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Period</strong></td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Unit Price</strong></td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Late Fee</strong></td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Extra Fee</strong></td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Discount</strong></td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
+				temp+='<td style="border:1px solid #000;><strong style="color:#000;">Note</strong></td>';
+			temp+='</tr>';
+			temp+='<tr style="font-size:12px !important;height: 10px;border:1px solid #000; ">';
+			  temp+='<td align="center" style="border:1px solid #000;">1</td>';
+			  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Test Fee</td>';
+			  temp+='<td align="center" style="border:1px solid #000;"> </td>';
+			  temp+='<td align="center" style="border:1px solid #000;"> </td>';
+			  temp+='<td align="center" style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
+			  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
+			  
+			  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
+			  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
+			  
+			  temp+='<td align="center" style="border:1px solid #000;">0</td>';
+			  temp+='<td align="center" style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
+			  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
+			  
+		    temp+='</tr>';
+		   temp+='</table>';
+		   
 		dojo.byId('t_amountmoneytype').innerHTML = temp;
 		dijit.byId("terms").show();	
 	}
@@ -549,8 +607,9 @@ function getStudentTestInfo(){
 				dijit.byId("parent_phone").attr("value",data.phone);
 				dijit.byId("degree").attr("value",data.degree_result);
 				dijit.byId("serial").attr("value",data.serial);
-				dijit.byId("test_date").attr("value",data.test_date);
+				//dijit.byId("test_date").attr("value",data.test_date);
 				dijit.byId("note").attr("value",data.note);
+
 	 		},
 	 		error: function(err) {
 	 			alert(err);
@@ -565,6 +624,7 @@ function getDefaultTutionfee(){
 	}else{
 		dijit.byId("price").attr("value",2.50);
 	}
+	readMoneyInKhmer();
 }
 </script>
 <div class="overlay">

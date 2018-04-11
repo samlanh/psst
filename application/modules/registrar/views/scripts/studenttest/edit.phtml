@@ -122,6 +122,15 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 															<td><?php echo $tr->translate("EMAIL")?></td>
 															<td><input type="text" name="email" id="email" value="<?php echo $this->rs['email']?>" class="fullside" dojoType="dijit.form.TextBox"   /></td>
 														</tr>
+														<tr>
+															<td><?php echo $tr->translate("STATUS")?></td>
+															<td>
+																<select name="status" id="status" dojoType="dijit.form.FilteringSelect" class="fullside" >
+																	<option value="1" <?php if($this->rs['status']==1){echo "selected='selected'";}?>><?php echo $tr->translate("ACTIVE")?></option>
+																	<option value="0" <?php if($this->rs['status']==0){echo "selected='selected'";}?>><?php echo $tr->translate("DEACTIVE")?></option>
+																</select>
+															</td>
+														</tr>
 													</table>
 												</td>
 												<td valign="top" width="33%">
@@ -162,8 +171,9 @@ echo $this->headTitle($tr->translate('EDIT_STUDENT_TEST'));
 														</tr>
 														<tr>
 														    <td><?php echo $tr->translate("ADDRESS")?></td>
-															<td colspan="1"><textarea style="min-height:60px;font-family:'Khmer OS Battambang';font-size: 15px;" value="<?php echo $this->rs['address']?>" class="fullside" name="address" id="address" dojoType="dijit.form.Textarea" ></textarea></td>
+															<td colspan="1"><textarea style="min-height:80px;font-family:'Khmer OS Battambang';font-size: 15px;" value="<?php echo $this->rs['address']?>" class="fullside" name="address" id="address" dojoType="dijit.form.Textarea" ></textarea></td>
 														</tr>
+														
 													</table>
 												</td>
 											</tr>

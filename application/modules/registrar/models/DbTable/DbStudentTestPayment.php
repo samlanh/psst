@@ -20,18 +20,46 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 // 		$stu_code = $this->getNewAccountNumber($data['dept']);
 		$receipt_number = $data['receipt_no']; //$this->getRecieptNo();
 		
-		$arr = array(
-			'receipt_no'=>$receipt_number,
-			'price'	 	=>$data['price'],
-			'total_price'	 	=>$data['price'],
-			'is_paid'	=>1,
-			'paid_date'	=>$data['paid_date'],
-			'account_userid'=>$this->getUserId()
-		);
-		
-		$where = ' id = '.$data['stu_test'];
-		$this->update($arr, $where);
-		
+		if($data['stu_type']==1){
+			$arr = array(
+				'kh_name'	 	=>$data['kh_name'],
+				'en_name'	 	=>$data['en_name'],
+				'receipt_no'	=>$receipt_number,
+				'price'	 		=>$data['price'],
+				'total_price'	=>$data['price'],
+				'is_paid'		=>1,
+				'paid_date'		=>$data['paid_date'],
+				'account_userid'=>$this->getUserId()
+			);
+			
+			$where = ' id = '.$data['stu_test'];
+			$this->update($arr, $where);
+		}else{
+			$array = array(
+				'branch_id'	=>$this->getBranchId(),
+				'kh_name'	 	=>$data['kh_name'],
+				'en_name'	 	=>$data['en_name'],
+				'sex'	 		=>$data['sex'],
+				'dob'		 	=>$data['dob'],
+				'phone'		 	=>$data['parent_phone'],
+					
+				'serial'		=>$data['serial'],
+				'degree'		=>$data['degree'],
+				'note'		 	=>$data['note'],
+					
+				'receipt_no'	=>$receipt_number,
+				'price'	 		=>$data['price'],
+				'total_price'	=>$data['price'],
+				'is_paid'		=>1,
+					
+				'paid_date'		=>$data['paid_date'],
+				'test_date'	=>date('Y-m-d'),
+				'create_date'	=>date('Y-m-d'),
+				
+				'account_userid'=>$this->getUserId()
+			);
+			$this->insert($array);
+		}
 	}
 	
 	function updateRegister($data,$id){
@@ -41,7 +69,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 			$arr = array(
 					'receipt_no'=>$receipt_number,
 					'price'	 	=>$data['price'],
-					'total_price'	 	=>$data['price'],
+					'total_price'=>$data['price'],
 					'is_paid'	=>1,
 					'paid_date'	=>$data['paid_date'],
 					'account_userid'=>$this->getUserId()
@@ -53,6 +81,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 			$arr = array(
 					'receipt_no'=>null,
 					'price'	 	=>null,
+					'total_price'=>null,
 					'is_paid'	=>0,
 					'paid_date'	=>null,
 			);

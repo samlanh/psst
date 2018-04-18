@@ -316,36 +316,53 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     public function getAllStudentBepay($search){
     	$db = $this->getAdapter();
     	$sql ='SELECT stu_id,
-    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-    	CONCAT(stu_enname) AS name,
-    	stu_khname,nationality,tel,stu_code,is_subspend,
-    	(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") from rms_tuitionfee where rms_tuitionfee.id=academic_year) as academic_year,
-    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
-    	(SELECT major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1)AS grade,
-    	(SELECT en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1)AS degree,
-    	(SELECT name_kh from rms_view where type=5 and key_code=is_subspend) as status,
-    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
-    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
+					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+					CONCAT(stu_enname) AS `name`,
+					stu_khname,
+					nationality,
+					tel,
+					(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=s.sex LIMIT 1)AS sex,
+					stu_code,
+					is_subspend,
+					
+					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
+					(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year) AS academic_year,
+					(SELECT name_en FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=s.session LIMIT 1)AS session,
+					(SELECT major_enname FROM rms_major WHERE rms_major.major_id=s.grade LIMIT 1)AS grade,
+					(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1)AS degree,
+					
+					(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=s.is_subspend) AS STATUS,
+					
+					
+					(SELECT sp.create_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS create_date,
+					(SELECT spd.fee FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS fee,
+					(SELECT spd.start_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS start_date,
+					(SELECT spd.validate FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1 ) AS validate,
+					
+					(SELECT scholarship_percent FROM rms_student_payment WHERE student_id=s.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_percent,
+					(SELECT scholarship_amount FROM rms_student_payment WHERE student_id=s.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_amount,
+					(SELECT tfd.tuition_fee FROM rms_tuitionfee_detail AS tfd WHERE academic_year = tfd.fee_id AND tfd.class_id=s.grade AND tfd.payment_term =4 LIMIT 1) AS tuition_fee,
+					s.group_id,
+					s.create_date as date_start_study
+				FROM 
+					rms_student AS s
+				WHERE 
+					s.status=1 
+					AND s.is_subspend=0 
+    		';
     	
-    	(SELECT sp.create_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.type=4 AND sp.student_id=rms_student.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS create_date,
-    	(SELECT spd.fee FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.type=4 AND sp.student_id=rms_student.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS fee,
-    	(SELECT spd.start_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.type=4 AND sp.student_id=rms_student.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS start_date,
-    	(SELECT spd.validate FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.type=4 AND sp.student_id=rms_student.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1 ) AS validate,
-    	
-    	(SELECT scholarship_percent FROM rms_student_payment WHERE student_id=rms_student.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_percent,
-    	(SELECT scholarship_amount FROM rms_student_payment WHERE student_id=rms_student.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_amount,
-    	(SELECT tfd.tuition_fee FROM rms_tuitionfee_detail AS tfd WHERE academic_year = tfd.fee_id AND tfd.class_id=rms_student.grade AND tfd.payment_term =4 LIMIT 1) AS tuition_fee
-    	FROM rms_student ';
-    	$where=' WHERE status=1 AND is_subspend=0 ';
+    	$where = ' ';
     
-    	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;
     	 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	 
-    	$order="  order by academic_year DESC,degree ASC,grade DESC,session ASC,stu_id DESC";
+    	//$order="  order by academic_year DESC,degree ASC,grade DESC,session ASC,stu_id DESC";
+    	$order = " order by s.group_id ASC,s.grade ASC, s.stu_id ASC";
+    	
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
     	}
@@ -376,8 +393,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if(!empty($search['group'])){
     		$where.=' AND group_id='.$search['group'];
     	}
+    
     	return $db->fetchAll($sql.$where.$order);
     }
+    
     public function getStudentPaymentbyDegree($search,$order_no){
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
@@ -447,4 +466,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 //     	echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
+    
+    
+    
 }   

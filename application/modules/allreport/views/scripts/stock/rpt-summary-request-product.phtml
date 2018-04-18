@@ -1,0 +1,111 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Report Request Product'); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm =  $this->form_search;
+	$frm_pro =  $this->form_search_pro;
+	$rows=$this->rows;
+?>
+<form action="" dojoType="dijit.form.Form" method="post">
+	 <table width="100%" >
+	    <tr>
+	        <td><?php echo $frm->getElement('branch_id');?></td>
+	        <td>
+				<select name="request_for" id="request_for" dojoType="dijit.form.FilteringSelect" class="fullside" >
+					<option value="-1">select request for</option>
+					<?php if(!empty($this->rq_for)){foreach($this->rq_for as $req_for){?>
+						<option value="<?php echo $req_for['id']?>" <?php if($req_for['id']==$this->search['request_for']){echo "selected='selected'";}?> ><?php echo $req_for['name']?></option>
+					<?php }}?>
+				</select>
+			</td>
+			<td>
+				<select name="for_section" id="for_section" dojoType="dijit.form.FilteringSelect" class="fullside" >
+					<option value="-1">select request for</option>
+					<?php if(!empty($this->for_section)){foreach($this->for_section as $for_sec){?>
+						<option value="<?php echo $for_sec['id']?>" <?php if($for_sec['id']==$this->search['for_section']){echo "selected='selected'";}?> ><?php echo $for_sec['name']?></option>
+					<?php }}?>
+				</select>
+			</td>
+			<td><?php echo $frm_pro->getElement("category_id");?></td>
+			<td><?php echo $frm_pro->getElement("product");?></td>
+		</tr>
+		<tr>	
+	    	<td><?php echo $frm->getElement('start_date');?></td>
+	    	<td><?php echo $frm->getElement('end_date');?></td>
+	    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
+	    </tr>
+	</table>
+</form>
+<style>
+#footer{display: none;}
+</style>	
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+	<div id="divPrint">
+		<style>
+			a{text-decoration: none;color: 000;}
+			.hover:hover{background: #ddd;}
+		</style>
+		<table width="100%">
+			<tr>
+				<td width="15%" align="center">
+					<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> 
+				</td>
+				<td align="center" width="70%">
+					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
+					<strong style="padding-left: 10px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_REQUEST_PRODUCT');?></strong> 
+					<div><?php if(!empty($this->search['start_date'])){echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';} echo date("d/m/Y",strtotime($this->search['end_date']));?></div>
+				</td>
+				<td width="15%" align="center">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+						<tr style="background: #CCD9FF;font-size: 13px; line-height: 30px;font-weight: bold;" align="center">
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH");?></td>
+							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("PRODUCT_CODE");?></td>
+							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("PRODUCT_NAME");?></td>
+							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("TOTAL_REQUEST");?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TOTAL_RECEIVED");?></td>
+							<td style="border:1px solid #000;text-align: center;" ><?php echo $tr->translate("TOTAL_PRICE");?></td>
+						</tr>
+						<?php 
+						$i=0;
+						if(!empty($rows)) foreach($rows As $key=> $rs_row){	$i++;
+						?>
+							<tr style="font-size: 12px;" class="hover">
+								<td style="border:1px solid #000;text-align: center;"><?php echo $i; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['branch_name'];; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_code']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_name']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['total_request']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['total_receive']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo "$ ".number_format($rs_row['total_price'],2); ?></td>
+							</tr>
+						<?php
+						}
+						?>
+					</table>
+					<table width="100%" style="font-family:'Khmer OS Battambang';">
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+						<tr>
+							<td  width="25%" align="center">
+								<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+							</td>
+							<td  width="50%">
+								&nbsp;
+							</td>
+							<td align="center"  width="25%">
+								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>	
+</div>

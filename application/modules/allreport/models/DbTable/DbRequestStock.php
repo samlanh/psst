@@ -55,6 +55,63 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order);
 	}
 	
+	function getAllRequestProductDetail($search=null){
+		$db = $this->getAdapter();
+		$sql="SELECT 
+					req_d.*,
+					req_d.id,
+					(SELECT branch_namekh FROM rms_branch AS b WHERE b.br_id = req_d.`branch_id`) AS branch_name,
+					(SELECT pro_code FROM `rms_product` AS p WHERE p.id = req_d.`pro_id`) AS pro_code,
+					(SELECT pro_name FROM `rms_product` AS p WHERE p.id = req_d.`pro_id`) AS pro_name,
+					SUM(req_d.`qty_request`) AS total_request,
+					SUM(req_d.`qty_receive`) AS total_receive,
+					SUM(req_d.`price`*req_d.`qty_receive`) AS total_price
+				FROM
+					rms_request_order AS req,
+					`rms_request_orderdetail` AS req_d 
+				WHERE 
+					req.`id` = req_d.`request_id`
+					AND req.`status`=1
+			";
+	
+		$where="";
+	
+		$from_date =(empty($search['start_date']))? '1': " req.request_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " req.request_date <= '".$search['end_date']." 23:59:59'";
+		$where .= " AND ".$from_date." AND ".$to_date;
+	
+		$group = " GROUP BY req_d.branch_id, req_d.pro_id";
+		$order = " ORDER BY req_d.branch_id ASC, req_d.`pro_id` ASC";
+		
+	
+		if($search['request_for']>0){
+			$where.=" AND request_for=".$search['request_for'];
+		}
+		if($search['for_section']>0){
+			$where.=" AND for_section=".$search['for_section'];
+		}
+		if($search['branch_id']>0){
+			$where.=" AND req_d.branch_id=".$search['branch_id'];
+		}
+	
+		if($search['category_id']>0){
+			$where.=" AND (SELECT cat_id FROM `rms_product` AS p WHERE p.id = req_d.`pro_id`) =".$search['category_id'];
+		}
+		if($search['product']>0){
+			$where.=" AND (SELECT id FROM `rms_product` AS p WHERE p.id = req_d.`pro_id`) =".$search['product'];
+		}
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('req_d.branch_id');
+		
+		//echo $sql.$where.$group.$order;
+		
+		return $db->fetchAll($sql.$where.$group.$order);
+	}
+	
+	
+	
+	
 	function getRequestProductById($id){
 		$db = $this->getAdapter();
 		$sql="SELECT
@@ -72,9 +129,7 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
-	
-	
-	function getAllRequestProductDetail($id){
+	function getAllRequestProductDetailById($id){
 		$db = $this->getAdapter();
 		$sql="SELECT
 					*,

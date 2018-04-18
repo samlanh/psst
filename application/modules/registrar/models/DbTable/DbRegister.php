@@ -168,7 +168,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'stu_enname'	=>$data['en_name'],
 							'sex'			=>$data['sex'],
 				    		'tel'			=>$data['parent_phone'],
-				    		'dob'			=>$data['dob'],
+				    		'dob'			=>empty($data['dob'])?null:$data['dob'],
 				    		'academic_year'	=>$data['study_year'],
 							'degree'		=>$data['dept'],
 							'grade'			=>$data['grade'],
@@ -675,7 +675,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'scholarship_amount'=>$data['scholarship_amount'],
 						'tution_feeperyear'=>$data['tution_peryear'],
 						'total_scholarship'=>$data['total_scholarship'],
-						'create_date'	=> date('Y-m-d'),
+						'create_date'	=>date('Y-m-d H:i:s'),
 						'user_id'		=>$this->getUserId(),
 						'branch_id'=>$this->getBranchId(),
 						);

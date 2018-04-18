@@ -132,7 +132,17 @@ table tr td strong{
 								<th>&nbsp;<?php echo $tr->translate('Note');?>&nbsp;</th>
 							  </tr>
 								<style> td{padding:0 3px; }</style>
-							  <?php $i=0; $total=0; if(!empty($this->row)) foreach($this->row as $rs){ $i++;?>
+							  <?php $i=0; $total=0; if(!empty($this->row)) foreach($this->row as $rs){ 
+							  		$i++;
+							  		$discount="";
+							  		if($rs['discount_percent']>0 && $rs['discount_fix']>0){
+							  			$discount = $rs['discount_percent']." % + ".$rs['discount_fix']." $";
+							  		}else if($rs['discount_percent']>0){
+							  			$discount = $rs['discount_percent']." %";
+							  		}else if($rs['discount_fix']>0){
+							  			$discount = $rs['discount_fix']." $";
+							  		}
+							  ?>
 							  <tr class="hover" style="font-size:12px;height: 21px;"​ >
 							    <td><?php echo $i;?></td>
 							    <?php if($rs["type"]==1){$rs['service']="Tuition Fee (".$rs['grade'].')';}?>
@@ -143,7 +153,7 @@ table tr td strong{
 							    <td><?php echo $rs['qty']; if(empty($rs['qty'])) echo '00';?></td>
 							    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
 						   		<td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
-							    <td><?php echo $rs['discount_percent']; if(empty($rs['discount_percent'])) echo '';?></td>
+							    <td><?php echo $discount;?></td>
 							    <td>$ <?php echo $rs['paidamount'];?></td>
 							    <td><?php echo $rs['note'];?></td>
 							  </tr> <?php $total = $total + $rs['subtotal']; ?>

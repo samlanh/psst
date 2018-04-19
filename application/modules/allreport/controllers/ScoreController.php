@@ -161,6 +161,30 @@ public function init()
        $this->view->studentgroup = $result_semester1;
     }
     
+    function yearlyOutstandingStudentAction(){
+    	$group_id=$this->getRequest()->getParam("id");
+    	$type=$this->getRequest()->getParam("type");
+    
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$result_semester1 = $db->getStundetScorebyYear($group_id,1);
+    
+    	$result_semester2 = $db->getStundetScorebyYear($group_id,2);
+    	$main_semester = $result_semester2;
+    	$array_score​= array();
+    	if(!empty($result_semester2)){
+	    	foreach ($result_semester2 as $key => $row){
+		    	$result_semester1[$key]['avage_semester1']= ($result_semester1[$key]['average']+$result_semester1[$key]['avg_exam'])/2;
+		    	$result_semester1[$key]['avage_semester2']= ($row['average']+$row['avg_exam'])/2;
+		    	$array_score[$key]['average_year'] = ($result_semester1[$key]['avage_semester1']+$result_semester1[$key]['avage_semester2'])/2;
+	    	}
+    	}
+    	if(empty($result_semester2)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/allstudent/student-group");
+    	}
+    	array_multisort($array_score, SORT_DESC, $result_semester1);
+    	$this->view->studentgroup = $result_semester1;
+    }
+    
     function rptScoreGepAction(){
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();

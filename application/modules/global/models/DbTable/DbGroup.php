@@ -54,7 +54,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			return $db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();exit();
 		}
 	}
 	

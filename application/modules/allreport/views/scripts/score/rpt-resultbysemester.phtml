@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
+	$this->headTitle($tr->translate("Semester Score Result")); 
 	echo $this->headTitle();
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
@@ -104,7 +104,7 @@ dojo.ready(function(){
 							<tr class="style" style="">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 								<td align="center" style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_code'];?>&nbsp;</td>
-								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
+								<td style="white-space:nowrap;">&nbsp;<?php if(!empty($rs['stu_khname'])){echo $rs['stu_khname'];}else{echo $rs['stu_enname'];}?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
 									$total_score = 0; 

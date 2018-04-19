@@ -274,7 +274,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	SUM(sd.`score`) AS total_score,
 		   	total_score AS total_scoreallsubject,
 		   	AVG(sd.score) AS average,
-		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE group_id=1 LIMIT 1) AS amount_subject,
+		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE group_id=g.`id` LIMIT 1) AS amount_subject,
 		   	(SELECT pass_average FROM `rms_dept` WHERE dept_id=g.degree LIMIT 1) as average_pass
    		FROM 
    			`rms_score` AS s,
@@ -380,6 +380,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	sd.`group_id`,
 		   	g.`group_code`,
 		   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+		   	(SELECT CONCAT(from_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS start_year,
+			(SELECT CONCAT(to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS end_year,
 		   	(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
 		   	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
 		   	`g`.`semester` AS `semester`,
@@ -391,6 +393,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	st.`stu_enname`,
 		   	st.`stu_khname`,
 		   	st.`sex`,
+		   	st.photo,
 		   	s.for_semester,
 		   	(SELECT AVG(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc 
 		   		WHERE 

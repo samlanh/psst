@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
+	$this->headTitle($tr->translate("Yearly Score Result")); 
 	echo $this->headTitle();
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
@@ -100,7 +100,7 @@ dojo.ready(function(){
 							<tr class="style" style="">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 								<td align="center" style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_code'];?>&nbsp;</td>
-								<td style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
+								<td style="white-space:nowrap;">&nbsp;<?php if(!empty($rs['stu_khname'])){echo $rs['stu_khname'];}else{echo $rs['stu_enname'];}?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
 									$total_score = 0; 
@@ -170,4 +170,32 @@ dojo.ready(function(){
 				</tr>
 			</table>
 		</div>
+		<table>
+			<tr>
+				<td colspan="3"><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="button" onclick="printSelected();"><?php echo $tr->translate("OUTSTANDING_STUDENT");?></button></td>
+			</tr>
+		</table>
 	</div>
+	
+
+<script>
+	function printSelected(){
+
+		//group = dijit.byId('group_id').get('value');
+		//semester = dijit.byId('semester').get('value');
+		
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+			$url_copy =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'yearly-outstanding-student'));
+		?>
+	
+		 //if(group!='' && semester!=''){
+			window.location.href = '<?php echo $url_copy;?>';
+		 //}else{
+			//alert('Please select record you want to print');
+			//return false;
+		 //}
+		
+	}
+</script>		
+	

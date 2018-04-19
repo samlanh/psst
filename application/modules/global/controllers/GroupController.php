@@ -65,8 +65,7 @@ class Global_GroupController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				$err =$e->getMessage();
-				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+				echo $e->getMessage();exit();
 			}
 		}
 		

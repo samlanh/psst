@@ -203,7 +203,7 @@ dojo.ready(function(){
 									}//
 									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
 								?>
-								<td align="center"><?php 
+								<td align="center"><?php //echo "jhdfjabshjgf ".$rs['amount_subject'];exit();
 								$total_score = number_format($total_score,2);
 								echo str_replace(".00", "", $total_score);?></td>
 								<?php $average = number_format($rs['total_score']/$rs['amount_subject'],2);

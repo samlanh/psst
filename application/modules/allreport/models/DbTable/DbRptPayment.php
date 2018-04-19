@@ -470,6 +470,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     public function getPaymentByDate($search){
     	$db = $this->getAdapter();
     	 
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$branch = $_db->getAccessPermission();
+    	
     	$sql="SELECT 
 				  sp.id,
 				  DATE_FORMAT(sp.create_date,'%Y-%m-%d') AS for_date,
@@ -483,6 +486,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				WHERE 
 				  sp.id = spd.payment_id 
 				  AND sp.is_void = 0 
+				  $branch
     		";
     	
     	$where = ' ';

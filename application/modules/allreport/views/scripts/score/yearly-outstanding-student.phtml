@@ -28,96 +28,88 @@
 				"11"=>"វិច្ឆិកា",
 				"12"=>"ធ្នូ"
 			);
+	$semester = array(
+				"1"=>"១",
+				"2"=>"២",
+			); 
 ?>	
-<body>
-	<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
-		<div id="divPrint">
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.data.ObjectStore");
+dojo.ready(function(){
+});
+</script>
+<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'yearly-outstanding-student')); ?>" dojoType="dijit.form.Form" method="post">
+</form>
+<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+	<div id="divPrint">
 		<style type="text/css">
 			.style{
-				line-height: 20px; font-size: 12px !important;
+				line-height: 21px; font-size: 15px !important;
 				font-family: 'Times New Roman','Khmer OS Battambang';
-				body{
-				    background:url(../images/logo.png);  
-				}
+				white-space: nowrap;
 			}
 			.padding{ padding: 0 1px !important;}
 			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 			tr{ page-break-inside:avoid; page-break-after:auto }
-			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
+			.cheader{height: 27px;font-weight: bold; background: #ccc; white-space: nowrap;}
 			#header {
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
 		</style>
-		
-	<?php if(!empty($this->studentgroup)){?>	
-		
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
-			<tr>
-				<td>	
-						<?php
-							 $show=1; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;$female=0;
-							 $duplicate=0;$count_pass=0;
-							 $rank="";
-							 $rank1="";
-							 $rank2="";
-							 $rank3="";
-							 $rank4="";
-							 $rank5="";
-							 
-// 							 print_R($this->studentgroup);
-							 if (!empty($this->all_student)){
-							 	foreach($this->all_student as $key=> $rs){
-							 		if($rs['sex']==1){
-							 			$sex = $tr->translate("MALE");
-							 		}else{
-							 			$sex = $tr->translate("FEMALE");
-							 			$female++;
-							 		}
-							 }}
-							 
-							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){
-								if($rs['total_score']==$old_totalscore){
-									if($key==1){
-										$rank2=$old_rank;
-									}
-									if($key==2){
-										$rank3=$old_rank;
-									}
-									if($key==3){
-										$rank4=$old_rank;
-									}
-									if($key==4){
-										$rank5=$old_rank;
-									}
-								}else{
-									if($key==0){
-										$rank1="១";
-										$old_rank = "១";
-									}
-									if($key==1){
-										$rank2="២";
-										$old_rank = "២";
-									}
-									if($key==2){
-										$rank3="៣";
-										$old_rank = "៣";
-									}
-									if($key==3){
-										$rank4="៤";
-										$old_rank = "៤";
-									}
-									if($key==4){
-										$rank5="៥";
-										$old_rank = "៥";
-									}
-								}
-								$old_totalscore = $rs['total_score'];
-						?>
-						<?php }}?>
-					</td>
-				</tr>
-				
+				<?php
+					$semester_str = array(1=>"I",2=>"II");
+					 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
+					 $duplicate=0;$count_pass=0;$female=0;
+					 $rank1="";$rank2="";$rank3="";$rank4="";$rank5="";
+					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ $i++;
+						if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");$female++;}
+						
+						$score_average = ($rs['avg_exam']+$rs['average'])/2;
+						if($score_average == $old_totalscore){
+							if($key==1){
+								$rank2=$old_rank;
+							}
+							if($key==2){
+								$rank3=$old_rank;
+							}
+							if($key==3){
+								$rank4=$old_rank;
+							}
+							if($key==4){
+								$rank5=$old_rank;
+							}
+						}else{
+							if($key==0){
+								$rank1="១";
+								$old_rank = "១";
+							}
+							if($key==1){
+								$rank2="២";
+								$old_rank = "២";
+							}
+							if($key==2){
+								$rank3="៣";
+								$old_rank = "៣";
+							}
+							if($key==3){
+								$rank4="៤";
+								$old_rank = "៤";
+							}
+							if($key==4){
+								$rank5="៥";
+								$old_rank = "៥";
+							}
+						}
+					?>
+								
+					<?php 
+						$old_totalscore = $score_average;
+					?>
+					
+				<?php }}?>
 				
 				<tr>
 					<td>
@@ -125,10 +117,10 @@
 							<tr>
 								<td colspan="3" align="center" style="font-family: Khmer MEF2;font-size: 22px;">
 									ព្រះរាជាណាចក្រកម្ពុជា <br />
-									ជាតិ សាសនា ព្រះមហាក្សត្រ<br />
+									ជាតិ សាសនា ព្រះមហាក្សត្រ <br />
 									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/style.png'?>">
 								</td>
-							</r>
+							</tr>
 						
 							<tr>
 								<td width="33%">&nbsp;</td>
@@ -151,7 +143,7 @@
 								</td>
 								<td align="center" style="font-family: Khmer MEF2;font-size: 18px;">
 									<span style="font-size: 20px;">តារាងកិត្តិយស </span><br />
-									ប្រចាំខែ <?php echo $this->studentgroup[0]['for_month'];?> ឆ្នាំសិក្សា  <label id="academic_year"></label><br />
+									ប្រចាំឆ្នាំសិក្សា  <label id="academic_year"></label><br />
 									ថ្នាក់ <?php echo $this->studentgroup[0]['grade'];?>
 								</td>
 								
@@ -169,7 +161,7 @@
 							<tr>
 								<td>&nbsp;</td>
 								<td>
-									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 17px ;">
+									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 17px;">
 										<tr>
 											<td align="center">
 												<table width="125px" height="150px">
@@ -182,10 +174,10 @@
 											</td>
 										</tr>
 										<tr align="center">
-											<td class="number">លេខ <?php echo $rank1;?></td>
+											<td colspan="1" class="number">លេខ <?php echo $rank1;?></td>
 										</tr>
 										<tr align="center">
-											<td class="studentname">
+											<td class="studentname" colspan="1">
 												<?php if(!empty($this->studentgroup[0])){if(!empty($this->studentgroup[0]['stu_khname'])){echo $this->studentgroup[0]['stu_khname'];}else{echo $this->studentgroup[0]['stu_enname'];}}?>
 											</td>
 										</tr>
@@ -311,7 +303,7 @@
 							</tr>
 							<tr>
 								<td colspan="3">
-									&nbsp;&nbsp;&nbsp; បញ្ឈប់បញ្ជីត្រឹមចំនួនសិស្ស <?php echo count($this->all_student)?> នាក់ ស្រី <?php echo $female;?> នាក់ ។
+									&nbsp;&nbsp;&nbsp; បញ្ឈប់បញ្ជីត្រឹមចំនួនសិស្ស <?php echo count($this->studentgroup)?> នាក់ ស្រី <?php echo $female;?> នាក់ ។
 								</td>
 							</tr>	
 							<tr>
@@ -325,7 +317,7 @@
 									&nbsp;&nbsp;&nbsp; ភ្នំពេញ ថ្ងៃទី &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ខែ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ឆ្នាំ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								</td>
 							</tr>	
-							<tr>
+							<tr>	
 								<td colspan="3">
 									&nbsp;
 								</td>
@@ -357,19 +349,13 @@
 									&nbsp;
 								</td>
 								<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 15px;">
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $this->studentgroup[0]['teacher'];?>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $this->studentgroup[0]['teacher_name'];?>
 								</td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 				
-				
-			</table>
-		
-		<?php }else{echo "No Result !!!";}?>	
-			
-		</div>
+		</table>
 	</div>
-	
-</body>
+</div>

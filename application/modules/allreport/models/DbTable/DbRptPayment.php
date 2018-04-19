@@ -265,35 +265,35 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     public function getPaymentReciptDetail($id){
     	$db = $this->getAdapter();
     	$sql=" SELECT 
-    	spd.id,
-    	spd.payment_id,
-    	spd.is_onepayment,
-    	(SELECT `rms_student`.`stu_khname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS kh_name,
-    	(SELECT `rms_student`.`stu_enname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS en_name,
-    	(SELECT `rms_view`.`name_kh` FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` =(SELECT `rms_student`.`sex` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) )))  as sex,
-    	spd.type,spd.fee,spd.qty,spd.subtotal,
-    	(SELECT title FROM `rms_program_name` WHERE `rms_program_name`.`service_id`= spd.service_id LIMIT 1) as service,
-    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
-    	(SELECT major_enname from rms_major where major_id = sp.grade LIMIT 1) as grade,
-    	spd.subtotal,
-    	spd.paidamount,
-    	sp.receipt_number as receipt_number,
-    	sp.`total_payment` AS total_payment,
-    	sp.`paid_amount` as paid_amount,
-    	sp.`balance_due` as balance_due,
-    	sp.`return_amount` as return_amount,
-    	sp.`amount_in_khmer` as amount_in_khmer,
-    	(SELECT CONCAT (`last_name`,' ', `first_name`) FROM `rms_users` WHERE `rms_users`.id = sp.user_id LIMIT 1) as user,
-    	spd.note,
-    	spd.start_date,
-    	spd.validate,
-    	spd.late_fee,
-    	spd.extra_fee, 
-    	spd.discount_fix,
-    	spd.discount_percent
-    	FROM 
-    	rms_student_payment as sp,
-    	rms_student_paymentdetail AS spd ";
+			    	spd.id,
+			    	spd.payment_id,
+			    	spd.is_onepayment,
+			    	(SELECT `rms_student`.`stu_khname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS kh_name,
+			    	(SELECT `rms_student`.`stu_enname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS en_name,
+			    	(SELECT `rms_view`.`name_kh` FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` =(SELECT `rms_student`.`sex` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) )))  as sex,
+			    	spd.type,spd.fee,spd.qty,spd.subtotal,
+			    	(SELECT title FROM `rms_program_name` WHERE `rms_program_name`.`service_id`= spd.service_id LIMIT 1) as service,
+			    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
+			    	(SELECT major_enname from rms_major where major_id = sp.grade LIMIT 1) as grade,
+			    	spd.subtotal,
+			    	spd.paidamount,
+			    	sp.receipt_number as receipt_number,
+			    	sp.`total_payment` AS total_payment,
+			    	sp.`paid_amount` as paid_amount,
+			    	sp.`balance_due` as balance_due,
+			    	sp.`return_amount` as return_amount,
+			    	sp.`amount_in_khmer` as amount_in_khmer,
+			    	(SELECT CONCAT (`last_name`,' ', `first_name`) FROM `rms_users` WHERE `rms_users`.id = sp.user_id LIMIT 1) as user,
+			    	spd.note,
+			    	spd.start_date,
+			    	spd.validate,
+			    	spd.late_fee,
+			    	spd.extra_fee, 
+			    	spd.discount_fix,
+			    	spd.discount_percent
+    			FROM 
+			    	rms_student_payment as sp,
+			    	rms_student_paymentdetail AS spd ";
     	$sql.='WHERE sp.id=spd.payment_id 
     		AND spd.payment_id = '.$id;
 		return $db->fetchAll($sql);    	
@@ -467,6 +467,63 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     }
     
-    
+    public function getPaymentByDate($search){
+    	$db = $this->getAdapter();
+    	 
+    	$sql="SELECT 
+				  sp.id,
+				  DATE_FORMAT(sp.create_date,'%Y-%m-%d') AS for_date,
+				  SUM(CASE WHEN spd.type=1 THEN paidamount ELSE 0 END) AS fulltime_fee,
+				  SUM(CASE WHEN spd.type=2 THEN paidamount ELSE 0 END) AS parttime_fee,
+				  SUM(CASE WHEN spd.type=3 THEN paidamount ELSE 0 END) AS service_fee,
+				  SUM(CASE WHEN spd.type=4 THEN paidamount ELSE 0 END) AS material_fee
+				FROM
+				  rms_student_payment AS sp,
+				  rms_student_paymentdetail AS spd 
+				WHERE 
+				  sp.id = spd.payment_id 
+				  AND sp.is_void = 0 
+    		";
+    	
+    	$where = ' ';
+    	$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
+    	$where .= " AND ".$from_date." AND ".$to_date;
+    	
+    	$group_by = " GROUP BY DATE_FORMAT(sp.create_date,'%Y-%m-%d') ";
+    	$order=" order by sp.`create_date` ASC";
+    	
+    	 
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if($search['branch_id']>0){
+    		$where .= " AND sp.branch_id = ".$search['branch_id'];
+    	}
+    	if($search['study_year']>0){
+    		$where .= " AND sp.year = ".$search['study_year'];
+    	}
+    	if($search['degree']>0){
+    		$where .= " AND sp.degree = ".$search['degree'];
+    	}
+    	if($search['grade_all']>0){
+    		$where .= " AND sp.grade = ".$search['grade_all'];
+    	}
+    	if($search['session']>0){
+    		$where .= " AND sp.session = ".$search['session'];
+    	}
+    	if($search['user']>0){
+    		$where .= " AND sp.user_id = ".$search['user'];
+    	}
+    	
+    	//echo $sql.$where.$group_by.$order;
+    	return $db->fetchAll($sql.$where.$group_by.$order);
+    }
     
 }   

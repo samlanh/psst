@@ -120,8 +120,20 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
     }
    function getParentName(){
    		$db=$this->getAdapter();
-   		$sql="select  (select subject_titleen from rms_subject where rms_subject.id=rms_score.parent_id) As parent_id from rms_score,rms_score_detail as sd 
-              where   sd.score_id=rms_score.id  GROUP BY rms_score.academic_id,rms_score.session_id,rms_score.group_id,rms_score.parent_id ";
+   		$sql="select 
+   				(select subject_titleen from rms_subject where rms_subject.id=rms_score.parent_id) As parent_id
+   			  from 
+   			  	rms_score,
+   			  	rms_score_detail as sd 
+              where 
+   				sd.score_id=rms_score.id
+   			  GROUP BY 
+   				rms_score.academic_id,
+   				rms_score.session_id,
+   				rms_score.group_id,
+   				rms_score.parent_id 
+   				
+   			";
         return $db->fetchAll($sql);
    } 
    function getSubjectdByParent(){
@@ -365,7 +377,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	AND s.type_score=1
 		   		AND g.id = $group_id
 		   		AND s.for_semester=$semester
-		   		AND s.exam_type=1 ";
+		   		AND s.exam_type=1 
+   		";
    	
    	$where='';
    	
@@ -374,7 +387,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    public function getStundetScorebyYear($group_id,$semester){ // score result for yearly
    	$db = $this->getAdapter();
-		   	$sql="
+		$sql="
 		   	SELECT
 		   	s.`id`,
 		   	sd.`group_id`,
@@ -421,9 +434,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   		AND g.id= $group_id
 		   		AND s.for_semester=$semester
 		   	AND s.exam_type=1 ";
-		   	$where='';
-		   	$order = " GROUP BY sd.`student_id` ORDER BY sd.`student_id`,s.for_academic_year";
-		   	return $db->fetchAll($sql.$where.$order);
+		 $where='';
+		 $order = " GROUP BY sd.`student_id` ORDER BY sd.`student_id`,s.for_academic_year";
+		 return $db->fetchAll($sql.$where.$order);
    }
    public function getAcadimicByStudentHeader($group_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា ក្បាល I+II
    	$db = $this->getAdapter();

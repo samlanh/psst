@@ -12,22 +12,23 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     public function indexAction(){
     	try{
     		$db = new Registrar_Model_DbTable_DbRegister();
-    		    		if($this->getRequest()->isPost()){
-    		    			$search=$this->getRequest()->getPost();
-    		    		}
-    		    		else{
-    		    			$search = array(
-    		    					'adv_search' => '',
-    		    					'study_year' => '',
-    		    					'degree' => '',
-    		    					'time'   =>'', 
-    		    					'session'=>'',
-    		    					'grade_all'=>'',
-    		    					'branch_id'=>0,
-    		    					'user'=>'',
-    		    					'start_date'=> date('Y-m-d'),
-    		    					'end_date'=>date('Y-m-d'));
-    		    		}
+    		if($this->getRequest()->isPost()){
+    			$search=$this->getRequest()->getPost();
+    		}
+    		else{
+    			$search = array(
+    						'adv_search' => '',
+    		    			'study_year' => '',
+    		    			'degree' => '',
+    		    			'time'   =>'', 
+    		    			'session'=>'',
+    		    			'grade_all'=>'',
+    		    			'branch_id'=>0,
+    		    			'user'=>'',
+    		    			'start_date'=> date('Y-m-d'),
+    		    			'end_date'=>date('Y-m-d')
+    					);
+    		}
     		$this->view->adv_search=$search;
     		$rs_rows= $db->getAllStudentRegister($search);
     		$glClass = new Application_Model_GlobalClass();
@@ -41,6 +42,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$letter=array('module'=>'registrar','controller'=>'register','action'=>'congratulationletter',);
     		
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('បោះ.អាហារូ'=>$letter,'branch_name'=>$link,'stu_code'=>$link,'receipt_number'=>$link,'name'=>$link));
+    	
+    		$this->view->customer_payment = $db->getCustomerPayment($search);
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
@@ -238,6 +241,63 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$db = new Foundation_Model_DbTable_DbStudent();
     	$this->view->group = $db->getAllgroup();
     }
+    
+    public function editcustomerpaymentAction(){
+    	$id=$this->getRequest()->getParam('id');
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		try {
+    			$db = new Registrar_Model_DbTable_DbRegister();
+    			$db->updateCustomerPayment($_data,$id);
+    			if(isset($_data['save_new'])){
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register/index');
+    			}else{
+    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register/index');
+    			}
+    		} catch (Exception $e) {
+    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+    			echo $e->getMessage();
+    			 
+    		}
+    	}
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->all_dept = $_db->getAllDegreeName();
+    	 
+    	$db = new Registrar_Model_DbTable_DbRegister();
+    	 
+    	$this->view->teacher = $db->getTeacherEdit($id);
+    	 
+    	$rspayment =  $db->getCustomerPaymentByID($id);
+    	$this->view->payment =$rspayment;
+    	 
+    	$session_user=new Zend_Session_Namespace('authstu');
+    	$user_type_id = $session_user->level;
+    	$payment_date = date("Y-m-d",strtotime($rspayment['create_date']));
+    	$current_date = date("Y-m-d");
+    	if($user_type_id!=1 AND $current_date>$payment_date){
+    		Application_Form_FrmMessage::Sucessfull("you data is more then a day.so can not edit", self::REDIRECT_URL . '/register/index');
+    	}
+    	// for loop in initialize
+    	$this->view->customer_payment_detail = $db->getCustomerPaymentDetailByID($id);
+    	// for information in  register
+    	 
+    	$this->view->service_only = $db->getServiceOnlyByID($id);
+    	 
+    	$this->view->product_only = $db->getProductOnlyByID($id);
+    	 
+    	$this->view->all_student_code = $db->getAllGerneralOldStudent();
+    	$this->view->all_student_name = $db->getAllGerneralOldStudentName();
+    	$this->view->all_year = $db->getAllYears();
+    	$this->view->all_session = $db->getAllSession();
+    	$this->view->all_paymentterm = $db->getAllpaymentTerm();
+    	$this->view->all_service = $db->getAllService();
+    	$this->view->all_room = $db->getAllRoom();
+    
+    	$test = $this->view->branch_info = $db->getBranchInfo();
+    	$db = new Foundation_Model_DbTable_DbStudent();
+    	$this->view->group = $db->getAllgroup();
+    }
+    
     public function editkentridgeAction(){
     	$id=$this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){

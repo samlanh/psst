@@ -19,7 +19,7 @@
 			store: dept_store,
 			autoComplete: false,
 			queryExpr: "*${0}*",                     
-			required: true,
+			required: false,
 			id: "dept",
 			name: "dept",           
 			class: 'fullside',  
@@ -35,6 +35,7 @@
 		
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
+			required: false,
 			queryExpr: "*${0}*",                      
 			id: "grade",
 			name: "grade",           
@@ -351,10 +352,11 @@ fieldset{  background:none;}
 						    <tr>
 								<td><strong><?php echo $tr->translate("STUDENT_TYPE");?></strong></td>
 								<td>
-									<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="changControll();setReadonlyForOldStudent();" >
+									<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="changControll();setReadOnlyCustomerType();setReadonlyForOldStudent();" >
 										<option value="3">Old Student</option>
 										<option value="1">Tested Student</option>
 										<option value="2">New Student</option>
+										<option value="4">Other Customer</option>
 									</select>
 								</td>
 							</tr>
@@ -1116,7 +1118,7 @@ function hideDialog1(){
 function changControll(){
 	dijit.byId('not').attr('value','');
 	student_type=dijit.byId('student_type').get('value');
-	 if(student_type==3){
+	if(student_type==3){
 		 document.getElementById('student_old').style.display="block";
 		 document.getElementById('student_old_name').style.display="block";
 		 document.getElementById('id_stu').style.display="none";
@@ -1130,7 +1132,7 @@ function changControll(){
 		 document.getElementById('stu_tested').style.display="block";
 		 document.getElementById('stu_new').style.display="none";
 		 clearControll();
-	} else{
+	} else if(student_type==2){
 		 document.getElementById('student_old').style.display="none";
 		 document.getElementById('student_old_name').style.display="none";
 		 document.getElementById('stu_tested').style.display="none";
@@ -1139,8 +1141,57 @@ function changControll(){
 		 dept = dijit.byId("dept").get("value");
 		 if(dept==''){return false;}
 		 getStudentNo(dept,'');
+	}else{
+		 document.getElementById('student_old').style.display="none";
+		 document.getElementById('student_old_name').style.display="none";
+		 document.getElementById('stu_tested').style.display="none";
+		 document.getElementById('id_stu').style.display="none";
+		 document.getElementById('stu_new').style.display="none";
+		 
 	}
 }
+
+function setReadOnlyCustomerType(){
+	student_type = dijit.byId('student_type').get('value');
+	if(student_type==4){
+		dijit.byId("group").set('readOnly',true);
+		dijit.byId("study_year").set('readOnly',true);
+		dijit.byId("dept").set('readOnly',true);
+		dijit.byId("grade").set('readOnly',true);
+		dijit.byId("session").set('readOnly',true);
+		dijit.byId("study_hour").set('readOnly',true);
+		dijit.byId("room").set('readOnly',true);
+		dijit.byId("not").set('readOnly',true);
+		dijit.byId("payment_term").set('readOnly',true);
+		dijit.byId("start_end").set('readOnly',true);
+		dijit.byId("start_date").set('readOnly',true);
+		dijit.byId("end_date").set('readOnly',true);
+		dijit.byId("scholarship_percent").set('readOnly',true);
+		dijit.byId("scholarship_amount").set('readOnly',true);
+		dijit.byId("late_fee").set('readOnly',true);
+		dijit.byId("discount_percent").set('readOnly',true);
+		dijit.byId("discount_fix").set('readOnly',true);
+	}else{
+		dijit.byId("group").set('readOnly',false);
+		dijit.byId("study_year").set('readOnly',false);
+		dijit.byId("dept").set('readOnly',false);
+		dijit.byId("grade").set('readOnly',false);
+		dijit.byId("session").set('readOnly',false);
+		dijit.byId("study_hour").set('readOnly',false);
+		dijit.byId("room").set('readOnly',false);
+		dijit.byId("not").set('readOnly',false);
+		dijit.byId("payment_term").set('readOnly',false);
+		dijit.byId("start_end").set('readOnly',false);
+		dijit.byId("start_date").set('readOnly',false);
+		dijit.byId("end_date").set('readOnly',false);
+		dijit.byId("scholarship_percent").set('readOnly',false);
+		dijit.byId("scholarship_amount").set('readOnly',false);
+		dijit.byId("late_fee").set('readOnly',false);
+		dijit.byId("discount_percent").set('readOnly',false);
+		dijit.byId("discount_fix").set('readOnly',false);
+	}
+}
+
 function setReadonlyForOldStudent(){
 	student_type = dijit.byId('student_type').get('value');
 	if(student_type==3){
@@ -1809,7 +1860,9 @@ function printSave(new_stu_id,new_receipt,submit){
 			dojo.byId("lb_credit_memo").innerHTML = '$ ' + dijit.byId("credit_memo").attr('displayedValue');
 			dojo.byId("lb_deduct").innerHTML = '$ ' + dijit.byId("deduct").attr('displayedValue');
 			dojo.byId("lb_net_amount").innerHTML = '$ ' + dijit.byId("net_amount").attr('displayedValue');
+			
 			var payment_type = dijit.byId("payment_type").get("value");
+			var student_type = dijit.byId("student_type").get("value");
 
 			var rowId = $('#identity').val();
 			var rowIDArray = rowId.split(',');
@@ -1828,8 +1881,65 @@ function printSave(new_stu_id,new_receipt,submit){
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Amount</strong></td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Note</strong></td>';
 					  temp+='</tr>';
-				
-				if(payment_type==1){
+					  
+					  
+				if(payment_type==1 && student_type==4){
+					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
+						 
+					  temp+='<tr style=" font-size:12px;height: 15px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId("service_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
+					  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId("term_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  
+				///////////////////    format date 	////////////////////////   
+					  var b = new Date(dijit.byId("date_start_"+rowIDArray[n]).get('value'));
+					  mm = b.getMonth()+1;
+					  var dd = b.getDate();
+					   if(dd<10){
+						dd = "0"+dd;
+					   }
+					   var mon = getMonthByNumber(mm);
+					   if(mm<10){
+						mm = "0"+mm;
+					   }
+					  var y = b.getFullYear();
+					  var start_date = dd + '/' + mon + '/' + y ;
+					  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
+					  // if product => dont show start date
+					  if(service_type==1){
+						  start_date = '';
+					  }
+
+					  var a = new Date(dijit.byId("validate_"+rowIDArray[n]).get('value'));
+					  mm = a.getMonth()+1;
+					  var dd = a.getDate();
+					   if(dd<10){
+						dd = "0"+dd;
+					   }
+					   var months = getMonthByNumber(mm);
+					   if(mm<10){
+						mm = "0"+mm;
+					   }
+					  var y = a.getFullYear();
+					  var epx_date = dd + '/' +months+ '/' + y ;
+
+					  if(service_type==1){
+						  epx_date = '';
+					  }
+					  s_startdate = dijit.byId("date_start_"+rowIDArray[n]).get('value');
+					  if(s_startdate==null){start_date='';epx_date='';}
+					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
+					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee_service_'+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('additional_fee_'+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
+					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("paidamount_"+rowIDArray[n]).get('value')+'</td>';				  				  
+					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+					  i++;
+					  temp+='</tr>';
+					}
+				}
+				else if(payment_type==1){
 					  temp+='<tr style="font-size:12px !important;height: 10px;border:1px solid #000; ">';
 						  temp+='<td align="center" style="border:1px solid #000;">1</td>';
 						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Tuition Fee('+dijit.byId('grade').attr('displayedValue')+')</td>';
@@ -2045,6 +2155,7 @@ function printSave(new_stu_id,new_receipt,submit){
 					  temp+='</tr>';
 					}
 				}
+				
 			
 			temp+='</table>';
 			dojo.byId('t_amountmoneytype').innerHTML = temp;

@@ -37,12 +37,13 @@
 	<tr>
 		<td colspan="5">
 			<div style="margin: 10px 0px;">
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="all" id="all_payment" name="all_payment"  <?php if(!empty($this->search['all_payment'])){if($this->search['all_payment']=="all"){echo "checked='checked'";}}?> /><?php echo $tr->translate("RPT_ALLPAYMENTREPORT");?>
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="2" id="student_test" name="student_test"  <?php if(!empty($this->search['student_test'])){if($this->search['student_test']==2){echo "checked='checked'";}}?> /><?php echo $tr->translate("STUDENTTEST_PAYMENT");?>
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> <?php echo $tr->translate("OTHER_INCOME");?>
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /><?php echo $tr->translate("OTHER_EXPENSE");?>
-				<input type="checkBox" style="margin-left: 5%;" dojoType="dijit.form.CheckBox" value="5" id="change_product" name="change_product"  <?php if(!empty($this->search['change_product'])){if($this->search['change_product']==5){echo "checked='checked'";}}?> /><?php echo $tr->translate("CHANGE_PRODUCT");?>
+				<input type="checkBox" style="margin-left: 1%;" dojoType="dijit.form.CheckBox" value="all" id="all_payment" name="all_payment"  <?php if(!empty($this->search['all_payment'])){if($this->search['all_payment']=="all"){echo "checked='checked'";}}?> /><?php echo $tr->translate("RPT_ALLPAYMENTREPORT");?>
+				<input type="checkBox" style="margin-left: 4%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>
+				<input type="checkBox" style="margin-left: 4%;" dojoType="dijit.form.CheckBox" value="2" id="student_test" name="student_test"  <?php if(!empty($this->search['student_test'])){if($this->search['student_test']==2){echo "checked='checked'";}}?> /><?php echo $tr->translate("STUDENTTEST_PAYMENT");?>
+				<input type="checkBox" style="margin-left: 4%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> <?php echo $tr->translate("OTHER_INCOME");?>
+				<input type="checkBox" style="margin-left: 4%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /><?php echo $tr->translate("OTHER_EXPENSE");?>
+				<input type="checkBox" style="margin-left: 4%;" dojoType="dijit.form.CheckBox" value="5" id="change_product" name="change_product"  <?php if(!empty($this->search['change_product'])){if($this->search['change_product']==5){echo "checked='checked'";}}?> /><?php echo $tr->translate("CHANGE_PRODUCT");?>
+				<input type="checkBox" style="margin-left: 4%;" dojoType="dijit.form.CheckBox" value="6" id="customer_payment" name="customer_payment"  <?php if(!empty($this->search['customer_payment'])){if($this->search['customer_payment']==6){echo "checked='checked'";}}?> /><?php echo $tr->translate("CUSTOMER_PAYMENT");?>
 			</div>
 		</td>
 	</tr>
@@ -91,6 +92,9 @@
 										 	$deduct = 0;
 										 	$total_payment_change_product = 0;
 										 	$total_credit_memo_change_product = 0;
+										 	
+										 	$total_customer_payment = 0;
+										 	
 										 	$net_amount = 0;
 										 	if (!empty($this->row)){  
 										 ?>
@@ -320,6 +324,7 @@
 								</td>
 							</tr>
 							<?php }?>
+							
 							<?php if(!empty($this->change_product)){?>
 							<tr>
 								<td colspan="2"><strong><?php echo $tr->translate("CHANGE_PRODUCT");?></strong></td>
@@ -380,7 +385,83 @@
 								</td>
 							</tr>
 							<?php }?>
-							<?php if(!empty($this->row) || !empty($this->stu_test) || !empty($this->income) || !empty($this->expense) || !empty($this->change_product)){?>
+							<tr>
+								<td colspan="2">&nbsp;</td>
+							</tr>
+							<?php if(!empty($this->customer_payment)){?>
+							<tr>
+								<td colspan="2"><strong><?php echo $tr->translate("CUSTOMER_PAYMENT");?></strong></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<table class="padd" width="100%" border="1" align="center" style="margin-top:5px;font-family: Khmer OS Battambang,Times new roman;">
+										<thead>
+										<tr  style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
+											<td><?php echo $tr->translate("N_O");?></td>
+											<td><?php echo $tr->translate("NAME_KH");?></td>
+											<td><?php echo $tr->translate("NAME_EN");?></td>
+											<td><?php echo $tr->translate("SEX");?></td>
+											<td><?php echo $tr->translate("DOB");?></td>
+											<td><?php echo $tr->translate("PHONE");?></td>
+											<td><?php echo $tr->translate("TOTAL_PAYMENT");?></td>
+											<td><?php echo $tr->translate("FINE");?></td>
+											<td><?php echo $tr->translate("DEDUCT");?></td>
+											<td><?php echo $tr->translate("NET_AMOUNT");?></td>
+											<td><?php echo $tr->translate("CREATE_DATE");?></td>
+											<td><?php echo $tr->translate("USER");?></td>
+											<td><?php echo $tr->translate("STATUS");?></td>
+											<td><?php echo $tr->translate("VOID_BY");?></td>
+										</tr>
+									   </thead>
+										 <style> td{padding:0 3px; }</style>
+									<?php $i=0;foreach ($this->customer_payment as $rs){$i++;?>
+										<tr  class="hover" style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
+											<td><?php echo $i;?></td>
+											<td><?php echo $rs['name_kh'];?></td>
+											<td><?php echo $rs['name_en'];?></td>
+											<td><?php echo $rs['sex'];?></td>
+											<td><?php echo date("d-M-Y",strtotime($rs['dob']));?></td>
+											<td><?php echo $rs['phone'];?></td>
+											<td><?php echo $rs['grand_total'];?></td>
+											<td><?php echo $rs['fine'];?></td>
+											<td><?php echo $rs['deduct'];?></td>
+											<td><?php echo $rs['net_amount'];?></td>
+											<td><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
+											<td><?php echo $rs['user'];?></td>
+											<td><?php echo $rs['status'];?></td>
+											<td><?php echo $rs['void_by'];?></td>
+										</tr>
+										
+										<?php 
+											if($rs['is_void']==0){
+												$total_customer_payment = $total_customer_payment + $rs['net_amount'];
+											}
+										?> 
+										
+									<?php }?>
+									</table>
+									<table width="100%" style="margin-top: 5px;">
+										<?php if(!empty($this->customer_payment)){?>
+											<tr>
+												<td colspan="3">
+													<table width="15%" border="1" align="right" style="white-space:nowrap;font-family: Khmer OS Battambang,Times new roman;font-size:12px;">
+												  		<tr style="background-color: #ccd9ff;" align="center">
+											 				<td style=" width: 38%; font-weight:bold;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
+												  		</tr>
+												  		<tr style="font-size:12px; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
+															<td style=" color:#F00; ">$ <?php echo number_format($total_customer_payment,2);?></td>
+												  		</tr>
+													</table>
+												</td>
+											</tr>
+										<?php }?>
+									</table>
+								</td>
+							</tr>
+							<?php }?>
+							
+							
+							<?php if(!empty($this->row) || !empty($this->stu_test) || !empty($this->income) || !empty($this->expense) || !empty($this->change_product) || !empty($this->customer_payment)){?>
 							<tr>
 								<td colspan="2"><strong><?php echo $tr->translate("TOTAL_INCOME");?></strong></td>
 							</tr>
@@ -388,8 +469,8 @@
 								
 								<td colspan="2">
 								<?php 
-									$final_total_dollar= $net_amount + $total_stu_test + $total_income_dollar + $total_payment_change_product - $total_expense_dollar;
-									$final_total_income = $net_amount + $total_stu_test + $total_income_dollar + $total_payment_change_product;
+									$final_total_dollar= $net_amount + $total_stu_test + $total_income_dollar + $total_payment_change_product + $total_customer_payment - $total_expense_dollar;
+									$final_total_income = $net_amount + $total_stu_test + $total_income_dollar + $total_payment_change_product + $total_customer_payment;
 									$final_total_expense = $total_expense_dollar;
 								?>
 								<table width="100%" border="1"  style="margin-top:5px;white-space:nowrap;">
@@ -399,6 +480,7 @@
 						 				<td style="font-weight:bold; ">&nbsp;<?php echo $tr->translate("STUDENT_TEST");?>&nbsp;</td>
 						 				<td style="font-weight:bold;">&nbsp;<?php echo $tr->translate("OTHER_INCOME"); ?>&nbsp;</td>
 						 				<td style="font-weight:bold;">&nbsp;<?php echo $tr->translate("CHANGE_PRODUCT"); ?>&nbsp;</td>
+						 				<td style="font-weight:bold;">&nbsp;<?php echo $tr->translate("CUSTOMER_PAYMENT"); ?>&nbsp;</td>
 						 				<td style="font-weight:bold;">&nbsp;<?php echo $tr->translate("OTHER_EXPENSE"); ?>&nbsp;</td>
 							  		</tr>
 							  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
@@ -407,11 +489,12 @@
 										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_stu_test;?> $ </td>
 										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_income_dollar;?> $​ </td>
 										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_payment_change_product;?> $ </td>
+										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_customer_payment;?> $ </td>
 										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_expense_dollar;?> $ </td>
 							  		</tr>
 							  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
 						  				<td style="font-weight:bold;"> Net Amount ($)</td>
-										<td colspan="4" style=" color:#006d1f; font-weight:bold;font-size: 15px;"> <?php echo $final_total_income-$total_expense_dollar;?> $ </td>
+										<td colspan="5" style=" color:#006d1f; font-weight:bold;font-size: 15px;"> <?php echo $final_total_income-$total_expense_dollar;?> $ </td>
 										<td style=" color:#F00; font-weight:bold;font-size: 15px;"> <?php echo $final_total_expense;?> $ </td>
 							  		</tr>
 							    </table>

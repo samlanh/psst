@@ -117,6 +117,7 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     					'stu_name'  =>'',
     					'expense'   =>'',
     					'change_product'=>'',
+    					'customer_payment'=>'',
     					'start_date'=> date('Y-m-d'),
     					'end_date'  => date('Y-m-d'),
     			);
@@ -128,10 +129,15 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		$user_type=$db->getUserType();
     		
     		if(!empty($search['all_payment'])){
+    			
     			$data1=$this->view->row = $db->getDailyReport($search);
     			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
     			
     			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
+    			
+    			$data4=$this->view->customer_payment = $db->getAllCustomerPayment($search);
+    			//print_r($data4);
+    			
     			$user_type=$db->getUserType();
     			if($user_type==1){
     				$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
@@ -162,6 +168,9 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		}
     		if(!empty($search['change_product'])){
     			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
+    		}
+    		if(!empty($search['customer_payment'])){
+    			$data4=$this->view->customer_payment = $db->getAllCustomerPayment($search);
     		}
     		
     	}catch(Exception $e){

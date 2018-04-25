@@ -317,6 +317,57 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 		
 	}
 	
+	function getAllCustomerPayment($search){
+		try{
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$branch_id = $_db->getAccessPermission('c.branch_id');
+	
+			$db=$this->getAdapter();
+	
+			$from_date =(empty($search['start_date']))? '1': "c.create_date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': "c.create_date <= '".$search['end_date']." 23:59:59'";
+	
+			$sql="select
+						*,
+						(select name_en from rms_view where type=2 and key_code=sex) as sex,
+				    	(select name_en from rms_view where type=10 and key_code=is_void) as status,
+				    	(select first_name from rms_users as u where u.id=user_id) as user,
+				    	(select first_name from rms_users as u where u.id=void_by) as void_by
+					from
+						rms_customer_payment c
+					where
+						1
+						$branch_id
+				";
+	
+			$where = " AND ".$from_date." AND ".$to_date;
+	
+			if(!empty($search['adv_search'])){
+				$s_where=array();
+				$s_search= addslashes(trim($search['adv_search']));
+				$s_where[]= " receipt_no LIKE '%{$s_search}%'";
+				$s_where[]= " name_kh LIKE '%{$s_search}%'";
+				$s_where[]= " name_en LIKE '%{$s_search}%'";
+				$where.=' AND ('.implode(' OR ', $s_where).')';
+			}
+	
+			if(!empty($search['user'])){
+				$where.=" AND c.user_id = ".$search['user'] ;
+			}
+				
+			$order=" ORDER By c.id DESC ";
+	
+			//echo $sql.$where.$order;exit();
+	
+			return $db->fetchAll($sql.$where.$order);
+	
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+	
+	}
+	
+	
 	function getStudentTestPaymentById($id){
 		$db=$this->getAdapter();
 		$sql="select 

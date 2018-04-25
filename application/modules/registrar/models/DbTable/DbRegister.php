@@ -117,12 +117,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
+		//$paid_date = $data['paid_date'];
+		$paid_date = date("Y-m-d H:i:s");
 		
 		if($data['payment_type']==1 && $data['student_type']==4){
 			try{
 				$this->_name="rms_customer_payment";				
 				$array = array(
-						
 						'branch_id'	=>$this->getBranchId(),
 						'receipt_no'	=>$data['receipt_no'],
 						
@@ -137,7 +138,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'deduct'	=>$data['deduct'],
 						'net_amount'=>$data['net_amount'],
 						
-						'create_date'	=>date("Y-m-d H:i:s"),
+						'create_date'	=>$paid_date,
 					);
 				$id = $this->insert($array);
 				
@@ -167,9 +168,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			$db->commit();	
 			}catch (Exception $e){
 				$db->rollBack();
-				echo $e->getMessage();exit();
 			}
-			
 			
 		}else{
 			$stu_code = $data['stu_id'];//$this->getNewAccountNumber($data['dept']);
@@ -233,7 +232,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							    'stu_type'		=>$stu_type,
 					    		'is_setgroup'	=>$isset_group,
 					    		'branch_id'		=>$this->getBranchId(),
-					    		'create_date'	=>date('Y-m-d H:i:s'),
+					    		'create_date'	=>$paid_date,
 								'user_id'		=>$this->getUserId(),
 					    		'group_id'	 	=>$data['group'],
 							);
@@ -290,7 +289,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'total_scholarship'=>$data['total_scholarship'],
 							'note'			=>$data['not'],
 							'student_type'	=>$data['student_type'],  // 1=tested student , 2=new student , 3=old student
-							'create_date'	=>date('Y-m-d H:i:s'),//check date here 
+							'create_date'	=>$paid_date,//check date here 
 							//'create_date'	=>$data['paid_date'],
 							//'amount_in_khmer'=>$data['char_price'],
 	// 						'payment_term'	=>$data['payment_term'],
@@ -333,7 +332,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'user_id'	=> $this->getUserId(),
 								'branch_id'	=> $this->getBranchId(),
 								'payment_id'=> $paymentid,
-								'create_date'=>date('Y-m-d H:i:s'),
+								'create_date'=>$paid_date,
 						);
 						$this->insert($array);
 					}
@@ -547,7 +546,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'stu_type'		=>$stu_type,
 								'remark'		=>$data['not'],
 								'branch_id'		=>$this->getBranchId(),
-								'create_date'	=>date('Y-m-d H:i:s'),
+								'create_date'	=>$paid_date,
 								'user_id'		=>$this->getUserId(),
 								'group_id'		=>$data['group'],
 						);
@@ -605,7 +604,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'total_scholarship'=>$data['total_scholarship'],
 							'note'			=>$data['not'],
 							'student_type'	=>$data['student_type'],
-							'create_date'	=>date('Y-m-d H:i:s'),
+							'create_date'	=>$paid_date,
 							//'amount_in_khmer'=>$data['char_price'],
 							'user_id'		=>$this->getUserId(),
 							'branch_id'		=>$this->getBranchId(),
@@ -634,7 +633,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'user_id'	=> $this->getUserId(),
 								'branch_id'	=> $this->getBranchId(),
 								'payment_id'=> $paymentid,
-								'create_date'=>date('Y-m-d H:i:s'),
+								'create_date'=>$paid_date,
 						);
 						$this->insert($array);
 					}
@@ -730,7 +729,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'scholarship_amount'=>$data['scholarship_amount'],
 							'tution_feeperyear'=>$data['tution_peryear'],
 							'total_scholarship'=>$data['total_scholarship'],
-							'create_date'	=>date('Y-m-d H:i:s'),
+							'create_date'	=>$paid_date,
 							'user_id'		=>$this->getUserId(),
 							'branch_id'=>$this->getBranchId(),
 							);

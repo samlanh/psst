@@ -63,7 +63,7 @@
 											</td>
 										</tr>
 										<tr style="list-style:15px;font-family: Times New Roman, cursive;font-size:20px;font-weight: bold;">
-											<td>Paññāsāstra International School</td>
+											<td><?php echo $tr->translate("CUSTOMER_BRANCH");?></td>
 										</tr>
 										<tr style="list-style:15px;font-family: Times New Roman, cursive;font-size:15px;">
 											<td class="pan-input">
@@ -235,7 +235,7 @@
 			  				</tr>
 			  				<tr>
 			  					<td>
-			  						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Paññāsāstra International School( Sen Sok) certifies that &nbsp;&nbsp;<strong><?php echo $this->rs['stu_enname'];?></strong>
+			  						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The <?php echo $tr->translate("CUSTOMER_BRANCH");?>( Sen Sok) certifies that &nbsp;&nbsp;<strong><?php echo $this->rs['stu_enname'];?></strong>
 									&nbsp;&nbsp;is a &nbsp;&nbsp;<strong><?php echo $this->rs['generation'];?></strong> <br />student in the &nbsp;&nbsp;
 									<strong><?php echo $this->rs['grade'];?></strong> &nbsp;&nbsp;for the academc year of &nbsp;&nbsp;<strong><?php echo $this->rs['academic_year'];?></strong>.<br />
 									This testimonial is rendered for the holder to use for any official purpose.

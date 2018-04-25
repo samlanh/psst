@@ -75,6 +75,7 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 		$pro=$_pur->getProducCutStockLater();
 		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->product= $pro;
+// 		print_r($pro);exit();
 		
 		$this->view->rq_code=$_pur->getRequestCode();
 		$this->view->bran_name=$_pur->getAllBranch();

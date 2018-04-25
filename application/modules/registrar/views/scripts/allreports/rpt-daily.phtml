@@ -398,6 +398,7 @@
 										<thead>
 										<tr  style="font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
 											<td><?php echo $tr->translate("N_O");?></td>
+											<td><?php echo $tr->translate("RECEIPT_NO");?></td>
 											<td><?php echo $tr->translate("NAME_KH");?></td>
 											<td><?php echo $tr->translate("NAME_EN");?></td>
 											<td><?php echo $tr->translate("SEX");?></td>
@@ -417,8 +418,9 @@
 									<?php $i=0;foreach ($this->customer_payment as $rs){$i++;?>
 										<tr  class="hover" style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
 											<td><?php echo $i;?></td>
-											<td><?php echo $rs['name_kh'];?></td>
-											<td><?php echo $rs['name_en'];?></td>
+											<td><a style="color: #000;" href="<?php echo $this->baseUrl()."/registrar/allreports/reprint-customer-payment/id/".$rs['id']?>" target="_blank" ><?php echo $rs['receipt_no'];?></a></td>
+											<td><a style="color: #000;" href="<?php echo $this->baseUrl()."/registrar/allreports/reprint-customer-payment/id/".$rs['id']?>" target="_blank" ><?php echo $rs['name_kh'];?></a></td>
+											<td><a style="color: #000;" href="<?php echo $this->baseUrl()."/registrar/allreports/reprint-customer-payment/id/".$rs['id']?>" target="_blank" ><?php echo $rs['name_en'];?></a></td>
 											<td><?php echo $rs['sex'];?></td>
 											<td><?php echo date("d-M-Y",strtotime($rs['dob']));?></td>
 											<td><?php echo $rs['phone'];?></td>

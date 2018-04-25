@@ -77,6 +77,18 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     
+    
+    function reprintCustomerPaymentAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	$db = new Allreport_Model_DbTable_DbRptPayment();
+    
+    	$this->view->rr = $db->getCustomerPaymentById($id);
+    	$this->view->row =  $db->getCustomerPaymentDeatilById($id);
+    	 
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    }
+    
     function reprintTestPaymentAction(){
     	$id=$this->getRequest()->getParam("id");
     	$db = new Registrar_Model_DbTable_DbReportStudentByuser();

@@ -530,4 +530,43 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$group_by.$order);
     }
     
+    function getCustomerPaymentById($id){
+    	try{
+    		$db=$this->getAdapter();
+    		$sql="select
+			    		*,
+			    		(select name_en from rms_view where type=2 and key_code=sex) as sex,
+			    		(select name_en from rms_view where type=10 and key_code=is_void) as status,
+			    		(select first_name from rms_users as u where u.id=void_by) as void_by,
+			    		
+			    		(select last_name from rms_users where id=c.user_id LIMIT 1) as last_name,
+    					(select first_name from rms_users where id=c.user_id LIMIT 1) as user
+    				from
+    					rms_customer_payment c
+    				where
+    					id = $id
+    				limit 1	
+    			";
+    		return $db->fetchRow($sql);
+	    }catch(Exception $e){
+	   		echo $e->getMessage();
+	    }
+    }
+    
+    public function getCustomerPaymentDeatilById($id){
+    	$db = $this->getAdapter();
+    	$sql=" SELECT
+			    	cpd.*,
+			    	(select title from rms_program_name as p where p.service_id = cpd.service_id) as service_name,
+			    	(select name_en from rms_view where type=6 and key_code = payment_term) as payment_term
+    			FROM
+			    	rms_customer_payment_detail as cpd
+    			WHERE 
+    				cpd.customer_id = $id
+    	";
+    	
+    	return $db->fetchAll($sql);
+    }
+    
+    
 }   

@@ -1971,7 +1971,7 @@ function printSave(new_stu_id,new_receipt,submit){
 							}
 							var y = a.getFullYear();
 							var epx_date = dd + '/' +months + '/' + y ;
-						  temp+='<td align="center" style="border:1px solid #000;"> '+lbl_termname+' </td>';
+						  temp+='<td align="center" style="border:1px solid #000;">' + start_date + ' - ' + epx_date + '</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
 						  
@@ -2088,7 +2088,7 @@ function printSave(new_stu_id,new_receipt,submit){
 							discount_percent = dijit.byId('discount_percent').get('value');
 							
 							discount_fix = dijit.byId('discount_fix').get('value');
-						  temp+='<td align="center" style="border:1px solid #000;"> '+lbl_termname+' </td>';
+						  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + '</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee').get('value')+'</td>';

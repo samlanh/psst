@@ -15,7 +15,7 @@ class Registrar_Model_DbTable_DbProductsold extends Zend_Db_Table_Abstract
 					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
 					sd.`pro_id`,
 					pn.title as pro_name,
-					(select pro_code from rms_product as p where p.id = pn.ser_cate_id LIMIT 1) as pro_code,
+					(SELECT pro_code from rms_product as p where p.id = pn.ser_cate_id LIMIT 1) as pro_code,
 					sd.qty,
 					sd.`cost`,
 					sd.`price`,
@@ -27,20 +27,18 @@ class Registrar_Model_DbTable_DbProductsold extends Zend_Db_Table_Abstract
 				WHERE 
 					sd.pro_id = pn.service_id
 					AND sp.id = sd.payment_id
-					AND sp.is_void=0 
-    		";
+					AND sp.is_void=0 ";
     	
     	$order_by = " ORDER BY sd.`pro_id` ASC";
-    	
     	$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
     	
-    	if(!empty($search['adv_search'])){
-    		$s_where=array();
-    		$s_search= addslashes(trim($search['adv_search']));
-    		//$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
-    		$where.=' AND ('.implode(' OR ', $s_where).')';
+    	if(!empty($search['user'])){
+    		$where.= " AND sp.user_id = ".$search['user'];
+    	}
+    	if(!empty($search['pro_name'])){
+    		$where.= " AND sd.pro_id = ".$search['pro_name'];
     	}
     	if(!empty($search['pro_name'])){
     		$where.= " AND sd.pro_id = ".$search['pro_name'];
@@ -48,13 +46,12 @@ class Registrar_Model_DbTable_DbProductsold extends Zend_Db_Table_Abstract
     	if(!empty($search['pro_cate'])){
     		$where.= " AND (select cat_id from rms_product as p where p.id = pn.ser_cate_id ) = ".$search['pro_cate'];
     	}
-//     	echo $sql.$where.$order_by;
     	return $db->fetchAll($sql.$where.$order_by);
     }	
-    
     function getAllProductInProgramName(){
     	$db = $this->getAdapter();
-    	$sql="select service_id as id,title from rms_program_name where type=1 and status=1 ";
+    	$sql="SELECT service_id as id,title from rms_program_name 
+    		WHERE type=1 and status=1 ";
     	return $db->fetchAll($sql);
     }
     

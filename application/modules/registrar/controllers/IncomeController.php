@@ -31,9 +31,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		
     		$_db = new Application_Model_DbTable_DbGlobal();
     		$user_type=$_db->getUserType();
-    		if($user_type!=1){
-    			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-    		}
     		
 			$rs_rows= $db->getAllIncome($search);//call frome model
     		$glClass = new Application_Model_GlobalClass();

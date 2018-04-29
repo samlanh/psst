@@ -223,7 +223,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 						'status_search'	=> 1
 				);
 			}
-			
 			$db=new Allreport_Model_DbTable_DbRequestStock();
 			$ds=$this->view->rows=$db->getAllRequestProduct($search);
 	
@@ -363,6 +362,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 						'end_date'		=>date("Y-m-d"),
 						'pro_name'		=>'',
 						'pro_cate'		=>'',
+						'user'=>''
 				);
 			}
 			$db = new Registrar_Model_DbTable_DbProductsold();

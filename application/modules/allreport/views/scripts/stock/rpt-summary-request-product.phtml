@@ -65,6 +65,8 @@
 						<tr style="background: #CCD9FF;font-size: 13px; line-height: 30px;font-weight: bold;" align="center">
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH");?></td>
+							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("REQUEST_FOR");?></td>
+							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("REQUEST_QTY");?></td>
 							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("PRODUCT_CODE");?></td>
 							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("PRODUCT_NAME");?></td>
 							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("TOTAL_REQUEST");?></td>
@@ -72,12 +74,14 @@
 							<td style="border:1px solid #000;text-align: center;" ><?php echo $tr->translate("TOTAL_PRICE");?></td>
 						</tr>
 						<?php 
-						$i=0;
+						$i=0;$total_amount =0;
 						if(!empty($rows)) foreach($rows As $key=> $rs_row){	$i++;
 						?>
 							<tr style="font-size: 12px;" class="hover">
 								<td style="border:1px solid #000;text-align: center;"><?php echo $i; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['branch_name'];; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['request_for']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['for_section']; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_code']; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_name']; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['total_request']; ?></td>
@@ -85,8 +89,14 @@
 								<td style="border:1px solid #000;text-align: center;"><?php echo "$ ".number_format($rs_row['total_price'],2); ?></td>
 							</tr>
 						<?php
+						$total_amount=$total_amount+$rs_row['total_price'];
 						}
 						?>
+						<tr style="font-size: 14px;" class="hover">
+							<td colspan="7" style="border: 1px solid #fff;"></td>
+							<td style="border-bottom: 2px double #000;"><strong><?php echo $tr->translate('TOTLE_AMOUNT');?></strong></td>
+							<td style="border-bottom: 2px double #000;border-right: 1px solid #fff;"><?php echo number_format($total_amount,2);?></td>
+						</tr>
 					</table>
 					<table width="100%" style="font-family:'Khmer OS Battambang';">
 						<tr>

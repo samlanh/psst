@@ -166,6 +166,7 @@
 		payment_term=dijit.byId('payment_term').get('value');
 		
 		if(payment_term==5){
+			payment_term=1;
 			dijit.byId("tuitionfee").set('readOnly',false);
 		}else{
 			dijit.byId("tuitionfee").set('readOnly',true);
@@ -1479,7 +1480,16 @@ function deleteRecord(index) {
 		tuitionfee=dijit.byId('tuitionfee').get('value');
 		tuitionfee=isNaN(tuitionfee)?0:tuitionfee;
 		term = dijit.byId('payment_term').get('value');
-		if(term==1){
+		if(term==1 || term==5){//month and other
+			if(term==5){
+				start_date = dijit.byId('start_date').get("value");
+				end_date = dijit.byId('end_date').get("value");
+				if(start_date==null || end_date==null){
+					alert("សូមជ្រើសរើសសពុលភាពមុនសិន");
+					dijit.byId('start_date').focus();
+					return false;
+				}
+			}
 			times = 12;
 		}else if(term==2){
 			times = 4;
@@ -1504,8 +1514,18 @@ function deleteRecord(index) {
 		pc=discount_percent/100;
 		ds = (tuitionfee -(scholarship_amount/times)-late_fee) * pc;
 		
-		total_payment = (tuitionfee -(scholarship_amount/times)-late_fee) - ds - discount_fix;
-		
+		if(term!=5){
+			total_payment = (tuitionfee -(scholarship_amount/times)-late_fee) - ds - discount_fix;
+		}else{//for other payment
+			start_date = new Date(dijit.byId('start_date').get("value"));
+			end_date = new Date(dijit.byId('end_date').get("value"));
+			
+			var timeDiff = ( end_date.getTime()-start_date.getTime() );
+			var amount_day = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+			total_payment = (tuitionfee/30)*amount_day;
+			total_payment = (total_payment -(scholarship_amount/times)-late_fee) - ds - discount_fix;
+			dijit.byId('not').attr("value",amount_day+'Days');
+		}
 		dijit.byId('total_scholarship').attr('value',scholarship_amount/times);
 		if(discount_percent<=100){
 		   dijit.byId('total_payment').attr('value',total_payment);

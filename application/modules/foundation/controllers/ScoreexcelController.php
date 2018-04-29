@@ -30,11 +30,14 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
-			$link=array(
-					'module'=>'foundation','controller'=>'scoreexcel','action'=>'edit',
-			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('exam_type'=>$link,'title_score'=>$link,
+			$collumns = array("TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_GROUP","STUDY_YEAR",
+					"DEGREE","GRADE","SESSION","ROOM_NAME","STATUS","STUDENT_SCORE_REPORT","OUTSTANDING_STUDENT");
+			$link=array('module'=>'foundation','controller'=>'scoreexcel','action'=>'edit',);
+			$result=array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-detail',);
+			$result_outstanding=array('module'=>'allreport','controller'=>'score','action'=>'monthly-outstanding-student',);
+			
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array(
+					'បោះពុម្ព'=>$result,'តារាងកិត្តិយស'=>$result_outstanding,'exam_type'=>$link,'title_score'=>$link,
 						'for_semester'=>$link,'for_month'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
 		
 		}catch (Exception $e){
@@ -45,7 +48,6 @@ class Foundation_ScoreexcelController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-// 		$this->view->g_all_name=$db->getGroupSearch();
 	}
 	public function fullResultAction(){
 		

@@ -27,11 +27,6 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     		}
     		
     		$this->view->adv_search = $formdata;
-    		$_db = new Application_Model_DbTable_DbGlobal();
-    		$user_type=$_db->getUserType();
-    		if($user_type!=1){
-    			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-    		}
     		
 			$rs_rows= $db->getAllExpense($formdata);//call frome model
     		$glClass = new Application_Model_GlobalClass();

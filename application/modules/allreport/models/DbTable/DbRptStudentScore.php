@@ -259,6 +259,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    
    public function getStundetScoreDetailGroup($search,$id,$limit){ // fro rpt-score
+   	
    	$db = $this->getAdapter();
    	$sql="SELECT
 		   	s.`id`,
@@ -280,13 +281,14 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	st.`sex`,
 		   	st.photo,
 		   	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+		   	s.exam_type,
 		   	s.for_semester,
 		   	s.reportdate,
 		   	s.title_score,
 		   	SUM(sd.`score`) AS total_score,
 		   	total_score AS total_scoreallsubject,
 		   	AVG(sd.score) AS average,
-		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE group_id=g.`id` LIMIT 1) AS amount_subject,
+		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
 		   	(SELECT pass_average FROM `rms_dept` WHERE dept_id=g.degree LIMIT 1) as average_pass
    		FROM 
    			`rms_score` AS s,
@@ -351,7 +353,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	st.`sex`,
 			   	st.photo,
 			   	s.for_semester,
-			   	(SELECT AVG(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc 
+			   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject,
+
+			   	(SELECT SUM(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc 
 			   		WHERE 
 			   		sc.id=sdd.score_id
 			   		AND sc.group_id=$group_id
@@ -359,9 +363,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   		AND sc.exam_type=2
 			   		AND sdd.`is_parent`=1 
 			   		AND sdd.student_id = sd.student_id
-			   		GROUP BY sdd.student_id LIMIT 1) AS avg_exam,
-			   	SUM(sd.`score`) AS total_score,
-			   	AVG(sd.score) as average,
+			   		GROUP BY sdd.student_id LIMIT 1) AS total_exam,
+			   		SUM(sd.`score`) AS total_score,
+			   		AVG(sd.`score`) as average,
 			   	(SELECT COUNT(ss.id) FROM `rms_score` AS ss WHERE ss.group_id=$group_id AND ss.exam_type=1 AND for_semester = $semester) AS amount_month
 		    FROM 
 		    	`rms_score` AS s,
@@ -377,12 +381,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	AND s.type_score=1
 		   		AND g.id = $group_id
 		   		AND s.for_semester=$semester
-		   		AND s.exam_type=1 
-   		";
+		   		AND s.exam_type=1 ";
    	
    	$where='';
    	
-   	$order = " GROUP BY sd.`student_id` ORDER BY average,avg_exam DESC,s.for_academic_year,s.for_semester ASC ";
+   	$order = "GROUP BY sd.`student_id` ORDER BY average DESC,total_exam DESC,s.for_academic_year,s.for_semester ASC ";
+
    	return $db->fetchAll($sql.$where.$order);
    }
    public function getStundetScorebyYear($group_id,$semester){ // score result for yearly

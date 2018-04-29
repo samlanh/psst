@@ -24,6 +24,7 @@
 				 		<?php }}?>
 				 	</select>
 				 </td>
+				 <td><?php echo $frm->getElement("user");?></td>
 				 <td><?php echo $frm->getElement("start_date");?></td>
 				 <td><?php echo $frm->getElement("end_date");?></td>
 				 <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
@@ -62,22 +63,20 @@
 							if($key>0 && $pro_id!=$row['pro_id']){$i++;
 								
 						?>
-								<tr style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
-									<td style="border: 1px solid #000;"><?php echo $i;?></td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $pro_code;?></td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $pro_name;?></td>
-									<td align="center" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo "$ ".number_format($total/$pro_qty,2);?></td>	
-									<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo number_format($pro_qty);?></td>
-									<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo "$ ".number_format($total,2);?></td>
-		 						</tr>
-		 						
+							<tr style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
+								<td style="border: 1px solid #000;"><?php echo $i;?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $pro_code;?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo $pro_name;?></td>
+								<td align="center" style="border: 1px solid #000;">&nbsp;&nbsp;<?php echo "$ ".number_format($total/$pro_qty,2);?></td>	
+								<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo number_format($pro_qty);?></td>
+								<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo "$ ".number_format($total,2);?></td>
+	 						</tr>
 	 						<?php 
 	 							$pro_id=$row['pro_id'];
 								$pro_name = $row['pro_name'];
 								$pro_code = $row['pro_code'];
 								$pro_qty = $row['qty'];
 								$total = $row['total'];
-
 							}else{
  								$pro_id=$row['pro_id'];
  								$pro_name = $row['pro_name'];
@@ -85,9 +84,7 @@
  								$pro_qty = $pro_qty+$row['qty'];
  								$total = $total + $row['total'];
 							}
-
-							$grand_total = $grand_total + $row['total'];
-								  
+								$grand_total = $grand_total + $row['total'];								  
  							?>
  						
 					<?php }?>	
@@ -101,7 +98,7 @@
  						</tr>
  					<?php }?>	
  						<tr style="font-size:13px; height: 20px;border: 1px solid #000;font-weight: bold;" align="center" class="hover" >
-							<td colspan="5" style="border: 1px solid #000;">Grand Total </td>
+							<td colspan="5" style="border: 1px solid #000;"><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
 							<td align="center" style="border: 1px solid #000;font-weight: bolder;">&nbsp;<?php echo "$ ".number_format($grand_total,2);?></td>
  						</tr>
 					</table>

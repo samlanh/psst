@@ -30,8 +30,8 @@
 			);
 ?>	
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.data.ObjectStore");
 dojo.ready(function(){
 });
 </script>
@@ -93,12 +93,11 @@ dojo.ready(function(){
 								<td style="color:#1949d6;width:90px;"><?php echo $tr->translate("មធ្យមភាគប្រឡង");?></td>
 								<td style="color:#1949d6;width:90px;"><?php echo $tr->translate("មធ្យមភាគប្រចាំខែ");?></td>
 								<td style="color:#1949d6;width:90px;" ><?php echo $tr->translate("ប្រចាំឆមាស");?></td>
-								<td style="color:red;style="width:90px;""><?php echo $tr->translate("RANK");?></td>
-								<td style="min-width:130px;"><?php echo $tr->translate("OTHERS");?></td>
-								
-								<input type="hidden" name="group_id" id="group_id" value="<?php echo $rs['group_id'];?>" dojoType="dijit.form.TextBox" />
-								<input type="hidden" name="semester" id="semester" value="<?php echo $rs['for_semester'];?>" dojoType="dijit.form.TextBox" />
-								
+								<td style="color:red;width:90px;"><?php echo $tr->translate("RANK");?></td>
+								<td style="min-width:130px;"><?php echo $tr->translate("OTHERS");?>
+									<input type="hidden" name="group_id" id="group_id" value="<?php echo $rs['group_id'];?>" dojoType="dijit.form.TextBox" />
+									<input type="hidden" name="semester" id="semester" value="<?php echo $rs['for_semester'];?>" dojoType="dijit.form.TextBox" />
+								</td>
 							</tr>
 							<?php }$i++;?>
 							<tr class="style" style="">
@@ -110,7 +109,7 @@ dojo.ready(function(){
 									$total_score = 0; 
 								?>
 								<?php 
-								$score_average = ($rs['avg_exam']+$rs['average'])/2;
+								$score_average = (($rs['total_exam']/$rs['amount_subject'])+($rs['total_score']/$rs['amount_subject']))/2;
 								if($score_average==$old_totalscore){
 									$duplicate=$duplicate+1;
 								}else{
@@ -118,8 +117,8 @@ dojo.ready(function(){
 									$duplicate=0;
 								}
 								?>
-								<td align="center"><strong><?php echo number_format($rs['avg_exam'],2);?></strong></td>
-								<td align="center"><strong><?php echo number_format($rs['average'],2); ?></strong></td>
+								<td align="center"><strong><?php echo number_format($rs['total_exam']/$rs['amount_subject'],2);?></strong></td>
+								<td align="center"><strong><?php echo number_format($rs['total_score']/$rs['amount_subject'],2); ?></strong></td>
 								<td align="center"><strong><?php echo number_format($score_average,2);?></strong></td>
 								<td align="center" style="color:red;"><label id="record<?php echo $i;?>"></label><strong><?php echo $old_rank;?></strong></td>
 								<td align="center"></td>

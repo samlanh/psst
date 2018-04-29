@@ -330,15 +330,13 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT name_en FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=s.session LIMIT 1)AS session,
 					(SELECT major_enname FROM rms_major WHERE rms_major.major_id=s.grade LIMIT 1)AS grade,
 					(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1)AS degree,
-					
 					(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=s.is_subspend) AS STATUS,
-					
-					
 					(SELECT sp.create_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS create_date,
-					(SELECT spd.fee FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS fee,
+					(SELECT spd.paidamount FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS fee,
+					(SELECT sp.receipt_number FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS receipt_number,
+					
 					(SELECT spd.start_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS start_date,
 					(SELECT spd.validate FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1 ) AS validate,
-					
 					(SELECT scholarship_percent FROM rms_student_payment WHERE student_id=s.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_percent,
 					(SELECT scholarship_amount FROM rms_student_payment WHERE student_id=s.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_amount,
 					(SELECT tfd.tuition_fee FROM rms_tuitionfee_detail AS tfd WHERE academic_year = tfd.fee_id AND tfd.class_id=s.grade AND tfd.payment_term =4 LIMIT 1) AS tuition_fee,

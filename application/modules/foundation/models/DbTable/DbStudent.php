@@ -335,6 +335,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'remark'		=>$_data['remark'],
 					'photo'			=>$pho_name
 					);
+
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
 			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 			$this->update($_arr, $where);

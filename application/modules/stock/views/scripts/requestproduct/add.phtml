@@ -199,7 +199,7 @@ fieldset{  background:none;}
 </form>
 
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
+	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណស្នើស្តុក");?>'" id="terms" >
 		<div id="print_request" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				<tr>
@@ -410,10 +410,8 @@ tmp = '';
 temp='';
 function addRow() {
 	label_proname = dijit.byId("pro_id").attr('displayedValue');
-	//alert(label_proname);
 	pro_id=dijit.byId("pro_id").get("value");
 	branch_id=dijit.byId("branch").get("value");
-	//alert(label_grade);
 		col++;no++;
 		template='';
 		if(title!=1){
@@ -555,7 +553,6 @@ function getProByBranch(){
 			},
 		handleAs:"json",
 		load: function(data) {
-			alert("data"+data);
 				dijit.byId('pro_id').set('value','');
 				pro_store  = getDataStorefromJSON('id','name', data);
 		    	dijit.byId('pro_id').set('store',pro_store); 

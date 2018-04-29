@@ -108,7 +108,7 @@ public function init()
     	$array_score = array();
     	if(!empty($result_semester)){
     		foreach ($result_semester as $key => $row){
-    			$array_score[$key]['score_average'] = ($row['average']+$row['avg_exam'])/2;
+    			$array_score[$key]['score_average'] = (($row['total_score']/$row['amount_subject'])+($row['total_exam']/$row['amount_subject']))/2;
     		}
     	}
     	if(empty($result_semester)){

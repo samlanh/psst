@@ -61,6 +61,8 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 					req_d.*,
 					req_d.id,
 					(SELECT branch_namekh FROM rms_branch AS b WHERE b.br_id = req_d.`branch_id`) AS branch_name,
+					(SELECT title from rms_request_for as rf where rf.id = req.request_for) as request_for,
+    				(SELECT title from rms_for_section as fs where fs.id = req.for_section) as for_section,
 					(SELECT pro_code FROM `rms_product` AS p WHERE p.id = req_d.`pro_id`) AS pro_code,
 					(SELECT pro_name FROM `rms_product` AS p WHERE p.id = req_d.`pro_id`) AS pro_name,
 					SUM(req_d.`qty_request`) AS total_request,

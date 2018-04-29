@@ -154,6 +154,10 @@ class Foundation_Model_DbTable_DbScoreexcel extends Zend_Db_Table_Abstract
 // 	}
 function getAllScore($search=null){
 		$db=$this->getAdapter();
+		$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+		$str = $tr->translate("PRINT");
+		$str_outstanding = $tr->translate("OUTSTANDING_STUDENT");
+		
 		$sql="SELECT s.id,s.title_score,
 			(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
 			s.for_semester,
@@ -164,9 +168,8 @@ function getAllScore($search=null){
 			(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1)AS grade,
 			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session`) AS session_id,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-			s.status
+			s.status,'$str','$str_outstanding'
 			FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1";
-		//before add more =>AND g.degree IN(1,2) 
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " s.date_input <= '".$search['end_date']." 23:59:59'";
@@ -197,7 +200,6 @@ function getAllScore($search=null){
 		if(!empty($search['group'])){
 			$where.=" AND `s`.`group_id` =".$search['group'];
 		}
-		
 		$order=" ORDER BY id DESC ";
 		return $db->fetchAll($sql.$where.$order);
 	}

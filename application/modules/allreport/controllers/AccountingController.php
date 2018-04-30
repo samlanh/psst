@@ -806,7 +806,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$db = new Registrar_Model_DbTable_DbRptByType();
 			$this->view->row = $db->getAllStudentPaymentByType($search,1);
 			$this->view->rs = $db->getAllStudentPaymentByType($search,2);
+			
 			$this->view->studenttestincome = $db->getTotalStudentTestPayment($search);
+			$this->view->otherincome = $db->getTotalOtherIncome($search);
+			$this->view->changeproduct = $db->getTotalChangeProduct($search);
+			$this->view->customerpayment = $db->getTotalCustomerPayment($search);
+			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();
@@ -841,10 +846,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->row_detail = $db->getStudentPaymentbyDegree($search,3);
 			$this->view->service = $db->getService();
 			$this->view->search = $search;
+			
 			$form=new Registrar_Form_FrmSearchInfor();
 			$form->FrmSearchRegister();
 			Application_Model_Decorator::removeAllDecorator($form);
 			$this->view->form_search=$form;
+			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

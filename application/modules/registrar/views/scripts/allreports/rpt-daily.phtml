@@ -128,11 +128,11 @@
 											<td><?php echo $rs['degree']; ?></td>
 											<td><?php echo $rs['grade']; ?></td>
 											<td><?php echo $rs['session']; ?></td>
-										    <td><?php echo '$ '.$rs['total_payment']; ?></td>
-										    <td><?php if($rs['fine']>0){echo '$ '.$rs['fine'];} ?></td>
-										    <td><?php if($rs['credit_memo']>0){echo '$ '.$rs['credit_memo'];} ?></td>
-										    <td><?php if($rs['deduct']>0){echo '$ '.$rs['deduct'];} ?></td>
-										    <td><?php echo '$ '.$rs['net_amount']; ?></td>
+										    <td><?php echo '$ '.number_format($rs['total_payment'],2); ?></td>
+										    <td><?php if($rs['fine']>0){echo '$ '.number_format($rs['fine'],2);} ?></td>
+										    <td><?php if($rs['credit_memo']>0){echo '$ '.number_format($rs['credit_memo'],2);} ?></td>
+										    <td><?php if($rs['deduct']>0){echo '$ '.number_format($rs['deduct'],2);} ?></td>
+										    <td><?php echo '$ '.number_format($rs['net_amount'],2); ?></td>
 										    <td><?php echo date('d-M-Y (H:i:s)', strtotime($rs['create_date'])); ?></td>
 										   	<td><?php echo $rs['note']; ?></td>
 										    <td><?php echo $rs['user_id'];?></td>
@@ -164,11 +164,11 @@
 										 				<td style=""><?php echo $tr->translate("NET_AMOUNT");?></td>
 											  		</tr>
 											  		<tr align="center" style="font-size:12px; color:red; height: 23px;"​ >
-										 				<td style=""><?php echo '$ '.$total_payment;?></td>
-										 				<td style=""><?php echo '$ '.$fine;?></td>
-										 				<td style=""><?php echo '$ '.$credit_memo;?></td>
-										 				<td style=""><?php echo '$ '.$deduct;?></td>
-										 				<td style=""><?php echo '$ '.$net_amount;?></td>
+										 				<td style=""><?php echo '$ '.number_format($total_payment,2);?></td>
+										 				<td style=""><?php echo '$ '.number_format($fine,2);?></td>
+										 				<td style=""><?php echo '$ '.number_format($credit_memo,2);?></td>
+										 				<td style=""><?php echo '$ '.number_format($deduct,2);?></td>
+										 				<td style=""><?php echo '$ '.number_format($net_amount,2);?></td>
 											  		</tr>
 												</table>
 											</td>
@@ -216,7 +216,7 @@
 											<td style="border: 1px solid #000;"><?php echo $stu_test['degree'];?></td>
 											<td style="border: 1px solid #000;"><?php echo $stu_test['old_school'];?></td>
 											<td style="border: 1px solid #000;"><?php echo $stu_test['old_grade'];?></td>
-											<td style="border: 1px solid #000;"><?php echo '$ '.$stu_test['total_price'];?></td>
+											<td style="border: 1px solid #000;"><?php echo '$ '.number_format($stu_test['total_price'],2);?></td>
 											<td style="border: 1px solid #000;"><?php echo $stu_test['note'];?></td>
 											<td style="border: 1px solid #000;"><?php echo $stu_test['user'];?></td>
 											<?php 
@@ -266,7 +266,7 @@
 											<td style="border: 1px solid #000;"><?php echo $row['invoice'];?></td>
 											<td style="border: 1px solid #000;"><?php echo $row['income_category'];?></td>
 											<td align="center" style="border: 1px solid #000;"><?php echo $row['payment_method'];?></td>	
-											<td style="border: 1px solid #000;"><?php echo '$ '.$row['total_amount'];?></td>
+											<td style="border: 1px solid #000;"><?php echo '$ '.number_format($row['total_amount'],2);?></td>
 											<td style="border: 1px solid #000;"><?php echo date('d-M-Y',strtotime($row['date']));?></td>
 											<td style="border: 1px solid #000;"><?php echo $row['name'];?></td>
 										</tr>
@@ -307,7 +307,7 @@
 											<td style="border: 1px solid #000; text-align: left;">&nbsp;<a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['title']; ?></a></td>
 											<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice']; ?></a></td>
 											<td align="center" style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['payment_type']; ?></a></td>	
-											<td style="border: 1px solid #000;"><?php echo '$ '.$row['total_amount'];?></td>
+											<td style="border: 1px solid #000;"><?php echo '$ '.number_format($row['total_amount'],2);?></td>
 											<td style="border: 1px solid #000;"><?php echo date('d-M-Y',strtotime($row['date']));?></td>
 											<td style="border: 1px solid #000;"><?php echo $row['name'];?></td>
 										</tr>
@@ -350,8 +350,8 @@
 											<td><?php echo $i;?></td>
 											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$row['id']))?>"><?php echo $row['receipt_no'];?></a></td>
 											<td><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-changeproduct','id'=>$row['id']))?>"><?php echo $row['name'];?></a></td>
-											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php if($row['total_payment']>0){echo '$ '.$row['total_payment'];}?></td>	
-											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php if($row['credit_memo']>0){echo '$ '.$row['credit_memo'];}?></td>
+											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php if($row['total_payment']>0){echo '$ '.number_format($row['total_payment'],2);}?></td>	
+											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php if($row['credit_memo']>0){echo '$ '.number_format($row['credit_memo'],2);}?></td>
 											<td><?php echo date('d-M-Y',strtotime($row['create_date']));?></td>
 											<td><?php echo $row['user'];?></td>
 											<td <?php if($row['is_void']==1){echo 'style="color:red;"';}?>><?php echo $row['status'];?></td>
@@ -424,10 +424,10 @@
 											<td><?php echo $rs['sex'];?></td>
 											<td><?php echo date("d-M-Y",strtotime($rs['dob']));?></td>
 											<td><?php echo $rs['phone'];?></td>
-											<td><?php echo $rs['grand_total'];?></td>
-											<td><?php echo $rs['fine'];?></td>
-											<td><?php echo $rs['deduct'];?></td>
-											<td><?php echo $rs['net_amount'];?></td>
+											<td><?php echo "$ ".number_format($rs['grand_total'],2);?></td>
+											<td><?php if($rs['fine']>0){echo "$ ".number_format($rs['fine'],2);}?></td>
+											<td><?php if($rs['deduct']>0){echo "$ ".number_format($rs['deduct'],2);}?></td>
+											<td><?php echo "$ ".number_format($rs['net_amount'],2);?></td>
 											<td><?php echo date("d-M-Y",strtotime($rs['create_date']));?></td>
 											<td><?php echo $rs['user'];?></td>
 											<td><?php echo $rs['status'];?></td>
@@ -487,17 +487,17 @@
 							  		</tr>
 							  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
 						  				<td style="font-weight:bold;"> Dollar ($)</td>
-										<td style=" color:#F00; font-weight:bold;"> <?php echo $net_amount;?> $ </td>
-										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_stu_test;?> $ </td>
-										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_income_dollar;?> $​ </td>
-										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_payment_change_product;?> $ </td>
-										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_customer_payment;?> $ </td>
-										<td style=" color:#F00; font-weight:bold;"> <?php echo $total_expense_dollar;?> $ </td>
+										<td style=" color:#F00; font-weight:bold;"> <?php echo number_format($net_amount,2);?> $ </td>
+										<td style=" color:#F00; font-weight:bold;"> <?php echo number_format($total_stu_test,2);?> $ </td>
+										<td style=" color:#F00; font-weight:bold;"> <?php echo number_format($total_income_dollar,2);?> $​ </td>
+										<td style=" color:#F00; font-weight:bold;"> <?php echo number_format($total_payment_change_product,2);?> $ </td>
+										<td style=" color:#F00; font-weight:bold;"> <?php echo number_format($total_customer_payment,2);?> $ </td>
+										<td style=" color:#F00; font-weight:bold;"> <?php echo number_format($total_expense_dollar,2);?> $ </td>
 							  		</tr>
 							  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
 						  				<td style="font-weight:bold;"> Net Amount ($)</td>
-										<td colspan="5" style=" color:#006d1f; font-weight:bold;font-size: 15px;"> <?php echo $final_total_income-$total_expense_dollar;?> $ </td>
-										<td style=" color:#F00; font-weight:bold;font-size: 15px;"> <?php echo $final_total_expense;?> $ </td>
+										<td colspan="5" style=" color:#006d1f; font-weight:bold;font-size: 15px;"> <?php echo number_format($final_total_income,2);?> $ </td>
+										<td style=" color:#F00; font-weight:bold;font-size: 15px;"> <?php echo number_format($final_total_expense,2);?> $ </td>
 							  		</tr>
 							    </table>
 										<?php }?>

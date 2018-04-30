@@ -2006,7 +2006,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql2="SELECT count(id)  FROM rms_student_test where total_price>0 AND paid_date>='2018-03-06' and is_paid=1 $branch_id LIMIT 1 ";
     	$stu_test_no = $db->fetchOne($sql2); 
 
-    	$sql3="SELECT count(id)  FROM rms_change_product where create_date>='2018-03-06' LIMIT 1 ";
+    	$sql3="SELECT count(id)  FROM rms_change_product where create_date>='2018-03-06' $branch_id LIMIT 1 ";
     	$change_product_no = $db->fetchOne($sql3);
     	
     	$sql4="SELECT count(id)  FROM rms_customer_payment where 1 $branch_id LIMIT 1 ";
@@ -2325,7 +2325,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		 s.stu_code,
 	    		 s.is_stu_new,
 	    		 (SELECT en_name FROM rms_dept WHERE dept_id=s.degree)AS degree,
-	    		 (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id
+	    		 (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+	    		 (select first_name from rms_users as u where u.id=sp.user_id) as first_name,
+	    		 (select last_name from rms_users as u where u.id=sp.user_id) as last_name
     		FROM
     		  	rms_student_payment as sp,
     		  	rms_student as s

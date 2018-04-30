@@ -841,17 +841,19 @@ function SubmitRegister(){
 			dojo.byId("lb_phone").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
 			dojo.byId("lb_session").innerHTML = dijit.byId("session").attr('displayedValue');
 			dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
-			dojo.byId("lb_total_payment").innerHTML = '$ ' + dijit.byId("grand_total").attr('displayedValue');
-			dojo.byId("lb_fine").innerHTML = '$ ' + dijit.byId("fine").attr('displayedValue');			
-			dojo.byId("lb_credit_memo").innerHTML = '$ ' + dijit.byId("credit_memo").attr('displayedValue');
-			dojo.byId("lb_deduct").innerHTML = '$ ' + dijit.byId("deduct").attr('displayedValue');
-			dojo.byId("lb_net_amount").innerHTML = '$ ' + dijit.byId("net_amount").attr('displayedValue');
+			
+			dojo.byId("lb_total_payment").innerHTML = '$ ' + (dijit.byId("grand_total").get('value').toFixed(2));
+			dojo.byId("lb_fine").innerHTML = '$ ' + (dijit.byId("fine").get('value').toFixed(2));			
+			dojo.byId("lb_credit_memo").innerHTML = '$ ' + (dijit.byId("credit_memo").get('value').toFixed(2));
+			dojo.byId("lb_deduct").innerHTML = '$ ' + (dijit.byId("deduct").get('value').toFixed(2));
+			dojo.byId("lb_net_amount").innerHTML = '$ ' + (dijit.byId("net_amount").get('value').toFixed(2));
+			
 			var payment_type = dijit.byId("payment_type").get("value");
 
 			var rowId = $('#identity').val();
 			var rowIDArray = rowId.split(',');
 			template="";
-				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important;  " id="table">'
+				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
 					  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
 						  temp+='<td style="border:1px solid #000;">No</td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
@@ -898,11 +900,11 @@ function SubmitRegister(){
 							var y = a.getFullYear();
 							var epx_date = dd + '/' +months + '/' + y ;
 						  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('tuitionfee').get('value').toFixed(2))+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
 						  
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee').get('value')+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee').get('value').toFixed(2))+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ 0.00</td>';
 						  
 						  dis_percent = dijit.byId('discount_percent').get('value');
 						  dis_percent = isNaN(dis_percent)?0:dis_percent;
@@ -921,7 +923,7 @@ function SubmitRegister(){
 							  }
 						  }
 						  temp+='<td align="center" style="border:1px solid #000;">'+discount+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('total_payment').get('value')+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('total_payment').get('value').toFixed(2))+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';
 						  
 					  temp+='</tr>';				  
@@ -967,12 +969,12 @@ function SubmitRegister(){
 						  epx_date = '';
 					  }
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("price_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee_service_'+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('additional_fee_'+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee_service_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('additional_fee_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("paidamount_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("paidamount_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 					  i++;
 					  temp+='</tr>';
@@ -1011,12 +1013,12 @@ function SubmitRegister(){
 							var epx_date = dd + '/' + months + '/' + y ;
 							
 						  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('tuitionfee').get('value').toFixed(2))+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee').get('value')+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee').get('value').toFixed(2))+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ 0.00</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('discount_percent').get('value')+' %</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('total_payment').get('value')+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('total_payment').get('value').toFixed(2))+'</td>';
 						  
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';
 
@@ -1066,12 +1068,12 @@ function SubmitRegister(){
 						  epx_date = '';
 					  }
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("price_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee_service_'+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('additional_fee_'+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee_service_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('additional_fee_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("paidamount_"+rowIDArray[n]).get('value')+'</td>';				  				  
+					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("paidamount_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';				  				  
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 					  i++;
 					  temp+='</tr>';
@@ -1113,20 +1115,45 @@ function getMonthByNumber(m){
 		</style>
 		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
-				<tr height="100px;">
-					<td colspan="10">&nbsp;</td>
-				</tr>
+				<?php if($this->data['show_header_receipt']==1){?>
+					<tr height="90px;">
+						<td colspan="10"  style="" align="center" valign="top">
+							<table width="100%" style="white-space:nowrap;">
+								<tr>
+									<td width="17%" valign="top">
+										<img style="width: 70%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+									</td>
+									<td width="83%" valign="top" style="font-size:11px;line-height: 18px;">
+										<div style="font-size:22px;margin-top: 10px;"><?php echo $tr->translate("SCHOOL_NAME");?></div>
+										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_ADDRESS");?></div>
+										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_TEL");?></div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				<?php }else{?>
+					<tr height="90px;">
+						<td colspan="10"  style="" align="center" valign="top">&nbsp;
+							
+						</td>
+					</tr>
+				<?php }?>
+				
 				<tr height="40px;">
 					<td colspan="10"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
 							<tr>
-								<td width="30%">
+								<td width="25%">&nbsp;
+									
 								</td>
-								<td width="40%" align="center" valign="top" style="font-size: 16px;font-weight: bold;">
+								<td width="50%" valign="top" align="center" style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;line-height: 20px">
+									<div>បង្កាន់ដៃបង់ប្រាក់</div>
+									<div>Official Receipt</div>
 								</td>
-								<td width="30%" valign="center" align="center">
+								<td width="25%" valign="top" align="left">
 									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
-									<span style="font-size: 14px;font-weight: bold;font-family: arail">Pmt Date : <label id="lb_date" class=" one bold"></label></span>
+									<div style="font-size: 14px;font-weight: bold;font-family: arail">Pmt Date : <label id="lb_date" class=" one bold"></label></div>
 								</td>
 							</tr>
 						</table>
@@ -1215,12 +1242,15 @@ function getMonthByNumber(m){
 														<td align="center">
 															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 5px;"> 
 																<?php 
+																   /*
 																   $session_user=new Zend_Session_Namespace('authstu');
 																   $last_name=$session_user->last_name;
 																   $username = $session_user->first_name;
 																   echo "".$last_name." ".$username;
+																   */
+																   echo $this->payment['last_name'].' '.$this->payment['first_name'];
 																?>
-																<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+																<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime($this->payment['create_date']));?></div>
 															</div>
 														</td>
 														<td align="center"></td>

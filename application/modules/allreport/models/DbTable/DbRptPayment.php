@@ -405,13 +405,28 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$sql=" SELECT
 			    	spd.id,
 			    	spd.type,
-			    	SUM(spd.fee) AS fee,
+			    	SUM(spd.fee*spd.qty) AS fee,
 			    	SUM(spd.late_fee) AS late_fee,
 			    	SUM(spd.extra_fee) AS extra_fee,
 			    	SUM(spd.paidamount) AS paidamount,
-			    	SUM(sp.deduct) AS deduct,
-			    	SUM(sp.fine) AS fine,
-			    	SUM(sp.credit_memo) AS credit_memo,
+			    	SUM(
+						CASE 
+							WHEN sp.`payment_type`<3 AND spd.type < 3 THEN sp.deduct
+							WHEN sp.`payment_type`=3 THEN sp.deduct END
+					  ) AS deduct,
+					  
+					SUM(
+						CASE 
+							WHEN sp.`payment_type`<3 AND spd.type < 3 THEN sp.fine
+							WHEN sp.`payment_type`=3 THEN sp.fine END
+					  ) AS fine,
+					  
+					SUM(
+						CASE 
+							WHEN sp.`payment_type`<3 AND spd.type < 3 THEN sp.credit_memo
+							WHEN sp.`payment_type`=3 THEN sp.credit_memo END
+					  ) AS credit_memo,
+					  
 			    	spd.subtotal,
 			    	spd.discount_percent,
 			    	spd.discount_fix,
@@ -428,7 +443,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    WHERE
 			    	s.stu_id = sp.student_id
 			    	AND sp.id=spd.payment_id
-    				AND  is_void=0";
+    				AND is_void=0
+    		";
     	if(!empty($search['title'])){
     		$s_where = array();
 //     		$s_search = addslashes(trim($search['title']));
@@ -461,7 +477,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	
     	$order=" GROUP BY sp.degree ASC ,spd.type ASC
     	ORDER BY sp.degree DESC,spd.type ASC, spd.service_id DESC ";
-//     	echo $sql.$where.$order;
+    	//echo $sql.$where.$order;
+
     	return $db->fetchAll($sql.$where.$order);
     }
     

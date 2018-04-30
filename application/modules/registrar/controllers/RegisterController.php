@@ -240,6 +240,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$test = $this->view->branch_info = $db->getBranchInfo();
     	$db = new Foundation_Model_DbTable_DbStudent();
     	$this->view->group = $db->getAllgroup();
+    	
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     
     public function editcustomerpaymentAction(){
@@ -296,6 +299,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$test = $this->view->branch_info = $db->getBranchInfo();
     	$db = new Foundation_Model_DbTable_DbStudent();
     	$this->view->group = $db->getAllgroup();
+    	
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     
     public function editkentridgeAction(){

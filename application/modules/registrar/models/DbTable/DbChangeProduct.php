@@ -53,6 +53,7 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 		
 		$this->_name="rms_change_product";
 		$arr = array(
+				'branch_id'		=>$this->getBranchId(),
 				'receipt_no'	=>$receipt,
 				'stu_id'		=>$data['stu_id'],
 				'total_payment'	=>$data['total_payment'],

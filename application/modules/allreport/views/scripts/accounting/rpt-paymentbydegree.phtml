@@ -110,46 +110,42 @@
 										    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
 											<th><?php echo $tr->translate('SERVICE_CATE');?></th>
 											<th><?php echo $tr->translate('PRICE');?></th>
+											<th><?php echo $tr->translate('FINE');?></th>
 											<th><?php echo $tr->translate('LATE_FEE');?></th>
-											<th><?php echo $tr->translate('EXTRA_FEE');?></th>
 											<th><?php echo $tr->translate('CREDIT_MEMO');?></th>
-											<!--
-											<th><?php //echo $tr->translate('SERVICE_NAME');?></th>
-											<th><?php //echo $tr->translate('DISCOUND');?></th>
-											<th><?php //echo $tr->translate('DISCOUNT');?></th> -->
 											<th><?php echo $tr->translate('PAID_AMOUNT');?></th>
 									  </tr>
 									  </thead>
-									   <?php 
+								<?php 
 									  }
 									  $rs['service_cate']="សេវាកម្ម";
 								   	  if($rs['type']==1 OR $rs['type']==2){//tuition fee
 										    $rs['service_cate']="បង់ថ្លៃសិក្សា";
 										   // $rs['service_name']=$rs['major_name'];
-									    }elseif($rs['type']==4){//for procut
+										   
+										    
+										    
+									  }elseif($rs['type']==4){//for procut
 									    	//$rs['service_cate']=$rs['product_category'];
 									    	$rs['service_cate']="ទំនិញ";
-									    }
-									 	$degree = $rs['degree'];
-									 	$total_paid = $total_paid + $rs['paidamount'];
-									 	$grand_total = $grand_total+$rs['paidamount'];
-									 	$total_bydegree=$total_bydegree+$rs['paidamount'];
-									 	$deduct = $deduct+$rs['deduct'];
-									 	$fine= $fine+$rs['fine'];
-									 	$credit_memo= $credit_memo+$rs['credit_memo'];
-						 	?>
+									  }
+									 $degree = $rs['degree'];
+									 $total_paid = $total_paid + $rs['paidamount'];
+									 $grand_total = $grand_total+$rs['paidamount'];
+									 $total_bydegree=$total_bydegree+$rs['paidamount'];
+									 
+									 $deduct = $deduct+$rs['deduct'];
+									 $fine= $fine+$rs['fine'];
+									 $credit_memo= $credit_memo+$rs['credit_memo'];
+						 		?>
 						   <tr class="hover" style="font-size:12px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang';"​ align="center">
 							  	<td><?php echo $i;?></td>
 							    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
 							    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
-							    <td><?php if($rs['deduct']>0){echo '$ '.$rs['deduct'];}?></td>
-							    <td><?php if($rs['credit_memo']>0){echo '$ '.$rs['credit_memo'];}?></td>
-							    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
-							    <!--
-							    <td style="text-align:left"><?php //echo $rs['service_name']; ?></td>
-							    <td><?php //if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
-							    <td><?php //echo $rs['discount_fix']; ?> </td> -->
-							    <td>$ <?php echo $rs['paidamount']; ?></td>
+							    <td><?php if($rs['fine']>0){echo '$ '.number_format($rs['fine'],2);}?></td>
+							    <td><?php if($rs['deduct']>0){echo '$ '.number_format($rs['deduct'],2);}?></td>
+							    <td><?php if($rs['credit_memo']>0){echo '$ '.number_format($rs['credit_memo'],2);}?></td>
+							    <td>$ <?php echo number_format($rs['paidamount'],2); ?></td>
 						 </tr>
 						  <?php } ?>
 						   <?php if(!empty($total_paid)){?>
@@ -168,7 +164,12 @@
 				</tr>
 				<?php if (!empty($grand_total)){?>
 				<tr>
-					<td colspan="1"></td>
+					<td colspan="1">
+						<?php 
+							$final_grand_total=0;
+							$final_grand_total = $grand_total+$fine-$credit_memo-$deduct;
+						?>
+					</td>
 					<td>
 						<table  colspan="2" border="1" align="right" style="width:100%; margin-right:0.5%; white-space:nowrap;font-family: Khmer OS  Battambang;">
 							<tr style="font-size:14px; background:#ccd9ff; height: 20px;font-weight: bold;" align="center">
@@ -183,7 +184,7 @@
 								<td><span style="color: red;">$ <?php echo number_format($fine,2)?></span></td>
 								<td><span style="color: red;">$ <?php echo number_format($credit_memo,2)?></span></td>
 								<td><span style="color: red;">$ <?php echo number_format($deduct,2)?></span></td>
-								<td><span style="color: red;">$ <?php echo number_format($grand_total,2)?></span></td>
+								<td><span style="color: red;">$ <?php echo number_format($final_grand_total,2)?></span></td>
 							</tr>
 						</table>
 					</td>

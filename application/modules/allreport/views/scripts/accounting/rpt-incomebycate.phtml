@@ -99,18 +99,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($grand_total,2);?></td>
 								  </tr>
 							 <?php }?>	
-							 <?php $income_stu_test =0; 
-							 if (!empty($this->studenttestincome)) { $no++; 
-							 	   $income_stu_test=$this->studenttestincome['total_test'];
-							 ?>
-							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-							  		<td style="text-align: center;"><?php echo $no;?></td>
-						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
-						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Test Income");?>&nbsp;</td>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($this->studenttestincome['total_test'],2);?></td>
-								  </tr>
-							 <?php }?> 
+							 
 							 <?php 
 									$i=0; 
 									$payment_id=0;
@@ -175,7 +164,62 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 								  </tr>
 							  <?php }
 							  ?>
-							  <?php $net_total = $sum_up + $fine +$income_stu_test - $credit_memo - $deduct; ?>
+							  
+							 <?php $income_stu_test =0; 
+								 if (!empty($this->studenttestincome)) { $no++; 
+							 	   $income_stu_test=$this->studenttestincome['total_test'];
+							 ?>
+							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+							  		<td style="text-align: center;"><?php echo $no;?></td>
+						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Test Income");?>&nbsp;</td>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_stu_test,2);?></td>
+								  </tr>
+							 <?php }?>
+							 
+							 <?php $income_other_income =0; 
+								 if (!empty($this->otherincome)) { $no++; 
+							 	   $income_other_income=$this->otherincome['total_other_income'];
+							 ?>
+							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+							  		<td style="text-align: center;"><?php echo $no;?></td>
+						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Other Income");?>&nbsp;</td>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_other_income,2);?></td>
+								  </tr>
+							 <?php }?>
+							 
+							 <?php $income_change_product =0; 
+								 if (!empty($this->changeproduct)) { $no++; 
+							 	   $income_change_product=$this->changeproduct['total_change_product'];
+							 ?>
+							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+							  		<td style="text-align: center;"><?php echo $no;?></td>
+						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Change Product Income");?>&nbsp;</td>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_change_product,2);?></td>
+								  </tr>
+							 <?php }?>
+							 
+							 <?php $income_customer_payment =0; 
+								 if (!empty($this->customerpayment)) { $no++; 
+							 	   $income_customer_payment=$this->customerpayment['total_customer_payment'];
+							 ?>
+							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+							  		<td style="text-align: center;"><?php echo $no;?></td>
+						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Customer Payment Income");?>&nbsp;</td>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_customer_payment,2);?></td>
+								  </tr>
+							 <?php }?>
+							 
+							 
+							  
+							  <?php $net_total = $sum_up + $fine +$income_stu_test + $income_other_income + $income_change_product + $income_customer_payment - $credit_memo - $deduct; ?>
 							  	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
 							  		<td colspan="3" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"> </td>
 							  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;&nbsp;សរុបរួម / Total</td>

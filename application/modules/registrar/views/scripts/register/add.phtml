@@ -1875,11 +1875,12 @@ function printSave(new_stu_id,new_receipt,submit){
 			dojo.byId("lb_phone").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
 			dojo.byId("lb_session").innerHTML = dijit.byId("session").attr('displayedValue');
 			dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
-			dojo.byId("lb_total_payment").innerHTML = '$ ' + dijit.byId("grand_total").attr('displayedValue');
-			dojo.byId("lb_fine").innerHTML = '$ ' + dijit.byId("fine").attr('displayedValue');			
-			dojo.byId("lb_credit_memo").innerHTML = '$ ' + dijit.byId("credit_memo").attr('displayedValue');
-			dojo.byId("lb_deduct").innerHTML = '$ ' + dijit.byId("deduct").attr('displayedValue');
-			dojo.byId("lb_net_amount").innerHTML = '$ ' + dijit.byId("net_amount").attr('displayedValue');
+			
+			dojo.byId("lb_total_payment").innerHTML = '$ ' + (dijit.byId("grand_total").get('value').toFixed(2));
+			dojo.byId("lb_fine").innerHTML = '$ ' + (dijit.byId("fine").get('value').toFixed(2));			
+			dojo.byId("lb_credit_memo").innerHTML = '$ ' + (dijit.byId("credit_memo").get('value').toFixed(2));
+			dojo.byId("lb_deduct").innerHTML = '$ ' + (dijit.byId("deduct").get('value').toFixed(2));
+			dojo.byId("lb_net_amount").innerHTML = '$ ' + (dijit.byId("net_amount").get('value').toFixed(2));
 			
 			var payment_type = dijit.byId("payment_type").get("value");
 			var student_type = dijit.byId("student_type").get("value");
@@ -1887,7 +1888,7 @@ function printSave(new_stu_id,new_receipt,submit){
 			var rowId = $('#identity').val();
 			var rowIDArray = rowId.split(',');
 			template="";
-				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important;  " id="table">'
+				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
 					  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
 						  temp+='<td style="border:1px solid #000;">No</td>';
 						  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
@@ -1948,12 +1949,12 @@ function printSave(new_stu_id,new_receipt,submit){
 					  s_startdate = dijit.byId("date_start_"+rowIDArray[n]).get('value');
 					  if(s_startdate==null){start_date='';epx_date='';}
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId(("price_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee_service_'+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('additional_fee_'+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee_service_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('additional_fee_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("paidamount_"+rowIDArray[n]).get('value')+'</td>';				  				  
+					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("paidamount_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';				  				  
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 					  i++;
 					  temp+='</tr>';
@@ -1992,11 +1993,11 @@ function printSave(new_stu_id,new_receipt,submit){
 							var y = a.getFullYear();
 							var epx_date = dd + '/' +months + '/' + y ;
 						  temp+='<td align="center" style="border:1px solid #000;">' + start_date + ' - ' + epx_date + '</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('tuitionfee').get('value').toFixed(2))+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
 						  
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee').get('value')+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee').get('value').toFixed(2))+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ 0.00</td>';
 						  
 						  dis_percent = dijit.byId('discount_percent').get('value');
 						  dis_percent = isNaN(dis_percent)?0:dis_percent;
@@ -2015,7 +2016,7 @@ function printSave(new_stu_id,new_receipt,submit){
 							  }
 						  }
 						  temp+='<td align="center" style="border:1px solid #000;">'+discount+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('total_payment').get('value')+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('total_payment').get('value').toFixed(2))+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';
 						  
 					  temp+='</tr>';				  
@@ -2063,12 +2064,12 @@ function printSave(new_stu_id,new_receipt,submit){
 					  s_startdate = dijit.byId("date_start_"+rowIDArray[n]).get('value');
 					  if(s_startdate==null){start_date='';epx_date='';}
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("price_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee_service_'+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('additional_fee_'+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee_service_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('additional_fee_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("paidamount_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("paidamount_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 					  i++;
 					  temp+='</tr>';
@@ -2109,12 +2110,12 @@ function printSave(new_stu_id,new_receipt,submit){
 							
 							discount_fix = dijit.byId('discount_fix').get('value');
 						  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + '</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('tuitionfee').get('value')+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('tuitionfee').get('value').toFixed(2))+'</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee').get('value')+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ 0</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee').get('value').toFixed(2))+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ 0.00</td>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+discount_percent+'%+'+discount_fix+'$</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('total_payment').get('value')+'</td>';
+						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('total_payment').get('value').toFixed(2))+'</td>';
 						  
 						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';
 					temp+='</tr>';
@@ -2164,18 +2165,17 @@ function printSave(new_stu_id,new_receipt,submit){
 					  s_startdate = dijit.byId("date_start_"+rowIDArray[n]).get('value');
 					  if(s_startdate==null){start_date='';epx_date='';}
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("price_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee_service_'+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('additional_fee_'+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee_service_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('additional_fee_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("paidamount_"+rowIDArray[n]).get('value')+'</td>';				  				  
+					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("paidamount_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';				  				  
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 					  i++;
 					  temp+='</tr>';
 					}
 				}
-				
 			
 			temp+='</table>';
 			dojo.byId('t_amountmoneytype').innerHTML = temp;

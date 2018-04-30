@@ -78,6 +78,9 @@ class Mobileapp_Model_DbTable_DbSlide extends Zend_Db_Table_Abstract
 		try{
 			$dbg = new Application_Model_DbTable_DbGlobal();
 			$part= PUBLIC_PATH.'/images/slide/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
 			$identity = $_data['identity'];
 			$ids = explode(',', $identity);
 			$image_name='';

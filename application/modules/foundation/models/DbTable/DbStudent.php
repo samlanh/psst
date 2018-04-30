@@ -120,16 +120,29 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$code = new Registrar_Model_DbTable_DbRegister();
 // 			$stu_code = $code->getNewAccountNumber($_data['degree']);
 			
-			$adapter = new Zend_File_Transfer_Adapter_Http();
-			$part = PUBLIC_PATH.'/images';
-			$adapter->setDestination($part);
-			$adapter->receive();
-			$photo = $adapter->getFileInfo();
+// 			$adapter = new Zend_File_Transfer_Adapter_Http();
+// 			$part = PUBLIC_PATH.'/images';
+// 			$adapter->setDestination($part);
+// 			$adapter->receive();
+// 			$photo = $adapter->getFileInfo();
 			
-			if(!empty($photo['photo']['name'])){
-				$pho_name = $photo['photo']['name'];
-			}else{
-				$pho_name = '';
+// 			if(!empty($photo['photo']['name'])){
+// 				$pho_name = $photo['photo']['name'];
+// 			}else{
+// 				$pho_name = '';
+// 			}
+			$part= PUBLIC_PATH.'/images/';
+			$name = $_FILES['photo']['name'];
+			$size = $_FILES['photo']['size'];
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
+			$photo='';
+			$dbg = new Application_Model_DbTable_DbGlobal();
+			if (!empty($name)){
+				$tem =explode(".", $name);
+				$new_image_name = "studentprofile".date("Y").date("m").date("d").time().".".end($tem);
+				$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
 			}
 			
 			if($_data['degree']==4){
@@ -198,7 +211,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'status'		=>$_data['status'],
 						'remark'		=>$_data['remark'],
 						'create_date'	=>date("Y-m-d H:i:s"),
-						'photo'		=>$pho_name,
+						'photo'		=>$photo,
 						);
 				$id = $this->insert($_arr);
 				
@@ -268,17 +281,18 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}
 			
 	//   photo ////////////////////////////////////////////////
-			$adapter = new Zend_File_Transfer_Adapter_Http();
-			$part = PUBLIC_PATH.'/images';
-			$adapter->setDestination($part);
-			$adapter->receive();
-			$photo = $adapter->getFileInfo();
+// 			$adapter = new Zend_File_Transfer_Adapter_Http();
+// 			$part = PUBLIC_PATH.'/images';
+// 			$adapter->setDestination($part);
+// 			$adapter->receive();
+// 			$photo = $adapter->getFileInfo();
 				
-			if(!empty($photo['photo']['name'])){
-				$pho_name = $photo['photo']['name'];
-			}else{
-				$pho_name = $_data['old_photo'];
-			}
+// 			if(!empty($photo['photo']['name'])){
+// 				$pho_name = $photo['photo']['name'];
+// 			}else{
+// 				$pho_name = $_data['old_photo'];
+// 			}
+			
 	////////////////////////////////////////////////////////////////////////
 			
 // 			$session_user=new Zend_Session_Namespace('authstu');
@@ -333,9 +347,23 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'is_setgroup'	=> $is_setgroup,
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
-					'photo'			=>$pho_name
+// 					'photo'			=>$pho_name
 					);
-
+			$part= PUBLIC_PATH.'/images/';
+			$name = $_FILES['photo']['name'];
+			$size = $_FILES['photo']['size'];
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
+			$photo='';
+			$dbg = new Application_Model_DbTable_DbGlobal();
+			if (!empty($name)){
+				$tem =explode(".", $name);
+				$new_image_name = "studentprofile".date("Y").date("m").date("d").time().".".end($tem);
+				$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
+				$_arr['photo']=$photo;
+			}
+			
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
 			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 			$this->update($_arr, $where);

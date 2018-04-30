@@ -1,0 +1,65 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('ADD ATTENDENCENOTE')); 
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	
+?>
+<script>
+dojo.require("dijit/Editor");
+</script>
+
+<style>
+body, #dijitEditorBody {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background: #fff !important;
+}
+.dijitEditor {
+    border: solid 1px #ccd9ff;
+}
+</style>
+<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+                dijit.byId("save_close").attr("disabled",true);
+				dijit.byId("save_new").attr("disabled",true);
+				return true;
+			}else {
+				return false;
+			}
+</script>
+<table cellspacing="10" width="80%" style="margin: 0 auto;">
+	<tr>
+		<td>
+		<fieldset style="background-color:menu;">
+					<legend align="center" ><strong><?php echo $tr->translate('ADD ATTENDENCENOTE');?></strong></legend>
+					<table style="margin: 0 auto; width: 95%;" cellspacing="10">
+						<tr>
+							<td style="width: 100px"><?php echo $tr->translate('TITLE');?></td>
+							<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="title" name="title" value="" type="text"></td>
+						</tr>	
+						<tr>
+							<td style="width: 100px"><?php echo $tr->translate('ORDERING');?></td>
+							<td><input dojoType="dijit.form.NumberTextBox" required="true" class="fullside" id="ordering" name="ordering" value="0" type="text"></td>
+						</tr>					             
+                        <tr>
+							<td style="width: 100px" valign="top"><?php echo $tr->translate('DESCRIPTION');?></td>
+							<td style="background:#fff;">
+							<textarea data-dojo-type="dijit/Editor" id="description" name="description" style=" border: solid 1px #ccd9ff;">
+							</textarea></td>
+						</tr>                        
+						<tr>
+							<td colspan="2" align="center">
+								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
+								<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+								<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+									iconClass="dijitEditorIcon dijitEditorIconSave" />
+							</td>
+						</tr>
+					</table>	
+		</fieldset>		
+		</td>
+	</tr>
+</table>	
+</form>

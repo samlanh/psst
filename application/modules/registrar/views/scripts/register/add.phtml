@@ -2290,7 +2290,7 @@ function getOldVildateToStartDateRegister(){
 					handleAs:"json",
 					load: function(data) {
 						if(data){
-							//dijit.byId('date_start_'+index).attr('value',data);
+							dijit.byId('date_start_'+index).attr('value',data);
 						}else{
 							//dijit.byId('date_start_'+index).attr('value','<?php //echo date('Y-m-d');?>');
 						}	

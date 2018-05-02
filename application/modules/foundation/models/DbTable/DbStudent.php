@@ -531,7 +531,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS gu_job,
 		(SELECT CONCAT(major_enname,' ',major_khname) FROM  rms_major WHERE rms_major.major_id=s.grade LIMIT 1) AS grade_name,
-		(SELECT CONCAT(en_name,'-',kh_name) FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1) AS degree_name
+		(SELECT CONCAT(en_name,'-',kh_name) FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1) AS degree_name,
+		(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1) AS degreeTitle,
+		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic_year,
+			   (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS start_year,
+			   (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS end_year,
+			   (SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=s.session LIMIT 1)AS session,
+			   (SELECT r.room_name FROM `rms_room` AS r WHERE r.room_id = s.`room` LIMIT 1 )AS room_name
+		
 	 FROM rms_student AS s WHERE stu_id=$id";
 		return $db->fetchRow($sql);
 	}

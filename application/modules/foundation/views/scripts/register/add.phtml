@@ -255,10 +255,10 @@ function getStudentNo(){
 <form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 		<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
 			if(this.validate()) {	
-  				if(maxSize == 1){
-      				 alert('<?php echo $tr->translate("Image size more than 5Mb can not upload");?>');
-      				 return false;
-      			}
+  				//if(maxSize == 1){
+      				// alert('<?php ///echo $tr->translate("Image size more than 5Mb can not upload");?>');
+      				 //return false;
+      			//}
 	    		dijit.byId('save_new').set('disabled',true);	
 				return true;
 			} else {
@@ -645,7 +645,7 @@ function addJob(){
     }
     var maxSize = 0;
     $("#photo").change(function(){
-    	var iSize = ($("#photo")[0].files[0].size / 1024); 
+    	/*var iSize = ($("#photo")[0].files[0].size / 1024); 
         if (iSize / 1024 > 1) 
         { 
            if (((iSize / 1024) / 1024) > 1) 
@@ -656,9 +656,9 @@ function addJob(){
            }else{ 
                iSize = (Math.round((iSize / 1024) * 100) / 100);
                if(iSize>5){
-                   alert('<?php echo $tr->translate("Image size more than 5Mb can not upload");?>');
-                   maxSize = 1;
-                   $('#profile_wiew').attr('src', "<?php echo $this->baseUrl().'/images/no-profile.png';?>");
+                   alert('<?php //echo $tr->translate("Image size more than 5Mb can not upload");?>');
+    	/*maxSize = 1;
+                   $('#profile_wiew').attr('src', "<?php //echo $this->baseUrl().'/images/no-profile.png';?>");
                    return false;
                }
                //$("#lblSize").html( iSize + "Mb"); 
@@ -669,7 +669,7 @@ function addJob(){
            iSize = (Math.round(iSize * 100) / 100);
            maxSize = 0;
            //$("#lblSize").html( iSize  + "kb"); 
-        }    
+        }    */
         
         readURL(this);
     });

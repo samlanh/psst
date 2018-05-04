@@ -279,4 +279,54 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
+    
+    function getSubjectForCalculateTime($year_id,$group_id,$subject_id){
+    	$db=$this->getAdapter();
+    	$sql="SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
+    	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times,
+    	(SELECT s.subject_titleen FROM rms_subject AS s WHERE s.id=gr.subject_id LIMIT 1) AS subject_name,
+    	(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_name,
+    	(SELECT t.tel FROM rms_teacher AS t WHERE t.id=gr.techer_id LIMIT 1) AS teacher_phone
+    	FROM rms_group_reschedule AS gr
+    	WHERE gr.year_id=$year_id
+    	AND gr.group_id=$group_id
+    	AND gr.subject_id =$subject_id
+    	ORDER BY subject_name,gr.subject_id DESC ";
+    	$row = $db->fetchAll($sql);
+    	$hour="";
+    	$min="";
+    	if (!empty($row)){
+    		
+	    	foreach ($row as $rs){
+	    		$fromHour = explode(".", $rs['from_hour']);
+	    		$to_hour = explode(".", $rs['to_hour']);
+	    		
+	    		$HourFro = $fromHour[0];
+	    		$HourTo = $to_hour[0];
+	    		
+	    		$MinFro = end($fromHour);
+	    		$MinTo = end($to_hour);
+	    		
+	    		$hour = $HourTo - $HourFro;
+	    		$min = $MinTo - $MinFro;
+	    		if ($min<0){
+	    			$hour = $hour -1;
+	    			$min = 60 + $min;
+	    		}
+	    	}
+    	}
+    	$lblHour="Hr";
+    	if ($hour>1){
+    		$lblHour="Hrs";
+    	}
+    	$hourStudy = $hour." ".$lblHour." ";
+    	if ($hour==0){
+    		$hourStudy = "";
+    	}
+    	$minStudy=$min." min";
+    	if ($min==0){
+    		$minStudy ="";
+    	}
+    	return $hourStudy.$minStudy;
+    }
 }

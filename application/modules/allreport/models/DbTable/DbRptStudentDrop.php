@@ -307,11 +307,14 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 	    		$MinFro = end($fromHour);
 	    		$MinTo = end($to_hour);
 	    		
-	    		$hour = $HourTo - $HourFro;
-	    		$min = $MinTo - $MinFro;
-	    		if ($min<0){
-	    			$hour = $hour -1;
+	    		$hour = $hour + ($HourTo - $HourFro);
+	    		$min = $min+($MinTo - $MinFro);
+	    		if (($MinTo - $MinFro)<0){
+	    			 $hour = $hour -1;
 	    			$min = 60 + $min;
+	    		}else if ($min>=60){
+	    			$min = $min%60;
+	    			$hour = $hour+1;
 	    		}
 	    	}
     	}

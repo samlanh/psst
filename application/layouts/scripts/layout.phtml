@@ -138,12 +138,33 @@ $teacher_id = $session_t->teacher_id;
             	<?php }?>
             	<td valign="top" style="border:1px solid #ccc; background:#ccd9ff; width: 1000px;">
 	            	<?php if($module=='allreport' AND $action!='index' AND $action!='rpt-certificate' ){?>
+						<!-- 
 						<div class="menureport">
 							<ul>
 								<li class="preview"><a title="Preview" href="#" onclick="preview();"></a></li>
 								<li class="print"><a href="#" title="Print" onclick="doPrint();" ></a></li>
 								<li class="excel"><a href="#"  title="Export"  onclick="exportExcel();"></a></li>
 							</ul>
+						</div>
+						 -->
+						
+						<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
+							<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
+								<i class="fa fa-print"></i>
+							</div>
+							<div class="ptss__header"><?php echo $tr->translate("PRINT");?></div>
+							<div class="ptss__settings">
+								<div class="ptss__single-setting" id="ptss__layout">
+									<div class="ptss__setting-control">
+										<div class="ptss__layout-wrapper">
+											<a class="qButton" title="<?php echo $tr->translate("Preview");?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
+											<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
+											<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+										</div>
+										
+									</div>
+								</div>
+							</div>
 						</div>
 						<div style="clear:both;"></div>
 						<?php }?>
@@ -205,7 +226,37 @@ function preview()
 function exportExcel(){
 	$('#exportExcel').tableExport({type:'excel',escape:'false'});
 }
-
+jQuery(function () {
+	'use strict';
+	
+	jQuery(".ptss__toggle-btn").click(function () {	
+		jQuery('.js-ptss-frame').toggleClass('is-opened');
+	});
+	
+	jQuery('.ptss__layout-wrapper > div').click(function(){
+		
+		jQuery(this).closest('.ptss__setting-control').find('.ptss__layout-wrapper').removeClass('is-selected');
+		
+		jQuery(this).parent().addClass('is-selected');
+		
+		if( jQuery(this).hasClass('ptss__layout-box--wide') ) {
+			
+			jQuery('body').removeClass('boxed');
+			jQuery('#ptss__boxed-bg').hide();
+			
+			jQuery('body').removeClass('bg1').removeClass('bg2').removeClass('bg3').removeClass('bg4');
+			
+			jQuery('#ptss__boxed-backgrounds span').removeClass('is-selected');
+			
+		} else {
+			
+			jQuery('body').addClass('boxed');
+			jQuery('#ptss__boxed-bg').show();
+			
+		}
+		
+	});
+})
 </script>
 <?php  }?>
 </html>

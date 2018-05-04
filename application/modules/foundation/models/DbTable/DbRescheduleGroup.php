@@ -308,7 +308,8 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 	
 	function getAllTeacher(){
 		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT(teacher_name_kh,'-',teacher_name_en) as name FROM rms_teacher WHERE status=1 and teacher_name_kh!='' ";
+		//$sql = "SELECT id,CONCAT(teacher_name_kh,'-',teacher_name_en) as name FROM rms_teacher WHERE status=1 and teacher_name_kh!='' ";
+		$sql = "SELECT id,teacher_name_kh as name FROM rms_teacher WHERE status=1 and teacher_name_kh!='' ";
 		return $db->fetchAll($sql);
 	}
 	

@@ -37,63 +37,80 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 				return false;
 			}
 </script>
-<table width="100%">
+<table width="100%" border="1">
 	<tr>
-		<td>
-			<fieldset style="margin-top:-13px; background: #fff;   border: solid 1px #008;">
-				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_STUDY_GROUP");?></strong></legend>
-				<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="10">
-					<tr>
-						<td><?php echo $tr->translate("GROUP_CODE")?></td>
-						<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="group_code" name="group_code" value="" type="text"></td>
-						
-						<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
-						<td>
+		<td width="33%">
+			<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="10">
+				<tr>
+					<td><?php echo $tr->translate("GROUP_CODE")?></td>
+					<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="group_code" name="group_code" value="" type="text"></td>
+				</tr>
+				<tr>
+					<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
+					<td>
 							<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
 								<option value="-1"><?php echo $tr->translate("SELECT_YEAR");?></option>
 								<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
 									<option value="<?php echo $year['id'];?>"><?php echo $year['years'];?></option>
 								<?php }}?>
 							</select>
-						</td>
-						<td><?php echo $tr->translate("SEMESTER")?></td>
-						<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" required="true" name="semester" value="" type="text"></td>
-					</tr>
+					</td>
+				</tr>
+				<tr>
+				<tr>
+					<td><?php echo $tr->translate("DEGREE")?></td>
+					<td><input id="degree" name="degree" /></td>
+				</tr>
+				<tr>
+					<td style="white-space: nowrap;"><?php echo $tr->translate("GRADE")?></td>
+					<td><input id="grade" name="grade" /></td>
+				</tr>
+				<tr>
+					<td><?php echo $tr->translate("SEMESTER")?></td>
+					<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" required="true" name="semester" value="" type="text"></td>
+				</tr>
+				<tr>
+					<td><?php echo $tr->translate("SESSION")?></td>
+					<td><select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect">
+						<?php $row= new Application_Model_DbTable_DbGlobal();
+							  $rows=$row->getSession();
+							  foreach($rows as $key =>$rs){?>
+								<option value="<?php echo $rs['key_code']?>" ><?php echo $rs['view_name'];?></option>
+						<?php }?>
+						</select>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width="33%">
+			<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="10">
+				<tr>
+					<td style="width: 5px"><?php echo $tr->translate("START_DATE")?></td>
+					<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" name="start_date" id="start_date" class="fullside" onchange="setEndDate();" value="<?php echo date('Y-m-d');?>" type="text"></td>
+				</tr>
+				<tr>
+					<td><?php echo $tr->translate("AMOUNT_MONTH")?></td>
+					<td><input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" class="fullside" value="" onkeyup="setEndDate();" type="text"></td>
+				</tr>
+				<tr>
+					<td><?php echo $tr->translate("END_DATE")?></td>
+					<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date" type="text" class="fullside" value="<?php echo date('Y-m-d');?>" ></td>
+				</tr>
+				<tr>
+					<td><?php echo $tr->translate("ROOM_NAME")?></td>
+					<td><input id="room" /></td>
+				</tr>
+				<tr>
+					<td ><?php echo $tr->translate("TEACHER_ROOM")?></td>
+					<td><input id="teacher_id" /></td>
+				</tr>
+			</table>
+		</td>
+		<td width="33%">
+			<fieldset style="margin-top:-13px; background: #fff;   border: solid 1px #008;">
+				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("ADD_STUDY_GROUP");?></strong></legend>
+				<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="10">
 					<tr>
-						
-						<td ><?php echo $tr->translate("DEGREE")?></td>
-						<td>
-							<input id="degree" name="degree" />
-						</td>
-						<td style="white-space: nowrap;"><?php echo $tr->translate("GRADE")?></td>
-						<td>
-							<input id="grade" name="grade" />
-						</td>
-						
-						<td><?php echo $tr->translate("SESSION")?></td>
-						<td>
-							<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect">
-							<?php $row= new Application_Model_DbTable_DbGlobal();
-								  $rows=$row->getSession();
-									foreach($rows as $key =>$rs){?>
-									<option value="<?php echo $rs['key_code']?>" ><?php echo $rs['view_name'];?></option>
-							<?php 	}?>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td style="width: 5px"><?php echo $tr->translate("START_DATE")?></td>
-						<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" name="start_date" id="start_date" class="fullside" onchange="setEndDate();" value="<?php echo date('Y-m-d');?>" type="text"></td>
-						<td><?php echo $tr->translate("AMOUNT_MONTH")?></td>
-						<td><input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" class="fullside" value="" onkeyup="setEndDate();" type="text"></td>
-						<td ><?php echo $tr->translate("END_DATE")?></td>
-						<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date" type="text" class="fullside" value="<?php echo date('Y-m-d');?>" ></td>
-					</tr>
-					<tr>
-						<td><?php echo $tr->translate("ROOM_NAME")?></td>
-						<td><input id="room" /></td>
-						<td ><?php echo $tr->translate("TEACHER_ROOM")?></td>
-						<td><input id="teacher_id" /></td>
 						<td><?php echo $tr->translate("TEACHER_ASSISTANCE")?></td>
 						<td><input id="teacher_ass" /></td>
 					</tr>
@@ -102,30 +119,30 @@ dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlenco
 						<td><input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="" type="text"></td>
 					</tr>
 					<tr>
-						<td colspan="6">
-							<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
-									<tr id="head-title" class="head-td" align="right"></tr>
-							</table>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="4" align="left">
-								<input type="button" label="<?php echo $tr->translate('ADD_SUBJECT_STUDY');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitIconEditProperty" onclick="addRow();" />
-						</td>
-						<input type="hidden" name="identity1" id="identity1"  />
-					</tr>
-					<tr>
-						<td colspan="6" align="center">
+						<td colspan="2" align="center">
 							<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="button" onclick="submitDataClose();"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
-								<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
+							<input type="button" onclick="submitDataClose();"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
+							<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitEditorIcon dijitEditorIconSave" />
 						</td>
 					</tr>
 				</table>
 			</fieldset>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
+				<tr id="head-title" class="head-td" align="right"></tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3" align="left">
+			<input type="button" label="<?php echo $tr->translate('ADD_SUBJECT_STUDY');?>" dojoType="dijit.form.Button" 
+				iconClass="dijitIconEditProperty" onclick="addRow();" />
+			<input type="hidden" name="identity1" id="identity1"  />
 		</td>
 	</tr>
 </table>
@@ -137,7 +154,6 @@ $techer= $this->frm_techer;
 <script type="text/javascript">
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require('dojox.form.BusyButton');
 
 dojo.require("dojo.html");
 var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );

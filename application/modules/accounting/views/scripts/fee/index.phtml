@@ -11,10 +11,8 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require('dojox.form.BusyButton');
-	
-	
-	var aca_year= getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->rows_year));?> );
+	////dojo.require('dojox.form.BusyButton');
+var aca_year= getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->rows_year));?> );
 	dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 	    store: aca_year,

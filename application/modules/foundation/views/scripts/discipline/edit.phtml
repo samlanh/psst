@@ -3,8 +3,7 @@
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_MISTAKE"));
 	$row_sub=$this->rows_sub;
 	$_model = new Foundation_Model_DbTable_DbStudentAttendance();
-?>	
-<head>
+?><head>
   <meta charset="utf-8">
 </head>
 <?php
@@ -22,6 +21,7 @@ dojo.require("dijit.form.DateTextBox");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.DateTextBox");*/
 </script>
+	
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -54,7 +54,7 @@ ol{margin: 10px;}
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
 //dojo.require("dojo.store.Memory");
-//dojo.require('dojox.form.BusyButton');
+////dojo.require('dojox.form.BusyButton');
 //dojo.require("dijit.form.Textarea");  
 //dojo.require("dijit.form.FilteringSelect");
 dojo.require("dojo.html");

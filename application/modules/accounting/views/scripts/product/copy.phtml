@@ -11,8 +11,8 @@
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require('dojox.form.BusyButton');
-	dojo.require("dojo.NodeList-manipulate");
+	////dojo.require('dojox.form.BusyButton');
+dojo.require("dojo.NodeList-manipulate");
 	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
 	dojo.ready(function(){ 
 		new dijit.form.FilteringSelect({

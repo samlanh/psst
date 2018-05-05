@@ -382,11 +382,11 @@ var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("DOB");?></td>
-							<td><input class="fullside" tabindex="24" dojoType="dijit.form.DateTextBox"  id="fa_dob" name="fa_dob" value="<?php echo $this->rs['father_dob'];?>" type="text" ></td>
+							<td><input class="fullside" tabindex="24" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" id="fa_dob" name="fa_dob" value="<?php echo $this->rs['father_dob'];?>" type="text" ></td>
 							<td><?php echo $tr->translate("DOB");?></td>
-							<td><input class="fullside"  tabindex="30" dojoType="dijit.form.DateTextBox"  id="mo_dob" name="mo_dob" value="<?php echo $this->rs['mother_dob'];?>" type="text" ></td>
+							<td><input class="fullside"  tabindex="30" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  id="mo_dob" name="mo_dob" value="<?php echo $this->rs['mother_dob'];?>" type="text" ></td>
 							<td><?php echo $tr->translate("DOB");?></td>
-							<td><input class="fullside"  tabindex="36" dojoType="dijit.form.DateTextBox"  id="guardian_dob" name="guardian_dob" value="<?php echo $this->rs['guardian_dob'];?>" type="text" ></td>
+							<td><input class="fullside"  tabindex="36" dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" id="guardian_dob" name="guardian_dob" value="<?php echo $this->rs['guardian_dob'];?>" type="text" ></td>
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("NATIONALITY");?></td>

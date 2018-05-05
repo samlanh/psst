@@ -54,26 +54,26 @@
 						<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
 								<th rowspan="1"><?php echo $tr->translate("NUM");?></th>
-								<th rowspan="1"><?php echo $tr->translate("BRANCH_NAME");?></th>
-								<th rowspan="1"><?php echo $tr->translate("STUDENT_CODE");?></th>
 								<th rowspan="1"><?php echo $tr->translate("STUDENT_NAME");?></th>
 								<th rowspan="1"><?php echo $tr->translate("SEX");?></th>
 								<th rowspan="1"><?php echo $tr->translate("TEL");?></th>
 								<th rowspan="1"><?php echo $tr->translate("DATE_START_STUDY");?></th>
-								<th rowspan="1"><?php echo $tr->translate("Std Fee<br />/M");?></th>
+								<?php /*<th rowspan="1"><?php echo $tr->translate("Std Fee<br />/M");?></th>*/?>
 								<th rowspan="1"><?php echo $tr->translate("% Scholar<br />/Y");?></th>
-								<th rowspan="1"><?php echo $tr->translate("Fee Be Paid<br />/M");?></th>
+								
 								<th rowspan="1"><?php echo $tr->translate("PAID_DATE");?></th>
 								<th rowspan="1"><?php echo $tr->translate("RECEIPT_NO");?></th>
+								<th rowspan="1"><?php echo $tr->translate("PAYMENT_TERM");?></th>
 								<th rowspan="1"><?php echo $tr->translate("PAID_AMOUNT");?></th>
 								<th rowspan="1"><?php echo $tr->translate("START_DATE");?></th>
 								<th rowspan="1"><?php echo $tr->translate("END_DATE");?></th>
+								<th rowspan="1"><?php echo $tr->translate("NOTE");?></th>
 							</tr>
 						<?php $i=0;$degree=0;$group='';$count=0; foreach ($this->rs AS $key=>$row) { ?>
 							
 							<?php if($group!=$row['group_id'] && $key>0){ //&& $row['group_id']>0 ?>
 									<tr>
-										<td colspan="11"></td>
+										<td colspan="10"></td>
 										<td colspan="2" align="center" style="font-size: 15px"><strong><?php echo $tr->translate("TOTAL");?></strong></td>
 										<td colspan="2" align="center" style="font-size: 15px"><strong><?php echo $count;$count=0;$i=0; echo $tr->translate("STUDENT_UNIT");?></strong></td>
 									</tr>
@@ -81,38 +81,38 @@
 								<table cellpadding="4"​ style="margin-top: 50px; font-family:'Khmer OS Battambang' ;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >	
 									<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
 										<th rowspan="1"><?php echo $tr->translate("NUM");?></th>
-										<th rowspan="1"><?php echo $tr->translate("BRANCH_NAME");?></th>
-										<th rowspan="1"><?php echo $tr->translate("STUDENT_CODE");?></th>
 										<th rowspan="1"><?php echo $tr->translate("STUDENT_NAME");?></th>
 										<th rowspan="1"><?php echo $tr->translate("SEX");?></th>
 										<th rowspan="1"><?php echo $tr->translate("TEL");?></th>
 										<th rowspan="1"><?php echo $tr->translate("DATE_START_STUDY");?></th>
-										<th rowspan="1"><?php echo $tr->translate("Std Fee<br />/M");?></th>
+										<?php /*<th rowspan="1"><?php echo $tr->translate("Std Fee<br />/M");?></th>*/?>
 										<th rowspan="1"><?php echo $tr->translate("% Scholar<br />/Y");?></th>
-										<th rowspan="1"><?php echo $tr->translate("Fee Be Paid<br />/M");?></th>
+										
 										<th rowspan="1"><?php echo $tr->translate("PAID_DATE");?></th>
 										<th rowspan="1"><?php echo $tr->translate("RECEIPT_NO");?></th>
+										<th rowspan="1"><?php echo $tr->translate("PAYMENT_TERM");?></th>
 										<th rowspan="1"><?php echo $tr->translate("PAID_AMOUNT");?></th>
 										<th rowspan="1"><?php echo $tr->translate("START_DATE");?></th>
 										<th rowspan="1"><?php echo $tr->translate("END_DATE");?></th>
+										<th rowspan="1"><?php echo $tr->translate("NOTE");?></th>
 									</tr>
 									<?php if($row['group_id']>0){?>
 										<tr>
-											<td colspan="15"> &nbsp; <strong>Group :</strong> <?php echo $row['group_name'];?> , <strong>Academic Year :</strong> <?php echo $row['academic_year'];?> , <strong>Degree :</strong> <?php echo $row['degree'];?> , <strong>Grade :</strong> <?php echo $row['grade'];?> , <strong>Session :</strong> <?php echo $row['session'];?></td> 			
+											<td colspan="14"> &nbsp; <strong>Group :</strong> <?php echo $row['group_name'];?> , <strong>Academic Year :</strong> <?php echo $row['academic_year'];?> , <strong>Degree :</strong> <?php echo $row['degree'];?> , <strong>Grade :</strong> <?php echo $row['grade'];?> , <strong>Session :</strong> <?php echo $row['session'];?></td> 			
 										</tr>
 									<?php }else{?>
 										<tr>
-											<td colspan="15"> &nbsp; <strong>Unknown Group</strong> </td>
+											<td colspan="14"> &nbsp; <strong>Unknown Group</strong> </td>
 										</tr>
 									<?php }?>
 							<?php }elseif($key==0){?>
 									<?php if($row['group_id']>0){?>
 									<tr>
-										<td colspan="15"> &nbsp; <strong>Group :</strong> <?php echo $row['group_name'];?> , <strong>Academic Year :</strong> <?php echo $row['academic_year'];?> , <strong>Degree :</strong> <?php echo $row['degree'];?> , <strong>Grade :</strong> <?php echo $row['grade'];?> , <strong>Session :</strong> <?php echo $row['session'];?></td>
+										<td colspan="14"> &nbsp; <strong>Group :</strong> <?php echo $row['group_name'];?> , <strong>Academic Year :</strong> <?php echo $row['academic_year'];?> , <strong>Degree :</strong> <?php echo $row['degree'];?> , <strong>Grade :</strong> <?php echo $row['grade'];?> , <strong>Session :</strong> <?php echo $row['session'];?></td>
 									</tr>
 									<?php }else{?>
 									<tr>
-										<td colspan="15"> &nbsp; <strong>Unknown Group</strong> </td>
+										<td colspan="14"> &nbsp; <strong>Unknown Group</strong> </td>
 									</tr>
 									<?php }?>
 							<?php }?>
@@ -121,29 +121,39 @@
 							
 							<tr style="font-size:12px; height: 23px;" align="center" class="hover" >
 								<td><?php echo $i;?></td>
-								<td><?php echo $row['branch_name'];?></td>
-								<td><?php echo $row['stu_code'];?></td>
 								<td align="left">&nbsp;&nbsp;&nbsp;<?php echo !empty($row['stu_khname'])?$row['stu_khname']:$row['name'];?>&nbsp;</td>
 								<td><?php echo $row['sex'];?></td>	
 								<td><?php echo $row['tel'];?></td>
 								<td><?php if($row['date_start_study']>0){echo date("d-m-Y",strtotime($row['date_start_study']));}?></td>
+								<?php /*?>
+								<td>$&nbsp;
+									<?php 
+										$tution_fee = $row['tuition_fee']/12;
+										echo number_format($tution_fee,2);
+									?>
+								</td>
+								*/?>
+								<td>
+									<?php 
+										echo number_format($row['scholarship_percent'],2);
+										$discount_percent = $row['scholarship_percent'];
+									?>
+								</td>
 								
-								<td>$&nbsp;<?php $tution_fee = $row['tuition_fee']/12;
-									echo number_format($tution_fee,2);?></td>
-								<td><?php echo number_format($row['scholarship_percent'],2);
-									$discount_percent = $row['scholarship_percent'];
-								?></td>
-								<td align="left">&nbsp;<strong>$&nbsp;<?php echo @number_format($tution_fee -($tution_fee*$discount_percent/100),2);?></strong></td>
-								<td align="left">&nbsp;<strong><?php if(!empty($row['create_date'])){echo date("d-m-Y",strtotime($row['create_date']));};?></strong></td>
-								<td align="left">&nbsp;<strong><?php echo $row['receipt_number'];?></strong></td>
+								<?php $payment_term=array("1"=>"Month","2"=>"Term","3"=>"Semester","4"=>"Annual","5"=>"Other",);?>
+								
+								<td align="center">&nbsp;<strong><?php if(!empty($row['create_date'])){echo date("d-m-Y",strtotime($row['create_date']));};?></strong></td>
+								<td align="center">&nbsp;<strong><?php echo $row['receipt_number'];?></strong></td>
+								<td align="center">&nbsp;<?php if($row['payment_term']>0){echo $payment_term[$row['payment_term']];}?></td>
 								<td align="left">&nbsp;<strong>$&nbsp;<?php echo number_format($row['fee'],2);?></strong></td>
-								<td align="left">&nbsp;<strong><?php if(!empty($row['start_date'])){echo date("d-m-Y",strtotime($row['start_date']));};?></strong></td>
-								<td align="left" <?php if(!empty($row['validate']) && strtotime($row['validate'])<strtotime(date("d-m-Y"))) {echo"style='background:red;'";}?>>&nbsp;<strong><?php if(!empty($row['validate'])){echo date("d-m-Y",strtotime($row['validate']));};?></strong></td>
+								<td align="center">&nbsp;<strong><?php if(!empty($row['start_date'])){echo date("d-m-Y",strtotime($row['start_date']));};?></strong></td>
+								<td align="center" <?php if(!empty($row['validate']) && strtotime($row['validate'])<strtotime(date("d-m-Y"))) {echo"style='background:red;'";}?>>&nbsp;<strong><?php if(!empty($row['validate'])){echo date("d-m-Y",strtotime($row['validate']));};?></strong></td>
+								<td align="left">&nbsp;<?php echo $row['note'];?></td>
 							</tr>
 							<?php $group=$row['group_id'];?>
 						<?php }?>	
 							<tr>
-								<td colspan="11"></td>
+								<td colspan="10"></td>
 								<td colspan="2" align="center" style="font-size: 15px"><strong><?php echo $tr->translate("TOTAL");?></strong></td>
 								<td colspan="2" align="center" style="font-size: 15px"><strong><?php echo $count;$count=0;$i=0; echo $tr->translate("STUDENT_UNIT");?></strong></td>
 							</tr>

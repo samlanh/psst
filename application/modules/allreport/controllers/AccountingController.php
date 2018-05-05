@@ -790,6 +790,34 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows = $group->getAllStudentBepay($search);
 		$this->view->search=$search;
 	}
+	
+	public function rptStudentBepayServiceAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'session' 		=>'',
+					'branch_id'		=>0,
+					'degree'		=>0,
+					'group'			=>'',
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	
+		$group= new Allreport_Model_DbTable_DbRptPayment();
+		$this->view->rs = $rs_rows = $group->getAllStudentBepayService($search);
+		$this->view->search=$search;
+	}
+	
 	public function rptIncomebycateAction(){
 		try{
 			if($this->getRequest()->isPost()){

@@ -337,9 +337,13 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					
 					(SELECT spd.start_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS start_date,
 					(SELECT spd.validate FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1 ) AS validate,
+					
+					(SELECT spd.payment_term FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS payment_term,
+					
 					(SELECT scholarship_percent FROM rms_student_payment WHERE student_id=s.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_percent,
 					(SELECT scholarship_amount FROM rms_student_payment WHERE student_id=s.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_amount,
 					(SELECT tfd.tuition_fee FROM rms_tuitionfee_detail AS tfd WHERE academic_year = tfd.fee_id AND tfd.class_id=s.grade AND tfd.payment_term =4 LIMIT 1) AS tuition_fee,
+					(SELECT sp.note FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) as note,
 					s.group_id,
 					s.create_date as date_start_study
 				FROM 
@@ -348,7 +352,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					s.status=1 
 					AND s.is_subspend=0 
     		';
-    	
+    	//and (SELECT spd.service_id FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) = 4
     	$where = ' ';
     
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
@@ -358,9 +362,97 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	 
-    	//$order="  order by academic_year DESC,degree ASC,grade DESC,session ASC,stu_id DESC";
-    	$order = " order by s.group_id ASC,s.grade ASC, s.stu_id ASC";
+    	//$order="  order by academic_year DESC,degree ASC,grade ASC,session ASC,stu_id DESC";
+    	$order = " order by s.group_id ASC,degree ASC,s.grade ASC, s.stu_enname ASC";
     	
+    	if(empty($search)){
+    		return $db->fetchAll($sql.$order);
+    	}
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
+    		$s_where[] = " CONCAT(stu_enname,stu_khname) LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['study_year'])){
+    		$where.=' AND academic_year='.$search['study_year'];
+    	}
+    	if(!empty($search['grade_all'])){
+    		$where.=' AND grade='.$search['grade_all'];
+    	}
+    	if(!empty($search['session'])){
+    		$where.=' AND session='.$search['session'];
+    	}if($search['degree']>0){
+    		$where.=' AND degree='.$search['degree'];
+    	}
+    	if(($search['branch_id'])>0){
+    		$where.=' AND branch_id='.$search['branch_id'];
+    	}
+    	if($search['grade_all']>0){
+    		$where.=' AND grade='.$search['grade_all'];
+    	}
+    	if(!empty($search['group'])){
+    		$where.=' AND group_id='.$search['group'];
+    	}
+    
+    	return $db->fetchAll($sql.$where.$order);
+    }
+    
+    
+    public function getAllStudentBepayService($search){
+    	$db = $this->getAdapter();
+    	$sql ='SELECT 
+    				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+    				s.stu_id,
+    				s.stu_enname,
+    				s.stu_khname,
+    				s.tel,
+			    	(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=s.sex LIMIT 1)AS sex,
+			    	s.stu_code,
+			    	s.is_subspend,
+			    	
+			    	sp.create_date,
+			    	sp.receipt_number,
+			    	sp.note,
+			    	
+			    	p.title as service_name,
+			    	p.ser_cate_id,
+			    	(select title from rms_program_type as pt where pt.id = p.ser_cate_id) as cate_name,
+			    	
+			    	spd.payment_term,
+			    	spd.start_date,
+			    	spd.validate,
+			    	spd.paidamount
+			    	
+    			FROM
+    				rms_student AS s,
+    				rms_student_payment AS sp,
+    				rms_student_paymentdetail AS spd,
+    				rms_program_name as p
+    			WHERE
+    				sp.student_id=s.stu_id
+    				AND sp.id=spd.payment_id 
+    				and p.service_id = spd.service_id
+    				AND spd.type=3 
+    				and spd.is_start=1
+    				and spd.is_onepayment = 0
+			    	and s.status=1
+			    	AND s.is_subspend=0
+    		';
+    	
+    	$where = ' ';
+    
+    	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
+    	$where .= " AND ".$from_date." AND ".$to_date;
+    
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    
+    	//$order="  order by academic_year DESC,degree ASC,grade ASC,session ASC,stu_id DESC";
+    	$order = " order by s.group_id ASC,degree ASC,s.grade ASC, s.stu_enname ASC";
+    	 
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
     	}

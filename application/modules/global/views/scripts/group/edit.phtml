@@ -1,8 +1,8 @@
 <?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$frm = $this->frm_callteral;
-echo $this->headTitle($tr->translate("EDIT_STUDY_GROUP"));
-$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm = $this->frm_callteral;
+	echo $this->headTitle($tr->translate("EDIT_STUDY_GROUP"));
+	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>

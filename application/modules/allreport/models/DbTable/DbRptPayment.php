@@ -411,6 +411,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    	(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=s.sex LIMIT 1)AS sex,
 			    	s.stu_code,
 			    	s.is_subspend,
+			    	s.create_date as date_start_study,
 			    	
 			    	sp.create_date,
 			    	sp.receipt_number,
@@ -448,10 +449,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$where .= " AND ".$from_date." AND ".$to_date;
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission("s.branch_id");
     
     	//$order="  order by academic_year DESC,degree ASC,grade ASC,session ASC,stu_id DESC";
-    	$order = " order by s.group_id ASC,degree ASC,s.grade ASC, s.stu_enname ASC";
+    	$order = " order by p.ser_cate_id ASC,spd.service_id ASC, s.stu_enname ASC";
     	 
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
@@ -483,7 +484,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if(!empty($search['group'])){
     		$where.=' AND group_id='.$search['group'];
     	}
-    
+//     	echo $sql.$where.$order;
     	return $db->fetchAll($sql.$where.$order);
     }
     

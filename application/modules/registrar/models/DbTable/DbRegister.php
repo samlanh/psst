@@ -1790,7 +1790,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$s_search=addslashes(trim($search['adv_search']));
     		$s_where[]= " name_kh LIKE '%{$s_search}%'";
     		$s_where[]=" name_en LIKE '%{$s_search}%'";
-    		$where1.=' AND ('.implode(' OR ', $s_where).')';
+    		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	$order=" ORDER BY id DESC";
     	return $db->fetchAll($sql.$where.$order);

@@ -66,7 +66,7 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 								$no=0;
 							  ?>
 							  <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
-								  <?php if($rs['type']!=$type){	?>
+								  <?php if($rs['type']!=$type && ($rs['type']!=1 && $rs['type']!=2)){	?>
 									   <?php  if($key>0 ){ $no++;?>
 												<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
 												  <td style="text-align: center;"><?php echo $no;?></td>

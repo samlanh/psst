@@ -332,7 +332,13 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1)AS degree,
 					(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=s.is_subspend) AS STATUS,
 					(SELECT sp.create_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS create_date,
-					(SELECT spd.paidamount FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS fee,
+					
+					(SELECT spd.subtotal FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS subtotal,
+					(SELECT spd.late_fee FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS late_fee,
+					(SELECT spd.discount_percent FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS discount_percent,
+					(SELECT spd.discount_fix FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS discount_fix,
+					(SELECT spd.paidamount FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS paidamount,
+					
 					(SELECT sp.receipt_number FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS receipt_number,
 					
 					(SELECT spd.start_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS start_date,

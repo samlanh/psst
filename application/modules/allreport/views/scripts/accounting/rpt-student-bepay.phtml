@@ -64,6 +64,9 @@
 								<th rowspan="1"><?php echo $tr->translate("PAID_DATE");?></th>
 								<th rowspan="1"><?php echo $tr->translate("RECEIPT_NO");?></th>
 								<th rowspan="1"><?php echo $tr->translate("PAYMENT_TERM");?></th>
+								<th rowspan="1"><?php echo $tr->translate("TOTAL");?></th>
+								<th rowspan="1"><?php echo $tr->translate("LATE_FEE");?></th>
+								<th rowspan="1"><?php echo $tr->translate("DISCOUNT");?></th>
 								<th rowspan="1"><?php echo $tr->translate("PAID_AMOUNT");?></th>
 								<th rowspan="1"><?php echo $tr->translate("START_DATE");?></th>
 								<th rowspan="1"><?php echo $tr->translate("END_DATE");?></th>
@@ -73,7 +76,7 @@
 							
 							<?php if($group!=$row['group_id'] && $key>0){ //&& $row['group_id']>0 ?>
 									<tr>
-										<td colspan="10"></td>
+										<td colspan="12"></td>
 										<td colspan="2" align="center" style="font-size: 15px"><strong><?php echo $tr->translate("TOTAL");?></strong></td>
 										<td colspan="2" align="center" style="font-size: 15px"><strong><?php echo $count;$count=0;$i=0; echo $tr->translate("STUDENT_UNIT");?></strong></td>
 									</tr>
@@ -91,6 +94,9 @@
 										<th rowspan="1"><?php echo $tr->translate("PAID_DATE");?></th>
 										<th rowspan="1"><?php echo $tr->translate("RECEIPT_NO");?></th>
 										<th rowspan="1"><?php echo $tr->translate("PAYMENT_TERM");?></th>
+										<th rowspan="1"><?php echo $tr->translate("TOTAL");?></th>
+										<th rowspan="1"><?php echo $tr->translate("LATE_FEE");?></th>
+										<th rowspan="1"><?php echo $tr->translate("DISCOUNT");?></th>
 										<th rowspan="1"><?php echo $tr->translate("PAID_AMOUNT");?></th>
 										<th rowspan="1"><?php echo $tr->translate("START_DATE");?></th>
 										<th rowspan="1"><?php echo $tr->translate("END_DATE");?></th>
@@ -98,21 +104,21 @@
 									</tr>
 									<?php if($row['group_id']>0){?>
 										<tr>
-											<td colspan="14"> &nbsp; <strong>Group :</strong> <?php echo $row['group_name'];?> , <strong>Academic Year :</strong> <?php echo $row['academic_year'];?> , <strong>Degree :</strong> <?php echo $row['degree'];?> , <strong>Grade :</strong> <?php echo $row['grade'];?> , <strong>Session :</strong> <?php echo $row['session'];?></td> 			
+											<td colspan="16"> &nbsp; <strong>Group :</strong> <?php echo $row['group_name'];?> , <strong>Academic Year :</strong> <?php echo $row['academic_year'];?> , <strong>Degree :</strong> <?php echo $row['degree'];?> , <strong>Grade :</strong> <?php echo $row['grade'];?> , <strong>Session :</strong> <?php echo $row['session'];?></td> 			
 										</tr>
 									<?php }else{?>
 										<tr>
-											<td colspan="14"> &nbsp; <strong>Unknown Group</strong> </td>
+											<td colspan="16"> &nbsp; <strong>Unknown Group</strong> </td>
 										</tr>
 									<?php }?>
 							<?php }elseif($key==0){?>
 									<?php if($row['group_id']>0){?>
 									<tr>
-										<td colspan="14"> &nbsp; <strong>Group :</strong> <?php echo $row['group_name'];?> , <strong>Academic Year :</strong> <?php echo $row['academic_year'];?> , <strong>Degree :</strong> <?php echo $row['degree'];?> , <strong>Grade :</strong> <?php echo $row['grade'];?> , <strong>Session :</strong> <?php echo $row['session'];?></td>
+										<td colspan="16"> &nbsp; <strong>Group :</strong> <?php echo $row['group_name'];?> , <strong>Academic Year :</strong> <?php echo $row['academic_year'];?> , <strong>Degree :</strong> <?php echo $row['degree'];?> , <strong>Grade :</strong> <?php echo $row['grade'];?> , <strong>Session :</strong> <?php echo $row['session'];?></td>
 									</tr>
 									<?php }else{?>
 									<tr>
-										<td colspan="14"> &nbsp; <strong>Unknown Group</strong> </td>
+										<td colspan="16"> &nbsp; <strong>Unknown Group</strong> </td>
 									</tr>
 									<?php }?>
 							<?php }?>
@@ -144,8 +150,44 @@
 								
 								<td align="center">&nbsp;<strong><?php if(!empty($row['create_date'])){echo date("d-m-Y",strtotime($row['create_date']));};?></strong></td>
 								<td align="center">&nbsp;<strong><?php echo $row['receipt_number'];?></strong></td>
-								<td align="center">&nbsp;<?php if($row['payment_term']>0){echo $payment_term[$row['payment_term']];}?></td>
-								<td align="left">&nbsp;<strong>$&nbsp;<?php echo number_format($row['fee'],2);?></strong></td>
+								
+								<?php 
+									$total_day=strtotime($row['validate'])-strtotime($row['start_date']);
+									$day=(int)($total_day/(60*60*24));
+									$qty_month = number_format($day/30);
+									$qty_day = $day%30;
+								?>
+								
+								<td align="center">
+									<?php 
+										if($row['payment_term']>0){
+											if($row['payment_term']==5){
+												if($qty_month>0){
+													echo $qty_month." month+".$qty_day." days";
+												}else{
+													echo $qty_day." days";
+												}
+											}else{
+												echo $payment_term[$row['payment_term']];
+											}
+										}
+									?>
+								</td>
+								<td align="center">&nbsp;<strong>$&nbsp;<?php echo number_format($row['subtotal'],2);?></strong></td>
+								<td align="center">&nbsp;<strong>&nbsp;<?php if($row['late_fee']>0){echo "$".number_format($row['late_fee'],2);}?></strong></td>
+								<?php 
+									$discount = "";
+									if($row['discount_fix']>0 && $row['discount_percent']>0){
+										$discount = number_format($row['discount_percent'])."%+".number_format($row['discount_fix'])."$";
+									}else if($row['discount_percent']>0){
+										$discount = number_format($row['discount_percent'])."%";
+									}else if($row['discount_fix']>0){
+										$discount = number_format($row['discount_fix'])."$";
+									}
+								?>
+								
+								<td align="center">&nbsp;<strong>&nbsp;<?php echo $discount;?></strong></td>
+								<td align="center">&nbsp;<strong>$&nbsp;<?php echo number_format($row['paidamount'],2);?></strong></td>
 								<td align="center">&nbsp;<strong><?php if(!empty($row['start_date'])){echo date("d-m-Y",strtotime($row['start_date']));};?></strong></td>
 								<td align="center" <?php if(!empty($row['validate']) && strtotime($row['validate'])<strtotime(date("d-m-Y"))) {echo"style='background:red;'";}?>>&nbsp;<strong><?php if(!empty($row['validate'])){echo date("d-m-Y",strtotime($row['validate']));};?></strong></td>
 								<td align="left">&nbsp;<?php echo $row['note'];?></td>
@@ -153,7 +195,7 @@
 							<?php $group=$row['group_id'];?>
 						<?php }?>	
 							<tr>
-								<td colspan="10"></td>
+								<td colspan="12"></td>
 								<td colspan="2" align="center" style="font-size: 15px"><strong><?php echo $tr->translate("TOTAL");?></strong></td>
 								<td colspan="2" align="center" style="font-size: 15px"><strong><?php echo $count;$count=0;$i=0; echo $tr->translate("STUDENT_UNIT");?></strong></td>
 							</tr>

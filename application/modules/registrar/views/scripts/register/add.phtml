@@ -1906,7 +1906,6 @@ function printSave(new_stu_id,new_receipt,submit){
 					  
 				if(payment_type==1 && student_type==4){
 					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
-						 
 					  temp+='<tr style=" font-size:12px;height: 15px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId("service_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
 					  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId("term_"+rowIDArray[n]).attr('displayedValue')+'</td>';
@@ -1947,14 +1946,16 @@ function printSave(new_stu_id,new_receipt,submit){
 						  epx_date = '';
 					  }
 					  s_startdate = dijit.byId("date_start_"+rowIDArray[n]).get('value');
+					  
 					  if(s_startdate==null){start_date='';epx_date='';}
+					  
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId(("price_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
+					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("price_"+rowIDArray[n]).get('value')+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee_service_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('additional_fee_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('late_fee_service_'+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;">$ '+dijit.byId('additional_fee_'+rowIDArray[n]).get('value')+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
-					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("paidamount_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';				  				  
+					  temp+='<td style="border:1px solid #000;">$ '+dijit.byId("paidamount_"+rowIDArray[n]).get('value')+'</td>';				  				  
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 					  i++;
 					  temp+='</tr>';

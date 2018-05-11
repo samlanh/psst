@@ -442,6 +442,7 @@ function Initailize() {
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
 		temp+='<th><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
+		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 		temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
 		dojo.query("#head-title").append(temp);
@@ -451,6 +452,7 @@ function Initailize() {
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
 		template+='<td width="40px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';	
+		template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
 		template+='<td width="24%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
@@ -469,6 +471,7 @@ function Initailize() {
 	});
 	dijit.byId('subject_study_'+col).attr('value','<?php echo $rows['subject_id'];?>');
 	dijit.byId('amount_subject'+col).attr('value','<?php echo $rows['amount_subject'];?>');
+	dijit.byId('amount_subject_semester'+col).attr('value','<?php echo $rows['amount_subject_sem'];?>');
 	dijit.byId('note_'+col).attr('value','<?php echo $rows['note'];?>');
 	dijit.byId('teacher_'+col).attr('value','<?php echo $rows['teacher'];?>');
 	<?php }}?>
@@ -482,6 +485,7 @@ function addRow() {
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
 		temp+='<th><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
+		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 		temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
 		dojo.query("#head-title").append(temp);
@@ -490,7 +494,8 @@ function addRow() {
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect"  class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
-		template+='<td width="40px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';	
+		template+='<td width="40px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
+		template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
 		template+='<td width="24%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
@@ -598,8 +603,8 @@ function getSubjectByDegree(){
 							<td style="width:100px"><?php echo $tr->translate("STATUS")?></td>
 							<td>
 								<select class="fullside"  tabindex="3" name="status_room" id="status_room" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("Active")?></option>
-									    <option value="0"><?php echo $tr->translate("Deactive")?></option>
+								    <option value="1"><?php echo $tr->translate("Active")?></option>
+								    <option value="0"><?php echo $tr->translate("Deactive")?></option>
 								</select>
 							</td>
 						</tr>
@@ -632,8 +637,7 @@ function getSubjectByDegree(){
 				</tr>
 				<tr>
 					<td><?php echo $tr->translate("SHORTCUT");?></td>
-					<td>
-						<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
+					<td><input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
 					</td>
 				</tr>
 				<tr>
@@ -741,7 +745,6 @@ function addGrade(){
 			form: dojo.byId("frm_add_grade"),
 			handleAs:"json",
 			load: function(data) {
-				//alert(data); 
 				var Itemmake = { 
 				    	 id: data,
 					     name: dijit.byId('major_enname').get('value')

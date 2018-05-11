@@ -104,7 +104,7 @@ public function init()
     	$type=$this->getRequest()->getParam("type");
     	$search= array();
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$result_semester = $db->getStundetScorebySemester($group_id,$type);
+    	$result_semester = $db->getStundetScorebySemester($group_id,$type);//ប្រើតែក្នុងលទ្ធផលប្រចាំខែ និង តារាងកិត្តិយស
     	$array_score = array();
     	if(!empty($result_semester)){
     		foreach ($result_semester as $key => $row){

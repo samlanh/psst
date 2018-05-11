@@ -130,6 +130,16 @@
 							</td>
 						</tr>
 						<tr>
+							<td><strong><?php echo $tr->translate("របបពិន្ទុ");?>*</strong></td>
+							<td>
+								<select class="fullside" tabindex="15" name="max_score" id="max_score"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup();getInfoBygroup();">
+									<option value="10">10</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
 							<td><?php echo $tr->translate("EXAM_TYPE");?></td>
 							<td>
 							   <select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >

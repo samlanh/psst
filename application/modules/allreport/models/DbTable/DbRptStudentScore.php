@@ -285,10 +285,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	s.for_semester,
 		   	s.reportdate,
 		   	s.title_score,
+		   	s.max_score,
 		   	SUM(sd.`score`) AS total_score,
 		   	total_score AS total_scoreallsubject,
 		   	AVG(sd.score) AS average,
 		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
+		   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem ,
 		   	(SELECT pass_average FROM `rms_dept` WHERE dept_id=g.degree LIMIT 1) as average_pass
    		FROM 
    			`rms_score` AS s,
@@ -354,6 +356,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	st.photo,
 			   	s.for_semester,
 			   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject,
+			   	(SELECT COUNT(ss.id) FROM `rms_score` AS ss WHERE ss.group_id=g.`id` AND ss.exam_type=1 AND ss.for_semester=$semester LIMIT 1) AS amount_month,
 
 			   	(SELECT SUM(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc 
 			   		WHERE 
@@ -385,7 +388,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	
    	$where='';
    	
-   	$order = "GROUP BY sd.`student_id` ORDER BY average DESC,total_exam DESC,s.for_academic_year,s.for_semester ASC ";
+   	$order = "GROUP BY sd.`student_id` ORDER BY (total_score+total_exam) DESC,s.for_academic_year,s.for_semester ASC ";
 
    	return $db->fetchAll($sql.$where.$order);
    }

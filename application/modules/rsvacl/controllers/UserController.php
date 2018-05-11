@@ -109,11 +109,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
 	{
 			// action body
 			$db_user=new Application_Model_DbTable_DbUsers();
-			 
-			if ($db_user->getMaxUser() > self::MAX_USER) {
-				Application_Form_FrmMessage::Sucessfull('អ្នក​ប្រើ​ប្រាស់​របស់​អ្នក​បាន​ត្រឹម​តែ '.self::MAX_USER.' នាក់ ទេ!', self::REDIRECT_URL);
-			}
-			 
+		
 			if($this->getRequest()->isPost()){
 				$userdata=$this->getRequest()->getPost();
 				try {

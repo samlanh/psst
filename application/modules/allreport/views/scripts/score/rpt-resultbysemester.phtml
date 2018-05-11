@@ -116,10 +116,14 @@ dojo.ready(function(){
 									$old_rank=$old_rank+1+$duplicate;
 									$duplicate=0;
 								}
+								$avg_semester = $rs['total_exam']/$rs['amount_subject'];
 								?>
-								<td align="center"><strong><?php echo number_format($rs['total_exam']/$rs['amount_subject'],2);?></strong></td>
-								<td align="center"><strong><?php echo number_format($rs['total_score']/$rs['amount_subject'],2); ?></strong></td>
-								<td align="center"><strong><?php echo number_format($score_average,2);?></strong></td>
+								<td align="center"><strong><?php echo number_format($avg_semester,2);?></strong></td>
+								<?php 
+									$avg_allmonth = ($rs['total_score']/$rs['amount_subject'])/$rs['amount_month'];
+								?>
+								<td align="center"><strong><?php echo number_format($avg_allmonth,2); ?></strong></td>
+								<td align="center"><strong><?php echo number_format(($avg_semester+$avg_allmonth)/2,2);?></strong></td>
 								<td align="center" style="color:red;"><label id="record<?php echo $i;?>"></label><strong><?php echo $old_rank;?></strong></td>
 								<td align="center"></td>
 							</tr>

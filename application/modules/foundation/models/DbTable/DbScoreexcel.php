@@ -14,6 +14,7 @@ class Foundation_Model_DbTable_DbScoreexcel extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
+					'max_score'=>$_data['max_score'],
 			        'exam_type'=>$_data['exam_type'],
 					'date_input'=>date("Y-m-d"),
 					'note'=>$_data['note'],
@@ -65,6 +66,7 @@ class Foundation_Model_DbTable_DbScoreexcel extends Zend_Db_Table_Abstract
 				$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
+					'max_score'=>$_data['max_score'],
 			        'exam_type'=>$_data['exam_type'],
 					'date_input'=>date("Y-m-d"),
 					'note'=>$_data['note'],

@@ -102,7 +102,7 @@ dojo.ready(function(){
 				 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
 				 if($rs['sex']==1){ $sex = $tr->translate("MALE_SHORT");$m = $m+1;}
 				 else{$sex = $tr->translate("FEMALE_SHORT");$f=$f+1;}
-				 $subj = $db->getSubjectScoreGroup($rs['group_id']);
+				 $subj = $db->getSubjectScoreGroup($rs['group_id'],$rs['exam_type']);
 				?>
 				<?php if ($old_groupid!=$rs['group_id']){ $count = count($subj); ?>
 				<?php $i=0; $count_fail=0;?>
@@ -180,7 +180,7 @@ dojo.ready(function(){
 								<?php 
 									if($this->data['scoreresulttye']==1){
 									$total_score = 0; 
-									$subj = $db->getSubjectScoreGroup($rs['group_id']); 
+									$subj = $db->getSubjectScoreGroup($rs['group_id'],$rs['exam_type']); 
 									if (!empty($subj)) foreach ($subj as $subject){
 								?>
 								<td align="center">
@@ -212,7 +212,7 @@ dojo.ready(function(){
 								<td align="center"><?php echo calCulateGrade($average);?></td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<td align="center" <?php if($rs['average']<$rs['average_pass']){echo 'style=" background: #fdbdbd;"'; $count_fail++;}?>>
-									<?php if($average>=$rs['average_pass']){
+									<?php if($average>=($rs['max_score']/2)){
 										echo $tr->translate("STUDENT_PASS");
 										$count_pass++;
 										if($rs['sex']==2){$pass_female=$pass_female+1;}//femail

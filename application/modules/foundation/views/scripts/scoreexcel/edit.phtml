@@ -17,7 +17,6 @@
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.DateTextBox");
-	//dojo.require('dojox.form.BusyButton');
 dojo.ready(function(){
 	 getInfoBygroup();
 	 getSubjectByGroup();
@@ -150,12 +149,12 @@ function filterStudentOld(){
     return false;
    }
 </script>
-<table cellspacing="10" style="margin: 0 auto;width:100%;" >
-	<tr>
-		<td>
-		<fieldset style="background: #fff;border: solid 1px #008;">
-					<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("EDIT_STUDENT_SCORE");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%;" cellspacing="10">
+<fieldset style="background: #fff;border: solid 1px #008;">
+	<legend align="center" style="font-size: 14px;"><strong><?php echo $tr->translate("EDIT_STUDENT_SCORE");?></strong></legend>
+		<table cellspacing="5" style="margin: 0 auto;width:100%;" >
+		<tr>
+			<td width="50%">
+					<table style="margin: 0 auto; width: 100%;" cellspacing="5">
 						<tr>
 							<td><strong><?php echo $tr->translate("SUBJECT_TITLE");?></strong>
 								<input type="hidden" name="score_id" id="score_id" value="<?php echo $this->score_id;?>"/>
@@ -163,6 +162,8 @@ function filterStudentOld(){
 							<td>
 								<input type="text" name="title" id="title" class="fullside" value="<?php echo $this->score['title_score'];?>" required="1" dojoType="dijit.form.ValidationTextBox" />
 							</td>
+						</tr>
+						<tr>
 							<td><?php echo $tr->translate("GROUP");?>*</td>
 							<td>
 								<select class="fullside" tabindex="15" name="group" id="group" readOnly="readOnly" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup(); getInfoBygroup();">
@@ -171,33 +172,14 @@ function filterStudentOld(){
 									<?php }?>
 								</select>
 							</td>
-							<td ><?php echo $tr->translate("STUDY_YEAR");?></td>
-							<td>
-								<input id="year_study" />
-							</td>
 						</tr>
 						<tr>
-							<td ><?php echo $tr->translate("DEGREE");?></td>
+							<td><strong><?php echo $tr->translate("របបពិន្ទុ");?>*</strong></td>
 							<td>
-								<select id="degree" name="degree" onchange="filterGrade();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
-									<option value="-1"> ------ select degree---------</option>
-								<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
-									<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
-								<?php }}?>
-								</select>
-							</td>
-							<td ><?php echo $tr->translate("GRADE");?></td>
-							<td>
-								<input id="grade" />
-								 <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
-							</td>
-							<td><?php echo $tr->translate("SESSION");?></td>
-							<td>
-								<select id="session" name="session" onchange="filterStudentByCondition();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
-									<option value="-1"> ------ select session---------</option>
-								<?php if(!empty($this->session)){foreach ($this->session as $session){?>
-									<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
-								<?php }}?>
+								<select class="fullside" tabindex="15" name="max_score" id="max_score"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup();getInfoBygroup();">
+									<option value="10" <?php if ($this->score['max_score']==10){ echo "selected='selected'";}?>>10</option>
+									<option value="50" <?php if ($this->score['max_score']==50){ echo "selected='selected'";}?>>50</option>
+									<option value="100" <?php if ($this->score['max_score']==100){ echo "selected='selected'";}?>>100</option>
 								</select>
 							</td>
 						</tr>
@@ -209,6 +191,8 @@ function filterStudentOld(){
 							   		<option value="2" <?php if($this->score['exam_type']==2){echo "selected";} ?>>ប្រលងឆមាស</option>
 							   </select>
 							</td>
+						</tr>
+						<tr>
 							<td style="white-space: nowrap;"><?php echo $tr->translate("FOR_MONTH");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
@@ -217,6 +201,8 @@ function filterStudentOld(){
 									<?php }}?>
 								</select>
 							</td>
+						</tr>
+						<tr>
 							<td><?php echo $tr->translate("FOR_SEMESTER");?></td>
 							<td>
 								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
@@ -225,45 +211,88 @@ function filterStudentOld(){
 								</select>
 							</td>
 						</tr>
-						<tr>
-							<td><?php echo $tr->translate("NOTE");?></td>
-							<td colspan="3"><textarea class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea></td>
-							<td style="white-space: nowrap;"><?php echo $tr->translate("STATUS");?></td>
-							<td>
-								<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
-										<option value="1" <?php if ($this->score['status']==1){ echo "Selected='selected'";}?>>ប្រើប្រាស់</option>
-										<option value="0" <?php if ($this->score['status']==0){ echo "Selected='selected'";}?>>មិនប្រើប្រាស់</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="8">
-								<label id="liststudent"></label>
-							</td>
-						</tr>
 					</table>
-					<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%;" >
-						<thead>
-							<tr>
-								<td colspan="8" align="left">
-									<input type="hidden" name="identity" id="identity"  value="" >
-								 </td>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<td colspan="8" align="center">
-								 	<input iconClass="dijitIconClear" type="reset" value="" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-									<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconSave" />
-								</td>
-							</tr>
-						</tfoot>
-				 </table>
-		</fieldset>		
-		</td>
-	</tr>
-</table>	
+			</td>
+			<td width="50%">
+				<table style="margin: 0 auto; width: 100%;" cellspacing="5">
+					<tr>
+							<td ><?php echo $tr->translate("STUDY_YEAR");?></td>
+							<td><input id="year_study" /></td>
+					</tr>
+					<tr>
+						<td ><?php echo $tr->translate("DEGREE");?></td>
+						<td>
+							<select id="degree" name="degree" onchange="filterGrade();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+								<option value="-1"> ------ select degree---------</option>
+							<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
+								<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
+							<?php }}?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("GRADE");?></td>
+						<td>
+							<input id="grade" />
+							<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("SESSION");?></td>
+						<td>
+							<select id="session" name="session" onchange="filterStudentByCondition();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+								<option value="-1"> ------ select session---------</option>
+							<?php if(!empty($this->session)){foreach ($this->session as $session){?>
+								<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
+							<?php }}?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("NOTE");?></td>
+						<td><textarea class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea></td>
+					</tr>
+					<tr>
+						<td style="white-space: nowrap;"><?php echo $tr->translate("STATUS");?></td>
+						<td>
+							<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">								
+									<option value="1" <?php if ($this->score['status']==1){ echo "Selected='selected'";}?>>ប្រើប្រាស់</option>
+									<option value="0" <?php if ($this->score['status']==0){ echo "Selected='selected'";}?>>មិនប្រើប្រាស់</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<table class="set-style" border="2px" style="border:1px solid #ccc; border-collapse: collapse;margin: 0 auto; width: 100%;" >
+					<tr>
+						<td colspan="2">
+							<label id="liststudent"></label>
+						</td>
+					</tr>
+					<thead>
+						<tr>
+							<td colspan="8" align="left">
+								<input type="hidden" name="identity" id="identity"  value="" >
+							 </td>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td colspan="8" align="center">
+							 	<input iconClass="dijitIconClear" type="reset" value="" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+								<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+									iconClass="dijitEditorIcon dijitEditorIconSave" />
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</td>
+		 <tr>
+	</table>
+</fieldset>		
 </form>
 <script> //validate controll form 
 function AllowOnlyNumbers(e) {

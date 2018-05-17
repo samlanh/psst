@@ -124,20 +124,21 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			try{
 				$this->_name="rms_customer_payment";				
 				$array = array(
-						'branch_id'	=>$this->getBranchId(),
+						'branch_id'		=>$this->getBranchId(),
 						'receipt_no'	=>$data['receipt_no'],
 						
-						'name_kh'	=>$data['kh_name'],
-						'name_en'	=>$data['en_name'],
-						'sex'		=>$data['sex'],
-						'dob'		=>$data['dob'],
-						'phone'		=>$data['parent_phone'],
+						'name_kh'		=>$data['kh_name'],
+						'name_en'		=>$data['en_name'],
+						'sex'			=>$data['sex'],
+						'dob'			=>$data['dob'],
+						'phone'			=>$data['parent_phone'],
 						
-						'grand_total'=>$data['grand_total'],
-						'fine'		=>$data['fine'],
-						'deduct'	=>$data['deduct'],
-						'net_amount'=>$data['net_amount'],
+						'grand_total'	=>$data['grand_total'],
+						'fine'			=>$data['fine'],
+						'deduct'		=>$data['deduct'],
+						'net_amount'	=>$data['net_amount'],
 						
+						'user_id'		=>$this->getUserId(),
 						'create_date'	=>$paid_date,
 					);
 				$id = $this->insert($array);

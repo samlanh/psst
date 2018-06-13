@@ -24,112 +24,92 @@ function getKHMonthByNumber(m){
 </script>
 
 
-<div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog" style="width:22cm;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
-		<div id="PickupCard" style="width: 21cm !important; height: 13cm ; padding: 0px; margin: 0px;">
-		<?php $i=0;$margin_work =2;if(!empty($this->rs)){foreach ($this->rs as $row){$i++;?>	
-			<table  width="100%" style="white-space: nowrap;font-size:10px;font-family: 'Khmer OS Battambang';margin-bottom:80px;<?php if($i==0){echo "margin-top:25px;";}?>" <?php if($margin_work == 2){echo "margin-top:25px;";}?>class="print" cellspacing="1"  cellpadding="0">
-				<tr>
-					<td width="100%" align="center">
-						<table style="border: 3px solid blue;height: 5.9cm;width: 95%;font-size:11px;font-family: 'Khmer OS Battambang',Arial,sans-serif;padding:10px;" cellspacing="0" cellpadding="0">
-							<tr>
-								<td colspan="4" align="left">
-									<img style="width:53%;height: 90px;" src="<?php echo $this->baseUrl().'/images/psis_full_logo.png';?>">
-								</td>
-							</tr>
-							<tr style="height: 0;">
-								<td colspan="4" align="center" valign="top">
-									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
-										<tr>
-											<td width="25%" valign="top">
-												<div style="font-size:20px;font-family: 'Times New Roman';margin-top: 5px;padding-left: 15px;font-weight:bold;"></div>
-											</td>
-											<td width="50%" align="center" valign="top">
-												<div style="font-size:22px;font-family: 'Khmer OS Muol Light';margin-top: 5px;color: red;">ប័ណ្ណទទួលសិស្ស</div>
-											</td>
-											<td width="25%" align="center" valign="top">
-												<img style="width:60%;height: 110px;border: 1px solid rgba(0, 0, 0, 0.1);margin-top: -60px;" src="<?php echo $this->baseUrl().'/images/'.$row['photo'];?>">
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr style="height: 0;line-height: 18px" >
-								<td colspan="4" align="center" valign="top">
-									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
-										<tr>
-											<td width="75%">
-												<div style="font-size:20px;font-family: Khmer OS Muol Light, Times New Roman;padding-left: 15px;">Name : <?php if($row['stu_khname']!=''){echo $row['stu_khname'];}else{echo $row['stu_enname'];}?></div>
-											</td>
-											<td width="25%" align="center" valign="top">
-												<div style="font-size:18px;font-family: 'Times New Roman';color: red;"><?php echo $row['stu_code'];?></div>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="4">
-									&nbsp;
-								</td>
-							</tr>	
-							<tr>
-								<td width="30%">
-									&nbsp;
-								</td>
-								<td width="20%" align="center">
-									<img style="width:70%;height: 110px;border: 1px solid #333232;" src="<?php //echo $this->baseUrl().'/images/'.$row['fa_photo'];?>">
-								</td>
-								<td width="20%" align="center">
-									<img style="width:70%;height: 110px;border: 1px solid #333232;" src="<?php //echo $this->baseUrl().'/images/'.$row['mo_photo'];?>">
-								</td>
-								<td width="30%" >
-									&nbsp;
-								</td>
-							</tr>
-							<tr>
-								<td colspan="4">
-									&nbsp;
-								</td>
-							</tr>
-							
-							<tr style="height: 0;line-height: 18px" >
-								<td colspan="4" align="center" valign="top">
-									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
-										<tr>
-											<td width="10%" align="center" valign="top">
-												<div style="font-size:15px;font-family: 'Khmer OS Muol Light';color:#000;">បញ្ជាក់ៈ</div>
-											</td>
-											<td width="70%"  valign="top" style="font-size:13px;font-family: 'Khmer OS Battambang';color:#000;">
-												<div>
-													- ក្នុងករណីបាត់បង់ អាណាព្យាបាលត្រូវជូនដំណឹងមកកាន់ការិយាល័យសិក្សាជាបន្ទាន់
-												</div>
-												<div>
-													- អាណាព្យាបាលត្រូវបង្ហាញប័ណ្ណនេះទៅបុគ្គលិកសាលា ពេលមកទទួលយកសិស្ស
-												</div>
-												<div>
-													- អ្នកដែលមកទទួលយកសិស្សត្រូវជាបុគ្គលដែលមានបិទរូបថតនៅខាងលើ
-												</div>
-												<div>
-													- រាល់ការបាត់បង់ ឫ ផ្លាស់ប្តូរប័ណ្ណថ្មីត្រូវបង់ប្រាក់ ៣ដុល្លារ
-												</div>
-											</td>
-											<td width="20%" align="center" style="border:1px solid blue;color:blue;">
-												<div style="font-size:15px;font-family: 'Khmer OS Muol Light';">
-													ព័ត៌មានលម្អិត
-												</div>
-												<div style="font-size:13px;font-family: 'Times New Roman';">
-													<?php echo $tr->translate("CUSTOMER_TEL");?>
-												</div>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
+<div class="dijitHidden" style="width: 120mm !important; height: 40mm ; padding: 0px; margin: 0px;">
+	<div data-dojo-type="dijit.Dialog" style="width:22cm;margin: 0 auto;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
+		<div id="PickupCard" style="margin: 0 auto;width:100%;" >
+		<?php 			
+			$i=0;$margin_work = 2;
+			if(!empty($this->rs)){foreach ($this->rs as $row){?>
+			<?php if($i==4){
+				$i=0;
+			?>
+			<div style="clear:both;page-break-after: always;width:100;height:10px;"></div>	
+			<?php }$i++;?>
+			<div style="width: 120mm !important; height: 80mm ; display:block;padding: 0px; margin: 5px;border:2px solid #000;float:left;">
+					<table style="height:100%;width: 100%;font-size:11px;font-family: 'Khmer OS Battambang',Arial,sans-serif;padding:10px;" cellspacing="0" cellpadding="0">
+						<tr height="80px;">
+							<td align="left" valign="top">
+								<img style="max-height:90px;max-width: 100%;" src="<?php echo $this->baseUrl().'/images/logo.png';?>">
+							</td>
+							<td colspan="2" align="center" valign="top">
+									<span style="font-family: 'Khmer OS Muol Light';font-size: 14px;"><?php echo $tr->translate("CUSTOMER_BRANCH");?></span><br />
+									<?php echo $tr->translate("SCHOOL_NAME");?>
+									<div style="font-size:16px;font-family: 'Khmer OS Muol Light';margin-top: 5px;color: red;">ប័ណ្ណទទួលសិស្ស</div>
+							</td>
+							<td align="left" valign="top"></td>
+						</tr>
+						<tr style="height: 0;line-height: 18px" >
+							<td colspan="4" align="center" valign="top">
+								<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
+									<tr>
+										<td width="75%" valign="top">
+											<div style="font-size:16px;font-family: Khmer OS Muol Light, Times New Roman;padding-left: 15px;margin-top:-20px;">Student Name : <?php if($row['stu_khname']!=''){echo $row['stu_khname'];}else{echo $row['stu_enname'];}?></div>
+										</td>
+										<td width="25%" align="center" valign="top">
+											<div style="font-size:16px;font-family:'Khmer OS Muol Light','Times New Roman';color: red;margin-top:-20px;"><?php echo $row['stu_code'];?></div>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr height="70px;">
+							<td width="25%">
+								&nbsp;
+							</td>
+							<td width="25%" align="center">
+							</td>
+							<td width="25%" align="center">
+							</td>
+							<td width="25%" >
+								&nbsp;
+							</td>
+						</tr>
+						<tr style="height: 0;line-height: 15px" >
+							<td colspan="4" align="center" valign="top">
+								<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
+									<tr>
+										<td colspan="2"><div style="font-size:10px;font-family: 'Khmer OS Muol Light';color:#000;">បញ្ជាក់ៈ</div></td>
+									</tr>
+									<tr>
+										<td width="80%"  valign="top" style="line-height:14px !important;font-size:10px;font-family: 'Khmer OS Battambang';color:#000;">
+											<div>
+												- ក្នុងករណីបាត់បង់ អាណាព្យាបាលត្រូវជូនដំណឹងមកកាន់ការិយាល័យសិក្សាជាបន្ទាន់
+											</div>
+											<div>
+												- អាណាព្យាបាលត្រូវបង្ហាញប័ណ្ណនេះទៅបុគ្គលិកសាលា ពេលមកទទួលយកសិស្ស
+											</div>
+											<div>
+												- អ្នកដែលមកទទួលយកសិស្សត្រូវជាបុគ្គលដែលមានបិទរូបថតនៅខាងលើ
+											</div>
+											<div>
+												- រាល់ការបាត់បង់ ឫ ផ្លាស់ប្តូរប័ណ្ណថ្មីត្រូវបង់ប្រាក់ ៣ដុល្លារ
+											</div>
+										</td>
+										<td width="20%" align="center" style="border:1px solid blue;color:blue;">
+											<div style="font-size:10px;font-family: 'Khmer OS Muol Light';">
+												ព័ត៌មានលម្អិត
+											</div>
+											<div style="font-size:13px;font-family: 'Times New Roman';">
+												<?php echo $tr->translate("CUSTOMER_TEL");?>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					
+			</div>
 		<?php }}?>
 		</div>
 		<table width="100%">

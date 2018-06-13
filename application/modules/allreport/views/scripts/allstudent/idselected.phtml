@@ -168,7 +168,7 @@ function getKHMonthByNumber(m){
 								: <label id="year<?php echo $i;?>"></label>
 									<script type="text/javascript">
 										<?php if($row['dept']<=2){?>
-											kh_date = 'ថ្ងៃទី ' + convertEnglishToKhmerNumber('<?php echo 30 //date('d',strtotime($row['end_date']));?>')+' ខែ '+getKHMonthByNumber('<?php echo 12;//date('m',strtotime($row['end_date']));?>')+' ឆ្នាំ '+ convertEnglishToKhmerNumber('<?php echo date('Y',strtotime($row['end_date']));?>');
+											kh_date = 'ថ្ងៃទី ' + convertEnglishToKhmerNumber('<?php echo 30 //date('d',strtotime($row['end_date']));?>')+' ខែ '+getKHMonthByNumber('<?php echo 12;//date('m',strtotime($row['end_date']));?>')+' ឆ្នាំ '+ convertEnglishToKhmerNumber('<?php echo date('Y');?>');
 										<?php }else{?>
 											kh_date = '<?php echo date('F d , Y',strtotime($row['end_date']));?>';
 										<?php }?>

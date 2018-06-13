@@ -376,14 +376,14 @@ function getKHMonthByNumber(m){
 <?php /////////////////////////////////////////////////// pick up card //////////////////////////////////////////////////////////?>
 
 
-<div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
+<div class="dijitHidden" style="width: 120mm !important; height: 80mm ; padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:22cm;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
-		<div id="PickupCard" style="width: 21cm !important; height: 13cm ; padding: 0px; margin: 0px;">
+		<div id="PickupCard" style="width: 120mm !important; height: 80mm ; padding: 0px; margin: 0px;">
 		<?php $i=0;$margin_work =2;if(!empty($this->rs)){foreach ($this->rs as $row){$i++;?>	
 			<table  width="100%" style="white-space: nowrap;font-size:10px;font-family: 'Khmer OS Battambang';margin-bottom:80px;<?php if($i==0){echo "margin-top:25px;";}?>" <?php if($margin_work == 2){echo "margin-top:25px;";}?>class="print" cellspacing="1"  cellpadding="0">
 				<tr>
 					<td width="100%" align="center">
-						<table style="border: 3px solid blue;height: 5.9cm;width: 95%;font-size:11px;font-family: 'Khmer OS Battambang',Arial,sans-serif;padding:10px;" cellspacing="0" cellpadding="0">
+						<table style="border: 3px solid blue;height: 80mm;width: 100%;font-size:11px;font-family: 'Khmer OS Battambang',Arial,sans-serif;padding:10px;" cellspacing="0" cellpadding="0">
 							<tr>
 								<td colspan="4" align="left">
 									<img style="width:53%;height: 90px;" src="<?php echo $this->baseUrl().'/images/psis_full_logo.png';?>">

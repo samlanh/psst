@@ -1519,12 +1519,14 @@ function deleteRecord(index) {
 		}else{//for other payment
 			start_date = new Date(dijit.byId('start_date').get("value"));
 			end_date = new Date(dijit.byId('end_date').get("value"));
+
+			total_payment = (tuitionfee -(scholarship_amount/times)-late_fee) - ds - discount_fix;
 			
-			var timeDiff = ( end_date.getTime()-start_date.getTime() );
+			/*var timeDiff = ( end_date.getTime()-start_date.getTime() );
 			var amount_day = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 			total_payment = (tuitionfee/30)*amount_day;
 			total_payment = (total_payment -(scholarship_amount/times)-late_fee) - ds - discount_fix;
-			dijit.byId('not').attr("value",amount_day+'Days');
+			dijit.byId('not').attr("value",amount_day+'Days');*/
 		}
 		dijit.byId('total_scholarship').attr('value',scholarship_amount/times);
 		if(discount_percent<=100){

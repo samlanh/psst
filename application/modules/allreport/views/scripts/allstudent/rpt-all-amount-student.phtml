@@ -19,6 +19,12 @@
 			</tr>
 			<tr>
 				<td><?php echo $frm->getElement("session");?></td>
+				<td><select dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
+						<option value="" <?php if($this->search['study_type']==''){echo "selected";}?>>ជ្រើសរើសប្រភេទសិស្ស</option>
+						<option value="0" <?php if($this->search['study_type']==0){echo "selected";}?>>សិស្សនៅរៀន</option>
+						<option value="1" <?php if($this->search['study_type']!=0){echo "selected";}?>>សិស្សឈប់</option>
+					</select>
+				</td>
 				<td><?php echo $frm->getElement("start_date");?></td>
 				<td><?php echo $frm->getElement("end_date");?></td>
 				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
@@ -81,7 +87,15 @@
 								<th><?php echo $tr->translate("STATUS");?></th>
 							</tr>
 							</thead>
-						<?php $i=0;$degree=0;$count=0; foreach ($this->rs AS $key=>$row) { ?>
+						<?php $i=0;$degree=0;$count=0; 
+							$all_total = 0;$all_drop = 0;
+							if(!empty($this->rs))foreach ($this->rs AS $key=>$row) { 
+							if($row['is_subspend']!=0){
+								$all_drop = $all_drop+1;
+							}else{
+								$all_total = $all_total+1;
+							}
+						?>
 							<?php if($degree!=$row['degree'] && $key>0){?>
 								<tr>
 									<td colspan="11"></td>
@@ -108,14 +122,22 @@
 							</tr>
 							<?php $degree=$row['degree'];?>
 						<?php }?>	
-						
 							<tr>
-								<td colspan="11"></td>
+								<td colspan="12"></td>
 								<td align="center" style="font-size: 15px;">Total</td>
 								<td align="center" style="font-size: 15px;"><?php echo $count;$count=0;?></td>
 							</tr>
-						
 						</table>	
+						<table style="float: right;font-weight: bolder;">
+							<tr>
+								<td>សិស្សកំពុងសិក្សាសរុប : </td>
+								<td><?php echo number_format($all_total);?>&nbsp;នាក់</td>
+							</tr>
+							<tr>
+								<td>សិស្សឈប់សរុប : </td>
+								<td><?php echo number_format($all_drop);?>&nbsp;នាក់</td>
+							</tr>
+						</table>
 					</div>	
 					</td>
 				</tr>

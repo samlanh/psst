@@ -108,6 +108,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'session' 		=>'',
 					'branch_id'=>0,
 					'degree'=>0,
+					'study_type'=>'',
 					'start_date'	=> date('Y-m-d'),
 					'end_date'		=> date('Y-m-d'),
 			);

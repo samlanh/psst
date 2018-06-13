@@ -225,6 +225,14 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if($search['grade_all']>0){
     		$where.=' AND grade='.$search['grade_all'];
     	}
+    	if($search['study_type']!=''){
+    		if($search['study_type']==0){
+    			$where.=' AND is_subspend='.$search['study_type'];
+    		}else{
+    			$where.=' AND is_subspend!=0';
+    		}
+    	}
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getStudentStatistic($search){

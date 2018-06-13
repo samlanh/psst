@@ -248,7 +248,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$where .= " and sp.degree = ".$search['degree'];
     	}
     	if($search['grade_all']>0){
-    		$where .= " AND spd.type=1 AND sp.grade = ".$search['grade_all'];
+    		$where .= " AND sp.grade = ".$search['grade_all'];
     	}
     	if($search['user']>0){
     		$where .= " and sp.user_id = ".$search['user'];

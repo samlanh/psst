@@ -122,6 +122,32 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows = $group->getAllAmountStudent($search);
 		$this->view->search=$search;
 	}
+	public function rptenglishprogramAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'session' 		=>'',
+					'branch_id'=>0,
+					'degree'=>0,
+					'study_type'=>'',
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$this->view->rs = $rs_rows = $group->getAllStudentgep($search);
+		$this->view->search=$search;
+	}
 	
 	public function rptStudentStatisticAction(){
 		if($this->getRequest()->isPost()){

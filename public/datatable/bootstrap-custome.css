@@ -490,10 +490,10 @@ body .main-menu {
 	border-bottom: solid 1px #f1f1f1;
 }
 .main-menu.menu-light .navigation > li > a {
-    padding: 12px 30px 12px 18px;
-}
-.main-menu.menu-light .navigation > li > a {
     padding: 7px 30px 7px 7px;
+}
+.main-menu.menu-light .navigation li a:hover {
+    text-decoration: none;
 }
 .main-menu.menu-light .navigation li a {
     color: #232425;

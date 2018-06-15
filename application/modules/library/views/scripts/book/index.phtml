@@ -18,114 +18,99 @@
 	    width: 35px;
 	}
 </style>
-<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
-<script type="text/javascript">
-    //dojo.require("dojo.NodeList-manipulate");
-</script>
-<form id="frm_search" name="frm_search" action="" dojoType="dijit.form.Form" method="post">
-	<table>
-		<tr>
-			<td style="background-color: #caccd6;border-radius: 5px;"><?php echo $formList->showCopyBuntton($url_copy);?></td>
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement("block_id");?></td>
-			<td><?php echo $frm->getElement('parent');?></td>
-			<td><?php echo $frm->getElement('status_search');?></td>
-			<td><button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
-</form>
-<table class="collape tablesorter" id="table"  width="100%" style="white-space: nowrap;font-size: 100%;font-family: 'Khmer OS Battambang';" >
-      <thead>
-	        <tr><input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" /></tr>
-			<tr>
-			    <th class="tdheader header" width="4%" align="center"></th>
-				<th class="tdheader header" width="4%" align="center"><?php echo $tr->translate("NUM");?></th>
-				<th class="tdheader header"><?php echo $tr->translate("BOOK_NO");?></th>
-				<th class="tdheader header"><?php echo $tr->translate("BOOK_NAME");?>
-				<th class="tdheader header"><?php echo $tr->translate("AUTHOR_NAME");?>
-				<th class="tdheader header"><?php echo $tr->translate("SERIAL_NO");?>
-				<th class="tdheader header"><?php echo $tr->translate("BLOCK_NAME");?>
-				<th class="tdheader header"><?php echo $tr->translate("CATEGORY");?>
-				<th class="tdheader header"><?php echo $tr->translate("QUANTITY");?>
-				<th class="tdheader header"><?php echo $tr->translate("UNIT_PRICE");?>
-				<th class="tdheader header"><?php echo $tr->translate("DATE");?>
-				<th class="tdheader header"><?php echo $tr->translate("USER");?>
-				<th class="tdheader header"><?php echo $tr->translate("STATUS");?>
-			</tr>
-		</thead>
-<?php 
-        						 $id = "table";
-        						 $stringPagination = '<script type="text/javascript">
-        						 $(document).ready(function(){
-        						 $("#'.$id.'").tablesorter();
-        						 $("#'.$id.'").tablesorter().tablesorterPager({container: $("#pagination_'.$id.'"),size:10});
-        						 $("#pagedisplay").focus(function(){ this.blur();
-        						 });
-        						 });
-        						 </script>
-        						 <div id="pagination_'.$id.'" class="pager" >
-        						 <form >
-        						 <table  style="width: 200px;"><tr>
-        						 <td><img src="'.BASE_URL.'/images/first.gif" class="first"/></td>
-        						 <td><img src="'.BASE_URL.'/images/previous.gif" class="prev"/></td>
-        						 <td><input type="text" class="pagedisplay"/></td>
-        						 <td><img src="'.BASE_URL.'/images/next.gif" class="next"/></td>
-        						 <td><img src="'.BASE_URL.'/images/last.gif" class="last"/></td>
-        						 <td><select class="pagesize" >
-        						 <option selected="selected"  value="10">10</option>
-        						 <option value="20">20</option>
-        						 <option value="30">30</option>
-        						 <option value="40">40</option>
-        						 <option value="50">50</option>
-        						 <option value="60">60</option>
-        						 <option value="70">70</option>
-        						 <option value="80">80</option>
-        						 <option value="90">90</option>
-        						 <option value="100">100</option>
-        						 </select>
-        						 </td>
-        						 </tr>
-        						 </table>
-        						 </form>
-        						 </div>	';
-        						 $footer="";
-        						 
-        						 ?>
-	
-     <?php $i=1;$num_book=0;$c_book='';$b_name=''; // print_r($this->book_row);
-			if(!empty($this->book_row)) foreach($this->book_row as $key=>$row){
-			    if($row['book_code']==$c_book && $row['book_title']==$b_name){
-			    	$num_book=$num_book+1;
-			    }else{
-			    	$num_book=0;
-			    	$c_book=$row['book_code'];
-			        $b_name=$row['book_title'];
-			    }
-			    
-				?>
-			
-			<tr class="normal" style="font-size: 100%;font-family: 'Khmer OS Battambang';<?php if($num_book>0)echo "background-color:#ffbdcf;";?>" 	<?php echo $row['book_title'].'='.$b_name;?>>
-			
-				<td id="items" width="4%" style="text-align: center;"><input type="radio" onclick="setValue()" name="copy" id="copy" value="<?php echo $row['id'];?>"></td>
-			    <td id="items" width="4%" style="text-align: center;"><?php echo $i++;?></td>
-				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['book_no'];?></a></td>
-				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['title'];?></a></td>
-				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['author'];?></a></td>
-				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['serial_no'];?></a></td>
-				<td id="items"><?php echo $row['block_name'];?></td>
-				<td id="items"><?php echo $row['cat_name'];?></td>
-				<td id="items" style="text-align: center"><?php echo $row['qty_after'];?> &nbsp;ក្បាល</td>
-				<td id="items">&nbsp;$&nbsp;<?php echo $row['unit_price'];?></td>
-				<td id="items"><?php echo date("d/M/Y",strtotime($row['date']));?></td>
-				<td id="items"><?php echo $row['user_name'];?></td>
-				<td id="items"><?php echo $row['status'];?></td>
-			</tr>
-		<?php  }
-					$counter='<strong style="float:right;padding:5px">Number of record(s): '.count($this->book_row).'</strong>';
-					$footer = '<div class="footer_list">'.$stringPagination.$counter.'</div>';
-			 ?>
-</table>
-<?php echo $footer?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form id="frm_search" name="frm_search" action="" dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+                   <div class="col-md-1 col-sm-1 col-xs-12">
+                    	<?php echo $formList->showCopyBuntton($url_copy);?>
+                   </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement("title");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement("block_id");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement("parent");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement("status_search");?>
+                   </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                   </div>
+                </div>
+			</form>
+		</div>
+		<div class="card-box">
+			<div class="dataTables_scrollBody" style="position: relative;  width: 100%; background:#fff;   ">
+    			<table border="1" id="datatable-responsive" style="  border-collapse: collapse;   border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >
+			      <thead>
+				        <tr><input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" /></tr>
+						<tr>
+						    <th class="tdheader header" width="4%" align="center"></th>
+							<th class="tdheader header" width="4%" align="center"><?php echo $tr->translate("NUM");?></th>
+							<th class="tdheader header"><?php echo $tr->translate("BOOK_NO");?></th>
+							<th class="tdheader header"><?php echo $tr->translate("BOOK_NAME");?>
+							<th class="tdheader header"><?php echo $tr->translate("AUTHOR_NAME");?>
+							<th class="tdheader header"><?php echo $tr->translate("SERIAL_NO");?>
+							<th class="tdheader header"><?php echo $tr->translate("BLOCK_NAME");?>
+							<th class="tdheader header"><?php echo $tr->translate("CATEGORY");?>
+							<th class="tdheader header"><?php echo $tr->translate("QUANTITY");?>
+							<th class="tdheader header"><?php echo $tr->translate("UNIT_PRICE");?>
+							<th class="tdheader header"><?php echo $tr->translate("DATE");?>
+							<th class="tdheader header"><?php echo $tr->translate("USER");?>
+							<th class="tdheader header"><?php echo $tr->translate("STATUS");?>
+						</tr>
+					</thead>
+			<?php 
+			        						 $id = "table";
+			        						 $stringPagination = '';
+			        						 $footer="";
+			        						 
+			        						 ?>
+				
+			     <?php $i=1;$num_book=0;$c_book='';$b_name=''; // print_r($this->book_row);
+						if(!empty($this->book_row)) foreach($this->book_row as $key=>$row){
+						    if($row['book_code']==$c_book && $row['book_title']==$b_name){
+						    	$num_book=$num_book+1;
+						    }else{
+						    	$num_book=0;
+						    	$c_book=$row['book_code'];
+						        $b_name=$row['book_title'];
+						    }
+						    
+							?>
+						
+						<tr class="normal" style="font-size: 100%;font-family: 'Khmer OS Battambang';<?php if($num_book>0)echo "background-color:#ffbdcf;";?>" 	<?php echo $row['book_title'].'='.$b_name;?>>
+						
+							<td id="items" width="4%" style="text-align: center;"><input type="radio" onclick="setValue()" name="copy" id="copy" value="<?php echo $row['id'];?>"></td>
+						    <td id="items" width="4%" style="text-align: center;"><?php echo $i++;?></td>
+							<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['book_no'];?></a></td>
+							<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['title'];?></a></td>
+							<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['author'];?></a></td>
+							<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['serial_no'];?></a></td>
+							<td id="items"><?php echo $row['block_name'];?></td>
+							<td id="items"><?php echo $row['cat_name'];?></td>
+							<td id="items" style="text-align: center"><?php echo $row['qty_after'];?> &nbsp;ក្បាល</td>
+							<td id="items">&nbsp;$&nbsp;<?php echo $row['unit_price'];?></td>
+							<td id="items"><?php echo date("d/M/Y",strtotime($row['date']));?></td>
+							<td id="items"><?php echo $row['user_name'];?></td>
+							<td id="items"><?php echo $row['status'];?></td>
+						</tr>
+					<?php  }
+								$counter='<strong style="float:right;padding:5px">Number of record(s): '.count($this->book_row).'</strong>';
+								$footer = '<div class="footer_list">'.$stringPagination.$counter.'</div>';
+						 ?>
+			</table>
+			<?php echo $footer?>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 <script type="text/javascript">
 dojo.require("dijit.form.CheckBox"); 

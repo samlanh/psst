@@ -15,33 +15,71 @@
 		  if(!empty($arr_module)){
 		  	foreach ($arr_module as $key => $rs){
 		  		
+// 		  		$lblcontroller = $rs['label'];
+// 		  		if($module!=$rs['module']){
+// 		  			$newarray= array($rs['controller']=>'<li><a href="">'.$tr->translate(($lblcontroller)).'</a></li>');
+// 		  			$menu[$rs['module']]= $newarray;
+// 		  			$old_module=$rs['module'];
+// 		  		}else{
+// 		  			$newarray= array_merge($newarray,array($rs['controller']=>'<li><a href="">'.$tr->translate(($lblcontroller)).'</a></li>'));
+// 		  			$menu[$rs['module']] = $newarray;
+// 		  		}
+// 		  		$module=$rs['module'];
 		  		$lblcontroller = $rs['label'];
 		  		if($module!=$rs['module']){
-		  			$newarray= array($rs['controller']=>'<li><a href="">'.$tr->translate(($lblcontroller)).'</a></li>');
+		  			$newarray= array($rs['controller']=>$tr->translate(($lblcontroller)));
 		  			$menu[$rs['module']]= $newarray;
 		  			$old_module=$rs['module'];
 		  		}else{
-		  			$newarray= array_merge($newarray,array($rs['controller']=>'<li><a href="">'.$tr->translate(($lblcontroller)).'</a></li>'));
+		  			$newarray= array_merge($newarray,array($rs['controller']=>$tr->translate(($lblcontroller))));
 		  			$menu[$rs['module']] = $newarray;
 		  		}
 		  		$module=$rs['module'];
 		  	}
 		  }
 		  $arr_param_menu = $menu;
-
+		  $module = $request->getModuleName();
+		  $controller = $request->getControllerName();
 	?>
+	<div class="main-menu menu-fixed menu-light menu-accordion    menu-shadow  " data-scroll-to-active="true">
+		<div class="button-make-loan mb-10">
+			<a href="<?php echo $this->baseUrl()."/registrar/register/add"?>"  class="closebtn-makesale"  ><i class="fa fa-plus" aria-hidden="true"></i> <?php echo $tr->translate("REGISTER");?> </a>
+		</div>
+	    <div class="main-menu-content">
+			<ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+			   <!-- 
+			   <li class="nav-item has-sub">
+			       <a href="#"><i class="la la-book"></i><span class="menu-title" data-i18n="nav.page_layouts.main">ចំណាត់ថ្នាក់ចំណាយ</span></a>
+			           <ul class="menu-content">
+			       	    	<li><a class="menu-item" href="/maffsystem/expenses">INDEX</a></li>
+			                 <li><a class="menu-item" href="/maffsystem/expenses/category">ប្រភេទការចំណាយ</a></li>
+			          </ul>
+			  </li>
+			    -->
+			    <?php foreach ($arr_param_menu[$request->getModuleName()] as $param =>$url){
+			    	$uri=$this->baseUrl().'/'.$module.'/'.$param;
+			    	?>
+			  <li class="nav-item <?php if($param==$controller){ echo "active";}?>">
+			  	<a href="<?php echo $uri;?>"><i class="la la-user"></i><span class="menu-title" data-i18n="nav.dash.main"><?php echo $url;?></span></a>
+			  </li>
+			  <?php }?>
+			</ul>
+		</div>
+	</div>
+	<!-- 
 	<div id="header-left">
 		<ul>
 			<?php 
-				if($request->getModuleName()!='report'){
-					if($request->getModuleName()!='default' AND $action!='changepassword' ){
-						$dc=new Application_Model_Decorator();					
-						$class="current-left";					
-						$menu=@$dc->getMenuLeft($arr_param_menu[$request->getModuleName()],$request->getControllerName(),$request->getModuleName());
-						//print_r($arr_param_menu[$request->getModuleName()]);
-						if($menu) echo $menu;	
-					 }		
-				}				
+// 				if($request->getModuleName()!='report'){
+// 					if($request->getModuleName()!='default' AND $action!='changepassword' ){
+// 						$dc=new Application_Model_Decorator();					
+// 						$class="current-left";					
+// 						$menu=@$dc->getMenuLeft($arr_param_menu[$request->getModuleName()],$request->getControllerName(),$request->getModuleName());
+// 						//print_r($arr_param_menu[$request->getModuleName()]);
+// 						if($menu) echo $menu;	
+// 					 }		
+// 				}				
 			?>
 		</ul>																
 	</div>
+	 -->

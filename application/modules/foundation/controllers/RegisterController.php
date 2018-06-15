@@ -97,10 +97,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		
 		$this->view->province = $row =$db->getProvince();
 		
-		$tsub=new Global_Form_FrmTeacher();
-		$frm_techer=$tsub->FrmTecher();
-		Application_Model_Decorator::removeAllDecorator($frm_techer);
-		$this->view->frm_techer = $frm_techer;
+		$tsub= new Foundation_Form_FrmStudentRegister();
+		$frm_register=$tsub->FrmStudentRegister();
+		Application_Model_Decorator::removeAllDecorator($frm_register);
+		$this->view->frm = $frm_register;
 		
 	}
 	public function editAction(){
@@ -139,16 +139,17 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		
 		$this->view->province = $db->getProvince();
 		
-		$this->view->rs =$test =  $db->getStudentById($id);
+		$test =  $db->getStudentById($id);
+		$this->view->rs = $test;
 		//echo $test['group_id'];exit();
 		
 		$this->view->year = $db->getAllYear();
 		$this->view->room = $row =$db->getAllRoom();
 		
-		$tsub=new Global_Form_FrmTeacher();
-		$frm_techer=$tsub->FrmTecher();
-		Application_Model_Decorator::removeAllDecorator($frm_techer);
-		$this->view->frm_techer = $frm_techer;
+		$tsub= new Foundation_Form_FrmStudentRegister();
+		$frm_register=$tsub->FrmStudentRegister($test);
+		Application_Model_Decorator::removeAllDecorator($frm_register);
+		$this->view->frm = $frm_register;
 	}
 	function getGradeAction(){
 		if($this->getRequest()->isPost()){

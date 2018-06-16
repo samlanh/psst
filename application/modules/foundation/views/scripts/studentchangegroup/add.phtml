@@ -5,154 +5,173 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 </script>
-<form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<script type="dojo/method" event="onSubmit">   
-   		if(this.validate()){
-			stu_id = dijit.byId('studentid').get('value');
-			if(stu_id==0){
-				dijit.byId("studentid").focus();
-				alert("Select student !!! ");
-				return false;
-			}
-			to_group = dijit.byId("to_group").get('value');		
-			if(to_group==0){
-				alert("Select group !!! ");
-				dijit.byId("to_group").focus();
-				return false;
-			}
-			from_group = dijit.byId("from_group").get('value');	
-			if(to_group==from_group){
-				alert("You can not change student to same group !!!");
-				dijit.byId("to_group").focus();
-				return false;
-			}
-			dijit.byId('save_new').set('disabled',true);	
-			dijit.byId('save_close').set('disabled',true);	
-       		return true;
-  		}else {
-  			return false;
-  		}
-	</script>
-	<table cellspacing="10" style="margin: 0 auto; width:100%">
-		<tr>
-			<td>
-				<fieldset style="background: #fff;   border: solid 1px #008;">
-					<legend align="center"><strong><?php echo $tr->translate("ADD_STUDENT_CHANGE_GROUP");?></strong></legend>
-					<table cellspacing="10" width="100%" >
-						<tr>
-							<td align="center" valign="top">
-								<table cellspacing="5" width="100%"​>
-									<tr>
-										<td>
-											<table cellspacing="5" style="width: 95%; white-space: nowrap;"​>
-												<tr>
-													<td ><?php echo $tr->translate("STUDENT_ID")?></td>
-													<td>
-														<select class="fullside" name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" onchange="getStudentInfo(1);" >
-													    	<option value="0" > </option>
-													    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $stu_id){?>
-																<option value="<?php echo $stu_id['id']?>"><?php echo $stu_id['stu_code']?></option>
-															<?php }?>
-														</select>
-													</td>
-												</tr>
-												<tr>
-													<td ><?php echo $tr->translate("STUDENT_NAME")?></td>
-													<td >
-														<select class="fullside" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="getStudentInfo(2);" >
-													    	<option value="0" > </option>
-													    	<?php if(!empty($this->stu_name)){foreach ($this->stu_name as $stu_name){?>
-																<option value="<?php echo $stu_name['id'];?>"><?php echo $stu_name['name'];?></option>
-															<?php }}?>
-														</select>
-													</td>
-												</tr>
-												<tr>
-													<td ><?php echo $tr->translate("SEX")?></td>
-													<td>
-														<select dojoType="dijit.form.FilteringSelect"  readonly="readonly" class="fullside" id="gender" name="gender" type="text">
-															<option value="1"><?php echo $tr->translate("MALE")?></option>
-															<option value="2"><?php echo $tr->translate("FEMALE")?></option>
-														</select>
-													</td>
-												</tr>
-												<tr>
-													<td><?php echo $tr->translate("FROM_GROUP")?></td>
-													<td>
-														<select dojoType="dijit.form.FilteringSelect" required="true" readonly="readonly" class="fullside" id="from_group" name="from_group" type="text" placeholder="<?php echo $tr->translate("SELECT_GROUP")?>" onchange="toStudentGroup(1);">
-															<option value="0" > </option>
-															<?php if(!empty($this->row))foreach ($this->row as $_row){?>
-																<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
-															<?php }?>
-														</select>
-													</td>
-												</tr>
-												<tr>
-													<td>&nbsp;</td>
-												</tr>
-												<tr><td><?php echo $tr->translate("DETAIL")?></td></tr>
-												<tr><td  colspan="4" rowspan="1"><label id="lblfromgroup" name="detail_from_group" style="font-size: 14px; background:#fff;width:100%;height:70px;display:block; padding: 10px; border: solid 1px #ccc;"></label></td></tr>
-											</table>
-										</td>
-										<td>
-											<table cellspacing="5" style="width: 95%; white-space: nowrap;"​>
-												<tr>
-													<td><?php echo $tr->translate("TO_GROUP")?></td>
-													<td>
-														<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("TO_GROUP")?>" onchange="toStudentGroup(2);">
-															<option value="0" > </option>
-															<?php if(!empty($this->row))foreach ($this->row as $_row){?>
-																<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
-															<?php }?>
-														</select>
-													</td>
-												</tr>
-												<tr>
-													<td><?php echo $tr->translate("MOVING_DATE")?></td>
-													<td><input dojoType="dijit.form.DateTextBox"  class="fullside" id="moving_date" name="moving_date" value="now" type="text"></td>
-												</tr>
-												<tr>
-													<td align="left"><?php echo $tr->translate("NOTE")?></td>
-													<td>
-														<input dojoType="dijit.form.TextBox" class="fullside" id="note" name="note" type="text" />
-															
-													</td>
-												</tr>
-												<tr>
-													<td align="left"><?php echo $tr->translate("STATUS")?></td>
-													<td>
-														<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="status" name="status" type="text">
-															<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
-															<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
-														</select>
-													</td>
-												</tr>
-												<tr>
-													<td>&nbsp;</td>
-												</tr>
-												<tr><td ><?php echo $tr->translate("DETAIL")?></td></tr>
-												<tr><td  colspan="4" rowspan="1"><label id="lbltogroup"  name="detail_to_group" style="font-size: 14px; background:#fff;width:100%;height:70px;display:block; padding: 10px; border: solid 1px #ccc;"></label></td></tr>
-											</table>
-										</td>
-									</tr>
-									<tr>
-										<td colspan="6" align="center">
-										<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" onclick="clear();" dojoType="dijit.form.Button"/>
-										<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-											iconClass="dijitEditorIcon dijitEditorIconSave" />
-										<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-											iconClass="dijitEditorIcon dijitEditorIconSave" />
-										</td>
-									</tr>					
-								</table>
-							</td>							
-						</tr>
-					</table>	
-				</fieldset>
-			</td>			
-		</tr>
-	</table>	
-</form>
+<div class="card">
+	<div class="card-content collapse show">
+		<form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">   
+   				if(this.validate()){
+					stu_id = dijit.byId('studentid').get('value');
+					if(stu_id==0){
+					dijit.byId("studentid").focus();
+					alert("Select student !!! ");
+					return false;
+				}
+				to_group = dijit.byId("to_group").get('value');		
+				if(to_group==0){
+					alert("Select group !!! ");
+					dijit.byId("to_group").focus();
+					return false;
+				}
+				from_group = dijit.byId("from_group").get('value');	
+				if(to_group==from_group){
+					alert("You can not change student to same group !!!");
+					dijit.byId("to_group").focus();
+					return false;
+				}
+				dijit.byId('save_new').set('disabled',true);	
+				dijit.byId('save_close').set('disabled',true);	
+       			return true;
+  			}else {
+  				return false;
+  			}
+			</script>
+
+			<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-sitemap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_STUDENT_CHANGE_GROUP');?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div>
+    		<div class="card-box">
+	        	<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_ID");?> <span class="required">*</span> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select class="fullside" name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" onchange="getStudentInfo(1);" >
+						    	<option value="0" > </option>
+						    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $stu_id){?>
+									<option value="<?php echo $stu_id['id']?>"><?php echo $stu_id['stu_code']?></option>
+								<?php }?>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select class="fullside" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="getStudentInfo(2);" >
+						    	<option value="0" > </option>
+						    	<?php if(!empty($this->stu_name)){foreach ($this->stu_name as $stu_name){?>
+									<option value="<?php echo $stu_name['id'];?>"><?php echo $stu_name['name'];?></option>
+								<?php }}?>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select dojoType="dijit.form.FilteringSelect"  readonly="readonly" class="fullside" id="gender" name="gender" type="text">
+								<option value="1"><?php echo $tr->translate("MALE")?></option>
+								<option value="2"><?php echo $tr->translate("FEMALE")?></option>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_GROUP");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select dojoType="dijit.form.FilteringSelect" required="true" readonly="readonly" class="fullside" id="from_group" name="from_group" type="text" placeholder="<?php echo $tr->translate("SELECT_GROUP")?>" onchange="toStudentGroup(1);">
+								<option value="0" > </option>
+								<?php if(!empty($this->row))foreach ($this->row as $_row){?>
+									<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
+								<?php }?>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("DETAIL");?> :
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <div class="col-md-12 col-sm-12 col-xs-12">
+	                   		<label id="lblfromgroup" name="detail_from_group" style="font-size: 12px; background:#fff;width:100%;min-height:70px;display:block; padding: 10px; border: solid 1px #ccc;"></label>
+	                   </div>
+	                </div>
+	           </div>
+	           <div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("GROUP_INFO");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TO_GROUP")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select dojoType="dijit.form.FilteringSelect" required="required" class="fullside" id="to_group" name="to_group" type="text" queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("TO_GROUP")?>" onchange="toStudentGroup(2);">
+								<option value="0" > </option>
+								<?php if(!empty($this->row))foreach ($this->row as $_row){?>
+									<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
+								<?php }?>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("MOVING_DATE")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.DateTextBox"  class="fullside" id="moving_date" name="moving_date" value="now" type="text">
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.TextBox" class="fullside" id="note" name="note" type="text" />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select dojoType="dijit.form.FilteringSelect"  class="fullside" id="status" name="status" type="text">
+								<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
+								<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("DETAIL");?> :
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <div class="col-md-12 col-sm-12 col-xs-12">
+	                   		<label id="lbltogroup"  name="detail_to_group" style="font-size: 12px; background:#fff;width:100%;min-height:70px;display:block; padding: 10px; border: solid 1px #ccc;"></label>
+	                   </div>
+	                </div>
+	           </div>
+       	  </div>
+       	  <div class="clearfix"></div>
+		    <div class="card-box">
+               	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+               			<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" onclick="clear();" dojoType="dijit.form.Button"/>
+						<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+						<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+	    		</div>
+	    	</div>
+       </form>
+	</div>
+</div>
 <script type="text/javascript">
 	var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-student')); ?>';
 	function getStudentInfo(type){

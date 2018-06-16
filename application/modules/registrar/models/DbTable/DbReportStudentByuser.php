@@ -145,6 +145,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						s.stu_code,
 						s.stu_khname,
 						s.stu_enname,
+						(select generation from rms_tuitionfee where rms_tuitionfee.id = s.academic_year ) as type,
 						(SELECT en_name from rms_dept where dept_id = s.degree LIMIT 1) as degree,
 						(SELECT major_enname from rms_major where major_id = s.grade LIMIT 1) as grade,
 						(SELECT name_en from rms_view where rms_view.type = 4 and key_code=s.session LIMIT 1) as session,
@@ -163,7 +164,10 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				  FROM
 						rms_student AS s,
 						rms_student_payment AS sp
-				  WHERE s.stu_id = sp.student_id  $branch_id  ";
+				  WHERE 
+						s.stu_id = sp.student_id  
+						$branch_id  
+				";
 	
 			$where = " AND ".$from_date." AND ".$to_date;
 	

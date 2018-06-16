@@ -111,6 +111,9 @@
 								    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
 								    <th>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
 									<th>&nbsp;<?php echo $tr->translate('NAME_KH');?>&nbsp;</th>
+									<?php if($rs['type']==1 OR $rs['type']==2){//tuition fee?>
+									<th>&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</th>
+									<?php }?>
 									<th><?php echo $tr->translate('SERVICE_CATE');?></th>
 									<th><?php echo $tr->translate('SERVICE_NAME');?></th>
 									<th><?php echo $tr->translate('PAID_DATE');?></th>
@@ -152,11 +155,39 @@
 							  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $i;?></td>
 							    <td style="text-align:center;"><?php echo $rs['stu_code']; ?></td>
 							    <td style="text-align:left"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></td>
+							    <?php if($rs['type']==1 OR $rs['type']==2){//tuition fee?>
+								<td><?php echo $rs['academic_type'];?></td>
+								<?php }?>
 							    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
 								<td style="text-align:left"><?php echo $rs['service_name']; ?></td>
 								<td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 							    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
-							    <td align="center"><?php echo $rs['payment_term'];?></td>
+							    
+							    
+							    <?php 
+									$total_day=strtotime($rs['validate'])-strtotime($rs['start_date']);
+									$day=(int)($total_day/(60*60*24));
+									$qty_month = number_format($day/30);
+									$qty_day = $day%30;
+								?>
+								<?php $payment_term=array("1"=>"Month","2"=>"Term","3"=>"Semester","4"=>"Annual","5"=>"Other",);?>
+								<td align="center">
+									<?php 
+										if($rs['payment_id']>0){
+											if($rs['payment_id']==5){
+												if($qty_month>0){
+													echo $qty_month." month+".$qty_day." days";
+												}else{
+													echo $qty_day." days";
+												}
+											}else{
+												echo $payment_term[$rs['payment_id']];
+											}
+										}
+									?>
+								</td>
+							    
+							    
 							    <td><?php echo $rs['qty'];?></td>
 							    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
 							    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>

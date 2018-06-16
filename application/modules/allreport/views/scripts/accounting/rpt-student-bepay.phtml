@@ -20,6 +20,11 @@
 				<td><?php echo $frm->getElement("session");?></td>
 				<td><?php echo $frm->getElement("start_date");?></td>
 				<td><?php echo $frm->getElement("end_date");?></td>
+				<td>
+					<select name="ordering" id="ordering" dojoType="dijit.form.FilteringSelect" class="fullside">
+						<option value="">ordering</option>
+					</select>
+				</td>
 				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 		 	</tr>
 		</table>		
@@ -60,13 +65,14 @@
 								<th rowspan="1"><?php echo $tr->translate("DATE_START_STUDY");?></th>
 								<?php /*<th rowspan="1"><?php echo $tr->translate("Std Fee<br />/M");?></th>*/?>
 								<th rowspan="1"><?php echo $tr->translate("% Scholar<br />/Y");?></th>
+								<th rowspan="1"><?php echo $tr->translate("LATE_FEE");?></th>
+								<th rowspan="1"><?php echo $tr->translate("DISCOUNT");?></th>
 								
 								<th rowspan="1"><?php echo $tr->translate("PAID_DATE");?></th>
 								<th rowspan="1"><?php echo $tr->translate("RECEIPT_NO");?></th>
 								<th rowspan="1"><?php echo $tr->translate("PAYMENT_TERM");?></th>
 								<th rowspan="1"><?php echo $tr->translate("TOTAL");?></th>
-								<th rowspan="1"><?php echo $tr->translate("LATE_FEE");?></th>
-								<th rowspan="1"><?php echo $tr->translate("DISCOUNT");?></th>
+								
 								<th rowspan="1"><?php echo $tr->translate("PAID_AMOUNT");?></th>
 								<th rowspan="1"><?php echo $tr->translate("START_DATE");?></th>
 								<th rowspan="1"><?php echo $tr->translate("END_DATE");?></th>
@@ -90,13 +96,14 @@
 										<th rowspan="1"><?php echo $tr->translate("DATE_START_STUDY");?></th>
 										<?php /*<th rowspan="1"><?php echo $tr->translate("Std Fee<br />/M");?></th>*/?>
 										<th rowspan="1"><?php echo $tr->translate("% Scholar<br />/Y");?></th>
+										<th rowspan="1"><?php echo $tr->translate("LATE_FEE");?></th>
+										<th rowspan="1"><?php echo $tr->translate("DISCOUNT");?></th>
 										
 										<th rowspan="1"><?php echo $tr->translate("PAID_DATE");?></th>
 										<th rowspan="1"><?php echo $tr->translate("RECEIPT_NO");?></th>
 										<th rowspan="1"><?php echo $tr->translate("PAYMENT_TERM");?></th>
 										<th rowspan="1"><?php echo $tr->translate("TOTAL");?></th>
-										<th rowspan="1"><?php echo $tr->translate("LATE_FEE");?></th>
-										<th rowspan="1"><?php echo $tr->translate("DISCOUNT");?></th>
+										
 										<th rowspan="1"><?php echo $tr->translate("PAID_AMOUNT");?></th>
 										<th rowspan="1"><?php echo $tr->translate("START_DATE");?></th>
 										<th rowspan="1"><?php echo $tr->translate("END_DATE");?></th>
@@ -145,8 +152,19 @@
 										$discount_percent = $row['scholarship_percent'];
 									?>
 								</td>
+								<td align="center">&nbsp;<strong>&nbsp;<?php if($row['late_fee']>0){echo "$".number_format($row['late_fee'],2);}?></strong></td>
+								<?php 
+									$discount = "";
+									if($row['discount_fix']>0 && $row['discount_percent']>0){
+										$discount = number_format($row['discount_percent'])."%+".number_format($row['discount_fix'])."$";
+									}else if($row['discount_percent']>0){
+										$discount = number_format($row['discount_percent'])."%";
+									}else if($row['discount_fix']>0){
+										$discount = number_format($row['discount_fix'])."$";
+									}
+								?>
+								<td align="center">&nbsp;<strong>&nbsp;<?php echo $discount;?></strong></td>
 								
-								<?php $payment_term=array("1"=>"Month","2"=>"Term","3"=>"Semester","4"=>"Annual","5"=>"Other",);?>
 								
 								<td align="center">&nbsp;<strong><?php if(!empty($row['create_date'])){echo date("d-m-Y",strtotime($row['create_date']));};?></strong></td>
 								<td align="center">&nbsp;<strong><?php echo $row['receipt_number'];?></strong></td>
@@ -157,7 +175,7 @@
 									$qty_month = number_format($day/30);
 									$qty_day = $day%30;
 								?>
-								
+								<?php $payment_term=array("1"=>"Month","2"=>"Term","3"=>"Semester","4"=>"Annual","5"=>"Other",);?>
 								<td align="center">
 									<?php 
 										if($row['payment_term']>0){
@@ -174,19 +192,7 @@
 									?>
 								</td>
 								<td align="center">&nbsp;<strong>$&nbsp;<?php echo number_format($row['subtotal'],2);?></strong></td>
-								<td align="center">&nbsp;<strong>&nbsp;<?php if($row['late_fee']>0){echo "$".number_format($row['late_fee'],2);}?></strong></td>
-								<?php 
-									$discount = "";
-									if($row['discount_fix']>0 && $row['discount_percent']>0){
-										$discount = number_format($row['discount_percent'])."%+".number_format($row['discount_fix'])."$";
-									}else if($row['discount_percent']>0){
-										$discount = number_format($row['discount_percent'])."%";
-									}else if($row['discount_fix']>0){
-										$discount = number_format($row['discount_fix'])."$";
-									}
-								?>
 								
-								<td align="center">&nbsp;<strong>&nbsp;<?php echo $discount;?></strong></td>
 								<td align="center">&nbsp;<strong>$&nbsp;<?php echo number_format($row['paidamount'],2);?></strong></td>
 								<td align="center">&nbsp;<strong><?php if(!empty($row['start_date'])){echo date("d-m-Y",strtotime($row['start_date']));};?></strong></td>
 								<td align="center" <?php if(!empty($row['validate']) && strtotime($row['validate'])<strtotime(date("d-m-Y"))) {echo"style='background:red;'";}?>>&nbsp;<strong><?php if(!empty($row['validate'])){echo date("d-m-Y",strtotime($row['validate']));};?></strong></td>

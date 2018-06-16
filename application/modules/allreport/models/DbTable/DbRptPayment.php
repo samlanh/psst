@@ -211,8 +211,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				  (SELECT major_enname FROM `rms_major` WHERE major_id=sp.grade LIMIT 1) As major_name,
 				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 				  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
+				  spd.payment_term as payment_id,
 				  (select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status,
-				  (select title from rms_program_type where rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate                             
+				  (select title from rms_program_type where rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate,
+				  (select generation from rms_tuitionfee where rms_tuitionfee.id = s.academic_year ) as academic_type                             
     			FROM 
     				rms_student_payment as sp,
     				rms_student_paymentdetail as spd,
@@ -368,8 +370,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	 
-    	//$order="  order by academic_year DESC,degree ASC,grade ASC,session ASC,stu_id DESC";
-    	$order = " order by s.group_id ASC,degree ASC,s.grade ASC, s.stu_enname ASC";
+    	//$order = " order by s.group_id ASC,degree ASC,s.grade ASC, s.stu_enname ASC";
+    	$order = " order by degree ASC,s.grade ASC,s.group_id ASC, s.stu_enname ASC";
     	
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);

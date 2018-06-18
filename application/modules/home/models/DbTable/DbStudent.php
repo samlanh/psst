@@ -16,7 +16,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$where = " AND ".$from_date." AND ".$to_date;
 				$sql = "SELECT  s.stu_id,
 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-				s.stu_code,
+				s.stu_code,s.stu_khname,s.stu_enname,
 				CONCAT(s.stu_khname,'-',s.stu_enname) AS name,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 				tel ,
@@ -26,8 +26,10 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=s.grade LIMIT 1) AS grade,
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
-				(SELECT name_kh FROM `rms_view` WHERE TYPE=1 AND key_code = status LIMIT 1) AS status
+				status,
+				photo
 				FROM rms_student AS s  WHERE  s.is_subspend=0 AND s.status = 1 ";
+// 				(SELECT name_kh FROM `rms_view` WHERE TYPE=1 AND key_code = status LIMIT 1) AS status,
 		$orderby = " ORDER BY s.stu_enname,s.stu_khname ASC ";
 		if(empty($search)){
 			return $_db->fetchAll($sql.$orderby);

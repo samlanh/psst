@@ -28,12 +28,14 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			$this->view->adv_search=$search;
 			$db_student= new Home_Model_DbTable_DbStudent();
 			$rs_rows = $db_student->getAllStudent($search);
-			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAME","SEX","PHONE","ACADEMIC_YEAR","GROUP","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
-			$link=array(
-					'module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail',
-			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'grade'=>$link));
+			$this->view->row = $rs_rows;
+			$this->view->list ="";
+// 			$list = new Application_Form_Frmtable();
+// 			$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAME","SEX","PHONE","ACADEMIC_YEAR","GROUP","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+// 			$link=array(
+// 					'module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail',
+// 			);
+// 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'grade'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

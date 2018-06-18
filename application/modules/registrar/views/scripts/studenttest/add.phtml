@@ -9,6 +9,387 @@
 	require(["dojo/parser", "dijit/Editor"]);
 	dojoConfig = {parseOnLoad: true}
 </script>
+<div class="card">
+	<div class="card-content collapse show">
+		<form id='frm_teststudent' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
+			if(this.validate()) {
+				if(dijit.byId("degree").get("value")==''){
+                    alert("Please Select Degree Name");
+					dijit.byId("degree").focus();
+					return false;
+				}
+				dijit.byId("savenew").attr("disabled", true);;
+				dijit.byId("saveclose").attr("disabled",true);
+				return true;
+			}else {
+				return false;
+			}
+			</script>
+			<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_STUDENT_TEST');?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div>
+	    	<div class="card-box">
+	        	<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_KH");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="kh_name" id="kh_name" required="true" class="fullside" dojoType="dijit.form.ValidationTextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_EN");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="en_name" id="en_name"  class="fullside" dojoType="dijit.form.TextBox" />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select name="sex" id="sex" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+								<option value="1"><?php echo $tr->translate('MALE')?></option>
+								<option value="2"><?php echo $tr->translate('FEMALE')?></option>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="nationality" id="nationality" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="dob" id="dob" class="fullside"  value="now" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POB");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="pob" id="pob" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                  	 <input type="text" name="phone" id="phone" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EMAIL");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="email" id="email" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_STATUS");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select name="student_status" id="student_status" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+								<option value="1"><?php echo $tr->translate('SINGLE')?></option>
+								<option value="2"><?php echo $tr->translate('MARRIED')?></option>
+								<option value="3"><?php echo $tr->translate('MONK')?></option>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("IF_EMPLOYED_WHERE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                  	 <input type="text" name="if_employed_where" id="if_employed_where" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POSITION");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="position" id="position" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PARENT_NAME");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                  	 <input type="text" name="parent_name" id="parent_name" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PARENT_TEL");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="parent_tel" id="parent_tel" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OLD_SCHOOL");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="old_school" id="old_school" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OLD_GRADE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="old_grade" id="old_grade" class="fullside" dojoType="dijit.form.TextBox" />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<textarea style="min-height:70px;font-family:'Khmer OS Battambang';font-size: 15px;" class="fullside" name="address" id="address" dojoType="dijit.form.Textarea" ></textarea>
+	                   </div>
+	                </div>
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_TEST_INFORMATION");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_ID");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input  style="color:red;" type="text" name="stu_code" id="stu_code" readonly class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SERIAL");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="serial" id="serial" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $this->serailno;?>"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select name="degree_result" id="degree_result" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGradeResult();" >
+								<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
+								<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
+									<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
+								<?php }}?>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("LEVEL_RESULT");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input id="grade_result" />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TERM_TEST");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input id="term_test" />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEST_DATE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="test_date" required="true"  id="test_date" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" value="now" dojoType="dijit.form.DateTextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="note"  id="note" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHOTO");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="file" name="photo"  id="photo" class="fullside"  />
+	                   </div>
+	                </div>
+	             </div>
+	        </div>
+	        <div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-volume-control-phone" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EMERGENCY_CONTACT');?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div>
+	    	<div class="card-box">
+	        	<div class="col-md-12 col-sm-12 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 " for="first-name"> 
+	                   List any person whom you would like to be contacted in case of emergency.
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-2 col-sm-2 col-xs-12" for="first-name"><?php echo $tr->translate("NAME");?> :
+	                   </label>
+	                   <div class="col-md-10 col-sm-10 col-xs-12">
+	                   		<input type="text" name="emergency_name" id="emergency_name" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-2 col-sm-2 col-xs-12" for="first-name"><?php echo $tr->translate("RELATIONSHIP_TO_STUDENT");?> :
+	                   </label>
+	                   <div class="col-md-10 col-sm-10 col-xs-12">
+	                   		 <div class="col-md-4 col-sm-4 col-xs-12">
+	                   		 	<input type="text" name="relationship_to_student" id="relationship_to_student" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   		 </div>
+	                   		 <div class="col-md-3 col-sm-3 col-xs-12 text-center">
+	                   		 	<?php echo $tr->translate("PHONE")?>
+	                   		 </div>
+	                   		 <div class="col-md-5 col-sm-5 col-xs-12">
+	                   		 	<input type="text" style="width:95%" name="emergency_tel" id="emergency_tel" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   		 </div>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-2 col-sm-2 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?> :
+	                   </label>
+	                   <div class="col-md-10 col-sm-10 col-xs-12">
+	                  		 <input type="text" name="emergency_address" id="emergency_address" class="fullside" dojoType="dijit.form.TextBox"   />
+	                   </div>
+	                </div>
+	            </div>
+	       </div>
+	        <div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-sliders" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("EDUCATIONAL_BACKGROUND")?>(SchoolName , Grade/Level/Year , Major , Year)</h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div> 
+	    	<div class="card-box">
+	        	<div class="col-md-12 col-sm-12 col-xs-12">
+	                <div class="form-group">
+	                   <div class="col-md-12 col-sm-12 col-xs-12">
+	                   		<table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;">
+						    	<tr id="head-title" class="head-td" align="right"></tr>
+							</table>
+							<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+								iconClass="dijitIconEditProperty" onclick="addRow();" />
+							<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+	                   </div>
+	                </div>
+	            </div>
+	        </div>  
+	        <div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-sliders" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("COUSE_WANT_STUDY")?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div> 
+	    	<div class="card-box">
+	        	<div class="col-md-3 col-sm-3 col-xs-12">
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGrade();" >
+								<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
+								<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
+									<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
+								<?php }}?>
+							</select>
+	                   </div>
+	                </div>
+	            </div>
+									
+	            <div class="col-md-3 col-sm-3 col-xs-12">
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GRADE")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input input id="grade" />
+	                   </div>
+	                </div>
+	            </div>
+	            <div class="col-md-3 col-sm-3 col-xs-12">
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SESSION")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect"  >
+								<option value="">select session</option>
+								<?php if(!empty($this->session)){foreach($this->session as $session){?>
+										<option value="<?php echo $session['id'];?>" > <?php echo $session['name'];?></option>
+								<?php }}?>
+							</select>
+	                   </div>
+	                </div>
+	            </div>
+	            <div class="col-md-3 col-sm-3 col-xs-12">
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TIME")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select required="false" name="time" id="time" class="fullside" dojoType="dijit.form.FilteringSelect" >
+								<option value="">select time</option>
+								<option value="7:30-11:00 am">7:30-11:00 am</option>
+								<option value="7:30-11:30 am">7:30-11:30 am</option>
+								<option value="8:00-9:30 am">8:00-9:30 am</option>
+								<option value="8:00-11:00 am">8:00-11:00 am</option>
+								<option value="9:30-11:00 am">9:30-11:00 am</option>
+								<option value="1:00-4:00 pm">1:00-4:00 pm</option>
+								<option value="1:30-6:30 pm">1:30-6:30 pm</option>
+								<option value="2:00-3:30 pm">2:00-3:30 pm</option>
+								<option value="2:00-5:00 pm">2:00-5:00 pm</option>
+								<option value="3:30-5:00 pm">3:30-5:00 pm</option>
+								<option value="5:30-7:00 pm">5:30-7:00 pm</option>
+								<option value="5:30-8:30 pm">5:30-8:30 pm</option>
+								<option value="7:30-8:30 pm">7:30-8:30 pm</option>												
+							</select>	
+	                   </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="card-box">
+               	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+               			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
+					 iconClass="dijitIconClear"/>
+					<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="button" onclick="submitDataClose()" iconClass="dijitEditorIcon dijitEditorIconSave"/>
+					<input label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' dojoType="dijit.form.Button" type="submit" iconClass="dijitEditorIcon dijitEditorIconSave"/>
+	    		</div>
+	    	</div>
+		</form>
+	</div>
+</div>
+		
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
@@ -111,306 +492,7 @@
  
  
  
-<form id='frm_teststudent' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'add')); ?>" 
-		dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-		
-	<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
-			if(this.validate()) {
-				if(dijit.byId("degree").get("value")==''){
-                    alert("Please Select Degree Name");
-					dijit.byId("degree").focus();
-					return false;
-				}
-				dijit.byId("savenew").attr("disabled", true);;
-				dijit.byId("saveclose").attr("disabled",true);
-				return true;
-			}else {
-				return false;
-			}
-	</script>
-	<table cellspacing="10" class='fullside' >
-		<tr>
-			<td>
-				<fieldset style="background: #fff;   border: solid 1px #008;">
-					<legend><strong><?php echo $tr->translate('STUDENT_DETAIL')?></strong></legend>
-						<table cellspacing="0"  width="100%" style="white-space: nowrap;">
-							<tr>
-							<td valign="top" width="66%" colspan="2">
-								<fieldset>
-									<legend align="center"><strong><?php echo $tr->translate('STUDENT_PROFILE')?></strong></legend>
-										<table cellspacing="0"  width="100%" style="white-space: nowrap;">
-											<tr>
-												<td valign="top" width="33%">
-												<table cellspacing="5" width="100%">
-													<tr>
-														<td><strong><?php echo $tr->translate("NAME_KH")?></strong></td>
-														<td><input type="text" name="kh_name" id="kh_name" required="true" class="fullside" dojoType="dijit.form.ValidationTextBox"   /></td>
-													</tr>
-													<tr>
-														<td style="white-space: nowrap;"><strong><?php echo $tr->translate("NAME_EN")?></strong></td>
-														<td><input type="text" name="en_name" id="en_name"  class="fullside" dojoType="dijit.form.TextBox" /></td>
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("SEX")?></td>
-														<td>
-															<select name="sex" id="sex" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-																<option value="1"><?php echo $tr->translate('MALE')?></option>
-																<option value="2"><?php echo $tr->translate('FEMALE')?></option>
-															</select>
-														</td>						
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("NATIONALITY")?></td>
-														<td><input type="text" name="nationality" id="nationality" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("DOB")?></td>
-														<td><input type="text" name="dob" id="dob" class="fullside"  value="now" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox"   /></td>
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("POB")?></td>
-														<td><input type="text" name="pob" id="pob" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("PHONE")?></td>
-														<td><input type="text" name="phone" id="phone" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("EMAIL")?></td>
-														<td><input type="text" name="email" id="email" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-													</tr>
-												</table>
-											</td>
-											<td valign="top" width="33%">
-												<table cellspacing="5"  width="100%">
-													
-													<tr>
-														<td><?php echo $tr->translate("STUDENT_STATUS")?></td>
-														<td>
-															<select name="student_status" id="student_status" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-																<option value="1"><?php echo $tr->translate('SINGLE')?></option>
-																<option value="2"><?php echo $tr->translate('MARRIED')?></option>
-																<option value="3"><?php echo $tr->translate('MONK')?></option>
-															</select>
-														</td>						
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("IF_EMPLOYED_WHERE")?></td>
-														<td><input type="text" name="if_employed_where" id="if_employed_where" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("POSITION")?></td>
-														<td><input type="text" name="position" id="position" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("PARENT_NAME")?></td>
-														<td><input type="text" name="parent_name" id="parent_name" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-													</tr>
-													<tr>
-														<td><?php echo $tr->translate("PARENT_TEL")?></td>
-														<td><input type="text" name="parent_tel" id="parent_tel" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-													</tr>
-													
-													<tr>
-														<td><?php echo $tr->translate("OLD_SCHOOL")?></td>
-														<td><input type="text" name="old_school" id="old_school" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-													</tr>
-													<tr>
-														 <td><?php echo $tr->translate("OLD_GRADE")?></td>
-														 <td><input type="text" name="old_grade" id="old_grade" class="fullside" dojoType="dijit.form.TextBox" /></td>
-													</tr>
-													
-													<tr>
-													    <td><?php echo $tr->translate("ADDRESS")?></td>
-														<td colspan="1"><textarea style="min-height:70px;font-family:'Khmer OS Battambang';font-size: 15px;" class="fullside" name="address" id="address" dojoType="dijit.form.Textarea" ></textarea></td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-								</fieldset>
-							   </td>
-							 
-								<td valign="top"  width="33%">
-								<fieldset>
-									<legend align="center"><strong><?php echo $tr->translate('STUDENT_TEST_INFORMATION')?></strong></legend>
-									<table cellspacing="5"  width="100%" style="background: #fff;">
-										<tr>
-										    <td><?php echo $tr->translate("STUDENT_ID")?></td>
-											<td><input  style="color:red;" type="text" name="stu_code" id="stu_code" readonly class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-										    <td><?php echo $tr->translate("SERIAL")?></td>
-											<td><input type="text" name="serial" id="serial" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $this->serailno;?>"  /></td>
-										</tr>
-										<tr>
-											<td><strong><?php echo $tr->translate("DEGREE")?></strong></td>
-											<td>
-												<select name="degree_result" id="degree_result" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGradeResult();" >
-													<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
-													<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
-														<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
-													<?php }}?>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td><strong><?php echo $tr->translate("LEVEL_RESULT")?></strong></td>
-											<td >
-												<input id="grade_result" />
-											</td>
-										</tr>
-										<tr>
-										    <td><?php echo $tr->translate("TERM_TEST")?></td>
-											<td><input id="term_test" /></td>
-										</tr>
-										<tr>
-											 <td><?php echo $tr->translate("TEST_DATE")?></td>
-											 <td><input type="text" name="test_date" required="true"  id="test_date" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" value="now" dojoType="dijit.form.DateTextBox"   /></td>
-										</tr>
-										<tr>
-											<td valign="top"><?php echo $tr->translate("NOTE")?></td>
-											<td><input type="text" name="note"  id="note" class="fullside" dojoType="dijit.form.TextBox"   /></td>
-										</tr>
-										<tr>
-											 <td><?php echo $tr->translate("PHOTO")?></td>
-											 <td><input type="file" name="photo"  id="photo" class="fullside"  /></td>
-										</tr>
-									</table>
-									</fieldset>
-								</td>
-							</tr>
-							
-							<tr>
-								<td colspan="3" style="border-bottom:1px solid #ccc;font-size: 16px;"><strong><?php echo $tr->translate("EMERGENCY_CONTACT")?></strong></td>
-							</tr>
-							<tr>
-								<td colspan="3" style="font-size: 15px;">List any person whom you would like to be contacted in case of emergency.</td>
-							</tr>
-							
-							<tr>
-								<td colspan="3" width="100%">
-									<table width="100%" >
-										<tr>
-											<td width="10%"></td>
-											<td width="40%"></td>
-											<td width="10%"></td>
-											<td width="40%"></td>
-										</tr>
-										<tr>
-											<td><?php echo $tr->translate("NAME")?></td>
-											<td colspan="3" >
-												<input type="text" name="emergency_name" id="emergency_name" class="fullside" dojoType="dijit.form.TextBox"   />
-											</td>
-										</tr>
-										
-										<tr>
-											<td ><?php echo $tr->translate("RELATIONSHIP_TO_STUDENT")?></td>
-											<td >
-												<input type="text" name="relationship_to_student" id="relationship_to_student" class="fullside" dojoType="dijit.form.TextBox"   />
-											</td>
-											
-											<td align="center"><?php echo $tr->translate("PHONE")?></td>
-											<td >
-												<input type="text" name="emergency_tel" id="emergency_tel" class="fullside" dojoType="dijit.form.TextBox"   />
-											</td>
-										</tr>
-										
-										<tr>
-											<td width="20%"><?php echo $tr->translate("ADDRESS")?></td>
-											<td colspan="3" width="80%">
-												<input type="text" name="emergency_address" id="emergency_address" class="fullside" dojoType="dijit.form.TextBox"   />
-											</td>
-										</tr>
-										
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" style="border-bottom:1px solid #ccc;font-size: 16px;"><strong><?php echo $tr->translate("EDUCATIONAL_BACKGROUND")?>(SchoolName , Grade/Level/Year , Major , Year)</strong></td>
-							</tr>	
-							<tr>
-								<!-- <td colspan="3" width="100%">
-									<textarea class="ckeditor"  rows="1"   id="edu_background" name="edu_background"></textarea>
-								</td> -->
-								<td colspan="3">
-								    <table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;">
-								    	<tr id="head-title" class="head-td" align="right"></tr>
-									</table>
-									<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-										iconClass="dijitIconEditProperty" onclick="addRow();" />
-									<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" style="border-bottom:1px solid #ccc;font-size: 16px;"><strong><?php echo $tr->translate("COUSE_WANT_STUDY");?></strong></td>
-							</tr>
-							<tr>
-								<td colspan="3" width="100%">
-									<table width="100%" >
-										<tr>
-											<td><strong><?php echo $tr->translate("DEGREE")?></strong></td>
-											<td>
-												<select name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getAllGrade();" >
-													<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>
-													<?php if(!empty($this->degree)){foreach($this->degree as $rs){?>
-														<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
-													<?php }}?>
-												</select>
-											</td>
-											<td><strong><?php echo $tr->translate("GRADE")?></strong></td>
-											<td>
-												<input input id="grade" />
-											</td>
-											
-											<td align="center"><?php echo $tr->translate("SESSION")?></td>
-											<td>
-												<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-													<option value="">select session</option>
-													<?php if(!empty($this->session)){foreach($this->session as $session){?>
-															<option value="<?php echo $session['id'];?>" > <?php echo $session['name'];?></option>
-													<?php }}?>
-												</select>
-											</td>
-											
-											<td><?php echo $tr->translate("TIME")?></td>
-											<td>
-												<select required="false" name="time" id="time" class="fullside" dojoType="dijit.form.FilteringSelect" >
-													<option value="">select time</option>
-													<option value="7:30-11:00 am">7:30-11:00 am</option>
-													<option value="7:30-11:30 am">7:30-11:30 am</option>
-													<option value="8:00-9:30 am">8:00-9:30 am</option>
-													<option value="8:00-11:00 am">8:00-11:00 am</option>
-													<option value="9:30-11:00 am">9:30-11:00 am</option>
-													<option value="1:00-4:00 pm">1:00-4:00 pm</option>
-													<option value="1:30-6:30 pm">1:30-6:30 pm</option>
-													<option value="2:00-3:30 pm">2:00-3:30 pm</option>
-													<option value="2:00-5:00 pm">2:00-5:00 pm</option>
-													<option value="3:30-5:00 pm">3:30-5:00 pm</option>
-													<option value="5:30-7:00 pm">5:30-7:00 pm</option>
-													<option value="5:30-8:30 pm">5:30-8:30 pm</option>
-													<option value="7:30-8:30 pm">7:30-8:30 pm</option>												
-												</select>	
-											</td>
-										</tr>
-										
-									</table>
-								</td>
-							</tr>
-						</table>
-				</fieldset>
-			</td>
-		</tr>
-		<tr>
-			<td align="center">
-				<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
-					 iconClass="dijitIconClear"/>
-				<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="button" onclick="submitDataClose()" iconClass="dijitEditorIcon dijitEditorIconSave"/>
-				<input label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' dojoType="dijit.form.Button" type="submit" iconClass="dijitEditorIcon dijitEditorIconSave"/>
-			</td>
-		</tr>	
-	</table>
-</form>
+
 <style>
 .headerreceipt{height: 0px !important;}
 </style>

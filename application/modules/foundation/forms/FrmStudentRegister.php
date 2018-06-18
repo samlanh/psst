@@ -145,6 +145,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$degree->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				'onChange'=>'getallGrade();',
 	
 		));
 		$rs_degree = $_db->getAllFecultyName();

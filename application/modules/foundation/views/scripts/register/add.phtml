@@ -205,8 +205,10 @@ input.btn_borwse_image {
 											<div id='preview'></div>	
 													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 													<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
+													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
 										</div>
+										<button type="button" onClick="setup()" class="btn btn-success btn-sm">បើក Camera</button>
 				                   </div>
 				                </div>
 				            </div>
@@ -630,6 +632,7 @@ function getRefreshGroup(){
 var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
 function getStudentNo(){
 	dept_id = dijit.byId('degree').get('value');
+	if(dept_id=='' || dept_id==-1){return false;}
 	dojo.xhrPost({
 		url:url_getstuno,
 		content:{
@@ -730,7 +733,12 @@ function addJob(){
 	}
 }
 </script>
-
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:415px;" align="center" data-dojo-props="title:'Camera'" id="showcamera" >
+		<div id="my_camera"></div>
+		<button type="button" onClick="take_snapshot()" class="btn btn-success btn-sm">ចុចថត</button>
+	</div>
+</div>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_dept2" >
 		<form style="background-color: buttonface;" id='frm_add_tran1' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -774,6 +782,43 @@ function addJob(){
 <script type="text/javascript">
 	//dojo.require("dojo.NodeList-manipulate");
 	//dojo.require("dojo.data.ObjectStore");
+Webcam.set({
+	width: 320,
+	height: 240,
+	image_format: 'jpeg',
+	jpeg_quality: 90
+});
+function setup() {
+	dijit.byId("showcamera").show();	
+	Webcam.reset();
+	Webcam.attach('#my_camera' );
+}
+var shutter = new Audio();
+shutter.autoplay = false;
+shutter.src = navigator.userAgent.match(/Firefox/) ? '<?php echo $this->baseUrl();?>/webcam/shutter.ogg' : '<?php echo $this->baseUrl();?>/webcam/shutter.mp3';
+function take_snapshot() {
+	// play sound effect
+	shutter.play();
+	// take snapshot and get image data
+	Webcam.snap( function(data_uri) {
+		  $('#profile_wiew').attr('src',data_uri);
+		  SaveSnap();
+	} );
+}
+function SaveSnap(){
+    var file =  document.getElementById("profile_wiew").src;
+    var formdata = new FormData();
+    formdata.append("profile_wiew", file);
+    var ajax = new XMLHttpRequest();
+    ajax.addEventListener("load", function(event) { uploadcomplete(event);}, false);
+    var url_upload = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'webcam')); ?>';	
+    ajax.open("POST", url_upload);
+    ajax.send(formdata);
+}
+function uploadcomplete(event){
+    var image_return=event.target.responseText;
+    $("#uploaded").val(image_return);
+}
 	function getInfoBygroup(){
 		url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 		group = dijit.byId('group').get('value');
@@ -803,7 +848,6 @@ function addJob(){
 				dijit.byId('session').set('value',data.session);
 				dijit.byId('session').set('readOnly',true);
 				dijit.byId('room').set('value',data.room_id);
-				//dijit.byId('room').set('readOnly',true);
 			},
 			error: function(err) {
 				alert(err);
@@ -822,35 +866,8 @@ function addJob(){
     }
     var maxSize = 0;
     $("#photo").change(function(){
-    	/*var iSize = ($("#photo")[0].files[0].size / 1024); 
-        if (iSize / 1024 > 1) 
-        { 
-           if (((iSize / 1024) / 1024) > 1) 
-           { 
-               iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
-               maxSize = 0;
-               //$("#lblSize").html( iSize + "Gb"); 
-           }else{ 
-               iSize = (Math.round((iSize / 1024) * 100) / 100);
-               if(iSize>5){
-                   alert('<?php //echo $tr->translate("Image size more than 5Mb can not upload");?>');
-    	/*maxSize = 1;
-                   $('#profile_wiew').attr('src', "<?php //echo $this->baseUrl().'/images/no-profile.png';?>");
-                   return false;
-               }
-               //$("#lblSize").html( iSize + "Mb"); 
-           } 
-        } 
-        else 
-        {
-           iSize = (Math.round(iSize * 100) / 100);
-           maxSize = 0;
-           //$("#lblSize").html( iSize  + "kb"); 
-        }    */
-        
         readURL(this);
     });
-    
 	function loading(){
 	    document.getElementsByClassName("overlay")[0].style.display="block";
 	}

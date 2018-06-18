@@ -327,7 +327,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	}else{
    		$limit = " ";
    	}
-//    	echo $sql.$where.$order.$limit;exit();
    	return $db->fetchAll($sql.$where.$order.$limit);
    }
    public function getStundetScorebySemester($group_id,$semester){ // fro rpt-score by semester I+II

@@ -203,10 +203,12 @@ dojo.ready(function(){
 									}//
 									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
 								?>
-								<td align="center"><?php //echo "jhdfjabshjgf ".$rs['amount_subject'];exit();
+								<td align="center"><?php
 								$total_score = number_format($total_score,2);
 								echo str_replace(".00", "", $total_score);?></td>
-								<?php $average = number_format($rs['total_score']/$rs['amount_subject'],2);
+								<?php 
+									$total_subject =($rs['exam_type']==2)?$rs['amount_subjectsem']:$rs['amount_subject'];//$rs['exam_type']==2 for subject semester else for month
+									$average = number_format($rs['total_score']/$total_subject,2);//amount_subjectsem
 								?>
 								<td align="center"><?php echo str_replace(".00", "", $average);?></td>
 								<td align="center"><?php echo calCulateGrade($average);?></td>

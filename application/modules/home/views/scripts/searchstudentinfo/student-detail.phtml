@@ -658,7 +658,7 @@
 										);
 										
 									?>	
-									<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">	
+									<div style=" background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">	
 										<div id="divPrint">
 											<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
 												<tr>
@@ -749,9 +749,10 @@
 														 	}else{
 														 		$h_label='hr';
 														 	}
+														 	$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
 														 	?>
 														 <tr>
-														    <td style="border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 25px;"><?php echo $key+1?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $rs_list['total_hour'].''.$h_label?></td>
+														    <td style="border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 25px;"><?php echo $key+1?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;//$rs_list['total_hour'].''.$h_label?></td>
 														 </tr>
 														 <?php }?>
 														  <tr >

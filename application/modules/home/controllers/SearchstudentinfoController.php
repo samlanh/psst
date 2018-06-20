@@ -10,8 +10,10 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 	
 	public function indexAction(){
 		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
+			$param = $this->getRequest()->getParams();
+			if(isset($param['search'])){
+// 			if(!empty($param['adv_search'])){
+				$search=$param;
 			}
 			else{
 				$search = array(
@@ -28,8 +30,42 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			$this->view->adv_search=$search;
 			$db_student= new Home_Model_DbTable_DbStudent();
 			$rs_rows = $db_student->getAllStudent($search);
-			$this->view->row = $rs_rows;
+			$this->view->rowdata = $rs_rows;
 			$this->view->list ="";
+			
+			$paginator = Zend_Paginator::factory($rs_rows);
+			$paginator->setDefaultItemCountPerPage(30);
+			$allItems = $paginator->getTotalItemCount();
+			$countPages= $paginator->count();
+			$p = Zend_Controller_Front::getInstance()->getRequest()->getParam('pages');
+			 
+			if(isset($p))
+			{
+				$paginator->setCurrentPageNumber($p);
+			} else $paginator->setCurrentPageNumber(1);
+			
+			$currentPage = $paginator->getCurrentPageNumber();
+			 
+			$this->view->row  = $paginator;
+			$this->view->countItems = $allItems;
+			$this->view->countPages = $countPages;
+			$this->view->currentPage = $currentPage;
+			
+			if($currentPage == $countPages)
+			{
+				$this->view->nextPage = $countPages;
+				$this->view->previousPage = $currentPage-1;
+			}
+			else if($currentPage == 1)
+			{
+				$this->view->nextPage = $currentPage+1;
+				$this->view->previousPage = 1;
+			}
+			else {
+				$this->view->nextPage = $currentPage+1;
+				$this->view->previousPage = $currentPage-1;
+			}
+			
 // 			$list = new Application_Form_Frmtable();
 // 			$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAME","SEX","PHONE","ACADEMIC_YEAR","GROUP","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 // 			$link=array(

@@ -185,7 +185,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    	(select name_kh from rms_view where type=5 and key_code=is_subspend) as status,    
 		    	(select province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,
 		    	(select name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
-		    	(SELECT room_name FROM `rms_room` r.room_id = room
+		    	(SELECT room_name FROM `rms_room` AS r WHERE r.room_id = room LIMIT 1) AS room
     	FROM rms_student ';
     	$where=' WHERE status=1 ';
     	 

@@ -8,6 +8,10 @@
 	$frm =  $this->form_search;
 	$parameterserch =  basename($_SERVER['REQUEST_URI']);
 	$urlsting = str_replace("&pages=".$this->currentPage,"",$parameterserch);
+	$sign="?";
+	if (!empty($urlsting)){
+		$sign="&";
+	}
 ?>
 <style>
 .card-box-border {
@@ -190,17 +194,17 @@ a.btn.btn-default.btn-detail:hover {
             	<nav aria-label="Page navigation example">
 				  <ul class="pagination">
 				  	<?php if($this->currentPage!=1){ ?>
-				    <li class="page-item"><a class="page-link" href="<?php echo $urlsting."&pages=".$this->previousPage;?>"><?php echo $tr->translate('Previous');?></a></li>
+				    <li class="page-item"><a class="page-link" href="<?php echo $urlsting.$sign."pages=".$this->previousPage;?>"><?php echo $tr->translate('Previous');?></a></li>
 				    <?php }?>
 				     <?php  $i=0; for( $i=1; $i<=$this->countPages; $i++){?>
            			 	<?php if ($statpage<=$i && $endpage>=$i){?>
 				    <li class="page-item <?php if($i==$this->currentPage){ echo "active";}?>">
-				    	<a class="page-link" href="<?php echo $urlsting."&pages=".$i;?>"><?php echo $i;?></a>
+				    	<a class="page-link" href="<?php echo $urlsting.$sign."pages=".$i;?>"><?php echo $i;?></a>
 				    </li>
 				    	<?php }
 					}?>
 					<?php if($this->countPages!= $this->currentPage){ ?>
-				    <li class="page-item"><a class="page-link" href="<?php echo $urlsting."&pages=".$this->nextPage;?>"><?php echo $tr->translate('Next');?></a></li>
+				    <li class="page-item"><a class="page-link" href="<?php echo $urlsting.$sign."pages=".$this->nextPage;?>"><?php echo $tr->translate('Next');?></a></li>
 				    <?php }?>
 				  </ul>
 				</nav>

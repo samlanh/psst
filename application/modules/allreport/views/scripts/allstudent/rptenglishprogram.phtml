@@ -6,33 +6,31 @@
 ?>	
 <style>
 .hover:hover{ background:#ccc;}</style>
-<div style="width: 30cm;margin: 0 auto;">
-<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table width="100%">
-	       <tr>
-	           <td><?php echo $frm->getElement("title");?></td>
-	           <td><?php echo $frm->getElement("branch_id");?></td>
-	           <td><?php echo $frm->getElement("study_year");?></td>
-	           <td><?php echo $frm->getElement("degree");?></td>
-	           <td><?php echo $frm->getElement("grade_all");?></td>
-			</tr>
-			<tr>
-				<td><?php echo $frm->getElement("session");?></td>
-				<td><select dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
-						<option value="" <?php if($this->search['study_type']==''){echo "selected";}?>>ជ្រើសរើសប្រភេទសិស្ស</option>
-						<option value="0" <?php if($this->search['study_type']==0){echo "selected";}?>>សិស្សនៅរៀន</option>
-						<option value="1" <?php if($this->search['study_type']!=0){echo "selected";}?>>សិស្សឈប់</option>
-					</select>
-				</td>
-				<td><?php echo $frm->getElement("start_date");?></td>
-				<td><?php echo $frm->getElement("end_date");?></td>
-				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		 	</tr>
-		</table>		
-</form>
-</div>
-	<div style="border: 1px dotted #000;background: #fff;width:29cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
-		<div id="divPrint">
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table width="100%">
+		       <tr>
+		           <td><?php echo $frm->getElement("title");?></td>
+		           <td><?php echo $frm->getElement("branch_id");?></td>
+		           <td><?php echo $frm->getElement("study_year");?></td>
+		           <td><?php echo $frm->getElement("degree");?></td>
+		           <td><?php echo $frm->getElement("grade_all");?></td>
+				</tr>
+				<tr>
+					<td><?php echo $frm->getElement("session");?></td>
+					<td><select dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
+							<option value="" <?php if($this->search['study_type']==''){echo "selected";}?>>ជ្រើសរើសប្រភេទសិស្ស</option>
+							<option value="0" <?php if($this->search['study_type']==0){echo "selected";}?>>សិស្សនៅរៀន</option>
+							<option value="1" <?php if($this->search['study_type']!=0){echo "selected";}?>>សិស្សឈប់</option>
+						</select>
+					</td>
+					<td><?php echo $frm->getElement("start_date");?></td>
+					<td><?php echo $frm->getElement("end_date");?></td>
+					<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+			 	</tr>
+			</table>		
+	</form>
+	<div id="divPrint">
 			<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
 				<tr>
 					<td width="15%" align="center">

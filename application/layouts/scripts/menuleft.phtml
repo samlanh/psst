@@ -42,9 +42,15 @@
 		  $controller = $request->getControllerName();
 	?>
 	<div class="main-menu menu-fixed menu-light menu-accordion    menu-shadow  " data-scroll-to-active="true">
-		<div class="button-make-loan mb-10">
-			<a href="<?php echo $this->baseUrl()."/registrar/register/add"?>"  class="closebtn-makesale"  ><i class="fa fa-plus" aria-hidden="true"></i> <?php echo $tr->translate("REGISTER");?> </a>
-		</div>
+			<div class="button-make-loan mb-10">
+				<?php 
+					$db = new Application_Model_DbTable_DbUsers();
+					$rs = $db->getAccessUrl("registrar","register","add");
+					if(!empty($rs)){
+				?>
+					<a href="<?php echo $this->baseUrl()."/registrar/register/add"?>"  class="closebtn-makesale"  ><i class="fa fa-plus" aria-hidden="true"></i> <?php echo $tr->translate("REGISTER");?> </a>
+				<?php }?>
+			</div>
 	    <div class="main-menu-content">
 			<ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
 			   <!-- 

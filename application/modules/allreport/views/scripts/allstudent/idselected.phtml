@@ -98,13 +98,7 @@ function getKHMonthByNumber(m){
 									<div style="font-family: 'Khmer OS Muol Light';margin-top: 5px;">អត្តសញ្ញាណប័ណ្ណសិស្ស</div>
 									<div style="margin-top: -4px;"><?php if($row['dept']<=2){echo 'អត្តលេខ';}else{echo 'ID N<sup>o</sup>';}?>: <label id="stu_code<?php echo $i;?>"></label></div>
 									<script type="text/javascript">
-										<?php //if($row['dept']<=2){?>
-												//test1 = convertEnglishToKhmerNumber('<?php //echo $row['stu_code']?>');
-										<?php //}else{?>
-												test1 = '<?php echo $row['stu_code'];?>';
-										<?php //}
-											
-										?>
+										test1 = '<?php echo $row['stu_code'];?>';
 										dojo.byId('stu_code<?php echo $i;?>').innerHTML=test1;
 									</script>
 								</td>

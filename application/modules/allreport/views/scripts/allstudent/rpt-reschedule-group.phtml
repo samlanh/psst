@@ -61,9 +61,8 @@
 			'21:30'=>"09:30 PM",
 	);
 ?>	
-<div style="width: 28cm;margin: 0 auto;">
-<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="100%" cellspacing="5">
 	       <tr>
 	           <td><?php echo $frm->getElement("title");?></td>
@@ -90,98 +89,94 @@
 	       </tr>
 		</table>
 </form>		
+	<div id="divPrint">
+		<table style="background:#fff; margin: 0 auto;width: 100%">
+			<tr>
+				<td width="25%" align="left">
+					<img style="width: 40%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+				</td>
+				<td align="center">
+					<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
+					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_GROUP");?></strong><br />
+					<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+				</td>
+				<td width="25%" align="right">
+				</td>
+			</tr>
+		<style>
+			table tr th{
+				border: 1px solid #000;	
+			}
+			.hover:hover{background: #ccc;}
+			table { page-break-inside:auto }
+			  tr{ page-break-inside:avoid; page-break-after:auto; }
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+			
+		</style>
+			<tr>
+				<td colspan="3">
+					<table border="1" cellpadding="5"​ style="border:1px solid #000;margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
+						<thead>
+						<tr style="font-size:13px; height: 20px;background: #ccd9ff;" align="center" >
+							<th >No.</th>
+							<th ><?php echo $tr->translate("STUDY_YEAR");?></th>
+							<th ><?php echo $tr->translate("GROUP");?></th>
+							<th ><?php echo $tr->translate("SESSION");?></th>
+							<th ><?php echo $tr->translate("DAY");?></th>
+							<th ><?php echo $tr->translate("TIME");?></th>
+							<th ><?php echo $tr->translate("SUBJECT");?></th>
+							<th ><?php echo $tr->translate("TEACHER");?></th>
+							<th ><?php echo $tr->translate("DATE");?></th>
+							<th ><?php echo $tr->translate("USER");?></th>
+						</tr>
+						</thead>
+					<?php  $i=0;  foreach ($this->rs AS $row) { $i++;
+					          if($row['from_hour']<=12){
+					          	$session="Morning";
+					          }else{
+					          	$session="Afternoon";
+					          }
+					?>
+						<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
+							<td ><?php echo $i;?></td>
+							<td ><?php echo $row['years'];?></td>
+							<td align="left">&nbsp;&nbsp;<?php echo $row['group_code'];?></td>
+							<td ><?php echo $session;?></td>
+							<td ><?php echo $row['days'];?></td>
+							<td ><?php   if (!empty($arr[$row['from_hour']])) {echo $arr[$row['from_hour']];}?>&nbsp;-&nbsp;<?php if (!empty($arr[$row['from_hour']])) {echo $arr[$row['to_hour']];}?></td>
+							<td align="left">&nbsp;<?php echo $row['subject_name'];?></td>
+							<td ><?php echo $row['teacher_name'];?></td>
+							<td ><?php echo $row['create_date'];?></td>
+							<td ><?php echo $row['USER'];?></td>
+							 
+						</tr>
+					<?php }?>	
+					</table>	
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="3">&nbsp;</td>
+			</tr>
+			<tr >
+				<td align="center" width="25%">
+					<span style="font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+				</td>
+				<td  width="50%">
+					&nbsp;
+				</td>
+				<td align="center"  width="25%">
+					<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+				</td>
+			</tr>
+		</table>
+	</div>		
 </div>
-	<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">	
-		<div id="divPrint">
-							<table style="background:#fff; margin: 0 auto;width: 100%">
-								<tr>
-									<td width="25%" align="left">
-										<img style="width: 40%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-									</td>
-									<td align="center">
-										<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
-										<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_GROUP");?></strong><br />
-										<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
-									</td>
-									<td width="25%" align="right">
-									</td>
-								</tr>
-							<style>
-								table tr th{
-									border: 1px solid #000;	
-								}
-								.hover:hover{background: #ccc;}
-								table { page-break-inside:auto }
-								  tr{ page-break-inside:avoid; page-break-after:auto; }
-								#header {
-								  display: table-header-group;
-								  page-break-inside:avoid; page-break-after:auto;
-								}
-								
-							</style>
-								<tr>
-									<td colspan="3">
-										<table border="1" cellpadding="5"​ style="border:1px solid #000;margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
-											<thead>
-											<tr style="font-size:13px; height: 20px;background: #ccd9ff;" align="center" >
-												<th >No.</th>
-												<th ><?php echo $tr->translate("STUDY_YEAR");?></th>
-												<th ><?php echo $tr->translate("GROUP");?></th>
-												<th ><?php echo $tr->translate("SESSION");?></th>
-												<th ><?php echo $tr->translate("DAY");?></th>
-												<th ><?php echo $tr->translate("TIME");?></th>
-												<th ><?php echo $tr->translate("SUBJECT");?></th>
-												<th ><?php echo $tr->translate("TEACHER");?></th>
-												<th ><?php echo $tr->translate("DATE");?></th>
-												<th ><?php echo $tr->translate("USER");?></th>
-												 
-											</tr>
-											</thead>
-										<?php  $i=0;  foreach ($this->rs AS $row) { $i++;
-										          if($row['from_hour']<=12){
-										          	$session="Morning";
-										          }else{
-										          	$session="Afternoon";
-										          }
-										?>
-											<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
-												<td ><?php echo $i;?></td>
-												<td ><?php echo $row['years'];?></td>
-												<td align="left">&nbsp;&nbsp;<?php echo $row['group_code'];?></td>
-												<td ><?php echo $session;?></td>
-												<td ><?php echo $row['days'];?></td>
-												<td ><?php   if (!empty($arr[$row['from_hour']])) {echo $arr[$row['from_hour']];}?>&nbsp;-&nbsp;<?php if (!empty($arr[$row['from_hour']])) {echo $arr[$row['to_hour']];}?></td>
-												<td align="left">&nbsp;<?php echo $row['subject_name'];?></td>
-												<td ><?php echo $row['teacher_name'];?></td>
-												<td ><?php echo $row['create_date'];?></td>
-												<td ><?php echo $row['USER'];?></td>
-												 
-											</tr>
-										<?php }?>	
-										</table>	
-									</td>
-								</tr>
-								<tr>
-									<td colspan="3">&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="3">&nbsp;</td>
-								</tr>
-								<tr >
-									<td align="center" width="25%">
-										<span style="font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
-									</td>
-									<td  width="50%">
-										&nbsp;
-									</td>
-									<td align="center"  width="25%">
-										<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
-									</td>
-								</tr>
-							</table>
-		</div>		
-	</div>
-	
 <script>
 $( document ).ready(function() {
 	if('<?php echo $this->search['session']?>'){

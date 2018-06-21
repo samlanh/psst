@@ -10,154 +10,146 @@
 display: table-cell !important;
 }
 </style>
-<div class="card pb-10 pt-10 pl-10 pr-10">
-	<div class="card-content collapse show">
-		<div class="card-box">
-			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-					<table width="100%">
-				       <tr>
-				           <td><?php echo $frm->getElement("title");?></td>
-				           <td><?php echo $frm->getElement("branch_id");?></td>
-				           <td><?php echo $frm->getElement("study_year");?></td>
-				           <td><?php echo $frm->getElement("degree");?></td>
-				           <td><?php echo $frm->getElement("grade_all");?></td>
-						</tr>
-						<tr>
-							<td><?php echo $frm->getElement("session");?></td>
-							<td><?php echo $frm->getElement("start_date");?></td>
-							<td><?php echo $frm->getElement("end_date");?></td>
-							<td>
-								<select name="stu_type" id="stu_type" type="text" class="fullside" dojoType="dijit.form.FilteringSelect" >
-									<option value="-1" <?php if($this->search['stu_type']==-1){echo 'selected="selected"';}?>><?php echo $tr->translate("ALL_STUDENT");?></option>
-									<option value="0" <?php if($this->search['stu_type']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("OLD_STUDENTS");?></option>
-									<option value="1" <?php if($this->search['stu_type']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("NEW_STUDENT");?></option>
-								</select>
-							</td>
-							<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-					 	</tr>
-					</table>		
-			</form>
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table width="100%">
+		       <tr>
+		           <td><?php echo $frm->getElement("title");?></td>
+		           <td><?php echo $frm->getElement("branch_id");?></td>
+		           <td><?php echo $frm->getElement("study_year");?></td>
+		           <td><?php echo $frm->getElement("degree");?></td>
+		           <td><?php echo $frm->getElement("grade_all");?></td>
+				</tr>
+				<tr>
+					<td><?php echo $frm->getElement("session");?></td>
+					<td><?php echo $frm->getElement("start_date");?></td>
+					<td><?php echo $frm->getElement("end_date");?></td>
+					<td>
+						<select name="stu_type" id="stu_type" type="text" class="fullside" dojoType="dijit.form.FilteringSelect" >
+							<option value="-1" <?php if($this->search['stu_type']==-1){echo 'selected="selected"';}?>><?php echo $tr->translate("ALL_STUDENT");?></option>
+							<option value="0" <?php if($this->search['stu_type']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("OLD_STUDENTS");?></option>
+							<option value="1" <?php if($this->search['stu_type']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("NEW_STUDENT");?></option>
+						</select>
+					</td>
+					<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+			 	</tr>
+			</table>		
+	</form>
+	<div id="divPrint">
+			<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
+				<tr>
+					<td width="15%" align="center">
+						<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> 
+					</td>
+					<td width="70%"  align="center">
+					    <strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
+						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("ALL_STUDENT_REPORT");?></strong><br />
+						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+					</td>
+					<td width="15%" align="center">
+					</td>
+				</tr>
+				<style>
+					table tr th{
+						border: 1px solid #000;	
+					}
+					table {page-break-inside:auto }
+					tr{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					}
+					.hidden{visibility: hidden; display: none;}
+					
+				</style>
+				<tr>
+					<td colspan="3">
+					<div id="exportExcel">
+						<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
+							<thead>
+								<tr style="font-size:14px; height: 20px;background: #ccd9ff; font-weight: bold" align="center" >
+									<th rowspan="2" class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></th>
+									<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
+									<th rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></th>
+									<th rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></th>
+									<th rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></th>
+									<th rowspan="2"><?php echo $tr->translate("SEX");?></th>
+									<th rowspan="2"><?php echo $tr->translate("NATIONALITY");?></th>
+									<th rowspan="2"><?php echo $tr->translate("PHONE");?></th>
+									<th rowspan="2"><?php echo $tr->translate("EMAIL");?></th>
+									<th colspan="5"><?php echo $tr->translate("STUDY_INFO");?></th>
+								</tr>
+								<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
+								<tr style="font-size:12px; height: 20px;background: #ccd9ff; font-weight: bold;" align="center" >
+									<th><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
+									<th><?php echo $tr->translate("DEGREE");?></th>
+									<th><?php echo $tr->translate("GRADE");?></th>
+									<th><?php echo $tr->translate("SESSION");?></th>
+									<th><?php echo $tr->translate("STATUS");?></th>
+								</tr>
+							</thead>
+						<?php $i=0;$degree=0;foreach ($this->rs AS $row) { $i++;$degree=$row['degree'];?>
+							<tr style="font-size:13px;line-height:18px;" align="center" class="hover" >
+								<td class="hidden">
+									<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
+									<input type="hidden" name="stu_id<?php echo $i;?>" id="stu_id<?php echo $i;?>" value="<?php echo $row['stu_id'];?>" dojoType="dijit.form.TextBox" />
+								</td>
+								<td ><?php echo $i;?></td>
+								<td ><?php echo $row['branch_name'];?></td>
+								<td ><?php echo $row['stu_code'];?></td>
+								<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['name'];?>&nbsp;</td>
+								<td ><?php echo $row['sex'];?></td>	
+								<td ><?php echo $row['nationality'];?></td>
+								<td ><?php echo $row['tel'];?></td>
+								<td align="left">&nbsp;<?php echo $row['email'];?></td>
+								<td ><?php echo $row['academic_year'];?></td>
+								<td ><?php echo $row['degree'];?></td>
+								<td align="left">&nbsp;<?php echo $row['grade'];?></td>
+								<td ><?php echo $row['session'];?></td>	
+								<td <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>><?php echo $row['status'];?></td>	
+							</tr>
+						<?php }?>	
+						</table>	
+					</div>	
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="3" width="100%">
+						<table width="100%" style="font-family:'Khmer MEF2';">
+							<tr>
+								<td  width="25%" align="center">
+									<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+								</td>
+								<td  width="50%">
+								</td>
+								<td align="center"  width="25%">
+									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
 		</div>
-		<div class="card-box">
-			<div style="border: 1px dotted #000;background: #fff; min-width:29cm;  margin: 0 auto; min-height: 27cm;padding: 0.5cm;">
-				<div id="divPrint">
-					<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
-						<tr>
-							<td width="15%" align="center">
-								<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> 
-							</td>
-							<td width="70%"  align="center">
-							    <strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
-								<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("ALL_STUDENT_REPORT");?></strong><br />
-								<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
-							</td>
-							<td width="15%" align="center">
-							</td>
-						</tr>
-						<style>
-							table tr th{
-								border: 1px solid #000;	
-							}
-							table {page-break-inside:auto }
-							tr{ page-break-inside:avoid; page-break-after:auto; }
-							#header {
-							  display: table-header-group;
-							  page-break-inside:avoid; page-break-after:auto;
-							}
-							.hidden{visibility: hidden; display: none;}
-							
-						</style>
-						<tr>
-							<td colspan="3">
-							<div id="exportExcel">
-								<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
-									<thead>
-										<tr style="font-size:14px; height: 20px;background: #ccd9ff; font-weight: bold" align="center" >
-											<th rowspan="2" class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></th>
-											<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
-											<th rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></th>
-											<th rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></th>
-											<th rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></th>
-											<th rowspan="2"><?php echo $tr->translate("SEX");?></th>
-											<th rowspan="2"><?php echo $tr->translate("NATIONALITY");?></th>
-											<th rowspan="2"><?php echo $tr->translate("PHONE");?></th>
-											<th rowspan="2"><?php echo $tr->translate("EMAIL");?></th>
-											<th colspan="5"><?php echo $tr->translate("STUDY_INFO");?></th>
-										</tr>
-										<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
-										<tr style="font-size:12px; height: 20px;background: #ccd9ff; font-weight: bold;" align="center" >
-											<th><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
-											<th><?php echo $tr->translate("DEGREE");?></th>
-											<th><?php echo $tr->translate("GRADE");?></th>
-											<th><?php echo $tr->translate("SESSION");?></th>
-											<th><?php echo $tr->translate("STATUS");?></th>
-										</tr>
-									</thead>
-								<?php $i=0;$degree=0;foreach ($this->rs AS $row) { $i++;$degree=$row['degree'];?>
-									<tr style="font-size:13px;line-height:18px;" align="center" class="hover" >
-										<td class="hidden">
-											<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
-											<input type="hidden" name="stu_id<?php echo $i;?>" id="stu_id<?php echo $i;?>" value="<?php echo $row['stu_id'];?>" dojoType="dijit.form.TextBox" />
-										</td>
-										<td ><?php echo $i;?></td>
-										<td ><?php echo $row['branch_name'];?></td>
-										<td ><?php echo $row['stu_code'];?></td>
-										<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['name'];?>&nbsp;</td>
-										<td ><?php echo $row['sex'];?></td>	
-										<td ><?php echo $row['nationality'];?></td>
-										<td ><?php echo $row['tel'];?></td>
-										<td align="left">&nbsp;<?php echo $row['email'];?></td>
-										<td ><?php echo $row['academic_year'];?></td>
-										<td ><?php echo $row['degree'];?></td>
-										<td align="left">&nbsp;<?php echo $row['grade'];?></td>
-										<td ><?php echo $row['session'];?></td>	
-										<td <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>><?php echo $row['status'];?></td>	
-									</tr>
-								<?php }?>	
-								</table>	
-							</div>	
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="3" width="100%">
-								<table width="100%" style="font-family:'Khmer MEF2';">
-									<tr>
-										<td  width="25%" align="center">
-											<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
-										</td>
-										<td  width="50%">
-										</td>
-										<td align="center"  width="25%">
-											<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<table width="100%">
-					<tr>
-						<td align="center">
-							<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
-								type="button" onclick="printSelected();"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
-							<input type="button" onclick="printIDCard();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
-							
-							<button dojoType="dijit.form.Button" id="printpickupselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
-								type="button" onclick="printPickupCardSelected();"><?php echo $tr->translate("SINGLE_PICKUP_PRINT");?></button>
-							<input type="button" onclick="printPickup();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_PICKUP");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
-						</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-	</div>
 </div>
-
-
+	
+	<table width="100%">
+		<tr>
+			<td align="center">
+				<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
+					type="button" onclick="printSelected();"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
+				<input type="button" onclick="printIDCard();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
+				
+				<button dojoType="dijit.form.Button" id="printpickupselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
+					type="button" onclick="printPickupCardSelected();"><?php echo $tr->translate("SINGLE_PICKUP_PRINT");?></button>
+				<input type="button" onclick="printPickup();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_PICKUP");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
+			</td>
+		</tr>
+	</table>
+			
 <div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
 	<div data-dojo-type="dijit.Dialog" style="width:22cm;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
 		<div id="print_student_card" style="width: 21cm !important; height: 13cm ; padding: 0px; margin: 0px;">

@@ -5,7 +5,8 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
 ?>
-<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="100%">
 	       <tr>
 	           <td><?php echo $frm->getElement("title");?></td>
@@ -22,7 +23,7 @@
 	           <td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 	       </tr>
 	       <tr>
-	       		<td colspan="5" style="">
+	       		<td colspan="5" style="text-align: left;">
 	       			<button onclick="getstudentlist();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("STUDENT_LIST");?></button>
 		       		<button onclick="getTranscript();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("TRANSCRIPT");?></button>
 		       		<button onclick="getAttendancelist();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></button>
@@ -37,14 +38,13 @@
 	       		</td>
 	       </tr>
 		</table>
-</form>	
-<<style>
+	</form>	
+<style>
 .hidden{
 	display: block !important;
 }
 </style>
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm; ">
-		<div id="divPrint">
+	<div id="divPrint">
 		<table style="background:#fff; margin: 0 auto; width: 100%;">
 			<tr>
 				<td width="28%" align="left">

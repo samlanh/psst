@@ -102,7 +102,7 @@ fieldset{  background:none;}
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select type="text" name="stu_test" id="stu_test" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getStudentTestInfo();"  >
-								<option value="0">--- Select Student Tested ---</option>
+								<option value="0">--- <?php echo $tr->translate("Select Student Tested");?> ---</option>
 								<?php if(!empty($this->all_student_test)){foreach ($this->all_student_test as $all_student_test){?>
 								<option value="<?php echo $all_student_test['id']?>"><?php echo $all_student_test['name']?></option>
 								<?php }}?>
@@ -128,8 +128,8 @@ fieldset{  background:none;}
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select type="text" name="sex" id="sex"  class="fullside" dojoType="dijit.form.FilteringSelect" >
-								<option value="1">Male</option>
-								<option value="2">Female</option>
+								<option value="1"><?php echo $tr->translate("MALE");?></option>
+								<option value="2"><?php echo $tr->translate("FEMALE");?></option>
 							</select>
 	                   </div>
 	                </div>

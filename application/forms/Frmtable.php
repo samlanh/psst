@@ -166,10 +166,10 @@ class Application_Form_Frmtable
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     
-    	$copyButton = '&nbsp;<a href="#" class="btn-action" onClick="copyRecord(\''.$url_copy.'\')">'
-    	.'<img alt="" src="'.BASE_URL.'/images/icon/copy.png"><b>'
+    	$copyButton = '&nbsp;<a href="#" class="btn btn-primary btn-copy" onClick="copyRecord(\''.$url_copy.'\')">'
+    	.'<i class="fa fa-files-o" aria-hidden="true"></i> '
     	.$tr->translate("COPY")
-    	.'</b></a>';
+    	.'</a>';
     	return $copyButton;
     }
     

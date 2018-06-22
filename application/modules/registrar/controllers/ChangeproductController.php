@@ -58,6 +58,7 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
 				}				
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				echo $e->getMessage();
 			}
 		}
@@ -86,6 +87,7 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
 				}				
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("EDIT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				echo $e->getMessage();
 			}
 		}

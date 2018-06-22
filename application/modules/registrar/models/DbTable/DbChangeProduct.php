@@ -185,6 +185,7 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 		 		$this->_name="rms_change_product";
 		 		$arr = array(
 		 				'status'=>$data['status'],
+		 				'is_void'=>1,
 		 				);
 		 		$where=" id = $id ";
 		 		$this->update($arr, $where);

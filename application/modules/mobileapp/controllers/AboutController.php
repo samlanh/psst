@@ -7,7 +7,8 @@ class Mobileapp_AboutController extends Zend_Controller_Action
         /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-	}
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    }
 
     public function indexAction()
     {
@@ -31,7 +32,7 @@ class Mobileapp_AboutController extends Zend_Controller_Action
 			$link=array(
 					'module'=>'mobileapp','controller'=>'about','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -50,8 +51,9 @@ class Mobileapp_AboutController extends Zend_Controller_Action
         if($this->getRequest()->isPost()){
             $_data = $this->getRequest()->getPost();
             $db->add($_data);
-            if(!empty($_data['save_close'])){
-                $this->_redirect("mobileapp/about");
+            if(isset($_data['save_close'])){
+            	Application_Form_FrmMessage::message("INSERT_SUCCESS");
+                $this->_redirect("/mobileapp/about");
             }else{
                 Application_Form_FrmMessage::message("INSERT_SUCCESS");
             }
@@ -100,6 +102,22 @@ class Mobileapp_AboutController extends Zend_Controller_Action
 
     }
 
+    function deleteAction(){
+    	try{
+	    	$id = $this->getRequest()->getParam("id");
+	    	$db = new Mobileapp_Model_DbTable_DbAbout();
+	    	if (!empty($id)) {
+	    		$db->deleteData($id);
+	    		Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
+	    		echo "<script>window.close();</script>";
+	    	}
+    	}catch(Exception $e){
+    		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));
+    		$err =$e->getMessage();
+    		Application_Model_DbTable_DbUserLog::writeMessageError($err);
+    		echo "<script>window.close();</script>";
+    	}
+    }
 
 }
 

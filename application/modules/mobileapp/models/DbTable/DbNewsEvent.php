@@ -75,7 +75,17 @@ class Mobileapp_Model_DbTable_DbNewsEvent extends Zend_Db_Table_Abstract
         }
 
  }
- 
+	 function deleteData($id){
+	 	$db = $this->getAdapter();
+	 	try{
+	 		$where=$this->getAdapter()->quoteInto("id=?", $id);
+	 		$this->delete($where);
+	 	}catch(exception $e){
+	 		Application_Form_FrmMessage::message("Application Error");
+	 		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	 		$db->rollBack();
+	 	}
+	 }
 
 
 }

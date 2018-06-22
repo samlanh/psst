@@ -68,9 +68,19 @@ class Mobileapp_Model_DbTable_DbAttendencenote extends Zend_Db_Table_Abstract
             Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
             $db->rollBack();
         }
-
  }
- 
+ function deleteData($id){
+ 	$db = $this->getAdapter();
+ 	try{
+ 		$this->_name = "mobile_attendencenote";
+ 		$where=$this->getAdapter()->quoteInto("id=?", $id);
+ 		$this->delete($where);
+ 	}catch(exception $e){
+ 		Application_Form_FrmMessage::message("Application Error");
+ 		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+ 		$db->rollBack();
+ 	}
+ }
 
 
 }

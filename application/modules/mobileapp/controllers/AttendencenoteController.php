@@ -7,7 +7,8 @@ class Mobileapp_AttendencenoteController extends Zend_Controller_Action
         /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-	}
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    }
 
     public function indexAction()
     {
@@ -31,7 +32,7 @@ class Mobileapp_AttendencenoteController extends Zend_Controller_Action
 			$link=array(
 					'module'=>'mobileapp','controller'=>'attendencenote','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'ordering'=>$link,));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'ordering'=>$link,));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -99,7 +100,22 @@ class Mobileapp_AttendencenoteController extends Zend_Controller_Action
 
 
     }
-
+    function deleteAction(){
+    	try{
+    		$id = $this->getRequest()->getParam("id");
+    		$db = new Mobileapp_Model_DbTable_DbAttendencenote();
+    		if (!empty($id)) {
+    			$db->deleteData($id);
+    			Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
+    			echo "<script>window.close();</script>";
+    		}
+    	}catch(Exception $e){
+    		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));
+    		$err =$e->getMessage();
+    		Application_Model_DbTable_DbUserLog::writeMessageError($err);
+    		echo "<script>window.close();</script>";
+    	}
+    }
 
 }
 

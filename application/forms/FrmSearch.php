@@ -21,14 +21,14 @@ Class Application_Form_FrmSearch extends Zend_Dojo_Form {
 		
 		$_title = new Zend_Dojo_Form_Element_TextBox('adv_search');
 		$_title->setAttribs(array('dojoType'=>$this->tvalidate,
-				'onkeyup'=>'this.submit()',
+				'onkeyup'=>'this.submit()','class'=>'fullside',
 				'placeholder'=>$this->tr->translate("SEARCH")
 		));
 		$_title->setValue($request->getParam("adv_search"));
 		
 		
 		$_status_search=  new Zend_Dojo_Form_Element_FilteringSelect('search_status');
-		$_status_search->setAttribs(array('dojoType'=>$this->filter));
+		$_status_search->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -40,6 +40,7 @@ Class Application_Form_FrmSearch extends Zend_Dojo_Form {
 		$_btn_search->setAttribs(array(
 				'dojoType'=>'dijit.form.Button',
 				'iconclass'=>'dijitIconSearch',
+				'class'=>'fullside',
 		
 		));
 		
@@ -51,7 +52,7 @@ Class Application_Form_FrmSearch extends Zend_Dojo_Form {
 		$_date = $request->getParam("start_date");
 
 		if(empty($_date)){
-			$_date = date('Y-m-01');
+			//$_date = date('Y-m-01');
 		}
 		$_startdate->setValue($_date);
 		

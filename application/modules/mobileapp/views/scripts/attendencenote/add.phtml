@@ -6,6 +6,7 @@
 ?>
 <script>
 dojo.require("dijit/Editor");
+require(["dijit/form/Textarea","dijit/form/NumberTextBox"]);
 </script>
 
 <style>
@@ -19,8 +20,10 @@ body, #dijitEditorBody {
     border: solid 1px #ccd9ff;
 }
 </style>
-<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
+<div class="card">
+	<div class="card-content collapse show">
+		<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
                 dijit.byId("save_close").attr("disabled",true);
 				dijit.byId("save_new").attr("disabled",true);
@@ -28,38 +31,49 @@ body, #dijitEditorBody {
 			}else {
 				return false;
 			}
-</script>
-<table cellspacing="10" width="80%" style="margin: 0 auto;">
-	<tr>
-		<td>
-		<fieldset style="background-color:menu;">
-					<legend align="center" ><strong><?php echo $tr->translate('ADD ATTENDENCENOTE');?></strong></legend>
-					<table style="margin: 0 auto; width: 95%;" cellspacing="10">
-						<tr>
-							<td style="width: 100px"><?php echo $tr->translate('TITLE');?></td>
-							<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="title" name="title" value="" type="text"></td>
-						</tr>	
-						<tr>
-							<td style="width: 100px"><?php echo $tr->translate('ORDERING');?></td>
-							<td><input dojoType="dijit.form.NumberTextBox" required="true" class="fullside" id="ordering" name="ordering" value="0" type="text"></td>
-						</tr>					             
-                        <tr>
-							<td style="width: 100px" valign="top"><?php echo $tr->translate('DESCRIPTION');?></td>
-							<td style="background:#fff;">
-							<textarea data-dojo-type="dijit/Editor" id="description" name="description" style=" border: solid 1px #ccd9ff;">
-							</textarea></td>
-						</tr>                        
-						<tr>
-							<td colspan="2" align="center">
-								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
-								<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
-								<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
-							</td>
-						</tr>
-					</table>	
-		</fieldset>		
-		</td>
-	</tr>
-</table>	
-</form>
+			</script>
+			<div class="card-box">
+	        	<div class="col-sm-12 border-botom">
+			    	<div class="col-sm-8 pd-0">
+			    		<h4 class="m-b-0"><i class="fa fa-address-book" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD ATTENDENCENOTE');?></h4>
+		    		</div>
+		    		<div class="col-sm-4 text-right">
+		    		</div>
+	    		</div>
+	    	</div>
+	    	<div class="card-box mb-10">
+	        	<div class="col-md-6 col-sm-6 col-xs-12">
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="title" name="title" value="" type="text">
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ORDERING");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.NumberTextBox" required="true" class="fullside" id="ordering" name="ordering" value="0" type="text">
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DESCRIPTION");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<textarea dojoType="dijit.form.Textarea" id="description" name="description" style=" width:99%; min-height: 60px"></textarea>
+	                   </div>
+	                </div>
+	           </div>
+	        </div>
+	        <div class="card-box">
+               	<div class="col-md-8 col-sm-8 col-xs-12 border-top mt-20 ptb-10 text-center">
+               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
+						<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+						<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+               	</div>
+            </div>
+		</form>
+	</div>
+</div>

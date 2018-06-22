@@ -200,5 +200,70 @@ function getStudentViewDetailById($id){
 			}
 		}
 	}
+	
+	function getMobileLabel($keyName=""){
+		$db = $this->getAdapter();
+		$sql="SELECT ml.code ,ml.keyName,ml.keyValue FROM `moble_label` AS ml 
+			WHERE ml.status=1 AND ml.access_type=0";
+		if (!empty($keyName)){
+			$sql.=" AND ml.`keyName` = '$keyName' ";
+		}
+		$sql.=" LIMIT 1";
+		return  $db->fetchRow($sql);
+	}
+	function updateMobileLabel($data){
+		try{
+			$this->_name="moble_label";
+			$_arr=array(
+					'keyValue'=>$data['lbl_smspaymentpaid'],
+			);
+			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smspaymentpaid");
+			$this->update($_arr, $where);
+			
+			$_arr=array(
+					'keyValue'=>$data['lbl_smsatt'],
+			);
+			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsatt");
+			$this->update($_arr, $where);
+			
+			$_arr=array(
+					'keyValue'=>$data['lbl_smsmistake'],
+			);
+			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsmistake");
+			$this->update($_arr, $where);
+			
+			$_arr=array(
+					'keyValue'=>$data['lbl_smsscore'],
+			);
+			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsscore");
+			$this->update($_arr, $where);
+			
+			$_arr=array(
+					'keyValue'=>$data['lbl_smsnews'],
+			);
+			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsnews");
+			$this->update($_arr, $where);
+			
+			$_arr=array(
+					'keyValue'=>$data['lbl_smsnotification'],
+			);
+			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_smsnotification");
+			$this->update($_arr, $where);
+			
+			$_arr=array(
+					'keyValue'=>$data['lbl_paymentnotification'],
+			);
+			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_paymentnotification");
+			$this->update($_arr, $where);
+			
+			$_arr=array(
+					'keyValue'=>$data['lbl_schoolphone'],
+			);
+			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_schoolphone");
+			$this->update($_arr, $where);
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
 }
 

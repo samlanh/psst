@@ -9,8 +9,8 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 	}
 	function getAllCalendar($search){
 		$db=$this->getAdapter();
-		$from_date =(empty($search['start_date']))? '1': "mba.date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': "mba.date <= '".$search['end_date']." 23:59:59'";
+		$from_date =(empty($search['start_date']))? '1': "mba.create_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': "mba.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;	
 		$sql="SELECT mba.id,mba.title,mba.amount_day,mba.start_date,mba.end_date,mba.active as status FROM $this->_name AS mba WHERE 1";
 		if($search['search_status']>-1){
@@ -50,7 +50,6 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
            if (!empty($data['selector'])) foreach ( $data['selector'] as $rs){
                 if (empty($dept)){ $dept = $rs;}else{ $dept = $dept.",".$rs;}
             }
-            
             if($data['amount_day']>1){
             	$date_next=$data['start_date'];
             	for($i=1;$i<=$data['amount_day'];$i++){
@@ -74,7 +73,6 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 						'status' => 1,		
 						'dept' => $dept,					
 		            );
-            	
 		         $this->_name;
 		        if(!empty($data['id'])){  
 		            $where = 'id='.$data['id'];          
@@ -87,7 +85,7 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
         }
         $db->commit();
      }catch(exception $e){
-            Application_Form_FrmMessage::message("Application Error");
+//             Application_Form_FrmMessage::message("Application Error");
             Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
             $db->rollBack();
     }

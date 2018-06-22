@@ -20,7 +20,7 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 				$search = array(
 						'adv_search' => '',
 						'search_status' => -1,
-						'start_date'=> date('Y-m-01'),
+						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}
 			$rs_rows= $db->getAllCalendar($search);

@@ -5,31 +5,31 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->form_search;
 ?>
-<form id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpaymentdetail')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table style="width:100%;font-family:'khmer os battambang';">
-	  <tr> 
-		   <td><?php echo $frm->getElement("title");?></td>
-		   <td><?php echo $frm->getElement("branch_id");?></td>
-		   <td><?php echo $frm->getElement("study_year");?></td>
-		   <td><?php echo $frm->getElement("degree");?></td>
-		   <td><?php echo $frm->getElement("grade_all");?></td>
-		   <td><?php echo $frm->getElement("session");?></td>
-   	  </tr>
-   	  <tr>
-   	  	   <td><?php echo $frm->getElement("service");?></td>
-   	  	   <td><?php echo $frm->getElement("user");?></td>
-   	  	   <td><?php echo $frm->getElement("payment_by");?></td>
-   	       <td><?php echo $frm->getElement("start_date");?></td>
-           <td><?php echo $frm->getElement("end_date");?></td>
-		   <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-   	  </tr>
-   </table>
-</form>
+<div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
+	<form id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-studentpaymentdetail')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<table style="width:100%;font-family:'khmer os battambang';">
+		  <tr> 
+			   <td><?php echo $frm->getElement("title");?></td>
+			   <td><?php echo $frm->getElement("branch_id");?></td>
+			   <td><?php echo $frm->getElement("study_year");?></td>
+			   <td><?php echo $frm->getElement("degree");?></td>
+			   <td><?php echo $frm->getElement("grade_all");?></td>
+			   <td><?php echo $frm->getElement("session");?></td>
+	   	  </tr>
+	   	  <tr>
+	   	  	   <td><?php echo $frm->getElement("service");?></td>
+	   	  	   <td><?php echo $frm->getElement("user");?></td>
+	   	  	   <td><?php echo $frm->getElement("payment_by");?></td>
+	   	       <td><?php echo $frm->getElement("start_date");?></td>
+	           <td><?php echo $frm->getElement("end_date");?></td>
+			   <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+	   	  </tr>
+	   </table>
+	</form>
 <style>
 #footer{display: none;}
 </style>	
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;padding:0px 20px;min-height: 27cm;">
-		<div id="divPrint">
+	<div id="divPrint">
 			<table style="background:#fff; margin: 0 auto; width: 100%; padding:0cm;font-family:'Khmer OS Battambang'; " >
 				<tr>
 					<td width="15%" align="center">
@@ -61,7 +61,7 @@
 						?>	
 							<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
 							  <thead>
-								  <tr style="text-align:center;background-color:#ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
+								  <tr style="text-align:center;background-color:#ccd9ff;line-height: 30px;font-weight: bold;font-size:10px; height: 20px; align="center" >
 								    <th><?php echo $tr->translate('N_O');?></th>
 								    <th><?php echo $tr->translate('STUDENT_ID');?></th>
 									<th><?php echo $tr->translate('STUDENT_NAME');?></th>

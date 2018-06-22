@@ -5,38 +5,39 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->frm_search;
 ?>
-<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-  <table width="100%">
-   <tr>  
-        <td><?php echo $frm->getElement("adv_search");?></td>
-        <td><?php echo $frm->getElement('status');?></td>
-   		<td><?php echo $frm->getElement('payment_type');?></td>
-   		<td>
-   			<select name="paid_status" id="paid_status" dojoType="dijit.form.FilteringSelect" class="fullside"  >
-        		<option value="" <?php if($this->adv_search['paid_status']==""){echo 'selected="selected"';} ?>> Piad Status </option>
-        		<option value="1" <?php if($this->adv_search['paid_status']==1){echo 'selected="selected"';} ?>> Cleared </option>
-        		<option value="0" <?php if($this->adv_search['paid_status']==0){echo 'selected="selected"';} ?>> Not Cleared </option>
-        	</select>
-   		</td>
-   </tr>
-   <tr>
-   		<td><?php echo $frm->getElement('start_date');?></td>
-   		<td><?php echo $frm->getElement('end_date');?></td>
-   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-   </tr>
-</table>
-</form>
-<style>
-#footer{display: none;}
-table {page-break-inside:auto }
-	tr{ page-break-inside:avoid; page-break-after:auto; }
-	#header {
-	  display: table-header-group;
-	  page-break-inside:avoid; page-break-after:auto;
-	}	
-</style>	
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;padding:0.5cm;">
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+	  <table width="100%">
+		   <tr>  
+		        <td><?php echo $frm->getElement("adv_search");?></td>
+		        <td><?php echo $frm->getElement('status');?></td>
+		   		<td><?php echo $frm->getElement('payment_type');?></td>
+		   		<td>
+		   			<select name="paid_status" id="paid_status" dojoType="dijit.form.FilteringSelect" class="fullside"  >
+		        		<option value="" <?php if($this->adv_search['paid_status']==""){echo 'selected="selected"';} ?>> Piad Status </option>
+		        		<option value="1" <?php if($this->adv_search['paid_status']==1){echo 'selected="selected"';} ?>> Cleared </option>
+		        		<option value="0" <?php if($this->adv_search['paid_status']==0){echo 'selected="selected"';} ?>> Not Cleared </option>
+		        	</select>
+		   		</td>
+		   </tr>
+		   <tr>
+		   		<td><?php echo $frm->getElement('start_date');?></td>
+		   		<td><?php echo $frm->getElement('end_date');?></td>
+		   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+		   </tr>
+		</table>
+	</form>
 	<div id="divPrint">
+		<style>
+			#footer{display: none;}
+			table {page-break-inside:auto }
+				tr{ page-break-inside:avoid; page-break-after:auto; }
+				#header {
+				  display: table-header-group;
+				  page-break-inside:avoid; page-break-after:auto;
+				}	
+				td{ padding: 1px !important;}
+			</style>	
 		<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 			<tr>
 				<td width="15%" align="center">
@@ -51,48 +52,48 @@ table {page-break-inside:auto }
 			</tr>
 			<tr>
 				<td colspan="3" >
-				<div id="exportExcel">
-					<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
-						<thead>
-						<tr style="background: #ccd9ff;font-weight: bold; font-size: 13px;">
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH_NAME");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_CODE");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TOTAL_AMOUNT");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("FOR_DATE");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("NOTE");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STATUS");?></th>
-						</tr>
-						</thead>
-						<?php if(!empty($this->all_memo)){ foreach($this->all_memo as $key=>$rs){ $key=$key+1; ?>
-						<tr>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['branch_name']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['stu_code']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['student_name']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['total_amount']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['date']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['note']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['user_name']; ?></td>
-							<?php if($rs['status']==1){ ?>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("ACTIVE");?></td>
-							<?php }else{ ?> 
-								<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("DISACTIVE");?></td>
-							<?php } ?>
-						</tr>
-						<?php
-						}}
-						?>
-					</table>
-					</div>
+					<div id="exportExcel">
+								<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+									<thead>
+									<tr style="background: #ccd9ff;font-weight: bold; font-size: 13px;">
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH_NAME");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_CODE");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TOTAL_AMOUNT");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("FOR_DATE");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("NOTE");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STATUS");?></th>
+									</tr>
+									</thead>
+									<?php if(!empty($this->all_memo)){ foreach($this->all_memo as $key=>$rs){ $key=$key+1; ?>
+									<tr>
+										<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
+										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['branch_name']; ?></td>
+										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['stu_code']; ?></td>
+										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['student_name']; ?></td>
+										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['total_amount']; ?></td>
+										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['date']; ?></td>
+										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['note']; ?></td>
+										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['user_name']; ?></td>
+										<?php if($rs['status']==1){ ?>
+											<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("ACTIVE");?></td>
+										<?php }else{ ?> 
+											<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("DEACTIVE");?></td>
+										<?php } ?>
+									</tr>
+									<?php
+									}}
+									?>
+								</table>
+							</div>
+						</td>
+					</tr>
 					<tr>
 						<td colspan="3">&nbsp;</td>
 					</tr>
-				</td>
-			  </tr>
-			  <tr >
+			  <tr>
 				<td colspan="3" width="100%">
 					<table width="100%" style="font-family:'Khmer OS Battambang';">
 						<tr>
@@ -112,4 +113,3 @@ table {page-break-inside:auto }
 		  </table>
 	</div>	
 </div>
-

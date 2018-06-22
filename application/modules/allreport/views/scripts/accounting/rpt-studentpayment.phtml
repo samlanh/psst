@@ -6,28 +6,28 @@
 	$frm = $this->form_search;
 	$str="";
 ?>
-<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table width="100%" align="left" style="font-family:'Khmer os Battambang'">
-		<tr> 
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement("branch_id");?></td>
-			<td><?php echo $frm->getElement("study_year");?></td>
-			<td><?php echo $frm->getElement("degree");?></td>
-			<td><?php echo $frm->getElement("grade_all");?></td>
-	  </tr>
-	  <tr>
-	  		<td><?php echo $frm->getElement("session");?></td>
-	  		<td><?php echo $frm->getElement("start_date");?></td>
-	 		<td><?php echo $frm->getElement("end_date");?></td>
-			<td><?php echo $frm->getElement("user");?></td>
-			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-	  </tr>
-	</table>	
-</form>
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<form id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<table width="100%" align="left" style="font-family:'Khmer os Battambang'">
+			<tr> 
+				<td><?php echo $frm->getElement("title");?></td>
+				<td><?php echo $frm->getElement("branch_id");?></td>
+				<td><?php echo $frm->getElement("study_year");?></td>
+				<td><?php echo $frm->getElement("degree");?></td>
+				<td><?php echo $frm->getElement("grade_all");?></td>
+		  </tr>
+		  <tr>
+		  		<td><?php echo $frm->getElement("session");?></td>
+		  		<td><?php echo $frm->getElement("start_date");?></td>
+		 		<td><?php echo $frm->getElement("end_date");?></td>
+				<td><?php echo $frm->getElement("user");?></td>
+				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+		  </tr>
+		</table>	
+	</form>
 <style>
 #footer{display: none;}
 </style>	
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
 	<div id="divPrint">
 		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">	
 			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm; font-family:'Khmer OS Battambang';">
@@ -44,9 +44,8 @@
 				</tr>
 				<tr> 
 					<td colspan="3" id="exportExcel" >
-						<style> th,td{ padding:0 1px;}</style>
 						<style type="text/css">
-							body{font-family: "Times New Roman",Arial; }
+							th,td{ padding:0 1px;}
 							table{ border-collapse:collapse; margin:0 auto;
 							border-color:#000; }
 							.padd tr td{  text-align:center}
@@ -67,7 +66,7 @@
 								<th>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</th>
 							  </tr>
-								<style> td{padding:0 3px; }</style>
+								<style> td{padding:2px; }</style>
 							 <?php $i=0; $total=0;if(!empty($this->row)){foreach($this->row as $key=>$rs){$i++;
 									 if($key==0){
 									 	$str=$key+1;
@@ -114,12 +113,9 @@
 					  </table>
 					</td>
 				</tr>
-	
 				<?php  }?>
-				
 				<tr style="text-align:center;border:1px solid #fff;">
 					<td colspan="10" align="center">
-						<!-- <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php //echo $tr->translate("SAVE_CLOSE");?></button> -->
 					</td>
 				</tr>
 				<tr>
@@ -137,4 +133,3 @@
 		</form>
 	</div>	
 </div>
-

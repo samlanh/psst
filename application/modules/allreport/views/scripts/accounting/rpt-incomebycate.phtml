@@ -8,17 +8,17 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 	dojo.require('dijit.form.Button');
 	dojo.require("dijit.form.DateTextBox");
 </script>
-	<div style="padding:20px;border: 1px dotted #000;width:28cm;background: #fff; margin: 0 auto;min-height: 27cm;">
-		<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-		<table width="50%" align="left"​ style="width:27cm;margin: 0 auto;"> 
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">			
+	<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+		<table width="50%" align="left"​ style="margin: 0 auto;"> 
 		   <tr>
 		   		<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="start_date" name="start_date" value="<?php echo $this->search['start_date']; ?>"  type="text"></td>
 				<td><input dojoType="dijit.form.DateTextBox"  constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text"></td>
 		   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 		   </tr>
 		</table>
-		</form>
-		<div id="divPrint">
+	</form>
+	<div id="divPrint">
 			<table style="background:#fff; margin: 0 auto; width: 100%; padding:0.5cm;" >
 				<tr>
 					<td width="15%" align="center">
@@ -34,7 +34,6 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 					<td colspan="3">
 						<style> th,td{ padding:0 1px;}</style>
 							<style type="text/css">
-								body{font-family: "Times New Roman",Arial; }
 								table{ border-collapse:collapse; margin:0 auto;
 								border-color:#000; }
 								.padd tr td{  text-align:left}
@@ -246,4 +245,4 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 				</tr>
 			</table>
 		</div>	
-	</div>
+</div>

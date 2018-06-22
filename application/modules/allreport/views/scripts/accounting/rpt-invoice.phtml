@@ -8,33 +8,31 @@
 	Application_Model_Decorator::removeAllDecorator($form);
 	$frm=$form;
 ?>
-<form
-	action=" "
-	dojoType="dijit.form.Form" method="post">
-	<table style="width: 100%">
-		<tr>
-			<td><input dojoType="dijit.form.TextBox" class="fullside" id="search" name="search" value="<?php echo $this->rssearch['search'];?>" type="text" ></td>
-			<td><?php echo $frm->getElement("stu_code");?></td>
-			<td><?php echo $frm->getElement("stu_name");?></td>
-			<td><?php echo $frm->getElement("group");?></td>
-			<td><?php echo $frm->getElement("degree");?></td>
-		</tr>
-		<tr>	
-			<td><?php echo $frm->getElement("grade");?></td>	
-			<td><?php echo $frm->getElement("start_date");?></td>
-			<td><?php echo $frm->getElement("end_date");?></td>		
-			<td>
-				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
-					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-			</td>
-		</tr>
-	</table>
-</form>
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<form action="" dojoType="dijit.form.Form" method="post">
+		<table style="width: 100%">
+			<tr>
+				<td><input dojoType="dijit.form.TextBox" class="fullside" id="search" name="search" value="<?php echo $this->rssearch['search'];?>" type="text" ></td>
+				<td><?php echo $frm->getElement("stu_code");?></td>
+				<td><?php echo $frm->getElement("stu_name");?></td>
+				<td><?php echo $frm->getElement("group");?></td>
+				<td><?php echo $frm->getElement("degree");?></td>
+			</tr>
+			<tr>	
+				<td><?php echo $frm->getElement("grade");?></td>	
+				<td><?php echo $frm->getElement("start_date");?></td>
+				<td><?php echo $frm->getElement("end_date");?></td>		
+				<td>
+					<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+						showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+				</td>
+			</tr>
+		</table>
+	</form>
 <style>
 #footer{display: none;}
 </style>	
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
-	<div id="divPrint">
+<div id="divPrint">
 		<style>
 			a{text-decoration: none;color: 000;}
 			table {page-break-inside:auto }
@@ -42,7 +40,8 @@
 			#header {
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
-			}	
+			}
+			td{line-height: 30px; padding:2px 0px !important;}	
 		</style>
 		<table width="100%">
 			<tr>
@@ -77,7 +76,7 @@
 						<?php 
 						$gender=array(1=>"Male",2=>"Female");
 						if(!empty($this->all_invoice)){ foreach($this->all_invoice as $key=>$rs){ $key=$key+1; ?>
-						<tr style="font-size: 12px;">
+						<tr style="font-size: 14px;">
 							<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
 							<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
 							<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['stu_khname']; ?></a></td>
@@ -93,11 +92,11 @@
 						}}
 						?>
 					</table>
+						</td>
+					</tr>
 					<tr>
 						<td colspan="3">&nbsp;</td>
 					</tr>
-				</td>
-			</tr>
 			<tr >
 				<td colspan="3" width="100%">
 					<table width="100%" style="font-family:'Khmer OS Battambang';">

@@ -532,3 +532,10 @@ body .main-menu .navigation li.open > a:not(.mm-next):after {
 td.child ul li {
     list-style-type: none;
 }
+a.btn.btn-primary.btn-copy {
+    height: auto;
+    min-width: 0;
+    padding: 5px 10px;
+    background: #0f2a5b;
+    background: linear-gradient(#2196F3, #0f2a5b);
+}

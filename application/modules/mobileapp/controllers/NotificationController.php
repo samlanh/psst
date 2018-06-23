@@ -57,6 +57,14 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
                 Application_Form_FrmMessage::message("INSERT_SUCCESS");
             }
         }
+        
+        $dbstudent = new Foundation_Model_DbTable_DbStudent();
+        $group = $dbstudent->getAllgroup();
+        $this->view->group = $group;
+        
+        $dbre = new Registrar_Model_DbTable_DbRegister();
+        $this->view->all_student = $dbre->getAllGerneralOldStudent();
+        
        // $frm = new Other_Form_FrmBanner();
        // $frm_manager=$frm->FrmAddBanner();
        // Application_Model_Decorator::removeAllDecorator($frm_manager);

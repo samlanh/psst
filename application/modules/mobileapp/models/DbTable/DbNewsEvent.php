@@ -68,7 +68,8 @@ class Mobileapp_Model_DbTable_DbNewsEvent extends Zend_Db_Table_Abstract
            $id = $this->insert($_arr);
             
             $dbpush = new  Application_Model_DbTable_DbGlobal();
-            $dbpush->pushSendNotification($id, 5);
+            $token = $dbpush->getTokenUser(null,null);
+            $dbpush->pushSendNotification($token, 5);
         }           
             $db->commit();
         }catch(exception $e){

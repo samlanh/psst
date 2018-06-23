@@ -729,7 +729,25 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 //    	);
 //    	return $title_str[$title_id];
    }
-   function pushSendNotification($student_id,$title_id,$body='',$data=''){//$stu_id
+   function getTokenUser($group=null,$student=null){
+   		$db = $this->getAdapter();
+   		if (!empty($group)){
+	   		$sql="
+		 		SELECT mb.`token`
+				FROM `rms_group_detail_student` AS sd
+				,`mobile_mobile_token` AS mb
+				WHERE sd.`group_id` = $group
+				AND sd.`stu_id` = mb.`stu_id`
+		 	";
+   		}else if (!empty($student)){
+   			$sql="SELECT t.`token` FROM `mobile_mobile_token` AS t WHERE t.`stu_id` =$student";
+   		}else{
+   			$sql="SELECT t.`token` FROM `mobile_mobile_token` AS t";
+   		}
+   		 return $db->fetchCol($sql);
+   }
+   
+   function pushSendNotification($studentToken,$title_id,$body='',$data=''){//$stu_id
    	$key = new Application_Model_DbTable_DbKeycode();
    	$dbset=$key->getKeyCodeMiniInv(TRUE);
    	if($dbset['notification']==0){return 1;}
@@ -740,7 +758,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	//$body = $req->message;
    
    	$title = $this->setTitleTonotification($title_id);
-   	$rs_appuse = $this->gettokenbystudentid($student_id);
+//    	$rs_appuse = $this->gettokenbystudentid($student_id);
    	 
    	$data=array('id'=>1,
    			'title'=>$title,
@@ -756,32 +774,32 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    			'badge' => '1'
    	);
    	 
-   	if(!empty($rs_appuse)){
-   		foreach ($rs_appuse as $rs){
-   			
-   			$arrayToSend = array(
-   					'to' => $rs['token'],
-   					'notification' => $notification,
-   					'priority'=>'high'
-   			);
-   			$json = json_encode($arrayToSend);
-   			$headers = array();
-   			$headers[] = 'Content-Type: application/json';
-   			$headers[] = 'Authorization: key='. $serverKey;
-   			$ch = curl_init();
-   			curl_setopt($ch, CURLOPT_URL, $url);
-   			curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
-   			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-   			curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
-   			//Send the request
-   			$response = curl_exec($ch);
-   			//Close request
-   			if ($response === FALSE) {
-   				//die('FCM Send Error: ' . curl_error($ch));
-   			}
-   			curl_close($ch);
+   	$countToken = count($studentToken);
+//    	if(!empty($studentToken)){
+   		if ($countToken>0){
+	   			$arrayToSend = array(
+	   					'registration_ids' => $studentToken,
+	   					'notification' => $notification,
+	   					'priority'=>'high'
+	   			);
+	   			$json = json_encode($arrayToSend);
+	   			$headers = array();
+	   			$headers[] = 'Content-Type: application/json';
+	   			$headers[] = 'Authorization: key='. $serverKey;
+	   			$ch = curl_init();
+	   			curl_setopt($ch, CURLOPT_URL, $url);
+	   			curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+	   			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+	   			curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+	   			//Send the request
+	   			$response = curl_exec($ch);
+	   			//Close request
+	   			if ($response === FALSE) {
+	   				//die('FCM Send Error: ' . curl_error($ch));
+	   			}
+	   			curl_close($ch);
    		}
-   	}
+//    	}
    }
    
    function resizeImase($image,$part,$new_imagename=null){

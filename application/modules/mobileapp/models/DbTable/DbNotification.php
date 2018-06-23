@@ -52,7 +52,10 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
         try{
             
             $_arr=array(
-                    'title' => $data['title'],                  
+                    'title' => $data['title'], 
+            		'opt_notification' => $data['opt_notification'],
+            		'group' => empty($data['group'])?"":$data['group'],
+            		'student' => empty($data['student'])?"":$data['student'],
                     'description' => $des,                  
                     'active' => 1,//use instead status
                     'date'=>date("Y-m-d H:i:s"),
@@ -66,8 +69,19 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
             $where = 'id='.$data['id'];          
            $this->update($_arr, $where);                     
         }else{
+       		
 			$_arr['create_date']=date("Y-m-d H:i:s");
-            $this->insert($_arr);
+            $id =  $this->insert($_arr);
+           
+            $dbpush = new  Application_Model_DbTable_DbGlobal();
+            if ($data['opt_notification']==2){
+            	$token =	$dbpush->getTokenUser($data['group']);
+            }else if ($data['opt_notification']==3){
+            	$token = $dbpush->getTokenUser(null,$data['student']);
+            }else{
+            	$token = $dbpush->getTokenUser(null,null);
+            }
+            $dbpush->pushSendNotification($token, 5);
         }           
             $db->commit();
         }catch(exception $e){
@@ -77,6 +91,18 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
         }
 
  }
+ 
+// 	 function getTokenStudentGroup($group_id){
+// 	 	$db = $this->getAdapter();
+// 	 	$sql="
+// 	 		SELECT mb.`token`
+// 			FROM `rms_group_detail_student` AS sd
+// 			,`mobile_mobile_token` AS mb
+// 			WHERE sd.`group_id` = $group_id
+// 			AND sd.`stu_id` = mb.`stu_id`
+// 	 	";
+// 	 	return $db->fetchCol($sql);
+// 	 }
 	 function deleteData($id){
 	 	$db = $this->getAdapter();
 	 	try{

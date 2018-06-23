@@ -3,15 +3,64 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 echo $this->headTitle($tr->translate("contact"));
 $frm = $this->frm;
 ?>
-<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-   <table>
-	  <tr> 
-		   <td><?php echo $frm->getElement("adv_search");?></td>
-		   <td> <?php echo $frm->getElement("start_date");?></td>
-           <td><?php echo $frm->getElement("end_date");?></td>
-		   <td><?php echo $frm->getElement('search_status');?></td>
-		   <td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-   	  </tr>
-   </table>
-</form>
-<?php echo $this->list;?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+        	<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-volume-control-phone" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('contact');?></h4>
+	    		</div>
+	    		<div class="col-sm-4 text-right">
+	    		</div>
+    		</div>
+    	</div>
+    	<form action="" method="post" enctype="application/x-www-form-urlencoded" >
+	    	<div class="card-box">
+	    		<div class="col-md-6 col-sm-6 col-xs-12">
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $this->contact['title']?>"  name="title" id="title" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Latitude");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $this->contact['latitude']?>"  name="latitude" id="latitude" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Longitude");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $this->contact['longitude']?>>"  name="longitude" id="longitude" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $this->contact['address']?>"  name="address" id="address" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" value="<?php echo $this->contact['phone']?>"  name="phone" id="phone" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	            </div>
+	       </div>
+	       <div class="clearfix"></div>
+		    <div class="card-box">
+               	<div class="col-md-6 col-sm-6 col-xs-12 border-top mt-20 ptb-10 text-center">
+					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+               	</div>
+            </div>
+	    </form>
+    </div>
+</div>

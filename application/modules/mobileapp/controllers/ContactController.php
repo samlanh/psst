@@ -10,39 +10,56 @@ class Mobileapp_ContactController extends Zend_Controller_Action
         $this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     }
 
-    public function indexAction()
-    {
-		try{
-			$db = new Mobileapp_Model_DbTable_DbContact();
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}
-			else{
-				$search = array(
-						'adv_search' => '',
-						'search_status' => -1,
-						'start_date'=> date('Y-m-01'),
-						'end_date'=>date('Y-m-d'));
-			}
-			$rs_rows= $db->getAllContact($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","DATE","STATUS");
-			$link=array(
-					'module'=>'mobileapp','controller'=>'contact','action'=>'edit',
-			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link));
-		}catch (Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-	
-		$frm = new Application_Form_FrmSearch();
-		$frm = $frm->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm = $frm;
+    function indexAction(){
+    	try{
+	    	$db = new Mobileapp_Model_DbTable_DbContact();
+	    	$id = $this->getRequest()->getParam("id");
+	    	if($this->getRequest()->isPost()){
+	    		$_data = $this->getRequest()->getPost();
+	    		$db->updateContactLocation($_data);
+	    		Application_Form_FrmMessage::message("EDIT_SUCCESS");
+	    		$this->_redirect("mobileapp/contact");
+	    	}
+	    	$row = $db->getContact();
+	    	$this->view->contact = $row;
+    	}catch (Exception $e){
+    		Application_Form_FrmMessage::message("Application Error");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
     }
+//     public function indexAction()
+//     {
+// 		try{
+// 			$db = new Mobileapp_Model_DbTable_DbContact();
+// 			if($this->getRequest()->isPost()){
+// 				$search=$this->getRequest()->getPost();
+// 			}
+// 			else{
+// 				$search = array(
+// 						'adv_search' => '',
+// 						'search_status' => -1,
+// 						'start_date'=> date('Y-m-01'),
+// 						'end_date'=>date('Y-m-d'));
+// 			}
+// 			$rs_rows= $db->getAllContact($search);
+// 			$glClass = new Application_Model_GlobalClass();
+// 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
+// 			$list = new Application_Form_Frmtable();
+// 			$collumns = array("TITLE","DATE","STATUS");
+// 			$link=array(
+// 					'module'=>'mobileapp','controller'=>'contact','action'=>'edit',
+// 			);
+// 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link));
+// 		}catch (Exception $e){
+// 			Application_Form_FrmMessage::message("Application Error");
+// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 		}
+	
+// 		$frm = new Application_Form_FrmSearch();
+// 		$frm = $frm->FrmSearch();
+// 		Application_Model_Decorator::removeAllDecorator($frm);
+// 		$this->view->frm = $frm;
+//     }
 
 
     public function addAction()

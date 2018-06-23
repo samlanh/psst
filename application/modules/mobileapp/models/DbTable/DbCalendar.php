@@ -50,6 +50,7 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
            if (!empty($data['selector'])) foreach ( $data['selector'] as $rs){
                 if (empty($dept)){ $dept = $rs;}else{ $dept = $dept.",".$rs;}
             }
+          
             if($data['amount_day']>1){
             	$date_next=$data['start_date'];
             	for($i=1;$i<=$data['amount_day'];$i++){
@@ -74,9 +75,11 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 						'dept' => $dept,					
 		            );
 		         $this->_name;
+		         
+		         
 		        if(!empty($data['id'])){  
-		            $where = 'id='.$data['id'];          
-		           $this->update($_arr, $where);                     
+		            $where = 'id='.$data['id'];
+		           $this->update($_arr, $where); 
 		        }else{
 					$_arr['create_date']=date("Y-m-d H:i:s");
 		            $this->insert($_arr);

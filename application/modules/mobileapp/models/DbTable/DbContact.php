@@ -73,7 +73,38 @@ class Mobileapp_Model_DbTable_DbContact extends Zend_Db_Table_Abstract
         }
 
  }
+ public function getContact()
+ {
+ 	$this->_name = "mobile_location";
+ 	$db=$this->getAdapter();
+ 	$sql="SELECT *  FROM ".$this->_name." WHERE 1 ";
+ 	$sql.=" LIMIT 1 ";
+ 	$row=$db->fetchRow($sql);
+ 	return $row;
+ }
+ function updateContactLocation($data){
+ 	$db = $this->getAdapter();
+ 	$db->beginTransaction();
+ 	try{
+ 		$this->_name = "mobile_location";
+ 		$_arr=array(
+ 				'title' => $data['title'],
+ 				'latitude' => $data['latitude'],
+ 				'longitude' => $data['longitude'],
+ 				'address' => $data['address'],
+ 				'date'=>date("Y-m-d H:i:s"),
+ 				'phone' => $data['phone'],
+ 		);
+ 		$where="";
+ 			$this->update($_arr, $where);
+ 		$db->commit();
+ 	}catch(exception $e){
+ 		Application_Form_FrmMessage::message("Application Error");
+ 		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+ 		$db->rollBack();
+ 	}
  
+ }
 
 
 }

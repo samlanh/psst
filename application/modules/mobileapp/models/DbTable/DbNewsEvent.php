@@ -65,7 +65,10 @@ class Mobileapp_Model_DbTable_DbNewsEvent extends Zend_Db_Table_Abstract
             $where = 'id='.$data['id'];          
            $this->update($_arr, $where);                     
         }else{
-            $this->insert($_arr);
+           $id = $this->insert($_arr);
+            
+            $dbpush = new  Application_Model_DbTable_DbGlobal();
+            $dbpush->pushSendNotification($id, 5);
         }           
             $db->commit();
         }catch(exception $e){

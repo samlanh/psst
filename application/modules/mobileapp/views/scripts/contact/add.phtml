@@ -19,9 +19,10 @@ body, #dijitEditorBody {
     border: solid 1px #ccd9ff;
 }
 </style>
-
-<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
+<div class="card">
+	<div class="card-content collapse show">
+		<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
                 dijit.byId("save_close").attr("disabled",true);
 				dijit.byId("save_new").attr("disabled",true);
@@ -29,7 +30,11 @@ body, #dijitEditorBody {
 			}else {
 				return false;
 			}
-</script>
+			</script>
+		</form>
+	</div>
+</div>
+
 <table cellspacing="10" width="80%" style="margin: 0 auto;">
 	<tr>
 		<td>

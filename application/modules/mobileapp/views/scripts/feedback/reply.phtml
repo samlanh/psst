@@ -1,0 +1,105 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('REPLY')); 
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+?>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+        	<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+		    		<h4 class="m-b-0"><i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('REPLY');?></h4>
+	    		</div>
+	    		<div class="col-sm-4 text-right">
+	    		</div>
+    		</div>
+    	</div>
+    	<div class="card-box chat-application" style="min-height: 300px">
+    		<div class="col-md-6 col-sm-6 col-xs-12">
+    		</div>
+    		<div class="col-md-6 col-sm-6 col-xs-12 c-content">
+    			<div class="ontent-right app-content">
+		          <section class="chat-app-window">
+		            <div class="badge badge-default mb-1">Feed Back History</div>
+		            <div class="chats">
+		              <div class="chats">
+		              <?php 
+		              $reply='';
+		              if (!empty($this->studentChat)) foreach ($this->studentChat as $message){?>
+			               <?php if (empty($message['reply_id'])){?>
+		                <div class="chat chat-left">
+		                  <div class="chat-avatar">
+		                    <a class="avatar" data-toggle="tooltip" href="#" data-placement="left" title="" data-original-title="">
+		                      <img src="<?php echo $this->baseUrl()."/images/no-profile.png"?>" alt="avatar">
+		                    </a>
+		                  </div>
+		                  <div class="chat-body">
+		                    <div class="chat-content">
+		                      <p><?php echo $message['message'];?></p>
+		                    </div>
+		                  </div>
+		                </div>
+		                <?php }else{?>
+		                <div class="chat">
+		                  <div class="chat-avatar">
+		                    <a class="avatar" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="">
+		                      <img src="<?php echo $this->baseUrl()."/images/no-profile-admin.png"?>" alt="avatar">
+		                    </a>
+		                  </div>
+		                  <div class="chat-body">
+		                    <div class="chat-content">
+		                     <p><?php echo $message['message'];?></p>
+		                    </div>
+		                  </div>
+		                </div>
+		                <?php }?>
+		               <?php }?> 
+		                
+		                
+		              </div>
+		            </div>
+		          </section>
+		          <section class="chat-app-form">
+		            <form class="chat-app-input d-flex">
+		              <fieldset class="form-group position-relative has-icon-left col-md-10 col-sm-10 col-xs-12 m-0">
+		                <input type="text" class="form-control text-feedback" id="message_feedback" name="message_feedback" placeholder="Type your message">
+		              </fieldset>
+		              <fieldset class="form-group position-relative has-icon-left col-md-2 col-sm-2 col-xs-12 m-0">
+		                <button id="btnSendMessage" type="button" class="chat-sent btn btn-info"><i class="la la-paper-plane-o d-lg-none"></i>
+		                  <span class="d-none d-lg-block">Send</span>
+		                </button>
+		              </fieldset>
+		            </form>
+		          </section>
+		        </div>
+    		</div>
+    	</div>
+	</div>
+</div>
+<script>
+$( "#btnSendMessage" ).click(function() {
+	var message = $('#message_feedback').val();
+	if(message==""){
+		alert("please type feedback");
+		return false;
+	}
+	loadingBlock();
+	
+	var stu_id = '<?php echo $this->stu_id;?>';
+	var url = '<?php echo $this->baseUrl()."/mobileapp/feedback/sentmessage"?>';
+	$.ajax({
+		  type: "POST",
+		  url: url,
+		  data: {'message':message,'stu_id':stu_id},
+		  dataType: 'JSON',
+		  success: function (data) {
+			  $( ".chats" ).append( data );
+			  $('#message_feedback').val("");
+			  HideloadingBlock();
+		  },
+		  error: function(e) {
+			console.log(e.responseText);
+		  }
+		});
+	});
+</script>

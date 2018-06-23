@@ -28,7 +28,8 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
 				'".$change_pwd."',
-				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status
+				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status,
+				(SELECT COUNT(t.`token`) FROM `mobile_mobile_token` AS t WHERE t.`stu_id` = s.`stu_id` LIMIT 1 ) AS number_mobile
 				FROM rms_student AS s  WHERE  s.is_subspend=0 ";
 // 				echo $sql;exit();
 		$orderby = " ORDER BY stu_id DESC ";

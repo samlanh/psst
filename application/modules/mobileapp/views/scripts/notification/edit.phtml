@@ -64,11 +64,43 @@ body, #dijitEditorBody {
 	            </div>
 	            <div class="col-md-4 col-sm-4 col-xs-12">
 	            	<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("NORTIFICATION_OPT");?> :
+	                   </label>
+	                </div>
+	            	<div class="form-group">
 	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<select name="opt_sent" id="opt_sent" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
-								<option value="1"><?php echo $tr->translate("FOR_ALL");?></option>
-								<option value="2"><?php echo $tr->translate("FOR_DEPARTMENT");?></option>
-								<option value="3"><?php echo $tr->translate("FOR_PRIVATE");?></option>
+	                   		<select name="opt_notification" id="opt_notification" class="fullside" onChange="Checkchange();" dojoType="dijit.form.FilteringSelect" >
+								<option value="1" <?php if ($row['opt_notification']==1){ echo 'selected="selected"';} ?>><?php echo $tr->translate("FOR_ALL");?></option>
+								<option value="2" <?php if ($row['opt_notification']==2){ echo 'selected="selected"';} ?>><?php echo $tr->translate("GROUP");?></option>
+								<option value="3" <?php if ($row['opt_notification']==3){ echo 'selected="selected"';} ?>><?php echo $tr->translate("STUDENT");?></option>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("GROUP");?> :
+	                   </label>
+	                </div>
+	            	<div class="form-group">
+	                   <div class="col-md-12 col-sm-12 col-xs-12">
+	                   		<select name="group" id="group" class="fullside" placeholder="<?php echo $tr->translate("GROUP");?>"  dojoType="dijit.form.FilteringSelect" >
+	                   			<option value=""></option>
+	                   			<?php if (!empty($this->group)) foreach ($this->group as $rs){?>
+								<option value="<?php echo $rs['id']?>" <?php if ($row['group']==$rs['id']){ echo 'selected="selected"';} ?>><?php echo $rs['name']?></option>
+								<?php }?>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT");?> :
+	                   </label>
+	                </div>
+	            	<div class="form-group">
+	                   <div class="col-md-12 col-sm-12 col-xs-12">
+	                   		<select  name="student" id="student" placeholder="<?php echo $tr->translate("STUDENT");?>" class="fullside"  dojoType="dijit.form.FilteringSelect" >
+	                   			<option value=""></option>
+	                   			<?php if (!empty($this->all_student)) foreach ($this->all_student as $rs){?>
+								<option value="<?php echo $rs['stu_id']; ?>" <?php if ($row['student']==$rs['stu_id']){ echo 'selected="selected"';} ?>><?php echo $rs['stu_code']." ".$rs['stu_name']; ?></option>
+								<?php }?>
 							</select>
 	                   </div>
 	                </div>
@@ -83,3 +115,43 @@ body, #dijitEditorBody {
 		</form>
 	</div>
 </div>
+<script>
+dojo.ready(function(){
+	try{
+		Checkchange();
+	}catch(e){
+		alert(e);
+	}
+});
+
+function Checkchange(){
+	  if (dijit.byId("opt_notification").get('value')==1){
+		  dijit.byId('group').reset();
+		  dijit.byId('student').reset();
+		  dijit.byId('group').set('required',false); 
+		  dijit.byId('group').set('readonly',true); 
+		  dijit.byId('group').set('disabled', true);
+		  dijit.byId('student').set('required',false); 
+		  dijit.byId('student').set('readonly',true); 
+		  dijit.byId('student').set('disabled', true);
+	  }else if (dijit.byId("opt_notification").get('value')==2){
+		  dijit.byId('student').reset();
+		  dijit.byId('group').set('required',true); 
+		  dijit.byId('group').set('readonly',false);
+		  dijit.byId('group').set('disabled', false); 
+		  
+		  dijit.byId('student').set('required',false); 
+		  dijit.byId('student').set('readonly',true); 
+		  dijit.byId('student').set('disabled', true); 	 
+	  }else if (dijit.byId("opt_notification").get('value')==3){
+		  dijit.byId('group').reset();
+		  dijit.byId('group').set('required',false); 
+		  dijit.byId('group').set('readonly',true); 
+		  dijit.byId('group').set('disabled', true);
+		  
+		  dijit.byId('student').set('required',true); 
+		  dijit.byId('student').set('readonly',false); 
+		  dijit.byId('student').set('disabled', false);
+	  }
+}
+</script>

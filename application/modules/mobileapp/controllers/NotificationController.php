@@ -80,31 +80,38 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
     public function editAction()
     {
        
-    $db = new Mobileapp_Model_DbTable_DbNotification();
-    if($this->getRequest()->isPost()){
-      $_data = $this->getRequest()->getPost();
-      try{
-        $db->add($_data);
-        //Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'),self::REDIRECT_URL . '/Banner');
-        $this->_redirect("mobileapp/notification");
-      }catch(Exception $e){
-        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
-        $err =$e->getMessage();
-        Application_Model_DbTable_DbUserLog::writeMessageError($err);
-      }
-    }
-
-    $id = $this->getRequest()->getParam("id");
-    $row = $db->getById($id);
-    $this->view->row = $row;
-  
-    if(empty($row)){
-     $this->_redirect('mobileapp/notification');
-    }   
-    //$fm = new Other_Form_FrmBanner();
-    //$frm = $fm->FrmAddBanner($row);
-    //Application_Model_Decorator::removeAllDecorator($frm);
-    //$this->view->frm = $frm;  
+	    $db = new Mobileapp_Model_DbTable_DbNotification();
+	    if($this->getRequest()->isPost()){
+	      $_data = $this->getRequest()->getPost();
+	      try{
+	        $db->add($_data);
+	        //Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'),self::REDIRECT_URL . '/Banner');
+	        $this->_redirect("mobileapp/notification");
+	      }catch(Exception $e){
+	        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
+	        $err =$e->getMessage();
+	        Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	      }
+	    }
+	
+	    $id = $this->getRequest()->getParam("id");
+	    $row = $db->getById($id);
+	    $this->view->row = $row;
+	  
+	    if(empty($row)){
+	     $this->_redirect('mobileapp/notification');
+	    }   
+	    
+	    $dbstudent = new Foundation_Model_DbTable_DbStudent();
+	    $group = $dbstudent->getAllgroup();
+	    $this->view->group = $group;
+	    
+	    $dbre = new Registrar_Model_DbTable_DbRegister();
+	    $this->view->all_student = $dbre->getAllGerneralOldStudent();
+	    //$fm = new Other_Form_FrmBanner();
+	    //$frm = $fm->FrmAddBanner($row);
+	    //Application_Model_Decorator::removeAllDecorator($frm);
+	    //$this->view->frm = $frm;  
 
    }
    function deleteAction(){

@@ -12,7 +12,7 @@ class Mobileapp_FeedbackController extends Zend_Controller_Action
     public function indexAction()
     {
 		try{
-			$db = new Mobileapp_Model_DbTable_DbContact();
+			$db = new Mobileapp_Model_DbTable_DbFeedBack();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}
@@ -20,18 +20,18 @@ class Mobileapp_FeedbackController extends Zend_Controller_Action
 				$search = array(
 						'adv_search' => '',
 						'search_status' => -1,
-						'start_date'=> date('Y-m-01'),
+						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}
-			$rs_rows= $db->getAllContact($search);
+			$rs_rows= $db->getAllFeedback($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","DATE","STATUS");
+			$collumns = array("FEEDBACK","STUDENT","DATE","VIEW","STATUS");
 			$link=array(
 					'module'=>'mobileapp','controller'=>'contact','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -42,8 +42,33 @@ class Mobileapp_FeedbackController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
     }
-
-
+    public function replyAction()
+    {
+    	$id = $this->getRequest()->getParam("id");
+    	if (empty($id)){
+    		$this->_redirect("mobileapp/feedback");
+    	}
+    	$search = null;
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	$this->view->stu_id =$id;
+    	$db = new Mobileapp_Model_DbTable_DbFeedBack();
+    	$rs_rows= $db->getStuIdById($search,$id);
+    	$this->view->studentChat = $rs_rows;
+    	if (empty($rs_rows)){
+    		$this->_redirect("mobileapp/feedback");
+    	}
+    }
+	function sentmessageAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Mobileapp_Model_DbTable_DbFeedBack();
+			$data=$db->AddFeedback($data);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
     public function addAction()
     {
        try{

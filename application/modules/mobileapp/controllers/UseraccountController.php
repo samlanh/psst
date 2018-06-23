@@ -31,7 +31,7 @@ class Mobileapp_UseraccountController extends Zend_Controller_Action {
 			$db_student= new Mobileapp_Model_DbTable_Dbuseraccount();
 			$rs_rows = $db_student->getAllStudent($search);
 			$list = new Application_Form_Frmtable();
-				$collumns = array("BRANCH_NAME","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","CHANGE_PASSWORD","STATUS");
+				$collumns = array("BRANCH_NAME","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","CHANGE_PASSWORD","STATUS","MOBILE_DEVICE");
 				$link=array(
 						'module'=>'mobileapp','controller'=>'useraccount','action'=>'edit',
 				);

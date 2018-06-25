@@ -114,44 +114,48 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	
 	public function addStudentGroup($_data){
 		$db = $this->getAdapter();
+		try{
 		//print_r($_data);exit();		
-		if(!empty($_data['public-methods'])){
-			
-			//print_r($_data['public-methods']);exit();
-			
-			$all_stu_id = $_data['public-methods'];
-			foreach ($all_stu_id as $stu_id){
-				$arr = array(
-					'user_id'	=>$this->getUserId(),
-					'group_id'	=>$_data['group'],
-					'stu_id'	=>$stu_id,
-					'status'	=>$_data['status'],
-					'date'		=>date('Y-m-d')
-				);
-				$this->_name='rms_group_detail_student';
-				$this->insert($arr);
+			if(!empty($_data['public-methods'])){
 				
-				$this->_name='rms_student';
-				$data=array(
-					'is_setgroup'	=> 1,
-					'academic_year'	=> $_data['academic_year_group'],
-					'degree'		=> $_data['degree_group'],
-					'grade'			=> $_data['grade_group'],
-					'session'		=> $_data['session_group'],
-					'room'			=> $_data['room_group'],
-					'group_id'		=> $_data['group'],
+				//print_r($_data['public-methods']);exit();
+				
+				$all_stu_id = $_data['public-methods'];
+				foreach ($all_stu_id as $stu_id){
+					$arr = array(
+						'user_id'	=>$this->getUserId(),
+						'group_id'	=>$_data['group'],
+						'stu_id'	=>$stu_id,
+						'status'	=>$_data['status'],
+						'date'		=>date('Y-m-d')
+					);
+					$this->_name='rms_group_detail_student';
+					$this->insert($arr);
+					
+					$this->_name='rms_student';
+					$data=array(
+						'is_setgroup'	=> 1,
+						'academic_year'	=> $_data['academic_year_group'],
+						'degree'		=> $_data['degree_group'],
+						'grade'			=> $_data['grade_group'],
+						'session'		=> $_data['session_group'],
+						'room'			=> $_data['room_group'],
+						'group_id'		=> $_data['group'],
+					);
+					$where='stu_id = '.$stu_id;
+					$this->update($data, $where);
+				}
+				
+				$this->_name = 'rms_group';
+				$data_gro = array(
+					'is_use'=> 1,
+					'is_pass'=> 2,
 				);
-				$where='stu_id = '.$stu_id;
-				$this->update($data, $where);
+				$where = 'id = '.$_data['group'];
+				$this->update($data_gro, $where);
 			}
-			
-			$this->_name = 'rms_group';
-			$data_gro = array(
-				'is_use'=> 1,
-				'is_pass'=> 2,
-			);
-			$where = 'id = '.$_data['group'];
-			$this->update($data_gro, $where);
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	public function getGroupDetail($search){

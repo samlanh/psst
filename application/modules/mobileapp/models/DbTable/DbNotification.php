@@ -77,11 +77,10 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
             if ($data['opt_notification']==2){
             	$token =	$dbpush->getTokenUser($data['group']);
             }else if ($data['opt_notification']==3){
-            	$token = $dbpush->getTokenUser(null,$data['student']);
+            	$token = $dbpush->getTokenUser(null,$data['student'],6);
             }else{
-            	$token = $dbpush->getTokenUser(null,null);
+            	$token = $dbpush->getTokenUser(null,null,6);
             }
-            $dbpush->pushSendNotification($token, 5);
         }           
             $db->commit();
         }catch(exception $e){

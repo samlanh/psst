@@ -3,6 +3,9 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 echo $this->headTitle($tr->translate("contact"));
 $frm = $this->frm;
 ?>
+<script type="text/javascript">
+    dojo.require('dijit.form.Textarea');
+</script>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -39,17 +42,17 @@ $frm = $this->frm;
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" value="<?php echo $this->contact['address']?>"  name="address" id="address" dojoType="dijit.form.TextBox" class="fullside"  />
-	                   </div>
-	                </div>
-	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" value="<?php echo $this->contact['phone']?>"  name="phone" id="phone" dojoType="dijit.form.TextBox" class="fullside"  />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input style="min-height: 80px;" type="text" value="<?php echo $this->contact['address']?>"  name="address" id="address" dojoType="dijit.form.Textarea" class="fullside"  />
 	                   </div>
 	                </div>
 	            </div>

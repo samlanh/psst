@@ -12,8 +12,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 </script>
 <div class="card">
 	<div class="card-content collapse show">
-		<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add')); ?>" 
-		dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
                 year=dijit.byId("academic_year").get("value");
@@ -145,38 +144,27 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
     	</div>
     	<div class="card-box">
                	<div class="col-sm-12">
-		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-book" ></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_STUDY_GROUP');?></h4>
-    			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
-    		</div>
-    	</div>
-    	<div class="card-box">
-               	<div class="col-sm-12">
                		<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
 						<tr id="head-title" class="head-td" align="right"></tr>
 					</table>
     			</div>
+    			<div class="clearfix"></div>
+    			<div class="col-sm-12">
+    				<input type="button" label="<?php echo $tr->translate('ADD_SUBJECT_STUDY');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitIconEditProperty" onclick="addRow();" />
+					<input type="hidden" name="identity1" id="identity1"  />
+    			</div>
     	</div>
-				<table width="100%" >
-					<tr>
-						<td colspan="3" align="left">
-							<input type="button" label="<?php echo $tr->translate('ADD_SUBJECT_STUDY');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitIconEditProperty" onclick="addRow();" />
-							<input type="hidden" name="identity1" id="identity1"  />
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" align="center">
-							<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="button" onclick="submitDataClose();"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
-							<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
-						</td>
-					</tr>
-				</table>
+    	<div class="clearfix"></div>
+	         <div class="card-box mt-20">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="button" onclick="submitDataClose();"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+               	</div>
+             </div>
 		</form>
 	</div>
 </div>

@@ -297,6 +297,9 @@
 .navbar-header:after, .navbar:after, .pager:after, .panel-body:after, .row:after {
     clear: both !important;
 }
+.clearfix {
+    clear: both !important;
+}
 section.inputmask {
     margin-bottom: 1.875rem;
     border: solid 1px #eee;

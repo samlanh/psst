@@ -5,24 +5,30 @@
 ?>	
 <script type="text/javascript">
 </script>
-<form  action="" dojoType="dijit.form.Form" method="post">
-	<table style="width:100%">
-	  <tr> 
-		    <td> <?php echo $frm->getElement("title");?></td>
-		    <td> <?php echo $frm->getElement("study_year");?></td>
-		    <td><?php echo $frm->getElement("degree");?></td>
-		    <td> <?php echo $frm->getElement("grade");?></td>
-		    <td> <?php echo $frm->getElement("group");?></td>
-	  </tr>
-	  <tr>	 
-	  		 <td> <?php echo $frm->getElement("session");?></td>
-	  		<td> <?php echo $frm->getElement("room");?></td>
-	  		<td><?php echo $frm->getElement("start_date");?></td>
-	 		<td><?php echo $frm->getElement("end_date");?></td>
-			<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-	  </tr>
-	 </table>
-</form>
-<?php 
-  echo $this->list;
-?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form  action="" dojoType="dijit.form.Form" method="post">
+				<table style="width:100%">
+				  <tr> 
+					    <td> <?php echo $frm->getElement("title");?></td>
+					    <td> <?php echo $frm->getElement("study_year");?></td>
+					    <td><?php echo $frm->getElement("degree");?></td>
+					    <td> <?php echo $frm->getElement("grade");?></td>
+					    <td> <?php echo $frm->getElement("group");?></td>
+				  </tr>
+				  <tr>	 
+				  		 <td> <?php echo $frm->getElement("session");?></td>
+				  		<td> <?php echo $frm->getElement("room");?></td>
+				  		<td><?php echo $frm->getElement("start_date");?></td>
+				 		<td><?php echo $frm->getElement("end_date");?></td>
+						<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+				  </tr>
+				 </table>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php  echo $this->list;?>
+		</div>
+	</div>
+</div>

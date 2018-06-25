@@ -81,7 +81,7 @@ body, #dijitEditorBody {
 	                </div>
 	            	<div class="form-group">
 	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<select name="group" id="group" class="fullside" placeholder="<?php echo $tr->translate("GROUP");?>"  dojoType="dijit.form.FilteringSelect" autoComplete="true" >
+	                   		<select name="group" id="group" class="fullside" placeholder="<?php echo $tr->translate("GROUP");?>"  dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*">
 	                   			<option value=""></option>
 	                   			<?php if (!empty($this->group)) foreach ($this->group as $rs){?>
 								<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
@@ -95,7 +95,7 @@ body, #dijitEditorBody {
 	                </div>
 	            	<div class="form-group">
 	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<select  name="student" id="student" placeholder="<?php echo $tr->translate("STUDENT");?>" class="fullside"  dojoType="dijit.form.FilteringSelect" autoComplete="true">
+	                   		<select  name="student" id="student" placeholder="<?php echo $tr->translate("STUDENT");?>" class="fullside"  dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*">
 	                   			<option value=""></option>
 	                   			<?php if (!empty($this->all_student)) foreach ($this->all_student as $rs){?>
 								<option value="<?php echo $rs['stu_id']; ?>"><?php echo $rs['stu_code']." ".$rs['stu_name']; ?></option>

@@ -211,7 +211,7 @@ dojo.ready(function(){
 									$average = number_format($rs['total_score']/$total_subject,2);//amount_subjectsem
 								?>
 								<td align="center"><?php echo str_replace(".00", "", $average);?></td>
-								<td align="center"><?php echo calCulateGrade($average);?></td>
+								<td align="center"><?php echo calCulateGrade($average,$rs['max_score']);?></td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<td align="center" <?php if($rs['average']<$rs['average_pass']){echo 'style=" background: #fdbdbd;"'; $count_fail++;}?>>
 									<?php if($average>=($rs['max_score']/2)){
@@ -282,21 +282,21 @@ dojo.ready(function(){
 		</div>
 </div>
 <?php 
-function calCulateGrade($score){
-	$grade="";
-	if($score>=90){
-		$grade="A";
-	}else if($score>=80){
-		$grade="B";
-	}else if($score>=70){
-		$grade="C";
-	}else if($score>=60){
-		$grade="D";
-	}else if($score>=50){
-		$grade="E";
+function calCulateGrade($score,$max_score){
+	$score_avg = (($score) / ($max_score))*100;
+	$x = 100/$max_score;
+	if($score_avg < (50/$x)){
+		return 'F';
+	}else if($score_avg < (60/$x)){
+		return 'E';
+	}else if($score_avg < (70/$x)){
+		return 'D';
+	}else if($score_avg < (80/$x)){
+		return 'C';
+	}else if($score_avg < (90/$x)){
+		return 'B';
 	}else{
-		$grade="F";
+		return 'A';
 	}
-	return $grade;
-}
+}			
 ?>

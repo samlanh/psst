@@ -716,6 +716,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    			5=>'lbl_smsnews',
    			6=>'lbl_smsnotification',
    			7=>'lbl_paymentnotification',
+   			8=>'lbl_replyfeedback',
    			);
    	$sql="SELECT keyValue FROM `moble_label` 
    		WHERE keyName='".$title_label[$title_id]."'";
@@ -770,7 +771,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$notification = array(
    			'title' =>$title ,
    			'text' => $body,
-   			'data' =>$data,
+//    			'data' =>$data,
    			'sound' => 'psis',
    			'badge' => '1'
    	);
@@ -781,7 +782,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   			$arrayToSend = array(
 	   					'registration_ids' => $studentToken,
 	   					'notification' => $notification,
-	   					'priority'=>'high'
+	   					'priority'=>'high',
+	   					'data' =>$data
 	   			);
 	   			$json = json_encode($arrayToSend);
 	   			$headers = array();
@@ -799,6 +801,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   				//die('FCM Send Error: ' . curl_error($ch));
 	   			}
 	   			curl_close($ch);
+	   			//curl_setopt(CURLOPT_RETURNTRANSFER, true);
    		}
 //    	}
    }

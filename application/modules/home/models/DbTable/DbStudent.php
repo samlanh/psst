@@ -208,7 +208,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		AND sp.id=spd.payment_id
 		AND p.service_id=spd.service_id
 
-		AND s.stu_id=$stu_id";
+		AND s.stu_id=$stu_id AND sp.status=1 ORDER BY sp.id DESC ";
 // 		if(!empty($search['adv_search'])){
 // 			$s_where = array();
 // 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));

@@ -315,7 +315,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$paymentid = $this->insert($arr);
 				    /*alert ទៅទូរសព្ទដៃអាណាព្យាបាលសិស្ស*/
 					$dbpush = new  Application_Model_DbTable_DbGlobal();
-					$dbpush->pushSendNotification($id, 1);
+					$dbpush->getTokenUser(null,$id, 1);
 					
 			/////////////// បញ្ចូលប្រវត្តិសិក្សារបស់សិស្ស /////////////////////////////////////////////		
 					$this->_name='rms_study_history';

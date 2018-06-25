@@ -105,12 +105,13 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new  Application_Model_DbTable_DbGlobal();
+			
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
 					if(isset($_data['have_mistake'.$i])){
 						if (!empty($_data['mistake_type'.$i])){
-							$dbpush->pushSendNotification($_data['student_id'.$i], 3);
+							$dbpush->getTokenUser($_data['student_id'.$i],null, 3);
 							$arr = array(
 // 									'discipline_id'=>$id,
 									'attendence_id'=>$id,

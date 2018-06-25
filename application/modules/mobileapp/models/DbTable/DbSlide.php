@@ -108,7 +108,6 @@ class Mobileapp_Model_DbTable_DbSlide extends Zend_Db_Table_Abstract
 					$_arr=array(
 							'title'      => '',
 							'images'      => $image_name,
-							'link'  =>"",
 							'create_date'=>date("Y-m-d H:i:s"),
 							'modify_date'=>date("Y-m-d H:i:s"),
 							'user_id'      => $this->getUserId(),
@@ -127,7 +126,7 @@ class Mobileapp_Model_DbTable_DbSlide extends Zend_Db_Table_Abstract
 					$_arr=array(
 							'title'      => "",
 							'images'      => $image_name,
-							'link'  =>"",
+// 							'link'  =>"",
 							'create_date'=>date("Y-m-d H:i:s"),
 							'modify_date'=>date("Y-m-d H:i:s"),
 							'user_id'      => $this->getUserId(),

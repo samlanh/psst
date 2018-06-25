@@ -53,28 +53,28 @@ dojo.ready(function(){
 		}, "group_name");
 });
 </script>
-<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-detail')); ?>" dojoType="dijit.form.Form" method="post">
-	<table style="width:27cm;margin: 0 auto;">
-		<tr> 
-			<td><input id="group_name" /></td>
-			<td><?php echo $frm->getElement("degree_bac");?></td>
-			<td><?php echo $frm->getElement("grade_bac");?></td>
-			<td><?php echo $frm->getElement("session");?></td>
-		</tr>
-		<tr>
-			<td><?php echo $frm->getElement("study_year");?></td>
-			<td>
-				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
-					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-						<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
-					<?php }}?>
-				</select>
-			</td>
-			<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
-</form>
-	<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-detail')); ?>" dojoType="dijit.form.Form" method="post">
+		<table style="width:100%;margin: 0 auto;">
+			<tr> 
+				<td><input id="group_name" /></td>
+				<td><?php echo $frm->getElement("degree_bac");?></td>
+				<td><?php echo $frm->getElement("grade_bac");?></td>
+				<td><?php echo $frm->getElement("session");?></td>
+			</tr>
+			<tr>
+				<td><?php echo $frm->getElement("study_year");?></td>
+				<td>
+					<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+						<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+							<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+						<?php }}?>
+					</select>
+				</td>
+				<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+			</tr>
+		</table>
+	</form>
 		<div id="divPrint">
 		<style type="text/css">
 			.style{
@@ -280,7 +280,7 @@ dojo.ready(function(){
 				</tr>
 			</table>
 		</div>
-	</div>
+</div>
 <?php 
 function calCulateGrade($score){
 	$grade="";

@@ -174,9 +174,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 	function rptPaymentrecieptdetailAction(){
-		$id=$this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbRptPayment();
-		
+			if($this->getRequest()->isPost()){
+				$data=$this->getRequest()->getPost();
+				$db->updateValidationbyreceipt($data);
+				Application_Form_FrmMessage::Sucessfull("UPDAE_SUCCESSS", "/allreport/accounting/rpt-studentpayment");
+			}
+		$id=$this->getRequest()->getParam("id");
 		$this->view->row =  $db->getPaymentReciptDetail($id);
 		$this->view->rr = $db->getStudentPaymentByid($id);
 	}

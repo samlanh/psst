@@ -39,12 +39,13 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
+			$dbpush->getTokenUser($_data['group'],null, 4);
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				$k=0;
 				if(!empty($ids))foreach ($ids as $i){
 					$k=$k+1;
-					$dbpush->pushSendNotification($_data['stu_id_'.$k], 4);//notification for score result 
+						//$dbpush->pushSendNotification($_data['stu_id_'.$k], 4);//notification for score result 
 						foreach ($this->getSubjectByGroup($_data['group']) as $index => $rs_parent){
 							$parent_id = $rs_parent["subject_id"];
 							$getChildren= $this->getChildSubject($parent_id);

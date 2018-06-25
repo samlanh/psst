@@ -729,7 +729,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 //    	);
 //    	return $title_str[$title_id];
    }
-   function getTokenUser($group=null,$student=null){
+   function getTokenUser($group=null,$student=null,$title_id){
    		$db = $this->getAdapter();
    		if (!empty($group)){
 	   		$sql="
@@ -744,7 +744,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    		}else{
    			$sql="SELECT t.`token` FROM `mobile_mobile_token` AS t";
    		}
-   		 return $db->fetchCol($sql);
+   		 $studentToken =  $db->fetchCol($sql);
+   		 $this->pushSendNotification($studentToken,$title_id);
    }
    
    function pushSendNotification($studentToken,$title_id,$body='',$data=''){//$stu_id
@@ -763,14 +764,14 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$data=array('id'=>1,
    			'title'=>$title,
    			'body'=>$body,
-   			'note_type'=>1
+   			'type'=>$title_id
    	);
    	 
    	$notification = array(
    			'title' =>$title ,
    			'text' => $body,
    			'data' =>$data,
-   			'sound' => 'default',
+   			'sound' => 'psis',
    			'badge' => '1'
    	);
    	 

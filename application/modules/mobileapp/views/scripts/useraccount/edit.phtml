@@ -217,7 +217,7 @@ dojo.ready(function(){
 							<td ><?php echo $tr->translate("DOB");?></td>
 							<td><input class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" tabindex="5"  name="date_of_birth" id="date_of_birth" dojoType="dijit.form.DateTextBox"  value="<?php echo $this->rs['dob'];?>" type="text"/></td>
 							<td> <span style=" width: 25%; display: inline-block;"><?php echo $tr->translate("PROVINCE");?></span>&nbsp;&nbsp;&nbsp;
-								<select style=" width: 70%;" class="fullside" tabindex="14" name="student_province" id="student_province" dojoType="dijit.form.FilteringSelect"">
+								<select style=" width: 70%;" required="false" class="fullside" tabindex="14" name="student_province" id="student_province" dojoType="dijit.form.FilteringSelect"">
 									<?php if(!empty($this->province))foreach ($this->province as $row){?>
 									<option value="<?php echo $row['id']?>"<?php if($row['id']==$this->rs['province_id']) echo 'selected="selected"';?>><?php echo $row['name']?></option>
 									<?php }?>

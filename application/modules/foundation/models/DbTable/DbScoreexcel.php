@@ -25,6 +25,9 @@ class Foundation_Model_DbTable_DbScoreexcel extends Zend_Db_Table_Abstract
 					'for_month'=>$_data['for_month'],
 			);
 			$id=$this->insert($_arr);
+			$dbpush = new Application_Model_DbTable_DbGlobal();
+			$dbpush->getTokenUser($_data['group'],null, 4);
+			
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				$k=0;

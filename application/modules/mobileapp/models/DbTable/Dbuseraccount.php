@@ -95,7 +95,7 @@ public function updateStudent($_data){
 					'password'=>md5($_data['new_password']),
 					);
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
-			echo $this->update($_arr, $where);
+			$this->update($_arr, $where);
 		}catch(Exception $e){
 		}
 	}

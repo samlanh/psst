@@ -18,8 +18,9 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 // 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 // 		$stu_code = $this->getNewAccountNumber($data['dept']);
-		$receipt_number = $data['receipt_no']; //$this->getRecieptNo();
-		
+		//$receipt_number = $data['receipt_no']; //$this->getRecieptNo();
+		$_db = new Registrar_Model_DbTable_DbRegister();
+		$receipt_number = $_db->getRecieptNo();
 		if($data['stu_type']==1){
 			$arr = array(
 				'kh_name'	 	=>$data['kh_name'],
@@ -53,7 +54,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 				'is_paid'		=>1,
 					
 				'paid_date'		=>$data['paid_date'],
-				'test_date'	=>date('Y-m-d'),
+				'test_date'		=>date('Y-m-d'),
 				'create_date'	=>date('Y-m-d'),
 				
 				'account_userid'=>$this->getUserId()
@@ -142,8 +143,8 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
     	}
     	$order=" ORDER BY st.id DESC";
     	return $db->fetchAll($sql.$where.$order);
-}
-public function getRecieptNo(){
+	}
+	public function getRecieptNo(){
     	$db = $this->getAdapter();
     	
     	$_db = new Application_Model_DbTable_DbGlobal();

@@ -1920,11 +1920,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 //     		$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (1) and status=1 ";
 //     		//$pre = 'K';
 //     	}else 
-	if($dept_id==6  || $dept_id==8 ){
+		if($dept_id==6  || $dept_id==8 ){
     		$sql="SELECT id_start FROM `rms_dept` WHERE dept_id= $dept_id";
 //     		$pre = 'G';
 //     	
-	}
+		}
 	//else{
 //     		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree>4 and status=1 ";
 //     		$pre = 'GE';

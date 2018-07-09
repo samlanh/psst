@@ -778,6 +778,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'study_year' 	=>'',
 					'grade_all' 	=>'',
 					'session' 		=>'',
+					'ordering'=>1,
 					'branch_id'=>0,
 					'degree'=>0,
 					'group'=>'',

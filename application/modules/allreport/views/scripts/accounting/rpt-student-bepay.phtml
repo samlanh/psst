@@ -22,7 +22,8 @@
 				<td><?php echo $frm->getElement("end_date");?></td>
 				<td>
 					<select name="ordering" id="ordering" dojoType="dijit.form.FilteringSelect" class="fullside">
-						<option value="">ordering</option>
+						<option value="1" <?php if($this->search['ordering']==1){echo"selected";}?>>Sort By Name A-Z</option>
+						<option value="2" <?php if($this->search['ordering']==2){echo"selected";}?>>Sort By Registered Date ASC</option>
 					</select>
 				</td>
 				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>

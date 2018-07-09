@@ -80,7 +80,6 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 		  $_data = $this->getRequest()->getPost();
 		  try{
 			$db->add($_data);
-			//Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'),self::REDIRECT_URL . '/Banner');
 			$this->_redirect("mobileapp/calendar");
 		  }catch(Exception $e){
 			Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));

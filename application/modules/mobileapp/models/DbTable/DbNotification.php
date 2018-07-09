@@ -1,7 +1,7 @@
 <?php
 class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'mobile_notification';
+	protected $_name = 'mobile_notice';
 
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace('authstu');
@@ -38,9 +38,6 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 
 
 	function add($data){
-
-		//print_r($data); exit();
-	
 		if(!empty($data['description'])){
 			$des =  $data['description'];
 		}else{

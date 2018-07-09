@@ -62,7 +62,7 @@
 			          </ul>
 			  </li>
 			    -->
-			    <?php foreach ($arr_param_menu[$request->getModuleName()] as $param =>$url){
+			    <?php if(!empty($arr_param_menu[$request->getModuleName()] ))foreach ($arr_param_menu[$request->getModuleName()] as $param =>$url){
 			    	$uri=$this->baseUrl().'/'.$module.'/'.$param;
 			    	?>
 			  <li class="nav-item <?php if($param==$controller){ echo "active";}?>">

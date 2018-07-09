@@ -7,6 +7,7 @@ class Mobileapp_GradingsystemController extends Zend_Controller_Action
         /* Initialize action controller here */
         header('content-type: text/html; charset=utf8');
          defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+         $this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     }
 
     public function indexAction()
@@ -31,7 +32,7 @@ class Mobileapp_GradingsystemController extends Zend_Controller_Action
 			$link=array(
 					'module'=>'mobileapp','controller'=>'gradingsystem','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -65,40 +66,46 @@ class Mobileapp_GradingsystemController extends Zend_Controller_Action
         Application_Form_FrmMessage::message("Application Error");
         Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     }
-  //  $dbglobal = new Application_Model_DbTable_DbVdGlobal();
-    //    $this->view->lang = $dbglobal->getLaguage();
-    }
-
+   }
     public function editAction()
     {
-       
-    $db = new Mobileapp_Model_DbTable_DbGradingSystem();
-    if($this->getRequest()->isPost()){
-      $_data = $this->getRequest()->getPost();
-      try{
-        $db->add($_data);
-        //Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'),self::REDIRECT_URL . '/Banner');
-        $this->_redirect("mobileapp/gradingsystem");
-      }catch(Exception $e){
-        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
-        $err =$e->getMessage();
-        Application_Model_DbTable_DbUserLog::writeMessageError($err);
-      }
-    }
-
-    $id = $this->getRequest()->getParam("id");
-    $row = $db->getById($id);
-    $this->view->row = $row;
-  
-    if(empty($row)){
-     $this->_redirect('mobileapp/gradingsystem');
-    }   
-    //$fm = new Other_Form_FrmBanner();
-    //$frm = $fm->FrmAddBanner($row);
-    //Application_Model_Decorator::removeAllDecorator($frm);
-    //$this->view->frm = $frm;  
-
-
+	    $db = new Mobileapp_Model_DbTable_DbGradingSystem();
+	    if($this->getRequest()->isPost()){
+	      $_data = $this->getRequest()->getPost();
+	      try{
+	        $db->add($_data);
+	        $this->_redirect("mobileapp/gradingsystem");
+	      }catch(Exception $e){
+	        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
+	        $err =$e->getMessage();
+	        Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	      }
+	    }
+	
+	    $id = $this->getRequest()->getParam("id");
+	    $row = $db->getById($id);
+	    $this->view->row = $row;
+	  
+	    if(empty($row)){
+	     $this->_redirect('mobileapp/gradingsystem');
+	    }   
+   }
+    
+    function deleteAction(){
+    	try{
+    		$id = $this->getRequest()->getParam("id");
+    		$db = new Mobileapp_Model_DbTable_DbGradingSystem();
+    		if (!empty($id)) {
+    			$db->deleteData($id);
+    			Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
+    			echo "<script>window.close();</script>";
+    		}
+    	}catch(Exception $e){
+    		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));
+    		$err =$e->getMessage();
+    		Application_Model_DbTable_DbUserLog::writeMessageError($err);
+    		echo "<script>window.close();</script>";
+    	}
     }
 
 

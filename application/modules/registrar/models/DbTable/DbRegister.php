@@ -117,6 +117,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
+		
 		//$paid_date = $data['paid_date'];
 		$paid_date = date("Y-m-d H:i:s");
 		
@@ -126,18 +127,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$array = array(
 						'branch_id'		=>$this->getBranchId(),
 						'receipt_no'	=>$data['receipt_no'],
-						
 						'name_kh'		=>$data['kh_name'],
 						'name_en'		=>$data['en_name'],
 						'sex'			=>$data['sex'],
 						'dob'			=>$data['dob'],
 						'phone'			=>$data['parent_phone'],
-						
 						'grand_total'	=>$data['grand_total'],
 						'fine'			=>$data['fine'],
 						'deduct'		=>$data['deduct'],
 						'net_amount'	=>$data['net_amount'],
-						
 						'user_id'		=>$this->getUserId(),
 						'create_date'	=>$paid_date,
 					);
@@ -830,6 +828,17 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					);
 					$where=" id=".$data['group'];
 					$this->update($group, $where);
+				}
+				
+				if($data['student_type']==1 OR $data['student_type']==2){
+					$sql="SELECT id_start FROM `rms_dept` WHERE dept_id=".$data['dept']." LIMIT 1";
+					$id_start = $db->fetchOne($sql);
+					$where="dept_id = ".$data['dept'];
+					$this->_name="rms_dept";
+					$arr=array(
+							'id_start'=>$id_start+1
+					);
+					$this->update($arr, $where);
 				}
 				$db->commit();//if not errore it do....
 			}catch (Exception $e){
@@ -1905,14 +1914,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$length = '';
     	$pre = '';
+    	
     	$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree=$dept_id";    	
 //     	if($dept_id==1){//Kindergarten
 //     		$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (1) and status=1 ";
 //     		//$pre = 'K';
-//     	}else if($dept_id==1  || $dept_id==2 || $dept_id==3){
-//     		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (1,2,3) and status=1 ";
+//     	}else 
+	if($dept_id==6  || $dept_id==8 ){
+    		$sql="SELECT id_start FROM `rms_dept` WHERE dept_id= $dept_id";
 //     		$pre = 'G';
-//     	}else{
+//     	
+	}
+	//else{
 //     		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree>4 and status=1 ";
 //     		$pre = 'GE';
 //     	}
@@ -1929,9 +1942,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}elseif($dept_id==3){//high
     		$acc_no = $acc_no-1;
     	}elseif($dept_id==6){  //gesl
-    		$acc_no = $acc_no+493;
+//     		$acc_no = $acc_no;
     	}elseif($dept_id==8){  //gesl
-    		$acc_no = $acc_no+493;
+//     		$acc_no = $acc_no;
     	}
     	$new_acc_no= (int)$acc_no+1;
     	$length = strlen((int)$new_acc_no);

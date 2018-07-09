@@ -371,8 +371,13 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$where.=$dbp->getAccessPermission();
     	 
     	//$order = " order by s.group_id ASC,degree ASC,s.grade ASC, s.stu_enname ASC";
-    	$order = " order by degree ASC,s.grade ASC,s.group_id ASC, s.stu_enname ASC";
-    	
+    	$order = " order by degree ASC,s.grade ASC,s.group_id ASC ";
+    	if($search['ordering']==1){
+    		$order.=" , s.stu_enname ASC ";
+    	}
+    	if($search['ordering']==2){
+    		$order.=" , s.create_date ASC";
+    	}
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
     	}

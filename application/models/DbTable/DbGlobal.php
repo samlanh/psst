@@ -794,6 +794,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   			curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
 	   			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
 	   			curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+	   			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 	   			//Send the request
 	   			$response = curl_exec($ch);
 	   			//Close request

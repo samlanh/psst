@@ -626,7 +626,6 @@ fieldset{  background:none;}
 			load: function(data) {
 				  dijit.byId('receipt_no').attr('value',data); 
 				  if(stu_id!=''){
-					  //printSave(stu_id,data);
 					  dojo.byId("lb_receipt_no").innerHTML = data;
 					  printSave(stu_id,data,submit);
 				  }

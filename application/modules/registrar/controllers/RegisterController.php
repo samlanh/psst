@@ -63,10 +63,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	try {
       		$db = new Registrar_Model_DbTable_DbRegister();
       		$db->addRegister($_data);
+      		Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       		if(isset($_data['save_new'])){
-      			Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
+      			//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       		}else{
-      			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/register/index');
+      			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/register/index');
       		}
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));

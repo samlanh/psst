@@ -30,7 +30,7 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 	{
 		$db=$this->getAdapter();
         $sql="SELECT *  FROM ".$this->_name." WHERE id = ".$db->quote($id);
-        $sql.=" LIMIT 1 ";
+        $sql.=" ORDER BY id ASC LIMIT 1 ";
         $row=$db->fetchRow($sql);
         return $row;
 	}

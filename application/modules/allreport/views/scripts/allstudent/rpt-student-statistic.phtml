@@ -42,7 +42,6 @@
 			  page-break-inside:avoid; page-break-after:auto;
 			}
 		</style>
-		
 			<tr>
 				<td colspan="3">
 				<div id="exportExcel">
@@ -51,17 +50,19 @@
 					<thead>
 					<tr style="font-size:14px; height: 20px;background: #ccd9ff; font-weight:bold;" align="center" >
 						<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
-						<th colspan="7"><?php echo $tr->translate("STUDY_INFO");?></th>
+						<th colspan="8"><?php echo $tr->translate("STUDY_INFO");?>
+							<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
+						</th>
 					</tr>
-					<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
 					<tr style="font-size:14px; font-weight:bold; height: 20px;background: #ccd9ff;" align="center" >
-						<th ><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
-						<th ><?php echo $tr->translate("DEGREE");?></th>
-						<th ><?php echo $tr->translate("GRADE");?></th>
-						<th ><?php echo $tr->translate("SESSION");?></th>
-						<th ><?php echo $tr->translate("AMOUNT_STUDENT");?></th>
-						<th ><?php echo $tr->translate("NEW_STUDENT");?></th>
-						<th ><?php echo $tr->translate("STUDENT_DROP");?></th>
+						<th><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
+						<th><?php echo $tr->translate("DEGREE");?></th>
+						<th><?php echo $tr->translate("GRADE");?></th>
+						<th><?php echo $tr->translate("SESSION");?></th>
+						<th><?php echo $tr->translate("AMOUNT_STUDENT");?></th>
+						<th><?php echo $tr->translate("NEW_STUDENT");?></th>
+						<th><?php echo $tr->translate("STUDENT_DROP");?></th>
+						<th><?php echo $tr->translate("STUDENT_STUDY");?></th>
 					</tr>
 					</thead>
 					<?php 
@@ -77,10 +78,10 @@
 						$degree_name = "";
 						$grade_name = "";
 						$session_name = "";
-						foreach ($this->rs AS $key=>$row) {  
+						foreach($this->rs AS $key=>$row){  
 					?>
 						<?php if(($academic_year != $row['academic_year'] || $degree != $row['degree'] || $grade != $row['grade'] || $session != $row['session']) && $key>0){ $i++; ?>
-								<tr style="font-size:12px !important; line-height: 20px;" align="center" class="hover" >
+								<tr style="font-size:14px !important; line-height: 20px;" align="center" class="hover" >
 									<td><?php echo $i;?></td>
 									<td><?php echo $academic_name;?></td>
 									<td><?php echo $degree_name;?></td>
@@ -89,6 +90,7 @@
 									<td><?php echo $amount_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 									<td><?php echo $new_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 									<td><?php echo $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>
+									<td><?php echo $amount_student - $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>
 								</tr>
 								<?php 
 									$total_amount_student = $total_amount_student + $amount_student;
@@ -143,12 +145,14 @@
 									<td><?php echo $amount_student." ".$tr->translate("STUDENT_UNIT");;?></td>	
 									<td><?php echo $new_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 									<td><?php echo $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>	
+									<td><?php echo $amount_student - $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 								</tr>
 								<tr align="center" class="hover">
 									<td colspan="5">Total</td>
 									<td><?php echo $total_amount_student." ".$tr->translate("STUDENT_UNIT");;?></td>	
 									<td><?php echo $total_amount_student_new." ".$tr->translate("STUDENT_UNIT");?></td>	
 									<td><?php echo $total_amount_student_drop." ".$tr->translate("STUDENT_UNIT");?></td>
+									<td><?php echo $total_amount_student-$total_amount_student_drop." ".$tr->translate("STUDENT_UNIT");?></td>
 								</tr>
 					</table> <?php } ?>	
 				</div>	

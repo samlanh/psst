@@ -17,6 +17,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$sql = "SELECT  s.stu_id,
 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,s.stu_khname,s.stu_enname,
+				s.is_subspend,
+				(SELECT name_kh from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
 				CONCAT(s.stu_khname,'-',s.stu_enname) AS name,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 				tel ,
@@ -29,7 +31,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				s.sex as sexcode,
 				status,
 				photo
-				FROM rms_student AS s  WHERE  s.is_subspend=0 AND s.status = 1 ";
+				FROM rms_student AS s  WHERE  s.status = 1 ";
 // 				(SELECT name_kh FROM `rms_view` WHERE TYPE=1 AND key_code = status LIMIT 1) AS status,
 		$orderby = " ORDER BY s.stu_enname,s.stu_khname ASC ";
 		if(empty($search)){
@@ -208,7 +210,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		AND sp.id=spd.payment_id
 		AND p.service_id=spd.service_id
 
-		AND s.stu_id=$stu_id AND sp.status=1 ORDER BY sp.id DESC ";
+		AND s.stu_id=$stu_id AND sp.is_void=0 ORDER BY sp.id DESC ";
 // 		if(!empty($search['adv_search'])){
 // 			$s_where = array();
 // 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));

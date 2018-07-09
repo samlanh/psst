@@ -67,25 +67,31 @@
 							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
 							.hover:hover{background: #ccc;}
 						</style>
+						<?php 
+						$all_student = 0;
+						$active_student = 0;
+						$drop_student = 0;?>
 					<div id="exportExcel">
 					<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="white-space:nowrap;">
 						  <thead>
-						  <tr style="font-size:14px; height: 25px; font-weight: bold; background: #ccd9ff;" align="center">
+						  <tr style="font-size:12px; height: 25px; font-weight: bold; background: #ccd9ff;" align="center">
 						    <td class="hidden"></td>
 						    <td><?php echo $tr->translate("NUM");?></td>
-						    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("CLASSES");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("AMOUNT_MONTH");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("START_DATE");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("END_DATE");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
+						    <td><?php echo $tr->translate("STUDY_GROUP");?></td>
+						    <td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+							<td><?php echo $tr->translate("SEMESTER");?></td>
+							<td><?php echo $tr->translate("DEGREE");?></td>
+							<td><?php echo $tr->translate("GRADE");?></td>
+							<td><?php echo $tr->translate("SESSION");?>&nbsp;</td>
+							<td><?php echo $tr->translate("CLASSES");?></td>
+							<td><?php echo $tr->translate("AMOUNT_MONTH");?></td>
+							<td><?php echo $tr->translate("START_DATE");?></td>
+							<td><?php echo $tr->translate("END_DATE");?></td>
+							<td><?php echo $tr->translate("STATUS");?></td>
+							<td><?php echo $tr->translate("TOTAL_STUDENT");?></td>
+							<td><?php echo $tr->translate("STUDENT_DROP");?></td>
+							<td><?php echo $tr->translate("STUDENT_STUDY");?></td>
+							<td><?php echo $tr->translate("NOTE");?></td>
 						  </tr>
 						  </thead>
 						  <?php $i=0; 
@@ -108,9 +114,21 @@
 						    <td><?php echo date('d-M-Y',strtotime($rs['expired_date'])); ?></td>
 						    <td><?php echo $rs['status']; ?></td>
 						    <td><?php echo $rs['Num_Student']; ?></td>
+						    <td><?php echo $rs['student_drop']; ?></td>
+						    <td><?php echo $rs['Num_Student']-$rs['student_drop']; ?></td>
 						    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?></td>
 						  </tr>
-						  <?php } ?>
+						  <?php 
+						  	$all_student = $all_student+$rs['Num_Student'];
+						  	$drop_student = $drop_student+$rs['student_drop'];
+							} ?>
+						  <tr>
+						  	  <td colspan="13" style="border:1px solid #fff;border-top:1px solid #000;border-right:1px solid #000;"></td>
+						  	  <td align="center"><strong><?php echo $all_student;?></strong></td>
+						  	  <td align="center"><strong><?php echo $drop_student;?></strong></td>
+						  	  <td align="center"><strong><?php echo $all_student -$drop_student;?></strong></td>
+						  	  <td align="center"></td>
+						  </tr>
 						</table>
 						</div>
 					</td>

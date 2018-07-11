@@ -182,10 +182,8 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 				$rows = $db->getServiceFeebyId($id);
 				$fee_row=1;$rs_rows=array();
 				if(!empty($rows))foreach($rows as $payment_tran){
+					$key_old=$key;
 					if($payment_tran['payment_term']==1){
-						
-// 						$rs_rows[$key]['monthly']=$payment_tran['price_fee'];
-						
 						$rs_rows[$key] = array(
 								'service_id'=>$payment_tran['service_id'],
 								'monthly'=>$payment_tran['price_fee'],

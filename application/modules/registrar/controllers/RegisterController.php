@@ -80,10 +80,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $this->view->deduct = $_db->getDeduct();
        
        $db = new Registrar_Model_DbTable_DbRegister();
-       $this->view->all_student_code = $db->getAllGerneralOldStudent();
-       $this->view->all_student_name = $db->getAllGerneralOldStudentName();
-       
-       $this->view->all_student_test = $db->getAllStudentTested();
+//        $this->view->all_student_code = $db->getAllGerneralOldStudent();
+//        $this->view->all_student_name = $db->getAllGerneralOldStudentName();
+//        $this->view->all_student_test = $db->getAllStudentTested();
        
        $this->view->all_year = $db->getAllYears();
        $this->view->all_session = $db->getAllSession();
@@ -509,6 +508,33 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$data = $db->getStudentPaidExist($data['stu_id'],$data['start_date'],$data['end_date']);
 			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
+	function getallstudenttestAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$rows = $db->getAllStudentTested();
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	function getallstudentAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$rows = $db->getAllGerneralOldStudentName();
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	function getallstudentcodeAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Registrar_Model_DbTable_DbRegister();
+			$rows = $db->getAllGerneralOldStudent();
+			print_r(Zend_Json::encode($rows));
 			exit();
 		}
 	}

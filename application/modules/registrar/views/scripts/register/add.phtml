@@ -69,8 +69,8 @@ fieldset{  background:none;}
 	                   		<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="changControll();setReadOnlyCustomerType();setReadonlyForOldStudent();" >
 								<option value="3"><?php echo $tr->translate("Old Student");?></option>
 								<option value="1"><?php echo $tr->translate("Tested Student");?></option>
-								<option value="2"><?php echo $tr->translate("New Student");?></option>
 								<option value="4"><?php echo $tr->translate("Other Customer");?></option>
+								<option value="2"><?php echo $tr->translate("New Student");?></option>
 							</select>
 	                   </div>
 	                </div>
@@ -79,12 +79,7 @@ fieldset{  background:none;}
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<div id="student_old">
-								<select type="text" name="old_studens" id="old_studens" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getOldStudentInfo();getCreditMemo();getOldVildateToStartDateRegister();" autoComplete="false" queryExpr="*${0}*"  >
-									<option value="">Select Student Code</option>
-									<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
-									<option value="<?php echo $student_code['stu_id']?>"><?php echo $student_code['stu_code']?></option>
-									<?php }}?>
-								</select>
+								<input id="old_studens" />
 							</div>
 							<div id="id_stu">
 								<input type="text" style="color: red;" name="stu_id" id="stu_id" class="fullside" dojoType="dijit.form.TextBox" />
@@ -96,20 +91,10 @@ fieldset{  background:none;}
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<div id="student_old_name">
-								<select type="text" name="old_stu_name" id="old_stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();" autoComplete="false" queryExpr="*${0}*"  >
-									<option value=""><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
-									<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
-									<option value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
-									<?php }}?>
-								</select>
+								<input id="old_stu_name" />
 							</div>
 							<div id="stu_tested">
-								<select type="text" name="stu_test" id="stu_test" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getStudentTestInfo();" autoComplete="false" queryExpr="*${0}*"  >
-									<option value="0">--- Select Student Tested ---</option>
-									<?php if(!empty($this->all_student_test)){foreach ($this->all_student_test as $all_student_test){?>
-									<option value="<?php echo $all_student_test['id']?>"><?php echo $all_student_test['name']?></option>
-									<?php }}?>
-								</select>
+								<input id="stu_test" />
 							</div>
 							<div id="stu_new">
 								<input type="text" name="new_stu" class="fullside" id="new_stu" readonly="readonly" dojoType="dijit.form.TextBox" /> 
@@ -531,19 +516,49 @@ fieldset{  background:none;}
 
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
-			queryExpr: "*${0}*",                     
-			id: "teacher_id",
-			name: "teacher_id",           
+			queryExpr: "*${0}*",  
+			required:false,                   
+			id: "stu_test",
+			name: "stu_test",           
 			class: 'fullside', 
-			placeHolder:"Select Teacher",          
+			placeHolder:"Select Student Tested",          
 			onChange: function() {  
 			}
-		}, "teacher_id");
-		
+		}, "stu_test");
+
+		new dijit.form.FilteringSelect({
+			autoComplete: false,
+			queryExpr: "*${0}*",                     
+			id: "old_stu_name",
+			name: "old_stu_name",   
+			required:false,        
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+			onChange: function() {  
+			setID();
+			}
+		}, "old_stu_name");
+
+		new dijit.form.FilteringSelect({
+			autoComplete: false,
+			queryExpr: "*${0}*",                     
+			id: "old_studens",
+			name: "old_studens",  
+			required:false,         
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+			onChange: function() {  
+				getOldStudentInfo();
+				getCreditMemo();
+				getOldVildateToStartDateRegister();
+			}
+		}, "old_studens");
+
 		dijit.byId('dept').attr('value','<?php echo $this->degree_row['degree'];?>');
 		getDateTerm();
-	});	
-	
+		getallstudentname();
+		getallstudentcode();
+});		
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallModel(dept_id,a){
@@ -565,29 +580,7 @@ fieldset{  background:none;}
 				}
 			});
 	}
-	var url_getteacher = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-teacher')); ?>';	
-	var teacher_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	function getAllTeacherByCourse(){
-		grade = dijit.byId('grade').get('value');
-		session = dijit.byId('session').get('value');
-		if(grade==''){return false;}
-			dojo.xhrPost({
-				url:url_getteacher,
-				content:{
-					'grade':grade,
-					'session':session,
-					},
-				handleAs:"json",
-				load: function(data){
-					teacher_store  = getDataStorefromJSON('id','name', data);
-					dijit.byId('teacher_id').set('store',teacher_store); 
-					dijit.byId('teacher_id').attr('value',-1);	
-				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-	}
+
 	var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
 	function getStudentNo(dept_id,condition){
 		if(dept_id==''){
@@ -966,12 +959,7 @@ function getMonthByNumber(m){
 		return (monthName[m-1]);
 }
 
-
-
 </script>
-
-
-
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'"  >
 		<style>
@@ -1209,24 +1197,26 @@ function hideDialog1(){
 function changControll(){
 	dijit.byId('not').attr('value','');
 	student_type=dijit.byId('student_type').get('value');
+	document.getElementById('stu_tested').style.display="none";
 	if(student_type==3){
+		 getallstudentname();
+		 getallstudentcode();
 		 document.getElementById('student_old').style.display="block";
 		 document.getElementById('student_old_name').style.display="block";
 		 document.getElementById('id_stu').style.display="none";
-		 document.getElementById('stu_tested').style.display="none";
 		 document.getElementById('stu_new').style.display="none";
 		 clearControll();
 	}else if(student_type==1){
 		 document.getElementById('student_old').style.display="none";
 		 document.getElementById('student_old_name').style.display="none";
 		 document.getElementById('id_stu').style.display="block";
+		 getAllstudnetTest();
 		 document.getElementById('stu_tested').style.display="block";
 		 document.getElementById('stu_new').style.display="none";
 		 clearControll();
 	} else if(student_type==2){
 		 document.getElementById('student_old').style.display="none";
 		 document.getElementById('student_old_name').style.display="none";
-		 document.getElementById('stu_tested').style.display="none";
 		 document.getElementById('id_stu').style.display="block";
 		 document.getElementById('stu_new').style.display="block";
 		 dept = dijit.byId("dept").get("value");
@@ -1235,13 +1225,61 @@ function changControll(){
 	}else{
 		 document.getElementById('student_old').style.display="none";
 		 document.getElementById('student_old_name').style.display="none";
-		 document.getElementById('stu_tested').style.display="none";
 		 document.getElementById('id_stu').style.display="none";
 		 document.getElementById('stu_new').style.display="none";
-		 
 	}
 }
-
+var url_getstudenttest = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
+function getAllstudnetTest(){
+	 dojo.xhrPost({
+		url:url_getstudenttest,
+		content:{
+			'student_test':1,
+		},
+		handleAs:"json",
+		load: function(data) {
+			test_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('stu_test').set('store',test_store);  
+		},
+		error: function(err) {
+			alert(err)
+		}
+	});
+}
+var url_getstudenlist = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+function getallstudentname(){
+	dojo.xhrPost({
+		url:url_getstudenlist,
+		content:{
+			'student_name':1,
+		},
+		handleAs:"json",
+		load: function(data) {
+			student_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('old_stu_name').set('store',student_store);  
+		},
+		error: function(err) {
+			alert(err)
+		}
+	});
+}
+var url_getstudencode = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcode')); ?>';
+function getallstudentcode(){
+	dojo.xhrPost({
+		url:url_getstudencode,
+		content:{
+			'student_name':1,
+		},
+		handleAs:"json",
+		load: function(data) {
+			studentcode_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('old_studens').set('store',studentcode_store);  
+		},
+		error: function(err) {
+			alert(err)
+		}
+	});
+}
 function setReadOnlyCustomerType(){
 	student_type = dijit.byId('student_type').get('value');
 	if(student_type==4){
@@ -1910,11 +1948,12 @@ function getservicefee(key){
 	 	});	 
 }
 function printSave(new_stu_id,new_receipt,submit){		
-	condition = checkValidateAddRow();
-	if(condition==false){
-		alert("Please select service or product !!! ");
-		return false;
-	}
+		condition = checkValidateAddRow();
+	
+		if(condition==false){
+			alert("Please select service or product !!! ");
+			return false;
+		}
 		if(dijit.byId('office_receipt').validate()) {
 			receipt=dijit.byId("receipt_no").get("value");
 			degree = dijit.byId('dept').get('value');
@@ -1945,7 +1984,6 @@ function printSave(new_stu_id,new_receipt,submit){
 			//alert(1);
 			
 			if(new_receipt==""){
-				//alert(1);
 				getReceiptNo(1,submit);
 				submit=0;
 			}
@@ -1955,7 +1993,6 @@ function printSave(new_stu_id,new_receipt,submit){
 			var dd = today.getDate();
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
-			//dojo.byId("lb_receipt_no").innerHTML = receipt;
 			dojo.byId("lb_stu_id").innerHTML = stu_id;		
 			dojo.byId("lb_sex").innerHTML = dijit.byId("sex").attr('displayedValue');
 			dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy;
@@ -2278,7 +2315,7 @@ function printSave(new_stu_id,new_receipt,submit){
 			}
 			
 		}
-	}
+}	
 /////////////// get student test info ////////////////////////////////////////////////////////
 var url_student_test = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-student-test-info')); ?>";
 function getStudentTestInfo(){

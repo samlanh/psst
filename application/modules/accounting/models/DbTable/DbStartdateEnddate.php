@@ -32,7 +32,7 @@ class Accounting_Model_DbTable_DbStartdateEnddate extends Zend_Db_Table_Abstract
 		$order=" ORDER BY id DESC";
 		return $db->fetchAll($sql.$where.$order);
 	}
-    public function addStartdateEnddate($data){
+public function addStartdateEnddate($data){
     	$db= $this->getAdapter();
     	try{
     		if(!empty($data['identity'])){
@@ -49,16 +49,15 @@ class Accounting_Model_DbTable_DbStartdateEnddate extends Zend_Db_Table_Abstract
 					$this->insert($arr);
 				}
     		}
-		    	
     	}catch(Exception $e){
     		echo $e->getMessage();
     	}
-    }
+}
 	public function editStartdateEnddate($data,$id){
 		$db= $this->getAdapter();
 		try{
 			$this->_name="rms_startdate_enddate";
-			$where = " status = 1 ";
+			$where = " id!='' ";
 			$this->delete($where);
 			
 			if(!empty($data['identity'])){
@@ -70,6 +69,7 @@ class Accounting_Model_DbTable_DbStartdateEnddate extends Zend_Db_Table_Abstract
 							'note'=>$data['remark_'.$i],
 							'create_date'=>date("Y-m-d"),
 							'user_id'=>$this->getUserId(),
+							'status'=>$data['status_'.$i],
 						);
 					$this->_name='rms_startdate_enddate';	
 					$this->insert($arr);

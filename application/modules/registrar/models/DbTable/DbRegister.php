@@ -840,6 +840,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					);
 					$this->update($arr, $where);
 				}
+				
+// 				$db->rollBack();
 				$db->commit();//if not errore it do....
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
@@ -1734,7 +1736,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$user 
 					$branch_id 
 			";
-    	$where=" ";
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
@@ -2061,31 +2062,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     //select all Gerneral old student
     function getAllGerneralOldStudent(){
     	$db=$this->getAdapter();
-    	
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
-    	
-    	$sql="SELECT s.stu_id As stu_id,s.stu_code As stu_code,
-    	(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS stu_name
-    	FROM rms_student AS s
-    	WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+    	$sql="SELECT s.stu_id As id,s.stu_id As stu_id,s.stu_code As stu_code,
+    		s.stu_code AS name,
+	    	(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS stu_name
+	    	FROM rms_student AS s
+	    	WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
     	return $db->fetchAll($sql);
     }
     //select general  old student by id
     
     function getAllGerneralOldStudentName(){
     	$db=$this->getAdapter();
-    	
-//     	$_db = new Application_Model_DbTable_DbGlobal();
-//     	$branch_id = $_db->getAccessPermission();    	
-//     	$sql="SELECT s.stu_id AS stu_id,
-//     	(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name
-//     	FROM rms_student AS s
-//     	WHERE (stu_enname!='' OR s.stu_khname!='') AND s.status=1 AND s.is_subspend=0  $branch_id ORDER BY stu_type DESC ";
-//     	return $db->fetchAll($sql);
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
-    	$sql="SELECT s.stu_id AS stu_id,
+    	$sql="SELECT s.stu_id AS id,s.stu_id AS stu_id,
     	CONCAT(s.stu_khname,'-',s.stu_enname) AS name
     	FROM rms_student AS s
     	WHERE (stu_enname!='' OR s.stu_khname!='') AND s.status=1 AND s.is_subspend=0  $branch_id ORDER BY stu_type DESC ";
@@ -2270,21 +2262,31 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     public function getAllService(){
     	$db = $this->getAdapter();
-    	$sql = "SELECT 
+//     	$sql = "SELECT 
+// 				  p.service_id ,
+// 				  p.`title`
+// 				FROM
+// 				  `rms_servicefee_detail` as sfd,
+// 				  `rms_servicefee`  as sf,
+// 				   rms_tuitionfee as tf,
+// 				  `rms_program_name` as p
+// 				WHERE `sf`.id = `sfd`.`service_feeid`
+// 				  and sf.academic_year = tf.id	 
+// 				  AND tf.`branch_id` = ".$this->getBranchId()."
+// 				  AND p.`service_id`=sfd.`service_id`
+// 				  or type=1
+// 				GROUP BY service_id ";
+    	$sql = "SELECT
 				  p.service_id ,
 				  p.`title`
 				FROM
 				  `rms_servicefee_detail` as sfd,
 				  `rms_servicefee`  as sf,
-				   rms_tuitionfee as tf,
 				  `rms_program_name` as p
 				WHERE `sf`.id = `sfd`.`service_feeid`
-				  and sf.academic_year = tf.id	 
-				  AND tf.`branch_id` = ".$this->getBranchId()."
 				  AND p.`service_id`=sfd.`service_id`
 				  or type=1
 				GROUP BY service_id ";
-    	//echo $sql;
     	return $db->fetchAll($sql);
     }
     
@@ -2445,7 +2447,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
-		$sql="select id,CONCAT(en_name,'-',kh_name)as name from rms_student_test where en_name!='' AND status=1 and register=0 $branch_id  ORDER BY id DESC ";
+		$sql="SELECT id,CONCAT(en_name,'-',kh_name) AS name 
+			FROM rms_student_test 
+		WHERE (en_name!='' OR kh_name!='') AND status=1 and register=0 $branch_id  ORDER BY id DESC ";
 		return $db->fetchAll($sql);
 	}
 	
@@ -2522,7 +2526,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	
 	function getAllStartDateEndDate(){
 		$db = $this->getAdapter();
-		$sql="select id,start_date,end_date,note,CONCAT(note,'(',start_date,' to ',end_date,')') as name from rms_startdate_enddate ";
+		$sql="select id,start_date,end_date,note,CONCAT(note,'(',start_date,' to ',end_date,')') as name 
+				FROM rms_startdate_enddate WHERE status=1 ORDER BY start_date ASC";
 		return $db->fetchAll($sql);
 	}
 	function getStartDateEndDate($id){

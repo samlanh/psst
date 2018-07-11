@@ -369,7 +369,10 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     }
     function getProDetailById($id){
     	$db=$this->getAdapter();
-    	$sql="SELECT * FROM rms_product_setdetail WHERE pro_id=$id";
+    	$sql="SELECT *,
+    	(SELECT p.pro_price FROM `rms_product` AS p WHERE p.id = rms_product_setdetail.subpro_id LIMIT 1) AS pro_price
+    		FROM rms_product_setdetail 
+    	WHERE pro_id=$id";
     	return $db->fetchAll($sql);
     }  
     public function updateProductSetDetail($_data){
@@ -404,7 +407,15 @@ class Accounting_Model_DbTable_DbProductset extends Zend_Db_Table_Abstract
     						'qty'=>$_data['qty_'.$i],
     						'remark'=>$_data['note_'.$i],
     					);
+    			$this->_name='rms_product_setdetail';
     			$this->insert($_arr);
+    			
+    			$_arr = array(
+    					'pro_price'=>$_data['price_'.$i]
+    			);
+    			$this->_name='rms_product';
+    			$where=" id=".$_data['pro_id'.$i];
+    			$this->update($_arr, $where);
     		}
     		 
     			$this->_name='rms_program_name';

@@ -16,7 +16,6 @@
 <form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 	<script type="dojo/method" event="onSubmit">   
 	   if(this.validate()) {
-			dijit.byId('save_new').set('disabled',true);
 			dijit.byId('save_close').set('disabled',true);
 			return true;
 	   }else {
@@ -88,6 +87,7 @@
 			temp+='<td><?php echo $tr->translate("START_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("END_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("NOTE");?></td>';
+			temp+='<td><?php echo $tr->translate("STATUS");?></td>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
@@ -97,6 +97,7 @@
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
+		template+='<td width="6%"><select id="status_'+col+'" name="status_'+col+'" dojoType="dijit.form.FilteringSelect" class="fullside"><option value="1"><?php echo $tr->translate("ACTIVE");?></option><option value="0"><?php echo $tr->translate("DEACTIVE");?></option></select></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -119,6 +120,7 @@
 			temp+='<td><?php echo $tr->translate("START_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("END_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("NOTE");?></td>';
+			temp+='<td><?php echo $tr->translate("STATUS");?></td>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
@@ -133,7 +135,7 @@
 			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
 			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
 			template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
-
+			template+='<td width="6%"><select id="status_'+col+'" name="status_'+col+'" dojoType="dijit.form.FilteringSelect" class="fullside"><option value="1"><?php echo $tr->translate("ACTIVE");?></option><option value="0"><?php echo $tr->translate("DEACTIVE");?></option></select></td>';
 			tmp='<tr id="row'+col+'">';
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
@@ -145,7 +147,7 @@
 			     parseContent: true,
 			});
 
-
+			dijit.byId('status_'+col).set('value','<?php echo $row_detail['status']?>');
 		    dijit.byId('startdate_'+col).set('value','<?php echo $row_detail['start_date']?>');
 		    dijit.byId('enddate_'+col).set('value','<?php echo $row_detail['end_date']?>');
 		    dijit.byId('remark_'+col).set('value','<?php echo $row_detail['note']?>');

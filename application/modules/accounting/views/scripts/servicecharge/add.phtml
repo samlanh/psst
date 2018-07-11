@@ -191,7 +191,7 @@ function addRow() {
 				}
 				template+='<td width="11%"><input type="text" class="fullside" value="'+value+'" id="fee'+col+'_'+column+'" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			}
-			template+='<td> <input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("OTHER");?>"style=""/><input type="hidden" class="fullside" name="one_value'+col+'" id="one_value'+col+'" value="'+col+'" dojoType="dijit.form.TextBox" /></td>';
+			template+='<td> <input type="text" required="1" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.NumberTextBox" placeholder="<?php echo $tr->translate("OTHER");?>"style=""/><input type="hidden" class="fullside" name="one_value'+col+'" id="one_value'+col+'" value="'+col+'" dojoType="dijit.form.TextBox" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);

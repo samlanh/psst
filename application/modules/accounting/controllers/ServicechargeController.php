@@ -211,7 +211,6 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 				
 			  $this->view->rows =$rs_rows;
 			   
-// 			  print_r($rs_rows);exit();
 			   $db_g=new Application_Model_DbTable_DbGlobal();
 			   $this->view->all_service=$db_g->getAllstudentRequest(2);
 			   $db = new Accounting_Model_DbTable_DbService();

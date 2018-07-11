@@ -3,7 +3,6 @@
 	echo $this->headTitle($tr->translate('EDIT_SERVICE_FEE')); 
 	$payment_term = $this->payment_term;
 ?>	
-<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
@@ -236,12 +235,12 @@ function ResetRecordRecord() {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-		dijit.byId('class_'+col).attr('value','<?php echo $row['service_id']?>');
-		dijit.byId('fee'+col+'_1').attr('value','<?php echo $row['monthly']?>');
-		dijit.byId('fee'+col+'_2').attr('value','<?php echo $row['quarter']?>');
-		dijit.byId('fee'+col+'_3').attr('value','<?php echo $row['semester']?>');
-		dijit.byId('fee'+col+'_4').attr('value','<?php echo $row['year']?>');
-		dijit.byId('remark'+col).attr('value','<?php echo $row['note']?>');
+		dijit.byId('class_'+col).attr('value','<?php echo !empty($row['service_id'])?$row['service_id']:"";?>');
+		dijit.byId('fee'+col+'_1').attr('value','<?php echo !empty($row['monthly'])?$row['monthly']:0;?>');
+		dijit.byId('fee'+col+'_2').attr('value','<?php echo !empty($row['quarter'])?$row['quarter']:0;?>');
+		dijit.byId('fee'+col+'_3').attr('value','<?php echo !empty($row['semester'])?$row['semester']:0;?>');
+		dijit.byId('fee'+col+'_4').attr('value','<?php echo !empty($row['year'])?$row['year']:0;?>');
+		dijit.byId('remark'+col).attr('value','<?php echo !empty($row['note'])?$row['note']:"";?>');
 		<?php } }?>
 	}
  function deleteRecord(index) {

@@ -182,6 +182,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 				$rows = $db->getServiceFeebyId($id);
 				$fee_row=1;$rs_rows=array();
 				if(!empty($rows))foreach($rows as $payment_tran){
+					
 					$key_old=$key;
 					if($payment_tran['payment_term']==1){
 						$rs_rows[$key] = array(
@@ -192,10 +193,9 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 								'year'=>'',
 								'note'=>$payment_tran['remark'],
 						);
-						
 						//$rs_rows[$key]['quarter'] = $payment_tran['tuition_fee'];
 						$key_old=$key;
-						$key++;
+						
 					}elseif($payment_tran['payment_term']==2){
 						$rs_rows[$key_old]['quarter'] = $payment_tran['price_fee'];
 		
@@ -204,10 +204,14 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 					}
 					elseif($payment_tran['payment_term']==4){
 						$rs_rows[$key_old]['year'] = $payment_tran['price_fee'];
+						$key++;
 					}
+					
 				}
-			   $test = $this->view->rows =$rs_rows;
-			  // print_r($test);exit();
+				
+			  $this->view->rows =$rs_rows;
+			   
+// 			  print_r($rs_rows);exit();
 			   $db_g=new Application_Model_DbTable_DbGlobal();
 			   $this->view->all_service=$db_g->getAllstudentRequest(2);
 			   $db = new Accounting_Model_DbTable_DbService();

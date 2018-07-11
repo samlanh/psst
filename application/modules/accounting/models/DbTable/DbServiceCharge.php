@@ -173,7 +173,9 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     function getServiceFeebyId($service_id){
     	
     	$db = $this->getAdapter();
-    	$sql = "SELECT id,service_id,price_fee,payment_term,remark,(select title from rms_program_name where rms_program_name.service_id=rms_servicefee_detail.service_id limit 1)AS service_name FROM `rms_servicefee_detail` WHERE service_feeid=".$service_id." ORDER BY service_id ";
+    	$sql = "SELECT id,service_id,price_fee,payment_term,remark,
+    	(select title from rms_program_name where rms_program_name.service_id=rms_servicefee_detail.service_id limit 1)AS service_name FROM `rms_servicefee_detail` 
+    	WHERE service_feeid=".$service_id." ORDER BY service_id,payment_term ASC ";
     		 
     	return $db->fetchAll($sql);
     	 

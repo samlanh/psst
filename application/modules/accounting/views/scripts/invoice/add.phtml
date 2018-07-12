@@ -14,133 +14,159 @@
 	background: #cccccc;
 	border:1px solid #ddd;
 }
+table#table_row tr th {
+    background: #3d6b82;
+    padding: 5px 0;
+	color:#fff;
+}
 </style>
 <title><?php echo $this->tr->translate("ADD_INVICE")?></title>
-<form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-	<script type="dojo/method" event="onSubmit">   
-	   if(this.validate()) {
-            student_id=dijit.byId("student_id").get("value");
-            if(student_id=="" || student_id==-1){
-               alert("Please Select Student Name or Student Id");
-			   return false;
-			}
-			identity = dijit.byId('identity').get('value');
-			if(identity==''){
-				alert('Please Select service !!! ');
-				addRow();
-				return false;
-			}
-			var rowId = $('#identity').val();
-    			if(rowId!=''){ 
-					var rowIDArray = rowId.split(',');
-					for(var n = 0; n < rowIDArray.length; n++){
-					var type = dijit.byId('type_'+rowIDArray[n]).get('value');
-					var service = dijit.byId('service_'+rowIDArray[n]).get('value');
-					if(type=='' || service==''){
-							alert("Please select type title and service title!");
-							return false;
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_INVICE');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+    	<form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit">   
+	  			 if(this.validate()) {
+           			 student_id=dijit.byId("student_id").get("value");
+            		if(student_id=="" || student_id==-1){
+               			alert("Please Select Student Name or Student Id");
+			  			 return false;
+					}
+					identity = dijit.byId('identity').get('value');
+					if(identity==''){
+						alert('Please Select service !!! ');
+						addRow();
+						return false;
+					}
+					var rowId = $('#identity').val();
+    				if(rowId!=''){ 
+						var rowIDArray = rowId.split(',');
+						for(var n = 0; n < rowIDArray.length; n++){
+							var type = dijit.byId('type_'+rowIDArray[n]).get('value');
+							var service = dijit.byId('service_'+rowIDArray[n]).get('value');
+							if(type=='' || service==''){
+								alert("Please select type title and service title!");
+								return false;
+							}
 						}
 					}
-				}
 
-			dijit.byId('save_new').set('disabled',true);
-			dijit.byId('save_close').set('disabled',true);
-			return true;
-	   }else {
-			return false;
-	   }
-</script>
-	<table cellspacing="20" width="100%" style="margin: 0 auto;">
-		<tr>
-			<td>
-				<fieldset style=" background: #fff;   border: solid 1px #008;">
-					<legend align="center"><strong><?php echo $tr->translate("ADD_INVICE");?></strong></legend>
-					<table cellspacing="20" width="100%" >
-						<tr>
-							<td align="center" valign="top">
-								<table style="margin: 0 auto; width:100%;" cellspacing="10">
-									<tr>
-										<td><?php echo $tr->translate("STUDENT_ID");?></td>
-										<td> 
-											<select type="text" id="student_id" name="student_id"queryExpr="*${0}*" autoComplete="false" required="true" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setname();"  >
-												<option value=""><?php echo $tr->translate("SELECT_STUDENT_ID");?></option>
-												<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
-												<option value="<?php echo $student_code['stu_id']?>"><?php echo $student_code['stu_code']?></option>
-												<?php }}?>
-											</select>
-										</td>
-										<td><?php echo $tr->translate("STUDENT_NAME");?></td>
-										<td>
-											<select type="text" id="student_name" required="true"queryExpr="*${0}*" autoComplete="false" name="student_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
-												<option value=""><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
-												<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
-												<option value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
-												<?php }}?>
-											</select>
-										</td>
-									</tr>
-									<tr>
-										<td><?php echo $tr->translate("INVOICE_DATE");?></td>
-										<td><input type="text" name="invoice_date" id="invoice_date" constraints="{datePattern:'dd/MM/yyyy'}" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/></td>
-										<td><?php echo $tr->translate("INVOICE_NUMBER");?></td>
-										<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="invoice_num" name="invoice_num" value="<?php echo $this->vcode; ?>" readonly type="text" required="required" ></td>
-									</tr>
-									<tr>
-										<td><?php echo $tr->translate("REMARK");?></td>
-										<td><input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="" type="text"  ></td>
-										<td><?php echo $tr->translate("INPUT_DATE");?></td>
-										<td><input type="text" name="input_date" id="input_date" constraints="{datePattern:'dd/MM/yyyy'}" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/></td>
-									</tr>
-									<tr>
-									    <td colspan="4">
-										    <table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;">
-											    <tr style="background:#04a2e0; color:#fff;">
-												    <th width="4%"><?php echo $tr->translate("DELETE");?></th>
-												    <th><?php echo $tr->translate("N_O");?></th>
-												    <th><?php echo $tr->translate("TYPE");?></th>
-													<th><?php echo $tr->translate("SERVICES");?></th>
-													<!--  <th><?php echo $tr->translate("PRICE");?></th>-->
-													
-													<?php $s=0; ?>
-													<?php  foreach ($payment_term as $value){?>
-													<?php echo '<th>'.$value.'</th>'; ?>			
-													<?php }?>
-													<th><?php echo $tr->translate("START_DATE");?></th>
-													<th><?php echo $tr->translate("END_DATE");?></th>
-													<th><?php echo $tr->translate("REMARK");?></th>
-												</tr>
-											</table>
-										    </div>
-										</td>
-									</tr>
-									<tr>
-										<td colspan="2" align="left">
-										<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
-											<input type="button" label="<?php echo $tr->translate('ADD_SERVICE');?>" dojoType="dijit.form.Button" 
-												iconClass="dijitIconEditProperty" onclick="addRow();" />
-										</td>
-										<td><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
-										<td><input dojoType="dijit.form.ValidationTextBox" readonly  class="fullside" id="totle_amount" name="totle_amount" value="00.00" type="text" required="required" ></td>
-									</tr>
-									<tr>
-										<td colspan="4" align="center">
-											<input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
-											<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
-												iconClass="dijitEditorIcon dijitEditorIconSave" />
-										    <input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
-												iconClass="dijitEditorIcon dijitEditorIconSave" />
-										</td>
-									</tr>					
-								</table>
-							</td>							
+					dijit.byId('save_new').set('disabled',true);
+					dijit.byId('save_close').set('disabled',true);
+					return true;
+	   			}else {
+					return false;
+	   			}
+			</script>
+			<div class="card-box">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_ID");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select type="text" id="student_id" name="student_id"queryExpr="*${0}*" autoComplete="false" required="true" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setname();"  >
+								<option value=""><?php echo $tr->translate("SELECT_STUDENT_ID");?></option>
+								<?php if(!empty($this->all_student_code)){foreach ($this->all_student_code as $student_code){?>
+								<option value="<?php echo $student_code['stu_id']?>"><?php echo $student_code['stu_code']?></option>
+								<?php }}?>
+							</select>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select type="text" id="student_name" required="true"queryExpr="*${0}*" autoComplete="false" name="student_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setID();"  >
+								<option value=""><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
+								<?php if(!empty($this->all_student_name)){foreach ($this->all_student_name as $student_name){?>
+								<option value="<?php echo $student_name['stu_id']?>"><?php echo $student_name['name']?></option>
+								<?php }}?>
+							</select>
+		                </div>
+		             </div>
+		        </div>
+		        <div class="col-md-4 col-sm-4 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("INVOICE_NUMBER");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="invoice_num" name="invoice_num" value="<?php echo $this->vcode; ?>" readonly type="text" required="required" >
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("INVOICE_DATE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input type="text" name="invoice_date" id="invoice_date" constraints="{datePattern:'dd/MM/yyyy'}" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/>
+		                </div>
+		             </div>
+		        </div>
+		        <div class="col-md-4 col-sm-4 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REMARK");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="" type="text"  >
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("INPUT_DATE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input type="text" name="input_date" id="input_date" constraints="{datePattern:'dd/MM/yyyy'}" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/>
+		                </div>
+		             </div>
+		        </div>
+			</div>
+			<div class="card-box">
+				<div class="col-md-12 col-sm-12 col-xs-12 mt-20 ">
+					<table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;">
+					    <tr >
+						    <th width="4%"><?php echo $tr->translate("DELETE");?></th>
+						    <th><?php echo $tr->translate("N_O");?></th>
+						    <th><?php echo $tr->translate("TYPE");?></th>
+							<th><?php echo $tr->translate("SERVICES");?></th>
+							<!--  <th><?php echo $tr->translate("PRICE");?></th>-->
+							
+							<?php $s=0; ?>
+							<?php  foreach ($payment_term as $value){?>
+							<?php echo '<th>'.$value.'</th>'; ?>			
+							<?php }?>
+							<th><?php echo $tr->translate("START_DATE");?></th>
+							<th><?php echo $tr->translate("END_DATE");?></th>
+							<th><?php echo $tr->translate("REMARK");?></th>
 						</tr>
-					</table>	
-				</fieldset>
-			</td>			
-		</tr>
-	</table>	
-	  
-</form> 
+					</table>
+					<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
+					<input type="button" label="<?php echo $tr->translate('ADD_SERVICE');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitIconEditProperty" onclick="addRow();" />
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-12">
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					<div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTLE_AMOUNT");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.ValidationTextBox" readonly  class="fullside" id="totle_amount" name="totle_amount" value="00.00" type="text" required="required" >
+		                </div>
+		             </div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+	       	<div class="card-box mt-20 ">
+	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+               <input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
+				<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
+					iconClass="dijitEditorIcon dijitEditorIconSave" />
+			    <input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
+					iconClass="dijitEditorIcon dijitEditorIconSave" />
+             </div>
+            </div>
+		</form>
+    </div>
+</div>
 <script>
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");

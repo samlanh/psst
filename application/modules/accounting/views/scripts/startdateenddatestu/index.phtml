@@ -7,34 +7,44 @@ $formList = new Application_Form_Frmtable();
 ?>
 <title><?php echo $tr->translate("START_DATE_END_DATE");?></title>
 <meta charset="utf-8">
-<form action=" " dojoType="dijit.form.Form" method="post">
-	<table style="width: 90%">
-		<tr>
-			<td><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="search" name="search" value="<?php echo $this->search['search']?>" type="text" ></td>
-			<td>
-		       <select type="text" name="stu_id" id="stu_id" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false"​​ queryExpr="*${0}*">
-					<option value=""><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
-					<?php if(!empty($this->all_stu)){foreach ($this->all_stu as $student_code){?>
-					<option value="<?php echo $student_code['id']?>"><?php echo $student_code['name']?></option>
-					<?php }}?>
-				</select>
-		    </td>
-		    <td>
-		       <select type="text" name="term_id" id="term_id" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false"​​ queryExpr="*${0}*">
-					<option value=""><?php echo $tr->translate("PAYMENT_TERM");?></option>
-					<?php if(!empty($this->all_paymentterm)){foreach ($this->all_paymentterm as $student_code){?>
-					<option value="<?php echo $student_code['id']?>"><?php echo $student_code['name']?></option>
-					<?php }}?>
-				</select>
-		    </td>
-			<td>
-				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
-					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-			</td>
-		</tr>
-	</table>
-</form>
-<?php echo $this->list; ?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form action=" " dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="search" name="search" value="<?php echo $this->search['search']?>" type="text" >
+					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<select type="text" name="stu_id" id="stu_id" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false"​​ queryExpr="*${0}*">
+								<option value=""><?php echo $tr->translate("SELECT_STUDENT_NAME");?></option>
+								<?php if(!empty($this->all_stu)){foreach ($this->all_stu as $student_code){?>
+								<option value="<?php echo $student_code['id']?>"><?php echo $student_code['name']?></option>
+								<?php }}?>
+							</select>
+					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<select type="text" name="term_id" id="term_id" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false"​​ queryExpr="*${0}*">
+								<option value=""><?php echo $tr->translate("PAYMENT_TERM");?></option>
+								<?php if(!empty($this->all_paymentterm)){foreach ($this->all_paymentterm as $student_code){?>
+								<option value="<?php echo $student_code['id']?>"><?php echo $student_code['name']?></option>
+								<?php }}?>
+							</select>
+					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+								showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+					 </div>
+				</div>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php echo $this->list; ?>
+		</div>
+	</div>
+</div>
+
+
 <script>
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");

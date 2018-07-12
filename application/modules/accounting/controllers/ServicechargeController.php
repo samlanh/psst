@@ -74,7 +74,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     				'module'=>'accounting','controller'=>'servicecharge','action'=>'edit',
     		);
     		$urlEdit = BASE_URL ."/product/index/update";
-    		$this->view->list=$list->getCheckList(2, $collumns, $service, array('academic'=>$link));
+    		$this->view->list=$list->getCheckList(10, $collumns, $service, array('academic'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

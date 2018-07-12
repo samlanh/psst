@@ -31,7 +31,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		$link=array(
     				'module'=>'accounting','controller'=>'fee','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(2, $collumns, $rs_rows , array('branch'=>$link,'academic'=>$link,'class'=>$link,'generation'=>$link));
+    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array('branch'=>$link,'academic'=>$link,'class'=>$link,'generation'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

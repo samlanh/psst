@@ -2,6 +2,8 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("SERVICE_FEE"));
 	$url_copy =$this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'copy'));
+	$urlCopy = $this->baseUrl()."/accounting/servicecharge/copy/id/";
+	$urlEdit = $this->baseUrl()."/accounting/servicecharge/edit/id/";
 	$formList = new Application_Form_Frmtable();
 ?>	
 <script type="text/javascript">
@@ -28,24 +30,30 @@ var aca_year= getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(
 	dijit.byId('year').attr('value','<?php echo $this->adv_search['year']?>');
 });
 </script>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<input dojoType="dijit.form.TextBox" class="fullside"  id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
+					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<input id="year" />
+					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+					 </div>
+				</div>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php echo $this->list;?>
+		</div>
+	</div>
+</div>
+	
 
-<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
-	<table style="width:60%">
-	  <tr> 
-	  	<td style="width: 95px;"><?php echo $formList->showCopyBuntton($url_copy);?></td>
-		<td> 
-			<input dojoType="dijit.form.TextBox" class="fullside"  id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
-		</td>
-		<td> 
-			<input id="year" /></td>
-		<td>
-			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-		</td>
-		<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
-	  </tr>
-	</table>
-</form>
-<?php echo $this->list;?>
 
 
  
@@ -69,7 +77,38 @@ dojo.require("dijit.form.DateTextBox");
 		var recordcopy = $('input[name=copy]:checked').val();
 		dijit.byId('recordcopy').attr('value',recordcopy);
 	}
-	
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+			
+				var m = "clicked: " + key;
+				if(key=="edit"){
+					url='<?php echo $urlEdit;?>';
+				}else if(key=="copy"){
+					url='<?php echo $urlCopy;?>';
+				}
+				
+				gotoAction();
+				//window.console && console.log(m) || alert(m); 
+			},
+			items: {
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+
+	var recordid ='';
+	function gotoAction(){
+		window.location.href =url+row;
+		 //window.open(url+row);
+	}	
 </script> 
 
  

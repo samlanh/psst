@@ -3,18 +3,30 @@
 	echo $this->headTitle($tr->translate("SRMS_SERVICE_PROGRAM"));
 ?>	
 <?php $frm =  $this->frm_search;?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<input dojoType="dijit.form.TextBox" class="fullside"  id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH")?>....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
+					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<?php echo $frm->getElement('cate_name');?>
+					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+					 </div>
+				</div>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php echo $this->list;?>
+		</div>
+	</div>
+</div>
 
-<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
-	<table style="width:50%">
-	  <tr> 
-		<td><input dojoType="dijit.form.TextBox" class="fullside"  id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH")?>....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
-		<td><?php echo $frm->getElement('cate_name');?></td>
-		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-	  </tr>
-	</table>
-</form>
 
-<?php echo $this->list;?>
 
 
 

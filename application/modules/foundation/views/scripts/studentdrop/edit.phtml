@@ -10,26 +10,136 @@ dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.CheckBox");
 </script>
-<form id="add_studentdrop" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<script type="dojo/method" event="onSubmit" >			
-			if(this.validate()) {
-               studentid=dijit.byId('studentid').get('value');
-			   studentname=dijit.byId('studentname').get('value');
-               if(studentid==0 || studentid=='' || studentid ==-1){
-					alert('Select studentid feld!');
-					dijit.byId('studentid').focus();
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_DROP');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<form id="add_studentdrop" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit" >			
+				if(this.validate()) {
+              	 	studentid=dijit.byId('studentid').get('value');
+			   		studentname=dijit.byId('studentname').get('value');
+               		if(studentid==0 || studentid=='' || studentid ==-1){
+						alert('Select studentid feld!');
+						dijit.byId('studentid').focus();
+						return false;
+					}
+					if(studentname==0 || studentname=='' || studentname ==-1){
+						alert('Select student name feld!');
+						dijit.byId('studentname').focus();
+						return false;
+					}
+					return true;
+				}else {
 					return false;
 				}
-				if(studentname==0 || studentname=='' || studentname ==-1){
-					alert('Select student name feld!');
-					dijit.byId('studentname').focus();
-					return false;
-				}
-				return true;
-			}else {
-				return false;
-			}
-	</script>
+			</script>
+			<div class="card-box">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_ID");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select readonly="readonly" class="fullside" name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" onchange="getStudentInfo();" >
+						    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $row){?>
+									<option value="<?php echo $row['stu_id']?>"<?php if($row['stu_id']==$this->row['stu_id']) echo 'selected="selected"';?>><?php echo $row['stu_code']?></option>
+								<?php }?>
+							</select>
+							<input type="hidden" name="id" value="<?php echo $this->row['id'];?>" />
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select readonly="readonly" class="fullside" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" onchange="getStudentInfo();" >
+						    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
+									<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
+								<?php }?>
+							</select>
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SEX");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select dojoType="dijit.form.FilteringSelect"  readonly="readonly" class="fullside" id="gender" name="gender" type="text">
+								<option value="1"><?php echo $tr->translate("MALE")?></option>
+								<option value="2"><?php echo $tr->translate("FEMALE")?></option>
+							</select>
+		                </div>
+		            </div>
+										
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		              	  <input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="academic_year" name="academic_year" value="" type="text">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		               	 	<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="grade" name="grade" value="" type="text">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="session" name="session" value="" type="text">
+		                </div>
+		            </div>
+		        </div>
+		        <div class="col-md-4 col-sm-4 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="type" name="type" type="text">
+								<?php if(!empty($this->type)){foreach ($this->type as $rs){?>
+									<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->row['type']){ echo 'selected="selected"';}?> ><?php echo $rs['name']?></option>
+								<?php }}?>
+							</select>
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STOP_DATE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="datestop" name="datestop" value="<?php echo $this->row['date_stop'];?>" type="text">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">
+								<option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE")?></option>
+								<option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE")?></option>
+							</select>
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input style="min-height: 100px" dojoType="dijit.form.Textarea"  class="fullside" id="reason" name="reason" value="<?php echo $this->row['reason'];?>" required="true" type="text">
+		                </div>
+		            </div>
+		         </div>
+		     </div>
+		     <div class="clearfix"></div>
+	       	<div class="card-box mt-20 ">
+	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+              		 <input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
+			 		iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"studentdrop",'action'=>'index'),null,true); ?>';" />
+					<input type="button" onclick="submitDataClose();" id="save_close" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+					iconClass="dijitEditorIcon dijitEditorIconSave" />
+            	 </div>
+            </div>
+		</form>
+	</div>
+</div>
 	<table cellspacing="20" style="margin: 0 auto; width: 100%">
 		<tr>
 			<td>
@@ -39,85 +149,11 @@ dojo.require("dijit.form.CheckBox");
 						<tr>
 							<td align="center" valign="top">
 								<table cellspacing="5" width="100%"​>
-									<tr>
-										<td><?php echo $tr->translate("STUDENT_ID")?></td><input type="hidden" name="id" value="<?php echo $this->row['id'];?>" />
-										<td>
-											<select readonly="readonly" class="fullside" name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" onchange="getStudentInfo();" >
-										    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $row){?>
-													<option value="<?php echo $row['stu_id']?>"<?php if($row['stu_id']==$this->row['stu_id']) echo 'selected="selected"';?>><?php echo $row['stu_code']?></option>
-												<?php }?>
-											</select>
-										</td>
-										<td><?php echo $tr->translate("TYPE")?></td>
-										<td>
-											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="type" name="type" type="text">
-												<?php if(!empty($this->type)){foreach ($this->type as $rs){?>
-													<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->row['type']){ echo 'selected="selected"';}?> ><?php echo $rs['name']?></option>
-												<?php }}?>
-											</select>
-										</td>
-										
-										
-									</tr>
-									<tr>
-										<td><?php echo $tr->translate("STUDENT_NAME")?></td>
-										<td>
-											<select readonly="readonly" class="fullside" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect" onchange="getStudentInfo();" >
-										    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
-													<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
-												<?php }?>
-											</select>
-										</td>
-										<td><?php echo $tr->translate("STOP_DATE")?></td>
-										<td>
-											<input dojoType="dijit.form.DateTextBox" required="true" class="fullside" id="datestop" name="datestop" value="<?php echo $this->row['date_stop'];?>" type="text">
-										</td>
-									</tr>
-									<tr>
-										<td><?php echo $tr->translate("SEX")?></td>
-										<td>
-											<select dojoType="dijit.form.FilteringSelect"  readonly="readonly" class="fullside" id="gender" name="gender" type="text">
-												<option value="1"><?php echo $tr->translate("MALE")?></option>
-												<option value="2"><?php echo $tr->translate("FEMALE")?></option>
-											</select>
-										</td>
-										<td><?php echo $tr->translate("STATUS")?></td>
-										<td>
-											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="status" name="status" type="text">
-												<option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE")?></option>
-												<option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE")?></option>
-											</select>
-										</td>
-									</tr>
-									<tr>
-										<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
-										<td>
-											<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="academic_year" name="academic_year" value="" type="text">
-										</td>
-										<td><?php echo $tr->translate("REASON")?></td>
-										<td rowspan="3">
-											<input style="min-height: 100px" dojoType="dijit.form.Textarea"  class="fullside" id="reason" name="reason" value="<?php echo $this->row['reason'];?>" required="true" type="text">
-										</td>
-									</tr>
-									<tr>
-										<td><?php echo $tr->translate("GRADE")?></td>
-										<td>
-											<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="grade" name="grade" value="" type="text">
-										</td>
-									</tr>
-									<tr>
-										<td><?php echo $tr->translate("SESSION")?></td>
-										<td>
-											<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="session" name="session" value="" type="text">
-										</td>
-									</tr>
+									
+									
 									<tr>
 										<td colspan="6" align="center">
-											<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-											<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-									 		iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"studentdrop",'action'=>'index'),null,true); ?>';" />
-											<input type="button" onclick="submitDataClose();" id="save_close" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
-											iconClass="dijitEditorIcon dijitEditorIconSave" />
+											
 										</td>
 									</tr>					
 								</table>

@@ -17,12 +17,12 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
-		$_title->setAttribs(array('dojoType'=>$this->text,
+		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
 				'placeholder'=>$this->tr->translate("SEARCH_FACULTY_NAME")));
 		$_title->setValue($request->getParam("title"));
 	
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,));
+		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside"));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -60,7 +60,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 	public function FrmSetting($_data=null){
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
-		$_title->setAttribs(array('dojoType'=>$this->text,
+		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
 				'placeholder'=>$this->tr->translate("INPUT_LABEL_VALUE")));
 		$_title->setValue($request->getParam("title"));
 	
@@ -134,12 +134,12 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
-		$_title->setAttribs(array('dojoType'=>$this->text,
+		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
 				'placeholder'=>$this->tr->translate("SEARCH_ROOM_TITLE")));
 		$_title->setValue($request->getParam("title"));
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,));
+		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -228,7 +228,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
-		$_title->setAttribs(array('dojoType'=>$this->text,
+		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
 				'placeholder'=>$this->tr->translate("SEARCH_BY_TEACHER_NAME")));
 		$_title->setValue($request->getParam('title'));
 		
@@ -260,7 +260,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 	
 	
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,));
+		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -387,12 +387,12 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
-		$_title->setAttribs(array('dojoType'=>$this->text,
+		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
 				'placeholder'=>$this->tr->translate("SEARCH_OCCUPATION_TITLE")));
 		$_title->setValue($request->getParam("title"));
 	
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,));
+		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),

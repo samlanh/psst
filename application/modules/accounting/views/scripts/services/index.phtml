@@ -9,7 +9,7 @@
 			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'services','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<input dojoType="dijit.form.TextBox"   id="adv_search" name="adv_search" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
+					 	<input dojoType="dijit.form.TextBox" class="fullside"   id="adv_search" name="adv_search" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
 					 </div>
 					  <div class="col-md-2 col-sm-2 col-xs-12">
 					  	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>

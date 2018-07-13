@@ -30,7 +30,7 @@ class Foundation_ReschedulegroupController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'foundation','controller'=>'reschedulegroup','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(2, $collumns, $rs_rows,array('group_code'=>$link,'years'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('group_code'=>$link,'years'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

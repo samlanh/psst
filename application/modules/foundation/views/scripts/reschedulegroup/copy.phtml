@@ -1,7 +1,7 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_callteral;
-echo $this->headTitle($tr->translate("EDIT_RESCHEDULE_GROUP"));
+echo $this->headTitle($tr->translate("ADD_RESCHEDULE_GROUP"));
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 //print_r($this->row_g);
 ?>
@@ -11,10 +11,20 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dijit.form.TextBox');
 </script>
-<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-calendar " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_RESCHEDULE_GROUP');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+    	<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-
 				group_code=dijit.byId("group_code").get("value");
                 if(group_code==-1){
 					alert("Please Selected group code!!!");
@@ -27,20 +37,6 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 					dijit.byId("academic_year").focus();
                     return false;
 				}
-<<<<<<< .mine
-||||||| .r390
-                if(group_code==$("#old_group").val() && year==$("#old_year").val()){
-					alert("Group code can not be duplicated!!!");
-					dijit.byId("group_code").focus();
-                    return false;
-				}
-=======
-               /* if(group_code==$("#old_group").val() && year==$("#old_year").val()){
-					alert("Group code can not be duplicated!!!");
-					dijit.byId("group_code").focus();
-                    return false;
-				}*/
->>>>>>> .r393
 				
     			var rowId = $('#identity1').val();
 				if(rowId!=''){ 
@@ -57,18 +53,6 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 					alert("Please teacher name !!!");
 					dijit.byId('teacher_'+rowIDArray[n]).focus();
 					return false;
-<<<<<<< .mine
-				}
-				if(dijit.byId('from_hour_'+rowIDArray[n]).get('value') > dijit.byId('to_hour_'+rowIDArray[n]).get('value')){
-					alert("Start hour can't bigger then end hour!!!");
-					dijit.byId('to_hour_'+rowIDArray[n]).focus();
-					return false;
-				}
-
-				}}
-||||||| .r390
-				}}}
-=======
 				}
 				if(dijit.byId('from_hour_'+rowIDArray[n]).get('value') > dijit.byId('to_hour_'+rowIDArray[n]).get('value')){
 					alert("Start hour can't bigger then end hour!!!");
@@ -76,72 +60,59 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 					return false;
 				}
 				}}
->>>>>>> .r393
 				dijit.byId('save_close').set('disabled',true);
 				return true;
 			}else {
 				return false;
 			}
-</script>
-<table width="100%">
-	<tr>
-		<td>
-			<fieldset style="margin-top:-13px;">
-				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("EDIT_RESCHEDULE_GROUP");?></strong></legend>
-				<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="10">
-					<tr>
-						<td><?php echo $tr->translate("GROUP_CODE")?></td>
-						<td>
-							<select name="group_code" class="fullside" id="group_code" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
+			</script>
+			<div class="card-box">
+	    		<div class="col-md-4 col-sm-4 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP_CODE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select name="group_code" class="fullside" id="group_code" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
 								<option value="-1"><?php echo $tr->translate("SELECT_GROUP")?></option>
 								<?php if(!empty($this->group_code)){foreach($this->group_code as $name){?>
 									<option value="<?php echo $name['id'];?>"><?php echo $name['name'];?></option>
 								<?php }}?>
 							</select>
-							<br/>
-								<input type="hidden" name="old_group" id="old_group"   />
-								<input type="hidden" name="old_year" id="old_year"   />
-						</td>
-						
-						<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
-						<td>
-							<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
+		                </div>
+		           </div>
+		           <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
 								<option value="-1">select year</option>
 								<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
 									<option value="<?php echo $year['id'];?>"><?php echo $year['years'];?></option>
 								<?php }}?>
 							</select>
-						</td>
-					</tr>
-					 
-					<tr>
-						<td colspan="6">
-							<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
-									<tr id="head-title" class="head-td" align="right"></tr>
-							</table>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="4" align="left">
-								<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+		                </div>
+		           </div>
+		       </div>
+		       <div class="col-md-8 col-sm-8 col-xs-12">
+		       		 <div class="form-group">
+		       		 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+								<tr id="head-title" class="head-td" align="right"></tr>
+						</table>
+						<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitIconEditProperty" onclick="addRow();" />
-						</td>
 						<input type="hidden" name="identity1" id="identity1"  />
-					</tr>
-					<tr>
-						<td colspan="6" align="center">
-							<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
-						</td>
-					</tr>
-				</table>
-			</fieldset>
-		</td>
-	</tr>
-</table>
-</form>
-
+		       		 </div>
+		       </div>
+		    </div>
+		     <div class="clearfix"></div>
+	       	<div class="card-box mt-20 ">
+	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+              		 <input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+            	 </div>
+            </div>
+		</form>
+	</div>
+</div>
 <?php 
 $techer= $this->frm_techer;
 ?>
@@ -341,7 +312,7 @@ function addRow() {
 		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="day_id_'+col+'" name="day_id_'+col+'">'+opt_day+'</select></td>';
 		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="from_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="from_hour_'+col+'" >'+opttime+'</select></td>';
 		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="to_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="to_hour_'+col+'" >'+opttime+'</select></td>';
-		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'" autoComplete="false"​​ queryExpr="*${0}*"  onchange="popUpsubject('+col+')">'+subject+'</select></td>';
+		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" onchange="popUpsubject('+col+')" name="group_subject_study_'+col+'" autoComplete="false"​​ queryExpr="*${0}*">'+subject+'</select></td>';
 		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" >';
 		template+=teacher_option;  
 		template+='</select></td>';
@@ -378,8 +349,6 @@ function oldaddRow() {
 		title=1;
 		dijit.byId("group_code").attr("value",<?php echo $rs['group_id']?>);
 		dijit.byId("academic_year").attr("value",<?php echo $rs['year_id']?>);
-		$("#old_group").val('<?php echo $rs['group_id']?>');
-		$("#old_year").val('<?php echo $rs['year_id']?>');
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
@@ -387,8 +356,8 @@ function oldaddRow() {
 		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="day_id_'+col+'" name="day_id_'+col+'">'+opt_day+'</select></td>';
 		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="from_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="from_hour_'+col+'" >'+opttime+'</select></td>';
 		template+='<td width="10%"><select class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" id="to_hour_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" name="to_hour_'+col+'" >'+opttime+'</select></td>';
-		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" onchange="popUpsubject('+col+')">'+subject+'</select></td>';
-		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" autoComplete="false"​​ queryExpr="*${0}*" >';
+		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'" onchange="popUpsubject('+col+')">'+subject+'</select></td>';
+		template+='<td width="10%"><select dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
 		template+='</select></td>';
 		template+='<td width="10%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
@@ -997,5 +966,4 @@ function popUpsubject(r){
 		$("#old_sub").val(r);
 	}
 }
-
 </script>

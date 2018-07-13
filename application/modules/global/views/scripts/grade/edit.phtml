@@ -6,6 +6,70 @@
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
 </script>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_GRADE');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+    	<form  id='edit-major' action="<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					return true;
+				}else {
+					return false;
+				}
+			</script>
+			<div class="card-box">
+				<div class="col-md-6 col-sm-6 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NAME");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" value="<?php echo $this->rs['major_enname']?>"  id="major_enname" name="major_enname" type="text">
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="shortcut" name="shortcut" value="<?php echo $this->rs['shortcut']?>" type="text">
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input id="dept" /> 
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true"  class="full height-text">
+							    <option value="1" <?php if($this->rs['is_active']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("ACTIVE")?></option>
+							    <option value="0" <?php if($this->rs['is_active']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("DEACTIVE")?></option>
+							</select>
+		                </div>
+		             </div>
+		             <div class="clearfix"></div>
+				         <div class="card-box mt-20">
+			               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+			               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+								<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
+									iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'global','controller'=>"grade",'action'=>'index'),null,true); ?>';" />
+								<input type="submit"  label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
+							 		iconClass="dijitEditorIcon dijitEditorIconSave" />
+			               	</div>
+			             </div>
+		         </div>
+			</div>
+		</form>
+    </div>
+ </div>
+
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.NumberTextBox");
@@ -34,64 +98,7 @@ dojo.ready(function(){
 });
 </script>
 <?php  $frm_major= $this->frm_major;?>
-<form  id='edit-major' action="<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				return true;
-			}else {
-				return false;
-			}
-</script>
 
-<table cellspacing="10" width="40%" style="margin: 0 auto;">
-	<tr>
-		<td>
-		<fieldset>
-			<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("EDIT_GRADE");?></strong></legend>
-			<table style="margin: 0 auto; width: 100%;" cellspacing="10">
-				<tr>
-					<td><?php echo $tr->translate("NAME")?></td>
-					<td> 
-						<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" value="<?php echo $this->rs['major_enname']?>"  id="major_enname" name="major_enname" type="text">
-					</td>
-				</tr>
-				<tr>
-					<td><?php echo $tr->translate("SHORTCUT")?></td>
-						<td> 
-							<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="shortcut" name="shortcut" value="<?php echo $this->rs['shortcut']?>" type="text">
-					</td>
-				</tr>
-				<tr>
-					<td><?php echo $tr->translate("DEGREE")?></td>
-					<td>
-						<input id="dept" /> 
-					</td>
-				</tr>
-				
-				<tr>
-					<td><?php echo $tr->translate("STATUS")?></td>
-					<td>
-						<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true"  class="full height-text">
-						    <option value="1" <?php if($this->rs['is_active']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("ACTIVE")?></option>
-						    <option value="0" <?php if($this->rs['is_active']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("DEACTIVE")?></option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="4" align="center">
-						<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-						<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-							iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'global','controller'=>"grade",'action'=>'index'),null,true); ?>';" />
-						<input type="submit"  label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
-					 		iconClass="dijitEditorIcon dijitEditorIconSave" />
-					</td>
-				</tr>
-			</table>	
-		</fieldset>		
-		</td>
-	</tr>
-</table>	
-</form>
 
 
 <div class="dijitHidden">

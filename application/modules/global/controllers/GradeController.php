@@ -28,7 +28,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    	$link=array(
 	    			'module'=>'global','controller'=>'grade','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(2, $collumns, $rs_rows,array('major_enname'=>$link ,'major_khname'=>$link,'dept_name'=>$link));
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('major_enname'=>$link ,'major_khname'=>$link,'dept_name'=>$link));
 	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");

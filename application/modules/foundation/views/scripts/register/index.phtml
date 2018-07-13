@@ -6,15 +6,15 @@
 	$url_copy =$this->url(array('module'=>'foundation','controller'=>'register','action'=>'copy'));
 	$formList = new Application_Form_Frmtable();
 	$frm =  $this->form_search;
+	
+	$urlCopy = $this->baseUrl()."/foundation/register/copy/id/";
+	$urlEdit = $this->baseUrl()."/foundation/register/edit/id/";
 ?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
 			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<div class="form-group">
-                   <div class="col-md-1 col-sm-1 col-xs-12">
-                    	<?php echo $formList->showCopyBuntton($url_copy);?>
-                   </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                     	<input dojoType="dijit.form.TextBox"   id="adv_search" name="adv_search" placeholder="<?php echo $tr->translate('SEARCH')?>" value="<?php echo $this->adv_search['adv_search']; ?>" class="fullside" type="text">
                    </div>
@@ -32,8 +32,6 @@
                    </div>
                 </div>
                 <div class="form-group">
-	               <div class="col-md-1 col-sm-1 col-xs-12">
-	               </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("start_date");?>
                    </div>
@@ -85,5 +83,37 @@ dojo.require("dijit.form.DateTextBox");
 		var recordcopy = $('input[name=copy]:checked').val();
 		dijit.byId('recordcopy').attr('value',recordcopy);
 	}
-	
+
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+			
+				var m = "clicked: " + key;
+				if(key=="edit"){
+					url='<?php echo $urlEdit;?>';
+				}else if(key=="copy"){
+					url='<?php echo $urlCopy;?>';
+				}
+				
+				gotoAction();
+				//window.console && console.log(m) || alert(m); 
+			},
+			items: {
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+
+	var recordid ='';
+	function gotoAction(){
+		window.location.href =url+row;
+		 //window.open(url+row);
+	}
 </script> 

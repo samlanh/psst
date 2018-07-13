@@ -4,21 +4,34 @@
 	
 	$url_copy =$this->url(array('module'=>'global','controller'=>'grade','action'=>'copy'));
 	$formList = new Application_Form_Frmtable();
-	
+	$urlCopy = $this->baseUrl()."/global/grade/copy/id/";
+	$urlEdit = $this->baseUrl()."/global/grade/edit/id/";
 ?>	
 <?php $frm =  $this->frm_search;?>
-<form id="list" name="list" action="<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
-	<table width="60%">
-		<tr>
-			<td style="width: 95px;border:1px solid #ccc;border-radius:10px;background:#eeeeee;"><?php echo $formList->showCopyBuntton($url_copy);?></td>
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement('status_search');?></td>
-			<td><button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-			<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
-		</tr>
-	</table>
-<?php echo $this->list;?>
-</form>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("title");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement('status_search');?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+						<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
+                   </div>
+                </div>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php echo $this->list;?>
+		</div>
+	</div>
+</div>
+
 
 
 
@@ -43,7 +56,39 @@ dojo.require("dijit.form.DateTextBox");
 		var recordcopy = $('input[name=copy]:checked').val();
 		dijit.byId('recordcopy').attr('value',recordcopy);
 	}
-	
+
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+			
+				var m = "clicked: " + key;
+				if(key=="edit"){
+					url='<?php echo $urlEdit;?>';
+				}else if(key=="copy"){
+					url='<?php echo $urlCopy;?>';
+				}
+				
+				gotoAction();
+				//window.console && console.log(m) || alert(m); 
+			},
+			items: {
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+
+	var recordid ='';
+	function gotoAction(){
+		window.location.href =url+row;
+		 //window.open(url+row);
+	}
 </script> 
 
 

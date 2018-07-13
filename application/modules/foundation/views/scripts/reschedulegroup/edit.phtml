@@ -11,8 +11,19 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dijit.form.TextBox');
 </script>
-<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_RESCHEDULE_GROUP');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
 				group_code=dijit.byId("group_code").get("value");
                 if(group_code==-1){
@@ -54,63 +65,54 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			}else {
 				return false;
 			}
-</script>
-<table width="100%">
-	<tr>
-		<td>
-			<fieldset style="margin-top:-13px;">
-				<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("EDIT_RESCHEDULE_GROUP");?></strong></legend>
-				<table style="margin: 0 auto; width: 100%;white-space:nowrap;" cellspacing="10">
-					<tr>
-						<td><?php echo $tr->translate("GROUP_CODE")?></td>
-						<td>
-							<select name="group_code" class="fullside" id="group_code" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
+			</script>
+			<div class="card-box">
+	    		<div class="col-md-4 col-sm-4 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP_CODE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select name="group_code" class="fullside" id="group_code" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
 								<option value="-1"><?php echo $tr->translate("SELECT_GROUP")?></option>
 								<?php if(!empty($this->group_code)){foreach($this->group_code as $name){?>
 									<option value="<?php echo $name['id'];?>"><?php echo $name['name'];?></option>
 								<?php }}?>
 							</select>
-						</td>
-						
-						<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
-						<td>
-							<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
+		                </div>
+		           </div>
+		           <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
 								<option value="-1">select year</option>
 								<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
 									<option value="<?php echo $year['id'];?>"><?php echo $year['years'];?></option>
 								<?php }}?>
 							</select>
-						</td>
-					</tr>
-					 
-					<tr>
-						<td colspan="6">
-							<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
-									<tr id="head-title" class="head-td" align="right"></tr>
-							</table>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="4" align="left">
-								<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+		                </div>
+		           </div>
+		       </div>
+		       <div class="col-md-8 col-sm-8 col-xs-12">
+		       		 <div class="form-group">
+		       		 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+								<tr id="head-title" class="head-td" align="right"></tr>
+						</table>
+						<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitIconEditProperty" onclick="addRow();" />
-						</td>
 						<input type="hidden" name="identity1" id="identity1"  />
-					</tr>
-					<tr>
-						<td colspan="6" align="center">
-							<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
-						</td>
-					</tr>
-				</table>
-			</fieldset>
-		</td>
-	</tr>
-</table>
-</form>
-
+		       		 </div>
+		       </div>
+		    </div>
+		     <div class="clearfix"></div>
+	       	<div class="card-box mt-20 ">
+	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+              		 <input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+            	 </div>
+            </div>
+		</form>
+	</div>
+</div>
 <?php 
 $techer= $this->frm_techer;
 ?>

@@ -3,75 +3,94 @@
 	echo $this->headTitle($tr->translate('ADD_NEW_SUBJECT')); 
 ?>	
 <?php  $subject_exam= $this->frm_subject_exam;?>
-<form  id='add_subject_exam' action="<?php echo $this->url(array('module'=>'global','controller'=>'subject','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-                dijit.byId("save_close").attr("disabled",true);
-                dijit.byId("save_new").attr("disabled",true);
-				return true;
-			}else {
-				return false;
-			}
-</script>
-<table cellspacing="10" width="40%" style="margin: 0 auto;">
-	<tr>
-		<td>
-			<fieldset style="background-color:#fff;   border: solid 1px #008;">
-						<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_NEW_SUBJECT");?></strong></legend>
-						<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
-							<tr>
-								<td><input type="checkBox" checked="checked" dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
-								<input type="hidden" id="par" name="par" />
-							</tr>
-							<tr>
-								<td style="width: 100px"><?php echo $tr->translate("PARENT")?></td>
-								<td>
-									<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
-										<option value="0"></option>
-										<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
-													<option value="<?php echo $row['id']?>"><?php echo $row['subject_titleen']?></option>
-										<?php }?>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_KH")?></td>
-								<td><?php  echo $subject_exam->getElement('subject_kh');?></td>
-							</tr>
-							<tr>
-								<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_EN")?></td>
-								<td><?php  echo $subject_exam->getElement('subject_en');?></td>
-							</tr>
-							<tr>
-								<td style="width: 100px"><?php echo $tr->translate("SHORTCUT")?></td>
-								<td><?php echo $subject_exam->getElement('score_percent');?></td>
-							</tr>
-							<!-- 
-							<tr>
-								<td style="width: 5px"><?php echo $tr->translate("DEGREE")?></td>
-								<td><input id="access_type" />
-								</td>
-							</tr>
-							 -->
-							<tr>
-								<td style="width: 5px"><?php echo $tr->translate("STATUS")?></td>
-								<td><?php  echo $subject_exam->getElement('status');?></td>
-							</tr>
-							<tr>
-								<td colspan="2" align="center">
-									<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-									<input type="button" onclick="submitDataClose();" id="save_close"  name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconSave" />
-									<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconSave" />
-								</td>
-							</tr>
-						</table>	
-			</fieldset>		
-		</td>
-	</tr>
-</table>	
-</form>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-folder-open-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_NEW_SUBJECT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+    	
+    	<form  id='add_subject_exam' action="<?php echo $this->url(array('module'=>'global','controller'=>'subject','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+               		dijit.byId("save_close").attr("disabled",true);
+               		dijit.byId("save_new").attr("disabled",true);
+					return true;
+				}else {
+					return false;
+				}
+			</script>
+			<div class="card-box">
+				<div class="col-md-6 col-sm-6 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12">
+		                <input type="checkBox" checked="checked" dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" />
+		                <?php echo $tr->translate("IS_PARENT");?> <input type="hidden" id="par" name="par" /></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PARENT");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
+								<option value="0"></option>
+								<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
+											<option value="<?php echo $row['id']?>"><?php echo $row['subject_titleen']?></option>
+								<?php }?>
+							</select>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_IN_KH");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php  echo $subject_exam->getElement('subject_kh');?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_IN_EN");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php  echo $subject_exam->getElement('subject_en');?>
+		                </div>
+		             </div>
+					<!--<div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("DEGREE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input id="access_type" />
+		                </div>
+		             </div> -->
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $subject_exam->getElement('score_percent');?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                <?php  echo $subject_exam->getElement('status');?>
+		                </div>
+		             </div>
+		             <div class="clearfix"></div>
+				         <div class="card-box mt-20">
+			               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+			               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+								<input type="button" onclick="submitDataClose();" id="save_close"  name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+									iconClass="dijitEditorIcon dijitEditorIconSave" />
+								<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+									iconClass="dijitEditorIcon dijitEditorIconSave" />
+			               	</div>
+			             </div>
+		         </div>
+			</div>
+			
+		</form>
+    </div>
+</div>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_add_degree" >
 		<form  id='frm_degree' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">

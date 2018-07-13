@@ -34,7 +34,7 @@ class Global_GroupController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'global','controller'=>'group','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(2, $collumns, $rs_rows,array('group_code'=>$link,'tuitionfee_id'=>$link,'degree'=>$link,'grade'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('group_code'=>$link,'tuitionfee_id'=>$link,'degree'=>$link,'grade'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

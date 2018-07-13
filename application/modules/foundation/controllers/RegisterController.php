@@ -38,7 +38,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				$link1=array(
 						'module'=>'foundation','controller'=>'register','action'=>'view',
 				);
-				$this->view->list=$list->getCheckList(2, $collumns, $rs_rows,array('branch_name'=>$link1,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'grade'=>$link));
+				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link1,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'grade'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

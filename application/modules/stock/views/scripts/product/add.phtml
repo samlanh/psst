@@ -3,6 +3,128 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>	
 <title><?php echo $tr->translate("ADD_PRODUCT");?></title>
+<style>
+select{ width:100%;}
+fieldset{  background:none;}
+.red{ color: red; padding-left:5px;}
+</style>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-cubes " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_PRODUCT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<form id='suspend_service' action="<?php echo $this->url(array('module'=>'stock','controller'=>'product','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				identity = dijit.byId('identity').get('value');
+				if(identity==''){
+					alert('សូមជ្រើសរើសសាខា !');
+                    dijit.byId("branch").focus();
+					return false;
+				}
+                dijit.byId("save_close").attr("disabled",true);
+				dijit.byId("save_new").attr("disabled",true);
+				return true;
+			} else {
+				return false;
+			}
+			</script>
+			<div class="card-box">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRODUCT_CODE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.TextBox"  class="fullside" id="product_code" value="<?php echo $this->pro_code;?>" name="product_code"  type="text">
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRODUCT_NAME");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.ValidationTextBox"  class="fullside" id="product_name" value="" name="product_name"  type="text"​​ required="required">
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRODUCT_CATEGORY");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input id="category_id" />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TYPE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="pro_type" name="pro_type" type="text">								
+								<option value="1" ><?php echo $tr->translate("PRODUCT_FOR_SELL");?></option>
+								<option value="2" ><?php echo $tr->translate("OFFICE_MATERIAL");?></option>
+							</select>
+	                   </div>
+	                </div>
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
+	             	<div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input id="branch" />
+	                   </div>
+	                </div>
+	                
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELL_PRICE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.NumberTextBox"  class="fullside" id="pro_price" value="" name="pro_price"  type="text" required="required">
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("UNIT_COST");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input dojoType="dijit.form.NumberTextBox"  class="fullside" id="cost" value="" name="cost"  type="text" required="required">
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<textarea class="fullside" tabindex="8" style=" height: 40px !important;" dojotype="" id="descript" name="descript"></textarea>
+	                   </div>
+	                </div>
+	             </div>
+			</div>
+			<div class="card-box">
+				 <div class="col-md-8 col-sm-8 col-xs-12">
+	             	<div class="form-group">
+	             		<table id="table_row" border="1" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
+							<tr id="head-title" class="head-td" align="right"></tr>
+						</table>
+						<input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" />
+	             	</div>
+	             </div>
+			</div>
+			 <div class="clearfix"></div>
+	         <div class="card-box mt-20">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="button" onclick="submitDataClose()" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+					 iconClass="dijitEditorIcon dijitEditorIconSave" />
+					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
+					 iconClass="dijitEditorIcon dijitEditorIconSave" />
+               	</div>
+             </div>
+		</form>
+	</div>
+</div>
+	
 <script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
@@ -46,91 +168,7 @@ dojo.require("dojo.NodeList-manipulate");
 		}, "branch");
 	});	
 </script>
-<style>
-select{ width:100%;}
-fieldset{  background:none;}
-.red{ color: red; padding-left:5px;}
-</style>
-<form id='suspend_service' action="<?php echo $this->url(array('module'=>'stock','controller'=>'product','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-<script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				identity = dijit.byId('identity').get('value');
-				if(identity==''){
-					alert('សូមជ្រើសរើសសាខា !');
-                    dijit.byId("branch").focus();
-					return false;
-				}
-                dijit.byId("save_close").attr("disabled",true);
-				dijit.byId("save_new").attr("disabled",true);
-				return true;
-			} else {
-				return false;
-			}
-</script>
-	<table  cellspacing="10" style="margin: 0 auto; width: 100%;">
-		<tr>
-			<td>
-			<fieldset style=" background: #fff;   border: solid 1px #008;">
-				<legend align="center"><strong><?php echo $tr->translate("ADD_PRODUCT");?></strong></legend>
-				<table style="margin: 0 auto; width: 100%;padding:10px;" cellspacing="7" >
-					<tr>
-						<td style="width: 160px"><strong><?php echo $tr->translate("PRODUCT_NAME");?></strong></td>
-						<td width="200px" ><input dojoType="dijit.form.ValidationTextBox"  class="fullside" id="product_name" value="" name="product_name"  type="text"​​ required="required"></td>
-						<td style="width: 160px"><?php echo $tr->translate("PRODUCT_CODE");?></td>
-						<td width="200px" ><input dojoType="dijit.form.TextBox"  class="fullside" id="product_code" value="<?php echo $this->pro_code;?>" name="product_code"  type="text"></td>
-					</tr>
-					<tr>
-						<td ><?php echo $tr->translate("PRODUCT_CATEGORY");?></td>
-						<td>
-							<input id="category_id" />
-						</td>
-						<td style="width: 160px"><strong><?php echo $tr->translate("SELL_PRICE");?></strong></td>
-						<td ><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="pro_price" value="" name="pro_price"  type="text" required="required"></td>
-					</tr>
-					<tr>
-						<td><?php echo $tr->translate("TYPE");?></td>
-						<td >
-							<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="pro_type" name="pro_type" type="text">								
-								<option value="1" ><?php echo $tr->translate("PRODUCT_FOR_SELL");?></option>
-								<option value="2" ><?php echo $tr->translate("OFFICE_MATERIAL");?></option>
-							</select>
-						</td>
-						<td style="width: 160px"><strong><?php echo $tr->translate("UNIT_COST");?></strong></td>
-						<td ><input dojoType="dijit.form.NumberTextBox"  class="fullside" id="cost" value="" name="cost"  type="text" required="required"></td>
-					</tr>
-					<tr>
-						<td style="white-space: nowrap;"><?php echo $tr->translate("BRANCH");?></td>
-						<td><input id="branch" /></td>		
-						<td><?php echo $tr->translate("NOTE");?></td>
-						<td >
-							<textarea class="fullside" tabindex="8" style=" height: 40px !important;" dojotype="" id="descript" name="descript"></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="4">
-							<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
-								<tr id="head-title" class="head-td" align="right"></tr>
-							</table>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2"><input type="hidden" dojoType="dijit.form.TextBox" id="identity" name="identity" /></td>
-					</tr>
-					<tr>
-						<td colspan="4" align="center">
-							<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="button" onclick="submitDataClose()" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-							 iconClass="dijitEditorIcon dijitEditorIconSave" />
-							 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-							 iconClass="dijitEditorIcon dijitEditorIconSave" />
-						</td>
-					</tr>
-				</table>	
-			</fieldset>		
-			</td>
-		</tr>
-	</table>	
-</form>
+
 <?php  $frm = $this->frm_branch;?>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:800px" id="popup_add_branch" >

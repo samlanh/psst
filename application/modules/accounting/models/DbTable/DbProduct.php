@@ -246,8 +246,8 @@ class Accounting_Model_DbTable_DbProduct extends Zend_Db_Table_Abstract
     			id,
     			name_kh,
     			`date`,
-    			(select name_en from rms_view where type=1 and key_code=status) as status
-    		  FROM rms_pro_category  WHERE status=1 ";
+    			status
+    		  FROM rms_pro_category  WHERE 1 ";
     	$where=" ";
     	if(!empty($search['title'])){
     		$s_where=array();

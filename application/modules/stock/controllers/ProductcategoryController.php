@@ -27,12 +27,14 @@ class Stock_ProductcategoryController extends Zend_Controller_Action {
 			$rows = $db->getAllCategory($search);
 				
 			$rs_rows=new Application_Model_GlobalClass();
+			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
+			
 			$list = new Application_Form_Frmtable();
 			$collumns = array("NAME","DATE","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'productcategory','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rows,array('name_kh'=>$link,'name_en'=>$link,));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('name_kh'=>$link,'name_en'=>$link,));
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}

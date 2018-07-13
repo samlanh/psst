@@ -96,7 +96,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
-		$_title->setAttribs(array('dojoType'=>$this->text,
+		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
 				'placeholder'=>$this->tr->translate("SEARCH_BY_TEACHER_NAME")));
 		$_title->setValue($request->getParam('title'));
 		

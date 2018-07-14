@@ -349,7 +349,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getSupplierById($id){
     	$db=$this->getAdapter();
-    	$sql="SELECT s.id,s.sup_name,s.purchase_no,s.sex,s.tel,s.email,s.address,sp.amount_due,sp.branch_id
+    	$sql="SELECT s.id,s.sup_name,s.purchase_no,s.sex,s.tel,s.email,s.address,sp.amount_due,sp.branch_id,sp.status
 		       FROM rms_supplier AS s,rms_supplier_product AS sp
 		       WHERE s.id=sp.sup_id AND sp.id=$id";
     	return $db->fetchRow($sql);

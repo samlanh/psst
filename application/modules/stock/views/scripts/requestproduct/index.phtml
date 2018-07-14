@@ -7,39 +7,55 @@ $frm = $this->form_search;
 ?>
 <title><?php //echo $tr->translate("CATEGORY");?></title>
 <meta charset="utf-8">
-<form action="<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'index')); ?>"
-	dojoType="dijit.form.Form" method="post">
-	<table style="width: 100%">
-		<tr>
-			<td><?php echo $frm->getElement("title");?></td>
-			<td>
-				<select name="request_for" id="request_for" dojoType="dijit.form.FilteringSelect" class="fullside" >
-					<option value="-1">select request for</option>
-					<?php if(!empty($this->rq_for)){foreach($this->rq_for as $req_for){?>
-						<option value="<?php echo $req_for['id']?>" <?php if($req_for['id']==$this->search['request_for']){echo "selected='selected'";}?> ><?php echo $req_for['name']?></option>
-					<?php }}?>
-				</select>
-			</td>
-			<td>
-				<select name="for_section" id="for_section" dojoType="dijit.form.FilteringSelect" class="fullside" >
-					<option value="-1">select request for</option>
-					<?php if(!empty($this->for_section)){foreach($this->for_section as $for_sec){?>
-						<option value="<?php echo $for_sec['id']?>" <?php if($for_sec['id']==$this->search['for_section']){echo "selected='selected'";}?> ><?php echo $for_sec['name']?></option>
-					<?php }}?>
-				</select>
-			</td>
-			<td><?php echo $frm->getElement("start_date");?></td>
-			<td><?php echo $frm->getElement("end_date");?></td>
-			<td> <?php echo $frm->getElement("status_search");?></td>
-			<td>
-				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
-					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-			</td>
-		</tr>
-	</table>
-</form>
-<?php
-  echo $this->list;
-?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form action="<?php echo $this->url(array('module'=>'stock','controller'=>'requestproduct','action'=>'index')); ?>"
+				dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("title");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<select name="request_for" id="request_for" dojoType="dijit.form.FilteringSelect" class="fullside" >
+							<option value="-1">select request for</option>
+							<?php if(!empty($this->rq_for)){foreach($this->rq_for as $req_for){?>
+								<option value="<?php echo $req_for['id']?>" <?php if($req_for['id']==$this->search['request_for']){echo "selected='selected'";}?> ><?php echo $req_for['name']?></option>
+							<?php }}?>
+						</select>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<select name="for_section" id="for_section" dojoType="dijit.form.FilteringSelect" class="fullside" >
+							<option value="-1">select request for</option>
+							<?php if(!empty($this->for_section)){foreach($this->for_section as $for_sec){?>
+								<option value="<?php echo $for_sec['id']?>" <?php if($for_sec['id']==$this->search['for_section']){echo "selected='selected'";}?> ><?php echo $for_sec['name']?></option>
+							<?php }}?>
+						</select>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("status_search");?>
+                   </div>
+                </div>
+                <div class="form-group">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("start_date");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("end_date");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+								showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                   </div>
+                </div>
+			</form>
+		</div>
+		<div class="card-box">
+		<?php   echo $this->list;?>
+		</div>
+	</div>
+</div>
+
+
 
  

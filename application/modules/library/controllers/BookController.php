@@ -25,7 +25,22 @@ protected $tr;
 		    			'status_search'	=>	1
 	    		);
     	    }
-    	    $this->view->book_row=$db->getAllBook($search);
+    	    $rs_rows =$db->getAllBook($search);
+    	    $list = new Application_Form_Frmtable();
+    	    if(!empty($rs_rows)){
+    	    	$glClass = new Application_Model_GlobalClass();
+    	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
+    	    }
+    	    else{
+    	    	$result = Application_Model_DbTable_DbGlobal::getResultWarning();
+    	    }
+    	    $collumns = array("BOOK_NO","BOOK_NAME","AUTHOR_NAME","SERIAL_NO","BLOCK_NAME","CATEGORY","QUANTITY","UNIT_PRICE","DATE","USER","STATUS");
+    	    $link=array(
+    	    		'module'=>'library','controller'=>'book','action'=>'edit',
+    	    );
+    	    $this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('book_no'=>$link,'title'=>$link));
+    	    
+//     	    $this->view->book_row=$db->getAllBook($search);
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

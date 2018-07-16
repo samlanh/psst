@@ -4,6 +4,8 @@
 	$url_edit = $this->url(array('module'=>'library','controller'=>'book','action'=>'edit',));
 	$url_copy =$this->url(array('module'=>'library','controller'=>'book','action'=>'copy'));
 	$formList = new Application_Form_Frmtable();
+	$urlCopy = $this->baseUrl()."/library/book/copy/id/";
+	$urlEdit = $this->baseUrl()."/library/book/edit/id/";
 ?>	
 <?php $frm =  $this->frm_search;?>
  <style>
@@ -23,9 +25,6 @@
 		<div class="card-box">
 			<form id="frm_search" name="frm_search" action="" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-                   <div class="col-md-1 col-sm-1 col-xs-12">
-                    	<?php echo $formList->showCopyBuntton($url_copy);?>
-                   </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                     	<?php echo $frm->getElement("title");?>
                    </div>
@@ -45,68 +44,7 @@
 			</form>
 		</div>
 		<div class="card-box">
-			<div class="dataTables_scrollBody" style="position: relative;  width: 100%; background:#fff;   ">
-    			<table border="1" id="datatable-responsive" style="  border-collapse: collapse;   border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >
-			      <thead>
-				        <tr><input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" /></tr>
-						<tr>
-						    <th class="tdheader header" width="4%" align="center"></th>
-							<th class="tdheader header" width="4%" align="center"><?php echo $tr->translate("NUM");?></th>
-							<th class="tdheader header"><?php echo $tr->translate("BOOK_NO");?></th>
-							<th class="tdheader header"><?php echo $tr->translate("BOOK_NAME");?>
-							<th class="tdheader header"><?php echo $tr->translate("AUTHOR_NAME");?>
-							<th class="tdheader header"><?php echo $tr->translate("SERIAL_NO");?>
-							<th class="tdheader header"><?php echo $tr->translate("BLOCK_NAME");?>
-							<th class="tdheader header"><?php echo $tr->translate("CATEGORY");?>
-							<th class="tdheader header"><?php echo $tr->translate("QUANTITY");?>
-							<th class="tdheader header"><?php echo $tr->translate("UNIT_PRICE");?>
-							<th class="tdheader header"><?php echo $tr->translate("DATE");?>
-							<th class="tdheader header"><?php echo $tr->translate("USER");?>
-							<th class="tdheader header"><?php echo $tr->translate("STATUS");?>
-						</tr>
-					</thead>
-			<?php 
-			        						 $id = "table";
-			        						 $stringPagination = '';
-			        						 $footer="";
-			        						 
-			        						 ?>
-				
-			     <?php $i=1;$num_book=0;$c_book='';$b_name=''; // print_r($this->book_row);
-						if(!empty($this->book_row)) foreach($this->book_row as $key=>$row){
-						    if($row['book_code']==$c_book && $row['book_title']==$b_name){
-						    	$num_book=$num_book+1;
-						    }else{
-						    	$num_book=0;
-						    	$c_book=$row['book_code'];
-						        $b_name=$row['book_title'];
-						    }
-						    
-							?>
-						
-						<tr class="normal" style="font-size: 100%;font-family: 'Khmer OS Battambang';<?php if($num_book>0)echo "background-color:#ffbdcf;";?>" 	<?php echo $row['book_title'].'='.$b_name;?>>
-						
-							<td id="items" width="4%" style="text-align: center;"><input type="radio" onclick="setValue()" name="copy" id="copy" value="<?php echo $row['id'];?>"></td>
-						    <td id="items" width="4%" style="text-align: center;"><?php echo $i++;?></td>
-							<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['book_no'];?></a></td>
-							<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['title'];?></a></td>
-							<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['author'];?></a></td>
-							<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['serial_no'];?></a></td>
-							<td id="items"><?php echo $row['block_name'];?></td>
-							<td id="items"><?php echo $row['cat_name'];?></td>
-							<td id="items" style="text-align: center"><?php echo $row['qty_after'];?> &nbsp;ក្បាល</td>
-							<td id="items">&nbsp;$&nbsp;<?php echo $row['unit_price'];?></td>
-							<td id="items"><?php echo date("d/M/Y",strtotime($row['date']));?></td>
-							<td id="items"><?php echo $row['user_name'];?></td>
-							<td id="items"><?php echo $row['status'];?></td>
-						</tr>
-					<?php  }
-								$counter='<strong style="float:right;padding:5px">Number of record(s): '.count($this->book_row).'</strong>';
-								$footer = '<div class="footer_list">'.$stringPagination.$counter.'</div>';
-						 ?>
-			</table>
-			<?php echo $footer?>
-			</div>
+			<?php echo $this->list; ?>
 		</div>
 	</div>
 </div>
@@ -131,7 +69,38 @@ dojo.require("dijit.form.DateTextBox");
 		var recordcopy = $('input[name=copy]:checked').val();
 		dijit.byId('recordcopy').attr('value',recordcopy);
 	}
-	
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+			
+				var m = "clicked: " + key;
+				if(key=="edit"){
+					url='<?php echo $urlEdit;?>';
+				}else if(key=="copy"){
+					url='<?php echo $urlCopy;?>';
+				}
+				
+				gotoAction();
+				//window.console && console.log(m) || alert(m); 
+			},
+			items: {
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+
+	var recordid ='';
+	function gotoAction(){
+		window.location.href =url+row;
+		 //window.open(url+row);
+	}	
 </script> 
 
  

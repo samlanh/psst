@@ -16,17 +16,32 @@
 	    width: 35px;
 	}
 </style>
-<div dojoType="dijit.layout.AccordionPane">
-<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-	<table cellpadding="2" cellpadding="2">
-		<tr>
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement('start_date');?></td>
-			<td><?php echo $frm->getElement('end_date');?></td>
-			<td><?php echo $frm->getElement('status_search');?></td>
-			<td><button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
-</form>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement("title");?>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement('start_date');?>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement('end_date');?>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement('status_search');?>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                    </div>
+                </div>
+			</form>
+		</div>
+		<div class="card-box">
+			 <?php echo $this->list?>
+		</div>
+	</div>
 </div>
- <?php echo $this->list?>
+

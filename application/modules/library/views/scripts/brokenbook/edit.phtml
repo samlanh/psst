@@ -13,79 +13,94 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
     dojo.require("dojo.parser");
 </script>
 <?php //echo print_r($this->row);?>
-<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'library','controller'=>'brokenbook','action'=>'edit')); ?>" 
-dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-<script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-                var rowId = $('#identity').val();
-    			if(rowId!=''){ 
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+             <div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;<?php echo $tr->translate('EDIT_BROKEN_BOOK');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'library','controller'=>'brokenbook','action'=>'edit')); ?>" 
+		dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+                	var rowId = $('#identity').val();
+    				if(rowId!=''){ 
 					var rowIDArray = rowId.split(',');
-					for(var n = 0; n < rowIDArray.length; n++){
-					var book_id = dijit.byId('book_id'+rowIDArray[n]).get('value');
-					if(book_id==''){
-							alert("Please select book title!");
-							return false;
+						for(var n = 0; n < rowIDArray.length; n++){
+							var book_id = dijit.byId('book_id'+rowIDArray[n]).get('value');
+							if(book_id==''){
+								alert("Please select book title!");
+								return false;
+							}
 						}
 					}
-				}
 			   
-				return true;
-			}else {
-				return false;
-			}
-</script>
-<table width="100%" style="padding-top: 10px;">
-	<tr>
-		<td>
-				<fieldset style="margin-top:-13px;">
-					<legend align="center" ><strong style="font-size: 18px;"><?php echo $tr->translate("EDIT_BROKEN_BOOK");?></strong></legend>
-					<table style="margin: 0 auto; width: 100%;" cellspacing="10" >
-						<tr >
-							<td nowrap="nowrap"><?php echo $tr->translate("Broken_No")?></td>
-							<td><input  dojoType="dijit.form.TextBox" id="broken_no" name="broken_no" type="text"  value="<?php echo $this->row['broke_no'];?>" readonly="readonly"></td>
-							<td nowrap="nowrap"><?php echo $tr->translate("RETURN_DATE")?></td>
-							<td><input dojoType="dijit.form.DateTextBox" id="broken_date" name="broken_date" type="text" constraints="{datePattern:'dd/MM/yyyy'}"  value="<?php echo $this->row['date_broken'];?>"/></td>
-						</tr>
-						<tr >
-						    <td style="width: 5px"><?php echo $tr->translate("NOTE")?></td>
-							<td >
-								<textarea id="note" rows="2" cols="32" name="note" dojoType="dijit.form.Textarea" style="height:35px;"><?php echo $this->row['title'];?></textarea>								
-							</td>
-							<td ><?php echo $tr->translate("STATUS")?></td>
-							<td><select name="status" id="status" dojoType="dijit.form.FilteringSelect">
-								    <option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE")?></option>
-								    <option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE")?></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="6">
-								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
-										<tr id="head-title" class="head-td" align="right"></tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="4" align="left">
-									<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
-								 		iconClass="dijitIconEditProperty" onclick="addRow();" />
-								 		<input type="hidden" name="identity" id="identity"  />
-							</td>
-						</tr>
-						<tr>
-							<td colspan="6" align="center">
-								<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-									<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-										iconClass="dijitEditorIcon dijitEditorIconSave" />
-									 
-							</td>
-						</tr>
-					</table>
-				</fieldset>
-		</td>
-	</tr>
-</table>
-</form>
+					return true;
+				}else {
+					return false;
+				}
+			</script>
+			<div class="card-box">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+	        		<div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Broken_No");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input class="fullside"  dojoType="dijit.form.TextBox" id="broken_no" name="broken_no" type="text"  value="<?php echo $this->row['broke_no'];?>" readonly="readonly">
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RETURN_DATE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input class="fullside" dojoType="dijit.form.DateTextBox" id="broken_date" name="broken_date" type="text" constraints="{datePattern:'dd/MM/yyyy'}"  value="<?php echo $this->row['date_broken'];?>"/>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<textarea class="fullside" id="note" rows="2" name="note" dojoType="dijit.form.Textarea" style="height:35px;"><?php echo $this->row['title'];?></textarea>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select class="fullside" name="status" id="status" dojoType="dijit.form.FilteringSelect">
+							    <option value="1" <?php if($this->row['status']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ACTIVE")?></option>
+							    <option value="0" <?php if($this->row['status']==0) echo 'selected="selected"';?>><?php echo $tr->translate("DEACTIVE")?></option>
+							</select>
+	                   </div>
+	                </div>
+	             </div>
+	             <div class="col-md-8 col-sm-8 col-xs-12">
+	        		<div class="form-group">
+        				<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+							<tr id="head-title" class="head-td" align="right"></tr>
+						</table>
+						<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+						 		iconClass="dijitIconEditProperty" onclick="addRow();" />
+						 		<input type="hidden" name="identity" id="identity"  />
+	        		</div>
+	        	</div>
+			</div>
+			<div class="clearfix"></div>
+		    <div class="card-box">
+               	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="submit" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+	    		</div>
+	    	</div>
+		</form>
+	</div>
+</div>	
 <?php 
 $techer= $this->frm_techer;
 ?>
@@ -160,10 +175,10 @@ function oldAdd() {
 	if(title!=1){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th id="lbl_titlemetion" width="250px"><?php echo $tr->translate("BOOK_TITLE");?></th>';
-		temp+='<th id="lbl_titlemetion" width="50px"><?php echo $tr->translate("CURR_QTY");?>(ក្បាល)</th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("BROKEN_QTY");?>(ក្បាល)</th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
+		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("BOOK_TITLE");?></th>';
+		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("CURR_QTY");?>(ក្បាល)</th>';
+		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("BROKEN_QTY");?>(ក្បាល)</th>';
+		temp+='<th id="lbl_titlemetion" ><?php echo $tr->translate("NOTE");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}

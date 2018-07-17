@@ -68,43 +68,6 @@ class RsvAcl_UserController extends Zend_Controller_Action
     	$this->view->txtsearch = $_data['txtsearch'];
     	
     }
-    public function viewUserAction()
-    {   
-    	/* Initialize action controller here */
-    	if($this->getRequest()->getParam('id')){
-    		$db = new RsvAcl_Model_DbTable_DbUser();
-    		$user_id = $this->getRequest()->getParam('id');
-    		$rs=$db->getUser($user_id);
-    		//print_r($rs); exit;
-    		$this->view->rs=$rs;
-    	}  	 
-    	
-    }
-	public function addUserAction()
-		{
-			$form=new RsvAcl_Form_FrmUser();	
-			$this->view->form=$form;
-			
-			if($this->getRequest()->isPost())
-			{
-				$db=new RsvAcl_Model_DbTable_DbUser();	
-				$post=$this->getRequest()->getPost();			
-				if(!$db->isUserExist($post['username'])){
-					
-						$id=$db->insertUser($post);
-						  //write log file 
-				             $userLog= new Application_Model_Log();
-				    		 $userLog->writeUserLog($id);
-				     	  //End write log file
-				
-						//Application_Form_FrmMessage::message('One row affected!');
-						Application_Form_FrmMessage::redirector('/rsvacl/user/index');																			
-				}else {
-					Application_Form_FrmMessage::message('User had existed already');
-				}
-			}
-			Application_Model_Decorator::removeAllDecorator($form);
-		}
 	public function addAction()
 	{
 			// action body

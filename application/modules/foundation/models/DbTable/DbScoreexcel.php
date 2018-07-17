@@ -78,6 +78,7 @@ class Foundation_Model_DbTable_DbScoreexcel extends Zend_Db_Table_Abstract
 					'for_academic_year'=>$_data['year_study'],
 					'for_semester'=>$_data['for_semester'],
 					'for_month'=>$_data['for_month'],
+					'status'=>$_data['status'],
 				);
 			$where="id=".$_data['score_id'];
 			$this->update($_arr, $where);

@@ -125,7 +125,7 @@ function filterStudentOld(){
 	        	<?php if($rss["is_parent"]== 1){ $j=$j+1;?>
 	        	no = '<?php echo $j;?>';
 	            stringsname = '<?php echo str_replace(' ','',$rss['subject_titleen'])?>';
-	            temp+='<td><input dojoType="dijit.form.validateNumberTextBox"  name="<?php echo $rs["student_id"].'subjectid_'.$rss['subject_id'];?>'+<?php echo $i; ?>+'" id="<?php echo $rs["student_id"].'subjectid_'.$rss['subject_id'];?>'+<?php echo $i; ?>+'"   value="<?php echo $rss["score"] ?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></td>';
+	            temp+='<td><input style="max-width:60px" dojoType="dijit.form.validateNumberTextBox"  name="<?php echo $rs["student_id"].'subjectid_'.$rss['subject_id'];?>'+<?php echo $i; ?>+'" id="<?php echo $rs["student_id"].'subjectid_'.$rss['subject_id'];?>'+<?php echo $i; ?>+'"   value="<?php echo $rss["score"] ?>" type="text" onkeypress="return AllowOnlyNumbers(event);"></td>';
 	       	 	<?php }?>
 		<?php }}?>
 		temp += '<td><input dojoType="dijit.form.validateNumberTextBox" class="fullside" name="note_'+inx+'" id="note_'+inx+'"  value="<?php echo $rs["note"];?>" type="text" ></td>';

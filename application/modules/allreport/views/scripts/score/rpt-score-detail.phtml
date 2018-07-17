@@ -283,17 +283,16 @@ dojo.ready(function(){
 </div>
 <?php 
 function calCulateGrade($score,$max_score){
-	$score_avg = (($score) / ($max_score))*100;
-	$x = 100/$max_score;
-	if($score_avg < (50/$x)){
+	$score_avg = ($score / $max_score)*100;
+	if($score_avg < 50){//0.67
 		return 'F';
-	}else if($score_avg < (60/$x)){
+	}else if($score_avg < 60){
 		return 'E';
-	}else if($score_avg < (70/$x)){
+	}else if($score_avg < 70){
 		return 'D';
-	}else if($score_avg < (80/$x)){
+	}else if($score_avg < 80){
 		return 'C';
-	}else if($score_avg < (90/$x)){
+	}else if($score_avg < 90){
 		return 'B';
 	}else{
 		return 'A';

@@ -831,14 +831,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}
 				
 				if($data['student_type']==1 OR $data['student_type']==2){
-					$sql="SELECT id_start FROM `rms_dept` WHERE dept_id=".$data['dept']." LIMIT 1";
+						$sql="SELECT id_start FROM `rms_dept` WHERE dept_id=".$data['dept']." LIMIT 1";
 					$id_start = $db->fetchOne($sql);
-					$where="dept_id = ".$data['dept'];
+					
 					$this->_name="rms_dept";
 					$arr=array(
 							'id_start'=>$id_start+1
 					);
-					$this->update($arr, $where);
+					if($data['dept']==6 OR $data['dept']==8){
+						$where = "dept_id = 6";
+						$where1 = "dept_id = 8";
+						$this->update($arr, $where);
+						$this->update($arr, $where1);
+					}else{
+						$where="dept_id = ".$data['dept'];
+						$this->update($arr, $where);
+					}
 				}
 				
 // 				$db->rollBack();
@@ -1935,7 +1943,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	
     	$acc_no = $db->fetchOne($sql);
         if($dept_id==1){//primary
-    		$acc_no = $acc_no-12;
+//     		$acc_no = $acc_no-12;
+    		$sql="SELECT id_start FROM `rms_dept` WHERE dept_id= $dept_id";
+    		$acc_no = $db->fetchOne($sql);
     	}elseif($dept_id==4){//kid
     		$acc_no = $acc_no-9;
     	}elseif($dept_id==2){//second

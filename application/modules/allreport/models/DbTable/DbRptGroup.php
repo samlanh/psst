@@ -244,7 +244,36 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchAll($sql);
 	}
-	
+	function UpdateAmountStudent($data){
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+			$ids = explode(",", $data['identity']);
+			$iddetail ="";
+			if (!empty($ids)) foreach ($ids as $id){
+				if (empty($iddetail)){
+					if (!empty($data['stu_id'.$id])){
+						$iddetail=$data['stu_id'.$id];
+					}
+				}else{
+					if (!empty($data['stu_id'.$id])){
+						$iddetail=$iddetail.",".$data['stu_id'.$id];
+					}
+				}
+			}
+			$this->_name="rms_group_detail_student";
+			$where1=" group_id=".$data['group_id'];
+			if (!empty($iddetail)){
+				$where1.=" AND stu_id NOT IN (".$iddetail.")";
+			}
+			$this->delete($where1);
+			$db->commit();
+		}catch(exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+		}
+	}
 	
 	
        

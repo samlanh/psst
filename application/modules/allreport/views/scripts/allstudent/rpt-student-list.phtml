@@ -70,8 +70,10 @@
 								<td><?php echo $tr->translate("DATE_OF_BIRTH");?></td>	
 								<td><?php echo $tr->translate("POB");?></td>
 								<td><?php echo $tr->translate("CONTACT_NO");?></td>	
+								<td><?php //echo $tr->translate("CONTACT_NO");?></td>	
 							</tr>
 							</thead>
+							<tbody>
 							<?php  $i=0;
 								$male=0;$femle=0;
 								$str='';
@@ -82,7 +84,7 @@
 								$str.=",".($key+1);
 							}
 							?>
-							<tr style="font-size:12px;height: 23px;"​ align="center">
+							<tr id="<?php echo "row".$i?>" style="font-size:12px;height: 23px;"​ align="center">
 								<td><?php echo $i;?></td>
 								<td><input type="text" name="student_<?php echo $i?>" id="student_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_code']?>" /></td>
 								<td align="left"><?php echo $row['kh_name'];?></td>
@@ -100,11 +102,15 @@
 								<input type="text" constraints="{datePattern:'dd/MM/yyyy'}"  name="dob_<?php echo $i?>" id="dob_<?php echo $i?>" dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d",strtotime($row['dob']));?>" /></td>
 								<td style="text-align: left;"><?php echo $row['pob'];?></td>
 								<td><?php echo $row['tel'];?></td>
+								<td align="center"><img style="cursor:pointer" onclick="deleteRecord(<?php echo $i;?>)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>
 							</tr>
 							<?php }?>	
+							</tbody>
 							<tr>
+								<td colspan="2" style="border:1px solid #fff;border-top:1px solid #000;">
 								<input type="hidden" name="identity" id="identity" value="<?php echo $str;?>" />
-								<td colspan="2" style="border:1px solid #fff;border-top:1px solid #000;"><strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?></strong></td>
+								<input type="hidden" name="group_id" id="group_id" value="<?php echo $this->rr['id'];?>" />
+								<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?></strong></td>
 								<td colspan="8" style="border:1px solid #fff;border-top:1px solid #000;"><strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT")."  <br />";?><?php echo $tr->translate("MALE")." ".$male;?><?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
 							</tr>
 							<tr>
@@ -124,3 +130,23 @@
 		</form>
 	</div>
 </div>
+<script>
+dojo.require("dojo.NodeList-manipulate");
+function deleteRecord(index) {
+	var txt;
+	var r = confirm("<?php echo $tr->translate("Do you want to remove this student");?>?");
+	if (r == true) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
+	} else {
+	    return false;
+	}
+	
+	}
+</script>

@@ -129,9 +129,21 @@
 		                </div>
 		             </div>
 		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> :</label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("IS_NEW_GROUP");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="<?php echo $this->rs['note'];?>" type="text">
+		                	<select name="is_use" id="is_use" class="fullside" dojoType="dijit.form.FilteringSelect">
+							    <option value="0" <?php if($this->rs['is_use']==0) echo 'selected="selected"';?>><?php echo $tr->translate("NEW");?></option>
+							    <option value="1" <?php if($this->rs['is_use']==1) echo 'selected="selected"';?>><?php echo $tr->translate("USING");?></option>
+							</select>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("IS_COMPLETED_GROUP");?> :</label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select name="is_pass" id="is_pass" class="fullside" dojoType="dijit.form.FilteringSelect">
+							    <option value="1" <?php if($this->rs['is_pass']==1) echo 'selected="selected"';?>><?php echo $tr->translate("COMPLETED");?></option>
+							    <option value="0" <?php if($this->rs['is_pass']==0) echo 'selected="selected"';?>><?php echo $tr->translate("NOT_YET_COMPLETE");?></option>
+							</select>
 		                </div>
 		             </div>
 	    		</div>
@@ -152,6 +164,12 @@
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("END_DATE");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date" type="text" value="<?php echo $this->rs['expired_date'];?>" >
+		                </div>
+		             </div>
+		              <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> :</label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="<?php echo $this->rs['note'];?>" type="text">
 		                </div>
 		             </div>
 		              <div class="form-group">

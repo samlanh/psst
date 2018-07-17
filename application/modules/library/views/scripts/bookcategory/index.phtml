@@ -2,7 +2,9 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("BOOK_CATEGORY"));
 	$url_edit = $this->url(array('module'=>'library','controller'=>'bookcategory','action'=>'edit',));
-?>	
+	$imgnone='<img src="'.$this->baseUrl().'/images/icon/cross.png"/>';
+	$imgtick='<img src="'.$this->baseUrl().'/images/icon/apply2.png"/>';
+?>
 <?php $frm =  $this->frm_search;?>
 <style>
 	#items  {
@@ -16,79 +18,51 @@
 	    width: 35px;
 	}
 </style>
-<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-	<table width="100%">
-		<tr>
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement('parent');?></td>
-			<td><?php echo $frm->getElement('status_search');?></td>
-			<td><button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
-</form>
-<table class="collape tablesorter" id="table"  width="100%" style="white-space: nowrap;font-size: 100%;font-family: 'Khmer OS Battambang';" >
-      <thead>
-			<tr>
-				<th class="tdheader header" width="4%" align="center"><?php echo $tr->translate("NUM");?></th>
-				<th class="tdheader header"><?php echo $tr->translate("CATEGORY_NAME");?></th>
-				<th class="tdheader header"><?php echo $tr->translate("STATUS");?>
-				<th class="tdheader header"><?php echo $tr->translate("REMARK");?>
-				<th class="tdheader header"><?php echo $tr->translate("USER");?>
-			</tr>
-		</thead>
-<?php 
-        						 $id = "table";
-        						 $stringPagination = '<script type="text/javascript">
-        						 $(document).ready(function(){
-        						 $("#'.$id.'").tablesorter();
-        						 $("#'.$id.'").tablesorter().tablesorterPager({container: $("#pagination_'.$id.'"),size:10});
-        						 $("#pagedisplay").focus(function(){ this.blur();
-        						 });
-        						 });
-        						 </script>
-        						 <div id="pagination_'.$id.'" class="pager" >
-        						 <form >
-        						 <table  style="width: 200px;"><tr>
-        						 <td><img src="'.BASE_URL.'/images/first.gif" class="first"/></td>
-        						 <td><img src="'.BASE_URL.'/images/previous.gif" class="prev"/></td>
-        						 <td><input type="text" class="pagedisplay"/></td>
-        						 <td><img src="'.BASE_URL.'/images/next.gif" class="next"/></td>
-        						 <td><img src="'.BASE_URL.'/images/last.gif" class="last"/></td>
-        						 <td><select class="pagesize" >
-        						 <option selected="selected"  value="10">10</option>
-        						 <option value="20">20</option>
-        						 <option value="30">30</option>
-        						 <option value="40">40</option>
-        						 <option value="50">50</option>
-        						 <option value="60">60</option>
-        						 <option value="70">70</option>
-        						 <option value="80">80</option>
-        						 <option value="90">90</option>
-        						 <option value="100">100</option>
-        						 </select>
-        						 </td>
-        						 </tr>
-        						 </table>
-        						 </form>
-        						 </div>	';
-        						 $footer="";
-        						 
-        						 ?>
-	
-     <?php $i=1; 
-			if(!empty($this->cate)) foreach($this->cate as $key=>$row){?>
-			
-			<tr class="normal" style="font-size: 100%;font-family: 'Khmer OS Battambang';">
-			    <td id="items" width="4%" style="text-align: center;"><?php echo $i++;?></td>
-				<td id="items"><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['name'];?></a></td>
-				<td id="items"><?php echo $row['status'];?></td>
-				<td id="items"><?php echo $row['remark'];?></td>
-				<td id="items"><?php echo $row['user_name'];?></td>
-			</tr>
-		<?php }
-					$counter='<strong style="float:right;padding:5px">Number of record(s): '.count($this->cate).'</strong>';
-					$footer = '<div class="footer_list">'.$stringPagination.$counter.'</div>';
-			 ?>
-</table>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement("title");?>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement('parent');?>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<?php echo $frm->getElement('status_search');?>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                    </div>
+                </div>
+			</form>
+		</div>
+		<div class="card-box">
+			<table border="1" id="datatable-responsive" style="  border-collapse: collapse;   border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >
+			      <thead>
+						<tr>
+							<th class="tdheader header" width="4%" align="center"><?php echo $tr->translate("NUM");?></th>
+							<th class="tdheader header"><?php echo $tr->translate("CATEGORY_NAME");?></th>
+							<th class="tdheader header"><?php echo $tr->translate("REMARK");?>
+							<th class="tdheader header"><?php echo $tr->translate("STATUS");?>
+							<th class="tdheader header"><?php echo $tr->translate("USER");?>
+						</tr>
+					</thead>
+			     <?php $i=1; 
+						if(!empty($this->cate)) foreach($this->cate as $key=>$row){?>
+						
+						<tr class="normal" style="font-size: 100%;font-family: 'Khmer OS Battambang';">
+						    <td  style="text-align: center;"><?php echo $i++;?></td>
+							<td ><a href="<?php echo $url_edit.'?id='.$row['id'];?>"><?php echo $row['name'];?></a></td>
+							<td ><?php echo $row['remark'];?></td>
+							<td  align="center"><?php if($row['status']==1){echo  $imgtick;} else{echo $imgnone;};?></td>
+							<td ><?php echo $row['user_name'];?></td>
+						</tr>
+					<?php } ?>
+			</table>
+		</div>
+	</div>
+</div>
 
-<?php echo $footer?>
+

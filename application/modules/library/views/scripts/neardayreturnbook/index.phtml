@@ -4,158 +4,183 @@ echo $this->headTitle($tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"));
 	 
 	echo $this->headTitle(''); 
 	$frm =  $this->frm_search;
-?>	
-<div style="width: 28cm;margin: 0 auto;">
-<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'library','controller'=>'neardayreturnbook','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table width="100%">
-	      <tr>
-		       <td>
-					<div class="menureport">
-						<ul>
-							<li class="preview"><a title="Preview" href="#" onclick="preview();"></a></li>
-							<li class="print"><a href="#" title="Print" onclick="doPrint();" ></a></li>
-							<li class="excel"><a href="#"  title="Export"  onclick="exportExcel();"></a></li>
-						</ul>
-					</div>
-		      </td>
-		</tr>
-	</table>
-	<table>
-		<tr>
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement("is_type_bor")?></td>
-			<td><?php echo $frm->getElement("student_name")?></td>
-			<td><?php echo $frm->getElement("cood_book");?></td>
-		</tr>
-		<tr>
-			<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  id="end_date" name="end_date" value="<?php echo date('Y-m-d',strtotime($this->search['end_date'])); ?>" class='fullside' type="text"></td>
-			<td><?php echo $frm->getElement('status_search');?></td>
-			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>  </td>
-		</tr>
-	</table>
-</form>	
-</div>
+?>
 <style>
 .hover:hover{background: #ddd;}
 </style>
-<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
-	<div id="divPrint">
-	<style>
-				table { page-break-inside:auto }
-                tr{ page-break-inside:avoid; page-break-after:auto }
-			   #header {
-					  display: table-header-group;
-					  page-break-inside:avoid; page-break-after:auto;
-					}
-		</style>
-									<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
-										<tr>
-											<td width="15%" align="center">
-												<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
-											</td>
-											<td align="center" width="70%">
-												<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​"><?php echo $tr->translate(" "); ?></strong><br />
-												<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer OS Muol';​"><?php echo $tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"); ?></strong><br />
-												<span style="font-weight: bold;font-size: 12px;font-family:'Khmer OS Battambang';​">&nbsp;<?php echo $tr->translate("DATE"); ?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br />
-											</td>
-											<td width="15%" >
-												&nbsp;
-											</td>
-											
+<div class="card">
+	<div class="card-content collapse show">
+		<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+			<div class="card-box">
+				<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'library','controller'=>'neardayreturnbook','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+					<div class="form-group">
+                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    		<?php echo $frm->getElement("title");?>
+                    	</div>
+                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    		<?php echo $frm->getElement("is_type_bor")?>
+                    	</div>
+                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    		<?php echo $frm->getElement("student_name")?>
+                    	</div>
+                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    		<?php echo $frm->getElement("cood_book");?>
+                    	</div>
+                    </div>
+                    <div class="form-group">
+                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    		<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  id="end_date" name="end_date" value="<?php echo date('Y-m-d',strtotime($this->search['end_date'])); ?>" class='fullside' type="text">
+                    	</div>
+                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    		<?php echo $frm->getElement('status_search');?>
+                    	</div>
+                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                    	</div>
+                    	<div class="col-md-2 col-sm-2 col-xs-12">
+                    	</div>
+                    </div>
+				</form>	
+			</div>
+			<div class="card-box">
+				<div id="divPrint">
+					<style>
+						table { page-break-inside:auto }
+		                tr{ page-break-inside:avoid; page-break-after:auto }
+					   #header {
+						  display: table-header-group;
+						  page-break-inside:avoid; page-break-after:auto;
+						}
+					</style>
+						<table style="background:#fff;width:90%; margin: 0 auto;width: 100%;font-family:'Khmer OS Battambang';">
+							<tr>
+								<td width="15%" align="center">
+									<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+								</td>
+								<td align="center" width="70%">
+									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';​"><?php echo $tr->translate(" "); ?></strong><br />
+									<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer OS Muol';​"><?php echo $tr->translate("STUDENT_NEARLY_RETURN_BOOK_REPORT"); ?></strong><br />
+									<span style="font-weight: bold;font-size: 12px;font-family:'Khmer OS Battambang';​">&nbsp;<?php echo $tr->translate("DATE"); ?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br />
+								</td>
+								<td width="15%" >
+									&nbsp;
+								</td>
+								
+							</tr>
+							<tr>
+								<td colspan="3" id="exportExcel">
+									<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
+									<thead>
+										<tr style="font-size:12px; height: 20px;border: 1px solid #000; background: #bdccf9; line-height: 30px; font-weight: bold;" align="center" >
+											<th>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</th>
+											<th>&nbsp;<?php echo $tr->translate("BORROW_NO"); ?>&nbsp;</th>
+											<th>&nbsp;<?php echo $tr->translate("TYPE"); ?>&nbsp;</th>
+											<th>&nbsp;<?php echo $tr->translate("CODE"); ?>&nbsp;</th>
+											<th>&nbsp;<?php echo $tr->translate("NAME"); ?>&nbsp;</th>
+											<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</th>
+											<th> <?php echo $tr->translate("STU_PHONE"); ?> </th>
+											<th>&nbsp;<?php echo $tr->translate("BOOK_NO"); ?>&nbsp;</th>
+											<th>&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</th>
+											<th>&nbsp;<?php echo $tr->translate("QTY"); ?>&nbsp;</th>
+											<th style="border: 1px solid #000;"><?php echo $tr->translate("BORROW_DATE"); ?></th>
+											<th style="border: 1px solid #000;"><?php echo $tr->translate("RETURN_DATE"); ?></th>
+											<th style="border: 1px solid #000;"><?php echo $tr->translate("REMAIN_DAY"); ?></th>
 										</tr>
-										<tr>
-											<td colspan="3" id="exportExcel">
-												<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
-												<thead>
-													<tr style="font-size:12px; height: 20px;border: 1px solid #000; background: #bdccf9; line-height: 30px; font-weight: bold;" align="center" >
-														<th>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</th>
-														<th>&nbsp;<?php echo $tr->translate("BORROW_NO"); ?>&nbsp;</th>
-														<th>&nbsp;<?php echo $tr->translate("TYPE"); ?>&nbsp;</th>
-														<th>&nbsp;<?php echo $tr->translate("CODE"); ?>&nbsp;</th>
-														<th>&nbsp;<?php echo $tr->translate("NAME"); ?>&nbsp;</th>
-														<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</th>
-														<th> <?php echo $tr->translate("STU_PHONE"); ?> </th>
-														<th>&nbsp;<?php echo $tr->translate("BOOK_NO"); ?>&nbsp;</th>
-														<th>&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</th>
-														<th>&nbsp;<?php echo $tr->translate("QTY"); ?>&nbsp;</th>
-														<th style="border: 1px solid #000;"><?php echo $tr->translate("BORROW_DATE"); ?></th>
-														<th style="border: 1px solid #000;"><?php echo $tr->translate("RETURN_DATE"); ?></th>
-														<th style="border: 1px solid #000;"><?php echo $tr->translate("REMAIN_DAY"); ?></th>
-													</tr>
-												</thead>
-												<?php $total=0;?>
-												<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
-												
-													$date1=date_create($row['return_date']);
-													$date2=date_create($this->search['end_date']);
-													$diff=date_diff($date1,$date2);
-													$day=$diff->format("%R%a");
-													$total=$total+$row['borr_qty'];
-												?>
-													<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
-														<td style="border: 1px solid #000;"><?php echo $i;?></td>
-														<td>&nbsp;<?php echo $row['borrow_no'];?></td>
-														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['type'];?></td>
-														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['card_id'];?></td>
-														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name'];?></td>
-														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['sex'];?></td>
-														<td align="left" style="border: 1px solid #000;">&nbsp; <?php echo $row['phone'];?></td>
-														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['bookno'];?>&nbsp;</td>
-														<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['bookname'];?></td>	
-														<td style="border: 1px solid #000;">&nbsp;<?php echo $row['borr_qty'];?>&nbsp;ក្បាល</td>
-														<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['borrow_date']));?>&nbsp;</td>
-														<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['return_date']));?>&nbsp;</td>
-														
-														<?php if($day>=0){
-															$daylate ="Late ".abs($day);
-														}else{
-															$daylate ="Remain ".abs($day);
-														}?>
-														<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo ($daylate);?> days</td>
+									</thead>
+									<?php $total=0;?>
+									<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
+									
+										$date1=date_create($row['return_date']);
+										$date2=date_create($this->search['end_date']);
+										$diff=date_diff($date1,$date2);
+										$day=$diff->format("%R%a");
+										$total=$total+$row['borr_qty'];
+									?>
+										<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
+											<td style="border: 1px solid #000;"><?php echo $i;?></td>
+											<td>&nbsp;<?php echo $row['borrow_no'];?></td>
+											<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['type'];?></td>
+											<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['card_id'];?></td>
+											<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name'];?></td>
+											<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['sex'];?></td>
+											<td align="left" style="border: 1px solid #000;">&nbsp; <?php echo $row['phone'];?></td>
+											<td style="border: 1px solid #000;">&nbsp;<?php echo $row['bookno'];?>&nbsp;</td>
+											<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['bookname'];?></td>	
+											<td style="border: 1px solid #000;">&nbsp;<?php echo $row['borr_qty'];?>&nbsp;ក្បាល</td>
+											<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['borrow_date']));?>&nbsp;</td>
+											<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['return_date']));?>&nbsp;</td>
+											
+											<?php if($day>=0){
+												$daylate ="Late ".abs($day);
+											}else{
+												$daylate ="Remain ".abs($day);
+											}?>
+											<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo ($daylate);?> days</td>
  													</tr>
 												<?php }}?>	 
-												</table>
-												
-												<table width="100%" style="width:100%; border-collapse: collapse;white-space: nowrap;" >
-												<tr height="5px;"></tr>
-												<tr >
-													<td align="right" width="25%"  > 	</td>
-													<td > </td>
-													<td align="center"  width="15%" style="border: 1px solid #000;">
-														<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("TOTAL_RETURN_QTY"); ?>&nbsp;</span>
-													</td>
-													<td align="center" width="15%" style="border: 1px solid #000; font-weight: 900;">
-														<span style="font-size: 14px;"><?php echo $total;?>&nbsp;ក្បាល</span>
-													</td>
-												</tr>
-												</table>
-													
-												<table width="100%">
-												<tr>
-													<td colspan="3">&nbsp;</td>
-												</tr>
-												<tr>
-													<td colspan="3">&nbsp;</td>
-												</tr>
-												<tr >
-													<td align="center" width="25%">
-														<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
-													</td>
-													<td  width="50%">
-														&nbsp;
-													</td>
-													<td align="center"  width="25%">
-														<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
-													</td>
-												</tr>
-												</table>
+									</table>
+									
+									<table width="100%" style="width:100%; border-collapse: collapse;white-space: nowrap;" >
+									<tr height="5px;"></tr>
+									<tr >
+										<td align="right" width="25%"  > 	</td>
+										<td > </td>
+										<td align="center"  width="15%" style="border: 1px solid #000;">
+											<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("TOTAL_RETURN_QTY"); ?>&nbsp;</span>
+										</td>
+										<td align="center" width="15%" style="border: 1px solid #000; font-weight: 900;">
+											<span style="font-size: 14px;"><?php echo $total;?>&nbsp;ក្បាល</span>
+										</td>
+									</tr>
+									</table>
 										
-											</td>
-										</tr>
-										
+									<table width="100%">
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr >
+										<td align="center" width="25%">
+											<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
+										</td>
+										<td  width="50%">
+											&nbsp;
+										</td>
+										<td align="center"  width="25%">
+											<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
+										</td>
+									</tr>
 									</table>
 							
-			</div>		
+								</td>
+							</tr>
+							
+						</table>
+										
+						</div>		
+				</div>
+			</div>
+	</div>
+</div>	
+<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
+	<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
+		<i class="fa fa-print"></i>
+	</div>
+	<div class="ptss__header"><?php echo $tr->translate("PRINT");?></div>
+	<div class="ptss__settings">
+		<div class="ptss__single-setting" id="ptss__layout">
+			<div class="ptss__setting-control">
+				<div class="ptss__layout-wrapper">
+					<a class="qButton" title="<?php echo $tr->translate("Preview");?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
+					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
+					<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+				</div>
+				
+			</div>
+		</div>
+	</div>
 </div>
 <script type="text/javascript">
 function doPrint() {
@@ -182,4 +207,5 @@ function preview()
 function exportExcel(){
 	$('#exportExcel').tableExport({type:'excel',escape:'false'});
 }
+
 </script>

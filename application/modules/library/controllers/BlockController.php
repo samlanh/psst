@@ -17,7 +17,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	   	}else{
     			$search = array(
 	    				'title'	       =>	'',
-		    			'status_search'	=>	1
+		    			'status_search'	=>	-1
 	    		);
     	    }
 	    	$rows = $db->getAllBlock($search);

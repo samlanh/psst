@@ -14,10 +14,10 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
     		$cate_tree_array = array();
     	$sql="SELECT c.`id`,
     	c.name,
-    	c.`parent_id`,(SELECT v.`name_en` FROM rms_view AS v WHERE v.`type`=1  AND c.`status`=v.`key_code` LIMIT 1) AS status ,
+    	c.`parent_id`,c.`status`,
     	c.remark,(SELECT first_name FROM rms_users WHERE rms_users.id=c.user_id LIMIT 1) AS user_name  
     	FROM `rms_bcategory` AS c WHERE  1 ";
-    	 
+//     	(SELECT v.`name_en` FROM rms_view AS v WHERE v.`type`=1  AND c.`status`=v.`key_code` LIMIT 1) AS status
         if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = trim(addslashes($search['title']));

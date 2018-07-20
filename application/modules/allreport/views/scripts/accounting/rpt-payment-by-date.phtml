@@ -54,42 +54,89 @@
 							  <tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
 							    <td rowspan="2">&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
 							    <td rowspan="2">&nbsp;<?php echo $tr->translate('FOR_DATE');?>&nbsp;</td>
-								<td colspan="5">&nbsp;<?php echo $tr->translate('NET_AMOUNT');?>&nbsp;</td>
+								<td colspan="6">&nbsp;<?php echo $tr->translate('NET_AMOUNT');?>&nbsp;</td>
 							  </tr>
 							  <tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
 							  	<td><?php echo $tr->translate('TUITION_FEE');?></td>
 							  	<td><?php echo $tr->translate('SERVICE');?></td>
 							  	<td><?php echo $tr->translate('PRODUCT');?></td>
+							  	<td><?php echo $tr->translate('TEST');?></td>
+							  	<td><?php echo $tr->translate('OTHER');?></td>
 							  	<td><?php echo $tr->translate('TOTAL');?></td>
 							  </tr>
 								<style> td{padding:0 3px; }</style>
-							 <?php $i=0; $total=0;$fulltime=0;$parttime=0;$service=0;$product=0;$grand_total=0; if(!empty($this->row)){foreach($this->row as $key=>$rs){$i++;
+							 <?php $i=0; $total=0;
+							 $keys=0;
+							 $fulltime=0;$parttime=0;$service=0;$product=0;$grand_total=0;$test=0; $other=0;
+							 $fulltimeByDate=0;$parttimeByDate=0;$serviceByDate=0;$productByDate=0;$grand_total=0;$testByDate=0;$otherByDate=0;
+							 $date="";
+// 							 print_r($this->row);exit();
+							 if(!empty($this->row)){
+							 	foreach($this->row as $key=>$rs){
 							 ?>
-							  <tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
-								    <td><?php echo $i;?></td>
-								    <td><?php echo date('d-M-Y', strtotime($rs['for_date'])); ?></td>
-								    <td><?php echo "$ ".number_format($rs['fulltime_fee']+$rs['parttime_fee'],2); ?></td>
-								   	<td><?php echo "$ ".number_format($rs['service_fee'],2); ?></td>
-								   	<td><?php echo "$ ".number_format($rs['material_fee'],2); ?></td>
-								   	
-								   	<?php $total = $rs['fulltime_fee'] + $rs['parttime_fee'] + $rs['service_fee'] + $rs['material_fee'];?>
-								   	<td><?php echo "$ ".number_format($total,2); ?></td>
-							  </tr>
+							 
+							 <?php 
+							
+							 if ($date!=date('d-M-Y', strtotime($rs['for_date']))){
+							 ?>
+							 	<?php if ($keys>0){ $i++;?>
+								 <tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
+									    <td><?php echo $i;?></td>
+									    <td><?php echo $date; ?></td>
+									    <td><?php echo "$ ".number_format($fulltimeByDate+$parttimeByDate,2); ?></td>
+									   	<td><?php echo "$ ".number_format($serviceByDate,2); ?></td>
+									   	<td><?php echo "$ ".number_format($productByDate,2); ?></td>
+									   	<td><?php echo "$ ".number_format($testByDate,2); ?></td>
+									   	<td><?php echo "$ ".number_format($otherByDate,2); ?></td>
+									   	<?php $total = $fulltimeByDate + $parttimeByDate + $serviceByDate+ $productByDate+$testByDate+$otherByDate;?>
+									   	<td><?php echo "$ ".number_format($total,2); ?></td>
+								  </tr>
+								  <?php }
+								  $fulltimeByDate=0;$parttimeByDate=0;$serviceByDate=0;$productByDate=0;$testByDate=0;$otherByDate=0;
+								  ?>
+							 <?php }
+							 			
+							 $date = date('d-M-Y', strtotime($rs['for_date']));
+							 			$fulltimeByDate = $fulltimeByDate + $rs['fulltime_fee'];
+							 			$parttimeByDate = $parttimeByDate + $rs['parttime_fee'];
+							 			$serviceByDate = $serviceByDate + $rs['service_fee'];
+							 			$productByDate = $productByDate + $rs['material_fee'];
+							 			$testByDate = $testByDate + $rs['g_total_test_price'];
+							 			$otherByDate = $otherByDate + $rs['total_otherincome'];
+							 			
+							 			$fulltime = $fulltime + $rs['fulltime_fee'];
+							 			$parttime = $parttime + $rs['parttime_fee'];
+							 			$service = $service + $rs['service_fee'];
+							 			$product = $product + $rs['material_fee'];
+							 			$test = $test + $rs['g_total_test_price'];
+							 			$other = $other + $rs['total_otherincome'];
+							 			
+							 			$grand_total = $grand_total + $rs['fulltime_fee']+$rs['parttime_fee']+$rs['service_fee']+$rs['material_fee']+$rs['g_total_test_price']+$rs['total_otherincome'];
+							 			$keys++;
+							?>
 							  
-							  		<?php 
-							  			$fulltime = $fulltime + $rs['fulltime_fee'];
-							  			$parttime = $parttime + $rs['parttime_fee'];
-							  			$service = $service + $rs['service_fee'];
-							  			$product = $product + $rs['material_fee'];
-							  			$grand_total = $grand_total + $total;
-							  		?>
-							  
-							  <?php }}?>
+							  <?php  }?>
+							 <tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
+									    <td><?php echo $i+1;?></td>
+									    <td><?php echo $date; ?></td>
+									    <td><?php echo "$ ".number_format($fulltimeByDate+$parttimeByDate,2); ?></td>
+									   	<td><?php echo "$ ".number_format($serviceByDate,2); ?></td>
+									   	<td><?php echo "$ ".number_format($productByDate,2); ?></td>
+									   	<td><?php echo "$ ".number_format($testByDate,2); ?></td>
+									   	<td><?php echo "$ ".number_format($otherByDate,2); ?></td>
+									   	<?php $total = $fulltimeByDate + $parttimeByDate + $serviceByDate+ $productByDate+$testByDate+$otherByDate;?>
+									   	<td><?php echo "$ ".number_format($total,2); ?></td>
+								  </tr>
 							  <tr>
+							   <?php 
+							 }?>
+							 <tr>
 							  	<td colspan="2"><?php echo $tr->translate('GRAND_TOTAL');?></td>
 							  	<td><?php echo "$ ".number_format($fulltime+$parttime,2); ?></td>
 							  	<td><?php echo "$ ".number_format($service,2); ?></td>
 							  	<td><?php echo "$ ".number_format($product,2); ?></td>
+							  	<td><?php echo "$ ".number_format($test,2); ?></td>
+							  	<td><?php echo "$ ".number_format($other,2); ?></td>
 							  	<td><?php echo "$ ".number_format($grand_total,2); ?></td>
 							  </tr>
 						</table>

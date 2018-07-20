@@ -960,6 +960,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbRptPayment();
 			$this->view->row = $db->getPaymentByDate($search);
+			$this->view->testPayment = $db->getStudentTestPaymentDate($search);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

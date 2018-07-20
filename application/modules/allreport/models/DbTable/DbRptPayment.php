@@ -661,21 +661,27 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$row = array_merge($row, $otherIncome);
     	}
 //     	print_r($row);exit();
+//     	foreach ($row as $rs){
+//     		echo $rs['for_date']." fulltime_fee: ".$rs['fulltime_fee']." parttime_fee: ".$rs['parttime_fee']." g_total_test_price: ".$rs['g_total_test_price']." g_total_test_price: ".$rs['total_otherincome']."<br />";
+//     	}
+//     	exit();
     	$payment = array();
+    	$i=0;
     	foreach ($row as $key => $rs)
-    	{
+    	{ $i++;
     		//  $price[$key] = $rs;
     		$date = date_create($rs['for_date']);
-    		$newIndex = date_format($date, "y").date_format($date, "m").date_format($date, "d").date_format($date, "H").date_format($date, "i").date_format($date, "s");
+    		$newIndex = date_format($date, "y").date_format($date, "m").date_format($date, "d").date_format($date, "H").date_format($date, "i").date_format($date, "s").time();
     		if (array_key_exists($newIndex,$payment)){
     			$sale_date = $rs['for_date'];
-    			$seee = date("s",strtotime("$sale_date +1 second"));
-    			$newIndex = date_format($date, "y").date_format($date, "m").date_format($date, "d").date_format($date, "H").date_format($date, "i").$seee;
+    			$seee = date("s",strtotime("$sale_date +$i second"));
+    			$newIndex = date_format($date, "y").date_format($date, "m").date_format($date, "d").date_format($date, "H").date_format($date, "i").$seee.time();
     			$payment[$newIndex] = $rs;
     		}else{
     			$payment[$newIndex] = $rs;
     		}
     	}
+//     	print_r($payment);exit();
     	krsort($payment);
     	
 //     	foreach ($payment as $rs){

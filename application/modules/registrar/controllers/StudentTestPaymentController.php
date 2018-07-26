@@ -63,6 +63,9 @@ class Registrar_StudenttestpaymentController extends Zend_Controller_Action {
 	      $db = new Registrar_Model_DbTable_DbStudentTestPayment();
 	      $this->view->all_student_test = $db->getAllStudentTested(1);
 	      $this->view->degree = $db->getAllDegree();
+	      
+	      $key = new Application_Model_DbTable_DbKeycode();
+	      $this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     
     
@@ -90,6 +93,9 @@ class Registrar_StudenttestpaymentController extends Zend_Controller_Action {
 	    $this->view->degree = $db->getAllDegree();
 	    
 	    $this->view->row = $db->getStudentTestPaymentById($id);
+	    
+	    $key = new Application_Model_DbTable_DbKeycode();
+	    $this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
     
 	function getStudentTestInfoAction(){

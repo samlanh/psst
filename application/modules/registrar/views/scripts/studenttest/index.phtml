@@ -27,17 +27,13 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("term_test");?>
                    </div>
-                </div>
-                <div class="form-group">
                 	<div class="col-md-2 col-sm-2 col-xs-12">
-                		<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
+                		<select name="result_status" id="result_status" class="fullside" style="width: 60%;display: inline-block;" dojoType="dijit.form.FilteringSelect" >
 			   				<option value="" <?php if($this->adv_search['result_status']==""){echo "selected='selected'";}?>> Select result status </option>
 			   				<option value="0" <?php if($this->adv_search['result_status']==0){echo "selected='selected'";}?>> Result not updated </option>
 			   				<option value="1" <?php if($this->adv_search['result_status']==1){echo "selected='selected'";}?>> Result updated </option>
 			   			</select>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			   			<button style="width: 30%;display: inline-block;" iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
                 </div>
   			</form>

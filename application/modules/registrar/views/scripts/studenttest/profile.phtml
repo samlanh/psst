@@ -9,20 +9,7 @@
 	dojo.ready(function(){
 	}); 
 </script>
-	<table width="100%">
-		<tr>
-			<td>
-				<div class="menureport">
-					<ul>
-						<li class="preview"><a title="Preview" href="#" onclick="preview();"></a></li>
-						<li class="print"><a href="#" title="Print" onclick="doPrint();" ></a></li>
-						<li class="excel"><a href="#"  title="Export"  onclick="exportExcel();"></a></li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-	</table>
-	<div style="border: 1px dotted #000;background: #fff;width: 21cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+	<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 		<div id="divPrint">
 			<table width="100%" border="0" style="font-size:12px;font-family:Tahoma,'Khmer OS Battambang';"> 
 				<tr>
@@ -235,6 +222,25 @@
 			</table>
 	   </div>
 	 </div>
+	 <div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
+		<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
+			<i class="fa fa-print"></i>
+		</div>
+		<div class="ptss__header"><?php echo $tr->translate("PRINT");?></div>
+		<div class="ptss__settings">
+			<div class="ptss__single-setting" id="ptss__layout">
+				<div class="ptss__setting-control">
+					<div class="ptss__layout-wrapper">
+						<a class="qButton" title="<?php echo $tr->translate("Preview");?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
+						<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
+						<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="clear:both;"></div>
 <script type="text/javascript">
 	function doPrint() {
 		window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;

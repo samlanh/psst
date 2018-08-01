@@ -154,7 +154,7 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Foundation_Model_DbTable_DbScore();
-			$data=$db->getSubjectByGroup($data['group']);
+			$data=$db->getSubjectByGroup($data['group'],null,$data['exam_type']);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

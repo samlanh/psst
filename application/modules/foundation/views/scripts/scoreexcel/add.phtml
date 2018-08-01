@@ -251,6 +251,7 @@ dojo.xhrPost({
 var url_getSubject= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-subjectbygroup')); ?>';
 function getSubjectByGroup(){
 	group = dijit.byId('group').get('value');
+	exam_type = dijit.byId('exam_type').get('value');
 	if(group==''){
 		return false;
 	}
@@ -258,6 +259,7 @@ function getSubjectByGroup(){
 	    url: url_getSubject,
 	    content : { 
 			'group':group,
+			'exam_type':exam_type
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
@@ -309,7 +311,7 @@ function filterStudent(){
 				  for(j=0;j<subject.length;j++){
 	      			  no++;
 	      			  stringsname = subject[j].subject_titleen.replace(' ','');
-		      	      temp+='<th th class="tdheader header">'+stringsname+no+'</th>';
+		      	      temp+='<th th class="tdheader header">'+no+stringsname+'</th>';
 	              }
 				  temp+='<th class="tdheader header"><?php echo $tr->translate('NOTE');?></th>'
 				  +'</thead>';

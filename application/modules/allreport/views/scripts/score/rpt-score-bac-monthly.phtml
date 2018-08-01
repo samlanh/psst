@@ -49,8 +49,9 @@ dojo.ready(function(){
 		}, "group_name");
 });
 </script>
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 <form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-bac-monthly')); ?>" dojoType="dijit.form.Form" method="post">
-	<table style="width:28cm;margin: 0 auto;">
+	<table style="width:100%;margin: 0 auto;">
 		<tr> 
 			<td><?php echo $frm->getElement("title");?></td>
 			<td><?php echo $frm->getElement("study_year");?></td>
@@ -80,8 +81,7 @@ dojo.ready(function(){
 		</tr>
 	</table>
 </form>
-	<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
-		<div id="divPrint">
+<div id="divPrint">
 		<style type="text/css">
 			.style{
 				line-height: 20px; font-size: 12px !important;

@@ -32,7 +32,7 @@ class Foundation_Model_DbTable_DbScoreexcel extends Zend_Db_Table_Abstract
 				$ids = explode(',', $_data['identity']);
 				$k=0;
 				if(!empty($ids))foreach ($ids as $i){
-					$rssubject = $this->getSubjectByGroup($_data['group']);
+					$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
 					if(!empty($rssubject)){
 						foreach ($rssubject as $index => $rs_parent){
 							if($_data['converted_'.$index]==1){//convert to exel ready
@@ -132,20 +132,25 @@ class Foundation_Model_DbTable_DbScoreexcel extends Zend_Db_Table_Abstract
 		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	}
  }
- function getSubjectByGroup($group_id,$teacher_id=null){
- 	$db=$this->getAdapter();
- 	$sql="SELECT *,
- 	(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
- 	(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
- 	(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
- 	(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen
- 	FROM rms_group_subject_detail AS gsjd WHERE gsjd.group_id = ".$group_id;
- 	if($teacher_id!=null){
- 		$sql.=" AND teacher = ".$teacher_id;
- 	}
- 	$rs = $db->fetchAll($sql);
- 	return $rs;
- }
+function getSubjectByGroup($group_id,$teacher_id=null,$exam_type=1){
+		$db=$this->getAdapter();
+		$sql="SELECT *,
+			(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
+			(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
+			(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
+			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen
+			 FROM rms_group_subject_detail AS gsjd WHERE gsjd.group_id = ".$group_id;
+		if($teacher_id!=null){
+			$sql.=" AND teacher = ".$teacher_id;
+		}
+		if($exam_type==1){
+			$sql.=" AND amount_subject >0 ";
+		}else{
+			$sql.=" AND amount_subject_sem >0 ";
+		}
+		$rs = $db->fetchAll($sql);
+		return $rs;
+	}
 // 	function getStudyYears(){
 // 		$db=$this->getAdapter();
 // 		$sql="SELECT id,CONCAT(from_academic,'-',to_academic) AS name FROM rms_group WHERE `status`=1";

@@ -41,7 +41,7 @@ dojo.ready(function(){
 </script>
 <form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'yearly-outstanding-student')); ?>" dojoType="dijit.form.Form" method="post">
 </form>
-<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div id="divPrint">
 		<style type="text/css">
 			.style{
@@ -58,7 +58,7 @@ dojo.ready(function(){
 			  page-break-inside:avoid; page-break-after:auto;
 			}
 		</style>
-		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
 					$semester_str = array(1=>"I",2=>"II");
 					 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;

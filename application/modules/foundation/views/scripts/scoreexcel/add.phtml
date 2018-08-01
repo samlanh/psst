@@ -79,7 +79,6 @@
 		    required:'true',
 		    placeHolder:"Selected Study Years",          
 		    onChange: function() {  
-		    	filterStudent();
 		    }
 		}, "year_study");
 		
@@ -92,7 +91,6 @@
 			class: 'fullside', 
 			placeHolder:"Selected Grade",          
 			onChange: function() {
-				filterStudent();
 			}
 		}, "grade");
 	});
@@ -101,6 +99,11 @@
 <form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<script type="dojo/method" event="onSubmit">   
   	if(this.validate()) {
+		group = dijit.byId("group").get('value');
+		if(group==''){
+			dijit.byId("group").focus();
+			return false;
+		}
 		dijit.byId('save_new').set('disabled',true);
     	return true;
   	}else {
@@ -122,7 +125,7 @@
 						<tr>
 							<td><strong><?php echo $tr->translate("GROUP");?>*</strong></td>
 							<td>
-								<select class="fullside" tabindex="15" name="group" id="group"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup();getInfoBygroup();">
+								<select class="fullside" tabindex="15" name="group" id="group"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup();getInfoBygroup();filterStudent();">
 									<?php if(!empty($this->group))foreach ($this->group as $row){?>
 									<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
 									<?php }?>
@@ -132,7 +135,7 @@
 						<tr>
 							<td><strong><?php echo $tr->translate("របបពិន្ទុ");?>*</strong></td>
 							<td>
-								<select class="fullside" tabindex="15" name="max_score" id="max_score"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup();getInfoBygroup();">
+								<select class="fullside" tabindex="15" name="max_score" id="max_score"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" >
 									<option value="10">10</option>
 									<option value="50">50</option>
 									<option value="100">100</option>
@@ -142,7 +145,7 @@
 						<tr>
 							<td><?php echo $tr->translate("EXAM_TYPE");?></td>
 							<td>
-							   <select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
+							   <select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();getSubjectByGroup();getInfoBygroup();filterStudent();"  dojoType="dijit.form.FilteringSelect" >
 							   		<option value="1">ប្រចាំខែ</option>
 							   		<option value="2">ប្រលងឆមាស</option>
 							   </select>
@@ -196,7 +199,7 @@
 				    		 <tr>
 				    		 	<td><?php echo $tr->translate("SESSION");?></td>
 								<td>
-									<select id="session" name="session" onchange="filterStudent();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+									<select id="session" name="session" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
 										<option value="-1"> ------ select session---------</option>
 									<?php if(!empty($this->session)){foreach ($this->session as $session){?>
 										<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
@@ -248,6 +251,7 @@ dojo.xhrPost({
 	}
 });
 }
+subject='';
 var url_getSubject= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-subjectbygroup')); ?>';
 function getSubjectByGroup(){
 	group = dijit.byId('group').get('value');
@@ -266,7 +270,6 @@ function getSubjectByGroup(){
 		   subject = data;
 	   },		
 	    error: function(err) {
-		
 	    }
 	});
 }
@@ -277,16 +280,16 @@ function filterStudent(){
 	session = dijit.byId('session').get('value');
 	group = dijit.byId('group').get('value');
 	if(year==''){
-		return false;
+		//return false;
 	}
 	if(grade==''){
-		return false;
+		//return false;
 	}
 	if(session==''){
-		return false;
+		//return false;
 	}
 	if(group==''){
-		return false;
+		//return false;
 	}
 	dojo.xhrPost({
 	    url: url_getStudent,
@@ -464,7 +467,6 @@ function getInfoBygroup(){
 			dijit.byId('session').set('readOnly',true);
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

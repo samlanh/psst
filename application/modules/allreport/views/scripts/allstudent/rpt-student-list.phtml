@@ -86,7 +86,7 @@
 							?>
 							<tr id="<?php echo "row".$i?>" style="font-size:12px;height: 23px;"​ align="center">
 								<td><?php echo $i;?></td>
-								<td><input type="text" name="student_<?php echo $i?>" id="student_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_code']?>" /></td>
+								<td><input type="hidden" name="student_<?php echo $i?>" id="student_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_code']?>" /><?php echo $row['stu_code']?></td>
 								<td align="left"><?php echo $row['kh_name'];?></td>
 								<td align="left"><?php echo $row['en_name'];?></td>
 								<td><?php echo $row['sex'];
@@ -98,9 +98,8 @@
 								?></td>
 								<td><?php echo $row['nation'];?></td>
 								<td><?php echo date("d-m-Y",strtotime($row['dob']));?></td>
-								<td><input type="hidden"  name="stu_id<?php echo $i?>" id="stu_id<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_id'];?>" />
-								<input type="text" constraints="{datePattern:'dd/MM/yyyy'}"  name="dob_<?php echo $i?>" id="dob_<?php echo $i?>" dojoType="dijit.form.DateTextBox" value="<?php echo date("Y-m-d",strtotime($row['dob']));?>" /></td>
-								<td style="text-align: left;"><?php echo $row['pob'];?></td>
+								<td><input type="hidden"  name="stu_id<?php echo $i?>" id="stu_id<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['gd_id'];?>" /></td>
+								<td style="text-align: left;"  ><input type="hidden" constraints="{datePattern:'dd/MM/yyyy'}"  name="dob_<?php echo $i?>" id="dob_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo date("Y-m-d",strtotime($row['dob']));?>" /><?php echo date("d-m-Y",strtotime($row['dob']));?><?php echo $row['pob'];?></td>
 								<td><?php echo $row['tel'];?></td>
 								<td align="center"><img style="cursor:pointer" onclick="deleteRecord(<?php echo $i;?>)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>
 							</tr>

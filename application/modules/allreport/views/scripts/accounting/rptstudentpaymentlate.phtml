@@ -4,137 +4,144 @@
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
 ?>	
-<?php
-?>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentpaymentlate')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table width="100%">	
 			<tr>
-				<td>
-					<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
-				</td>
-				<td> <?php echo $frm->getElement("service_type");?></td>
-				<td> <?php echo $frm->getElement("service");?></td>
-				<td> <?php echo $frm->getElement("grade_all");?></td>
-				<td> <?php echo $frm->getElement("session");?></td>
+				<td><input class="fullside" dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>" value="<?php echo $this->search['txtsearch'];?>" type="text"></td>
+				<td><?php echo $frm->getElement("service_type");?></td>
+				<td><?php echo $frm->getElement("service");?></td>
+				<td><?php echo $frm->getElement("grade_all");?></td>
+				<td><?php echo $frm->getElement("session");?></td>
 			</tr>
 			<tr>
-				<td> <?php echo $frm->getElement("group");?></td>
-				<td> <?php echo $frm->getElement("stu_code");?></td>
-				<td> <?php echo $frm->getElement("stu_name");?></td>
+				<td><?php echo $frm->getElement("group");?></td>
+				<td><?php echo $frm->getElement("stu_code");?></td>
+				<td><?php echo $frm->getElement("stu_name");?></td>
 				<td><?php echo $frm->getElement("end_date");?></td>
-				<td>
-					<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-				</td>
+				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 			</tr>
 		</table>
 	</form>	
 <div id="divPrint">
-		<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">
-			
-			<tr>
-				<td width="15%" align="center">
-					<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-				</td>
-				<td align="center"  width="70%">
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2'; "><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></strong><br />
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2'; ">របាយការណ៏​​ សិស្សបង់យឺត</strong><br />
-					<span style="font-weight: bold;font-size: 14px; ">&nbsp;ON&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span>
-				</td>
-				<td width="15%" align="center">
-				</td>
-			</tr>
-			
-			<style>
-				table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
-						tr{ page-break-inside:avoid; page-break-after:auto }
-						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
-						#header {
-						  display: table-header-group;
-						  page-break-inside:avoid; page-break-after:auto;
-						}
-				.hover:hover{background: #ccc;}
-			</style>
-			
-			<tr>
-				<td colspan="3" id="exportExcel">
-					<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
-						<thead>
-						<tr style="font-size:12px; height: 20px;border: 1px solid #000;background: #ccd9ff;" align="center" >
-							<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</th>
-							<th style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_ID"); ?></th>
-							<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</th>
-							<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SEX");?>&nbsp;</th>
-							<th>&nbsp;<?php echo $tr->translate("TEL");?>&nbsp;</th>
-							<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</th>
-							<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</th>
-							<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</th>
-							<th style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_TYPE"); ?></th>
-							<th style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_NAME"); ?></th>
-							<th style="border: 1px solid #000;"><?php echo $tr->translate("PAID_DATE"); ?></th>
-							<th style="border: 1px solid #000;"><?php echo $tr->translate("START_DATE"); ?></th>
-							<th style="border: 1px solid #000;"><?php echo $tr->translate("VALIDATE"); ?></th>
-							<th style="border: 1px solid #000;"><?php echo $tr->translate("AMOUNT_LATE"); ?></th>
-						</tr>
-						</thead>
-					<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
-						$end_dat=$row['end'];
-						$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
-						$day=(int)($total_day/(60*60*24));
-				?>
-						<tr class="hover" style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" >
-							<td style="border: 1px solid #000;"><?php echo $i;?></td>
-							<td style="border: 1px solid #000;">&nbsp;<?php echo $row['code'];?>&nbsp;</td>
-							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name'];?></td>	
-							<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo $row['sex'];?></td>
-							<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo $row['tel'];?></td>
-							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['group_name'];?></td>
-							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['grade'];?></td>
-							<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['session'];?></td>
-							<?php 
-							if($row['type']==1){
-								$row['service_type']="Tuition Fee";
-							}else if($row['type']==4){//product
-								$row['service_type']="ទំនិញ";
+		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'submitlate')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">
+				<tr>
+					<td width="15%" align="center"><img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /></td>
+					<td align="center"  width="70%">
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2'; "><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></strong><br />
+						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2'; ">របាយការណ៏​​ សិស្សបង់យឺត</strong><br />
+						<span style="font-weight: bold;font-size: 14px; ">&nbsp;ON&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span>
+					</td>
+					<td width="15%" align="center"></td>
+				</tr>
+				<style>
+					table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+							tr{ page-break-inside:avoid; page-break-after:auto }
+							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+							#header {
+							  display: table-header-group;
+							  page-break-inside:avoid; page-break-after:auto;
 							}
-							?>
-						    <td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['service_type'];?></td>
-							<td align="left" style="border: 1px solid #000;">&nbsp;<?php if ($row['type']==1){ echo $row['grade'];}else{ echo $row['service'];}?></td>
-							<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
-							<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['start']));?>&nbsp;</td>
-							<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-M-Y",strtotime($row['end']));?>&nbsp;</td>
-							<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo abs($day);?> days</td>
- 													</tr>
-												<?php }}?>	 
-					</table>	
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
-			<tr >
-				<td colspan="3">
-					<table width="100%" style="font-family: 'Khmer OS Battambang';">
-						<tr>
-							<td align="center" width="25%">
-								<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY');?></span>
-							</td>
-							<td  width="50%">
-								&nbsp;
-							</td>
-							<td align="center"  width="25%">
-								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY');?></span>
-							</td>
-						</tr>
-					</table>
-				</td>
-					
-			</tr>
-			
-		</table>
-					
+					.hover:hover{background: #ccc;}
+				</style>
+				<tr>
+					<td colspan="3" id="exportExcel">
+						<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
+							<thead>
+								<tr style="font-size:12px; height: 40px;border: 1px solid #000;background: #ccd9ff;" align="center" >
+									<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</th>
+									<th style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_ID"); ?></th>
+									<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</th>
+									<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SEX");?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate("TEL");?>&nbsp;</th>
+									<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</th>
+									<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</th>
+									<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</th>
+									<th style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_TYPE"); ?></th>
+									<th style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_NAME"); ?></th>
+									<th style="border: 1px solid #000;"><?php echo $tr->translate("PAID_DATE"); ?></th>
+									<th style="border: 1px solid #000;"><?php echo $tr->translate("START_DATE"); ?></th>
+									<th style="border: 1px solid #000;"><?php echo $tr->translate("VALIDATE"); ?></th>
+									<th style="border: 1px solid #000;"><?php echo $tr->translate("AMOUNT_LATE"); ?></th>
+									<th style="border: 1px solid #000;"><?php echo $tr->translate("PERIOD"); ?></th>
+								</tr>
+							</thead>
+						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $key=> $row) { $i++;
+							if($key==0){
+								$str=$key+1;
+							}else{
+								$str.=",".($key+1);
+							}	
+							$end_dat=$row['end'];
+							$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
+							$day=(int)($total_day/(60*60*24));
+						?>
+							<tr class="hover" style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" >
+								<td style="border: 1px solid #000;"><?php echo $i;?>
+									<input dojoType="dijit.form.TextBox" id="payment_id<?php echo $i?>" name="payment_id<?php echo $i?>" value="<?php echo $row['payment_id'];?>" type="hidden">
+								</td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo $row['code'];?>&nbsp;</td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['name'];?></td>	
+								<td align="center" style="border: 1px solid #000;">&nbsp;<?php echo $row['sex'];?></td>
+								<td align="center" style="border: 1px solid #000;max-width: 90px;white-space: normal;">&nbsp;<?php echo $row['tel'];?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['group_name'];?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['grade'];?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['session'];?></td>
+								<?php 
+								if($row['type']==1){
+									$row['service_type']="Tuition Fee";
+								}else if($row['type']==4){//product
+									$row['service_type']="ទំនិញ";
+								}
+								?>
+							    <td align="left" style="border: 1px solid #000;max-width: 70px;white-space: normal;">&nbsp;<?php echo $row['service_type'];?></td>
+								<td align="left" style="border: 1px solid #000;max-width: 70px;white-space: normal;">&nbsp;<?php if ($row['type']==1){ echo $row['grade'];}else{ echo $row['service'];}?></td>
+								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
+								<td style="border: 1px solid #000;">&nbsp;<input style="width:90px;" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" id="create_date<?php echo $i?>" name="create_date<?php echo $i?>" value="<?php echo date("Y-m-d",strtotime($row['start']));?>" type="text">&nbsp;</td>
+								<td style="border: 1px solid #000;color: red;">&nbsp;<input style="width:90px;" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" id="end_date<?php echo $i?>" name="end_date<?php echo $i?>" value="<?php echo date("Y-m-d",strtotime($row['end']));?>" type="text">&nbsp;</td>
+								<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo abs($day);?> days</td>
+								<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">
+									<select style="width:90px;" id="onepayment_<?php echo $i?>" name="onepayment_<?php echo $i?>" dojoType="dijit.form.FilteringSelect">
+										<option value="0" <?php if($row['is_onepayment']==0){echo"selected";}?>>Normal</option>
+										<option value="1" <?php if($row['is_onepayment']==1){echo"selected";}?>>1 Payment only</option>
+									</select>
+								</td>
+	 						</tr>
+						<?php }}?>	 
+						</table>	
+					</td>
+				</tr>
+				<tr>
+	                <td align="center" colspan="2"> 
+	                    <input type="hidden" name="identity" id="identity" value="<?php echo $str;?>" />
+	               		<input type="submit" value="រក្សាទុក & ចាកចេញ"  id="btn_save_close" name="btn_save_close" label="<?php echo $tr->translate('SAVECLOSE');?>" id="submitButton_Save" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
+			        </td>
+	            </tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr >
+					<td colspan="3">
+						<table width="100%" style="font-family: 'Khmer OS Battambang';">
+							<tr>
+								<td align="center" width="25%">
+									<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY');?></span>
+								</td>
+								<td width="50%">
+									&nbsp;
+								</td>
+								<td align="center"  width="25%">
+									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY');?></span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</form>
 	</div>		
 </div>

@@ -264,7 +264,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			$this->_name="rms_group_detail_student";
 			$where1=" group_id=".$data['group_id'];
 			if (!empty($iddetail)){
-				$where1.=" AND stu_id NOT IN (".$iddetail.")";
+				$where1.=" AND gd_id NOT IN (".$iddetail.")";
 			}
 			$this->delete($where1);
 			$db->commit();

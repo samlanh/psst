@@ -580,11 +580,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($search['grade_all']>0){
     		$where .= " AND spd.type=1 AND sp.grade = ".$search['grade_all'];
     	}
-    	
     	$order=" GROUP BY sp.degree ASC ,spd.type ASC
     	ORDER BY sp.degree DESC,spd.type ASC, spd.service_id DESC ";
-    	//echo $sql.$where.$order;
-
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -626,9 +623,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
-//     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-//     		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
-//     		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if($search['branch_id']>0){
@@ -650,7 +644,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$where .= " AND sp.user_id = ".$search['user'];
     	}
     	
-    	//echo $sql.$where.$group_by.$order;
     	$row = $db->fetchAll($sql.$where.$group_by.$order);
     	$studentTestPayment = $this->getStudentTestPaymentDate($search);
     	if (!empty($studentTestPayment)){
@@ -660,7 +653,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if (!empty($otherIncome)){
     		$row = array_merge($row, $otherIncome);
     	}
-//     	print_r($row);exit();
 //     	foreach ($row as $rs){
 //     		echo $rs['for_date']." fulltime_fee: ".$rs['fulltime_fee']." parttime_fee: ".$rs['parttime_fee']." g_total_test_price: ".$rs['g_total_test_price']." g_total_test_price: ".$rs['total_otherincome']."<br />";
 //     	}
@@ -669,7 +661,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$i=0;
     	foreach ($row as $key => $rs)
     	{ $i++;
-    		//  $price[$key] = $rs;
     		$date = date_create($rs['for_date']);
     		$newIndex = date_format($date, "y").date_format($date, "m").date_format($date, "d").date_format($date, "H").date_format($date, "i").date_format($date, "s").time();
     		if (array_key_exists($newIndex,$payment)){
@@ -683,12 +674,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	}
 //     	print_r($payment);exit();
     	krsort($payment);
-    	
-//     	foreach ($payment as $rs){
-//     		echo $rs['for_date']." fulltime_fee: ".$rs['fulltime_fee']." parttime_fee: ".$rs['parttime_fee']." g_total_test_price: ".$rs['g_total_test_price']." g_total_test_price: ".$rs['total_otherincome']."<br />";
-//     	}
-//     	exit();
-//     	print_r($payment);exit();
     	return $payment;
     }
     function getStudentTestPaymentDate($search=null){
@@ -699,7 +684,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     			
     		$from_date =(empty($search['start_date']))? '1': "st.paid_date >= '".$search['start_date']." 00:00:00'";
     		$to_date = (empty($search['end_date']))? '1': "st.paid_date <= '".$search['end_date']." 23:59:59'";
-//     		$where .= " AND ".$from_date." AND ".$to_date;
     		
     		$sql="SELECT
     		st.id,
@@ -740,8 +724,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$group_by = " GROUP BY DATE_FORMAT(st.paid_date,'%Y-%m-%d') ";
     		$order=" order by st.paid_date ASC";
     		
-//     		$order=" ORDER By st.id DESC ";
-// 			echo $sql.$where.$group_by.$order;exit();
     		return $db->fetchAll($sql.$where.$group_by.$order);
     					
     	}catch(Exception $e){
@@ -790,10 +772,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$where.=" AND ic.user_id = ".$search['user'] ;
     		}
     		$group_by = " GROUP BY DATE_FORMAT(ic.`date`,'%Y-%m-%d') ";
-    			$order=" order by ic.`date` ASC";
-    	
-    		//     		$order=" ORDER By st.id DESC ";
-    		// 			echo $sql.$where.$group_by.$order;exit();
+    		$order=" order by ic.`date` ASC";
     		return $db->fetchAll($sql.$where.$group_by.$order);
     			
     	}catch(Exception $e){

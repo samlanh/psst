@@ -128,21 +128,13 @@
 		                	<input id="teacher_ass" />
 		                </div>
 		             </div>
-		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("IS_NEW_GROUP");?> :</label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select name="is_use" id="is_use" class="fullside" dojoType="dijit.form.FilteringSelect">
-							    <option value="0" <?php if($this->rs['is_use']==0) echo 'selected="selected"';?>><?php echo $tr->translate("NEW");?></option>
-							    <option value="1" <?php if($this->rs['is_use']==1) echo 'selected="selected"';?>><?php echo $tr->translate("USING");?></option>
-							</select>
-		                </div>
-		             </div>
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("IS_COMPLETED_GROUP");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select name="is_pass" id="is_pass" class="fullside" dojoType="dijit.form.FilteringSelect">
+							    <option value="0" <?php if($this->rs['is_pass']==0) echo 'selected="selected"';?>><?php echo $tr->translate("NOT_USE");?></option>
 							    <option value="1" <?php if($this->rs['is_pass']==1) echo 'selected="selected"';?>><?php echo $tr->translate("COMPLETED");?></option>
-							    <option value="0" <?php if($this->rs['is_pass']==0) echo 'selected="selected"';?>><?php echo $tr->translate("NOT_YET_COMPLETE");?></option>
+							    <option value="2" <?php if($this->rs['is_pass']==2) echo 'selected="selected"';?>><?php echo $tr->translate("STUDYING");?></option>
 							</select>
 		                </div>
 		             </div>

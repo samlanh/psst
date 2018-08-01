@@ -23,11 +23,14 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  pn.`title` service,
 				  spd.`start_date` as start,
 				  spd.`validate` as end,
+				  spd.`type`,
+				  spd.id AS payment_id,
+				  spd.is_onepayment,
 				   sp.create_date,
 				  (select major_enname from rms_major where major_id = s.grade LIMIT 1) as grade,
 				  (select name_en from rms_view where type=4 and key_code =s.session LIMIT 1) as session,
-				  (SELECT title FROM rms_program_type WHERE rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_type,
-				   spd.`type`
+				  (SELECT title FROM rms_program_type WHERE rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_type
+				  
 				FROM
 				  `rms_student_paymentdetail` AS spd,
 				  `rms_student_payment` AS sp,
@@ -42,7 +45,8 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
     			  $branch_id	
     			  and sp.is_void=0
     			  and sp.student_id=s.stu_id
-    			  and sp.is_suspend = 0 ";
+    			  and sp.is_suspend = 0 
+    			  AND spd.is_onepayment =0 ";
     	
      	$order=" ORDER by spd.type ASC ";
      	$to_date = (empty($search['end_date']))? '1': "spd.validate <= '".$search['end_date']." 23:59:59'";
@@ -82,6 +86,20 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
        return $db->fetchAll($sql.$where.$order);
+    }
+    function submitlatePayment($data){
+    	$ids = explode(',', $data['identity']);
+    	$key = 1;
+    	$this->_name='rms_student_paymentdetail';
+    	foreach ($ids as $i){
+    		$arr = array(
+    				'is_onepayment'=>$data['onepayment_'.$i],
+    				'start_date'=>$data['create_date'.$i],
+    				'validate'=>$data['end_date'.$i],
+    			);
+    		$where="id = ".$data['payment_id'.$i];
+    		$this->update($arr, $where);
+    	}
     }
     
 }

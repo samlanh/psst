@@ -49,8 +49,6 @@
 		</div>
 	</div>
 </div>
- 
-
 
 <?php if(!empty($this->customer_payment)){?>
 <table width="100%"  border="1" style="border: 1px solid #CCCCCC;border-collapse: collapse;margin-top: 50px;">
@@ -73,6 +71,7 @@
 
 	<tr class="tdheader" align="center">
 		<td><?php echo $tr->translate("N_O");?></td>
+		<td><?php echo $tr->translate("RECEIPT");?></td>
 		<td><?php echo $tr->translate("NAME_KH");?></td>
 		<td><?php echo $tr->translate("NAME_EN");?></td>
 		<td><?php echo $tr->translate("SEX");?></td>
@@ -90,6 +89,7 @@
 	<?php $i=0;foreach ($this->customer_payment as $rs){$i++;?>
 		<tr class="hover" align="center" style="background: none repeat scroll 0 0 #FFFFFF;line-height: 25px;">
 			<td><?php echo $i;?></td>
+			<td><?php echo $rs['receipt_no'];?></td>
 			<td><a href="<?php echo $this->baseUrl()."/registrar/register/editcustomerpayment/id/".$rs['id']?>" target="_blank" ><?php echo $rs['name_kh'];?></a></td>
 			<td><a href="<?php echo $this->baseUrl()."/registrar/register/editcustomerpayment/id/".$rs['id']?>" target="_blank" ><?php echo $rs['name_en'];?></a></td>
 			<td><?php echo $rs['sex'];?></td>

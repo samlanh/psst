@@ -79,8 +79,8 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'teacher_assistance'=> $_data['teacher_ass'],
 					'status'   		=> $_data['status'],
 					'note'   		=> $_data['note'],
-					'is_pass'   		=> $_data['is_pass'],
-					'is_use'   		=> $_data['is_use'],
+					'is_pass'   	=> $_data['is_pass'],
+// 					'is_use'   		=> $_data['is_use'],
 					'user_id'	  	=> $this->getUserId()
 			);
 			$where=$this->getAdapter()->quoteInto("id=?", $_data['id']);

@@ -42,10 +42,11 @@ class Global_GroupController extends Zend_Controller_Action {
 		}
 		$frm = new Application_Form_FrmOther();
 		$this->view->add_major = $frm->FrmAddMajor(null);
-		$frm = new Global_Form_FrmSearchMajor();
-		$frm = $frm->frmSearchTeacher();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm_search = $frm;
+// 		$frm = new Global_Form_FrmSearchMajor();
+// 		$frm = $frm->frmSearchTeacher();
+// 		Application_Model_Decorator::removeAllDecorator($frm);
+// 		$this->view->frm_search = $frm;
+		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
@@ -65,7 +66,6 @@ class Global_GroupController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				echo $e->getMessage();exit();
 			}
 		}
 		
@@ -116,7 +116,7 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->rs = $group_info = $db->getGroupById($id);
 		
 		if($group_info['is_pass']==1){
-			Application_Form_FrmMessage::Sucessfull("ក្រុមសិក្សាត្រូវបានបញ្ចប់ មិនអាចកែបានទេ !!! ", "/global/group/index");
+			//Application_Form_FrmMessage::Sucessfull("ក្រុមសិក្សាត្រូវបានបញ្ចប់ មិនអាចកែបានទេ !!! ", "/global/group/index");
 		}
 		
 		$this->view->row = $db->getGroupSubjectById($id);

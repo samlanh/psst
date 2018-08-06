@@ -115,7 +115,7 @@ background-repeat: no-repeat;
 		<tr>
 			<td>
 			<?php 
-				$url_submit_restore =  $this->url(array('module'=>'setting','controller'=>'Database','action'=>'restore'));
+				$url_submit_restore =  $this->url(array('module'=>'setting','controller'=>'database','action'=>'restore'));
 			?>
 			</td>
 		</tr>
@@ -155,7 +155,7 @@ if(isset($_GET['task'])&& $_GET['task']=='clear'){
 	if(file_exists($file)){
 		if(unlink($file))
 			$this->baseUrl();
-			echo'<script>alert("Deleted successfully"); window.location="Database";</script>';
+			echo'<script>alert("Deleted successfully"); window.location="";</script>';
 		   //echo $this->baseUrl()."/setting/database";
 		  
 			//$rmsg="$file_name Deleted successfully";

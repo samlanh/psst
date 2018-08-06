@@ -67,7 +67,9 @@
 									<th style="border: 1px solid #000;"><?php echo $tr->translate("PERIOD"); ?></th>
 								</tr>
 							</thead>
-						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $key=> $row) { $i++;
+						<?php $i=0;$totalpaid=0;$totalbalance=0; 
+						$str='';
+						if(!empty($this->row)){foreach ($this->row AS $key=> $row) { $i++;
 							if($key==0){
 								$str=$key+1;
 							}else{

@@ -47,6 +47,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+		$db_student->updategroupstudent();
+		
 	}
 	function addAction(){
 		$db = new Foundation_Model_DbTable_DbStudent();

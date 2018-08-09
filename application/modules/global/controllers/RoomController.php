@@ -27,7 +27,7 @@ class Global_RoomController extends Zend_Controller_Action {
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("ROOM_NAME","MODIFY_DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","FLOOR","ROOM_NAME","MODIFY_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'room','action'=>'edit',
 			);

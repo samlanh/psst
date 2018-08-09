@@ -9,6 +9,25 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $session_user->user_id;
 	
 	}
+	function updategroupstudent(){
+		$db=$this->getAdapter();
+		$sql="SELECT 
+		s.`stu_id`,
+		s.group_id,
+		(SELECT `group_id` FROM `rms_group_detail_student` WHERE rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 )
+		 AS current_groupid
+		 FROM `rms_student` AS s  WHERE s.group_id>0
+		 AND s.group_id !=(SELECT `group_id` FROM `rms_group_detail_student` WHERE rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 )";
+			$result = $db->fetchAll($sql);
+			
+			foreach($result as $rs){
+				$arr = array(
+						'group_id'=>$rs['current_groupid']
+						);	
+				$where=" stu_id=".$rs['stu_id'];
+				$this->update($arr, $where);
+			}
+	}
 	public function getAllStudent($search){
 		///(CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) AS name,
 		$_db = $this->getAdapter();

@@ -149,6 +149,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						}
 						
 						$array=array(
+								'group_id'		=>$group_detail['to_group'],
 								'session'		=>$group_detail['session'],
 								'degree'		=>$group_detail['degree'],
 								'grade'			=>$group_detail['grade'],
@@ -287,6 +288,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							
 							$this->_name = 'rms_student';
 							$array=array(
+									'group_id'		=>$group_detail['to_group'],
 									'session'		=>$group_detail['session'],
 									'degree'		=>$group_detail['degree'],
 									'grade'			=>$group_detail['grade'],

@@ -18,7 +18,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		//$this->check='dijit.form.CheckBox';
 	}
 	public function FrmAddClass($data=null){
-	
+		$request=Zend_Controller_Front::getInstance()->getRequest();
 		$_classname = new Zend_Dojo_Form_Element_TextBox('classname');
 		$_classname->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
 		
@@ -29,15 +29,30 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				2=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		
+		$branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
+		$branch_id->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("SERVIC"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$branch_id->setValue($request->getParam("branch_id"));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$rows= $db->getAllBranch();
+		array_unshift($rows, array('br_id'=>'','branch_namekh'=>$this->tr->translate("SELECT_LOCATION")));
+		$opt=array();
+		if(!empty($rows))foreach($rows As $row)$opt[$row['br_id']]=$row['branch_namekh'];
+		$branch_id->setMultiOptions($opt);
+		
+		
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$_submit->setLabel("save"); 
 		if(!empty($data)){
-			//print_r($data);exit();
-			
 			$_classname->setValue($data['room_name']);
 			$_status->setValue($data['is_active']);
 		}
-		$this->addElements(array($_classname,$_status,$_submit));
+		$this->addElements(array($branch_id,$_classname,$_status,$_submit));
 		
 		return $this;
 		

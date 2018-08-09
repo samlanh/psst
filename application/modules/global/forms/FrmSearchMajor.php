@@ -138,16 +138,32 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				'placeholder'=>$this->tr->translate("SEARCH_ROOM_TITLE")));
 		$_title->setValue($request->getParam("title"));
 		
-		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
+		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
+		$_branch_id->setAttribs(array('dojoType'=>$this->filter,
+				//	'placeholder'=>$this->tr->translate("SERVIC"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$_branch_id->setValue($request->getParam("branch_id"));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$rows= $db->getAllBranch();
+		array_unshift($rows, array('br_id'=>'','branch_namekh'=>$this->tr->translate("SELECT_LOCATION")));
+		$opt=array();
+		if(!empty($rows))foreach($rows As $row)$opt[$row['br_id']]=$row['branch_namekh'];
+		$_branch_id->setMultiOptions($opt);
+		
+			$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
+		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
-		$this->addElements(array($_title,$_status));
 		
+		$this->addElements(array($_branch_id,$_title,$_status));		
 		return $this;
 	}
 	public function SubjectExam(){

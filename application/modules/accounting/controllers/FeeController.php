@@ -35,8 +35,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    	}
-    	
+    	}    	
     	$this->view->adv_search = $search;
     	$year=$db->getAceYear();
     	array_unshift($year, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));

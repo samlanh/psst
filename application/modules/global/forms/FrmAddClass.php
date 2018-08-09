@@ -22,6 +22,9 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_classname = new Zend_Dojo_Form_Element_TextBox('classname');
 		$_classname->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
 		
+		$_floor = new Zend_Dojo_Form_Element_TextBox('floor');
+		$_floor->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
+		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_status_opt = array(
@@ -29,33 +32,32 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				2=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		
-		$branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
-		$branch_id->setAttribs(array('dojoType'=>$this->filter,
-				'placeholder'=>$this->tr->translate("SERVIC"),
+		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
+		$_branch_id->setAttribs(array('dojoType'=>$this->filter,
+			//	'placeholder'=>$this->tr->translate("SERVIC"),
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
-		$branch_id->setValue($request->getParam("branch_id"));
+		$_branch_id->setValue($request->getParam("branch_id"));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$rows= $db->getAllBranch();
 		array_unshift($rows, array('br_id'=>'','branch_namekh'=>$this->tr->translate("SELECT_LOCATION")));
 		$opt=array();
 		if(!empty($rows))foreach($rows As $row)$opt[$row['br_id']]=$row['branch_namekh'];
-		$branch_id->setMultiOptions($opt);
-		
-		
+		$_branch_id->setMultiOptions($opt);
+			
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$_submit->setLabel("save"); 
 		if(!empty($data)){
 			$_classname->setValue($data['room_name']);
+			$_branch_id->setValue($data['branch_id']);
+			$_floor->setValue($data['floor']);
 			$_status->setValue($data['is_active']);
 		}
-		$this->addElements(array($branch_id,$_classname,$_status,$_submit));
-		
-		return $this;
-		
+		$this->addElements(array($_branch_id,$_floor,$_classname,$_status,$_submit));		
+		return $this;		
 	}
 	
 }

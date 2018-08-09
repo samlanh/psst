@@ -2,7 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('SRMS_ADD_ROOM')); 
 ?>	
-
 <?php  $classname= $this->frm_classname;?>
 <div class="card">
 	<div class="card-content collapse show">
@@ -27,6 +26,7 @@
 			</script>
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
+					<div class="card-content collapse show">		    	 
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH");?>
 	                   </label>
@@ -34,13 +34,22 @@
 	                   		<?php  echo $classname->getElement('branch_id');?>
 	                   </div>
 	                </div>
+	                
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FLOOR");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php  echo $classname->getElement('floor');?>
+	                   </div>
+	                </div>
+	                
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CLASSNAME");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php  echo $classname->getElement('classname');?>
 	                   </div>
-	                </div>
+	                </div>	                	            
 	                
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>
@@ -48,28 +57,51 @@
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php  echo $classname->getElement('status');?>
 	                   </div>
-	                </div>
-	                 <div class="clearfix"></div>
-				         <div class="card-box mt-20">
-			               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-			               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="button" onClick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
-								<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" />
-			               	</div>
-			             </div>
+	                </div>	                 
 	            </div>
-	         </div>
-	        
+	          </div>
+	         
+	           <div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="form-group">
+                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OTHER_INFOMATION");?> 
+                   </label>
+                </div>
+                <div class="form-group">
+                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                    	<div class="account-image">
+							<div class="button_browse">
+							<div id='preview'></div>	
+								<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+								<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
+								<input type="hidden" name="uploaded" id="uploaded" />
+							</div>
+						</div>
+                   </div>
+                </div>
+            </div>
+
+	        <div class="clearfix"></div>
+	         <div class="card-box mt-20">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="button" onClick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+               	</div>
+             </div>
 		</form>
 	</div>
 </div>
 
 <script>
-
 function submitDataClose(){
 	if(dijit.byId('add_room').validate()) {
+		brnach=dijit.byId('branch_id').get('value');
+		if(brnach==''){
+			alert('Please Select Branch !');
+			return false;
+		}
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'room','action'=>'add')); ?>';

@@ -12,12 +12,14 @@ class Global_RoomController extends Zend_Controller_Action {
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = array(
-						'title' => $_data['title'],
-						'status' => $_data['status_search']);
+						'title'		 => $_data['title'],
+						'branch_id'  => $_data['branch_id'],
+						'status'	 => $_data['status_search']);
 			}
 			else{
 				$search = array(
 						'title' => '',
+						'branch_id' => '',
 						'status' => -1);
 			}
 			$db = new Global_Model_DbTable_DbRoom();
@@ -31,13 +33,13 @@ class Global_RoomController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'global','controller'=>'room','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('room_name'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('room_name'=>$link,'branch'=>$link,'floor'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$frm = new Global_Form_FrmSearchMajor();
-		$frm =$frm->searchRoom();
+		$frm_branch = new Global_Form_FrmSearchMajor();
+		$frm =$frm_branch->searchRoom();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_search = $frm;
 	}
@@ -47,6 +49,7 @@ class Global_RoomController extends Zend_Controller_Action {
    		$_data = $this->getRequest()->getPost();
    		try {
    			$_dbmodel = new Global_Model_DbTable_DbRoom();
+   		//	$row = $_dbmodel->getRoomsById($_data);
    			$_major_id = $_dbmodel->addNewRoom($_data);
    			if(isset($_data['save_close'])){
    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/room/index");

@@ -49,7 +49,6 @@ class Global_RoomController extends Zend_Controller_Action {
    		$_data = $this->getRequest()->getPost();
    		try {
    			$_dbmodel = new Global_Model_DbTable_DbRoom();
-   		//	$row = $_dbmodel->getRoomsById($_data);
    			$_major_id = $_dbmodel->addNewRoom($_data);
    			if(isset($_data['save_close'])){
    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/room/index");
@@ -70,9 +69,7 @@ class Global_RoomController extends Zend_Controller_Action {
    }
    public function editAction()
    {
-	   	$id=$this->getRequest()->getParam("id");
-	   	$db = new Global_Model_DbTable_DbRoom();
-	   	$row = $db->getRoomById($id);
+	   	$id=$this->getRequest()->getParam("id");	   
 	   	if($this->getRequest()->isPost())
 	   	{
 	   		try{
@@ -86,6 +83,9 @@ class Global_RoomController extends Zend_Controller_Action {
 	   			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	   		}
 	   	}
+	   	$db = new Global_Model_DbTable_DbRoom();
+	   	$row = $db->getRoomById($id);
+	   	
 	   	$obj=new Global_Form_FrmAddClass();
 	   	$frm_room=$obj->FrmAddClass($row);
 	   	$this->view->update_room=$frm_room;

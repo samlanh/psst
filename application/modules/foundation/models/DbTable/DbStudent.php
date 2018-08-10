@@ -230,7 +230,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'status'		=>$_data['status'],
 						'remark'		=>$_data['remark'],
 						'create_date'	=>date("Y-m-d H:i:s"),
-						'photo'		=>$photo,
+						'photo'			=>$photo,
 						);
 				$id = $this->insert($_arr);
 				

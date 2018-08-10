@@ -9,6 +9,7 @@ class Global_BranchController extends Zend_Controller_Action {
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
+	
 	public function indexAction(){
       try{
     	$db = new Global_Model_DbTable_DbBranch();
@@ -79,7 +80,7 @@ class Global_BranchController extends Zend_Controller_Action {
 		}
 		$db=new Global_Model_DbTable_DbBranch();
 		$row=$db->getBranchById($id);
-	
+		$this->view->rs = $row;
 		$frm= new Global_Form_Frmbranch();
 		$update=$frm->FrmBranch($row);
 		$this->view->frm_branch=$update;

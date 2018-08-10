@@ -2,38 +2,89 @@
 
 class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 {
-
-    protected $_name = 'rms_branch';
+    protected $_name = 'rms_branch';   
     function addbranch($_data){
-    	$_arr = array(
-    			'parent'=>$_data['main_branch_id'],
-    			'branch_nameen'=>$_data['branch_nameen'],
-    			'prefix'=>$_data['prefix_code'],
-    			'br_address'=>$_data['br_address'],
-    			'branch_code'=>$_data['branch_code'],
-    			'branch_tel'=>$_data['branch_tel'],
-    			'fax'=>$_data['fax'],
-    			'other'=>$_data['branch_note'],
-    			'status'=>$_data['branch_status'],
-    			'displayby'=>2,
-    			);
-    	$this->insert($_arr);//insert data
+    	$_db= $this->getAdapter();
+    	$_db->beginTransaction();
+    	//print_r($_FILES['photo']); exit();
+    	try{
+    		$part= PUBLIC_PATH.'/images/';
+    		$name = $_FILES['photo']['name'];
+    		$size = $_FILES['photo']['size'];
+    		if (!file_exists($part)) {
+    			mkdir($part, 0777, true);
+    		}
+    		$photo='';
+    		$dbg = new Application_Model_DbTable_DbGlobal();
+    		if (!empty($name)){
+    			$tem =explode(".", $name);
+    			$new_image_name = "branch".date("Y").date("m").date("d").time().".".end($tem);
+    			$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
+    			//$arr['photo']=$photo;
+    		}
+    		//	echo $photo; exit();
+	    	$_arr = array(
+	    			'parent'	    =>$_data['main_branch_id'],
+	    			'branch_nameen' =>$_data['branch_nameen'],
+	    			'prefix'		=>$_data['prefix_code'],
+	    			'br_address'	=>$_data['br_address'],
+	    			'branch_code'	=>$_data['branch_code'],
+	    			'branch_tel'	=>$_data['branch_tel'],
+	    			'fax'		    =>$_data['fax'],
+	    			'other'			=>$_data['branch_note'],
+	    			'status'		=>$_data['branch_status'],	    			
+	    			'displayby'		=>2,
+	    			'photo'   	    => $photo,
+	    			);
+	    	$this->insert($_arr);//insert data
+	    	
+	    	$_db->commit();
+	    	}catch(Exception $e){
+	    		$_db->rollBack();
+	    		echo $e->getMessage(); exit();
+	    	}
     }
     public function updateBranch($_data,$id){
+    	$_db= $this->getAdapter();
+    	$_db->beginTransaction();
+    	//print_r($_data); exit();
+    	try{
+    		$part= PUBLIC_PATH.'/images/';
+    		$name = $_FILES['photo']['name'];
+    		$size = $_FILES['photo']['size'];
+    		if (!file_exists($part)) {
+    			mkdir($part, 0777, true);
+    		}
+    		$photo='';
+    		$dbg = new Application_Model_DbTable_DbGlobal();
+    		if (!empty($name)){
+    			$tem =explode(".", $name);
+    			$new_image_name = "branch".date("Y").date("m").date("d").time().".".end($tem);
+    			$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
+    			$_arr['photo']=$photo;
+    		}
+    		//	echo $photo; exit();
     	$_arr = array(
-    			'parent'=>$_data['main_branch_id'],
-    			'branch_nameen'=>$_data['branch_nameen'],
-    			'prefix'      =>      $_data['prefix_code'],
-    			'br_address'=>$_data['br_address'],
-    			'branch_code'=>$_data['branch_code'],
-    			'branch_tel'=>$_data['branch_tel'],
-    			'fax'=>$_data['fax'],
-    			'other'=>$_data['branch_note'],
-    			'status'=>$_data['branch_status'],
-    			'displayby'=>2,
+    			'parent'		=>$_data['main_branch_id'],
+    			'branch_nameen'	=>$_data['branch_nameen'],
+    			'prefix'      	=>$_data['prefix_code'],
+    			'br_address'	=>$_data['br_address'],
+    			'branch_code'	=>$_data['branch_code'],
+    			'branch_tel'	=>$_data['branch_tel'],
+    			'fax'			=>$_data['fax'],
+    			'other'			=>$_data['branch_note'],
+    			'status'		=>$_data['branch_status'],
+    			'displayby'		=>2,
+    			'photo'   	    => $photo,
     			);
     	$where=$this->getAdapter()->quoteInto("br_id=?", $id);
     	$this->update($_arr, $where);
+    	
+    	$_db->commit();
+    	}catch(Exception $e){
+    		$_db->rollBack();
+    		echo $e->getMessage(); exit();
+    	}
     }
     	
     function getAllBranch($search=null){
@@ -67,11 +118,11 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     }
     
  function getBranchById($id){
+ 		
     	$db = $this->getAdapter();
-    	$sql = "SELECT br_id,parent,prefix,branch_namekh,branch_nameen,br_address,branch_code,branch_tel,fax,displayby,other,status FROM
+    	$sql = "SELECT br_id,parent,prefix,branch_namekh,branch_nameen,br_address,branch_code,branch_tel,fax,photo,displayby,other,status FROM
     	$this->_name ";
-    	$where = " WHERE `br_id`= $id" ;
-  
+    	$where = " WHERE `br_id`= $id" ;  
    		return $db->fetchRow($sql.$where);
     }
     public static function getBranchCode(){

@@ -28,7 +28,7 @@
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
 		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NAME");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" value="<?php echo $this->rs['major_enname']?>"  id="major_enname" name="major_enname" type="text">
 		                </div>
@@ -37,6 +37,12 @@
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="shortcut" name="shortcut" value="<?php echo $this->rs['shortcut']?>" type="text">
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ORDERING");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" value="<?php echo $this->rs['ordering']?>"  id="ordering" name="ordering" type="text">
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -105,7 +111,7 @@ dojo.ready(function(){
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_add_dept" >
 		<form  id='frm_add_tran' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<fieldset>
-				<legend align="center">Add New Degree</legend>	
+				<legend align="center"><?php echo $tr->translate("ADD_NEW_DEGREE");?></legend>	
 				<table cellspacing="10" width="100%" style="margin: 0 auto;">
 				<tr>
 					<td><?php echo $tr->translate("DEGREE");?></td>

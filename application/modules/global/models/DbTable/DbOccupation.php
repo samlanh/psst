@@ -2,21 +2,32 @@
 
 class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 {
-
     protected $_name = 'rms_occupation';
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
-    	return $session_user->user_id;
-    	 
+    	return $session_user->user_id;  	 
     }
 	public function addNewOccupation($_data){
+		$db = $this->getAdapter();
+		//print_r($_data); exit();
+		try{
+			$sql="SELECT occupation_id FROM rms_occupation WHERE status =".$_data['status'];
+			$sql.=" AND occu_name='".$_data['occu_name']."'";
+			$rs = $db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
+			}			
 		$_arr=array(
 				'occu_name'	  => $_data['occu_name'],
 				'create_date' => Zend_Date::now(),
-				'status'   => $_data['status'],
+				'status'  	  => $_data['status'],
 				'user_id'	  => $this->getUserId()
 		);
-		return  $this->insert($_arr);
+		$this->insert($_arr);
+		}catch (Exception $e){
+			$db->rollBack();
+			echo $e->getMessage();exit();
+		}
 	}
 	
 	public function addNewOccupationPopup($_data){

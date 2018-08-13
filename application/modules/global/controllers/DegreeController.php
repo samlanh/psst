@@ -40,13 +40,17 @@ class Global_DegreeController extends Zend_Controller_Action {
     function addAction(){
     	if($this->getRequest()->isPost()){
     		try {
+    			$sms="INSERT_SUCCESS";
     			$_data = $this->getRequest()->getPost();
     			$db = new Global_Model_DbTable_DbDegree();
-    			$db->AddDegree($_data);
-    			if(isset($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/degree/index");
+    			$degree_id= $db->AddDegree($_data);
+    			if($degree_id==-1){
+    				$sms = "RECORD_EXIST";
     			}
-    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/degree/add");
+    			if(isset($_data['save_close'])){
+    				Application_Form_FrmMessage::Sucessfull($sms, "/global/degree/index");
+    			}
+    			Application_Form_FrmMessage::Sucessfull($sms, "/global/degree/add");
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("Application Error!");
     			echo $e->getMessage();

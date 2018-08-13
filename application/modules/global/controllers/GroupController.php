@@ -55,15 +55,19 @@ class Global_GroupController extends Zend_Controller_Action {
 	function addAction(){
 		if($this->getRequest()->isPost()){
 			try {
+				$sms="INSERT_SUCCESS";
 				$data = $this->getRequest()->getPost();
 				$db= new Global_Model_DbTable_DbGroup();
-				$db->AddNewGroup($data);
+				$group_id= $db->AddNewGroup($data);
+				if($group_id==-1){
+    				$sms = "RECORD_EXIST";
+    			}
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group");
+					Application_Form_FrmMessage::Sucessfull($sms, "/global/group");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group/add");
+					Application_Form_FrmMessage::Sucessfull($sms, "/global/group/add");
 				}
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+				Application_Form_FrmMessage::message($sms);
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 			}

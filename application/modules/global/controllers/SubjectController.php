@@ -52,14 +52,18 @@ class Global_SubjectController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
+				$sms="INSERT_SUCCESS";
 				$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
-				$_dbmodel->addNewSubjectExam($_data);
-				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/subject");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/subject/add");
+				$subject_id = $_dbmodel->addNewSubjectExam($_data);
+				if ($subject_id==-1){
+						$sms = "RECORD_EXIST";
 				}
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+				if(isset($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull($sms,"/global/subject");
+				}else{
+					Application_Form_FrmMessage::Sucessfull($sms,"/global/subject/add");
+				}
+				Application_Form_FrmMessage::message($sms);
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				$err =$e->getMessage();

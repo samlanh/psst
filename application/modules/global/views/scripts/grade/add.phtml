@@ -33,7 +33,7 @@
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
 		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NAME");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input dojoType="dijit.form.ValidationTextBox" required="true" class="full height-text" id="major_enname" name="major_enname" value="" type="text">
 		                </div>
@@ -42,6 +42,12 @@
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input dojoType="dijit.form.ValidationTextBox"  class="full height-text" id="shortcut" name="shortcut" value="" type="text">
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ORDERING");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.ValidationTextBox" required="true" class="full height-text" id="ordering" name="ordering" value="" type="text">
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -60,15 +66,15 @@
 		                </div>
 		             </div>
 		             <div class="clearfix"></div>
-				         <div class="card-box mt-20">
-			               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-			               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="button"  onClick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
-								<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-								iconClass="dijitEditorIcon dijitEditorIconSave" />
-			               	</div>
-			             </div>
+			         <div class="card-box mt-20">
+		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+		               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+							<input type="button"  onClick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+							<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+		               	</div>
+		             </div>
 		         </div>
 			</div>
 		</form>
@@ -77,7 +83,6 @@
 
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
-
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
 dojo.ready(function(){
@@ -126,7 +131,7 @@ dojo.ready(function(){
 	<div data-dojo-type="dijit.Dialog" style="width:70%;overflow-y:scroll;" id="popup_add_dept" >
 		<form  id='frm_add_dep' name='frm_add_dep' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<fieldset>
-				<legend align="center">Add New Degree</legend>
+				<legend align="center"><?php echo $tr->translate("ADD_NEW_DEGREE");?></legend>
 				<table cellspacing="10" width="100%" style="margin: 0 auto;">
 				    <tr>
 						<td width="10%"><?php echo $tr->translate("DEGREE");?></td>
@@ -347,7 +352,6 @@ function hideDialog(){
 function hideDialogDegree() {		
 	dijit.byId("popup_add_dept").hide();
 }
-
 function submitDataClose(){
 	if(dijit.byId('edit-major').validate()) {
 		dijit.byId('save_close').set('disabled',true);

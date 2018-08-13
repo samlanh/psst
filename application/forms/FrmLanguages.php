@@ -1,6 +1,5 @@
 <?php
-class Application_Form_FrmLanguages
-{
+class Application_Form_FrmLanguages{
     public function init()
     {
         /* Form Elements & Other Definitions Here ... */

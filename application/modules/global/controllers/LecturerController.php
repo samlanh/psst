@@ -20,19 +20,13 @@ class Global_LecturerController extends Zend_Controller_Action {
 						'title' => '');
 			}
 			$rs_rows= $db->getAllTeacher($search);
-			//print_r($rs_rows);exit();
 			$list = new Application_Form_Frmtable();
 			$collumns = array("ID_NUMBER","TEACHER_NAME","SEX","NATIONALITY","PHONE","NOTE","STATUS");
-			 
-			$link=array(
-					'module'=>'global','controller'=>'lecturer','action'=>'edit',
-			);
+			$link=array('module'=>'global','controller'=>'lecturer','action'=>'edit',);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			
-			
 		}
 		$frm = new Application_Form_FrmOther();
 		$this->view->add_major = $frm->FrmAddMajor(null);
@@ -45,13 +39,16 @@ class Global_LecturerController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
-				$db = new Global_Model_DbTable_DbTeacher();
-				$id = $db->AddNewStaff($_data);
-				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/global/lecturer');
+				$sms="INSERT_SUCCESS";
+				$dbmodel = new Global_Model_DbTable_DbTeacher();
+				$id = $dbmodel->AddNewStaff($_data);
+				if($id==-1){
+					$sms = "RECORD_EXIST";
 				}
- 
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", '/global/lecturer/add');
+				if(!empty($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull($sms,'/global/lecturer');
+				} 
+				Application_Form_FrmMessage::Sucessfull($sms,'/global/lecturer/add');
  
 				 
 			}catch (Exception $e) {

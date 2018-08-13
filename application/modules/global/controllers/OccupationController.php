@@ -48,21 +48,23 @@ class Global_OccupationController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
+				$sms="INSERT_SUCCESS";
 				$_dbmodel = new Global_Model_DbTable_DbOccupation();
-				$_major_id = $_dbmodel->addNewOccupation($_data);
-				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/occupation");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/occupation/add");
+				$_occupa = $_dbmodel->addNewOccupation($_data);
+				if($_occupa==-1){
+					$sms = "RECORD_EXIST";
 				}
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				
+				if(isset($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull($sms,"/global/occupation");
+				}else{
+					Application_Form_FrmMessage::Sucessfull($sms,"/global/occupation/add");
+				}
+				Application_Form_FrmMessage::message($sms);				
 					
-			} catch (Exception $e) {
+			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		
+			}		
 		}
 	}
 	public function editAction(){

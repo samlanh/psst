@@ -40,7 +40,7 @@
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select name="status" id="status" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
     								<option value="1" <?php if ($rs["status"]==1){echo "selected='selected'";}?> label="<?php echo $tr->translate('ACTIVE');?>" ><?php echo $tr->translate('ACTIVE');?></option>
-    								<option value="0" label="<?php echo $tr->translate('DEACTIVE');?>" <?php if ($rs["status"]==0){echo "selected='selected'";}?>  ><?php echo $tr->translate('DEACTIVE');?></option>
+    								<option value="0" <?php if ($rs["status"]==0){echo "selected='selected'";}?> label="<?php echo $tr->translate('DEACTIVE');?>" ><?php echo $tr->translate('DEACTIVE');?></option>
 							</select>
 	                   </div>
 	                </div>

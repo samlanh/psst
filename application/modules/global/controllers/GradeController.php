@@ -24,11 +24,11 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	    }
 	    	$rs_rows= $db->getAllGrade($search);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("NAME","DEGREE","SHORTCUT","MODIFY_DATE","STATUS");
+	    	$collumns = array("GRADE","SHORTCUT","ORDERING","DEGREE","MODIFY_DATE","STATUS");
 	    	$link=array(
 	    			'module'=>'global','controller'=>'grade','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('major_enname'=>$link ,'major_khname'=>$link,'dept_name'=>$link));
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link ,'major_enname'=>$link ,'major_khname'=>$link,'ordering'=>$link));
 	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
@@ -39,21 +39,23 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$frm_search = $frm_major->FrmMajors();
     	Application_Model_Decorator::removeAllDecorator($frm_search);
     	$this->view->frm_search = $frm_search;
-    }
-    
-    
+    }  
     public function addAction(){
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
+    			$sms="INSERT_SUCCESS";
     			$db = new Global_Model_DbTable_DbGrade();
-    			$db->AddGrade($_data);
-    			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/grade/index");
-    			}else{
-    				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+    			$_major_id = $db->AddGrade($_data);
+    			if($_major_id==-1){
+    				$sms = "RECORD_EXIST";
     			}
-    		} catch (Exception $e) {
+    			if(!empty($_data['save_close'])){
+    				Application_Form_FrmMessage::Sucessfull($sms, "/global/grade/index");
+    			}else{
+    				Application_Form_FrmMessage::message($sms);
+    			}
+    		}catch (Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();

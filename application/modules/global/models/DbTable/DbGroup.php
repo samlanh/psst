@@ -12,6 +12,13 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			$sql="SELECT id FROM rms_group WHERE academic_year =".$_data['academic_year'];
+			$sql.=" AND group_code='".$_data['group_code']."'";
+			$sql.=" AND degree='".$_data['degree']."'";
+			$rs = $db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
+			}
 			$_arr=array(
 					'group_code' 	=> $_data['group_code'],
 					'room_id' 		=> $_data['room'],
@@ -31,8 +38,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'user_id'	 	=> $this->getUserId(),
 					'is_use' 		=> 0
 			);
-			$id = $this->insert($_arr);
-			
+			$id = $this->insert($_arr);			
 			$this->_name='rms_group_subject_detail';
 			
 			if(!empty($_data['identity1'])){

@@ -87,14 +87,13 @@ function submitDataClose(){
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("add_room"),		    
-			load: function(data) {
+			load: function(data){
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
 				window.location.href ="<?php echo $this->baseUrl();?>/global/room";
-			},
+			},			
 			error: function(e) {
 			}
 		});
 	}
 }
- 
 </script>

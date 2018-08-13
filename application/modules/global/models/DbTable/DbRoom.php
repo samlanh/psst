@@ -9,22 +9,13 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
     }
 	public function addNewRoom($_data){
 		$db = $this->getAdapter();
-		$db->beginTransaction();
 		try{
-			$rs= $this->getRoomsById($_data['room_name']);
-			$room=$_data['room_name'];		
-			if(!empty($rs)) foreach($rs As $row){
-				if($room==0){
-					$room = '';
-					if($room!=0){
-						$arr = array(
-								'room_name'=>abs($room)
-						);
-					}
-					$this->_name='rms_room';
-					$where=" id=".$row['id'];
-					$this->update($arr, $where);
-				}
+			$sql="SELECT room_id FROM rms_room WHERE branch_id =".$_data['branch_id'];
+			$sql.=" AND room_name='".$_data['classname']."'";
+			$sql.=" AND floor='".$_data['floor']."'";
+			$rs = $db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
 			}
 			$_arr=array(
 					'branch_id'	  => $_data['branch_id'],
@@ -34,10 +25,8 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 					'is_active'   => $_data['status'],
 					'user_id'	  => $this->getUserId()
 			);
-			  $this->insert($_arr);
-		$db->commit();
+			 return $this->insert($_arr);
 		}catch(Exception $e){
-			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
 			echo $e->getMessage();exit();
 		}
@@ -63,11 +52,11 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		return $row;
 	}
 		
-	public function getRoomsById($id){
-		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_room WHERE room_name!='' and room_name=$id LIMIT 0";
-		$row=$db->fetchAll($sql);
-	}
+// 	public function getRoomsById($id){
+// 		$db = $this->getAdapter();
+// 		$sql = "SELECT * FROM rms_room WHERE room_name!='' and room_name=$id LIMIT 0";
+// 		$row=$db->fetchAll($sql);
+// 	}
 	
 	public function updateRoom($data){		
 		$_arr=array(
@@ -82,7 +71,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		$this->update($_arr,$where);
 	}
 	
-	function getAllRooms($search=null){
+	function getAllRooms($search){
 		$db = $this->getAdapter();
 		$sql = " SELECT 
 					room_id AS id,
@@ -90,26 +79,23 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 					floor,
 					room_name,
 					modify_date,
-					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
+					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id LIMIT 1 )AS user_name,
 					is_active as status
 				FROM 
 					rms_room
 				WHERE 
-					room_name != ''
-			 ";
+					room_name != ''";
 		$order=" order by id DESC ";
 		$where = '';
-		
+		//PRINT_R($search);
 		if(!empty($search['title'])){
 			$search['title']=addslashes(trim($search['title']));
-			$where.=" AND room_name LIKE '%".$search['title']."%'";
-			$where.=" AND floor LIKE '%".$search['title']."%'";
+			$where.=" AND ( room_name LIKE '%".$search['title']."%'";
+			$where.=" OR floor LIKE '%".$search['title']."%' )";
 		}
-		
 		if(!empty($search['branch_id'])){
 			$where.=" AND branch_id=".$search['branch_id'];
 		}
-		
 		if($search['status']>-1){
 			$where.= " AND is_active = ".$search['status'];
 		}

@@ -39,7 +39,14 @@
 	}
 	
 	public function AddDegree($_data){
+		$_db= $this->getAdapter();
 		try{
+			$sql="SELECT dept_id FROM rms_dept WHERE max_average =".$_data['max_average'];
+			$sql.=" AND en_name='".$_data['en_name']."'";
+			$rs = $_db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
+			}
 			$_arr=array(
 					'en_name'	  => $_data['en_name'],
 					'max_average' => $_data['max_average'],

@@ -22,6 +22,13 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
     			//$arr['photo']=$photo;
     		}
+    		$sql="SELECT br_id FROM rms_branch WHERE parent =".$_data['main_branch_id'];
+    		$sql.=" AND branch_nameen='".$_data['branch_nameen']."'";
+    		$sql.=" AND prefix='".$_data['prefix_code']."'";
+    		$rs = $_db->fetchOne($sql);
+    		if(!empty($rs)){
+    			return -1;
+    		}
     		//	echo $photo; exit();
 	    	$_arr = array(
 	    			'parent'	    =>$_data['main_branch_id'],
@@ -86,12 +93,12 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		echo $e->getMessage(); exit();
     	}
     }
-    	
+   	
     function getAllBranch($search=null){
     	$db = $this->getAdapter();
     	$sql = "SELECT b.br_id,b.branch_nameen,
-    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.parent LIMIT 1) as parent_name,
-    	b.prefix,b.branch_code,b.br_address,b.branch_tel,b.fax,
+		    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.parent LIMIT 1) as parent_name,
+		    	b.prefix,b.branch_code,b.br_address,b.branch_tel,b.fax,
     			b.other,b.`status` FROM rms_branch AS b  ";
     	$where = ' WHERE  b.branch_nameen !="" ';
     	
@@ -115,8 +122,8 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	$order=' ORDER BY b.br_id DESC';
    //echo $sql.$where;
    return $db->fetchAll($sql.$where.$order);
-    }
-    
+   }
+      
  function getBranchById($id){
  		
     	$db = $this->getAdapter();

@@ -16,12 +16,12 @@ class Global_Model_DbTable_DbGrade extends Zend_Db_Table_Abstract
 	 
 	public function getAllGrade($search=''){
 		$db = $this->getAdapter();
-		$sql = " SELECT m.major_id AS id,m.major_enname, 
+		$sql = " SELECT m.major_id AS id,m.major_enname,m.shortcut,m.ordering, 
         (select d.en_name from rms_dept AS d where m.dept_id=d.dept_id )AS dept_name,
-        m.shortcut,m.modify_date,
+        m.modify_date,
 		(select name_en from rms_view where type=1 and key_code=is_active)
         FROM rms_major AS m WHERE 1";
-		$order=" order by m.major_id DESC,dept_id  DESC ";
+		$order=" order by m.major_id DESC,dept_id, ordering DESC ";
 		$where = '';
 		if(empty($search)){
 			return $db->fetchAll($sql.$order);
@@ -31,6 +31,7 @@ class Global_Model_DbTable_DbGrade extends Zend_Db_Table_Abstract
 			$s_search = trim($search['txtsearch']);
 			$s_where[] = " m.major_enname LIKE '%{$s_search}%'";
 			$s_where[] = " m.major_khname LIKE '%{$s_search}%'";
+			$s_where[] = " m.ordering LIKE '%{$s_search}%'";
 			$s_where[] = " (select d.en_name from rms_dept AS d where m.dept_id=d.dept_id ) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
@@ -38,20 +39,32 @@ class Global_Model_DbTable_DbGrade extends Zend_Db_Table_Abstract
 			$where.= " AND m.is_active = ".$db->quote($search['status']);
 		}
 		return $db->fetchAll($sql.$where.$order);
-	}
-	
-	
+	}	
 	public function AddGrade($_data){
+		$db = $this->getAdapter();
+		try{
+			$sql="SELECT major_id FROM rms_major WHERE dept_id =".$_data['dept'];
+			$sql.=" AND major_enname='".$_data['major_enname']."'";
+			$sql.=" AND ordering='".$_data['ordering']."'";
+			$sql.=" AND shortcut='".$_data['shortcut']."'";
+			$rs = $db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
+			}
 		$_arr=array(
 				'dept_id'	  => $_data['dept'],
-				'major_enname'  => $_data['major_enname'],
+				'major_enname'=> $_data['major_enname'],
+				'ordering'	  => $_data['ordering'],
 				'shortcut'	  => $_data['shortcut'],
 				'modify_date' => Zend_Date::now(),
 				'is_active'	  => $_data['status'],
 				'user_id'	  => $this->getUserId()
 		);
 		$major_id = $this->insert($_arr);
-		
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message('INSERT_FAIL');
+			echo $e->getMessage();exit();
+		}		
 // 		if(!empty($_data['identity'])){
 // 			$ids = explode(',', $_data['identity']);
 //     		foreach ($ids as $i){
@@ -79,6 +92,7 @@ class Global_Model_DbTable_DbGrade extends Zend_Db_Table_Abstract
 		$_arr=array(
 				'dept_id'	  => $_data['dept'],
 				'major_enname'  => $_data['major_enname'],
+				'ordering'	  => $_data['ordering'],
 				'shortcut'	  => $_data['shortcut'],
 				'modify_date' => Zend_Date::now(),
 				'is_active'	  => $_data['status'],

@@ -8,6 +8,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     }
 	public function AddNewStaff($_data){
+		$_db= $this->getAdapter();		
 		try{
 		/*/ add photo ////////////////////////////////////////////////////
 			$adapter = new Zend_File_Transfer_Adapter_Http();
@@ -23,28 +24,38 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			}
 		*////////////////////////////////////////////////////////////////////////	
 // 			$teacher_code = $this->getTeacherCode();
+			$sql="SELECT id FROM rms_teacher WHERE sex =".$_data['sex'];
+			$sql.=" AND teacher_name_kh='".$_data['kh_name']."'";
+			$sql.=" AND dob='".$_data['dob']."'";
+			$rs = $_db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
+			}
 			
 			$_arr=array(
-					'teacher_code' => $_data['code'],
-					'teacher_name_kh' => $_data['kh_name'],
-					'teacher_name_en' => $_data['kh_name'],
-					'sex' => $_data['sex'],
-					'dob' => $_data['dob'],
-					'nationality'  => $_data['nationality'],
-			        'tel'   => $_data['phone'],
-					'address' => $_data['address'],
-					'note' => $_data['note'],
-					'user_name' => $_data['user_name'],
-					'password' => md5($_data['password']),
-					//'status'   => $_data['status'],
-					//'photo'  => $pho_name,
-					'branch_id' => 1,
-			        'create_date' => date("Y-m-d"),
-			        'user_id'	  => $this->getUserId(),
+					'teacher_code'		 => $_data['code'],
+					'teacher_name_kh'	 => $_data['kh_name'],
+					'teacher_name_en'	 => $_data['kh_name'],
+					'sex'				 => $_data['sex'],
+					'dob'				 => $_data['dob'],
+					'nationality'  		 => $_data['nationality'],
+			        'tel'  				 => $_data['phone'],
+					'address' 			 => $_data['address'],
+					'note' 				 => $_data['note'],
+					'user_name' 		 => $_data['user_name'],
+					'password' 			 => md5($_data['password']),
+					//'status'   		 => $_data['status'],
+					//'photo'  			 => $pho_name,
+					'branch_id' 		 => 1,
+			        'create_date' 		 => date("Y-m-d"),
+			        'user_id'	  		 => $this->getUserId(),
 				);
 			$this->insert($_arr);
-		}catch (Exception $e){
-		}
+			}catch(Exception $e){
+	    		$_db->rollBack();
+	    		echo $e->getMessage(); exit();
+	    	}
+		
 	}
 	public function updateStaff($_data){
 		$db = $this->getAdapter();
@@ -64,22 +75,22 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			*////////////////////////////////////////////////////////////////////////
 	
 			$_arr=array(
-					'teacher_code' => $_data['code'],
-					'teacher_name_kh' => $_data['kh_name'],
-					'teacher_name_en' => $_data['kh_name'],
-					'sex' => $_data['sex'],
-					'dob' => $_data['dob'],
-					'nationality'  => $_data['nationality'],
-					'tel'   => $_data['phone'],
-					'address' => $_data['address'],
-					//'branch_id' => $_data['branch_id'],
-					//'position' => $_data['staff_position'],
-					//'expired_date' => $_data['expired_date'],
-					'user_name' => $_data['user_name'],
-					'note' => $_data['note'],
-					'status'   => $_data['status'],
-					'create_date' => date("Y-m-d"),
-					'user_id'	  => $this->getUserId(),
+					'teacher_code' 		=> $_data['code'],
+					'teacher_name_kh' 	=> $_data['kh_name'],
+					'teacher_name_en' 	=> $_data['kh_name'],
+					'sex' 				=> $_data['sex'],
+					'dob' 				=> $_data['dob'],
+					'nationality'  		=> $_data['nationality'],
+					'tel'   			=> $_data['phone'],
+					'address' 			=> $_data['address'],
+					//'branch_id' 		=> $_data['branch_id'],
+					//'position' 		=> $_data['staff_position'],
+					//'expired_date' 	=> $_data['expired_date'],
+					'user_name' 		=> $_data['user_name'],
+					'note' 				=> $_data['note'],
+					'status'   			=> $_data['status'],
+					'create_date' 		=> date("Y-m-d"),
+					'user_id'	  		=> $this->getUserId(),
 			);
 		if(!empty($_data['password'])){
 			$_arr['password']=md5($_data['password']);
@@ -122,7 +133,6 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			$s_where[] = " teacher_code LIKE '%{$s_search}%'";
 			$s_where[] = " teacher_name_en LIKE '%{$s_search}%'";
 			$s_where[] = " teacher_name_kh LIKE '%{$s_search}%'";
-			//$s_where[] = " (select title from rms_staff_position where rms_staff_position.id = position) LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}
 		return $db->fetchAll($sql.$where.$order_by);

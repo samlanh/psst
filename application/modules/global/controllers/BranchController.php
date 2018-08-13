@@ -19,7 +19,7 @@ class Global_BranchController extends Zend_Controller_Action {
      else{
    		 $search = array(
       		'adv_search' => '',
-      		'status_search' => -1);
+      		'status_search' => -1);   		
   		 }
            $rs_rows= $db->getAllBranch($search);
            $glClass = new Application_Model_GlobalClass();
@@ -29,7 +29,7 @@ class Global_BranchController extends Zend_Controller_Action {
 			$link=array(
 					      'module'=>'global','controller'=>'branch','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rowshow,array('branch_namekh'=>$link,'branch_nameen'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rowshow,array('parent_name'=>$link,'branch_nameen'=>$link,'prefix'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message($this->tr->translate("APPLICATION_ERROR"));
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -40,19 +40,22 @@ class Global_BranchController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
   
-	}
-	
+	}	
 	function addAction()
 	{
 		if($this->getRequest()->isPost()){//check condition return true click submit button
-			$_data = $this->getRequest()->getPost();
-			$_dbmodel = new Global_Model_DbTable_DbBranch();
+			$_data = $this->getRequest()->getPost();		
 			try {
-				$_dbmodel->addbranch($_data);
+				$sms = "INSERT_SUCCESS";
+				$_dbmodel = new Global_Model_DbTable_DbBranch();
+				$branch_id= $_dbmodel->addbranch($_data);
+				if($branch_id==-1){
+					$sms = "RECORD_EXIST";
+				}
 				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),self::REDIRECT_URL ."/branch/index");
+					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/branch/index");
 				}else{
-					Application_Form_FrmMessage::Sucessfull($this->tr->translate("INSERT_SUCCESS"),self::REDIRECT_URL ."/branch/add");
+					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL ."/branch/add");
 				}
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));

@@ -79,15 +79,31 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     function updateReceiptAction(){
     	$id=$this->getRequest()->getParam("id");
     	$db = new Allreport_Model_DbTable_DbRptPayment();
-    
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Allreport_Model_DbTable_DbRptStudentPaymentLate();
+    		$db->submitlatePayment($data);
+    		$this->_redirect("/registrar/allreports/rptreceiptdetail/id/".$id);
+    	}
+    	else{
+    		$search = array(
+    				'adv_search' =>'',
+    				'study_year' =>'',
+    				'service'=>'',
+    				'user'=>'',
+    				'type'=>1,
+    				'branch_id'=>0,
+    				'start_date'=> date('Y-m-d'),
+    				'end_date'=>date('Y-m-d'),
+    		);
+    	}
+    	
     	$this->view->rr = $db->getStudentPaymentByid($id);
     	$this->view->row =  $db->getPaymentReciptDetail($id);
     	 
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     }
-    
-    
     function reprintCustomerPaymentAction(){
     	$id=$this->getRequest()->getParam("id");
     	$db = new Allreport_Model_DbTable_DbRptPayment();

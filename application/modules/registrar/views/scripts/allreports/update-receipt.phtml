@@ -10,199 +10,193 @@ table tr td strong{
 	padding-left: 0px;
 }
 </style>
-<div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
-	<div id="divPrint">
-			<?php 
-			$amount_print = 1;
-			for($prin=0;$prin<$amount_print;$prin++){?>
-			<table style="margin: 0 auto; width:100%;height:13.97cm;" >
-				<?php if($this->data['show_header_receipt']==1){?>
-					<tr height="90px;">
-						<td colspan="10"  style="" align="center" valign="top">
-							<table width="100%" style="white-space:nowrap;">
+<form action="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'update-receipt')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+		<div id="divPrint">
+				<table style="margin: 0 auto; width:100%;height:13.97cm;" >
+					<tr height="40px;">
+					    <td colspan="3"  style="" align="center" valign="top">
+							<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
 								<tr>
-									<td width="17%" valign="top">
-										<img style="width: 70%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+									<td width="25%"></td>
+									<td width="50%" valign="top" align="center" style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;line-height: 20px">
+										<div>បង្កាន់ដៃបង់ប្រាក់</div>
+										<div>Official Receipt</div>
 									</td>
-									<td width="83%" valign="top" style="font-size:11px;line-height: 18px;">
-										<div style="font-size:22px;margin-top: 10px;"><?php echo $tr->translate("SCHOOL_NAME");?></div>
-										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_ADDRESS");?></div>
-										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_TEL");?></div>
+									<td width="25%" valign="bottom">
+										<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u><?php echo $this->rr['receipt_number'];?><?php if($this->rr['is_void']==1){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></div> 
+										<span style="font-size: 14px;font-weight: bold;font-family: arail"><?php echo $tr->translate('Pmt Date');?> : <?php echo date('d-M-Y',strtotime($this->rr['create_date']));?></span>
 									</td>
+								</tr>
+							</table>
+					    </td>
+					</tr>
+					<tr height="50px">
+						<td colspan="3">
+							<table width="100%" border="0" style="font-family: Khmer OS Battambang; font-size: 12px;white-space: nowrap;margin-bottom: 5px;">
+								<tr>
+									<td width="10%"></td>
+									<td width="25%"></td>
+									<td width="8%"></td>
+									<td width="20%"></td>
+									<td width="12%"></td>
+									<td width="25%"></td>
+								</tr>
+								<tr style="line-height: 16px;">
+									<td>Student's ID</td>
+									<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['stu_code'];?></strong></td>
+									<td>Dob</td>
+									<td> : &nbsp;&nbsp;<?php echo empty($this->rr['dob'])?"":date('d-m-Y',strtotime($this->rr['dob']));?></td>
+									<td >Grade</td>
+									<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['grade'];?></strong></td>
+								</tr>
+								<tr style="line-height: 16px;">
+									<td>Student's Name</td>
+									<td colspan="1"> :&nbsp;&nbsp;<strong><?php echo $this->rr['stu_khname'].' / ';echo $this->rr['stu_enname']?></strong></td>
+									<td>Phone</td>
+									<td> : &nbsp;&nbsp;<?php echo $this->rr['tel'];?></td>
+									<td>Academic Year</td>
+									<td>  : &nbsp;<?php echo $this->rr['academic_year'];?></td>
+								</tr>
+								<tr style="line-height: 16px;">
+									<td >Gender</td>
+									<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['sex'];?></strong></td>
+									<td >Degree</td>
+									<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['degree'];?></strong></td>
+									<td >Session</td>
+									<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['session'];?></strong></td>
 								</tr>
 							</table>
 						</td>
 					</tr>
-				<?php }else{?>
-					<tr height="90px;">
-						<td colspan="3"  style="" align="center" valign="top">&nbsp;
-							
-						</td>
-					</tr>
-				<?php }?>
-				<tr height="40px;">
-				    <td colspan="3"  style="" align="center" valign="top">
-						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
-							<tr>
-								<td width="25%"></td>
-								<td width="50%" valign="top" align="center" style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;line-height: 20px">
-									<div>បង្កាន់ដៃបង់ប្រាក់</div>
-									<div>Official Receipt</div>
-								</td>
-								<td width="25%" valign="bottom">
-									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u><?php echo $this->rr['receipt_number'];?><?php if($this->rr['is_void']==1){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></div> 
-									<span style="font-size: 14px;font-weight: bold;font-family: arail"><?php echo $tr->translate('Pmt Date');?> : <?php echo date('d-M-Y',strtotime($this->rr['create_date']));?></span>
-								</td>
-							</tr>
-						</table>
-				    </td>
-				</tr>
-				<tr height="50px">
-					<td colspan="3">
-						<table width="100%" border="0" style="font-family: Khmer OS Battambang; font-size: 12px;white-space: nowrap;margin-bottom: 5px;">
-							<tr>
-								<td width="10%"></td>
-								<td width="25%"></td>
-								<td width="8%"></td>
-								<td width="20%"></td>
-								<td width="12%"></td>
-								<td width="25%"></td>
-							</tr>
-							<tr style="line-height: 16px;">
-								<td>Student's ID</td>
-								<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['stu_code'];?></strong></td>
-								<td>Dob</td>
-								<td> : &nbsp;&nbsp;<?php echo empty($this->rr['dob'])?"":date('d-m-Y',strtotime($this->rr['dob']));?></td>
-								<td >Grade</td>
-								<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['grade'];?></strong></td>
-							</tr>
-							<tr style="line-height: 16px;">
-								<td>Student's Name</td>
-								<td colspan="1"> :&nbsp;&nbsp;<strong><?php echo $this->rr['stu_khname'].' / ';echo $this->rr['stu_enname']?></strong></td>
-								<td>Phone</td>
-								<td> : &nbsp;&nbsp;<?php echo $this->rr['tel'];?></td>
-								<td>Academic Year</td>
-								<td>  : &nbsp;<?php echo $this->rr['academic_year'];?></td>
-							</tr>
-							<tr style="line-height: 16px;">
-								<td >Gender</td>
-								<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['sex'];?></strong></td>
-								<td >Degree</td>
-								<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['degree'];?></strong></td>
-								<td >Session</td>
-								<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['session'];?></strong></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" valign="top">
-						<style> th,td{ padding:0 1px;}</style>
-							<style type="text/css">
-								body{font-family: "Times New Roman",Arial; }
-								table{ border-collapse:collapse; margin:0 auto;
-								border-color:#000; }
-								.padd tr td{  text-align:center}
-							</style>
-						<table border="1" class="padd" width="99%" border="1" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;">
-							  <tr style="font-size:12px; height: 22px;background: #f0f0f0;" align="center"  >
-							    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Item Name');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Term');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Period');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Unit Price');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Qty');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Deduct');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Extra Fee');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Discount');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Amount');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Note');?>&nbsp;</th>
-							  </tr>
-								<style> td{padding:0 3px; }</style>
-							  <?php $i=0; $total=0; if(!empty($this->row)) foreach($this->row as $rs){ 
-							  		$i++;
-							  		$discount="";
-							  		if($rs['discount_percent']>0 && $rs['discount_fix']>0){
-							  			$discount = $rs['discount_percent']." % + ".$rs['discount_fix']." $";
-							  		}else if($rs['discount_percent']>0){
-							  			$discount = $rs['discount_percent']." %";
-							  		}else if($rs['discount_fix']>0){
-							  			$discount = $rs['discount_fix']." $";
-							  		}
-							  ?>
-							  <tr class="hover" style="font-size:12px;height: 21px;"​ >
-							    <td><?php echo $i;?></td>
-							    <?php if($rs["type"]==1){$rs['service']="Tuition Fee (".$rs['grade'].')';}?>
-							    <td style="text-align: left;"><?php echo $rs['service'];?></td>
-							    <td><?php echo $rs['payment_term']; ?></td>
-							    <td><?php if($rs['is_onepayment']!=1){echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?>-<?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); }?></td>
-							    <td>$ <?php echo $rs['fee']; if(empty($rs['fee'])) echo '0.00';?></td>
-							    <td><?php echo $rs['qty']; if(empty($rs['qty'])) echo '00';?></td>
-							    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
-						   		<td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
-							    <td><?php echo $discount;?></td>
-							    <td>$ <?php echo $rs['paidamount'];?></td>
-							    <td><?php echo $rs['note'];?></td>
-							  </tr> <?php $total = $total + $rs['subtotal']; ?>
-							  <?php } 
-							  ?>
-							  <tr style="font-size:12px;height:20px;border: 1px solid #fff;border-top: 1px solid #000;"​>
-								  	<td style="" colspan="9"></td>
-								  	<td style="text-align: left;"><?php echo $tr->translate('Total Payment');?></td>
-								  	<td>$ <?php echo $this->rr['grand_total'];?></td>
-							  </tr>
-							 <tr style="font-size:12px;height: 15px; border: 1px solid #fff;"​>
-								  	<td style="text-align: left;" colspan="9" ><label id="lbl_moneykhmer"></label></td>
-								  	<td style="text-align: left;"><?php echo $tr->translate('FINE');?></td>
-								  	<td>$ <?php echo $this->rr['fine'];?></td>
-							  </tr> 
-							  <tr style="font-size:12px;height: 15px;border: 1px solid #fff;"​>
-								  	<td style="" colspan="9"></td>
-								  	<td style="text-align: left;"><?php echo $tr->translate('Credit Memo');?></td>
-								  	<td>$ <?php echo $this->rr['credit_memo'];?></td>
-							  </tr>
-							  <tr style="font-size:12px;height:15px;border: 1px solid #fff;"​>
-								  	<td style="" colspan="9"></td>
-								  	<td style="text-align: left;"><?php echo $tr->translate('Deduct');?></td>
-								  	<td>$ <?php echo $this->rr['deduct'];?></td>
-							  </tr>
-							  <tr style="font-size:12px;height: 15px;border: 1px solid #fff;"​>
-								  	<td style=" border: 1px solid #fff;" colspan="9">
-								  		<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
-											<tr>
-												<td width="33%" align="center">Cashier</td>
-												<td width="34%" align="center">Customer</td>
-												<td width="33%" align="center">Verified By</td>
-											</tr>	
-											<tr>
-												<td width="33%" align="center"><br /><br /></td>
-												<td width="34%" align="center"></td>
-												<td width="33%" align="center"></td>
-											</tr>
-											<tr style="height:15px;">
-												<td align="center">
-													<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 5px;"> 
-														<?php echo "".$this->rr['last_name']." ".$this->rr['user'];
-														?>
-														<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime($this->rr['create_date']));?></div>
-													</div>
-												</td>
-												<td align="center"></td>
-												<td align="center"></td>
-											</tr>	
-										</table>	
-								  	</td>
-								  	<td style="text-align: left !important;" valign="top"><strong style="text-align: left !important;"><?php echo $tr->translate('Net Amount');?></strong></td>
-								  	<td valign="top"><strong >$ <?php echo $this->rr['net_amount'];?></strong></td>
-							  </tr>
-							</table>
-						</td>
-					</tr>
-			</table>
-<?php
-}?>
-	</div>	
-</div>
+					<tr>
+						<td colspan="3" valign="top" align="center">
+							<style> th,td{ padding:0 1px;}</style>
+								<style type="text/css">
+									body{font-family: "Times New Roman",Arial; }
+									table{ border-collapse:collapse; margin:0 auto;
+									border-color:#000; }
+									.padd tr td{  text-align:center}
+								</style>
+							<table border="1" class="padd" width="99%" border="1" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;">
+								  <tr style="font-size:12px; height: 22px;background: #f0f0f0;" align="center"  >
+								    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Item Name');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Term');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Period Type');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Period');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Unit Price');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Qty');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Deduct');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Extra Fee');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Discount');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Amount');?>&nbsp;</th>
+									<th>&nbsp;<?php echo $tr->translate('Note');?>&nbsp;</th>
+								  </tr>
+									<style> td{padding:0 3px; }</style>
+								  <?php $i=0; $total=0; $str='';
+								  	if(!empty($this->row)) foreach($this->row as $key=> $rs){ 
+									  	if($key==0){
+									  		$str=$key+1;
+									  	}else{
+									  		$str.=",".($key+1);
+									  	}
+								  		$i++;
+								  		$discount="";
+								  		if($rs['discount_percent']>0 && $rs['discount_fix']>0){
+								  			$discount = $rs['discount_percent']." % + ".$rs['discount_fix']." $";
+								  		}else if($rs['discount_percent']>0){
+								  			$discount = $rs['discount_percent']." %";
+								  		}else if($rs['discount_fix']>0){
+								  			$discount = $rs['discount_fix']." $";
+								  		}
+								  ?>
+								  <tr class="hover" style="font-size:12px;height: 21px;"​ >
+								    <td><?php echo $i;?></td>
+								    <?php if($rs["type"]==1){$rs['service']="Tuition Fee (".$rs['grade'].')';}?>
+								    <td style="text-align: left;"><?php echo $rs['service'];?></td>
+								    <td><?php echo $rs['payment_term']; ?></td>
+								    <td>
+								    	<select style="width:90px;" id="onepayment_<?php echo $i?>" name="onepayment_<?php echo $i?>" dojoType="dijit.form.FilteringSelect">
+											<option value="0" <?php if($rs['is_onepayment']==0){echo"selected";}?>>Normal</option>
+											<option value="1" <?php if($rs['is_onepayment']==1){echo"selected";}?>>1 Payment only</option>
+										</select>
+								    </td>
+								    <td>
+								    	<input style="width:90px;" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" id="create_date<?php echo $i?>" name="create_date<?php echo $i?>" value="<?php echo date("Y-m-d",strtotime($rs['start_date']));?>" type="text">
+								    	<input style="width:90px;" constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" id="end_date<?php echo $i?>" name="end_date<?php echo $i?>" value="<?php echo date("Y-m-d",strtotime($rs['validate']));?>" type="text">
+								    	<input dojoType="dijit.form.TextBox" id="payment_id<?php echo $i?>" name="payment_id<?php echo $i?>" value="<?php echo $rs['id'];?>" type="hidden">
+								    	<?php //if($rs['is_onepayment']!=1){echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?><?php //echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); }?>
+								    </td>
+								    <td>$ <?php echo $rs['fee']; if(empty($rs['fee'])) echo '0.00';?></td>
+								    <td><?php echo $rs['qty']; if(empty($rs['qty'])) echo '00';?></td>
+								    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
+							   		<td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
+								    <td><?php echo $discount;?></td>
+								    <td>$ <?php echo $rs['paidamount'];?></td>
+								    <td><?php echo $rs['note'];?></td>
+								  </tr> <?php $total = $total + $rs['subtotal']; ?>
+								  <?php } 
+								  ?>
+								  <tr style="font-size:12px;height:20px;border: 1px solid #fff;border-top: 1px solid #000;"​>
+									  	<td style="" colspan="9"></td>
+									  	<td style="text-align: left;"><?php echo $tr->translate('Total Payment');?></td>
+									  	<td>$ <?php echo $this->rr['grand_total'];?></td>
+								  </tr>
+								 <tr style="font-size:12px;height: 15px; border: 1px solid #fff;"​>
+									  	<td style="text-align: left;" colspan="9" ><label id="lbl_moneykhmer"></label></td>
+									  	<td style="text-align: left;"><?php echo $tr->translate('FINE');?></td>
+									  	<td>$ <?php echo $this->rr['fine'];?></td>
+								  </tr> 
+								  <tr style="font-size:12px;height: 15px;border: 1px solid #fff;"​>
+									  	<td style="" colspan="9"></td>
+									  	<td style="text-align: left;"><?php echo $tr->translate('Credit Memo');?></td>
+									  	<td>$ <?php echo $this->rr['credit_memo'];?></td>
+								  </tr>
+								  <tr style="font-size:12px;height:15px;border: 1px solid #fff;"​>
+									  	<td style="" colspan="9"></td>
+									  	<td style="text-align: left;"><?php echo $tr->translate('Deduct');?></td>
+									  	<td>$ <?php echo $this->rr['deduct'];?></td>
+								  </tr>
+								  <tr style="font-size:12px;height: 15px;border: 1px solid #fff;"​>
+									  	<td style=" border: 1px solid #fff;" colspan="9">
+									  		<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
+												<tr>
+													<td width="33%" align="center">Cashier</td>
+													<td width="34%" align="center">Customer</td>
+													<td width="33%" align="center">Verified By</td>
+												</tr>	
+												<tr>
+													<td width="33%" align="center"><br /><br /></td>
+													<td width="34%" align="center"></td>
+													<td width="33%" align="center"></td>
+												</tr>
+												<tr style="height:15px;">
+													<td align="center">
+														<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 5px;"> 
+															<?php echo "".$this->rr['last_name']." ".$this->rr['user'];
+															?>
+															<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime($this->rr['create_date']));?></div>
+														</div>
+													</td>
+													<td align="center"></td>
+													<td align="center"></td>
+												</tr>	
+											</table>	
+									  	</td>
+									  	<td style="text-align: left !important;" valign="top"><strong style="text-align: left !important;"><?php echo $tr->translate('Net Amount');?></strong></td>
+									  	<td valign="top"><strong >$ <?php echo $this->rr['net_amount'];?></strong></td>
+								  </tr>
+								</table>
+								<input type="hidden" name="identity" id="identity" value="<?php echo $str;?>" />
+								<input type="submit"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
+									iconClass="dijitEditorIcon dijitEditorIconSave"  />
+							</td>
+						</tr>
+				</table>
+		</div>	
+	</div>
+</form>
 <script type="text/javascript">
 dojo.ready(function(){
 	readMoneyInKhmer("<?php echo $this->rr['net_amount'];?>");

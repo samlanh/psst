@@ -18,7 +18,9 @@ table tr td strong{
 					<ul>
 						<li class="preview"><a title="Preview" href="#" onclick="preview();"></a></li>
 						<li class="print"><a href="#" title="Print" onclick="doPrint();" ></a></li>
-						<li class="" style="border:1px solid #ccc;width:48px;height: 48px;vertical-align: middle;text-align: center;font-weight: bold;"><a href="#"  title="Export"  onclick="exportExcel();">Edit</a></li>
+						<li class="" style="border:1px solid #ccc;width:48px;height: 48px;vertical-align: middle;text-align: center;font-weight: bold;">
+							<a href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'update-receipt'));?>" title="Export">Edit</a>
+						</li>
 					</ul>
 				</div>
 	      </td>

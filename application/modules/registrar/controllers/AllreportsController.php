@@ -75,6 +75,9 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     function updateReceiptAction(){
     	$id=$this->getRequest()->getParam("id");

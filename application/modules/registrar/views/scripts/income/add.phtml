@@ -75,7 +75,7 @@
 	            </div>
 	            <div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DATE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FOR_DATE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   	<input type="text" name="date" id="date" dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" />
@@ -278,6 +278,7 @@ dojo.require("dojo.store.Memory");
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
+		loading();
 	    dijit.byId('frm_add_tran').submit();
 	}
 	function hideDialog(){
@@ -330,10 +331,15 @@ function submitDataAddNew(){
 		
 		<div id="PrintReceipt" style="width: 20cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%" height="49%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap;">
+				<tr height="90px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
+				
 				<tr>
 					<td colspan="10" valign="top">
-						<table width="100%" border="0" cellspacing="10" style="font-family: Khmer OS Battambang;font-size:16px;white-space:nowrap;line-height: 20px;">
-							<tr><td>&nbsp;</td></tr>
+						<table width="100%" border="0" cellspacing="10" style="font-family: Khmer OS Battambang;font-size:16px;white-space:nowrap;line-height: 20px;margin-top: -20px;">
 							<tr>
 								<td colspan="4" style="text-align:center;font-weight:bold;font-family:'Khmer MEF2';">
 									<div style="font-size:18px;">បង្កាន់ដៃបង់ប្រាក់</div>
@@ -394,9 +400,9 @@ function submitDataAddNew(){
 										   echo "".$last_name." ".$username;
 										?>
 					        		</h4>
-					        		<span style="font-size: 12px; margin-top: 0px;">
+					        		<div style="font-size: 12px; margin-top: -10px;">
 					        			<?php  $today = date("F j, Y, g:i a");echo $today; ?>
-					        		</span>
+					        		</div>
 					        	</td>
 							</tr>
 						</table>

@@ -61,6 +61,13 @@ $frm = $this->frm_expense;
 	                   		<input id="cate_income" />
 	                   </div>
 	                </div>
+					<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("INCOME_TITLE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="title" id="title" dojoType="dijit.form.TextBox" value="<?php echo $this->rs['title'];?>" class="fullside" />
+	                   </div>
+	                </div>
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAYMENT_METHOD");?> :
 	                   </label>
@@ -270,10 +277,14 @@ dojo.require("dojo.store.Memory");
 		
 		<div id="PrintReceipt" style="width: 20cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%" height="49%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap;">
+				<tr height="90px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
 				<tr>
 					<td colspan="10" valign="top">
-						<table width="100%" border="0" cellspacing="10" style="font-family: Khmer OS Battambang;font-size:16px;white-space:nowrap;line-height: 20px;">
-							<tr><td>&nbsp;</td></tr>
+						<table width="100%" border="0" cellspacing="10" style="font-family: Khmer OS Battambang;font-size:16px;white-space:nowrap;line-height: 20px;margin-top: -20px;">
 							<tr>
 								<td colspan="4" style="text-align:center;font-weight:bold;font-family:'Khmer MEF2';">
 									<div style="font-size:18px;">បង្កាន់ដៃបង់ប្រាក់</div>
@@ -295,7 +306,7 @@ dojo.require("dojo.store.Memory");
 							<tr style="height: 30px;">
 								<td class="one ">&nbsp;<?php echo $tr->translate("RECEIPT_NO");?>&nbsp;</td>
 								<td class="border"><label id="lb_receipt_no" class=" values one "></label> </td>
-								<td class="one " align="left">&nbsp;<?php echo $tr->translate("DATE");?>&nbsp;</td>
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("FOR_DATE");?>&nbsp;</td>
 								<td class="border"><label id="lb_date" class="values one"> </label></td>
 							</tr>
 							<tr style="height: 30px;">
@@ -326,7 +337,7 @@ dojo.require("dojo.store.Memory");
 							<tr style="font-size: 15px;">
 								<td colspan="2" align="center"></td>
 								<td colspan="2" align="center" style="line-height: 13px;">
-									<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';margin-top: -15px;"> 
+									<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';"> 
 								        <?php 
 										   $session_user=new Zend_Session_Namespace('authstu');
 								           $last_name=$session_user->last_name;
@@ -334,9 +345,9 @@ dojo.require("dojo.store.Memory");
 										   echo "".$last_name." ".$username;
 										?>
 					        		</h4>
-					        		<span style="font-size: 12px;margin-top:0px;">
+					        		<div style="font-size: 12px;margin-top:-10px;">
 					        			<?php  $today = date("F j, Y, g:i a");echo $today; ?>
-					        		</span>
+					        		</div>
 					        	</td>
 							</tr>
 						</table>

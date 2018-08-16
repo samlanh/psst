@@ -30,31 +30,12 @@ table tr td strong{
 			<?php 
 			$amount_print = $this->data['receipt_print'];
 			for($prin=0;$prin<$amount_print;$prin++){?>
-			<table style="margin: 0 auto; width:100%;height:13.97cm;" >
-				<?php if($this->data['show_header_receipt']==1){?>
-					<tr height="90px;">
-						<td colspan="10"  style="" align="center" valign="top">
-							<table width="100%" style="white-space:nowrap;">
-								<tr>
-									<td width="17%" valign="top">
-										<img style="width: 70%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
-									</td>
-									<td width="83%" valign="top" style="font-size:11px;line-height: 18px;">
-										<div style="font-size:22px;margin-top: 10px;"><?php echo $tr->translate("SCHOOL_NAME");?></div>
-										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_ADDRESS");?></div>
-										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_TEL");?></div>
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-				<?php }else{?>
-					<tr height="90px;">
-						<td colspan="3"  style="" align="center" valign="top">&nbsp;
-							
-						</td>
-					</tr>
-				<?php }?>
+			<table cellspacing="0" width="100%" cellpadding="0" style="margin: 0 auto; width:100%;height:13.97cm;font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: 0px;white-space:nowrap;" >
+				<tr height="90px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
 				<tr height="40px;">
 				    <td colspan="3"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
@@ -65,7 +46,7 @@ table tr td strong{
 									<div>Official Receipt</div>
 								</td>
 								<td width="25%" valign="bottom">
-									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u><?php echo $this->rr['receipt_number'];?><?php if($this->rr['is_void']==1){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></div> 
+									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <?php echo $this->rr['receipt_number'];?><?php if($this->rr['is_void']==1){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></div> 
 									<span style="font-size: 14px;font-weight: bold;font-family: arail"><?php echo $tr->translate('Pmt Date');?> : <?php echo date('d-M-Y',strtotime($this->rr['create_date']));?></span>
 								</td>
 							</tr>
@@ -119,9 +100,9 @@ table tr td strong{
 								border-color:#000; }
 								.padd tr td{  text-align:center}
 							</style>
-						<table border="1" class="padd" width="99%" border="1" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;">
-							  <tr style="font-size:12px; height: 22px;background: #f0f0f0;" align="center"  >
-							    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+						<table border="1" class="padd" width="100%" border="1" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;">
+							  <tr style="font-size:12px; height: 25px;background: #f0f0f0;" align="center"  >
+							    <th>&nbsp;<?php echo $tr->translate('No');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('Item Name');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('Term');?>&nbsp;</th>
 								<th>&nbsp;<?php echo $tr->translate('Period');?>&nbsp;</th>
@@ -145,7 +126,7 @@ table tr td strong{
 							  			$discount = $rs['discount_fix']." $";
 							  		}
 							  ?>
-							  <tr class="hover" style="font-size:12px;height: 21px;"​ >
+							  <tr class="hover" style="font-size:12px;height: 25px;"​ >
 							    <td><?php echo $i;?></td>
 							    <?php if($rs["type"]==1){$rs['service']="Tuition Fee (".$rs['grade'].')';}?>
 							    <td style="text-align: left;"><?php echo $rs['service'];?></td>

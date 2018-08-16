@@ -181,10 +181,9 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 	 	$db = $this->getAdapter();
 	 	try{
 	 		//print_r($data);exit();
-		 	if($data['status']==0){
+		 	if($data['is_void']==1){
 		 		$this->_name="rms_change_product";
 		 		$arr = array(
-		 				'status'=>$data['status'],
 		 				'is_void'=>1,
 		 				);
 		 		$where=" id = $id ";
@@ -232,7 +231,7 @@ class Registrar_Model_DbTable_DbChangeProduct extends Zend_Db_Table_Abstract
 	
 	function getAllChangeProductById($id){
 		$db = $this->getAdapter();
-		$sql=" SELECT * FROM rms_change_product where id=$id ";
+		$sql=" SELECT * FROM rms_change_product where id=$id limit 1";
 		return $db->fetchRow($sql);
 	}
 	

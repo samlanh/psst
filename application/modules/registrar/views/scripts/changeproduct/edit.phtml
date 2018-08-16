@@ -73,9 +73,9 @@ $frm = $this->frm_expense;
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="hidden" name="credit_memo_id" id="credit_memo_id" value="<?php echo $this->row['credit_memo_id']?>" dojoType="dijit.form.TextBox" />
-	                   		<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-								<option value="1" <?php if($this->row['status']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("USING")?></option>
-								<option value="0" <?php if($this->row['status']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("VOID")?></option>
+	                   		<select name="is_void" id="is_void" class="fullside" dojoType="dijit.form.FilteringSelect" >
+								<option value="0" <?php if($this->row['is_void']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("USING")?></option>
+								<option value="1" <?php if($this->row['is_void']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("VOID")?></option>
 							</select>
 	                   </div>
 	                </div>
@@ -120,76 +120,76 @@ $frm = $this->frm_expense;
 	        </div>
 	       <div class="card-box">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
-						iconClass="dijitIconClear"/>
 					<input type="submit" label="<?php echo $tr->translate("GO_EDIT");?>" id='saveclose' name='saveclose' value='saveclose' dojoType="dijit.form.Button"
 						iconClass="dijitIconSave"/>
+					<input type="button" onclick='printSave();' label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button"
+						iconClass="dijitIconNewTask"/>	
                	</div>
             </div>
 		</form>
 	</div>
 </div>
+
+
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
+	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("CHANGE_PRODUCT");?>'" id="terms" >
 		<div id="printexpense" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+				
+				<tr height="90px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
 				<tr>
 				    <td colspan="10"  style="" align="center">
-						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
+						<table width="100%" style="font-size: 10px;margin-top: -20px;">
 							<tr>
 								<td width="30%">
-									<img style="width: 55%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo_print.png'?>"><br />
 								</td>
 								<td width="40%" align="center" valign="top" style="">
-									<div style="font-size: 14px;text-align:center;font-family: Khmer OS Muol Light;"><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></div>
-									<div style="font-size: 12px;font-family:Battambang,Arial,Helvetica,sans-serif"><?php echo $tr->translate("SCHOOL_NAME"); ?></div> 
-									<div style="font-size: 13px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div> 
-									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:2px;">PAYMENT VOUCHER</div> 
+									<div style="font-size: 16px;font-family: khmer OS Muol Light;">ប័ណ្ណប្តូរផលិតផល</div> 
 								</td>
-								<td width="30%">
-									<div style="font-size: 16px;font-weight:bold;text-align:center;">
-										N<sup>o</sup> : <label id="lb_receipt_no"></label>
-									</div>
+								<td width="30%">&nbsp;
+									
 								</td>
 							</tr>
 						</table>
 				    </td>
 				</tr>
+				
+				<style>
+					.value{font-weight:bold;}
+				</style>
+				
 				<tr>
-					<td colspan="10">
-						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
+					<td colspan="10"> 
+						<table width="100%" border="0" style="font-family: Khmer OS Battambang,Times New Roman;font-size:14px;white-space:nowrap;margin-top:0px;line-height: 17px;border-collapse:collapse;">
 							<tr >
 								<td width="10%"></td>
-								<td width="18%"></td>
-								<td width="9%"></td>
-								<td width="18%"></td>
-								<td width="4%"></td>
-								<td width="8%"></td>
-								<td width="4%"></td>
-								<td width="5%"></td>
-								<td width="3%"></td>
-								<td width="8%"></td>
+								<td width="20%"></td>
+								<td width="15%"></td>
+								<td width="30%"></td>
+								<td width="15%"></td>
+								<td width="10%"></td>
 							</tr>
 							<tr >
-								<td class="one ">ចំណាយឱ្យ​ <br />Pay To </td>
-								<td valign="top"> :&nbsp; <label id="bl_payfor"></label> </td>
-								<td  align="center">ថ្ងៃចំណាយ </br />Paid Date</td>
-								<td valign="top"> :&nbsp; <label id="lb_paiddate"></label> </td>
-								<td colspan="3"><label id="" >ចំណាយជា  </br />Payment Method</label></td>
-								<td colspan="3" valign="top">:&nbsp;<label id="lb_paymentmehtod"></label></td>
+								<td>Student ID</td>
+								<td > :&nbsp; <label class="value" id="lb_stu_code"></label> </td>
+								<td align="center">Student Name</td>
+								<td > :&nbsp; <label class="value" id="lb_stu_name"></label> </td>
+								<td align="center">Receipt N<sup>o</sup></label></td>
+								<td >:&nbsp; <label class="value" id="lb_receipt_no"></label></td>
 							</tr>
-							<tr>
-								<td>សម្គាល់  </br /> Note </td>
-								<td colspan="9" valign="top"> :&nbsp; <label id="lb_note"></label></td>
-							</tr>
+							
 							<tr>
 								<td colspan="10">
 									<div id="t_amountmoneytype"></div>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="10" valign="bottom">
-									<table width="100%"   style="font-family:'Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:-5px;margin-bottom:5px;">
+								<td colspan="6" >
+									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;font-size:14px; line-height:20px;">
 										<tr>
 											<td width="20%"></td>
 											<td width="20%"></td>
@@ -198,63 +198,68 @@ $frm = $this->frm_expense;
 											<td width="15%"></td>
 											<td width="15%"></td>
 										</tr>
-										<tr>
-											<td colspan="2"  align="center">
-												<div style="margin-top:-5px;"></div>
-											</td>
-											<td colspan="2">&nbsp;
-												
-											</td>
-											<td>
-												<div style="margin-top:-15px;"></div>
-											</td>
-											<td>
-											</td>
-										</tr>
+										
 										<tr>
 											<td colspan="4"></td>
 											<td>
-												<div style="margin-top:-20px;">ចំណាយសរុប <br />Paid Amount</div>
+												<div style="">Total Payment</div>
 											</td>
 											<td>
-												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
+												<div style="width:100%;font-weight: bold;">: &nbsp;<label id="lb_total_payment"> </label></div>
 											</td>
 										</tr>
-										<tr >
-											<td colspan="2" align="center" valign="top">
-												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
-													<?php 
-													   $session_user=new Zend_Session_Namespace('authstu');
-													   $last_name=$session_user->last_name;
-													   $username = $session_user->first_name;
-													   echo"Paid By : ".$last_name." ".$username;
-													?>
-												</div>
-											</td>
-											<td colspan="2" valign="top">
-												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
-													<?php 
-													   echo"Received By :........................ &nbsp;&nbsp;";
-													?>
-												</div>
-											</td>
-											<td></td>
-											<td></td>
-										</tr>
+										
+										
 										<tr>
-											<td colspan="2" align="center" >
-												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 30px;"></div>
-												<div style="margin-top:-11px;">Date : <?php echo date('d / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+											<td colspan="4"></td>
+											
+											<td>
+												<div style="">Credit Memo</div>
 											</td>
-											<td colspan="2" align="center" width="30%">
-												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 30px;"></div>
-												<div style="margin-top:-11px;">Date : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / </div>
+											<td>
+												<div style="width:100%;font-weight: bold;">: &nbsp;<label id="lb_credit_memo"> </label></div>
 											</td>
-											<td colspan="2" align="center"></td>
+										</tr>
+										
+										
+										<tr>
+											<td colspan="4">
+												<table width="100%" style="white-space:nowrap;font-family:Khmer OS Battambang,Times New Roman;font-size:14px;margin-top:-10px;">
+													<tr style="text-align:center;">
+														<td width="35%">Cashier</td>
+														<td width="35%">Customer</td>
+														<td width="30%">Verified By</td>
+													</tr>
+													
+													<tr style="text-align:center;">
+														<td colspan="3">&nbsp;</td>
+													</tr>
+													
+													<tr style="text-align:center;">
+														<td>
+															<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+																<?php 
+																   $session_user=new Zend_Session_Namespace('authstu');
+																   $last_name=$session_user->last_name;
+																   $username = $session_user->first_name;
+																   echo"".$last_name." ".$username;
+																?>
+															</div>
+															<div style="margin-top:-5px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+														</td>
+														
+														<td></td>
+														<td></td>
+													</tr>
+													
+												</table>
+											</td>
+											<td colspan="2"></td>
 										</tr>
 									</table>
 								</td>
 							</tr>
+							
 						</table>
 					</td>
 				</tr>
@@ -266,7 +271,9 @@ $frm = $this->frm_expense;
 				 type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
 </div>
+
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
+
 <script type="text/javascript">
 dojo.require("dijit.form.Textarea");
 dojo.require("dojo.data.ItemFileWriteStore");  
@@ -522,58 +529,76 @@ function getProductPrice(index,type){
 	
 }
  
-function printSave(new_receipt){	
+ 
+function printSave(){
 	if(dijit.byId('office_receipt').validate()) {
-		if(dijit.byId("payment_method").get("value")==-1){
-			alert("សូមជ្រើសរើសប្រភេទបង់ប្រាក់");dijit.byId("payment_method").focus();
-			return false;
-		}
-		if(new_receipt==''){
-			getReceiptNumber(1);
-		}	
-		paid_date = dijit.byId("Date").get('value')
-		var today = new Date(paid_date);
-		var dd = today.getDate();
-		var mon = today.toDateString().substr(4,3); //January is 0!
-		var yyyy = today.getFullYear();
-		dojo.byId("lb_paiddate").innerHTML  = dd+'/'+mon+'/'+yyyy;
-		dojo.byId("lb_receipt_no").innerHTML = new_receipt;
-		dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
-		dojo.byId("lb_total_received").innerHTML = '$ ' + dijit.byId("total_amount").get('value');
-		dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
-		dojo.byId("lb_paymentmehtod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+		dojo.byId("lb_receipt_no").innerHTML = dijit.byId("receipt_no").get('value');
+		
+		dojo.byId("lb_stu_code").innerHTML = dijit.byId("stu_id").attr('displayedValue');
+		dojo.byId("lb_stu_name").innerHTML = dijit.byId("stu_name").attr('displayedValue');
+		
+		dojo.byId("lb_total_payment").innerHTML = '$ ' + dijit.byId("total_payment").get('value');
+		dojo.byId("lb_credit_memo").innerHTML = '$ ' + dijit.byId("credit_memo").get('value');
 		
 		var rowId = $('#identity').val();
 		var rowIDArray = rowId.split(',');
 		template="";
-			 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
-				  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
-				  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ប្រភេទចំណាយ/Expense Type</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ពណ៌នា/Description</div></strong></td>';
-				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនប្រាក់/Amount</div></strong></td>';
+			 temp='<table align="center" border="1" style="margin-top:10px; width: 100%;border:1px solid #000; border-collapse: collapse;font-family: Khmer OS Battambang;color:#000;font-size:14px; " id="table">'
+				  temp+='<tr style=" font-size:14px; text-align:center; height:25px;background:#eeebeb;">';
+				  temp+='<td style="border:1px solid #000;"><strong>No</strong></td>';
+				  temp+='<td style="border:1px solid #000;"><strong>Old Product</strong></td>';
+				  temp+='<td style="border:1px solid #000;"><strong>Unit Price</strong></td>';
+				  temp+='<td style="border:1px solid #000;"><strong>Qty</strong></td>';
+				  temp+='<td style="border:1px solid #000;"><strong>Total</strong></td>';
+				                                          
+				  temp+='<td style="border:1px solid #000;"><strong>New Product</strong></td>';
+				  temp+='<td style="border:1px solid #000;"><strong>Unit Price</strong></td>';
+				  temp+='<td style="border:1px solid #000;"><strong>Qty</strong></td>';
+				  temp+='<td style="border:1px solid #000;"><strong>Total</strong></td>';
+				                                          
+				  temp+='<td style="border:1px solid #000;"><strong>Different</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;"><strong>Note</div></strong></td>';
+				  
 				  temp+='</tr>';
 				  n=0;
-				i=1;  for(var n = 0; n < rowIDArray.length; n++) {
-				  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-				  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
-				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_paid"+rowIDArray[n]).attr('displayedValue')+'</td>';
-				  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+				i=1;for(var n = 0; n < rowIDArray.length; n++) {
+				  temp+='<tr align="center" style="font-size:12px;height: 23px;border:1px solid #000;"​ >';
+					  temp+='<td align="center" >'+i+'</td>';
+					  temp+='<td >'+dijit.byId("product_old_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
+					  temp+='<td >'+'$ '+dijit.byId("price_old_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td >'+dijit.byId("qty_old_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td >'+'$ '+dijit.byId("total_old_"+rowIDArray[n]).get('value')+'</td>';
+					  
+					  temp+='<td >'+dijit.byId("product_new_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
+					  temp+='<td >'+'$ '+dijit.byId("price_new_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td >'+dijit.byId("qty_new_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td >'+'$ '+dijit.byId("total_new_"+rowIDArray[n]).get('value')+'</td>';
+					  
+					  temp+='<td >'+'$ '+dijit.byId("total_diff_"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td >'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 				  i++;
 				  temp+='</tr>';
 				}
 				for(row = n+1;row<=6;row++){
-					 temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
-					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
-					  temp+='<td style="border:1px solid #000;"></td>';
-					  temp+='</tr>';
+					temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
+						temp+='<td>&nbsp;&nbsp;</td>'; 
+						temp+='<td></td>';
+						temp+='<td></td>';
+						temp+='<td></td>';
+						temp+='<td></td>';
+						temp+='<td></td>';
+						temp+='<td></td>';
+						temp+='<td></td>';
+						temp+='<td></td>';
+						temp+='<td></td>';
+					temp+='</tr>';
 				}
 			temp+='</table>';
 		dojo.byId('t_amountmoneytype').innerHTML = temp;
 		dijit.byId("terms").show();	
 	}
-}
+} 
+ 
 function submitData(){
 	if(dijit.byId('office_receipt').validate()) {
 		dijit.byId('saveclose').set('disabled',true);

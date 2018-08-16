@@ -70,6 +70,8 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
     	$this->view->stu_name = $db->getAllStuName();
     	
     	//print_r($test);exit();
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
  
     public function editAction()
@@ -80,11 +82,7 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
 			$db = new Registrar_Model_DbTable_DbChangeProduct();				
 			try {
 				$db->editChangeProduct($data,$id);
-				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/registrar/changeproduct");
-				}else{
-					Application_Form_FrmMessage::message("EDIT_SUCCESS");
-				}				
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/registrar/changeproduct");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -99,12 +97,14 @@ class Registrar_ChangeproductController extends Zend_Controller_Action
     	$this->view->stu_name = $db->getAllStuName();
     	
     	
-    	$data = $this->view->row = $db->getAllChangeProductById($id);
-    	if($data['is_void']==1){
+    	$row = $this->view->row = $db->getAllChangeProductById($id);
+    	if($row['is_void']==1){
     		Application_Form_FrmMessage::Sucessfull("You can not edit !!! ","/registrar/changeproduct");
     	}
-    	
     	$this->view->row_detail = $db->getAllChangeProductDetailById($id);
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     
     function getProductPriceAction(){

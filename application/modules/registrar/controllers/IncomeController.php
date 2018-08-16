@@ -82,6 +82,9 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	array_unshift($cate_income, array('id'=>'-1','name'=>$this->tr->translate("ADD_NEW")));
     	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     public function editAction()
     {
@@ -125,6 +128,9 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	array_unshift($cate_income, array('id'=>'-1','name'=>$this->tr->translate("ADD_NEW")));
     	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){

@@ -56,6 +56,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$this->view->form_search=$form;
 //     	$db = new Registrar_Model_DbTable_DbRegister();
 //     	$db->resetReceipt();
+
     }
     public function addAction(){
       if($this->getRequest()->isPost()){
@@ -99,6 +100,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
+	   
+	   $_db = new Application_Form_FrmGlobal();
+	   $this->view->header = $_db->getHeaderReceipt();
     }
     public function addkentridgeAction(){
     	if($this->getRequest()->isPost()){
@@ -243,6 +247,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     
     public function editcustomerpaymentAction(){

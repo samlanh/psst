@@ -968,31 +968,11 @@ function getMonthByNumber(m){
 		</style>
 		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;">
-				<?php if($this->data['show_header_receipt']==1){?>
-					<tr height="90px;">
-						<td colspan="10"  style="" align="center" valign="top">
-							<table width="100%" style="white-space:nowrap;">
-								<tr>
-									<td width="17%" valign="top">
-										<img style="width: 70%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
-									</td>
-									<td width="83%" valign="top" style="font-size:11px;line-height: 18px;">
-										<div style="font-size:22px;margin-top: 10px;"><?php echo $tr->translate("SCHOOL_NAME");?></div>
-										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_ADDRESS");?></div>
-										<div style="line-height: 18px;"><?php echo $tr->translate("CUSTOMER_TEL");?></div>
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-				<?php }else{?>
-					<tr height="90px;">
-						<td colspan="10"  style="" align="center" valign="top">&nbsp;
-							
-						</td>
-					</tr>
-				<?php }?>
-				
+				<tr height="90px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
 				<tr height="40px;">
 					<td colspan="10"  style="" align="center" valign="top">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >

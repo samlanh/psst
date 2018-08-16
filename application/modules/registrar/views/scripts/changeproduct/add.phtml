@@ -135,18 +135,20 @@ $frm = $this->frm_expense;
 	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("CHANGE_PRODUCT");?>'" id="terms" >
 		<div id="printexpense" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+				
+				<tr height="90px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
 				<tr>
 				    <td colspan="10"  style="" align="center">
-						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
+						<table width="100%" style="font-size: 10px;margin-top: -20px;">
 							<tr>
 								<td width="30%">
-									<img style="width: 50%;margin-top:-3px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo_print.png'?>"><br />
 								</td>
 								<td width="40%" align="center" valign="top" style="">
-									<div style="font-size: 14px;text-align:center;font-family: Khmer OS Muol Light;"><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></div>
-									<div style="font-size: 12px;font-family:Battambang,Arial,Helvetica,sans-serif"><?php echo $tr->translate("SCHOOL_NAME"); ?></div> 
-									<div style="font-size: 13px;font-family: khmer OS Muol Light;">ប័ណ្ណប្តូរផលិតផល</div> 
-									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:2px;">PAYMENT VOUCHER</div> 
+									<div style="font-size: 16px;font-family: khmer OS Muol Light;">ប័ណ្ណប្តូរផលិតផល</div> 
 								</td>
 								<td width="30%">&nbsp;
 									
@@ -269,7 +271,9 @@ $frm = $this->frm_expense;
 				 type="button" onclick="doPrintInvoice();"><?php echo $tr->translate("SAVE_PRINT");?></button>
 	</div>
 </div>
+
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
+
 <script type="text/javascript">
 dojo.require("dijit.form.Textarea");
 dojo.require("dojo.data.ItemFileWriteStore");  

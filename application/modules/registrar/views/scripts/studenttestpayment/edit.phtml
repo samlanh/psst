@@ -207,16 +207,28 @@ fieldset{  background:none;}
 			.defaulheight{line-height: 22px !important;}
 		</style>
 		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:10.97cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -14px;white-space:nowrap;">
+				<tr height="90px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
+				
+				<style>
+					.bold{
+						font-weight:bold;
+						}
+				</style>
+				
 				<tr height="40px;">
 					<td colspan="10"  style="" align="center" valign="top">
-						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
+						<table width="100%" style="font-size: 10px;margin-top: -15px;" >
 							<tr>
 								<td width="30%">
-									<img style="height: 80px" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 								</td>
-								<td width="40%" align="center" valign="top" style="font-size: 16px;font-weight: bold;">OFFICIAL RECEIPT
-									<div><img height="20px" style="margin-top: -2px" src="<?php echo $this->baseUrl().'/images/fonttateng.png'?>"></div>
+								<td align="center" width="40%" style="font-size: 16px;font-weight: bold;line-height: 20px;">
+									<div style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;">បង្កាន់ដៃបង់ប្រាក់</div>
+									OFFICIAL RECEIPT
 								</td>
 								<td width="30%" valign="center" align="center">
 									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
@@ -226,11 +238,6 @@ fieldset{  background:none;}
 						</table>
 					</td>
 				</tr>
-				<style>
-					.bold{
-						font-weight:bold;
-						}
-				</style>
 				<tr>
 					<td colspan="10" valign="top">
 						<table class='defaulheight' width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;">
@@ -270,7 +277,7 @@ fieldset{  background:none;}
 							</tr>
 							<tr>
 								<td colspan="6">&nbsp;
-									
+									<label id="lb_read_khmer" style="font-size:10px;font-weight:normal;"></label> 
 								</td>
 							</tr>
 							<tr>
@@ -323,7 +330,6 @@ fieldset{  background:none;}
 				</tr>
 			</table>
 		</div>
-		
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 				type="button" onclick="hideDialog();">Cancel</button>
@@ -438,7 +444,7 @@ function printSave(new_stu_id,new_receipt){
 
 		dojo.byId("lb_serial").innerHTML = dijit.byId("serial").get('value');
 		dojo.byId("lb_phone").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
-		//dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
+		dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
 		
 		dojo.byId("lb_phone").innerHTML = dijit.byId("parent_phone").attr('displayedValue');
 

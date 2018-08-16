@@ -100,7 +100,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 				'<option value="07.30">07:30 AM </option>'.
 				'<option value="08.00">08:00 AM </option>'.
 				'<option value="08.15">08:15 AM </option>'.
-				'<option value="08:20">08:20 AM </option>'.
+				'<option value="08.20">08:20 AM </option>'.
 				'<option value="08.30">08:30 AM </option>'.
 				'<option value="08.40">08.40 AM </option>'.
 				'<option value="09.00">09:00 AM </option>'.
@@ -363,8 +363,7 @@ class Application_Model_GlobalClass  extends Zend_Db_Table_Abstract
 			$options .= '<option Value="-1">'.$tr->translate("ADD_NEW").'</option>';
 			if(!empty($rows))foreach($rows as $value){
 				$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']).'</option>';
-			}
-			
+			}			
 			return $options;
 		}
 		

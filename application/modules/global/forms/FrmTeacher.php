@@ -5,6 +5,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 	protected $filter;
 	protected $t_date;
 	//protected $t_num;
+	protected $textarea=null;
 	protected $text;
 	//protected $check;
 	public function init()
@@ -15,18 +16,19 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$this->t_date = 'dijit.form.DateTextBox';
 		//$this->t_num = 'dijit.form.NumberTextBox';
 		$this->text = 'dijit.form.TextBox';
+		$this->textarea = 'dijit.form.Textarea';
 		//$this->check='dijit.form.CheckBox';
 	}
 	public function FrmTecher($_data=null){
 	
 		$_enname = new Zend_Dojo_Form_Element_TextBox('en_name');
-		$_enname->setAttribs(array('dojoType'=>$this->tvalidate, 'class'=>'fullside',));
+		$_enname->setAttribs(array('dojoType'=>$this->tvalidate, 'class'=>'fullside','required'=>'true'));
 		
 		$_khname = new Zend_Dojo_Form_Element_TextBox('kh_name');
-		$_khname->setAttribs(array('dojoType'=>$this->tvalidate, 'class'=>'fullside',));
+		$_khname->setAttribs(array('dojoType'=>$this->tvalidate, 'class'=>'fullside','required'=>'true'));
 		
 		$code = new Zend_Dojo_Form_Element_TextBox('code');
-		$code->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
+		$code->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside','style'=>'color:red;'));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$code_num = $db->getTeacherCode();
 		$code->setValue($code_num);
@@ -36,23 +38,59 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		
 		$sex = new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
-		$options=array(1=>"M",2=>"F");
+		$options=array(1=>$this->tr->translate("MALE"),2=>$this->tr->translate("FEMALE"));
 		$sex->setMultiOptions($options);
 		
 		$dob = new Zend_Dojo_Form_Element_DateTextBox('dob');
-		$dob->setAttribs(array('dojoType'=>$this->t_date,'class'=>'fullside','value'=>'now',));
+		$dob->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
+				'required'=>true,
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
+		));
+		$dob->setValue(date('Y-m-d'));
+		
+		$start_date = new Zend_Dojo_Form_Element_DateTextBox('start_date');
+		$start_date->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
+				'required'=>true,
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
+		));
+		$start_date->setValue(date('Y-m-d'));
+		
+		$end_date = new Zend_Dojo_Form_Element_DateTextBox('end_date');
+		$end_date->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
+				'required'=>true,
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
+		));
+		$end_date->setValue(date('Y-m-d'));
 		
 		$_adress = new Zend_Dojo_Form_Element_TextBox('address');
 		$_adress->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
+		$_user = new Zend_Dojo_Form_Element_TextBox('user_name');
+		$_user->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
+		$_nationality = new Zend_Dojo_Form_Element_TextBox('nationality');
+		$_nationality->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
-		
-		
-		
+		$_position = new Zend_Dojo_Form_Element_TextBox('position_add');
+		$_position->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
 		$_email = new Zend_Dojo_Form_Element_TextBox('email');
 		$_email->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
+		
+		$_passport = new Zend_Dojo_Form_Element_TextBox('passport_no');
+		$_passport->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
+		
+		$_experiences = new Zend_Dojo_Form_Element_Textarea('experiences');
+		$_experiences->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
+		
+		$_agreement = new Zend_Dojo_Form_Element_Textarea('agreement');
+		$_agreement->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
 		
 		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
 		$_degree->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
@@ -60,17 +98,20 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));		
-		$_note =  new Zend_Dojo_Form_Element_TextBox('note');
-		$_note->setAttribs(array('dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside'));
-		
-		
-		
+				'required'=>true
+		));	
 		$degree_opt = $db->getAllDegree();
 		$_degree->setMultiOptions($degree_opt);
 		
+// 		$rs_roow = $_db->getAllRoom();
+// 		$arr_room = array(-1=>$tr->translate("SELECT_ROOM"));
+// 		if(!empty($rs_roow))foreach($rs_roow AS $row) $arr_room[$row['id']]=$row['name'];
+// 		$room->setMultiOptions($arr_room);
+		
+		$_note =  new Zend_Dojo_Form_Element_TextBox('note');
+		$_note->setAttribs(array('dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside'));
+
 		$_photo = new Zend_Form_Element_File('photo');
 		
 		
@@ -95,12 +136,12 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 // 			$pob->setValue($_data['pob']);
 // 			$dob->setValue($_data['dob']);
 // 			$_adress->setValue($_data['address']);
-// 			$_email->setValue($_data['email']);
+//			$end_date->setValue($_data['end_date']);
 // 			$_degree->setValue($_data['degree']);
 // 			$_note->setValue($_data['note']);
 // 			$_status->setValue($_data['status']);
 		}
-		$this->addElements(array($id,$_enname,$_note,$_khname,$code,$phone,$sex,$dob,$_adress,$_email,$_degree,$_photo,$_status,$_submit));
+		$this->addElements(array($id,$_enname,$_note,$end_date,$_khname,$code,$phone,$_user,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
 		

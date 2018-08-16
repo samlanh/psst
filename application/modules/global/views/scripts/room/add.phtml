@@ -35,21 +35,28 @@
 	                </div>
 	                
 	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CLASSNAME");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php  echo $classname->getElement('classname');?>
+	                   </div>
+	                </div>	
+
+	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FLOOR");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php  echo $classname->getElement('floor');?>
 	                   </div>
 	                </div>
-	                
+	           
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CLASSNAME");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("MAX_STUDENT");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php  echo $classname->getElement('classname');?>
+	                   		<?php  echo $classname->getElement('max_student');?>
 	                   </div>
-	                </div>	                	            
-	                
+	                </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>
 	                   </label>

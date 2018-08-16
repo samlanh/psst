@@ -51,9 +51,8 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
-		
-		$this->addElements(array($_title,$_status));
-		
+				
+		$this->addElements(array($_title,$_status));		
 		return $this;
 	}
 	
@@ -100,7 +99,22 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				'placeholder'=>$this->tr->translate("SEARCH_BY_TEACHER_NAME")));
 		$_title->setValue($request->getParam('title'));
 		
-// 		$_db = new Application_Model_DbTable_DbGlobal();
+		$select_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
+		$select_degree->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$select_degree->setValue($request->getParam("degree"));
+		$db_degree=new Global_Model_DbTable_DbTeacher();
+		$degree=$db_degree->getAllDegree();
+		$opt = array(''=>$this->tr->translate("SELECT_DEGREE"));
+		if(!empty($degree))foreach($degree AS $row) $opt[$row['id']]=$row['name'];
+		$select_degree->setMultiOptions($opt);
+		
+ //		$_db = new Application_Model_DbTable_DbGlobal();
 // 		//$rows = $_db->getGlobalDb("SELECT DISTINCT subject_name_en FROM rms_teacher WHERE teacher_name_en!='' AND subject_name_en!=''");
 // 		$rows=array();
 // 		$opt = array(-1=>$this->tr->translate("CHOOSE_SUJECT"));
@@ -124,7 +138,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 // 		$_status->setValue($request->getParam("status_search"));
 	
 	
-		$this->addElements(array($_title));
+		$this->addElements(array($_title,$select_degree));
 		if(!empty($_data)){
 		}
 	
@@ -138,6 +152,15 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				'placeholder'=>$this->tr->translate("SEARCH_ROOM_TITLE")));
 		$_title->setValue($request->getParam("title"));
 		
+		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
+		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_status_opt = array(
+				-1=>$this->tr->translate("ALL_STATUS"),
+				1=>$this->tr->translate("ACTIVE"),
+				0=>$this->tr->translate("DACTIVE"));
+		$_status->setMultiOptions($_status_opt);
+		$_status->setValue($request->getParam("status_search"));
+				
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
 		$_branch_id->setAttribs(array('dojoType'=>$this->filter,
 				//	'placeholder'=>$this->tr->translate("SERVIC"),
@@ -154,15 +177,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		if(!empty($rows))foreach($rows As $row)$opt[$row['br_id']]=$row['branch_namekh'];
 		$_branch_id->setMultiOptions($opt);
 		
-			$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
-		$_status_opt = array(
-				-1=>$this->tr->translate("ALL_STATUS"),
-				1=>$this->tr->translate("ACTIVE"),
-				0=>$this->tr->translate("DACTIVE"));
-		$_status->setMultiOptions($_status_opt);
-		$_status->setValue($request->getParam("status_search"));
-		
+			
 		$this->addElements(array($_branch_id,$_title,$_status));		
 		return $this;
 	}
@@ -400,6 +415,27 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		return $this;
 	}
 	public function FrmsearchOccupation(){
+		$request=Zend_Controller_Front::getInstance()->getRequest();
+	
+		$_title = new Zend_Dojo_Form_Element_TextBox('title');
+		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
+				'placeholder'=>$this->tr->translate("SEARCH_OCCUPATION_TITLE")));
+		$_title->setValue($request->getParam("title"));
+	
+		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
+		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
+		$_status_opt = array(
+				-1=>$this->tr->translate("ALL_STATUS"),
+				1=>$this->tr->translate("ACTIVE"),
+				0=>$this->tr->translate("DACTIVE"));
+		$_status->setMultiOptions($_status_opt);
+		$_status->setValue($request->getParam("status_search"));
+		$this->addElements(array($_title,$_status));
+	
+		return $this;
+	}
+	
+	public function FrmsearchDocument(){
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');

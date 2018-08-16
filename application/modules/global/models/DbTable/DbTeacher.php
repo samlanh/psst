@@ -10,7 +10,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	public function AddNewStaff($_data){
 		$_db= $this->getAdapter();		
 		try{
-		/*/ add photo ////////////////////////////////////////////////////
+		/// add photo ////////////////////////////////////////////////////
 			$adapter = new Zend_File_Transfer_Adapter_Http();
 			$part = PUBLIC_PATH.'/images';
 			$adapter->setDestination($part);
@@ -22,16 +22,15 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			}else{
 				$pho_name = '';
 			}
-		*////////////////////////////////////////////////////////////////////////	
-// 			$teacher_code = $this->getTeacherCode();
+		////////////////////////////////////////////////////////////////////////	
+			$teacher_code = $this->getTeacherCode();
 			$sql="SELECT id FROM rms_teacher WHERE sex =".$_data['sex'];
 			$sql.=" AND teacher_name_kh='".$_data['kh_name']."'";
 			$sql.=" AND dob='".$_data['dob']."'";
 			$rs = $_db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;
-			}
-			
+			}			
 			$_arr=array(
 					'teacher_code'		 => $_data['code'],
 					'teacher_name_kh'	 => $_data['kh_name'],
@@ -42,10 +41,20 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			        'tel'  				 => $_data['phone'],
 					'address' 			 => $_data['address'],
 					'note' 				 => $_data['note'],
+					
+ 					'position_add' 		 => $_data['position_add'],
+ 					'passport_no' 		 => $_data['passport_no'],
+ 					'email' 			 => $_data['email'],
+  					'degree' 			 => $_data['degree'],
+  					'experiences' 		 => $_data['experiences'],
+ 					'start_date' 		 => $_data['start_date'],
+ 					'end_date' 			 => $_data['end_date'],
+  					'agreement' 		 => $_data['agreement'],
+					
 					'user_name' 		 => $_data['user_name'],
 					'password' 			 => md5($_data['password']),
 					//'status'   		 => $_data['status'],
-					//'photo'  			 => $pho_name,
+					'photo'  			 => $pho_name,
 					'branch_id' 		 => 1,
 			        'create_date' 		 => date("Y-m-d"),
 			        'user_id'	  		 => $this->getUserId(),
@@ -55,23 +64,23 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	    		$_db->rollBack();
 	    		echo $e->getMessage(); exit();
 	    	}
-		
+		//print_r($_data); exit();
 	}
 	public function updateStaff($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
 			/*/////////// add photo ////////////////////////////////////////////////////
-			$adapter = new Zend_File_Transfer_Adapter_Http();
-			$part = PUBLIC_PATH.'/images';
-			$adapter->setDestination($part);
-			$adapter->receive();
-			$photo = $adapter->getFileInfo();
-			if(!empty($photo['photo']['name'])){
-			$pho_name = $photo['photo']['name'];
-			}else{
-			$pho_name = $_data['old_photo'];
-			}
+// 			$adapter = new Zend_File_Transfer_Adapter_Http();
+// 			$part = PUBLIC_PATH.'/images';
+// 			$adapter->setDestination($part);
+// 			$adapter->receive();
+// 			$photo = $adapter->getFileInfo();
+// 			if(!empty($photo['photo']['name'])){
+// 			$pho_name = $photo['photo']['name'];
+// 			}else{
+// 			$pho_name = $_data['old_photo'];
+// 			}
 			*////////////////////////////////////////////////////////////////////////
 	
 			$_arr=array(
@@ -110,6 +119,11 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$row=$db->fetchRow($sql);
 		return $row;
 	}
+	function getAllDegree(){
+		$db=$this->getAdapter();
+		$sql="SELECT id,name_kh AS name FROM rms_view WHERE rms_view.type=3 AND name_kh!=''";
+		return $db->fetchAll($sql);
+	}
 	public function getallSubjectTeacherById($teacher_id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM `rms_teacher_subject` WHERE id= ".$db->quote($teacher_id);
@@ -121,7 +135,9 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$sql = 'SELECT id, teacher_code, teacher_name_kh,
 				(select name_kh from rms_view where rms_view.type=2 and rms_view.key_code=rms_teacher.sex) AS sex, 
 				nationality,
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=degree) AS degree,
 				tel,
+				email,
 				note,
 				(select name_en from rms_view where type=1 and key_code =status) as status
 				FROM rms_teacher WHERE 1';
@@ -134,6 +150,9 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			$s_where[] = " teacher_name_en LIKE '%{$s_search}%'";
 			$s_where[] = " teacher_name_kh LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['degree'])){
+			$where.=' AND degree='.$search['degree'];
 		}
 		return $db->fetchAll($sql.$where.$order_by);
 	}

@@ -271,7 +271,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		if(!empty($search['session'])){
 			$where.=' AND g.session='.$search['session'];
 		}
-		if($search['status_search']>-1){
+		if(!empty($search['status_search'])>-1){
 			$where.=' AND g.status='.$search['status_search'];
 		}
 		return $db->fetchAll($sql.$where.$order);

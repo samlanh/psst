@@ -19,7 +19,7 @@ class Global_BranchController extends Zend_Controller_Action {
      else{
    		 $search = array(
       		'adv_search' => '',
-      		'status_search' => -1);   		
+      		'status_search' => 1);   		
   		 }
            $rs_rows= $db->getAllBranch($search);
            $glClass = new Application_Model_GlobalClass();
@@ -98,8 +98,7 @@ class Global_BranchController extends Zend_Controller_Action {
     		$gty= $db->addajaxs($data);
     		print_r(Zend_Json::encode($gty));
     		exit();
-    	}
-    
+    	}   
     }
 }
 

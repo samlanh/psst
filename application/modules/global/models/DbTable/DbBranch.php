@@ -94,17 +94,13 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	}
     }
    	
-    function getAllBranch($search=null){
+    function getAllBranch($search){
     	$db = $this->getAdapter();
     	$sql = "SELECT b.br_id,b.branch_nameen,
 		    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.parent LIMIT 1) as parent_name,
 		    	b.prefix,b.branch_code,b.br_address,b.branch_tel,b.fax,
-    			b.other,b.`status` FROM rms_branch AS b  ";
-    	$where = ' WHERE  b.branch_nameen !="" ';
-    	
-    	if($search['status_search']>-1){
-    		$where.= " AND b.status = ".$search['status_search'];
-    	}
+    			b.other,b.status FROM rms_branch AS b  ";
+    	$where = ' WHERE  b.branch_nameen !="" ';   	
 //     	(SELECT name_en FROM `rms_view` AS v WHERE v.`type` = 4 AND v.key_code = b.displayby)AS displayby,
     	if(!empty($search['adv_search'])){
     		$s_where=array();
@@ -119,6 +115,9 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		$s_where[]=" b.other LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ',$s_where).')';
     	}
+    		if($search['status_search']>-1){
+			$where.= " AND b.status  = ".$db->quote($search['status_search']);
+		}
     	$order=' ORDER BY b.br_id DESC';
    //echo $sql.$where;
    return $db->fetchAll($sql.$where.$order);

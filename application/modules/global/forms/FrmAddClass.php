@@ -25,6 +25,9 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_floor = new Zend_Dojo_Form_Element_TextBox('floor');
 		$_floor->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 		
+		$_student = new Zend_Dojo_Form_Element_TextBox('max_student');
+		$_student->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
+		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_status_opt = array(
@@ -53,10 +56,11 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		if(!empty($data)){
 			$_classname->setValue($data['room_name']);
 			$_branch_id->setValue($data['branch_id']);
-			$_floor->setValue($data['floor']);
+			$_student->setValue($data['max_std']);
+			$_floor->setValue($data['floor']);			
 			$_status->setValue($data['is_active']);
 		}
-		$this->addElements(array($_branch_id,$_floor,$_classname,$_status,$_submit));		
+		$this->addElements(array($_branch_id,$_floor,$_classname,$_status,$_submit,$_student));		
 		return $this;		
 	}
 	

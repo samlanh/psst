@@ -13,15 +13,17 @@ class Global_LecturerController extends Zend_Controller_Action {
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = array(
-						'title' => $_data['title']);
+						'title'  => $_data['title'],
+						'degree' => $_data['degree']);
 			}
 			else{
 				$search = array(
-						'title' => '');
+						'title' => '',
+						'degree' => '');
 			}
 			$rs_rows= $db->getAllTeacher($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("ID_NUMBER","TEACHER_NAME","SEX","NATIONALITY","PHONE","NOTE","STATUS");
+			$collumns = array("ID_NUMBER","TEACHER_NAME","SEX","NATIONALITY","DEGREE","PHONE","EMAIL","NOTE","STATUS");
 			$link=array('module'=>'global','controller'=>'lecturer','action'=>'edit',);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link));
 		}catch (Exception $e){
@@ -49,8 +51,6 @@ class Global_LecturerController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull($sms,'/global/lecturer');
 				} 
 				Application_Form_FrmMessage::Sucessfull($sms,'/global/lecturer/add');
- 
-				 
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				echo $e->getMessage();

@@ -21,6 +21,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 					'branch_id'	  => $_data['branch_id'],
 					'floor'	  	  => $_data['floor'],
 					'room_name'	  => $_data['classname'],
+					'max_std'	  => $_data['max_student'],
 					'modify_date' => Zend_Date::now(),
 					'is_active'   => $_data['status'],
 					'user_id'	  => $this->getUserId()
@@ -37,6 +38,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 				'branch_id'	  => $_data['branch_id'],
 				'floor'	  	  => $_data['floor'],
 				'room_name'	  => $_data['classname'],
+				'max_std'	  => $_data['max_student'],
 				'modify_date' => Zend_Date::now(),
 				'is_active'   => 1,
 				'user_id'	  => $this->getUserId()
@@ -63,6 +65,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 				'branch_id'	  => $data['branch_id'],
 				'floor'	  	  => $data['floor'],
 				'room_name'	  => $data['classname'],
+				'max_std'	  => $data['max_student'],
 				'modify_date' => Zend_Date::now(),
 				'is_active'   => $data['status'],
 				'user_id'	  => $this->getUserId()
@@ -91,6 +94,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		if(!empty($search['title'])){
 			$search['title']=addslashes(trim($search['title']));
 			$where.=" AND ( room_name LIKE '%".$search['title']."%'";
+			$where.=" OR floor LIKE '%".$search['title']."%'";
 			$where.=" OR floor LIKE '%".$search['title']."%' )";
 		}
 		if(!empty($search['branch_id'])){

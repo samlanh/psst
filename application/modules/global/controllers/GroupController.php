@@ -42,10 +42,10 @@ class Global_GroupController extends Zend_Controller_Action {
 		}
 		$frm = new Application_Form_FrmOther();
 		$this->view->add_major = $frm->FrmAddMajor(null);
-// 		$frm = new Global_Form_FrmSearchMajor();
-// 		$frm = $frm->frmSearchTeacher();
-// 		Application_Model_Decorator::removeAllDecorator($frm);
-// 		$this->view->frm_search = $frm;
+		$frm = new Global_Form_FrmSearchMajor();
+		$frm = $frm->frmSearchTeacher();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_search = $frm;
 		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();

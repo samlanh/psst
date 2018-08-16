@@ -3,9 +3,50 @@
 	$frm = $this->frm_callteral;
 	echo $this->headTitle($tr->translate("ADD_TECHER_NAME"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-	$techer= $this->frm_techer;
+	$frm= $this->frm_techer;
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
+<style>
+.image-box {
+    text-align: center;
+    width: 170px;
+    height: 110px;
+}
+.image-box img {
+    width: 170px;
+    height: 130px;
+}
+
+.button_browse {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    height: 38px;
+    background: #fbf9f9;
+    border: 1px solid #e8e8e8;
+}
+.button_browse span {
+    line-height: 33px;
+    font-weight: 600;
+    cursor: pointer;
+}
+input.btn_borwse_image {
+    position: absolute;
+    width: 100%;
+    height: 38px;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+}
+.account-image {
+    border: solid 1px #eee;
+    width: 172px;
+    margin: 0 auto;
+}
+</style>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -36,7 +77,7 @@
 			}
 			</script>
 			<div class="card-box">
-				<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("LECTURER_INFO");?> 
 	                   </label>
@@ -45,59 +86,116 @@
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ID_NUMBER");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" required="1" style="color:red;" class="fullside" id="code" name="code" value="" type="text">
+	                   		<?php echo $frm->getElement("code");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEACHER_NAME");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" required="1" class="fullside" id="kh_name" name="kh_name" value="" type="text">
+	                   		<?php echo $frm->getElement("kh_name");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select dojoType="dijit.form.FilteringSelect" value="1" class="fullside" id="sex" name="sex" value="" type="text">
-									<option value="1"><?php echo $tr->translate("MALE");?></option>
-									<option value="2"><?php echo $tr->translate("FEMALE");?></option>
-								</select>
+							<?php echo $frm->getElement("sex");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.DateTextBox" value="now" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="dob" name="dob" value="" type="text" />
+	                   		<?php echo $frm->getElement("dob");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.TextBox"  class="fullside" id="nationality" name="nationality" value="" type="text">
+	                   		<?php echo $frm->getElement("nationality");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.TextBox"  class="fullside" id="phone" name="phone" value="" type="text">
+	                   		<?php echo $frm->getElement("phone");?>
+	                   </div>
+	                </div>
+	                 <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EMAIL");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                  		<?php echo $frm->getElement("email");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.TextBox"  class="fullside" id="address" name="address" value="" type="text">
+	                  		<?php echo $frm->getElement("address");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.TextBox"  class="fullside" id="note" name="note" value="" type="text">
+	                   		<?php echo $frm->getElement("note");?>
+	                   </div>
+	                </div>
+	            </div>
+	            <div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("ADDRESS");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                		<?php echo $frm->getElement("degree");?>
+						</div>
+		             </div>
+	                 <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POSITION");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("position_add");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PASSPORT_NO");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("passport_no");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("START_DATE");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("start_date");?>
+		                </div>
+		             </div>
+	                <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("END_DATE");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		               		<?php echo $frm->getElement("end_date");?>
+		                </div>
+		             </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AGREEMENT");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("agreement");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EXPERIENCES");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("experiences");?>
 	                   </div>
 	                </div>
 	            </div>
@@ -110,7 +208,7 @@
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ACCOUNT_NAME");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.TextBox"  class="fullside" id="user_name" name="user_name" value="" type="text">
+	                   		<?php echo $frm->getElement("user_name");?>
 	                   </div>
 	                </div>
 	                 <div class="form-group">
@@ -129,7 +227,29 @@
 								 class="fullside" id="confirm_password" name="confirm_password" value="" type="password">
 	                   </div>
 	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name">
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	              
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+	                    	<div class="account-image">
+								<div class="image-box">
+									<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+								</div>
+								<div class="button_browse">
+								<div id='preview'></div>	
+										<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+										<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
+								</div>
+							</div>			
+	                   </div>
+	                </div>
 	            </div>
+	            
 			</div>
 			<div class="clearfix"></div>
 	         <div class="card-box mt-20">
@@ -212,4 +332,19 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 			});
 		}
 	}
+
+	function readURL(input) {
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+	        
+	        reader.onload = function (e) {
+	            $('#profile_wiew').attr('src', e.target.result);
+	        }
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+	var maxSize = 0;
+	$("#photo").change(function(){
+	    readURL(this);
+	});
 </script>

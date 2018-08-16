@@ -135,7 +135,8 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
                 	<input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" class="fullside" value="" onkeyup="setEndDate();" type="text">
                 </div>
              </div>
-             <div class="form-group">
+          
+              <div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("END_DATE");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
                 	<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date" type="text" class="fullside" value="<?php echo date('Y-m-d');?>" >

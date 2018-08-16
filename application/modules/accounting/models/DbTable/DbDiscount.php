@@ -1,8 +1,8 @@
 <?php
 
-class Global_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
+class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'rms_document';
+    protected $_name = 'rms_discount';
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;  	 
@@ -11,14 +11,14 @@ class Global_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		//print_r($_data); exit();
 		try{
-			$sql="SELECT document_id FROM rms_document WHERE status =".$_data['status'];
-			$sql.=" AND doc_name='".$_data['doc_name']."'";
+			$sql="SELECT disco_id FROM rms_discount WHERE status =".$_data['status'];
+			$sql.=" AND dis_name='".$_data['dis_name']."'";
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;
 			}			
 		$_arr=array(
-				'doc_name'	  => $_data['doc_name'],
+				'dis_name'	  => $_data['dis_name'],
 				'create_date' => Zend_Date::now(),
 				'status'  	  => $_data['status'],
 				'user_id'	  => $this->getUserId()
@@ -32,7 +32,7 @@ class Global_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 	
 	public function addNewOccupationPopup($_data){
 		$_arr=array(
-				'doc_name' => $_data['doc_name'],
+				'dis_name' => $_data['dis_name'],
 				'create_date' => Zend_Date::now(),
 				'status'   => $_data['status_j'],
 				'user_id'	  => $this->getUserId()
@@ -41,43 +41,43 @@ class Global_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 	}
 	
 	
-	public function getDocumentById($id){
+	public function getDiscountById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_document WHERE document_id = ".$db->quote($id);
+		$sql = "SELECT * FROM rms_discount WHERE disco_id = ".$db->quote($id);
 		$sql.=" LIMIT 1 ";
 		$row=$db->fetchRow($sql);
 		return $row;
 	}
 	public function updateDiscount($_data){
 		$_arr=array(
-				'doc_name' => $_data['doc_name'],
+				'dis_name' => $_data['dis_name'],
 				'create_date' => Zend_Date::now(),
 				'status'   => $_data['status'],
 				'user_id'	  => $this->getUserId()
 		);
-		$where=$this->getAdapter()->quoteInto("document_id=?", $_data["id"]);
+		$where=$this->getAdapter()->quoteInto("disco_id=?", $_data["id"]);
 		$this->update($_arr, $where);
 	}
 	function getAllDiscount($search){
 		$db = $this->getAdapter();
 		$sql = " SELECT 
-					document_id AS id,
-					doc_name,
+					disco_id AS id,
+					dis_name,
 					create_date,
 				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
 					status
 				FROM 
-					rms_document ";
+					rms_discount ";
 		
 		$order = ' ORDER BY id DESC '; 
-		$where = ' WHERE doc_name!="" ';
+		$where = ' WHERE dis_name!="" ';
 		if(empty($search)){
 			return $db->fetchAll($sql.$order);
 		}
 		if(!empty($search['title'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
-			$s_where[] = " doc_name LIKE '%{$s_search}%'";
+			$s_where[] = " dis_name LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if($search['status']>-1){
@@ -85,9 +85,9 @@ class Global_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 		}
 		return $db->fetchAll($sql.$where.$order);
 	}	
-	public function addDocumenttion($_data){//ajax
+	public function addDiscounttion($_data){//ajax
 		$_arr=array(
-				'doc_name' => $_data['doc_name'],
+				'dis_name' => $_data['dis_name'],
 				'create_date' => Zend_Date::now(),
 				'status'   => 1,
 				'user_id'	  => $this->getUserId()

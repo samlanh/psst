@@ -1,19 +1,19 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('ADD_DOCUMENT')); 
+	echo $this->headTitle($tr->translate('ADD_DISCOUNT')); 
 ?>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-shield " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_DOCUMENT');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-shield " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_DISCOUNT');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
     		</div>
     	</div>
-		<form id='add_document' action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded">
+		<form id='add_discount' action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
   				 if(this.validate()) {
     				dijit.byId("save_close").attr("disabled",true);
@@ -29,7 +29,7 @@
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" required="1" class="fullside" id="doc_name" name="doc_name" type="text">
+	                   		<input dojoType="dijit.form.ValidationTextBox" required="1" class="fullside" id="dis_name" name="dis_name" type="text">
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -59,16 +59,16 @@
 </div>
 <script>
 function submitDataClose(){
-	if(dijit.byId('add_document').validate()) {
+	if(dijit.byId('add_discount').validate()) {
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'document','action'=>'add')); ?>';
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'discount','action'=>'add')); ?>';
 		dojo.xhrPost({
 		    url: url_submit,	
-			form: dojo.byId("add_documentsa"),		    
+			form: dojo.byId("add_discount"),		    
 			load: function(data) {
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/global/document";
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/discount";
 			},
 			error: function(e) {
 			}

@@ -2,8 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_DOCUMENT')); 
 ?>
-
-
 <?php $rs=$this->rs;?>
 <div class="card">
 	<div class="card-content collapse show">
@@ -16,7 +14,7 @@
     			</div>
     		</div>
     	</div>
-		<form id='edit_occupation'  action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded" dojoType="dijit.form.Form">
+		<form id='edit_discount'  action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded" dojoType="dijit.form.Form">
 			<script type="dojo/method" event="onSubmit">   
    				if(this.validate()) {
     				return true;
@@ -30,8 +28,8 @@
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TITLE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="doc_name" name="doc_name" value="<?php echo $rs["doc_name"]?>" type="text">
-	                   		<input dojoType="dijit.form.TextBox" required="true" class="fullside" id="id" name="id" value="<?php echo $rs["document_id"]?>" type="hidden">
+	                   		<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="doc_name" name="dis_name" value="<?php echo $rs["dis_name"]?>" type="text">
+	                   		<input dojoType="dijit.form.TextBox" required="true" class="fullside" id="id" name="id" value="<?php echo $rs["disco_id"]?>" type="hidden">
 	                   </div>
 	                </div>
 	                <div class="form-group">

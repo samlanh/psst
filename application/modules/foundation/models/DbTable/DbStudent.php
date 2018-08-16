@@ -14,10 +14,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 		s.`stu_id`,
 		s.group_id,
-		(SELECT `group_id` FROM `rms_group_detail_student` WHERE rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 )
+		(SELECT `group_id` FROM `rms_group_detail_student` WHERE rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 LIMIT 1 )
 		 AS current_groupid
 		 FROM `rms_student` AS s  WHERE s.group_id>0
-		 AND s.group_id !=(SELECT `group_id` FROM `rms_group_detail_student` WHERE rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 )";
+		 AND s.group_id !=(SELECT `group_id` FROM `rms_group_detail_student` WHERE rms_group_detail_student.`stu_id`=s.`stu_id` AND is_pass=0 LIMIT 1)";
 			$result = $db->fetchAll($sql);
 			
 			foreach($result as $rs){

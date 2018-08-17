@@ -371,14 +371,31 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 	
 	}
 	
+	function getOtherIncomeById($id){
+		$db=$this->getAdapter();
+		$sql="SELECT
+					*,
+					(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income) AS cate_income,
+					(SELECT name_kh FROM rms_view WHERE TYPE=8 AND key_code = payment_method) AS payment_method,
+					(SELECT first_name FROM rms_users AS u WHERE u.id = user_id) AS first_name,
+					(SELECT last_name FROM rms_users AS u WHERE u.id = user_id) AS last_name
+				FROM
+					`ln_income`
+				WHERE
+					id = $id
+				LIMIT 1
+			";
+		return $db->fetchRow($sql);
+	}
 	
 	function getStudentTestPaymentById($id){
 		$db=$this->getAdapter();
 		$sql="select 
 					*,
-					(select name_en from rms_view where type=2 and key_code=sex) as sex,
+					(select name_kh from rms_view where type=2 and key_code=sex) as sex,
 					(select en_name from rms_dept where dept_id = degree) as degree, 
-					(select CONCAT(first_name,'-',last_name) from rms_users as u where u.id = account_userid) as user
+					(select first_name from rms_users as u where u.id = account_userid) as first_name,
+					(select last_name from rms_users as u where u.id = account_userid) as last_name
 				from 
 					rms_student_test 
 				where 

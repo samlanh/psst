@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title><?php echo $tr->translate("EDIT_OTHER_INCOME")?></title>
+<title><?php echo $tr->translate("EDIT_OTHER_EXPENSE")?></title>
 <style>	
 .fullside {
 	width: 100%;
@@ -25,7 +25,7 @@ $frm = $this->frm_expense;
 			<div class="card-box">
 	             <div class="col-sm-12 border-botom">
 			    	<div class="col-sm-8 pd-0">
-			    		<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_OTHER_INCOME');?></h4>
+			    		<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_OTHER_EXPENSE');?></h4>
 	    			</div>
 	    			<div class="col-sm-4 text-right">
 	    			</div>
@@ -133,18 +133,20 @@ $frm = $this->frm_expense;
 	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
 		<div id="printexpense" style="width: 19cm !important; height: 12cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height: 11cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+				<tr height="90px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
 				<tr>
 				    <td colspan="10"  style="" align="center">
-						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
+						<table width="100%" style="font-size: 10px;margin-top: -20px;">
 							<tr>
 								<td width="30%">
-									<img style="width: 55%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo_print.png'?>"><br />
 								</td>
-								<td width="40%" align="center" valign="top" style="">
-									<div style="font-size: 14px;text-align:center;font-family: Khmer OS Muol Light;"><?php echo $tr->translate('CUSTOMER_BRANCH');?></div>
-									<div style="font-size: 12px;font-family:Battambang,Arial,Helvetica,sans-serif"><?php echo $tr->translate('SCHOOL_NAME');?></div> 
-									<div style="font-size: 13px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div> 
-									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:2px;">PAYMENT VOUCHER</div> 
+								<td width="40%" align="center" valign="top" style="line-height: 20px;" >
+									<div style="font-size: 16px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div> 
+									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:0px;font-weight: bold;">PAYMENT VOUCHER</div> 
 								</td>
 								<td width="30%">
 									<div style="font-size: 16px;font-weight:bold;text-align:center;">
@@ -170,15 +172,15 @@ $frm = $this->frm_expense;
 								<td width="3%"></td>
 								<td width="8%"></td>
 							</tr>
-							<tr >
-								<td class="one ">ចំណាយសម្រាប់​ <br />Pay To </td>
+							<tr style="line-height: 15px;">
+								<td class="one ">ចំណាយឱ្យ​ <br />Pay To </td>
 								<td valign="top"> :&nbsp; <label id="bl_payfor"></label> </td>
 								<td  align="center">ថ្ងៃចំណាយ </br />Paid Date</td>
 								<td valign="top"> :&nbsp; <label id="lb_paiddate"></label> </td>
 								<td colspan="3"><label id="" >ចំណាយជា  </br />Payment Method</label></td>
 								<td colspan="3" valign="top">:&nbsp;<label id="lb_paymentmehtod"></label></td>
 							</tr>
-							<tr>
+							<tr style="line-height: 15px;">
 								<td>សម្គាល់  </br /> Note </td>
 								<td colspan="9" valign="top"> :&nbsp; <label id="lb_note"></label></td>
 							</tr>
@@ -243,11 +245,11 @@ $frm = $this->frm_expense;
 										</tr>
 										<tr>
 											<td colspan="2" align="center" >
-												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 30px;"></div>
+												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 40px;"></div>
 												<div style="margin-top:-11px;">Date : <?php echo date('d / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
 											</td>
 											<td colspan="2" align="center" width="30%">
-												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 30px;"></div>
+												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 40px;"></div>
 												<div style="margin-top:-11px;">Date : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / </div>
 											</td>
 											<td colspan="2" align="center"></td>
@@ -417,6 +419,13 @@ function deleteRecord(index) {
 	 }
 	function printSave(){	
 		if(dijit.byId('office_receipt').validate()) {
+			
+			condition = checkValidateAddRow();
+			if(condition==false){
+				alert("Please select category expense !!! ");
+				return false;
+			}
+			
 			paid_date = dijit.byId("Date").get('value')
 			var today = new Date(paid_date);
 			var dd = today.getDate();
@@ -434,7 +443,7 @@ function deleteRecord(index) {
 			template="";
 				 temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin: 0px; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">'
 					  temp+='<tr style=" font-size:14px; text-align:center; height:25px;">';
-					  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</div></strong></td>';
+					  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">លរ/No</div></strong></td>';
 					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ប្រភេទចំណាយ/Expense Type</div></strong></td>';
 					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ពណ៌នា/Description</div></strong></td>';
 					  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនប្រាក់/Amount</div></strong></td>';
@@ -444,11 +453,11 @@ function deleteRecord(index) {
 					  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("total_paid"+rowIDArray[n]).attr('displayedValue')+'</td>';
+					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+"$ "+dijit.byId("total_paid"+rowIDArray[n]).attr('displayedValue')+'</td>';
 					  i++;
 					  temp+='</tr>';
 					}
-					for(row = n+1;row<=6;row++){
+					for(row = n+1;row<=5;row++){
 						 temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
 						  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
 						  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
@@ -504,8 +513,26 @@ function deleteRecord(index) {
 	}
 	function submitData(){
 		if(dijit.byId('office_receipt').validate()) {
+			condition = checkValidateAddRow();
+			if(condition==false){
+				alert("Please select category expense !!! ");
+				return false;
+			}
 			dijit.byId('saveclose').set('disabled',true);
 			dijit.byId('office_receipt').submit();
 		}
 	}
+	
+	function checkValidateAddRow(){
+	var rowId = $('#identity').val();
+	if(rowId!=''){
+		var rowIDArray = rowId.split(',');
+		for(var n = 0; n < rowIDArray.length; n++) {
+			expense = dijit.byId('expense_id'+rowIDArray[n]).get('value');
+			if(expense<=0){
+				return false;
+			}
+		}
+	}
+}
 </script>

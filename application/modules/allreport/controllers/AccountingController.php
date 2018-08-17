@@ -388,6 +388,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
 		$this->view->row = $db->getAllexspanByid($id);	
 		$this->view->detail = $db->getAllexspandetailByid($id);
+		
+		$_db = new Application_Form_FrmGlobal();
+		$this->view->header = $_db->getHeaderReceipt();
 	}
 	public function rptOtherIncomeAction(){
 		try{

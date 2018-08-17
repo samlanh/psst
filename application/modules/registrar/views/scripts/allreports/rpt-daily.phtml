@@ -254,7 +254,7 @@
 										<tr class="hover" style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
 											<td style="border: 1px solid #000;"><?php echo $i;?></td>
 											<td style="border: 1px solid #000;text-align: left;"><?php echo $row['title'];?></td>
-											<td style="border: 1px solid #000;"><?php echo $row['invoice'];?></td>
+											<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-other-income','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice'];?></a></td>
 											<td style="border: 1px solid #000;"><?php echo $row['income_category'];?></td>
 											<td align="center" style="border: 1px solid #000;"><?php echo $row['payment_method'];?></td>	
 											<td style="border: 1px solid #000;"><?php echo '$ '.number_format($row['total_amount'],2);?></td>

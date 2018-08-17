@@ -116,6 +116,9 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     	 
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     
     function reprintTestPaymentAction(){
@@ -125,6 +128,21 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
+    }
+    
+    function reprintOtherIncomeAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+    	$this->view->row = $db->getOtherIncomeById($id);
+    	
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	 
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     
     function reprintChangeproductAction(){
@@ -136,6 +154,9 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     
     public function rptDailyAction()

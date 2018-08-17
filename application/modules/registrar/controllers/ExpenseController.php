@@ -79,6 +79,9 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	$cate_expense = $_db->getAllCateExpense(5);
     	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
     	$this->view->cate_expense = $cate_expense;
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     public function editAction()
     {
@@ -126,6 +129,9 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	$cate_expense = $_db->getAllCateExpense(5);
     	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
     	$this->view->cate_expense = $cate_expense;
+    	
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
     }
     function getReceiptNumberAction(){
     	if($this->getRequest()->isPost()){

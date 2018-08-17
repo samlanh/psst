@@ -3,6 +3,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
     public function init()
     {    	
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
@@ -29,7 +30,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 //   			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
         	
 			$list = new Application_Form_Frmtable();
-			$collumns = array("DISCOUNT_KHNAME","DIS_MAX","START_DATE","END_DATE","USER","STATUS");
+			$collumns = array("DISCOUNT_NAME","DIS_MAX","START_DATE","END_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'discountsetting','action'=>'edit',
 			);
@@ -65,28 +66,45 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}		
 		}
+		$model = new Application_Model_DbTable_DbGlobal();
+		$disc = $model->getAllDiscount();
+		array_unshift($disc, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$this->view->discount = $disc;
+		
 		$tsub=new Accounting_Form_FrmDiscount();
 		$frm_discount=$tsub->FrmDiscountsetting();
 		Application_Model_Decorator::removeAllDecorator($frm_discount);
 		$this->view->frm_discount = $frm_discount;
 	}
 	public function editAction(){
+		$id=$this->getRequest()->getParam("id");
 		if($this->getRequest()->isPost())
 		{
+			$_data = $this->getRequest()->getPost();
+			$_data['id']=$id;
 			try{
 				$data = $this->getRequest()->getPost();
 				$db = new Accounting_Model_DbTable_DbDiscountSetting();
-				$db->updateDiscountset($data);
+				$db->updateDiscountset($_data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/discountsetting/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$id=$this->getRequest()->getParam("id");
+		
 		$db = new Accounting_Model_DbTable_DbDiscountSetting();
 		$rows = $db->getDiscountsetById($id);
 		$this->view->rs= $rows;
+		
+		$model = new Application_Model_DbTable_DbGlobal();
+		$disc = $model->getAllDiscount();
+		array_unshift($disc, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$this->view->discount = $disc;
+		
+		$model = new Application_Model_DbTable_DbGlobal();
+		$dis = $model->getAllDiscount();
+		$this->view->discount = $dis;
 		
 		$tsub=new Accounting_Form_FrmDiscount();
 		$frm_discount=$tsub->FrmDiscountsetting($rows);
@@ -99,6 +117,15 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 			$db = new Accounting_Model_DbTable_DbDiscountSetting();
 			$id = $db->addDiscounttionset($data);
 			print_r(Zend_Json::encode($id));
+			exit();
+		}
+	}
+	function adddiscountAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Accounting_Model_DbTable_DbDiscountSetting();
+			$gty= $db->addNewDiscountPopup($data);
+			print_r(Zend_Json::encode($gty));
 			exit();
 		}
 	}

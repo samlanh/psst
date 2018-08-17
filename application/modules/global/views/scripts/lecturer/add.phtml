@@ -148,7 +148,7 @@ input.btn_borwse_image {
 	            </div>
 	            <div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("ADDRESS");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CONTACT_INFO_EXPER");?> 
 	                   </label>
 	                </div>
 	                <div class="form-group">
@@ -170,6 +170,13 @@ input.btn_borwse_image {
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("passport_no");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CARD_NO");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("card_no");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -227,16 +234,12 @@ input.btn_borwse_image {
 								 class="fullside" id="confirm_password" name="confirm_password" value="" type="password">
 	                   </div>
 	                </div>
+	               ​
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name" style="line-height: 8.75;"><?php echo $tr->translate("SELECT_PICTURE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	              
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-	                    	<div class="account-image">
+	                   		<div class="account-image">
 								<div class="image-box">
 									<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
 								</div>
@@ -245,7 +248,7 @@ input.btn_borwse_image {
 										<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 										<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
 								</div>
-							</div>			
+							</div>		
 	                   </div>
 	                </div>
 	            </div>

@@ -38,6 +38,8 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			'branch_code'	=>$_data['branch_code'],
 	    			'branch_tel'	=>$_data['branch_tel'],
 	    			'fax'		    =>$_data['fax'],
+	    			'email'		    =>$_data['email'],
+	    			'website'		=>$_data['website'],
 	    			'other'			=>$_data['branch_note'],
 	    			'status'		=>$_data['branch_status'],	    			
 	    			'displayby'		=>2,
@@ -79,6 +81,8 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'branch_code'	=>$_data['branch_code'],
     			'branch_tel'	=>$_data['branch_tel'],
     			'fax'			=>$_data['fax'],
+    			'email'		    =>$_data['email'],
+    			'website'		=>$_data['website'],
     			'other'			=>$_data['branch_note'],
     			'status'		=>$_data['branch_status'],
     			'displayby'		=>2,
@@ -126,7 +130,7 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
  function getBranchById($id){
  		
     	$db = $this->getAdapter();
-    	$sql = "SELECT br_id,parent,prefix,branch_namekh,branch_nameen,br_address,branch_code,branch_tel,fax,photo,displayby,other,status FROM
+    	$sql = "SELECT br_id,parent,prefix,branch_namekh,branch_nameen,br_address,branch_code,branch_tel,fax,email,website,photo,displayby,other,status FROM
     	$this->_name ";
     	$where = " WHERE `br_id`= $id" ;  
    		return $db->fetchRow($sql.$where);

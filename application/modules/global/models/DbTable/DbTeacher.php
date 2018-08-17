@@ -47,6 +47,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
  					'email' 			 => $_data['email'],
   					'degree' 			 => $_data['degree'],
   					'experiences' 		 => $_data['experiences'],
+					'card_no' 			 => $_data['card_no'],
  					'start_date' 		 => $_data['start_date'],
  					'end_date' 			 => $_data['end_date'],
   					'agreement' 		 => $_data['agreement'],

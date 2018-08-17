@@ -86,6 +86,9 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_passport = new Zend_Dojo_Form_Element_TextBox('passport_no');
 		$_passport->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
+		$_card = new Zend_Dojo_Form_Element_TextBox('card_no');
+		$_card->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
+		
 		$_experiences = new Zend_Dojo_Form_Element_Textarea('experiences');
 		$_experiences->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
 		
@@ -141,7 +144,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 // 			$_note->setValue($_data['note']);
 // 			$_status->setValue($_data['status']);
 		}
-		$this->addElements(array($id,$_enname,$_note,$end_date,$_khname,$code,$phone,$_user,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
+		$this->addElements(array($id,$_enname,$_note,$end_date,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
 		

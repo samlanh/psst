@@ -32,13 +32,14 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function addNewOccupationPopup($_data){
+	public function addNewDiscountPopup($_data){
 		$_arr=array(
 				'dis_name' => $_data['dis_name'],
 				'create_date' => Zend_Date::now(),
 				'status'   => $_data['status_j'],
 				'user_id'	  => $this->getUserId()
 		);
+		$this->_name="rms_discount";
 		return  $this->insert($_arr);
 	}
 	
@@ -62,7 +63,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		);
 		$where=$this->getAdapter()->quoteInto("discount_id=?", $_data["id"]);
 		$this->update($_arr, $where);
-		print_r($_data); exit();
+		//print_r($_data); exit();
 	}
 	function getAllDiscountset($search){
 	$db = $this->getAdapter();

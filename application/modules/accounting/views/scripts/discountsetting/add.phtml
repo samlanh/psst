@@ -2,7 +2,34 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_DISCOUNTSETTING')); 
 	$frm= $this->frm_discount;
+	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+</script>
+<script>
+var disname_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->discount));?> );
+dojo.ready(function(){
+	var metion = '<?php// echo $this->all_branch; ?>';
+	new dijit.form.FilteringSelect({
+		store: disname_store,
+		autoComplete: true,                        
+		required: true,
+		id: "disname_id",
+		name: "disname_id",           
+		class: "full", 
+		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
+		onChange: function() {  
+			discount_id = dijit.byId('disname_id').get('value');
+			if(discount_id==-1){
+				dijit.byId("popup_add_discount").show();
+			}
+		}
+	}, "disname_id");
+});
+</script>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -27,10 +54,10 @@
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
 					<div class="form-group">
-	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_DISCOUNT");?>
+	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISCOUNT_NAME");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                		<?php echo $frm->getElement("disname_id");?>
+		                		<input id="disname_id" />
 						</div>
 		             </div>
 	                <div class="form-group">
@@ -76,6 +103,51 @@
 		</form>
 	</div>
 </div>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_add_discount" >
+		<form style="background-color: buttonface;" id='frm_adddiscount' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					return true;
+				} else {
+					return false;
+				}
+			</script>
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+			<tr>
+				<td>
+					<fieldset style="background-color: buttonface;">
+					<legend align="center" ><?php echo $tr->translate('ADD_DISCOUNT');?></legend>
+						<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
+							<tr>
+								<td><?php echo $tr->translate('DISCOUNT_NAME');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="dis_name" name="dis_name" value="" type="text"></td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate('STATUS');?></td>
+								<td><select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"   class="fullside">
+	    								<option value="1" >Active</option>
+	    								<option value="0" >Deactive</option>
+									</select>
+								</td>
+							</tr>
+
+							<tr>
+								<td colspan="2" align="center" >
+									<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
+									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
+									<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
+									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDiscount();"/>
+								</td>
+							</tr>
+						</table>
+				</fieldset>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</div>
 <script>
 function submitDataClose(){
 	if(dijit.byId('add_discount').validate()) {
@@ -98,5 +170,37 @@ function submitDataClose(){
 			}
 		});
 	}
+}
+var url_adddiscount = '<?php echo $this->url(array('module'=>'accounting','controller'=>'discountsetting','action'=>'adddiscount')); ?>';
+	function addDiscount(){
+		if(dijit.byId('frm_adddiscount').validate()){
+		dojo.xhrPost({
+				url:url_adddiscount,
+				form: dojo.byId("frm_adddiscount"),
+				handleAs:"json",
+				load: function(data) {
+					var Itemmake = { 
+							 id: data,
+							 name: dijit.byId('dis_name').get('value')
+						   };
+			   addDataToSelectbox(dijit.byId('disname_id'), disname_store, Itemmake, data);
+			   dijit.byId('frm_adddiscount').reset();
+			   dijit.byId("popup_add_discount").hide();	
+			},
+			error: function(err) {
+			}
+	});
+}
+}
+
+function branch(){
+    dept_id = dijit.byId('branch').get('value');
+    if(dept_id==-1){
+    	dijit.byId("popup_add_discount").show();
+	}
+}
+function hideDialog(){
+	dijit.byId('frm_adddiscount').reset();
+	dijit.byId("popup_add_discount").hide();
 }
 </script>

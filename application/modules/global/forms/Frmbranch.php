@@ -103,6 +103,20 @@ Class Global_Form_Frmbranch extends Zend_Dojo_Form {
 				'onkeyup'=>'Calfive()'
 				));
 		
+		$email = new Zend_Dojo_Form_Element_NumberTextBox('email');
+		$email->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'onkeyup'=>'Calfive()'
+		));
+		
+		$website = new Zend_Dojo_Form_Element_NumberTextBox('website');
+		$website->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'onkeyup'=>'Calfive()'
+		));
+		
 		$_fax = new Zend_Dojo_Form_Element_TextBox('fax ');
 		$_fax->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
@@ -164,12 +178,14 @@ Class Global_Form_Frmbranch extends Zend_Dojo_Form {
 			$branch_tel->setValue($data['branch_tel']);
 			$branch_code->setValue($data['branch_code']);
 			$_fax->setValue($data['fax']);
+			$email->setValue($data['email']);
+			$website->setValue($data['website']);
 			$branch_note->setValue($data['other']);
 			$branch_status->setValue($data['status']);
 			$branch_display->setValue($data['displayby']);
 		}
 		
-		$this->addElements(array($branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
+		$this->addElements(array($branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
 				$branch_status,$branch_display));
 		
 		return $this;

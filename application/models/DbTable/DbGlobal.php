@@ -133,6 +133,24 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $db->fetchAll($sql);
    }
    
+   public function getAllLangLevel(){
+	   	$db = $this->getAdapter();
+	   	$sql = "SELECT title as id, title as name FROM rms_degree_language WHERE status=1 AND title!='' ORDER BY rms_degree_language.id ASC ";
+	   	return $db->fetchAll($sql);
+   }
+   
+   public function getAllKnoyBy(){
+   	$db = $this->getAdapter();
+   	$sql = "SELECT title as id, title as name FROM rms_know_by WHERE status=1 AND title!='' ORDER BY rms_know_by.id ASC ";
+   	return $db->fetchAll($sql);
+   }
+   
+   public function getAllDocumentType(){
+   	$db = $this->getAdapter();
+   	$sql = "SELECT name as id, name FROM rms_document_type WHERE status=1 AND name!='' ORDER BY rms_document_type.id ASC ";
+   	return $db->fetchAll($sql);
+   }
+   
    public function getAllFecultyNamess($type){
    	$db = $this->getAdapter();
    	if($type==1){
@@ -915,6 +933,36 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   		CONCAT(note,'(',start_date,' to ',end_date,')') as name
   	 FROM rms_test_term ";
   	return $db->fetchAll($sql);
+  }
+  
+  function addLangLevel($data){
+  	$array = array(
+  				"title"		=>$data['title'],
+	  			"user_id"	=>$this->getUserId(),
+	  			"modify_date"=>date("Y-m-d"),
+  			);
+  	$this->_name="rms_degree_language";
+  	return $this->insert($array);
+  }
+  
+  function addKnowBy($data){
+  	$array = array(
+  			"title"		=>$data['title_know_by'],
+  			"user_id"	=>$this->getUserId(),
+  			"create_date"=>date("Y-m-d H:i:s"),
+  	);
+  	$this->_name="rms_know_by";
+  	return $this->insert($array);
+  }
+  
+  function addDocType($data){
+  	$array = array(
+  			"name"		=>$data['title_doc_type'],
+  			"user_id"	=>$this->getUserId(),
+  			"create_date"=>date("Y-m-d H:i:s"),
+  	);
+  	$this->_name="rms_document_type";
+  	return $this->insert($array);
   }
   
 }

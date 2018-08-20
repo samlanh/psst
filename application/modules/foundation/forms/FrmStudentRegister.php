@@ -233,6 +233,22 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$guardian_national->setAttribs(array('dojoType'=>$this->text,
 				'class'=>'fullside'));
 		
+		$from_school = new Zend_Dojo_Form_Element_TextBox('from_school');
+		$from_school->setAttribs(array('dojoType'=>$this->text,
+				'class'=>'fullside'));
+		
+		$sponser = new Zend_Dojo_Form_Element_TextBox('sponser');
+		$sponser->setAttribs(array('dojoType'=>$this->text,
+				'class'=>'fullside'));
+		
+		$sponser_phone = new Zend_Dojo_Form_Element_TextBox('sponser_phone');
+		$sponser_phone->setAttribs(array('dojoType'=>$this->text,
+				'class'=>'fullside'));
+		
+		$nation = new Zend_Dojo_Form_Element_TextBox('nation');
+		$nation->setAttribs(array('dojoType'=>$this->text,
+				'class'=>'fullside'));
+		
 		$guardian_phone = new Zend_Dojo_Form_Element_ValidationTextBox('guardian_phone');
 		$guardian_phone->setAttribs(array('dojoType'=>$this->tvalidate,
 				'class'=>'fullside'));
@@ -280,6 +296,11 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			}
 			$guardian_national->setValue($data['guardian_nation']);
 			$guardian_phone->setValue($data['guardian_tel']);
+			
+			$from_school->setValue($data['from_school']);
+			$sponser->setValue($data['sponser']);
+			$sponser_phone->setValue($data['sponser_phone']);
+			$nation->setValue($data['nation']);
 		}
 	
 		$this->addElements(
@@ -317,7 +338,10 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$guardian_dob,
 						$guardian_national,
 						$guardian_phone,
-						
+						$from_school,
+						$sponser,
+						$sponser_phone,
+						$nation,
 						)
 				);
 		

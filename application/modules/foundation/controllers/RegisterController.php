@@ -84,19 +84,29 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
-		$row =$_db->getOccupation();
+		$row = $_db->getOccupation();
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_JOB")));
 		$this->view->occupation = $row;
 		
-		$this->view->row = $db->getDegreeLanguage();
+		$row = $_db->getAllLangLevel(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->lang_level = $row;
+		
+		$row = $_db->getAllKnoyBy(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->know_by = $row;
+		
+		$row = $_db->getAllDocumentType(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->doc_type = $row;
 		
 		$this->view->year = $db->getAllYear();
-		
 		$this->view->degree = $rows = $db->getAllFecultyName();
-		
 		$this->view->room = $row =$db->getAllRoom();
-		
 		$this->view->province = $row =$db->getProvince();
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
@@ -137,12 +147,29 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_JOB")));
 		$this->view->occupation = $row;
 		
+		$row = $_db->getAllLangLevel(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->lang_level = $row;
+		
+		$row = $_db->getAllKnoyBy(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->know_by = $row;
+		
+		$row = $_db->getAllDocumentType(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->doc_type = $row;
+		
+		
 		$this->view->degree = $db->getAllFecultyName();
 		
 		$this->view->province = $db->getProvince();
 		
 		$test =  $db->getStudentById($id);
 		$this->view->rs = $test;
+		$this->view->row = $db->getStudentDocumentById($id);
 		//echo $test['group_id'];exit();
 		
 		$this->view->year = $db->getAllYear();
@@ -173,22 +200,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function submitAction(){
-		if($this->getRequest()->isPost()){
-			try{
-				$data = $this->getRequest()->getPost();
-				$db = new Foundation_Model_DbTable_DbLanguage();
-				$row = $db->addDegreeLanguage($data);
-				$result = array("id"=>$row);
-				print_r(Zend_Json::encode($row));
-				exit();
-				//Application_Form_FrmMessage::message("INSERT_SUCCESS");
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
-	}
+	
 	function addJobAction(){
 		if($this->getRequest()->isPost()){
 			try{
@@ -209,7 +221,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$student_type=$data['student_type'];
+			$student_type=$data['dept_id'];
 			$stu_no = $db->getNewAccountNumber($student_type);
 			print_r(Zend_Json::encode($stu_no));
 			exit();
@@ -235,37 +247,27 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 	public function copyAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db= new Foundation_Model_DbTable_DbStudent();
-		
-		if($this->getRequest()->isPost()){
+		$row = $db->getStudentById($id);
+		if(empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_DATA","/foundation/register");
+		}
+		$rr = $db->getStudyHishotryById($id);
+		$this->view->rr = $rr;
+		if($this->getRequest()->isPost())
+		{
 			try{
-				$_data = $this->getRequest()->getPost();
-				$id_existing = $db->ifStudentIdExisting($_data['student_id']);
-				if(!empty($id_existing)){
-					print_r("<script type='text/javascript'>
-							alert('អត្តលេខ សិស្សនេះបានប្រើរួចរាល់ហើយសូមត្រួតពិនិត្យម្តងទៀត!');
-							</script>");
-				}else{
-					$exist = $db->addStudent($_data);
-					if($exist==-1){
-						Application_Form_FrmMessage::message("RECORD_EXIST");
-					}else{
-						if(isset($_data['save_close'])){
-							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register");
-						}else{
-							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add");
-						}
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
-					}
-				}
+				$data = $this->getRequest()->getPost();
+				$data["id"]=$id;
+				$row=$db->addStudent($data);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/register/index");
 			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		
 		$group = $db->getAllgroup();
-		array_unshift($group, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		array_unshift($group, array ( 'id' =>'','name' => $this->tr->translate("SELECT_GROUP")));
+		array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -274,24 +276,83 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_JOB")));
 		$this->view->occupation = $row;
 		
+		$row = $_db->getAllLangLevel(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->lang_level = $row;
+		
+		$row = $_db->getAllKnoyBy(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->know_by = $row;
+		
+		$row = $_db->getAllDocumentType(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->doc_type = $row;
+		
+		
 		$this->view->degree = $db->getAllFecultyName();
 		
 		$this->view->province = $db->getProvince();
 		
-		$this->view->rs = $db->getStudentById($id);
+		$test =  $db->getStudentById($id);
+		$this->view->rs = $test;
+		$this->view->row = $db->getStudentDocumentById($id);
+		//echo $test['group_id'];exit();
 		
 		$this->view->year = $db->getAllYear();
 		$this->view->room = $row =$db->getAllRoom();
 		
-		$row = $db->getStudentById($id);
-		if(empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_DATA","/foundation/register");
-		}
-		$rr = $db->getStudyHishotryById($id);
-		$this->view->rr = $rr;
-		$tsub=new Global_Form_FrmTeacher();
-		$frm_techer=$tsub->FrmTecher();
-		Application_Model_Decorator::removeAllDecorator($frm_techer);
-		$this->view->frm_techer = $frm_techer;
+		$tsub= new Foundation_Form_FrmStudentRegister();
+		$frm_register=$tsub->FrmStudentRegister($test);
+		Application_Model_Decorator::removeAllDecorator($frm_register);
+		$this->view->frm = $frm_register;
 	}
+	function addLanglevelAction(){
+		if($this->getRequest()->isPost()){
+			try{
+				$data = $this->getRequest()->getPost();
+				$db = new Application_Model_DbTable_DbGlobal();
+				$row = $db->addLangLevel($data);
+				print_r(Zend_Json::encode($row));
+				exit();
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+	}
+	
+	function addKnowbyAction(){
+		if($this->getRequest()->isPost()){
+			try{
+				$data = $this->getRequest()->getPost();
+				$db = new Application_Model_DbTable_DbGlobal();
+				$row = $db->addKnowBy($data);
+				print_r(Zend_Json::encode($row));
+				exit();
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+	}
+	
+	function addDoctypeAction(){
+		if($this->getRequest()->isPost()){
+			try{
+				$data = $this->getRequest()->getPost();
+				$db = new Application_Model_DbTable_DbGlobal();
+				$row = $db->addDocType($data);
+				print_r(Zend_Json::encode($row));
+				exit();
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+	}
+	
+	
 }

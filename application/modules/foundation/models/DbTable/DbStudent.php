@@ -104,6 +104,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql.=$dbp->getAccessPermission();
 		return $db->fetchRow($sql);
 	}
+	
+	public function getStudentDocumentById($id){
+		$db = $this->getAdapter();
+		$sql = "SELECT * FROM rms_student_document as s WHERE s.stu_id =".$id;
+		return $db->fetchAll($sql);
+	}
+	
 	public function getDegreeLanguage(){
 // 		try{
 // 			$db = $this->getAdapter();
@@ -188,6 +195,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'stu_khname'	=>$_data['name_kh'],
 						'sex'			=>$_data['sex'],
 						'nationality'	=>$_data['studen_national'],
+						'nation'		=>$_data['nation'],
 						'dob'			=>$_data['date_of_birth'],
 						'tel'			=>$_data['phone'],
 						'pob'			=>$_data['pob'],
@@ -225,6 +233,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'guardian_job'	=>$_data['gu_job'],
 						'guardian_tel'	=>$_data['guardian_phone'],
 						
+						/////other infomation tab /////
+						'lang_level'	=>$_data['lang_level'],
+						'from_school'	=>$_data['from_school'],
+						'know_by'		=>$_data['know_by'],
+						'sponser'		=>$_data['sponser'],
+						'sponser_phone'	=>$_data['sponser_phone'],
+						//////////////////////////////////////////////
+				
 						'is_stu_new'	=> 0,
 						'is_setgroup'	=> $is_setgroup,
 						'status'		=>$_data['status'],
@@ -280,6 +296,21 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				);
 				$this->insert($arra);
 				
+				$this->_name = 'rms_student_document';
+				$ids = explode(',', $_data['identity']);
+				foreach ($ids as $i){
+					if($_data['document_type_'.$i]!=0 || $_data['document_type_'.$i] != -1){
+						$_arr = array(
+								'stu_id'		=>$id,
+								'document_type'	=>$_data['document_type_'.$i],
+								'date_give'		=>$_data['date_give_'.$i],
+								'is_receive'	=>$_data['is_receive_'.$i],
+								'note'			=>$_data['note_'.$i]
+						);
+						$this->insert($_arr);
+					}
+				}
+				
 				$_db->commit();
 			}catch(Exception $e){
 				$_db->rollBack();
@@ -328,6 +359,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'stu_khname'	=>$_data['name_kh'],
 					'sex'			=>$_data['sex'],
 					'nationality'	=>$_data['studen_national'],
+					'nation'		=>$_data['nation'],
 					'dob'			=>$_data['date_of_birth'],
 					'tel'			=>$_data['phone'],
 					'pob'			=>$_data['pob'],
@@ -362,6 +394,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'guardian_nation'=>$_data['guardian_national'],
 					'guardian_job'	=>$_data['gu_job'],
 					'guardian_tel'	=>$_data['guardian_phone'],
+					
+					/////other infomation tab /////
+					'lang_level'	=>$_data['lang_level'],
+					'from_school'	=>$_data['from_school'],
+					'know_by'		=>$_data['know_by'],
+					'sponser'		=>$_data['sponser'],
+					'sponser_phone'	=>$_data['sponser_phone'],
+					//////////////////////////////////////////////
 					
 					'is_setgroup'	=> $is_setgroup,
 					'status'		=>$_data['status'],
@@ -439,8 +479,24 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			);
 			$where = " stu_id = ".$_data["id"];
 			$this->update($arra, $where);
-			$db->commit();//if not errore it do....
 			
+			$this->_name = 'rms_student_document';
+			$where="stu_id = ".$_data["id"];
+			$this->delete($where);
+			
+			$ids = explode(',', $_data['identity']);
+			foreach ($ids as $i){
+					$_arr = array(
+							'stu_id'		=>$_data["id"],
+							'document_type'	=>$_data['document_type_'.$i],
+							'date_give'		=>$_data['date_give_'.$i],
+							'is_receive'	=>$_data['is_receive_'.$i],
+							'note'			=>$_data['note_'.$i]
+					);
+					$this->insert($_arr);
+			}
+			
+			$db->commit();//if not errore it do....
 		}catch(Exception $e){
 			$db->rollBack();
 			echo $e->getMessage();

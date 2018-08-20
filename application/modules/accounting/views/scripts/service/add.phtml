@@ -12,7 +12,6 @@
 	
 var service_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->service));?> );
 dojo.ready(function(){	
-
 	new dijit.form.FilteringSelect({
 		store: service_store,
 		autoComplete: true,                        
@@ -33,7 +32,6 @@ dojo.ready(function(){
 }); 
 </script>
 <?php  $item= $this->frm;?>
-
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">

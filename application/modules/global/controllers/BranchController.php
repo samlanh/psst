@@ -14,13 +14,15 @@ class Global_BranchController extends Zend_Controller_Action {
       try{
     	$db = new Global_Model_DbTable_DbBranch();
     	 if($this->getRequest()->isPost()){
-    	$search=$this->getRequest()->getPost();
-   		}
-     else{
-   		 $search = array(
-      		'adv_search' => '',
-      		'status_search' => 1);   		
-  		 }
+	    	$_data=$this->getRequest()->getPost();
+	   		$search = array(
+		   		'adv_search' => $_data['adv_search'],
+		   		'status' => $_data['status_search']);
+    	 }else{
+	   		 $search = array(
+	      		'adv_search' => '',
+	      		'status' => -1);   		
+	  		 }
            $rs_rows= $db->getAllBranch($search);
            $glClass = new Application_Model_GlobalClass();
 			$rs_rowshow = $glClass->getImgActive($rs_rows, BASE_URL, true);

@@ -31,8 +31,8 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_status_opt = array(
-				1=>$this->tr->translate("ACTIVE"),
-				2=>$this->tr->translate("DACTIVE"));
+				 1=>$this->tr->translate("ACTIVE"),
+				 0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
@@ -46,9 +46,9 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_branch_id->setValue($request->getParam("branch_id"));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$rows= $db->getAllBranch();
-		array_unshift($rows, array('br_id'=>'','branch_namekh'=>$this->tr->translate("SELECT_LOCATION")));
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_BRANCH")));
 		$opt=array();
-		if(!empty($rows))foreach($rows As $row)$opt[$row['br_id']]=$row['branch_namekh'];
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$_branch_id->setMultiOptions($opt);
 			
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');

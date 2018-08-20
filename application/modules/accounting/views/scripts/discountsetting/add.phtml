@@ -7,7 +7,8 @@
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require('dijit.form.TextBox');  
 </script>
 <script>
 var disname_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->discount));?> );
@@ -15,7 +16,8 @@ dojo.ready(function(){
 	var metion = '<?php// echo $this->all_branch; ?>';
 	new dijit.form.FilteringSelect({
 		store: disname_store,
-		autoComplete: true,                        
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
 		required: true,
 		id: "disname_id",
 		name: "disname_id",           

@@ -267,7 +267,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    public function getAllDegree($id=null){
 	   $rs = array(
-	   		//	0=>$this->tr->translate("SELECT_DEGREE"),
+	   			0=>$this->tr->translate("SELECT_DEGREE"),
 	   			1=>$this->tr->translate("ASSOCIATE"),
 	   			2=>$this->tr->translate("BACHELOR"),
 	   			3=>$this->tr->translate('MASTER'),
@@ -555,12 +555,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $db->fetchAll($sql);
    }
    
-   function getAllBranch(){
-   	$db = $this->getAdapter();
-   	$sql=" SELECT br_id,branch_namekh,branch_nameen FROM `rms_branch` WHERE STATUS=1 AND branch_namekh!='' ";
-   	$sql.=$this->getAccessPermission('br_id');
-   	return $db->fetchAll($sql);
-   }
+	function getAllBranch(){
+    	$db = $this->getAdapter();
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$branch_id = $_db->getAccessPermission('br_id');
+    	$sql="select br_id as id, CONCAT(branch_nameen) as name from rms_branch WHERE branch_nameen!='' AND  status=1  $branch_id ";
+    	return $db->fetchAll($sql);
+    } 
    public function getAccessPermission($branch_str='branch_id'){
 	   	$session_user=new Zend_Session_Namespace('authstu');
 	   	$branch_id = $session_user->branch_id;

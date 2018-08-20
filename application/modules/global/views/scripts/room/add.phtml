@@ -17,6 +17,11 @@
 		<form  id='add_room' action="<?php echo $this->url(array('module'=>'global','controller'=>'room','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				branch_id=dijit.byId("branch_id").get('value');
+				if(branch_id=='' || branch_id==null){
+					dijit.byId("branch_id").focus();
+					return false;
+				}
                 dijit.byId("save_close").attr("disabled",true);
 				dijit.byId("save_new").attr("disabled",true);
 				return true;

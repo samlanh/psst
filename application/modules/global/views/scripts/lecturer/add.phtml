@@ -68,7 +68,7 @@ input.btn_borwse_image {
 					dojo.byId('confirm_password').value = '';
 					dijit.byId('password').focus();
 					return false;
-				}	
+				}
                 dijit.byId("save_new").attr("disabled",true);	
 				dijit.byId("save_close").attr("disabled",true);		
 				return true;
@@ -274,7 +274,6 @@ dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
 
 var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->position));?> );
-
 	dojo.ready(function(){
 		getTeacherID();
 		new dijit.form.FilteringSelect({
@@ -294,7 +293,6 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 	});
 </script>
 
-
 <script type="text/javascript">
 	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
 	function getTeacherID(){
@@ -309,7 +307,6 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 			}
 		});
 	}
-
 	function submitDataClose(){
 		if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
 			alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
@@ -318,8 +315,12 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 			dijit.byId('password').focus();
 			return false;
 		}	
-        
 		if(dijit.byId('frm_add_tran').validate()) {
+			degree=dijit.byId('degree').get('value');
+			if(degree=='' || degree==null){
+				alert('Please Select Degree!');
+				return false;
+			}
 			dijit.byId("save_new").attr("disabled",true);	
 			dijit.byId("save_close").attr("disabled",true);		
 			var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'add')); ?>';

@@ -87,7 +87,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_passport->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
 		$_card = new Zend_Dojo_Form_Element_TextBox('card_no');
-		$_card->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
+		$_card->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside','required'=>'true'));
 		
 		$_experiences = new Zend_Dojo_Form_Element_Textarea('experiences');
 		$_experiences->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
@@ -101,7 +101,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>true
+				'required'=>false
 		));	
 		$degree_opt = $db->getAllDegree();
 		$_degree->setMultiOptions($degree_opt);

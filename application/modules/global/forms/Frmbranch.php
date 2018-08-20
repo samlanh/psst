@@ -146,7 +146,7 @@ Class Global_Form_Frmbranch extends Zend_Dojo_Form {
 				'class'=>'fullside',
 // 				'readonly'=>true
 				));
-		$options = array(1=>$this->tr->translate("ACTIVE"), 2=>$this->tr->translate("DEACTIVE"));
+		$options = array( -1=>$this->tr->translate("ALL_STATUS"), 1=>$this->tr->translate("ACTIVE"), 0=>$this->tr->translate("DEACTIVE"));
 		$branch_status->setMultiOptions($options);
 		
 		$branch_display = new Zend_Dojo_Form_Element_FilteringSelect('branch_display');

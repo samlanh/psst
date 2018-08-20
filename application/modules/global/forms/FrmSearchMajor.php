@@ -99,21 +99,18 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				'placeholder'=>$this->tr->translate("SEARCH_BY_TEACHER_NAME")));
 		$_title->setValue($request->getParam('title'));
 		
-		$select_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
-		$select_degree->setAttribs(array(
-				'dojoType'=>$this->filter,
+		$db = new Application_Model_DbTable_DbGlobal();
+		
+		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
+		$_degree->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SERVIC"),
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$select_degree->setValue($request->getParam("degree"));
-		$db_degree=new Global_Model_DbTable_DbTeacher();
-		$degree=$db_degree->getAllDegree();
-		$opt = array(''=>$this->tr->translate("SELECT_DEGREE"));
-		if(!empty($degree))foreach($degree AS $row) $opt[$row['id']]=$row['name'];
-		$select_degree->setMultiOptions($opt);
-		
+				'required'=>true
+		));	
+		$degree_opt = $db->getAllDegree();
+		$_degree->setMultiOptions($degree_opt);
  //		$_db = new Application_Model_DbTable_DbGlobal();
 // 		//$rows = $_db->getGlobalDb("SELECT DISTINCT subject_name_en FROM rms_teacher WHERE teacher_name_en!='' AND subject_name_en!=''");
 // 		$rows=array();
@@ -138,7 +135,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 // 		$_status->setValue($request->getParam("status_search"));
 	
 	
-		$this->addElements(array($_title,$select_degree));
+		$this->addElements(array($_title,$_degree));
 		if(!empty($_data)){
 		}
 	
@@ -172,9 +169,9 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_branch_id->setValue($request->getParam("branch_id"));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$rows= $db->getAllBranch();
-		array_unshift($rows, array('br_id'=>'','branch_namekh'=>$this->tr->translate("SELECT_LOCATION")));
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_BRANCH")));
 		$opt=array();
-		if(!empty($rows))foreach($rows As $row)$opt[$row['br_id']]=$row['branch_namekh'];
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$_branch_id->setMultiOptions($opt);
 		
 			

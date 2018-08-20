@@ -119,8 +119,8 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		$s_where[]=" b.other LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ',$s_where).')';
     	}
-    		if($search['status_search']>-1){
-			$where.= " AND b.status  = ".$db->quote($search['status_search']);
+		if($search['status']>-1){
+			$where.= " AND b.status = ".$search['status'];
 		}
     	$order=' ORDER BY b.br_id DESC';
    //echo $sql.$where;

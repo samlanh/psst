@@ -67,7 +67,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 	}
 	function getAllDiscountset($search){
 	$db = $this->getAdapter();
-		$sql = "  SELECT 
+		$sql = " SELECT 
 					discount_id AS id,
 					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=disname_id )AS disc_name,
 					dis_max,

@@ -56,7 +56,7 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$rows = $db->getAllBranch();
 		$options=array();
 		if(!empty($rows))foreach($rows AS $row){
-			$options[$row['br_id']]=$row['branch_namekh'];
+			$options[$row['id']]=$row['name'];
 		}
 		$_branch_id->setMultiOptions($options);
 		

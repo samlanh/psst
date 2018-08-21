@@ -15,7 +15,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 	
 		$sql=" SELECT 
 				c.id,
-				(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,
+				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
 				CONCAT(stu_khname,'-',stu_enname) as student_name,
 				total_amount,

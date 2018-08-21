@@ -16,9 +16,8 @@ dojo.ready(function(){
 	var metion = '<?php// echo $this->all_branch; ?>';
 	new dijit.form.FilteringSelect({
 		store: disname_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: true,
+		autoComplete: true,                        
+		required: true, 
 		id: "disname_id",
 		name: "disname_id",           
 		class: "full", 

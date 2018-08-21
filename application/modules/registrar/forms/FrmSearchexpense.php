@@ -79,7 +79,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$rows = $db->getAllBranch();
 		$options=array(-1=>'---Select Branch---');
 			if(!empty($rows))foreach($rows AS $row){
-				$options[$row['br_id']]=$row['branch_namekh'];
+				$options[$row['id']]=$row['name'];
 			}
 		$_branch_id->setMultiOptions($options);
 		$_branch_id->setValue($request->getParam("branch_id"));

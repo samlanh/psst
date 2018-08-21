@@ -484,7 +484,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	s.`sex`,
 			    	(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
 			    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) LIMIT 1) AS group_code, 
-			    	(SELECT kh_name FROM `rms_dept` WHERE `rms_dept`.`dept_id`= s.`degree` LIMIT 1) AS degree,
+			    	(SELECT en_name FROM `rms_dept` WHERE `rms_dept`.`dept_id`= s.`degree` LIMIT 1) AS degree,
 			    	s.`degree` as degree_id,
 					(SELECT major_enname FROM `rms_major` WHERE `rms_major`.`major_id`=s.`grade` LIMIT 1) AS grade,
 					(SELECT `r`.`room_name`	FROM `rms_room` `r` WHERE `r`.`room_id` = s.`room`LIMIT 1) AS room,
@@ -532,7 +532,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					g.id as group_id,
 					g.`group_code`,
 					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-					(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+					(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
 					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
 					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 					`g`.`semester` AS `semester`,
@@ -545,15 +545,16 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					`rms_student` AS st,
 					rms_student_attendence AS sta
 				WHERE 
-				sta.type=1
-				AND gsd.status=1
-				AND gsd.type=1
-				AND sta.type=1
-    			AND g.`id` = gsd.`group_id`
-				 AND sta.group_id = g.id 
-				 AND st.`stu_id` = gsd.`stu_id` 
-				 AND sta.status=1 
-				 AND g.is_pass!=1 ";
+					sta.type=1
+					AND gsd.status=1
+					AND gsd.type=1
+					AND sta.type=1
+	    			AND g.`id` = gsd.`group_id`
+				 	AND sta.group_id = g.id 
+				 	AND st.`stu_id` = gsd.`stu_id` 
+				 	AND sta.status=1 
+				 	AND g.is_pass!=1 
+    		";
     	
     	$from_date =(empty($search['start_date']))? '1': "sta.date_attendence >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "sta.date_attendence <= '".$search['end_date']." 23:59:59'";
@@ -615,7 +616,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					g.id as group_id,
 					g.`group_code`,
 					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year, 
-					(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+					(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
 					 (SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade, 
 					 (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
 					 `g`.`semester` AS `semester`,
@@ -813,7 +814,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	gsj.`subject_id`,
 			(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsj.`subject_id` LIMIT 1) AS subject_name,
 	    	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-	    	(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+	    	(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
 	    	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
 	    	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 	    	`g`.`semester` AS `semester`,

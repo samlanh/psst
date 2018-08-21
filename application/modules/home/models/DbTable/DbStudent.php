@@ -378,5 +378,116 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
+	function getStudentDocumentById($id){
+		$db=$this->getAdapter();
+		$sql=" SELECT * from rms_student_document where stu_id = $id ";
+		return $db->fetchAll($sql);
+	}
+	
+	function getStudentMistake($stu_id){
+		$db = $this->getAdapter();
+		$sql="SELECT
+					g.id as group_id,
+					g.`group_code`,
+					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+					(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+					`g`.`semester` AS `semester`,
+					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+					sdd.`stu_id`, st.`stu_code`, st.`stu_enname`, st.`stu_khname`, st.`sex`
+				FROM
+					`rms_group` AS g, 
+					`rms_student` AS st,
+					rms_student_attendence AS sd,
+					`rms_student_attendence_detail` AS sdd
+				WHERE
+					(sd.type=2 OR sdd.`attendence_status` IN (4,5))
+					AND sd.`id` = sdd.`attendence_id`
+					AND sd.group_id = g.id 
+					AND sd.status=1
+					AND st.`stu_id` = sdd.`stu_id` 
+					AND st.is_subspend = 0
+					and sdd.stu_id = $stu_id
+			";
+		 
+		$order =" GROUP BY g.id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC";
+		return $db->fetchAll($sql.$order);
+	}
+	
+	function getStatusMistakeByStudent($stu_id,$group){
+		$db = $this->getAdapter();
+		$sql="SELECT
+					sd.`group_id`,
+					sd.`type`,
+					sdd.`attendence_status` as mistake_type,
+					sdd.description,
+					sd.`date_attendence` as mistake_date,
+					sd.for_session
+				FROM
+					`rms_student_attendence` AS sd,
+					`rms_student_attendence_detail` AS sdd
+				WHERE
+					(sd.type=2 OR sdd.`attendence_status` IN (4,5))
+					AND sd.`id` = sdd.`attendence_id`
+					AND sdd.`stu_id` = $stu_id
+					AND sd.`group_id` = $group 
+			";
+		return $db->fetchAll($sql);
+	}
+	
+	
+	function getStudentAttendence($stu_id){
+		$db = $this->getAdapter();
+		$sql="SELECT
+					g.id AS group_id,
+					g.`group_code`,
+					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+					(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
+					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+					`g`.`semester` AS `semester`,
+					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+					sdd.`stu_id`,
+					st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`
+				FROM
+					`rms_group` AS g,
+					`rms_student` AS st,
+					rms_student_attendence AS sta,
+					`rms_student_attendence_detail` AS sdd
+				WHERE
+					sta.type=1
+					AND sta.`id` = sdd.`attendence_id`
+					AND sta.type=1
+					AND sta.group_id = g.id
+					AND st.`stu_id` = sdd.`stu_id`
+					AND sta.status=1
+					AND g.is_pass!=1
+					AND st.`stu_id` = $stu_id
+			";
+		$order =" GROUP BY sta.group_id,sdd.stu_id
+		ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC,st.stu_khname ASC ";
+		 
+		return $db->fetchAll($sql.$order);
+	}
+	
+	function getStatusAttendence($stu_id,$group){
+		$db = $this->getAdapter();
+		$sql="SELECT
+					sat.`group_id`,
+					satd.`attendence_status`,
+					sat.`date_attendence`,
+					satd.description
+				FROM 
+					`rms_student_attendence` AS sat,
+					`rms_student_attendence_detail` AS satd
+				WHERE 
+					sat.`id`= satd.`attendence_id`
+					AND sat.type=1
+					AND satd.`stu_id`=$stu_id
+					AND sat.`group_id`=$group
+			";
+		return $db->fetchAll($sql);
+	}
 }
 

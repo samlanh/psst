@@ -107,6 +107,16 @@
 			                <i class="fa fa-calendar ml-2"></i> <?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?>
 			                </a>
 			            </li>
+						<li class="nav-item">
+			                <a class="nav-link" data-toggle="tab" href="#panel26" role="tab">
+			                <i class="fa fa-calendar-times-o ml-2"></i> <?php echo $tr->translate("STUDENT_ATTENDANCE");?>
+			                </a>
+			            </li>
+						<li class="nav-item">
+			                <a class="nav-link" data-toggle="tab" href="#panel27" role="tab">
+			                <i class="fa fa-exclamation-triangle ml-2"></i> <?php echo $tr->translate("STUDENT_MISTAKE");?>
+			                </a>
+			            </li>
 			        </ul>
 			    </div>
 			    <!--/. Tab Menu -->
@@ -154,12 +164,18 @@
 										  	?>
 					                   </div>
 					                </div>
-					                
 					               	<div class="form-group">
 					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?> 
 					                   </label>
 					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
 					                   		<?php echo $this->rs['nationality'];?>
+					                   </div>
+					                </div>
+									<div class="form-group">
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?> 
+					                   </label>
+					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
+					                   		<?php echo $this->rs['nation'];?>
 					                   </div>
 					                </div>
 					                <div class="form-group">
@@ -329,6 +345,78 @@
 					                   </div>
 					                </div>
 					            </div>
+								
+								<div class="col-md-4 col-sm-4 col-xs-12">
+									<div class="form-group">
+					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OTHER_INFOMATION");?> 
+					                   </label>
+					                </div>
+					                <div class="form-group">
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ENGLISH_LANGUAGE_LEVEL");?> 
+					                   </label>
+					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
+					                   		<?php echo $this->rs['lang_level'];?>
+					                   </div>
+					                </div>
+					                <div class="form-group">
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_SCHOOL");?> 
+					                   </label>
+					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
+					                   		<?php echo $this->rs['from_school'];?>
+					                   </div>
+					                </div>
+					                <div class="form-group">
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("KNOW_BY");?> 
+					                   </label>
+					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
+					                   		<?php echo $this->rs['know_by'];?>
+					                   </div>
+					                </div>
+					                <div class="form-group">
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SPONSER");?> 
+					                   </label>
+					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
+					                   		<?php echo $this->rs['sponser'];?>
+					                   </div>
+					                </div>
+					                <div class="form-group">
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> 
+					                   </label>
+					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
+					                   		<?php echo $this->rs['sponser_phone'];?>
+					                   </div>
+					                </div>
+					            </div>
+								
+								<div class="col-md-4 col-sm-4 col-xs-12">
+									<div class="form-group">
+					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("DOCUMENT_INFO");?> 
+					                   </label>
+					                </div>
+					                <div class="form-group">
+					                   <div class="control-label col-md-12 col-sm-12 col-xs-12" >
+											<table width="100%" border="1" style="border:1px solid #000;border-collapse:collapse;line-height: 24px;white-space:nowrap;">
+												<tr align="center" style="font-size:14px;height:27px;font-weight:bold;background-color: #e8e6e6;">
+													<td><?php echo $tr->translate("N_O");?></td>
+													<td><?php echo $tr->translate("DOCUMENT_TYPE");?></td>
+													<?php /*?><td><?php echo $tr->translate("DATE_GIVE");?></td><?php */?>
+													<td><?php echo $tr->translate("RECEIVED");?></td>
+													<td><?php echo $tr->translate("NOTE");?></td>
+												</tr>
+												<?php $i=0;if(!empty($this->document)){foreach($this->document as $rs){$i++;?>
+												<tr style="font-size:13px;height:23px;">
+													<td align="center"><?php echo $i;?></td>
+													<td><?php echo $rs['document_type'];?></td>
+													<?php /*?><td align="center"><?php echo date("d/m/Y",strtotime($rs['date_give']));?></td><?php */?>
+													<td><?php if($rs['is_receive']==1){echo $tr->translate("RECEIVED");}else{echo $tr->translate("NOT_RECEIVED");}?></td>
+													<td><?php echo $rs['note'];?></td>
+												</tr>
+												<?php }}?>
+											</table>
+					                   </div>
+					                </div>
+					            </div>
+								
 					        </div>
 				        </div>
 				        <!--/. Panel 1-->
@@ -352,7 +440,9 @@
 					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?> 
 					                   </label>
 					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo date("d",strtotime($this->rs['father_dob'])>0)?"":date("d/m/Y",strtotime($this->rs['father_dob']));?>
+					                   		<?php echo date("d",strtotime($this->rs['father_dob'])>0)?date("d/m/Y",strtotime($this->rs['father_dob'])):"";?>
+											
+											<?php //echo date("d",strtotime($this->rs['father_dob']));?>
 					                   </div>
 					                </div>
 					                <div class="form-group">
@@ -393,7 +483,7 @@
 					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?> 
 					                   </label>
 					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo date("d",strtotime($this->rs['mother_dob'])>0)?"":date("d/m/Y",strtotime($this->rs['mother_dob']));?>
+					                   		<?php echo date("d",strtotime($this->rs['mother_dob'])>0)?date("d/m/Y",strtotime($this->rs['mother_dob'])):"";?>
 					                   </div>
 					                </div>
 					                <div class="form-group">
@@ -435,7 +525,7 @@
 					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?> 
 					                   </label>
 					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo date("d",strtotime($this->rs['guardian_dob'])>0)?"":date("d/m/Y",strtotime($this->rs['guardian_dob']));?>
+					                   		<?php echo date("d",strtotime($this->rs['guardian_dob'])>0)?date("d/m/Y",strtotime($this->rs['guardian_dob'])):"";?>
 					                   </div>
 					                </div>
 					                <div class="form-group">
@@ -636,8 +726,7 @@
 				        </div>
 				        <!--/. Panel 4-->
 				        
-				        
-				         <!--Panel 5-->
+				        <!--Panel 5-->
 				        <div class="tab-pane fade in " id="panel25" role="tabpanel">
 				        	<div class="card-box">
 					        	<div class="col-md-12 col-sm-12 col-xs-12">
@@ -788,6 +877,324 @@
 					        </div>
 				        </div>
 				        <!--/. Panel 5-->
+						
+						
+						<!--Panel 6-->
+				        <div class="tab-pane fade in " id="panel26" role="tabpanel">
+				        	<div class="card-box">
+					        	<div class="col-md-12 col-sm-12 col-xs-12">
+									<table cellpadding="5"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
+										<thead>
+										<?php 
+											$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+											$i=0; 
+											$old_groupid=0; 
+											$old_student_id=0; 
+										if (!empty($this->student_attendance)) foreach ($this->student_attendance as $key => $rs){
+											if ($rs['sex']==1){$sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
+										?>
+										<?php if ($old_groupid!=$rs['group_id']){ ?>
+										<?php if ($key>0){ 
+										?>
+									
+										<tr>
+											<td align="right" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+												&nbsp;
+											</td>
+										</tr>
+										<?php }$i=0; ?>
+										<tr>
+											<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+												<!-- <img style="width: 90px;float: left; " alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>"> -->
+												<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_ATTENDENCE");?></strong><br />
+												<strong​​ style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol light';">
+													<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
+													<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
+													<?php echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $month[date("m")]." ".date("Y");?></span>
+													<br />
+													<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
+													<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
+													<?php echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['semester'];?></span> , 
+													<?php echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> 
+													, <?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
+												</strong>
+											</td>
+										</tr>
+										</thead>
+										<?php } $i++;?>
+										<tr style="border: solid 1px #fff;">
+											<td style="font-weight: 600;">
+												<?php echo $i.". ".$tr->translate("STUDENT_ID");?> : <?php echo $rs['stu_code'];?>
+												<?php echo $tr->translate("STUDENT");?> : <?php echo $rs['stu_khname'];?>
+												<?php echo $tr->translate("SEX");?> : <?php echo $sex;?>
+											</td>
+										</tr>
+										<?php 
+										$A=0; 
+										$P=0; 
+										$L=0; 
+										$EL=0; 
+										$db = new Home_Model_DbTable_DbStudent();
+										$attentence_status = $db->getStatusAttendence($rs['stu_id'], $rs['group_id']);
+										?>
+										
+										<?php if (!empty($attentence_status)){?>
+										<tr style="border: solid 1px #fff;">
+											<td>
+												<table cellpadding="5"​ border="1" style="font-family:'Khmer OS Battambang' ; border:1px solid #000; border-collapse: collapse; margin:0 auto; width:100%; white-space: nowrap;" >
+													<tr style="font-size:13px; font-weight:bold; background: #ccd9ff;">
+														<td rowspan="2" align="center">
+															<?php echo $tr->translate("DATE");?>	
+														</td>
+														<td colspan="4" align="center">
+															<?php echo $tr->translate("ATTENDANCE");?>
+														</td>
+														<td rowspan="2" align="center">
+															<?php echo $tr->translate("DESCRIPTION");?>
+														</td>
+													</tr>
+													<tr style="font-size:12px; font-weight:bold; background: #ccd9ff;">
+														<td align="center"><?php echo $tr->translate("ABSENT");?></td>
+														<td align="center"><?php echo $tr->translate("PERMISSION");?></td>
+														<td align="center"><?php echo $tr->translate("LATE");?></td>
+														<td align="center"><?php echo $tr->translate("EARLY_LEAVE");?></td>
+													</tr>
+													<?php foreach ($attentence_status as $rs){
+														$absent="";
+														$permission="";
+														$late="";
+														$early_leave="";
+														
+														if ($rs['attendence_status']==2){
+															$absent = 1;
+															$A=$A+1;
+															//Absent
+														}
+														else if ($rs['attendence_status']==3){
+															$permission=1;
+															 $P = $P+1;
+															//Permission
+														}
+														else if ($rs['attendence_status']==4){
+															$late=1;
+															$L = $L+1;
+															//Late
+														}
+														else if ($rs['attendence_status']==5){
+															$early_leave=1;
+															$EL = $EL+1;
+															//Early Leave
+														}else{
+															echo " ";
+														}
+													?>
+													<tr style="font-size:13px;">
+														<td width="20%" align="center"><?php echo date("d-m-Y",strtotime($rs['date_attendence']));?></td>
+														<td width="10%" align="center"><?php echo $absent;?></td>
+														<td width="10%" align="center"><?php echo $permission;?></td>
+														<td width="10%" align="center"><?php echo $late;?></td>
+														<td width="10%" align="center"><?php echo $early_leave;?></td>
+														<td width="40%" align="left"> &nbsp;<?php echo $rs['description'];?></td>
+													</tr>
+													<?php }?>
+													<tr align="center" style="font-size:13px;">
+														<td style="background: #ccd9ff;">
+															<?php echo $tr->translate("TOTAL");?>
+														</td>
+														<td>
+															<?php echo $A;?>
+														</td>
+														<td>
+															<?php echo $P;?>
+														</td>
+														<td>
+															<?php echo $L;?>
+														</td>
+														<td>
+															<?php echo $EL;?>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<?php }?>
+										<?php $old_groupid = $rs['group_id'];
+										}?>
+										<tr>
+											<td align="right" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+												&nbsp;
+											</td>
+										</tr>
+									</table>
+					        	</div>
+					        </div>
+				        </div>
+				        <!--/. Panel 6-->
+						
+						
+						<!--Panel 7-->
+				        <div class="tab-pane fade in " id="panel27" role="tabpanel">
+				        	<div class="card-box">
+					        	<div class="col-md-12 col-sm-12 col-xs-12">
+									<table cellpadding="5"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
+										<thead>
+										<?php 
+											$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+											$i=0; 
+											$old_groupid=0; 
+											$old_student_id=0; 
+										if (!empty($this->student_mistake)) foreach ($this->student_mistake as $key => $rs){
+											if ($rs['sex']==1){$sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
+										?>
+										<?php if ($old_groupid!=$rs['group_id']){ ?>
+										<?php if ($key>0){ 
+										?>
+									
+										<tr>
+											<td align="right" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+												&nbsp;
+											</td>
+										</tr>
+										<?php }$i=0; ?>
+										<tr>
+											<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+												<!-- <img style="width: 90px;float: left; " alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>"> -->
+												<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol light';"><?php echo $tr->translate("STUDENT_MISTAKE");?></strong><br />
+												<strong​​ style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol light';">
+													<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
+													<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
+													<?php echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $month[date("m")]." ".date("Y");?></span>
+													<br />
+													<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
+													<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
+													<?php echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['semester'];?></span> , 
+													<?php echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> 
+													, <?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
+												</strong>
+											</td>
+										</tr>
+										</thead>
+										<?php } $i++;?>
+										<tr style="border: solid 1px #fff;">
+											<td style="font-weight: 600;">
+												<?php echo $i.". ".$tr->translate("STUDENT_ID");?> : <?php echo $rs['stu_code'];?>
+												<?php echo $tr->translate("STUDENT");?> : <?php echo $rs['stu_khname'];?>
+												<?php echo $tr->translate("SEX");?> : <?php echo $sex;?>
+											</td>
+										</tr>
+										<?php 
+										$s=0; 
+										$m=0; 
+										$b=0; 
+										$db = new Home_Model_DbTable_DbStudent();
+										$mistake_status = $db->getStatusMistakeByStudent($rs['stu_id'],$rs['group_id']);?>
+										<?php if (!empty($mistake_status)){?>
+										<tr style="border: solid 1px #fff;">
+											<td>
+												<table cellpadding="5"​ border="1" style="font-family:'Khmer OS Battambang' ; border:1px solid #000; border-collapse: collapse; margin:0 auto; width:100%; white-space: nowrap;" >
+													<tr style="font-size:13px; font-weight:bold; background: #ccd9ff;">
+														<td rowspan="2" align="center">
+															<?php echo $tr->translate("DATE");?>	
+														</td>
+														<td colspan="3" align="center">
+															<?php echo $tr->translate("MISTAKE");?>
+														</td>
+														<td rowspan="2" align="center">
+															<?php echo $tr->translate("DESCRIPTION");?>
+														</td>
+													</tr>
+													<tr style="font-size:12px; font-weight:bold; background: #ccd9ff;">
+														<td align="center"><?php echo $tr->translate("SMALL_MISTACK");?></td>
+														<td align="center"><?php echo $tr->translate("MEDIUM_MISTACK");?></td>
+														<td align="center"><?php echo $tr->translate("BIG_MISTACK");?></td>
+													</tr>
+													<?php foreach ($mistake_status as $rs){
+														$small="";
+														$medium="";
+														$big="";
+														$description="";
+														if ($rs['type']==2){
+															$description = $rs['description'];
+															if ($rs['mistake_type']==1){
+																$small = 1;
+																$s=$s+1;
+																//small
+															}
+															else if ($rs['mistake_type']==2){
+																$medium=1;
+																 $m = $m+1;
+																//medium
+															}
+															else if ($rs['mistake_type']==3){
+																$big=1;
+																$b = $b+1;
+																//big
+															}else{
+																echo " ";
+															}
+														}else{
+															if ($rs['mistake_type']==4){
+																$small = 1;
+																if ($rs['for_session']==1){
+																	$descri_added = "(មកយឺត ពេលព្រឹក)";
+																}else if ($rs['for_session']==2){
+																	$descri_added = "(មកយឺត ពេលល្ងាច)";
+																}
+																$description = $rs['description']." ".$descri_added;
+																 $s=$s+1;
+															}elseif ($rs['mistake_type']==5){
+																$small = 1;
+																if ($rs['for_session']==1){
+																	$descri_added = "(ចេញមុន ពេលព្រឹក)";
+																}else if ($rs['for_session']==2){
+																	$descri_added = "(ចេញមុន ពេលល្ងាច)";
+																}
+																$description = $rs['description']." ".$descri_added;
+			// 													$description = "( 'ចេញមុន' ".$rs['description'].")";
+																$s=$s+1;
+															}
+														}
+													?>
+													<tr style="font-size:13px;">
+														<td width="20%" align="center"><?php echo date("d-m-Y",strtotime($rs['mistake_date']));?></td>
+														<td width="10%" align="center"><?php echo $small;?></td>
+														<td width="10%" align="center"><?php echo $medium;?></td>
+														<td width="10%" align="center"><?php echo $big;?></td>
+														<td width="50%" align="left"> &nbsp;<?php echo $description;?></td>
+													</tr>
+													<?php }?>
+													<tr align="center" style="font-size:13px;">
+														<td style="background: #ccd9ff;">
+															<?php echo $tr->translate("TOTAL");?>
+														</td>
+														<td>
+															<?php echo $s;?>
+														</td>
+														<td>
+															<?php echo $m;?>
+														</td>
+														<td>
+															<?php echo $b;?>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<?php }?>
+										<?php $old_groupid = $rs['group_id'];
+										}?>
+										<tr>
+											<td align="right" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+												&nbsp;
+											</td>
+										</tr>
+									</table>
+					        	</div>
+					        </div>
+				        </div>
+				        <!--/. Panel 7-->
+						
+						
 			   		 </div>
 			   		   <!--/. Tab panels -->
 			   	</div>

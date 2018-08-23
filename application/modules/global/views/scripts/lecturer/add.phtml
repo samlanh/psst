@@ -62,16 +62,15 @@ input.btn_borwse_image {
 			dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				degree = dijit.byId('degree').get('value');
+        			if(degree==0){
+						alert("Please Select Degree");dijit.byId('degree').focus();return false;
+					}
 				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
 					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
 					dojo.byId('password').value = '';
 					dojo.byId('confirm_password').value = '';
 					dijit.byId('password').focus();
-					return false;
-				}
-				degree=dijit.byId("degree").get('value');
-				if(degree=='' || degree==null){
-					dijit.byId("degree").focus();
 					return false;
 				}
                 dijit.byId("save_new").attr("disabled",true);	
@@ -265,7 +264,7 @@ input.btn_borwse_image {
                		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
 					<input type="button" onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
-					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+					<input type="submit" name='save_new' id='save_new' value='save_new' label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>
@@ -313,6 +312,11 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 		});
 	}
 	function submitDataClose(){
+		degree=dijit.byId('degree').get('value');
+		if(degree==0){
+			alert('Please Select Degree!');dijit.byId('degree').focus();return false;
+			return false;
+		}
 		if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
 			alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
 			dojo.byId('password').value = '';
@@ -321,11 +325,6 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 			return false;
 		}	
 		if(dijit.byId('frm_add_tran').validate()) {
-			degree=dijit.byId('degree').get('value');
-			if(degree==''){
-				alert('Please Select Degree!');
-				return false;
-			}
 			dijit.byId("save_new").attr("disabled",true);	
 			dijit.byId("save_close").attr("disabled",true);		
 			var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'add')); ?>';
@@ -341,7 +340,6 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 			});
 		}
 	}
-
 	function readURL(input) {
 	    if (input.files && input.files[0]) {
 	        var reader = new FileReader();

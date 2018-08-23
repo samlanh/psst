@@ -1,7 +1,7 @@
 
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('REGISTER'));
+	$this->headTitle($tr->translate('SEARCH_STUDENT'));
 	echo $this->headTitle(''); 
 	$url_copy =$this->url(array('module'=>'foundation','controller'=>'register','action'=>'copy'));
 	$formList = new Application_Form_Frmtable();

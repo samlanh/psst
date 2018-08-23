@@ -308,9 +308,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'credit_memo'	=>$cut_credit_memo,
 							'deduct'		=>$data['deduct'],
 							'net_amount'	=>$data['net_amount'],
+							
+							'paid_amount'	=>$data['paid_amount'],
+							'balance_due'	=>$data['balance_due'],
 					);
 					
 					$paymentid = $this->insert($arr);
+					
 				    /*alert ទៅទូរសព្ទដៃអាណាព្យាបាលសិស្ស*/
 					$dbpush = new  Application_Model_DbTable_DbGlobal();
 					$dbpush->getTokenUser(null,$id, 1);
@@ -613,6 +617,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'credit_memo'	=>$data['credit_memo'],
 							'deduct'		=>$data['deduct'],
 							'net_amount'	=>$data['net_amount'],
+							
+							'paid_amount'	=>$data['paid_amount'],
+							'balance_due'	=>$data['balance_due'],
 					);
 					$paymentid = $this->insert($arr);
 					
@@ -724,6 +731,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'deduct'		=>$data['deduct'],
 							'net_amount'	=>$data['net_amount'],
 							
+							'paid_amount'	=>$data['paid_amount'],
+							'balance_due'	=>$data['balance_due'],
+							
 							'scholarship_percent'=>$data['scholarship_percent'],
 							'scholarship_amount'=>$data['scholarship_amount'],
 							'tution_feeperyear'=>$data['tution_peryear'],
@@ -831,7 +841,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}
 				
 				if($data['student_type']==1 OR $data['student_type']==2){
-						$sql="SELECT id_start FROM `rms_dept` WHERE dept_id=".$data['dept']." LIMIT 1";
+					$sql="SELECT id_start FROM `rms_dept` WHERE dept_id=".$data['dept']." LIMIT 1";
 					$id_start = $db->fetchOne($sql);
 					
 					$this->_name="rms_dept";
@@ -1818,7 +1828,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     function getRegisterById($id){
     	$db=$this->getAdapter();
     	$sql=" SELECT s.stu_id,s.stu_code,sp.receipt_number,s.academic_year,s.stu_khname,s.stu_enname,s.sex,s.session,s.degree,s.grade,
-		    	sp.payment_term,sp.tuition_fee,sp.discount_percent,sp.other_fee,sp.admin_fee,sp.total,sp.paid_amount,sp.is_void,
+		    	sp.payment_term,sp.tuition_fee,sp.discount_percent,sp.other_fee,sp.admin_fee,sp.total,sp.paid_amount,sp.is_void,sp.create_date,
 		    	sp.balance_due,sp.amount_in_khmer,sp.note,sp.student_type,sp.time,sp.end_hour,spd.start_date,spd.validate,spd.is_start,spd.is_parent
 		    	FROM rms_student AS s,rms_student_payment AS sp ,rms_student_paymentdetail AS spd
 		    	WHERE s.stu_id=sp.student_id AND sp.id=spd.payment_id AND sp.id=".$id;
@@ -2036,7 +2046,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql4="SELECT count(id)  FROM rms_customer_payment where 1 $branch_id LIMIT 1 ";
     	$customer_payment = $db->fetchOne($sql4);
     	
-    	$new_acc_no= (int)$payment_no + (int)$income_no + (int)$stu_test_no + (int)$change_product_no + (int)$customer_payment + 1;
+    	$sql5="SELECT count(id)  FROM rms_student_clear_balance where 1 $branch_id LIMIT 1 ";
+    	$clear_balance = $db->fetchOne($sql5);
+    	
+    	$new_acc_no= (int)$payment_no + (int)$income_no + (int)$stu_test_no + (int)$change_product_no + (int)$customer_payment + (int)$clear_balance + 1;
     	
     	$acc_length = strlen((int)$new_acc_no+1);
     	$pre=0;
@@ -2562,4 +2575,66 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		return $this->getAdapter()->fetchOne($sql);
 	}
 	
+	function getStudentBalance($stu_id){
+		$db = $this->getAdapter();
+		$sql="select id from rms_student_payment where student_id = $stu_id and balance_due>0 and is_void=0 order by id DESC LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+	function updateBalance($data,$payment_id){
+		$db = $this->getAdapter();
+		$sql="select * from rms_student_payment where id = $payment_id LIMIT 1 ";
+		$result = $db->fetchRow($sql);
+		if(!empty($result)){
+			$array = array(
+					"payment_id"	=>$payment_id,
+					"stu_id"		=>$data['stu_id'],
+					"receipt_no"	=>$this->getRecieptNo(),
+					"total_balance"	=>$data['total_balance'],
+					"paid_amount"	=>$data['paid_amount'],
+					"balance"		=>$data['balance'],
+					"note"			=>$data['note'],
+					
+					"create_date"	=>date("Y-m-d H:i:s"),
+					"user_id"		=>$this->getUserId(),
+				);
+			$this->_name = "rms_student_clear_balance";
+			$this->insert($array);
+			
+			$arr = array(
+					"paid_amount"	=>$result['paid_amount'] + $data['paid_amount'],
+					"balance_due"	=>$result['balance_due'] - $data['paid_amount'],
+				);
+			$where = "id = $payment_id";
+			$this->_name = "rms_student_payment";
+			$this->update($arr, $where);
+		}
+	}
+	
+	function voidStudentClearBalance($id){
+		$db = $this->getAdapter();
+		$sql="select * from rms_student_clear_balance where id = $id LIMIT 1 ";
+		$result = $db->fetchRow($sql);
+		if(!empty($result)){
+			$array = array(
+					"is_void"	=>1,
+					"void_by"	=>$this->getUserId(),
+				);
+			$this->_name = "rms_student_clear_balance";
+			$where = " id = $id";
+			$this->update($array, $where);
+				
+			
+			$sql1="select * from rms_student_payment where id = ".$result['payment_id']." LIMIT 1 ";
+			$row_payment = $db->fetchRow($sql1);
+			if(!empty($row_payment)){
+				$arr = array(
+						"paid_amount"	=>$row_payment['paid_amount'] - $result['paid_amount'],
+						"balance_due"	=>$row_payment['balance_due'] + $result['paid_amount'],
+				);
+				$where = "id = ".$result['payment_id'];
+				$this->_name = "rms_student_payment";
+				$this->update($arr, $where);
+			}
+		}
+	}
 }

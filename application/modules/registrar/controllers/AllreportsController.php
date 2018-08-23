@@ -145,6 +145,25 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     	$this->view->header = $_db->getHeaderReceipt();
     }
     
+    function reprintClearbalanceAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Registrar_Model_DbTable_DbRegister();
+    		$db->voidStudentClearBalance($id);
+    	}
+    	
+    	$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+    	$this->view->row = $db->getClearBalanceById($id);
+    	 
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    
+    	$_db = new Application_Form_FrmGlobal();
+    	$this->view->header = $_db->getHeaderReceipt();
+    }
+    
     function reprintChangeproductAction(){
     	$id=$this->getRequest()->getParam("id");
     	$db = new Registrar_Model_DbTable_DbReportStudentByuser();
@@ -180,6 +199,7 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     					'expense'   =>'',
     					'change_product'=>'',
     					'customer_payment'=>'',
+    					'clear_balance'=>'',
     					'start_date'=> date('Y-m-d'),
     					'end_date'  => date('Y-m-d'),
     			);
@@ -208,6 +228,8 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     				$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
     				$this->view->expense = $_db1->getAllOtherExpense($search);
     			}
+    			
+    			$data5=$this->view->clear_balance = $db->getAllStudentClearBalance($search);
     		}
     		
     		if(!empty($search['student_payment'])){
@@ -234,6 +256,10 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		if(!empty($search['customer_payment'])){
     			$data4=$this->view->customer_payment = $db->getAllCustomerPayment($search);
     		}
+    		if(!empty($search['clear_balance'])){
+    			$data5=$this->view->clear_balance = $db->getAllStudentClearBalance($search);
+    		}
+    		
     		
     	}catch(Exception $e){
     		Application_Form_FrmMessage::message("Application Error");

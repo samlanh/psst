@@ -441,6 +441,20 @@ fieldset{  background:none;}
 	                   		<input type="text" name="net_amount" readonly="readonly" id="net_amount" value="0" dojoType="dijit.form.NumberTextBox" />
 	                   </div>
 	                </div>
+					<div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAID_AMOUNT");?>  :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="paid_amount" id="paid_amount" value="0" onkeyup="onPaidAmount();" dojoType="dijit.form.NumberTextBox" />
+	                   </div>
+	                </div>
+					<div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BALANCE");?>  :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="balance_due" readonly="readonly" id="balance_due" value="0" style="color:red;" dojoType="dijit.form.NumberTextBox" />
+	                   </div>
+	                </div>
 	        	</div>
 	        </div>
 	        
@@ -535,7 +549,7 @@ fieldset{  background:none;}
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function() {  
-			setID();
+				setID();
 			}
 		}, "old_stu_name");
 
@@ -548,6 +562,7 @@ fieldset{  background:none;}
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function() {  
+				getStudentBalance();
 				getOldStudentInfo();
 				getCreditMemo();
 				getOldVildateToStartDateRegister();
@@ -559,6 +574,8 @@ fieldset{  background:none;}
 		getallstudentname();
 		getallstudentcode();
 });		
+	
+
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallModel(dept_id,a){
@@ -1066,13 +1083,24 @@ function getMonthByNumber(m){
 														<td width="34%" align="center">Customer</td>
 														<td width="33%" align="center">Verified By</td>
 													</tr>	
+												</table>	
+											</td>
+											<td valign="top"><span style="font-size: 14px;font-weight: bold;font-family: arail">Net Amount</span></td>
+											<td valign="top"> : &nbsp;&nbsp; <span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_net_amount" ></label></span></td>
+										</tr>
+										<tr>
+											<td colspan="2" align="center">&nbsp;</td>
+											<td><span style="font-size: 14px;font-weight: bold;font-family: arail">Paid Amount</span></td>
+											<td>
+												 : &nbsp;&nbsp; <span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_paid_amount" ></label></span>
+											</td>
+										</tr>
+										
+										<tr style="height:15px;">
+											<td colspan="2">
+												<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
 													<tr>
-														<td align="center">&nbsp;</td>
-														<td align="center"></td>
-														<td align="center"></td>
-													</tr>	
-													<tr style="height:15px;">
-														<td align="center">
+														<td width="33%" align="center">
 															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 5px;"> 
 																<?php 
 																   $session_user=new Zend_Session_Namespace('authstu');
@@ -1083,13 +1111,15 @@ function getMonthByNumber(m){
 																<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
 															</div>
 														</td>
-														<td align="center"></td>
-														<td align="center"></td>
+														<td width="34%" align="center"></td>
+														<td width="33%" align="center"></td>
 													</tr>	
-												</table>	
+												</table>
 											</td>
-											<td valign="top"><span style="font-size: 14px;font-weight: bold;font-family: arail">Net Amount</span></td>
-											<td valign="top"> : &nbsp;&nbsp; <span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_net_amount" ></label></span></td>
+											<td valign="top"><span style="font-size: 14px;font-weight: bold;font-family: arail">Balance</span></td>
+											<td valign="top">
+												 : &nbsp;&nbsp; <span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_balance_due" ></label></span>
+											</td>
 										</tr>
 									</table>
 								</td>
@@ -1701,15 +1731,33 @@ function deleteRecord(index) {
 		
 		if(netAmount<0){
 			dijit.byId('net_amount').attr('value',0);
+			dijit.byId('paid_amount').attr('value',0);
 			dijit.byId('credit_memo_after').attr('value',abs(netAmount));
 		}else{
 			dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
+			dijit.byId('paid_amount').attr('value',netAmount.toFixed(2));
 			dijit.byId('credit_memo_after').attr('value',0);
 		}
-		
-		
 		readMoneyInKhmer(netAmount.toFixed(2));
 	}
+	
+	function onPaidAmount(){
+		net_amount = dijit.byId('net_amount').get('value');
+		net_amount = isNaN(net_amount)?0:net_amount;
+		
+		paid_amount = dijit.byId('paid_amount').get('value');
+		paid_amount = isNaN(paid_amount)?0:paid_amount;
+		
+		if(net_amount>=paid_amount){
+			dijit.byId('balance_due').attr('value',(net_amount-paid_amount).toFixed(2));
+		}else{
+			alert("Can not paid more than total amount !!! ");
+			dijit.byId('paid_amount').attr('value',(net_amount).toFixed(2));
+			dijit.byId('balance_due').attr('value',0);
+			dijit.byId('paid_amount').focus();
+		}
+	}
+	
 	function onKeyUpDeduct(){
 		grandTotal = dijit.byId('grand_total').get('value');
 		grandTotal = isNaN(grandTotal)?0:grandTotal;
@@ -1990,6 +2038,9 @@ function printSave(new_stu_id,new_receipt,submit){
 			dojo.byId("lb_credit_memo").innerHTML = '$ ' + (dijit.byId("credit_memo").get('value').toFixed(2));
 			dojo.byId("lb_deduct").innerHTML = '$ ' + (dijit.byId("deduct").get('value').toFixed(2));
 			dojo.byId("lb_net_amount").innerHTML = '$ ' + (dijit.byId("net_amount").get('value').toFixed(2));
+			
+			dojo.byId("lb_paid_amount").innerHTML = '$ ' + (dijit.byId("paid_amount").get('value').toFixed(2));
+			dojo.byId("lb_balance_due").innerHTML = '$ ' + (dijit.byId("balance_due").get('value').toFixed(2));
 			
 			var payment_type = dijit.byId("payment_type").get("value");
 			var student_type = dijit.byId("student_type").get("value");
@@ -2451,6 +2502,30 @@ function setStartAndEndDate(){
 			alert(err);
 		}
 	});
+}
+
+var url_student_balance = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentbalance')); ?>';	
+function getStudentBalance(){
+	stu_id = dijit.byId('old_studens').get('value');
+	if(stu_id>0){
+		dojo.xhrPost({
+			url:url_student_balance,
+			content:{
+				'stu_id':stu_id
+				},
+			handleAs:"json",
+			load: function(data) {
+				if(data){
+					alert("This student have balance !!! You have to clear balance first !!!");
+					url='<?php echo $this->baseUrl()."/registrar/register/clearbalance/id/";?>';
+					window.open(url+data,"_self");
+				}
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
 }
 </script>
 <div class="overlay">

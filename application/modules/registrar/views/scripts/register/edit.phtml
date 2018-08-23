@@ -763,6 +763,14 @@ fieldset{  background:none;}
 						<td align="right"><input type="text" name="net_amount" readonly="readonly" id="net_amount" value="<?php echo $this->payment['net_amount']?>" dojoType="dijit.form.NumberTextBox" /></td>
 					</tr>
 					<tr>
+						<td><?php echo $tr->translate("PAID_AMOUNT");?></td>
+						<td align="right"><input type="text" name="paid_amount" readonly="readonly" id="paid_amount" value="<?php echo $this->payment['paid_amount']?>" dojoType="dijit.form.NumberTextBox" /></td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("BALANCE");?></td>
+						<td align="right"><input type="text" name="balance_due" readonly="readonly" id="balance_due" value="<?php echo $this->payment['balance_due']?>" dojoType="dijit.form.NumberTextBox" /></td>
+					</tr>
+					<tr>
 						<td colspan="3">
 							<input type="hidden" id="identity" name="identity" />
 							<input type="hidden" id="identitystock" name="identitystock" />
@@ -848,6 +856,8 @@ function SubmitRegister(){
 			dojo.byId("lb_credit_memo").innerHTML = '$ ' + (dijit.byId("credit_memo").get('value').toFixed(2));
 			dojo.byId("lb_deduct").innerHTML = '$ ' + (dijit.byId("deduct").get('value').toFixed(2));
 			dojo.byId("lb_net_amount").innerHTML = '$ ' + (dijit.byId("net_amount").get('value').toFixed(2));
+			dojo.byId("lb_paid_amount").innerHTML = '$ ' + (dijit.byId("paid_amount").get('value').toFixed(2));
+			dojo.byId("lb_balance_due").innerHTML = '$ ' + (dijit.byId("balance_due").get('value').toFixed(2));
 			
 			var payment_type = dijit.byId("payment_type").get("value");
 
@@ -1215,13 +1225,24 @@ function getMonthByNumber(m){
 														<td width="34%" align="center">Customer</td>
 														<td width="33%" align="center">Verified By</td>
 													</tr>	
+												</table>	
+											</td>
+											<td valign="top"><span style="font-size: 14px;font-weight: bold;font-family: arail">Net Amount</span></td>
+											<td valign="top"> : &nbsp;&nbsp; <span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_net_amount" ></label></span></td>
+										</tr>
+										<tr>
+											<td colspan="2" align="center">&nbsp;</td>
+											<td><span style="font-size: 14px;font-weight: bold;font-family: arail">Paid Amount</span></td>
+											<td>
+												 : &nbsp;&nbsp; <span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_paid_amount" ></label></span>
+											</td>
+										</tr>
+
+										<tr style="height:15px;">
+											<td colspan="2">
+												<table width="100%" border="0" style="white-space:nowrap;border-collapse:collapse;font-size:12px;line-height:16px;">	
 													<tr>
-														<td align="center">&nbsp;</td>
-														<td align="center"></td>
-														<td align="center"></td>
-													</tr>	
-													<tr style="height:15px;">
-														<td align="center">
+														<td width="33%" align="center">
 															<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 5px;"> 
 																<?php 
 																   /*
@@ -1235,14 +1256,16 @@ function getMonthByNumber(m){
 																<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime($this->payment['create_date']));?></div>
 															</div>
 														</td>
-														<td align="center"></td>
-														<td align="center"></td>
+														<td width="34%" align="center"></td>
+														<td width="33%" align="center"></td>
 													</tr>	
-												</table>	
+												</table>
 											</td>
-											<td valign="top"><span style="font-size: 14px;font-weight: bold;font-family: arail">Net Amount</span></td>
-											<td valign="top"> : &nbsp;&nbsp; <span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_net_amount" ></label></span></td>
-										</tr>
+											<td valign="top"><span style="font-size: 14px;font-weight: bold;font-family: arail">Balance</span></td>
+											<td valign="top">
+												 : &nbsp;&nbsp; <span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_balance_due" ></label></span>
+											</td>
+										</tr>	
 									</table>
 								</td>
 							</tr>

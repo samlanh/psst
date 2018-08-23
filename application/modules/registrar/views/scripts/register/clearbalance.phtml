@@ -1,0 +1,385 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('Clear Balance')); 
+?>
+<style>
+select{ width:100%;}
+fieldset{  background:none;}
+.red{ color: red; padding-left:5px;}
+
+.tab-content.vertical div.tab-pane {
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.tab-content.vertical div.tab-pane {
+    overflow-y: auto;
+    max-height: 300px;
+    border-bottom: solid #615f5f 5px;
+}
+</style>
+<div class="card">
+	<div class="card-content collapse show">
+		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'clearbalance')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">   
+   				if(this.validate()) {
+					dijit.byId('save_close').set('disabled',true);
+    				return true;
+   				}else {
+    				return false;
+   				}
+			</script>
+			<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-money" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('Clear Balance');?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div>
+	    	<div class="card-box">
+	        	<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("STUDENT_ID");?>  :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="stu_code" id="stu_code" class="fullside" readonly value="<?php echo $this->row['stu_code']?>" dojoType="dijit.form.TextBox" />
+	                   </div>
+					   
+					   <input type="hidden" name="stu_id" id="stu_id" value="<?php echo $this->row['stu_id']?>" dojoType="dijit.form.TextBox" />
+					   
+	                </div>
+					<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("NAME_KH");?>  :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="name_kh" id="name_kh"class="fullside" readonly value="<?php echo $this->row['stu_khname']?>" dojoType="dijit.form.TextBox" />
+	                   </div>
+	                </div>
+					<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("NAME_EN");?>  :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="name_en" id="name_en" class="fullside" readonly value="<?php echo $this->row['stu_enname']?>" dojoType="dijit.form.TextBox" />
+	                   </div>
+	                </div>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BALANCE_INFO");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("ON_RECEIPT");?>  :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" class="fullside" name="on_receipt" id="on_receipt" readonly value="<?php echo $this->row['receipt_number']?>" dojoType="dijit.form.TextBox" />
+	                   </div>
+	                </div>
+					<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("DATE_BALANCE");?>  :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" class="fullside" name="paid_date" id="paid_date" readonly value="<?php echo date('d/m/Y',strtotime($this->row['create_date']))?>" dojoType="dijit.form.TextBox" />
+	                   </div>
+	                </div>
+					<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("TOTAL_BALANCE");?>  :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" class="fullside" name="total_balance" id="total_balance" readonly value="<?php echo number_format($this->row['balance_due'],2)?>" dojoType="dijit.form.NumberTextBox" />
+	                   </div>
+	                </div>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+					   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PAYMENT_INFO");?> 
+					   </label>
+					</div>
+					<div class="form-group">
+					   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("RECEIPT");?> <span class="required">*</span> :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input type="text" class="fullside" name="receipt" id="receipt" readonly style="color:red;" value="<?php echo $this->receipt;?>" dojoType="dijit.form.TextBox" />
+					   </div>
+					</div>
+					<div class="form-group">
+					   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("PAID_AMOUNT");?> <span class="required">*</span> :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input type="text" class="fullside" name="paid_amount" id="paid_amount" onkeyup="calculateBalance();" value="<?php echo number_format($this->row['balance_due'],2)?>" dojoType="dijit.form.NumberTextBox" />
+					   </div>
+					</div>
+					<div class="form-group">
+					   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("BALANCE");?> <span class="required">*</span> :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input type="text" class="fullside" readonly name="balance" id="balance" value="0" style="color:red;" dojoType="dijit.form.TextBox" />
+					   </div>
+					</div>
+					<div class="form-group">
+					   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name">
+							<?php echo $tr->translate("NOTE");?> :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input type="text" class="fullside" name="note" id="note" value="" dojoType="dijit.form.TextBox" />
+					   </div>
+					</div>
+				</div>
+			</div>	
+		    <div class="card-box">
+               	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+               			<input type="submit" name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
+					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
+					 <input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printReceipt('');"/> 
+	    		</div>
+	    	</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require('dijit.form.TextBox');
+	
+	dojo.ready(function(){
+		
+	});		
+	function calculateBalance(){
+		total_balance = parseFloat(dijit.byId("total_balance").get('value'));
+		paid_amount = parseFloat(dijit.byId("paid_amount").get('value'));
+		if(total_balance>=paid_amount){
+			balance = total_balance - paid_amount;
+			dijit.byId("balance").attr('value',balance);
+		}else{
+			alert("Can not paid more than total amount !!! ");
+			dijit.byId("paid_amount").attr('value',total_balance);
+			dijit.byId("balance").attr('value',0);
+		}
+	}
+	function printReceipt(new_receipt){
+		if(dijit.byId('office_receipt').validate()) {
+		
+		//////////////////////////////////// check validate ///////////////////////////////
+			paid_amount = dijit.byId('paid_amount').get('value')
+			if(paid_amount<=0){
+				dijit.byId('paid_amount').focus();
+				return false;
+			}
+		///////////////////////////////////////////////////////////////////////////////////	
+			
+			dojo.byId("lb_stu_code").innerHTML = dijit.byId("stu_code").get('value');
+			dojo.byId("lb_name_kh").innerHTML = dijit.byId("name_kh").get('value');
+			dojo.byId("lb_name_en").innerHTML = dijit.byId("name_en").get('value');
+			dojo.byId("lb_on_receipt").innerHTML = dijit.byId("on_receipt").get('value');
+			dojo.byId("lb_date_balance").innerHTML = dijit.byId("paid_date").get('value');
+			
+			
+			if(new_receipt==''){
+				getReceiptNo(1);
+			}else{
+				dojo.byId("lb_receipt_no").innerHTML = new_receipt;
+			}
+			//dojo.byId("lb_receipt_no").innerHTML = dijit.byId('receipt').get('value');
+			dojo.byId("lb_total_balance").innerHTML = "$ "+dijit.byId('total_balance').get('value');
+			dojo.byId("lb_paid_amount").innerHTML = "$ "+dijit.byId('paid_amount').get('value');
+			dojo.byId("lb_balance").innerHTML = "$ "+dijit.byId('balance').get('value');
+			dojo.byId("lb_note").innerHTML = dijit.byId('note').get('value');
+			
+			dijit.byId("terms").show();	
+		}
+	}
+	
+	function confirmBeforePrint(){
+		dijit.byId('alertBeforePrint').show();
+	}
+	function displayNone(){
+		document.getElementById('PrintReceipt1').style.display="none";
+	}
+	function printSubmit(){	
+		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
+		window.frames["print_frame"].window.focus();
+		window.frames["print_frame"].window.print();
+		//hideDialog();
+		//dijit.byId('office_receipt').submit();
+	}
+	function hideDialog(){
+		dijit.byId('terms').hide();
+	}
+
+	function hideDialog1(){
+		dijit.byId('alertBeforePrint').hide();
+	}
+	
+	var url_getreceipt_no = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
+	function getReceiptNo(stu_id){
+		dojo.xhrPost({
+			url:url_getreceipt_no,
+			content:{
+				//'dept_id':dept_id   // student id ??????? degree ???  prefix ?? ? ????????????????
+				'dept_id':1			  // ?????????? degree ?????????????????????????
+				},
+			handleAs:"json",
+			load: function(data) {
+				  dijit.byId('receipt').attr('value',data); 
+				  if(stu_id!=''){
+					  printReceipt(data);
+				  }
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+</script>
+
+<div class="dijitHidden" style="padding: 0px; margin: 0px;">
+	<div data-dojo-type="dijit.Dialog" style="width:24cm;height: 14cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'" id="terms" >
+		<div id="PrintReceipt" style="width: 20cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
+			<table width="100%" height="49%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap;">
+				<tr height="90px;">
+					<td colspan="10"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan="10" valign="top">
+						<table width="100%" border="0" cellspacing="10" style="font-family: Khmer OS Battambang;font-size:16px;white-space:nowrap;line-height: 20px;margin-top: -20px;">
+							<tr>
+								<td colspan="4" style="text-align:center;font-weight:bold;font-family:'Khmer MEF2';">
+									<div style="font-size:18px;">បង្កាន់ដៃបង់ប្រាក់</div>
+									<div style="font-size:15px;">OFFICIAL RECEIPT</div>
+								</td>
+							</tr>	
+							<tr><td>&nbsp;</td></tr>
+							<style>
+								.h{ margin-top: -3px;margin-bottom: 3px;}
+								.tab_row{ margin-top: -8px;}
+								
+								.h1{ margin-top: -6px;}
+								.values{ min-height: 20px; padding: 0 5px;display: block;
+										 font-family: Khmer OS battambang ,Times New Roman;margin-top: 3px;}
+								.fonteng{font-size:16px;}
+								.one{white-space:nowrap;font-size:16px;}
+								.border{border:1px solid #000; min-width:220px}
+							</style>
+							<tr style="height: 30px;">
+								<td class="one ">&nbsp;<?php echo $tr->translate("STUDENT_ID");?>&nbsp;</td>
+								<td class="border"><label id="lb_stu_code" class=" values one "></label> </td>
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("RECEIPT");?>&nbsp;</td>
+								<td class="border"><label id="lb_receipt_no" class="values one"> </label></td>
+							</tr>
+							<tr style="height: 30px;">
+								<td class="one ">&nbsp;<?php echo $tr->translate("NAME_KH");?>&nbsp;</td>
+								<td class="border"><label id="lb_name_kh" class="values one"></label> </td>
+								<td class="one ">&nbsp;<?php echo $tr->translate("TOTAL_BALANCE");?>&nbsp;</td>
+								<td class="border"><label id="lb_total_balance" class=" values one"></label> </td>
+							</tr>
+							<tr style="height: 30px;">
+								<td class="one ">&nbsp;<?php echo $tr->translate("NAME_EN");?>&nbsp;</td>
+								<td class="border"><label id="lb_name_en" class="values one"></label> </td>
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("PAID_AMOUNT");?>&nbsp;</td>
+								<td class="border"><label id="lb_paid_amount" class="values one"> </label></td>
+							</tr>
+							<tr style="height: 30px;">
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("ON_RECEIPT");?>&nbsp;</td>
+								<td class="border"><label id="lb_on_receipt" class="values one"> </label></td>
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("BALANCE");?>&nbsp;</td>
+								<td class="border"><label id="lb_balance" class="values one"> </label></td>
+							</tr>
+							<tr style="height: 30px;">
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("DATE_BALANCE");?>&nbsp;</td>
+								<td class="border"><label id="lb_date_balance" class="values one"> </label></td>
+								<td class="one " align="left">&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
+								<td class="border"><label style="white-space: normal !important;" id="lb_note" class="values one"> </label></td>
+							</tr>
+							<tr style="font-size: 15px; font-weight:bold;font-family:'Khmer MEF2'">
+								<td colspan="2" align="center" >អ្នកប្រគល់</td>
+								<td colspan="2" align="center">អ្នកទទួល</td>
+							</tr>
+							<tr style="font-size: 15px;">
+								<td colspan="2" align="center">&nbsp;</td>
+							</tr>
+							<tr style="font-size: 15px;">
+								<td colspan="2" align="center"></td>
+								<td colspan="2" align="center" style="line-height: 13px;">
+									<h4 style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Battambang';"> 
+								        <?php 
+										   $session_user=new Zend_Session_Namespace('authstu');
+								           $last_name=$session_user->last_name;
+								           $username = $session_user->first_name;
+										   echo "".$last_name." ".$username;
+										?>
+					        		</h4>
+					        		<div style="font-size: 12px; margin-top: -10px;">
+					        			<?php  $today = date("F j, Y, g:i a");echo $today; ?>
+					        		</div>
+					        	</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
+		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+				type="button" onclick="hideDialog();">Cancel</button>
+		<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+				 type="button" onclick="printSubmit();"><?php echo $tr->translate("PRINT");?></button>
+	</div>
+</div>
+
+<div class="dijitHidden" style="padding: 0px; margin: 0px;">
+	<div id="alertBeforePrint" data-dojo-type="dijit.Dialog" style="width:10cm;height: 5cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពបង្កាន់ដៃ");?>'"  >
+		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;color:red; font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
+			<tr>
+				<td align="center" >
+					តើលោកអ្នកពិតជាចង់បោះពុម្ពបង្កាន់ដៃនេះ មែនទេ? <br />
+					Do you really want to print ?
+				</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+						type="button" onclick="hideDialog1();">No</button>
+					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+						type="button" onclick="printSave('','',1)"><?php echo $tr->translate("Yes");?></button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>	
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("<?php echo $this->baseUrl()?>/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

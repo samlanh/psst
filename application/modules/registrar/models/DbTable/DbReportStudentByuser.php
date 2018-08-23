@@ -159,6 +159,8 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						sp.credit_memo,
 						sp.deduct,
 						sp.net_amount,
+						sp.paid_amount,
+						sp.balance_due,
 						sp.note,
 						(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by) AS void_by
 				  FROM
@@ -369,6 +371,101 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			echo $e->getMessage();
 		}
 	
+	}
+	
+	function getAllStudentClearBalance($search){
+		try{
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$branch_id = $_db->getAccessPermission('sp.branch_id');
+	
+			$db=$this->getAdapter();
+	
+			$from_date =(empty($search['start_date']))? '1': "scb.create_date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': "scb.create_date <= '".$search['end_date']." 23:59:59'";
+	
+			$sql="SELECT
+						scb.id,
+						s.stu_code,
+						s.stu_khname,
+						s.stu_enname,
+						sp.receipt_number,
+						sp.create_date,
+						scb.receipt_no,
+						scb.total_balance,
+						scb.paid_amount,
+						scb.balance,
+						scb.note,
+						scb.create_date,
+						scb.is_void,
+						(SELECT name_en FROM rms_view AS v WHERE v.type=10 AND v.key_code=scb.is_void) AS status,
+						(SELECT first_name FROM rms_users AS u WHERE u.id=scb.user_id) AS user,
+						(SELECT first_name FROM rms_users AS u WHERE u.id=scb.void_by) AS void_by
+					FROM
+						rms_student_clear_balance scb,
+						rms_student_payment AS sp,
+						rms_student AS s
+					WHERE
+						sp.id = scb.payment_id
+						AND s.stu_id = scb.stu_id
+						$branch_id
+				";
+	
+			$where = " AND ".$from_date." AND ".$to_date;
+	
+			if(!empty($search['adv_search'])){
+			$s_where=array();
+			$s_search= addslashes(trim($search['adv_search']));
+				$s_where[]= " scb.receipt_no LIKE '%{$s_search}%'";
+				$s_where[]= " sp.receipt_number LIKE '%{$s_search}%'";
+				$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
+				$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
+				$s_where[]= " s.stu_enname LIKE '%{$s_search}%'";
+				$where.=' AND ('.implode(' OR ', $s_where).')';
+			}
+			if(!empty($search['user'])){
+				$where.=" AND scb.user_id = ".$search['user'] ;
+			}
+			$order=" ORDER By scb.id DESC ";
+			//echo $sql.$where.$order;exit();
+			return $db->fetchAll($sql.$where.$order);
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
+	
+	function getClearBalanceById($id){
+		$db=$this->getAdapter();
+		$sql="SELECT
+					scb.id,
+					s.stu_code,
+					s.stu_khname,
+					s.stu_enname,
+					sp.receipt_number,
+					sp.create_date as date_balance,
+					scb.receipt_no,
+					scb.total_balance,
+					scb.paid_amount,
+					scb.balance,
+					scb.note,
+					scb.create_date,
+					scb.is_void,
+					(SELECT name_en FROM rms_view AS v WHERE v.type=10 AND v.key_code=scb.is_void) AS status,
+					(SELECT first_name FROM rms_users AS u WHERE u.id=scb.user_id) AS user,
+					(SELECT first_name FROM rms_users AS u WHERE u.id=scb.void_by) AS void_by,
+					(SELECT first_name FROM rms_users AS u WHERE u.id = scb.user_id) AS first_name,
+					(SELECT last_name FROM rms_users AS u WHERE u.id = scb.user_id) AS last_name
+				FROM
+					rms_student_clear_balance scb,
+					rms_student_payment AS sp,
+					rms_student AS s
+				WHERE
+					sp.id = scb.payment_id
+					AND s.stu_id = scb.stu_id
+					and scb.id = $id
+				LIMIT 
+					1	
+			";
+		return $db->fetchRow($sql);
 	}
 	
 	function getOtherIncomeById($id){

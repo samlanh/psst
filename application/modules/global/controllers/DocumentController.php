@@ -33,7 +33,7 @@ class Global_DocumentController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'global','controller'=>'document','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('doc_name'=>$link,'doc_name'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('name'=>$link,'doc_name'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

@@ -31,7 +31,6 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		}
     		//	echo $photo; exit();
 	    	$_arr = array(
-	    			'parent'	    =>$_data['main_branch_id'],
 	    			'branch_nameen' =>$_data['branch_nameen'],
 	    			'prefix'		=>$_data['prefix_code'],
 	    			'br_address'	=>$_data['br_address'],
@@ -74,7 +73,6 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		}
     		//	echo $photo; exit();
     	$_arr = array(
-    			'parent'		=>$_data['main_branch_id'],
     			'branch_nameen'	=>$_data['branch_nameen'],
     			'prefix'      	=>$_data['prefix_code'],
     			'br_address'	=>$_data['br_address'],
@@ -101,7 +99,6 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     function getAllBranch($search){
     	$db = $this->getAdapter();
     	$sql = "SELECT b.br_id,b.branch_nameen,
-		    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.parent LIMIT 1) as parent_name,
 		    	b.prefix,b.branch_code,b.br_address,b.branch_tel,b.fax,
     			b.other,b.status FROM rms_branch AS b  ";
     	$where = ' WHERE  b.branch_nameen !="" ';   	

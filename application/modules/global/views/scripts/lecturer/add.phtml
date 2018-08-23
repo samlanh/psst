@@ -69,6 +69,11 @@ input.btn_borwse_image {
 					dijit.byId('password').focus();
 					return false;
 				}
+				degree=dijit.byId("degree").get('value');
+				if(degree=='' || degree==null){
+					dijit.byId("degree").focus();
+					return false;
+				}
                 dijit.byId("save_new").attr("disabled",true);	
 				dijit.byId("save_close").attr("disabled",true);		
 				return true;
@@ -317,7 +322,7 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 		}	
 		if(dijit.byId('frm_add_tran').validate()) {
 			degree=dijit.byId('degree').get('value');
-			if(degree=='' || degree==null){
+			if(degree==''){
 				alert('Please Select Degree!');
 				return false;
 			}

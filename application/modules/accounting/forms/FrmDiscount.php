@@ -12,6 +12,7 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		$this->tvalidate = 'dijit.form.ValidationTextBox';
 		$this->filter = 'dijit.form.FilteringSelect';
 		$this->text = 'dijit.form.TextBox';
+		$this->t_num = 'dijit.form.NumberTextBox';
 		//$this->tarea = 'dijit.form.Textarea';
 		$this->tarea = 'dijit.form.SimpleTextarea';
 	}
@@ -21,11 +22,7 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		$db = new Application_Model_DbTable_DbGlobal();
 		$_discount = new Zend_Dojo_Form_Element_FilteringSelect('disname_id');
 		$_discount->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("SERVIC"),
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>true,
+				 
 		));
 		$degree_opt = $db->getAllDegree();
 		$_discount->setMultiOptions($degree_opt);
@@ -56,8 +53,8 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		));
 		$end_date->setValue(date('Y-m-d'));
 		
-		$_dismax = new Zend_Dojo_Form_Element_TextBox('dis_max');
-		$_dismax->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true',));
+		$_dismax = new Zend_Dojo_Form_Element_NumberTextBox('dis_max');
+		$_dismax->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside','required'=>'true',));
 		
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');

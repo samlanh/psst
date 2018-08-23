@@ -13,14 +13,13 @@
 <script>
 var disname_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->discount));?> );
 dojo.ready(function(){
-	var metion = '<?php// echo $this->all_branch; ?>';
 	new dijit.form.FilteringSelect({
 		store: disname_store,
 		autoComplete: true,                        
-		required: true, 
+		required: true,   
 		id: "disname_id",
 		name: "disname_id",           
-		class: "full", 
+		class: "fullside", 
 		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
 		onChange: function() {  
 			discount_id = dijit.byId('disname_id').get('value');
@@ -30,6 +29,25 @@ dojo.ready(function(){
 		}
 	}, "disname_id");
 });
+dojo.ready(function(){	
+	new dijit.form.FilteringSelect({
+		store: service_store,
+		autoComplete: true,                        
+		required: true,                      
+	    id: "title",
+	    name: "title",  
+	    tabindex: "1",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY")?>", 
+	    onChange: function() {          
+		   	service_id = dijit.byId('title').get('value');
+		    if(service_id==-1){
+		   		dijit.byId("popup_dept").show();
+		   		dijit.byId("s_save").set("disabled",false);
+		    }
+	   }
+	}, "title");
+}); 
 </script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -137,7 +155,7 @@ dojo.ready(function(){
 								<td colspan="2" align="center" >
 									<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
 									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
-									<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
+									<input type="button" value="save_new" name="s_save"  id="s_save" label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
 									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDiscount();"/>
 								</td>
 							</tr>
@@ -175,6 +193,7 @@ function submitDataClose(){
 var url_adddiscount = '<?php echo $this->url(array('module'=>'accounting','controller'=>'discountsetting','action'=>'adddiscount')); ?>';
 	function addDiscount(){
 		if(dijit.byId('frm_adddiscount').validate()){
+			dijit.byId("s_save").attr("disabled",true);
 		dojo.xhrPost({
 				url:url_adddiscount,
 				form: dojo.byId("frm_adddiscount"),

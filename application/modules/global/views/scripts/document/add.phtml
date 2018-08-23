@@ -29,7 +29,7 @@
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOCUMENT_NAME");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.ValidationTextBox" required="1" class="fullside" id="doc_name" name="doc_name" type="text">
+	                   		<input dojoType="dijit.form.ValidationTextBox" required="1" class="fullside" id="name" name="name" type="text">
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -65,7 +65,7 @@ function submitDataClose(){
 		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'document','action'=>'add')); ?>';
 		dojo.xhrPost({
 		    url: url_submit,	
-			form: dojo.byId("add_documentsa"),		    
+			form: dojo.byId("add_document"),		    
 			load: function(data) {
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
 				window.location.href ="<?php echo $this->baseUrl();?>/global/document";

@@ -4,7 +4,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 	protected $tvalidate ;//text validate
 	protected $filter;
 	protected $t_date;
-	//protected $t_num;
+	protected $t_num;
 	protected $textarea=null;
 	protected $text;
 	//protected $check;
@@ -14,7 +14,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$this->tvalidate = 'dijit.form.ValidationTextBox';
 		$this->filter = 'dijit.form.FilteringSelect';
 		$this->t_date = 'dijit.form.DateTextBox';
-		//$this->t_num = 'dijit.form.NumberTextBox';
+		$this->t_num = 'dijit.form.NumberTextBox';
 		$this->text = 'dijit.form.TextBox';
 		$this->textarea = 'dijit.form.Textarea';
 		//$this->check='dijit.form.CheckBox';
@@ -33,8 +33,8 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$code_num = $db->getTeacherCode();
 		$code->setValue($code_num);
 		
-		$phone = new Zend_Dojo_Form_Element_TextBox('phone');
-		$phone->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
+		$phone = new Zend_Dojo_Form_Element_NumberTextBox('phone');
+		$phone->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside','required'=>'true'));
 		
 		$sex = new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
@@ -84,10 +84,10 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_email->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
 		$_passport = new Zend_Dojo_Form_Element_TextBox('passport_no');
-		$_passport->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
+		$_passport->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 		
-		$_card = new Zend_Dojo_Form_Element_TextBox('card_no');
-		$_card->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside','required'=>'true'));
+		$_card = new Zend_Dojo_Form_Element_NumberTextBox('card_no');
+		$_card->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside','required'=>'true'));
 		
 		$_experiences = new Zend_Dojo_Form_Element_Textarea('experiences');
 		$_experiences->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));

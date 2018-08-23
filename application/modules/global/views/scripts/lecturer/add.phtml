@@ -64,7 +64,8 @@ input.btn_borwse_image {
 			if(this.validate()) {
 				degree = dijit.byId('degree').get('value');
         			if(degree==0){
-						alert("Please Select Degree");dijit.byId('degree').focus();return false;
+						alert("Please Select Degree");
+						dijit.byId('degree').focus();return false;
 					}
 				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
 					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');

@@ -19,7 +19,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 			}			
 		$_arr=array(
 				'name'	  => $_data['name'],
-				'create_date' => Zend_Date::now(),
+				'create_date' => date("Y-m-d"),
 				'status'  	  => $_data['status'],
 				'user_id'	  => $this->getUserId()
 		);
@@ -33,7 +33,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 	public function addNewOccupationPopup($_data){
 		$_arr=array(
 				'name' 		  => $_data['name'],
-				'create_date' => Zend_Date::now(),
+				'create_date' => date("Y-m-d"),
 				'status'  	  => $_data['status_j'],
 				'user_id'	  => $this->getUserId()
 		);
@@ -51,7 +51,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 	public function updateDocument($_data){
 		$_arr=array(
 				'name' => $_data['name'],
-				'create_date' => Zend_Date::now(),
+				'create_date' => date("Y-m-d"),
 				'status'   => $_data['status'],
 				'user_id'	  => $this->getUserId()
 		);
@@ -88,7 +88,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 	public function addDocumenttion($_data){//ajax
 		$_arr=array(
 				'name' 		  => $_data['name'],
-				'create_date' => Zend_Date::now(),
+				'create_date' => date("Y-m-d"),
 				'status'      => 1,
 				'user_id'	  => $this->getUserId()
 		);

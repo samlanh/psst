@@ -14,12 +14,14 @@ class Global_LecturerController extends Zend_Controller_Action {
 				$_data=$this->getRequest()->getPost();
 				$search = array(
 						'title'  => $_data['title'],
-						'degree' => $_data['degree']);
+						'degree' => $_data['degree'],
+						'status' => $_data['status_search']);
 			}
 			else{
 				$search = array(
 						'title' => '',
-						'degree' => '');
+						'degree' => '',
+						'status' => -1);
 			}
 			$rs_rows= $db->getAllTeacher($search);
 			$list = new Application_Form_Frmtable();

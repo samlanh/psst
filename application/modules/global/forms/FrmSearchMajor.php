@@ -125,17 +125,17 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 // 		$_subject->setValue($request->getParam('subjec_name'));
 		
 		
-// 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
-// 		$_status->setAttribs(array('dojoType'=>$this->filter,));
-// 		$_status_opt = array(
-// 				-1=>$this->tr->translate("ALL_STATUS"),
-// 				1=>$this->tr->translate("ACTIVE"),
-// 				0=>$this->tr->translate("DACTIVE"));
-// 		$_status->setMultiOptions($_status_opt);
-// 		$_status->setValue($request->getParam("status_search"));
+		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
+		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_status_opt = array(
+				-1=>$this->tr->translate("ALL_STATUS"),
+				1=>$this->tr->translate("ACTIVE"),
+				0=>$this->tr->translate("DACTIVE"));
+		$_status->setMultiOptions($_status_opt);
+		$_status->setValue($request->getParam("status_search"));
 	
 	
-		$this->addElements(array($_title,$_degree));
+		$this->addElements(array($_title,$_degree,$_status));
 		if(!empty($_data)){
 		}
 	

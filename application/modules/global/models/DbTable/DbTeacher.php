@@ -155,6 +155,9 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if(!empty($search['degree'])){
 			$where.=' AND degree='.$search['degree'];
 		}
+		if($search['status']>-1){
+			$where.=' AND status='.$search['status'];
+		}
 		return $db->fetchAll($sql.$where.$order_by);
 	}
 	public function addNewPosition($data){//ajax

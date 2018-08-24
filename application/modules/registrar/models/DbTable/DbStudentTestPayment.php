@@ -30,6 +30,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 				'total_price'	=>$data['price'],
 				'is_paid'		=>1,
 				'paid_date'		=>$data['paid_date'],
+				'note'		 	=>$data['note'],
 				'account_userid'=>$this->getUserId()
 			);
 			
@@ -43,20 +44,16 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 				'sex'	 		=>$data['sex'],
 				'dob'		 	=>$data['dob'],
 				'phone'		 	=>$data['parent_phone'],
-					
 				'serial'		=>$data['serial'],
 				'degree'		=>$data['degree'],
 				'note'		 	=>$data['note'],
-					
 				'receipt_no'	=>$receipt_number,
 				'price'	 		=>$data['price'],
 				'total_price'	=>$data['price'],
 				'is_paid'		=>1,
-					
 				'paid_date'		=>$data['paid_date'],
 				'test_date'		=>date('Y-m-d'),
 				'create_date'	=>date('Y-m-d'),
-				
 				'account_userid'=>$this->getUserId()
 			);
 			$this->insert($array);
@@ -73,6 +70,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 					'total_price'=>$data['price'],
 					'is_paid'	=>1,
 					'paid_date'	=>$data['paid_date'],
+					'note'		 	=>$data['note'],
 					'account_userid'=>$this->getUserId()
 			);
 		
@@ -84,6 +82,7 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 					'price'	 	=>null,
 					'total_price'=>null,
 					'is_paid'	=>0,
+					'note'		 	=>$data['note'],
 					'paid_date'	=>null,
 			);
 			

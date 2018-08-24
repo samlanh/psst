@@ -604,7 +604,7 @@ function printSave(new_receipt){
 			  
 			  temp+='<td align="center" style="border:1px solid #000;">0</td>';
 			  temp+='<td align="center" style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
-			  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId("price").get('value'),{places:2})+'</td>';
+			  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId("note").get('value')+'</td>';
 			  
 		    temp+='</tr>';
 		   temp+='</table>';

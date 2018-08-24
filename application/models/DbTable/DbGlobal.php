@@ -964,6 +964,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	$this->_name="rms_document_type";
   	return $this->insert($array);
   }
+  public function getLaguage(){
+  	$db = $this->getAdapter();
+  	$sql="SELECT * FROM `ln_language` AS l WHERE l.`status`=1 ORDER BY l.ordering ASC";
+  	return $db->fetchAll($sql);
+  }
   
 }
 ?>

@@ -22,13 +22,6 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
     			//$arr['photo']=$photo;
     		}
-    		$sql="SELECT br_id FROM rms_branch WHERE parent =".$_data['main_branch_id'];
-    		$sql.=" AND branch_nameen='".$_data['branch_nameen']."'";
-    		$sql.=" AND prefix='".$_data['prefix_code']."'";
-    		$rs = $_db->fetchOne($sql);
-    		if(!empty($rs)){
-    			return -1;
-    		}
     		//	echo $photo; exit();
 	    	$_arr = array(
 	    			'branch_nameen' =>$_data['branch_nameen'],
@@ -40,7 +33,7 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			'email'		    =>$_data['email'],
 	    			'website'		=>$_data['website'],
 	    			'other'			=>$_data['branch_note'],
-	    			'status'		=>$_data['branch_status'],	    			
+	    			//'status'		=>$_data['branch_status'],	    			
 	    			'displayby'		=>2,
 	    			'photo'   	    => $photo,
 	    			);

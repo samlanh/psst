@@ -217,8 +217,8 @@ fieldset{  background:none;}
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
 		window.frames["print_frame"].window.focus();
 		window.frames["print_frame"].window.print();
-		//hideDialog();
-		//dijit.byId('office_receipt').submit();
+		hideDialog();
+		dijit.byId('office_receipt').submit();
 	}
 	function hideDialog(){
 		dijit.byId('terms').hide();

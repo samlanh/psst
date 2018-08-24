@@ -1779,6 +1779,7 @@ function deleteRecord(index) {
 		//dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
 		
 		readMoneyInKhmer(netAmount.toFixed(2));
+		netTotal();
 	}
 function readMoneyInKhmer(netTotal){
 		var str = netTotal.toString();

@@ -25,6 +25,7 @@ dojo.ready(function(){
 			discount_id = dijit.byId('disname_id').get('value');
 			if(discount_id==-1){
 				dijit.byId("popup_add_discount").show();
+				dijit.byId("s_save").set("disabled",false);
 			}
 		}
 	}, "disname_id");

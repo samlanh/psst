@@ -59,23 +59,29 @@ $frm = $this->frm_credit;
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement('status');?>
-		                </div>
-		             </div>
-		         </div>
-		         <div class="col-md-4 col-sm-4 col-xs-12">
-		         	<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CREATED_DATE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		               	 <?php echo $frm->getElement('Date');?>
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_EXPENSE");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		               	 <?php echo $frm->getElement('end_date');?>
+		                </div>
+		             </div>
+		         </div>
+		         <div class="col-md-4 col-sm-4 col-xs-12">
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SPACE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement('total_amount');?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement('prob');?>
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -83,6 +89,12 @@ $frm = $this->frm_credit;
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input type="hidden" id="identity" name="identity" />
 		                	<?php echo $frm->getElement('Description');?>
+		                </div>
+		             </div>
+		              <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement('status');?>
 		                </div>
 		             </div>
 		         </div>

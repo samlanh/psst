@@ -1,6 +1,8 @@
 <?php 
 $frm = $this->frm_search;
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$urlEdit = $this->baseUrl()."/accounting/creditmemo/edit/id/";
+$urlTransfer = $this->baseUrl()."/accounting/creditmemo/transfer/id/";
 ?>
 <title><?php echo $tr->translate("Credit Memo");?></title>
 <script>
@@ -42,5 +44,40 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		</div>
 	</div>
 </div>
-
+<script>
+var row=0;
+var url="";
+var indexkey="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			indexkey="";
+			var m = "clicked: " + key;
+			if(key=="edit"){
+				url='<?php echo $urlEdit;?>';
+			}else if(key=="transfer"){
+				url='<?php echo $urlTransfer;?>';
+				indexkey = 'transfer';
+			}
+			gotoAction();
+		},
+		items: {
+			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "c o p y"},
+			"transfer": {name: "<?php echo $tr->translate("TRANSFER_TO");?>", icon: "copy", accesskey: "c o p y"},
+			
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+function setrowdata(index){
+	  row = index;
+	}
+var recordid ='';
+function gotoAction(){
+	 window.open(url+row, '_blank');
+}
+</script>
 

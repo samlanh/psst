@@ -18,6 +18,18 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$optstu = $db->getAllStudent(1,1);
 		$student_id->setMultiOptions($optstu);
 		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$stu_id = new Zend_Dojo_Form_Element_FilteringSelect('stu_idto');
+		$stu_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'onchange'=>'setSelected(1)'
+		));
+		$optstu = $db->getAllStudent(1,1);
+		$stu_id->setMultiOptions($optstu);
+		
 		$student_name = new Zend_Dojo_Form_Element_FilteringSelect('student_name');
 		$student_name->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
@@ -28,6 +40,17 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		));
 		$optstu = $db->getAllStudent(1,2);
 		$student_name->setMultiOptions($optstu);
+		
+		$stu_name = new Zend_Dojo_Form_Element_FilteringSelect('stu_name');
+		$stu_name->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'autoComplete'=>"true",
+				'queryExpr'=>'*${0}*',
+				'onchange'=>'setSelected(2)'
+		));
+		$optstu = $db->getAllStudent(1,2);
+		$stu_name->setMultiOptions($optstu);
 		
 		
 		$for_date = new Zend_Dojo_Form_Element_FilteringSelect('for_date');
@@ -44,6 +67,33 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
 		));
 		$_Date->setValue(date('Y-m-d'));
+		
+		$_enddate = new Zend_Dojo_Form_Element_DateTextBox('end_date');
+		$_enddate->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
+				'required'=>true,
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
+		));
+		$_enddate->setValue(date('Y-m-d'));
+		
+		$_enddates = new Zend_Dojo_Form_Element_DateTextBox('end_dates');
+		$_enddates->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
+				'required'=>true,
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
+		));
+		$_enddates->setValue(date('Y-m-d'));
+		
+		$start_date = new Zend_Dojo_Form_Element_DateTextBox('start_date');
+		$start_date->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
+				'required'=>true,
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}"
+		));
+		$start_date->setValue(date('Y-m-d'));
 		
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
 		$_branch_id->setAttribs(array(
@@ -69,14 +119,43 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$options= array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
 		$_stutas->setMultiOptions($options);
 		
+		$prob=new Zend_Dojo_Form_Element_TextBox('prob');
+		$prob->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		
+		$problem=new Zend_Dojo_Form_Element_TextBox('problem');
+		$problem->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		
 		$_Description = new Zend_Dojo_Form_Element_Textarea('Description');
 		$_Description ->setAttribs(array(
 				'dojoType'=>'dijit.form.SimpleTextarea',
 				'class'=>'fullside',
 				'style'=>"font-size:14px;font-family: 'Khmer OS Battambang';height:50px;"
 		));
+		
+		$Description_s = new Zend_Dojo_Form_Element_Textarea('Descriptions');
+		$Description_s ->setAttribs(array(
+				'dojoType'=>'dijit.form.SimpleTextarea',
+				'class'=>'fullside',
+				'style'=>"font-size:14px;font-family: 'Khmer OS Battambang';height:50px;"
+		));
+		
 		$total_amount=new Zend_Dojo_Form_Element_NumberTextBox('total_amount');
 		$total_amount->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		
+		$total_am=new Zend_Dojo_Form_Element_NumberTextBox('total_amountall');
+		$total_am->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'required'=>true,
@@ -88,11 +167,15 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 			$student_id->setValue($data['student_id']);
 			$total_amount->setValue($data['total_amount']);
 			$_Description->setValue($data['note']);
+			$prob->setValue($data['prob']);
 			$_Date->setValue($data['date']);
+			$_enddate->setValue($data['end_date']);
 			$_stutas->setValue($data['status']);
+			
+	//		$stu_id->setValue($data['stu_idto']);
 			$id->setValue($data['id']);
 		}
-		$this->addElements(array($student_name,$student_id,$_Date ,$_stutas,$_Description,
+		$this->addElements(array($student_name,$student_id,$stu_name,$_enddates,$problem,$total_am,$Description_s,$start_date,$_Date,$stu_id,$_stutas,$prob,$_enddate,$_Description,
 				$total_amount,$_branch_id,$for_date,$id,));
 		return $this;
 		

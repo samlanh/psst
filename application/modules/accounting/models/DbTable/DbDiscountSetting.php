@@ -74,7 +74,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 					g.start_date,
 					g.end_date,
 					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=g.user_id )AS user_name,
-					(SELECT name_en FROM rms_view WHERE TYPE=1 AND key_code =g.status) AS STATUS
+					(SELECT name_kh FROM rms_view WHERE TYPE=1 AND key_code =g.status) AS STATUS
 					FROM 
 					rms_dis_setting AS g ";
 		

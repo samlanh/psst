@@ -21,7 +21,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				total_amount,
 				total_amountafter,
 				c.date,
-				c.note,
+				c.end_date,
 				(select name_en from rms_view where rms_view.type=15 and key_code=c.type) as paid_status,
 				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) as user_name,
 				c.status 
@@ -35,6 +35,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		if (!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['adv_search']));
+			$s_where[] = " (SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
 			$s_where[] = " stu_khname LIKE '%{$s_search}%'";
 			$s_where[] = " stu_enname LIKE '%{$s_search}%'";
@@ -53,16 +54,19 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 	}
 	function addCreditmemo($data){
 		$arr = array(
-			'branch_id'=>$data['branch_id'],
-			'student_id'=>$data['student_id'],
-			'total_amount'=>$data['total_amount'],
+			'branch_id'		=>$data['branch_id'],
+			'student_id'	=>$data['student_id'],
+			'total_amount'	=>$data['total_amount'],
 			'total_amountafter'=>$data['total_amount'],
-			'note'=>$data['Description'],
-			'type'=>0,
-			'date'=>$data['Date'],
-			'status'=>$data['status'],
-			'user_id'=>$this->getUserId(),);
+			'note'			=>$data['Description'],
+			'prob'			=>$data['prob'],
+			'type'			=>0,
+			'date'			=>$data['Date'],
+			'end_date'		=>$data['end_date'],
+			'status'		=>$data['status'],
+			'user_id'		=>$this->getUserId(),);
 		$this->insert($arr);
+		//print_r($data); exit();
  }
 	 function updatcreditMemo($data){
 			$arr = array(
@@ -71,8 +75,10 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				'total_amount'=>$data['total_amount'],
 				'total_amountafter'=>$data['total_amount'],
 				'note'=>$data['Description'],
+				'prob'=>$data['prob'],
 				'type'=>0,
 				'date'=>$data['Date'],
+				'end_date'=>$data['end_date'],
 				'status'=>$data['status'],
 				'user_id'=>$this->getUserId(),);
 		$where=" id = ".$data['id'];

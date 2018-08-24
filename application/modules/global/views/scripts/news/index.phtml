@@ -2,8 +2,9 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 echo $this->headTitle($tr->translate("NEWS"));
 $frm = $this->frm_new;
-$urlEdit = $this->baseUrl()."/other/news/edit/id/";
-$urlDelete = $this->baseUrl()."/other/news/delete/id/";
+$urlEdit = $this->baseUrl()."/global/news/edit/id/";
+$urlDelete = $this->baseUrl()."/global/news/delete/id/";
+$urlCopy = $this->baseUrl()."/global/news/copy/id/";
 ?>
 <script type="text/javascript">	
 	dojo.require("dijit.form.DateTextBox");
@@ -15,9 +16,6 @@ $urlDelete = $this->baseUrl()."/other/news/delete/id/";
 			  	<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("adv_search");?>
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                    	<?php echo $frm->getElement('status_search');?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                     <?php echo $frm->getElement('start_date');?>
@@ -52,11 +50,15 @@ $(function(){
 			}else if(key=="delete"){
 				url='<?php echo $urlDelete;?>';
 				indexkey = 'delete';
+			}else if(key=="copy"){
+				url='<?php echo $urlCopy;?>';
+				indexkey = 'copy';
 			}
 			gotoAction();
 		},
 		items: {
 			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "c o p y"},
+			"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy", accesskey: "c o p y"},
 			"delete": {name: "<?php echo $tr->translate("DELETE");?>", icon: "delete"},
 			
 		}

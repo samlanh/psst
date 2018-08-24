@@ -17,13 +17,13 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$lang = $this->getCurrentLang();
     	$sql="SELECT
-    	act.`id`,
-    	(SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS title,
-    	act.`publish_date`,
-    	act.`status`,
-    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name
-    	FROM `ln_news` AS act
-    	WHERE act.`status`>-1";
+		    	act.`id`,
+		    	(SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS title,
+		    	act.`publish_date`,
+		    	act.`status`,
+		    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name
+		    	FROM `ln_news` AS act
+		    	WHERE act.`status`";
     	$where='';
     	$from_date =(empty($search['start_date']))? '1': " act.publish_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " act.publish_date <= '".$search['end_date']." 23:59:59'";
@@ -36,9 +36,6 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     	$s_where[] = " (SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND language_id=3 LIMIT 1) LIKE '%{$s_search}%'";
     	$where .=' AND ('.implode(' OR ',$s_where).')';
     	}
-    	if (!empty($search['status_search'])){
-    		$where.=" AND act.`status` =".$search['status_search'];
-    	}
     	$order = "  ORDER BY act.`id` DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -46,7 +43,7 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
-    		$valid_formats = array("jpg", "png", "gif", "bmp","jpeg");
+    		$valid_formats = array("jpg", "png","gif","bmp","jpeg");
     		$part= PUBLIC_PATH.'/images/news/';
     		if (!file_exists($part)) {
     			mkdir($part, 0777, true);
@@ -151,13 +148,73 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     				$this->insert($arr_article);
     			}
     		}
-    
     		$db->commit();
     	}catch(exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		$db->rollBack();
     	}
+    }
+    function copyArticle($data){
+    	$db = $this->getAdapter();
+    	$db->beginTransaction();
+    	try{
+    		$valid_formats = array("jpg", "png","gif","bmp","jpeg");
+    		$part= PUBLIC_PATH.'/images/news/';
+    		if (!file_exists($part)) {
+    			mkdir($part, 0777, true);
+    		}
+    		$name = $_FILES['photo']['name'];
+    		$size = $_FILES['photo']['size'];
+    		$photo='';
+    		$dbglobal = new Application_Model_DbTable_DbGlobal();
+    		$lang = $dbglobal->getLaguage();
+    		$arr = array(
+    				'status'=>$data['status'],
+    				'publish_date'=>$data['public_date'],
+    				'modify_date'=>date("Y-m-d H:i:s"),
+    				'user_id'=>$this->getUserId(),
+    		);
+    		if(!empty($lang)){
+    				$iddetail="";
+    				foreach($lang as $row){
+    					$title = str_replace(' ','',$row['title']);
+    					if (empty($iddetail)){
+    						if (!empty($data['iddetail'.$title])){
+    							$iddetail=$data['iddetail'.$title];
+    						}
+    					}
+    					else{
+    						if (!empty($data['iddetail'.$title])){
+    							$iddetail=$iddetail.",".$data['iddetail'.$title];
+    						}
+    					}
+    				}
+    			}else{
+    			$this->_name="ln_news";
+    			$arr['image_feature']= $photo;
+    			$arr['created_date']= date("Y-m-d H:i:s");
+    			$article_id = $this->insert($arr);
+    	
+    			if(!empty($lang)) foreach($lang as $row){
+    				$title = str_replace(' ','',$row['title']);
+    				$arr_article = array(
+    						'news_id'=>$article_id,
+    						'title'=>$data['title'.$title],
+    						'description'=>$data['description'.$title],
+    						'lang'=>$row['id'],
+    				);
+    				$this->_name="ln_news_detail";
+    				$this->insert($arr_article);
+    			}
+    		}
+    		$db->commit();
+    	}catch(exception $e){
+    		Application_Form_FrmMessage::message("Application Error");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$db->rollBack();
+    	}
+    	print_r($data); exit();
     }
     
     function getArticleById($id){

@@ -49,6 +49,7 @@ Class Global_Form_FrmNews extends Zend_Dojo_Form {
 		);
 		$_status_search->setMultiOptions($_arrsearch);
 		$_status_search->setAttribs(array(
+				'class'=>'fullside',
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
 		));

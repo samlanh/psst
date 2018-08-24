@@ -31,7 +31,7 @@ class Global_NewsController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'global','controller'=>'news','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('zone_name'=>$link,'zone_num'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'zone_num'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -90,6 +90,34 @@ class Global_NewsController extends Zend_Controller_Action {
 	   	Application_Model_Decorator::removeAllDecorator($frm);
 	   	$this->view->frm_new = $frm;
    	
+   	$dbglobal = new Application_Model_DbTable_DbGlobal();
+   	$this->view->lang = $dbglobal->getLaguage();
+   }
+   
+   function copyAction(){
+   	$db = new Global_Model_DbTable_DbNews();
+   	$id = $this->getRequest()->getParam('id');
+   	if($this->getRequest()->isPost()){
+   		try{
+   			$_data = $this->getRequest()->getPost();
+   			$db->copyArticle($_data);
+   			Application_Form_FrmMessage::Sucessfull($this->tr->translate('COPY_SUCCESS'), self::REDIRECT_URL);
+   		}catch(Exception $e){
+   			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+   			$err =$e->getMessage();
+   			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+   		}
+   	}
+   	 
+   	$row = $db->getArticleById($id);
+   	$this->view->row = $row;
+   	$this->view->id = $id;
+   	 
+   	$frm = new Global_Form_FrmNews();
+   	$frm=$frm->FrmAddNews($row);
+   	Application_Model_Decorator::removeAllDecorator($frm);
+   	$this->view->frm_new = $frm;
+   
    	$dbglobal = new Application_Model_DbTable_DbGlobal();
    	$this->view->lang = $dbglobal->getLaguage();
    }

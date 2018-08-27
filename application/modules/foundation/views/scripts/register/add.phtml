@@ -1139,7 +1139,7 @@ date_format = '"dd/MM/yyyy"';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
-		}
+			}
 			template+='<td width="5%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="5%" align="center">'+no+'</td>';
 			template+='<td width="25%"><select class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" value="0" onChange="popupDocType('+col+');" dojoType="dijit.form.FilteringSelect" >';	

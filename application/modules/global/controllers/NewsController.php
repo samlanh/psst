@@ -100,7 +100,7 @@ class Global_NewsController extends Zend_Controller_Action {
    	if($this->getRequest()->isPost()){
    		try{
    			$_data = $this->getRequest()->getPost();
-   			$db->copyArticle($_data);
+   			$db->addArticle($_data);
    			Application_Form_FrmMessage::Sucessfull($this->tr->translate('COPY_SUCCESS'), self::REDIRECT_URL);
    		}catch(Exception $e){
    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
@@ -108,7 +108,6 @@ class Global_NewsController extends Zend_Controller_Action {
    			Application_Model_DbTable_DbUserLog::writeMessageError($err);
    		}
    	}
-   	 
    	$row = $db->getArticleById($id);
    	$this->view->row = $row;
    	$this->view->id = $id;
@@ -122,7 +121,7 @@ class Global_NewsController extends Zend_Controller_Action {
    	$this->view->lang = $dbglobal->getLaguage();
    }
    
-   public function deleteAction(){
+   function deleteAction(){
    	try{
    		$request=Zend_Controller_Front::getInstance()->getRequest();
    		$action=$request->getActionName();

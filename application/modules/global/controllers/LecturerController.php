@@ -63,6 +63,12 @@ class Global_LecturerController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_techer = $frm_techer;
 		
+ 		$_db = new Application_Model_DbTable_DbGlobal();
+		$row = $_db->getAllDocumentType(); // degree language
+// 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->doc_type = $row;
+		
 		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
 		

@@ -135,7 +135,6 @@ dojo.ready(function(){
 });
 </script>
 <div class="dijitHidden">
-	<?php $frmdegree = $this->frm_degree;?>
 	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate("ADD_NEW_DEGREE")?>'" style="width:70%;overflow-y:scroll;" id="popup_add_dept" >
 		<form  id='frm_add_dep' name='frm_add_dep' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<fieldset>
@@ -155,7 +154,11 @@ dojo.ready(function(){
 					<tr>
 						<td><?php echo $tr->translate("School Option");?></td>
 						<td >
-							<?php echo $frmdegree->getElement("schoolOption");?>
+							<select name="schoolOption" class="fullside" id="schoolOption" placeholder="<?php echo $tr->translate("School Option");?>" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
+								<?php if(!empty($this->schooloptionlist)){foreach($this->schooloptionlist as $sss){?>
+									<option value="<?php echo $sss['id'];?>"><?php echo $sss['name'];?></option>
+								<?php }}?>
+							</select>
 						</td>
 						<td width="10%"></td>
 						<td><?php echo $tr->translate("SUBJECT");?></td>
@@ -198,6 +201,19 @@ function addRowDegree(){
 	subject_label = dijit.byId("subject_id").attr('displayedValue');
 	subject_id = dijit.byId("subject_id").get('value');
 	if(subject_id=='' || subject_id==-1){return false;}
+
+	var iden = $("#identity").val();
+	var arrays = iden.split(',');
+	 if(arrays!=""){
+		 for(var i=0;i< arrays.length;i++) {
+			 readychoose = dijit.byId('subject_study_'+arrays[i]).get('value');
+			 if(readychoose==subject_id){
+					alert("<?php echo $tr->translate("Choosen ready")?>");
+				 return false;
+			 }
+		}
+	}
+		
 	col1++;no1++;
 	template1='';
 	if(title1!=1){

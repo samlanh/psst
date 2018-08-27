@@ -80,13 +80,10 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
     	$this->view->subjectlist = $_dbgb->getAllSubjectStudy();
+    	$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption($userinfo['branch_list']);
+    	
     	$_model = new Global_Model_DbTable_DbGroup();
     	$this->view->subject = $_model->getAllSubjectStudy();
-    	
-    	$frm = new Global_Form_FrmItems();
-    	$frm->FrmAddDegree(null);
-    	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_degree = $frm;
     	
     }
     

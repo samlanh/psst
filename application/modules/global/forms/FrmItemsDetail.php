@@ -1,0 +1,185 @@
+<?php
+
+class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
+{
+	protected  $tr;
+
+    public function init()
+    {
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();	
+    }
+    function FrmAddItemsDetail($data,$typeItems=null){
+    	
+    	$request=Zend_Controller_Front::getInstance()->getRequest();
+    	$typeItems = empty($typeItems)?1:$typeItems;
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$_dbuser = new Application_Model_DbTable_DbUsers();
+    	$userid = $_dbgb->getUserId();
+    	$userinfo = $_dbuser->getUserInfo($userid);
+    	
+    	
+    	$code = new Zend_Dojo_Form_Element_TextBox('code');
+    	$code->setAttribs(array(
+    			'dojoType'=>'dijit.form.TextBox',
+    			'class'=>'fullside height-text',
+    			'missingMessage'=>$this->tr->translate("Forget Enter Title")
+    	));
+    	$itemsCode = $_dbgb->getItemsDetailCodeByItemsType($typeItems);
+    	$code->setValue($itemsCode);
+    	
+    	$title = new Zend_Dojo_Form_Element_TextBox('title');
+    	$title->setAttribs(array(
+    			'dojoType'=>'dijit.form.ValidationTextBox',
+    			'required'=>'true',
+    			'class'=>'fullside height-text',
+    			'missingMessage'=>$this->tr->translate("Forget Enter Title")
+    	));
+    	
+    	$_shortcut = new Zend_Dojo_Form_Element_TextBox('shortcut');
+    	$_shortcut->setAttribs(array(
+    			'dojoType'=>'dijit.form.ValidationTextBox',
+    			//'required'=>'true',
+    			'class'=>' fullside height-text',
+    			'missingMessage'=>$this->tr->translate("Forget Enter Shortcut")
+    			
+    	));
+
+    	
+    	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$Option = $_dbgb->getAllItems($typeItems,$userinfo['branch_id']);
+    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	$_items_id = new Zend_Dojo_Form_Element_FilteringSelect("items_id");
+    	$_items_id->setMultiOptions($_arr_opt);
+    	$_items_id->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_ordering = new Zend_Dojo_Form_Element_NumberTextBox('ordering');
+    	$_ordering->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'class'=>' fullside height-text',
+    			'missingMessage'=>$this->tr->translate("Forget Enter Ordering")
+    			 
+    	));
+    	
+    	
+    	$note=  new Zend_Form_Element_Textarea('note');
+    	$note->setAttribs(array(
+    			'dojoType'=>'dijit.form.Textarea',
+    			'class'=>'fullside',
+    			'style'=>'font-family: inherit;  min-height:100px !important;'));
+    	
+    	
+    	$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
+    	$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
+    	$_status->setMultiOptions($_arr);
+    	$_status->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_arr = array(1=>$this->tr->translate("PRODUCT_FOR_SELL"),2=>$this->tr->translate("OFFICE_MATERIAL"));
+    	$_product_type = new Zend_Dojo_Form_Element_FilteringSelect("product_type");
+    	$_product_type->setMultiOptions($_arr);
+    	$_product_type->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_cost = new Zend_Dojo_Form_Element_NumberTextBox('cost');
+    	$_cost->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'class'=>' fullside height-text',
+    			'placeholder'=>$this->tr->translate("UNIT_COST"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Cost")
+    	
+    	));
+    	
+    	
+    	$id = new Zend_Form_Element_Hidden('id');
+    	
+    	
+    	//for form Search
+    	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
+    	$advance_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.TextBox',
+    			'class'=>'fullside height-text',
+    			'placeholder'=>$this->tr->translate("SEARCH_HERE"),
+    			'missingMessage'=>$this->tr->translate("SEARCH_HERE")
+    	));
+    	$advance_search->setValue($request->getParam("advance_search"));
+    	
+    	$_arr = array(-1=>$this->tr->translate("ALL"),1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
+    	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
+    	$_status_search->setMultiOptions($_arr);
+    	$_status_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_status_search->setValue($request->getParam("status_search"));
+    	
+    	
+    	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$Option = $_dbgb->getAllItems($typeItems,$userinfo['branch_id']);//degree
+    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	$_items_search = new Zend_Dojo_Form_Element_FilteringSelect("items_search");
+    	$_items_search->setMultiOptions($_arr_opt);
+    	$_items_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_items_search->setValue($request->getParam("items_search"));
+    	
+    	$_arr = array(-1=>$this->tr->translate("TYPE"),1=>$this->tr->translate("PRODUCT_FOR_SELL"),2=>$this->tr->translate("OFFICE_MATERIAL"));
+    	$_product_type_search = new Zend_Dojo_Form_Element_FilteringSelect("product_type_search");
+    	$_product_type_search->setMultiOptions($_arr);
+    	$_product_type_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_product_type_search->setValue($request->getParam("product_type_search"));
+    	
+    	if(!empty($data)){
+    		$title->setValue($data["title"]);
+    		$_shortcut->setValue($data["shortcut"]);
+    		$_items_id->setValue($data["items_id"]);
+    		$_ordering->setValue($data["ordering"]);
+    		$note->setValue($data["note"]);
+    		$_status->setValue($data["status"]);
+    		$id->setValue($data["id"]);
+    		
+    		$code->setValue($data["code"]);
+    		if ($data["items_type"]==3){ // product
+	    		$_product_type->setValue($data["product_type"]);
+	    		$_cost->setValue($data["cost"]);
+    		}
+    		
+    	}
+    	
+    	$this->addElements(array(
+    			$title,
+				$_shortcut,
+				$_items_id,
+				$_ordering,
+				$note,
+				$_status,
+				$id,
+				$advance_search,
+				$_status_search,
+				$_items_search,
+    			$_product_type_search,
+    			
+    			$code,
+    			$_product_type,
+    			$_cost
+    			));
+    	return $this;
+    }
+}
+

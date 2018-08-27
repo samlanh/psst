@@ -2,7 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("FEE"));
 	$frm =  $this->form_search;
-	$frm_fee = $this->frm_fee;
 	
 	$url_copy =$this->url(array('module'=>'accounting','controller'=>'fee','action'=>'copy'));
 	$formList = new Application_Form_Frmtable();
@@ -13,32 +12,44 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore");  
+	////dojo.require('dojox.form.BusyButton');
+var aca_year= getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->rows_year));?> );
+	dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+	    store: aca_year,
+	    autoComplete: true,                        
+	    required: false,
+	    id: "year",
+	    name: "year",           
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
+	    onChange: function() {  
+	    }
+	}, "year");
+	dijit.byId('year').attr('value','<?php echo $this->row_ace['year']?>');
+});
 </script>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
-             <div class="col-sm-12 border-botom">
-		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-money" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('FEE');?></h4>
-    			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
-    		</div>
-    	</div>
-		<div class="card-box">
 			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<?php echo $frm->getElement("title");?>
+					 	<input dojoType="dijit.form.TextBox"   id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text" class="fullside">
 					 </div>
 					  <div class="col-md-2 col-sm-2 col-xs-12">
-					  <?php echo $frm_fee->getElement("year");?>
+					  	<input id="year" />
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 					  	<?php echo $frm->getElement("branch_id");?>
 					 </div>
 					  <div class="col-md-2 col-sm-2 col-xs-12">
-					  	<?php echo $frm_fee->getElement("is_finished_search");?>
+					  	<select name="finished_status" id="finished_status" dojoType="dijit.form.FilteringSelect" class="fullside" >
+					 		<option value="" <?php if($this->adv_search['finished_status']==""){echo 'selected="selected"';}?>><?php echo $tr->translate("PROCESS_TYPE");?></option>
+					 		<?php if(!empty($this->pro_type)) foreach ($this->pro_type As $rs){?>
+					 		<option value="<?php echo $rs['id']?>" <?php if($this->adv_search['finished_status']==$rs['id']){echo 'selected="selected"';}?>><?php echo $rs['name']?></option>
+					 	    <?php }?>
+					 	</select>
 					 </div>
 					  <div class="col-md-2 col-sm-2 col-xs-12">
 					  	<?php echo $frm->getElement("status_search");?>

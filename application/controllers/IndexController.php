@@ -66,6 +66,8 @@ class IndexController extends Zend_Controller_Action
 					$session_user->last_name= $user_info['last_name'];
 					$session_user->first_name= $user_info['first_name'];
 					$session_user->branch_id= $user_info['branch_id'];
+					$session_user->branch_list= $user_info['branch_list'];
+					$session_user->schoolOption= $user_info['schoolOption'];
 					
 // 					$session_user->url_report = $db_user->getArrAclReport($user_info['user_type']);
 // 					for($i=0; $i<count($arr_acl);$i++){

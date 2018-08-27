@@ -82,14 +82,15 @@ class RsvAcl_UserController extends Zend_Controller_Action
 					$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
 				}
 			}
+			
 			$db  = new Application_Model_DbTable_DbGlobal();
 			$this->view->rs_branch = $db->getAllBranch();
+			
 			$user_type = $this->user_typelist;
 			$this->view->user_typelist =$user_type;
-			
 			array_unshift($user_type, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
 			$this->view->user_type = $user_type;
-			
+			$this->view->schoolOption = $db->getAllSchoolOption();
 	}
 	public function editAction()
 	    {
@@ -118,6 +119,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			
 			$db  = new Application_Model_DbTable_DbGlobal();
 			$this->view->rs_branch = $db->getAllBranch();
+			$this->view->schoolOption = $db->getAllSchoolOption();
     }
     
  
@@ -156,5 +158,33 @@ class RsvAcl_UserController extends Zend_Controller_Action
 		}
 		
 	}
-
+// 	function getschooloptionAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data=$this->getRequest()->getPost();
+		
+// 			$db = new Application_Model_DbTable_DbGlobal();
+// 			$gty= $db->getAllSchoolOption($data['branch_id']);
+// 			print_r(Zend_Json::encode($gty));
+// 			exit();
+// 		}
+// 	}
+	function getschooloptionbybranchlistAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			
+			$branchList="";
+			if (!empty($data['selector'])){
+				foreach ($data['selector'] as $rs){
+					if (empty($branchList)){
+						$branchList = $rs;
+					}else { $branchList = $branchList.",".$rs;
+					}
+				}
+			}
+			$db = new Application_Model_DbTable_DbGlobal();
+			$gty= $db->getAllSchoolOption($branchList);
+			print_r(Zend_Json::encode($gty));
+			exit();
+		}
+	}
 }

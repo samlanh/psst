@@ -114,6 +114,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $session_user->user_id;
    }
    
+   public function getUserInfo(){
+	   	$session_user=new Zend_Session_Namespace('authstu');
+	   	$userName=$session_user->user_name;
+	   	$GetUserId= $session_user->user_id;
+	   	$level = $session_user->level;
+	   	$location_id = $session_user->branch_id;
+	   	$branch_list = $session_user->branch_list;
+	   	$schoolOption = $session_user->schoolOption;
+	   	$info = array("user_name"=>$userName,"user_id"=>$GetUserId,"level"=>$level,"branch_id"=>$location_id,"branch_list"=>$branch_list,"schoolOption"=>$schoolOption);
+	   	return $info;
+   }
    
    public function getAllSession(){
 	   	$db = $this->getAdapter();
@@ -583,14 +594,22 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    public function getAccessPermission($branch_str='branch_id'){
 	   	$session_user=new Zend_Session_Namespace('authstu');
 	   	$branch_id = $session_user->branch_id;
+	   	$branch_list = $session_user->branch_list;
 	   	if(!empty($branch_id)){
 		   	$level = $session_user->level;
+		   	if ($branch_id!=1){
+// 		   		$result = " AND $branch_str =".$branch_id;
+		   		$result = " AND $branch_str IN ($branch_list)";
+		   		return $result;
+		   	}
+		   	
 		   	if($level==1 OR $level==2){
 		   		$result = "";
 		   		return $result;
 		   	}
 		   	else{
-		   		$result = " AND $branch_str =".$branch_id;
+// 		   		$result = " AND $branch_str =".$branch_id;
+		   		$result = " AND $branch_str IN ($branch_list)";
 		   		return $result;
 		   	}
 	   	}
@@ -970,5 +989,120 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	return $db->fetchAll($sql);
   }
   
+  //New Edition
+  function getBranchInfo($branch_id){
+  	$db = $this->getAdapter();
+  	$sql="SELECT b.* FROM `rms_branch` AS b WHERE b.br_id = $branch_id LIMIT 1";
+  	return $db->fetchRow($sql);
+  }
+//   function getAllSchoolOption($branch=null){
+//   	$db = $this->getAdapter();
+//   	$this->_name = "rms_schooloption";
+//   	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1";
+//   	if($branch!==1 AND $branch !=null){
+//   		$branchinfo = $this->getBranchInfo($branch);
+//   		$schooloption = empty($branchinfo['schooloptionlist'])?0:$branchinfo['schooloptionlist'];
+//   		$sql.=" AND s.id IN ($schooloption) ";
+  	
+//   	}
+//   	return $db->fetchAll($sql);
+//   }
+  function getAllSchoolOption($branchlist=null){
+  	$db = $this->getAdapter();
+  	$this->_name = "rms_schooloption";
+  	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1";
+  	if($branchlist!==1 AND $branchlist !=null){
+  		$bran = explode(",", $branchlist);
+  		$s_where = array();
+  		foreach ($bran as $branch){
+  			$branchinfo = $this->getBranchInfo($branch);
+  			$schooloption = empty($branchinfo['schooloptionlist'])?0:$branchinfo['schooloptionlist'];
+  			$s_where[] = " s.id IN ($schooloption)";
+  		}
+  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+  	}
+  	$user = $this->getUserInfo();
+  	$level = $user['level'];
+  	if ($level!=1){
+  		$sql .=' AND s.id = '.$user['schoolOption'];
+  	}
+  	return $db->fetchAll($sql);
+  }
+  function getAllDegreetype(){
+  	$db = $this->getAdapter();
+  	$this->_name = "rms_itemstype";
+  	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1";
+  	return $db->fetchAll($sql);
+  }
+  
+  function getAllItems($type=null,$branch=null){
+  	$db = $this->getAdapter();
+  	$this->_name = "rms_items";
+  	$sql="SELECT m.id, m.title AS name FROM $this->_name AS m WHERE m.status=1 ";
+  	if (!empty($type)){
+  		$sql.=" AND m.type=$type";
+  	}
+  	if($branch!==1 AND $branch !=null){
+  		$branchinfo = $this->getBranchInfo($branch);
+  		$schooloption = empty($branchinfo['schooloptionlist'])?0:$branchinfo['schooloptionlist'];
+  		$ids = explode(",", $schooloption);
+  		$s_where = array();
+  		if (!empty($ids)) foreach ($ids as $i){
+  			$s_where[] = " $i IN (m.schoolOption)";
+  		}
+  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+  	}
+  	return $db->fetchAll($sql);
+  }
+  
+  function getItemType($type){
+  	$db = $this->getAdapter();
+  	$this->_name = "rms_itemstype";
+  	$sql="SELECT * FROM $this->_name AS t WHERE t.id = $type LIMIT 1";
+  	return $db->fetchRow($sql);
+  }
+  function getItemsDetailCodeByItemsType($type){
+  	$db = $this->getAdapter();
+  	$this->_name = "rms_itemsdetail";
+  	$sql ="SELECT COUNT(id) AS number FROM $this->_name WHERE items_type =$type  LIMIT 1 ";
+  	$acc_no = $db->fetchOne($sql);
+  	$pre = $this->getItemType($type);
+  	$pre = empty($pre['prefix'])?"":$pre['prefix'];
+  	$new_acc_no= (int)$acc_no+1;
+  	$acc_no= strlen((int)$acc_no+1);
+//   	$pre="";
+  	for($i = $acc_no;$i<5;$i++){
+  		$pre.='0';
+  	}
+  	return $pre.$new_acc_no;
+  }
+  
+  function getAllGradeStudy(){
+  	$db = $this->getAdapter();
+  	$sql="SELECT i.id,
+			CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+		FROM `rms_itemsdetail` AS i 
+		WHERE 
+			i.items_type=1
+			AND i.status =1
+		ORDER BY i.items_id ASC, i.ordering ASC";
+  	return $db->fetchAll($sql);
+  }
+  
+  public function getAllGradeStudyOption(){
+  	$rows = $this->getAllGradeStudy();
+  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  	array_unshift($rows, array('id'=>-1,'name'=>$tr->translate("PLEASE_SELECT")));
+  	$options = '';
+  	if(!empty($rows))foreach($rows as $value){
+  		$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+  	}
+  	return $options;
+  }
+  function getProcessTypeView(){
+  	$db = $this->getAdapter();
+  	$sql="SELECT key_code AS id , name_en AS `name` FROM rms_view  WHERE `status`=1 AND type=12";
+  	return $db->fetchAll($sql);
+  }
 }
 ?>

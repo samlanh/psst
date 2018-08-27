@@ -1,6 +1,7 @@
 <?php
 class Global_GradeController extends Zend_Controller_Action {
 private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+	const REDIRECT_URL = '/global/grade';
     public function init()
     {    	
      /* Initialize action controller here */
@@ -11,47 +12,50 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     public function indexAction()
     {
     	try{
-	    	$db = new Global_Model_DbTable_DbGrade();
+	    	$db = new Global_Model_DbTable_DbItemsDetail();
 	    	if($this->getRequest()->isPost()){
-	    		$_data=$this->getRequest()->getPost();
-		    	$search = array(
-	    				'txtsearch' => $_data['title'],
-		    			'title' => $_data['title'],
-		    			'status' => $_data['status_search']
+	    		$search=$this->getRequest()->getPost();
+	    	}
+	    	else{
+	    		$search = array(
+	    				'advance_search' => "",
+	    				'items_search'=>"",
+	    				'status_search' => -1
 	    		);
-    	   	}else{
-    			$search='';
-    	    }
-	    	$rs_rows= $db->getAllGrade($search);
+	    	}
+	    	$type=1; //Degree
+	    	$rs_rows= $db->getAllItemsDetail($search,$type);
+	    	$glClass = new Application_Model_GlobalClass();
+	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("GRADE","SHORTCUT","ORDERING","DEGREE","MODIFY_DATE","STATUS");
+	    	$collumns = array("GRADE","SHORTCUT","ORDERING","DEGREE","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(
 	    			'module'=>'global','controller'=>'grade','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link ,'major_enname'=>$link ,'major_khname'=>$link,'ordering'=>$link));
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link ,'title'=>$link ,'ordering'=>$link));
 	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     	
-    	$frm_major = new Global_Form_FrmSearchMajor();
-    	$frm_search = $frm_major->FrmMajors();
-    	Application_Model_Decorator::removeAllDecorator($frm_search);
-    	$this->view->frm_search = $frm_search;
+    	$frm = new Global_Form_FrmItemsDetail();
+    	$frm->FrmAddItemsDetail(null,$type);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_items = $frm;
     }  
     public function addAction(){
+    	$db = new Global_Model_DbTable_DbItemsDetail();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try {
     			$sms="INSERT_SUCCESS";
-    			$db = new Global_Model_DbTable_DbGrade();
-    			$_major_id = $db->AddGrade($_data);
+    			$_major_id = $db->AddItemsDetail($_data);
     			if($_major_id==-1){
     				$sms = "RECORD_EXIST";
     			}
     			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull($sms, "/global/grade/index");
+    				Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/index");
     			}else{
     				Application_Form_FrmMessage::message($sms);
     			}
@@ -62,82 +66,86 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     			
     	}
+    	$type=1; //Degree
+    	$frm = new Global_Form_FrmItemsDetail();
+    	$frm->FrmAddItemsDetail(null,$type);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_items = $frm;
     	
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$_dbuser = new Application_Model_DbTable_DbUsers();
+    	$userid = $_dbgb->getUserId();
+    	$userinfo = $_dbuser->getUserInfo($userid);
+    	$d_row = $_dbgb->getAllItems(1,$userinfo['branch_id']);
+    	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    	$this->view->degree = $d_row;
+    	$this->view->subjectlist = $_dbgb->getAllSubjectStudy();
+    	$_model = new Global_Model_DbTable_DbGroup();
+    	$this->view->subject = $_model->getAllSubjectStudy();
     	
-    	$db = new Global_Model_DbTable_DbGrade();
-    	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    	$this->view->dept = $dept;
-		
-		$this->view->teacher= $db->getTeacher();
-		
-		$this->view->session= $db->getSession();
-		
-		
-		$_db = new Global_Model_DbTable_DbGroup();
-		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
-		$this->view->parent_subject = $_db->getParentSubject();
+    	$frm = new Global_Form_FrmItems();
+    	$frm->FrmAddDegree(null);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_degree = $frm;
+    	
     }
     
     public function editAction(){
+    	$db = new Global_Model_DbTable_DbItemsDetail();
     	$id = $this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
     		try{
 	    		$_data = $this->getRequest()->getPost();
-	    		$db = new Global_Model_DbTable_DbGrade();
-	    		$db->updateGrade($_data,$id);
-	    		Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/global/grade/index");
+	    		$db->updateItemsDetail($_data,$id);
+	    		Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("Application Error");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
+    	$type=1; //Degree
+    	$row =$db->getItemsDetailById($id,$type);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    	}
     	
-    	$db= new Global_Model_DbTable_DbGrade();
-    	$row=$db->getMajorById($id);
-    	$this->view->rs = $row;
-    	
-    	$db = new Global_Model_DbTable_DbGrade();
-    	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    	$this->view->dept = $dept;
+    	$frm = new Global_Form_FrmItemsDetail();
+    	$frm->FrmAddItemsDetail($row,$type);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_items = $frm;
 		
-		//$this->view->teacher= $db->getTeacher();
-		
-		//$this->view->session= $db->getSession();
-		
-		//$this->view->teacherbyid = $db->getTeacherBySubjectID($id);
-		//print_r($abc);exit();
     }
     
     public function copyAction(){
+    	$db = new Global_Model_DbTable_DbItemsDetail();
     	$id = $this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
     		try{
-    			$_data = $this->getRequest()->getPost();
-    			$db = new Global_Model_DbTable_DbGrade();
-    			$db->AddGrade($_data);
-    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCESS", "/global/grade/index");
+	    		$_data = $this->getRequest()->getPost();
+	    		$db->AddItemsDetail($_data,$id);
+	    		Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("Application Error");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
-    	$db= new Global_Model_DbTable_DbGrade();
-    	$row=$db->getMajorById($id);
-    	$this->view->rs = $row;
-    	 
-    	$db = new Global_Model_DbTable_DbGrade();
-    	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    	$this->view->dept = $dept;
+    	$type=1; //Degree
+    	$row =$db->getItemsDetailById($id,$type);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    	}
+    	
+    	$frm = new Global_Form_FrmItemsDetail();
+    	$frm->FrmAddItemsDetail($row,$type);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_items = $frm;
     }
-    function addDeptAction(){
+    function adddegreeAction(){
     	if($this->getRequest()->isPost()){
     		try{
     			$data = $this->getRequest()->getPost();
-    			$db = new Global_Model_DbTable_DbGrade();
-    			$degree = $db->addDept($data);
+    			$db = new Global_Model_DbTable_DbItemsDetail();
+    			$degree = $db->addDegreeByAjax($data);
     			print_r(Zend_Json::encode($degree));
     			exit();
     		}catch(Exception $e){
@@ -146,27 +154,27 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     }
-    function addDeptandsubjectAction(){
-    	if($this->getRequest()->isPost()){
-    		try{
-    			$data = $this->getRequest()->getPost();
-    			$db = new Global_Model_DbTable_DbGrade();
-    			$degree = $db->addDept($data);
+//     function addDeptandsubjectAction(){
+//     	if($this->getRequest()->isPost()){
+//     		try{
+//     			$data = $this->getRequest()->getPost();
+//     			$db = new Global_Model_DbTable_DbGrade();
+//     			$degree = $db->addDept($data);
     			 
-    			$_db = new Global_Model_DbTable_DbGroup();
-    			$sub_option = $_db->getAllSubjectStudy();
+//     			$_db = new Global_Model_DbTable_DbGroup();
+//     			$sub_option = $_db->getAllSubjectStudy();
     			 
-    			$result = array(
-    					"degree"=>$degree,
-    					"sub_option"=>$sub_option,
-    			);
+//     			$result = array(
+//     					"degree"=>$degree,
+//     					"sub_option"=>$sub_option,
+//     			);
     			 
-    			print_r(Zend_Json::encode($result));
-    			exit();
-    		}catch(Exception $e){
-    			Application_Form_FrmMessage::message("INSERT_FAIL");
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		}
-    	}
-    }
+//     			print_r(Zend_Json::encode($result));
+//     			exit();
+//     		}catch(Exception $e){
+//     			Application_Form_FrmMessage::message("INSERT_FAIL");
+//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+//     		}
+//     	}
+//     }
 }

@@ -6,15 +6,26 @@
 	$formList = new Application_Form_Frmtable();
 	$urlCopy = $this->baseUrl()."/global/grade/copy/id/";
 	$urlEdit = $this->baseUrl()."/global/grade/edit/id/";
-?>	
-<?php $frm =  $this->frm_search;?>
+	 $frm =  $this->frm_items;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
-			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-server " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('GRADE');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("advance_search");?>
+                   </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("title");?>
+                   		<?php echo $frm->getElement("items_search");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement('status_search');?>

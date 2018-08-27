@@ -9,7 +9,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	public function getUserInfo($user_id)
 	{		
 		$select=$this->select();
-			$select->from($this,array('user_type', 'last_name' ,'first_name','branch_id'))
+			$select->from($this,array('user_type', 'last_name' ,'first_name','branch_id','branch_list','schoolOption'))
 			->where('id=?',$user_id);			
 		$row=$this->fetchRow($select);		
 		if(!$row) return NULL;
@@ -116,16 +116,19 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		u.`user_name` ,
 		(SELECT user_type FROM `rms_acl_user_type` WHERE user_type_id=u.user_type LIMIT 1) aS users_type,
 		(SELECT branch_namekh FROM `rms_branch` WHERE status=1 AND branch_namekh!='' AND br_id=u.branch_id) AS branch_name,
-		u.`active` as status
+		u.`active` as status,
+		u.`branch_list` 
 		FROM `rms_users` AS u
-		
-		WHERE 1 ";
+		WHERE u.is_system =0 ";
 		$orderby = " ORDER BY u.user_type DESC";
-		if(empty($search)){
-			return $sql.$orderby;
-		}
-		$where = '';
 		
+		$where = '';
+		$_db = new Application_Model_DbTable_DbGlobal();
+// 		$where.= $_db->getAccessPermission('branch_id');
+		
+		if(empty($search)){
+			return $sql.$where.$orderby;
+		}
 		if ($search['active'] >= 0){
 			$where = 'AND u.`active` = '.$search['active'];
 		}
@@ -144,7 +147,30 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 			$where .= ' AND u.`user_type` = '. $search['user_type'];
 		}
 		
-		return $db->fetchAll($sql.$where);		
+		$row = $db->fetchAll($sql.$where.$orderby);
+		
+		//loop display only branch are available in current user
+		$userInfo = $_db->getUserInfo();
+		$branchList = empty($userInfo['branch_list'])?"":$userInfo['branch_list'];
+		$bra = explode(",", $branchList);
+		$resutl = array();
+		if (!empty($bra)){
+			$array = array();
+			foreach ($bra as $ss) {
+				$array[$ss] = $ss;
+			}
+			if (!empty($row)) foreach ($row as $key => $rs){
+				$exp = explode(",", $rs['branch_list']);
+				foreach ($exp as $ss){
+					if (in_array($ss, $array)) {
+						$resutl[$key] = $rs;
+						break;
+					}
+				}
+			}
+		}
+		
+		return $resutl;
 	}
 	
 	function getUserListBy($search, $start, $limit){        
@@ -175,7 +201,9 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 					u.`user_type`, 
 					u.`active`, 
 					u.branch_id,
-					u.`id` 
+					u.branch_list,
+					u.`id`,
+					u.schoolOption 
 					
 				FROM `rms_users` AS u
 				WHERE u.id = ".$id;	
@@ -215,27 +243,52 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	
 	function insertUser($data){
 		
+		$branchList="";
+		if (!empty($data['selector'])){
+			foreach ($data['selector'] as $rs){
+				if (empty($branchList)){
+					$branchList = $rs;
+				}else { $branchList = $branchList.",".$rs;
+				}
+			}
+		}
+		
 		$_user_data=array(
 	    	'last_name'=>$data['last_name'],
 			'first_name'=>$data['first_name'],
 			'user_name'=>$data['user_name'],
 			'password'=> MD5($data['password']),
 			'user_type'=> $data['user_type'],
-			'branch_id'=>$data['branch_id'],
+// 			'branch_id'=>$data['branch_id'],
+			'branch_list'=>$branchList,
+			'schoolOption'=>$data['schoolOption'],
 			'active'=> 1			
 	    ); 
 	    	           	    	   
 		return  $this->insert($_user_data);
 	}
 	
-	function updateUser($data){		
+	function updateUser($data){	
+
+		$branchList="";
+		if (!empty($data['selector'])){
+			foreach ($data['selector'] as $rs){
+				if (empty($branchList)){
+					$branchList = $rs;
+				}else { $branchList = $branchList.",".$rs;
+				}
+			}
+		}
+		
 		$_user_data=array(
 	    	'last_name'=>$data['last_name'],
 			'first_name'=>$data['first_name'],
 			'user_name'=>$data['user_name'],
 // 			'password'=> MD5($data['password']),
 			'user_type'=> $data['user_type'],
-			'branch_id'=>$data['branch_id'],
+// 			'branch_id'=>$data['branch_id'],
+			'branch_list'=>$branchList,
+			'schoolOption'=>$data['schoolOption'],
 			'active'=> $data['active']			
 	    );    	   
 		if (!empty($data['check_change'])){

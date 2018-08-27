@@ -1,76 +1,93 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("SRMS_EDET_FACULTY"));
-	$subject_exam= $this->frm_subject_exam;
+	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+ 	$frm_degree= $this->frm_degree;
+ 	$subject_exam= $this->frm_subject_exam;
 ?>	
-<?php  $frm_dept= $this->frm_dept;?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
+    dojo.require("dijit.form.Textarea");
 </script>
+<style>
+.dijitTextArea[cols].dijitTextArea[cols]{
+	width: 99%;
+}
+</style>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-server " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_FACULTY');?></h4>
+	    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_DEGREE');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
     		</div>
     	</div>
-    	<form  id='edit-dept' action="<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+    	<form  id='edit-dept' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
   				 if(this.validate()) {
-					var rowId = $('#identity').val();
-					if(rowId!=''){ 
-						var rowIDArray = rowId.split(',');
-						for(var n = 0; n < rowIDArray.length; n++){
-							var row_id = dijit.byId('subject_study_'+rowIDArray[n]).get('value');
-							if(row_id==''){
-							alert("Please select subject title!");
-							return false;
-						}
-						}
-					}
-    			return true;
+					loadingBlock();
+    				return true;
    				}else {
     				return false;
   				 }
 			</script>
-				<div class="card-box">
+			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
 		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NAME");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_dept->getElement("en_name");?>
+		                	<?php echo $frm_degree->getElement("title");?>
+		                	<?php echo $frm_degree->getElement("id");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_dept->getElement("shortcut");?>
+		                	<?php echo $frm_degree->getElement("shortcut");?>
+		                	<input type="hidden" id="type" name="type" value="1" />
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAX_AVERAGE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input name="max_average" id="max_average" value="<?php echo $this->result['max_average']?>" dojoType="dijit.form.TextBox"  class="fullside" />
+		                	<input name="max_average" id="max_average" value="<?php echo $this->row['max_average']?>" dojoType="dijit.form.TextBox"  class="fullside" />
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PASS_AVERAGE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input name="pass_average" id="pass_average" value="<?php echo $this->result['pass_average']?>" dojoType="dijit.form.TextBox"  class="fullside" />
+		                	<input name="pass_average" id="pass_average" value="<?php echo $this->row['pass_average']?>" dojoType="dijit.form.TextBox"  class="fullside" />
 		                </div>
 		             </div>
-		              <div class="form-group">
+		             <!-- 
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php //echo $frm_degree->getElement("type");?>
+		                </div>
+		             </div>
+		              -->
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("School Option");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("schoolOption");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("note");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_dept->getElement("status");?>
-							<?php echo $frm_dept->getElement("dept_id");?>
+		                	<?php echo $frm_degree->getElement("status");?>
 		                </div>
 		             </div>
 		         </div>
@@ -87,7 +104,7 @@
 		         <div class="clearfix"></div>
 		         <div class="card-box mt-20">
 	               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-	               		  <input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
+	               		 <input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
 							iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'global','controller'=>"degree",'action'=>'index'),null,true); ?>';" />
 						<input type="submit"  label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" 
 						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
@@ -97,7 +114,57 @@
 		</form>
     </div>
 </div>
-
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_subject" >
+		<form  name='add_subject_exam' id='add_subject_exam'  dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				<tr>
+					<td>
+						<fieldset style="background-color:menu;">
+									<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_NEW_SUBJECT");?></strong></legend>
+									<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
+										<tr>
+											<td><input type="checkBox" checked="checked" dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
+											<input type="hidden" id="par" name="par" />
+										</tr>
+										<tr>
+											<td style="width: 100px"><?php echo $tr->translate("PARENT")?></td>
+											<td>
+												<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
+													<option value="0"></option>
+													<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
+																<option value="<?php echo $row['id']?>"><?php echo $row['subject_titleen']?></option>
+													<?php }?>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_KH")?></td>
+											<td><?php  echo $subject_exam->getElement('subject_kh');?></td>
+										</tr>
+										<tr>
+											<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_EN")?></td>
+											<td><?php  echo $subject_exam->getElement('subject_en');?></td>
+										</tr>
+										<tr>
+											<td style="width: 100px"><?php echo $tr->translate("SHORTCUT")?></td>
+											<td><?php echo $subject_exam->getElement('score_percent');?></td>
+										</tr>
+										<tr>
+											<td colspan="2" align="center">
+												<input type="button" onclick="addSubject();" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+													iconClass="dijitEditorIcon dijitEditorIconSave" />
+											</td>
+										</tr>
+									</table>	
+						</fieldset>		
+					</td>
+				</tr>
+			</table>	
+			<input type="hidden"  name="tow_value" id="tow_value" value="" />
+ 			</form>
+	</div>
+</div>
 <script type="text/javascript">
 dojo.require("dojo.date.locale");
 dojo.require("dojo.data.ObjectStore");
@@ -108,8 +175,8 @@ dojo.require("dojo.html");
 dojo.ready(function(){
 	getValue();
 	Initailize();
-	//calculateTotalAverage();
 });
+
 var subject = '<?php echo $this->subject;?>';
 var col = 0;
 var no = 0;
@@ -160,26 +227,6 @@ function deleteRecord(index) {
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
-}
-
-function calculateTotalAverage() {
-	var total_score = 0;
-	var max_average = 0;
-	var pass_average = 0;
-	var identity = $('#identity').val();
-	var arrays = identity.split(',');
-	for(var i=0;i<arrays.length;i++){
-		total_score += parseFloat(dijit.byId('scoreinclass_'+arrays[i]).get('value'));
-	}
-
-	amount_subject = arrays.length;
-	max_average = total_score / amount_subject;
-	pass_average = max_average / 2;
-
-	dijit.byId('max_average').attr('value',max_average.toFixed(2));
-	dijit.byId('pass_average').attr('value',pass_average.toFixed(2));
-	
-	//alert("total score = "+total_score+",amt_sub = "+amount_subject+", max avg = "+max_average+", pass avg = "+pass_average);
 }
 
 
@@ -235,10 +282,30 @@ function addSubject(){
 	}
 }
 
+function calculateTotalAverage() {
+	var total_score = 0;
+	var max_average = 0;
+	var pass_average = 0;
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++){
+		total_score += parseFloat(dijit.byId('scoreinclass_'+arrays[i]).get('value'));
+	}
+
+	amount_subject = arrays.length;
+	max_average = total_score / amount_subject;
+	pass_average = max_average / 2;
+
+	dijit.byId('max_average').attr('value',max_average.toFixed(2));
+	dijit.byId('pass_average').attr('value',pass_average.toFixed(2));
+	
+	//alert("total score = "+total_score+",amt_sub = "+amount_subject+", max avg = "+max_average+", pass avg = "+pass_average);
+}
+
 function Initailize() {
 
-	<?php if(!empty($this->row)){ 
-		foreach ($this->row as $rows){?>
+	<?php if(!empty($this->rowdetail)){ 
+		foreach ($this->rowdetail as $rows){?>
 	
 	col++;no++;
 	template='';
@@ -261,7 +328,7 @@ function Initailize() {
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" onkeyup="calculateTotalAverage();" value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="" type="text"></td>';
-		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
+		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"><input type="hidden" value="<?php echo $rows['id'];?>"  name="detailid'+col+'" class="fullside" id="detailid'+col+'"  /></td>';		
 		template+='<td><select dojoType="dijit.form.FilteringSelect" class="fullside" id="status_'+col+'" name="status_'+col+'" style="width:100%;"><option value="1"><?php echo $tr->translate("ACTIVE")?></option><option value="0"><?php echo $tr->translate("DEACTIVE")?></option></select><input style="width:10px;" dojoType="dijit.form.TextBox" class="fullside" name="oldindex_'+col+'" id="oldindex_'+col+'" value="'+col+'" type="hidden"></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -281,59 +348,8 @@ function Initailize() {
 	dijit.byId('scoreoutclass_'+col).attr('value','<?php echo $rows['score_out_class'];?>');
 	dijit.byId('scoreshort_'+col).attr('value','<?php echo $rows['score_short'];?>');
 	
-	<?php }}?>
+	<?php }
+}?>
 
 }
 </script>
-	
-<div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_subject" >
-		<form  name='add_subject_exam' id='add_subject_exam'  dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table cellspacing="10" width="100%" style="margin: 0 auto;">
-				<tr>
-					<td>
-						<fieldset style="background-color:menu;">
-									<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_NEW_SUBJECT");?></strong></legend>
-									<table style="margin: 0 auto; width: 95%;white-space: nowrap;" cellspacing="10">
-										<tr>
-											<td><input type="checkBox" checked="checked" dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" /><?php echo $tr->translate("IS_PARENT")?></td>
-											<input type="hidden" id="par" name="par" />
-										</tr>
-										<tr>
-											<td style="width: 100px"><?php echo $tr->translate("PARENT")?></td>
-											<td>
-												<select class="fullside" name="parent" id="parent" dojoType="dijit.form.FilteringSelect" >
-													<option value="0"></option>
-													<?php if(!empty($this->rs))foreach ($this->rs as $row){?>
-																<option value="<?php echo $row['id']?>"><?php echo $row['subject_titleen']?></option>
-													<?php }?>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_KH")?></td>
-											<td><?php  echo $subject_exam->getElement('subject_kh');?></td>
-										</tr>
-										<tr>
-											<td style="width: 100px"><?php echo $tr->translate("SUBJECT_IN_EN")?></td>
-											<td><?php  echo $subject_exam->getElement('subject_en');?></td>
-										</tr>
-										<tr>
-											<td style="width: 100px"><?php echo $tr->translate("SHORTCUT")?></td>
-											<td><?php echo $subject_exam->getElement('score_percent');?></td>
-										</tr>
-										<tr>
-											<td colspan="2" align="center">
-												<input type="button" onclick="addSubject();" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-													iconClass="dijitEditorIcon dijitEditorIconSave" />
-											</td>
-										</tr>
-									</table>	
-						</fieldset>		
-					</td>
-				</tr>
-			</table>	
-			<input type="hidden"  name="tow_value" id="tow_value" value="" />
- 			</form>
-	</div>
-</div>

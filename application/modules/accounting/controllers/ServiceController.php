@@ -2,6 +2,7 @@
 class Accounting_ServiceController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	private $type = array(1=>'service',2=>'program');
+	const REDIRECT_URL = '/accounting/service';
 	public function init()
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -11,109 +12,110 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 	public function start(){
 		return ($this->getRequest()->getParam('limit_satrt',0));
 	}
-	public function indexAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}
-			else{
-				$search=array('txtsearch' =>'','cate_name'=>-1);
-			}
-			$db = new Accounting_Model_DbTable_DbService();
-			$rs_rows = $db->getAllServiceNames($search);
-			$list = new Application_Form_Frmtable();
-			if(!empty($rs_rows)){
-				$glClass = new Application_Model_GlobalClass();
-				$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-			}
-			else{
-				$result = Application_Model_DbTable_DbGlobal::getResultWarning();
-			}
-			$collumns = array("PROGRAM_TITLE","TYPE","DISCRIPTION","MODIFY_DATE","BY_USER","STATUS");
-			$link=array(
-					'module'=>'accounting','controller'=>'service','action'=>'edit',
-			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('cate_name'=>$link,'title'=>$link));
-		}catch (Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+	public function indexAction()
+    {
+    	try{
+	    	$db = new Global_Model_DbTable_DbItemsDetail();
+	    	if($this->getRequest()->isPost()){
+	    		$search=$this->getRequest()->getPost();
+	    	}
+	    	else{
+	    		$search = array(
+	    				'advance_search' => "",
+	    				'items_search'=>"",
+	    				'status_search' => -1
+	    		);
+	    	}
+	    	$type=2; //Service
+	    	$rs_rows= $db->getAllItemsDetail($search,$type);
+	    	$glClass = new Application_Model_GlobalClass();
+	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
+	    	$list = new Application_Form_Frmtable();
+	    	$collumns = array("PROGRAM_TITLE","SHORTCUT","ORDERING","SERVICE_TYPE","MODIFY_DATE","BY_USER","STATUS");
+	    	$link=array(
+	    			'module'=>'accounting','controller'=>'service','action'=>'edit',
+	    	);
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link ,'title'=>$link ,'ordering'=>$link));
+	    	
+    	}catch (Exception $e){
+    		Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$frm1 = new Global_Form_FrmSearchMajor();
-		$frm = $frm1->frmSearchServiceProgram();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm_search = $frm;
-		$this->view->adv_search = $search;
-	}
-public function addAction(){
-	if($this->getRequest()->isPost()){
-			try{
-				$_data = $this->getRequest()->getPost();
-				$_model = new Accounting_Model_DbTable_DbService();
-				$_model->addservice($_data);
-				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/service");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/service/add");
-				}
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
-		}
+    	}
+    	
+    	$frm = new Global_Form_FrmItemsDetail();
+    	$frm->FrmAddItemsDetail(null,$type);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_items = $frm;
+    }  
+    public function addAction(){
+    	$db = new Global_Model_DbTable_DbItemsDetail();
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		try {
+    			$sms="INSERT_SUCCESS";
+    			$_major_id = $db->AddItemsDetail($_data);
+    			if($_major_id==-1){
+    				$sms = "RECORD_EXIST";
+    			}
+    			if(!empty($_data['save_close'])){
+    				Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/index");
+    			}else{
+    				Application_Form_FrmMessage::message($sms);
+    			}
+    		}catch (Exception $e){
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			echo $e->getMessage();
+    		}
+    			
+    	}
+    	$type=2; //Service
+    	$frm = new Global_Form_FrmItemsDetail();
+    	$frm->FrmAddItemsDetail(null,$type);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_items = $frm;
+    }
+    
+    public function editAction(){
+    	$db = new Global_Model_DbTable_DbItemsDetail();
+    	$id = $this->getRequest()->getParam("id");
+    	if($this->getRequest()->isPost()){
+    		try{
+	    		$_data = $this->getRequest()->getPost();
+	    		$db->updateItemsDetail($_data,$id);
+	    		Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
+    		}catch(Exception $e){
+    			Application_Form_FrmMessage::message("Application Error");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    	$type=2; //Service
+    	$row =$db->getItemsDetailById($id,$type);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    	}
+    	
+    	$frm = new Global_Form_FrmItemsDetail();
+    	$frm->FrmAddItemsDetail($row,$type);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_items = $frm;
 		
-	$db = new Accounting_Model_DbTable_DbService();
-	$rs= $db->getServiceType(1);
-	array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-	$this->view->service = $rs;
-		
-	$frm=new Accounting_Form_FrmProgram();
-	$this->view->frm=$frm->addProgramName();
-	Application_Model_Decorator::removeAllDecorator($frm->addProgramName());
-}
-public function editAction(){
-	$id=$this->getRequest()->getParam("id");
-	$db = new Accounting_Model_DbTable_DbService();
-	$row = $db->getServiceById($id);
-	if($this->getRequest()->isPost())
-	{
-		try{
-			$data = $this->getRequest()->getPost();
-			$data["id"]=$id;
-			$db = new Accounting_Model_DbTable_DbService();
-			$row=$db->updateservice($data);
-			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/service/index");
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("EDIT_FAIL");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-	}
-	$db = new Accounting_Model_DbTable_DbService();
-	$rs= $db->getServiceType(1);
-	array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-	$this->view->service = $rs;
-	
-	$obj=new Accounting_Form_FrmProgram();
-	$frm=$obj->addProgramName($row);
-	$this->view->frm=$frm;
-	Application_Model_Decorator::removeAllDecorator($frm);
-	$this->view->row=$row;
-}
-function submitAction(){
-	if($this->getRequest()->isPost()){
-		try{
-			$data = $this->getRequest()->getPost();
-			$db = new Accounting_Model_DbTable_DbService();
-			$row = $db->AddServiceType($data);
-			$result = array("id"=>$row);
-			print_r(Zend_Json::encode($row));
-			exit();
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("INSERT_FAIL");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-	}
-}
+    }
+// function submitAction(){
+// 	if($this->getRequest()->isPost()){
+// 		try{
+// 			$data = $this->getRequest()->getPost();
+// 			$db = new Accounting_Model_DbTable_DbService();
+// 			$row = $db->AddServiceType($data);
+// 			$result = array("id"=>$row);
+// 			print_r(Zend_Json::encode($row));
+// 			exit();
+// 		}catch(Exception $e){
+// 			Application_Form_FrmMessage::message("INSERT_FAIL");
+// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 		}
+// 	}
+// }
 
 
 }

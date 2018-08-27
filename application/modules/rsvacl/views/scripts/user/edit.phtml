@@ -2,6 +2,21 @@
 $this->headTitle('SRMS | User edit page'); 
 echo $this->headTitle();
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+
+$session_user=new Zend_Session_Namespace('authstu');
+$user_id = $session_user->user_id;
+$branch_id = $session_user->branch_id;
+
+$category='';
+if(!empty($this->user_edit['branch_list'])){
+	$category =  explode(",",$this->user_edit['branch_list']);
+}
+$array = array();
+if (!empty($category)) {
+	foreach ($category as $ss) {
+		$array[$ss] = $ss;
+	}
+}
 ?>
 <script type="text/javascript">	
 	dojo.require("dijit.form.ValidationTextBox");
@@ -10,6 +25,15 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	dojo.require('dijit.form.Button');
 	dojo.require("dijit.form.CheckBox");
 </script>
+<style>
+ul.opt-school {
+    list-style-type: none;
+}
+ input[type=checkbox],  input[type=radio]{
+	height: 15px;
+    display: initial;
+}
+</style>
  <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -21,7 +45,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
     			</div>
     		</div>
     	</div>
-		<form action="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id="frmUser" action="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">										
 				if(this.validate()) {
 					if(dojo.byId('password').value != dojo.byId('con_password').value ){
@@ -36,24 +60,10 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 				return false;
 			</script>
 			<div class="card-box">
-				<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 	        		<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FIRST_NAME");?>
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("ACCOUNT_INFO");?> 
 	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" required="true" name="first_name" id="first_name" placeholder="<?php echo $tr->translate("FIRST_NAME");?>" 
-											dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['first_name'];?>"
-											missingMessage="អ្នក​ភ្លេច​បំពេញ​ នាមខ្លួន!" class='fullside'/>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("LAST_NAME");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" required="true" name="last_name" id="last_name" placeholder="<?php echo $tr->translate("LAST_NAME");?>" 
-											dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['last_name'];?>"
-											missingMessage="អ្នក​ភ្លេច​បំពេញ​ នាម​ត្រកូល!" class='fullside'/>
-	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("USER_NAME");?>
@@ -84,25 +94,6 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="branch_id" class='fullside' required="true" id="branch_id" 
-							 missingMessage="អ្នក​ភ្លេច​បំពេញ​  សាខា" dojoType="dijit.form.FilteringSelect"> 
-								<?php foreach ($this->rs_branch as $key => $rs) : ?>
-									<option value="<?php echo $rs["br_id"];?>" <?php if($this->user_edit['branch_id']==$rs["br_id"]) echo 'selected'?> ><?php echo $rs['branch_namekh'];?></option>
-								<?php endforeach;?>																					
-							</select> 
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("USER_TYPE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="user_type" />
-	                   </div>
-	                </div>
-	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -112,17 +103,86 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 							</select> 
 	                   </div>
 	                </div>
-	                <div class="clearfix"></div>
-				    <div class="card-box">
-		               	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-		               	<input type="hidden" name="id" value="<?php echo $this->user_edit['id'];?>" />
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
+	             	<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("USER_INFO");?> 
+	                   </label>
+	                </div>
+	             	<div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FIRST_NAME");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" required="true" name="first_name" id="first_name" placeholder="<?php echo $tr->translate("FIRST_NAME");?>" 
+											dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['first_name'];?>"
+											missingMessage="អ្នក​ភ្លេច​បំពេញ​ នាមខ្លួន!" class='fullside'/>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("LAST_NAME");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" required="true" name="last_name" id="last_name" placeholder="<?php echo $tr->translate("LAST_NAME");?>" 
+											dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['last_name'];?>"
+											missingMessage="អ្នក​ភ្លេច​បំពេញ​ នាម​ត្រកូល!" class='fullside'/>
+	                   </div>
+	                </div>
+	                <!-- 
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php //echo $tr->translate("BRANCH");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select name="branch_id" <?php //if ($branch_id!=1){ echo 'readonly="readonly"';}?> class='fullside' required="true" id="branch_id" 
+							 missingMessage="អ្នក​ភ្លេច​បំពេញ​  សាខា" dojoType="dijit.form.FilteringSelect"> 
+								<?php //foreach ($this->rs_branch as $key => $rs) : ?>
+									<option value="<?php //echo $rs["id"];?>" <?php //if($this->user_edit['branch_id']==$rs["id"]) echo 'selected'?> ><?php //echo $rs['name'];?></option>
+								<?php //endforeach;?>																					
+							</select> 
+	                   </div>
+	                </div>
+	                 -->
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("USER_TYPE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input id="user_type" />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("School Option");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input id="schoolOption" />
+	                   </div>
+	                </div>
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
+	             	<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("Assign Branch Access");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                	<span><input type="checkbox" class="checkbox"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style=" height: initial;"  />&nbsp;<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span></span>
+	                	<ul class="opt-school">
+	                		<?php $identityCheck = ""; if (!empty($this->rs_branch)) foreach ($this->rs_branch as $rs){?>
+	                		<li class="opt-items"> <input  type="checkbox" <?php if (in_array($rs['id'], $array)) { echo 'checked="checked"';}?> class="checkbox"  value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" /> <span style="vertical-align: top;"><?php echo $rs['name'];?></span></li>
+	                			<?php if (empty($identityCheck)){ $identityCheck = $rs['id'];}else{$identityCheck = $identityCheck.",".$rs['id'];}?>
+	                		<?php }?>
+	                	</ul>
+	                	<input type="hidden" id="identityCheck" name="identityCheck" value="<?php echo $identityCheck;?>" />
+	                </div>
+	             </div>
+	         </div>
+	         <div class="clearfix"></div>
+			    <div class="card-box">
+	               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+	               		<input type="hidden" name="id" value="<?php echo $this->user_edit['id'];?>" />
 			               		<input type="button" value="GO_BACK" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
 						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'rsvacl','controller'=>"user",'action'=>'index'),null,true); ?>';" />
 						<input type="submit" value="Save" label="Save" id="submitButton" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 
-			    		</div>
-			    	</div>
-	             </div>
-	         </div>
+			    		
+		    		</div>
+		    	</div>
 		</form>
 	</div>
 </div>
@@ -163,6 +223,7 @@ dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
 
 var usertype_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->user_type));?> );
+var schooloptionstore  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->schoolOption));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: usertype_store,
@@ -179,6 +240,17 @@ dojo.ready(function(){
 			}
 		}
 	}, "user_type");
+
+	new dijit.form.FilteringSelect({
+		store: schooloptionstore,
+		autoComplete: true,                        
+		id: "schoolOption",
+		name: "schoolOption",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("PLEASE_SELECT");?>",          
+	}, "schoolOption");
+
+	getSchoolOption();
 });
 
 function getpopupUsertype(){
@@ -238,5 +310,74 @@ function Checkchange(){
 		  dijit.byId('con_password').set('required',false); 
 		  dijit.byId('con_password').set('readonly',true); 
 	  }
+}
+var oldBranch = '<?php echo $this->user_edit['branch_id'];?>';
+var oldschoolOption = '<?php echo $this->user_edit['schoolOption'];?>';
+
+var url_getoptionSchool = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"getschooloptionbybranchlist")); ?>';
+function getSchoolOption(){
+	/*
+	var url_getoptionSchool = '<?php //echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"getschooloption")); ?>';
+	branch_id = dijit.byId('branch_id').get('value');
+		dojo.xhrPost({
+			url: url_getoptionSchool,
+			content:{
+				'branch_id':branch_id,
+			},
+			handleAs:"json",
+			load: function(data) {
+				schooloptionstore  = getDataStorefromJSON('id','name', data );
+			    dijit.byId('schoolOption').set('store', schooloptionstore);
+			    if(branch_id == oldBranch){
+			    	dijit.byId('schoolOption').set('value',oldschoolOption)
+			    }
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});*/
+	dojo.xhrPost({
+		url:url_getoptionSchool,
+		form: dojo.byId("frmUser"),
+		handleAs:"json",
+		load: function(data) {
+			schooloptionstore  = getDataStorefromJSON('id','name', data );
+		    dijit.byId('schoolOption').set('store', schooloptionstore);
+		    //if(branch_id == oldBranch){
+		    dijit.byId('schoolOption').reset();
+		    	dijit.byId('schoolOption').set('value',oldschoolOption)
+		    //}
+			
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+function CheckAllTotal(index){
+	if(index==0){
+			if($('#check_all').is(":checked")){
+				$('.checkbox').each(function() { //loop through each checkbox
+		            this.checked = true;  
+				});
+			}else{
+				$('.checkbox').each(function() { //loop through each checkbox
+		            this.checked = false;  
+				});
+			}
+	}else{
+		var a = $("input:checked").val();
+		 var identity = [];
+	     $(':checkbox:checked').each(function(i){
+	    	 identity[i] = $(this).val();
+	     });
+	     var allidentity = $("#identityCheck").val();
+		if(identity == allidentity ){
+			$('#check_all').prop('checked', true); // checks it
+		}else{
+			$('#check_all').prop('checked', false); // Unchecks it
+		}
+	}
+	getSchoolOption();
 }
 </script>

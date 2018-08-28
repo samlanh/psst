@@ -1037,6 +1037,25 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	return $db->fetchAll($sql);
   }
   
+//   function getAllItems($type=null,$branch=null){
+//   	$db = $this->getAdapter();
+//   	$this->_name = "rms_items";
+//   	$sql="SELECT m.id, m.title AS name FROM $this->_name AS m WHERE m.status=1 ";
+//   	if (!empty($type)){
+//   		$sql.=" AND m.type=$type";
+//   	}
+//   	if($branch!==1 AND $branch !=null){
+//   		$branchinfo = $this->getBranchInfo($branch);
+//   		$schooloption = empty($branchinfo['schooloptionlist'])?0:$branchinfo['schooloptionlist'];
+//   		$ids = explode(",", $schooloption);
+//   		$s_where = array();
+//   		if (!empty($ids)) foreach ($ids as $i){
+//   			$s_where[] = " $i IN (m.schoolOption)";
+//   		}
+//   		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+//   	}
+//   	return $db->fetchAll($sql);
+//   }
   function getAllItems($type=null,$branch=null){
   	$db = $this->getAdapter();
   	$this->_name = "rms_items";
@@ -1044,16 +1063,21 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	if (!empty($type)){
   		$sql.=" AND m.type=$type";
   	}
-  	if($branch!==1 AND $branch !=null){
-  		$branchinfo = $this->getBranchInfo($branch);
-  		$schooloption = empty($branchinfo['schooloptionlist'])?0:$branchinfo['schooloptionlist'];
-  		$ids = explode(",", $schooloption);
-  		$s_where = array();
-  		if (!empty($ids)) foreach ($ids as $i){
-  			$s_where[] = " $i IN (m.schoolOption)";
+  	$branchlist = $this->getAllSchoolOption($branch);
+  	if (!empty($branchlist)){ 
+  		foreach ($branchlist as $i){
+  		  $s_where[] = $i['id']." IN (m.schoolOption)";
   		}
   		$sql .=' AND ( '.implode(' OR ',$s_where).')';
   	}
+//  $sql .=' AND 2 IN (m.schoolOption)';
+  	$user = $this->getUserInfo();
+  	$level = $user['level'];
+  	if ($level!=1){
+  		$sql .=' AND '.$user['schoolOption'].' IN (m.schoolOption)';
+  	}
+  	
+  	$sql .=' ORDER BY m.schoolOption ASC, m.title ASC';
   	return $db->fetchAll($sql);
   }
   
@@ -1079,7 +1103,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	return $pre.$new_acc_no;
   }
   
-  function getAllGradeStudy(){
+  function getAllGradeStudy($items_id=null){
   	$db = $this->getAdapter();
   	$sql="SELECT i.id,
 			CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
@@ -1087,7 +1111,23 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		WHERE 
 			i.items_type=1
 			AND i.status =1
-		ORDER BY i.items_id ASC, i.ordering ASC";
+		";
+  	if (!empty($items_id)){
+  		$sql.=" AND i.items_id = $items_id";
+  	}
+  	$branchlist = $this->getAllSchoolOption();
+  	if (!empty($branchlist)){
+  		foreach ($branchlist as $i){
+  			$s_where[] = $i['id']." IN (i.schoolOption)";
+  		}
+  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+  	}
+  	$user = $this->getUserInfo();
+  	$level = $user['level'];
+  	if ($level!=1){
+  		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+  	}
+  	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
   	return $db->fetchAll($sql);
   }
   

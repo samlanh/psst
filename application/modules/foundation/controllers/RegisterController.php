@@ -183,9 +183,11 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 	function getGradeAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbStudent();
-			$grade = $db->getAllGrade($data['dept_id']);
-			//print_r($grade);exit();
+			$_dbgb = new Application_Model_DbTable_DbGlobal();
+			$grade = $_dbgb->getAllGradeStudy($data['dept_id']);
+// 			$db = new Foundation_Model_DbTable_DbStudent();
+// 			$grade = $db->getAllGrade($data['dept_id']);
+// 			//print_r($grade);exit();
 			array_unshift($grade, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")));
 			print_r(Zend_Json::encode($grade));
 			exit();

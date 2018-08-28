@@ -17,6 +17,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		//$this->validate = 'dijit.form.TextBox';
 	}
 	public function FrmSearchRegister($data=null){ 
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
@@ -145,7 +147,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		));
 		$_degree->setValue($request->getParam('degree'));
 		$opt_deg = array(''=>$this->tr->translate("DEGREE"));
-		$opt_degree=$db_years->getAllDegree();
+		$opt_degree = $_dbgb->getAllItems(1);//degree
+// 		$opt_degree=$db_years->getAllDegree();
 		if(!empty($opt_degree))foreach ($opt_degree As $rows)$opt_deg[$rows['id']]=$rows['name'];
 		$_degree->setMultiOptions($opt_deg);
 		
@@ -189,7 +192,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 				));
 		$_grade->setValue($request->getParam('grade'));
 		$opt_g = array(''=>$this->tr->translate("GRADE"));
-		$opt_grade=$db_years->getGradeAll();
+// 		$opt_grade=$db_years->getGradeAll();
+		$opt_grade= $_dbgb->getAllGradeStudy();
 		if(!empty($opt_grade))foreach ($opt_grade As $rows)$opt_g[$rows['id']]=$rows['name'];
 		$_grade->setMultiOptions($opt_g);
 		

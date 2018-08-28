@@ -40,12 +40,12 @@ class Global_GroupController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
-		$frm = new Application_Form_FrmOther();
-		$this->view->add_major = $frm->FrmAddMajor(null);
-		$frm = new Global_Form_FrmSearchMajor();
-		$frm = $frm->frmSearchTeacher();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm_search = $frm;
+// 		$frm = new Application_Form_FrmOther();
+// 		$this->view->add_major = $frm->FrmAddMajor(null);
+// 		$frm = new Global_Form_FrmSearchMajor();
+// 		$frm = $frm->frmSearchTeacher();
+// 		Application_Model_Decorator::removeAllDecorator($frm);
+// 		$this->view->frm_search = $frm;
 		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
@@ -93,14 +93,17 @@ class Global_GroupController extends Zend_Controller_Action {
 		array_unshift($room, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_ROOM")));
 		$this->view->room = $room;
 		
-		$db=new Global_Model_DbTable_DbGrade();
-		$d_row=$db->getNameGradeAll();
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$dept = $_dbgb->getAllItems(1);//degree
+		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$this->view->dept = $dept;
+		
+		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
 		
-		$dept = $db->getAllDept();
-		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->dept = $dept;
+		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
 	}
 	function editAction(){
 		$db= new Global_Model_DbTable_DbGroup();
@@ -224,8 +227,10 @@ class Global_GroupController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		try{
     			$data = $this->getRequest()->getPost();
-    			$db = new Global_Model_DbTable_DbGroup();
-    			$row = $db->addGradeAjax($data);
+    			$db = new Global_Model_DbTable_DbItemsDetail();
+    			$row = $db->AddGradeByAjax($data);
+//     			$db = new Global_Model_DbTable_DbGroup();
+//     			$row = $db->addGradeAjax($data);
     			print_r(Zend_Json::encode($row));
     			exit();
     		}catch(Exception $e){

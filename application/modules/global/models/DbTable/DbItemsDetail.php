@@ -350,7 +350,7 @@
 		}
 	}
 	
-	
+	//Ajx Function
 	public function addDegreeByAjax($data){
 		try{
 			$this->_name='rms_items';
@@ -387,6 +387,36 @@
 			return $id;
 				
 		}catch(exception $e){
+			Application_Form_FrmMessage::message("Application Error!");
+			echo $e->getMessage();
+		}
+	}
+	
+	
+	public function AddGradeByAjax($_data){//To Items Detail
+		$_db= $this->getAdapter();
+		try{
+			$db_items = new Global_Model_DbTable_DbItems();
+			$itemsinfo = $db_items->getDegreeById($_data['degree_popup1'],1);
+			$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
+			$_arr=array(
+					'items_id'=> $_data['degree_popup1'],
+					'items_type'=> 1,
+					'title'	  => $_data['major_enname'],
+					'shortcut' => $_data['shortcut'],
+// 					'note'    => $_data['note'],
+// 					'ordering'    => $_data['ordering'],
+					'schoolOption'    => $schooloption,
+					'create_date' => date("Y-m-d H:i:s"),
+					'modify_date' => date("Y-m-d H:i:s"),
+					'status'=> $_data['grade_status'],
+					'user_id'	  => $this->getUserId()
+			);
+			$this->_name = "rms_itemsdetail";
+			$id =  $this->insert($_arr);
+			return $id;
+		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
 			echo $e->getMessage();
 		}

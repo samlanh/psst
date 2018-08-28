@@ -76,7 +76,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$_dbuser = new Application_Model_DbTable_DbUsers();
     	$userid = $_dbgb->getUserId();
     	$userinfo = $_dbuser->getUserInfo($userid);
-    	$d_row = $_dbgb->getAllItems(1,$userinfo['branch_id']);
+    	$d_row = $_dbgb->getAllItems(1);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
     	$this->view->subjectlist = $_dbgb->getAllSubjectStudy();
@@ -151,27 +151,27 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     }
-//     function addDeptandsubjectAction(){
-//     	if($this->getRequest()->isPost()){
-//     		try{
-//     			$data = $this->getRequest()->getPost();
-//     			$db = new Global_Model_DbTable_DbGrade();
-//     			$degree = $db->addDept($data);
+    function addDeptandsubjectAction(){
+    	if($this->getRequest()->isPost()){
+    		try{
+    			$data = $this->getRequest()->getPost();
+    			$db = new Global_Model_DbTable_DbItemsDetail();
+    			$degree = $db->addDegreeByAjax($data);
     			 
-//     			$_db = new Global_Model_DbTable_DbGroup();
-//     			$sub_option = $_db->getAllSubjectStudy();
+    			$_db = new Global_Model_DbTable_DbGroup();
+    			$sub_option = $_db->getAllSubjectStudy();
     			 
-//     			$result = array(
-//     					"degree"=>$degree,
-//     					"sub_option"=>$sub_option,
-//     			);
+    			$result = array(
+    					"degree"=>$degree,
+    					"sub_option"=>$sub_option,
+    			);
     			 
-//     			print_r(Zend_Json::encode($result));
-//     			exit();
-//     		}catch(Exception $e){
-//     			Application_Form_FrmMessage::message("INSERT_FAIL");
-//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-//     		}
-//     	}
-//     }
+    			print_r(Zend_Json::encode($result));
+    			exit();
+    		}catch(Exception $e){
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    }
 }

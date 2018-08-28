@@ -177,9 +177,10 @@ dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
 
 dojo.require("dojo.html");
-var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
+
+var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
 var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
 var teacher_storeass= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
@@ -496,6 +497,19 @@ function addRowDegree(){
 	subject_label = dijit.byId("subject_id").attr('displayedValue');
 	subject_id = dijit.byId("subject_id").get('value');
 	if(subject_id=='' || subject_id==-1){return false;}
+
+	var iden = $("#identity").val();
+	var arrays = iden.split(',');
+	 if(arrays!=""){
+		 for(var i=0;i< arrays.length;i++) {
+			 readychoose = dijit.byId('subject_study_'+arrays[i]).get('value');
+			 if(readychoose==subject_id){
+					alert("<?php echo $tr->translate("Choosen ready")?>");
+				 return false;
+			 }
+		}
+	}
+		
 	col1++;no1++;
 	template1='';
 	if(title1!=1){
@@ -577,46 +591,53 @@ function deleteRecord1(index) {
 	</div>
 </div>
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:50%;overflow-y:scroll;" id="popup_add_dept" >
+	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate("ADD_NEW_DEGREE")?>'" style="width:70%;overflow-y:scroll;" id="popup_add_dept" >
 		<form  id='frm_add_dep' name='frm_add_dep' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-				<div class="card-box">
-					 <div class="form-group">
-	                   	<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> <span class="required">*</span> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" class="fullside" name='fac_enname' id="fac_enname" required="true" dojoType="dijit.form.ValidationTextBox" />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   	<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   	<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="subject_id" /><input type="hidden" name="identity" id="identity"  />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<table id="table_row1" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
-									<tr id="head-title1" class="head-td" align="right" style="font-size: 12px;"></tr>
+			<fieldset>
+				<legend align="center"><?php echo $tr->translate("ADD_NEW_DEGREE");?></legend>
+				<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				    <tr>
+						<td width="10%"><?php echo $tr->translate("DEGREE");?></td>
+						<td width="35%">
+							<input type="text" class="fullside" name='fac_enname' id="fac_enname" required="true" dojoType="dijit.form.ValidationTextBox" />
+						</td>
+						<td width="10%"></td>
+						<td width="10%"><?php echo $tr->translate("SHORTCUT");?></td>
+						<td width="35%">
+							<input type="text" class="fullside" name='shortcut_fac' id="shortcut_fac" dojoType="dijit.form.TextBox" />
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $tr->translate("School Option");?></td>
+						<td >
+							<select name="schoolOption" class="fullside" id="schoolOption" placeholder="<?php echo $tr->translate("School Option");?>" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
+								<?php if(!empty($this->schooloptionlist)){foreach($this->schooloptionlist as $sss){?>
+									<option value="<?php echo $sss['id'];?>"><?php echo $sss['name'];?></option>
+								<?php }}?>
+							</select>
+						</td>
+						<td width="10%"></td>
+						<td><?php echo $tr->translate("SUBJECT");?></td>
+						<td ><input id="subject_id" /><input type="hidden" name="identity" id="identity"  />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<table id="table_row1" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
+									<tr id="head-title1" class="head-td" align="right"></tr>
 							</table>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <div class="col-md-12 col-sm-12 col-xs-12 center">
-	                   		<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" align="center">
+							<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
 							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialogDegree()"/>
 							<input type="button"  label="<?php echo $tr->translate("SAVE");?>" id="save_dep" 
 							dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDept();"/>
-	                   </div>
-	                </div>
-				</div>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
 		</form>
 	</div>
 </div>
@@ -667,9 +688,10 @@ function deleteRecord1(index) {
 		</form>
 	</div>
 </div>
+
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:40%;" id="popup_grate" >
-		<form style="background-color: buttonface;" id='frm_add_grade' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form style="background-color: buttonface;" id='frm_add_grade' data-dojo-props="title:'<?php echo $tr->translate("ADD_GRADE")?>'" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
@@ -776,34 +798,31 @@ function deleteRecord1(index) {
 var url_add_dept = '<?php echo $this->url(array("module"=>"global","controller"=>"grade","action"=>"add-deptandsubject")); ?>';
 function addDept(){
 	if(dijit.byId('frm_add_dep').validate()){
-		fac_enname=dijit.byId('fac_enname').get('value');
-		if(fac_enname==''){
-			alert('Please input degree !');
-			return false;
-		}
-		dijit.byId('save_dep').set('disabled',true);	
 		dojo.xhrPost({
-				url:url_add_dept,
-				form: dojo.byId("frm_add_dep"),
-				handleAs:"json",
-				load: function(data) {
-					var Itemmake = { 
-					    	 id: data.degree,
-						     name: dijit.byId('fac_enname').get('value')
-						   };
-				   addDataToSelectbox(dijit.byId('degree'), dept_store, Itemmake, data.degree);
-				   dijit.byId('frm_add_dep').reset();
-				   dijit.byId("popup_add_dept").hide();	
-				   //getSubjectByDegree();
-				   subject = data.sub_option;
-				   dijit.byId('save_dep').set('disabled',false);	
-				},
-				error: function(err) {
-					dijit.byId('save_dep').set('disabled',false);	
-				}
+			url:url_add_dept,
+			form: dojo.byId("frm_add_dep"),
+			handleAs:"json",
+			load: function(data) {
+				//alert(data); 
+				var Itemmake = { 
+				    	 id: data.degree,
+					     name: dijit.byId('fac_enname').get('value')
+					   };
+			  addDataToSelectbox(dijit.byId('degree'), dept_store, Itemmake, data.degree);
+			   dijit.byId('frm_add_dep').reset();
+			   dijit.byId("popup_add_dept").hide();	
+
+			   subject = data.sub_option;
+			   dijit.byId('save_dep').set('disabled',false);
+			},
+			error: function(err) {
+				dijit.byId('save_dep').set('disabled',false);
+				alert(err);
+			}
 		});
 	}
 }
+
 var url_add_grade = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"add-graddjax")); ?>';
 function addGrade(){
 	if(dijit.byId('frm_add_grade').validate()){
@@ -833,6 +852,7 @@ function addGrade(){
 		});
 	}
 }
+
 var url_add_subject = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"addsubjectajax")); ?>';
 function addSubjectajax(){
 	if(dijit.byId('frm_subject').validate()){

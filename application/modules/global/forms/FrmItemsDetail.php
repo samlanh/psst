@@ -46,7 +46,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
 
     	
     	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
-    	$Option = $_dbgb->getAllItems($typeItems,$userinfo['branch_id']);
+    	$Option = $_dbgb->getAllItems($typeItems);
     	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
     	$_items_id = new Zend_Dojo_Form_Element_FilteringSelect("items_id");
     	$_items_id->setMultiOptions($_arr_opt);
@@ -124,7 +124,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	
     	
     	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
-    	$Option = $_dbgb->getAllItems($typeItems,$userinfo['branch_id']);//degree
+    	$Option = $_dbgb->getAllItems($typeItems);//degree
     	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
     	$_items_search = new Zend_Dojo_Form_Element_FilteringSelect("items_search");
     	$_items_search->setMultiOptions($_arr_opt);

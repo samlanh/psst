@@ -170,7 +170,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 	}
 	
 	function copyAction(){
-		$_db = new Accounting_Model_DbTable_DbTuitionFee();
+		$_db = new Accounting_Model_DbTable_DbFee();
 		if($this->getRequest()->isPost()){
 			try {
 				$_data = $this->getRequest()->getPost();

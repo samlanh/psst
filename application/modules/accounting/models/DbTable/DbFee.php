@@ -70,6 +70,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 	    				'to_academic'=>$_data['to_academic'],
 	    				'generation'=>$_data['generation'],
 	    				'note'=>$_data['note'],
+	    				'type'=>1,//Tuition Fee
 	    				'branch_id'=>$_data['branch_id'],
 	    				'create_date'=>date("Y-m-d"),
 	    				'user_id'=>$this->getUserId()
@@ -126,6 +127,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     				'generation'	=>$_data['generation'],
     				'note'			=>$_data['note'],
     				'status'		=>$_data['status'],
+    				'type'=>1,//Tuition Fee
     				'is_finished'	=>$_data['is_finished'],
     				//'time'			=>$_data['time'],
     				'branch_id'		=>$_data['branch_id'],

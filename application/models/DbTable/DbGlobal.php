@@ -1011,6 +1011,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	$db = $this->getAdapter();
   	$this->_name = "rms_schooloption";
   	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1";
+  	$session_user=new Zend_Session_Namespace('authstu');
+  	$branchlist = empty($branchlist)?$session_user->branch_list:$branchlist;
   	if($branchlist!==1 AND $branchlist !=null){
   		$bran = explode(",", $branchlist);
   		$s_where = array();

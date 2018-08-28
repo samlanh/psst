@@ -3,7 +3,7 @@
 class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'rms_servicefee';
+    protected $_name = 'rms_tuitionfee';
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
@@ -41,40 +41,46 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     
     function getAllServiceFee($search){
 	    try{		
-	    	$db=$this->getAdapter();
-	    	$_db = new Application_Model_DbTable_DbGlobal();
-	    	$branch_id = $_db->getAccessPermission();
-	    	$sql = "SELECT sf.id,CONCAT(tf.from_academic,' - ',tf.to_academic,'(',generation,')') AS academic,
-	    			sf.note,
-	    		    tf.create_date,
-	    		    (select name_en from rms_view where type=1 and key_code=sf.status ) as status
-	    		    
-	    		    FROM rms_servicefee as sf,rms_tuitionfee as tf 
-	    			where sf.academic_year=tf.id
-	    			$branch_id
-	    		";
-	    	$order=" ORDER BY sf.id DESC ";
-	    	$where = '';
-	    	
-	    	if(empty($search)){
-	    		return $db->fetchAll($sql.$order);
-	    	}
-	    	
-	    	if(!empty($search['year'])){
-	    		$where .=" AND tf.id=".$search['year'];
-	    	}
-	    	
-	    	if(!empty($search['txtsearch'])){
-	    		$s_where = array();
-	    		$s_search = addslashes(trim($search['txtsearch']));
-	    		$s_where[] = " CONCAT(from_academic,'-',to_academic) LIKE '%{$s_search}%'";
-	    		$s_where[] = " generation LIKE '%{$s_search}%'";
-	     		//$s_where[] = " (select title from rms_program_name where service_id=rms_servicefee_detail.service_id ) LIKE '%{$s_search}%'";
-	//     		$s_where[] = " en_name LIKE '%{$s_search}%'";
-	    		$where .=' AND ( '.implode(' OR ',$s_where).')';
-	    	}
-// 	    	echo $sql.$where.$order;
-	    	return $db->fetchAll($sql.$where.$order);
+	    $db=$this->getAdapter();
+    	$sql = "SELECT t.id,
+    	(select CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
+    	CONCAT(t.from_academic,' - ',t.to_academic) AS academic,
+    	t.create_date,
+    	(select name_en from rms_view where type=12 and key_code=t.is_finished) as is_finished,
+    	t.status,
+    	(select CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user
+    	FROM `rms_tuitionfee` AS t
+    	WHERE t.type=2 ";
+    	$where =" ";
+    	 
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " CONCAT(from_academic,'-',to_academic) LIKE '%{$s_search}%'";
+    		$s_where[] = " t.generation LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['year'])){
+    		$where.=" AND t.id=".$search['year'];
+    	}
+    	 
+    	if(!empty($search['branch_id'])){
+    		$where.=" AND t.branch_id=".$search['branch_id'];
+    	}
+    	 
+    	if($search['is_finished_search']!=""){
+    		$where.=" AND t.is_finished=".$search['is_finished_search'];
+    	}
+    	 
+    	if($search['status_search']>0){
+    		$where.=" AND t.status=".$search['status_search'];
+    	}
+    	 
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	 
+    	$order=" GROUP BY t.branch_id,t.from_academic,t.to_academic,t.generation,t.time ORDER BY t.id DESC  ";
+    	return $db->fetchAll($sql.$where.$order);
 	    }catch(Exception $e){
 	    	echo $e->getMessage();
 	    }
@@ -83,7 +89,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     
     function getCondition($_data){
     	$db = $this->getAdapter();
-    	$find="select id from rms_servicefee where academic_year = ".$_data['academic_year'];
+    	$find="select id from rms_tuitionfee where type=2 AND from_academic ='".$_data['from_academic']."' AND to_academic='".$_data['to_academic']."'";
     	return $db->fetchOne($find);
     }
     
@@ -93,29 +99,30 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	
     	$service_id = $this->getCondition($_data);
     	try{   	
-
     		if(!empty($service_id)){
-    			 
     		}else{
 	    		$_arr = array(
-	    				'academic_year'=>$_data['academic_year'],
+	    				'branch_id'=>$_data['branch_id'],
+	    				'from_academic'=>$_data['from_academic'],
+	    				'to_academic'=>$_data['to_academic'],
 	    				'note'=>$_data['note'],
+	    				'type'=>2,
 	    				'status'=>$_data['status'],
 	    				'create_date'=>date('Y-m-d'),
 	    				'user_id'=>$this->getUserId()
 	    				);
 	    		$service_id = $this->insert($_arr);
     		}
-	    		$this->_name='rms_servicefee_detail';
+	    		$this->_name='rms_tuitionfee_detail';
 	    		$ids = explode(',', $_data['identity']);
 	    		$id_term =explode(',', $_data['iden_term']);
 	    		foreach ($ids as $i){
 	    			foreach ($id_term as $j){
 	    				$_arr = array(
-	    						'service_feeid'=>$service_id,
-	    						'service_id'=>$_data['class_'.$i],
+	    						'fee_id'=>$service_id,
+	    						'class_id'=>$_data['class_'.$i],
 	    						'payment_term'=>$j,
-	    						'price_fee'=>$_data['fee'.$i.'_'.$j],
+	    						'tuition_fee'=>$_data['fee'.$i.'_'.$j],
 	    						'remark'=>$_data['remark'.$i]
 	    				);
 	    				$this->insert($_arr);
@@ -131,70 +138,75 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	}
     }
     public function updateServiceCharge($_data){
-    	$db = $this->getAdapter();
+    $db = $this->getAdapter();
     	$db->beginTransaction();
-    	try{    
+    	try{
     		$_arr = array(
-    				'academic_year'=>$_data['academic_year'],
-    				'note'=>$_data['note'],
-    				'status'=>$_data['status'],
-    				//'create_date'=>$_data['create_date'],
-    				'user_id'=>$this->getUserId()
+    				'from_academic'	=>$_data['from_academic'],
+    				'to_academic'	=>$_data['to_academic'],
+    				'note'			=>$_data['note'],
+    				'status'		=>$_data['status'],
+    				'type'=>2,
+    				'is_finished'	=>$_data['is_finished'],
+    				'branch_id'		=>$_data['branch_id'],
+    				'user_id'		=>$this->getUserId()
     		);
-//     		$fee_id = $this->insert($_arr);
     		$where=$this->getAdapter()->quoteInto("id=?", $_data['id']);
     		$this->update($_arr, $where);
-    
-    		$this->_name='rms_servicefee_detail';
-    		$where = "service_feeid = ".$_data['id'];
-    		$this->delete($where);
-    		$ids = explode(',', $_data['identity']);
-    		$id_term =explode(',', $_data['iden_term']);
-    		foreach ($ids as $i){
-    			foreach ($id_term as $j){
-    				$_arr = array(
-    						'service_feeid'=>$_data['id'],
-    						'service_id'=>$_data['class_'.$i],
-    						'payment_term'=>$j,
-    						'price_fee'=>$_data['fee'.$i.'_'.$j],
-    						'remark'=>$_data['remark'.$i]
-    				);
-     				$this->insert($_arr);
+    		if($_data['is_finished']==1){
+    			$db->commit();
+    			return true;
+    		}
+    		if($_data['is_finished']==0){
+    			$this->_name='rms_tuitionfee_detail';
+    			$where = "fee_id = ".$_data['id'];
+    			$this->delete($where);
+    			$ids = explode(',', $_data['identity']);
+    			$id_term =explode(',', $_data['iden_term']);
+    			foreach ($ids as $i){
+    				foreach ($id_term as $j){
+    					$_arr = array(
+    							'fee_id'=>$_data['id'],
+    							'class_id'=>$_data['class_'.$i],
+    							'payment_term'=>$j,
+    							'tuition_fee'=>$_data['fee'.$i.'_'.$j],
+    							'remark'=>$_data['remark'.$i],
+    							//'status'=>$_data['status_'.$i]
+    					);
+    					$this->insert($_arr);
+    				}
     			}
     		}
     		$db->commit();
     		return true;
     	}catch (Exception $e){
     		$db->rollBack();
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		return false;
+    		 Application_Form_FrmMessage::message("INSERT_FAIL");
+    		 Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
-    function getServiceFeebyId($service_id){
-    	
+    public function getServiceChargeById($service_id){
     	$db = $this->getAdapter();
-    	$sql = "SELECT id,service_id,price_fee,payment_term,remark,
-    	(select title from rms_program_name where rms_program_name.service_id=rms_servicefee_detail.service_id limit 1)AS service_name FROM `rms_servicefee_detail` 
-    	WHERE service_feeid=".$service_id." ORDER BY service_id,payment_term ASC ";
-    		 
-    	return $db->fetchAll($sql);
-    	 
+    	$sql = "SELECT * FROM rms_tuitionfee WHERE type=2 AND id=$service_id LIMIT 1";
+    	return $db->fetchRow($sql);
     }
+    function getServiceFeebyId($service_id){    	
+    	$db = $this->getAdapter();
+//     	$sql = "SELECT id,service_id,price_fee,payment_term,remark,
+//     	(select title from rms_program_name where rms_program_name.service_id=rms_servicefee_detail.service_id limit 1)AS service_name FROM `rms_servicefee_detail` 
+//     	WHERE service_feeid=".$service_id." ORDER BY service_id,payment_term ASC ";  	
+    	$db = $this->getAdapter();
+    	$sql = "SELECT *
+    		FROM rms_tuitionfee_detail WHERE fee_id = ".$service_id." ORDER BY id ";
+    	return $db->fetchAll($sql);    	 
+    }
+    
     public function setServiceChargeExist($service_id,$pay_type){
     	$db = $this->getAdapter();
     	$sql = "SELECT servicefee_id,price FROM `rms_servicefee_detail` WHERE service_id=$service_id AND pay_type=$pay_type ";
     	return $db->fetchRow($sql);
     }
-    public function getServiceChargeById($service_id){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT * FROM rms_servicefee WHERE id=$service_id LIMIT 1";
-    	
-    /*	$sql = "SELECT ser_cate_id,status,
-    	sd.service_id,pay_type,price,remark,s.create_date
-    	FROM `rms_program_name` AS s,`rms_servicefee_detail` AS sd
-    	WHERE sd.service_id=s.service_id AND s.service_id=$service_id";*/
-    	return $db->fetchRow($sql);
-    }
+    
     
     function getAllBranch(){
     	$db = $this->getAdapter();

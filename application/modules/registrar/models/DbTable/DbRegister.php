@@ -2343,7 +2343,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    	return $row;
     	}
     	else{
-	    	$sql="select sfd.price_fee from rms_servicefee_detail as sfd,rms_servicefee as sf where sfd.service_id=$serviceid 
+	    	$sql="select sfd.price_fee from rms_servicefee_detail as sfd,
+	    			rms_servicefee as sf where 
+	    		sf.id  = sfd.service_feeid
+	    		AND sfd.service_id=$serviceid AND sf.status=1
 	    		and sfd.payment_term=$termid  limit 1";
 	    	return $db->fetchRow($sql);
     	}

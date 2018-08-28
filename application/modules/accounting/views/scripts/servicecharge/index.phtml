@@ -5,13 +5,15 @@
 	$urlCopy = $this->baseUrl()."/accounting/servicecharge/copy/id/";
 	$urlEdit = $this->baseUrl()."/accounting/servicecharge/edit/id/";
 	$formList = new Application_Form_Frmtable();
+	$frm =  $this->form_search;
+	$frm_fee = $this->frm_fee;
 ?>	
 <script type="text/javascript">
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.store.Memory");
 	dojo.require("dojo.data.ObjectStore");
-	////dojo.require('dojox.form.BusyButton');
+	
 var aca_year= getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->rows_year));?> );
 
 	dojo.ready(function(){
@@ -33,15 +35,24 @@ var aca_year= getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
-			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<input dojoType="dijit.form.TextBox" class="fullside"  id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>....." value="<?php echo $this->adv_search['txtsearch']; ?>" type="text">
+					 <div class="col-md-3 col-sm-3 col-xs-12">
+					 	<?php echo $frm->getElement("title");?>
+					 </div>
+					  <div class="col-md-2 col-sm-2 col-xs-12">
+					  <?php echo $frm_fee->getElement("year");?>
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<input id="year" />
+					  	<?php echo $frm->getElement("branch_id");?>
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
+					  	<?php echo $frm_fee->getElement("is_finished_search");?>
+					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					  	<?php echo $frm->getElement("status_search");?>
+					 </div>
+					 <div class="col-md-1 col-sm-1 col-xs-12">
 					 	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 					 </div>
 				</div>

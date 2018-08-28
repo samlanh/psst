@@ -18,6 +18,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 	    					'title' => '',
 	    					'year' => '',
 	    					'branch_id'=>'',
+    						'school_option'=>-1,
     						'is_finished_search' => '',
     						'status_search' =>-1,
     					);
@@ -27,7 +28,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE","CREATED_DATE","PROCESS_TYPE","STATUS","BY_USER");
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE","School Option","CREATED_DATE","PROCESS_TYPE","STATUS","BY_USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'fee','action'=>'edit',
     		);
@@ -99,8 +100,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	
     	$model = new Application_Model_DbTable_DbGlobal();
     	$this->view->payment_term = $model->getAllPaymentTerm(null,null);
-    	
-		
     }
  	
     public function editAction()
@@ -131,7 +130,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		 
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$d_row= $dbgb->getAllGradeStudy();
-// 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
 		$this->view->grade_name=$d_row;
 		$this->view->all_grade = $dbgb ->getAllGradeStudyOption();
@@ -148,6 +146,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 						'class_id'=>$payment_tran['class_id'],
 						'session_id'=>$payment_tran['session'],
 						'monthly'=>$payment_tran['tuition_fee'],
+						'school_option'=>$payment_tran['school_option'],
 						'semester'=>'',
 						'year'=>'',
 						'note'=>$payment_tran['remark'],

@@ -13,6 +13,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	$sql = "SELECT t.id,
     	(select CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
     	CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
+    	(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,
     	t.create_date,
     	(select name_en from rms_view where type=12 and key_code=t.is_finished) as is_finished,
     	t.status,
@@ -39,6 +40,9 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	if($search['is_finished_search']!=""){
     		$where.=" AND t.is_finished=".$search['is_finished_search'];
     	}
+    	if($search['school_option']>0){
+    		$where.=" AND t.school_option=".$search['school_option'];
+    	}
     	 
     	if($search['status_search']>0){
     		$where.=" AND t.status=".$search['status_search'];
@@ -63,12 +67,12 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	$fee_id = $this->getCondition($_data);
     	try{
     		if(!empty($fee_id)){
-    			
     		}else{
 	    		$_arr = array(
 	    				'from_academic'=>$_data['from_academic'],
 	    				'to_academic'=>$_data['to_academic'],
 	    				'generation'=>$_data['generation'],
+	    				'school_option'=>$_data['school_option'],
 	    				'note'=>$_data['note'],
 	    				'type'=>1,//Tuition Fee
 	    				'branch_id'=>$_data['branch_id'],
@@ -77,7 +81,6 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 	    				);
 	    		$fee_id = $this->insert($_arr);
     		}
-	    		
 	    		$this->_name='rms_tuitionfee_detail';
 	    		$ids = explode(',', $_data['identity']);
 	    		$id_term =explode(',', $_data['iden_term']);
@@ -113,7 +116,8 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     }
     public function getFeeDetailById($id){
     	$db = $this->getAdapter();
-    	$sql = "SELECT * FROM rms_tuitionfee_detail WHERE fee_id = ".$id ." ORDER BY id";
+    	$sql = "SELECT *
+    	FROM rms_tuitionfee_detail WHERE fee_id = ".$id ." ORDER BY id";
     	return $db->fetchAll($sql);
     
     }
@@ -125,6 +129,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     				'from_academic'	=>$_data['from_academic'],
     				'to_academic'	=>$_data['to_academic'],
     				'generation'	=>$_data['generation'],
+    				'school_option'=>$_data['school_option'],
     				'note'			=>$_data['note'],
     				'status'		=>$_data['status'],
     				'type'=>1,//Tuition Fee

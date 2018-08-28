@@ -61,7 +61,7 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 		$note->setAttribs(array(
 				'dojoType'=>'dijit.form.Textarea',
 				'class'=>'fullside',
-				'style'=>'font-family: inherit;  min-height:100px !important;'));
+				'style'=>'font-family: inherit;  min-height:100px !important;width:100%;'));
 		
 		
 		$_is_finished = new Zend_Dojo_Form_Element_FilteringSelect('is_finished');
@@ -120,11 +120,29 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 		}
 		$_is_finished_search->setMultiOptions($options);
 		$_is_finished_search->setValue($request->getParam("is_finished_search"));
+		
+		
+		$schooloption = new Zend_Dojo_Form_Element_FilteringSelect('school_option');
+		$schooloption->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required' =>'true',
+				'class'=>'fullside',
+		));
+		
+		$rsschool = $db->getAllSchoolOption();
+		$options=array(-1=>"SELECT_SCHOOLOPTION");
+		if(!empty($rsschool))foreach($rsschool AS $row){
+			$options[$row['id']]=$row['name'];
+		}
+		$schooloption->setMultiOptions($options);
+		$schooloption->setValue($request->getParam("school_option"));
+		
 		if($data!=null){
 			$_branch_id->setValue($data['branch_id']);
 			$_from_academic->setValue($data['from_academic']);
 			$_to_academic->setValue($data['to_academic']);
 			$generation->setValue($data['generation']);
+			$schooloption->setValue($data['school_option']);
 			$note->setValue($data['note']);
 			$_status->setValue($data['status']);
 			$id->setValue($data['id']);
@@ -137,7 +155,7 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 				$note,
 				$_is_finished,
 				$_status,$id,
-				
+				$schooloption,
 				$_year,
 				$_is_finished_search
 				));

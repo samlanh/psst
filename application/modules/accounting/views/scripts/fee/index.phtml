@@ -28,19 +28,26 @@
 		<div class="card-box">
 			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 <div class="col-md-3 col-sm-3 col-xs-12">
 					 	<?php echo $frm->getElement("title");?>
 					 </div>
-					  <div class="col-md-2 col-sm-2 col-xs-12">
+					  <div class="col-md-3 col-sm-3 col-xs-12">
 					  <?php echo $frm_fee->getElement("year");?>
 					 </div>
-					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 <div class="col-md-3 col-sm-3 col-xs-12">
 					  	<?php echo $frm->getElement("branch_id");?>
 					 </div>
-					  <div class="col-md-2 col-sm-2 col-xs-12">
+					 <div class="col-md-3 col-sm-3 col-xs-12">
+					 </div>
+			    </div>
+				<div class="form-group">
+					 <div class="col-md-3 col-sm-3 col-xs-12">
+					  	<?php echo $frm_fee->getElement("school_option");?>
+					 </div>
+					 <div class="col-md-3 col-sm-3 col-xs-12">
 					  	<?php echo $frm_fee->getElement("is_finished_search");?>
 					 </div>
-					  <div class="col-md-2 col-sm-2 col-xs-12">
+					 <div class="col-md-3 col-sm-3 col-xs-12">
 					  	<?php echo $frm->getElement("status_search");?>
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">

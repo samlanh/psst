@@ -13,67 +13,27 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     {
     	try{
     		if($this->getRequest()->isPost()){
-    			$_data = $this->getRequest()->getPost();
-    			$search = array(
-    					'txtsearch' => $_data['txtsearch'],
-    					'year' => $_data['year'],
-    			);
+    			$search = $this->getRequest()->getPost();
  		}
     		else{
     			$search=array(
-    					'txtsearch' =>'',
-    					'year' => '',
+	    				'title' => '',
+	    				'year' => '',
+	    				'branch_id'=>'',
+    					'is_finished_search' => '',
+    					'status_search' =>-1,
     			);
     		}
+    		
     		$db = new Accounting_Model_DbTable_DbServiceCharge();
     		$service= $db->getAllServiceFee($search);
-    		//print_r($service);exit();
-    		$model = new Application_Model_DbTable_DbGlobal();
-    		$row=0;$indexterm=1;$key=0;$rs_rows=array();
-    		if(!empty($service)){
-    			foreach ($service as $i => $rs) {
-    				$rows = $db->getServiceFeebyId($rs['id']);
-    				$fee_row=1;
-    				if(!empty($rows))foreach($rows as $payment_tran){
-    					if($payment_tran['payment_term']==1){
-    						$rs_rows[$key]=$this->headAddRecordTuitionFee($rs,$key);
-    						$term = $model->getAllPaymentTerm($fee_row);
-    	
-    						$rs_rows[$key]['service_id'] = $payment_tran['service_name'];
-    						$rs_rows[$key]['monthly'] = $payment_tran['price_fee'];
-//     						$rs_rows[$key]['quarter'] = $payment_tran['price_fee'];
-    						$key_old=$key;
-    						$key++;
-    					}elseif($payment_tran['payment_term']==2){
-    						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
-    						$rs_rows[$key_old]['quarter'] = $payment_tran['price_fee'];
-    	
-    					}elseif($payment_tran['payment_term']==3){
-    						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
-    						$rs_rows[$key_old]['semester'] = $payment_tran['price_fee'];
-    					}
-    					elseif($payment_tran['payment_term']==4){
-    						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
-    						$rs_rows[$key_old]['year'] = $payment_tran['price_fee'];
-    					}
-    				}
-    			}
-    		}
-    		else{
-    			$rs_rows = array();
-    			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
-    		}
-    		$pay_term = $model->getAllPaymentTerm();
-    		$payment_term='';
-    		foreach ($pay_term as $value){
-    			$payment_term.='"'.$value.'",';
-    		}
-    		$list = new Application_Form_Frmtable();
-    		$collumns = array("ACADEMIC_YEAR","NOTE","CREATED_DATE","STATUS");
+    		
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","CREATED_DATE","PROCESS_TYPE","STATUS","BY_USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'servicecharge','action'=>'edit',
     		);
-    		$urlEdit = BASE_URL ."/product/index/update";
+    		
+    		$list = new Application_Form_Frmtable();
     		$this->view->list=$list->getCheckList(10, $collumns, $service, array('academic'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -81,15 +41,17 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     		echo $e->getMessage();
     	}
     	
-    	$frm = new Global_Form_FrmSearchMajor();
-    	$frm = $frm->frmSearchTutionFee();
-    	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_search = $frm;
     	$this->view->adv_search = $search;
     	
-    	$year = $db->getAceYear();
-    	array_unshift($year,array ( 'id' => -1, 'name' => $this->tr->translate("SELECT_YEAR")));
-    	$this->view->rows_year = $year;
+    	$frm = new Accounting_Form_FrmFee();
+    	$frm->FrmTutionfee();
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_fee = $frm;
+    	
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($form);
+    	$this->view->form_search=$form;
     }
     public function headAddRecordTuitionFee($rs,$key){
     	$result[$key] = array(
@@ -115,108 +77,166 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$_model = new Application_Model_GlobalClass();
-		$this->view->all_faculty = $_model->getAllServiceItemOption(2);
 		
-		$db_g=new Application_Model_DbTable_DbGlobal();
-		$this->view->all_service=$db_g->getAllstudentRequest(2);
-		 
-		$_model = new Application_Model_GlobalClass();
-		$this->view->all_metion = $_model ->getAllMetionOption();
+		$frm = new Accounting_Form_FrmFee();
+		$frm->FrmTutionfee();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_fee = $frm;
+		
+// 		$frm = new Accounting_Form_Frmservicefee();
+// 		$frm->FrmTutionfee();
+// 		Application_Model_Decorator::removeAllDecorator($frm);
+// 		$this->view->frm_fee = $frm;
+		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm();
 		 
-		$frm = new Application_Form_FrmOther();
-		$frm =  $frm->FrmAddDept(null);
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->add_dept = $frm;
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$d_row= $dbgb->getAllGradeStudy(2);
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
 		
-		$db = new Accounting_Model_DbTable_DbServiceCharge();
-		$this->view->year = $db->getAllYear();
-		
-		$db = new Accounting_Model_DbTable_DbService();
-		$rs= $db->getServiceType(1);
-		array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-		$this->view->service = $rs;
+		$this->view->service_name=$d_row;
 		
 	}
 	public function editAction(){
-		$id=$this->getRequest()->getParam("id");
+// 		$id=$this->getRequest()->getParam("id");
+// 		if($this->getRequest()->isPost()){
+// 			try {
+// 				$_data = $this->getRequest()->getPost();
+// 				$_data['id']=$id;
+// 				$_model = new Accounting_Model_DbTable_DbServiceCharge();
+// 				$rs =  $_model->updateServiceCharge($_data);
+// 				if(!empty($rs))Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/servicecharge/index");
+// 			}catch(Exception $e){
+// 				Application_Form_FrmMessage::message("INSERT_FAIL");
+// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 			}
+// 		}
+
+// 		$db = new Accounting_Model_DbTable_DbServiceCharge();
+// 		$this->view->year = $db->getAllYear();
+		
+// 		$_model = new Application_Model_GlobalClass();
+// 		$this->view->all_metion = $_model ->getAllMetionOption();
+// 		$this->view->all_faculty = $_model->getAllServiceItemOption(2);
+// // 		$this->view->all_faculty = $_model ->getAllFacultyOption();
+// 		$model = new Application_Model_DbTable_DbGlobal();
+// 		$this->view->payment_term = $model->getAllPaymentTerm();
+		 
+// 		$frm = new Application_Form_FrmOther();
+// 		$frm =  $frm->FrmAddDept(null);
+// 		Application_Model_Decorator::removeAllDecorator($frm);
+// 		$this->view->add_dept = $frm;
+		
+// 		$db=new Accounting_Model_DbTable_DbServiceCharge();
+// 		$id=$this->getRequest()->getParam("id");
+// 		$this->view->rs =$db->getServiceChargeById($id);
+		
+// 		$db = new Accounting_Model_DbTable_DbServiceCharge();
+// 		$this->view->branch = $db->getAllBranch();
+		
+// 		$row=0;$indexterm=1;$key=0;
+
+// 				$rows = $db->getServiceFeebyId($id);
+// 				$fee_row=1;$rs_rows=array();
+// 				if(!empty($rows))foreach($rows as $payment_tran){
+					
+// 					$key_old=$key;
+// 					if($payment_tran['payment_term']==1){
+// 						$rs_rows[$key] = array(
+// 								'service_id'=>$payment_tran['service_id'],
+// 								'monthly'=>$payment_tran['price_fee'],
+// 								'quarter'=>'',
+// 								'semester'=>'',
+// 								'year'=>'',
+// 								'note'=>$payment_tran['remark'],
+// 						);
+// 						//$rs_rows[$key]['quarter'] = $payment_tran['tuition_fee'];
+// 						$key_old=$key;
+						
+// 					}elseif($payment_tran['payment_term']==2){
+// 						$rs_rows[$key_old]['quarter'] = $payment_tran['price_fee'];
+		
+// 					}elseif($payment_tran['payment_term']==3){
+// 						$rs_rows[$key_old]['semester'] = $payment_tran['price_fee'];
+// 					}
+// 					elseif($payment_tran['payment_term']==4){
+// 						$rs_rows[$key_old]['year'] = $payment_tran['price_fee'];
+// 						$key++;
+// 					}
+					
+// 				}
+				
+// 			  $this->view->rows =$rs_rows;
+			   
+// 			   $db_g=new Application_Model_DbTable_DbGlobal();
+// 			   $this->view->all_service=$db_g->getAllstudentRequest(2);
+// 			   $db = new Accounting_Model_DbTable_DbService();
+// 			   $rs= $db->getServiceType(1);
+// 			   array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+// 			   $this->view->service = $rs;
+
+		$_db = new Accounting_Model_DbTable_DbServiceCharge();
 		if($this->getRequest()->isPost()){
 			try {
 				$_data = $this->getRequest()->getPost();
-				$_data['id']=$id;
-				$_model = new Accounting_Model_DbTable_DbServiceCharge();
-				$rs =  $_model->updateServiceCharge($_data);
-				if(!empty($rs))Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/servicecharge/index");
+				$rs =  $_db->updateServiceCharge($_data);
+				if(!empty($rs))Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/servicecharge");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-
-		$db = new Accounting_Model_DbTable_DbServiceCharge();
-		$this->view->year = $db->getAllYear();
 		
-		$_model = new Application_Model_GlobalClass();
-		$this->view->all_metion = $_model ->getAllMetionOption();
-		$this->view->all_faculty = $_model->getAllServiceItemOption(2);
-// 		$this->view->all_faculty = $_model ->getAllFacultyOption();
-		$model = new Application_Model_DbTable_DbGlobal();
-		$this->view->payment_term = $model->getAllPaymentTerm();
-		 
-		$frm = new Application_Form_FrmOther();
-		$frm =  $frm->FrmAddDept(null);
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->add_dept = $frm;
-		
-		$db=new Accounting_Model_DbTable_DbServiceCharge();
 		$id=$this->getRequest()->getParam("id");
-		$this->view->rs =$db->getServiceChargeById($id);
+		$row = $_db->getServiceChargeById($id);
+		$this->view->rs = $row;
+		if(empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_DATA","/accounting/servicecharge");
+		}
 		
-		$db = new Accounting_Model_DbTable_DbServiceCharge();
-		$this->view->branch = $db->getAllBranch();
+		$frm = new Accounting_Form_FrmFee();
+		$frm->FrmTutionfee($row);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_fee = $frm;
+			
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$d_row= $dbgb->getAllGradeStudy(2);
+		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+		$this->view->service_name=$d_row;
+		$this->view->all_service = $dbgb ->getAllGradeStudyOption(2);
+		
+		$model = new Application_Model_DbTable_DbGlobal();
+		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 		
 		$row=0;$indexterm=1;$key=0;
-
-				$rows = $db->getServiceFeebyId($id);
-				$fee_row=1;$rs_rows=array();
-				if(!empty($rows))foreach($rows as $payment_tran){
-					
-					$key_old=$key;
-					if($payment_tran['payment_term']==1){
-						$rs_rows[$key] = array(
-								'service_id'=>$payment_tran['service_id'],
-								'monthly'=>$payment_tran['price_fee'],
-								'quarter'=>'',
-								'semester'=>'',
-								'year'=>'',
-								'note'=>$payment_tran['remark'],
-						);
-						//$rs_rows[$key]['quarter'] = $payment_tran['tuition_fee'];
-						$key_old=$key;
-						
-					}elseif($payment_tran['payment_term']==2){
-						$rs_rows[$key_old]['quarter'] = $payment_tran['price_fee'];
+		$rows = $_db->getServiceFeebyId($id);
+		$fee_row=1;$rs_rows=array();
+		if(!empty($rows))foreach($rows as $payment_tran){
+			if($payment_tran['payment_term']==1){
+				$rs_rows[$key] = array(
+						'class_id'=>$payment_tran['class_id'],
+						'session_id'=>$payment_tran['session'],
+						'monthly'=>$payment_tran['tuition_fee'],
+						'semester'=>'',
+						'year'=>'',
+						'note'=>$payment_tran['remark'],
+						'status'=>$payment_tran['status'],
+				);
+				$key_old=$key;
+				$key++;
+			}elseif($payment_tran['payment_term']==4){
+				$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
 		
-					}elseif($payment_tran['payment_term']==3){
-						$rs_rows[$key_old]['semester'] = $payment_tran['price_fee'];
-					}
-					elseif($payment_tran['payment_term']==4){
-						$rs_rows[$key_old]['year'] = $payment_tran['price_fee'];
-						$key++;
-					}
-					
-				}
-				
-			  $this->view->rows =$rs_rows;
-			   
-			   $db_g=new Application_Model_DbTable_DbGlobal();
-			   $this->view->all_service=$db_g->getAllstudentRequest(2);
-			   $db = new Accounting_Model_DbTable_DbService();
-			   $rs= $db->getServiceType(1);
-			   array_unshift($rs, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-			   $this->view->service = $rs;
+			}elseif($payment_tran['payment_term']==2){
+				$rs_rows[$key_old]['quarter'] = $payment_tran['tuition_fee'];
+			}
+			elseif($payment_tran['payment_term']==3){
+				$rs_rows[$key_old]['semester'] = $payment_tran['tuition_fee'];
+			}
+		}
+		$this->view->rows =$rs_rows;
 	
 	}
 	
@@ -336,15 +356,30 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 			try{
 				$data = $this->getRequest()->getPost();
 				$db = new Accounting_Model_DbTable_DbService();
-				$row = $db->AddServiceAjax($data);
+				$row = $db->ajaxgetservice($data);
 				$result = array("id"=>$row);
 				print_r(Zend_Json::encode($row));
 				exit();
-				//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 	}	
+	function refreshserviceAction(){
+		if($this->getRequest()->isPost()){
+			try{
+				$data = $this->getRequest()->getPost();
+				$dbgb = new Application_Model_DbTable_DbGlobal();
+					$d_row= $dbgb->getAllGradeStudy(2);
+					array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+					array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+					print_r(Zend_Json::encode($d_row));
+				exit();
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+	}
 }

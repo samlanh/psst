@@ -106,7 +106,7 @@ public function getServiceById($id){
 	    }
     	return $db->fetchAll($sql.$where.$order);
     }
-    public function AddServiceType($_data){
+public function AddServiceType($_data){
     	try{
     	$this->_name='rms_program_type';
     	$_db = $this->getAdapter();
@@ -124,25 +124,4 @@ public function getServiceById($id){
     	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
    }
 }
-public function AddServiceAjax($_data){
-    	if(empty($_data['service_type'])){
-    		$_data['service_type']=2;
-    	}
-    	try{
-    		$this->_name='rms_program_name';
-    		$_db = $this->getAdapter();
-    		$_arr = array(
-    				'title'=>$_data['add_title'],
-    				'type'=>$_data['service_type'],
-    				'ser_cate_id'=>$_data['title'],
-    				'description'=>$_data['description'],
-    				'create_date'=>Zend_Date::now(),
-    				'status'=>$_data['service_status'],
-    				'user_id'=>$this->getUserId(),
-    		);
-    		return $this->insert($_arr);
-    	}catch(Exception $e){
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    	}
-    }
 }

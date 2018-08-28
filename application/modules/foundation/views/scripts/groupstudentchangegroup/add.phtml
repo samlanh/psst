@@ -306,11 +306,11 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 
 
 <script type="text/javascript">
-var url_getgroup = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getgroup"));?>';										
+var url_getservice = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"refreshservice"));?>';										
 function getRefreshGroup(){
 	loading();
 	dojo.xhrPost({
-		url:url_getgroup,
+		url:url_getservice,
 		handleAs:"json",
 		load: function(data) {
 			group_store  = getDataStorefromJSON('id','name', data.group);
@@ -452,7 +452,6 @@ function popupAddGroup(){
 	id = dijit.byId('to_group').get('value');
 	if(id==-1){
 		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
-	//dijit.byId("popup_dept").show();	
 	}
 }
 function HidePopupGroup(){

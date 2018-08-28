@@ -26,6 +26,13 @@ table .set-style td, table .set-style th {
     padding: 0px;
     border: 1px solid #ccc;
 }
+ul.opt-school {
+    list-style-type: none;
+}
+ input[type=checkbox],  input[type=radio]{
+	height: 15px;
+    display: initial;
+}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -72,11 +79,17 @@ table .set-style td, table .set-style th {
 		                </div>
 	             	</div>
 	             	<div class="form-group">
-		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement("generation");?>
 		                </div>
 	             	</div>
+	                <div class="form-group">
+	                	<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("School Option");?> </label>
+	                	<div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("school_option");?>
+	                	</div>
+	                </div>
 	             	<div class="form-group">
 		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -157,7 +170,7 @@ dojo.ready(function(){
 		store: grade_store,
 		queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                        
+		required: false,                        
 		id: "grade",
 		name: "grade",  
 		class: 'fullside',  

@@ -1103,18 +1103,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	return $pre.$new_acc_no;
   }
   
-  function getAllGradeStudy($items_id=null){
+  function getAllGradeStudy($option=1){
   	$db = $this->getAdapter();
   	$sql="SELECT i.id,
 			CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
 		FROM `rms_itemsdetail` AS i 
-		WHERE 
-			i.items_type=1
-			AND i.status =1
-		";
-  	if (!empty($items_id)){
-  		$sql.=" AND i.items_id = $items_id";
+		WHERE i.status =1 ";
+  	if($option!=null){
+  		$sql.=" AND i.items_type=".$option;
   	}
+	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+  	
   	$branchlist = $this->getAllSchoolOption();
   	if (!empty($branchlist)){
   		foreach ($branchlist as $i){
@@ -1131,8 +1130,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	return $db->fetchAll($sql);
   }
   
-  public function getAllGradeStudyOption(){
-  	$rows = $this->getAllGradeStudy();
+  public function getAllGradeStudyOption($type=1){
+  	$rows = $this->getAllGradeStudy($type);
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
   	array_unshift($rows, array('id'=>-1,'name'=>$tr->translate("PLEASE_SELECT")));
   	$options = '';

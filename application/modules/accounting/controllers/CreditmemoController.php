@@ -95,30 +95,6 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
     	$this->view->frm_credit=$frm;
     }
     
-    public function transferAction()
-    {
-    	$id = $this->getRequest()->getParam('id');
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$data['id'] = $id;
-    		$db = new Accounting_Model_DbTable_DbCreditmemo();
-    		try {
-    			$db->addCreditmemo($data);
-    			Application_Form_FrmMessage::Sucessfull('TRANSFER_SUCCESS', self::REDIRECT_URL);
-    		} catch (Exception $e) {
-    			$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
-    		}
-    	}
-    
-    	$id = $this->getRequest()->getParam('id');
-    	$db = new Accounting_Model_DbTable_DbCreditmemo();
-    	$row  = $db->getCreditmemobyid($id);
-    
-    	$pructis=new Accounting_Form_Frmcreditmemo();
-    	$frm = $pructis->Frmcreditmemo($row);
-    	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_credit=$frm;
-    }
 // <?php
 // class Accounting_CreditmemoController extends Zend_Controller_Action
 // {

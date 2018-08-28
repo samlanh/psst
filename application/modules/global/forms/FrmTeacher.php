@@ -125,6 +125,13 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		
+		$_teacher=  new Zend_Dojo_Form_Element_FilteringSelect('teacher_ty');
+		$_teacher->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_teacher_opt = array(
+				1=>$this->tr->translate("TEACHER_KHMER"),
+				2=>$this->tr->translate("TEACHER_FOREIGNER"));
+		$_teacher->setMultiOptions($_teacher_opt);
+		
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$_submit->setLabel("save"); 
 		
@@ -144,7 +151,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 // 			$_note->setValue($_data['note']);
 // 			$_status->setValue($_data['status']);
 		}
-		$this->addElements(array($id,$_enname,$_note,$end_date,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
+		$this->addElements(array($id,$_enname,$_note,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
 		

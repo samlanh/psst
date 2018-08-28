@@ -1,0 +1,83 @@
+<?php
+class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
+{
+	protected $_name = 'rms_transfer_credit';
+	public function getUserId(){
+		$session_user=new Zend_Session_Namespace('authstu');
+		return $session_user->user_id;
+	}
+	function getAllTransfer($search=null){
+		$db = $this->getAdapter();
+		$session_user=new Zend_Session_Namespace('authstu');
+		$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
+	
+		$sql="SELECT 
+				c.id,
+				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,				
+				(SELECT stu_code FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) AS stu_id,
+				CONCAT(stu_khname,'-',stu_enname) AS student_name,
+				(SELECT s.stu_code FROM `rms_student` WHERE rms_student.stu_id = c.stu_idto LIMIT 1) AS stu_idto,
+				(SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.stu_name LIMIT 1) AS stu_name,
+				prob,
+				problem,
+				 
+				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) AS user_name,
+				c.status 
+			  FROM 
+				rms_transfer_credit c,
+				rms_student AS s
+			  WHERE
+				  s.stu_id = c.stu_idto
+				
+			";
+	
+		if (!empty($search['title'])){
+			$s_where = array();
+			$s_search = trim(addslashes($search['title']));
+			$s_where[] = " (SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT stu_code FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " CONCAT(stu_khname,'-',stu_enname) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT s.stu_code FROM `rms_student` WHERE rms_student.stu_id = c.stu_idto LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.stu_name LIMIT 1) LIKE '%{$s_search}%'";
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if($search['status_search']>-1){
+			$where.= " AND c.status  = ".$search['status_search'];
+		}
+		$order=" order by id desc ";
+		return $db->fetchAll($sql.$where.$order);
+	}
+	
+	function transfercreditMemo($data){
+		//print_r($data); exit();
+		$arr = array(
+				'branch_id'=>$data['branch_id'],
+				'student_id'=>$data['student_id'],
+				'total_amount'=>$data['total_amount'],
+				'total_amountafter'=>$data['total_amount'],
+				'note'=>$data['Description'],
+				'prob'=>$data['prob'],
+				'type'=>0,
+				'date'=>$data['Date'],
+				'end_date'=>$data['end_date'],
+				
+				'stu_idto'=>$data['stu_idto'],
+				'stu_name'=>$data['stu_name'],
+				'start_date'=>$data['start_date'],
+				'end_dates'=>$data['end_dates'],
+				'total_amountall'=>$data['total_amountall'],
+				'problem'=>$data['problem'],
+				'Descriptions'=>$data['Descriptions'],
+				'status'=>$data['status'],
+				'user_id'=>$this->getUserId(),);
+		$this->_name='rms_transfer_credit';
+		$this->insert($arr);
+	}
+function getCreditmemobyid($id){
+	$db = $this->getAdapter();
+	$sql=" SELECT * FROM rms_creditmemo where id=$id ";
+	return $db->fetchRow($sql);
+}
+}

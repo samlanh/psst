@@ -304,6 +304,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'stu_id'		=>$id,
 								'document_type'	=>$_data['document_type_'.$i],
 								'date_give'		=>$_data['date_give_'.$i],
+								'date_end'		=>$_data['date_end_'.$i],
 								'is_receive'	=>$_data['is_receive_'.$i],
 								'note'			=>$_data['note_'.$i]
 						);
@@ -490,6 +491,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 							'stu_id'		=>$_data["id"],
 							'document_type'	=>$_data['document_type_'.$i],
 							'date_give'		=>$_data['date_give_'.$i],
+							'date_end'		=>$_data['date_end_'.$i],
 							'is_receive'	=>$_data['is_receive_'.$i],
 							'note'			=>$_data['note_'.$i]
 					);

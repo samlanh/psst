@@ -84,7 +84,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		$where=" id = ".$data['id'];
 		$this->update($arr, $where);
 	}
-function getCreditmemobyid($id){
+ function getCreditmemobyid($id){
 	$db = $this->getAdapter();
 	$sql=" SELECT * FROM rms_creditmemo where id=$id ";
 	return $db->fetchRow($sql);

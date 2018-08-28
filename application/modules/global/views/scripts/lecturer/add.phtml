@@ -138,6 +138,13 @@ input.btn_borwse_image {
 	                   		<?php echo $frm->getElement("dob");?>
 	                   </div>
 	                </div>
+	                 <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEACHER_EHNICITY");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+							<?php echo $frm->getElement("teacher_ty");?>
+	                   </div>
+	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>
 	                   </label>
@@ -330,6 +337,7 @@ dojo.require("dijit.form.DateTextBox");
 dojo.require("dojo.NodeList-manipulate");
 
 var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->position));?> );
+var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
 	dojo.ready(function(){
 		getTeacherID();
 		new dijit.form.FilteringSelect({
@@ -348,6 +356,36 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 		}, "staff_position");
 	});
 </script>
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_doc_type" >
+		<form style="background-color: buttonface;" id='frm_doc_type' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				<tr>
+					<td>
+						<fieldset style="background-color: buttonface;">
+						<legend align="center" ><?php echo $tr->translate('DOCUMENT_TYPE');?></legend>
+							<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
+								<tr>
+									<td><?php echo $tr->translate('TITLE');?></td>
+									<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_doc_type" name="title_doc_type" value="" type="text"></td>
+								</tr>
+								<tr>
+									<td colspan="4" align="center">
+										<input type="button" value="ចាកចេញ" label="Close" id="hide_doc_type" name="hide_doc_type" dojoType="dijit.form.Button" 
+										​ ​​iconClass="dijitIconUndo" onclick="hideDialog3();"/>
+										<input type="button" value="save" label="SAVE" id="save_doc_type" name="save_doc_type" dojoType="dijit.form.Button" 
+										 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDocType();"/>
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
 
 <script type="text/javascript">
 	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
@@ -406,6 +444,34 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 	$("#photo").change(function(){
 	    readURL(this);
 	});
+
+	var url_add_doc_type = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-doctype")); ?>';
+	function addDocType(){
+		if(dijit.byId('frm_doc_type').validate()){
+			dijit.byId("save_doc_type").attr("disabled",true);
+			dojo.xhrPost({
+				url:url_add_doc_type,
+				form: dojo.byId("frm_doc_type"),
+				handleAs:"json",
+				load: function(data) {
+				var Itemmake = { 
+						 id: dijit.byId('title_doc_type').get('value'),
+						 name: dijit.byId('title_doc_type').get('value')
+					   };
+				index = $("#popup_index").val();	   
+			   addDataToSelectbox(dijit.byId('document_type_'+index), doctype_store, Itemmake, dijit.byId('title_doc_type').get('value'));
+			   dijit.byId('frm_doc_type').reset();
+			   dijit.byId("popup_doc_type").hide();
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
+	}
+	function hideDialog3() {		
+		dijit.byId("popup_doc_type").hide();
+	}
 	
 var template = '';
 var service = '';
@@ -431,7 +497,7 @@ function addRow(){
 	}
 		template+='<td width="5%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="5%" align="center">'+no+'</td>';
-		template+='<td width="25%"><select class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" value="0" onChange="popupDocType('+col+');" dojoType="dijit.form.FilteringSelect" >';	
+		template+='<td width="20%"><select class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" value="0" onChange="popupDocType('+col+');" dojoType="dijit.form.FilteringSelect" >';	
 			<?php if(!empty($this->doc_type)){foreach($this->doc_type as $doc_type){?>
 				template+='<option value="'+'<?php echo $doc_type['id']?>'+'"><?php echo $doc_type['name'];?></option>';
 			<?php }}?>
@@ -439,7 +505,7 @@ function addRow(){
 		template+='<td width="15%"><input type="text" class="fullside" name="date_give_'+col+'" id="date_give_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 		template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 		template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
-		template+='<td width="25%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
+		template+='<td width="20%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
 	
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -461,6 +527,15 @@ function deleteRecord(index) {
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
+}
+
+function popupDocType(index){
+	id = dijit.byId('document_type_'+index).get('value');
+	if(id==-1){
+		$('#popup_index').val(index);
+		dijit.byId("popup_doc_type").show();
+	}
+	
 }
 </script>
 <div class="overlay">

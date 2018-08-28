@@ -5,6 +5,7 @@ class Global_LecturerController extends Zend_Controller_Action {
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	
 	public function indexAction(){
@@ -65,8 +66,8 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
  		$_db = new Application_Model_DbTable_DbGlobal();
 		$row = $_db->getAllDocumentType(); // degree language
-// 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
 		$_db = new Global_Model_DbTable_DbTeacher();

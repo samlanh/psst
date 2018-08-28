@@ -8,11 +8,6 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     }
 	public function AddNewStaff($_data){
-		$id = $this->getStudentExist($_data['name_en'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session']);
-		if(!empty($id)){
-			Application_Form_FrmMessage::Sucessfull("STUDENT_EXISTRING","/foundation/register/add");
-			return -1;
-		}
 		$_db= $this->getAdapter();		
 		try{
 		/// add photo ////////////////////////////////////////////////////
@@ -43,6 +38,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					'sex'				 => $_data['sex'],
 					'dob'				 => $_data['dob'],
 					'nationality'  		 => $_data['nationality'],
+					'teacher_ty'  		 => $_data['teacher_ty'],
 			        'tel'  				 => $_data['phone'],
 					'address' 			 => $_data['address'],
 					'note' 				 => $_data['note'],
@@ -65,28 +61,27 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			        'create_date' 		 => date("Y-m-d"),
 			        'user_id'	  		 => $this->getUserId(),
 				);
-			$this->insert($_arr);
-			
+			$this->_name="rms_teacher";
+			$id = $this->insert($_arr);
 			$this->_name = 'rms_student_document';
 			$ids = explode(',', $_data['identity']);
 			foreach ($ids as $i){
-				if($_data['document_type_'.$i]!=0 || $_data['document_type_'.$i] != -1){
 					$_arr = array(
 							'stu_id'		=>$id,
 							'document_type'	=>$_data['document_type_'.$i],
 							'date_give'		=>$_data['date_give_'.$i],
 							'date_end'		=>$_data['date_end_'.$i],
 							'is_receive'	=>$_data['is_receive_'.$i],
-							'note'			=>$_data['note_'.$i]
+							'note'			=>$_data['note_'.$i],
+							'type'			=>2,
 					);
 					$this->insert($_arr);
-				}
 			}
 			}catch(Exception $e){
 	    		$_db->rollBack();
 	    		echo $e->getMessage(); exit();
 	    	}
-			print_r($_data); exit();
+// 			print_r($_data); exit();
 	}
 	public function updateStaff($_data){
 		$db = $this->getAdapter();
@@ -140,11 +135,6 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
 		return $row;
-	}
-	function getStudentExist($name_en,$sex,$grade,$dob,$session){
-		$db = $this->getAdapter();
-		$sql = "select * from rms_student where stu_enname="."'$name_en'"." and sex=".$sex." and grade=".$grade." and dob="."'$dob'"." and session=".$session;
-		return $db->fetchRow($sql);
 	}
 	function getAllDegree(){
 		$db=$this->getAdapter();

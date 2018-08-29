@@ -7,16 +7,23 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
     }
-    
+    function checkGroupExits($_data){
+    	$db = $this->getAdapter();
+    	$sql="SELECT id FROM rms_group WHERE academic_year =".$_data['academic_year'];
+    	$sql.=" AND group_code='".$_data['group_code']."'";
+    	$sql.=" AND degree='".$_data['degree']."'";
+    	$rs = $db->fetchOne($sql);
+    	if(!empty($rs)){
+    		return 1;
+    	}
+    	return null;
+    }
 	public function AddNewGroup($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$sql="SELECT id FROM rms_group WHERE academic_year =".$_data['academic_year'];
-			$sql.=" AND group_code='".$_data['group_code']."'";
-			$sql.=" AND degree='".$_data['degree']."'";
-			$rs = $db->fetchOne($sql);
-			if(!empty($rs)){
+			$groupExit = $this->checkGroupExits($_data);
+			if (!empty($groupExit)){
 				return -1;
 			}
 			$_arr=array(
@@ -27,9 +34,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'session' 		=> $_data['session'],
 					'degree' 		=> $_data['degree'],
 					'grade' 		=> $_data['grade'],
-					'amount_month' 	=> $_data['amountmonth'],
-					'start_date'	=> $_data['start_date'],
-					'expired_date'	=> $_data['end_date'],
+// 					'amount_month' 	=> $_data['amountmonth'],
+// 					'start_date'	=> $_data['start_date'],
+// 					'expired_date'	=> $_data['end_date'],
 					'date' 			=> date("Y-m-d"),
 					'status'   		=> 1,
 					'teacher_id'   	=> $_data['teacher_id'],
@@ -77,9 +84,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'session' 		=> $_data['session'],
 					'degree' 		=> $_data['degree'],
 					'grade'		 	=> $_data['grade'],
-					'amount_month' 	=> $_data['amountmonth'],
-					'start_date' 	=> $_data['start_date'],
-					'expired_date'	=> $_data['end_date'],
+// 					'amount_month' 	=> $_data['amountmonth'],
+// 					'start_date' 	=> $_data['start_date'],
+// 					'expired_date'	=> $_data['end_date'],
 					'date' 			=> date("Y-m-d"),
 					'teacher_id'   	=> $_data['teacher_id'],
 					'teacher_assistance'=> $_data['teacher_ass'],
@@ -229,15 +236,17 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$sql = "SELECT `g`.`id`,`g`.`group_code` AS `group_code`,
 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS tuitionfee_id,		 
 		 `g`.`semester` AS `semester`, 
-		(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
-		(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+		(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree,
+		(SELECT id.title FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,
 		(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
 		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-		`g`.`start_date`,`g`.`expired_date`,`g`.`note`,
+		`g`.`note`,
 		(select name_kh from rms_view where type=9 and key_code=is_pass) as group_status,
-		(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1) AS `status`
+		g.status
 		FROM `rms_group` AS `g`";
+		//`g`.`start_date`,`g`.`expired_date`,
+		//(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1) AS `status`
 		$where =' WHERE 1 ';
 		$from_date =(empty($search['start_date']))? '1': "g.date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "g.date <= '".$search['end_date']." 23:59:59'";
@@ -252,8 +261,8 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$s_where[] = " `g`.`group_code` LIKE '%{$s_search}%'";
 			$s_where[]="(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
 			$s_where[] = " `g`.`semester` LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT major_khname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`)) LIKE '%{$s_search}%'";
-			$s_where[]="(SELECT kh_name FROM rms_dept WHERE rms_dept.dept_id=g.degree) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT id.title FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[]=" (SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`)) LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
 			AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) LIKE '%{$s_search}%'";

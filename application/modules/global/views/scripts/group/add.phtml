@@ -123,25 +123,27 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
              </div>
     	</div>
     	<div class="col-md-4 col-sm-4 col-xs-12">
+    		<!-- 
     		<div class="form-group">
-                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("START_DATE");?></label>
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("START_DATE");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
-                	<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" name="start_date" id="start_date" class="fullside" onchange="setEndDate();" value="<?php echo date('Y-m-d');?>" type="text">
+                	<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" name="start_date" id="start_date" class="fullside" onchange="setEndDate();" value="<?php //echo date('Y-m-d');?>" type="text">
                 </div>
              </div>
              <div class="form-group">
-                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_MONTH");?></label>
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("AMOUNT_MONTH");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
                 	<input dojoType="dijit.form.NumberTextBox"   name="amountmonth" id="amountmonth" class="fullside" value="" onkeyup="setEndDate();" type="text">
                 </div>
              </div>
           
               <div class="form-group">
-                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("END_DATE");?></label>
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("END_DATE");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
-                	<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date" type="text" class="fullside" value="<?php echo date('Y-m-d');?>" >
+                	<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date" type="text" class="fullside" value="<?php //echo date('Y-m-d');?>" >
                 </div>
              </div>
+    		 -->
     	</div>
     	<div class="card-box">
                	<div class="col-sm-12">
@@ -230,7 +232,7 @@ dojo.ready(function(){
 		id: "subject_id",
 		name: "subject_id",           
 		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
+		placeHolder:"<?php echo $tr->translate("SELECT_SUBJECT");?>",          
 		onChange: function() {  
 			subject_id = dijit.byId('subject_id').get('value');
 			if(subject_id==-1){

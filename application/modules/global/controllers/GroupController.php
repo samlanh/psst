@@ -1,6 +1,7 @@
 <?php
 class Global_GroupController extends Zend_Controller_Action {
-    public function init()
+	const REDIRECT_URL = '/global/group';
+	public function init()
     {    	
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
@@ -20,17 +21,18 @@ class Global_GroupController extends Zend_Controller_Action {
 						'time' => '',
 						'session' =>'',
 						'status_search'=>1,
-						'start_date'=>date("Y-m-d"),
-						'end_date' => date("Y-m-d")
+// 						'start_date'=>date("Y-m-d"),
+// 						'end_date' => date("Y-m-d")
 						);
 			}
 			$db = new Global_Model_DbTable_DbGroup();
 			$rs_rows= $db->getAllGroups($search);
 			$glClass = new Application_Model_GlobalClass();
+			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			
-			$collumns = array("GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","START_DATE","END_DATE","NOTE","PROCESS_TYPE","STATUS");
-			
+			$collumns = array("GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","NOTE","PROCESS_TYPE","STATUS");
+			//"START_DATE","END_DATE",
 			$link=array(
 					'module'=>'global','controller'=>'group','action'=>'edit',
 			);
@@ -58,17 +60,24 @@ class Global_GroupController extends Zend_Controller_Action {
 				$sms="INSERT_SUCCESS";
 				$data = $this->getRequest()->getPost();
 				$db= new Global_Model_DbTable_DbGroup();
+				
+				$groupExit = $db->checkGroupExits($data);
+				if (!empty($groupExit)){
+					Application_Form_FrmMessage::Sucessfull("This Group Already Exist", "/global/group/index");
+				}
+				
 				$group_id= $db->AddNewGroup($data);
 				if($group_id==-1){
     				$sms = "RECORD_EXIST";
     			}
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms, "/global/group");
+					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/index");
 				}else{
-					Application_Form_FrmMessage::Sucessfull($sms, "/global/group/add");
+					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/add");
 				}
 				Application_Form_FrmMessage::message($sms);
 			} catch (Exception $e) {
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
@@ -111,7 +120,7 @@ class Global_GroupController extends Zend_Controller_Action {
 			try {
 				$data = $this->getRequest()->getPost();
 				$db->updateGroup($data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/global/group/index");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				echo $e->getMessage();
@@ -128,9 +137,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$this->view->row = $db->getGroupSubjectById($id);
 		
-		$db = new Global_Model_DbTable_DbGroup();
-		$this->view->degree = $rows = $db->getAllFecultyName();
-		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();
 		array_unshift($room, Array('id'=> -1 ,'name' =>$this->tr->translate("ADD_NEW")));
@@ -140,21 +146,32 @@ class Global_GroupController extends Zend_Controller_Action {
 		$_db = new Global_Model_DbTable_DbGroup();
 		$this->view->subject = $_db->getAllSubjectStudy();
 		$this->view->row_year=$_db->getAllYears();
-		
-		$db=new Global_Model_DbTable_DbGrade();
-		$grade=$db->getNameGradeAll();
-		array_unshift($grade, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->grade_name=$grade;
-		
-		$dept = $db->getAllDept();
-		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->dept = $dept;
-		
 		$this->view->teacher_option = $_db->getAllTeacherOption();
-		
 		$teacher = $_db->getAllTeacher();
 		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 		$this->view->teacher = $teacher;
+// 		$this->view->degree = $rows = $_db->getAllFecultyName();
+		
+// 		$db=new Global_Model_DbTable_DbGrade();
+// 		$grade=$db->getNameGradeAll();
+// 		array_unshift($grade, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->grade_name=$grade;
+		
+// 		$dept = $db->getAllDept();
+// 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->dept = $dept;
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$dept = $_dbgb->getAllItems(1);//degree
+		$this->view->degree = $dept;
+		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$this->view->dept = $dept;
+		
+		$d_row= $_dbgb->getAllGradeStudy();
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$this->view->grade_name=$d_row;
+		
+		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
 	}
 	function copyAction(){
 		$db= new Global_Model_DbTable_DbGroup();
@@ -162,12 +179,17 @@ class Global_GroupController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			try {
 				$data = $this->getRequest()->getPost();
+				$groupExit = $db->checkGroupExits($data);
+				if (!empty($groupExit)){
+					Application_Form_FrmMessage::Sucessfull("This Group Already Exist", self::REDIRECT_URL."/index");
+				}
 				$db->AddNewGroup($data);
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/global/group/index");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL."/index");
 			} catch (Exception $e) {
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				$err =$e->getMessage();
-				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+// 				$err =$e->getMessage();
+// 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
 		$id=$this->getRequest()->getParam("id");
@@ -185,20 +207,32 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->row_year=$_db->getAllYears();
 		$this->view->parent_subject = $_db->getParentSubject();
 		
-		$db = new Global_Model_DbTable_DbGrade();
-		$dept = $db->getAllDept();
-		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->degree = $dept;
+// 		$db = new Global_Model_DbTable_DbGrade();
+// 		$dept = $db->getAllDept();
+// 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->degree = $dept;
 		
-		$grade=$db->getNameGradeAll();
-		array_unshift($grade, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->grade_name=$grade;
+// 		$grade=$db->getNameGradeAll();
+// 		array_unshift($grade, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->grade_name=$grade;
 		
 		$this->view->teacher_option = $_db->getAllTeacherOption();
-		
 		$teacher = $_db->getAllTeacher();
 		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 		$this->view->teacher = $teacher;
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$dept = $_dbgb->getAllItems(1);//degree
+		
+		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$this->view->degree = $dept;
+		$this->view->dept = $dept;
+		
+		$d_row= $_dbgb->getAllGradeStudy();
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		$this->view->grade_name=$d_row;
+		
+		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
 	}
 	function addRoomAction(){
 		if($this->getRequest()->isPost()){

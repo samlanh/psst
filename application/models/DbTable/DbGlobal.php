@@ -1132,6 +1132,32 @@ function getAllgroupStudy($teacher_id=null){
   	return $db->fetchAll($sql);
   }
   
+  function getAllGradeStudyByDegree($items_id=null){
+  	$db = $this->getAdapter();
+  	$sql="SELECT i.id,
+  	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+  	FROM `rms_itemsdetail` AS i
+  	WHERE i.status =1 ";
+  	if($items_id!=null){
+  		$sql.=" AND i.items_id=".$items_id;
+  	}
+  	 
+  	$branchlist = $this->getAllSchoolOption();
+  	if (!empty($branchlist)){
+  		foreach ($branchlist as $i){
+  			$s_where[] = $i['id']." IN (i.schoolOption)";
+  		}
+  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+  	}
+  	$user = $this->getUserInfo();
+  	$level = $user['level'];
+  	if ($level!=1){
+  		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+  	}
+  	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+  	return $db->fetchAll($sql);
+  }
+  
   public function getAllGradeStudyOption($type=1){
   	$rows = $this->getAllGradeStudy($type);
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();

@@ -128,46 +128,39 @@ class Stock_ProductController extends Zend_Controller_Action {
 // 			exit();
 // 		}
 // 	}
-// 	public function copyAction(){
-// 		$id=$this->getRequest()->getParam('id');
-// 		if($this->getRequest()->isPost()){
-// 			$_data = $this->getRequest()->getPost();
-// 			$_data['id']=$id;
-// 				try{
-// 					$db = new Accounting_Model_DbTable_DbProduct();
-					
-// 					$row = $db->addProduct($_data);
-					
-// 					if(isset($_data['save_close'])){
-// 						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/product");
-// 					}else{
-// 						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/product/add");
-// 					}
-					
-// 					Application_Form_FrmMessage::message("INSERT_SUCCESS");
-// 				}catch(Exception $e){
-// 					Application_Form_FrmMessage::message("INSERT_FAIL");
-// 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 					echo $e->getMessage();
-// 				}
-// 			}
-			 
-// 			$_pro = new Accounting_Model_DbTable_DbProduct();
-// 			$this->view->branch_name = $_pro->getBrandLocation();
-// 			$this->view->pro_code=$_pro->getProCode();
-// 			$this->view->pro_row=$_pro->getProductById($id);
-// 		    $this->view->pro_locat=$_pro->getProLocationById($id);
-		    
-// 		    $this->view->cat_rows=$_pro->getProductCategory();
-		    
-// 		    $fm = new Global_Form_Frmbranch();
-// 		    $frm = $fm->Frmbranch();
-// 		    Application_Model_Decorator::removeAllDecorator($frm);
-// 		    $this->view->frm_branch = $frm;
-		    	
-// 		    $model = new Application_Model_DbTable_DbGlobal();
-// 		    $branch = $model->getAllBranchName();
-// 		    array_unshift($branch, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-// 		    $this->view->branchopt = $branch;
-// 	}
+    public function copyAction(){
+    	$db = new Global_Model_DbTable_DbItemsDetail();
+    	$id = $this->getRequest()->getParam("id");
+    	if($this->getRequest()->isPost()){
+    		try{
+    			$_data = $this->getRequest()->getPost();
+    			$db->AddProduct($_data);
+    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
+    			exit();
+    		}catch(Exception $e){
+    			Application_Form_FrmMessage::message("Application Error");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    	$type=3; //Product
+    	$row =$db->getItemsDetailById($id,$type);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    	}
+    	$this->view->row = $row;
+    	$this->view->productBranch = $db->getProductLocation($id);
+    	 
+    	$frm = new Global_Form_FrmItemsDetail();
+    	$frm->FrmAddItemsDetail($row,$type);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_items = $frm;
+    	 
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    
+    	$model = new Application_Model_DbTable_DbGlobal();
+    	$branch = $model->getAllBranchName();
+    	array_unshift($branch, array ( 'id' => "",'name' => $tr->translate("SELECT_LOCATION")));
+    	$this->view->branchopt = $branch;
+    
+    }
 }

@@ -46,8 +46,11 @@
 		$_db= $this->getAdapter();
 		try{
 			$db_items = new Global_Model_DbTable_DbItems();
+			$schooloption="";
+			if (!empty($_data['items_id'])){
 			$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
 			$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
+			}
 			$_arr=array(
 					'items_id'=> $_data['items_id'],
 					'items_type'=> $_data['items_type'],
@@ -74,8 +77,11 @@
 		$_db= $this->getAdapter();
 		try{
 			$db_items = new Global_Model_DbTable_DbItems();
+			$schooloption="";
+			if (!empty($_data['items_id'])){
 			$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
 			$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
+			}
 			$_arr=array(
 					'items_id'=> $_data['items_id'],
 					'items_type'=> $_data['items_type'],
@@ -107,8 +113,11 @@
 		$_db= $this->getAdapter();
 		try{
 			$db_items = new Global_Model_DbTable_DbItems();
-			$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
-			$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
+			$schooloption="";
+			if (!empty($_data['items_id'])){
+				$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
+				$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
+			}
 			
 			$part= PUBLIC_PATH.'/images/proimage/';
 			if (!file_exists($part)) {
@@ -195,7 +204,7 @@
 			END AS product_type,
 			ide.modify_date,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name,
-			ide.status FROM `rms_itemsdetail` AS ide WHERE 1
+			ide.status FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 0
 			";
 		$orderby = " ORDER BY ide.items_id ASC,ide.ordering ASC, ide.id DESC ";
 		$where = ' ';
@@ -348,6 +357,220 @@
 			Application_Form_FrmMessage::message("Application Error!");
 			echo $e->getMessage();
 		}
+	}
+	
+	
+	public function addProductSet($_data){
+		$_db= $this->getAdapter();
+		try{
+			$db_items = new Global_Model_DbTable_DbItems();
+			$schooloption="";
+			if (!empty($_data['items_id'])){
+				$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
+				$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
+			}
+				
+			$_arr=array(
+					'items_id'=> $_data['items_id'],
+					'items_type'=> $_data['items_type'],
+					'code'=> $_data['code'],
+					'title'	  => $_data['title'],
+					'note'    => $_data['note'],
+					'product_type' => 1,
+					'is_productseat' => 1,
+					'price'    => $_data['price'],
+					'schoolOption'    => $schooloption,
+					'create_date' => date("Y-m-d H:i:s"),
+					'modify_date' => date("Y-m-d H:i:s"),
+					'status'=> 1,
+					'user_id'	  => $this->getUserId()
+			);
+			$this->_name = "rms_itemsdetail";
+			$id =  $this->insert($_arr);
+			
+			$this->_name='rms_product_setdetail';
+			$ids = explode(',', $_data['identity']);
+			if (!empty($ids)){
+				foreach ($ids as $i){
+					$_arrss = array(
+							'pro_id'=>$id,
+							'subpro_id'=>$_data['product_'.$i],
+							'qty'=>$_data['qty_'.$i],
+							'remark'=>$_data['note_'.$i],
+					);
+					$this->insert($_arrss);
+				}
+			}
+				
+			return $id;
+		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("Application Error!");
+			echo $e->getMessage();
+		}
+	}
+	public function updateProductSet($_data){
+		$_db= $this->getAdapter();
+		try{
+			$db_items = new Global_Model_DbTable_DbItems();
+			$schooloption="";
+			if (!empty($_data['items_id'])){
+				$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
+				$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
+			}
+	
+			$_arr=array(
+					'items_id'=> $_data['items_id'],
+					'items_type'=> $_data['items_type'],
+					'code'=> $_data['code'],
+					'title'	  => $_data['title'],
+					'note'    => $_data['note'],
+					'product_type' => 1,
+					'is_productseat' => 1,
+					'price'    => $_data['price'],
+					'schoolOption'    => $schooloption,
+// 					'create_date' => date("Y-m-d H:i:s"),
+					'modify_date' => date("Y-m-d H:i:s"),
+					'status'=> 1,
+					'user_id'	  => $this->getUserId()
+			);
+			$this->_name = "rms_itemsdetail";
+			$id =  $_data["id"];
+			$where = $_db->quoteInto("id=?", $id);
+			$this->update($_arr, $where);
+			
+			
+			$identitys = explode(',',$_data['identity']);
+			$detailId="";
+			if (!empty($identitys)){
+				foreach ($identitys as $i){
+					if (empty($detailId)){
+						if (!empty($_data['detailid'.$i])){
+							$detailId = $_data['detailid'.$i];
+						}
+					}else{
+						if (!empty($_data['detailid'.$i])){
+							$detailId= $detailId.",".$_data['detailid'.$i];
+						}
+					}
+				}
+			}
+			$this->_name='rms_product_setdetail';
+			$where="pro_id = ".$_data["id"];
+			if (!empty($detailId)){
+				$where.=" AND id NOT IN ($detailId) ";
+			}
+			$this->delete($where);
+			
+			$this->_name='rms_product_setdetail';
+			$ids = explode(',', $_data['identity']);
+			if (!empty($ids)){
+				foreach ($ids as $i){
+					if (!empty($_data['detailid'.$i])){
+						$_arrss = array(
+								'pro_id'=>$id,
+								'subpro_id'=>$_data['product_'.$i],
+								'qty'=>$_data['qty_'.$i],
+								'remark'=>$_data['note_'.$i],
+						);
+						$where =" id =".$_data['detailid'.$i];
+						$this->update($_arrss, $where);
+					}else{
+						$_arrss = array(
+								'pro_id'=>$id,
+								'subpro_id'=>$_data['product_'.$i],
+								'qty'=>$_data['qty_'.$i],
+								'remark'=>$_data['note_'.$i],
+						);
+						$this->insert($_arrss);
+					}
+				}
+			}
+	
+			return $id;
+		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("Application Error!");
+			echo $e->getMessage();
+		}
+	}
+	function getAllProductSet($search = '',$items_type=null){
+		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$result = $dbgb->getUserInfo();
+		$level = $result["level"];
+		$branch_id = $result["branch_id"];
+		$string="";
+		$location="";
+	
+		$sql = " SELECT ide.id,ide.code,ide.title,
+			(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
+			ide.price,
+			ide.modify_date,
+			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name,
+			ide.status FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 1
+		";
+		$orderby = " ORDER BY ide.items_id ASC,ide.ordering ASC, ide.id DESC ";
+		$where = ' ';
+		if(!empty($items_type)){
+			$where.= " AND ide.items_type = ".$db->quote($items_type);
+		}
+		
+		$from_date =(empty($search['start_date']))? '1': " ide.modify_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " ide.modify_date <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
+		
+		if(!empty($search['advance_search'])){
+		$s_where = array();
+		$s_search = addslashes(trim($search['advance_search']));
+			$s_where[] = " ide.title LIKE '%{$s_search}%'";
+			$s_where[] = " ide.price LIKE '%{$s_search}%'";
+			$sql .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['items_search'])){
+		$where.= " AND ide.items_id  = ".$db->quote($search['items_search']);
+		}
+		if($search['status_search']>-1){
+			$where.= " AND status = ".$db->quote($search['status_search']);
+		}
+// 		if($search['product_type_search']>-1){
+// 			$where.= " AND ide.product_type = ".$db->quote($search['product_type_search']);
+// 		}
+		return $db->fetchAll($sql.$where.$location.$orderby);
+	}
+	function getProductSetDetailById($id){
+		$db=$this->getAdapter();
+		$sql="SELECT *,
+			(SELECT p.title FROM `rms_itemsdetail` AS p WHERE p.id = rms_product_setdetail.subpro_id LIMIT 1) AS title,
+			(SELECT p.cost FROM `rms_itemsdetail` AS p WHERE p.id = rms_product_setdetail.subpro_id LIMIT 1) AS pro_price
+			FROM rms_product_setdetail
+			WHERE pro_id=$id";
+		return $db->fetchAll($sql);
+	}
+	
+	function getAllProductsNormal(){
+		$db = $this->getAdapter();
+		$sql="SELECT i.id,
+		CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+		FROM `rms_itemsdetail` AS i
+		WHERE i.status =1 AND i.items_type=3 AND i.product_type =1 AND i.is_productseat=0  ";
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$branchlist = $dbgb->getAllSchoolOption();
+		if (!empty($branchlist)){
+			foreach ($branchlist as $i){
+				$s_where[] = $i['id']." IN (i.schoolOption)";
+			}
+			$sql .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		$user = $dbgb->getUserInfo();
+		$level = $user['level'];
+		if ($level!=1){
+			$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+		}
+		$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+		return $db->fetchAll($sql);
 	}
 	
 	//Ajx Function

@@ -99,6 +99,14 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	
     	));
     	
+    	$_price = new Zend_Dojo_Form_Element_NumberTextBox('price');
+    	$_price->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'class'=>' fullside height-text',
+    			'placeholder'=>$this->tr->translate("PRICE"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Price")
+    			 
+    	));
     	
     	$id = new Zend_Form_Element_Hidden('id');
     	
@@ -145,6 +153,33 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_product_type_search->setValue($request->getParam("product_type_search"));
     	
+    	
+    	$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
+    	$start_date->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'value'=>'now',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			'class'=>'fullside',));
+    	$_date = $request->getParam("start_date");
+    	// 		if(empty($_date)){
+    	// 			$_date = date('Y-m-d');
+    	// 		}
+    	$start_date->setValue($_date);
+    	
+    	$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
+    	$date = date("Y-m-d");
+    	$end_date->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			'required'=>false));
+    	$_date = $request->getParam("end_date");
+    	if(empty($_date)){
+    		$_date = date("Y-m-d");
+    	}
+    	$end_date->setValue($_date);
+    	
+    	
     	if(!empty($data)){
     		$title->setValue($data["title"]);
     		$_shortcut->setValue($data["shortcut"]);
@@ -158,6 +193,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     		if ($data["items_type"]==3){ // product
 	    		$_product_type->setValue($data["product_type"]);
 	    		$_cost->setValue($data["cost"]);
+	    		$_price->setValue($data["price"]);
     		}
     		
     	}
@@ -174,10 +210,13 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
 				$_status_search,
 				$_items_search,
     			$_product_type_search,
+    			$start_date,
+    			$end_date,
     			
     			$code,
     			$_product_type,
-    			$_cost
+    			$_cost,
+    			$_price
     			));
     	return $this;
     }

@@ -67,6 +67,11 @@ input.btn_borwse_image {
     	<form  id='edit-major' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
+					items_id = dijit.byId('items_id').get('value');
+					if(items_id=="" || items_id==-1){
+						alert("<?php echo $tr->translate("PLEASE_PRODUCT_CATEGORY");?>");
+						return false;
+					}
 					loadingBlock();
                 	//dijit.byId("save_new").attr("disabled",true);
 					//dijit.byId("save_close").attr("disabled",true);

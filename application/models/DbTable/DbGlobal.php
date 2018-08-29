@@ -667,7 +667,8 @@ function getAllgroupStudy($teacher_id=null){
    function getAllYear($type=1){
 	   	$db = $this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
-	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name 
+	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name,
+	   	CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years 
 	   		FROM rms_tuitionfee WHERE `status`=1
 	   		AND type=1
 	   		AND is_finished=0 $branch_id 

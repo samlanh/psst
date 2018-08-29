@@ -1129,7 +1129,9 @@ function getMonthByNumber(m){
 				</tr>
 			</table>
 		</div>
-		
+		<div id="PrintReceipt1">
+			<div id="innerPrintReceipt"></div>
+		</div>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
 			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 					type="button" onclick="hideDialog();">Cancel</button>
@@ -1190,7 +1192,8 @@ function displayNone(){
 	document.getElementById('PrintReceipt1').style.display="none";
 }
 function printSubmit(){	
-	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
+	dojo.byId('innerPrintReceipt').innerHTML = dojo.byId('PrintReceipt').innerHTML;
+	window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML<?php if($this->data['receipt_print']==2){ ?>+dojo.byId('innerPrintReceipt').innerHTML<?php }?>;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
 	hideDialog1();

@@ -66,24 +66,24 @@ public function addAction(){
 			}
 		}
 		$_pur = new Accounting_Model_DbTable_DbPurchase();
-		$pro=$_pur->getProductName();
-		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->product= $pro;
+// 		$pro=$_pur->getProductName();
+// 		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->product= $pro;
 		
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->bran_name=$_pur->getAllBranch();
 		
-		$db_gr=new Global_Model_DbTable_DbGrade();
-		$d_row=$db_gr->getNameGradeAll();
-		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->grade_name=$d_row;
+// 		$db_gr=new Global_Model_DbTable_DbGrade();
+// 		$d_row=$db_gr->getNameGradeAll();
+// 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->grade_name=$d_row;
 		
-		$_pro = new Accounting_Model_DbTable_DbProduct();
-		$this->view->pro_code=$_pro->getProCode();
-		$pro_cate = $_pro->getProductCategory();
-		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>$this->tr->translate("ADD_NEW")));
-		$this->view->cat_rows = $pro_cate;
+// 		$_pro = new Accounting_Model_DbTable_DbProduct();
+// 		$this->view->pro_code=$_pro->getProCode();
+// 		$pro_cate = $_pro->getProductCategory();
+// 		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>$this->tr->translate("ADD_NEW")));
+// 		$this->view->cat_rows = $pro_cate;
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$branch = $model->getAllBranchName();
@@ -95,8 +95,11 @@ public function addAction(){
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
 		
-		
-	
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$d_row= $db->getAllProductsNormal();
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+		$this->view->product= $d_row;
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');
@@ -180,4 +183,22 @@ function getStudentAction(){
     	}
     }
 
+    
+    
+    function refreshproductAction(){
+    	if($this->getRequest()->isPost()){
+    		try{
+    			$data = $this->getRequest()->getPost();
+    			$db = new Global_Model_DbTable_DbItemsDetail();
+    			$d_row= $db->getAllProductsNormal();
+    			array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+    			print_r(Zend_Json::encode($d_row));
+    			exit();
+    		}catch(Exception $e){
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    }
 }

@@ -550,12 +550,17 @@
 		return $db->fetchAll($sql);
 	}
 	
-	function getAllProductsNormal(){
+	function getAllProductsNormal($product_type=null){
 		$db = $this->getAdapter();
 		$sql="SELECT i.id,
 		CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
 		FROM `rms_itemsdetail` AS i
-		WHERE i.status =1 AND i.items_type=3 AND i.product_type =1 AND i.is_productseat=0  ";
+		WHERE i.status =1 AND i.items_type=3 AND i.is_productseat=0  ";
+		
+		if(!empty($product_type)){//check type product sale or office
+			$sql.= " AND i.product_type = ".$db->quote($product_type);
+		}
+		
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$branchlist = $dbgb->getAllSchoolOption();
 		if (!empty($branchlist)){

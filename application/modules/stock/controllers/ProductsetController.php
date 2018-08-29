@@ -73,7 +73,8 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 		$this->view->frm_items = $frm;
 		
 		
-		$d_row= $db->getAllProductsNormal();
+		$product_type=1;
+		$d_row= $db->getAllProductsNormal($product_type);
 	    array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 	    array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 	    $this->view->productlist=$d_row;
@@ -104,8 +105,8 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 		    $frm->FrmAddItemsDetail($row,$type);
 		    Application_Model_Decorator::removeAllDecorator($frm);
 		    $this->view->frm_items = $frm;
-		    
-		    $d_row= $db->getAllProductsNormal();
+		    $product_type=1;
+		    $d_row= $db->getAllProductsNormal($product_type);
 		    array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		    array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 		    $this->view->productlist=$d_row;
@@ -115,7 +116,8 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 			try{
 				$data = $this->getRequest()->getPost();
 				$db = new Global_Model_DbTable_DbItemsDetail();
-				$d_row= $db->getAllProductsNormal();
+				$product_type=1;
+				$d_row= $db->getAllProductsNormal($product_type);
 				array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 				array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
 				print_r(Zend_Json::encode($d_row));

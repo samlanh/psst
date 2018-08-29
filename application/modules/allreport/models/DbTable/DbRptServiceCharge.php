@@ -76,18 +76,6 @@ class Allreport_Model_DbTable_DbRptServiceCharge extends Zend_Db_Table_Abstract
     	$sql.=" ORDER BY sd.service_id ";
     	return $db->fetchAll($sql);
     }
-
-    function getAllYearService(){
-    	$db=$this->getAdapter();
-    	
-    	$_db=new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
-    	
-    	$sql=" select CONCAT(from_academic,'-',to_academic,'(',generation,')')as year ,id from rms_servicefee where 1  $branch_id  ";
-    	return $db->fetchAll($sql);
-    }	
-    
-    
 }
 
 

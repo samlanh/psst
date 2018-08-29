@@ -193,13 +193,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$db = $this->getAdapter();
    	$sql ="SELECT dept_id AS id, en_name AS name FROM rms_dept WHERE is_active=1 AND (en_name!='' OR kh_name!='') ORDER BY id DESC";
    	return $db->fetchAll($sql);
-   }
-   
-   function getAllgroupStudy($teacher_id=null){
+   }   
+function getAllgroupStudy($teacher_id=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
-   	FROM `rms_group` AS `g`  ";
+   			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
+   		FROM `rms_group` AS `g`  ";
    	if($teacher_id!=null){
    		$sql.=" ,rms_group_subject_detail AS gsd WHERE g.id =gsd.group_id AND gsd.teacher= ".$teacher_id;
    	}else{
@@ -207,7 +206,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}
    	$sql.=" AND g.status =1 AND group_code!=''";
    	return $db->fetchAll($sql);
-   }
+}
    function getAllgroupStudyNotPass($action=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
@@ -665,9 +664,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	$sql="SELECT dept_id as id,CONCAT(en_name) AS name FROM rms_dept WHERE `is_active`=1";
 	   	return $db->fetchAll($sql);
    }
-   function getAllYear(){
+   function getAllYear($type=1){
 	   	$db = $this->getAdapter();
-	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
+	   	$branch_id = $this->getAccessPermission();
+	   	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS name 
+	   		FROM rms_tuitionfee WHERE `status`=1
+	   		AND type=1
+	   		AND is_finished=0 $branch_id 
 	   	GROUP BY from_academic,to_academic,generation";
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);
@@ -1112,7 +1115,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   	if($option!=null){
   		$sql.=" AND i.items_type=".$option;
   	}
-	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
   	
   	$branchlist = $this->getAllSchoolOption();
   	if (!empty($branchlist)){

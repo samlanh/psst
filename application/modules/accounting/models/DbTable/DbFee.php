@@ -19,7 +19,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	t.status,
     	(select CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user
     	FROM `rms_tuitionfee` AS t
-    	WHERE 1	";
+    	WHERE t.type=1	";
     	$where =" ";
     	 
     	if(!empty($search['title'])){

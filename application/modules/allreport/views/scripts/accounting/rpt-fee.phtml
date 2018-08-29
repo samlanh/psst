@@ -11,14 +11,7 @@
 				<td>	
 					<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
 				</td>	
-				<td>
-					<select class="fullside"   name="year" id="year" dojoType="dijit.form.FilteringSelect">
-						<option value=""><?php echo $tr->translate("SELECT_YEAR");?></option>
-						<?php if(!empty($this->row)){foreach ($this->row as $id ){?>
-							<option value="<?php echo $id['id']?>" <?php if($id['id']==$this->search['year']) echo 'selected="selected"' ?>><?php echo $id['year'];?></option>
-						<?php }}?>
-					</select>
-				</td>
+				<td><?php echo $frm->getElement('study_year')?></td>
 				<td><?php echo $frm->getElement('branch_id')?></td>
 				<td><?php echo $frm->getElement('generation')?></td>
 			</tr>

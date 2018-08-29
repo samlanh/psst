@@ -1893,27 +1893,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$order);
     }
     
-    function getAllYears(){
+    function getAllYears($type=1){
     	$db = $this->getAdapter();
-    	
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
-    	
-    	$sql = "SELECT 
-				  id,
-				  CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years
-				FROM 
-					rms_tuitionfee 
-				WHERE 
-					`status` = 1 and is_finished=0 $branch_id  
-				GROUP BY 
-				  	from_academic,
-				  	to_academic,
-				  	generation
-				";
-    	$order=' ORDER BY id DESC';
-    	
-    	return $db->fetchAll($sql.$order);
+    	return $_db->getAllYear();
     }
     
     function getAllYearsServiceFee(){
@@ -2173,13 +2156,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		
     		$this->insert($arr);
     }
-    
-    function getGradeAllDept(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT major_id AS id,CONCAT(major_enname ,' (',(select shortcut from rms_dept where rms_dept.dept_id=rms_major.dept_id LIMIT 1),')') AS `name` FROM rms_major where major_enname!='' AND is_active=1 order by dept_id,major_id ";
-    	return $db->fetchAll($sql);
-    }
-    
+    function getGradeAllDept($type){
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	return $db->getAllGradeStudy($type);
+    }  
     function getGradeAll(){
     	$db=$this->getAdapter();
     	$sql="SELECT major_id AS id,major_enname AS `name` FROM rms_major WHERE major_enname!='' AND is_active=1 AND major_enname!='' ";
@@ -2196,10 +2176,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     }
     
-    function getAllDegreeBac(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE en_name!=''  AND is_active=1 ";
-    	return $db->fetchAll($sql);
+    function getAllDegreeBac($type){
+    	$db=new Application_Model_DbTable_DbGlobal();
+    	return $db->getAllItems($type,null);
     }
    
     function getGradeAllBac(){

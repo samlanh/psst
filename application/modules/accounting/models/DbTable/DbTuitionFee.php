@@ -212,11 +212,8 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     }
  
     function getAllBranch(){
-    	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission('br_id');
-    	$sql="select br_id as id, CONCAT(branch_nameen) as name from rms_branch WHERE branch_nameen!='' AND  status=1  $branch_id ";
-    	return $db->fetchAll($sql);
+    	return $_db->getAllBranch();
     } 
     
     function getProcessTypeView(){

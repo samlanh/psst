@@ -17,7 +17,6 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$userid = $_dbgb->getUserId();
     	$userinfo = $_dbuser->getUserInfo($userid);
     	
-    	
     	$code = new Zend_Dojo_Form_Element_TextBox('code');
     	$code->setAttribs(array(
     			'dojoType'=>'dijit.form.TextBox',
@@ -38,12 +37,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_shortcut = new Zend_Dojo_Form_Element_TextBox('shortcut');
     	$_shortcut->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
-    			//'required'=>'true',
     			'class'=>' fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter Shortcut")
-    			
     	));
-
     	
     	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
     	$Option = $_dbgb->getAllItems($typeItems);
@@ -61,16 +57,13 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.NumberTextBox',
     			'class'=>' fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter Ordering")
-    			 
     	));
-    	
     	
     	$note=  new Zend_Form_Element_Textarea('note');
     	$note->setAttribs(array(
     			'dojoType'=>'dijit.form.Textarea',
     			'class'=>'fullside',
     			'style'=>'font-family: inherit;  min-height:100px !important;'));
-    	
     	
     	$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
     	$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
@@ -96,7 +89,6 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'class'=>' fullside height-text',
     			'placeholder'=>$this->tr->translate("UNIT_COST"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Cost")
-    	
     	));
     	
     	$_price = new Zend_Dojo_Form_Element_NumberTextBox('price');
@@ -105,13 +97,10 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'class'=>' fullside height-text',
     			'placeholder'=>$this->tr->translate("PRICE"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Price")
-    			 
     	));
     	
     	$id = new Zend_Form_Element_Hidden('id');
     	
-    	
-    	//for form Search
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
     	$advance_search->setAttribs(array(
     			'dojoType'=>'dijit.form.TextBox',
@@ -130,7 +119,6 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_status_search->setValue($request->getParam("status_search"));
     	
-    	
     	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
     	$Option = $_dbgb->getAllItems($typeItems);//degree
     	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
@@ -143,7 +131,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_items_search->setValue($request->getParam("items_search"));
     	
-    	$_arr = array(-1=>$this->tr->translate("TYPE"),1=>$this->tr->translate("PRODUCT_FOR_SELL"),2=>$this->tr->translate("OFFICE_MATERIAL"));
+    	$_arr = array(-1=>$this->tr->translate("TYPE"),
+    			1=>$this->tr->translate("PRODUCT_FOR_SELL"),
+    			2=>$this->tr->translate("OFFICE_MATERIAL"));
     	$_product_type_search = new Zend_Dojo_Form_Element_FilteringSelect("product_type_search");
     	$_product_type_search->setMultiOptions($_arr);
     	$_product_type_search->setAttribs(array(
@@ -153,6 +143,17 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_product_type_search->setValue($request->getParam("product_type_search"));
     	
+    	$_arr = array(
+    			0=>$this->tr->translate("IS_VALIDATE"),
+    			1=>$this->tr->translate("ONE_PAYMENTONLY"));
+    	$_onepayment = new Zend_Dojo_Form_Element_FilteringSelect("is_onepayment");
+    	$_onepayment->setMultiOptions($_arr);
+    	$_onepayment->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_onepayment->setValue($request->getParam("is_onepayment"));
     	
     	$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
     	$start_date->setAttribs(array(
@@ -161,9 +162,6 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
     			'class'=>'fullside',));
     	$_date = $request->getParam("start_date");
-    	// 		if(empty($_date)){
-    	// 			$_date = date('Y-m-d');
-    	// 		}
     	$start_date->setValue($_date);
     	
     	$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
@@ -179,7 +177,6 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	}
     	$end_date->setValue($_date);
     	
-    	
     	if(!empty($data)){
     		$title->setValue($data["title"]);
     		$_shortcut->setValue($data["shortcut"]);
@@ -188,16 +185,14 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     		$note->setValue($data["note"]);
     		$_status->setValue($data["status"]);
     		$id->setValue($data["id"]);
-    		
+    		$_onepayment->setValue($data["is_onepayment"]);
     		$code->setValue($data["code"]);
     		if ($data["items_type"]==3){ // product
 	    		$_product_type->setValue($data["product_type"]);
 	    		$_cost->setValue($data["cost"]);
 	    		$_price->setValue($data["price"]);
     		}
-    		
     	}
-    	
     	$this->addElements(array(
     			$title,
 				$_shortcut,
@@ -206,13 +201,13 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
 				$note,
 				$_status,
 				$id,
+    			$_onepayment,
 				$advance_search,
 				$_status_search,
 				$_items_search,
     			$_product_type_search,
     			$start_date,
     			$end_date,
-    			
     			$code,
     			$_product_type,
     			$_cost,
@@ -221,4 +216,3 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	return $this;
     }
 }
-

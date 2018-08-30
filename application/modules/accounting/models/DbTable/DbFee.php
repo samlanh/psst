@@ -175,12 +175,12 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     
     function getAceYear(){
     	$db=$this->getAdapter();
-    	 
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
-    	$sql="SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS `name`
-    	FROM rms_tuitionfee WHERE `status`=1 $branch_id  group by from_academic,to_academic,generation,time ";
-    	$oder=" ORDER BY id DESC ";
-    	return $db->fetchAll($sql.$oder);
+    	return $_db->getAllYear(2);
+//     	$branch_id = $_db->getAccessPermission();
+//     	$sql="SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS `name`
+//     	FROM rms_tuitionfee WHERE `status`=1 $branch_id  group by from_academic,to_academic,generation,time ";
+//     	$oder=" ORDER BY id DESC ";
+//     	return $db->fetchAll($sql.$oder);
     }
 }

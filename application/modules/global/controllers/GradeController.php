@@ -84,7 +84,6 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	
     	$_model = new Global_Model_DbTable_DbGroup();
     	$this->view->subject = $_model->getAllSubjectStudy();
-    	
     }
     
     public function editAction(){

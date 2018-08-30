@@ -120,14 +120,15 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql=" SELECT  sp.id,sp.supplier_no,s.sup_name,s.tel,
 		           (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name ,
-		           pro.pro_name AS pro_id,
-		           (SELECT g.name_kh FROM `rms_pro_category` AS g WHERE g.id=pro.cat_id LIMIT 1) AS cate_name,
+		           pro.title AS pro_id,
+		           (SELECT it.title FROM `rms_items` AS it WHERE it.id = pro.items_id LIMIT 1) AS cate_name,
+		          
 		            spd.qty,spd.qty,spd.cost,spd.amount,spd.date,
 		       		(SELECT name_kh FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
        				FROM rms_supplier_product AS sp,
        				rms_supproduct_detail AS spd,
        				rms_supplier AS s,
-       				rms_product as pro
+       				rms_itemsdetail AS pro
        				WHERE sp.id=spd.supproduct_id  
     					AND s.id=sp.sup_id
     				AND pro.id=spd.pro_id	";
@@ -152,7 +153,7 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$where.=" AND spd.pro_id=".$search['product'];
     	}
     	if($search['category_id']>0){
-    		$where.=" AND pro.cat_id=".$search['category_id'];
+    		$where.=" AND pro.items_id =".$search['category_id'];
     	}
 //     	if($search['status_search']==1 OR $search['status_search']==0){
 //     		$where.=" AND spd.status=".$search['status_search'];

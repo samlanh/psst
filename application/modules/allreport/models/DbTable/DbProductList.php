@@ -54,31 +54,35 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     	}
     	
     	$sql="SELECT 
-    				p.pro_code,
-    				CONCAT(p.pro_name) AS pro_name ,
-    	            (SELECT name_kh FROM `rms_pro_category` WHERE id = p.cat_id limit 1) as category_name,
-    	            (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id limit 1) AS brand_name,
+    				p.code AS pro_code,
+    				CONCAT(p.title) AS pro_name ,
+    				(SELECT it.title FROM `rms_items` AS it WHERE it.id = p.items_id LIMIT 1) AS category_name,
+    	           
+    	            (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id LIMIT 1) AS brand_name,
     	            pl.brand_id,
     				pl.pro_qty,
     				pl.note,
-    				p.pro_price,
+    				p.price,
+    				pl.price AS pro_price, 
     				p.cost,
     				pl.total_amount,
-			        p.date,
-			        (SELECT name_kh FROM rms_view WHERE rms_view.key_code=p.status AND rms_view.type=1 limit 1) AS `status` 
+			        p.create_date AS date,
+			        (SELECT name_kh FROM rms_view WHERE rms_view.key_code=p.status AND rms_view.type=1 LIMIT 1) AS `status` 
 			  FROM 
-			  		rms_product AS p,
+			  		`rms_itemsdetail` AS p,
 			  		rms_product_location AS pl
 			  WHERE 
     				p.id=pl.pro_id 
+    				AND p.items_type=3
     				$branch_id ";
     	$where=" ";
     	if(!empty($search['title'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['title']));
-    		$s_where[]= " p.pro_code LIKE '%{$s_search}%'";
-    		$s_where[]= " p.pro_name LIKE '%{$s_search}%'";
-    		$s_where[]= " p.pro_price LIKE '%{$s_search}%'";
+    		$s_where[]= " p.code LIKE '%{$s_search}%'";
+    		$s_where[]= " p.title LIKE '%{$s_search}%'";
+    		$s_where[]= " p.cost LIKE '%{$s_search}%'";
+    		$s_where[]= " p.price LIKE '%{$s_search}%'";
     		$s_where[]= "  pl.pro_qty LIKE '%{$s_search}%'";
     		$s_where[]= "  pl.total_amount LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
@@ -93,12 +97,12 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     		$where.=" AND p.status=".$search['status_search'];
     	}
     	if($search['category_id']>0){
-    		$where.=" AND p.cat_id=".$search['category_id'];
+    		$where.=" AND p.items_id=".$search['category_id'];
     	}
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('brand_id');
-    	$where.=" ORDER BY pl.brand_id DESC,p.cat_id DESC";
+    	$where.=" ORDER BY pl.brand_id DESC,p.items_id DESC";
     	return $db->fetchAll($sql.$where);
     }
     function getProductsByLocId($loc_id){

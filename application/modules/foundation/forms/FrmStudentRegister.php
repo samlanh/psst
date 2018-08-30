@@ -115,9 +115,10 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'style'=>'color: red;',
 				));
 		
-		$rs_year = $_db->getAllYear();
+		$db = new Global_Model_DbTable_DbGroup();
+		$rs_year = $db->getAllYears();
 		$opt_year = array() ;//array(-1=>$this->tr->translate("SELECT_DEPT"));
-		if(!empty($rs_year))foreach($rs_year AS $row) $opt_year[$row['id']]=$row['name'];			
+		if(!empty($rs_year))foreach($rs_year AS $row) $opt_year[$row['id']]=$row['years'];			
 		$_academic_year = new Zend_Dojo_Form_Element_FilteringSelect("academic_year");
 		$_academic_year->setMultiOptions($opt_year);
 		$_academic_year->setAttribs(array(
@@ -154,7 +155,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		if(!empty($rs_degree))foreach($rs_degree AS $row) $arr_opt[$row['id']]=$row['name'];
 		$degree->setMultiOptions($arr_opt);
 		
-		$degree_stu =  new Zend_Dojo_Form_Element_FilteringSelect('degree_student');
+		$degree_stu =  new Zend_Dojo_Form_Element_FilteringSelect('calture');
 		$degree_stu->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
@@ -287,7 +288,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$_academic_year->setValue($data['academic_year']);
 			$session->setValue($data['session']);
 			$degree->setValue($data['degree']);
-			$degree_stu->setValue($data['degree_student']);
+			$degree_stu->setValue($data['calture']);
 			$room->setValue($data['room']);
 			$status->setValue($data['status']);
 			$remark->setValue($data['remark']);

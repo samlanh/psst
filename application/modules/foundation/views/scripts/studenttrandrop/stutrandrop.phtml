@@ -1,0 +1,416 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
+	echo $this->headTitle(''); 
+	$frm = $this->frm;
+?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<div class="card">
+	<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-graduation-cap " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_STUDENT_DROP');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+	<div class="card-content collapse show">
+		<form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+  				//if(maxSize == 1){
+      				// alert('<?php //echo $tr->translate("Image size more than 5Mb can not upload");?>');
+      				 //return false;
+      			//}
+				dijit.byId('save_close').set('disabled',true);	
+				return true;
+			}else {
+				return false;
+			}
+			</script>
+		    <!--/. Tab Menu -->
+		    <div class="col-md-12">
+		        <!-- Tab panels -->
+		        <div class="tab-content vertical">
+			        <!--Panel 1-->
+			            <div class="card-box">
+							<div class="col-md-4 col-sm-4 col-xs-12">
+				                <div class="form-group">
+				                   <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_ID");?> <span class="required">*</span> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("student_id");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GROUP");?> <span class="required">*</span> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input id="group" />
+										<input class="fullside" dojoType="dijit.form.TextBox"  id="old_group_id" name="old_group_id" value="<?php echo $this->rs['group_id'];?>" type="hidden"  >
+				                   </div>
+				                </div>
+				                 <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CULTURE_LEVEL");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("calture");?>
+				                   </div>
+				                </div>  
+						        <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ACADEMIC_YEAR");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("academic_year");?>
+				                   </div>
+				                </div>  
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SESSION");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("session");?>
+				                   </div>
+				                </div>
+				                 <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("degree");?>
+				                   </div>
+				                </div>
+				            </div>
+				            <div class="col-md-4 col-sm-4 col-xs-12">
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GRADE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input class="fullside" tabindex="17" id="grade" value="<?php echo $this->rs['grade'];?>" />
+										<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
+				                   </div>
+				                </div>  
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ROOM_NAME");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("room");?>
+				                   </div>
+				                </div>  
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("status");?>
+				                   </div>
+				                </div>  
+				            </div>
+						</div>
+			    </div>
+			</div>
+			<div class="clearfix"></div>
+		    <div class="card-box">
+               	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+               			<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
+						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"register",'action'=>'index'),null,true); ?>';" />
+					<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+	    		</div>
+	    	</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.Textarea");
+dojo.require("dojo.NodeList-manipulate");
+
+var language_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->lang_level));?> );
+var job_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+var job_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+var job_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->group));?> );
+var knowby_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->know_by));?> );
+var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
+
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: group_store,
+	    autoComplete: true,                        
+	    id: "group",
+	    name: "group",  
+	    value:'<?php echo $this->rs['group_id'];?>' ,       
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",  
+	    onChange: function() {  
+	    	group_id = dijit.byId('group').get('value');
+	    	if(group_id==-1){
+	    		dijit.byId('academic_year').set('readOnly',false);
+	    		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
+			  }else{
+				  getInfoBygroup();
+			  }
+	    }
+	}, "group");
+	 getInfoBygroup();
+	 initialize();
+	
+	new dijit.form.FilteringSelect({
+	    autoComplete: true,                        
+	    id: "grade",
+	    name: "grade",
+	    required : "false",          
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+	    onChange: function() {  
+	    }
+	}, "grade");
+	getallGrade(1);
+
+	new dijit.form.FilteringSelect({
+		store: job_store,
+		autoComplete: true,                        
+	    id: "fa_job",
+	    name: "fa_job",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
+	    onChange: function() {          
+	   	fa_job = dijit.byId('fa_job').get('value');
+	    if(fa_job==-1){
+	   	 	dijit.byId("popup_dept2").show();
+		   	dijit.byId('value_j').attr('value',1);
+	    }
+	    else {
+	    }  
+	   } 
+	}, "fa_job");
+	dijit.byId('fa_job').attr('value',"<?php echo $this->rs['father_job']?>");
+	fa = dijit.byId('fa_job').get('value');
+	if(fa==''){
+		dijit.byId('fa_job').attr('value',0);
+	}
+
+	new dijit.form.FilteringSelect({
+		store: job_store,
+		autoComplete: true,                        
+	    id: "mo_job",
+	    name: "mo_job",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
+	    onChange: function() {          
+	   	mo_job = dijit.byId('mo_job').get('value');
+	    if(mo_job==-1){
+	   	 dijit.byId("popup_dept2").show();
+		   	dijit.byId('value_j').attr('value',2);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "mo_job");
+	
+	dijit.byId('mo_job').attr('value',"<?php echo $this->rs['mother_job']?>");
+	mo = dijit.byId('mo_job').get('value');
+	if(mo==''){
+		dijit.byId('mo_job').attr('value',0);
+	}
+	new dijit.form.FilteringSelect({
+		store: job_store,
+		autoComplete: true,                        
+	    id: "gu_job",
+	    name: "gu_job",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
+	    onChange: function() {          
+	   	mo_job = dijit.byId('gu_job').get('value');
+	    if(mo_job==-1){
+	   	 dijit.byId("popup_dept2").show();
+		   	dijit.byId('value_j').attr('value',3);
+	     }
+	    else {}  
+	   } 
+	}, "gu_job");
+	dijit.byId('gu_job').attr('value',"<?php echo $this->rs['guardian_job']?>");
+	fa = dijit.byId('gu_job').get('value');
+	if(fa==''){
+		dijit.byId('gu_job').attr('value',0);
+	}
+	
+	new dijit.form.FilteringSelect({
+		store: language_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                        
+	    id: "lang_level",
+	    name: "lang_level",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_LANGUAGE_LEVEL");?>", 
+	    onChange: function() {          
+			lang_level = dijit.byId('lang_level').get('value');
+			if(lang_level==-1){
+				dijit.byId("popup_lang_level").show();
+			}
+	    } 
+	}, "lang_level");
+	dijit.byId('lang_level').attr('value',"<?php echo $this->rs['lang_level']?>");
+	lang_level = dijit.byId('lang_level').get('value');
+	if(lang_level==''){
+		dijit.byId('lang_level').attr('value',0);
+	}
+	
+	new dijit.form.FilteringSelect({
+		store: knowby_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                        
+	    id: "know_by",
+	    name: "know_by",  
+	    tabindex: "17",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT");?>", 
+	    onChange: function() {          
+	   	know_by = dijit.byId('know_by').get('value');
+	    if(know_by==-1){
+			dijit.byId("popup_know_by").show();
+	    }
+	   } 
+	}, "know_by");
+	dijit.byId('know_by').attr('value',"<?php echo $this->rs['know_by']?>");
+	know_by = dijit.byId('know_by').get('value');
+	if(know_by==''){
+		dijit.byId('know_by').attr('value',0);
+	}
+	
+	dijit.byId('academic_year').attr('value',"<?php echo $this->rs['academic_year']?>");
+}); 
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+	function getallGrade(condition){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id==''){return false;}
+			dojo.xhrPost({
+				url:url_dept,
+				content:{
+					'dept_id':dept_id
+					},
+				handleAs:"json",
+				load: function(data) {
+					grade_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('grade').set('store',grade_store); 
+				    if(condition==1){
+				    	dijit.byId('grade').attr('value','<?php echo $this->rs['grade']; ?>');  
+				    }else{
+				    	dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
+				    }
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+	}
+	
+	
+	
+	
+</script>
+
+<style>
+ @media (min-width: 1401px) and (max-width: 1601px){
+	#mainTabContainer{
+	width: 1400px !important;
+   	 display: block;
+	}
+}
+</style>
+<script>
+
+var url_add_lang = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-langlevel")); ?>';
+function addLanguage(){
+	if(dijit.byId('frm_lang_level').validate()){	
+		dojo.xhrPost({
+			url:url_add_lang,
+			form: dojo.byId("frm_lang_level"),
+			handleAs:"json",
+			load: function(data) {
+			var Itemmake = { 
+					 id: dijit.byId('title').get('value'),
+					 name: dijit.byId('title').get('value')
+				   };
+		   addDataToSelectbox(dijit.byId('lang_level'), language_store, Itemmake, dijit.byId('title').get('value'));
+		   dijit.byId('frm_lang_level').reset();
+		   dijit.byId("popup_lang_level").hide();
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+}
+
+var url_add_know_by = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-knowby")); ?>';
+function addKnowBy(){
+	if(dijit.byId('frm_know_by').validate()){
+		dojo.xhrPost({
+			url:url_add_know_by,
+			form: dojo.byId("frm_know_by"),
+			handleAs:"json",
+			load: function(data) {
+			var Itemmake = { 
+					 id: dijit.byId('title_know_by').get('value'),
+					 name: dijit.byId('title_know_by').get('value')
+				   };
+		   addDataToSelectbox(dijit.byId('know_by'), knowby_store, Itemmake, dijit.byId('title_know_by').get('value'));
+		   dijit.byId('frm_know_by').reset();
+		   dijit.byId("popup_know_by").hide();
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}	
+}
+
+var url_add_doc_type = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-doctype")); ?>';
+function addDocType(){
+	if(dijit.byId('frm_doc_type').validate()){
+		dojo.xhrPost({
+			url:url_add_doc_type,
+			form: dojo.byId("frm_doc_type"),
+			handleAs:"json",
+			load: function(data) {
+			var Itemmake = { 
+					 id: dijit.byId('title_doc_type').get('value'),
+					 name: dijit.byId('title_doc_type').get('value')
+				   };
+			index = $("#popup_index").val();	   
+		   addDataToSelectbox(dijit.byId('document_type_'+index), doctype_store, Itemmake, dijit.byId('title_doc_type').get('value'));
+		   dijit.byId('frm_doc_type').reset();
+		   dijit.byId("popup_doc_type").hide();
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+}
+</script>
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

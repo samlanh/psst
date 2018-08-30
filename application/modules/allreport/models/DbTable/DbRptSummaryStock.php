@@ -97,7 +97,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		$where .=' AND p.id = '.$search['pro_name'];
     	}
     	
-    	echo $sql.$where.$group_by.$order;//exit();
+//     	echo $sql.$where.$group_by.$order;//exit();
     	return $db->fetchAll($sql.$where.$group_by.$order);
     }
    

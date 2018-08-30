@@ -150,7 +150,7 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql="SELECT  ad.adjust_no,ad.request_name,ad.note,ad.request_date,ad.create_date,
 		        (SELECT b.branch_nameen FROM rms_branch AS b WHERE b.br_id=adj.branch_id LIMIT 1)AS branch_name,
-		        (SELECT p.pro_name FROM rms_product AS p WHERE p.id=adj.pro_id LIMIT 1)AS pro_name,
+		       (SELECT it.title FROM `rms_itemsdetail` AS it WHERE it.id=adj.pro_id AND it.items_type=3 LIMIT 1 ) AS pro_name,
 		         adj.qty_befor,adj.qty_after,adj.difference,
 		        (SELECT name_en FROM rms_view WHERE key_code=ad.status AND rms_view.type=1 LIMIT 1) AS `status`,
 				(SELECT first_name FROM rms_users WHERE id=ad.user_id LIMIT 1) AS user_name
@@ -167,7 +167,7 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 					$s_where[]= " REPLACE(ad.adjust_no,' ','') LIKE '%{$s_search}%'";
 					$s_where[]="  REPLACE(ad.request_name,' ','') LIKE '%{$s_search}%'";
 					$s_where[]= " REPLACE(ad.note,' ','') LIKE '%{$s_search}%'";
-					$s_where[]= " REPLACE((SELECT p.pro_name FROM rms_product AS p WHERE p.id=adj.pro_id LIMIT 1),' ','') LIKE '%{$s_search}%'";
+					$s_where[]= " REPLACE((SELECT it.title FROM `rms_itemsdetail` AS it WHERE it.id=adj.pro_id AND it.items_type=3 LIMIT 1 ),' ','') LIKE '%{$s_search}%'";
 					$where.=' AND ('.implode(' OR ', $s_where).')';
 				}
 				

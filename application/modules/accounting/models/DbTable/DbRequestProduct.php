@@ -20,12 +20,13 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     				request_date,
 			       (SELECT SUM(rd.qty_request) FROM rms_request_orderdetail AS rd WHERE rd.request_id=rms_request_order.id)AS total_qty,
 			       (SELECT first_name FROM rms_users WHERE id=rms_request_order.user_id LIMIT 1) AS user_name,
-			       (SELECT name_en FROM rms_view WHERE key_code=rms_request_order.status AND rms_view.type=1 LIMIT 1) AS `status`
+			       status
 			   FROM 
     				rms_request_order 
     			WHERE 
     				1
     		";
+    	//(SELECT name_en FROM rms_view WHERE key_code=rms_request_order.status AND rms_view.type=1 LIMIT 1) AS `status`
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " request_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " request_date <= '".$search['end_date']." 23:59:59'";
@@ -64,7 +65,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     				pl.pro_qty 
     			FROM 
     				rms_product_location AS pl,
-    				rms_product AS p
+    				rms_itemsdetail AS p
 				WHERE 
 					pl.pro_id=$pro_id 
 					AND pl.brand_id=$branch_id
@@ -129,7 +130,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 							$where=" id = ".$rows['id'];
 							$this->update($datatostock, $where);
 					}else{
-						echo "heer";exit();
+// 						echo "heer";exit();
 					}
 				 }
 			}
@@ -238,49 +239,50 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 	
 	function getRequestDetail($id){
 		$db=$this->getAdapter();
-		$sql="SELECT *,branch_id,(SELECT p.pro_name FROM rms_product AS p WHERE p.id=pro_id ) AS pro_name,
+		$sql="SELECT *,branch_id,
+		(SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = pro_id LIMIT 1) AS pro_name,
 			    pro_id,qty_curr,qty_request,remark FROM rms_request_orderdetail 
 				WHERE request_id=$id";
 		return $db->fetchAll($sql);
 	}
 	
-    function getProductNames(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
- 				WHERE p.id=pl.pro_id AND p.status=1  ";
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
-    	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-        $rows=$db->fetchAll($sql);
+//     function getProductNames(){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
+//  				WHERE p.id=pl.pro_id AND p.status=1  ";
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$sql.=$dbp->getAccessPermission('brand_id');
+//     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
+//         $rows=$db->fetchAll($sql);
         
-        array_unshift($rows,array('id' => '',"name"=>"Please select product name"));
-        $options = '';
-        if(!empty($rows))foreach($rows as $value){
-        	$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
-        }
-        return $options;
-    }
+//         array_unshift($rows,array('id' => '',"name"=>"Please select product name"));
+//         $options = '';
+//         if(!empty($rows))foreach($rows as $value){
+//         	$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+//         }
+//         return $options;
+//     }
     
-    function getProductName(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
-    	WHERE p.id=pl.pro_id AND p.status=1  ";
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
-    	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-    	return $db->fetchAll($sql);
-    }
+//     function getProductName(){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
+//     	WHERE p.id=pl.pro_id AND p.status=1  ";
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$sql.=$dbp->getAccessPermission('brand_id');
+//     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
+//     	return $db->fetchAll($sql);
+//     }
     
-    function getProducCutStockLater(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
-		    	WHERE p.id=pl.pro_id AND p.status=1
-		    	AND p.pro_type=2";
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
-    	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-    	return $db->fetchAll($sql);
-    }
+//     function getProducCutStockLater(){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
+// 		    	WHERE p.id=pl.pro_id AND p.status=1
+// 		    	AND p.pro_type=2";
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$sql.=$dbp->getAccessPermission('brand_id');
+//     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
+//     	return $db->fetchAll($sql);
+//     }
 
     function getRequestCode(){
     	$db = $this->getAdapter();
@@ -295,62 +297,62 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     	return $pre.$new_acc_no;
     }
      
-    function getProductById($id){
-    	$db=$this->getAdapter();
-    	$sql="SELECT * FROM rms_product WHERE id=$id";
-    	return $db->fetchRow($sql);
-    }
+//     function getProductById($id){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT * FROM rms_product WHERE id=$id";
+//     	return $db->fetchRow($sql);
+//     }
     
-    function getAllBranch(){
-    	$db = $this->getAdapter();
-    	$sql="select br_id as id, CONCAT(branch_nameen) as name from rms_branch where status=1 ";
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('br_id');
-    	return $db->fetchAll($sql);
-    }
+//     function getAllBranch(){
+//     	$db = $this->getAdapter();
+//     	$sql="select br_id as id, CONCAT(branch_nameen) as name from rms_branch where status=1 ";
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$sql.=$dbp->getAccessPermission('br_id');
+//     	return $db->fetchAll($sql);
+//     }
     
-    public function ajaxAddProduct($data){
-    	$db = $this->getAdapter();
-    	$session_user=new Zend_Session_Namespace('authstu');
-    	$userName=$session_user->user_name;
-    	$GetUserId= $session_user->user_id;
-    	$_arr = array(
-    			'pro_name'	=>$data['product_name'],
-    			'pro_code'	=>$data['product_code'],
-    			'cat_id'	=>$data['category_id'],
-    			'pro_price'	=>$data['pro_price'],
-    			'pro_des'	=>$data['descript'],
-    			'pro_type'	=>$data['pro_type'],
-    			'status'	=>$data['p_status'],
-    			'date'		=>date("Y-m-d"),
-    			'user_id'	=>$this->getUserId()
-    	);
-    	$this->_name = "rms_product";
-    	$pro_id = $this->insert($_arr);
-    	$_arr = array(
-    			'pro_id'=>$pro_id,
-    			'brand_id'=>$data['location_id'],
-    			'pro_qty'=>0,
-    			'total_amount'=>0,
-    			'note'=>'',
-    	);
-    	$this->_name='rms_product_location';
-    	$this->insert($_arr);
-    	$array = array(
-    			'ser_cate_id'	=>$pro_id,
-    			'title'			=>$data['product_name'],
-    			'description'	=>$data['descript'],
-    			'price'			=>$data['pro_price'],
-    			'status'		=>1,
-    			'create_date'	=>date("Y-m-d H:i:s"),
-    			'user_id'		=>$this->getUserId(),
-    			'type'			=>1, // type=1 => product
-    			'pro_type'		=>$data['pro_type'], // 1=cut stock , 2=cut stock later
-    	);
-    	$this->_name='rms_program_name';
-    	$this->insert($array);
-    	return $pro_id;
-    }
+//     public function ajaxAddProduct($data){
+//     	$db = $this->getAdapter();
+//     	$session_user=new Zend_Session_Namespace('authstu');
+//     	$userName=$session_user->user_name;
+//     	$GetUserId= $session_user->user_id;
+//     	$_arr = array(
+//     			'pro_name'	=>$data['product_name'],
+//     			'pro_code'	=>$data['product_code'],
+//     			'cat_id'	=>$data['category_id'],
+//     			'pro_price'	=>$data['pro_price'],
+//     			'pro_des'	=>$data['descript'],
+//     			'pro_type'	=>$data['pro_type'],
+//     			'status'	=>$data['p_status'],
+//     			'date'		=>date("Y-m-d"),
+//     			'user_id'	=>$this->getUserId()
+//     	);
+//     	$this->_name = "rms_product";
+//     	$pro_id = $this->insert($_arr);
+//     	$_arr = array(
+//     			'pro_id'=>$pro_id,
+//     			'brand_id'=>$data['location_id'],
+//     			'pro_qty'=>0,
+//     			'total_amount'=>0,
+//     			'note'=>'',
+//     	);
+//     	$this->_name='rms_product_location';
+//     	$this->insert($_arr);
+//     	$array = array(
+//     			'ser_cate_id'	=>$pro_id,
+//     			'title'			=>$data['product_name'],
+//     			'description'	=>$data['descript'],
+//     			'price'			=>$data['pro_price'],
+//     			'status'		=>1,
+//     			'create_date'	=>date("Y-m-d H:i:s"),
+//     			'user_id'		=>$this->getUserId(),
+//     			'type'			=>1, // type=1 => product
+//     			'pro_type'		=>$data['pro_type'], // 1=cut stock , 2=cut stock later
+//     	);
+//     	$this->_name='rms_program_name';
+//     	$this->insert($array);
+//     	return $pro_id;
+//     }
     
     function getProductQty($location,$pro_id){
     	$db=$this->getAdapter();
@@ -358,7 +360,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     				pl.pro_qty,
     				p.cost
     			FROM 
-    				rms_product AS p,
+    				rms_itemsdetail AS p,
     				rms_product_location AS pl
 		  		WHERE 
 		  			p.id=pl.pro_id
@@ -371,17 +373,18 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     function getAllProductBybranch($branch_id){
     	$db = $this->getAdapter();
     	$sql = "SELECT 
-				  p.id,
-				  pl.brand_id,
-				  p.pro_name AS `name` 
-				FROM
-				  rms_product AS p,
-				  rms_product_location AS pl 
-				WHERE 
-				  p.id = pl.pro_id 
-				  AND p.status = 1 
-				  AND pl.brand_id = $branch_id
+			  p.id,
+			  pl.brand_id,
+			  p.title AS `name` 
+			FROM
+			  `rms_itemsdetail` AS p,
+			  rms_product_location AS pl 
+			WHERE 
+			  p.id = pl.pro_id 
+			  AND p.status = 1 
+			  AND pl.brand_id = $branch_id
     		";
+    	$sql.=" AND p.product_type=2";
     	$order=' ORDER BY p.id DESC';
     	return $db->fetchAll($sql.$order);
     }

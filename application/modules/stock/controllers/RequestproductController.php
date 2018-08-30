@@ -28,12 +28,14 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		}
 			$db =  new Accounting_Model_DbTable_DbRequestProduct();
 			$rows = $db->getAllRequest($search);
+			$rs_rows=new Application_Model_GlobalClass();
+			$rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("REQUEST_NO","REQUEST_FOR","FOR_SECTION","PURPOSE","REQUEST_DATE","TOTAL","USER","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'requestproduct','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rows,array('request_no'=>$link,'request_name'=>$link,'purpose'=>$link,));
+			$this->view->list=$list->getCheckList(0, $collumns, $rows,array('request_no'=>$link,'request_for'=>$link,'purpose'=>$link,));
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
@@ -43,9 +45,7 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 		
 		$for_section = $_pur->getAllForSection();
 		$this->view->for_section = $for_section;
-			
 		$this->view->search = $search;
-		
 		$form=new Accounting_Form_FrmSearchProduct();
 		$form=$form->FrmSearchProduct();
 		Application_Model_Decorator::removeAllDecorator($form);
@@ -72,13 +72,7 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 		}
 		
 		$_pur = new Accounting_Model_DbTable_DbRequestProduct();
-		$pro=$_pur->getProducCutStockLater();
-		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->product= $pro;
-// 		print_r($pro);exit();
-		
 		$this->view->rq_code=$_pur->getRequestCode();
-		$this->view->bran_name=$_pur->getAllBranch();
 		
 		$req_for = $_pur->getAllRequestFor();
 		array_unshift($req_for, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
@@ -88,15 +82,16 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 		array_unshift($for_section, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		$this->view->for_section = $for_section;
 		
-		$db_gr=new Global_Model_DbTable_DbGrade();
-		$d_row=$db_gr->getNameGradeAll();
-		array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-		$this->view->grade_name=$d_row;
-		 
 		$model = new Application_Model_DbTable_DbGlobal();
 		$branch = $model->getAllBranchName();
 		$this->view->branchopt = $branch;
 		
+		
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$d_row= $db->getAllProductsNormal(2);//
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+		$this->view->product= $d_row;
 		
 	}
 	
@@ -121,14 +116,10 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 				}
 			}
 			$_pur = new Accounting_Model_DbTable_DbRequestProduct();
-			$pro=$_pur->getProducCutStockLater();
 			$this->view->row=$_pur->getRequestById($id);
 			$this->view->row_detail=$_pur->getRequestDetail($id);
-			array_unshift($pro, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-			$this->view->product= $pro;
 			
 			$this->view->rq_code=$_pur->getRequestCode();
-			$this->view->bran_name=$_pur->getAllBranch();
 			
 			$req_for = $_pur->getAllRequestFor();
 			array_unshift($req_for, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
@@ -138,14 +129,15 @@ class Stock_RequestproductController extends Zend_Controller_Action {
 			array_unshift($for_section, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 			$this->view->for_section = $for_section;
 			
-			$db_gr=new Global_Model_DbTable_DbGrade();
-			$d_row=$db_gr->getNameGradeAll();
-			array_unshift($d_row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-			$this->view->grade_name=$d_row;
-			 
 			$model = new Application_Model_DbTable_DbGlobal();
 			$branch = $model->getAllBranchName();
 			$this->view->branchopt = $branch;
+			
+			$db = new Global_Model_DbTable_DbItemsDetail();
+			$d_row= $db->getAllProductsNormal(2);//
+			array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+			$this->view->product= $d_row;
 	}
 
     function getSupplierInfoAction(){
@@ -159,15 +151,15 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     	}
     }
     
-    function addProductAction(){
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		$_dbmodel = new Accounting_Model_DbTable_DbPurchase();
-    		$id = $_dbmodel->ajaxAddProduct($_data);
-    		print_r(Zend_Json::encode($id));
-    		exit();
-    	}
-    }
+//     function addProductAction(){
+//     	if($this->getRequest()->isPost()){
+//     		$_data = $this->getRequest()->getPost();
+//     		$_dbmodel = new Accounting_Model_DbTable_DbPurchase();
+//     		$id = $_dbmodel->ajaxAddProduct($_data);
+//     		print_r(Zend_Json::encode($id));
+//     		exit();
+//     	}
+//     }
     
     function getProductqtyAction(){
     	if($this->getRequest()->isPost()){
@@ -184,6 +176,8 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRequestProduct();
     		$gty= $db->getAllProductBybranch($data['branch_id']);
+    		array_unshift($gty, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		array_unshift($gty, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
     		print_r(Zend_Json::encode($gty));
     		exit();
     	}

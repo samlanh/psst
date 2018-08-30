@@ -120,8 +120,10 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		
 		$product->setValue($request->getParam("product"));
 		$opt_p = array(''=>$this->tr->translate("SELECT_PRODUCT"));
-		$_pro=new Accounting_Model_DbTable_DbProduct();
-		$rows=$_pro->getProductName();
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$rows= $db->getAllProductsNormal(1);//only Normal product for sale
+// 		$_pro=new Accounting_Model_DbTable_DbProduct();
+// 		$rows=$_pro->getProductName();
 		if(!empty($rows))foreach ($rows As $row)$opt_p[$row['id']]=$row['name'];
 		$product->setMultiOptions($opt_p);
 		

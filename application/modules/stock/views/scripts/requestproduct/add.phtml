@@ -64,13 +64,6 @@ fieldset{  background:none;}
 	                   		<input id="for_section"/>
 	                   </div>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRODUCT_NAME");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="pro_id" name="pro_id" />
-	                   </div>
-	                </div>
 	             </div>
 	             <div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
@@ -113,10 +106,23 @@ fieldset{  background:none;}
 	         </div>
 	         <div class="card-box">
 	         	<div class="col-md-8 col-sm-8 col-xs-12">
-	         		<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
-							<tr id="head-title" class="head-td" align="right"></tr>
-					</table>
-					<input type="hidden" id="identity" name="identity" />
+	         		<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
+	                   <label class="control-label bold col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("SELECT_PRODUCT");?> 
+	                   </label>
+                   		<div class="col-md-5 col-sm-5 col-xs-12">
+		                		<input id="pro_id" name="pro_id" />
+		                </div>
+		                <div class="col-md-3 col-sm-3 col-xs-12">
+                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getProByBranch();"/>
+                   		</div>
+                  		 <div class="clearfix"></div>
+	                </div>
+	                <div class="form-group">
+		         		<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
+								<tr id="head-title" class="head-td" align="right"></tr>
+						</table>
+						<input type="hidden" id="identity" name="identity" />
+					</div>
 	         	</div>
 	         </div>
 	         <div class="clearfix"></div>
@@ -140,8 +146,6 @@ fieldset{  background:none;}
 	//dojo.require('dojox.form.BusyButton');
 dojo.require("dojo.NodeList-manipulate");
 	var pro_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->product));?> );
-	var pro_cate_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cat_rows));?> );
-	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
 	
 	var request_for_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->rq_for));?> );
 	var for_section_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->for_section));?> );
@@ -160,7 +164,10 @@ dojo.require("dojo.NodeList-manipulate");
 				pro_id   = dijit.byId('pro_id').get('value');
 				branch_id= dijit.byId('branch').get('value');
 				if(pro_id==-1 || pro_id==''){
-					 return false;
+					if(pro_id==-1){
+					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product/add";?>','_blank');
+					}
+					return false;
 				}else{
 					var rowId = $('#identity').val();
 	    			if(rowId!=''){ 
@@ -265,18 +272,18 @@ dojo.require("dojo.NodeList-manipulate");
 								<td width="8%"></td>
 							</tr>
 							<tr style="line-height:15px;">
-								<td align="left">សាខា </br />Branch</td>
+								<td align="left">សាខា </br /><small>(Branch)</small></td>
 								<td valign="top"> :&nbsp; <label id="lb_branch"></label> </td>
-								<td class="one ">ស្នើសម្រាប់<br />Request for</td>
+								<td class="one ">ស្នើសម្រាប់<br /><small>(Request for)</small></td>
 								<td valign="top"> :&nbsp; <label id="lb_request_for"></label> </td>
-								<td colspan="2"><label id="" >សម្រាប់ផ្នែក </br >For Department</label></td>
+								<td colspan="2">សម្រាប់ផ្នែក </br ><small>(For Department)</small></td>
 								<td colspan="4" valign="top">:&nbsp;<label id="lb_for_section"></label></td>
 							</tr>
 							<tr style="line-height:15px;">
-								<td colspan="1"><label id="" >ថ្ងៃស្នើ </br >Request Date</label></td>
+								<td colspan="1">ថ្ងៃស្នើ </br ><small>(Request Date)</small></td>
 								<td colspan="1" valign="top">:&nbsp;<label id="lb_request_date"></label></td>
 								
-								<td>គោលបំណង</br />Purpose</td>
+								<td>គោលបំណង</br /><small>(Purpose)</small></td>
 								<td colspan="7" valign="top"> :&nbsp; <label id="lb_purpose"></label></td>
 							</tr>
 							<tr>
@@ -359,7 +366,6 @@ dojo.require("dojo.NodeList-manipulate");
 	</div>
 </div>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>	
-
 <script type="text/javascript">
 function doPrintInvoice() {
 	window.frames["print_frame"].document.body.innerHTML = dojo.byId('print_request').innerHTML;
@@ -485,32 +491,7 @@ function deleteRecord(index) {
 		sumAmountDue();
 }
  
-var b_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->branchopt));?> );
-var url_addbranch = '<?php echo $this->url(array('module'=>'global','controller'=>'branch','action'=>'addbranch')); ?>';
-	function addBranch(){
-		if(dijit.byId('frm_addbranch').validate()){
-			dojo.xhrPost({
-				url:url_addbranch,
-				form: dojo.byId("frm_addbranch"),
-				handleAs:"json",
-				load: function(data) {
-					var Itemmake = { 
-							 id: data,
-							 name: dijit.byId('branch_nameen').get('value')
-						   };
-				   addDataToSelectbox(dijit.byId('branch'), b_store, Itemmake, data);
-				   dijit.byId('frm_addbranch').reset();
-				   dijit.byId("popup_add_branch").hide();	
-				},
-				error: function(err) {
-				}
-			});
-		}
-	}
-function hideDialog(){
-	dijit.byId('frm_addbranch').reset();
-	dijit.byId("popup_add_branch").hide();
-}
+
 function submitDataClose(){
 	pro_id=dijit.byId("pro_id").get('value');
 	if(pro_id=='' || pro_id==null){
@@ -571,6 +552,7 @@ function getProByBranch(){
 	    alert("Please Selected Branch Name!");
 	    return false ;
     }
+    loadingBlock();
 	dojo.xhrPost({
 		url:url_pro_branch,
 		content:{
@@ -581,9 +563,11 @@ function getProByBranch(){
 				dijit.byId('pro_id').set('value','');
 				pro_store  = getDataStorefromJSON('id','name', data);
 		    	dijit.byId('pro_id').set('store',pro_store); 
+		    	 document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
 			alert(err);
+			 document.getElementsByClassName("overlay")[0].style.display="none";
 		}
 	});
 }

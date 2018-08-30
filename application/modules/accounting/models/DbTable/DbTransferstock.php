@@ -14,8 +14,9 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=s.to_location LIMIT 1) as tolocation,
     	s.note,
     	(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) as user_name,
-    	(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code=s.status ) as status
+    	s.status
     	FROM `rms_transferstock` AS s WHERE 1 ";
+    	//(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code=s.status ) as status
     	$from_date =(empty($search['start_date']))? '1': " s.transfer_date>= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " s.transfer_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
@@ -44,7 +45,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     function getTransferByIdDetail($id){
     	$db = $this->getAdapter();
     	$sql = "SELECT *,
-		(SELECT pro_name FROM `rms_product` WHERE id=rms_transferdetail.pro_id LIMIT 1) as pro_name 
+		(SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = pro_id LIMIT 1) AS pro_name
     	FROM rms_transferdetail WHERE transferid=".$id;
     	return $db->fetchAll($sql);
     }
@@ -58,6 +59,8 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
 	    				'from_location'=>$_data['f_branch'],
 	    				'to_location'=>$_data['branch'],
 	    				'note'=>$_data['remark'],
+	    				'create_date'=>date("Y-m-d H:i:s"),
+	    				'modify_date'=>date("Y-m-d H:i:s"),
 	    				'user_id'=>$this->getUserId(),
 	    				'status'=>1,
 	    				);
@@ -178,7 +181,8 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     function getProductLocation($pro_id,$location_id){
     	$db = $this->getAdapter();
     	$sql="select * from rms_product_location where pro_id=".$pro_id." AND brand_id = ".$location_id;
-    	return $db->fetchRow($sql);
+    	$row = $db->fetchRow($sql);
+    	return $row;
     }
 	public function updateTransferStock($_data){
     	$db = $this->getAdapter();
@@ -201,6 +205,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
 	    		if(!empty($rsdetail)){
 	    			foreach($rsdetail as $rsd){
 		    			$qty_stock = $this->getProductLocation($rsd['pro_id'],$_data['old_flocation']);
+		    			$this->_name="rms_product_location";
 		    			if(!empty($qty_stock)){
 		    				$qty = $qty_stock['pro_qty'] + $rsd['qty'];
 		    				$array = array(

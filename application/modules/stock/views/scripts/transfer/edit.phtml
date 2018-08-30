@@ -16,7 +16,6 @@
 	}
 	.center{border:1px solid #000;}
 </style>
-<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ItemFileWriteStore");  
@@ -119,11 +118,11 @@
 	                </div>
 	            </div>
 	            <div class="col-md-8 col-sm-8 col-xs-12">
-	            	<div class="form-group">
+	            	<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SELECT_PRODUCT");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select onchange="getProductName();" style="height:35px;" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
+	                   		<select onchange="chcekcProductLocation();" name="pro_id" id="pro_id" dojoType="dijit.form.FilteringSelect" required="true" missingMessage="Invalid Module!" class="fullside">
 									<option></option>
 									<?php 
 								    if(!empty($this->rsproduct)){
@@ -133,6 +132,7 @@
 								  ?>
 							</select>
 	                   </div>
+	                   <div class="clearfix"></div>
 	                </div>
 	                <div class="form-group">
 	                	<table id="table_row" border="1px" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
@@ -168,6 +168,7 @@ function initailize(){
 		temp='';
 		temp+='<td><?php echo $tr->translate("NUM");?></td>';
 		temp+='<td><?php echo $tr->translate("PRODUCT_NAME");?></td>';
+		temp+='<td ><?php echo $tr->translate("CURR_QTY");?></td>';
 		temp+='<td><?php echo $tr->translate("QTY_TRANSFER");?></td>';
 		temp+='<td><?php echo $tr->translate("OTHER");?></td>';
 		temp+='<td><?php echo $tr->translate("DELETE");?></td>';
@@ -177,6 +178,7 @@ function initailize(){
 	pro_name='';
 	template='<td width="2%" align="center">'+index+'</td>';
 	template+='<td ><?php echo $row['pro_name'];?><input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
+	template+='<td ></td>';
 	template+='<td ><input dojoType="dijit.form.NumberTextBox" class="fullside" type="text" required="1" id="qty_'+index+'" name="qty_'+index+'" ></td>';
 	template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 	template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
@@ -201,35 +203,118 @@ function initailize(){
 <?php $url_product =  $this->url(array('module'=>'','controller'=>'ajax','action'=>'get-product-name')); ?>
 index=0;
 function getProductName() {
+	grade=dijit.byId("pro_id").get("value");
+	if(grade==''){return false;}
+	location_id = dijit.byId("from_location").get("value");
+	if(location_id<0 || location_id==''){
+		alert("Please select from branch");
+		dijit.byId("from_location").focus();
+		return false;}
+	if(location_id=='' || location_id==-1){
+		alert("Please Select Branch");
+		dijit.byId("from_location").focus()();
+		return false;}
+	
+	pro_id=dijit.byId("pro_id").get("value");
+
+	var iden = $("#identity").val();
+	var arrays = iden.split(',');
+	 if(arrays!=""){
+		 for(var i=0;i< arrays.length;i++) {
+			 readychoose = dijit.byId('pro_id_'+arrays[i]).get('value');
+			 if(readychoose==pro_id){
+				 alert("<?php echo $tr->translate("Choosen ready")?>");
+				 return false;
+			 }
+		}
+	}
 	index++;
+	getcurrentproduct(pro_id,location_id,index);
+	
 			if(index==1){
 				temp='';
-				temp+='<td >NO</td>';
-				temp+='<td >ឈ្មោះផលិតផល</td>';
-				temp+='<td >QTY_TRANSFER</td>';
-				temp+='<td >ផ្សេងៗ</td>';
-				temp+='<td >លុប</td>';
+				temp+='<td ><?php echo $tr->translate("NUM");?></td>';
+				temp+='<td ><?php echo $tr->translate("PRODUCT_NAME");?></td>';
+				temp+='<td ><?php echo $tr->translate("CURR_QTY");?></td>';
+				temp+='<td ><?php echo $tr->translate("QTY_TRANSFER");?></td>';
+				temp+='<td ><?php echo $tr->translate("OTHER");?></td>';
+				temp+='<td ><?php echo $tr->translate("DELETE");?></td>';
 				dojo.query("#head-title").append(temp);
 			}
-            pro_id=dijit.byId("pro_id").get("value");
-            pro_name = dijit.byId("pro_id").attr('displayedValue')
-			var inp = '';
+			pro_name = dijit.byId("pro_id").attr('displayedValue')
 			template='<td width="2%" align="center">'+index+'</td>';
 			template+='<td >'+pro_name+'<input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
-			template+='<td ><input dojoType="dijit.form.NumberTextBox" class="fullside" type="text" required="1" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+			template+='<td ><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
+			template+='<td ><input onkeyup="checkCurrentStock('+index+')" dojoType="dijit.form.NumberTextBox" required="1" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
 			template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 			template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
 		tmp='<tr id="row'+index+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
 		dojo.html.set(dojo.byId("row"+index),template , {
-		     parseContent: true,
+			 parseContent: true,
 		});
 		dijit.byId("pro_id_"+index).attr("value",pro_id);
 		if($('#identity').val()!="") {
 			var identity = $('#identity').val();
 			$('#identity').val(identity+','+index);
 		} else {$('#identity').val(index);}
+		var inp = '';
+}
+function checkCurrentStock(index){
+	currqty = dijit.byId("currqty_"+index).get("value");
+	qty = dijit.byId("qty_"+index).get("value");
+	if(qty>currqty){
+	 alert("ចំនួនទំនិញដែលត្រូវផ្ទេរមិនអាច លើសកំណត់បានទេ !");
+	 dijit.byId("qty_"+index).attr("value",currqty);
+	 dijit.byId("qty_"+index).focus();
+	}
+}
+var url_getproduct = '<?php echo $this->url(array('module'=>'accounting','controller'=>'transfer','action'=>'getcurrentproduct')); ?>';
+function chcekcProductLocation(){
+	pro_id=dijit.byId("pro_id").get("value");
+	location_id = dijit.byId("from_location").get("value");
+	if(location_id<0 || location_id==''){
+		alert("Please select from branch");
+		dijit.byId("from_location").focus();
+		return false;}
+	dojo.xhrPost({
+		url:url_getproduct,
+		content:{
+			'pro_id':pro_id,
+			'location_id':location_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(data.pro_qty==0){
+				alert("<?php echo $tr->translate("This product unavailable transfer from this location");?>");
+				return false;
+			}
+			getProductName();
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+function getcurrentproduct(pro_id,location_id,index){
+	if(location_id=='' || location_id==-1){
+		return false;}
+	dojo.xhrPost({
+		url:url_getproduct,
+		content:{
+			'pro_id':pro_id,
+			'location_id':location_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId("currqty_"+index).attr("value",data.pro_qty);
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();

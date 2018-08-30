@@ -46,10 +46,10 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 			$this->view->form_search=$form;
 		
 	}
-public function addAction(){
-	if($this->getRequest()->isPost()){
+	public function addAction(){
+		if($this->getRequest()->isPost()){
 		$_data = $this->getRequest()->getPost();
-		try{
+			try{
 				$db = new Accounting_Model_DbTable_DbPurchase();
 				$row = $db->addPurchase($_data);
 				
@@ -66,13 +66,13 @@ public function addAction(){
 			}
 		}
 		$_pur = new Accounting_Model_DbTable_DbPurchase();
-// 		$pro=$_pur->getProductName();
-// 		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->product= $pro;
-		
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->bran_name=$_pur->getAllBranch();
+
+// 		$pro=$_pur->getProductName();
+// 		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->product= $pro;
 		
 // 		$db_gr=new Global_Model_DbTable_DbGrade();
 // 		$d_row=$db_gr->getNameGradeAll();
@@ -98,7 +98,7 @@ public function addAction(){
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$d_row= $db->getAllProductsNormal();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 		$this->view->product= $d_row;
 	}
 	public function editAction(){
@@ -124,21 +124,27 @@ public function addAction(){
 			}
 		}
 		$_pur = new Accounting_Model_DbTable_DbPurchase();
-		$this->view->product= $_pur->getProductNames();
-		$pro=$_pur->getProductName();
-		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->products= $pro;
+// 		$this->view->product= $_pur->getProductNames();
+// 		$pro=$_pur->getProductName();
+// 		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->products= $pro;
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->row_sup=$_pur->getSupplierById($id);
 		$this->view->row_pur_detai=$_pur->getSupplierProducts($id);		
 		$this->view->bran_name=$_pur->getAllBranch();
 		
-		$_pro = new Accounting_Model_DbTable_DbProduct();
-		$this->view->pro_code=$_pro->getProCode();
-		$pro_cate = $_pro->getProductCategory();
-		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>$this->tr->translate("ADD_NEW")));
-		$this->view->cat_rows = $pro_cate;
+// 		$_pro = new Accounting_Model_DbTable_DbProduct();
+// 		$this->view->pro_code=$_pro->getProCode();
+// 		$pro_cate = $_pro->getProductCategory();
+// 		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>$this->tr->translate("ADD_NEW")));
+// 		$this->view->cat_rows = $pro_cate;
+		
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$d_row= $db->getAllProductsNormal();
+		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+		$this->view->products= $d_row;
 	}
 
 function getStudentAction(){
@@ -192,7 +198,7 @@ function getStudentAction(){
     			$db = new Global_Model_DbTable_DbItemsDetail();
     			$d_row= $db->getAllProductsNormal();
     			array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+    			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
     			print_r(Zend_Json::encode($d_row));
     			exit();
     		}catch(Exception $e){

@@ -119,7 +119,7 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 				$product_type=1;
 				$d_row= $db->getAllProductsNormal($product_type);
 				array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-				array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+				array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 				print_r(Zend_Json::encode($d_row));
 				exit();
 			}catch(Exception $e){

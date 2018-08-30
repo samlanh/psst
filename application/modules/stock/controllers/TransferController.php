@@ -23,6 +23,8 @@ class Stock_TransferController extends Zend_Controller_Action {
     			);
     		}
     		$rs_rows= $db->getAllTransfer($search);
+    		$rs_row=new Application_Model_GlobalClass();
+    		$rs_rows=$rs_row->getImgActive($rs_rows, BASE_URL);
     		$list = new Application_Form_Frmtable();
     		$collumns = array("TRANSFER_NUMBER","TRANSFER_DATE","FROM_LOCATION","TO_LOCATION","NOTE","BY_USER","STATUS");
     		$link=array(
@@ -54,16 +56,20 @@ class Stock_TransferController extends Zend_Controller_Action {
 		}
 		$this->view->tran_no = $db->getTransferNo();
 		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->rsproduct = $db->getallProductName();
+// 		$this->view->rsproduct = $db->getallProductName();
 		
 		$branch = $db->getAllBranchName();
-    	array_unshift($branch, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+//     	array_unshift($branch, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
     	$this->view->branchopt = $branch;
 		
 		$fm = new Global_Form_Frmbranch();
 		$frm = $fm->Frmbranch();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
+		
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$d_row= $db->getAllProductsNormal();
+		$this->view->rsproduct =$d_row;
 		
 	}
 	public function editAction(){
@@ -83,7 +89,11 @@ class Stock_TransferController extends Zend_Controller_Action {
 		$this->view->rsdetail = $db->getTransferByIdDetail($id);
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rsbranch = $db->getAllBranchName();
-		$this->view->rsproduct = $db->getallProductName();
+// 		$this->view->rsproduct = $db->getallProductName();
+		
+		$db = new Global_Model_DbTable_DbItemsDetail();
+		$d_row= $db->getAllProductsNormal();
+		$this->view->rsproduct =$d_row;
 	}
 	function getcurrentproductAction(){
 		if($this->getRequest()->isPost()){

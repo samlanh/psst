@@ -98,6 +98,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	$_arr = array(
     			'parent'		=>$_data['main_branch_id'],
     			'branch_nameen'	=>$_data['branch_nameen'],
+    			'branch_namekh'	=>$_data['branch_nameen'],
     			'prefix'      	=>$_data['prefix_code'],
     			'br_address'	=>$_data['br_address'],
     			'branch_code'	=>$_data['branch_code'],

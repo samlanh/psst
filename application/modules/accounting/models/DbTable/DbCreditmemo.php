@@ -17,18 +17,19 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				c.id,
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
-				CONCAT(stu_khname,'-',stu_enname) as student_name,
+				CONCAT(stu_khname,'-',stu_enname) AS student_name,
 				total_amount,
 				total_amountafter,
 				c.date,
 				c.end_date,
-				(select name_en from rms_view where rms_view.type=15 and key_code=c.type) as paid_status,
-				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) as user_name,
+				(SELECT name_en FROM rms_view WHERE rms_view.type=15 AND key_code=c.type) AS paid_status,
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=20 AND key_code=c.type) AS paid_transfer,
+				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) AS user_name,
 				c.status 
 			  FROM 
-				rms_creditmemo c,
-				rms_student as s
-			  Where
+				rms_creditmemo c, 
+				rms_student AS s
+			  WHERE
 				s.stu_id = c.student_id
 			";
 	
@@ -60,7 +61,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			'total_amountafter'=>$data['total_amount'],
 			'note'			=>$data['Description'],
 			'prob'			=>$data['prob'],
-			'type'			=>0,
+			'type'			=>1,
 			'date'			=>$data['Date'],
 			'end_date'		=>$data['end_date'],
 			'status'		=>$data['status'],
@@ -76,7 +77,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				'total_amountafter'=>$data['total_amount'],
 				'note'=>$data['Description'],
 				'prob'=>$data['prob'],
-				'type'=>0,
+				'type'=>1,
 				'date'=>$data['Date'],
 				'end_date'=>$data['end_date'],
 				'status'=>$data['status'],

@@ -27,7 +27,7 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH_NAME","STUDENT_CODE","INFORS_TO","STUDENT_CODE","INFORS_RECEIVE","REASON_TO","REASON_RESIVE","BY_USER","STATUS");
+    		$collumns = array("BRANCH_NAME","STUDENT_CODE","INFORS_TO","STUDENT_CODE","INFORS_RECEIVE","TOTAL_AMOUNT","REASON_TO","REASON_RESIVE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'accounting','controller'=>'transfer','action'=>'edit',
     		);
@@ -49,10 +49,14 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$data['id'] = $id;
-    		$db = new Accounting_Model_DbTable_DbTransfercredit();
     		try {
-    			$db->transfercreditMemo($data);
-    			Application_Form_FrmMessage::Sucessfull("TRANSFER_SUCCESS", "/accounting/transfercredit");
+    			$sms="INSERT_SUCCESS";
+    			$db = new Accounting_Model_DbTable_DbTransfercredit();
+    			$_transfer = $db->transfercreditMemo($data);
+    			if($_transfer==-1){
+    				$sms = "RECORD_EXIST";
+    			}
+    			Application_Form_FrmMessage::Sucessfull($sms, "/accounting/transfercredit");
     		} catch (Exception $e) {
     			$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
     		}

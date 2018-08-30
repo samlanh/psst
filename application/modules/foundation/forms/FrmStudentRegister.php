@@ -153,6 +153,17 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		if(!empty($rs_degree))foreach($rs_degree AS $row) $arr_opt[$row['id']]=$row['name'];
 		$degree->setMultiOptions($arr_opt);
 		
+		$degree_stu =  new Zend_Dojo_Form_Element_FilteringSelect('degree_student');
+		$degree_stu->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'onChange'=>'getallGrade();getStudentNo()',
+		
+		));
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$arr_degree = $_db->getAllDegreeStu();
+		$degree_stu->setMultiOptions($arr_degree);
+		
 		
 		$room =  new Zend_Dojo_Form_Element_FilteringSelect('room');
 		$room->setAttribs(array(
@@ -275,6 +286,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$_academic_year->setValue($data['academic_year']);
 			$session->setValue($data['session']);
 			$degree->setValue($data['degree']);
+			$degree_stu->setValue($data['degree_stu']);
 			$room->setValue($data['room']);
 			$status->setValue($data['status']);
 			$remark->setValue($data['remark']);
@@ -323,6 +335,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$_academic_year,
 						$session,
 						$degree,
+						$degree_stu,
 						$room,
 						$status,
 						$remark,

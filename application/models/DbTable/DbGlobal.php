@@ -306,6 +306,19 @@ function getAllgroupStudy($teacher_id=null){
 	   return $rs[$id];
    }
    
+   public function getAllDegreeStu($id=null){
+   	$rs = array(
+   			0=>$this->tr->translate("SELECT_DEGREE"),
+   			1=>$this->tr->translate("ASSOCIATE"),
+   			2=>$this->tr->translate("BACHELOR"),
+   			3=>$this->tr->translate('MASTER'),
+   			4=>$this->tr->translate('DOCTORATE'),
+   			//	5=>$this->tr->translate('INTERNATIONAL_PROGRAM')
+   	);
+   	if($id==null)return $rs;
+   	return $rs[$id];
+   }
+   
    public static  function getAllStatus($id=null){
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$rs = array(

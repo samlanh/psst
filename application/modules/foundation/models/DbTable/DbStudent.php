@@ -209,6 +209,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'stu_code'		=>$stu_code,
 						'academic_year'	=>$_data['academic_year'],
 						'degree'		=>$_data['degree'],
+						'degree_stu'	=>$_data['degree_stu'],
 						'grade'			=>$_data['grade'],
 						'room'			=>$_data['room'],
 						'session'		=>$_data['session'],
@@ -375,6 +376,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'stu_code'		=>$_data['student_id'],
 					'degree'		=>$_data['degree'],
 					'grade'			=>$_data['grade'],
+					'grade_stu'		=>$_data['grade_stu'],
 					'session'		=>$_data['session'],
 					'room'			=>$_data['room'],
 					

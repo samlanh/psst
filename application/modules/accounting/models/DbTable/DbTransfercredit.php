@@ -20,9 +20,9 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				CONCAT(stu_khname,'-',stu_enname) AS student_name,
 				(SELECT s.stu_code FROM `rms_student` WHERE rms_student.stu_id = c.stu_idto LIMIT 1) AS stu_idto,
 				(SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.stu_name LIMIT 1) AS stu_name,
-				prob,
-				problem,
-				 
+				total_amount,
+				 prob,
+				 problem,
 				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) AS user_name,
 				c.status 
 			  FROM 
@@ -30,9 +30,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				rms_student AS s
 			  WHERE
 				  s.stu_id = c.stu_idto
-				
 			";
-	
 		if (!empty($search['title'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['title']));
@@ -51,7 +49,17 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	}
 	
 	function transfercreditMemo($data){
+		$db = $this->getAdapter();
 		//print_r($data); exit();
+		try{
+			$sql="SELECT id FROM rms_transfer_credit WHERE branch_id =".$data['branch_id'];
+			$sql.=" AND student_id='".$data['student_id']."'";
+			$sql.=" AND total_amount='".$data['total_amount']."'";
+			$sql.=" AND total_amountafter='".$data['total_amount']."'";
+			$rs = $db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
+			}
 		$arr = array(
 				'branch_id'=>$data['branch_id'],
 				'student_id'=>$data['student_id'],
@@ -59,7 +67,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'total_amountafter'=>$data['total_amount'],
 				'note'=>$data['Description'],
 				'prob'=>$data['prob'],
-				'type'=>0,
+				'type'=>1,
 				'date'=>$data['Date'],
 				'end_date'=>$data['end_date'],
 				
@@ -67,17 +75,35 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'stu_name'=>$data['stu_name'],
 				'start_date'=>$data['start_date'],
 				'end_dates'=>$data['end_dates'],
-				'total_amountall'=>$data['total_amountall'],
 				'problem'=>$data['problem'],
 				'Descriptions'=>$data['Descriptions'],
 				'status'=>$data['status'],
 				'user_id'=>$this->getUserId(),);
 		$this->_name='rms_transfer_credit';
 		$this->insert($arr);
+		
+		$arr = array(
+				'branch_id'		=>$data['branch_id'],
+				'student_id'	=>$data['student_id'],
+				'total_amount'	=>0,
+				'total_amountafter'=>0,
+				'note'			=>$data['Description'],
+				'prob'			=>$data['prob'],
+				'type'			=>0,
+				'date'			=>$data['Date'],
+				'end_date'		=>$data['end_date'],
+				'status'		=>$data['status'],
+				'user_id'		=>$this->getUserId(),);
+		$this->_name='rms_creditmemo';
+		$this->insert($arr);
+		}catch (Exception $e){
+			$db->rollBack();
+			echo $e->getMessage();exit();
+		}
 	}
-function getCreditmemobyid($id){
-	$db = $this->getAdapter();
-	$sql=" SELECT * FROM rms_creditmemo where id=$id ";
-	return $db->fetchRow($sql);
-}
+// 	function getCreditmemobyid($id){
+// 		$db = $this->getAdapter();
+// 		$sql=" SELECT * FROM rms_creditmemo where id=$id ";
+// 		return $db->fetchRow($sql);
+// 	}
 }

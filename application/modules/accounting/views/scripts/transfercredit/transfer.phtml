@@ -120,12 +120,6 @@
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SPACE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement('total_amountall');?>
-		                </div>
-		             </div>
-		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement('problem');?>
@@ -173,6 +167,13 @@ function setSelected(type){
 	}else{
 		student_id = dijit.byId("student_name").get('value');
 		dijit.byId("student_id").attr('value',student_id);
+	}
+	if(type==1){
+		stu_idto = dijit.byId("stu_idto").get('value');
+		dijit.byId("stu_name").attr('value',stu_idto);
+	}else{
+		stu_idto = dijit.byId("stu_name").get('value');
+		dijit.byId("stu_idto").attr('value',stu_idto);
 	}
 }
 </script>

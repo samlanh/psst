@@ -13,9 +13,10 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql="SELECT id,adjust_no,request_name,note,request_date,
     		   (SELECT SUM(rd.qty_after) FROM rms_adjuststock_detail AS rd WHERE rd.adjuststock_id=rms_adjuststock.id)AS total_qty,
-		       (SELECT name_en FROM rms_view WHERE key_code=rms_adjuststock.status AND rms_view.type=1 LIMIT 1) AS `status`,
+    		   status,
 			   (SELECT first_name FROM rms_users WHERE id=rms_adjuststock.user_id LIMIT 1) AS user_name
 			   FROM rms_adjuststock WHERE 1";
+//     	(SELECT name_en FROM rms_view WHERE key_code=rms_adjuststock.status AND rms_view.type=1 LIMIT 1) AS `status`,
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " request_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " request_date <= '".$search['end_date']." 23:59:59'";
@@ -41,8 +42,11 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 
     public function getProQtyByLocation($branch_id,$pro_id){
     	$db=$this->getAdapter();
-    	$sql=" SELECT pl.id,pl.pro_id,pl.pro_qty  FROM rms_product_location AS pl,rms_product AS p
-				 WHERE pl.pro_id=$pro_id AND pl.brand_id=$branch_id
+    	$sql=" SELECT pl.id,pl.pro_id,pl.pro_qty  
+    		   FROM 
+    		   		rms_product_location AS pl,
+    		   		rms_itemsdetail AS p
+			   WHERE pl.pro_id=$pro_id AND pl.brand_id=$branch_id
 				 AND   p.id=pl.pro_id ";
     	$row = $db->fetchRow($sql);
     	if(empty($row)){
@@ -59,7 +63,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     		);
     		$this->_name="rms_product_location";
     		$this->insert($array);
-    		$sql=" SELECT pl.pro_id,pl.pro_qty  FROM rms_product_location AS pl,rms_product AS p
+    		$sql=" SELECT pl.pro_id,pl.pro_qty  FROM rms_product_location AS pl,rms_itemsdetail AS p
     		WHERE pl.pro_id=$pro_id AND pl.brand_id=$branch_id
     		AND   p.id=pl.pro_id ";
     		return $row = $db->fetchRow($sql);
@@ -131,7 +135,8 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
  	function updateAdjustStock($data){
  		$db = $this->getAdapter();
  		$db->beginTransaction();
- 		try{//sum qty to current qty in stock
+ 		try{
+ 			//sum qty to current qty in stock
  			$rows=$this->getAdjustStockDetail($data['id']);
  			if(!empty($rows))foreach ($rows AS $row){
  				$qty=$this->getProQtyByLocation($row['branch_id'], $row['pro_id']);
@@ -218,7 +223,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 	
 	function getAdjustStockDetail($id){
 		$db=$this->getAdapter();
-		$sql="SELECT ad.branch_id,(SELECT p.pro_name FROM rms_product AS p WHERE p.id=ad.pro_id ) AS pro_name,
+		$sql="SELECT ad.branch_id,(SELECT p.title FROM rms_itemsdetail AS p WHERE p.id=ad.pro_id ) AS pro_name,
 			    ad.pro_id,ad.qty_befor,ad.qty_after,ad.difference,ad.remark FROM rms_adjuststock_detail  AS ad
 				WHERE ad.adjuststock_id=$id";
 		return $db->fetchAll($sql);
@@ -226,7 +231,7 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 	
     function getProductNames(){
     	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
+    	$sql="SELECT p.id,pl.brand_id,p.title AS `name` FROM rms_itemsdetail AS p,rms_product_location AS pl
  				WHERE p.id=pl.pro_id AND p.status=1  ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('brand_id');
@@ -241,28 +246,28 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
         return $options;
     }
     
-    function getProductName(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` FROM rms_product AS p,rms_product_location AS pl
-    	WHERE p.id=pl.pro_id AND p.status=1  ";
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
-    	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-    	return $db->fetchAll($sql);
-    }
+//     function getProductName(){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT p.id,pl.brand_id,p.title AS `name` FROM rms_itemsdetail AS p,rms_product_location AS pl
+//     	WHERE p.id=pl.pro_id AND p.status=1  ";
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$sql.=$dbp->getAccessPermission('brand_id');
+//     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
+//     	return $db->fetchAll($sql);
+//     }
     
-    function getProducCutStockLater(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` 
-    		FROM rms_product AS p,
-    			rms_product_location AS pl
-		    	WHERE p.id=pl.pro_id AND p.status=1";
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$sql.=$dbp->getAccessPermission('brand_id');
-    	$sql.=" GROUP BY p.id ORDER BY id DESC ";
-//     	echo $sql;exit();
-    	return $db->fetchAll($sql);
-    }
+//     function getProducCutStockLater(){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT p.id,pl.brand_id,p.pro_name AS `name` 
+//     		FROM rms_product AS p,
+//     			rms_product_location AS pl
+// 		    	WHERE p.id=pl.pro_id AND p.status=1";
+//     	$dbp = new Application_Model_DbTable_DbGlobal();
+//     	$sql.=$dbp->getAccessPermission('brand_id');
+//     	$sql.=" GROUP BY p.id ORDER BY id DESC ";
+// //     	echo $sql;exit();
+//     	return $db->fetchAll($sql);
+//     }
 
     function getAjustCode(){
     	$db = $this->getAdapter();

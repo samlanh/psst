@@ -92,12 +92,16 @@ fieldset{  background:none;}
 	                </div>
 	            </div>
 	            <div class="col-md-8 col-sm-8 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PRODUCT_NAME");?>
+	                <div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
+	                   <label class="control-label bold col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("SELECT_PRODUCT");?> 
 	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="pro_id" name="pro_id" />
-	                   </div>
+                   		<div class="col-md-5 col-sm-5 col-xs-12">
+		                		<input id="pro_id" name="pro_id" />
+		                </div>
+		                <div class="col-md-3 col-sm-3 col-xs-12">
+                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getProByBranch();"/>
+                   		</div>
+                  		 <div class="clearfix"></div>
 	                </div>
 	                <div class="form-group">
 	                 	 <table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
@@ -141,6 +145,9 @@ dojo.require("dojo.NodeList-manipulate");
 				pro_id   = dijit.byId('pro_id').get('value');
 				branch_id= dijit.byId('branch').get('value');
 				if(pro_id==-1 || pro_id==''){
+					if(pro_id==-1){
+						window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product/add";?>','_blank');
+					}
 					 return false;
 				}else{
 					var rowId = $('#identity').val();
@@ -372,6 +379,7 @@ function getProByBranch(){
 		    alert("Please Selected Branch Name!");
 		    return false ;
 	    }
+	    loadingBlock();
 		dojo.xhrPost({
 			url:url_pro_branch,
 			content:{
@@ -384,6 +392,7 @@ function getProByBranch(){
 					 
 					pro_store  = getDataStorefromJSON('id','name', data);
 			    	dijit.byId('pro_id').set('store',pro_store); 
+			    	document.getElementsByClassName("overlay")[0].style.display="none";
 			},
 			error: function(err) {
 				alert(err);

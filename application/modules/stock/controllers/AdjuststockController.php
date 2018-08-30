@@ -4,6 +4,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 	private $type = array(1=>'service',2=>'program');
 	public function init()
 	{
+		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -25,6 +26,9 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
     		}
 			$db =  new Accounting_Model_DbTable_DbAdjustStock();
 			$rows = $db->getAllAdjustStock($search);
+			$rs_rows=new Application_Model_GlobalClass();
+			$rows=$rs_rows->getImgActive($rows, BASE_URL);
+			
 			$list = new Application_Form_Frmtable();
 			$collumns = array("ADJUST_NO","TITLE","NOTE","DATE","TOTAL","STATUS","USER");
 			$link=array(
@@ -59,22 +63,23 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 				}
 			}
 			$_pur = new Accounting_Model_DbTable_DbAdjustStock();
-			$pro=$_pur->getProducCutStockLater();
-			array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
-			$this->view->product= $pro;
+// 			$pro=$_pur->getProducCutStockLater();
+// 			array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
+// 			$this->view->product= $pro;
 // 			print_r($pro);exit();
 			
 			$this->view->rq_code=$_pur->getAjustCode();
 			$this->view->bran_name=$_pur->getAllBranch();
-			
-			$db_gr=new Global_Model_DbTable_DbGrade();
-			$d_row=$db_gr->getNameGradeAll();
-			array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-			$this->view->grade_name=$d_row;
 			 
 			$model = new Application_Model_DbTable_DbGlobal();
 			$branch = $model->getAllBranchName();
 			$this->view->branchopt = $branch;
+			
+			$db = new Global_Model_DbTable_DbItemsDetail();
+			$d_row= $db->getAllProductsNormal(2);//
+			array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+			$this->view->product= $d_row;
 	}
 	
 	public function editAction(){
@@ -98,45 +103,22 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 				}
 			}
 			$_pur = new Accounting_Model_DbTable_DbAdjustStock();
-			$pro=$_pur->getProducCutStockLater();
-			array_unshift($pro, array ( 'id' => -1,'name' => 'Add New'));
-			$this->view->product= $pro;
+
 			$this->view->row=$_pur->getAdjustStockById($id);
 			$this->view->row_detail=$_pur->getAdjustStockDetail($id);
 			
 			$this->view->rq_code=$_pur->getAjustCode();
-			$this->view->bran_name=$_pur->getAllBranch();
-			
-			$db_gr=new Global_Model_DbTable_DbGrade();
-			$d_row=$db_gr->getNameGradeAll();
-			array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
-			$this->view->grade_name=$d_row;
 			 
 			$model = new Application_Model_DbTable_DbGlobal();
 			$branch = $model->getAllBranchName();
 			$this->view->branchopt = $branch;
+			
+			$db = new Global_Model_DbTable_DbItemsDetail();
+			$d_row= $db->getAllProductsNormal(2);//
+			array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+			$this->view->product= $d_row;
 	}
-
-    function getSupplierInfoAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Accounting_Model_DbTable_DbPurchase();
-    		$row = $db->getSuplierInfo($data['sup_id']);
-    		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-    		print_r(Zend_Json::encode($row));
-    		exit();
-    	}
-    }
-    
-    function addProductAction(){
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		$_dbmodel = new Accounting_Model_DbTable_DbPurchase();
-    		$id = $_dbmodel->ajaxAddProduct($_data);
-    		print_r(Zend_Json::encode($id));
-    		exit();
-    	}
-    }
     
     function getProductqtyAction(){
     	if($this->getRequest()->isPost()){
@@ -147,12 +129,13 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
     function getProBylocationAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Accounting_Model_DbTable_DbRequestProduct();
     		$gty= $db->getAllProductBybranch($data['branch_id']);
+    		array_unshift($gty, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		array_unshift($gty, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
     		print_r(Zend_Json::encode($gty));
     		exit();
     	}

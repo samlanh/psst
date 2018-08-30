@@ -81,7 +81,6 @@ class Global_GroupController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
-		
 		$_db = new Global_Model_DbTable_DbGroup();
 		$this->view->degree = $rows = $_db->getAllFecultyName();
 		$this->view->row_year=$_db->getAllYears();

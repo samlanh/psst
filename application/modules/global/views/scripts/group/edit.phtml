@@ -72,6 +72,18 @@
 		                </div>
 		             </div>
 		             <div class="form-group">
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CULTURE_LEVEL");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                   <select name="calture" class="fullside" id="calture" placeholder="Select Level Culture" type="text" dojoType="dijit.form.FilteringSelect">
+								<option value="0" <?php if($this->rs['calture']==0) echo 'selected="selected"';?>><?php echo $tr->translate("SELECT_CULTURE");?></option>
+								<option value="1" <?php if($this->rs['calture']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ASSOCIATE");?></option>
+								<option value="2" <?php if($this->rs['calture']==2) echo 'selected="selected"';?>><?php echo $tr->translate("BACHELOR");?></option>
+								<option value="3" <?php if($this->rs['calture']==3) echo 'selected="selected"';?>><?php echo $tr->translate("MASTER");?></option>
+							    <option value="4" <?php if($this->rs['calture']==4) echo 'selected="selected"';?>><?php echo $tr->translate("DOCTORATE");?></option>
+							</select>
+		                </div>
+		             </div>
+		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select   name="degree" id="degree" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getallGrade(); getSubjectByDegree();">
@@ -94,7 +106,6 @@
 		                	<input dojoType="dijit.form.ValidationTextBox" required="true" name="semester" class="fullside" value="<?php echo $this->rs['semester'];?>" type="text">
 		                </div>
 		             </div>
-		             
 	    		</div>
 	    		<div class="col-md-4 col-sm-4 col-xs-12">
 	    			 
@@ -138,6 +149,12 @@
 							</select>
 		                </div>
 		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> :</label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="<?php echo $this->rs['note'];?>" type="text">
+		                </div>
+		             </div>
 	    		</div>
 	    		<div class="col-md-4 col-sm-4 col-xs-12">
 	    			<!-- 
@@ -160,12 +177,6 @@
 		                </div>
 		             </div>
 	    			 -->
-		              <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> :</label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="<?php echo $this->rs['note'];?>" type="text">
-		                </div>
-		             </div>
 		              <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">

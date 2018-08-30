@@ -209,7 +209,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'stu_code'		=>$stu_code,
 						'academic_year'	=>$_data['academic_year'],
 						'degree'		=>$_data['degree'],
-						'degree_stu'	=>$_data['degree_stu'],
+						'degree_student'=>$_data['degree_student'],
 						'grade'			=>$_data['grade'],
 						'room'			=>$_data['room'],
 						'session'		=>$_data['session'],
@@ -322,7 +322,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	public function updateStudent($_data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-		
+		print_r($_data); exit();
 		try{	
 			if($_data['degree']==4){
 				$stu_type=1;    //  kid
@@ -376,7 +376,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'stu_code'		=>$_data['student_id'],
 					'degree'		=>$_data['degree'],
 					'grade'			=>$_data['grade'],
-					'grade_stu'		=>$_data['grade_stu'],
+					'degree_student'=>$_data['degree_student'],
 					'session'		=>$_data['session'],
 					'room'			=>$_data['room'],
 					

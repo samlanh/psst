@@ -128,6 +128,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
 		));
+		
 		$session = new Zend_Dojo_Form_Element_FilteringSelect("session");
 		$opt_session = array(
 				1=>$tr->translate('MORNING'),
@@ -286,7 +287,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$_academic_year->setValue($data['academic_year']);
 			$session->setValue($data['session']);
 			$degree->setValue($data['degree']);
-			$degree_stu->setValue($data['degree_stu']);
+			$degree_stu->setValue($data['degree_student']);
 			$room->setValue($data['room']);
 			$status->setValue($data['status']);
 			$remark->setValue($data['remark']);

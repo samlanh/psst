@@ -31,7 +31,7 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     		$link=array(
     				'module'=>'accounting','controller'=>'transfer','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('branch_name'=>$link,'stu_id'=>$link,'student_name'=>$link,'stu_idto'=>$link,'stu_name'=>$link,'tolocation'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('branch_namesfs'=>$link,'stu_idsdf'=>$link,'student_me'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

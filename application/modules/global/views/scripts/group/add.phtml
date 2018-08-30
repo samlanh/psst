@@ -66,6 +66,18 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
                 </div>
              </div>
              <div class="form-group">
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CULTURE_LEVEL");?></label>
+                <div class="col-md-7 col-sm-7 col-xs-12">
+                   <select name="calture" class="fullside" id="calture" placeholder="Select Level Culture" type="text" dojoType="dijit.form.FilteringSelect">
+						<option value="0"><?php echo $tr->translate("SELECT_CULTURE");?></option>
+						<option value="1"><?php echo $tr->translate("ASSOCIATE");?></option>
+						<option value="2"><?php echo $tr->translate("BACHELOR");?></option>
+						<option value="3"><?php echo $tr->translate("MASTER");?></option>
+						<option value="4"><?php echo $tr->translate("DOCTORATE");?></option>
+					</select>
+                </div>
+             </div>
+             <div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
                  <input id="degree" name="degree" />
@@ -75,12 +87,6 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
                   <input id="grade" name="grade" />
-                </div>
-             </div>
-             <div class="form-group">
-                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SEMESTER");?></label>
-                <div class="col-md-7 col-sm-7 col-xs-12">
-                 	<input dojoType="dijit.form.ValidationTextBox" class="fullside" required="true" name="semester" value="" type="text">
                 </div>
              </div>
     	</div>
@@ -116,13 +122,19 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
                 </div>
              </div>
              <div class="form-group">
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SEMESTER");?></label>
+                <div class="col-md-7 col-sm-7 col-xs-12">
+                 	<input dojoType="dijit.form.ValidationTextBox" class="fullside" required="true" name="semester" value="" type="text">
+                </div>
+             </div>
+    	</div>
+    	<div class="col-md-4 col-sm-4 col-xs-12">
+    		<div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
                 	<input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="" type="text">
                 </div>
              </div>
-    	</div>
-    	<div class="col-md-4 col-sm-4 col-xs-12">
     		<!-- 
     		<div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("START_DATE");?></label>

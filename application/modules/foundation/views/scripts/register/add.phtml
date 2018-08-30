@@ -251,7 +251,7 @@ input.btn_borwse_image {
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE_STUDENT");?>  :
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CULTURE_LEVEL");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("degree_student");?>
@@ -563,6 +563,7 @@ dojo.ready(function(){
 	    	group_id = dijit.byId('group').get('value');
 	    	if(group_id==-1){
 	    		dijit.byId('academic_year').set('readOnly',false);
+	    		dijit.byId('degree_student').set('readOnly',false);
 				dijit.byId('degree').set('readOnly',false);
 				dijit.byId('grade').set('readOnly',false);
 				dijit.byId('session').set('readOnly',false);
@@ -691,8 +692,8 @@ dojo.ready(function(){
 	   } 
 	}, "know_by");
 	dijit.byId('know_by').attr('value',0);
-	
 }); 
+
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallGrade(){
@@ -1080,6 +1081,7 @@ function uploadcomplete(event){
 		if(group=='' || group==-1){
 			dijit.byId('academic_year').set('readOnly',false);
 			dijit.byId('degree').set('readOnly',false);
+			dijit.byId('degree_student').set('readOnly',false);
 			dijit.byId('grade').set('readOnly',false);
 			dijit.byId('session').set('readOnly',false);
 			//dijit.byId('room').set('readOnly',false);
@@ -1097,6 +1099,8 @@ function uploadcomplete(event){
 				dijit.byId('academic_year').set('readOnly',true);
 				dijit.byId('degree').set('value',data.degree);
 				dijit.byId('degree').set('readOnly',true);
+				dijit.byId('degree_student').set('value',data.degree_student);
+				dijit.byId('degree_student').set('readOnly',true);
 				dijit.byId('grade').set('value',data.grade);
 				dijit.byId('grade').set('readOnly',true);
 				dijit.byId('grade_fromgrouop').set('value',data.grade);

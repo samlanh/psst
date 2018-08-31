@@ -20,8 +20,8 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 					  (SELECT 
 						    SUM(pd.qty) 
 						  FROM
-						    rms_supproduct_detail AS pd,
-						    rms_supplier_product AS pu 
+						    rms_purchase_detail AS pd,
+						    rms_purchase AS pu 
 						  WHERE pu.id = pd.supproduct_id 
 						    AND pd.pro_id = p.id 
 						    AND pu.branch_id = pl.`brand_id`

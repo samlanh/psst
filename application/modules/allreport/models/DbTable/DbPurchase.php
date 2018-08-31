@@ -47,7 +47,7 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 				(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id LIMIT 1) AS branch_name,
 				sp.amount_due,sp.date,
 				(SELECT name_kh FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1 LIMIT 1) AS `status`
-				FROM rms_supplier_product AS sp,rms_supplier AS s 
+				FROM rms_purchase AS sp,rms_supplier AS s 
 			    WHERE sp.sup_id=s.id AND sp.status=1 ";
     	
     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
@@ -75,14 +75,14 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getPurchaseSupplierById($id){
     	$db=$this->getAdapter();
-    	$sql="SELECT pro_id,qty,qty,cost,amount,note,STATUS FROM rms_supproduct_detail WHERE supproduct_id=1";
+    	$sql="SELECT pro_id,qty,qty,cost,amount,note,STATUS FROM rms_purchase_detail WHERE supproduct_id=1";
     	return $db->fetchRow($sql);
     }
     function getPurchaseName($id){
     	$db=$this->getAdapter();
     	$sql="SELECT sp.supplier_no,s.sup_name,
 		       (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name 
-		       FROM rms_supplier AS s,rms_supplier_product AS sp 
+		       FROM rms_supplier AS s,rms_purchase AS sp 
 		       WHERE s.id=sp.sup_id AND sp.sup_id=$id LIMIT 1";
     	return $db->fetchRow($sql);
     }
@@ -92,7 +92,7 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	 (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name,
     		s.sup_name,
     		s.purchase_no,s.sex,s.tel,s.email,s.address,sp.amount_due,sp.branch_id,sp.status
-    	FROM rms_supplier AS s,rms_supplier_product AS sp
+    	FROM rms_supplier AS s,rms_purchase AS sp
     	WHERE s.id=sp.sup_id AND sp.id=$id";
     	return $db->fetchRow($sql);
     }
@@ -105,7 +105,7 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 			            	spd.qty,spd.qty,
 			            	spd.cost,spd.amount,spd.date,
 		       				(SELECT name_kh FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
-		       				FROM rms_supplier_product AS sp,rms_supproduct_detail AS spd,rms_supplier As s 
+		       				FROM rms_purchase AS sp,rms_purchase_detail AS spd,rms_supplier As s 
 		       				WHERE sp.id=spd.supproduct_id AND s.id=sp.sup_id AND spd.supproduct_id=$pro_id";
     			$where="";
     			if(!empty($search['title'])){
@@ -137,8 +137,8 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 		          
 		            spd.qty,spd.qty,spd.cost,spd.amount,spd.date,
 		       		(SELECT name_kh FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
-       				FROM rms_supplier_product AS sp,
-       				rms_supproduct_detail AS spd,
+       				FROM rms_purchase AS sp,
+       				rms_purchase_detail AS spd,
        				rms_supplier AS s,
        				rms_itemsdetail AS pro
        				WHERE sp.id=spd.supproduct_id  

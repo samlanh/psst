@@ -15,7 +15,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	 (SELECT name_kh FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
 		        (SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = spd.pro_id LIMIT 1) AS pro_name,
 					spd.qty,spd.cost,spd.amount,sp.date,sp.status
-		     		   FROM rms_supplier AS s,rms_supplier_product AS sp,rms_supproduct_detail AS spd 
+		     		   FROM rms_supplier AS s,rms_purchase AS sp,rms_purchase_detail AS spd 
 					WHERE s.id=sp.sup_id AND sp.id=spd.supproduct_id";
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
@@ -108,7 +108,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		}
 	    		
 	    		//Purchasing Order Product
-	    		$this->_name='rms_supplier_product';
+	    		$this->_name='rms_purchase';
 	    		$_arr = array(
 	    				'sup_id'		=>$sup_id,
 	    				'supplier_no'	=>$_data['purchase_no'],
@@ -122,10 +122,10 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		);
 	    		$sup_proid=$this->insert($_arr);
 	    		
-	    		$this->_name='rms_supproduct_detail';
+	    		$this->_name='rms_purchase_detail';
 	    		$ids = explode(',', $_data['identity']);
 	    		foreach ($ids as $i){
-	    			$this->_name='rms_supproduct_detail';
+	    			$this->_name='rms_purchase_detail';
 	    				$_arr = array(
 	    						'supproduct_id'=>$sup_proid,
 	    						'pro_id'=>$_data['product_name_'.$i],
@@ -194,8 +194,8 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 				  spd.pro_id,
 				  spd.qty 
 				FROM
-				  rms_supplier_product AS sp,
-				  rms_supproduct_detail AS spd 
+				  rms_purchase AS sp,
+				  rms_purchase_detail AS spd 
 				WHERE 
 				  sp.id = spd.supproduct_id 
 				  AND sp.id = $id  ";
@@ -243,7 +243,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    			$this->update($_arr, $where);
 	    		
 	    		//Purchasing Order Product
-	    		$this->_name='rms_supplier_product';
+	    		$this->_name='rms_purchase';
 	    		$_arr = array(
 	    				'sup_id'		=>$sup_id,
 	    				'supplier_no'	=>$_data['purchase_no'],
@@ -257,12 +257,12 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		$where=" id =".$_data['id'];
 	    		$this->update($_arr, $where);
 	    		
-	    		$this->_name='rms_supproduct_detail';
+	    		$this->_name='rms_purchase_detail';
 	    		$where=" supproduct_id =".$_data['id'];
 	    		$this->delete($where);
 	    		$ids = explode(',', $_data['identity']);
 	    		foreach ($ids as $i){
-	    			$this->_name='rms_supproduct_detail';
+	    			$this->_name='rms_purchase_detail';
     				$_arr = array(
     						'supproduct_id'	=>$_data['id'],
     						'pro_id'		=>$_data['product_name_'.$i],
@@ -310,7 +310,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     
     function getPurchaseCode(){
     	$db = $this->getAdapter();
-    	$sql="SELECT id FROM rms_supplier_product WHERE STATUS=1 ORDER BY id DESC LIMIT 1";
+    	$sql="SELECT id FROM rms_purchase WHERE STATUS=1 ORDER BY id DESC LIMIT 1";
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
     	$acc_no= strlen((int)$acc_no+1);
@@ -338,7 +338,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     function getSupplierById($id){
     	$db=$this->getAdapter();
     	$sql="SELECT s.id,s.sup_name,s.purchase_no,s.sex,s.tel,s.email,s.address,sp.amount_due,sp.branch_id,sp.status
-		       FROM rms_supplier AS s,rms_supplier_product AS sp
+		       FROM rms_supplier AS s,rms_purchase AS sp
 		       WHERE s.id=sp.sup_id AND sp.id=$id";
     	return $db->fetchRow($sql);
     }
@@ -346,7 +346,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="SELECT id,supproduct_id,pro_id,qty,cost,amount,note,status,
 		(SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = pro_id LIMIT 1) AS pro_name
-    	FROM rms_supproduct_detail WHERE supproduct_id=$id";
+    	FROM rms_purchase_detail WHERE supproduct_id=$id";
     	return $db->fetchAll($sql);
     }
     function getAllBranch(){

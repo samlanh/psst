@@ -98,6 +98,7 @@ dojo.require("dijit.form.CheckBox");
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="type" name="type" type="text">
+								<option value=""><?php echo $tr->translate("SELECT_TYPE")?></option>
 								<?php if(!empty($this->type)){foreach ($this->type as $rs){?>
 									<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->row['type']){ echo 'selected="selected"';}?> ><?php echo $rs['name']?></option>
 								<?php }}?>

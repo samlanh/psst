@@ -6,6 +6,7 @@ class Foundation_StudenttrandropController extends Zend_Controller_Action {
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	public function indexAction(){
 		try{
@@ -15,60 +16,52 @@ class Foundation_StudenttrandropController extends Zend_Controller_Action {
 			else{
 				$search=array(
 					'title'	=>'',
-					'study_year'=> '',
-					'grade_bac'=> '',
-					'session'=> '',
-					'start_date'=>date("Y-m-d"),
-					'end_date'=>date("Y-m-d")
+					'academic_year'=> '',
+					'degree'=> '',
 				);
 			}
-			
-			$form=new Registrar_Form_FrmSearchInfor();
-			$form->FrmSearchRegister();
-			Application_Model_Decorator::removeAllDecorator($form);
-			$this->view->form_search=$form;
-			
-			$db_student= new Foundation_Model_DbTable_DbStudentDrop();
-			$rs_rows = $db_student->getAllStudentDrop($search);
+			$db_student= new Foundation_Model_DbTable_DbStudenttranDrop();
+			$rs_rows = $db_student->getAllStudranDrop($search);
 			$list = new Application_Form_Frmtable();
 			if(!empty($rs_rows)){
 				} 
 				else{
 					$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 				}
-				$collumns = array("STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","GRADE","SESSION","TYPE","REASON","STOP_DATE");
+				$collumns = array("STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","SEX","ACADEMIC_YEAR","GRADE","SESSION","TYPE","REASON","STOP_DATE");
 				$link=array(
 						'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 				);
 				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('code'=>$link,'kh_name'=>$link,'en_name'=>$link));
 	
 			$this->view->adv_search = $search;
+			$form=new Registrar_Form_FrmSearchInfor();
+			$form->FrmSearchRegister();
+			Application_Model_Decorator::removeAllDecorator($form);
+			$this->view->form_search=$form;
 		}catch(Exception $e){
 			echo $e->getMessage();
 		}
 	}
 	public function stutrandropAction(){
 		$id=$this->getRequest()->getParam("id");
-		$db= new Foundation_Model_DbTable_DbStudent();
-		$row = $db->getStudentById($id);
-		if(empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_DATA","/foundation/register");
-		}
-		$rr = $db->getStudyHishotryById($id);
-		$this->view->rr = $rr;
+		$_db = new Foundation_Model_DbTable_DbStudenttranDrop();
 		if($this->getRequest()->isPost())
 		{
 			try{
 				$data = $this->getRequest()->getPost();
 				$data["id"]=$id;
-				$row=$db->addStudent($data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/register/index");
+				$row=$_db->addStudentDrop($data);
+				Application_Form_FrmMessage::Sucessfull("TRANSFER_SUCCESS","/foundation/studenttrandrop/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
+		$db= new Foundation_Model_DbTable_DbStudent();
+		$row = $db->getStudentById($id);
 		$group = $db->getAllgroup();
+		//array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
 		$this->view->group = $group;
 	
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -84,7 +77,6 @@ class Foundation_StudenttrandropController extends Zend_Controller_Action {
 		$row = $_db->getAllDocumentType(); // degree language
 		$this->view->doc_type = $row;
 	
-	
 		$this->view->degree = $db->getAllFecultyName();
 	
 		$test =  $db->getStudentById($id);
@@ -96,7 +88,7 @@ class Foundation_StudenttrandropController extends Zend_Controller_Action {
 		$this->view->room = $row =$db->getAllRoom();
 	
 		$tsub= new Foundation_Form_FrmStudentRegister();
-		$frm_register=$tsub->FrmStudentRegister($test);
+		$frm_register=$tsub->FrmStudropRegister($test);
 		Application_Model_Decorator::removeAllDecorator($frm_register);
 		$this->view->frm = $frm_register;
 	}	

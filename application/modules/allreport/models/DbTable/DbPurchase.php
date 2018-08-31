@@ -86,13 +86,25 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 		       WHERE s.id=sp.sup_id AND sp.sup_id=$id LIMIT 1";
     	return $db->fetchRow($sql);
     }
+    function getPruchaseById($id){
+    	$db=$this->getAdapter();
+    	$sql="SELECT sp.*,
+    	 (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name,
+    		s.sup_name,
+    		s.purchase_no,s.sex,s.tel,s.email,s.address,sp.amount_due,sp.branch_id,sp.status
+    	FROM rms_supplier AS s,rms_supplier_product AS sp
+    	WHERE s.id=sp.sup_id AND sp.id=$id";
+    	return $db->fetchRow($sql);
+    }
     function getPurchaseProductDetail($pro_id,$search=null){
     	$db=$this->getAdapter();
-    			$sql=" SELECT  sp.supplier_no,s.sup_name,
-			           (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name ,
-			           (SELECT pro_name FROM rms_product WHERE rms_product.id=spd.pro_id) AS pro_id, 
-			            spd.qty,spd.qty,spd.cost,spd.amount,spd.date,
-		       			(SELECT name_kh FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
+    			$sql=" SELECT  
+    						sp.supplier_no,s.sup_name,
+			           		(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id ) AS brand_name ,
+			           		(SELECT d.title FROM `rms_itemsdetail` AS d WHERE d.items_type=3 AND d.id = spd.pro_id LIMIT 1) AS pro_id,
+			            	spd.qty,spd.qty,
+			            	spd.cost,spd.amount,spd.date,
+		       				(SELECT name_kh FROM rms_view WHERE rms_view.key_code=spd.status AND rms_view.type=1) AS `status`
 		       				FROM rms_supplier_product AS sp,rms_supproduct_detail AS spd,rms_supplier As s 
 		       				WHERE sp.id=spd.supproduct_id AND s.id=sp.sup_id AND spd.supproduct_id=$pro_id";
     			$where="";

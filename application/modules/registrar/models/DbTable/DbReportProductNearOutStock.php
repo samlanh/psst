@@ -27,21 +27,22 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
 		
     	$db=$this->getAdapter();
     	$sql="SELECT 
-    				p.pro_code,
-    				CONCAT(p.pro_name) AS pro_name ,
-    	            (SELECT name_kh FROM `rms_pro_category` WHERE id = p.cat_id limit 1) as category_name,
-    	            (SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id limit 1) AS brand_name,
-    	            pl.brand_id,
-    				pl.pro_qty,
-    				p.pro_price,
-    				pl.total_amount,
-			        p.date,
-			        (SELECT name_kh FROM rms_view WHERE rms_view.key_code=p.status AND rms_view.type=1 limit 1) AS `status` 
+				p.code AS pro_code,
+				CONCAT(p.title) AS pro_name ,
+				(SELECT it.title FROM `rms_items` AS it WHERE it.id = p.items_id AND it.type=3 LIMIT 1) AS category_name,
+			(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=pl.brand_id LIMIT 1) AS brand_name,
+			pl.brand_id,
+				pl.pro_qty,
+				pl.price AS pro_price,
+				p.price,
+				pl.total_amount,
+				p.create_date AS DATE,
+				(SELECT name_kh FROM rms_view WHERE rms_view.key_code=p.status AND rms_view.type=1 LIMIT 1) AS `status` 
 			  FROM 
-			  		rms_product AS p,
-			  		rms_product_location AS pl
+					rms_itemsdetail AS p,
+					rms_product_location AS pl
 			  WHERE 
-    				p.id=pl.pro_id 
+				p.id=pl.pro_id
     				$branch_id
     		";
 //     	echo $sql;

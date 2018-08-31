@@ -106,6 +106,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbPurchase();
 			$id=$this->getRequest()->getParam('id');
+			$this->view->purchase = $db->getPruchaseById($id);
 			$this->view->pur_detail=$db->getPurchaseProductDetail($id,$search);
 	
 		}catch(Exception $e){

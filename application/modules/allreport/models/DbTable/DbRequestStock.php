@@ -136,7 +136,7 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 		$sql="SELECT
 					*,
 					(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
-					(select pro_name from rms_product as p where p.id = pro_id) as pro_name
+					(SELECT d.title FROM `rms_itemsdetail` AS d WHERE d.items_type=3 AND d.id = pro_id LIMIT 1) AS pro_name
 				FROM
 					rms_request_orderdetail 
 				WHERE

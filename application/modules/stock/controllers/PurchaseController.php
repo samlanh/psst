@@ -26,7 +26,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
     							'status_search'=>1,
     					);
     		}
-			$db =  new Accounting_Model_DbTable_DbPurchase();
+			$db =  new Stock_Model_DbTable_DbPurchase();
 			$rows = $db->getAllSupPurchase($search);
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
@@ -50,7 +50,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 		$_data = $this->getRequest()->getPost();
 			try{
-				$db = new Accounting_Model_DbTable_DbPurchase();
+				$db = new Stock_Model_DbTable_DbPurchase();
 				$row = $db->addPurchase($_data);
 				
 				if(isset($_data['save_close'])){
@@ -65,7 +65,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 				echo $e->getMessage();
 			}
 		}
-		$_pur = new Accounting_Model_DbTable_DbPurchase();
+		$_pur = new Stock_Model_DbTable_DbPurchase();
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->bran_name=$_pur->getAllBranch();
@@ -103,7 +103,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');
-		$_pur = new Accounting_Model_DbTable_DbPurchase();
+		$_pur = new Stock_Model_DbTable_DbPurchase();
 		$row = $_pur->getSupplierById($id);
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("No Record","/stock/purchase");
@@ -123,7 +123,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
 			try{
-				$db = new Accounting_Model_DbTable_DbPurchase();
+				$db = new Stock_Model_DbTable_DbPurchase();
 				$row = $db->updateProduct($_data,$id);
 		
 				if(isset($_data['save_close'])){
@@ -163,31 +163,11 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 		$this->view->products= $d_row;
 	}
 
-function getStudentAction(){
-	if($this->getRequest()->isPost()){
-		$data=$this->getRequest()->getPost();
-		$db = new Accounting_Model_DbTable_DbSuspendservice();
-		$studentinfo = $db->getAllStudentInfo($data['studentid']);
-		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-		print_r(Zend_Json::encode($studentinfo));
-		exit();
-	}
-	}
 	
-	function getStudentIdAction(){
-	if($this->getRequest()->isPost()){
-		$data=$this->getRequest()->getPost();
-		$db = new Accounting_Model_DbTable_DbSuspendservice();
-		$year = $db->getStudentID($data['study_year']);
-		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-		print_r(Zend_Json::encode($year));
-		exit();
-		}
-    }
     function getSupplierInfoAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$db = new Accounting_Model_DbTable_DbPurchase();
+    		$db = new Stock_Model_DbTable_DbPurchase();
     		$row = $db->getSuplierInfo($data['sup_id']);
     		//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
     		print_r(Zend_Json::encode($row));
@@ -198,7 +178,7 @@ function getStudentAction(){
     function addProductAction(){
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_dbmodel = new Accounting_Model_DbTable_DbPurchase();
+    		$_dbmodel = new Stock_Model_DbTable_DbPurchase();
     		$id = $_dbmodel->ajaxAddProduct($_data);
     		print_r(Zend_Json::encode($id));
     		exit();

@@ -94,11 +94,12 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				'tel'			=>$_data['phone'],
 	    				'email'			=>$_data['email'],
 	    				'address'		=>$_data['address'],
-	    				'amount_due'	=>$_data['amount_due'],
+// 	    				'amount_due'	=>$_data['amount_due'],
 	    				'status'		=>$_data['status'],
 	    				'date'			=>date("Y-m-d"),
 	    				'user_id'		=>$this->getUserId()
 	    				);
+	    		$this->_name='rms_supplier';
 	    		if(!empty($_data['is_new_cu'])){
 	    			$sup_id=$_data['sup_id'];
 	    			$where=" id =".$_data['sup_id'];
@@ -113,6 +114,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				'sup_id'		=>$sup_id,
 	    				'supplier_no'	=>$_data['purchase_no'],
 	    				'amount_due'	=>$_data['amount_due'],
+	    				'amount_due_after'	=>$_data['amount_due'],
 	    				'branch_id'		=>$_data['branch'],
 	    				'date'			=>date("Y-m-d"),
 	    				'status'		=>$_data['status'],
@@ -141,6 +143,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		}
     			$db->commit();
 		   	}catch (Exception $e){
+		   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		   		echo $e->getMessage();
 		   		$db->rollBack();
 		   	}
@@ -233,6 +236,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				'email'			=>$_data['email'],
 	    				'address'		=>$_data['address'],
 	    				'amount_due'	=>$_data['amount_due'],
+// 	    				'amount_due_after'	=>$_data['amount_due'],
 	    				'status'		=>$_data['status'],
 	    				'date'			=>date("Y-m-d"),
 	    				'user_id'		=>$this->getUserId()
@@ -248,6 +252,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				'sup_id'		=>$sup_id,
 	    				'supplier_no'	=>$_data['purchase_no'],
 	    				'amount_due'	=>$_data['amount_due'],
+	    				'amount_due_after'	=>$_data['amount_due'],
 	    				'branch_id'		=>$_data['branch_id'],
 	    				'date'			=>date("Y-m-d"),
 	    				'status'		=>$_data['status'],
@@ -337,7 +342,7 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getSupplierById($id){
     	$db=$this->getAdapter();
-    	$sql="SELECT s.id,s.sup_name,s.purchase_no,s.sex,s.tel,s.email,s.address,sp.amount_due,sp.branch_id,sp.status
+    	$sql="SELECT sp.*,s.sup_name,s.purchase_no,s.sex,s.tel,s.email,s.address,sp.amount_due,sp.branch_id,sp.status
 		       FROM rms_supplier AS s,rms_purchase AS sp
 		       WHERE s.id=sp.sup_id AND sp.id=$id";
     	return $db->fetchRow($sql);
@@ -403,5 +408,12 @@ class Accounting_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$this->insert($array);
     	return $pro_id;
     }
-    
+    function checkHaspayment($purchase_id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT * FROM `rms_purchase_payment_detail` AS pr WHERE pr.`purchase_id`=$purchase_id
+    	AND (SELECT p.`status` FROM `rms_purchase_payment` AS p WHERE p.`id` = pr.`payment_id` LIMIT 1) =1 LIMIT 1";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('(SELECT p.`branch_id` FROM `rms_purchase_payment` AS p WHERE p.`id` = pr.`payment_id` LIMIT 1)');
+    	return $db->fetchRow($sql);
+    }
 }

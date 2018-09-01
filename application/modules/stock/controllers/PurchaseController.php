@@ -103,6 +103,22 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');
+		$_pur = new Accounting_Model_DbTable_DbPurchase();
+		$row = $_pur->getSupplierById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("No Record","/stock/purchase");
+			exit();
+		}else if ($row['is_paid']==1){
+			Application_Form_FrmMessage::Sucessfull("This Purchase Already Payment","/stock/purchase");
+			exit();
+		}
+		
+		$haspay = $_pur->checkHaspayment($id);
+		if (!empty($haspay)){
+			Application_Form_FrmMessage::Sucessfull("This Purchase has paid on some payment ready","/stock/purchase");
+			exit();
+		}
+		
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
@@ -113,7 +129,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/purchase");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/purchase");
+					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/purchase/add");
 				}
 		
 				Application_Form_FrmMessage::message("INSERT_SUCCESS");
@@ -123,14 +139,14 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 				echo $e->getMessage();
 			}
 		}
-		$_pur = new Accounting_Model_DbTable_DbPurchase();
+		
 // 		$this->view->product= $_pur->getProductNames();
 // 		$pro=$_pur->getProductName();
 // 		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 // 		$this->view->products= $pro;
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
-		$this->view->row_sup=$_pur->getSupplierById($id);
+		$this->view->row_sup=$row;
 		$this->view->row_pur_detai=$_pur->getSupplierProducts($id);		
 		$this->view->bran_name=$_pur->getAllBranch();
 		

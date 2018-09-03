@@ -3,10 +3,8 @@
 	$frm = $this->frm_callteral;
 	echo $this->headTitle($tr->translate("ADD_TECHER_NAME"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-	$frm= $this->frm_techer;
-?>
-<?php 
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm= $this->frm_techer;
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <style>
@@ -67,8 +65,7 @@ input.btn_borwse_image {
 			if(this.validate()) {
 				degree = dijit.byId('degree').get('value');
         			if(degree==0){
-						alert("Please Select Degree");
-						dijit.byId('degree').focus();return false;
+						alert("សូមជ្រើសរើសកម្រិតសិក្សា");dijit.byId('degree').focus();return false;
 					}
 				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
 					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
@@ -84,12 +81,11 @@ input.btn_borwse_image {
 				return false;
 			}
 			</script>
-			
 			<div class="card-box">
 	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
 		            <li class="nav-item active">
 		                <a class="nav-link " data-toggle="tab" href="#panel21" role="tab">
-		                <i class="fa fa-user ml-2"></i> <?php echo $tr->translate("STUDENT_INFO");?>
+		                <i class="fa fa-user ml-2"></i> <?php echo $tr->translate("INFORMATION_TEACHER");?>
 		                </a>
 		            </li>
 					<li class="nav-item">
@@ -132,17 +128,17 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEACHER");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+							<?php echo $frm->getElement("teacher_ty");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("dob");?>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEACHER_EHNICITY");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-							<?php echo $frm->getElement("teacher_ty");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -404,7 +400,7 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 	function submitDataClose(){
 		degree=dijit.byId('degree').get('value');
 		if(degree==0){
-			alert('Please Select Degree!');dijit.byId('degree').focus();return false;
+			alert('សូមជ្រើសរើសកម្រិតសិក្សា!');dijit.byId('degree').focus();return false;
 			return false;
 		}
 		if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
@@ -489,7 +485,7 @@ function addRow(){
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
-		temp+='<th width="100px"><?php echo $tr->translate("DATE_END");?></th>';
+		temp+='<th width="100px"><?php echo $tr->translate("END_DATE");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 		dojo.query("#head-title").append(temp);

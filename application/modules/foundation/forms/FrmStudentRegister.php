@@ -422,15 +422,20 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$date_stop = new Zend_Dojo_Form_Element_DateTextBox('date_stop');
 		$date_stop->setAttribs(array(
 				'data-dojo-Type'=>"dijit.form.DateTextBox",
+				'required'=>'true',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside',
 		));
+		$date_stop->setValue(date('Y-m-d'));
+		
+	 
 	
 		$degree =  new Zend_Dojo_Form_Element_FilteringSelect('degree');
 		$degree->setAttribs(array(
 				'readonly'=>'readonly',
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+				'value'=>'now',
 				'onChange'=>'getallGrade();getStudentNo()',
 	
 		));
@@ -502,7 +507,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$session->setValue($data['session']);
 			$degree->setValue($data['degree']);
 	//		$reason->setValue($data['reason']);
-	//		$stu_stop->setValue($data['stu_stop']);
+		//	$date_stop->setValue($data['date_stop']);
 			$degree_stu->setValue($data['calture']);
 			$room->setValue($data['room']);
 			$status->setValue($data['status']);

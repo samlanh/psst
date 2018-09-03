@@ -1,5 +1,4 @@
 <?php 
-
 class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 {
 	protected $tr = null;

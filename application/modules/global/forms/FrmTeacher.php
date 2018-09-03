@@ -20,7 +20,8 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		//$this->check='dijit.form.CheckBox';
 	}
 	public function FrmTecher($_data=null){
-	
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		
 		$_enname = new Zend_Dojo_Form_Element_TextBox('en_name');
 		$_enname->setAttribs(array('dojoType'=>$this->tvalidate, 'class'=>'fullside','required'=>'true'));
 		

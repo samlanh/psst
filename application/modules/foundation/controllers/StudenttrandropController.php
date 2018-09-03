@@ -1,6 +1,5 @@
 <?php
 class Foundation_StudenttrandropController extends Zend_Controller_Action {
-	
     public function init()
     {    	
      /* Initialize action controller here */
@@ -14,34 +13,30 @@ class Foundation_StudenttrandropController extends Zend_Controller_Action {
 				$search=$this->getRequest()->getPost();
 			}
 			else{
-				$search=array(
-					'title'	=>'',
-					'academic_year'=> '',
-					'degree'=> '',
+				$search= array(
+						'title' 		=> '',
+						'academic_year'	=> '',
+						'degree'		=> '',
+						'status_search'	=> -1,
 				);
 			}
+			$this->view->search = $search;
 			$db_student= new Foundation_Model_DbTable_DbStudenttranDrop();
 			$rs_rows = $db_student->getAllStudranDrop($search);
 			$list = new Application_Form_Frmtable();
-			if(!empty($rs_rows)){
-				} 
-				else{
-					$result = Application_Model_DbTable_DbGlobal::getResultWarning();
-				}
-				$collumns = array("STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","SEX","ACADEMIC_YEAR","GRADE","SESSION","TYPE","REASON","STOP_DATE");
+				$collumns = array("STUDENT_ID","STUDENT_NAME","SEX","DEGREE","YEARS","TYPE","SESSION","ROOM","STOP_DATE","REASON","USER","STATUS");
 				$link=array(
-						'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
+						'module'=>'accounting','controller'=>'studenttrandrop','action'=>'edit',
 				);
-				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('code'=>$link,'kh_name'=>$link,'en_name'=>$link));
-	
-			$this->view->adv_search = $search;
-			$form=new Registrar_Form_FrmSearchInfor();
-			$form->FrmSearchRegister();
-			Application_Model_Decorator::removeAllDecorator($form);
-			$this->view->form_search=$form;
-		}catch(Exception $e){
-			echo $e->getMessage();
+				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('name_kh'=>$link,'name_en'=>$link,));
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+			//print_r($form); exit();
 	}
 	public function stutrandropAction(){
 		$id=$this->getRequest()->getParam("id");
@@ -49,12 +44,17 @@ class Foundation_StudenttrandropController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost())
 		{
 			try{
+				$sms="INSERT_SUCCESS";
 				$data = $this->getRequest()->getPost();
 				$data["id"]=$id;
 				$row=$_db->addStudentDrop($data);
-				Application_Form_FrmMessage::Sucessfull("TRANSFER_SUCCESS","/foundation/studenttrandrop/index");
+				if($row==-1){
+					$sms = "RECORD_EXIST";
+				}
+				Application_Form_FrmMessage::Sucessfull($sms,"/foundation/studenttrandrop/index");
+				Application_Form_FrmMessage::message($sms);
 			}catch(Exception $e){
-				Application_Form_FrmMessage::message("EDIT_FAIL");
+				Application_Form_FrmMessage::message("TRAN_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}

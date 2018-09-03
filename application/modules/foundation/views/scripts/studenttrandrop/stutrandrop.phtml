@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('STUDENT_REGISTER_DROP')); 
+	$this->headTitle($tr->translate('STUDENT_INFORMATION')); 
 	echo $this->headTitle(''); 
 	$frm = $this->frm;
 ?>
@@ -9,7 +9,7 @@
 	<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-graduation-cap " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDNET_STOP_STUDY');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-graduation-cap " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_INFORMATION');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -19,6 +19,10 @@
 		<form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				stu_stop = dijit.byId('stu_stop').get('value');
+        			if(stu_stop==-1){
+						alert("សូមជ្រើសរើសប្រភេទ");dijit.byId('stu_stop').focus();return false;
+					}
 				dijit.byId('save_close').set('disabled',true);	
 				return true;
 			}else {
@@ -151,18 +155,6 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 dojo.ready(function(){
 	
 	new dijit.form.FilteringSelect({
-	    autoComplete: true,                        
-	    id: "grade",
-	    name: "grade",
-	    required : "false",          
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-	    onChange: function() {  
-	    }
-	}, "grade");
-	getallGrade(1);
-
-	new dijit.form.FilteringSelect({
 		store: job_store,
 		autoComplete: true,                        
 	    id: "fa_job",
@@ -278,7 +270,6 @@ dojo.ready(function(){
 	if(know_by==''){
 		dijit.byId('know_by').attr('value',0);
 	}
-	
 	dijit.byId('academic_year').attr('value',"<?php echo $this->rs['academic_year']?>");
 }); 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );

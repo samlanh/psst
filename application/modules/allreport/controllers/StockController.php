@@ -419,5 +419,50 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	public function rptPurchasePaymentAction(){
+		try{
+		if($this->getRequest()->isPost()){
+    			$search = $this->getRequest()->getPost();
+    		}
+    		else{
+    			$search=array(
+    							'branch_search' => '',
+    							'adv_search' => '',
+    					        'supplier_search'=>'',
+    							'paid_by_search'=>'',
+    							'start_date'=> date('Y-m-d'),
+    							'end_date'=>date('Y-m-d'),
+    					);
+    		}
+			$this->view->search = $search;
+			$db = new Allreport_Model_DbTable_DbPurchase();
+			$this->view->row = $db->getAllPurchasePayment($search);
 	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$frm = new Stock_Form_FrmPurchasePayment();
+		$frm->FrmAddPurchasePayment(null);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_payment = $frm;
+	}
+	
+	public function rptPaymentReceiptAction(){
+		try{
+			$id=$this->getRequest()->getParam('id');
+			
+			$db = new Allreport_Model_DbTable_DbPurchase();
+			$row = $db->getPurchasePaymentById($id);
+			if (empty($row)){
+				Application_Form_FrmMessage::Sucessfull("No Record","/allreport/stock/rpt-purchase-payment");
+				exit();
+			}
+			$this->view->row = $row;
+			$this->view->rowDetail = $db->getPurchasePaymentDetail($id);;
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
 }

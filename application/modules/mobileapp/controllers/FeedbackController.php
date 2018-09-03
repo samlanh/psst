@@ -59,6 +59,7 @@ class Mobileapp_FeedbackController extends Zend_Controller_Action
     	if (empty($rs_rows)){
     		$this->_redirect("mobileapp/feedback");
     	}
+    	$db->updateMessage($id);
     }
 	function sentmessageAction(){
 		if($this->getRequest()->isPost()){

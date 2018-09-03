@@ -179,6 +179,74 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where);
     }
     
+    function getAllPurchasePayment($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$sql="
+    		SELECT
+    		pp.*,
+    		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+    		pp.receipt_no,
+    		(SELECT s.sup_name FROM `rms_supplier` AS s WHERE s.id = pp.supplier_id LIMIT 1 ) AS supplier_name,
+    		pp.balance,
+    		pp.total_paid,pp.total_due,
+    		(SELECT v.name_kh FROM `rms_view` AS v WHERE v.key_code = pp.paid_by AND v.type=8 LIMIT 1) AS paid_by,
+    		pp.date_payment,
+    		pp.status
+    		FROM `rms_purchase_payment` AS pp WHERE pp.status=1 
+    		";
+    		$from_date =(empty($search['start_date']))? '1': " pp.date_payment >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+    		$to_date = (empty($search['end_date']))? '1': " pp.date_payment <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+    		$sql.= " AND  ".$from_date." AND ".$to_date;
+    		$where="";
+    		if(!empty($search['adv_search'])){
+    			$s_where=array();
+    			$s_search=addslashes(trim($search['adv_search']));
+    			$s_where[]= " pp.receipt_no LIKE '%{$s_search}%'";
+    			$s_where[]= " pp.balance LIKE '%{$s_search}%'";
+    			$s_where[]= " pp.total_paid LIKE '%{$s_search}%'";
+    			$s_where[]= " pp.total_due LIKE '%{$s_search}%'";
+    
+    			$where.=' AND ('.implode(' OR ', $s_where).')';
+    		}
+    		if(!empty($search['supplier_search'])){
+    			$where.=" AND pp.supplier_id=".$search['supplier_search'];
+    		}
+    		if(!empty($search['status_search'])){
+    			$where.=" AND pp.status=".$search['status_search'];
+    		}
+    		if(!empty($search['branch_search'])){
+    			$where.=" AND pp.branch_id=".$search['branch_search'];
+    		}
+    		$dbp = new Application_Model_DbTable_DbGlobal();
+    		$where.=$dbp->getAccessPermission('pp.branch_id');
+    		$order=" ORDER BY pp.id DESC";
+    
+    		return $db->fetchAll($sql.$where.$order);
+    
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    }
+    function getPurchasePaymentById($id){
+    	$db=$this->getAdapter();
+    	$sql="SELECT pp.*,
+    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+		(SELECT s.sup_name FROM `rms_supplier` AS s WHERE s.id = pp.supplier_id LIMIT 1 ) AS supplier_name,
+		(SELECT s.tel FROM `rms_supplier` AS s WHERE s.id = pp.supplier_id LIMIT 1 ) AS tel,
+		(SELECT s.email FROM `rms_supplier` AS s WHERE s.id = pp.supplier_id LIMIT 1 ) AS email
+    	FROM `rms_purchase_payment` AS pp WHERE pp.id = $id ";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('pp.branch_id');
+    	return $db->fetchRow($sql);
+    }
+    function getPurchasePaymentDetail($payment_id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT pd.*,
+    	(SELECT p.supplier_no FROM `rms_purchase` AS p WHERE p.id = pd.purchase_id LIMIT 1) AS supplier_no
+    	FROM `rms_purchase_payment_detail` AS pd WHERE pd.id =$payment_id ";
+    	return $db->fetchAll($sql);
+    }
 }
 
 

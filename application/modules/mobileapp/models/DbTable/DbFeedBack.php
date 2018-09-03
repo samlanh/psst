@@ -40,6 +40,16 @@ class Mobileapp_Model_DbTable_DbFeedBack extends Zend_Db_Table_Abstract
         $row=$db->fetchAll($sql.$where);
         return $row;
 	}
+	function updateMessage($id){
+		$db=$this->getAdapter();
+		$_arr = array(
+				'read'=>"read",
+		);
+		$unread = "unread";
+		$where = " stu_id=".$id." AND `read`='$unread'";
+		$this->_name ="mobile_message";
+		$this->update($_arr, $where);
+	}
 	function AddFeedback($data){
 		$db=$this->getAdapter();
 		$_arr = array(

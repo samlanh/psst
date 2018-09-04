@@ -107,7 +107,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	public function getStudentDocumentById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_teacher_document as s WHERE s.stu_id =".$id;
+		$sql = "SELECT * FROM rms_student_document as s WHERE s.stu_id =".$id;
 		return $db->fetchAll($sql);
 	}
 	
@@ -139,24 +139,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				return -1;
 			}
 			$stu_code=$_data['student_id'];
-// 			$rs_student = $this->ifStudentIdExisting($stu_code);
-// 			if(!empty($rs_student)){
-// 				return 0;
-// 			}
 			$code = new Registrar_Model_DbTable_DbRegister();
-// 			$stu_code = $code->getNewAccountNumber($_data['degree']);
-			
-// 			$adapter = new Zend_File_Transfer_Adapter_Http();
-// 			$part = PUBLIC_PATH.'/images';
-// 			$adapter->setDestination($part);
-// 			$adapter->receive();
-// 			$photo = $adapter->getFileInfo();
-			
-// 			if(!empty($photo['photo']['name'])){
-// 				$pho_name = $photo['photo']['name'];
-// 			}else{
-// 				$pho_name = '';
-// 			}
+
 			$part= PUBLIC_PATH.'/images/';
 			$name = $_FILES['photo']['name'];
 			$size = $_FILES['photo']['size'];
@@ -171,13 +155,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
 			}
 			
-			if($_data['degree']==4){
-				$stu_type=1;    //  kid
-			}else if($_data['degree']==1 || $_data['degree']==2 || $_data['degree']==3){
-				$stu_type=2;    // G1-G12
-			}else{
-				$stu_type=3;	// eng and other subject
-			}
+			
 			$_db= $this->getAdapter();
 			$_db->beginTransaction();
 			try{	
@@ -189,12 +167,11 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$branch_id = $session_user->branch_id;
 				$_arr= array(
 						'branch_id'		=>$branch_id,
-						'stu_type'		=>$stu_type,
 						'user_id'		=>$this->getUserId(),
 						'stu_enname'	=>$_data['name_en'],
 						'stu_khname'	=>$_data['name_kh'],
 						'sex'			=>$_data['sex'],
-						'student_type'	=>$_data['student_type'],
+						'is_stu_new'	=>$_data['student_type'],
 						'nationality'	=>$_data['studen_national'],
 						'nation'		=>$_data['nation'],
 						'dob'			=>$_data['date_of_birth'],
@@ -238,12 +215,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						/////other infomation tab /////
 						'lang_level'	=>$_data['lang_level'],
 						'from_school'	=>$_data['from_school'],
-						//'know_by'		=>$_data['know_by'],
+						'know_by'		=>$_data['know_by'],
 						'sponser'		=>$_data['sponser'],
 						'sponser_phone'	=>$_data['sponser_phone'],
-						//////////////////////////////////////////////
-				
-						'is_stu_new'	=> 0,
+						//////////////////////////////////////////////				
 						'is_setgroup'	=> $is_setgroup,
 						'status'		=>$_data['status'],
 						'remark'		=>$_data['remark'],
@@ -258,7 +233,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'user_id'	=>$this->getUserId(),
 						'stu_id'	=>$id,
 						'stu_code'	=>$_data['student_id'],
-						'stu_type'	=>$stu_type,
 						'academic_year'	=>$_data['academic_year'],
 						'degree'	=>$_data['degree'],
 						'grade'		=>$_data['grade'],
@@ -298,10 +272,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				);
 				$this->insert($arra);
 				
-				$this->_name = 'rms_teacher_document';
+				$this->_name = 'rms_student_document';
 				$ids = explode(',', $_data['identity']);
 				foreach ($ids as $i){
-					if($_data['document_type_'.$i]!=0 || $_data['document_type_'.$i] != -1){
+					if($_data['document_type_'.$i]!=0 AND $_data['document_type_'.$i] != -1){
 						$_arr = array(
 								'stu_id'		=>$id,
 								'document_type'	=>$_data['document_type_'.$i],
@@ -309,23 +283,20 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'date_end'		=>$_data['date_end_'.$i],
 								'is_receive'	=>$_data['is_receive_'.$i],
 								'note'			=>$_data['note_'.$i],
-								'type'			=>1
 						);
 						$this->insert($_arr);
 					}
 				}
-				
 				//for update depart m
-// 					$sql="SELECT id_start FROM `rms_dept` WHERE dept_id=".$_data['dept']." LIMIT 1";
-// 					$id_start = $_db->fetchOne($sql);
+					$sql="SELECT id_start FROM `rms_items` WHERE id=".$_data['degree']." LIMIT 1";
+					$id_start = $_db->fetchOne($sql);
 						
-// 					$this->_name="rms_dept";
-// 					$arr=array(
-// 							'id_start'=>$id_start+1
-// 					);
-// 					$where="dept_id = ".$_data['dept'];
-// 					$this->update($arr, $where);
-					
+					$this->_name="rms_items";
+					$arr=array(
+							'id_start'=>$id_start+1
+					);
+					$where="id = ".$_data['degree'];
+					$this->update($arr, $where);
 				$_db->commit();
 			}catch(Exception $e){
 				$_db->rollBack();
@@ -335,45 +306,18 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	public function updateStudent($_data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-		//print_r($_data); exit();
 		try{	
-			if($_data['degree']==4){
-				$stu_type=1;    //  kid
-			}else if($_data['degree']==1 || $_data['degree']==2 || $_data['degree']==3){
-				$stu_type=2;    // G1-G12
-			}else{
-				$stu_type=3;	// eng and other subject
-			}
-			
-	//   photo ////////////////////////////////////////////////
-// 			$adapter = new Zend_File_Transfer_Adapter_Http();
-// 			$part = PUBLIC_PATH.'/images';
-// 			$adapter->setDestination($part);
-// 			$adapter->receive();
-// 			$photo = $adapter->getFileInfo();
-				
-// 			if(!empty($photo['photo']['name'])){
-// 				$pho_name = $photo['photo']['name'];
-// 			}else{
-// 				$pho_name = $_data['old_photo'];
-// 			}
-			
-	////////////////////////////////////////////////////////////////////////
-			
-// 			$session_user=new Zend_Session_Namespace('authstu');
-// 			$branch_id = $session_user->branch_id;
 			$is_setgroup=0;
 			if(!empty($_data['group']) AND $_data['group']!=-1){
 				$is_setgroup=1;
 			}
 			$_arr=array(
 // 					'branch_id'		=>$branch_id,
-					'stu_type'		=>$stu_type,
 					'user_id'		=>$this->getUserId(),
 					'stu_enname'	=>$_data['name_en'],
 					'stu_khname'	=>$_data['name_kh'],
 					'sex'			=>$_data['sex'],
-					'student_type'	=>$_data['student_type'],
+					'is_stu_new'	=>$_data['student_type'],
 					'nationality'	=>$_data['studen_national'],
 					'nation'		=>$_data['nation'],
 					'dob'			=>$_data['date_of_birth'],
@@ -423,7 +367,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'is_setgroup'	=> $is_setgroup,
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
-// 					'photo'			=>$pho_name
 					);
 			$part= PUBLIC_PATH.'/images/';
 			$name = $_FILES['photo']['name'];
@@ -447,7 +390,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$this->_name = 'rms_study_history';
 				$arr= array(
 						'user_id'		=>$this->getUserId(),
-						'stu_type'		=>$stu_type,
 						'academic_year'	=>$_data['academic_year'],
 						'degree'		=>$_data['degree'],
 						'grade'			=>$_data['grade'],
@@ -497,7 +439,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where = " stu_id = ".$_data["id"];
 			$this->update($arra, $where);
 			
-			$this->_name = 'rms_teacher_document';
+			$this->_name = 'rms_student_document';
 			$where="stu_id = ".$_data["id"];
 			$this->delete($where);
 			
@@ -517,7 +459,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$db->commit();//if not errore it do....
 		}catch(Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();
+			echo $e->getMessage();exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	function getStudyHishotryById($id){

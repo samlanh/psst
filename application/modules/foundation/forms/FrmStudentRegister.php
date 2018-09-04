@@ -54,7 +54,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$men_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
 		$stu_type_opt = array(
 				1=>$tr->translate("NEW_STUDENT"),
-				2=>$tr->translate("OLD_STUDENT"));
+				0=>$tr->translate("OLD_STUDENT"));
 		$men_type->setMultiOptions($stu_type_opt);
 		
 		$date_of_birth = new Zend_Dojo_Form_Element_DateTextBox('date_of_birth');
@@ -280,7 +280,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$name_en->setValue($data['stu_enname']);
 			$studen_national->setValue($data['nationality']);
 			$_sex->setValue($data['sex']);
-			$men_type->setValue($data['student_type']);
+			$men_type->setValue($data['is_stu_new']);
 			if (!empty($data['dob'])){
 			$date_of_birth->setValue(date("Y-m-d",strtotime($data['dob'])));
 			}

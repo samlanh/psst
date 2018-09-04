@@ -65,7 +65,8 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 				}
 			}
 			
-			return $db->commit();
+			$db->commit();
+			return true;
 		}catch (Exception $e){
 			$db->rollBack();
 			echo $e->getMessage();exit();
@@ -293,11 +294,8 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$order);
 	}
 	function getAllYears(){
-		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years FROM rms_tuitionfee WHERE `status`=1 and is_finished=0
-		        GROUP BY from_academic,to_academic,generation";
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
+		$db = new Application_Model_DbTable_DbGlobal();
+		return $db->getAllYear();
 	}
 	
 	

@@ -113,7 +113,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 		$branch_id = $_db->getAccessPermission();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` FROM rms_student AS s
-		WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+		WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY s.degree DESC ";
 		$rows=$db->fetchAll($sql);
 		//array_unshift($rows,array('id' => '-1',"name"=>"Add New"));
 		array_unshift($rows,array('id' => '',"name"=>$tr->translate("CHOOSE")));
@@ -129,7 +129,7 @@ class Accounting_Model_DbTable_DbStartdateEnddateStu extends Zend_Db_Table_Abstr
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
 		$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` FROM rms_student AS s
-		WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+		WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY s.degree DESC ";
 		return $db->fetchAll($sql);
 	}
 }

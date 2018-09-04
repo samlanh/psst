@@ -117,10 +117,11 @@ class Application_Form_FrmOther extends Zend_Dojo_Form
     			'class'=>'full height-text',));
     	
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$rows = $_db->getGlobalDb('SELECT DISTINCT en_name,dept_id FROM rms_dept WHERE is_active=1 AND en_name !="" ');
+    	
+		$rows = $_db->getAllFecultyName();
     	$opt = "";
     	$opt = array(''=>'','-1'=>$this->tr->translate("ADD_NEW"));
-    	if(!empty($rows))foreach($rows AS $row) $opt[$row['dept_id']]=$row['en_name']; 
+    	if(!empty($rows))foreach($rows AS $row) $opt[$row['id']]=$row['name']; 
     	//print_r($opt);exit();
     	$_dept = new Zend_Dojo_Form_Element_FilteringSelect("dept");
     	$_dept->setMultiOptions($opt);

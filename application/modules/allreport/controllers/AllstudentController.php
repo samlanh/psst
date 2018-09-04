@@ -55,7 +55,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'study_year' 	=>'',
 					'grade_all' 	=>'',
 					'session' 		=>'',
-					'stu_type' 		=>-1,
+					
 					'start_date'	=> date('Y-m-d'),
 					'end_date'		=> date('Y-m-d'),
 			);

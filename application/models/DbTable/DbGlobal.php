@@ -163,37 +163,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    
    public function getAllFecultyNamess($type){
-   	$db = $this->getAdapter();
-   	if($type==1){
-   		$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND (en_name!='' OR kh_name!='') ORDER BY en_name ";
-   		return $db->fetchAll($sql);
-   	 }else if($type==2){
-        $sql="SELECT dept_id AS id, en_name AS `name`,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1  AND (en_name!='' OR kh_name!='') ORDER BY en_name";
-        return $db->fetchAll($sql);
-   	 }
+   		return $this->getAllFecultyName();
    }
-   
    public function getAllDegreeName(){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 and en_name!='' ORDER BY id ASC";
-   	return $db->fetchAll($sql);
+   	return $this->getAllFecultyName();
    }
    
  public function getAllFecultyName(){
    	$db = $this->getAdapter();
-   		$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND (en_name!='' OR kh_name!='') ORDER BY id DESC";
-   		return $db->fetchAll($sql);
-   }   public function getGepDept(){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT dept_id as id,en_name AS name FROM rms_dept WHERE (en_name!='' OR kh_name!='') AND is_active =1";
-   	return $db->fetchAll($sql);
-   }
-   
-   public function getAllDegreeKindergarten(){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT dept_id AS id, en_name AS name FROM rms_dept WHERE is_active=1 AND (en_name!='' OR kh_name!='') ORDER BY id DESC";
-   	return $db->fetchAll($sql);
-   }   
+   	return $this->getAllItems(1,null);
+}   
 function getAllgroupStudy($teacher_id=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
@@ -219,13 +198,6 @@ function getAllgroupStudy($teacher_id=null){
    		$where = " AND g.is_pass=0 ";
    	}
    	return $db->fetchAll($sql.$where);
-   }
-   
-   
-   public function getAllDegreeGEP(){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT dept_id AS id, en_name AS name FROM rms_dept WHERE is_active=1 AND en_name!='' AND dept_id IN(5) ORDER BY id DESC";
-   	return $db->fetchAll($sql);
    }
    
    public function getAllServiceItemsName($status=1,$type=null){
@@ -300,7 +272,9 @@ function getAllgroupStudy($teacher_id=null){
 	   			2=>$this->tr->translate("BACHELOR"),
 	   			3=>$this->tr->translate('MASTER'),
 	   			4=>$this->tr->translate('DOCTORATE'),
-	   		//	5=>$this->tr->translate('INTERNATIONAL_PROGRAM')
+	   			5=>$this->tr->translate('English Program'),
+	   			6=>$this->tr->translate('Computer Course'),
+	   			7=>$this->tr->translate('Other')
 	   );
 	   if($id==null)return $rs; 
 	   return $rs[$id];
@@ -313,7 +287,9 @@ function getAllgroupStudy($teacher_id=null){
    			2=>$this->tr->translate("BACHELOR"),
    			3=>$this->tr->translate('MASTER'),
    			4=>$this->tr->translate('DOCTORATE'),
-   			//	5=>$this->tr->translate('INTERNATIONAL_PROGRAM')
+   			5=>$this->tr->translate('English Program'),
+   			6=>$this->tr->translate('Computer Course'),
+   			7=>$this->tr->translate('Other')
    	);
    	if($id==null)return $rs;
    	return $rs[$id];
@@ -524,10 +500,7 @@ function getAllgroupStudy($teacher_id=null){
    	return $db->fetchAll($sql);
    }
    function getAllMajor(){
-   	$db = $this->getAdapter();
-   	$sql = "SELECT major_id AS id ,CONCAT(major_enname,' (',(select shortcut from rms_dept where rms_dept.dept_id=rms_major.dept_id),')') AS name FROM `rms_major`
-   	WHERE is_active=1 Order BY major_id DESC ";
-   	return $db->fetchAll($sql);
+   	return $this->getAllGradeStudy();
    }
    public function getAllRoom(){
    	$db = $this->getAdapter();
@@ -673,9 +646,7 @@ function getAllgroupStudy($teacher_id=null){
 	   	return $db->fetchOne($sql);
    }
    function getDegree(){
-	   	$db=$this->getAdapter();
-	   	$sql="SELECT dept_id as id,CONCAT(en_name) AS name FROM rms_dept WHERE `is_active`=1";
-	   	return $db->fetchAll($sql);
+   		return $this->getAllItems();
    }
    function getAllYear($type=1){
 	   	$db = $this->getAdapter();
@@ -690,9 +661,7 @@ function getAllgroupStudy($teacher_id=null){
 	   	return $db->fetchAll($sql.$order);
    }
    function getAllGrade(){
-	   	$db=$this->getAdapter();
-	   	$sql="SELECT major_id as id,major_enname AS name FROM rms_major WHERE `is_active`=1";
-	   	return $db->fetchAll($sql);
+	  return $this->getAllGradeStudy();
    }
    public function getExpenseIncome($type){
    	$db = $this->getAdapter();
@@ -939,7 +908,7 @@ function getAllgroupStudy($teacher_id=null){
   	$_db = new Application_Model_DbTable_DbGlobal();
   	$branch_id = $_db->getAccessPermission();
   	$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` FROM rms_student AS s
-  	WHERE s.status=1 and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
+  	WHERE s.status=1 and s.is_subspend=0  $branch_id  ";
   	return $db->fetchAll($sql);
   }
   

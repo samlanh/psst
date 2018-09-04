@@ -107,7 +107,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	public function getStudentDocumentById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_student_document as s WHERE s.stu_id =".$id;
+		$sql = "SELECT * FROM rms_teacher_document as s WHERE s.stu_id =".$id;
 		return $db->fetchAll($sql);
 	}
 	
@@ -194,6 +194,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'stu_enname'	=>$_data['name_en'],
 						'stu_khname'	=>$_data['name_kh'],
 						'sex'			=>$_data['sex'],
+						'student_type'	=>$_data['student_type'],
 						'nationality'	=>$_data['studen_national'],
 						'nation'		=>$_data['nation'],
 						'dob'			=>$_data['date_of_birth'],
@@ -237,7 +238,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						/////other infomation tab /////
 						'lang_level'	=>$_data['lang_level'],
 						'from_school'	=>$_data['from_school'],
-						'know_by'		=>$_data['know_by'],
+						//'know_by'		=>$_data['know_by'],
 						'sponser'		=>$_data['sponser'],
 						'sponser_phone'	=>$_data['sponser_phone'],
 						//////////////////////////////////////////////
@@ -297,7 +298,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				);
 				$this->insert($arra);
 				
-				$this->_name = 'rms_student_document';
+				$this->_name = 'rms_teacher_document';
 				$ids = explode(',', $_data['identity']);
 				foreach ($ids as $i){
 					if($_data['document_type_'.$i]!=0 || $_data['document_type_'.$i] != -1){
@@ -307,7 +308,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 								'date_give'		=>$_data['date_give_'.$i],
 								'date_end'		=>$_data['date_end_'.$i],
 								'is_receive'	=>$_data['is_receive_'.$i],
-								'note'			=>$_data['note_'.$i]
+								'note'			=>$_data['note_'.$i],
+								'type'			=>1
 						);
 						$this->insert($_arr);
 					}
@@ -371,6 +373,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'stu_enname'	=>$_data['name_en'],
 					'stu_khname'	=>$_data['name_kh'],
 					'sex'			=>$_data['sex'],
+					'student_type'	=>$_data['student_type'],
 					'nationality'	=>$_data['studen_national'],
 					'nation'		=>$_data['nation'],
 					'dob'			=>$_data['date_of_birth'],
@@ -494,7 +497,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where = " stu_id = ".$_data["id"];
 			$this->update($arra, $where);
 			
-			$this->_name = 'rms_student_document';
+			$this->_name = 'rms_teacher_document';
 			$where="stu_id = ".$_data["id"];
 			$this->delete($where);
 			

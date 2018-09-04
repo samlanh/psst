@@ -50,8 +50,14 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				2=>$tr->translate("FEMALE"));
 		$_sex->setMultiOptions($sex_opt);
 		
+		$men_type =  new Zend_Dojo_Form_Element_FilteringSelect('student_type');
+		$men_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$stu_type_opt = array(
+				1=>$tr->translate("NEW_STUDENT"),
+				2=>$tr->translate("OLD_STUDENT"));
+		$men_type->setMultiOptions($stu_type_opt);
+		
 		$date_of_birth = new Zend_Dojo_Form_Element_DateTextBox('date_of_birth');
-	
 		$date = date("2000-m-d");
 		$date_of_birth->setAttribs(array(
 				'data-dojo-Type'=>"dijit.form.DateTextBox",
@@ -187,6 +193,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$status->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',));
+		
 		$remark = new Zend_Dojo_Form_Element_Textarea('remark');
 		$remark->setAttribs(array(
 				'dojoType'=>$this->textarea,'class'=>'fullside',
@@ -273,6 +280,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$name_en->setValue($data['stu_enname']);
 			$studen_national->setValue($data['nationality']);
 			$_sex->setValue($data['sex']);
+			$men_type->setValue($data['student_type']);
 			if (!empty($data['dob'])){
 			$date_of_birth->setValue(date("Y-m-d",strtotime($data['dob'])));
 			}
@@ -324,6 +332,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$name_en,
 						$studen_national,
 						$_sex,
+						$men_type,
 						$date_of_birth,
 						$pob,
 						$phone,

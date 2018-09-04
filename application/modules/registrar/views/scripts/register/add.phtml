@@ -3,20 +3,18 @@
 	echo $this->headTitle($tr->translate('Add Student Register')); 
 ?>
 <style>
-select{ width:100%;}
-fieldset{  background:none;}
-.red{ color: red; padding-left:5px;}
-
-.tab-content.vertical div.tab-pane {
-    overflow-y: auto;
-    max-height: 300px;
-}
-
-.tab-content.vertical div.tab-pane {
-    overflow-y: auto;
-    max-height: 300px;
-    border-bottom: solid #615f5f 5px;
-}
+	select{ width:100%;}
+	fieldset{  background:none;}
+	.red{ color: red; padding-left:5px;}
+	.tab-content.vertical div.tab-pane {
+	    overflow-y: auto;
+	    max-height: 300px;
+	}
+	.tab-content.vertical div.tab-pane {
+	    overflow-y: auto;
+	    max-height: 300px;
+	    border-bottom: solid #615f5f 5px;
+	}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -229,14 +227,12 @@ fieldset{  background:none;}
 	                   		<input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="<?php echo date("Y-m-d");?>" name="paid_date" id="paid_date" class="fullside"/>
 	                   </div>
 	                </div>
-	                
 	           </div>
 	           <div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OFFICIAL_RECEIPT");?> 
 	                   </label>
 	                </div>
-	                
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RECEIPT_NO");?>  :
 	                   </label>
@@ -266,7 +262,6 @@ fieldset{  background:none;}
 								<?php }}?>
 							</select>
 							<input type="hidden"  name="term_lable" id="term_lable" class="fullside" dojoType="dijit.form.TextBox"/>
-									
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -376,7 +371,6 @@ fieldset{  background:none;}
 			        	 </div>
 			       	</div>
 			       	<!--/.Panel 1-->
-			       	
 			       	<!--Panel 2-->
 			        <div class="tab-pane fade in " id="panel22" role="tabpanel">
 			        	 <div class="card-box">
@@ -391,7 +385,6 @@ fieldset{  background:none;}
 			    </div>
 			    <!--/. Tab panels -->
 			</div>
-			
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	        		<div class="form-group">
@@ -457,7 +450,6 @@ fieldset{  background:none;}
 	                </div>
 	        	</div>
 	        </div>
-	        
 	        <div class="clearfix">
 	        	<input type="hidden" id="identity" name="identity" />
 				<input type="hidden" id="identitystock" name="identitystock" />
@@ -470,10 +462,10 @@ fieldset{  background:none;}
 	        </div>
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-               			<input type="submit"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
-					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
+               		<input type="submit"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
+					 	iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					<input type="button" onclick="submitDataAddNew();" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-					 iconClass="dijitEditorIcon dijitEditorIconSave"  />
+					 	iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					 <input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','','');"/> 
 	    		</div>
@@ -481,7 +473,6 @@ fieldset{  background:none;}
 		</form>
 	</div>
 </div>
-
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");

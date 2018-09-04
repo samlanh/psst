@@ -59,7 +59,6 @@ class Global_DegreeController extends Zend_Controller_Action {
     		} catch (Exception $e) {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			Application_Form_FrmMessage::message("Application Error!");
-    			echo $e->getMessage();
     		}
     	}
     	

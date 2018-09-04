@@ -313,6 +313,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					}
 				}
 				
+				//for update depart m
+// 					$sql="SELECT id_start FROM `rms_dept` WHERE dept_id=".$_data['dept']." LIMIT 1";
+// 					$id_start = $_db->fetchOne($sql);
+						
+// 					$this->_name="rms_dept";
+// 					$arr=array(
+// 							'id_start'=>$id_start+1
+// 					);
+// 					$where="dept_id = ".$_data['dept'];
+// 					$this->update($arr, $where);
+					
 				$_db->commit();
 			}catch(Exception $e){
 				$_db->rollBack();

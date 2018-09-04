@@ -55,7 +55,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::Sucessfull($sms,'/global/lecturer/add');
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				echo $e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		

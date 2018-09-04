@@ -64,7 +64,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						);
 						$this->_name="rms_teacher";
 						$id = $this->insert($_arr);
-						$this->_name = 'rms_student_document';
+						$this->_name = 'rms_teacher_document';
 						$ids = explode(',', $_data['identity']);
 						foreach ($ids as $i){
 								$_arr = array(

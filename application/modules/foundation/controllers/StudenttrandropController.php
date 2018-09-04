@@ -17,6 +17,7 @@ class Foundation_StudenttrandropController extends Zend_Controller_Action {
 						'title' 		=> '',
 						'academic_year'	=> '',
 						'degree'		=> '',
+						'session'		=> '',
 						'status_search'	=> -1,
 				);
 			}
@@ -60,33 +61,10 @@ class Foundation_StudenttrandropController extends Zend_Controller_Action {
 		}
 		$db= new Foundation_Model_DbTable_DbStudent();
 		$row = $db->getStudentById($id);
-		$group = $db->getAllgroup();
-		//array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
-		$this->view->group = $group;
-	
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$row =$_db->getOccupation();
-		$this->view->occupation = $row;
-	
-		$row = $_db->getAllLangLevel(); // degree language
-		$this->view->lang_level = $row;
-	
-		$row = $_db->getAllKnoyBy(); // degree language
-		$this->view->know_by = $row;
-	
-		$row = $_db->getAllDocumentType(); // degree language
-		$this->view->doc_type = $row;
-	
 		$this->view->degree = $db->getAllFecultyName();
 	
 		$test =  $db->getStudentById($id);
 		$this->view->rs = $test;
-		$this->view->row = $db->getStudentDocumentById($id);
-		//echo $test['group_id'];exit();
-	
-		$this->view->year = $db->getAllYear();
-		$this->view->room = $row =$db->getAllRoom();
-	
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudropRegister($test);
 		Application_Model_Decorator::removeAllDecorator($frm_register);

@@ -35,7 +35,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$code->setValue($code_num);
 		
 		$phone = new Zend_Dojo_Form_Element_NumberTextBox('phone');
-		$phone->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside','required'=>'true'));
+		$phone->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true'));
 		
 		$sex = new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
@@ -88,7 +88,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_passport->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 		
 		$_card = new Zend_Dojo_Form_Element_NumberTextBox('card_no');
-		$_card->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside','required'=>'true'));
+		$_card->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true'));
 		
 		$_experiences = new Zend_Dojo_Form_Element_Textarea('experiences');
 		$_experiences->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
@@ -126,7 +126,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		
-		$_teacher=  new Zend_Dojo_Form_Element_FilteringSelect('teacher_ty');
+		$_teacher=  new Zend_Dojo_Form_Element_FilteringSelect('teacher_type');
 		$_teacher->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_teacher_opt = array(
 				1=>$this->tr->translate("TEACHER_KHMER"),

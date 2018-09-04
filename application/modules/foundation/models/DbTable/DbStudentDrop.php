@@ -163,7 +163,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 					'user_id'	=>$this->getUserId(),
 					'stu_id'	=>$_data['studentid'],
 					'type'		=>$_data['type'],
-					'date_stop'		=>$_data['datestop'],
+					'date_stop'	=>$_data['datestop'],
 					'reason'	=>$_data['reason'],
 					//'note'		=>$_data['note'],
 					'status'	=>$_data['status'],

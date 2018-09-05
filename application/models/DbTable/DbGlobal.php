@@ -16,6 +16,10 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	 * @param string $sql
 	 * @return array $row;
 	 */
+	function currentlang(){
+		$session_lang=new Zend_Session_Namespace('lang');
+		return $session_lang->lang_id;
+	}
 	public function getGlobalDb($sql)
   	{
   		$db=$this->getAdapter();

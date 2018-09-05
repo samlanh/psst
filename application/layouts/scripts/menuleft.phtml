@@ -41,51 +41,99 @@
 		  $module = $request->getModuleName();
 		  $controller = $request->getControllerName();
 	?>
-	<div class="main-menu menu-fixed menu-light menu-accordion    menu-shadow  " data-scroll-to-active="true">
-			<div class="button-make-loan mb-10">
-				<?php 
+	<?php 
+	$array_icon = array(
+      		'home'=>'<i class="fa fa-home" aria-hidden="true"></i>',
+      		'registrar'=>'<i class="fa fa-graduation-cap" aria-hidden="true"></i>',
+      		'global'=>'<i class="fa fa-users" aria-hidden="true"></i>',
+      		'foundation'=>'<i class="fa fa-desktop" aria-hidden="true"></i>',
+      		'accounting'=>'<i class="fa fa-money" aria-hidden="true"></i>',
+      		'stock'=>'<i class="fa fa-suitcase" aria-hidden="true"></i>',
+			'library'=>'<i class="fa  fa-book" aria-hidden="true"></i>',
+			'mobileapp'=>'<i class="fa fa-apple" aria-hidden="true"></i>',
+      		'allreport'=>'<i class="fa  fa-file-text" aria-hidden="true"></i>',
+      		'rsvacl'=>'<i class="fa  fa-cog" aria-hidden="true"></i>',
+      		'setting'=>'<i class="fa  fa-cogs" aria-hidden="true"></i>',
+      		
+      );
+	
+	$arr_module = $session_user->arr_module;
+	$arr_acl = $session_user->arr_acl;
+	?>
+	<!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+              &nbsp;
+               <?php 
 					$db = new Application_Model_DbTable_DbUsers();
 					$rs = $db->getAccessUrl("registrar","register","add");
 					if(!empty($rs)){
 				?>
-					<a href="<?php echo $this->baseUrl()."/registrar/register/add"?>"  class="closebtn-makesale"  ><i class="fa fa-plus" aria-hidden="true"></i> <?php echo $tr->translate("REGISTER");?> </a>
-				<?php }?>
+			<div class="button-make-loan mb-10">
+				<a href="<?php echo $this->baseUrl()."/registrar/register/add"?>"  class="closebtn-makesale"  ><i class="fa fa-graduation-cap" aria-hidden="true"></i> <?php echo $tr->translate("REGISTER");?> </a>
 			</div>
-	    <div class="main-menu-content">
-			<ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-			   <!-- 
-			   <li class="nav-item has-sub">
-			       <a href="#"><i class="la la-book"></i><span class="menu-title" data-i18n="nav.page_layouts.main">ចំណាត់ថ្នាក់ចំណាយ</span></a>
-			           <ul class="menu-content">
-			       	    	<li><a class="menu-item" href="/maffsystem/expenses">INDEX</a></li>
-			                 <li><a class="menu-item" href="/maffsystem/expenses/category">ប្រភេទការចំណាយ</a></li>
-			          </ul>
-			  </li>
-			    -->
-			    <?php if(!empty($arr_param_menu[$request->getModuleName()] ))foreach ($arr_param_menu[$request->getModuleName()] as $param =>$url){
-			    	$uri=$this->baseUrl().'/'.$module.'/'.$param;
-			    	?>
-			  <li class="nav-item <?php if($param==$controller){ echo "active";}?>">
-			  	<a href="<?php echo $uri;?>"><i class="la la-user"></i><span class="menu-title" data-i18n="nav.dash.main"><?php echo $url;?></span></a>
-			  </li>
-			  <?php }?>
-			</ul>
-		</div>
-	</div>
-	<!-- 
-	<div id="header-left">
-		<ul>
-			<?php 
-// 				if($request->getModuleName()!='report'){
-// 					if($request->getModuleName()!='default' AND $action!='changepassword' ){
-// 						$dc=new Application_Model_Decorator();					
-// 						$class="current-left";					
-// 						$menu=@$dc->getMenuLeft($arr_param_menu[$request->getModuleName()],$request->getControllerName(),$request->getModuleName());
-// 						//print_r($arr_param_menu[$request->getModuleName()]);
-// 						if($menu) echo $menu;	
-// 					 }		
-// 				}				
-			?>
-		</ul>																
-	</div>
-	 -->
+			<?php }?>
+                <ul class="nav side-menu">
+                	<?php if(!empty($arr_module)){ foreach ($arr_module as $rs){
+                		$url =$this->url(array('module'=>$rs,'controller'=>'index','action'=>'index'), null, true);
+                		if ($rs=="project"){
+                			$title=$tr->translate("JOBS");
+                		}else{
+                			$title=$tr->translate(strtoupper($rs));
+                		}
+                	?>
+                	<li>
+                		<?php if ($rs=="report"){?>
+                			<a href="<?php echo $this->url(array('module'=>$rs,'controller'=>'index','action'=>'index'), null, true);;?>">
+                			<?php echo $array_icon[$rs];?> <?php echo $title;?> 
+	                		</a>
+                		<?php }else{?>
+                		
+                			<?php if (count($arr_param_menu[$rs])>1){?>
+	                		<a><?php echo $array_icon[$rs];?> <?php echo $title;?> 
+	                		<?php if (!empty($arr_param_menu[$rs])){?><span class="fa fa-chevron-down"></span><?php }?>
+	                		</a>
+	                		<?php if (!empty($arr_param_menu[$rs])){?>
+		                    <ul class="nav child_menu">
+		                       <?php  foreach ($arr_param_menu[$rs] as $key => $sub){
+		                       	$urlsub = $this->url(array('module'=>$rs,'controller'=>$key,'action'=>'index'), null, true);
+		                       	?>
+		                      <li><a href="<?php echo $urlsub;?>"><?php echo $sub;?></a></li>
+		                       <?php }?>
+		                    </ul>
+		                    <?php }?>
+	                    <?php }else{?>
+	                    	<?php  foreach ($arr_param_menu[$rs] as $key => $sub){
+		                       	$urlsub = $this->url(array('module'=>$rs,'controller'=>$key,'action'=>'index'), null, true);
+		                       	$title=$tr->translate(strtoupper($key));
+		                       	if ($rs=="home" and $key=="index" ){
+		                       		$title=$tr->translate(strtoupper($rs));
+		                       	}
+		                       	?>
+		                    <a href="<?php echo $urlsub;?>">
+                			<?php echo $array_icon[$rs];?> <?php echo $title;?> 
+	                		</a>
+	                		<?php }?>
+	                    <?php }?>
+                    <?php }?>
+                 	 </li>
+                	<?php }
+                	}?>
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <!-- 
+            <div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" onClick="toggleFullScreen(document.body)" title="<?php //echo $tr->translate("FullScreen");?>">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="<?php //echo $tr->translate("SIGN_OUT");?>" href="<?php //echo $this->url(array('module'=>'','controller'=>'index','action'=>'logout','value'=>'1')); ?>">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+             -->
+            <!-- /menu footer buttons -->

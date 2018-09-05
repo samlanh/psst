@@ -122,7 +122,7 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("nation");?>
+				                   		<input id="nation" />
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -130,13 +130,6 @@ input.btn_borwse_image {
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("sex");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("student_type");?>
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -550,6 +543,7 @@ var job_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::enco
 var job_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->group));?> );
 var knowby_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->know_by));?> );
+var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
 
 dojo.ready(function(){
@@ -616,6 +610,29 @@ dojo.ready(function(){
 	   } 
 	}, "fa_job");
 	dijit.byId('fa_job').attr('value',0);
+
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "nation",
+	    name: "nation",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	    nation = dijit.byId('nation').get('value');
+	    if(nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',1);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "nation");
+	dijit.byId('nation').attr('value',0);
 
 	new dijit.form.FilteringSelect({
 		store: job_store,
@@ -797,6 +814,30 @@ function addLanguage(){
 	}
 }
 
+var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
+function addNationBy(){
+	if(dijit.byId('frm_nation').validate()){
+		dijit.byId("save_nation").attr("disabled",true);	
+		dojo.xhrPost({
+			url:url_add_nation,
+			form: dojo.byId("frm_nation"),
+			handleAs:"json",
+			load: function(data) {
+			var Itemmake = { 
+					 id: dijit.byId('title_nation').get('value'),
+					 name: dijit.byId('title_nation').get('value')
+				   };
+		   addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, dijit.byId('title_nation').get('value'));
+		   dijit.byId('frm_nation').reset();
+		   dijit.byId("popup_nation").hide();
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+}
+
 var url_add_know_by = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-knowby")); ?>';
 function addKnowBy(){
 	if(dijit.byId('frm_know_by').validate()){
@@ -857,7 +898,10 @@ function hideDialog2() {
 function hideDialog3() {		
 	dijit.byId("popup_doc_type").hide();
 }
-
+function hideDialog4() {	
+	dijit.byId('frm_nation').reset();
+	dijit.byId("popup_nation").hide();
+}
 var url_add_job = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-job")); ?>';
 function addJob(){
 	if(dijit.byId('frm_add_tran1').validate()){
@@ -939,6 +983,36 @@ function addJob(){
 									​ ​​iconClass="dijitIconUndo" onclick="hideDialog1();"/>
 									<input type="button" value="save" label="SAVE" id="save" name="save" dojoType="dijit.form.Button" 
 									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addJob();"/>
+								</td>
+							</tr>
+						</table>
+				</fieldset>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</div>
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_nation" >
+		<form style="background-color: buttonface;" id='frm_nation' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+			<tr>
+				<td>
+					<fieldset style="background-color: buttonface;">
+					<legend align="center" ><?php echo $tr->translate('ADD_OCCUPATION');?></legend>
+						<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
+							<tr>
+								<td><?php echo $tr->translate('TITLE_NATION');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_nation" name="title_nation" value="" type="text"></td>
+							</tr>
+							<tr>
+								<td colspan="4" align="center">
+									<input type="button" value="ចាកចេញ" label="Close" id="close" name="close" dojoType="dijit.form.Button" 
+									​ ​​iconClass="dijitIconUndo" onclick="hideDialog4();"/>
+									<input type="button" value="save" label="SAVE" id="save_nation" name="save_nation" dojoType="dijit.form.Button" 
+									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNationBy();"/>
 								</td>
 							</tr>
 						</table>

@@ -302,6 +302,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$_db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
+			print_r($_data); exit();
 	}
 	public function updateStudent($_data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base

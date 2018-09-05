@@ -2,7 +2,6 @@
 
 class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 {
-
     protected $_name = 'rms_tuitionfee';
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');

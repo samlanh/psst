@@ -154,6 +154,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	return $db->fetchAll($sql);
    }
    
+   public function getAllNation(){
+   	$db = $this->getAdapter();
+   	$sql = "SELECT id, name_kh AS name FROM rms_view WHERE rms_view.type=21 AND name_kh!='' ORDER BY rms_view.id ASC";
+   	return $db->fetchAll($sql);
+   }
+   
    public function getAllKnoyBy(){
    	$db = $this->getAdapter();
    	$sql = "SELECT title as id, title as name FROM rms_know_by WHERE status=1 AND title!='' ORDER BY rms_know_by.id ASC ";
@@ -951,6 +957,16 @@ function getAllgroupStudy($teacher_id=null){
 	  			"modify_date"=>date("Y-m-d"),
   			);
   	$this->_name="rms_degree_language";
+  	return $this->insert($array);
+  }
+  
+  function addNation($data){
+  	$array = array(
+  			"title_nation"	=>$data['title_nation'],
+  			//"title_khmer"	=>$data['title_khmer'],
+  			"key_code"		=>$data['key_code'],
+  	);
+  	$this->_name="rms_view";
   	return $this->insert($array);
   }
   

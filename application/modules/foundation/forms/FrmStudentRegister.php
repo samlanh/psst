@@ -39,9 +39,12 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'required'=>'true',
 				'class'=>'fullside'));
 		
-		$studen_national = new Zend_Dojo_Form_Element_TextBox('studen_national');
-		$studen_national->setAttribs(array('dojoType'=>$this->text,
-				'class'=>'fullside'));
+		$studen_national =  new Zend_Dojo_Form_Element_FilteringSelect('studen_national');
+		$studen_national->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$sex_opt = array(
+				1=>$tr->translate("KHMER"),
+				2=>$tr->translate("ENGLISH"));
+		$studen_national->setMultiOptions($sex_opt);
 	
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
@@ -49,13 +52,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				1=>$tr->translate("MALE"),
 				2=>$tr->translate("FEMALE"));
 		$_sex->setMultiOptions($sex_opt);
-		
-		$men_type =  new Zend_Dojo_Form_Element_FilteringSelect('student_type');
-		$men_type->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
-		$stu_type_opt = array(
-				1=>$tr->translate("NEW_STUDENT"),
-				0=>$tr->translate("OLD_STUDENT"));
-		$men_type->setMultiOptions($stu_type_opt);
 		
 		$date_of_birth = new Zend_Dojo_Form_Element_DateTextBox('date_of_birth');
 		$date = date("2000-m-d");
@@ -265,10 +261,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$sponser_phone->setAttribs(array('dojoType'=>$this->text,
 				'class'=>'fullside'));
 		
-		$nation = new Zend_Dojo_Form_Element_TextBox('nation');
-		$nation->setAttribs(array('dojoType'=>$this->text,
-				'class'=>'fullside'));
-		
 		$guardian_phone = new Zend_Dojo_Form_Element_ValidationTextBox('guardian_phone');
 		$guardian_phone->setAttribs(array('dojoType'=>$this->tvalidate,
 				'class'=>'fullside'));
@@ -280,7 +272,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$name_en->setValue($data['stu_enname']);
 			$studen_national->setValue($data['nationality']);
 			$_sex->setValue($data['sex']);
-			$men_type->setValue($data['is_stu_new']);
 			if (!empty($data['dob'])){
 			$date_of_birth->setValue(date("Y-m-d",strtotime($data['dob'])));
 			}
@@ -322,7 +313,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$from_school->setValue($data['from_school']);
 			$sponser->setValue($data['sponser']);
 			$sponser_phone->setValue($data['sponser_phone']);
-			$nation->setValue($data['nation']);
 		}
 	
 		$this->addElements(
@@ -332,7 +322,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$name_en,
 						$studen_national,
 						$_sex,
-						$men_type,
 						$date_of_birth,
 						$pob,
 						$phone,
@@ -365,7 +354,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$from_school,
 						$sponser,
 						$sponser_phone,
-						$nation,
 						)
 				);
 		

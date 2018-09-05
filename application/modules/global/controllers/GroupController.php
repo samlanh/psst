@@ -100,6 +100,7 @@ class Global_GroupController extends Zend_Controller_Action {
 		array_unshift($room, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($room, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_ROOM")));
 		$this->view->room = $room;
+		$this->view->calture = $model->getAllDegreeStu();
 		
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();

@@ -18,8 +18,6 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     		else{
     			$search=array(
     					'title' => '',
-    					'start_date' =>date("Y-m-d"),
-    					'end_date' =>date("Y-m-d"),
     					'status_search' => -1,
     			);
     		}
@@ -65,6 +63,7 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     	$id = $this->getRequest()->getParam('id');
     	$db = new Accounting_Model_DbTable_DbCreditmemo();
     	$row  = $db->getCreditmemobyid($id);
+    	$this->view->row = $row;
     
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemo($row);

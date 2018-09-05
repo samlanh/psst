@@ -3,12 +3,14 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_callteral;
 echo $this->headTitle($tr->translate("ADD_STUDY_GROUP"));
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+//print_r($this->calture); exit();
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require('dijit.form.TextBox');
+	dojo.require('dijit.form.Textarea');
 </script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -69,11 +71,10 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CULTURE_LEVEL");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
                    <select name="calture" class="fullside" id="calture" placeholder="Select Level Culture" type="text" dojoType="dijit.form.FilteringSelect">
-						<option value="0"><?php echo $tr->translate("SELECT_CULTURE");?></option>
-						<option value="1"><?php echo $tr->translate("ASSOCIATE");?></option>
-						<option value="2"><?php echo $tr->translate("BACHELOR");?></option>
-						<option value="3"><?php echo $tr->translate("MASTER");?></option>
-						<option value="4"><?php echo $tr->translate("DOCTORATE");?></option>
+						<option value="-1"><?php echo $tr->translate("SELECT_CULTURE");?></option>
+						<?php if(!empty($this->calture)){foreach($this->calture as $key=>$year){?>
+							<option value="<?php echo $year;?>"><?php echo $year;?></option>
+						<?php }}?>
 					</select>
                 </div>
              </div>
@@ -131,8 +132,8 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
     	<div class="col-md-4 col-sm-4 col-xs-12">
     		<div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?></label>
-                <div class="col-md-7 col-sm-7 col-xs-12">
-                	<input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="" type="text">
+                <div class="col-md-7 col-sm-7 col-xs-12" >
+                	<input dojoType="dijit.form.Textarea"  style="min-height: 70px;" class="fullside"  name="note" value="" type="text" >
                 </div>
              </div>
     		<!-- 

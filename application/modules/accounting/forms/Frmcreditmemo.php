@@ -130,7 +130,6 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$problem->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
-				'required'=>true,
 		));
 		
 		$_Description = new Zend_Dojo_Form_Element_Textarea('Description');

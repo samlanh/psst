@@ -1,6 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$frm = $this->frm_credit;
+	$row =$this->row;
 ?>
 <title><?php echo $tr->translate("TRANSFER_CREDIT");?></title>
 <style>	
@@ -26,9 +27,10 @@
     	<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'transfercredit','action'=>'transfer')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-				student_id = dijit.byId('student_id').get('value');
-       			 if(student_id==0){
-					alert("សូមជ្រើសរើសសិស្ស");dijit.byId('student_id').focus();return false;}
+				stu_idto = dijit.byId('stu_idto').get('value');
+       			 if(stu_idto==0){
+					alert("សូមជ្រើសរើសអត្តលេខសិស្ស");dijit.byId('stu_idto').focus();return false;}
+        			dijit.byId("saveclose").set("disabled",true);
 					return true;
 			}else {
 				return false;
@@ -110,13 +112,13 @@
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CREATED_DATE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement('start_date');?>
+		                	 <input type="text" name="start_date" readOnly="readOnly" id="start_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		               	 <?php echo $frm->getElement('end_dates');?>
+		               	 <input type="text" name="end_dates" readOnly="readOnly" id="end_dates" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['end_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
 		                </div>
 		             </div>
 		             <div class="form-group">

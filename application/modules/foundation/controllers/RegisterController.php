@@ -93,6 +93,11 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->lang_level = $row;
 		
+		$row = $_db->getAllNation(); // Nation language
+		array_unshift($row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0, 'name' => $this->tr->translate("SELECT_NATION")));
+		$this->view->nation = $row;
+		
 		$row = $_db->getAllKnoyBy(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
@@ -374,6 +379,21 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$db = new Application_Model_DbTable_DbGlobal();
 				$row = $db->addLangLevel($data);
+				print_r(Zend_Json::encode($row));
+				exit();
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+	}
+	
+	function addNationAction(){
+		if($this->getRequest()->isPost()){
+			try{
+				$data = $this->getRequest()->getPost();
+				$db = new Application_Model_DbTable_DbGlobal();
+				$row = $db->addNation($data);
 				print_r(Zend_Json::encode($row));
 				exit();
 			}catch(Exception $e){

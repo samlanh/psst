@@ -84,7 +84,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 		
 		$arr = array(
 				'branch_id'		=>$data['branch_id'],
-				'student_id'	=>$data['student_id'],
+				'student_id'	=>$data['stu_idto'],
 				'total_amount'	=>0,
 				'total_amountafter'=>0,
 				'note'			=>$data['Description'],

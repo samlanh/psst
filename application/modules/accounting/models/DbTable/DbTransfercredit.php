@@ -16,11 +16,11 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 				c.id,
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,				
-				(SELECT stu_code FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) AS stu_id,
-				CONCAT(stu_khname,'-',stu_enname) AS student_name,
+				(SELECT stu_code FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) AS stu_id, 
+				(SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) AS stu_idname,
 				(SELECT s.stu_code FROM `rms_student` WHERE rms_student.stu_id = c.stu_idto LIMIT 1) AS stu_idto,
 				(SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.stu_name LIMIT 1) AS stu_name,
-				total_amount,
+				 total_amount,
 				 prob,
 				 problem,
 				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) AS user_name,
@@ -31,6 +31,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 			  WHERE
 				  s.stu_id = c.stu_idto
 			";
+		$where="";
 		if (!empty($search['title'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['title']));

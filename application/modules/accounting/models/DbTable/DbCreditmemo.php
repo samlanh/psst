@@ -32,7 +32,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			  WHERE
 				s.stu_id = c.student_id
 			";
-	
+		$where="";
 		if (!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['adv_search']));
@@ -49,7 +49,6 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		if($search['paid_status'] != ''){
 			$where.= " AND type = ".$search['paid_status'];
 		}
-		
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}

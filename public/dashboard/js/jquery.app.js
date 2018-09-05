@@ -41,7 +41,6 @@
     }
 
     function init() {
-       
         initLeftMenuCollapse();
         initComponents();
         initActiveMenu();

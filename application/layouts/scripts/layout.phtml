@@ -385,11 +385,7 @@ function exportExcel(){
 }
 <?php }?>
 </script>
-<?php if($action!='index'){?>
-	<?php if($module!="allreport"){?>
-	        <script src="<?php echo $this->baseUrl()."/"?>dashboard/js/jquery-2.1.4.min.js"></script>
-	<?php }?>
-<?php }?>
+
 <script src="<?php echo $this->baseUrl()?>/admin/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="<?php echo $this->baseUrl()?>/admin/build/js/custom.min.js"></script>
 <iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>

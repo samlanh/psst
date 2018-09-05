@@ -198,25 +198,25 @@ $teacher_id = $session_t->teacher_id;
        		<div class="right_col" role="main" >
        		 	<div class="right-conten" style="min-height: 570px;">
        		 	<div style="clear:both;"></div>
-             	<?php if($module!='report' AND $module!='home' AND $module!='default' ){?>
+             	<?php if($module!='allreport' AND $module!='home' AND $module!='default' ){?>
              		<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
 							<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
-								<?php if($action=='index' AND $module!='report' AND $module!='home' AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
+								<?php if($action=='index' AND $module!='allreport' AND $module!='home' AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
 									<a title="<?php echo $tr->translate('ADD_NEW');?>" class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>">
 										<i class="fa fa-plus-circle" aria-hidden="true"></i>
 									</a>
-									<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='report'){?>
+									<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='allreport'){?>
 									<a title="<?php echo $tr->translate('GO_BACK');?>" class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>">
 										<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
 									</a>
 								<?php }?>
 							</div>
 							<div class="ptss__header add-edit-action">
-							 <?php if($action=='index' AND $module!='report' AND $module!='home' AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
+							 <?php if($action=='index' AND $module!='allreport' AND $module!='home' AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
 								<a  class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?> 
 									<i class="fa fa-plus-circle" aria-hidden="true"></i>
 								</a>
-							<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='report'){?>
+							<?php }elseif($action=='add' OR $action=='edit' OR $action=='copy' OR $action=='view' OR $module=='allreport'){?>
 								<a class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>">
 								<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> <?php echo $tr->translate('GO_BACK');?>
 								</a>

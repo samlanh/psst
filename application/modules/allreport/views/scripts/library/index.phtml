@@ -32,39 +32,58 @@ hr.style-two {
 	  echo $this->headTitle($tr->translate("LIBRARY_REPORT"));
   ?>
   <title><?php echo $tr->translate('LIBRARY_REPORT');?></title>
-  <div style=" width: 100%;">
-    <h3 style="font-family:'khmer os muol light';font-size:14px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("BOOK_REPORT");?></h3><hr>
-	  	<ul class="link-rpt">  	    
-	  		<?php
-		       $db_user=new Application_Model_DbTable_DbUsers();
-		       $report_url=$db_user->getArrAclReport(1,'library');
-		       if(!empty($report_url)){
-			       foreach($report_url as $url){
-			       if($url['controller']=='library' AND $url['action']!='index' AND $url['action']!='rpt-nealydayreturn' AND $url['action']!='rpt-summarydetail' AND $url['action']!='rpt-purchasedetail' AND $url['action']!='rpt-brokendetail'){
-		     ?>
-			        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
-			        <?php echo $tr->translate($url['label']);?></a></li>
-			        <?php }?>
-		       <?php }
-	       	  }?>
-	  	</ul>
-  </div>
-  <div style=" width: 100%;">
-	 	<h3  style="font-family:'khmer os muol light';font-size:14px;text-align: center;border-bottom:2px solid #F1F1F1;color: #666;padding:2px 0;"><?php echo $tr->translate("PURCHASE_AND_BROKEN_REPORT");?></h3><hr>
-	  	<ul class="link-rpt">
-	  		<?php
-		       $db_user=new Application_Model_DbTable_DbUsers();
-		       $report_url=$db_user->getArrAclReport(1,'library');
-		       
-		       if(!empty($report_url)){
-			       foreach($report_url as $url){
-			       if($url['controller']=='library' AND $url['action']!='index' AND $url['action']!='rpt-book-list' AND $url['action']!='rpt-unavailable' AND $url['action']!='rpt-borrowdetail' AND $url['action']!='rpt-returndetail' AND $url['action']!='rpt-borrow-book-byweek'){
-		   ?>
-			        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
-			        <?php echo $tr->translate($url['label']);?></a></li>
-			        <?php }?>
-		       <?php }
-	       	  }?>  	
-	  	</ul>
-   </div>  
+  
+  <div class="card">
+		<div class="card-content collapse show">
+			<div class="card-box report-list">
+				<h3 style="font-family:'khmer os muol light';font-size:14px;text-align: center; color: #666;padding:2px 0;"><?php echo $tr->translate("BOOK_REPORT");?></h3><hr>
+				<!--border-bottom:2px solid #F1F1F1;-->
+				<div class="row top_tiles">
+					<?php
+					   $db_user=new Application_Model_DbTable_DbUsers();
+					   $report_url=$db_user->getArrAclReport(1,'library');
+					   if(!empty($report_url)){
+						   foreach($report_url as $url){
+						   if($url['controller']=='library' AND $url['action']!='index' AND $url['action']!='rpt-nealydayreturn' AND $url['action']!='rpt-summarydetail' AND $url['action']!='rpt-purchasedetail' AND $url['action']!='rpt-brokendetail'){
+					 ?>
+				   <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+						<div title="<?php echo $tr->translate($url['label']);?>" class="tile-stats report-list">
+							<div class="icon"><i class="fa fa-book"></i></div>
+							<div class="count">&nbsp;</div>
+			                 	<h3><?php echo $tr->translate($url['label']);?></h3>
+						</div>
+						</a>
+			        </div>
+					<?php }?>
+			   <?php }
+			  }?>
+				</div>
+				<h3  style="font-family:'khmer os muol light';font-size:14px;text-align: center; color: #666;padding:2px 0;"><?php echo $tr->translate("PURCHASE_AND_BROKEN_REPORT");?></h3><hr>	  	
+				<!--border-bottom:2px solid #F1F1F1;-->
+				<div class="row top_tiles">
+					<?php
+						   $db_user=new Application_Model_DbTable_DbUsers();
+						   $report_url=$db_user->getArrAclReport(1,'library');
+						   
+						   if(!empty($report_url)){
+							   foreach($report_url as $url){
+							   if($url['controller']=='library' AND $url['action']!='index' AND $url['action']!='rpt-book-list' AND $url['action']!='rpt-unavailable' AND $url['action']!='rpt-borrowdetail' AND $url['action']!='rpt-returndetail' AND $url['action']!='rpt-borrow-book-byweek'){
+					   ?>
+				   <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+						<div title="<?php echo $tr->translate($url['label']);?>" class="tile-stats report-list">
+							<div class="icon"><i class="fa fa-book"></i></div>
+							<div class="count">&nbsp;</div>
+			                 	<h3><?php echo $tr->translate($url['label']);?></h3>
+						</div>
+						</a>
+			        </div>
+					<?php }?>
+			   <?php }
+			  }?>
+				</div>
+			</div>
+		</div>
+	</div>
   <div style="clear: both;"></div>

@@ -24,26 +24,33 @@
   $tr = Application_Form_FrmLanguages::getCurrentlanguage();
   echo $this->headTitle($tr->translate("ACCOUNTING_REPORT"));
   ?>
-  <div style="background:#ccc; width: 100%;">
-  <ul class="link-rpt">
-       <?php
-	       $db=new Application_Model_DbTable_DbUsers();
-	       $report_url=$db->getArrAclReport(1,'accounting');
-	       if(!empty($report_url)){
-		       foreach($report_url as $url){
-		       if($url['controller']=='accounting' AND $url['action']!='index' AND $url['action']!='rpt-paymentrecieptdetail' AND $url['action']!='rpt-income-expense-detail' ){
-	   ?>
-		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
-		        <?php echo $tr->translate($url['label']);?></a></li>
-		        
-		        <?php }?>
-		        
-	       <?php }
-       	  }?>
-   </ul>
-  	
-  	
-  </div>
+  <div class="card">
+		<div class="card-content collapse show">
+			<div class="card-box report-list">
+				<div class="row top_tiles">
+					 <?php
+						   $db=new Application_Model_DbTable_DbUsers();
+						   $report_url=$db->getArrAclReport(1,'accounting');
+						   if(!empty($report_url)){
+							   foreach($report_url as $url){
+							   if($url['controller']=='accounting' AND $url['action']!='index' AND $url['action']!='rpt-paymentrecieptdetail' AND $url['action']!='rpt-income-expense-detail' ){
+					   ?>
+				   <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+						<div title="<?php echo $tr->translate($url['label']);?>" class="tile-stats report-list">
+							<div class="icon"><i class="fa fa-book"></i></div>
+							<div class="count">&nbsp;</div>
+			                 	<h3><?php echo $tr->translate($url['label']);?></h3>
+						</div>
+						</a>
+			        </div>
+					<?php }?>
+			   <?php }
+			  }?>
+				</div>
+			</div>
+		</div>
+	</div>
   <div style="clear: both;"></div>
   
   

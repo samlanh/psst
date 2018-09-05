@@ -24,24 +24,32 @@
 	width: 200px !important;
   }
   </style>
-  <div style="background:#ccc; width: 100%;">
-  	<?php /*?>
-  	<?php */?>
-  	<ul class="link-rpt">
-       <?php
-	       $db_user=new Application_Model_DbTable_DbUsers();
-	       $report_url=$db_user->getArrAclReport(1,'allstudent');
-	       if(!empty($report_url)){
-		       foreach($report_url as $url){
-		       if($url['controller']=='allstudent' AND $url['action']!='index' AND $url['action']!='certify' AND $url['action']!='rpt-transcript' AND $url['action']!='academic-transcript' AND $url['action']!='rpt-att-list' 
-		       		AND $url['action']!='rpt-student-group' AND $url['action']!='mistake-certificate' AND $url['action']!='idselected' AND $url['action']!='semester-outstanding-student' ){
-	   ?>
-		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
-		        <?php echo $tr->translate($url['label']);?></a></li>
-		        <?php }?>
-	       <?php }
-       	  }?>
-    </ul>
-  	<?php ?>
-  </div>
+	<div class="card">
+		<div class="card-content collapse show">
+			<div class="card-box report-list">
+				<div class="row top_tiles">
+					<?php
+					   $db_user=new Application_Model_DbTable_DbUsers();
+					   $report_url=$db_user->getArrAclReport(1,'allstudent');
+					   if(!empty($report_url)){
+						   foreach($report_url as $url){
+						   if($url['controller']=='allstudent' AND $url['action']!='index' AND $url['action']!='certify' AND $url['action']!='rpt-transcript' AND $url['action']!='academic-transcript' AND $url['action']!='rpt-att-list' 
+								AND $url['action']!='rpt-student-group' AND $url['action']!='mistake-certificate' AND $url['action']!='idselected' AND $url['action']!='semester-outstanding-student' ){
+				   ?>
+				   <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+						<div title="<?php echo $tr->translate($url['label']);?>" class="tile-stats report-list">
+							<div class="icon"><i class="fa fa-book"></i></div>
+							<div class="count">&nbsp;</div>
+			                 	<h3><?php echo $tr->translate($url['label']);?></h3>
+						</div>
+						</a>
+			        </div>
+					<?php }?>
+			   <?php }
+			  }?>
+				</div>
+			</div>
+		</div>
+	</div>
   <div style="clear: both;"></div>

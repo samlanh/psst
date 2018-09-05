@@ -26,6 +26,14 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		));
 		$_title->setValue($request->getParam("adv_search"));
 		
+		$_transfer=  new Zend_Dojo_Form_Element_FilteringSelect('paid_transfer');
+		$_transfer->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'));
+		$_status_opt = array(
+				-1=>$this->tr->translate("ជ្រើសរើសប្រភេទផ្ទេរ"),
+				1=>$this->tr->translate("NOT_TRANSFER"),
+				0=>$this->tr->translate("TRANSFER_TO_ONE"));
+		$_transfer->setMultiOptions($_status_opt);
+		$_transfer->setValue($request->getParam("paid_transfer"));
 		
 // 		$_currency_type = new Zend_Dojo_Form_Element_FilteringSelect('payment_id');
 // 		$_currency_type->setAttribs(array(
@@ -85,7 +93,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_branch_id->setValue($request->getParam("branch_id"));
 		
 		
-		$this->addElements(array($_title,$_branch_id,$payment_method,$_releasedate
+		$this->addElements(array($_title,$_branch_id,$payment_method,$_transfer,$_releasedate
 				,$_dateline,$_status));
 		return $this;
 		

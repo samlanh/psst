@@ -17,13 +17,9 @@ $urlTransfer = $this->baseUrl()."/accounting/transfercredit/transfer/id/";
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 					 	<?php echo $frm->getElement("adv_search");?>
 					 </div>
-					 <div class="col-md-2 col-sm-2 col-xs-12">
-					 	<select name="paid_status" id="paid_status" dojoType="dijit.form.FilteringSelect" class="fullside"  >
-			        		<option value="" <?php if($this->adv_search['paid_status']==""){echo 'selected="selected"';} ?>> Piad Status </option>
-			        		<option value="1" <?php if($this->adv_search['paid_status']==1){echo 'selected="selected"';} ?>> Cleared </option>
-			        		<option value="0" <?php if($this->adv_search['paid_status']==0){echo 'selected="selected"';} ?>> Not Cleared </option>
-			        	</select>
-					 </div>
+					​​​ <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<?php echo $frm->getElement('paid_transfer');?>
+					 </div>​
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 					 	<?php echo $frm->getElement('status');?>
 					 </div>

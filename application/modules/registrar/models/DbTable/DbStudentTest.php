@@ -231,7 +231,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				FROM 
 					rms_student_test
 				WHERE
-					status=1";
+					status=1 AND is_makestudenttest=1";
 		
 		if (!empty($search['txtsearch'])){
 			$s_where = array();

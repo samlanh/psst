@@ -118,6 +118,27 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	return $session_user->user_id;
    }
    
+   function getAllUser($branchId=null){
+	   	$db = $this->getAdapter();
+	   	$sql="SELECT
+			u.id,
+			CONCAT(u.last_name,' ',u.first_name) AS name,
+			u.branch_id
+			 FROM `rms_users` AS u WHERE u.active=1
+			AND u.is_system =0";
+	   	
+	   	// this case check all user that avaiable in all branch that current user can access
+	   	$sql.= $this->getAccessPermission("u.branch_id");
+	   	
+	   	//this for check more by branch record of data
+	   	//ex: when we enter register student in which branch filter only user in that branch
+	   	if (!empty($branchId)){
+	   		$sql.=" AND u.branch_id = $branchId";
+	   	}
+	   	
+	   	return $db->fetchAll($sql);
+   }
+   
    public function getUserInfo(){
 	   	$session_user=new Zend_Session_Namespace('authstu');
 	   	$userName=$session_user->user_name;
@@ -927,9 +948,13 @@ function getAllgroupStudy($teacher_id=null){
   	$SQL="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
   	return $db->fetchAll($SQL);
   }
-  function getTestStudentId(){
+  function getTestStudentId($branch=null){
   	$db = $this->getAdapter();
-  	$sql ="SELECT id AS number FROM `rms_student_test` ORDER BY id DESC LIMIT 1 ";
+  	$sql ="SELECT COUNT(id) AS number FROM `rms_student_test` WHERE is_makestudenttest =1  ";
+  	if (!empty($branch)){
+  		$sql.= " AND branch_id=1";
+  	}
+  	$sql.=" ORDER BY id DESC LIMIT 1 ";
   	$acc_no = $db->fetchOne($sql);
   	 
   	$new_acc_no= (int)$acc_no+1;

@@ -72,7 +72,7 @@ $teacher_id = $session_t->teacher_id;
     <!-- NProgress -->
     <link href="<?php echo $base_url;?>admin/vendors/nprogress/nprogress.css" rel="stylesheet">
     
-    <?php if ($module!=="home" AND ( $action=="index" OR $module=='report')){?>
+    <?php if ( ($module!='home' OR $controller=="crm") AND ( $action=="index" OR $module=='report')){?>
 	<link href="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.css" rel="stylesheet" type="text/css" />
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.js" type="text/javascript"></script>
 	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.ui.position.min.js" type="text/javascript"></script>
@@ -198,10 +198,10 @@ $teacher_id = $session_t->teacher_id;
        		<div class="right_col" role="main" >
        		 	<div class="right-conten" style="min-height: 570px;">
        		 	<div style="clear:both;"></div>
-             	<?php if($module!='allreport' AND $module!='home' AND $module!='default' ){?>
+             	<?php if($module!='allreport' AND ($module!='home' OR $controller=="crm") AND $module!='default' ){?>
              		<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
 							<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
-								<?php if($action=='index' AND $module!='allreport' AND $module!='home' AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
+								<?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' ){?>
 									<a title="<?php echo $tr->translate('ADD_NEW');?>" class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>">
 										<i class="fa fa-plus-circle" aria-hidden="true"></i>
 									</a>
@@ -212,7 +212,7 @@ $teacher_id = $session_t->teacher_id;
 								<?php }?>
 							</div>
 							<div class="ptss__header add-edit-action">
-							 <?php if($action=='index' AND $module!='allreport' AND $module!='home' AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
+							 <?php if($action=='index' AND $module!='allreport' AND ($module!='home' OR $controller=="crm") AND $controller!='studentnearlyendservice' AND $controller!='studentpaymentlate' AND $controller!='studentpaymentlate' AND $module!='allreport'){?>
 								<a  class='add-edit' href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true); ?>"><?php echo $tr->translate('ADD');?> 
 									<i class="fa fa-plus-circle" aria-hidden="true"></i>
 								</a>

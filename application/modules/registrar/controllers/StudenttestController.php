@@ -109,4 +109,39 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     	$this->view->row = $row = $db->getStudentTestProfileById($id);
     	$this->view->row_detail=$db->getStudentTestDetail($id);
     }
+    
+    function makecrmtestAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Registrar_Model_DbTable_DbStudentTest();
+    		try {
+    			$db->addStudentTest($data);
+    			if(!empty($data['saveclose'])){
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest");
+    			}else{
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
+    			}
+    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
+    		} catch (Exception $e) {
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->degree = $db->getAllDegreeName();
+    	$this->view->session = $db->getAllSession();
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->serailno= $db->getTestStudentId();
+    	
+    	$rs = $db->getallTermtest();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	array_unshift($rs,array('id' => -1,'name'=>$tr->translate("ADD_NEW")));
+    	$this->view->startdate_enddate = $rs;
+    	
+    	
+    	$frm = new Registrar_Form_FrmStudentTest();
+    	$frm->FrmAddCRMToTest(null);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_crm = $frm;
+    }
 }

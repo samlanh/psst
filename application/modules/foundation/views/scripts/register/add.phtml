@@ -103,26 +103,35 @@ input.btn_borwse_image {
 				                   		<?php echo $frm->getElement("name_kh");?>
 				                   </div>
 				                </div>
-				              
+				                 <div class="form-group">
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Last Name");?> <span class="required">*</span> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("last_name");?>
+				                   </div>
+				                </div>
 				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_EN");?> <span class="required">*</span> :
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("First Name");?> <span class="required">*</span> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("name_en");?>
 				                   </div>
 				                </div>
 				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>  :
+				                   </label>
+				                   <div class="col-md-4 col-sm-4 col-xs-12">
+				                   		<input id="nation" />
+				                   </div>
+				                   <div class="col-md-3 col-sm-3 col-xs-12">
+					                   	<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshStudent();"/>
+					                </div>
+				                </div>
+				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("studen_national");?>
-				                   </div>
-				                </div>
-								<div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<input id="nation" />
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -209,7 +218,7 @@ input.btn_borwse_image {
 				                </div>
 				                <div class="form-group">
 				                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-				                    	<div class="account-image">
+				                    	<div class="account-image" style="padding-right: 821px;">
 											<div class="image-box">
 												<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
 											</div>
@@ -762,6 +771,28 @@ function getRefreshGroup(){
 		}
 	});
 }
+
+var url_getstudent = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"get-studenttype"));?>';										
+function getRefreshStudent(){
+	loading();
+	dojo.xhrPost({
+		url:url_getstudent,
+		handleAs:"json",
+		load: function(data) {
+			nation_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('nation').set('store',nation_store);  
+		    nation_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('studen_national').set('store',nation_store);  
+		    
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			alert(err);
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+
 var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
 function getStudentNo(){
 	dept_id = dijit.byId('degree').get('value');

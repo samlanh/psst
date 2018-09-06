@@ -39,12 +39,22 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'required'=>'true',
 				'class'=>'fullside'));
 		
+		$last_name = new Zend_Dojo_Form_Element_ValidationTextBox('last_name');
+		$last_name->setAttribs(array('dojoType'=>$this->tvalidate,
+				'required'=>'true',
+				'class'=>'fullside'));
+		
 		$studen_national =  new Zend_Dojo_Form_Element_FilteringSelect('studen_national');
-		$studen_national->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
-		$sex_opt = array(
-				1=>$tr->translate("KHMER"),
-				2=>$tr->translate("ENGLISH"));
-		$studen_national->setMultiOptions($sex_opt);
+		$studen_national->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'onChange'=>'getallGrade();getStudentNo()',
+		
+		));
+		$rs_nation = $_db->getAllNation();
+		$arr_opt = array();
+		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
+		$studen_national->setMultiOptions($arr_opt);
 	
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
@@ -270,6 +280,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$id->setValue($data['stu_id']);
 			$name_kh->setValue($data['stu_khname']);
 			$name_en->setValue($data['stu_enname']);
+			$last_name->setValue($data['last_name']);
 			$studen_national->setValue($data['nationality']);
 			$_sex->setValue($data['sex']);
 			if (!empty($data['dob'])){
@@ -320,6 +331,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$id,
 						$name_kh,
 						$name_en,
+						$last_name,
 						$studen_national,
 						$_sex,
 						$date_of_birth,

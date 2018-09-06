@@ -391,9 +391,13 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 	function addNationAction(){
 		if($this->getRequest()->isPost()){
 			try{
+				$sms="INSERT_SUCCESS";
 				$data = $this->getRequest()->getPost();
 				$db = new Application_Model_DbTable_DbGlobal();
 				$row = $db->addNationType($data);
+// 				if($row==-1){
+// 					$sms = "RECORD_EXIST";
+// 				}
 				print_r(Zend_Json::encode($row));
 				exit();
 			}catch(Exception $e){
@@ -430,6 +434,15 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
+		}
+	}
+	function getStudenttypeAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$student = $db->getAllNation();
+			print_r(Zend_Json::encode($student));
+			exit();
 		}
 	}
 	

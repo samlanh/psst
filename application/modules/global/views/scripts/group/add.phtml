@@ -182,7 +182,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 dojo.require("dojo.html");
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
-
 var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
 var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );

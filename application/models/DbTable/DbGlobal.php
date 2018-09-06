@@ -989,6 +989,12 @@ function getAllgroupStudy($teacher_id=null){
   	try{
   		$db = $this->getAdapter();
   		$key_code = $this->getLastKeycodeByType(21);
+//   		$sql="SELECT id FROM rms_view WHERE status =".$data['status_na'];
+//   		$sql.=" AND name_kh='".$data['name_kh']."'";
+//   		$rs = $db->fetchOne($sql);
+//   		if(!empty($rs)){
+//   			return -1;
+//   		}
   		$arr = array(
   				'name_en'	=>$data['title_en'],
   				'name_kh'	=>$data['title_kh'],

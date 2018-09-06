@@ -35,7 +35,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 				$sql = "SELECT  s.stu_id,
-				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
 				s.stu_khname,
 				s.stu_enname,

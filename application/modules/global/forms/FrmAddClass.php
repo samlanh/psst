@@ -63,5 +63,79 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$this->addElements(array($_branch_id,$_floor,$_classname,$_status,$_submit,$_student));		
 		return $this;		
 	}
+	public function FrmAddGroup($data=null){
+		
+		$request=Zend_Controller_Front::getInstance()->getRequest();
+		$_goup = new Zend_Dojo_Form_Element_TextBox('group_code');
+		$_goup->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
+	
+// 		$_floor = new Zend_Dojo_Form_Element_TextBox('floor');
+// 		$_floor->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
+	
+// 		$_student = new Zend_Dojo_Form_Element_TextBox('max_student');
+// 		$_student->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
+	
+// 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
+// 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+// 		$_status_opt = array(
+// 				1=>$this->tr->translate("ACTIVE"),
+// 				0=>$this->tr->translate("DACTIVE"));
+// 		$_status->setMultiOptions($_status_opt);
+	
+		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
+		$_academic->setAttribs(array('dojoType'=>$this->filter,
+				//	'placeholder'=>$this->tr->translate("SERVIC"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$_academic->setValue($request->getParam("academic_year"));
+		$db = new Global_Model_DbTable_DbGroup();
+		$rows= $db->getAllYears();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
+		$opt=array();
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$_academic->setMultiOptions($opt);
+		
+		$_session = new Zend_Dojo_Form_Element_FilteringSelect('session');
+		$_session->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("SESSION"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+				));
+		$_session->setValue($request->getParam("session"));
+		$opt_ses=new Application_Model_DbTable_DbGlobal();
+		$opt_sesion=$opt_ses->getSession();
+		$opt_session = array(''=>$this->tr->translate("SESSION"));
+		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
+		$_session->setMultiOptions($opt_session);
+		
+		$_calture = new Zend_Dojo_Form_Element_FilteringSelect('calture');
+		$_calture->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SERVIC"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$db = new Application_Model_DbTable_DbGlobal();
+		$calture_opt = $db->getAllDegree();
+		$_calture->setMultiOptions($calture_opt);
+			
+		$id = new Zend_Form_Element_hidden('id');
+		if($data!=null){
+			$_goup->setValue($data['group_code']);
+			$_academic->setValue($data['academic_year']);
+			$_session->setValue($data['session']);
+			$_calture->setValue($data['calture']);
+		}
+		$this->addElements(array($_academic,$_session,$_calture,$_goup));
+		return $this;
+	}
+	
 	
 }

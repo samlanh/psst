@@ -22,10 +22,6 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$groupExit = $this->checkGroupExits($_data);
-			if (!empty($groupExit)){
-				return -1;
-			}
 			$_arr=array(
 					'group_code' 	=> $_data['group_code'],
 					'room_id' 		=> $_data['room'],
@@ -71,6 +67,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$db->rollBack();
 			echo $e->getMessage();exit();
 		}
+		print_r($_data); exit();
 	}
 	
 	public function updateGroup($_data){
@@ -348,6 +345,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	public function addNewRoom($_data){
 		$this->_name='rms_room';
 		$_arr=array(
+				'branch_id'	  => $_data['branch_id'],
+				'max_std'	  => $_data['max_std'],
+				'floor'	  	  => $_data['floor'],
 				'room_name'	  => $_data['room_name'],
 				'modify_date' => Zend_Date::now(),
 				'is_active'   => $_data['status_room'],
@@ -386,8 +386,11 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$sql = "SELECT id,teacher_name_kh  as name FROM rms_teacher WHERE status=1 and teacher_name_kh!='' ";
 		return $db->fetchAll($sql);
 	}
-	
-	
+	function getTeacherByID($teacher_id){
+		$db = $this->getAdapter();
+		$sql ="SELECT * FROM rms_teacher AS g WHERE g.id=$teacher_id LIMIT 1";
+		return $db->fetchRow($sql);
+	}
 	
 	public function addTeacherAjax($_data){
 		$this->_name='rms_teacher';

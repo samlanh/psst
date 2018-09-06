@@ -393,7 +393,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			try{
 				$data = $this->getRequest()->getPost();
 				$db = new Application_Model_DbTable_DbGlobal();
-				$row = $db->addNation($data);
+				$row = $db->addNationType($data);
 				print_r(Zend_Json::encode($row));
 				exit();
 			}catch(Exception $e){

@@ -61,21 +61,13 @@ class Global_GroupController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$db= new Global_Model_DbTable_DbGroup();
 				
-				$groupExit = $db->checkGroupExits($data);
-				if (!empty($groupExit)){
-					Application_Form_FrmMessage::Sucessfull("This Group Already Exist", "/global/group/index");
-				}
-				
 				$group_id= $db->AddNewGroup($data);
-				if($group_id==-1){
-    				$sms = "RECORD_EXIST";
-    			}
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/index");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL."/index");
 				}else{
-					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL."/add");
 				}
-				Application_Form_FrmMessage::message($sms);
+				Application_Form_FrmMessage::message("RECORD_EXIST");
 			} catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -111,8 +103,12 @@ class Global_GroupController extends Zend_Controller_Action {
 		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
-		
 		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
+		
+		$tsub= new Global_Form_FrmAddClass();
+		$frm_group=$tsub->FrmAddGroup();
+		Application_Model_Decorator::removeAllDecorator($frm_group);
+		$this->view->frm = $frm_group;
 	}
 	function editAction(){
 		$db= new Global_Model_DbTable_DbGroup();
@@ -145,7 +141,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$_db = new Global_Model_DbTable_DbGroup();
 		$this->view->subject = $_db->getAllSubjectStudy();
-		$this->view->row_year=$_db->getAllYears();
 		$this->view->teacher_option = $_db->getAllTeacherOption();
 		$teacher = $_db->getAllTeacher();
 		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
@@ -302,6 +297,15 @@ class Global_GroupController extends Zend_Controller_Action {
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
+    	}
+    }
+    function getteacherAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Global_Model_DbTable_DbGroup();
+    		$teacher = $db->getAllTeacher();
+    		print_r(Zend_Json::encode($teacher));
+    		exit();
     	}
     }
 }

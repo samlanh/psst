@@ -97,7 +97,7 @@ input.btn_borwse_image {
 				                   </label>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_KH");?> <span class="required">*</span> :
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_NAMEKHMER");?> <span class="required">*</span> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("name_kh");?>
@@ -160,7 +160,7 @@ input.btn_borwse_image {
 				                   </label>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("HOME");?>  :
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NUMBER_HOME");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("home_note");?>
@@ -627,6 +627,7 @@ dojo.ready(function(){
 	    if(nation==-1){
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',1);
+		   	dijit.byId("save_nation").attr("disabled",false);
 	     }
 	    else {
 	    }  
@@ -816,19 +817,19 @@ function addLanguage(){
 
 var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
 function addNationBy(){
-	if(dijit.byId('frm_nation').validate()){
+	if(dijit.byId('frm_nation_kh').validate()){
 		dijit.byId("save_nation").attr("disabled",true);	
 		dojo.xhrPost({
 			url:url_add_nation,
-			form: dojo.byId("frm_nation"),
+			form: dojo.byId("frm_nation_kh"),
 			handleAs:"json",
 			load: function(data) {
 			var Itemmake = { 
-					 id: dijit.byId('title_nation').get('value'),
-					 name: dijit.byId('title_nation').get('value')
+					 id: data,
+					 name: dijit.byId('title_kh').get('value')
 				   };
-		   addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, dijit.byId('title_nation').get('value'));
-		   dijit.byId('frm_nation').reset();
+		   addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+		   dijit.byId('frm_nation_kh').reset();
 		   dijit.byId("popup_nation").hide();
 			},
 			error: function(err) {
@@ -899,7 +900,7 @@ function hideDialog3() {
 	dijit.byId("popup_doc_type").hide();
 }
 function hideDialog4() {	
-	dijit.byId('frm_nation').reset();
+	dijit.byId('frm_nation_kh').reset();
 	dijit.byId("popup_nation").hide();
 }
 var url_add_job = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-job")); ?>';
@@ -996,30 +997,42 @@ function addJob(){
 
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_nation" >
-		<form style="background-color: buttonface;" id='frm_nation' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form style="background-color: buttonface;" id='frm_nation_kh' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
-			<tr>
-				<td>
-					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate('ADD_OCCUPATION');?></legend>
-						<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
-							<tr>
-								<td><?php echo $tr->translate('TITLE_NATION');?></td>
-								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_nation" name="title_nation" value="" type="text"></td>
+				<tr>
+					<td>
+						<fieldset style="background-color: buttonface;">
+						<legend align="center" ><?php echo $tr->translate('DOCUMENT_TYPE');?></legend>
+							<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
+								<tr>
+								<td><?php echo $tr->translate('KH_NAME');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_kh" name="title_kh" value="" type="text"></td>
 							</tr>
 							<tr>
-								<td colspan="4" align="center">
-									<input type="button" value="ចាកចេញ" label="Close" id="close" name="close" dojoType="dijit.form.Button" 
-									​ ​​iconClass="dijitIconUndo" onclick="hideDialog4();"/>
-									<input type="button" value="save" label="SAVE" id="save_nation" name="save_nation" dojoType="dijit.form.Button" 
-									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNationBy();"/>
+								<td><?php echo $tr->translate('EN_NAME');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_en" name="title_en" value="" type="text"></td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate('STATUS');?></td>
+								<td><select name="status_na" id="status_na" dojoType="dijit.form.FilteringSelect"   class="fullside">
+	    								<option value="1" >Active</option>
+	    								<option value="0" >Deactive</option>
+									</select>
 								</td>
 							</tr>
-						</table>
-				</fieldset>
-				</td>
-			</tr>
-		</table>
+								<tr>
+									<td colspan="4" align="center">
+										<input type="button" value="ចាកចេញ" label="Close" id="hide_nation" name="hide_nation" dojoType="dijit.form.Button" 
+										​ ​​iconClass="dijitIconUndo" onclick="hideDialog4();"/>
+										<input type="button" value="save" label="SAVE" id="save_nation" name="save_nation" dojoType="dijit.form.Button" 
+										 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNationBy();"/>
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
 		</form>
 	</div>
 </div>

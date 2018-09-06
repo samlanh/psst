@@ -3,6 +3,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_callteral;
 echo $this->headTitle($tr->translate("ADD_STUDY_GROUP"));
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+$frm = $this->frm;
 //print_r($this->calture); exit();
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
@@ -53,29 +54,19 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
     		<div class="form-group">
                 <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP_CODE");?> <span class="required">*</span> :</label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
-                   <input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="group_code" name="group_code" value="" type="text">
+                	<?php echo $frm->getElement("group_code");?>
                 </div>
              </div>
              <div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> <span class="required">*</span> :</label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
-                   <select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
-						<option value="-1"><?php echo $tr->translate("SELECT_YEAR");?></option>
-						<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
-							<option value="<?php echo $year['id'];?>"><?php echo $year['years'];?></option>
-						<?php }}?>
-					</select>
+					<?php echo $frm->getElement("academic_year");?>
                 </div>
              </div>
              <div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CULTURE_LEVEL");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
-                   <select name="calture" class="fullside" id="calture" placeholder="Select Level Culture" type="text" dojoType="dijit.form.FilteringSelect">
-						<option value="-1"><?php echo $tr->translate("SELECT_CULTURE");?></option>
-						<?php if(!empty($this->calture)){foreach($this->calture as $key=>$year){?>
-							<option value="<?php echo $year;?>"><?php echo $year;?></option>
-						<?php }}?>
-					</select>
+					<?php echo $frm->getElement("calture");?>
                 </div>
              </div>
              <div class="form-group">
@@ -95,13 +86,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
     		<div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
-                	<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect">
-					<?php $row= new Application_Model_DbTable_DbGlobal();
-						  $rows=$row->getSession();
-						  foreach($rows as $key =>$rs){?>
-							<option value="<?php echo $rs['key_code']?>" ><?php echo $rs['view_name'];?></option>
-					<?php }?>
-					</select>
+					<?php echo $frm->getElement("session");?>
                 </div>
              </div>
              <div class="form-group">
@@ -118,9 +103,12 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
              </div>
              <div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TEACHER_ASSISTANCE");?></label>
-                <div class="col-md-7 col-sm-7 col-xs-12">
+                <div class="col-md-4 col-sm-4 col-xs-12">
                 	<input id="teacher_ass" />
                 </div>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                   	<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshTeacher();"/>
+                 </div>
              </div>
              <div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SEMESTER");?></label>
@@ -369,7 +357,29 @@ function getallGrade(){
 			}
 		});
 }
-
+var url_gettecher = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getteacher"));?>';										
+function getRefreshTeacher(){
+	loading();
+	dojo.xhrPost({
+		url:url_gettecher,
+		handleAs:"json",
+		load: function(data) {
+			teacher_storeass  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('teacher_ass').set('store',teacher_storeass);  
+		    teacher_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('teacher_id').set('store',teacher_store);  
+		    
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			alert(err);
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
 
 var subject = '<?php echo $this->subject;?>';
 var teacher_option = '<?php echo $this->teacher_option;?>';
@@ -580,8 +590,26 @@ function deleteRecord1(index) {
 					<legend align="center" ><?php echo $tr->translate("ADD_ROOM")?></legend>
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("ROOM_NAME")?></td>
+							<td style="width:100px"><?php echo $tr->translate("BRANCH")?></td>
+							<td><select class="fullside"  tabindex="3" name="branch_id" id="branch_id" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
+								<?php $row= new Application_Model_DbTable_DbGlobal();
+									  $rows=$row->getAllBranch();
+									  foreach($rows as $key =>$rs){?>
+										<option value="<?php echo $rs['id']?>" ><?php echo $rs['name'];?></option>
+								<?php }?>
+							</select><td/>
+						</tr>
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("CLASSNAME")?></td>
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="room_name" id="room_name" type="text" required="required" /></td>
+						</tr>
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("FLOOR")?></td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="floor" id="floor" type="text" /></td>
+						</tr>
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("MAX_STUDENT")?></td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="max_std" id="max_std" type="text" /></td>
 						</tr>
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("STATUS")?></td>

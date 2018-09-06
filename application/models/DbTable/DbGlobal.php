@@ -960,14 +960,30 @@ function getAllgroupStudy($teacher_id=null){
   	return $this->insert($array);
   }
   
-  function addNation($data){
-  	$array = array(
-  			"title_nation"	=>$data['title_nation'],
-  			//"title_khmer"	=>$data['title_khmer'],
-  			"key_code"		=>$data['key_code'],
-  	);
-  	$this->_name="rms_view";
-  	return $this->insert($array);
+  function addNationType($data){
+  	try{
+  		$db = $this->getAdapter();
+  		$key_code = $this->getLastKeycodeByType(21);
+  		$arr = array(
+  				'name_en'	=>$data['title_en'],
+  				'name_kh'	=>$data['title_kh'],
+  				'status'	=>$data['status_na'],
+  				'key_code'	=>$key_code,
+  				'displayby'	=>1,
+  				'type'=>21,
+  				 
+  		);
+  		$this->_name="rms_view";
+  		return $this->insert($arr);
+  	}catch (Exception $e){
+  		echo '<script>alert('."$e".');</script>';
+  	}
+  }
+  function getLastKeycodeByType($type){
+  	$sql = "SELECT key_code FROM `rms_view` WHERE type=$type ORDER BY key_code DESC LIMIT 1 ";
+  	$db =$this->getAdapter();
+  	$number = $db->fetchOne($sql);
+  	return $number+1;
   }
   
   function addKnowBy($data){

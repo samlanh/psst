@@ -147,7 +147,5 @@ class Application_Form_FrmOther extends Zend_Dojo_Form
     	return $this;
     
     }
-
-
 }
 

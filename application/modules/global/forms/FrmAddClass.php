@@ -68,7 +68,13 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		$_goup = new Zend_Dojo_Form_Element_TextBox('group_code');
 		$_goup->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
+		
+		$_time = new Zend_Dojo_Form_Element_TextBox('time');
+		$_time->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
 	
+		$_note = new Zend_Dojo_Form_Element_TextBox('note');
+		$_note->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','style'=>'min-height: 70px;'));
+		
 // 		$_floor = new Zend_Dojo_Form_Element_TextBox('floor');
 // 		$_floor->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 	
@@ -132,8 +138,10 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$_academic->setValue($data['academic_year']);
 			$_session->setValue($data['session']);
 			$_calture->setValue($data['calture']);
+			$_time->setValue($data['time']);
+			$_note->setValue($data['note']);
 		}
-		$this->addElements(array($_academic,$_session,$_calture,$_goup));
+		$this->addElements(array($_academic,$_time,$_note,$_session,$_calture,$_goup));
 		return $this;
 	}
 	

@@ -9,7 +9,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 	function getAllCreditmemo($search=null){
 		$db = $this->getAdapter();
 		//$session_user=new Zend_Session_Namespace('authstu');
-		$sql=" SELECT 
+		$sql="SELECT 
 				c.id,
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
@@ -18,16 +18,16 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				total_amountafter,
 				c.date,
 				c.end_date,
-				(SELECT name_en FROM rms_view WHERE rms_view.type=15 AND key_code=c.type) AS paid_status,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=20 AND key_code=c.type) AS paid_transfer,
+				(SELECT name_en FROM rms_view WHERE rms_view.type=15 AND key_code=c.type LIMIT 1) AS paid_status,
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=20 AND key_code=c.type LIMIT 1) AS paid_transfer,
 				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) AS user_name,
 				c.status 
 			  FROM 
 				rms_creditmemo c, 
 				rms_student AS s
 			  WHERE
-				s.stu_id = c.student_id
-			";
+				s.stu_id = c.student_id";
+		//$where ='';
 		$from_date =(empty($search['start_date']))? '1': " c.date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " c.date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
@@ -43,11 +43,9 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.= " AND c.status = ".$search['status'];
 		}
-		
 		if($search['paid_transfer']>-1){
 			$where.= " AND c.type = ".$search['paid_transfer'];
 		}
-		
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}

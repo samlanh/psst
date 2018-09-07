@@ -81,12 +81,24 @@ $frm = $this->frm;
                   <input id="grade" name="grade" />
                 </div>
              </div>
+              <div class="form-group">
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SEMESTER");?></label>
+                <div class="col-md-7 col-sm-7 col-xs-12">
+                 	<input dojoType="dijit.form.ValidationTextBox" class="fullside" required="true" name="semester" value="" type="text">
+                </div>
+             </div>
     	</div>
     	<div class="col-md-4 col-sm-4 col-xs-12">
     		<div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12">
 					<?php echo $frm->getElement("session");?>
+                </div>
+             </div>
+             <div class="form-group">
+                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TIME");?></label>
+                <div class="col-md-7 col-sm-7 col-xs-12">
+					<?php echo $frm->getElement("time");?>
                 </div>
              </div>
              <div class="form-group">
@@ -110,18 +122,12 @@ $frm = $this->frm;
                    	<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshTeacher();"/>
                  </div>
              </div>
-             <div class="form-group">
-                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SEMESTER");?></label>
-                <div class="col-md-7 col-sm-7 col-xs-12">
-                 	<input dojoType="dijit.form.ValidationTextBox" class="fullside" required="true" name="semester" value="" type="text">
-                </div>
-             </div>
     	</div>
     	<div class="col-md-4 col-sm-4 col-xs-12">
     		<div class="form-group">
                 <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?></label>
                 <div class="col-md-7 col-sm-7 col-xs-12" >
-                	<input dojoType="dijit.form.Textarea"  style="min-height: 70px;" class="fullside"  name="note" value="" type="text" >
+                	<?php echo $frm->getElement("note");?>
                 </div>
              </div>
     		<!-- 

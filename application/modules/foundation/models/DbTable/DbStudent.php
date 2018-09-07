@@ -172,7 +172,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'stu_khname'	=>$_data['name_kh'],
 						'last_name'		=>$_data['last_name'],
 						'sex'			=>$_data['sex'],
-						'is_stu_new'	=>$_data['student_type'],
+						//'is_stu_new'	=>$_data['student_type'],
 						'nationality'	=>$_data['studen_national'],
 						'nation'		=>$_data['nation'],
 						'dob'			=>$_data['date_of_birth'],
@@ -216,7 +216,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						/////other infomation tab /////
 						'lang_level'	=>$_data['lang_level'],
 						'from_school'	=>$_data['from_school'],
-						'know_by'		=>$_data['know_by'],
+						//'know_by'		=>$_data['know_by'],
 						'sponser'		=>$_data['sponser'],
 						'sponser_phone'	=>$_data['sponser_phone'],
 						//////////////////////////////////////////////				
@@ -303,7 +303,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$_db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-			print_r($_data); exit();
+			//print_r($_data); exit();
 	}
 	public function updateStudent($_data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base

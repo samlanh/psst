@@ -21,6 +21,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 	}
 	public function FrmTecher($_data=null){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$_db = new Application_Model_DbTable_DbGlobal();
 		
 		$_enname = new Zend_Dojo_Form_Element_TextBox('en_name');
 		$_enname->setAttribs(array('dojoType'=>$this->tvalidate, 'class'=>'fullside','required'=>'true'));
@@ -75,8 +76,18 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_user = new Zend_Dojo_Form_Element_TextBox('user_name');
 		$_user->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
-		$_nationality = new Zend_Dojo_Form_Element_TextBox('nationality');
-		$_nationality->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
+		$_nationality =  new Zend_Dojo_Form_Element_FilteringSelect('nationality');
+		$_nationality->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'onChange'=>'getallGrade();getStudentNo()',
+		
+		));
+		$rs_nation = $_db->getAllNation();
+		$arr_opt = array();
+		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
+		$_nationality->setMultiOptions($arr_opt);
+		
 		
 		$_position = new Zend_Dojo_Form_Element_TextBox('position_add');
 		$_position->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));

@@ -3,6 +3,7 @@
 	$frm = $this->frm_callteral;
 	echo $this->headTitle($tr->translate("ADD_STUDY_GROUP"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+	$frm = $this->frm;
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
@@ -58,31 +59,19 @@
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP_CODE");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input type="hidden" name="id" value="<?php echo $this->rs['id'];?>" />
-		                	<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="group_code" name="group_code" value="<?php echo $this->rs['group_code'];?>" type="text">
+		                	<?php echo $frm->getElement("group_code");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("YEARS");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select name="academic_year" id="academic_year" placeholder="Select Year" class="fullside" type="text" dojoType="dijit.form.FilteringSelect">
-								<option value="-1"><?php echo $tr->translate("SELECT_YEAR");?></option>
-								<?php if(!empty($this->row_year)){ foreach($this->row_year as $year){?>
-									<option value="<?php echo $year['id'];?>" <?php if($year['id']==$this->rs['academic_year']) echo 'selected="selected"';?>><?php echo $year['years'];?></option>
-								<?php }}?>
-						    </select>
+		                	<?php echo $frm->getElement("academic_year");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CULTURE_LEVEL");?></label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                   <select name="calture" class="fullside" id="calture" placeholder="Select Level Culture" type="text" dojoType="dijit.form.FilteringSelect">
-								<option value="0" <?php if($this->rs['calture']==0) echo 'selected="selected"';?>><?php echo $tr->translate("SELECT_CULTURE");?></option>
-								<option value="1" <?php if($this->rs['calture']==1) echo 'selected="selected"';?>><?php echo $tr->translate("ASSOCIATE");?></option>
-								<option value="2" <?php if($this->rs['calture']==2) echo 'selected="selected"';?>><?php echo $tr->translate("BACHELOR");?></option>
-								<option value="3" <?php if($this->rs['calture']==3) echo 'selected="selected"';?>><?php echo $tr->translate("MASTER");?></option>
-							    <option value="4" <?php if($this->rs['calture']==4) echo 'selected="selected"';?>><?php echo $tr->translate("DOCTORATE");?></option>
-							</select>
+		                   <?php echo $frm->getElement("calture");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -97,19 +86,25 @@
 		                	<input id="grade" name="grade" class="fullside" value="<?php echo $this->rs['grade']; ?>" />
 		                </div>
 		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SEMESTER");?> :</label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input dojoType="dijit.form.ValidationTextBox" required="true" name="semester" class="fullside" value="<?php echo $this->rs['semester'];?>" type="text">
+		                </div>
+		             </div>
 	    		</div>
 	    		<div class="col-md-4 col-sm-4 col-xs-12">
 	    			 
 		    		 <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect">
-								<?php $row= new Application_Model_DbTable_DbGlobal();
-								      $rows=$row->getSession();
-									foreach($rows as $key =>$rs){?>
-										<option value='<?php echo $rs['key_code']?>' <?php if($rs['key_code']==$this->rs['session']) echo 'selected="selected"';?>><?php echo $rs['view_name'];?></option>
-								<?php 	}?>
-								</select>
+		                	<?php echo $frm->getElement("session");?>
+		                </div>
+		             </div>
+		              <div class="form-group">
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TIME");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+							<?php echo $frm->getElement("time");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -126,22 +121,19 @@
 		             </div>
 		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TEACHER_ASSISTANCE");?> :</label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                <div class="col-md-4 col-sm-4 col-xs-12">
 		                	<input id="teacher_ass" />
 		                </div>
-		             </div>
-		              <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SEMESTER");?> :</label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input dojoType="dijit.form.ValidationTextBox" required="true" name="semester" class="fullside" value="<?php echo $this->rs['semester'];?>" type="text">
-		                </div>
+		                <div class="col-md-3 col-sm-3 col-xs-12">
+		                   	<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshTeacher();"/>
+		                 </div>
 		             </div>
 	    		</div>
 	    		<div class="col-md-4 col-sm-4 col-xs-12">
 	    			<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> :</label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input dojoType="dijit.form.TextBox" class="fullside"  name="note" value="<?php echo $this->rs['note'];?>" type="text">
+		                	<?php echo $frm->getElement("note");?>
 		                </div>
 		             </div>
 	    			<!-- 
@@ -392,6 +384,31 @@ function getallGrade(){
 			}
 		});
 }
+
+var url_gettecher = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getteacher"));?>';										
+function getRefreshTeacher(){
+	loading();
+	dojo.xhrPost({
+		url:url_gettecher,
+		handleAs:"json",
+		load: function(data) {
+			teacher_storeass  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('teacher_ass').set('store',teacher_storeass);  
+		    teacher_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('teacher_id').set('store',teacher_store);  
+		    
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			alert(err);
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
+
 var subject = '<?php echo $this->subject;?>';
 var teacher_option = '<?php echo $this->teacher_option;?>';
 var col = 0;
@@ -967,7 +984,7 @@ function addTeacher(){
 	
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:50%;" id="popup_room" >
-		<form style="background-color: buttonface; width:15cm;" id='form_add_room' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form style="background-color: buttonface; " id='form_add_room' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
@@ -975,10 +992,27 @@ function addTeacher(){
 					<legend align="center" ><?php echo $tr->translate("ADD_ROOM")?></legend>
 					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
 						<tr>
-							<td style="width:100px"><?php echo $tr->translate("ROOM_NAME")?></td>
+							<td style="width:100px"><?php echo $tr->translate("BRANCH")?></td>
+							<td><select class="fullside"  tabindex="3" name="branch_id" id="branch_id" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
+								<?php $row= new Application_Model_DbTable_DbGlobal();
+									  $rows=$row->getAllBranch();
+									  foreach($rows as $key =>$rs){?>
+										<option value="<?php echo $rs['id']?>" ><?php echo $rs['name'];?></option>
+								<?php }?>
+							</select><td/>
+						</tr>
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("CLASSNAME")?></td>
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="room_name" id="room_name" type="text" required="required" /></td>
 						</tr>
-						
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("FLOOR")?></td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="floor" id="floor" type="text" /></td>
+						</tr>
+						<tr>
+							<td style="width:100px"><?php echo $tr->translate("MAX_STUDENT")?></td>
+							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="max_std" id="max_std" type="text" /></td>
+						</tr>
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("STATUS")?></td>
 							<td>
@@ -990,8 +1024,8 @@ function addTeacher(){
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("CANCEL")?>" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save_room" name="save_room" id="save_room" label="<?php echo $tr->translate("SAVECLOSE")?>" dojoType="dijit.form.Button" 
+								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("CANCEL");?>" dojoType="dijit.form.Button" onclick="hideDialog();"/>
+								<input type="button" value="save" id="save_room" label="<?php echo $tr->translate("SAVECLOSE");?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addRoom();"/>
 							</td>
 						</tr>
@@ -1000,7 +1034,6 @@ function addTeacher(){
 				</td>
 			</tr>
 		</table>
-
 		</form>
 	</div>
 </div>

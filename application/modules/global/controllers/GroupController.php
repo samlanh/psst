@@ -21,8 +21,6 @@ class Global_GroupController extends Zend_Controller_Action {
 						'time' => '',
 						'session' =>'',
 						'status_search'=>1,
-// 						'start_date'=>date("Y-m-d"),
-// 						'end_date' => date("Y-m-d")
 						);
 			}
 			$db = new Global_Model_DbTable_DbGroup();
@@ -125,8 +123,9 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$id=$this->getRequest()->getParam("id");
 		
-		$this->view->rs = $group_info = $db->getGroupById($id);
-		
+		//$this->view->rs = $group_info = $db->getGroupById($id);
+		$row = $group_info = $db->getGroupById($id);
+		$this->view->rs = $row;
 		if($group_info['is_pass']==1){
 			//Application_Form_FrmMessage::Sucessfull("ក្រុមសិក្សាត្រូវបានបញ្ចប់ មិនអាចកែបានទេ !!! ", "/global/group/index");
 		}
@@ -165,8 +164,12 @@ class Global_GroupController extends Zend_Controller_Action {
 		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
-		
 		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
+		
+		$tsub= new Global_Form_FrmAddClass();
+		$frm_group=$tsub->FrmAddGroup($row);
+		Application_Model_Decorator::removeAllDecorator($frm_group);
+		$this->view->frm = $frm_group;
 	}
 	function copyAction(){
 		$db= new Global_Model_DbTable_DbGroup();
@@ -188,9 +191,9 @@ class Global_GroupController extends Zend_Controller_Action {
 			}
 		}
 		$id=$this->getRequest()->getParam("id");
-		$this->view->rs = $db->getGroupById($id);
+		$row = $db->getGroupById($id);
 		$this->view->row = $db->getGroupSubjectById($id);
-		
+		$this->view->rs = $row;
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();
 		array_unshift($room, Array('id'=> -1 ,'name' =>$this->tr->translate("ADD_NEW")));
@@ -226,8 +229,12 @@ class Global_GroupController extends Zend_Controller_Action {
 		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
-		
 		$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption();
+		
+		$tsub= new Global_Form_FrmAddClass();
+		$frm_group=$tsub->FrmAddGroup($row);
+		Application_Model_Decorator::removeAllDecorator($frm_group);
+		$this->view->frm = $frm_group;
 	}
 	function addRoomAction(){
 		if($this->getRequest()->isPost()){

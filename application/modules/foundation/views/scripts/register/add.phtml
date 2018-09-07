@@ -10,9 +10,10 @@
 <style>
 .image-box {
     text-align: center;
+     height: 100px;
 }
 .image-box img {
-    width: 120px;
+    width: 150px;
     height: 130px;
 }
 .button_browse {
@@ -118,6 +119,20 @@ input.btn_borwse_image {
 				                   </div>
 				                </div>
 				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("sex");?>
+				                   </div>
+				                </div>
+				                 <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_TYPE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("stu_denttype");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>  :
 				                   </label>
 				                   <div class="col-md-4 col-sm-4 col-xs-12">
@@ -132,13 +147,6 @@ input.btn_borwse_image {
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("studen_national");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("sex");?>
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -217,8 +225,10 @@ input.btn_borwse_image {
 				                   </label>
 				                </div>
 				                <div class="form-group">
-				                   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-				                    	<div class="account-image" style="padding-right: 821px;">
+					                <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name" style="line-height: 7.75;"><?php echo $tr->translate("IMAGE");?>
+				                   </label>
+				                  <div class="col-md-7 col-sm-7 col-xs-12">
+				                    	<div class="account-image">
 											<div class="image-box">
 												<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
 											</div>
@@ -229,7 +239,7 @@ input.btn_borwse_image {
 													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
 										</div>
-										<button type="button" onClick="setup()" class="btn btn-success btn-sm">បើក Camera</button>
+										<button type="button" style="padding-left: 20px;" onClick="setup()" class="btn btn-success btn-sm">បើក Camera</button>
 				                   </div>
 				                </div>
 				            </div>
@@ -781,8 +791,9 @@ function getRefreshStudent(){
 		load: function(data) {
 			nation_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('nation').set('store',nation_store);  
+		    
 		    nation_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('studen_national').set('store',nation_store);  
+		    dijit.byId('studen_national').set('store',nation_store); 
 		    
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
@@ -1033,7 +1044,7 @@ function addJob(){
 				<tr>
 					<td>
 						<fieldset style="background-color: buttonface;">
-						<legend align="center" ><?php echo $tr->translate('DOCUMENT_TYPE');?></legend>
+						<legend align="center" ><?php echo $tr->translate('ADD_NATION');?></legend>
 							<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
 								<tr>
 								<td><?php echo $tr->translate('KH_NAME');?></td>

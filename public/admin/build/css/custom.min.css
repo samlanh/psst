@@ -378,6 +378,49 @@ ul.guide-info .info-squar.sold {
     color: #089dff;
     cursor: pointer;
 }
+
+.nav_menu.page-notification {
+    background: #02014a;
+    padding: 0 20px;
+    box-shadow: none;
+}
+.nav_menu.page-notification .nav .open>a, .nav_menu.page-notification .nav .open>a:focus, .nav .open>a:hover{
+	background-color: #0077c5;
+    border-color: #337ab7;
+}
+
+.nav_menu.page-notification ul li a {
+    padding: 0 10px;
+    font-size: 18px;
+}
+.nav_menu.page-notification ul.navbar-nav .open .dropdown-menu {
+    left: 0;
+}
+.nav_menu.page-notification .profile-list img {
+    width: 50px;
+}
+.nav_menu.page-notification li.items-list.event {
+    padding: 5px 0;
+    border-bottom: solid 1px #eee;
+    margin-bottom: 5px;
+}
+.nav_menu.page-notification li.items-list.event a {
+    padding: 0 2px;
+    font-size: 12px;
+}
+.nav_menu.page-notification .media-body small,
+.nav_menu.page-notification .media-body span.title {
+    white-space: nowrap;
+    text-overflow: clip;
+    overflow: hidden;
+    width: 90%;
+    display: block;
+    color: #02014a;
+    font-weight: 600;
+}
+.nav_menu.page-notification .media-body p {
+    color: #02014a;
+}
 /*==============================
 	End Login Page
 ==============================*/

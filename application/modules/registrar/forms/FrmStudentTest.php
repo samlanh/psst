@@ -14,8 +14,7 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     	
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
     	$_dbuser = new Application_Model_DbTable_DbUsers();
-    	$userid = $_dbgb->getUserId();
-    	$userinfo = $_dbuser->getUserInfo($userid);
+    	$userinfo = $_dbgb->getUserInfo();
     	
     	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
     	$optionBranch = $_dbgb->getAllBranch();
@@ -25,6 +24,7 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_branch_id->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'onChange'=>'getSerailCodeByBranch();',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	
@@ -60,6 +60,27 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_sex->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_arr_opt_nation = array(""=>$this->tr->translate("PLEASE_SELECT"),"-1"=>$this->tr->translate("ADD_NEW"));
+    	$optionNation = $_dbgb->getViewByType(21);//Nation
+    	if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
+    	$_nationality = new Zend_Dojo_Form_Element_FilteringSelect("nationality");
+    	$_nationality->setMultiOptions($_arr_opt_nation);
+    	$_nationality->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'popupNation(1);',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	 
+    	$_nation = new Zend_Dojo_Form_Element_FilteringSelect("nation");
+    	$_nation->setMultiOptions($_arr_opt_nation);
+    	$_nation->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'popupNation(2);',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	
@@ -326,6 +347,9 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     		$_first_name->setValue($data["first_name"]);
     		$_last_name->setValue($data["en_name"]);
     		$_sex->setValue($data["sex"]);
+    		
+    		$_nationality->setValue($data["nationality"]);
+    		$_nation->setValue($data["nation"]);
 //     		$_from_school->setValue($data["old_school"]);
 //     		$reason->setValue($data["reason"]);
 //     		$_reference_name->setValue($data["parent_name"]);
@@ -371,6 +395,8 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
 				$_first_name,
 				$_last_name,
 				$_sex,
+    			$_nationality,
+    			$_nation,
 				$dob,
 				$_pob,
 				$_phone,
@@ -410,8 +436,7 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     	 
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
     	$_dbuser = new Application_Model_DbTable_DbUsers();
-    	$userid = $_dbgb->getUserId();
-    	$userinfo = $_dbuser->getUserInfo($userid);
+    	$userinfo = $_dbgb->getUserInfo();
     	 
     	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
     	$optionBranch = $_dbgb->getAllBranch();
@@ -421,6 +446,7 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_branch_id->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'onChange'=>'getSerailCodeByBranch();',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	 
@@ -458,7 +484,30 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     			'required'=>'true',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
-    	 
+
+    	
+    	$_arr_opt_nation = array(""=>$this->tr->translate("PLEASE_SELECT"),"-1"=>$this->tr->translate("ADD_NEW"));
+    	$optionNation = $_dbgb->getViewByType(21);//Nation
+    	if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
+    	$_nationality = new Zend_Dojo_Form_Element_FilteringSelect("nationality");
+    	$_nationality->setMultiOptions($_arr_opt_nation);
+    	$_nationality->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'popupNation(1);',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_nation = new Zend_Dojo_Form_Element_FilteringSelect("nation");
+    	$_nation->setMultiOptions($_arr_opt_nation);
+    	$_nation->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'popupNation(2);',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	
     	$dob= new Zend_Dojo_Form_Element_DateTextBox('dob');
     	$dob->setAttribs(array(
     			'dojoType'=>"dijit.form.DateTextBox",
@@ -716,6 +765,23 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     	}
     	$end_date->setValue($_date);
     	 
+    	if ($userinfo['level']!=1){
+    		$_branch_id->setAttribs(array(
+    			'readonly'=>"readonly"));
+    		$kh_name->setAttribs(array(
+    				'readonly'=>"readonly"));
+    		$_first_name->setAttribs(array(
+    				'readonly'=>"readonly"));
+    		$_last_name->setAttribs(array(
+    				'readonly'=>"readonly"));
+    		$_sex->setAttribs(array(
+    				'readonly'=>"readonly"));
+    		$_parent_name->setAttribs(array(
+    				'readonly'=>"readonly"));
+    		$_parent_tel->setAttribs(array(
+    				'readonly'=>"readonly"));
+    	}
+    	
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
     		$kh_name->setValue($data["kh_name"]);
@@ -734,7 +800,7 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     		$_position->setValue($data["position"]);
     		$_parent_name->setValue($data["parent_name"]);
     		$_parent_tel->setValue($data["parent_tel"]);
-    		$_from_school->setValue($data["from_school"]);
+    		$_from_school->setValue($data["old_school"]);
     		$_old_grade->setValue($data["old_grade"]);
     		$address->setValue($data["address"]);
     		$_stu_code->setValue($data["stu_code"]);
@@ -745,6 +811,8 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     		if (!empty($data["test_date"])){
     			$test_date->setValue(date("Y-m-d",strtotime($data["test_date"])));
     		}
+    		$_nationality->setValue($data["nationality"]);
+    		$_nation->setValue($data["nation"]);
     		$note->setValue($data["note"]);
     		$_emergency_name->setValue($data["emergency_name"]);
     		$_relationship_to_student->setValue($data["relationship_to_student"]);
@@ -762,6 +830,8 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     			$_first_name,
     			$_last_name,
     			$_sex,
+    			$_nationality,
+    			$_nation,
     			$dob,
     			$_pob,
     			$_phone,

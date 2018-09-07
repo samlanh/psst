@@ -13,28 +13,37 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function addStudentTest($data){
 		try{
 			
-			$updated_result = 0;
-			if(!empty($data['degree_result']) && !empty($data['grade_result']) ){
-				$updated_result = 1;
+// 			$updated_result = 0;
+// 			if(!empty($data['degree_result']) && !empty($data['grade_result']) ){
+// 				$updated_result = 1;
+// 			}
+			
+		$part= PUBLIC_PATH.'/images/photo/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
+			$photo = "";
+			$name = $_FILES['photo']['name'];
+			if (!empty($name)){
+				$ss = 	explode(".", $name);
+				$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+				$tmp = $_FILES['photo']['tmp_name'];
+				if(move_uploaded_file($tmp, $part.$image_name)){
+					$photo = $image_name;
+				}
+				else
+					$string = "Image Upload failed";
 			}
 			
-			$adapter = new Zend_File_Transfer_Adapter_Http();
-			$part = PUBLIC_PATH.'/images';
-			$adapter->setDestination($part);
-			$adapter->receive();
-			$photo = $adapter->getFileInfo();
-			if(!empty($photo['photo']['name'])){
-				$pho_name = $photo['photo']['name'];
-			}else{
-				$pho_name = '';
-			}
 			$array = array(
-						'branch_id'	=>$this->getBranchId(),
+						'branch_id'	=>$data['branch_id'],
 						'stu_code'	=>$data['stu_code'],
 						'kh_name'	=>$data['kh_name'],
+						'first_name'	=>$data['first_name'],
 						'en_name'	=>$data['en_name'],
 						'sex'		=>$data['sex'],
 						'nationality'=>$data['nationality'],
+						'nation'=>$data['nation'],
 						'dob'		=>$data['dob'],
 						'pob'		=>$data['pob'],
 						'phone'		=>$data['phone'],
@@ -45,7 +54,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'position'			=>$data['position'],
 						'parent_name'		=>$data['parent_name'],
 						'parent_tel'		=>$data['parent_tel'],
-						'photo'				=>$pho_name,
+						'photo'				=>$photo,
 
 						'old_school'=>$data['old_school'],
 						'old_grade'	=>$data['old_grade'],
@@ -58,21 +67,20 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'emergency_address'		=>$data['emergency_address'],
 						//'educational_background'=>$data['edu_background'],
 					
-						'degree_result'	=>$data['degree_result'],
-						'grade_result'	=>$data['grade_result'],
-						'session_result'=>$data['session'],
-						'time_result'	=>$data['time'],
-					    //'date_result'   =>$data['date_result'],
-					    'term_test'		=>$data['term_test'],
+// 						'degree_result'	=>$data['degree_result'],
+// 						'grade_result'	=>$data['grade_result'],
+// 						'session_result'=>$data['session'],
+// 						'time_result'	=>$data['time'],
+// 					    //'date_result'   =>$data['date_result'],
+// 					    'term_test'		=>$data['term_test'],
 					
-						'note'		=>$data['note'],
+// 						'note'		=>$data['note'],
 						'serial'	=>$data['serial'],
 						'user_id'	=>$this->getUserId(),
-						'test_date'	=>$data['test_date'],
-					
-						'updated_result'=>$updated_result,
-					
-						'create_date'=>date('Y-m-d'),
+						'is_makestudenttest'	=>1,
+						'type'	=>1,
+						'create_datetest' => date("Y-m-d H:i:s"),
+						'modify_datetest' => date("Y-m-d H:i:s")
 					);
 					$stutest_id=$this->insert($array);
 					if(!empty($data['identity'])){
@@ -95,6 +103,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					}
 					
 		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();exit();
 		}
 		
@@ -208,8 +217,8 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$session_user=new Zend_Session_Namespace('authstu');
 		$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		$print=$tr->translate("PRINT_PROFILE");
-		$from_date =(empty($search['start_date']))? '1': " create_date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " create_date <= '".$search['end_date']." 23:59:59'";
+		$from_date =(empty($search['start_date']))? '1': " create_datetest >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " create_datetest <= '".$search['end_date']." 23:59:59'";
 		
 		$where = " AND ".$from_date." AND ".$to_date;
 		$sql="  SELECT 
@@ -273,4 +282,92 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
+	
+	function createStudentTestFromCrm($data){
+		$db=$this->getAdapter();
+		try{
+			
+			$part= PUBLIC_PATH.'/images/photo/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
+			$photo = "";
+			$name = $_FILES['photo']['name'];
+			if (!empty($name)){
+				$ss = 	explode(".", $name);
+				$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+				$tmp = $_FILES['photo']['tmp_name'];
+				if(move_uploaded_file($tmp, $part.$image_name)){
+					$photo = $image_name;
+				}
+				else
+					$string = "Image Upload failed";
+			}
+			
+			$array = array(
+					'branch_id'	=>$data['branch_id'],
+					'stu_code'	=>$data['stu_code'],
+					'kh_name'	=>$data['kh_name'],
+					'first_name'	=>$data['first_name'],
+					'en_name'	=>$data['en_name'],
+					'sex'		=>$data['sex'],
+					'nationality'=>$data['nationality'],
+					'nation'=>$data['nation'],
+					'dob'		=>$data['dob'],
+					'pob'		=>$data['pob'],
+					'phone'		=>$data['phone'],
+					'email'		=>$data['email'],
+					'address'	=>$data['address'],
+					'student_status'	=>$data['student_status'],
+					'if_employed_where'	=>$data['if_employed_where'],
+					'position'			=>$data['position'],
+					'parent_name'		=>$data['parent_name'],
+					'parent_tel'		=>$data['parent_tel'],
+					'photo'				=>$photo,
+					'old_school'=>$data['old_school'],
+					'old_grade'	=>$data['old_grade'],
+					
+					'emergency_name'		=>$data['emergency_name'],
+					'relationship_to_student'=>$data['relationship_to_student'],
+					'emergency_tel'			=>$data['emergency_tel'],
+					'emergency_address'		=>$data['emergency_address'],
+						
+// 					'note'		=>$data['note'],
+					'serial'	=>$data['serial'],
+					'user_id'	=>$this->getUserId(),
+					'is_makestudenttest'	=>1,
+					'create_datetest' => date("Y-m-d H:i:s"),
+					'modify_datetest' => date("Y-m-d H:i:s")
+						
+			);
+			
+			$id = $data['id'];
+			$where="id = $id";
+			$this->update($array, $where);
+			
+			if(!empty($data['identity'])){
+				$ids = explode(',', $data['identity']);
+				foreach ($ids as $i){
+					$arr = array(
+							'stutest_id'	=>$id,
+							'school_name'	=>$data['school_name'.$i],
+							'level'			=>$data['level'.$i],
+							'year'			=>$data['year'.$i],
+							'major'			=>$data['major'.$i],
+							'note'			=>$data['remark_'.$i],
+							'creat_date'	=>date("Y-m-d"),
+							'status'		=>1,
+							'user_id'		=>$this->getUserId(),
+					);
+					$this->_name='rms_student_testdetail';
+					$this->insert($arr);
+				}
+			}
+			
+			return $id;
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
+		}
+	}
 }

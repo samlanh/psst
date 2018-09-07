@@ -672,6 +672,21 @@ function getAllgroupStudy($teacher_id=null){
    	}
    	return $options;
    }
+   function getViewByType($type,$is_opt=null){
+   	$db=$this->getAdapter();
+   	$sql="SELECT key_code as id ,name_kh AS name FROM rms_view WHERE `type`=$type AND `status`=1 ORDER BY name_kh ASC ";
+   	$rows = $db->fetchAll($sql);
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+   	$options= array(-1=>$tr->translate("CHOOSE"));
+   	if($is_opt!=null){
+   		if(!empty($rows))foreach($rows AS $row){
+   			$options[$row['id']]=$row['name'];
+   		}
+   	}else{
+   		return $rows;
+   	}
+   	return $options;
+   }
    function getExchangeRate(){
 	   	$db=$this->getAdapter();
 	   	$sql="select reil from rms_exchange_rate";

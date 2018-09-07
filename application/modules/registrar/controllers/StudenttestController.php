@@ -40,6 +40,11 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
+    	
+    	$dbcrm = new Home_Model_DbTable_DbCRM();
+    	$crm = $dbcrm->getAllCompleteCRM();
+    	$this->view->crm = $crm;
+    	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
@@ -53,26 +58,27 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 			try {
 				$db->addStudentTest($data);
 				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
 				}		
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
 			} catch (Exception $e) {
-				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 			}
 		}
-		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->degree = $db->getAllDegreeName();
-		$this->view->session = $db->getAllSession();
-		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->serailno= $db->getTestStudentId();
-		
-		$rs = $db->getallTermtest();
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		array_unshift($rs,array('id' => -1,'name'=>$tr->translate("ADD_NEW")));
-		$this->view->startdate_enddate = $rs;
+		$optionNation = $_dbgb->getViewByType(21);//Nation
+		array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+		array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
+		$this->view->nation = $optionNation;
+		
+		$frm = new Registrar_Form_FrmStudentTest();
+    	$frm->FrmAddStudentTest(null);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_crm = $frm;
     }
     public function editAction()
     {
@@ -115,33 +121,77 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentTest();
     		try {
-    			$db->addStudentTest($data);
+    			
+    			$db->createStudentTestFromCrm($data);
     			if(!empty($data['saveclose'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
     			}
-    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
+    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			
     		}
     	}
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->degree = $db->getAllDegreeName();
-    	$this->view->session = $db->getAllSession();
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->serailno= $db->getTestStudentId();
-    	
-    	$rs = $db->getallTermtest();
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	array_unshift($rs,array('id' => -1,'name'=>$tr->translate("ADD_NEW")));
-    	$this->view->startdate_enddate = $rs;
+    	$optionNation = $_dbgb->getViewByType(21);//Nation
+    	array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+    	array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
+    	$this->view->nation = $optionNation;
     	
-    	
+    	$id = $this->getRequest()->getParam("id");
+    	$dbcrm = new Home_Model_DbTable_DbCRM();
+    	$row = $dbcrm->getCRMById($id);
+    	$this->view->row = $row;
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("This Record Created to Student Test Ready",self::REDIRECT_URL);
+    	}
     	$frm = new Registrar_Form_FrmStudentTest();
-    	$frm->FrmAddCRMToTest(null);
+    	$frm->FrmAddCRMToTest($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_crm = $frm;
     }
+    function getserialAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$_dbgb = new Application_Model_DbTable_DbGlobal();
+    		$serial = $_dbgb->getTestStudentId($data['branch_id']);
+    		print_r(Zend_Json::encode($serial));
+    		exit();
+    	}
+    }
+    
+    
+//     public function addAction()
+//     {
+//     	if($this->getRequest()->isPost()){
+//     		$data=$this->getRequest()->getPost();
+//     		$db = new Registrar_Model_DbTable_DbStudentTest();
+//     		try {
+//     			$db->addStudentTest($data);
+//     			if(!empty($data['saveclose'])){
+//     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest");
+//     			}else{
+//     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
+//     			}
+//     			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/studenttest/add");
+//     		} catch (Exception $e) {
+//     			Application_Form_FrmMessage::message("INSERT_FAIL");
+//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+//     		}
+//     	}
+//     	$db = new Application_Model_DbTable_DbGlobal();
+//     	$this->view->degree = $db->getAllDegreeName();
+//     	$this->view->session = $db->getAllSession();
+//     	$db = new Application_Model_DbTable_DbGlobal();
+//     	$this->view->serailno= $db->getTestStudentId();
+    
+//     	$rs = $db->getallTermtest();
+//     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+//     	array_unshift($rs,array('id' => -1,'name'=>$tr->translate("ADD_NEW")));
+//     	$this->view->startdate_enddate = $rs;
+//     }
 }

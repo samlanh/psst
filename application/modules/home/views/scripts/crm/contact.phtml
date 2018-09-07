@@ -87,8 +87,8 @@ table.history-record tbody tr td {
 		         <div class="col-md-6 col-sm-6 col-xs-12">
 		         	<div class="form-group">
 		         		<ul style="list-style: none;">
-		         			<li><span class="bold" style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span> <span > : <?php echo $this->row['kh_name'];?></span></li>
-		         			<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("FROM_SCHOOL");?></span> <span > : <?php echo $this->row['first_name']." ".$this->row['en_name'];?></span></li>
+		         			<li><span class="bold" style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span> <span > : <?php echo $this->row['kh_name'];?> (<?php echo $this->row['first_name']." ".$this->row['en_name'];?>)</span></li>
+		         			<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("FROM_SCHOOL");?></span> <span > : <?php echo $this->row['old_school'];?> </span></li>
 		         			<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("PARENT_NAME");?></span> <span > : <?php echo $this->row['parent_name'];?></span></li>
 		         			<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("TEL");?></span> <span > : <?php echo $this->row['parent_tel'];?></span></li>
 		         			<li><span style=" display: inline-block; min-width: 100px;"><?php echo $tr->translate("Amount Contacted");?></span> <span class="bold" > : <?php echo count($this->history);?></span></li>

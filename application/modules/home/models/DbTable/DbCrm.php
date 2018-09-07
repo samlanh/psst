@@ -109,7 +109,7 @@
 	}
 	public function getCRMById($id){
 		$db = $this->getAdapter();
-		$sql="SELECT st.*	FROM `rms_student_test` AS st WHERE st.id = $id";
+		$sql="SELECT st.*	FROM `rms_student_test` AS st WHERE st.id = $id AND st.is_makestudenttest = 0 ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('st.branch_id');
 		return $db->fetchRow($sql);
@@ -119,7 +119,7 @@
 		$db = $this->getAdapter();
 		$sql="SELECT c.*,
 			(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE c.user_contact=id LIMIT 1 ) AS user_contact_name
-		FROM `rms_crm_history_contact` AS c WHERE crm_id = $crm_id";
+		FROM `rms_crm_history_contact` AS c WHERE crm_id = $crm_id ORDER BY c.id DESC";
 		return $db->fetchAll($sql);
 	}
 	public function addCrmContactHistory($_data){
@@ -154,5 +154,11 @@
 			Application_Form_FrmMessage::message("Application Error!");
 			echo $e->getMessage();
 		}
+	}
+	
+	function getAllCompleteCRM(){
+		$db = $this->getAdapter();
+		$sql="SELECT st.*,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = st.branch_id LIMIT 1) AS branch_name FROM `rms_student_test` AS st WHERE st.is_makestudenttest = 0 AND st.crm_status = 2";
+		return $db->fetchAll($sql);
 	}
 }

@@ -4,6 +4,7 @@
 	$frm_items= $this->frm_crm;
 	$urlContact = $this->baseUrl()."/home/crm/contact/id/";
 	$urlTest = $this->baseUrl()."/registrar/studenttest/makecrmtest/id/";
+	$urlTestPayment = $this->baseUrl()."/registrar/studenttest/testpayment/id/";
 ?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -54,8 +55,12 @@
 				var m = "clicked: " + key;
 				if(key=="contact"){
 					url='<?php echo $urlContact;?>';
-				}else if(key=="test"){
-					url='<?php echo $urlTest;?>';
+				/*
+					}else if(key=="test"){
+					url='<?php //echo $urlTest;?>';
+				}else if(key=="testpayment"){
+					url='<?php //echo $urlTestPayment;?>';
+					*/
 				}
 				
 				gotoAction();
@@ -63,7 +68,10 @@
 			},
 			items: {
 				"contact": {name: "<?php echo $tr->translate("CREATE_CONTACT_HISTORY");?>", icon: "fa-phone"},
-				"test": {name: "<?php echo $tr->translate("CREATE_TO_STUDENT_TEST");?>", icon: "fa-magic"},
+				/*
+				"test": {name: "<?php //echo $tr->translate("CREATE_TO_STUDENT_TEST");?>", icon: "fa-magic"},
+				"testpayment": {name: "<?php //echo $tr->translate("CREATE_TO_STUDENT_TEST_PAYMENT");?>", icon: "fa-money"},
+				*/
 			}
 		});
 	});

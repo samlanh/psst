@@ -10,6 +10,74 @@
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
+       		<div class="col-sm-12  m-0">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_TEST');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    		<div class=" nav_menu page-notification">
+		   		<nav>
+              		<ul class="nav navbar-nav navbar-left">
+              			<li role="presentation" class="dropdown">
+			                  <a title="<?php echo $tr->translate("CREATE_TO_STUDENT_TEST");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+			                    <i class="fa fa-universal-access"></i>
+			                    <span id="countNews" class="badge bg-green"><?php $count = count($this->crm); if ($count>0){ echo $count;}?></span>
+			                  </a>
+			                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+				                 <li class=" event title">
+				                  	<h4><?php echo $tr->translate("CREATE_TO_STUDENT_TEST");?></h4>
+				                  </li>
+				                  <?php if (!empty($this->crm)) foreach ($this->crm as $crm){?>
+		                          <li class="items-list event">
+		                         	 <a href="<?php echo $this->baseUrl()."/registrar/studenttest/makecrmtest/id/".$crm['id'];?>">
+			                            <div class="pull-left profile-list ">
+			                              <img src="<?php echo $this->baseUrl()."/images/no-profile.png";?>" />
+			                            </div>
+			                            <div class="media-body">
+			                              <p><strong><i class="fa fa-university"></i> <?php echo $crm['branch_name'];?> </strong>  </p>
+			                              <span class="title" ><?php echo $crm['kh_name']." (".$crm['first_name']." ".$crm['en_name'].")";?></span>
+			                              <p><?php echo $tr->translate("GENDER");?> <?php if ($crm['sex']==1){ echo $tr->translate("MALE");}else { echo  $tr->translate("FEMALE");}?> </p>
+			                              <p><strong><i class="fa fa-phone"></i> <?php echo $crm['parent_tel'];?> </strong>  </p>
+			                              <p> <small><?php echo empty($crm['old_school'])?"":"(".$crm['old_school'].")";?></small>
+			                              </p>
+			                            </div>
+		                            </a>
+		                          </li>
+		                          <?php }?>
+			                  </ul>
+			              </li>
+			              <li role="presentation" class="dropdown">
+			                  <a title="<?php echo $tr->translate("UPDATE_SCORE_TEST");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+			                    <i class="fa fa-bell"></i>
+			                    <span id="countNews" class="badge bg-green">1</span>
+			                  </a>
+			                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+				                 <li class=" event title">
+				                  	<h4><?php echo $tr->translate("UPDATE_SCORE_TEST");?></h4>
+				                  </li>
+		                          <li class="items-list event">
+		                         	 <a href="#">
+			                            <div class="pull-left profile-list ">
+			                              <img src="<?php echo $this->baseUrl()."/images/no-profile.png";?>" />
+			                            </div>
+			                            <div class="media-body">
+			                              <span class="title" >ជា ចាន់វីរៈ  (Chea Chan Vireak)</span>
+			                              <p><?php echo $tr->translate("GENDER");?> ប្រុស </p>
+			                              <p><strong><i class="fa fa-phone"></i> 012 999 999 </strong>  </p>
+			                              <p> <small>(Beltei International School)</small>
+			                              </p>
+			                            </div>
+		                            </a>
+		                          </li>
+			                  </ul>
+			              </li>
+              		</ul>
+              	</nav>
+             </div>
+    	</div>
+		<div class="card-box">
 			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
   				<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
@@ -29,9 +97,9 @@
                    </div>
                 	<div class="col-md-2 col-sm-2 col-xs-12">
                 		<select name="result_status" id="result_status" class="fullside" style="width: 60%;display: inline-block;" dojoType="dijit.form.FilteringSelect" >
-			   				<option value="" <?php if($this->adv_search['result_status']==""){echo "selected='selected'";}?>> Select result status </option>
-			   				<option value="0" <?php if($this->adv_search['result_status']==0){echo "selected='selected'";}?>> Result not updated </option>
-			   				<option value="1" <?php if($this->adv_search['result_status']==1){echo "selected='selected'";}?>> Result updated </option>
+			   				<option value="" <?php if($this->adv_search['result_status']==""){echo "selected='selected'";}?>> <?php echo $tr->translate('Select Result Status');?> </option>
+			   				<option value="0" <?php if($this->adv_search['result_status']==0){echo "selected='selected'";}?>> <?php echo $tr->translate('Result Not Updated');?> </option>
+			   				<option value="1" <?php if($this->adv_search['result_status']==1){echo "selected='selected'";}?>> <?php echo $tr->translate('Result Updated');?> </option>
 			   			</select>
 			   			<button style="width: 30%;display: inline-block;" iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>

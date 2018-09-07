@@ -47,12 +47,6 @@ class Home_CrmController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_crm = $frm;
     }
-
-    public function viewAction()
-    {
-       
-    }
-
     public function addAction()
     {
     	if($this->getRequest()->isPost()){
@@ -98,7 +92,9 @@ class Home_CrmController extends Zend_Controller_Action
     	}
     	 
     	$row = $db->getCRMById($id);
-    	
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("Can Not Edit This Record. This Record Already Created to Student Test",self::REDIRECT_URL);
+    	}
     	$allContact = $db->AllHistoryContact($id);
     	$this->view->history = $allContact;
     	
@@ -117,7 +113,7 @@ class Home_CrmController extends Zend_Controller_Action
 			try{
 				 
 				$row = $db->addCrmContactHistory($_data);
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -125,6 +121,9 @@ class Home_CrmController extends Zend_Controller_Action
 			}
 		}
 		$row = $db->getCRMById($id);
+		if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull(" This Record Can Not Make Contact History. This Record Already Created to Student Test",self::REDIRECT_URL."/index");
+    	}
 		$this->view->row = $row;
 		$allContact = $db->AllHistoryContact($id);
 		$this->view->history = $allContact;

@@ -1837,10 +1837,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
     function getAllGrade($grade_id){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and major_enname!='' and dept_id=".$grade_id;
-    	$order=' ORDER BY id DESC';
-    	return $db->fetchAll($sql.$order);
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	return $db->getAllGradeStudyByDegree($grade_id);
+//     	$db = $this->getAdapter();
+//     	$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and major_enname!='' and dept_id=".$grade_id;
+//     	$order=' ORDER BY id DESC';
+//     	return $db->fetchAll($sql.$order);
     }
     function getPaymentTerm($generat,$payment_term,$grade){
     	$db = $this->getAdapter();
@@ -2236,18 +2238,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$order=' ORDER BY id DESC';
     	return $db->fetchAll($sql.$order);
     }
-    
-    function getAllSession(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT key_code as id,name_en as name FROM rms_view WHERE `type`=4 AND `status`=1";
-    	return $db->fetchAll($sql);
-    }
-    
-    function getAllpaymentTerm(){
-    	$db = $this->getAdapter();
-    	$sql="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
-    	return $db->fetchAll($sql);
-    }
+//     function getAllpaymentTerm(){
+//     	$db = $this->getAdapter();
+//     	$sql="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
+//     	return $db->fetchAll($sql);
+//     }
     
 //     public function getAllService(){
 //     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -2294,12 +2289,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     function getAllProductName(){
     	$db = $this->getAdapter();
     	$sql="SELECT id,pro_name FROM `rms_product` WHERE STATUS=1 AND pro_name!='' ORDER BY pro_name";
-    	return $db->fetchAll($sql);
-    }
-    
-    public function getAllRoom(){
-    	$db = $this->getAdapter();
-    	$sql = "select room_id as id , room_name as name from rms_room where is_active=1 AND room_name!='' ";
     	return $db->fetchAll($sql);
     }
     
@@ -2528,12 +2517,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			return $db->fetchAll($sql);
 	}
 	
-	function getAllStartDateEndDate(){
-		$db = $this->getAdapter();
-		$sql="select id,start_date,end_date,note,CONCAT(note,'(',start_date,' to ',end_date,')') as name 
-				FROM rms_startdate_enddate WHERE status=1 ORDER BY start_date ASC";
-		return $db->fetchAll($sql);
-	}
 	function getStartDateEndDate($id){
 		$db = $this->getAdapter();
 		$sql="select start_date,end_date,note from rms_startdate_enddate where id = $id ";

@@ -79,6 +79,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $this->view->all_dept = $_db->getAllDegreeName();
        $this->view->exchange_rate = $_db->getExchangeRate();
        $this->view->deduct = $_db->getDeduct();
+       $this->view->degreeculture = $_db->getAllDegreeStu();
+       $this->view->all_session = $_db->getSession();
+       $this->view->all_room = $_db->getAllRoom();
+       $this->view->all_paymentterm = $_db->getAllTerm();
+        $this->view->rs_type = $_db->getAllItems();
        
        $db = new Registrar_Model_DbTable_DbRegister();
 //        $this->view->all_student_code = $db->getAllGerneralOldStudent();
@@ -86,13 +91,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 //        $this->view->all_student_test = $db->getAllStudentTested();
        
        $this->view->all_year = $db->getAllYears();
-       $this->view->all_session = $db->getAllSession();
-       $this->view->all_paymentterm = $db->getAllpaymentTerm();
        $this->view->all_service = $db->getAllService();
        $this->view->all_product = $db->getAllProductName();
-       $this->view->all_room = $db->getAllRoom();
-       
-       $this->view->startdate_enddate = $db->getAllStartDateEndDate();
        
 	   $test = $this->view->branch_info = $db->getBranchInfo();
 	   $db = new Foundation_Model_DbTable_DbStudent();

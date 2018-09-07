@@ -146,7 +146,6 @@ class Accounting_FeeController extends Zend_Controller_Action {
 						'class_id'=>$payment_tran['class_id'],
 						'session_id'=>$payment_tran['session'],
 						'monthly'=>$payment_tran['tuition_fee'],
-						'school_option'=>$payment_tran['school_option'],
 						'semester'=>'',
 						'year'=>'',
 						'note'=>$payment_tran['remark'],

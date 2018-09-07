@@ -45,48 +45,32 @@
 	    	<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
 	                   </label>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAYMENT_TYPE");?> <span class="required">*</span> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_TYPE");?> <span class="required">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select class="fullside" name="payment_type" id="payment_type" dojoType="dijit.form.FilteringSelect" onchange="netTotal();displayNoneAddRow();SetReadonlyForPayService();popupTestPayment();">
-				    			<option value="1">Tuition Fee and Service</option>
-				    			<option value="2">Tuition Fee</option>
-				    			<option value="3">Service and Product</option>
-								<option value="4">Student Test Payment</option>
+				    			<option value="1">Student Payment</option>
+				    			<option value="2">Customer Payment</option>
 				    		</select>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_TYPE");?> <span class="required">*</span> :
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_TYPE");?> <span class="required">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="changControll();setReadOnlyCustomerType();setReadonlyForOldStudent();" >
+	                   		<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setReadOnlyCustomerType();setReadonlyForOldStudent();" >
 								<option value="3"><?php echo $tr->translate("Old Student");?></option>
 								<option value="1"><?php echo $tr->translate("Tested Student");?></option>
-								<option value="4"><?php echo $tr->translate("Other Customer");?></option>
 								<option value="2"><?php echo $tr->translate("New Student");?></option>
 							</select>
 	                   </div>
 	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_ID");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<div id="student_old">
-								<input id="old_studens" />
-							</div>
-							<div id="id_stu">
-								<input type="text" style="color: red;" name="stu_id" id="stu_id" class="fullside" dojoType="dijit.form.TextBox" />
-							</div>
-	                   </div>
-	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span> :
-	                   </label>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span>:</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<div id="student_old_name">
 								<input id="old_stu_name" />
@@ -94,27 +78,29 @@
 							<div id="stu_tested">
 								<input id="stu_test" />
 							</div>
-							<div id="stu_new">
-								<input type="text" name="new_stu" class="fullside" id="new_stu" readonly="readonly" dojoType="dijit.form.TextBox" /> 
-							</div>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_KH");?> :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME_KH");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="kh_name" id="kh_name" class="fullside" dojoType="dijit.form.TextBox"/>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_EN");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME_EN");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="en_name" id="en_name" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox"/>
+	                   		<div class="col-md-6 col-sm-6 col-xs-6">
+	                   			<input type="text" name="en_name" id="en_name" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox"/>
+	                   		</div>
+	                   		<div class="col-md-6 col-sm-6 col-xs-6">
+	                   			<input type="text" name="last_name" id="last_name" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox"/>
+	                   		</div>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?>  :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEX");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select type="text" name="sex" id="sex" class="fullside" dojoType="dijit.form.FilteringSelect" >
@@ -124,14 +110,14 @@
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?> <span class="required">*</span> :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DOB");?> <span class="required">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input name="dob" id="dob" constraints="{datePattern:'dd/MM/yyyy'}"  dojoType="dijit.form.DateTextBox" value="now" class="fullside" type="text" />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PARENT_PHONE");?> :
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PARENT_PHONE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="parent_phone" id="parent_phone" class="fullside" dojoType="dijit.form.TextBox"/>
@@ -140,11 +126,11 @@
 	           </div>
 	           <div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDY_INFO");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDY_INFO");?> 
 	                   </label>
 	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GROUP");?> <span class="required">*</span> :
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP");?> <span class="required">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select required="false" name="group" id="group" type="text"  onchange="getInfoBygroup();"  class="fullside" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*"  >
@@ -155,8 +141,8 @@
 				    		</select>
 	                   </div>
 	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ACADEMIC_YEAR");?> :
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="study_year" id="study_year" onchange="getTuitionFee();" autoComplete="false" queryExpr="*${0}*"  >
@@ -167,15 +153,25 @@
 							</select>
 	                   </div>
 	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?> <span class="required red">*</span> :
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CULTURE_LEVEL");?> :</label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="degree_culture" id="degree_culture" autoComplete="false" queryExpr="*${0}*"  >
+								<?php if(!empty($this->degreeculture)){foreach ($this->degreeculture as $index => $rs){?>
+								<option value="<?php echo $rs?>"><?php echo $rs;?></option>
+								<?php }}?>
+							</select>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEGREE");?> <span class="required red">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input id="dept" />
 	                   </div>
 	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CLASS");?> <span class="required red">*</span>  :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CLASS");?> <span class="required red">*</span>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input id="grade" /> 
@@ -184,10 +180,10 @@
 	                   </div>
 	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SESSION");?>  :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SESSION");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select type="text" name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setHourDefault();" autoComplete="false" queryExpr="*${0}*" >
+	                   		<select type="text" name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*" >
 								<?php if(!empty($this->all_session)){foreach ($this->all_session as $session){?>
 								<option value="<?php echo $session['id']?>"><?php echo $session['name']?></option>		
 								<?php }}?>						
@@ -195,14 +191,14 @@
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TIME");?> :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TIME");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input dojoType="dijit.form.TextBox"  class="fullside" id="study_hour" name="study_hour"  type="text">
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ROOM_NAME");?> :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ROOM_NAME");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select required="false" type="text" name="room" id="room"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
@@ -214,14 +210,7 @@
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="not" id="not" class="fullside"  dojoType="dijit.form.TextBox"/>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAID_DATE");?>  :
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_DATE");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="<?php echo date("Y-m-d");?>" name="paid_date" id="paid_date" class="fullside"/>
@@ -230,117 +219,84 @@
 	           </div>
 	           <div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OFFICIAL_RECEIPT");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PHOTO");?> 
+	                   </label>
+	                </div>
+					<div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<div class="account-image" style="padding-right: 821px;">
+								<div class="image-box">
+									<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+								</div>
+							</div>
+	                   </div>
+	                </div>
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OFFICIAL_RECEIPT");?> 
 	                   </label>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RECEIPT_NO");?>  :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input readonly type="text" style="color: red;" required="1" dojoType="dijit.form.ValidationTextBox" name="receipt_no" id="receipt_no" class="fullside" />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAYMENT_TERM");?> <span class="required red">*</span> :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BALANCE");?> <span class="required red">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select type="text" name="payment_term" id="payment_term" onchange="getTuitionFee();getDateTerm();" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-								<?php if(!empty($this->all_paymentterm)){foreach ($this->all_paymentterm as $paymentterm){?>
-								<option value="<?php echo $paymentterm['id']?>"><?php echo $paymentterm['name']?></option>
-								<?php }}?>
-							</select>
+							<input type="text"  name="balance" id="balance" class="fullside" dojoType="dijit.form.NumberTextBox"/>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PERIOD");?> <span class="required red">*</span> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ចុចសងប្រាក់");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="start_end" id="start_end" onchange="setStartAndEndDate();" class="fullside" dojoType="dijit.form.FilteringSelect"  >
-								<option value="-1"> select period </option>
-								<?php if(!empty($this->startdate_enddate)){foreach ($this->startdate_enddate as $rs){?>
-								<option value="<?php echo $rs['id']?>"><?php echo $rs['note'].'('.date("d-m-Y",strtotime($rs['start_date'])).' To '.date("d-m-Y",strtotime($rs['end_date'])).')';?></option>
-								<?php }}?>
-							</select>
-							<input type="hidden"  name="term_lable" id="term_lable" class="fullside" dojoType="dijit.form.TextBox"/>
+	                   		<input type="text" name="start_date" id="start_date" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("START_DATE");?>  :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" constraints="{datePattern:'dd/MM/yyyy'}" name="start_date" id="start_date" value="now" onchange="getDateTerm();" class="fullside" dojoType="dijit.form.DateTextBox"/>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VALIDATE");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" constraints="{datePattern:'dd/MM/yyyy'}" name="end_date" id="end_date" class="fullside" dojoType="dijit.form.DateTextBox"/>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TUITION_FEE");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		 <div class="col-md-4 col-sm-4 col-xs-12">
-	                   		 	<input type="text" name="tuitionfee" id="tuitionfee" readOnly="1" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/>
-	                   		 </div>
-	                   		 <div class="col-md-4 col-sm-4 col-xs-12">
-	                   		 	<?php echo $tr->translate("ANNUAL_PRICE");?>
-	                   		 </div>
-	                   		 <div class="col-md-4 col-sm-4 col-xs-12">
-	                   		 	<input type="text" name="tution_peryear" readonly id="tution_peryear" class="fullside" dojoType="dijit.form.NumberTextBox"/>
-	                   		 </div>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SCHOLARSHIP");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<div class="col-md-4 col-sm-4 col-xs-12">
-	                   			<input type="text" name="scholarship_percent" id="scholarship_percent" onkeyup="calCulateScholarship(1);" value="" placeHolder="%" class="fullside" dojoType="dijit.form.NumberTextBox"/>
-	                   		</div>
-	                   		<div class="col-md-4 col-sm-4 col-xs-12">
-	                   			<?php echo $tr->translate("SCHOLARSHIP_AMOUNT");?>
-	                   		</div>
-	                   		<div class="col-md-4 col-sm-4 col-xs-12">
-	                   			<input type="text" name="scholarship_amount" id="scholarship_amount" onkeyup="calCulateScholarship(2);" placeHolder="សាច់ប្រាក់" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/>
-								<input type="hidden" name="total_scholarship" id="total_scholarship" class="fullside" dojoType="dijit.form.TextBox"/>
-	                   		</div>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("LATE_FEE");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="late_fee" id="late_fee" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISCOUND");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<div class="col-md-4 col-sm-4 col-xs-12">
-	                   			<input type="text" name="discount_percent" id="discount_percent" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/>
-	                   		</div>
-	                  		 <div class="col-md-4 col-sm-4 col-xs-12">
-	                  		 <?php echo $tr->translate("DISCOUNT");?>
-	                   		</div>
-	                   		<div class="col-md-4 col-sm-4 col-xs-12">
-	                   			<input type="text" name="discount_fix" id="discount_fix" onkeyup=" getTotale();netTotal();" value="0" class="fullside" dojoType="dijit.form.NumberTextBox"/>
-	                   		</div>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GRAND_TOTAL");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" dojoType="dijit.form.NumberTextBox" readonly="true" value="0" name="total_payment" id="total_payment" class="fullside"/>
+	                   		<input type="text" name="note" id="note" class="fullside"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
 	                   </div>
 	                </div>
 	           </div>
+	           <div class="card-box" >
+		           <div class="form-group" style="background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+			           <div class="col-md-3 col-sm-3 col-xs-12">
+			           		 <div class="form-group">
+			                   <label class="control-label  col-md-3 col-sm-3 col-xs-12" style="font-size: 16px;" ><?php echo $tr->translate("CATEGORY");?></label>
+			                   <div class="col-md-9 col-sm-9 col-xs-12">
+			                   		<select style="height: 40px;" required="false" type="text" name="category" id="category"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" onchange="getgradebyDegree(1,1,2);" >
+											<option value="-1"></option>
+											<?php if(!empty($this->rs_type)){foreach ($this->rs_type as $rs){?>
+											<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+											<?php }}?>
+			                   		</select>
+			                   </div>
+			                </div>
+			           </div>
+			           <div class="col-md-5 col-sm-5 col-xs-12">
+			           		 <div class="form-group">
+			                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" style="font-size: 16px;" >វគ្គសិក្សា/សេវាកម្ម<br />ផលិតផល</label>
+			                   <div class="col-md-7 col-sm-7 col-xs-12">
+			                   		<input id="item" name="item" />
+			                   </div>
+			                </div>
+			           </div>
+			           <div class="col-md-4 col-sm-4 col-xs-12">
+			           </div>
+			           <div class="col-md-4 col-sm-4 col-xs-12">
+			           </div>
+			           <div style="clear: both;"></div>
+		           </div>
+		        </div>
 	       </div>
-	       
 	       <!-- Tab Menu -->
 	    	<div class="card-box">
 	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
@@ -355,7 +311,6 @@
 		        </ul>
 		    </div>
 		    <!--/. Tab Menu -->
-		    <div class="col-md-12">
 		        <!-- Tab panels -->
 		        <div class="tab-content vertical">
 			        <!--Panel 1-->
@@ -363,10 +318,8 @@
 			        	 <div class="card-box">
 			        	 	<div class="col-md-12 col-sm-12 col-xs-12">
 			        	 		<table border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-								 	<tr id="head-title" class="head-td"  align="right" style="background:#ececec;font-size:12px;"></tr>
+								 	<tr id="head-title" class="head-td"  align="right" style="background:#ececec;font-size:12px;color:#000"></tr>
 								</table>
-								<input type="button" label="<?php echo $tr->translate('ADD_SERVICE');?>" dojoType="dijit.form.Button" 
-										iconClass="dijitIconEditProperty" onclick="addRow();" />
 			        	 	</div>
 			        	 </div>
 			       	</div>
@@ -384,11 +337,11 @@
 			       	<!--/.Panel 2-->
 			    </div>
 			    <!--/. Tab panels -->
-			</div>
+			
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	        		<div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("READ_IN_KHMER");?>  :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("READ_IN_KHMER");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<Textarea type="text" name="money_in_khmer" id="money_in_khmer" readonly="readonly" dojoType="dijit.form.TextBox" class="fullside" ></Textarea>
@@ -399,21 +352,21 @@
 	        	</div>
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	        		<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TOTAL_PAYMENT");?>  :
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_PAYMENT");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" readonly="readonly" name="grand_total" id="grand_total" value="0" dojoType="dijit.form.NumberTextBox" />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FINE");?>  :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FINE");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text"  onkeyup="onKeyUpDeduct();"  name="fine" id="fine"  value="0" dojoType="dijit.form.NumberTextBox" />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CREDIT_MEMO");?>  :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREDIT_MEMO");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text"  onkeyup="" readOnly="1"  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" />
@@ -421,28 +374,28 @@
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEDUCT");?>  :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEDUCT");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text"  onkeyup="onKeyUpDeduct();"  name="deduct" id="deduct"  value="0" dojoType="dijit.form.NumberTextBox" />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NET_AMOUNT");?>  :
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NET_AMOUNT");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="net_amount" readonly="readonly" id="net_amount" value="0" dojoType="dijit.form.NumberTextBox" />
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAID_AMOUNT");?>  :
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_AMOUNT");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="paid_amount" id="paid_amount" value="0" onkeyup="onPaidAmount();" dojoType="dijit.form.NumberTextBox" />
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BALANCE");?>  :
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BALANCE");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input type="text" name="balance_due" readonly="readonly" id="balance_due" value="0" style="color:red;" dojoType="dijit.form.NumberTextBox" />
@@ -478,13 +431,12 @@
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require('dijit.form.TextBox');
+	dojo.require("dijit.form.Textarea");
 	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->all_dept));?> );
+	item_store = getDataStorefromJSON('id','name');
 	dojo.ready(function(){
-		changControll();
 		getStudentNo(1,'');
 		getReceiptNo('','');
-		addRow();
-		getValidate(1);
 
 		new dijit.form.FilteringSelect({
 			store: dept_store,
@@ -498,9 +450,8 @@
 			onChange: function() {  
 				dept_id = dijit.byId('dept').get('value');
 				dijit.byId('grade').attr('value','');
-				getallModel(dept_id,a=''); 
+				getgradebyDegree(dept_id,a='',1); 
 				getStudentNo(dept_id,'');
-				setHourDefault();
 			}
 		}, "dept");
 		
@@ -545,49 +496,70 @@
 		}, "old_stu_name");
 
 		new dijit.form.FilteringSelect({
+			store: item_store,
+			autoComplete: false,
+			queryExpr: "*${0}*",                     
+			id: "item",
+			name: "item",   
+			required:false,        
+			class: 'fullside', 
+			onChange: function() {  
+				addRow();
+			}
+		}, "item");
+
+		/*new dijit.form.FilteringSelect({
 			autoComplete: false,
 			queryExpr: "*${0}*",                     
 			id: "old_studens",
 			name: "old_studens",  
 			required:false,         
 			class: 'fullside', 
-			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+			placeHolder:"<?php //echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function() {  
 				getStudentBalance();
 				getOldStudentInfo();
 				getCreditMemo();
 				getOldVildateToStartDateRegister();
 			}
-		}, "old_studens");
+		}, "old_studens");*/
 
 		dijit.byId('dept').attr('value','<?php echo $this->degree_row['degree'];?>');
-		getDateTerm();
 		getallstudentname();
-		getallstudentcode();
+		//getallstudentcode();
 });		
 	
 
-	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
-	function getallModel(dept_id,a){
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+function getgradebyDegree(dept_id,a,type=1){
+	if(type==1){
 		if(dept_id==''){return false;}
-			dojo.xhrPost({
-				url:url_dept,
-				content:{
-					'dept_id':dept_id
-					},
-				handleAs:"json",
-				load: function(data) {
+	}else if(type==2){
+		dept_id = dijit.byId("category").get("value");
+	}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id
+				},
+			handleAs:"json",
+			load: function(data) {
+				if(type==1){
 					grade_store  = getDataStorefromJSON('id','name', data);
 				    dijit.byId('grade').set('store',grade_store);  
 				    if(a!=""){
 				    	dijit.byId('grade').attr('value',a);
 			        }
-				},
-				error: function(err) {
+				}else{
+					item_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('item').set('store',item_store);  	
 				}
-			});
-	}
+			},
+			error: function(err) {
+			}
+		});
+}
 
 	var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
 	function getStudentNo(dept_id,condition){
@@ -637,9 +609,8 @@
 		});
 	}
 	var url_getpaymentterm = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-payment-term')); ?>';
-	function getTuitionFee(){//time (full/part time)
-		
-		dijit.byId('not').attr('value','');
+function getTuitionFee(){//time (full/part time)
+		/*dijit.byId('not').attr('value','');
 		dijit.byId('tuitionfee').attr('value',0);
 		dijit.byId('total_payment').attr('value',0);
 		generat=dijit.byId('study_year').get('value');
@@ -671,77 +642,53 @@
 			},
 			error: function(err) {
 			}
-		});
-	}
+		});*/
+}
 	// set regisetr info to readonly when pay for service
-	function SetReadonlyForPayService(){
-		var payment_type = dijit.byId("payment_type").get("value");
-		if(payment_type==3 || payment_type==4){
-			dijit.byId('student_type').attr('value',3); // set student type to old student because only old student can pay only service 
-			dijit.byId("student_type").set('readOnly',true);
-			dijit.byId("en_name").set('readOnly',true);
-			dijit.byId("kh_name").set('readOnly',true);
-			dijit.byId("sex").set('readOnly',true);
-			dijit.byId("start_date").set('readOnly',true);
-			dijit.byId("end_date").set('readOnly',true);
-			dijit.byId("study_year").set('readOnly',true);
-			dijit.byId("dept").set('readOnly',true);
-			dijit.byId("grade").set('readOnly',true);
-			dijit.byId("session").set('readOnly',true);
-			dijit.byId("study_hour").set('readOnly',true);
-			dijit.byId("payment_term").set('readOnly',true);
-			//dijit.byId("tuitionfee").set('readOnly',true);
-			dijit.byId("discount_percent").set('readOnly',true);
-			//dijit.byId("paid_amount").set('readOnly',true);
-			//dijit.byId("room").set('readOnly',true);
-			dijit.byId("parent_phone").set('readOnly',true);
-		}else{
-			dijit.byId("student_type").set('readOnly',false);
-			dijit.byId("en_name").set('readOnly',false);
-			dijit.byId("kh_name").set('readOnly',false);
-			dijit.byId("sex").set('readOnly',false);
-			dijit.byId("start_date").set('readOnly',false);
-			dijit.byId("end_date").set('readOnly',false);
-			dijit.byId("study_year").set('readOnly',false);
-			dijit.byId("dept").set('readOnly',false);
-			dijit.byId("grade").set('readOnly',false);
-			dijit.byId("session").set('readOnly',false);
-			dijit.byId("study_hour").set('readOnly',false);
-			dijit.byId("payment_term").set('readOnly',false);
-			//dijit.byId("tuitionfee").set('readOnly',false);
-			dijit.byId("discount_percent").set('readOnly',false);
-			//dijit.byId("paid_amount").set('readOnly',false);
-			//dijit.byId("room").set('readOnly',false);
-			dijit.byId("parent_phone").set('readOnly',false);
-		}
-	}
-	// set field to readonly when balance>0 for get all old information of student
-	function setReadOnly(){
-		dijit.byId("start_date").set('readOnly',true);
-		dijit.byId("end_date").set('readOnly',true);
-		dijit.byId("study_year").set('readOnly',true);
-		dijit.byId("dept").set('readOnly',true);
-		dijit.byId("grade").set('readOnly',true);
-		dijit.byId("session").set('readOnly',true);
-		dijit.byId("study_hour").set('readOnly',true);
-		dijit.byId("payment_term").set('readOnly',true);
-	}
+function SetReadonlyForPayService(){
+	/*var payment_type = dijit.byId("payment_type").get("value");
+	dijit.byId("student_type").set('readOnly',false);
+	dijit.byId("en_name").set('readOnly',false);
+	dijit.byId("kh_name").set('readOnly',false);
+	dijit.byId("sex").set('readOnly',false);
+	dijit.byId("start_date").set('readOnly',false);
+	dijit.byId("end_date").set('readOnly',false);
+	dijit.byId("study_year").set('readOnly',false);
+	dijit.byId("dept").set('readOnly',false);
+	dijit.byId("grade").set('readOnly',false);
+	dijit.byId("session").set('readOnly',false);
+	dijit.byId("study_hour").set('readOnly',false);
+	dijit.byId("payment_term").set('readOnly',false);
+	dijit.byId("discount_percent").set('readOnly',false);
+	dijit.byId("parent_phone").set('readOnly',false);*/
+}
+// set field to readonly when balance>0 for get all old information of student
+function setReadOnly(){
+	/*dijit.byId("start_date").set('readOnly',true);
+	dijit.byId("end_date").set('readOnly',true);
+	dijit.byId("study_year").set('readOnly',true);
+	dijit.byId("dept").set('readOnly',true);
+	dijit.byId("grade").set('readOnly',true);
+	dijit.byId("session").set('readOnly',true);
+	dijit.byId("study_hour").set('readOnly',true);
+	dijit.byId("payment_term").set('readOnly',true);*/
+}
 	// Remove field readonly when balance <= 0 for get all old information of student
-	function removeReadOnly(){
-		var payment_type = dijit.byId("payment_type").get("value");
-		if(payment_type!=3 || payment_type!=4){
-			dijit.byId("start_date").set('readOnly',false);
-			dijit.byId("end_date").set('readOnly',false);
-			dijit.byId("study_year").set('readOnly',false);
-			dijit.byId("dept").set('readOnly',false);
-			dijit.byId("grade").set('readOnly',false);
-			dijit.byId("session").set('readOnly',false);
-			dijit.byId("study_hour").set('readOnly',false);
-			dijit.byId("payment_term").set('readOnly',false);
-		}
-	}
+function removeReadOnly(){
+	/*var payment_type = dijit.byId("payment_type").get("value");
+	if(payment_type!=3 || payment_type!=4){
+		dijit.byId("start_date").set('readOnly',false);
+		dijit.byId("end_date").set('readOnly',false);
+		dijit.byId("study_year").set('readOnly',false);
+		dijit.byId("dept").set('readOnly',false);
+		dijit.byId("grade").set('readOnly',false);
+		dijit.byId("session").set('readOnly',false);
+		dijit.byId("study_hour").set('readOnly',false);
+		dijit.byId("payment_term").set('readOnly',false);
+	}*/
+}
 //calculator date by select term_payment
-	function getDateTerm() {
+	/*function getDateTerm() {
 		start_end=dijit.byId('start_end').get('value');
 		if(start_end==-1){
 			payment_term=dijit.byId('payment_term').get('value');
@@ -769,7 +716,7 @@
 			
 			dijit.byId('end_date').attr('value',epx_date);
 		}			
-	}
+	}*/
 	function getTestFee(){
 		student_type = dijit.byId('student_type').get('value');
 		if(student_type==1){
@@ -872,7 +819,7 @@ function getInfoBygroup(){
 			dijit.byId('dept').set('readOnly',true);
 			dijit.byId('grade').set('readOnly',true);
 			dijit.byId('grade_fromgrouop').set('value',data.grade);
-			getallModel(data.degree,data.grade);
+			getgradebyDegree(data.degree,data.grade,1);
 			dijit.byId('session').set('value',data.session);
 			dijit.byId('session').set('readOnly',true);
 			dijit.byId('room').set('value',data.room_id);
@@ -1154,28 +1101,6 @@ function getMonthByNumber(m){
 	</div>
 </div>
 <script>
-//set hour defuale
-
-function setHourDefault(){
-	dept=dijit.byId('dept').get('value');
-	session=dijit.byId('session').get('value');
-	if(session==1){
-		dijit.byId('study_hour').attr('value','7:30 - 11:30');
-	}
-	else if(session==2){
-		dijit.byId('study_hour').attr('value','13:00 - 17:00');
-	}
-	else if(session==3){
-		dijit.byId('study_hour').attr('value','17:30 - 19:00');
-	}
-	else if(session==4){
-		dijit.byId('study_hour').attr('value','8:30 - 17:00');
-	}
-	else{
-		dijit.byId('study_hour').attr('value','');
-	}
-}
-
 function confirmBeforePrint(){
 	dijit.byId('alertBeforePrint').show();
 }
@@ -1198,41 +1123,6 @@ function hideDialog1(){
 	dijit.byId('alertBeforePrint').hide();
 }
 
-function changControll(){
-	dijit.byId('not').attr('value','');
-	student_type=dijit.byId('student_type').get('value');
-	document.getElementById('stu_tested').style.display="none";
-	if(student_type==3){
-		 getallstudentname();
-		 getallstudentcode();
-		 document.getElementById('student_old').style.display="block";
-		 document.getElementById('student_old_name').style.display="block";
-		 document.getElementById('id_stu').style.display="none";
-		 document.getElementById('stu_new').style.display="none";
-		 clearControll();
-	}else if(student_type==1){
-		 document.getElementById('student_old').style.display="none";
-		 document.getElementById('student_old_name').style.display="none";
-		 document.getElementById('id_stu').style.display="block";
-		 getAllstudnetTest();
-		 document.getElementById('stu_tested').style.display="block";
-		 document.getElementById('stu_new').style.display="none";
-		 clearControll();
-	} else if(student_type==2){
-		 document.getElementById('student_old').style.display="none";
-		 document.getElementById('student_old_name').style.display="none";
-		 document.getElementById('id_stu').style.display="block";
-		 document.getElementById('stu_new').style.display="block";
-		 dept = dijit.byId("dept").get("value");
-		 if(dept==''){return false;}
-		 getStudentNo(dept,'');
-	}else{
-		 document.getElementById('student_old').style.display="none";
-		 document.getElementById('student_old_name').style.display="none";
-		 document.getElementById('id_stu').style.display="none";
-		 document.getElementById('stu_new').style.display="none";
-	}
-}
 var url_getstudenttest = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
 function getAllstudnetTest(){
 	 dojo.xhrPost({
@@ -1267,7 +1157,7 @@ function getallstudentname(){
 		}
 	});
 }
-var url_getstudencode = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcode')); ?>';
+/*var url_getstudencode = '<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcode')); ?>';
 function getallstudentcode(){
 	dojo.xhrPost({
 		url:url_getstudencode,
@@ -1283,7 +1173,7 @@ function getallstudentcode(){
 			alert(err)
 		}
 	});
-}
+}*/
 function setReadOnlyCustomerType(){
 	student_type = dijit.byId('student_type').get('value');
 	if(student_type==4){
@@ -1328,8 +1218,6 @@ function setReadOnlyCustomerType(){
 function setReadonlyForOldStudent(){
 	student_type = dijit.byId('student_type').get('value');
 	if(student_type==3){
-		//dijit.byId("en_name").set('readOnly',true);
-		//dijit.byId("kh_name").set('readOnly',true);
 		dijit.byId("sex").set('readOnly',true);
 		dijit.byId("dob").set('readOnly',true);
 		dijit.byId("parent_phone").set('readOnly',true);
@@ -1342,9 +1230,8 @@ function setReadonlyForOldStudent(){
 	}
 }
 function setID(){
-	//alert("new set"+stu_id);
 	stu_id = dijit.byId('old_stu_name').get('value');
-	dijit.byId('old_studens').attr('value',stu_id);
+	//dijit.byId('old_studens').attr('value',stu_id);
 	getPaymentHistory(stu_id);
 }
 var url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
@@ -1435,7 +1322,7 @@ function clearControll(){
 ///get Gerneral old student
 var url_getalldstudent = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-general-old-student')); ?>';
 function getOldStudentInfo(){
-	student_id=dijit.byId('old_studens').get('value');
+	student_id=dijit.byId('old_stu_name').get('value');
 	dijit.byId('kh_name').attr('value','');
 	dijit.byId('en_name').attr('value','');
 	dijit.byId('sex').attr('value','');
@@ -1462,7 +1349,7 @@ function getOldStudentInfo(){
 						dijit.byId('dept').attr('value',data.degree);
 						dijit.byId('session').attr('value',data.session);
 						dijit.byId('room').attr('value',data.room);
-						getallModel(data.degree,data.grade);
+						getgradebyDegree(data.degree,data.grade,1);
 					}
 					dijit.byId('kh_name').attr('value',data.stu_khname);
 					dijit.byId('en_name').attr('value',data.stu_enname);
@@ -1489,60 +1376,49 @@ tmp = '';
 temp='';
 date_format = '"dd/MM/yyyy"';
 function addRow() {
+		label = dijit.byId("item").attr('displayedValue');
+		service_id = dijit.byId("item").get("value");
 		col++;no++;
 		template='';
 		if(title!=1){
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("SERVICES");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("PAYMENT_TERM");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("PRICE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("SUBTOTAL");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("LATE_FEE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("EXTRA_FEE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DISCOUNT");?> %</th>';
-			temp+='<th width="100px"><?php echo $tr->translate("TOTAL_PAYMENT");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("VALIDATE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DATE_START");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("END_DATE");?></th>';
+			temp+='<th><?php echo $tr->translate("SERVICES");?></th>';
+			temp+='<th><?php echo $tr->translate("PAYMENT_TERM");?></th>';
+			temp+='<th><?php echo $tr->translate("PRICE");?></th>';
+			temp+='<th><?php echo $tr->translate("AMOUNT");?></th>';
+			temp+='<th><?php echo $tr->translate("SUBTOTAL");?></th>';
+			temp+='<th><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>';
+			temp+='<th><?php echo $tr->translate("DISCOUNT_TYPE");?></th>';
+			temp+='<th><?php echo $tr->translate("DISCOUNT");?> %</th>';
+			temp+='<th><?php echo $tr->translate("DISCOUNT");?>$</th>';
+			temp+='<th><?php echo $tr->translate("TOTAL_PAYMENT");?></th>';
+			temp+='<th><?php echo $tr->translate("DATE_START");?></th>';
+			temp+='<th><?php echo $tr->translate("END_DATE");?></th>';
 			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			template+='<td width="40px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="40px" align="center">'+no+'</td>';
-			template+='<td width="20%"><input type="hidden" dojoType="dijit.form.TextBox" name="old_service_'+col+'" id="old_service_'+col+'"/>';
-			template+='<select queryExpr="*${0}*" autoComplete="false" width="20%" class="fullside" onchange="getServiceType('+col+');getValidate('+col+');getOldVildateToStartDateService('+col+');" dojoType="dijit.form.FilteringSelect" id="service_'+col+'" name="service_'+col+'">';
-				template+='<option value="">Select </option>';
-				<?php if(!empty($this->all_service)){foreach($this->all_service as $service){?>
-					template+='<option value="'+<?php echo $service['service_id']?>+'"><?php echo $service['title'];?></option>';
-				<?php }}?>
-				
-			template+='</select></td>';	
-			template+='<td width="9%"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';
-				<?php foreach($this->all_paymentterm as $term){?>
+			template+='<td width="30px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="30px" align="center">'+no+'</td>';
+			template+='<td style="width:150px;font-size:12px;">'+label+'<input type="hidden" value="'+service_id+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/>';
+			template+='<td style="width:100px"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';
+				<?php if(!empty($this->all_paymentterm))foreach($this->all_paymentterm as $term){?>
 					template+='<option value="'+<?php echo $term['id']?>+'"><?php echo $term['name'];?></option>';
 				<?php }?>
-			template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/>';
-			template+='<input type="hidden" style="width:30px;" dojoType="dijit.form.TextBox" name="product_type_'+col+'" id="product_type_'+col+'"/>';
-			template+='</select></td>';
+			template+='</select><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/></td>';
 			column = 0;
-			
-			template+='<td width="6%"> <input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /> <input type="hidden" class="fullside" name="cost_'+col+'" id="cost_'+col+'"  value="0" dojoType="dijit.form.TextBox"  /> ';	
-			template+='</td >';
-			
-			template+='<td width="4%"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
-			template+='<td width="6%"><input type="text" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
-			template+='<td width="6%"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="late_fee_service_'+col+'" id="late_fee_service_'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
-			template+='<td width="6%"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="additional_fee_'+col+'" id="additional_fee_'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
-			template+='<td width="6%"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
-			template+='<td width="8%"><input type="text" class="fullside" readonly="readonly" onkeyup="alerterror('+col+');netTotal('+col+');"  name="paidamount_'+col+'" value="0" id="paidamount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
-			template+='<td width="6%"><select class="fullside" onchange="checkPeriodType('+col+');" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="0">Normal</option><option value="1">1 Payment only</option></select></td>';
-			template+="<td width='10%'><input type='text' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" value='now' name='date_start_"+col+"' onchange='getValidate("+col+");' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
-			template+='<td width="10%"><input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
-			template+='<td width="8%"><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:140px;" /></td>';
-		
+			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /> <input type="hidden" class="fullside" name="cost_'+col+'" id="cost_'+col+'"  value="0" dojoType="dijit.form.TextBox"  /></td>';	
+			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
+			template+='<td style="width:70px"><input type="text" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="late_fee_service_'+col+'" id="late_fee_service_'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="additional_fee_'+col+'" id="additional_fee_'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td><input type="text" class="fullside" readonly="readonly" onkeyup="alerterror('+col+');netTotal('+col+');"  name="paidamount_'+col+'" value="0" id="paidamount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td><select class="fullside" onchange="checkPeriodType('+col+');" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="0">Normal</option><option value="1">1 Payment only</option></select></td>';
+			template+="<td><input type='text' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" value='now' name='date_start_"+col+"' onchange='getValidate("+col+");' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
+			template+='<td><input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
+			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:140px;" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -1609,7 +1485,7 @@ function deleteRecord(index) {
 	 }
  }
 	function getTotale(){
-		tuitionfee=dijit.byId('tuitionfee').get('value');
+		/*tuitionfee=dijit.byId('tuitionfee').get('value');
 		tuitionfee=isNaN(tuitionfee)?0:tuitionfee;
 		term = dijit.byId('payment_term').get('value');
 		if(term==1 || term==5){//month and other
@@ -1658,7 +1534,7 @@ function deleteRecord(index) {
 			var amount_day = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 			total_payment = (tuitionfee/30)*amount_day;
 			total_payment = (total_payment -(scholarship_amount/times)-late_fee) - ds - discount_fix;
-			dijit.byId('not').attr("value",amount_day+'Days');*/
+			dijit.byId('not').attr("value",amount_day+'Days');
 		}
 		dijit.byId('total_scholarship').attr('value',scholarship_amount/times);
 		if(discount_percent<=100){
@@ -1670,7 +1546,7 @@ function deleteRecord(index) {
 			dijit.byId('discount_fix').attr('value','0');
 			getTotale();
 		}
-		netTotal();
+		netTotal();*/
 	}
 	function calculateTotal(index){
 		price = dijit.byId('price_'+index).get('value');
@@ -1818,15 +1694,6 @@ function readMoneyInKhmer(netTotal){
 			handleAs:"json",
 			load: function(data) {
 					dijit.byId('service_type_'+index).attr('value',data.type);
-					if(data.type==2){ // service type
-						removeAddRowReadOnly(index);
-						getservicefee(index);
-						dijit.byId('product_type_'+index).attr('value','');
-					}else{ // product type
-						getProductFee(index);
-						setAddRowReadOnly(index);
-						dijit.byId('product_type_'+index).attr('value',data.pro_type);
-					}
 			},
 			error: function(err) {
 			}
@@ -1869,10 +1736,10 @@ function getservicefee(key){
 	 	stu_type = dijit.byId('student_type').get('value');
 		// if old student ?????????????????????? ???????????????????? ????????????????????????
 	 	if(stu_type==3){
- 			studentid = dijit.byId('old_studens').get('value');
+ 			studentid = dijit.byId('old_stu_name').get('value');
 			if(studentid==''){
 				alert("Please select student !!!");
-				dijit.byId('old_studens').focus();
+				dijit.byId('old_stu_name').focus();
 				return false;
 			}
 			
@@ -1983,7 +1850,7 @@ function printSave(new_stu_id,new_receipt,submit){
 			stu_type = dijit.byId('student_type').get('value');
 
 			if(stu_type==3){
-				stu_id = dijit.byId("old_studens").attr('displayedValue');
+				stu_id = dijit.byId("old_stu_name").attr('displayedValue');
 			}else{
 				stu_id = dijit.byId("stu_id").attr('displayedValue');
 			}
@@ -1995,7 +1862,7 @@ function printSave(new_stu_id,new_receipt,submit){
 					receipt = new_receipt;
 				}
 			}else{
-				stu_id = dijit.byId("old_studens").attr('displayedValue');
+				stu_id = dijit.byId("old_stu_name").attr('displayedValue');
 				if(new_receipt==''){
 					getReceiptNo(stu_id);
 					
@@ -2003,9 +1870,6 @@ function printSave(new_stu_id,new_receipt,submit){
 					receipt = new_receipt;
 				}
 			}	*/
-			
-			//alert(1);
-			
 			if(new_receipt==""){
 				getReceiptNo(1,submit);
 				submit=0;
@@ -2059,7 +1923,6 @@ function printSave(new_stu_id,new_receipt,submit){
 					  temp+='</tr>';
 					  
 					  
-				if(payment_type==1 && student_type==4){
 					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
 					  temp+='<tr style=" font-size:12px;height: 15px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId("service_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
@@ -2115,223 +1978,6 @@ function printSave(new_stu_id,new_receipt,submit){
 					  i++;
 					  temp+='</tr>';
 					}
-				}
-				else if(payment_type==1){
-					  temp+='<tr style="font-size:12px !important;height: 10px;border:1px solid #000; ">';
-						  temp+='<td align="center" style="border:1px solid #000;">1</td>';
-						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Tuition Fee('+dijit.byId('grade').attr('displayedValue')+')</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('payment_term').attr('displayedValue')+'</td>';
-					///////////////////    format date 	//////////////////////// 
-						  var lbl_termname = dijit.byId("term_lable").get('value');
-						  var b = new Date(dijit.byId("start_date").get('value'));
-							mm = b.getMonth()+1;
-							var dd = b.getDate();
-							if(dd<10){
-								dd = "0"+dd;
-							}
-							var mon = getMonthByNumber(mm);
-							if(mm<10){
-								mm = "0"+mm;
-							}
-							var y = b.getFullYear();
-							var start_date = dd + '/' + mon + '/' + y ;
-	  						
-							var a = new Date(dijit.byId("end_date").get('value'));
-							mm = a.getMonth()+1;
-							var dd = a.getDate();
-							if(dd<10){
-								dd = "0"+dd;
-							}
-							var months = getMonthByNumber(mm);
-							if(mm<10){
-								mm = "0"+mm;
-							}
-							var y = a.getFullYear();
-							var epx_date = dd + '/' +months + '/' + y ;
-						  temp+='<td align="center" style="border:1px solid #000;">' + start_date + ' - ' + epx_date + '</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('tuitionfee').get('value').toFixed(2))+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
-						  
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee').get('value').toFixed(2))+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ 0.00</td>';
-						  
-						  dis_percent = dijit.byId('discount_percent').get('value');
-						  dis_percent = isNaN(dis_percent)?0:dis_percent;
-						  
-						  dis_fix = dijit.byId('discount_fix').get('value');
-						  dis_fix = isNaN(dis_fix)?0:dis_fix;
-						  
-						  discount=0;
-						  if(dis_percent>0 && dis_fix>0){
-							  discount = dis_percent + " %  + " + dis_fix + " $"; 
-						  }else{
-							  if(dis_percent>0){
-								  discount = dis_percent + " %";
-							  }else{
-								  discount = dis_fix + " $";
-							  }
-						  }
-						  temp+='<td align="center" style="border:1px solid #000;">'+discount+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('total_payment').get('value').toFixed(2))+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';
-						  
-					  temp+='</tr>';				  
-					  i=2;  for(var n = 0; n < rowIDArray.length; n++) {
-						 
-					  temp+='<tr style=" font-size:12px !important;height: 17px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId("service_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
-					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;">'+dijit.byId("term_"+rowIDArray[n]).attr('displayedValue')+'</td>';
-				///////////////////    format date 	//////////////////////// 
-					 	
-					  var b = new Date(dijit.byId("date_start_"+rowIDArray[n]).get('value'));
-					  mm = b.getMonth()+1;
-					  var dd = b.getDate();
-					   if(dd<10){
-						dd = "0"+dd;
-					   }
-					   var mon = getMonthByNumber(mm);
-					   if(mm<10){
-						mm = "0"+mm;
-					   }
-					  var y = b.getFullYear();
-					  var start_date = dd + '/' + mon + '/' + y ;
-					  
-					  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
-					  // if product => dont show start date
-					  if(service_type==1){
-						  start_date = '';
-					  }
-					  var a = new Date(dijit.byId("validate_"+rowIDArray[n]).get('value'));
-					  mm = a.getMonth()+1;
-					  var dd = a.getDate();
-					   if(dd<10){
-						dd = "0"+dd;
-					   }
-					   var months = getMonthByNumber(mm);
-					   if(mm<10){
-						mm = "0"+mm;
-					   }
-					  var y = a.getFullYear();
-					  var epx_date = dd + '/' +months + '/' + y ;
-					  // if product => dont show end date
-					  if(service_type==1){
-						  epx_date = '';
-					  }
-					  s_startdate = dijit.byId("date_start_"+rowIDArray[n]).get('value');
-					  if(s_startdate==null){start_date='';epx_date='';}
-					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("price_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee_service_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('additional_fee_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
-					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("paidamount_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
-					  i++;
-					  temp+='</tr>';
-					} 
-				}else if(payment_type==2){
-					i=2;
-					temp+='<tr style="font-size:12px;border:1px solid #000;height:10px; ">';
-						  temp+='<td align="center" style="border:1px solid #000;">1</td>';
-						  temp+='<td style="border:1px solid #000;">&nbsp;&nbsp;Tuition Fee('+dijit.byId('grade').attr('displayedValue')+')</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('payment_term').attr('displayedValue')+'</td>';
-						  var lbl_termname = dijit.byId("term_lable").get('value');
-						  var b = new Date(dijit.byId("start_date").get('value'));
-							mm = b.getMonth()+1;
-							var dd = b.getDate();
-							if(dd<10){
-								dd = "0"+dd;
-							}
-							var mon = getMonthByNumber(mm);
-							if(mm<10){
-								mm = "0"+mm;
-							}
-							var y = b.getFullYear();
-							var start_date = dd + '/' + mon + '/' + y ;
-
-							var a = new Date(dijit.byId("end_date").get('value'));
-							mm = a.getMonth()+1;
-							var dd = a.getDate();
-							if(dd<10){
-								dd = "0"+dd;
-							}
-							var months = getMonthByNumber(mm);
-							if(mm<10){
-								mm = "0"+mm;
-							}
-							var y = a.getFullYear();
-							var epx_date = dd + '/' + months + '/' + y ;
-							discount_percent = dijit.byId('discount_percent').get('value');
-							
-							discount_fix = dijit.byId('discount_fix').get('value');
-						  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + '</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('tuitionfee').get('value').toFixed(2))+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">'+1+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee').get('value').toFixed(2))+'</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ 0.00</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">'+discount_percent+'%+'+discount_fix+'$</td>';
-						  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('total_payment').get('value').toFixed(2))+'</td>';
-						  
-						  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId('not').get('value')+'</td>';
-					temp+='</tr>';
-				}
-				else if(payment_type==3){
-					i=1;  for(var n = 0; n < rowIDArray.length; n++) {
-						 
-					  temp+='<tr style=" font-size:12px;height: 15px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-					  temp+='<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;'+dijit.byId("service_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
-					  temp+='<td align="center" style="border:1px solid #000;">'+dijit.byId("term_"+rowIDArray[n]).attr('displayedValue')+'</td>';
-					  
-				///////////////////    format date 	////////////////////////   
-					  var b = new Date(dijit.byId("date_start_"+rowIDArray[n]).get('value'));
-					  mm = b.getMonth()+1;
-					  var dd = b.getDate();
-					   if(dd<10){
-						dd = "0"+dd;
-					   }
-					   var mon = getMonthByNumber(mm);
-					   if(mm<10){
-						mm = "0"+mm;
-					   }
-					  var y = b.getFullYear();
-					  var start_date = dd + '/' + mon + '/' + y ;
-					  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');
-					  // if product => dont show start date
-					  if(service_type==1){
-						  start_date = '';
-					  }
-
-					  var a = new Date(dijit.byId("validate_"+rowIDArray[n]).get('value'));
-					  mm = a.getMonth()+1;
-					  var dd = a.getDate();
-					   if(dd<10){
-						dd = "0"+dd;
-					   }
-					   var months = getMonthByNumber(mm);
-					   if(mm<10){
-						mm = "0"+mm;
-					   }
-					  var y = a.getFullYear();
-					  var epx_date = dd + '/' +months+ '/' + y ;
-
-					  if(service_type==1){
-						  epx_date = '';
-					  }
-					  s_startdate = dijit.byId("date_start_"+rowIDArray[n]).get('value');
-					  if(s_startdate==null){start_date='';epx_date='';}
-					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("price_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('late_fee_service_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
-					  temp+='<td align="center" style="border:1px solid #000;">$ '+(dijit.byId('additional_fee_'+rowIDArray[n]).get('value').toFixed(2))+'</td>';
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_"+rowIDArray[n]).get('value')+' %</td>';
-					  temp+='<td style="border:1px solid #000;">$ '+(dijit.byId("paidamount_"+rowIDArray[n]).get('value').toFixed(2))+'</td>';				  				  
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
-					  i++;
-					  temp+='</tr>';
-					}
-				}
 			
 			temp+='</table>';
 			dojo.byId('t_amountmoneytype').innerHTML = temp;
@@ -2362,7 +2008,7 @@ function getStudentTestInfo(){
 				
 				dijit.byId("dept").attr("value",data.degree_result);
 				dijit.byId("session").attr("value",data.session_result);
-				getallModel(data.degree_result,data.grade_result);
+				getgradebyDegree(data.degree_result,data.grade_result,1);
 	 		},
 	 		error: function(err) {
 	 			alert(err);
@@ -2374,7 +2020,7 @@ var url_creditmemo = "<?php echo $this->url(array('module'=>'registrar','control
 function getCreditMemo(){
 	stu_type = dijit.byId('student_type').get('value');
 	if(stu_type==3){
-		stu_id = dijit.byId('old_studens').get('value');
+		stu_id = dijit.byId('old_stu_name').get('value');
 		if(stu_id != ""){
 			dojo.xhrPost({
 				url:url_creditmemo,
@@ -2402,7 +2048,7 @@ var url_get_start_date = '<?php echo $this->url(array('module'=>'registrar','con
 function getOldVildateToStartDateRegister(){
 	stu_type = dijit.byId('student_type').get('value');
 	if(stu_type==3){
-		stu_id = dijit.byId('old_studens').get('value');
+		stu_id = dijit.byId('old_stu_name').get('value');
 		if(stu_id==''){
 			return 0;
 		}
@@ -2431,7 +2077,7 @@ function getOldVildateToStartDateRegister(){
 	function getOldVildateToStartDateService(index){
 		stu_type = dijit.byId('student_type').get('value');
 		if(stu_type==3){
-			stu_id = dijit.byId('old_studens').get('value');
+			stu_id = dijit.byId('old_stu_name').get('value');
 			if(stu_id==''){
 				return 0;
 			}
@@ -2448,7 +2094,6 @@ function getOldVildateToStartDateRegister(){
 						if(data){
 							dijit.byId('date_start_'+index).attr('value',data);
 						}else{
-							//dijit.byId('date_start_'+index).attr('value','<?php //echo date('Y-m-d');?>');
 						}	
 					},
 					error: function(err) {
@@ -2462,7 +2107,6 @@ function checkValidateAddRow(){
 	payment_type = dijit.byId('payment_type').get('value');
 	if(payment_type!=2)	{
 		var rowId = $('#identity').val();
-		//alert(rowId);
 		if(rowId!=''){
 			var rowIDArray = rowId.split(',');
 			for(var n = 0; n < rowIDArray.length; n++) {
@@ -2476,7 +2120,7 @@ function checkValidateAddRow(){
 		return true;
 	}
 }
-var url_set_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date-end-date')); ?>';	
+/*var url_set_date = '<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date-end-date')); ?>';	
 function setStartAndEndDate(){
 	dijit.byId('term_lable').attr('value','');
 	id = dijit.byId('start_end').get('value');
@@ -2497,11 +2141,10 @@ function setStartAndEndDate(){
 			alert(err);
 		}
 	});
-}
-
+}*/
 var url_student_balance = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentbalance')); ?>';	
 function getStudentBalance(){
-	stu_id = dijit.byId('old_studens').get('value');
+	stu_id = dijit.byId('old_stu_name').get('value');
 	if(stu_id>0){
 		dojo.xhrPost({
 			url:url_student_balance,

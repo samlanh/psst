@@ -533,11 +533,7 @@ function getAllgroupStudy($teacher_id=null){
    function getAllMajor(){
    	return $this->getAllGradeStudy();
    }
-   public function getAllRoom(){
-   	$db = $this->getAdapter();
-   	$sql=" SELECT room_id AS id ,room_name As name FROM `rms_room` WHERE is_active=1 AND room_name!='' order by room_id DESC ";
-   	return $db->fetchAll($sql);
-   }
+  
    
    public function getAllGroup(){
 	   	$db = $this->getAdapter();
@@ -570,10 +566,15 @@ function getAllgroupStudy($teacher_id=null){
    	$sql="SELECT room_id,room_name FROM rms_room ";
    	return $db->fetchAll($sql.'ORDER  BY room_id DESC');
    }
+   public function getAllRoom(){
+   	$db = $this->getAdapter();
+   	$sql=" SELECT room_id AS id ,room_name As name FROM `rms_room` WHERE is_active=1 AND room_name!='' order by room_id DESC ";
+   	return $db->fetchAll($sql);
+   }
    function getSession(){
    	$db=$this->getAdapter();
-   	//$sql="SELECT key_code,CONCAT(name_en,'-',name_kh) AS view_name FROM rms_view WHERE `type`=4 AND `status`=1";
-   	$sql="SELECT key_code,name_en AS view_name FROM rms_view WHERE `type`=4 AND `status`=1";
+   	$sql="SELECT key_code AS id,key_code,name_en aS name,name_en AS view_name 
+   		FROM rms_view WHERE `type`=4 AND `status`=1";
 	return $db->fetchAll($sql);
    }
    function getGender(){
@@ -942,7 +943,12 @@ function getAllgroupStudy($teacher_id=null){
   	WHERE s.status=1 and s.is_subspend=0  $branch_id  ";
   	return $db->fetchAll($sql);
   }
-  
+  function getAllTermStudy(){
+  	$db = $this->getAdapter();
+  	$sql="select id,start_date,end_date,note,CONCAT(note,'(',start_date,' to ',end_date,')') as name
+  	FROM rms_startdate_enddate WHERE status=1 ORDER BY start_date ASC";
+  	return $db->fetchAll($sql);
+  }
   function getAllTerm(){
   	$db = $this->getAdapter();
   	$SQL="select key_code as id , name_en as name from rms_view where type=6 and status=1 ";
@@ -1130,7 +1136,7 @@ function getAllgroupStudy($teacher_id=null){
   		$sql .=' AND '.$user['schoolOption'].' IN (m.schoolOption)';
   	}
   	
-  	$sql .=' ORDER BY m.schoolOption ASC, m.title ASC';
+  	$sql .=' ORDER BY m.schoolOption ASC,m.type DESC, m.title ASC';
   	return $db->fetchAll($sql);
   }
   

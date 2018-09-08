@@ -240,19 +240,19 @@ function getAllgroupStudy($teacher_id=null){
    	}
    return $db->fetchAll($sql);
    }
-   public function getAllstudentRequest($type=null){
-   	$db = $this->getAdapter();
-   	if($type!=null){
-   		$sql = " SELECT service_id as id,title as name FROM `rms_program_name` WHERE
-   		 type=$type AND status = 1 AND title!=''";
-   		return $db->fetchAll($sql);
-   	}else{
-   	$sql = 'SELECT service_id as id,pn.title as name FROM `rms_program_type` AS pt,`rms_program_name` AS pn 
-   			WHERE pt.id = pn.ser_cate_id AND pt.type=1 
-   				AND pn.status = 1 AND pn.title!=""';
-   	}
-   	return $db->fetchAll($sql);
-   }
+//    public function getAllstudentRequest($type=null){
+//    	$db = $this->getAdapter();
+//    	if($type!=null){
+//    		$sql = " SELECT service_id as id,title as name FROM `rms_program_name` WHERE
+//    		 type=$type AND status = 1 AND title!=''";
+//    		return $db->fetchAll($sql);
+//    	}else{
+//    	$sql = 'SELECT service_id as id,pn.title as name FROM `rms_program_type` AS pt,`rms_program_name` AS pn 
+//    			WHERE pt.id = pn.ser_cate_id AND pt.type=1 
+//    				AND pn.status = 1 AND pn.title!=""';
+//    	}
+//    	return $db->fetchAll($sql);
+//    }
    
    
    public function getAllSubjectStudy(){
@@ -718,10 +718,17 @@ function getAllgroupStudy($teacher_id=null){
    			AND account_type = ".$type;
    	return $db->fetchAll($sql);
    }
-   function getAllStudent($opt=null,$type){
-   	$db = $this->getAdapter();
+   function getAllStudent($opt=null,$type=2){
+   	$db=$this->getAdapter();
+   	$branch_id = $this->getAccessPermission();
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-   	$sql=" SELECT stu_id As id,stu_code,CONCAT(stu_khname,'-',stu_enname) as name FROM `rms_student` WHERE stu_khname!='' AND STATUS=1 AND is_subspend=0 ";
+   	$sql="SELECT s.stu_id AS id,s.stu_id AS stu_id,
+		   	CONCAT(s.stu_code,'-',s.stu_khname,'-',s.stu_enname,' ',s.last_name) AS name
+		   	FROM rms_student AS s
+		   	WHERE
+		   	(stu_enname!='' OR s.stu_khname!='')
+		   	AND s.status=1 AND s.is_subspend=0 AND customer_type=1
+		   	ORDER BY degree DESC,stu_khname ASC ";
    	$rows = $db->fetchAll($sql);
    	if($opt!=null){
    		$options=array(0=>$tr->translate("CHOOSE"));
@@ -730,8 +737,10 @@ function getAllgroupStudy($teacher_id=null){
    			if($type==2){$lable = $row['name'];}
    			$options[$row['id']]=$lable;
    		}
+   		return $options;
+   	}else{
+   		return $rows;
    	}
-   	return $options;
    }
    function getDeduct(){
 	   	$db = $this->getAdapter();
@@ -950,14 +959,19 @@ function getAllgroupStudy($teacher_id=null){
   	return $db->fetchAll($sql);
   }
 
-  function getAllStudentConcat(){
-  	$db=$this->getAdapter();
-  	$_db = new Application_Model_DbTable_DbGlobal();
-  	$branch_id = $_db->getAccessPermission();
-  	$sql="SELECT s.stu_id As id,s.stu_code As stu_code,CONCAT(s.stu_enname,'(',s.stu_code,')')AS `name` FROM rms_student AS s
-  	WHERE s.status=1 and s.is_subspend=0  $branch_id  ";
-  	return $db->fetchAll($sql);
-  }
+//   function getAllStudent(){
+//   	$db=$this->getAdapter();
+//   	$_db = new Application_Model_DbTable_DbGlobal();
+//   	$branch_id = $_db->getAccessPermission();
+//   	$sql="SELECT s.stu_id AS id,s.stu_id AS stu_id,
+//     		CONCAT(s.stu_code,'-',s.stu_khname,'-',s.stu_enname,' ',s.last_name) AS name
+//     		FROM rms_student AS s
+//     		WHERE 
+//     		(stu_enname!='' OR s.stu_khname!='') 
+//     		AND s.status=1 AND s.is_subspend=0 AND customer_type=1 
+//   		$branch_id ORDER BY stu_type DESC,stu_khname ASC ";
+//   	return $db->fetchAll($sql);
+//   }
   function getAllTermStudy(){
   	$db = $this->getAdapter();
   	$sql="select id,start_date,end_date,note,CONCAT(note,'(',start_date,' to ',end_date,')') as name
@@ -1242,6 +1256,13 @@ function getAllgroupStudy($teacher_id=null){
   function getProcessTypeView(){
   	$db = $this->getAdapter();
   	$sql="SELECT key_code AS id , name_en AS `name` FROM rms_view  WHERE `status`=1 AND type=12";
+  	return $db->fetchAll($sql);
+  }
+  function getAllDiscountName(){
+  	$db = $this->getAdapter();
+  	$sql="SELECT disco_id AS id,dis_name FROM `rms_discount` WHERE 
+  		status=1 AND dis_name!='' 
+  			ORDER BY dis_name ASC ";
   	return $db->fetchAll($sql);
   }
 }

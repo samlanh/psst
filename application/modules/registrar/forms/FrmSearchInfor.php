@@ -428,7 +428,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		));
 		$stuname_con->setValue($request->getParam("stuname_con"));
 		$db = new Application_Model_DbTable_DbGlobal();
-		$result = $db->getAllStudentConcat();
+		$result = $db->getAllStudent();
 		$opt_stu_name = array(''=>$this->tr->translate("SELECT_STUDENT_NAME"));
 		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
 		$stuname_con->setMultiOptions($opt_stu_name);

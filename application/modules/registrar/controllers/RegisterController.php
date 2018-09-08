@@ -83,11 +83,12 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $this->view->all_session = $_db->getSession();
        $this->view->all_room = $_db->getAllRoom();
        $this->view->all_paymentterm = $_db->getAllTerm();
-        $this->view->rs_type = $_db->getAllItems();
+       $this->view->rs_type = $_db->getAllItems();
+       $this->view->rsdiscount = $_db->getAllDiscountName();
+       $this->view->rs_paymenttype = $_db->getViewById(8,null);
        
        $db = new Registrar_Model_DbTable_DbRegister();
 //        $this->view->all_student_code = $db->getAllGerneralOldStudent();
-//        $this->view->all_student_name = $db->getAllGerneralOldStudentName();
 //        $this->view->all_student_test = $db->getAllStudentTested();
        
        $this->view->all_year = $db->getAllYears();
@@ -122,13 +123,13 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     	}
     	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->all_student_name = $db->getAllStudent();
     	$this->view->all_dept = $_db->getAllDegreeName();
     	$this->view->exchange_rate = $_db->getExchangeRate();
     	$this->view->deduct = $_db->getDeduct();
     	 
     	$db = new Registrar_Model_DbTable_DbRegister();
     	$this->view->all_student_code = $db->getAllGerneralOldStudent();
-    	$this->view->all_student_name = $db->getAllGerneralOldStudentName();
     	 
     	$this->view->all_student_test = $db->getAllStudentTested();
     	 
@@ -409,15 +410,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-    function getPaymentTermAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Registrar_Model_DbTable_DbRegister();
-    		$payment = $db->getPaymentTerm($data['generat_id'],$data['pay_id'],$data['grade_id']);
-    		print_r(Zend_Json::encode($payment));
-    		exit();
-    	}
-    }
+//     function getPaymentTermAction(){
+//     	if($this->getRequest()->isPost()){
+//     		$data=$this->getRequest()->getPost();
+//     		$db = new Registrar_Model_DbTable_DbRegister();
+//     		$payment = $db->getPaymentTerm($data['generat_id'],$data['pay_id'],$data['grade_id']);
+//     		print_r(Zend_Json::encode($payment));
+//     		exit();
+//     	}
+//     }
     function getBanlancePriceAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -445,11 +446,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function getServiceFeeAction(){
+    function getservicefeeAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
-    		$service_fee = $db->getServiceFee($data['studentid'],$data['service'],$data['term']);
+    		$service_fee = $db->getServiceFee($data['year'],$data['service'],$data['term']);
     		print_r(Zend_Json::encode($service_fee));
     		exit();
     	}
@@ -554,21 +555,21 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	function getallstudentAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
-			$rows = $db->getAllGerneralOldStudentName();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$rows = $db->getAllStudent(null,2);
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}
 	}
-	function getallstudentcodeAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
-			$rows = $db->getAllGerneralOldStudent();
-			print_r(Zend_Json::encode($rows));
-			exit();
-		}
-	}
+// 	function getallstudentcodeAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data = $this->getRequest()->getPost();
+// 			$db = new Registrar_Model_DbTable_DbRegister();
+// 			$rows = $db->getAllGerneralOldStudent();
+// 			print_r(Zend_Json::encode($rows));
+// 			exit();
+// 		}
+// 	}
 	
 	function getStudentbalanceAction(){
 		if($this->getRequest()->isPost()){

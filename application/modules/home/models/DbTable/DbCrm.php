@@ -22,7 +22,8 @@
 				CASE    
 				WHEN  st.crm_status = 0 THEN '".$tr->translate("DROPPED")."'
 				WHEN  st.crm_status = 1 THEN '".$tr->translate("PROCCESSING")."'
-				WHEN  st.crm_status = 2 THEN '".$tr->translate("COMPLETED")."'
+				WHEN  st.crm_status = 2 THEN '".$tr->translate("WAITING_TEST")."'
+				WHEN  st.crm_status = 3 THEN '".$tr->translate("COMPLETED")."'
 				END AS crm_status,
 				st.create_date,
 				(SELECT COUNT(c.id) FROM `rms_crm_history_contact` AS c WHERE c.crm_id = st.id LIMIT 1) AS amountContact, 

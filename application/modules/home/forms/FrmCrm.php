@@ -97,7 +97,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			 
     	));
     	
-    	$_arr = array(0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("COMPLETED"));
+    	$_arr = array(0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"));
     	$_crm_status = new Zend_Dojo_Form_Element_FilteringSelect("crm_status");
     	$_crm_status->setMultiOptions($_arr);
     	$_crm_status->setAttribs(array(
@@ -120,7 +120,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	));
     	$advance_search->setValue($request->getParam("advance_search"));
     	
-    	$_arr = array(-1=>$this->tr->translate("ALL"),0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("COMPLETED"));
+    	$_arr = array(-1=>$this->tr->translate("ALL"),0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"));
     	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
     	$_status_search->setMultiOptions($_arr);
     	$_status_search->setAttribs(array(
@@ -215,7 +215,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'required'=>'true',
     			'style'=>'font-family: inherit; width:99%;  min-height:100px !important;'));
     	
-    	$_arr = array(0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("COMPLETED"));
+    	$_arr = array(0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"));
     	$_proccess = new Zend_Dojo_Form_Element_FilteringSelect("proccess");
     	$_proccess->setMultiOptions($_arr);
     	$_proccess->setAttribs(array(

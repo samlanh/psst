@@ -36,7 +36,7 @@ class Registrar_InternalincomeController extends Zend_Controller_Action
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("INCOME_TITLE","RECEIPT_NO","TOTAL_INCOME","NOTE","PAID_DATE","STATUS");
+    		$collumns = array("INCOME_TITLE","RECEIVER","RECEIPT_NO","TOTAL_INCOME","NOTE","PAID_DATE","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'internalincome','action'=>'edit',
     		);
@@ -59,11 +59,11 @@ class Registrar_InternalincomeController extends Zend_Controller_Action
 			try {
 				$db->addIncome($data);
 				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/income");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/internalincome");
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/income/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/internalincome/add");
 				}				
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/income/add");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/internalincome/add");
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -95,17 +95,13 @@ class Registrar_InternalincomeController extends Zend_Controller_Action
 			$db = new Registrar_Model_DbTable_DbInternalincomeincome();				
 			try {
 				$db->updateIncome($data);				
-				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/registrar/income");		
+				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/registrar/internalincome");		
 			} catch (Exception $e) {
 				$this->view->msg = $this->tr->translate("EDIT_FAIL");
 			}
 		}
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
-// 		$user_type=$_db->getUserType();
-// 		if($user_type!=1){
-// 			Application_Form_FrmMessage::Sucessfull(" You are not Admin !!! ", '/registrar/register/index');
-// 		}
 		
 		$id = $this->getRequest()->getParam('id');
 		$db = new Registrar_Model_DbTable_DbInternalincomeincome();

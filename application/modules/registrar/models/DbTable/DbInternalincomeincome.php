@@ -16,6 +16,7 @@ class Registrar_Model_DbTable_DbInternalincomeincome extends Zend_Db_Table_Abstr
 		$array = array(
 				'branch_id'		=>$this->getBranchId(),
 				'title'			=>$data['title'],
+				'receiver' 		=>$data['receiver'],
 				'total_amount'	=>$data['total_income'],
 				'invoice'		=>$receipt_no,
 				'description'	=>$data['note'],
@@ -30,6 +31,7 @@ class Registrar_Model_DbTable_DbInternalincomeincome extends Zend_Db_Table_Abstr
 		$arr = array(
 					'branch_id'		=>$this->getBranchId(),
 					'title'			=>$data['title'],
+					'receiver' 		=>$data['receiver'],
 					'total_amount'	=>$data['total_income'],
 					'invoice'		=>$data['invoice'],
 					'description'	=>$data['note'],
@@ -52,7 +54,9 @@ class Registrar_Model_DbTable_DbInternalincomeincome extends Zend_Db_Table_Abstr
 		$where = " WHERE ".$from_date." AND ".$to_date;
 		
 		$sql=" SELECT id,
-				title, invoice,
+				title,
+				receiver,
+				invoice,
 				total_amount,
 				description,
 				date,

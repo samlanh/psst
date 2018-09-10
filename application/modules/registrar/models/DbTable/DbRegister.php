@@ -1227,17 +1227,16 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				sp.id,
     				sp.receipt_number,
 	    			s.stu_code,
-	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name,
+	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS NAME,
 	    			s.sex,
-	    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.year) AS year,
+	    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS YEAR,
 	    	        (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree)AS degree,
 			        (SELECT CONCAT(major_enname) FROM rms_major WHERE major_id=sp.grade ) AS grade,
-			       
-	 		       sp.grand_total,sp.fine,sp.credit_memo,sp.deduct,sp.net_amount, sp.create_date ,
-	 		       (select CONCAT(first_name) from rms_users where rms_users.id = sp.user_id) as user,
-	 		       (select name_en from rms_view where type=10 and key_code = sp.is_void) as void,
-	 		       (select CONCAT(first_name) from rms_users where rms_users.id = sp.void_by) as void_by,
-	 		       '$print'
+	 		       sp.grand_total,sp.penalty,sp.credit_memo, sp.create_date ,
+	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS USER,
+	 		       (SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void) AS void,
+	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by) AS void_by,
+	 		       'TEST'
  			   FROM 
     				rms_student AS s,
 					rms_student_payment AS sp 

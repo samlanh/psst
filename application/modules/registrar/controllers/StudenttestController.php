@@ -6,6 +6,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     {
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     }
     public function indexAction()
     {
@@ -35,7 +36,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		$link1=array(
 						'module'=>'registrar','controller'=>'studenttest','action'=>'profile'
 			);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('receipt'=>$link,'kh_name'=>$link,'en_name'=>$link,'Print Profile'=>$link1,'បោះពុម្ពទម្រង់'=>$link1));
+    		$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('receipt'=>$link,'kh_name'=>$link,'en_name'=>$link,'Print Profile'=>$link1,'បោះពុម្ពទម្រង់'=>$link1));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -45,10 +46,15 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     	$crm = $dbcrm->getAllCompleteCRM();
     	$this->view->crm = $crm;
     	
-    	$form=new Registrar_Form_FrmSearchInfor();
-    	$form->FrmSearchRegister();
-    	Application_Model_Decorator::removeAllDecorator($form);
-    	$this->view->form_search=$form;
+//     	$form=new Registrar_Form_FrmSearchInfor();
+//     	$form->FrmSearchRegister();
+//     	Application_Model_Decorator::removeAllDecorator($form);
+//     	$this->view->form_search=$form;
+    	
+    	$frm = new Registrar_Form_FrmStudentTest();
+    	$frm->FrmAddStudentTest(null);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->form_search = $frm;
     }
     public function addAction()
     {
@@ -83,31 +89,40 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     public function editAction()
     {
     	$id = $this->getRequest()->getParam('id');
+    	$db = new Registrar_Model_DbTable_DbStudentTest();
     	if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbStudentTest();				
-			try {
-				$db->updateStudentTest($data,$id);				
-				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/registrar/studenttest");		
-			} catch (Exception $e) {
-				$this->view->msg = 'EDIT_FAIL';
-			}
-		}
-		$id = $this->getRequest()->getParam('id');
-		$db = new Registrar_Model_DbTable_DbStudentTest();
-		$this->view->rs = $row  = $db->getStudentTestById($id);
-		$this->view->row_detail=$db->getStudentTestDetail($id);
-		if($row['register']==1){
-			//Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/registrar/studenttest");
-		}
-		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->degree = $db->getAllDegreeName();
-		$this->view->session = $db->getAllSession();
-		
-		$rs = $db->getallTermtest();
-		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		array_unshift($rs, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
-		$this->view->startdate_enddate= $rs;
+    		$data=$this->getRequest()->getPost();
+    		try {
+    			
+    			$db->updateStudentTest($data,$id);
+    			Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);
+    				
+    		} catch (Exception $e) {
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    		}
+    	}
+    	$row  = $db->getStudentTestById($id);
+    	$this->view->rs = $row;
+    	$this->view->row_detail=$db->getStudentTestDetail($id);
+    	if($row['register']==1){
+    		Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/registrar/studenttest");
+    	}
+    	
+    	$this->view->testresult = $db->getAllTestResult($id);
+    	
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	$optionNation = $_dbgb->getViewByType(21);//Nation
+    	array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+    	array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
+    	$this->view->nation = $optionNation;
+    	
+    	$frm = new Registrar_Form_FrmStudentTest();
+    	$frm->FrmAddStudentTest($row);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_crm = $frm;
+    	
     }
     function profileAction(){
     	$id = $this->getRequest()->getParam('id');
@@ -164,6 +179,47 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     	}
     }
     
+    function createtestexamAction(){
+    	
+    	
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Registrar_Model_DbTable_DbStudentTest();
+    		try {
+    			 
+    			$db->insertTestExam($data);
+    			if(!empty($data['saveclose'])){
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
+    			}
+    		} catch (Exception $e) {
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			 
+    		}
+    	}
+    	
+    	$id = $this->getRequest()->getParam("id");
+    	$db = new Registrar_Model_DbTable_DbStudentTest();
+    	$row  = $db->getStudentTestById($id);
+    	$this->view->rs = $row;
+    	
+    	$frm = new Registrar_Form_FrmStudentTest();
+    	$frm->FrmEnterResultTest($row);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->form = $frm;
+    	
+    }
+    
+    function getstudenttestbybranchAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$_dbgb = new Registrar_Model_DbTable_DbStudentTest();
+    		$serial = $_dbgb->getAllStudentByBranchTested($data['branch_id']);
+    		array_unshift($serial,array ( 'id' =>"",'name' => $this->tr->translate("PLEASE_SELECT")));
+    		print_r(Zend_Json::encode($serial));
+    		exit();
+    	}
+    }
     
 //     public function addAction()
 //     {
@@ -193,5 +249,35 @@ class Registrar_StudenttestController extends Zend_Controller_Action
 //     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 //     	array_unshift($rs,array('id' => -1,'name'=>$tr->translate("ADD_NEW")));
 //     	$this->view->startdate_enddate = $rs;
+//     }
+
+//     public function editAction()
+//     {
+//     	$id = $this->getRequest()->getParam('id');
+//     	if($this->getRequest()->isPost()){
+//     		$data=$this->getRequest()->getPost();
+//     		$db = new Registrar_Model_DbTable_DbStudentTest();
+//     		try {
+//     			$db->updateStudentTest($data,$id);
+//     			Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', "/registrar/studenttest");
+//     		} catch (Exception $e) {
+//     			$this->view->msg = 'EDIT_FAIL';
+//     		}
+//     	}
+//     	$id = $this->getRequest()->getParam('id');
+//     	$db = new Registrar_Model_DbTable_DbStudentTest();
+//     	$this->view->rs = $row  = $db->getStudentTestById($id);
+//     	$this->view->row_detail=$db->getStudentTestDetail($id);
+//     	if($row['register']==1){
+//     		//Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/registrar/studenttest");
+//     	}
+//     	$db = new Application_Model_DbTable_DbGlobal();
+//     	$this->view->degree = $db->getAllDegreeName();
+//     	$this->view->session = $db->getAllSession();
+    
+//     	$rs = $db->getallTermtest();
+//     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+//     	array_unshift($rs, array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+//     	$this->view->startdate_enddate= $rs;
 //     }
 }

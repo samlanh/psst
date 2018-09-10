@@ -58,23 +58,11 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 
 						'old_school'=>$data['old_school'],
 						'old_grade'	=>$data['old_grade'],
-						'degree'	=>$data['degree'],
-						'grade'		=>$data['grade'],
 					
 						'emergency_name'		=>$data['emergency_name'],
 						'relationship_to_student'=>$data['relationship_to_student'],
 						'emergency_tel'			=>$data['emergency_tel'],
 						'emergency_address'		=>$data['emergency_address'],
-						//'educational_background'=>$data['edu_background'],
-					
-// 						'degree_result'	=>$data['degree_result'],
-// 						'grade_result'	=>$data['grade_result'],
-// 						'session_result'=>$data['session'],
-// 						'time_result'	=>$data['time'],
-// 					    //'date_result'   =>$data['date_result'],
-// 					    'term_test'		=>$data['term_test'],
-					
-// 						'note'		=>$data['note'],
 						'serial'	=>$data['serial'],
 						'user_id'	=>$this->getUserId(),
 						'is_makestudenttest'	=>1,
@@ -101,6 +89,28 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 							$this->insert($arr);
 						}
 					}
+					
+					$arrayScore = array(
+							'stu_test_id'	=>$stutest_id,
+							'degree'	=>$data['degree'],
+							'grade'	=>$data['grade'],
+							'test_date'		=>$data['test_date'],
+							'note'		=>$data['note'],
+							'create_date' => date("Y-m-d H:i:s"),
+							'modify_date' => date("Y-m-d H:i:s"),
+							'user_id'	=>$this->getUserId(),
+					);
+						
+					if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
+					
+						$arrayScore['score']=$data['score'];
+						$arrayScore['degree_result']=$data['degree_result'];
+						$arrayScore['grade_result']=$data['grade_result'];
+						$arrayScore['result_date']=empty($data['result_date'])?date("Y-m-d"):$data['result_date'];
+						$arrayScore['updated_result']=1;
+					}
+					$this->_name="rms_student_test_result";
+					$this->insert($arrayScore);
 					
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -369,5 +379,65 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
+	}
+	
+	function getAllStudentByBranchTested($branch){
+		$db=$this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$branch_id = $_db->getAccessPermission();
+		$sql="SELECT id,CONCAT(en_name,'-',kh_name) AS name 
+			FROM rms_student_test 
+		WHERE (en_name!='' OR kh_name!='') AND is_makestudenttest=1 AND status=1 and register=0 $branch_id ";
+		$sql.=" AND branch_id = $branch ";
+		$sql.=" ORDER BY id DESC ";
+		return $db->fetchAll($sql);
+	}
+	
+	function insertTestExam($data){
+		$db=$this->getAdapter();
+		try{
+			$array = array(
+					'stu_test_id'	=>$data['stu_test_id'],
+					'degree'	=>$data['degree'],
+					'grade'	=>$data['grade'],
+					'test_date'		=>$data['test_date'],
+					'note'		=>$data['note'],
+					'create_date' => date("Y-m-d H:i:s"),
+					'modify_date' => date("Y-m-d H:i:s"),
+					'user_id'	=>$this->getUserId(),
+			);
+			
+			if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
+				
+				$array['score']=$data['score'];
+				$array['degree_result']=$data['degree_result'];
+				$array['grade_result']=$data['grade_result'];
+				$array['result_date']=empty($data['result_date'])?date("Y-m-d"):$data['result_date'];
+				$array['updated_result']=1;
+			}
+			$this->_name="rms_student_test_result";
+			$id = $this->insert($array);
+			
+			return $id;
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
+		}
+	}
+	
+	function getAllTestResult($stu_id){
+		$db = $this->getAdapter();
+		$sql="SELECT 
+			str.*,
+			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
+			(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
+			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
+			(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title
+			FROM
+			`rms_student_test_result` AS str
+			WHERE 
+			str.stu_test_id = $stu_id ORDER BY str.id DESC ";
+		
+		return $db->fetchAll($sql);
 	}
 }

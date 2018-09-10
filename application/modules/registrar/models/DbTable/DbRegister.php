@@ -1924,7 +1924,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$branch_id = $_db->getAccessPermission();
 		$sql="SELECT id,CONCAT(en_name,'-',kh_name) AS name 
 			FROM rms_student_test 
-		WHERE (en_name!='' OR kh_name!='') AND status=1 and register=0 $branch_id  ORDER BY id DESC ";
+		WHERE (en_name!='' OR kh_name!='') AND is_makestudenttest=1 AND status=1 and register=0 $branch_id  ORDER BY id DESC ";
 		return $db->fetchAll($sql);
 	}
 	

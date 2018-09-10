@@ -295,6 +295,23 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     	
     	$id = new Zend_Form_Element_Hidden('id');
     	
+    	$result_date= new Zend_Dojo_Form_Element_DateTextBox('result_date');
+    	$date = date("Y-m-d");
+    	$result_date->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			'required'=>false));
+    	$result_date->setValue($_date);
+    	
+    	$_score = new Zend_Dojo_Form_Element_NumberTextBox('score');
+    	$_score->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'class'=>' fullside height-text',
+    			'placeholder'=>$this->tr->translate("SCORE"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Score")
+    			 
+    	));
     	
     	//for form Search
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
@@ -350,7 +367,6 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     		
     		$_nationality->setValue($data["nationality"]);
     		$_nation->setValue($data["nation"]);
-//     		$_from_school->setValue($data["old_school"]);
 //     		$reason->setValue($data["reason"]);
 //     		$_reference_name->setValue($data["parent_name"]);
 //     		$_parent_tel->setValue($data["parent_tel"]);
@@ -367,7 +383,7 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     		$_position->setValue($data["position"]);
     		$_parent_name->setValue($data["parent_name"]);
     		$_parent_tel->setValue($data["parent_tel"]);
-    		$_from_school->setValue($data["from_school"]);
+    		$_from_school->setValue($data["old_school"]);
     		$_old_grade->setValue($data["old_grade"]);
     		$address->setValue($data["address"]);
     		$_stu_code->setValue($data["stu_code"]);
@@ -421,6 +437,8 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
 				$_degree,
     			$_session,
 				$id,
+    			$result_date,
+    			$_score,
     			
     			$advance_search,
     			$_status_search,
@@ -864,6 +882,158 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     	));
     	return $this;
     }
- 
+    function FrmEnterResultTest($data=null,$detailscore=null){
+    
+    	$request=Zend_Controller_Front::getInstance()->getRequest();
+    
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$_dbuser = new Application_Model_DbTable_DbUsers();
+    	$userinfo = $_dbgb->getUserInfo();
+    
+    	
+    	$dbRegi = new Registrar_Model_DbTable_DbRegister();
+    	
+    	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$optionBranch = $_dbgb->getAllBranch();
+    	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+    	$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+    	$_branch_id->setMultiOptions($_arr_opt_branch);
+    	$_branch_id->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'getStudntTestByBranch();',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_arr_opt_stu = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$rows = $dbRegi->getAllStudentTested();
+    	if(!empty($rows))foreach($rows AS $row) $_arr_opt_stu[$row['id']]=$row['name'];
+    	$_stu_test_id = new Zend_Dojo_Form_Element_FilteringSelect("stu_test_id");
+    	$_stu_test_id->setMultiOptions($_arr_opt_stu);
+    	$_stu_test_id->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			//'onChange'=>'getStudentTestByBranch();',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	
+    	$_score = new Zend_Dojo_Form_Element_NumberTextBox('score');
+    	$_score->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'class'=>' fullside height-text',
+    			'placeholder'=>$this->tr->translate("SCORE"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Score")
+    	
+    	));
+    	
+    	$_arr_opt = array(""=>$this->tr->translate("SELECT_DEGREE"));
+    	$Option = $_dbgb->getAllItems(1);
+    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	$_degree = new Zend_Dojo_Form_Element_FilteringSelect("degree");
+    	$_degree->setMultiOptions($_arr_opt);
+    	$_degree->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'getAllGrade();',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	 
+    	$_arr_opt = array(""=>$this->tr->translate("SELECT_SESSION"));
+    	$Option = $_dbgb->getAllSession();
+    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	$_session = new Zend_Dojo_Form_Element_FilteringSelect("session");
+    	$_session->setMultiOptions($_arr_opt);
+    	$_session->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_date = date("Y-m-d");
+    	
+    	$test_date= new Zend_Dojo_Form_Element_DateTextBox('test_date');
+    	$test_date->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			'required'=>false));
+    	$test_date->setValue($_date);
+    	
+    	$result_date= new Zend_Dojo_Form_Element_DateTextBox('result_date');
+    	$date = date("Y-m-d");
+    	$result_date->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    			'required'=>false));
+    	$result_date->setValue($_date);
+    	
+    	$_arr_opt = array(""=>$this->tr->translate("SELECT_DEGREE"));
+    	$Option = $_dbgb->getAllItems(1);
+    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	$_degree_result = new Zend_Dojo_Form_Element_FilteringSelect("degree_result");
+    	$_degree_result->setMultiOptions($_arr_opt);
+    	$_degree_result->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'getAllGradeResult();',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    
+    	$note=  new Zend_Form_Element_Textarea('note');
+    	$note->setAttribs(array(
+    			'dojoType'=>'dijit.form.Textarea',
+    			'class'=>'fullside',
+    			'style'=>'font-family: inherit; width:99%;  min-height:100px !important;'));
+    	
+    	$id = new Zend_Form_Element_Hidden('id');
+    	
+    	if (!empty($data)){
+    		$_branch_id->setValue($data['branch_id']);
+    		$_stu_test_id->setValue($data['id']);
+    		
+    		$_branch_id->setAttribs(array(
+    				'readonly'=>'readonly',
+    		));
+    		$_stu_test_id->setAttribs(array(
+    				'readonly'=>'readonly',
+    				));
+    	}
+    	
+    	if (!empty($detailscore)){
+    		$_score->setValue($detailscore['score']);
+    		$_degree->setValue($detailscore['degree']);
+    		$_session->setValue($detailscore['session']);
+    		if (!empty($detailscore['test_date'])){
+    			$test_date->setValue(date("Y-m-d",strtotime($detailscore['test_date'])));
+    		}
+    		if (!empty($detailscore['result_date'])){
+    			$result_date->setValue(date("Y-m-d",strtotime($detailscore['result_date'])));
+    		}
+    		$_degree_result->setValue($detailscore['degree_result']);
+    		$note->setValue($detailscore['note']);
+    		$id->setValue($detailscore['id']);
+    		
+    		$_score->setAttribs(array(
+    				'required'=>'true',
+    		));
+    		
+    	}
+    	$this->addElements(array(
+    			$_branch_id,
+    			$_stu_test_id,
+    			$_score,
+    			$_degree,
+    			$_session,
+    			$test_date,
+    			$result_date,
+    			$_degree_result,
+    			$note,
+    			$id
+    	
+    	));
+    	return $this;
+    }
 }
 

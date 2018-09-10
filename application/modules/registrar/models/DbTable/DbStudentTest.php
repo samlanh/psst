@@ -139,12 +139,14 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$pho_name = $data['old_photo'];
 			}
 			$array = array(
-						'branch_id'	=>$this->getBranchId(),
+						'branch_id'	=>$data['branch_id'],
 						'stu_code'	=>$data['stu_code'],
 						'kh_name'	=>$data['kh_name'],
+						'first_name'	=>$data['first_name'],
 						'en_name'	=>$data['en_name'],
 						'sex'		=>$data['sex'],
 						'nationality'=>$data['nationality'],
+						'nation'=>$data['nation'],
 						'dob'		=>$data['dob'],
 						'pob'		=>$data['pob'],
 						'phone'		=>$data['phone'],
@@ -155,32 +157,22 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'position'			=>$data['position'],
 						'parent_name'		=>$data['parent_name'],
 						'parent_tel'		=>$data['parent_tel'],
-						'photo'				=>$pho_name,
-					
+						'photo'				=>$photo,
+
 						'old_school'=>$data['old_school'],
 						'old_grade'	=>$data['old_grade'],
-						'degree'	=>$data['degree'],
-						'grade'		=>$data['grade'],
 					
 						'emergency_name'		=>$data['emergency_name'],
 						'relationship_to_student'=>$data['relationship_to_student'],
 						'emergency_tel'			=>$data['emergency_tel'],
 						'emergency_address'		=>$data['emergency_address'],
-						//'educational_background'=>$data['edu_background'],
-					
-						'degree_result'	=>$data['degree_result'],
-						'grade_result'	=>$data['grade_result'],
-						'session_result'=>$data['session'],
-						'time_result'	=>$data['time'],
-						//'date_result'   =>$data['date_result'],
-						'term_test'		=>$data['term_test'],
-					
-						'note'		=>$data['note'],
 						'serial'	=>$data['serial'],
+						'status'	=>$data['status'],
 						'user_id'	=>$this->getUserId(),
-						'test_date'	=>$data['test_date'],
-						'updated_result'=>$updated_result,
-					
+						'is_makestudenttest'	=>1,
+						'type'	=>1,
+// 						'create_datetest' => date("Y-m-d H:i:s"),
+						'modify_datetest' => date("Y-m-d H:i:s")
 					);
 			$where="id = $id";
 			$this->update($array, $where);
@@ -206,6 +198,7 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				}
 			}
 		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
 	}
@@ -233,24 +226,25 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$where = " AND ".$from_date." AND ".$to_date;
 		$sql="  SELECT 
 					id,
+					(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
 					serial,
 					stu_code,
 					kh_name,
 					en_name,
 					(SELECT name_kh from rms_view WHERE type=2 and key_code=sex LIMIT 1) as sex,
+					(SELECT name_kh from rms_view WHERE type=21 and key_code=nationality LIMIT 1) as nationality,
 					phone,
-					test_date,
-					(SELECT en_name from rms_dept WHERE dept_id=degree_result LIMIT 1) as degree,
-					(SELECT major_enname from rms_major where major_id=grade_result LIMIT 1) as grade,
-					term_test,
-					note,
+					dob,
+					old_school,
+					parent_name,
+					parent_tel,
 					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1) aS user_name,
-					(select name_en from rms_view WHERE type=14 and key_code=updated_result LIMIT 1) as result_status,
 					'$print'
 				FROM 
 					rms_student_test
 				WHERE
 					status=1 AND is_makestudenttest=1";
+		
 		
 		if (!empty($search['txtsearch'])){
 			$s_where = array();
@@ -261,7 +255,10 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$s_where[] = " old_school LIKE '%{$s_search}%'";
 			$s_where[] = " old_grade LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
-		}      
+		}    
+		if(!empty($search['branch_search'])){
+		$where .= " AND branch_id = ".$search['branch_search'];
+		}
 		if(!empty($search['degree'])){
 			$where .= " and degree = ".$search['degree'];
 		}

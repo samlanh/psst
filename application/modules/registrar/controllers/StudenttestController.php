@@ -17,6 +17,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		}
     		else{
     			$search = array(
+    					'branch_search'=>'',
     					'txtsearch'=>'',
     					'degree' => '',
     					'result_status' => '',
@@ -29,7 +30,7 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     		
 			$rs_rows= $db->getAllStudentTest($search);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("SERIAL","STUDENT_ID","NAME_KH","NAME_EN","SEX","PHONE","TEST_DATE","DEGREE","GRADE","TEST_TERM","NOTE","BY_USER","STATUS","PRINT_PROFILE");
+    		$collumns = array("BRANCH","SERIAL","STUDENT_ID","NAME_KH","NAME_EN","SEX","NATIONALITY","PHONE","DOB","FROM_SCHOOL","PARENT_NAME","TEL","BY_USER","PRINT_PROFILE");
     		$link=array(
     				'module'=>'registrar','controller'=>'studenttest','action'=>'edit',
     		);

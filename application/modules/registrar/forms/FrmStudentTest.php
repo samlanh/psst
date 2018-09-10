@@ -313,6 +313,16 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     			 
     	));
     	
+    	
+    	$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
+    	$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
+    	$_status->setMultiOptions($_arr);
+    	$_status->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	
     	//for form Search
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
     	$advance_search->setAttribs(array(
@@ -357,6 +367,18 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     		$_date = date("Y-m-d");
     	}
     	$end_date->setValue($_date);
+    	
+    	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$optionBranch = $_dbgb->getAllBranch();
+    	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+    	$_branch_search = new Zend_Dojo_Form_Element_FilteringSelect("branch_search");
+    	$_branch_search->setMultiOptions($_arr_opt_branch);
+    	$_branch_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_branch_search->setValue($request->getParam("branch_search"));
     	
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
@@ -403,6 +425,8 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     		$_session->setValue($data["session_result"]);
     		$id->setValue($data["id"]);
     		
+    		$_status->setValue($data["status"]);
+    		
     	}
     	
     	$this->addElements(array(
@@ -439,11 +463,13 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
 				$id,
     			$result_date,
     			$_score,
+    			$_status,
     			
     			$advance_search,
     			$_status_search,
     			$start_date,
-    			$end_date
+    			$end_date,
+    			$_branch_search
     			));
     	return $this;
     }

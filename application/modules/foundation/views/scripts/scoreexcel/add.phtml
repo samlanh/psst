@@ -10,6 +10,9 @@
     <script src="<?php echo $this->baseUrl()."/collap/jquery-1.10.2.js";?>"></script>
     <script src="<?php echo $this->baseUrl()."/collap/jquery-ui.js";?>"></script>
 </head>
+<script type="text/javascript">
+	dojo.require("dojo.NodeList-manipulate");
+</script>
 <style>
 	select{ width:100%;}
 	fieldset{  background:none;}
@@ -55,6 +58,7 @@
 	    border-top-left-radius: 0px !important;
 	}
 	.subject{width:50px !important;}
+	fieldset th.tdheader{white-space:normal; padding: 0px;}
 </style>
 <style>
 	ul.blogscoresubject li{list-style: none;width:10%;float: left; }
@@ -306,7 +310,8 @@ function filterStudent(){
 				str='';
 				column = 0;
 				temp='<table class="collape tablesorter" style="font-size:12px;" id="table" width="100%">'
-					+'<thead><tr><th class="tdheader" ><?php echo $tr->translate('NO');?></th>'
+					+'<thead><tr><th class="tdheader" ><?php echo $tr->translate('DEL');?></th>'
+					+'<th class="tdheader" ><?php echo $tr->translate('NO');?></th>'
 					+'<th class="tdheader header"><?php echo $tr->translate('STUDENT_ID');?></th>'
 					+'<th class="tdheader header"><?php echo $tr->translate('STUDENT_NAME');?></th>'
 					+'<th class="tdheader header"><?php echo $tr->translate('SEX');?></th>'
@@ -323,7 +328,8 @@ function filterStudent(){
 				for(i=0;i<data.length;i++){ //alert(data[i].stu_id);
 					inx = i+1;
 					num++;
-					temp+= '<tr class="hover normal">';
+					temp+= '<tr class="hover normal" id="row'+inx+'">';
+					temp+='<td width="4%"align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 					temp += '<td align="center">&nbsp;'+inx+'</td>';
 					temp += '<td>&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" type="hidden" ></td>';
 					temp += '<td style="min-width:100px;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
@@ -348,7 +354,7 @@ function filterStudent(){
 				temp+= '<tr class="hover normal">';
 				temp += '<td align="center" colspan="4"></td>';
 				for(j=0;j<subject.length;j++){
-					temp += '<td align="center" ><input onclick="createTable('+j+');"  type="button" value="convert to Excel" dojoType="dijit.form.Button"  /></td>';
+					temp += '<td align="center" style="font-size:9px;" ><input onclick="createTable('+j+');"  type="button" value="convert to Excel" dojoType="dijit.form.Button"  /></td>';
 				}
 				temp += '<td align="center" ></td>';
 			    temp+= '</tr>';
@@ -362,6 +368,16 @@ function filterStudent(){
 	    error: function(err) {
 	    }
 	});
+}
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
 }
 function gender(sex){
 	if(sex==1){

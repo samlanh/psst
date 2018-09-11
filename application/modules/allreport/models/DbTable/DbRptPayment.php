@@ -24,15 +24,12 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				sp.is_void,
     				sp.grand_total,
     				sp.credit_memo,
-    				sp.deduct,
-    				sp.fine,
-    				sp.net_amount,
+    				sp.penalty AS fine,
     				(SELECT CONCAT(from_academic,'-',to_academic) 
-						FROM rms_tuitionfee where rms_tuitionfee.id=sp.year LIMIT 1) AS academic_year,
+						FROM rms_tuitionfee where rms_tuitionfee.id=sp.academic_year LIMIT 1) AS academic_year,
     				(select en_name from rms_dept where dept_id = sp.degree LIMIT 1) as degree,
 					(select major_enname from rms_major where major_id = sp.grade LIMIT 1) as grade,
-					(select name_en from rms_view where rms_view.type = 4 and key_code=sp.session LIMIT 1) as session,
-					spd.type
+					(select name_en from rms_view where rms_view.type = 4 and key_code=sp.session LIMIT 1) as session
     			from
     				rms_student_payment as sp,
 					rms_student as s,
@@ -179,7 +176,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		
     	$sql=" Select 
     			  spd.id,
-    			  spd.type,
 				  spd.fee,
 				  spd.qty,
 				  spd.subtotal,
@@ -273,25 +269,22 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    	(SELECT `rms_student`.`stu_khname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS kh_name,
 			    	(SELECT `rms_student`.`stu_enname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS en_name,
 			    	(SELECT `rms_view`.`name_kh` FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` =(SELECT `rms_student`.`sex` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) )))  as sex,
-			    	spd.type,spd.fee,spd.qty,spd.subtotal,
-			    	(SELECT title FROM `rms_program_name` WHERE `rms_program_name`.`service_id`= spd.service_id LIMIT 1) as service,
+			    	spd.fee,spd.qty,spd.subtotal,
+			    	(SELECT title FROM `rms_itemsdetail` WHERE items_id=spd.itemdetail_id LIMIT 1) AS service,
+			    	
 			    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
 			    	(SELECT major_enname from rms_major where major_id = sp.grade LIMIT 1) as grade,
 			    	spd.subtotal,
 			    	spd.paidamount,
 			    	sp.receipt_number as receipt_number,
-			    	sp.`total_payment` AS total_payment,
+			    	sp.`grand_total` AS total_payment,
 			    	sp.`paid_amount` as paid_amount,
 			    	sp.`balance_due` as balance_due,
-			    	sp.`return_amount` as return_amount,
 			    	sp.`amount_in_khmer` as amount_in_khmer,
 			    	(SELECT CONCAT (`last_name`,' ', `first_name`) FROM `rms_users` WHERE `rms_users`.id = sp.user_id LIMIT 1) as user,
 			    	spd.note,
 			    	spd.start_date,
 			    	spd.validate,
-			    	spd.late_fee,
-			    	spd.extra_fee, 
-			    	spd.discount_fix,
 			    	spd.discount_percent
     			FROM 
 			    	rms_student_payment as sp,

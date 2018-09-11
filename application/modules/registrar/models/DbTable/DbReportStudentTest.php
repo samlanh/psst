@@ -25,7 +25,6 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 	    	
 	    	$sql=" SELECT 
 					  st.*,
-					 
 					  (SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code=st.sex LIMIT 1) AS sex,    
 					  (SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 					  (SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
@@ -35,7 +34,9 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 					  (SELECT name_kh FROM rms_view WHERE TYPE=15 AND key_code = str.updated_result LIMIT 1) AS result_status,
 					  (SELECT name_kh FROM rms_view WHERE TYPE=16 AND key_code = st.register LIMIT 1) AS register_status,
 					  str.create_date as create_date_exam,
-					  str.test_date as test_date_exam
+					  str.test_date as test_date_exam,
+					  str.updated_result as updated_result_de
+					  
 					  
 					FROM
 					  rms_student_test AS st,
@@ -79,6 +80,7 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 // 	    	echo $sql.$where.$order;exit();
 	    	return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
 		}
 	}

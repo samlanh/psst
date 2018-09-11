@@ -17,7 +17,7 @@ class Registrar_RptstudenttestController extends Zend_Controller_Action {
     					'branch_id'=>0,
     					'result_status' => '',
     					'register_status' => '',
-    					'start_date'=> null,
+    					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
     			);
     		}

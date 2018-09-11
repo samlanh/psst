@@ -138,8 +138,8 @@
 												    <td><?php echo $rs['first_name']." ".$rs['en_name']; ?></td>
 												    <td><?php echo $rs['sex']; ?></td>
 												    <td><?php echo $rs['phone']; ?></td>
-												    <td><?php if (!empty($rs['score'])){ echo $rs['degree_result_title']; }?></td>
-												    <td><?php if (!empty($rs['score'])){ echo $rs['grade_result_title']; }?></td>
+												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?></td>
+												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['grade_result_title']; }?></td>
 												    <td><?php echo $rs['note']; ?></td>
 												    <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
 													<td><?php echo $rs['user_id'];?></td>								    

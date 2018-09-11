@@ -135,8 +135,6 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			$user_level = $_db->getUserAccessPermission('sp.user_id');
 	
 			$db=$this->getAdapter();
-	
-			$type=$this->getType();
 			$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
 			$to_date = (empty($search['end_date']))? '1': "sp.create_date <= '".$search['end_date']." 23:59:59'";
 			$sql=" SELECT
@@ -145,20 +143,19 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						s.stu_code,
 						s.stu_khname,
 						s.stu_enname,
-						(select generation from rms_tuitionfee where rms_tuitionfee.id = s.academic_year ) as type,
-						(SELECT en_name from rms_dept where dept_id = s.degree LIMIT 1) as degree,
-						(SELECT major_enname from rms_major where major_id = s.grade LIMIT 1) as grade,
-						(SELECT name_en from rms_view where rms_view.type = 4 and key_code=s.session LIMIT 1) as session,
+						(SELECT generation FROM rms_tuitionfee WHERE rms_tuitionfee.id = s.academic_year ) AS type,
+						(SELECT en_name FROM rms_dept WHERE dept_id = s.degree LIMIT 1) AS degree,
+						(SELECT major_enname FROM rms_major WHERE major_id = s.grade LIMIT 1) AS grade,
+						(SELECT name_en FROM rms_view WHERE rms_view.type = 4 AND key_code=s.session LIMIT 1) AS session,
 						sp.create_date,
 						sp.is_void,
-						(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.year LIMIT 1) AS year,
+						(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS YEAR,
 						(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user_id,
-						(SELECT name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status,
-						sp.grand_total as total_payment,
-						sp.fine,
+						(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status,
+						sp.grand_total AS total_payment,
 						sp.credit_memo,
-						sp.deduct,
-						sp.net_amount,
+						sp.grand_total,
+						sp.penalty,
 						sp.paid_amount,
 						sp.balance_due,
 						sp.note,
@@ -202,6 +199,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				$where.= " AND sp.student_id = ".$search['stu_name'];
 			}
 			$order=" ORDER By sp.id DESC ";
+// 			echo $sql.$where.$order;exit();
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 		}

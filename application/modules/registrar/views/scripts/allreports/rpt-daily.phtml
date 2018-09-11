@@ -7,7 +7,7 @@
 	$user_id=$session_user->user_id;
 	$frm =  $this->form_search;
 ?>
-<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+<div style="min-height:10cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">	
 <form  id='foundation_class' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'rpt-daily')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 	<table width="100%" style="margin: 0px; font-family:'khmer os battambang';">
 		<tr> 
@@ -47,7 +47,7 @@
 </style>
 		<div id="divPrint" >
 			<table style="background:#fff; margin: 0 auto; width:100%;white-space: nowrap;" >
-				<tr style="font-size: 13px;">
+				<tr style="font-size: 12px;">
 					<td width="15%" align="center">
 						<img style="width:60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 					</td>
@@ -94,7 +94,7 @@
 										 	if (!empty($this->row)){  
 										 ?>
 										  <thead>
-											  <tr style="font-size:12px; height: 20px; white-space:nowrap;background: #ccd9ff !important; line-height: 30px; font-weight: bold;" align="center">
+											  <tr style="font-size:11px; height: 20px; white-space:nowrap;background: #ccd9ff !important; line-height: 30px; font-weight: bold;" align="center">
 											    <td><?php echo $tr->translate("N_O"); ?></td>
 											    <td><?php echo $tr->translate("RECEIPT_NO"); ?></td>
 											    <td><?php echo $tr->translate("STUDENT_ID"); ?></td>
@@ -103,11 +103,9 @@
 												<td><?php echo $tr->translate("DEGREE"); ?></td>
 												<td><?php echo $tr->translate("GRADE"); ?></td>
 												<td><?php echo $tr->translate("SESSION"); ?></td>
-												<td><?php echo $tr->translate("TOTAL_PAYMENT"); ?></td>
 												<td><?php echo $tr->translate("FINE"); ?></td>
-												<td><?php echo $tr->translate("CREDIT_MEMO"); ?></td>
-												<td><?php echo $tr->translate("DEDUCT");?></td>
-												<td><?php echo $tr->translate("NET_AMOUNT"); ?></td>
+												<td><?php echo $tr->translate("TOTAL_PAYMENT"); ?></td>
+												<td><?php echo $tr->translate("Credit Memo"); ?></td>
 												<td><?php echo $tr->translate("PAID_AMOUNT"); ?></td>
 												<td><?php echo $tr->translate("BALANCE"); ?></td>
 												<td><?php echo $tr->translate("CREATE_DATE"); ?></td>
@@ -118,20 +116,18 @@
 											  </tr>
 										  </thead>
 										 <?php foreach($this->row as $rs){ $i++;?>
-										  <tr style="font-size:11px; height: 20px;white-space:nowrap;"​ class="hover">
+										  <tr style="font-size:11px; height: 20px;"​ class="hover">
 										    <td <?php if($rs['is_void']==1){echo "style='color:red;'";}?>><?php echo $i;?></td>
 										    <td><?php echo $rs['receipt_number']; ?></td>
 										    <td><?php echo $rs['stu_code']; ?></td>
 										    <td style=" white-space:nowrap; text-align:left">&nbsp;<a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'rptreceiptdetail','id'=>$rs['id']))?>"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></a></td>
-											<td><?php echo $rs['type']; ?></td>
+											<td><?php //echo $rs['type']; ?></td>
 											<td><?php echo $rs['degree']; ?></td>
 											<td><?php echo $rs['grade']; ?></td>
 											<td><?php echo $rs['session']; ?></td>
-										    <td><?php echo '$ '.number_format($rs['total_payment'],2); ?></td>
-										    <td><?php if($rs['fine']>0){echo '$ '.number_format($rs['fine'],2);} ?></td>
+											<td><?php if($rs['penalty']>0){echo '$ '.number_format($rs['penalty'],2);} ?></td>
+											<td><?php echo '$ '.number_format($rs['grand_total'],2); ?></td>
 										    <td><?php if($rs['credit_memo']>0){echo '$ '.number_format($rs['credit_memo'],2);} ?></td>
-										    <td><?php if($rs['deduct']>0){echo '$ '.number_format($rs['deduct'],2);} ?></td>
-										    <td><?php echo '$ '.number_format($rs['net_amount'],2); ?></td>
 											<td><?php echo '$ '.number_format($rs['paid_amount'],2); ?></td>
 											<td><?php echo '$ '.number_format($rs['balance_due'],2); ?></td>
 										    <td><?php echo date('d-M-Y (H:i:s)', strtotime($rs['create_date'])); ?></td>
@@ -143,10 +139,10 @@
 										  	 <?php 
 										  	 	if($rs['is_void']==0){
 										  	 		$total_payment = $total_payment + $rs['total_payment'];
-										  	 		$fine = $fine + $rs['fine'];
+										  	 		$fine = $fine + $rs['penalty'];
 										  	 		$credit_memo = $credit_memo + $rs['credit_memo'];
-										  	 		$deduct = $deduct + $rs['deduct'];
-									  	 			$net_amount = $net_amount + $rs['net_amount'];
+										  	 		
+									  	 			$net_amount = $net_amount + $rs['grand_total'];
 													$paid_amount = $paid_amount + $rs['paid_amount'];
 													$balance = $balance + $rs['balance_due'];
 									  	 		} 

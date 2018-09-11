@@ -718,6 +718,7 @@ function getAllgroupStudy($teacher_id=null){
    			AND account_type = ".$type;
    	return $db->fetchAll($sql);
    }
+   /*blog get student*/
    function getAllStudent($opt=null,$type=2){
    	$db=$this->getAdapter();
    	$branch_id = $this->getAccessPermission();
@@ -742,6 +743,24 @@ function getAllgroupStudy($teacher_id=null){
    		return $rows;
    	}
    }
+   function getAllStuCode(){
+   	$db = $this->getAdapter();
+   	$sql=" select stu_id as id , stu_code from rms_student where status=1 and is_subspend=0 ";
+   	return $db->fetchAll($sql);
+   }
+   function getAllStuName(){
+   	$db = $this->getAdapter();
+   	$sql=" select stu_id as id , CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END AS name from rms_student where status=1 and is_subspend=0 ";
+   	return $db->fetchAll($sql);
+   }
+   function getStudentinfoById($stu_id){
+	   	$db=$this->getAdapter();
+	   	$sql="SELECT s.*
+	   	FROM rms_student as s
+	   	WHERE s.stu_id=$stu_id LIMIT 1 ";
+	   	return $db->fetchRow($sql);
+   }
+   /*end blog student*/
    function getDeduct(){
 	   	$db = $this->getAdapter();
 	   	$sql=" SELECT value FROM `ln_system_setting` WHERE id=19 ";
@@ -762,18 +781,6 @@ function getAllgroupStudy($teacher_id=null){
    	return $pre.$new_acc_no;
    }
    
-   function getAllStuCode(){
-   		$db = $this->getAdapter();
-		$sql=" select stu_id as id , stu_code from rms_student where status=1 and is_subspend=0 ";
-		return $db->fetchAll($sql);
-   }
-   
-   
-   function getAllStuName(){
-   	$db = $this->getAdapter();
-   	$sql=" select stu_id as id , CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END AS name from rms_student where status=1 and is_subspend=0 ";
-   	return $db->fetchAll($sql);
-   }
    function getAllGeneration($opt=null,$option=null){
    	$db= $this->getAdapter();
    	$sql="SELECT  DISTINCT(generation) AS generation FROM `rms_tuitionfee` WHERE generation!=''ORDER BY id DESC ";
@@ -1223,7 +1230,7 @@ function getAllgroupStudy($teacher_id=null){
   	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
   	FROM `rms_itemsdetail` AS i
   	WHERE i.status =1 ";
-  	if($items_id!=null){
+  	if($items_id!=null AND $items_id>0){
   		$sql.=" AND i.items_id=".$items_id;
   	}
   	 

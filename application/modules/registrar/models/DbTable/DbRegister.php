@@ -239,7 +239,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					foreach ($ids as $i){
 						$_arr = array(
 								'payment_id'	=>$paymentid,
-								'service_type'	=>$data['service_type'.$i],
+								'service_type'	=>$data['item_id'.$i],
 								'itemdetail_id'	=>$data['item_id'.$i],
 								'payment_term'	=>$data['term_'.$i],
 								'fee'			=>$data['price_'.$i],
@@ -1500,13 +1500,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	$branch_id="";
-    	return "Receipt";
+//     	return "Receipt";
     	
-//     	$sql="SELECT count(id)  FROM rms_student_payment where create_date>='2018-03-06' $branch_id LIMIT 1 ";
-//     	$payment_no = $db->fetchOne($sql);
+    	$sql="SELECT count(id)  FROM rms_student_payment where 1 $branch_id LIMIT 1 ";
+    	$payment_no = $db->fetchOne($sql);
     	
-//     	$sql1="SELECT count(id)  FROM ln_income where date>='2018-03-06' $branch_id LIMIT 1 ";
-//     	$income_no = $db->fetchOne($sql1);
+    	$sql1="SELECT count(id)  FROM ln_income where date>='2018-03-06' $branch_id LIMIT 1 ";
+    	$income_no = $db->fetchOne($sql1);
     	
 //     	$sql2="SELECT count(id)  FROM rms_student_test where total_price>0 AND paid_date>='2018-03-06' and is_paid=1 $branch_id LIMIT 1 ";
 //     	$stu_test_no = $db->fetchOne($sql2); 
@@ -1520,14 +1520,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 //     	$sql5="SELECT count(id)  FROM rms_student_clear_balance where 1 $branch_id LIMIT 1 ";
 //     	$clear_balance = $db->fetchOne($sql5);
     	
-//     	$new_acc_no= (int)$payment_no + (int)$income_no + (int)$stu_test_no + (int)$change_product_no + (int)$customer_payment + (int)$clear_balance + 1;
+    	$new_acc_no= (int)$payment_no + (int)$income_no +  1;
     	
-//     	$acc_length = strlen((int)$new_acc_no+1);
-//     	$pre=0;
-//     	for($i = $acc_length;$i<5;$i++){
-//     		$pre.='0';
-//     	}
-//     	return $pre.$new_acc_no;
+    	$acc_length = strlen((int)$new_acc_no+1);
+    	$pre=0;
+    	for($i = $acc_length;$i<5;$i++){
+    		$pre.='0';
+    	}
+    	return $pre.$new_acc_no;
     }
     //select GEP all old student
     function getAllGepOldStudent(){
@@ -1572,15 +1572,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     //select general  old student by name
     
-    function getGeneralOldStudentById($stu_id){
-    	$db=$this->getAdapter();
-    	$sql="SELECT s.*,
-    		(SELECT scholarship_percent FROM rms_student_payment WHERE student_id=$stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_percent,
-    		(SELECT scholarship_amount FROM rms_student_payment WHERE student_id=$stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_amount,
-    		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.stu_id ORDER BY sgh.gd_id DESC LIMIT 1) as group_id
-    			 FROM rms_student as s    
-    		WHERE s.stu_id=$stu_id LIMIT 1 ";
-    	return $db->fetchRow($sql);
+    function getStudentById($stu_id){
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	return $db->getStudentinfoById($stu_id);
     }
     ///select degree searching 
     function getDegree(){
@@ -1787,7 +1781,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$item_type=$db->fetchOne($sql);
     	
     	if($item_type==1 OR $item_type==2){//grade or service
-    		$sql="SELECT tfd.id,tfd.tuition_fee AS price FROM rms_tuitionfee AS tf,rms_tuitionfee_detail AS tfd 
+    		$sql="SELECT tfd.id,tfd.tuition_fee AS price,
+				(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$serviceid LIMIT 1) as onepayment
+    		 FROM rms_tuitionfee AS tf,rms_tuitionfee_detail AS tfd 
     				WHERE tf.id = tfd.fee_id
     				  AND tfd.class_id = $serviceid AND tfd.payment_term = $termid ";
     		if($item_type==2){
@@ -1796,7 +1792,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$sql.=" $branch_id";
     		return $db->fetchRow($sql);
     	}elseif ($item_type==3){//product
-    		$sql="SELECT price FROM `rms_product_location` WHERE brand_id = 1 AND pro_id=$serviceid";
+    		$sql="SELECT price,
+			(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$serviceid LIMIT 1) as onepayment
+    		FROM `rms_product_location` WHERE brand_id = 1 AND pro_id=$serviceid";
 //     		$sql.=" $branch_id";
     		return $db->fetchRow($sql);
     	}

@@ -399,7 +399,6 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'grade'	=>$data['grade'],
 					'test_date'		=>$data['test_date'],
 					'note'		=>$data['note'],
-					'create_date' => date("Y-m-d H:i:s"),
 					'modify_date' => date("Y-m-d H:i:s"),
 					'user_id'	=>$this->getUserId(),
 			);
@@ -412,8 +411,16 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$array['result_date']=empty($data['result_date'])?date("Y-m-d"):$data['result_date'];
 				$array['updated_result']=1;
 			}
-			$this->_name="rms_student_test_result";
-			$id = $this->insert($array);
+			if (!empty($data['id'])){
+				$id = $data['id'];
+				$where = " id = $id ";
+				$this->_name="rms_student_test_result";
+				$this->update($array, $where);
+			}else{
+				$array['create_date']=date("Y-m-d H:i:s");
+				$this->_name="rms_student_test_result";
+				$id = $this->insert($array);
+			}
 			
 			return $id;
 		}catch (Exception $e){
@@ -436,5 +443,20 @@ class Registrar_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			str.stu_test_id = $stu_id ORDER BY str.id DESC ";
 		
 		return $db->fetchAll($sql);
+	}
+	
+	function getTestResultById($id){
+		$db = $this->getAdapter();
+		$sql="SELECT
+		str.*,
+		(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
+		(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
+		(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
+		(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title
+		FROM
+		`rms_student_test_result` AS str
+		WHERE
+		str.id = $id LIMIT 1 ";
+		return $db->fetchRow($sql);
 	}
 }

@@ -20,36 +20,32 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 	    	
 	    	$db=$this->getAdapter();
 
-        	$from_date =(empty($search['start_date']))? '1': "st.create_date >= '".$search['start_date']." 00:00:00'";
-	    	$to_date = (empty($search['end_date']))? '1': "st.create_date <= '".$search['end_date']." 23:59:59'";
+        	$from_date =(empty($search['start_date']))? '1': "str.create_date >= '".$search['start_date']." 00:00:00'";
+	    	$to_date = (empty($search['end_date']))? '1': "str.create_date <= '".$search['end_date']." 23:59:59'";
 	    	
 	    	$sql=" SELECT 
-	    			  st.*,
-					  st.id,
-					  st.serial,
-					  st.stu_code,
-					  st.kh_name,
-					  st.en_name,
-					  (SELECT name_en from rms_view where type=2 and key_code=st.sex LIMIT 1) as sex,
-					  st.dob,
-					  st.phone,
-					  st.create_date,					  
-					  st.degree_result,
-					  st.grade_result,
-					  st.session_result,					  
-					  (SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=st.degree_result) LIMIT 1) AS degree,
-		   			  (SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=st.grade_result) LIMIT 1 )AS grade,
-		   			  (SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = st.session_result))LIMIT 1) AS `session`,
-					  st.note,
-					  (SELECT first_name FROM rms_users WHERE rms_users.id = st.user_id limit 1) AS user_id,
-					  (select name_kh from rms_view where type=15 and key_code = updated_result LIMIT 1) as result_status,
-					  (select name_kh from rms_view where type=16 and key_code = register LIMIT 1) as register_status
+					  st.*,
+					 
+					  (SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code=st.sex LIMIT 1) AS sex,    
+					  (SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
+					  (SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
+					  (SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
+					  (SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,								 
+					  (SELECT first_name FROM rms_users WHERE rms_users.id = str.user_id LIMIT 1) AS user_id,
+					  (SELECT name_kh FROM rms_view WHERE TYPE=15 AND key_code = str.updated_result LIMIT 1) AS result_status,
+					  (SELECT name_kh FROM rms_view WHERE TYPE=16 AND key_code = st.register LIMIT 1) AS register_status,
+					  str.create_date as create_date_exam,
+					  str.test_date as test_date_exam
 					  
 					FROM
-					  rms_student_test AS st
+					  rms_student_test AS st,
+					  `rms_student_test_result` AS str
 					WHERE 
-						status=1  
-						and st.kh_name!=''
+					str.stu_test_id = st.id
+					AND
+						STATUS=1  
+					AND st.kh_name!=''
+					AND st.is_makestudenttest =1
 						$branch_id  
 	    		";
 	    	
@@ -68,18 +64,18 @@ class Registrar_Model_DbTable_DbReportStudentTest extends Zend_Db_Table_Abstract
 	    		$where.= " AND st.branch_id = ".$search['branch_id'];
 	    	}
 	    	if(!empty($search['user'])){
-	    		$where.= " AND st.user_id = ".$search['user'];
+	    		$where.= " AND str.user_id = ".$search['user'];
 	    	}
 	    	if(!empty($search['degree'])){
-	    		$where .= " and degree = ".$search['degree'];
+	    		$where .= " and str.degree_result = ".$search['degree'];
 	    	}
 	    	if($search['register_status']!=''){
-	    		$where .= " and register = ".$search['register_status'];
+	    		$where .= " and st.register = ".$search['register_status'];
 	    	}
 	    	if($search['result_status']!=''){
-	    		$where .= " and updated_result = ".$search['result_status'];
+	    		$where .= " and str.updated_result = ".$search['result_status'];
 	    	}
-	    	$order=" ORDER By updated_result DESC,degree_result ASC,grade_result ASC,session_result ASC ";
+	    	$order=" ORDER By str.updated_result DESC,str.degree_result ASC,str.grade_result ASC ";
 // 	    	echo $sql.$where.$order;exit();
 	    	return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){

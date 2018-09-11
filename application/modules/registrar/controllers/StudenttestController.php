@@ -182,7 +182,6 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     
     function createtestexamAction(){
     	
-    	
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbStudentTest();
@@ -204,8 +203,17 @@ class Registrar_StudenttestController extends Zend_Controller_Action
     	$row  = $db->getStudentTestById($id);
     	$this->view->rs = $row;
     	
+    	$test = $this->getRequest()->getParam("test");
+    	$result=null;
+    	
+    	if (!empty($test)){
+    		$db = new Registrar_Model_DbTable_DbStudentTest();
+    		$result  = $db->getTestResultById($test);
+    	}
+    	$this->view->detailscore = $result;
+    	
     	$frm = new Registrar_Form_FrmStudentTest();
-    	$frm->FrmEnterResultTest($row);
+    	$frm->FrmEnterResultTest($row,$result);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->form = $frm;
     	

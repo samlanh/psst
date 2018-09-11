@@ -1040,7 +1040,6 @@ class Registrar_Form_FrmStudentTest extends Zend_Dojo_Form
     		$_degree_result->setValue($detailscore['degree_result']);
     		$note->setValue($detailscore['note']);
     		$id->setValue($detailscore['id']);
-    		
     		$_score->setAttribs(array(
     				'required'=>'true',
     		));

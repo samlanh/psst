@@ -18,6 +18,40 @@
     			<div class="col-sm-4 text-right">
     			</div>
     		</div>
+    		<div class=" nav_menu page-notification">
+		   		<nav>
+              		<ul class="nav navbar-nav navbar-left">
+              			<li role="presentation" class="dropdown">
+			                  <a title="<?php echo $tr->translate("CREATE_TO_STUDENT_TEST");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+			                    <i class="fa fa-universal-access"></i>
+			                    <span id="countNews" class="badge bg-green"><?php $count = count($this->crm); if ($count>0){ echo $count;}?></span>
+			                  </a>
+			                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+				                 <li class=" event title">
+				                  	<h4><?php echo $tr->translate("CREATE_TO_STUDENT_TEST");?></h4>
+				                  </li>
+				                  <?php if (!empty($this->crm)) foreach ($this->crm as $crm){?>
+		                          <li class="items-list event">
+		                         	 <a href="<?php echo $this->baseUrl()."/registrar/studenttest/makecrmtest/id/".$crm['id'];?>">
+			                            <div class="pull-left profile-list ">
+			                              <img src="<?php echo $this->baseUrl()."/images/no-profile.png";?>" />
+			                            </div>
+			                            <div class="media-body">
+			                              <p><strong><i class="fa fa-university"></i> <?php echo $crm['branch_name'];?> </strong>  </p>
+			                              <span class="title" ><?php echo $crm['kh_name']." (".$crm['first_name']." ".$crm['en_name'].")";?></span>
+			                              <p><?php echo $tr->translate("GENDER");?> <?php if ($crm['sex']==1){ echo $tr->translate("MALE");}else { echo  $tr->translate("FEMALE");}?> </p>
+			                              <p><strong><i class="fa fa-phone"></i> <?php echo $crm['parent_tel'];?> </strong>  </p>
+			                              <p> <small><?php echo empty($crm['old_school'])?"":"(".$crm['old_school'].")";?></small>
+			                              </p>
+			                            </div>
+		                            </a>
+		                          </li>
+		                          <?php }?>
+			                  </ul>
+			              </li>
+			          </ul>
+			      </nav>
+			  </div>
     		<!-- 
     		
     		<div class=" nav_menu page-notification">

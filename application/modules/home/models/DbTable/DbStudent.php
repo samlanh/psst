@@ -489,5 +489,23 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchAll($sql);
 	}
+	function getSumStatusAttendence($stu_id,$group){
+		$db = $this->getAdapter();
+		$sql="SELECT
+		sat.`group_id`,
+		satd.`attendence_status`,
+		COUNT(satd.`attendence_status`) AS total,
+		sat.`date_attendence`,
+		satd.description
+		FROM
+		`rms_student_attendence` AS sat,
+		`rms_student_attendence_detail` AS satd
+		WHERE
+		sat.`id`= satd.`attendence_id`
+		AND sat.type=1
+		AND satd.`stu_id`=$stu_id
+		AND sat.`group_id`=$group GROUP BY satd.`attendence_status`";
+		return $db->fetchAll($sql);
+	}
 }
 

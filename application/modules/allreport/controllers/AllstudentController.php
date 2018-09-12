@@ -705,4 +705,25 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$result = $db->getAcadimicByStudentHeader($group_id,$student_id);
 		$this->view->result = $result;
 	}
+	public function rptTotalattendanceAction()
+	{
+		$id=$this->getRequest()->getParam("id");
+		if(empty($id)){
+			$this->_redirect("/allreport/allstudent/student-group");
+		}
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search = array(
+					'txtsearch' => "",
+					'study_type'=>1);
+		}
+		$this->view->search = $search;
+		$db = new Allreport_Model_DbTable_DbRptGroup();
+		$row = $db->getStudentGroup($id,$search,1);
+		$this->view->rs = $row;
+		$rs= $db->getGroupDetailByID($id);
+		$this->view->rr = $rs;
+	}
 }

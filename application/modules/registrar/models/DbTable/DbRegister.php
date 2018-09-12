@@ -140,7 +140,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								);
 						$where = ' stu_id = '.$id;
 						$this->update($arr, $where);
-					}else {//ករណីសិស្សថ្មីត្រូវបញ្ចូលថ្មី
+				}elseif($data['student_type']==5){//ករណីសិស្សថ្មីត្រូវបញ្ចូលថ្មី
 					    $arr=array(
 								'stu_code'		=>$stu_code,
 					    		'customer_type'	=>$data['customer_type'],
@@ -174,7 +174,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				    		);
 				    		$this->insert($arra);
 				    	}
-					}
+				}
 					
 					$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
 					if($cut_credit_memo<0){

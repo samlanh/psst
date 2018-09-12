@@ -58,7 +58,7 @@
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CUSTOMER_TYPE");?> <span class="required">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect" onchange="netTotal();displayNoneAddRow();SetReadonlyForPayService();popupTestPayment();">
+	                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect" onchange="netTotal();">
 				    			<option value="1">Student Payment</option>
 				    			<option value="2">Customer Payment</option>
 				    		</select>
@@ -72,7 +72,7 @@
 								<option value="1"><?php echo $tr->translate("Old Student");?></option>
 								<option value="2"><?php echo $tr->translate("Tested Student");?></option>
 								<option value="3"><?php echo $tr->translate("CRM");?></option>
-								<option value="4"><?php echo $tr->translate("Student Test");?></option>
+								<option value="4"><?php echo $tr->translate("Placement Test");?></option>
 								<option value="5"><?php echo $tr->translate("New Student");?></option>
 							</select>
 	                   </div>
@@ -520,7 +520,6 @@
 		dijit.byId('dept').attr('value','<?php echo $this->degree_row['degree'];?>');
 		getallstudentname();
 		getgradebyDegree(-1,1,2);
-		//getallstudentcode();
 });		
 	
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
@@ -602,35 +601,7 @@ function getgradebyDegree(dept_id,a,type=1){
 		});
 	}
 	// set regisetr info to readonly when pay for service
-function SetReadonlyForPayService(){
-	/*var customer_type = dijit.byId("e").get("value");
-	dijit.byId("student_type").set('readOnly',false);
-	dijit.byId("en_name").set('readOnly',false);
-	dijit.byId("kh_name").set('readOnly',false);
-	dijit.byId("sex").set('readOnly',false);
-	dijit.byId("start_date").set('readOnly',false);
-	dijit.byId("end_date").set('readOnly',false);
-	dijit.byId("study_year").set('readOnly',false);
-	dijit.byId("dept").set('readOnly',false);
-	dijit.byId("grade").set('readOnly',false);
-	dijit.byId("session").set('readOnly',false);
-	dijit.byId("study_hour").set('readOnly',false);
-	dijit.byId("payment_term").set('readOnly',false);
-	dijit.byId("discount_percent").set('readOnly',false);
-	dijit.byId("parent_phone").set('readOnly',false);*/
-}
-// set field to readonly when balance>0 for get all old information of student
-function setReadOnly(){
-	/*dijit.byId("start_date").set('readOnly',true);
-	dijit.byId("end_date").set('readOnly',true);
-	dijit.byId("study_year").set('readOnly',true);
-	dijit.byId("dept").set('readOnly',true);
-	dijit.byId("grade").set('readOnly',true);
-	dijit.byId("session").set('readOnly',true);
-	dijit.byId("study_hour").set('readOnly',true);
-	dijit.byId("payment_term").set('readOnly',true);*/
-}
-	// Remove field readonly when balance <= 0 for get all old information of student
+// Remove field readonly when balance <= 0 for get all old information of student
 function removeReadOnly(){
 	/*var customer_type = dijit.byId("customer_type").get("value");
 	if(customer_type!=3 || customer_type!=4){
@@ -680,17 +651,6 @@ function removeReadOnly(){
 			dijit.byId('deduct').attr('value','<?php echo $this->deduct ?>');
 		}else{
 			dijit.byId('deduct').attr('value',0);
-		}
-	}
-	function popupTestPayment(){
-		<?php 
-			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-			$url_copy = $this->url(array('module'=>'registrar','controller'=>'studenttestpayment','action'=>'add'));
-		?>
-		//window.location.href = '<?php //echo $url_copy;?>';
-		customer_type = dijit.byId('customer_type').get('value');
-		if(customer_type == 4){
-			window.open('<?php echo $url_copy;?>', '_blank');
 		}
 	}
 </script>
@@ -771,14 +731,6 @@ function submitDataAddNew(){
 }
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
-}
-function displayNoneAddRow(){
-	var customer_type = dijit.byId("customer_type").get("value");
-	if(customer_type==2 || customer_type==4){
-		document.getElementById('table_row').style.display="none";
-	}else{
-		document.getElementById('table_row').style.display="block";
-	}
 }
 function getMonthByNumber(m){
 	var monthName=[
@@ -1010,7 +962,7 @@ function hideDialog(){
 function hideDialog1(){
 	dijit.byId('alertBeforePrint').hide();
 }
-function getallstudentname(){
+function getallstudentname(){//
 	student_type = dijit.byId("student_type").attr("value");
 	if(student_type==1){//old
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
@@ -1018,6 +970,10 @@ function getallstudentname(){
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
 	}else if(student_type==3){//crm
 		url_data='';
+	}
+	else if(student_type==4){//new test
+		SetReadonly();
+		return false;
 	}
 	dojo.xhrPost({
 		url:url_data,
@@ -1033,6 +989,31 @@ function getallstudentname(){
 		}
 	});
 }
+function SetReadonly(){
+	dijit.byId("kh_name").attr('value','');
+	dijit.byId("en_name").attr('value','');
+	dijit.byId("last_name").attr('value','');
+	dijit.byId("dob").set('value','');
+	dijit.byId("parent_phone").attr('value','');
+	
+	dijit.byId("kh_name").set('readOnly',false);
+	dijit.byId("en_name").set('readOnly',false);
+	dijit.byId("last_name").set('readOnly',false);
+	dijit.byId("sex").set('readOnly',false);
+	dijit.byId("dob").set('readOnly',false);
+	dijit.byId("parent_phone").set('readOnly',false);
+	
+	dijit.byId("degree_culture").set('readOnly',false);
+	dijit.byId("dept").set('readOnly',false);
+	dijit.byId("grade").set('readOnly',false);
+	
+	dijit.byId("group").set('readOnly',true);
+	dijit.byId("study_year").set('readOnly',true);
+	dijit.byId("session").set('readOnly',true);
+	dijit.byId("study_hour").set('readOnly',true);
+	dijit.byId("room").set('readOnly',true);
+}
+
 function setID(){
 	stu_id = dijit.byId('old_stu').get('value');
 	getPaymentHistory(stu_id);
@@ -1154,7 +1135,7 @@ function getOldStudentInfo(){
 							dijit.byId('room').attr('value',data.room);
 							getgradebyDegree(data.degree,data.grade,1);
 						}
-					   alert(data.calture);
+					 
 					   dijit.byId('degree_culture').attr('value',data.calture);
 						dijit.byId('kh_name').attr('value',data.stu_khname);
 						dijit.byId('en_name').attr('value',data.stu_enname);

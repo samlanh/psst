@@ -186,7 +186,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$sql = "SELECT title as id, title as name FROM rms_know_by WHERE status=1 AND title!='' ORDER BY rms_know_by.id ASC ";
    	return $db->fetchAll($sql);
    }
-   
+   public function getAllKnowBy(){
+   	$db = $this->getAdapter();
+   	$sql = "SELECT id as id, title as name FROM rms_know_by WHERE status=1 AND title!='' ORDER BY rms_know_by.id ASC ";
+   	return $db->fetchAll($sql);
+   }
    public function getAllDocumentType(){
    	$db = $this->getAdapter();
    	$sql = "SELECT name as id, name FROM rms_document_type WHERE status=1 AND name!='' ORDER BY rms_document_type.id ASC ";
@@ -1006,16 +1010,23 @@ function getAllgroupStudy($teacher_id=null){
   }
   function getTestStudentId($branch=null){
   	$db = $this->getAdapter();
-  	$sql ="SELECT COUNT(id) AS number FROM `rms_student_test` WHERE is_makestudenttest =1  ";
+  	$sql ="SELECT COUNT(stu_id) AS number FROM `rms_student` WHERE customer_type =4  ";
   	if (!empty($branch)){
   		$sql.= " AND branch_id=1";
   	}
-  	$sql.=" ORDER BY id DESC LIMIT 1 ";
+  	$sql.=" ORDER BY stu_id DESC LIMIT 1 ";
   	$acc_no = $db->fetchOne($sql);
   	 
   	$new_acc_no= (int)$acc_no+1;
   	$acc_no= strlen((int)$acc_no+1);
-  	$pre="";
+  	$pre="T";
+  	$branch_prefix="";
+  	if (!empty($branch)){
+  		$row = $this->getBranchInfo($branch);
+  		if (!empty($row['prefix'])){
+  			$pre.= $row['prefix'];
+  		}
+  	}
   	for($i = $acc_no;$i<6;$i++){
   		$pre.='0';
   	}

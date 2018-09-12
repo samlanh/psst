@@ -35,75 +35,144 @@
 				}
 			</script>
 			<div class="card-box">
-				<div class="col-md-7 col-sm-7 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					
 					<div class="form-group">
-		                <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
-		                <div class="col-md-9 col-sm-9 col-xs-12">
+		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("branch_id");?>
 		                </div>
 		             </div>
 					<div class="form-group">
-		                <label class="control-label bold col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("STUDENT_NAMEKHMER");?> </label>
-		                <div class="col-md-9 col-sm-9 col-xs-12">
+		                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_NAMEKHMER");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("kh_name");?>
 		                </div>
 		             </div>
 					<div class="form-group">
-	                   <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("First Name");?>
+	                    <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("First Name");?>
 	                   </label>
-	                  <div class="col-md-3 col-sm-3 col-xs-12">
+	                  <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm_items->getElement("first_name");?>
 	                   </div>
-	                   <label class="control-label text-center col-md-3 col-sm-3 col-xs-12" for="first-name"><?php echo $tr->translate("Last Name");?>
+	                </div>
+	                <div class="form-group">
+	                    <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Last Name");?>
 	                   </label>
-	                   <div class="col-md-3 col-sm-3 col-xs-12">
-	                   		<?php echo $frm_items->getElement("en_name");?>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm_items->getElement("last_name");?>
 	                   </div>
 	                   <div class="clearfix"></div>
 	                </div>
-	                <div class="form-group">
-		               <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("GENDER");?> </label>
-		               <div class="col-md-9 col-sm-9 col-xs-12">
+	                
+	                 <div class="form-group">
+		               <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GENDER");?> </label>
+		               <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("sex");?>
 		                </div>
 		             </div>
-					<div class="form-group">
-		                <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("FROM_SCHOOL");?> </label>
-		                <div class="col-md-9 col-sm-9 col-xs-12">
-		                	<?php echo $frm_items->getElement("old_school");?>
+		             <div class="form-group">
+		               <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ASK_FOR");?> </label>
+		               <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_items->getElement("ask_for");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
-	                   <label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("REASON");?>
-	                   </label>
-	                   <div class="col-md-9 col-sm-9 col-xs-12">
-	                   		<?php echo $frm_items->getElement("reason");?>
-	                   </div>
-	                </div>
-		         </div>
-		         <div class="col-md-4 col-sm-4 col-xs-12">
-		         	<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PARENT_NAME");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm_items->getElement("reference_name");?>
-	                   </div>
-	                </div>
+		               <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Previous Concern");?> </label>
+		               <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input value="" type="text" id="e15" name="prev_concern" style="width: 100%">
+		                </div>
+		             </div>
+		             
+		             
+		             <div class="form-group">
+		               <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("KNOW_BY");?> </label>
+		               <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_items->getElement("know_by");?>
+		                </div>
+		             </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEL");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm_items->getElement("parent_tel");?>
+	                   		<?php echo $frm_items->getElement("tel");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PROCCESS");?>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_SCHOOL");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_items->getElement("old_school");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("REASON");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm_items->getElement("reason");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm_items->getElement("crm_status");?>
 	                   </div>
 	                </div>
 		         </div>
+				<div class="col-md-8 col-sm-8 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFORMATION");?> 
+	                   </label>
+	                </div>
+	                <div class="bd-bg">
+		                <div class="form-group">
+		                   <div class="col-md-3 col-sm-2 col-xs-12">
+		                   		<?php echo $frm_items->getElement("kh_name_stu");?>
+		                   </div>
+		                   <div class="col-md-3 col-sm-3 col-xs-12">
+		                   		<?php echo $frm_items->getElement("first_name_stu");?>
+		                   </div>
+		                   <div class="col-md-3 col-sm-3 col-xs-12">
+		                   		<?php echo $frm_items->getElement("last_name_stu");?>
+		                   </div>
+		                   <div class="col-md-3 col-sm-3 col-xs-12">
+		                   		<?php echo $frm_items->getElement("sex_stu");?>
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                	<div class="col-md-3 col-sm-3 col-xs-12">
+		                   		<?php echo $frm_items->getElement("age_stu");?>
+		                   </div>
+		                   <div class="col-md-3 col-sm-3 col-xs-12">
+		                   		<?php echo $frm_items->getElement("degree");?>
+		                   </div>
+		                  <div class="col-md-3 col-sm-3 col-xs-12">
+		                   		<input input id="grade" />
+		                   </div>
+		                   <div class="col-md-3 col-sm-3 col-xs-12">
+		                   		<input type="button" label="<?php echo $tr->translate('Add To Record');?>" dojoType="dijit.form.Button" 
+												iconClass="dijitIconEditProperty" onclick="addRow();" />
+		                   </div>
+		                </div>
+	                 </div>
+	               <div class="form-group">
+		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+								<tr id="head-title" class="head-td" align="right"></tr>
+						</table>
+						
+						<input type="hidden" name="identity" id="identity"  />
+		         	 </div>
+					<div class="form-group">
+	                   <label class="control-label  col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <div class="col-md-12 col-sm-12 col-xs-12">
+	                   		<?php echo $frm_items->getElement("note");?>
+	                   </div>
+	                </div>
+		         </div>
+		         
 		         <div class="clearfix"></div>
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
@@ -118,3 +187,170 @@
 		</form>
     </div>
 </div>
+<style>
+.bd-bg {
+    background: #f7f7f7;
+    padding: 5px 10px;
+    border: solid 1px #062b61;
+    margin-bottom: 10px;
+}
+.bd-bg .form-group {
+    margin-bottom: 0;
+}
+table#table_row tr td {
+    padding: 5px 2px;
+    background: #f7f7f7;
+}
+</style>
+ <link href="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.css" /> 
+ <script src="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.js"></script>
+  <?php 
+ $tags="";
+ if (!empty($this->prev_concern)) foreach ($this->prev_concern as $rs){
+ 	if (empty($tags)){
+ 		$tags = '"'.$rs['name'].'"';
+ 	}else{
+ 		if (!empty($rs['name'])){
+ 		$tags=$tags.',"'.$rs['name'].'"';
+ 		}
+ 	}
+ }
+?>
+<script>
+require(["dojo/ready"], function(ready){
+	ready(function(){
+		 $("#e15").select2({tags:[<?php echo $tags;?>],placeholder: "<?php echo $tr->translate("Previous Concern");?>",allowClear: true});
+	});
+});
+
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.store.Memory");
+
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: grade_store,
+		autoComplete: true,                        
+		required: false,
+		id: "grade",
+		name: "grade",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate('SELECT_GRADE');?>",          
+		onChange: function() {  
+			
+		}
+	}, "grade");
+	
+	getAllGrade();	
+	
+	//addRow();
+});
+
+var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+function getAllGrade(){
+	dijit.byId('grade').set('value',''); 
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_get_grade,
+		content:{
+			'dept_id':dept_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			grade_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade').set('store',grade_store);  
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+var col = 0;
+var no = 0;
+var title = 0;
+tmp = '';
+temp='';
+function addRow() {
+
+	kh_name_stu = dijit.byId('kh_name_stu').get('value');
+	first_name_stu = dijit.byId('first_name_stu').get('value');
+	last_name_stu = dijit.byId('last_name_stu').get('value');
+	sex_stu = dijit.byId('sex_stu').get('value');
+	age_stu = dijit.byId('age_stu').get('value');
+	degree = dijit.byId('degree').get('value');
+	grade = dijit.byId('grade').get('value');
+
+	degreelabel = dijit.byId("degree").attr('displayedValue');
+	gradelabel = dijit.byId("grade").attr('displayedValue');
+	sex_stulabel = dijit.byId("sex_stu").attr('displayedValue');
+	if(kh_name_stu==""){
+		alert("<?php echo $tr->translate("Please Enter Name Kh");?>");
+		dijit.byId('kh_name_stu').focus();
+		return false;
+	}
+	if(degree==""){ degreelabel = ""}
+	 if (isNaN(age_stu)) { age_stu = ""}
+	col++;no++;
+	template='';
+	if(title!=1){
+		temp+='<th><?php echo $tr->translate("DEL");?></th>';
+		temp+='<th><?php echo $tr->translate("N_O");?></th>';
+		temp+='<th style="white-space: nowrap;" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?></th>';
+		temp+='<th ><?php echo $tr->translate("First Name");?></th>';
+		temp+='<th ><?php echo $tr->translate("Last Name");?></th>';
+		temp+='<th ><?php echo $tr->translate("SEX");?></th>';
+		temp+='<th ><?php echo $tr->translate("AGE")." (".$tr->translate("YEAR").")";?></th>';
+		temp+='<th ><?php echo $tr->translate("DEGREE");?></th>';
+		temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
+		
+		dojo.query("#head-title").append(temp);
+		title=1;
+	}
+		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="4%" align="center">'+no+'</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="kh_name_'+col+'" id="kh_name_'+col+'" value="'+kh_name_stu+'" type="hidden">'+kh_name_stu+'&nbsp;</td>';	
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("First Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="first_name_'+col+'" id="first_name_'+col+'" value="'+first_name_stu+'" type="hidden">'+first_name_stu+'&nbsp;</td>';	
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("Last Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="last_name_'+col+'" id="last_name_'+col+'" value="'+last_name_stu+'" type="hidden">'+last_name_stu+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="gender_'+col+'" id="gender_'+col+'" value="'+sex_stu+'" type="hidden">'+sex_stulabel+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("AGE");?>" dojoType="dijit.form.TextBox" class="fullside" name="age_'+col+'" id="age_'+col+'" value="'+age_stu+'" type="hidden">'+age_stu+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
+
+		
+	tmp='<tr id="row'+col+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
+
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+col);
+	} else {$("#identity").val(col);}
+	dojo.html.set(dojo.byId("row"+col),template , {
+	     parseContent: true,
+	});
+
+	kh_name_stu = dijit.byId('kh_name_stu').set('value','');
+	first_name_stu = dijit.byId('first_name_stu').set('value','');
+	last_name_stu = dijit.byId('last_name_stu').set('value','');
+	sex_stu = dijit.byId('sex_stu').set('value',1);
+	age_stu = dijit.byId('age_stu').set('value','');
+	grade = dijit.byId('grade').set('value','');
+}
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+}
+</script>

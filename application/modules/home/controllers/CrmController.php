@@ -21,6 +21,7 @@ class Home_CrmController extends Zend_Controller_Action
 	    	else{
 	    		$search = array(
 	    				'advance_search' => "",
+	    				'branch_search' => "",
 	    				'status_search' => -1,
 	    				'start_date'=> date('Y-m-d'),
 	    				'end_date'=>date('Y-m-d'),
@@ -31,8 +32,8 @@ class Home_CrmController extends Zend_Controller_Action
 	    	$rs_rows = $db->getAllCRM($search);
 	    	
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("BRANCH","STUDENT_NAMEKHMER","First Name","Last Name","GENDER","FROM_SCHOOL","PARENT_NAME","TEL",
-	    			"PROCCESS","DATE","Amount Contacted","BY_USER");
+	    	$collumns = array("BRANCH","STUDENT_NAMEKHMER","First Name","Last Name","GENDER","TEL","ASK_FOR","DATE",
+	    			"STATUS","Amount Contacted","BY_USER");
 	    	$link=array(
 	    			'module'=>'home','controller'=>'crm','action'=>'edit',
 	    	);
@@ -67,6 +68,13 @@ class Home_CrmController extends Zend_Controller_Action
     			echo $e->getMessage();
     		}
     	}
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$pevconcer = $_dbgb->getViewByType(22);
+    	$this->view->prev_concern = $pevconcer;
+    	
+    	$degree = $_dbgb->getAllItems(1);
+    	array_unshift($degree, array ( 'id' => '','name' =>$this->tr->translate("PLEASE_SELECT")));
+    	$this->view->degree = $degree;
     	
     	$frm = new Home_Form_FrmCrm();
     	$frm->FrmAddCRM(null);
@@ -93,10 +101,32 @@ class Home_CrmController extends Zend_Controller_Action
     	 
     	$row = $db->getCRMById($id);
     	if (empty($row)){
-    		Application_Form_FrmMessage::Sucessfull("Can Not Edit This Record. This Record Already Created to Student Test",self::REDIRECT_URL);
+    		Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL);
     	}
+    	
+    	$rowdetail = $db->getCRMDetailById($id);
+    	$this->view->rowdetail = $rowdetail;
+    	
     	$allContact = $db->AllHistoryContact($id);
     	$this->view->history = $allContact;
+    	
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$pevconcer = $_dbgb->getViewByType(22);
+    	$this->view->prev_concern = $pevconcer;
+    	
+    	
+    	$pre = explode(",", $row['prev_concern']);
+    	$prevCon="";
+    	if (!empty($pre)) foreach ($pre as $a){
+    		$title = $db->getPrevTilteByKeyCode($a);
+    		if (empty($prevCon)){ $prevCon = $title;
+    		}else {
+    			if (!empty($title)){
+    				$prevCon = $prevCon.",".$title;
+    			}
+    		}
+    	}
+    	$this->view->prevconcern = $prevCon;
     	
     	$frm = new Home_Form_FrmCrm();
     	$frm->FrmAddCRM($row);
@@ -122,7 +152,7 @@ class Home_CrmController extends Zend_Controller_Action
 		}
 		$row = $db->getCRMById($id);
 		if (empty($row)){
-    		Application_Form_FrmMessage::Sucessfull(" This Record Can Not Make Contact History. This Record Already Created to Student Test",self::REDIRECT_URL."/index");
+    		Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL."/index");
     	}
 		$this->view->row = $row;
 		$allContact = $db->AllHistoryContact($id);

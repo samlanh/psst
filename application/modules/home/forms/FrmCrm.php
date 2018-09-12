@@ -27,6 +27,12 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'required'=>'true',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
+    	if (count($optionBranch)==1){
+    		$_branch_id->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($optionBranch))foreach($optionBranch AS $row){
+    			$_branch_id->setValue($row['id']);
+    		}
+    	}
     	
     	$kh_name = new Zend_Dojo_Form_Element_TextBox('kh_name');
     	$kh_name->setAttribs(array(
@@ -45,7 +51,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			
     	));
     	
-    	$_last_name = new Zend_Dojo_Form_Element_TextBox('en_name');
+    	$_last_name = new Zend_Dojo_Form_Element_TextBox('last_name');
     	$_last_name->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
     			'required'=>'true',
@@ -64,6 +70,26 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	
     	
+    	$_arr = array(1=>$this->tr->translate("KHMER_KNOWLEDGE"),2=>$this->tr->translate("ENGLISH"),3=>$this->tr->translate("UNIVERSITY"),4=>$this->tr->translate("OTHER"));
+    	$_ask_for = new Zend_Dojo_Form_Element_FilteringSelect("ask_for");
+    	$_ask_for->setMultiOptions($_arr);
+    	$_ask_for->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_arr_opt_know = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$optionKnowBy = $_dbgb->getAllKnowBy();
+    	if(!empty($optionKnowBy))foreach($optionKnowBy AS $row) $_arr_opt_know[$row['id']]=$row['name'];
+    	$_know_by = new Zend_Dojo_Form_Element_FilteringSelect("know_by");
+    	$_know_by->setMultiOptions($_arr_opt_know);
+    	$_know_by->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
     	$_from_school = new Zend_Dojo_Form_Element_TextBox('old_school');
     	$_from_school->setAttribs(array(
     			'dojoType'=>'dijit.form.TextBox',
@@ -79,25 +105,22 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside',
     			'style'=>'font-family: inherit; width:99%;  min-height:100px !important;'));
     	
-    	$_reference_name = new Zend_Dojo_Form_Element_TextBox('reference_name');
-    	$_reference_name->setAttribs(array(
-    			'dojoType'=>'dijit.form.ValidationTextBox',
-    			'required'=>'true',
-    			'class'=>' fullside height-text',
-    			'missingMessage'=>$this->tr->translate("Forget Enter Last Name")
-    	
-    	));
-    	
-    	$_parent_tel = new Zend_Dojo_Form_Element_TextBox('parent_tel');
-    	$_parent_tel->setAttribs(array(
+    	$_tel = new Zend_Dojo_Form_Element_TextBox('tel');
+    	$_tel->setAttribs(array(
     			'dojoType'=>'dijit.form.ValidationTextBox',
     			'required'=>'true',
     			'class'=>' fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter Tel")
-    			 
+    	
     	));
     	
-    	$_arr = array(0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"));
+    	$note=  new Zend_Form_Element_Textarea('note');
+    	$note->setAttribs(array(
+    			'dojoType'=>'dijit.form.Textarea',
+    			'class'=>'fullside',
+    			'style'=>'font-family: inherit; width:99%;  min-height:100px !important;'));
+    	
+    	$_arr = array(1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"),0=>$this->tr->translate("DROPPED"));
     	$_crm_status = new Zend_Dojo_Form_Element_FilteringSelect("crm_status");
     	$_crm_status->setMultiOptions($_arr);
     	$_crm_status->setAttribs(array(
@@ -110,6 +133,72 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$id = new Zend_Form_Element_Hidden('id');
     	
     	
+    	
+    	$kh_name_stu = new Zend_Dojo_Form_Element_TextBox('kh_name_stu');
+    	$kh_name_stu->setAttribs(array(
+    			'dojoType'=>'dijit.form.ValidationTextBox',
+    			'class'=>'fullside height-text',
+    			'placeholder'=>$this->tr->translate("STUDENT_NAMEKHMER"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Name In Khmer")
+    	));
+    	 
+    	$_first_name_stu = new Zend_Dojo_Form_Element_TextBox('first_name_stu');
+    	$_first_name_stu->setAttribs(array(
+    			'dojoType'=>'dijit.form.ValidationTextBox',
+    			'class'=>' fullside height-text',
+    			'placeholder'=>$this->tr->translate("First Name"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter First Name")
+    			 
+    	));
+    	 
+    	$_last_name_stu = new Zend_Dojo_Form_Element_TextBox('last_name_stu');
+    	$_last_name_stu->setAttribs(array(
+    			'dojoType'=>'dijit.form.ValidationTextBox',
+    			'class'=>' fullside height-text',
+    			'placeholder'=>$this->tr->translate("last Name"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Last Name")
+    	
+    	));
+    	
+    	$_arr = array(1=>$this->tr->translate("MALE"),2=>$this->tr->translate("FEMALE"));
+    	$_sex_stu = new Zend_Dojo_Form_Element_FilteringSelect("sex_stu");
+    	$_sex_stu->setMultiOptions($_arr);
+    	$_sex_stu->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_age_stu = new Zend_Dojo_Form_Element_NumberTextBox('age_stu');
+    	$_age_stu->setAttribs(array(
+    			'dojoType'=>'dijit.form.NumberTextBox',
+    			'class'=>' fullside height-text',
+    			'placeholder'=>$this->tr->translate("AGE"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Age")
+    	
+    	));
+    	
+    	$_arr_opt = array(""=>$this->tr->translate("SELECT_DEGREE"));
+    	$Option = $_dbgb->getAllItems(1);
+    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	$_degree = new Zend_Dojo_Form_Element_FilteringSelect("degree");
+    	$_degree->setMultiOptions($_arr_opt);
+    	$_degree->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'onChange'=>'getAllGrade();',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	 
+    	$_arr = array(1=>$this->tr->translate("MALE"),2=>$this->tr->translate("FEMALE"));
+    	$_sex_stu = new Zend_Dojo_Form_Element_FilteringSelect("sex_stu");
+    	$_sex_stu->setMultiOptions($_arr);
+    	$_sex_stu->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	
     	//for form Search
     	$advance_search = new Zend_Dojo_Form_Element_TextBox('advance_search');
     	$advance_search->setAttribs(array(
@@ -120,7 +209,24 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	));
     	$advance_search->setValue($request->getParam("advance_search"));
     	
-    	$_arr = array(-1=>$this->tr->translate("ALL"),0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"));
+    	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$optionBranch = $_dbgb->getAllBranch();
+    	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+    	$_branch_search = new Zend_Dojo_Form_Element_FilteringSelect("branch_search");
+    	$_branch_search->setMultiOptions($_arr_opt_branch);
+    	$_branch_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	if (count($optionBranch)==1){
+    		$_branch_search->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($optionBranch))foreach($optionBranch AS $row){
+    			$_branch_search->setValue($row['id']);
+    		}
+    	}
+    	$_branch_search->setValue($request->getParam("branch_search"));
+    	
+    	$_arr = array(-1=>$this->tr->translate("ALL"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"),0=>$this->tr->translate("DROPPED"));
     	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
     	$_status_search->setMultiOptions($_arr);
     	$_status_search->setAttribs(array(
@@ -156,18 +262,20 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$end_date->setValue($_date);
     	
     	if(!empty($data)){
+    		
     		$_branch_id->setValue($data["branch_id"]);
     		$kh_name->setValue($data["kh_name"]);
     		$_first_name->setValue($data["first_name"]);
-    		$_last_name->setValue($data["en_name"]);
+    		$_last_name->setValue($data["last_name"]);
     		$_sex->setValue($data["sex"]);
+    		$_ask_for->setValue($data["ask_for"]);
+    		$_know_by->setValue($data["know_by"]);
     		$_from_school->setValue($data["old_school"]);
+    		$_tel->setValue($data["tel"]);
     		$reason->setValue($data["reason"]);
-    		$_reference_name->setValue($data["parent_name"]);
-    		$_parent_tel->setValue($data["parent_tel"]);
     		$_crm_status->setValue($data["crm_status"]);
     		$id->setValue($data["id"]);
-    		
+    		$note->setValue($data["note"]);
     	}
     	
     	$this->addElements(array(
@@ -176,14 +284,24 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
 				$_first_name,
 				$_last_name,
 				$_sex,
+    			$_ask_for,
+    			$_know_by,
     			$_from_school,
+    			$_tel,
 				$reason,
-				$_reference_name,
 				$_crm_status,
     			$id,
-    			$_parent_tel,
+    			$note,
+    			
+    			$kh_name_stu,
+    			$_first_name_stu,
+    			$_last_name_stu,
+    			$_sex_stu,
+    			$_age_stu,
+    			$_degree,
     			
     			$advance_search,
+    			$_branch_search,
     			$_status_search,
     			$start_date,
     			$end_date

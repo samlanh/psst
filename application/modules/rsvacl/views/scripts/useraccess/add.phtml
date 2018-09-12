@@ -20,6 +20,7 @@ table.user td{
 	  $df=$this->data;
 	  $module_str = array(
 	  		'home'=>'HOME_PAGE',
+	  		'test'=>'test',
 	  		'rsvacl'=>'ACL',
 	  		'setting'=>'SETTING',
 	  		'stock'=>'ORIGINAL_PRODUCT',
@@ -98,7 +99,7 @@ table.user td{
 						<?php 
 							$old_module = "";
 						?>
-						<div data-dojo-type="dijit/layout/TabContainer" style="width: 98%; height: 400px;" tabPosition="left-h" tabStrip="true">
+						<div data-dojo-type="dijit/layout/TabContainer" style="width: 98%; height: 600px;" tabPosition="left-h" tabStrip="true">
 							
 							<?php if(!empty($this->rows)){foreach ($this->rows as $key=>$rs){ ?>
 								<?php if($old_module != $rs['module']){

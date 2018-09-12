@@ -80,7 +80,8 @@ class Global_LecturerController extends Zend_Controller_Action {
 	}
 	public function editAction()
 	{
-		$id=$this->getRequest()->getParam("id");
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$id=$this->getRequest()->getParam("id");	   
 		if($this->getRequest()->isPost())
 		{
 			try{
@@ -96,27 +97,25 @@ class Global_LecturerController extends Zend_Controller_Action {
 				echo $e->getMessage();
 			}
 		}
-		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$db=new Global_Model_DbTable_DbTeacher();
-		$row=$db->getTeacherById($id);
+		$row = $db->getTeacherById($id); 
 		$this->view->rs = $row;
-		
-		$tsub=new Global_Form_FrmTeacher();
-		$frm_techer=$tsub->FrmTecher($row);
+		$tsub = new Global_Form_FrmTeacher();
+		$frm_techer = $tsub->FrmTecher($row);
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
-		$this->view->frm_techer = $frm_techer;
+		$this->view->frm_update = $frm_techer;
 		
-		$this->view->branch_id = $db->getAllBranch();
+		//print_r($row); exit();
+		 
+ 		$_db = new Application_Model_DbTable_DbGlobal();
+		$row = $_db->getAllDocumentType(); // degree language
+		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		$this->view->doc_type = $row;
 		
+		$_db = new Global_Model_DbTable_DbTeacher();
+		$this->view->branch_id = $_db->getAllBranch();
 		$db = new Global_Model_DbTable_DbTeacher();
-		$position = $db->getAllPosition();
-		array_unshift($position, array('id'=>-1,'name'=>$tr->translate("ADD_NEW")));
-		$this->view->position = $position;
-		
-		$db = new Global_Model_DbTable_DbTeacher();
-		$position = $db->getAllPosition();
-		array_unshift($position, array('id'=>-1,'name'=>$tr->translate("ADD_NEW")));
-		$this->view->position = $position;
 	}
 	function addPositionAction(){
 		if($this->getRequest()->isPost()){

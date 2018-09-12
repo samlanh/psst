@@ -79,7 +79,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		}
 		$group = $db->getAllgroup();
 		array_unshift($group,array('id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-		array_unshift($group, array ( 'id' =>'','name' => $this->tr->translate("SELECT_GROUP")));
+		array_unshift($group,array ( 'id' =>'','name' => $this->tr->translate("SELECT_GROUP")));
 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();

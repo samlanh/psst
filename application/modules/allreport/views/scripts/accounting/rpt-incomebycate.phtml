@@ -9,240 +9,237 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 	dojo.require("dijit.form.DateTextBox");
 </script>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">			
-	<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-		<table width="50%" align="left"​ style="margin: 0 auto;"> 
-		   <tr>
-		   		<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="start_date" name="start_date" value="<?php echo $this->search['start_date']; ?>"  type="text"></td>
-				<td><input dojoType="dijit.form.DateTextBox"  constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text"></td>
-		   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		   </tr>
-		</table>
-	</form>
-	<div id="divPrint">
-			<table style="background:#fff; margin: 0 auto; width: 100%; padding:0.5cm;" >
-				<tr>
-					<td width="15%" align="center">
-						<img style="width: 70%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
-					</td>
-					<td align="center" width=70%">
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_INCOMEBYCATE');?></strong><br />
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer MEF2';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong>
-					</td>
-					<td width="15%" align="center"></td>
-				</tr>
-				<tr>
-					<td colspan="3">
-						<style> th,td{ padding:0 1px;}</style>
-							<style type="text/css">
-								table{ border-collapse:collapse; margin:0 auto;
-								border-color:#000; }
-								.padd tr td{  text-align:left}
-								.padd tr th{  background-color: #ccc; }
-							</style>
-						<table class="padd" width="100%" border="1" align="left" style="white-space:nowrap;font-family: Khmer OS Battambang;">
-							<tr style="background:#efefef;text-align:center;color:#000; font-size: 14px;font-family:'Khmer MEF2';">
-								<td style="text-align:center">លរ</td>
-								<td style="text-align:center"><?php echo $tr->translate("លេខគណនី");?></td>
-								<td style="text-align:center"><?php echo $tr->translate("ឈ្មោះគណនីជាខ្មែរ");?></td>
-								<td style="text-align:center"><?php echo $tr->translate("ឈ្មោះគណនីជាអង់គ្លេស");?></td>
-								<td style="text-align:center"><?php echo $tr->translate("សរុប");?></td>
-							</tr> 
-							<tr style="background:#efefef;color:#000; font-size: 16px;font-weight:bold;font-family:'Arail';text-align: center !important;">
-								<td style="text-align:center">No.</td>
-								<td style="text-align:center">Account Code</td>
-								<td style="text-align:center">Account in Khmer</td>
-								<td style="text-align:center">Account in English</td>
-								<td style="text-align:center">Amount</td>
-							</tr> 
-							<style> td{padding:0 3px; }</style>
+<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+	<table width="50%" align="left"​ style="margin: 0 auto;"> 
+	   <tr>
+	   		<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="start_date" name="start_date" value="<?php echo $this->search['start_date']; ?>"  type="text"></td>
+			<td><input dojoType="dijit.form.DateTextBox"  constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text"></td>
+	   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+	   </tr>
+	</table>
+</form>
+<div id="divPrint">
+		<table style="background:#fff; margin: 0 auto; width: 100%; padding:0.5cm;" >
+			<tr>
+				<td width="15%" align="center">
+					<img style="width: 70%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+				</td>
+				<td align="center" width=70%">
+					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_INCOMEBYCATE');?></strong><br />
+					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer MEF2';">For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong>
+				</td>
+				<td width="15%" align="center"></td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<style> th,td{ padding:0 1px;}</style>
+						<style type="text/css">
+							table{ border-collapse:collapse; margin:0 auto;
+							border-color:#000; }
+							.padd tr td{  text-align:left}
+							.padd tr th{  background-color: #ccc; }
+						</style>
+					<table class="padd" width="100%" border="1" align="left" style="white-space:nowrap;font-family: Khmer OS Battambang;">
+						<tr style="background:#efefef;text-align:center;color:#000; font-size: 14px;font-family:'Khmer MEF2';">
+							<td style="text-align:center">លរ</td>
+							<td style="text-align:center"><?php echo $tr->translate("លេខគណនី");?></td>
+							<td style="text-align:center"><?php echo $tr->translate("ឈ្មោះជាខ្មែរ");?></td>
+							<td style="text-align:center"><?php echo $tr->translate("ឈ្មោះគណនីជាអង់គ្លេស");?></td>
+							<td style="text-align:center"><?php echo $tr->translate("សរុប");?></td>
+						</tr> 
+						<tr style="background:#efefef;color:#000; font-size: 16px;font-weight:bold;font-family:'Arail';text-align: center !important;">
+							<td style="text-align:center">No.</td>
+							<td style="text-align:center">Account Code</td>
+							<td style="text-align:center">Account in Khmer</td>
+							<td style="text-align:center">Account in English</td>
+							<td style="text-align:center">Amount</td>
+						</tr> 
+						<style> td{padding:0 3px; }</style>
+						<?php 
+							$i=0; 
+							$type=0;
+							$grand_total=0;
+							$type_name='';
+							$sum_up = 0;
+							$net_total=0;
+							$no=0;
+						  ?>
+						  <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
+							  <?php if($rs['type']!=$type && ($rs['type']!=1 && $rs['type']!=2)){	?>
+								   <?php  if($key>0 ){ $no++;?>
+											<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+											  <td style="text-align: center;"><?php echo $no;?></td>
+										 	  <td width="50%" style=" font-weight:bold;">&nbsp;&nbsp;</td>
+											  <td width="50%" style=" color:#F00; font-weight:bold;"></td>
+										 	  <td width="50%" style="  background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</td>
+											  <td width="50%" style=" color:#F00; font-weight:bold;">$ <?php echo number_format($grand_total,2);?></td>
+											</tr>
+									<?php }$sum_up = $sum_up + $grand_total;$grand_total=0;?>
+								<?php 
+								 	}
+								 	$type=$rs['type'];
+								 	$grand_total = $grand_total + $rs['paidamount'];
+								 	if($type==1 || $type==2){
+								 		$type_name = "ថ្លៃសិក្សា";
+								 	}else if($type==3){
+								 		$type_name = "ថ្លៃសេវាកម្ម";
+								 	}else if($type==4){
+								 		$type_name = "ថ្លៃលក់ផលិតផល";
+								 	}
+						 	 	?>
+						  
+						  	<?php }
+						  	$sum_up = $sum_up + $grand_total; $no++; ?>
+							  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+						 		<td style="text-align: center;"><?php echo $no."";?></td>
+					 			<td width="50%" style=" font-weight:bold;">&nbsp;</th>
+								<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+						  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</th>
+								<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($grand_total,2);?></td>
+							  </tr>
+						 <?php }?>	
+						 
+						 <?php 
+								$i=0; 
+								$payment_id=0;
+								$fine=0;
+						 ?>
+						  <?php if(!empty($this->rs)){ $no++; foreach($this->rs as $key => $rs){ $i++; ?>
+							  <?php 
+							  		if($rs['payment_id']!=$payment_id){	
+										$fine = $fine + $rs['fine'];
+								 	}
+								 	$payment_id=$rs['payment_id'];
+						 	  ?>
+						  	  <?php }?>
+							  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+						  		<td style="text-align: center;"><?php echo $no;?></td>
+					 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+					 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+					 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("FINE");?>&nbsp;</td>
+								<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($fine,2);?></td>
+							  </tr>
+						  <?php }?>
 							<?php 
 								$i=0; 
-								$type=0;
-								$grand_total=0;
-								$type_name='';
-								$sum_up = 0;
-								$net_total=0;
-								$no=0;
-							  ?>
-							  <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
-								  <?php if($rs['type']!=$type && ($rs['type']!=1 && $rs['type']!=2)){	?>
-									   <?php  if($key>0 ){ $no++;?>
-												<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-												  <td style="text-align: center;"><?php echo $no;?></td>
-											 	  <td width="50%" style=" font-weight:bold;">&nbsp;&nbsp;</td>
-												  <td width="50%" style=" color:#F00; font-weight:bold;"></td>
-											 	  <td width="50%" style="  background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</td>
-												  <td width="50%" style=" color:#F00; font-weight:bold;">$ <?php echo number_format($grand_total,2);?></td>
-												</tr>
-										<?php }$sum_up = $sum_up + $grand_total;$grand_total=0;?>
-									<?php 
-									 	}
-									 	$type=$rs['type'];
-									 	$grand_total = $grand_total + $rs['paidamount'];
-									 	if($type==1 || $type==2){
-									 		$type_name = "ថ្លៃសិក្សា";
-									 	}else if($type==3){
-									 		$type_name = "ថ្លៃសេវាកម្ម";
-									 	}else if($type==4){
-									 		$type_name = "ថ្លៃលក់ផលិតផល";
-									 	}
-							 	 	?>
-							  
-							  	<?php }
-							  	$sum_up = $sum_up + $grand_total; $no++; ?>
-								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-							 		<td style="text-align: center;"><?php echo $no."";?></td>
-						 			<td width="50%" style=" font-weight:bold;">&nbsp;</th>
-									<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-							  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate($type_name);?>&nbsp;</th>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($grand_total,2);?></td>
-								  </tr>
-							 <?php }?>	
-							 
-							 <?php 
-									$i=0; 
-									$payment_id=0;
-									$fine=0;
-							 ?>
-							  <?php if(!empty($this->rs)){ $no++; foreach($this->rs as $key => $rs){ $i++; ?>
-								  <?php 
-								  		if($rs['payment_id']!=$payment_id){	
-											$fine = $fine + $rs['fine'];
-									 	}
-									 	$payment_id=$rs['payment_id'];
-							 	  ?>
-							  	  <?php }?>
-								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+								$payment_id=0;
+								$credit_memo=0;
+						    ?>
+						  <?php if(!empty($this->rs)){ $no++; foreach($this->rs as $key => $rs){ $i++; ?>
+							  	<?php 
+							  		if($rs['payment_id']!=$payment_id){	
+										$credit_memo = $credit_memo + $rs['credit_memo'];
+								 	}
+								 	$payment_id=$rs['payment_id'];
+						 	  	?>
+						  	  <?php } ?>
+							  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
 							  		<td style="text-align: center;"><?php echo $no;?></td>
-						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
-						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("FINE");?>&nbsp;</td>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($fine,2);?></td>
-								  </tr>
-							  <?php }?>
-								<?php 
-									$i=0; 
-									$payment_id=0;
-									$credit_memo=0;
-							    ?>
-							  <?php if(!empty($this->rs)){ $no++; foreach($this->rs as $key => $rs){ $i++; ?>
-								  	<?php 
-								  		if($rs['payment_id']!=$payment_id){	
-											$credit_memo = $credit_memo + $rs['credit_memo'];
-									 	}
-									 	$payment_id=$rs['payment_id'];
-							 	  	?>
-							  	  <?php } ?>
-								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-								  		<td style="text-align: center;"><?php echo $no;?></td>
-								  		<td width="50%" style="font-weight:bold;">&nbsp;&nbsp;</td>
-										<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-										<td width="50%" style=" background-color: #efefef; font-weight:bold; ">&nbsp;<?php echo $tr->translate("CREDIT_MEMO");?>&nbsp;</td>
-										<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($credit_memo,2);?></td>
-								  </tr>
-							  <?php } ?>
+							  		<td width="50%" style="font-weight:bold;">&nbsp;&nbsp;</td>
+									<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+									<td width="50%" style=" background-color: #efefef; font-weight:bold; ">&nbsp;<?php echo $tr->translate("CREDIT_MEMO");?>&nbsp;</td>
+									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($credit_memo,2);?></td>
+							  </tr>
+						  <?php } ?>
+						  <?php 
+								$i=0; 
+								$payment_id=0;
+								$deduct=0;
+						   ?>
+						  <?php if(!empty($this->rs)){ $no++; foreach($this->rs as $key => $rs){ $i++; ?>
 							  <?php 
-									$i=0; 
-									$payment_id=0;
-									$deduct=0;
-							   ?>
-							  <?php if(!empty($this->rs)){ $no++; foreach($this->rs as $key => $rs){ $i++; ?>
-								  <?php 
-								  		if($rs['payment_id']!=$payment_id){	
-											$deduct = $deduct + $rs['deduct'];
-									 	}
-									 	$payment_id=$rs['payment_id'];
-							 	  ?>
-							  	  <?php }?>
-								  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-							  		<td style="text-align: center;"><?php echo $no;?></td>
-						 			<td width="50%" style="font-weight:bold; ">&nbsp;&nbsp;</th>
-									<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-							  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate("DEDUCT");?>&nbsp;</th>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($deduct,2);?></td>
-								  </tr>
-							  <?php }
-							  ?>
-							  
-							 <?php $income_stu_test =0; 
-								 if (!empty($this->studenttestincome)) { $no++; 
-							 	   $income_stu_test=$this->studenttestincome['total_test'];
-							 ?>
-							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-							  		<td style="text-align: center;"><?php echo $no;?></td>
-						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
-						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Test Income");?>&nbsp;</td>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_stu_test,2);?></td>
-								  </tr>
-							 <?php }?>
-							 
-							 <?php $income_other_income =0; 
-								 if (!empty($this->otherincome)) { $no++; 
-							 	   $income_other_income=$this->otherincome['total_other_income'];
-							 ?>
-							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-							  		<td style="text-align: center;"><?php echo $no;?></td>
-						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
-						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Other Income");?>&nbsp;</td>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_other_income,2);?></td>
-								  </tr>
-							 <?php }?>
-							 
-							 <?php $income_change_product =0; 
-								 if (!empty($this->changeproduct)) { $no++; 
-							 	   $income_change_product=$this->changeproduct['total_change_product'];
-							 ?>
-							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-							  		<td style="text-align: center;"><?php echo $no;?></td>
-						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
-						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Change Product Income");?>&nbsp;</td>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_change_product,2);?></td>
-								  </tr>
-							 <?php }?>
-							 
-							 <?php $income_customer_payment =0; 
-								 if (!empty($this->customerpayment)) { $no++; 
-							 	   $income_customer_payment=$this->customerpayment['total_customer_payment'];
-							 ?>
-							 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-							  		<td style="text-align: center;"><?php echo $no;?></td>
-						 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
-						 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
-						 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Customer Payment Income");?>&nbsp;</td>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_customer_payment,2);?></td>
-								  </tr>
-							 <?php }?>
-							 
-							 
-							  
-							  <?php $net_total = $sum_up + $fine +$income_stu_test + $income_other_income + $income_change_product + $income_customer_payment - $credit_memo - $deduct; ?>
-							  	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
-							  		<td colspan="3" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"> </td>
-							  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;&nbsp;សរុបរួម / Total</td>
-									<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($net_total,2);?></td>
-								  </tr>
-						</table>
-					</td>	
-				</tr>	
-				<tr>
-					<td colspan="3">
-						<table width="100%" style="font-size:12px;font-weight:bold;color:#000; font-size: 14px;font-family:'khmer os battambang';">
-							<tr style="text-align: center;">
-								<td width="30%">បានឃើញនិង ឯកភាព</td>
-								<td width="30%">បានពិនិត្យ</td>
-								<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
-							</tr>
-							<tr style="text-align: center;">
-								<td width="30%" style="font-size: 16px;font-family:'Khmer MEF2'">លោកអគ្គនាយក</td>
-								<td width="30%">ប្រធានគណនេយ្យ</td>
-								<td width="30%">បេឡាករ</td>
-							</tr>
-						</table>
-					</td>	
-				</tr>
-			</table>
-		</div>	
+							  		if($rs['payment_id']!=$payment_id){	
+										$deduct = $deduct + $rs['deduct'];
+								 	}
+								 	$payment_id=$rs['payment_id'];
+						 	  ?>
+						  	  <?php }?>
+							  <tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+						  		<td style="text-align: center;"><?php echo $no;?></td>
+					 			<td width="50%" style="font-weight:bold; ">&nbsp;&nbsp;</th>
+								<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+						  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;<?php echo $tr->translate("DEDUCT");?>&nbsp;</th>
+								<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($deduct,2);?></td>
+							  </tr>
+						  <?php }
+						  ?>
+						  
+						 <?php $income_stu_test =0; 
+							 if (!empty($this->studenttestincome)) { $no++; 
+						 	   $income_stu_test=$this->studenttestincome['total_test'];
+						 ?>
+						 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+						  		<td style="text-align: center;"><?php echo $no;?></td>
+					 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+					 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+					 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Test Income");?>&nbsp;</td>
+								<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_stu_test,2);?></td>
+							  </tr>
+						 <?php }?>
+						 
+						 <?php $income_other_income =0; 
+							 if (!empty($this->otherincome)) { $no++; 
+						 	   $income_other_income=$this->otherincome['total_other_income'];
+						 ?>
+						 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+						  		<td style="text-align: center;"><?php echo $no;?></td>
+					 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+					 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+					 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Other Income");?>&nbsp;</td>
+								<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_other_income,2);?></td>
+							  </tr>
+						 <?php }?>
+						 
+						 <?php $income_change_product =0; 
+							 if (!empty($this->changeproduct)) { $no++; 
+						 	   $income_change_product=$this->changeproduct['total_change_product'];
+						 ?>
+						 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+						  		<td style="text-align: center;"><?php echo $no;?></td>
+					 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+					 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+					 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Change Product Income");?>&nbsp;</td>
+								<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_change_product,2);?></td>
+							  </tr>
+						 <?php }?>
+						 <?php $income_customer_payment =0; 
+							 if (!empty($this->customerpayment)) { $no++; 
+						 	   $income_customer_payment=$this->customerpayment['total_customer_payment'];
+						 ?>
+						 	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+						  		<td style="text-align: center;"><?php echo $no;?></td>
+					 			<td width="50%" style="font-weight:bold;">&nbsp;</td>
+					 			<td width="50%" style=" color:#F00; font-weight:bold; "></td>
+					 			<td width="50%" style=" background-color: #efefef;  font-weight:bold; ">&nbsp;<?php echo $tr->translate("Customer Payment Income");?>&nbsp;</td>
+								<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($income_customer_payment,2);?></td>
+							  </tr>
+						 <?php }?>
+						  
+						  <?php $net_total = $sum_up + $fine +$income_stu_test + $income_other_income + $income_change_product + $income_customer_payment - $credit_memo - $deduct; ?>
+						  	<tr style="font-size:12px; color:#000; height: 30px;"​ align="left">
+						  		<td colspan="3" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"> </td>
+						  		<td width="50%" style=" background-color: #efefef; font-weight:bold;">&nbsp;&nbsp;សរុបរួម / Total</td>
+								<td width="50%" style=" color:#F00; font-weight:bold; ">$ <?php echo number_format($net_total,2);?></td>
+							  </tr>
+					</table>
+				</td>	
+			</tr>	
+			<tr>
+				<td colspan="3">
+					<table width="100%" style="font-size:12px;font-weight:bold;color:#000; font-size: 14px;font-family:'khmer os battambang';">
+						<tr style="text-align: center;">
+							<td width="30%">បានឃើញនិង ឯកភាព</td>
+							<td width="30%">បានពិនិត្យ</td>
+							<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
+						</tr>
+						<tr style="text-align: center;">
+							<td width="30%" style="font-size: 16px;font-family:'Khmer MEF2'">លោកអគ្គនាយក</td>
+							<td width="30%">ប្រធានគណនេយ្យ</td>
+							<td width="30%">បេឡាករ</td>
+						</tr>
+					</table>
+				</td>	
+			</tr>
+		</table>
+	</div>	
 </div>

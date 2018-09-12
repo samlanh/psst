@@ -81,7 +81,6 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
 				'onChange'=>'getallGrade();getStudentNo()',
-		
 		));
 		$rs_nation = $_db->getAllNation();
 		$arr_opt = array();
@@ -117,11 +116,6 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		));	
 		$degree_opt = $db->getAllDegree();
 		$_degree->setMultiOptions($degree_opt);
-		
-// 		$rs_roow = $_db->getAllRoom();
-// 		$arr_room = array(-1=>$tr->translate("SELECT_ROOM"));
-// 		if(!empty($rs_roow))foreach($rs_roow AS $row) $arr_room[$row['id']]=$row['name'];
-// 		$room->setMultiOptions($arr_room);
 		
 		$_note =  new Zend_Dojo_Form_Element_TextBox('note');
 		$_note->setAttribs(array('dojoType'=>'dijit.form.TextBox',
@@ -166,7 +160,6 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$this->addElements(array($id,$_enname,$_note,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
-		
 	}
 	
 }

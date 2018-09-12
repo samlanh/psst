@@ -789,12 +789,12 @@ function getRefreshStudent(){
 		url:url_getstudent,
 		handleAs:"json",
 		load: function(data) {
-			nation_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('nation').set('store',nation_store);  
-		    
-		    nation_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('studen_national').set('store',nation_store); 
-		    
+			nation_store  = getDataStorefromJSON('id','name', data.nation);
+		    dijit.byId('nation').set('store',nation_store); 
+		     
+		    studen_store  = getDataStorefromJSON('id','name', data.studen_national);
+		    dijit.byId('studen_national').set('store',studen_store); 
+
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {

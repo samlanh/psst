@@ -118,14 +118,13 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
    }
       
  function getBranchById($id){
- 		
     	$db = $this->getAdapter();
     	$sql = "SELECT br_id,parent,prefix,branch_namekh,branch_nameen,br_address,branch_code,branch_tel,fax,email,website,photo,displayby,other,status FROM
     	$this->_name ";
     	$where = " WHERE `br_id`= $id" ;  
    		return $db->fetchRow($sql.$where);
     }
-    public static function getBranchCode(){
+ public static function getBranchCode(){
     	$db = new Application_Model_DbTable_DbGlobal();
     	$sql = "SELECT COUNT(br_id) AS amount FROM `rms_branch`";
     	$acc_no= $db->getGlobalDbRow($sql);
@@ -138,7 +137,6 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	}
     	return "C-".$pre.$new_acc_no;
     }
-	
 	function addajaxs($_data){
 		//return '0000';
     	$_arr = array(

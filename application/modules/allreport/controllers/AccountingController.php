@@ -929,7 +929,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->otherincome = $db->getTotalOtherIncome($search);
 			$this->view->changeproduct = $db->getTotalChangeProduct($search);
 			$this->view->customerpayment = $db->getTotalCustomerPayment($search);
-			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();

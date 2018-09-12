@@ -99,7 +99,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	public function getStudentById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT *,(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id FROM rms_student as s WHERE s.stu_id =".$id;
+		$sql = "SELECT *,(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id FROM rms_student as s WHERE s.stu_id =".$id;
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission();
 		return $db->fetchRow($sql);
@@ -154,8 +154,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$new_image_name = "studentprofile".date("Y").date("m").date("d").time().".".end($tem);
 				$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
 			}
-			
-			
 			$_db= $this->getAdapter();
 			$_db->beginTransaction();
 			try{	

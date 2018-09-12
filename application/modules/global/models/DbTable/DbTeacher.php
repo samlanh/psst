@@ -85,54 +85,77 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	    	}
 	}
 	public function updateStaff($_data){
-		$db = $this->getAdapter();
-		$db->beginTransaction();
+		$_db= $this->getAdapter();		
+		$_db->beginTransaction();
 		try{
-			/*/////////// add photo ////////////////////////////////////////////////////
-// 			$adapter = new Zend_File_Transfer_Adapter_Http();
-// 			$part = PUBLIC_PATH.'/images';
-// 			$adapter->setDestination($part);
-// 			$adapter->receive();
-// 			$photo = $adapter->getFileInfo();
-// 			if(!empty($photo['photo']['name'])){
-// 			$pho_name = $photo['photo']['name'];
-// 			}else{
-// 			$pho_name = $_data['old_photo'];
-// 			}
-			*////////////////////////////////////////////////////////////////////////
-	
-			$_arr=array(
-					'teacher_code' 		=> $_data['code'],
-					'teacher_name_kh' 	=> $_data['kh_name'],
-					'teacher_name_en' 	=> $_data['kh_name'],
-					'sex' 				=> $_data['sex'],
-					'dob' 				=> $_data['dob'],
-					'nationality'  		=> $_data['nationality'],
-					'tel'   			=> $_data['phone'],
-					'address' 			=> $_data['address'],
-					//'branch_id' 		=> $_data['branch_id'],
-					//'position' 		=> $_data['staff_position'],
-					//'expired_date' 	=> $_data['expired_date'],
-					'user_name' 		=> $_data['user_name'],
-					'note' 				=> $_data['note'],
-					'status'   			=> $_data['status'],
-					'create_date' 		=> date("Y-m-d"),
-					'user_id'	  		=> $this->getUserId(),
-			);
-		if(!empty($_data['password'])){
-			$_arr['password']=md5($_data['password']);
-		}
-			$where=$this->getAdapter()->quoteInto("id=?", $_data["id"]);
-			$this->update($_arr, $where);
-		return $db->commit();
-		}catch (Exception $e){
-			$db->rollBack();
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
+		/// add photo ////////////////////////////////////////////////////
+				$adapter = new Zend_File_Transfer_Adapter_Http();
+				$part = PUBLIC_PATH.'/images';
+				$adapter->setDestination($part);
+				$adapter->receive();
+				$photo = $adapter->getFileInfo();
+				if(!empty($photo['photo']['name'])){
+					$pho_name = $photo['photo']['name'];
+				}else{
+					$pho_name = '';
+				}
+		////////////////////////////////////////////////////////////////////	
+				$teacher_code = $this->getTeacherCode();
+				$_arr=array(
+						'teacher_code'		 => $_data['code'],
+						'teacher_name_kh'	 => $_data['kh_name'],
+						'teacher_name_en'	 => $_data['kh_name'],
+						'sex'				 => $_data['sex'],
+						'dob'				 => $_data['dob'],
+						'nationality'  		 => $_data['nationality'],
+						'teacher_type'  	 => $_data['teacher_type'],
+				        'tel'  				 => $_data['phone'],
+						'address' 			 => $_data['address'],
+						'note' 				 => $_data['note'],
+						
+	 					'position_add' 		 => $_data['position_add'],
+	 					'passport_no' 		 => $_data['passport_no'],
+	 					'email' 			 => $_data['email'],
+	  					'degree' 			 => $_data['degree'],
+	  					'experiences' 		 => $_data['experiences'],
+						'card_no' 			 => $_data['card_no'],
+	 					'start_date' 		 => $_data['start_date'],
+	 					'end_date' 			 => $_data['end_date'],
+	  					'agreement' 		 => $_data['agreement'],
+						
+						'user_name' 		 => $_data['user_name'],
+						'password' 			 => md5($_data['password']),
+						//'status'   		 => $_data['status'],
+						'photo'  			 => $pho_name,
+						'branch_id' 		 => 1,
+				        'create_date' 		 => date("Y-m-d"),
+				        'user_id'	  		 => $this->getUserId(),
+					);
+					$this->_name="rms_teacher";
+					$id = $this->insert($_arr);
+					$this->_name = 'rms_teacher_document';
+					$ids = explode(',', $_data['identity']);
+					foreach ($ids as $i){
+							$_arr = array(
+									'stu_id'		=>$id,
+									'document_type'	=>$_data['document_type_'.$i],
+									'date_give'		=>$_data['date_give_'.$i],
+									'date_end'		=>$_data['date_end_'.$i],
+									'is_receive'	=>$_data['is_receive_'.$i],
+									'note'			=>$_data['note_'.$i],
+									'type'			=>2,
+							);
+						$this->insert($_arr);
+					}
+					$_db->commit();
+		}catch(Exception $e){
+    		$_db->rollBack();
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
 	}
 	public function getTeacherById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_teacher WHERE id = ".$db->quote($id);
+		$sql = "SELECT * FROM rms_teacher WHERE id =".$db->quote($id);
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
 		return $row;

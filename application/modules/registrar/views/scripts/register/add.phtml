@@ -161,7 +161,7 @@
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="degree_culture" id="degree_culture" autoComplete="false" queryExpr="*${0}*"  >
 								<?php if(!empty($this->degreeculture)){foreach ($this->degreeculture as $index => $rs){?>
-								<option value="<?php echo $rs?>"><?php echo $rs;?></option>
+								<option value="<?php echo $index?>"><?php echo $rs;?></option>
 								<?php }}?>
 							</select>
 	                   </div>
@@ -1010,53 +1010,17 @@ function hideDialog(){
 function hideDialog1(){
 	dijit.byId('alertBeforePrint').hide();
 }
-/*var url_getstudenttest = '<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
-function getAllstudnetTest(){
-	 dojo.xhrPost({
-		url:url_getstudenttest,
-		content:{
-			'student_test':1,
-		},
-		handleAs:"json",
-		load: function(data) {
-			test_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('stu_test').set('store',test_store);  
-		},
-		error: function(err) {
-			alert(err)
-		}
-	});
-}*/
-//var url_student_test = "<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-student-test-info')); ?>";
-/*function getStudentTestInfo(){
-	stu_test = dijit.byId('stu_test').get('value');
-	if(stu_test != ""){
-	 	dojo.xhrPost({
-	 		url:url_student_test,
-	 		content:{
-	 			'stu_test_id':stu_test,
-	 			},
-	 		handleAs:"json",
-	 		load: function(data) {
-	 			dijit.byId("kh_name").attr("value",data.kh_name);
-				dijit.byId("en_name").attr("value",data.en_name);
-				dijit.byId("sex").attr("value",data.sex);
-				dijit.byId("dob").attr("value",data.dob);
-				dijit.byId("parent_phone").attr("value",data.phone);
-				dijit.byId("dept").attr("value",data.degree_result);
-				dijit.byId("session").attr("value",data.session_result);
-				getgradebyDegree(data.degree_result,data.grade_result,1);
-	 		},
-	 		error: function(err) {
-	 			alert(err);
-	 		}
-	 	});	 
-	}
-}*/
-var url_getstudenlist = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
 function getallstudentname(){
+	student_type = dijit.byId("student_type").attr("value");
+	if(student_type==1){//old
+		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+	}else if(student_type==2){//tested student
+		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
+	}else if(student_type==3){//crm
+		url_data='';
+	}
 	dojo.xhrPost({
-		url:url_getstudenlist,
+		url:url_data,
 		content:{
 			'student_name':1,
 		},
@@ -1152,8 +1116,16 @@ function clearControll(){
 	dijit.byId('en_name').attr('value','');
 }
 ///get Gerneral old student
-var url_getalldstudent = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
 function getOldStudentInfo(){
+	student_type = dijit.byId("student_type").attr("value");
+	if(student_type==1){//old
+		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
+	}else if(student_type==2){//tested student
+		var url_getdata = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studenttestinfo')); ?>";
+	}else if(student_type==3){//crm
+		url_getdata='';
+	}
+	
 	student_id=dijit.byId('old_stu').get('value');
 	dijit.byId('kh_name').attr('value','');
 	dijit.byId('en_name').attr('value','');
@@ -1163,39 +1135,50 @@ function getOldStudentInfo(){
 	dijit.byId('old_stu').attr('value',student_id);
 	
 	dojo.xhrPost({
-		url:url_getalldstudent,
+		url:url_getdata,
 		content:{
 			'student_id':student_id,
 			},
 		handleAs:"json",
 		load: function(data) {
 			   if(data){
-				   if(data.group_id!= null && data.group_id>0){
-						dijit.byId('group').attr('value',data.group_id);
-						getInfoBygroup();
-					}else{
-						dijit.byId('group').attr('value','-1');
-						dijit.byId('study_year').attr('value',data.academic_year);
-						dijit.byId('dept').attr('value',data.degree);
-						dijit.byId('session').attr('value',data.session);
-						dijit.byId('room').attr('value',data.room);
-						getgradebyDegree(data.degree,data.grade,1);
-					}
-					dijit.byId('kh_name').attr('value',data.stu_khname);
-					dijit.byId('en_name').attr('value',data.stu_enname);
-					dijit.byId('last_name').attr('value',data.last_name);
-					
-					dijit.byId('sex').attr('value',data.sex);
-					dijit.byId('parent_phone').attr('value',data.tel);
-					dijit.byId('dob').attr('value',data.dob);
-					if(data.photo!=''){
-						$('#profile_wiew').attr('src', "<?php echo $this->baseUrl().'/images/';?>"+data.photo);
-					}else{
-						$('#profile_wiew').attr('src', "<?php echo $this->baseUrl().'/images/no-profile.png';?>");
-					}
-					
-			  }else {
-			  } 
+				   if(student_type==1){//student info
+					   if(data.group_id!= null && data.group_id>0){
+							dijit.byId('group').attr('value',data.group_id);
+							getInfoBygroup();
+						}else{
+							dijit.byId('group').attr('value','-1');
+							dijit.byId('study_year').attr('value',data.academic_year);
+							dijit.byId('dept').attr('value',data.degree);
+							dijit.byId('session').attr('value',data.session);
+							dijit.byId('room').attr('value',data.room);
+							getgradebyDegree(data.degree,data.grade,1);
+						}
+					   alert(data.calture);
+					   dijit.byId('degree_culture').attr('value',data.calture);
+						dijit.byId('kh_name').attr('value',data.stu_khname);
+						dijit.byId('en_name').attr('value',data.stu_enname);
+						dijit.byId('last_name').attr('value',data.last_name);
+						
+						dijit.byId('sex').attr('value',data.sex);
+						dijit.byId('parent_phone').attr('value',data.tel);
+						dijit.byId('dob').attr('value',data.dob);
+						if(data.photo!=''){
+							$('#profile_wiew').attr('src', "<?php echo $this->baseUrl().'/images/';?>"+data.photo);
+						}else{
+							$('#profile_wiew').attr('src', "<?php echo $this->baseUrl().'/images/no-profile.png';?>");
+						}
+				 	}else if(student_type==2){//testing info
+						dijit.byId("kh_name").attr("value",data.kh_name);
+						dijit.byId("en_name").attr("value",data.en_name);
+						dijit.byId("sex").attr("value",data.sex);
+						dijit.byId("dob").attr("value",data.dob);
+						dijit.byId("parent_phone").attr("value",data.phone);
+						dijit.byId("dept").attr("value",data.degree_result);
+						dijit.byId("session").attr("value",data.session_result);
+						//getgradebyDegree(data.degree_result,data.grade_result,1);
+			     }
+			 }
 		},
 		error: function(err) {
 			alert("get student"+err);

@@ -760,6 +760,20 @@ function getAllgroupStudy($teacher_id=null){
 	   	WHERE s.stu_id=$stu_id LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
+   /*test student*/
+   function getAllstudentTest(){//get all
+	   	$db=$this->getAdapter();
+	   	$branch_id = $this->getAccessPermission();
+	   	$sql="SELECT id,CONCAT(en_name,'-',kh_name) AS name
+	   	FROM rms_student_test
+	   	WHERE (en_name!='' OR kh_name!='') AND is_makestudenttest=1 AND status=1 and register=0 $branch_id  ORDER BY id DESC ";
+	   	return $db->fetchAll($sql);
+   }
+   function getStudentTestbyId($stu_test_id){
+   		$db=$this->getAdapter();
+   		$sql="SELECT * FROM rms_student_test WHERE id = $stu_test_id ";
+   		return $db->fetchRow($sql);
+   }
    /*end blog student*/
    function getDeduct(){
 	   	$db = $this->getAdapter();

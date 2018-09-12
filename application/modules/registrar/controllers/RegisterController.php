@@ -484,11 +484,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getStudentTestInfoAction(){
+	function getStudenttestinfoAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$stu_info = $db->getStudentTestInfo($data['stu_test_id']);
+			$stu_info = $db->getStudentTestInfo($data['student_id']);
 			print_r(Zend_Json::encode($stu_info));
 			exit();
 		}

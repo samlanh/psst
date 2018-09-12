@@ -1913,27 +1913,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = " select vill_id as id , village_namekh as name from ln_village where status=1 ";
 		return $db->fetchAll($sql);
-	}
-    
-	
-	function getAllStudentTested(){
-		$db=$this->getAdapter();
+	}    
+	function getAllStudentTested(){//get all student test
 		$_db = new Application_Model_DbTable_DbGlobal();
-		$branch_id = $_db->getAccessPermission();
-		$sql="SELECT id,CONCAT(en_name,'-',kh_name) AS name 
-			FROM rms_student_test 
-		WHERE (en_name!='' OR kh_name!='') AND is_makestudenttest=1 AND status=1 and register=0 $branch_id  ORDER BY id DESC ";
-		return $db->fetchAll($sql);
+		return $_db->getAllstudentTest();
 	}
-	
-	
 	function getStudentTestInfo($stu_test_id){
-		$db=$this->getAdapter();
-		$sql="select * from rms_student_test where id = $stu_test_id ";
-		return $db->fetchRow($sql);
+		$_db = new Application_Model_DbTable_DbGlobal();
+		return $_db->getStudentTestbyId($stu_test_id);
 	}
-	
-	
 	function getCreditMemoByStuId($stu_id){
 		$db=$this->getAdapter();
 		$sql="select id, total_amountafter from rms_creditmemo where student_id = $stu_id and type=0 ";

@@ -332,13 +332,15 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$session_user=new Zend_Session_Namespace('authstu');
 		$user_type_id = $session_user->level;
-		$sql = "SELECT aa.label,aa.module, aa.controller, aa.action FROM rms_acl_user_access AS ua  INNER JOIN rms_acl_acl AS aa
+		$sql = "SELECT aa.label,aa.module, aa.controller, aa.action 
+			FROM rms_acl_user_access AS ua  
+			INNER JOIN rms_acl_acl AS aa
 		ON (ua.acl_id=aa.acl_id) 
 			WHERE aa.status=1 AND ua.user_type_id='".$user_type_id."'
 				AND aa.module='allreport' 
 				AND aa.controller ='".$str_controller."'
 			GROUP BY  aa.module ,aa.controller,aa.action
-		ORDER BY aa.module ,aa.controller ASC , aa.acl_id ASC ";	
+		ORDER BY aa.module ,aa.controller ASC , aa.rank ASC ";	
 		return $db->fetchAll($sql);
 	}
 	function getAccessUrl($module,$controller,$action){

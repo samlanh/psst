@@ -64,141 +64,96 @@
 						.hover:hover{background:#eee;}										
 					  </style>
 					 <td colspan="3" id="exportExcel">
-						<table class="padd" width="100%" border="1" align="center" style="white-space:nowrap;">
+						<table class="padd" width="100%"  align="center" style="white-space:nowrap;">
 						<style> td{padding:0 3px; }</style>
 						  <?php 
-							$total_dic=0; 
 							$grand_total =0;  
-							$service_cate="";
+							$all_grandtotal =0;
 							$i=0; 
-							$total=0; $total_amount=0; 
-							$total_admin_nOhter = 0;
-							$total_fee=0;
-							$grand_total_paid_amount = 0;
-							$grand_total_balance = 0;
-							$total_paid_amount=0;
-							$total_receive_amount=0;
-							$total_balance=0;
 							$type='';
+					 		$payment_term=array("1"=>"Month","2"=>"Term","3"=>"Semester","4"=>"Annual","5"=>"Other",);
 						  ?>
 						  <?php if(!empty($this->row_detail)) foreach($this->row_detail as $key => $rs){ $i++;?>
-						  <?php  
-							if($rs['type']!=$type){	?>
-							   <?php  if($key>0 ){?>
-						</table>
-								<table border="1" align="right" style="font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang'">
+						  <?php 
+						  if($rs['items_id']!=$type){
+						  if($key>0){?>
+								</table>
+								<table align="right" style="font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang'">
 									  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-										<td style=" border-bottom: 1px #000 solid; background-color: #ccd9ff; width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('GRAND_TOTAL');?>&nbsp;</td>
-										<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($total,2);?></td>
+										<td style="width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('GRAND_TOTAL');?>&nbsp;</td>
+										<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($grand_total,2);?></td>
 									  </tr>
-								 </table>
-									<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;">
-							  <?php $i=1;}
-							  if($rs['type']==4){
-								  $rs['service_cate']="ទំនិញ";
-							  }
-							  else if($rs['type']==3){
-								  $rs['service_cate']="សេវាកម្ម";
-							  }else{
-							  	$rs['service_cate']="បង់ថ្លៃសិក្សា";
-							  }
+								 </table><br /><br />
+								<table border="1" class="padd" width="99%"  align="center" style="border:1px solid #ccc;white-space:nowrap;">
+							  <?php $i=1;
+							  $grand_total=0;
+						  		}
 							  ?>
 							  <thead>
-							  <tr style="font-size:10px; color:#000; height: 23px; border-left:1px solid #fff; border-right:1px solid #fff; border-top: 1px solid #fff;"​ align="center">
-							    <th colspan="16" style="text-align:left">
-							    	<strong style="color:#000; font-size: 12px;font-family:'Khmer MEF2';" ><?php echo $tr->translate('TYPE').' : '.$rs['service_cate']; ?></strong>
-							    </th>
-							  </tr>
-							   <tr class="hover" style="background-color:#ccd9ff;line-height: 30px;font-weight: bold;font-size:11px; height: 22px;font-family: 'Open Sans', sans-serif,'khmer os battambang','Khmer Battambang';" align="center" >
-								    <th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
-								    <th>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('NAME_KH');?>&nbsp;</th>
-									<?php if($rs['type']==1 OR $rs['type']==2){//tuition fee?>
-									<th>&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</th>
-									<?php }?>
-									<th><?php echo $tr->translate('SERVICE_CATE');?></th>
-									<th><?php echo $tr->translate('SERVICE_NAME');?></th>
-									<th><?php echo $tr->translate('PAID_DATE');?></th>
-									<th><?php echo $tr->translate('RECEIPT_NO');?></th>
-									<th><?php echo $tr->translate('PAYMENT_TERM');?></th>
-									<th><?php echo $tr->translate('QTY');?></th>
-									<th><?php echo $tr->translate('PRICE');?></th>
-									<th style="font-size:9px;"><?php echo $tr->translate('LATE_FEE');?></th>
-									<th style="font-size:9px;"><?php echo $tr->translate('EXTRA_FEE');?></th>
-									<th style="font-size:9px;"><?php echo $tr->translate('DISCOUND');?></th>
-									<th style="font-size:9px;"><?php echo $tr->translate('DISCOUNT');?></th>
-									<th><?php echo $tr->translate('PAID_AMOUNT');?></th>
-									<th><?php echo $tr->translate('START_DATE');?></th>
-									<th><?php echo $tr->translate('END_DATE');?></th>
-									<th><?php echo $tr->translate('REMARK');?></th>
-									<th><?php echo $tr->translate('STATUS');?></th>
-									<th><?php echo $tr->translate('USER');?></th>
-							  </tr>
+								   <tr class="hover" style="text-align:center !important;background-color:#ccd9ff;line-height: 30px;font-weight: bold;font-size:10px; height: 22px;font-family: 'Open Sans', sans-serif,'khmer os battambang','Khmer Battambang';" >
+									    <th class="center">&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
+									    <th class="center">&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</th>
+										<th class="center">&nbsp;<?php echo $tr->translate('NAME_KH');?>&nbsp;</th>
+										<th class="center"><?php echo $tr->translate('PAID_DATE');?></th>
+										<th class="center"><?php echo $tr->translate('RECEIPT_NO');?></th>
+										<th class="center">&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</th>
+										<th class="center"><?php echo $tr->translate('SERVICE_NAME');?></th>
+										<th class="center"><?php echo $tr->translate('PAYMENT_TERM');?></th>
+										<th class="center"><?php echo $tr->translate('QTY');?></th>
+										<th class="center"><?php echo $tr->translate('PRICE');?></th>
+										<th class="center"><?php echo $tr->translate('Deduct/Extra');?></th>
+										<th class="center"><?php echo $tr->translate('Disc Type');?></th>
+										<th class="center"><?php echo $tr->translate('DISCOUND');?></th>
+										<th class="center"><?php echo $tr->translate('PAID_AMOUNT');?></th>
+										<th class="center"><?php echo $tr->translate('PERIOD');?></th>
+										<th class="center"><?php echo $tr->translate('REMARK');?></th>
+										<th class="center"><?php echo $tr->translate('STATUS');?></th>
+										<th class="center"><?php echo $tr->translate('USER');?></th>
+								  </tr>
 							  </thead>
 							   <?php 
-						   		$total=0;
-						   		$total_paid_amount=0;
-						   		$total_receive_amount=0;
-						   		$total_balance=0;
-							 }
-						   	  if($rs['type']==1 OR $rs['type']==2){//tuition fee
-								    	$rs['service_cate']="បង់ថ្លៃសិក្សា";
-								    	$rs['service_name']=$rs['major_name'];
-							    	}elseif($rs['type']==4){//for procut
-							    		$rs['service_cate']=$rs['product_category'];
-							    }
-							   						 	
-						 	$type = $rs['type'];
-						 	if($rs['is_void']==0){
-						 		$total = $total + $rs['paidamount'];
-						 	}
+						  }
+						  $type = $rs['items_id'];
 						 	?>
 						   <tr class="hover" style="font-size:11px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang';"​ align="center">
 							  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"';}?>><?php echo $i;?></td>
 							    <td style="text-align:center;"><?php echo $rs['stu_code']; ?></td>
 							    <td style="text-align:left"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></td>
-							    <?php if($rs['type']==1 OR $rs['type']==2){//tuition fee?>
-								<td><?php echo $rs['academic_type'];?></td>
-								<?php }?>
-							    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
-								<td style="text-align:left"><?php echo $rs['service_name']; ?></td>
-								<td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
+							    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 							    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
-							    
-							    
+							    <td style="text-align:left"><?php echo $rs['category']; ?></td>
+								<td style="text-align:left"><?php echo $rs['service_name']; ?></td>
 							    <?php 
 									$total_day=strtotime($rs['validate'])-strtotime($rs['start_date']);
 									$day=(int)($total_day/(60*60*24));
 									$qty_month = number_format($day/30);
 									$qty_day = $day%30;
 								?>
-								<?php $payment_term=array("1"=>"Month","2"=>"Term","3"=>"Semester","4"=>"Annual","5"=>"Other",);?>
 								<td align="center">
-									<?php 
-										if($rs['payment_id']>0){
-											if($rs['payment_id']==5){
-												if($qty_month>0){
-													echo $qty_month." month+".$qty_day." days";
-												}else{
-													echo $qty_day." days";
-												}
+								<?php 
+									if($rs['payment_id']>0){
+										if($rs['payment_id']==5){
+											if($qty_month>0){
+												echo $qty_month." month+".$qty_day." days";
 											}else{
-												echo $payment_term[$rs['payment_id']];
+												echo $qty_day." days";
 											}
+										}else{
+											echo $payment_term[$rs['payment_id']];
 										}
-									?>
+									}
+								?>
 								</td>
-							    
-							    
 							    <td><?php echo $rs['qty'];?></td>
 							    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
-							    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
 							    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
+							    <td><?php //$rs['discount_percent']; ?> </td>
 							    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
-							    <td><?php echo $rs['discount_fix']; ?> </td>
 							    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
-							    <td><?php if($rs['type']!=4){echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); }?></td>
-							    <td><?php if($rs['type']!=4){echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate']));}?></td>
+							    <td><?php if($rs['is_onepayment']==0){
+							    	echo date('d/m/Y', strtotime($rs['start_date']));
+							    	echo "-".date('d/m/Y', strtotime($rs['validate']));
+							    }?></td>
 							    <td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
 							   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
 								<td><?php echo $rs['user']; ?></td>
@@ -206,61 +161,48 @@
 						  <?php 
 						  	if($rs['is_void']==0){
 						  		$grand_total = $grand_total+$rs['paidamount'];
+						  		$all_grandtotal = $all_grandtotal+$rs['paidamount'];
+						  		
 						  	}
 						  ?>
 						  <?php } ?>
-						   <?php if(!empty($total)){?>
 						   </table>
-						   <table border="1" align="right" style="margin-right: 6px; font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang'">
-							  <tr style="font-size:12px; color:#000; height: 18px;"​ align="center">
-								<th style=" border-bottom: 1px #000 solid; background-color: #ccd9ff; width:146px; ">&nbsp;<?php echo $tr->translate('GRAND_TOTAL');?>&nbsp;</th>
-								<td style=" border-bottom: 1px #000 solid; color:#F00; width:112px; font-weight:bold; ">$ <?php echo number_format($total,2);?></td>
+						   <table align="right" style="font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang'">
+							  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+								<td style="width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('GRAND_TOTAL');?>&nbsp;</td>
+								<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($grand_total,2);?></td>
 							  </tr>
-						 <?php }?>
-					</table>
-				</td>
+						 </table>
+					</td>
 				</tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
-				<?php 
-					$fine=0;
-					$credit_memo=0;
-					$deduct=0;
-					$net_amount=0;
-					
-					if(!empty($this->row)){foreach ($this->row as $payment){
-						if($payment['is_void']==0){
-							$fine = $fine + $payment['fine'];
-							$credit_memo = $credit_memo + $payment['credit_memo'];
-							$deduct = $deduct + $payment['deduct'];
-							$net_amount = $net_amount + $payment['net_amount'];
-						}
-					}}	
-				?>
 				<?php if (!empty($grand_total)){?>
+				<?php 
+				$credit_memo=0;
+				$penalty=0;
+				if(!empty($this->row)){
+					foreach ($this->row as $payment){
+							$credit_memo = $credit_memo + $payment['credit_memo'];
+							$penalty = $penalty + $payment['penalty'];
+					}
+				}
+				?>
 				<tr>
 					<td colspan="1"></td>
 					<td>
-						<table  colspan="2" border="1" align="right" style="width:100%; margin-right:0.5%; white-space:nowrap;font-family: Khmer OS  Battambang;">
+						<table  colspan="2" align="right" style="width:100%; margin-right:0.5%; white-space:nowrap;font-family: Khmer OS  Battambang;">
 							<tr style="font-size:14px; background:#ccd9ff; height: 20px;font-weight: bold;" align="center">
-								<th><?php echo $tr->translate('GRAND_TOTAL');?></th>
-								<th><?php echo $tr->translate('FINE');?></th>
-								<th><?php echo $tr->translate('CREDIT_MEMO');?></th>
-								<th><?php echo $tr->translate('DEDUCT');?></th>
-								<th><?php echo $tr->translate('NET_AMOUNT');?></th>
+								<th><?php echo $tr->translate('GRAND_TOTAL');?>(+)</th>
+								<th><?php echo $tr->translate('FINE');?>(+)</th>
+								<th><?php echo $tr->translate('Credit Memo');?>(-)</th>
+								<th><?php echo $tr->translate('NET_AMOUNT');?>(=)</th>
 							</tr>
 							<tr align="center" style=" height:18px; font-size:14px; padding: 1px;" >
-								<td><span style="color: red;">$ <?php echo number_format($grand_total,2)?></span></td>
-								<td><span style="color: red;">$ <?php echo number_format($fine,2)?></span></td>
-								<td><span style="color: red;">$ <?php echo number_format($credit_memo,2)?></span></td>
-								<td><span style="color: red;">$ <?php echo number_format($deduct,2)?></span></td>
-								<td><span style="color: red;">$ <?php echo number_format($net_amount,2)?></span></td>
+								<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($all_grandtotal,2)?></span></td>
+								<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($penalty,2)?></span></td>
+								<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($credit_memo,2)?></span></td>
+								<td><div style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($all_grandtotal+$penalty-$credit_memo,2)?></div></td>
 							</tr>
 						</table>
-						<tr>
-							<td colspan="3">&nbsp;</td>
-						</tr>
 					</td>
 				</tr>
 				<?php }?>

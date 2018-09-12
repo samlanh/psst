@@ -76,14 +76,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->service = $db->getService();
 			$this->view->search = $search;
 			
-			$form=new Registrar_Form_FrmSearchInfor();
-			$form->FrmSearchRegister();
-			Application_Model_Decorator::removeAllDecorator($form);
-			$this->view->form_search=$form;
 		}catch(Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();exit();
+			Application_Form_FrmMessage::message("Application Error");
 		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
 	}
 	function  rptPaymentdetailbytypeSumupAction(){
 		try{
@@ -915,20 +915,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'adv_search' =>'',
-						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
+					'adv_search' =>'',
+					'start_date'=> date('Y-m-d'),
+					'end_date'=>date('Y-m-d'),
 				);
 			}
 	
 			$db = new Registrar_Model_DbTable_DbRptByType();
-			$this->view->row = $db->getAllStudentPaymentByType($search,1);
-			$this->view->rs = $db->getAllStudentPaymentByType($search,2);
-			
-			$this->view->studenttestincome = $db->getTotalStudentTestPayment($search);
-			$this->view->otherincome = $db->getTotalOtherIncome($search);
-			$this->view->changeproduct = $db->getTotalChangeProduct($search);
-			$this->view->customerpayment = $db->getTotalCustomerPayment($search);
+			$this->view->row = $db->getIncomebyCategory($search,1);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();

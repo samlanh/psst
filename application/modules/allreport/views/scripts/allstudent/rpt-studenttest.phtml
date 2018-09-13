@@ -1,0 +1,234 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Student Test Report'); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$session_user=new Zend_Session_Namespace('authstu');
+	$user_id=$session_user->user_id;
+	$frm =  $this->form_search;
+?>
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<div class="form-group">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>" placeholder="Search" type="text" >
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("branch_id");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("degree");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" value="<?php  echo $this->search['start_date']; ?>"  type="text">
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text">
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("user");?>
+                   </div>
+                </div>
+                <div class="form-group">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
+			   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>>ប្រភេទលទ្ធផល </option>
+			   				<option value="0" <?php if($this->search['result_status']==0){echo "selected='selected'";}?>> មិនទាន់បាន </option>
+			   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>> បានទទួល </option>
+			   			</select>
+                   </div>
+                   <!-- 
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<select name="register_status" id="register_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
+			   				<option value="" <?php //if($this->search['register_status']==""){echo "selected='selected'";}?>>ប្រភេទចុះឈ្មោះ </option>
+			   				<option value="0" <?php //if($this->search['register_status']==0){echo "selected='selected'";}?>> មិនទាន់ចុះឈ្មោះ </option>
+			   				<option value="1" <?php //if($this->search['register_status']==1){echo "selected='selected'";}?>> បានចុះឈ្មោះ </option>
+			   			</select>
+                   </div>
+                    -->
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   </div>
+                </div>
+			</form>
+		</div>
+		<div class="card-box">
+			<style>
+			.hover:hover{ background: #ddd;}
+			</style>
+					<div id="divPrint"  >
+						<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm;" >
+							<tr style="font-size: 13px;">
+								<td width="15%" align="center">
+									<img style="width:62%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+								</td>
+								<td align="center"  width="70%">
+									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></strong><br />
+									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_TEST"); ?></strong><br />
+									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';">For Date <?php if(!empty($this->search["start_date"])){echo date("d-M-Y",strtotime($this->search["start_date"]))." to ";}?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong><br /><br />
+								</td>
+								<td width="15%">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3" id="exportExcel">
+										<style> th,td{ padding:0 1px;}</style>
+										<style type="text/css">
+											body{font-family: "Times New Roman",Arial,'Kh Battambang','Khmer Battambang'; }
+											table{ border-collapse:collapse; margin:0 auto;
+											border-color:#000; }
+											.padd tr td{  text-align:center}
+											.padd tr th{  background-color: #e4e4e4; }
+										</style>
+			
+									<table class="padd" width="100%" border="1" align="center" style="font-family: Khmer OS Battambang,Times New Roman ;">
+										 
+										 <?php 
+										 	$i=0; $total=0;$total_paid=0;$total_balance=0;
+										 	$comple_b=0; $isset =0; $total_other_income=0;
+										 	$total_other_expense=0;
+										 	$total_income_dollar=0;
+										 	$total_income_kh = 0;
+										 	$total_expense_dollar = 0;
+										 	$total_expense_kh =0;
+										 	$updated_result=0;
+										 	$register=0;
+										 	if (!empty($this->row)){  
+										 ?>
+										 
+										  <tr style="font-size:12px; height: 20px; white-space:nowrap;background: #ccd9ff !important; line-height: 25px; font-weight: bold;" align="center">
+										    <td rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
+										    <td rowspan="2">&nbsp;<?php echo $tr->translate("SERIAL"); ?>&nbsp;</td>
+										    <td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_KH"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_EN"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
+											
+											<td colspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
+											
+											
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("CREATE_DATE"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
+											<!-- <td rowspan="2">&nbsp;<?php //echo $tr->translate("STATUS"); ?>&nbsp;</td> -->
+										  </tr>
+										 <tr style="font-size:12px; height: 20px; white-space:nowrap;background: #ccd9ff !important; line-height: 20px; font-weight: bold;" align="center">
+										 	<td>&nbsp;<?php echo $tr->translate("DEGREE"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
+										 </tr>
+										 <style> 
+											td{padding:0 3px; }
+											table { page-break-inside:auto }
+											tr{ page-break-inside:avoid; page-break-after:auto }
+										 </style>
+										 
+										 <?php foreach($this->row as $rs){ $i++;?>
+											  <tr style="font-size:12px; height: 20px;white-space:nowrap;"​ class="hover">
+												    <td><?php echo $i;?></td>
+												    <td><?php echo $rs['serial']; ?></td>
+												    <td><?php echo $rs['stu_code']; ?></td>
+												    <td><?php echo $rs['stu_khname']; ?></td>
+												    <td><?php echo $rs['stu_enname']." ".$rs['last_name']; ?></td>
+												    <td><?php echo $rs['sex']; ?></td>
+												    <td><?php echo $rs['tel']; ?></td>
+												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?></td>
+												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['grade_result_title']; }?></td>
+												    <td><?php echo $rs['note_result']; ?></td>
+												    <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
+													<td><?php echo $rs['user_id'];?></td>								    
+												    <td <?php if($rs['updated_result_de']==0){echo "style='color:red'";}?>><?php echo $rs['result_status']; ?></td>
+												    <!-- <td <?php //if($rs['register']==0){echo "style='color:red'";}?>><?php //echo $rs['register_status'];?></td> -->								    
+											  </tr>
+											  
+											  <?php 
+											  	if($rs['updated_result_de']==1){
+													$updated_result = $updated_result + 1;
+											  	}
+// 											  	if($rs['register']==1){
+// 													$register = $register + 1;		
+// 											  	}					
+											  	  
+											  ?>
+											  
+										  <?php }}?>
+										  
+									</table>
+									<?php if (!empty($this->row)){?>
+									<table width="40%" border="1" align="right" style="border:1px solid #000; white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;font-size: 12px;margin-top: 10px;">
+										<tr align="center" style="background: #ccd9ff;">
+											<td><?php echo $tr->translate("សិស្សសរុប");?></td>
+											<td><?php echo $tr->translate("បានទទួលលទ្ធផល");?></td>
+											<td><?php echo $tr->translate("មិនទាន់បានទទួលលទ្ធផល");?></td>
+											<!-- <td><?php //echo $tr->translate("បានចុះឈ្មោះ");?></td> -->
+										</tr>
+										<tr align="center">
+											<td><?php echo $i." នាក់";?></td>
+											<td><?php echo $updated_result." នាក់";?></td>
+											<td><?php echo ($i-$updated_result)." នាក់";?></td>
+											<!-- <td><?php //echo $register." នាក់";?></td> -->
+										</tr>
+									</table>
+									<?php }?>
+								</td>
+							</tr>
+							<tr >
+								<td colspan="3" width="100%"><br />
+									<table width="100%" style="font-family: 'Khmer OS Battambang';">
+										<tr>
+											<td  width="25%" align="center">
+												<span style="font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('APPROVED_BY')?></span>
+											</td>
+											<td  width="50%" align="center">
+												&nbsp;<span style="text-align: right;font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('VERIFIED_BY')?></span>
+											</td>
+											<td align="center"  width="25%">
+												<span style="text-align: right;font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('PREPARED_BY')?></span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+											</td>
+											<td  width="50%">
+												&nbsp;
+											</td>
+											<td align="center"  width="25%">
+												
+											</td>
+										</tr>
+										
+									</table>
+								</td>
+							</tr>
+						</table>
+				</div>	
+		</div>
+	</div>
+</div>
+<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
+	<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
+		<i class="fa fa-print"></i>
+	</div>
+	<div class="ptss__header"><?php echo $tr->translate("PRINT");?></div>
+	<div class="ptss__settings">
+		<div class="ptss__single-setting" id="ptss__layout">
+			<div class="ptss__setting-control">
+				<div class="ptss__layout-wrapper">
+					<a class="qButton" title="<?php echo $tr->translate("Preview");?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
+					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
+					<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+

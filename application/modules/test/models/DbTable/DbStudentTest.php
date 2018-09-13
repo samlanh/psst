@@ -327,7 +327,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				FROM 
 					rms_student 
 				where 
-					stu_id=$id AND customer_type =4";
+					stu_id=$id AND is_studenttest=1";
+		// customer_type =4
 		return $db->fetchRow($sql);
 	}
 	

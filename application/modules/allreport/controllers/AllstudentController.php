@@ -783,4 +783,35 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$this->view->prevconcern = $prevCon;
 	}
+	function rptStudenttestAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'adv_search' =>'',
+						'user'=>'',
+						'branch_id'=>0,
+						'result_status' => '',
+						'register_status' => '',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+				);
+			}
+		
+			$db = new Allreport_Model_DbTable_DbStudent();
+			$this->view->row = $db->getAllStudentTest($search);
+			 
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			echo $e->getMessage();
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
+	}
+	
 }

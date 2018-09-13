@@ -766,12 +766,16 @@ function getAllgroupStudy($teacher_id=null){
 	   	return $db->fetchRow($sql);
    }
    /*test student*/
-   function getAllstudentTest(){//get all
+   function getAllstudentTest($branch=null){//get all
 	   	$db=$this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
-	   	$sql="SELECT id,CONCAT(en_name,'-',kh_name) AS name
-	   	FROM rms_student_test
-	   	WHERE (en_name!='' OR kh_name!='') AND is_makestudenttest=1 AND status=1 and register=0 $branch_id  ORDER BY id DESC ";
+	   	$sql="SELECT stu_id as id,CONCAT(stu_khname,' [',stu_enname,' ',last_name,']') AS name
+	   	FROM rms_student
+	   	WHERE (stu_khname!='' OR stu_enname!='') AND 1=1 AND status=1 AND customer_type=4 $branch_id  ";
+	   	if (!empty($branch)){
+	   		$sql.=" AND branch_id = $branch";
+	   	}
+	   	$sql.=" ORDER BY stu_id DESC";
 	   	return $db->fetchAll($sql);
    }
    function getStudentTestbyId($stu_test_id){
@@ -1177,7 +1181,7 @@ function getAllgroupStudy($teacher_id=null){
 //   	}
 //   	return $db->fetchAll($sql);
 //   }
-  function getAllItems($type=null,$branch=null){
+  function getAllItems($type=null,$branch=null,$schooloption=null){
   	$db = $this->getAdapter();
   	$this->_name = "rms_items";
   	$sql="SELECT m.id, m.title AS name FROM $this->_name AS m WHERE m.status=1 ";
@@ -1197,7 +1201,9 @@ function getAllgroupStudy($teacher_id=null){
   	if ($level!=1){
   		$sql .=' AND '.$user['schoolOption'].' IN (m.schoolOption)';
   	}
-  	
+  	if (!empty($schooloption)){
+  		$sql.=" AND $schooloption IN (m.schoolOption) ";
+  	}
   	$sql .=' ORDER BY m.schoolOption ASC,m.type DESC, m.title ASC';
   	return $db->fetchAll($sql);
   }

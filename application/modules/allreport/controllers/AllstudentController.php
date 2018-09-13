@@ -726,4 +726,61 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$rs= $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
 	}
+	
+	public function rptCrmAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'advance_search' => "",
+						'branch_search' => "",
+						'status_search' => -1,
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+				);
+			}
+			
+			$db = new Allreport_Model_DbTable_DbStudent();
+			$rs_rows = $db->getAllCRM($search);
+			$this->view->row = $rs_rows;
+			$this->view->search  = $search;
+		
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$frm = new Home_Form_FrmCrm();
+		$frm->FrmAddCRM(null);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_crm = $frm;
+	}
+	public function rptCrmDetailAction(){
+		$id=$this->getRequest()->getParam("id");
+		if(empty($id)){
+			$this->_redirect("/allreport/allstudent/rpt-crm");
+		}
+		$db = new Home_Model_DbTable_DbCRM();
+		$row = $db->getCRMById($id);
+		$this->view->rs = $row;
+		
+		$rowdetail = $db->getCRMDetailById($id);
+		$this->view->rowdetail = $rowdetail;
+		$allContact = $db->AllHistoryContact($id);
+		$this->view->history = $allContact;
+		
+		$pre = explode(",", $row['prev_concern']);
+		$prevCon="";
+		if (!empty($pre)) foreach ($pre as $a){
+			$title = $db->getPrevTilteByKeyCode($a);
+			if (empty($prevCon)){
+				$prevCon = $title;
+			}else {
+				if (!empty($title)){
+					$prevCon = $prevCon." , ".$title;
+				}
+			}
+		}
+		$this->view->prevconcern = $prevCon;
+	}
 }

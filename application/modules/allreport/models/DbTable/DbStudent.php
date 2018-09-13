@@ -65,7 +65,60 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		return $_db->fetchAll($sql);
 	}
- 
+	function getAllCRM($search = ''){
+		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql="SELECT c.*,
+			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+			CASE
+			WHEN  c.sex = 1 THEN '".$tr->translate("MALE")."'
+			WHEN  c.sex = 2 THEN '".$tr->translate("FEMALE")."'
+			END AS sexTitle,
+			CASE
+			WHEN  c.ask_for = 1 THEN '".$tr->translate("KHMER_KNOWLEDGE")."'
+			WHEN  c.ask_for = 2 THEN '".$tr->translate("ENGLISH")."'
+			WHEN  c.ask_for = 3 THEN '".$tr->translate("UNIVERSITY")."'
+			WHEN  c.ask_for = 4 THEN '".$tr->translate("OTHER")."'
+			END AS ask_for_title,
+			CASE
+			WHEN  c.crm_status = 0 THEN '".$tr->translate("DROPPED")."'
+			WHEN  c.crm_status = 1 THEN '".$tr->translate("PROCCESSING")."'
+			WHEN  c.crm_status = 2 THEN '".$tr->translate("WAITING_TEST")."'
+			WHEN  c.crm_status = 3 THEN '".$tr->translate("COMPLETED")."'
+			END AS crm_status_title,
+			(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = c.know_by LIMIT 1 ) AS know_by_title,
+			(SELECT COUNT(cr.id) FROM `rms_crm_history_contact` AS cr WHERE cr.crm_id = c.id LIMIT 1) AS amountContact,
+			(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=id LIMIT 1 ) AS userby
+			FROM `rms_crm` AS c
+			WHERE 1
+		";
+		$where = ' ';
+		$from_date =(empty($search['start_date']))? '1': " c.create_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " c.create_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+		$where.= " AND  ".$from_date." AND ".$to_date;
+		if(!empty($search['advance_search'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['advance_search']));
+			$s_where[] = " c.kh_name LIKE '%{$s_search}%'";
+			$s_where[] = " c.first_name LIKE '%{$s_search}%'";
+			$s_where[] = " c.last_name LIKE '%{$s_search}%'";
+			$s_where[] = " c.tel LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['branch_search'])){
+			$where.= " AND c.branch_id = ".$db->quote($search['branch_search']);
+		}
+		if(!empty($search['askfor_search'])){
+			$where.= " AND c.ask_for = ".$db->quote($search['askfor_search']);
+		}
+		if($search['status_search']>-1){
+			$where.= " AND c.crm_status = ".$db->quote($search['status_search']);
+		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('c.branch_id');
+		$where.=" ORDER BY c.id DESC";
+		return $db->fetchAll($sql.$where);
+	}
 }
 
 

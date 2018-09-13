@@ -84,11 +84,6 @@ a.btn.btn-primary.btn-xs {
 					dijit.byId("branch_id").focus();
 					return false;
 				}
-				if(dijit.byId("degree").get("value")==''){
-                    alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
-					dijit.byId("degree").focus();
-					return false;
-				}
 				loadingBlock();
 				return true;
 			}else {
@@ -98,7 +93,7 @@ a.btn.btn-primary.btn-xs {
 			<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_TEST');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_TEST');?></h4>
 	    			</div>
 	    			<div class="col-sm-4 text-right">
 	    			</div>
@@ -121,7 +116,7 @@ a.btn.btn-primary.btn-xs {
 		    <div class="col-md-12">
 		        <!-- Tab panels -->
 		        <div class="tab-content vertical">
-			        <!--Panel 1-->
+		        	<!--Panel 1-->
 			        <div class="tab-pane fade in active" id="panel21" role="tabpanel">
 				    	<div class="card-box">
 				        	<div class="col-md-4 col-sm-4 col-xs-12">
@@ -181,6 +176,13 @@ a.btn.btn-primary.btn-xs {
 				                   </div>
 				                </div>
 				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_STATUS");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("student_status");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -209,6 +211,80 @@ a.btn.btn-primary.btn-xs {
 				                   </div>
 				                </div>
 				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OLD_SCHOOL");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("old_school");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OLD_GRADE");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("old_grade");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OCCUPATION");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("student_option");?>
+				                   </div>
+				                </div>
+				             </div>
+				             <div class="col-md-4 col-sm-4 col-xs-12">
+				             	<div class="form-group">
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS");?> 
+				                   </label>
+				                </div>
+				                
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NUMBER_HOME");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("home_num");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STREET");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("street_num");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("village_name");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("COMMUNE");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("commune_name");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("district_name");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PROVINCE");?> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("province_id");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CONTACT_INFO");?> 
+				                   </label>
+				                </div>
+				                <div class="form-group">
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -222,32 +298,9 @@ a.btn.btn-primary.btn-xs {
 				                   		<?php echo $frm->getElement("email");?>
 				                   </div>
 				                </div>
-				             </div>
-				             <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
 				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
 				                   </label>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_STATUS");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("student_status");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("IF_EMPLOYED_WHERE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("if_employed_where");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POSITION");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("position");?>
-				                   </div>
 				                </div>
 				                <div class="form-group">
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PARENT_NAME");?> :
@@ -263,34 +316,7 @@ a.btn.btn-primary.btn-xs {
 				                   		<?php echo $frm->getElement("parent_tel");?>
 				                   </div>
 				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OLD_SCHOOL");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("old_school");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OLD_GRADE");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("old_grade");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("address");?>
-				                   </div>
-				                </div>
-				                 <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("status");?>
-				                   </div>
-				                </div>
+				                
 				             </div>
 				             <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
@@ -321,22 +347,12 @@ a.btn.btn-primary.btn-xs {
 										</div>
 				                   </div>
 				                </div>
-				             </div>
-				        </div>
-				        <div class="card-box">
-			               	
-				    	</div>
-				    	<div class="card-box">
-				    		<div class="col-md-12 col-sm-12 col-xs-12">
-								
-				            </div>
-				        	<div class="col-md-4 col-sm-4 col-xs-12">
-				        		<div class="col-sm-12 border-botom">
-						    		<div class="col-sm-12 pd-0">
-						    			<h4 class="m-b-0"><i class="fa fa-volume-control-phone" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EMERGENCY_CONTACT');?></h4>
-					    			</div>
-					    		</div>
-					    		<div class="form-group">
+				                
+				                <div class="form-group">
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("EMERGENCY_CONTACT");?> 
+				                   </label>
+				                </div>
+				                <div class="form-group">
 				                   <label style="  white-space: normal;  font-style: italic;" class="control-label col-md-12 col-sm-12 col-xs-12 " for="first-name"> 
 				                   List any person whom you would like to be contacted in case of emergency.
 				                   </label>
@@ -363,15 +379,13 @@ a.btn.btn-primary.btn-xs {
 				                   </div>
 				                </div>
 				                
-				                 <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?> :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("emergency_address");?>
-				                   </div>
-				                </div>
-				            </div>
-				            <div class="col-md-8 col-sm-8 col-xs-12">
+				             </div>
+				        </div>
+				        <div class="card-box">
+			               	
+				    	</div>
+				    	<div class="card-box">
+				    		<div class="col-md-12 col-sm-12 col-xs-12">
 				            	<div class="col-sm-12 border-botom">
 						    		<div class="col-sm-12 pd-0">
 						    			<h4 class="m-b-0"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("EDUCATIONAL_BACKGROUND")?>(SchoolName , Grade/Level/Year , Major , Year)</h4>
@@ -405,6 +419,7 @@ a.btn.btn-primary.btn-xs {
 			                		<thead>
 			                			<tr>
 			                				<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
+			                				<th rowspan="2"><?php echo $tr->translate("TEST_TYPE");?></th>
 			                				<th colspan="3"><?php echo $tr->translate("REQUEST_FOR");?></th>
 			                				<th colspan="4"><?php echo $tr->translate("RESULT");?></th>
 			                				<th rowspan="2"><?php echo $tr->translate("NOTE");?></th>
@@ -425,6 +440,7 @@ a.btn.btn-primary.btn-xs {
 			                			<?php foreach ($this->testresult as $key => $record){?>
 			                			<tr>
 			                				<td align="center">&nbsp;<?php echo $key+1;?>&nbsp;</td>
+			                				<td align="left">&nbsp;<?php echo $record['test_type_title'];?>&nbsp;</td>
 			                				<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($record['test_date']))?>&nbsp;</td>
 			                				<td align="left">&nbsp;<?php echo $record['degree_title'];?>&nbsp;</td>
 			                				<td align="center">&nbsp;<?php echo $record['grade_title'];?>&nbsp;</td>
@@ -434,7 +450,18 @@ a.btn.btn-primary.btn-xs {
 			                				<td align="center">&nbsp;<?php echo $record['score'];?>&nbsp;</td>
 			                				<td align="center">&nbsp;<?php echo $record['note'];?>&nbsp;</td>
 			                				<td align="center">&nbsp;
-			                					<a class="btn btn-primary btn-xs" target="_blank" title="<?php echo $tr->translate("Update Or Edit Result");?>" href="<?php echo $this->baseUrl()."/registrar/studenttest/createtestexam/id/".$this->rs['id']."?test=".$record['id'];?>">
+			                					<?php 
+			                					$url="#";
+			                					$url = $this->baseUrl()."/test/index/createtestexam/id/".$this->rs['stu_id']."?test=".$record['id']."&type=".$record['test_type'];
+// 			                					if ($record['test_type']==1){
+// 			                						$url = $this->baseUrl()."/test/index/createtestexamkh/id/".$this->rs['stu_id']."?test=".$record['id'];
+// 			                					}else  if ($record['test_type']==2){
+// 			                						$url = $this->baseUrl()."/test/index/createtestexam/id/".$this->rs['stu_id']."?test=".$record['id']."&type=".$record['test_type'];
+// 		                						}else  if ($record['test_type']==3){
+// 		                							$url = $this->baseUrl()."/test/index/createtestexamuniver/id/".$this->rs['stu_id']."?test=".$record['id'];
+// 												}
+												?>
+			                					<a class="btn btn-primary btn-xs" target="_blank" title="<?php echo $tr->translate("Update Or Edit Result");?>" href="<?php echo $url;?>">
 			                					<i class="fa fa-edit" aria-hidden="true"></i>
 			                					</a>
 			                				<?php //echo $record['note'];?>&nbsp;</td>
@@ -454,7 +481,6 @@ a.btn.btn-primary.btn-xs {
                			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
 					 iconClass="dijitIconClear"/>
 					<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="submit"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
-					<input label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' dojoType="dijit.form.Button" type="submit" iconClass="dijitEditorIcon dijitEditorIconSave"/>
 	    		</div>
 	    	</div>
 		</form>
@@ -638,7 +664,7 @@ function addNationBy(){
 					
 				}
 			}, "grade_result");
-			getAllGrade();				 
+			//getAllGrade();				 
 		});
 		
 		var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';

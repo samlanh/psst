@@ -2,7 +2,9 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('STUDENT_TEST'));
 	$frm =  $this->form_search;
-	$urlEnterResult = $this->baseUrl()."/registrar/studenttest/createtestexam/id/";
+	$urlEnterResult = $this->baseUrl()."/test/index/createtestexam?type=2&id=";
+	$urlCreateExamKh = $this->baseUrl()."/test/index/createtestexam?type=1&id=";
+	$urlCreateExamUniver = $this->baseUrl()."/test/index/createtestexam?type=3&id=";
 ?>
 <script>
 	dojo.require('dijit.form.Button');
@@ -18,7 +20,7 @@
     			<div class="col-sm-4 text-right">
     			</div>
     		</div>
-    		<div class=" nav_menu page-notification">
+    		<div class=" nav_menu page-notification" style="display: none;">
 		   		<nav>
               		<ul class="nav navbar-nav navbar-left">
               			<li role="presentation" class="dropdown">
@@ -54,7 +56,7 @@
 			  </div>
     	</div>
 		<div class="card-box">
-			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
   				<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input type="text" name="txtsearch" id="txtsearch" dojoType="dijit.form.TextBox" value="<?php echo $this->adv_search['txtsearch']; ?>" placeholder="<?php echo $tr->translate('SEARCH');?>" class="fullside" />
@@ -106,13 +108,19 @@
 				var m = "clicked: " + key;
 				if(key=="enterresult"){
 					url='<?php echo $urlEnterResult;?>';
+				}else if(key=="enterresultkh"){
+					url='<?php echo $urlCreateExamKh;?>';
+				}else if(key=="enterresultuniver"){
+					url='<?php echo $urlCreateExamUniver;?>';
 				}
 				
 				gotoAction();
 				//window.console && console.log(m) || alert(m); 
 			},
 			items: {
-				"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM");?>", icon: "fa-file-code-o "},
+				"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop  "},
+				"enterresultkh": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_KH");?>", icon: "fa-laptop  "},
+				"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
 			}
 		});
 	});
@@ -122,7 +130,6 @@
 
 	var recordid ='';
 	function gotoAction(){
-		//window.location.href =url+row;
 		 window.open(url+row);
 	}
 </script> 

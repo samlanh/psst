@@ -29,7 +29,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					$string = "Image Upload failed";
 			}
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
-			$newSerial = $_dbgb->getTestStudentId();
+			$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
 			$array = array(
 						'branch_id'	=>$data['branch_id'],
 						'serial'	=>$newSerial,
@@ -71,7 +71,9 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						
 						'user_id'	=>$this->getUserId(),
 						'customer_type'	=>4,
+						'is_studenttest'	=>1,
 						'create_date' => date("Y-m-d H:i:s"),
+						'create_date_stu_test' => date("Y-m-d H:i:s"),
 						'modify_date' => date("Y-m-d H:i:s")
 					);
 					$this->_name="rms_student";
@@ -124,63 +126,70 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		
  	}
  	
-	function updateStudentTest($data,$id){
+	function updateStudentTest($data){
 		$db=$this->getAdapter();
 		try{
-			$updated_result = 0;
-			if(!empty($data['degree_result']) && !empty($data['grade_result']) ){
-				$updated_result = 1;
+			$part= PUBLIC_PATH.'/images/photo/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
 			}
 			
-			$adapter = new Zend_File_Transfer_Adapter_Http();
-			$part = PUBLIC_PATH.'/images';
-			$adapter->setDestination($part);
-			$adapter->receive();
-			$photo = $adapter->getFileInfo();
-			
-			if(!empty($photo['photo']['name'])){
-				$pho_name = $photo['photo']['name'];
-			}else{
-				$pho_name = $data['old_photo'];
-			}
 			$array = array(
-						'branch_id'	=>$data['branch_id'],
-						'stu_code'	=>$data['stu_code'],
-						'kh_name'	=>$data['kh_name'],
-						'first_name'	=>$data['first_name'],
-						'en_name'	=>$data['en_name'],
-						'sex'		=>$data['sex'],
-						'nationality'=>$data['nationality'],
-						'nation'=>$data['nation'],
-						'dob'		=>$data['dob'],
-						'pob'		=>$data['pob'],
-						'phone'		=>$data['phone'],
-						'email'		=>$data['email'],
-						'address'	=>$data['address'],
-						'student_status'	=>$data['student_status'],
-						'if_employed_where'	=>$data['if_employed_where'],
-						'position'			=>$data['position'],
-						'parent_name'		=>$data['parent_name'],
-						'parent_tel'		=>$data['parent_tel'],
-						'photo'				=>$photo,
-
-						'old_school'=>$data['old_school'],
-						'old_grade'	=>$data['old_grade'],
-					
-						'emergency_name'		=>$data['emergency_name'],
-						'relationship_to_student'=>$data['relationship_to_student'],
-						'emergency_tel'			=>$data['emergency_tel'],
-						'emergency_address'		=>$data['emergency_address'],
-						'serial'	=>$data['serial'],
-						'status'	=>$data['status'],
-						'user_id'	=>$this->getUserId(),
-						'is_makestudenttest'	=>1,
-						'type'	=>1,
-// 						'create_datetest' => date("Y-m-d H:i:s"),
-						'modify_datetest' => date("Y-m-d H:i:s")
-					);
-			$where="id = $id";
+					'branch_id'	=>$data['branch_id'],
+					'serial'	=>$data['serial'],
+					'stu_code'	=>$data['stu_code'],
+					'stu_khname'	=>$data['kh_name'],
+					'stu_enname'	=>$data['first_name'],
+					'last_name'	=>$data['en_name'],
+					'sex'		=>$data['sex'],
+					'nationality'=>$data['nationality'],
+					'nation'=>$data['nation'],
+					'dob'		=>$data['dob'],
+					'pob'		=>$data['pob'],
+					'student_status'	=>$data['student_status'],
+					'from_school'=>$data['old_school'],
+					'old_grade'	=>$data['old_grade'],
+					'student_option'	=>$data['student_option'],
+						
+					'home_num'	=>$data['home_num'],
+					'street_num'	=>$data['street_num'],
+					'village_name'	=>$data['village_name'],
+					'commune_name'	=>$data['commune_name'],
+					'district_name'	=>$data['district_name'],
+					'province_id'	=>$data['province_id'],
+						
+					'tel'		=>$data['phone'],
+					'email'		=>$data['email'],
+			
+					'guardian_khname'		=>$data['parent_name'],
+					'guardian_tel'		=>$data['parent_tel'],
+// 					'photo'				=>$photo,
+			
+					'emergency_name'		=>$data['emergency_name'],
+					'relationship_to_student'=>$data['relationship_to_student'],
+					'emergency_tel'			=>$data['emergency_tel'],
+			
+					'user_id'	=>$this->getUserId(),
+					'is_studenttest'	=>1,
+					'modify_date' => date("Y-m-d H:i:s")
+			);
+			
+			
+			$photo = "";
+			$name = $_FILES['photo']['name'];
+			if (!empty($name)){
+				$ss = 	explode(".", $name);
+				$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+				$tmp = $_FILES['photo']['tmp_name'];
+				if(move_uploaded_file($tmp, $part.$image_name)){
+					$array['photo']=$image_name;
+				}
+			}
+			$id = $data['id'];
+			$where=" stu_id = $id";
+			$this->_name='rms_student';
 			$this->update($array, $where);
+			
 			$sql = "DELETE FROM rms_student_testdetail WHERE stutest_id=".$id;
 			$db->query($sql);
 			
@@ -202,6 +211,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					$this->insert($arr);
 				}
 			}
+			
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();
@@ -210,7 +220,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	
 	function getStudentTestById($id){
 		$db = $this->getAdapter();
-		$sql=" SELECT * FROM rms_student_test where id=$id ";
+		$sql=" SELECT * FROM rms_student WHERE stu_id=$id AND customer_type =4 AND is_studenttest=1 ";
 		return $db->fetchRow($sql);
 	}	
 	
@@ -225,55 +235,59 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$session_user=new Zend_Session_Namespace('authstu');
 		$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		$print=$tr->translate("PRINT_PROFILE");
-		$from_date =(empty($search['start_date']))? '1': " create_datetest >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " create_datetest <= '".$search['end_date']." 23:59:59'";
+		$from_date =(empty($search['start_date']))? '1': " s.create_date_stu_test >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " s.create_date_stu_test <= '".$search['end_date']." 23:59:59'";
 		
 		$where = " AND ".$from_date." AND ".$to_date;
-		$sql="  SELECT 
-					id,
-					(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
-					serial,
-					stu_code,
-					kh_name,
-					en_name,
-					(SELECT name_kh from rms_view WHERE type=2 and key_code=sex LIMIT 1) as sex,
-					(SELECT name_kh from rms_view WHERE type=21 and key_code=nationality LIMIT 1) as nationality,
-					phone,
-					dob,
-					old_school,
-					parent_name,
-					parent_tel,
-					(SELECT first_name FROM `rms_users` WHERE id=rms_student_test.user_id LIMIT 1) AS user_name,
-					'$print'
-				FROM 
-					rms_student_test
-				WHERE
-					status=1 AND is_makestudenttest=1";
-		
-		
+		$sql="
+			SELECT 
+				s.stu_id,
+				(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = s.branch_id LIMIT 1) AS branch_name,
+				s.serial,
+				s.stu_khname,
+				s.stu_enname,
+				s.last_name,
+				(SELECT name_kh from rms_view WHERE type=2 and key_code=s.sex LIMIT 1) as sex,
+				(SELECT name_kh FROM rms_view WHERE TYPE=21 AND key_code=s.nationality LIMIT 1) AS nationality,
+				s.tel,
+				s.dob,
+				s.from_school,
+				s.guardian_khname,
+				s.guardian_tel,
+				(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name,
+				'$print'
+			 FROM `rms_student` AS s
+			WHERE s.is_studenttest =1
+		";
+// 		s.customer_type =4
 		if (!empty($search['txtsearch'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['txtsearch']));
-			$s_where[] = " serial LIKE '%{$s_search}%'";
-			$s_where[] = " kh_name LIKE '%{$s_search}%'";
-			$s_where[] = " en_name LIKE '%{$s_search}%'";
-			$s_where[] = " old_school LIKE '%{$s_search}%'";
-			$s_where[] = " old_grade LIKE '%{$s_search}%'";
+			$s_where[] = " s.serial LIKE '%{$s_search}%'";
+			$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
+			$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
+			$s_where[] = " s.last_name LIKE '%{$s_search}%'";
+			$s_where[] = " s.tel LIKE '%{$s_search}%'";
+			$s_where[] = " s.guardian_khname LIKE '%{$s_search}%'";
+			$s_where[] = " s.guardian_tel LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}    
 		if(!empty($search['branch_search'])){
-		$where .= " AND branch_id = ".$search['branch_search'];
+		$where .= " AND s.branch_id = ".$search['branch_search'];
 		}
-		if(!empty($search['degree'])){
-			$where .= " and degree = ".$search['degree'];
-		}
-		if(!empty($search['term_test'])){
-			$where .= " AND term_test ='".$search['term_test']."'";
-		}
-		if(!empty($search['result_status'])){
-			$where .= " and updated_result = ".$search['result_status'];
-		}
-		$order=" order by id desc ";
+// 		if(!empty($search['degree'])){
+// 			$where .= " and degree = ".$search['degree'];
+// 		}
+// 		if(!empty($search['term_test'])){
+// 			$where .= " AND term_test ='".$search['term_test']."'";
+// 		}
+// 		if(!empty($search['result_status'])){
+// 			$where .= " and updated_result = ".$search['result_status'];
+// 		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('s.branch_id');
+		
+		$order=" ORDER BY s.stu_id desc ";
 
 		return $db->fetchAll($sql.$where.$order);
 	}	
@@ -395,11 +409,12 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function insertTestExam($data){
+	function insertTestExam($data,$type=null){
 		$db=$this->getAdapter();
 		try{
 			$array = array(
 					'stu_test_id'	=>$data['stu_test_id'],
+					'test_type'	=>$type,//General English
 					'degree'	=>$data['degree'],
 					'grade'	=>$data['grade'],
 					'test_date'		=>$data['test_date'],
@@ -411,6 +426,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
 				
 				$array['score']=$data['score'];
+				$array['comment']=$data['comment'];
 				$array['degree_result']=$data['degree_result'];
 				$array['grade_result']=$data['grade_result'];
 				$array['result_date']=empty($data['result_date'])?date("Y-m-d"):$data['result_date'];
@@ -426,6 +442,60 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$this->_name="rms_student_test_result";
 				$id = $this->insert($array);
 			}
+			if ($type==1){
+				if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
+					
+					$identitys = explode(',',$data['identity']);
+					$detailId="";
+					if (!empty($identitys)){
+						foreach ($identitys as $i){
+							if (empty($detailId)){
+								if (!empty($data['detailid'.$i])){
+									$detailId = $data['detailid'.$i];
+								}
+							}else{
+								if (!empty($data['detailid'.$i])){
+									$detailId= $detailId.",".$data['detailid'.$i];
+								}
+							}
+						}
+					}
+					$this->_name="rms_result_test_subject";
+					$where="test_result_id = ".$id;
+					if (!empty($detailId)){
+						$where.=" AND id NOT IN ($detailId) ";
+					}
+					$this->delete($where);
+					
+					if (!empty($data['identity'])){
+						$ids = explode(",", $data['identity']);
+						foreach ($ids as $i){
+							if (!empty($data['detailid'.$i])){
+								$arr = array(
+										'test_result_id'	=>$id,
+										'subjecttest_id'	=>$data['subjecttest_id_'.$i],
+										'score'	=>$data['score_'.$i],
+										'comment'	=>$data['comment_'.$i],
+										'note'	=>$data['note_'.$i],
+								);
+								$this->_name="rms_result_test_subject";
+								$where1=" id = ".$data['detailid'.$i];
+								$this->update($arr, $where1);
+							}else{
+								$arr = array(
+									'test_result_id'	=>$id,
+									'subjecttest_id'	=>$data['subjecttest_id_'.$i],
+									'score'	=>$data['score_'.$i],
+									'comment'	=>$data['comment_'.$i],
+									'note'	=>$data['note_'.$i],
+									);
+								$this->_name="rms_result_test_subject";
+								$this->insert($arr);
+							}
+						}
+					}
+				}
+			}
 			
 			return $id;
 		}catch (Exception $e){
@@ -436,8 +506,14 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	
 	function getAllTestResult($stu_id){
 		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql="SELECT 
 			str.*,
+			CASE    
+				WHEN  str.test_type = 1 THEN '".$tr->translate("KHMER_KNOWLEDGE")."'
+				WHEN  str.test_type = 2 THEN '".$tr->translate("ENGLISH")."'
+				WHEN  str.test_type = 3 THEN '".$tr->translate("UNIVERSITY")."'
+				END AS test_type_title,
 			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 			(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
 			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
@@ -450,7 +526,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function getTestResultById($id){
+	function getTestResultById($id,$type=null){
 		$db = $this->getAdapter();
 		$sql="SELECT
 		str.*,
@@ -461,7 +537,17 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		FROM
 		`rms_student_test_result` AS str
 		WHERE
-		str.id = $id LIMIT 1 ";
+		str.id = $id ";
+		if (!empty($type)){
+			$sql.=" AND test_type=$type ";
+		}
+		$sql.=" LIMIT 1";
 		return $db->fetchRow($sql);
+	}
+	
+	function getSubjectScoreByTest($test_id){
+		$db = $this->getAdapter();
+		$sql="SELECT * FROM `rms_result_test_subject` AS r WHERE r.test_result_id=$test_id";
+		return $db->fetchAll($sql);
 	}
 }

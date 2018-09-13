@@ -63,11 +63,7 @@ tr#head-title {
 					dijit.byId("branch_id").focus();
 					return false;
 				}
-				if(dijit.byId("degree").get("value")==''){
-                    alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
-					dijit.byId("degree").focus();
-					return false;
-				}
+				
 				loadingBlock();
 				return true;
 			}else {
@@ -89,11 +85,13 @@ tr#head-title {
 		            <li class="nav-item active">
 		                <a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i> <?php echo $tr->translate("STUDENT_INFO");?></a>
 		            </li>
+		            <!-- 
 		            <li class="nav-item">
 		                <a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
-		                <i class="fa fa-graduation-cap ml-2"></i> <?php echo $tr->translate("STUDENT_TEST_INFORMATION");?>
+		                <i class="fa fa-graduation-cap ml-2"></i> <?php //echo $tr->translate("STUDENT_TEST_INFORMATION");?>
 		                </a>
 		            </li>
+		             -->
 		        </ul>
 		    </div>
 		    <!--/. Tab Menu -->

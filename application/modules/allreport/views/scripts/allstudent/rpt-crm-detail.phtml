@@ -1,0 +1,182 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('CRM_SUMMARY')); 
+	echo $this->headTitle(''); 
+?>	
+	<div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+		<div id="divPrint">
+			<table width="100%" border="0" style="font-size:12px;font-family:Tahoma,'Khmer OS Battambang';"> 
+				<tr>
+					<td>
+					   <table width="100%" style="font-family: Times New Roman,'Khmer MEF2';">
+				   			<tr>
+								<td colspan="3" align="center" >
+									<img style="height: 80px;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+									<span style="font-family: Brush Script Std;font-size: 11px;">School for the Elite</span>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center" style="font-size: 20px;"><?php echo $tr->translate("CRM_SUMMARY");?></td>
+							</tr>
+					   </table>
+				   </td>
+				</tr>
+				<tr>
+					<td height="20px">&nbsp;</td>
+				</tr>
+				<style>
+					.defaultheight{height: 21px;}
+					.border{border:1px solid #000;border-left: none;border-right: none;}
+						table.data-value tbody tr td {
+						    line-height: 22px;
+						    padding: 1px 0;
+						    border-bottom: solid 1px #000;
+						}
+						table.data-value tbody tr td span.label-title {
+						    line-height: 22px;
+						    display: inline-block;
+						    min-width: 75px;
+						}
+						table.data-value tbody tr.head-title td
+						 {
+						    text-align: center;
+						    font-weight: 600;
+						    border: solid 1px #000;
+						    border-top: none;
+						    border-left: none;
+						}
+						table.data-value tbody tr.row-value td{
+							border: solid 1px #000;
+						    border-left: none;
+						}
+						table.data-value tbody tr td.borderbottom-none {
+							 border-bottom: none;
+						}
+						table.data-value tbody tr td.borderright-none {
+							 border-right: none;
+						}
+						
+				</style>
+				<tr>
+					<td>
+						<table width="100%" border="1"  style="font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+							<tr style="height: 24px; background: #0077c5;">
+								<td colspan="2" style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp; <?php echo $tr->translate('CUSTOMER_INFO')?></td>
+							</tr>
+							<tr>
+								<td valign="top" width="50%">
+									<table class="data-value"  width="100%" style="font-size:12px; border-collapse:collapse; vertical-align:top; font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+										<tr>
+											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span>&nbsp;: <?php echo $this->rs['kh_name'];?></td>
+										</tr>
+										<tr>
+											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("First Name");?></span>&nbsp;: <?php echo $this->rs['first_name'];?></td>
+										</tr>
+										<tr>
+											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("Last Name");?></span>&nbsp;: <?php echo $this->rs['last_name'];?></td>
+										</tr>
+										<tr>
+											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("GENDER");?></span>&nbsp;: <?php echo $this->rs['sexTitle'];?></td>
+										</tr>
+										<tr>
+											<td class="borderbottom-none">&nbsp;<span class="label-title"><?php echo $tr->translate("TEL");?></span>&nbsp;: <?php echo $this->rs['tel'];?></td>
+										</tr>
+									</table>
+								</td>
+								<td valign="top" width="50%">
+									<table class="data-value"   width="100%" style="font-size:12px; border-collapse:collapse; font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+										<tr>
+											<td  >&nbsp;<span class="label-title"><?php echo $tr->translate("ASK_FOR");?></span>&nbsp;: <?php echo $this->rs['ask_for_title'];?></td>
+										</tr>
+										<tr>
+											<td  >&nbsp;<span class="label-title"><?php echo $tr->translate("KNOW_BY");?></span>&nbsp;: <?php echo $this->rs['know_by_title'];?></td>
+										</tr>
+										<tr>
+											<td  >&nbsp;<span class="label-title"><?php echo $tr->translate("FROM_SCHOOL");?></span>&nbsp;: <?php echo $this->rs['old_school'];?></td>
+										</tr>
+										<tr>
+											<td  >&nbsp;<span class="label-title"><?php echo $tr->translate("Previous Concer");?></span>&nbsp;: <?php echo $this->prevconcern;?></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<?php if (!empty($this->rowdetail)) {?>
+				<tr>
+					<td>
+						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+							<tr style="height: 24px; background: #0077c5;">
+								<td style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp;<?php echo $tr->translate("STUDENT_INFORMATION");?></td>
+							</tr>
+							<tr>
+								<td>
+									<table class="data-value"   width="100%" style="font-size:12px; border-collapse:collapse; font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+										<tr class="head-title">
+											<td  ><?php echo $tr->translate("N_O");?></td>
+											<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+											<td><?php echo $tr->translate("First Name");?></td>
+											<td><?php echo $tr->translate("Last Name");?></td>
+											<td><?php echo $tr->translate("GENDER");?></td>
+											<td><?php echo $tr->translate("AGE")." (".$tr->translate("YEAR").")";?></td>
+											<td><?php echo $tr->translate("DEGREE");?></td>
+											<td class="borderright-none"><?php echo $tr->translate("GRADE");?></td>
+										</tr>
+										<?php  foreach ($this->rowdetail as $key=> $rs){?>
+										<tr class="row-value">
+											<td class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>" align="center"><?php echo $key+1;?>&nbsp;</td>
+											<td class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
+											<td class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['stu_enname'];?>&nbsp;</td>
+											<td class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['last_name'];?>&nbsp;</td>
+											<td align="center" class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['sextitle'];?>&nbsp;</td>
+											<td align="center" class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['age'];?>&nbsp;</td>
+											<td align="center" class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['degree_title'];?>&nbsp;</td>
+											<td align="center" class="borderright-none <?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['grade_title'];?>&nbsp;</td>
+										</tr>
+										<?php }?>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<?php }?>
+				
+				<?php if (!empty($this->history)) {?>
+				<tr>
+					<td>
+						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+							<tr style="height: 24px; background: #0077c5;">
+								<td style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp;<?php echo $tr->translate("CONTACT_HISTORY");?></td>
+							</tr>
+							<tr>
+								<td>
+									<table class="data-value"   width="100%" style="font-size:12px; border-collapse:collapse; font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+										<tr class="head-title">
+											<td  >&nbsp;<?php echo $tr->translate("N_O");?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("CONTACT_DATE");?>&nbsp;</td>
+											<td style="width: 380px;">&nbsp;<?php echo $tr->translate("FEEDBACK");?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("NEXT_DATE_CONTACT");?>&nbsp;</td>
+											<td class="borderright-none">&nbsp;<?php echo $tr->translate("CONTACT_BY");?>&nbsp;</td>
+										</tr>
+										<?php  foreach ($this->history as $key=> $record){?>
+										<tr class="row-value">
+											<td class="<?php if (count($this->history)==$key+1){ echo "borderbottom-none";}?>" align="center"><?php echo $key+1;?>&nbsp;</td>
+											<td align="center" class="<?php if (count($this->history)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo date("d/M/Y",strtotime($record['contact_date']));?>&nbsp;</td>
+											<td class="<?php if (count($this->history)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['feedback'];?>&nbsp;</td>
+											<td align="center" class="<?php if (count($this->history)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo date("d/M/Y",strtotime($record['next_contact']));?>&nbsp;</td>
+											<td align="center" class="borderright-none <?php if (count($this->history)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['user_contact_name'];?>&nbsp;</td>
+										</tr>
+										<?php }?>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<?php }?>
+			</table>
+	   </div>
+	 </div>
+	<div style="clear:both;"></div>

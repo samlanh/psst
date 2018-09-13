@@ -418,10 +418,11 @@ a.btn.btn-primary.btn-xs {
 				        		<table class="history-record" >
 			                		<thead>
 			                			<tr>
+			                				<th rowspan="2"><?php echo $tr->translate("Default");?></th>
 			                				<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
 			                				<th rowspan="2"><?php echo $tr->translate("TEST_TYPE");?></th>
 			                				<th colspan="3"><?php echo $tr->translate("REQUEST_FOR");?></th>
-			                				<th colspan="4"><?php echo $tr->translate("RESULT");?></th>
+			                				<th colspan="5"><?php echo $tr->translate("RESULT");?></th>
 			                				<th rowspan="2"><?php echo $tr->translate("NOTE");?></th>
 			                				<th rowspan="2"><?php //echo $tr->translate("SCORE");?></th>
 			                			</tr>
@@ -433,12 +434,17 @@ a.btn.btn-primary.btn-xs {
 			                				<th ><?php echo $tr->translate("DEGREE");?></th>
 			                				<th ><?php echo $tr->translate("GRADE");?></th>
 			                				<th><?php echo $tr->translate("SCORE");?></th>
-			                				
+			                				<th><?php echo $tr->translate("COMMENTS");?></th>
 			                			</tr>
 			                		</thead>
 			                		<tbody>
 			                			<?php foreach ($this->testresult as $key => $record){?>
 			                			<tr>
+			                				<td align="center">
+			                					<?php if (!empty($record['score']) AND !empty($record['degree_result']) AND !empty($record['grade_result'])){?>
+			                					<input <?php if ($record['is_current']==1){ echo 'checked="checked"';}?> style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="default_<?php echo $record['id'];?>"  name="default_<?php echo $record['id'];?>"/>
+			                					<?php }else{ echo '&nbsp;';}?>
+			                				</td>
 			                				<td align="center">&nbsp;<?php echo $key+1;?>&nbsp;</td>
 			                				<td align="left">&nbsp;<?php echo $record['test_type_title'];?>&nbsp;</td>
 			                				<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($record['test_date']))?>&nbsp;</td>
@@ -448,6 +454,7 @@ a.btn.btn-primary.btn-xs {
 			                				<td align="center">&nbsp;<?php echo $record['degree_result_title'];?>&nbsp;</td>
 			                				<td align="center">&nbsp;<?php echo $record['grade_result_title'];?>&nbsp;</td>
 			                				<td align="center">&nbsp;<?php echo $record['score'];?>&nbsp;</td>
+			                				<td align="center">&nbsp;<?php echo $record['comment_title'];?>&nbsp;</td>
 			                				<td align="center">&nbsp;<?php echo $record['note'];?>&nbsp;</td>
 			                				<td align="center">&nbsp;
 			                					<?php 

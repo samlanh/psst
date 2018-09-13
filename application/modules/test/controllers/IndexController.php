@@ -94,7 +94,7 @@ class Test_IndexController extends Zend_Controller_Action
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		try {
-    			
+//     			print_r($data);exit();
     			$db->updateStudentTest($data);
     			Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);
     				
@@ -130,6 +130,10 @@ class Test_IndexController extends Zend_Controller_Action
     	$db = new Test_Model_DbTable_DbStudentTest();
     	$this->view->row = $row = $db->getStudentTestProfileById($id);
     	$this->view->row_detail=$db->getStudentTestDetail($id);
+    	
+    	$this->view->testresultkh = $db->getAllTestResult($id,1);
+    	$this->view->testresulteng = $db->getAllTestResult($id,2);
+    	$this->view->testresultuniver = $db->getAllTestResult($id,3);
     }
     
 //     function makecrmtestAction(){

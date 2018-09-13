@@ -190,6 +190,23 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$this->_name='rms_student';
 			$this->update($array, $where);
 			
+			
+			$testresult = $this->getAllTestResult($id);
+			if (!empty($testresult)) foreach ($testresult as $result){
+				if (!empty($data['default_'.$result['id']])){
+					$arr_res = array(
+							'is_current'=>1,
+					);
+				}else{
+					$arr_res = array(
+							'is_current'=>0,
+					);
+				}
+				$this->_name='rms_student_test_result';
+				$whereres=" id=".$result['id'];
+				$this->update($arr_res, $whereres);
+			}
+			
 			$sql = "DELETE FROM rms_student_testdetail WHERE stutest_id=".$id;
 			$db->query($sql);
 			
@@ -294,17 +311,23 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	
 	function getStudentTestProfileById($id){
 		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql=" SELECT 
 					*,
-					(select en_name from rms_dept where dept_id = degree_result) as degree_name,
-					(select major_enname from rms_major where major_id = grade_result) as grade_name,
-					(select name_en from rms_view where type=4 and key_code = session_result) as session_name,
-					(select name_en from rms_view where type=2 and key_code=sex) as sex,
-					(select name_en from rms_view where type=16 and key_code=student_status) as student_status
+					CASE    
+				WHEN  student_status = 1 THEN '".$tr->translate("SINGLE")."'
+				WHEN  student_status = 2 THEN '".$tr->translate("MARRIED")."'
+				WHEN  student_status = 3 THEN '".$tr->translate("MONK")."'
+				END AS student_statustitle,
+				CASE    
+				WHEN  sex = 1 THEN '".$tr->translate("MALE")."'
+				WHEN  sex = 2 THEN '".$tr->translate("FEMALE")."'
+				END AS sex_title,
+				(SELECT p.province_kh_name FROM `rms_province` AS p WHERE p.province_id = province_id LIMIT 1) AS province_title
 				FROM 
-					rms_student_test 
+					rms_student 
 				where 
-					id=$id ";
+					stu_id=$id AND customer_type =4";
 		return $db->fetchRow($sql);
 	}
 	
@@ -504,7 +527,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	function getAllTestResult($stu_id){
+	function getAllTestResult($stu_id,$type=null){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql="SELECT 
@@ -514,6 +537,12 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				WHEN  str.test_type = 2 THEN '".$tr->translate("ENGLISH")."'
 				WHEN  str.test_type = 3 THEN '".$tr->translate("UNIVERSITY")."'
 				END AS test_type_title,
+			CASE    
+				WHEN  str.comment = 1 THEN '".$tr->translate("GOOD")."'
+				WHEN  str.comment = 2 THEN '".$tr->translate("GOOD_FAIR")."'
+				WHEN  str.comment = 3 THEN '".$tr->translate("FAIR")."'
+				WHEN  str.comment = 4 THEN '".$tr->translate("WEAK")."'
+				END AS comment_title,
 			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 			(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
 			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
@@ -521,8 +550,11 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			FROM
 			`rms_student_test_result` AS str
 			WHERE 
-			str.stu_test_id = $stu_id ORDER BY str.id DESC ";
-		
+			str.stu_test_id = $stu_id ";
+		if (!empty($type)){
+			$sql.=" AND str.test_type = $type";
+		}
+		$sql.=" ORDER BY str.id DESC ";
 		return $db->fetchAll($sql);
 	}
 	
@@ -547,7 +579,15 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	
 	function getSubjectScoreByTest($test_id){
 		$db = $this->getAdapter();
-		$sql="SELECT * FROM `rms_result_test_subject` AS r WHERE r.test_result_id=$test_id";
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql="SELECT *,
+				CASE    
+				WHEN  r.comment = 1 THEN '".$tr->translate("GOOD")."'
+				WHEN  r.comment = 2 THEN '".$tr->translate("GOOD_FAIR")."'
+				WHEN  r.comment = 3 THEN '".$tr->translate("FAIR")."'
+				WHEN  r.comment = 4 THEN '".$tr->translate("WEAK")."'
+				END AS comment_title
+		FROM `rms_result_test_subject` AS r WHERE r.test_result_id=$test_id";
 		return $db->fetchAll($sql);
 	}
 }

@@ -42,7 +42,7 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    	$_db->commit();
 	    	}catch(Exception $e){
 	    		$_db->rollBack();
-	    		echo $e->getMessage(); exit();
+	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
     }
     public function updateBranch($_data,$id){
@@ -85,7 +85,7 @@ class Global_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     	$_db->commit();
     	}catch(Exception $e){
     		$_db->rollBack();
-    		echo $e->getMessage(); exit();
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
    	

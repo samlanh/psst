@@ -143,19 +143,27 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		
 		$id=  new Zend_Form_Element_Hidden('id');
 		if(!empty($_data)){
-// 			$id->setValue($_data['id']);
+ 			$id->setValue($_data['id']);
 			$code->setValue($_data['teacher_code']);
-// 			$_enname->setValue($_data['teacher_name_en']);
-// 			$_khname->setValue($_data['teacher_name_kh']);
-// 			$sex->setValue($_data['sex']);
-// 			$phone->setValue($_data['tel']);
-// 			$pob->setValue($_data['pob']);
-// 			$dob->setValue($_data['dob']);
-// 			$_adress->setValue($_data['address']);
-//			$end_date->setValue($_data['end_date']);
-// 			$_degree->setValue($_data['degree']);
-// 			$_note->setValue($_data['note']);
-// 			$_status->setValue($_data['status']);
+			$_enname->setValue($_data['teacher_name_en']);
+			$_khname->setValue($_data['teacher_name_kh']);
+			$sex->setValue($_data['sex']);
+			$phone->setValue($_data['tel']);
+			$_nationality->setValue($_data['nationality']);
+			$dob->setValue($_data['dob']);
+			$_adress->setValue($_data['address']);
+			$_email->setValue($_data['email']);
+			$_degree->setValue($_data['degree']);
+			$_note->setValue($_data['note']);
+			$_status->setValue($_data['status']);
+			
+			$_position->setValue($_data['position_add']);
+			$_passport->setValue($_data['passport_no']);
+			$_experiences->setValue($_data['experiences']);
+			$_card->setValue($_data['card_no']);
+			$start_date->setValue($_data['start_date']);
+			$end_date->setValue($_data['end_date']);
+			$_agreement->setValue($_data['agreement']);
 		}
 		$this->addElements(array($id,$_enname,$_note,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
 		

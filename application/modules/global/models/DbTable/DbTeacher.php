@@ -133,7 +133,11 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					);
 					$this->_name="rms_teacher";
 					$id = $this->insert($_arr);
+					
+					
 					$this->_name = 'rms_teacher_document';
+					$where="stu_id = ".$_data["id"];
+					$this->delete($where);
 					$ids = explode(',', $_data['identity']);
 					foreach ($ids as $i){
 							$_arr = array(
@@ -170,7 +174,11 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$sql = "SELECT * FROM `rms_teacher_subject` WHERE id= ".$db->quote($teacher_id);
 		return $db->fetchAll($sql);;
 	}
-	
+	public function getTeacherDocumentById($id){
+		$db = $this->getAdapter();
+		$sql = "SELECT * FROM rms_teacher_document as s WHERE s.stu_id =".$id;
+		return $db->fetchAll($sql);
+	}
 	function getAllTeacher($search){
 		$db = $this->getAdapter();
 		$sql = 'SELECT g.id, g.teacher_code, g.teacher_name_kh,

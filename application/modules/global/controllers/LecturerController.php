@@ -97,16 +97,6 @@ class Global_LecturerController extends Zend_Controller_Action {
 				echo $e->getMessage();
 			}
 		}
-		$db=new Global_Model_DbTable_DbTeacher();
-		$row = $db->getTeacherById($id); 
-		$this->view->rs = $row;
-		$tsub = new Global_Form_FrmTeacher();
-		$frm_techer = $tsub->FrmTecher($row);
-		Application_Model_Decorator::removeAllDecorator($frm_techer);
-		$this->view->frm_update = $frm_techer;
-		
-		//print_r($row); exit();
-		 
  		$_db = new Application_Model_DbTable_DbGlobal();
 		$row = $_db->getAllDocumentType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
@@ -115,7 +105,16 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
 		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
-		$db = new Global_Model_DbTable_DbTeacher();
+		$this->view->row = $_db->getTeacherDocumentById($id);
+		$db=new Global_Model_DbTable_DbTeacher();
+		$row = $db->getTeacherById($id);
+		$this->view->rs = $row;
+		$tsub = new Global_Form_FrmTeacher();
+		$frm_techer = $tsub->FrmTecher($row);
+		Application_Model_Decorator::removeAllDecorator($frm_techer);
+		$this->view->frm_update = $frm_techer;
+		
+		//print_r($row); exit();
 	}
 	function addPositionAction(){
 		if($this->getRequest()->isPost()){

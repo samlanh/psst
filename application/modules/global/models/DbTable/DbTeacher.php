@@ -134,7 +134,6 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					$this->_name="rms_teacher";
 					$id = $this->insert($_arr);
 					
-					
 					$this->_name = 'rms_teacher_document';
 					$where="stu_id = ".$_data["id"];
 					$this->delete($where);

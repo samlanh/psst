@@ -7,49 +7,63 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 		return $session_user->user_id;
 	}
 	function addExpense($data){
-		$arr = array(
-					'branch_id'=>$data['branch_id'],
-					'title'=>$data['title'],
-					'total_amount'=>$data['total_amount'],
-					'invoice'=>$data['invoice'],
-					'payment_type'=>$data['payment_method'],
-					'description'=>$data['Description'],
-					'cheque_no'=>$data['cheque_num'],
-					'date'=>$data['Date'],
-					'status'=>$data['Stutas'],
-					'user_id'=>$this->getUserId(),
-					'create_date'=>date('Y-m-d H:i:s'),
+		$_db= $this->getAdapter();
+		$_db->beginTransaction();
+		try{
+		$_arr = array(
+					'branch_id'		=>$data['branch_id'],
+					'title'			=>$data['title'],
+					'total_amount'	=>$data['total_amount'],
+					'invoice'		=>$data['invoice'],
+					'payment_type'	=>$data['payment_method'],
+					'description'	=>$data['Description'],
+					'receiver'		=>$data['receiver'],
+					'cheque_no'		=>$data['cheque_num'],
+					'date'			=>$data['Date'],
+					'status'		=>$data['Stutas'],
+					'user_id'		=>$this->getUserId(),
+					'create_date'	=>date('Y-m-d H:i:s'),
 				);
-		$expend_id = $this->insert($arr);
+		$expend_id = $this->insert($_arr);
 		$ids = explode(',', $data['identity']);
 		$this->_name='ln_expense_detail';
 		foreach ($ids as $j){
 			$arr = array(
-					'expense_id'=>$expend_id,
-					'service_id'=>$data['expense_id'.$j],
-					'description'=>$data['remark'.$j],
-					'total_amount'=>$data['total_paid'.$j]
+					'expense_id'	=>$expend_id,
+					'service_id'	=>$data['expense_id'.$j],
+					'description'	=>$data['remark'.$j],
+					'price_paid'	=>$data['price_paid'.$j],
+					'qty_paid'		=>$data['qty_paid'.$j],
+					'total_amount'	=>$data['total_paid'.$j]
 				);
-			
 		   $this->insert($arr);
 		}
-
+			$_db->commit();
+		}catch(Exception $e){
+			$_db->rollBack();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		//print_r($data); exit();
  }
  function updatExpense($data){
+ 	$_db= $this->getAdapter();
+ 	$_db->beginTransaction();
+ 	try{
 	$arr = array('branch_id'=>$data['branch_id'],
-					'title'=>$data['title'],
-					'total_amount'=>$data['total_amount'],
-					'invoice'=>$data['invoice'],
-					'payment_type'=>$data['payment_method'],
-					'description'=>$data['Description'],
-					'date'=>$data['Date'],
-					'cheque_no'=>$data['cheque_num'],
-					'status'=>$data['Stutas'],
-					'user_id'=>$this->getUserId(),
+					'branch_id'		=>$data['branch_id'],
+					'title'			=>$data['title'],
+					'total_amount'	=>$data['total_amount'],
+					'invoice'		=>$data['invoice'],
+					'payment_type'	=>$data['payment_method'],
+					'description'	=>$data['Description'],
+					'cheque_no'		=>$data['cheque_num'],
+					'date'			=>$data['Date'],
+					'status'		=>$data['Stutas'],
+					'user_id'		=>$this->getUserId(),
 					//'create_date'=>date('Y-m-d H:i:s'),
 				);
 	$where=" id = ".$data['id'];
-	$this->update($arr, $where);
+	$id = $this->update($arr, $where);
 	
 	$ids = explode(',', $data['identity']);
 	$this->_name='ln_expense_detail';
@@ -58,13 +72,17 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 	
 	foreach ($ids as $j){
 		$arr = array(
-				'expense_id'=>$data['id'],
-				'service_id'=>$data['expense_id'.$j],
-				'description'=>$data['remark'.$j],
-				'total_amount'=>$data['total_paid'.$j]);
+				'expense_id'	=>$id,
+				'service_id'	=>$data['expense_id'.$j],
+				'description'	=>$data['remark'.$j],
+				'total_amount'	=>$data['total_paid'.$j]);
 		$this->insert($arr);
 	}
-		
+	$_db->commit();
+	}catch(Exception $e){
+		$_db->rollBack();
+		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	}
 }
 function getexpensebyid($id){
 	$db = $this->getAdapter();
@@ -85,7 +103,7 @@ function getAllExpense($search=null){
 	$where = " WHERE ".$from_date." AND ".$to_date;
 	
 	$sql=" SELECT id,
-	(SELECT branch_namekh FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
+	(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
 	title,invoice,
 	(SELECT name_kh FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_type limit 1) AS payment_type,
 	total_amount,description,date,

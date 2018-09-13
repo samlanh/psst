@@ -17,6 +17,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				total_amount,
 				total_amountafter,
 				c.date,
+				c.note,
 				c.end_date,
 				(SELECT name_en FROM rms_view WHERE rms_view.type=15 AND key_code=c.type LIMIT 1) AS paid_status,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=20 AND key_code=c.type LIMIT 1) AS paid_transfer,

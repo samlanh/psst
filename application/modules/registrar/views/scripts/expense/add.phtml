@@ -2,7 +2,7 @@
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_expense;
 ?>
-<title><?php echo $tr->translate("ADD_OTHER_EXPENSE")?></title>
+<title><?php echo $tr->translate("EDIT_OTHER_EXPENSE")?></title>
 <style>	
 .fullside {
 	width: 100%;
@@ -10,7 +10,7 @@ $frm = $this->frm_expense;
 }
 </style>
  <script>
-		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
+	require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
  </script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -59,6 +59,13 @@ $frm = $this->frm_expense;
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement('payment_method');?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("INFORS_RECEIVE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement('receiver');?>
 	                   </div>
 	                </div>
 	             </div>
@@ -281,6 +288,7 @@ dojo.ready(function(){
 function hideDialog(){
 	dijit.byId('terms').hide();
 }
+
 var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'get-receipt-number')); ?>";
 function getReceiptNumber(receipt){
 	dojo.xhrPost({
@@ -331,14 +339,16 @@ var title = 0;
 tmp = '';
 temp='';
 optexpense = '<?php echo $this->expenseopt;?>';
-function addRow() {
+function addRow() { 
 		col++;no++;
 		template='';
-		if(title!=1){
+		if(title!=1){  
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CATE_EXPENSE");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("TOTAL");?></th>';
 			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -346,7 +356,9 @@ function addRow() {
 		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="50px" align="center">'+no+'</td>';
 		template+='<td style="width:300px"><select style="width:100%" onchange="popupCateExpense('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
-		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="total_paid'+col+'" id="total_paid'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';			
+		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="price_paid'+col+'" id="price_paid'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
+		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_paid'+col+'" id="qty_paid'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
+		template+='<td><input type="text" onkeyup="calculateTotal('+col+');" readonly="readonly" name="total_paid'+col+'" id="total_paid'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
 		template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /><label id="subsub"></label></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -358,7 +370,22 @@ function addRow() {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
+		
  }
+
+function calculateTotal(index,type){
+	if(type==1){
+		price = dijit.byId('price_paid'+index).get('value');
+		price = isNaN(price)?0:price;
+		
+		qty = dijit.byId('qty_paid'+index).get('value');
+		qty = isNaN(qty)?0:qty;
+		
+		dijit.byId('total_paid'+index).attr('value',price * qty);
+		
+	}
+}
+
 function printSave(new_receipt){	
 	if(dijit.byId('office_receipt').validate()) {
 		

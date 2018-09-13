@@ -728,6 +728,7 @@ function getAllgroupStudy($teacher_id=null){
    	$branch_id = $this->getAccessPermission();
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$sql="SELECT s.stu_id AS id,s.stu_id AS stu_id,
+   			stu_code,
 		   	CONCAT(s.stu_code,'-',s.stu_khname,'-',s.stu_enname,' ',s.last_name) AS name
 		   	FROM rms_student AS s
 		   	WHERE

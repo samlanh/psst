@@ -71,8 +71,9 @@ ul.opt-school {
 					//dijit.byId("main_branch_id").focus();
 					//return false;
 				//}
-               	 	dijit.byId("save_close").attr("disabled",true);
-					dijit.byId("save_new").attr("disabled",true);
+					loadingBlock();
+               	 	//dijit.byId("save_close").attr("disabled",true);
+					//dijit.byId("save_new").attr("disabled",true);
 					return true;
 				} else {
 					return false;
@@ -217,7 +218,7 @@ ul.opt-school {
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" iconClass="dijitIconClear" />
-					<input type="button" onClick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVECLOSE');?>" dojoType="dijit.form.Button" 
+					<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVECLOSE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 					<input type="submit" value="save_new" name="save_new"  id="save_new" label="<?php echo $tr->translate('SAVENEW');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />

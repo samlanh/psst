@@ -22,10 +22,14 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		$photo='';
     		$dbg = new Application_Model_DbTable_DbGlobal();
     		if (!empty($name)){
-    			$tem =explode(".", $name);
-    			$new_image_name = "branch".date("Y").date("m").date("d").time().".".end($tem);
-    			$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
-    			//$arr['photo']=$photo;
+    			$ss = 	explode(".", $name);
+    			$image_name = "branch_".date("Y").date("m").date("d").time().".".end($ss);
+    			$tmp = $_FILES['photo']['tmp_name'];
+    			if(move_uploaded_file($tmp, $part.$image_name)){
+    				$photo = $image_name;
+    			}
+    			else
+    				$string = "Image Upload failed";
     		}
     		$sql="SELECT br_id FROM rms_branch WHERE 1";
     		$sql.=" AND branch_nameen='".$_data['branch_nameen']."'";
@@ -104,13 +108,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		}
     		$photo='';
     		$dbg = new Application_Model_DbTable_DbGlobal();
-    		if (!empty($name)){
-    			$tem =explode(".", $name);
-    			$new_image_name = "branch".date("Y").date("m").date("d").time().".".end($tem);
-    			$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
-    			$_arr['photo']=$photo;
-    		}
-    		//	echo $photo; exit();
     		
     		$schooloption="";
     		if (!empty($_data['selector'])){
@@ -136,9 +133,18 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'other'			=>$_data['branch_note'],
     			'status'		=>$_data['branch_status'],
     			'displayby'		=>2,
-    			'photo'   	    => $photo,
     			'schooloptionlist'		=>$schooloption,
     			);
+    	if (!empty($name)){
+    		$ss = 	explode(".", $name);
+    		$image_name = "branch_".date("Y").date("m").date("d").time().".".end($ss);
+    		$tmp = $_FILES['photo']['tmp_name'];
+    		if(move_uploaded_file($tmp, $part.$image_name)){
+    			$_arr['photo']=$image_name;
+//     			$photo = $image_name;
+    		}
+    	}
+    	
     	$where=$this->getAdapter()->quoteInto("br_id=?", $id);
     	$this->update($_arr, $where);
     	

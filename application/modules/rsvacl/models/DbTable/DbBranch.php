@@ -3,6 +3,11 @@
 class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_branch';   
+    function getCheckHasBranch(){
+    	$db = $this->getAdapter();
+    	$sql="SELECT * FROM `rms_branch` AS b WHERE b.status=1 LIMIT 1";
+    	return $db->fetchRow($sql);
+    }
     function addbranch($_data){
     	$_db= $this->getAdapter();
     	$_db->beginTransaction();
@@ -22,9 +27,12 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
     			//$arr['photo']=$photo;
     		}
-    		$sql="SELECT br_id FROM rms_branch WHERE parent =".$_data['main_branch_id'];
+    		$sql="SELECT br_id FROM rms_branch WHERE 1";
     		$sql.=" AND branch_nameen='".$_data['branch_nameen']."'";
     		$sql.=" AND prefix='".$_data['prefix_code']."'";
+    		if (!empty($_data['main_branch_id'])){
+    			$sql." AND parent =".$_data['main_branch_id'];
+    		}
     		$rs = $_db->fetchOne($sql);
     		if(!empty($rs)){
     			return -1;
@@ -51,11 +59,23 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			'email'		    =>$_data['email'],
 	    			'website'		=>$_data['website'],
 	    			'other'			=>$_data['branch_note'],
-	    			'status'		=>$_data['branch_status'],	    			
+	    			'status'		=>1,	    			
 	    			'displayby'		=>2,
 	    			'photo'   	    => $photo,
 	    			'schooloptionlist'		=>$schooloption,
 	    			);
+	    	$check = $this->getCheckHasBranch();
+	    	if (empty($check)){
+	    		$school = $this->getAllSchoolOption();
+	    		$list = "";
+	    		if (!empty($school)){
+	    			foreach ($school as $sss){
+	    				if (empty($list)){$list=$sss['id'];}else{$list=$list.",".$sss['id'];}
+	    			}
+	    		}
+	    		$_arr['schooloptionlist']=$list;
+	    	}
+	    	$this->_name ="rms_branch";
 	    	$this->insert($_arr);//insert data
 	    	
 	    	$_db->commit();
@@ -63,6 +83,12 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    		$_db->rollBack();
 	    		echo $e->getMessage(); exit();
 	    	}
+    }
+    function getAllSchoolOption(){
+    	$db = $this->getAdapter();
+    	$this->_name = "rms_schooloption";
+    	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1";
+    	return $db->fetchAll($sql);
     }
     public function updateBranch($_data,$id){
     	$_db= $this->getAdapter();

@@ -455,6 +455,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$array['grade_result']=$data['grade_result'];
 				$array['result_date']=empty($data['result_date'])?date("Y-m-d"):$data['result_date'];
 				$array['updated_result']=1;
+				$array['result_by']=$this->getUserId();
 			}
 			if (!empty($data['id'])){
 				$id = $data['id'];

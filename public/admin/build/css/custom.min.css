@@ -1,6 +1,5 @@
 @font-face{font-family:'NiDA Khmer Empire';src:url("../../../font/NiDAKhmerEmpire.ttf");}
 @font-face{font-family:'Khmer MEF2';src:url("../../../font/KHMERMEF2.ttf");}
-@font-face{font-family:'Kh Battambang';src:url("../../../font/KH-BATTAMBANG.TTF");}
 
 table#table_parent table.table {
     margin-bottom: 0;
@@ -578,6 +577,25 @@ input#e15 {
 }
 .select2-results .select2-selected {
     display: none;
+}
+
+.top_nav .dropdown-menu li.event.unread {
+    background: #e4f3e8;
+}
+section.content.invoice.news {
+    min-height: 500px;
+}
+
+article.clearfix.hentry.unread {
+    background: #e4f3e8;
+}
+article.clearfix.hentry {
+    margin-bottom: 10px;
+    padding: 10px 0;
+    border-bottom: solid 1px #eee;
+}
+header.article-list time.hentry__date {
+    color: #6b6868;
 }
 /*==============================
 	End Login Page

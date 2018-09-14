@@ -89,7 +89,9 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 			}
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		$this->view->schoolOption = $_dbgb->getAllSchoolOption();
+		
+		$_dbmodel = new RsvAcl_Model_DbTable_DbBranch();
+		$this->view->schoolOption = $_dbmodel->getAllSchoolOption();
 		
 		$row=$db->getBranchById($id);
 		$this->view->rs = $row;

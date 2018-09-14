@@ -1304,5 +1304,54 @@ function getAllgroupStudy($teacher_id=null){
   			ORDER BY dis_name ASC ";
   	return $db->fetchAll($sql);
   }
+  
+  public function getAllNew($limit=null){
+  	$db = $this->getAdapter();
+  	$user = $this->getUserInfo();
+  	$currentLang = $this->currentlang();
+  	$userid = empty($user['user_id'])?0:$user['user_id'];
+  	$sql="SELECT n.*,
+  		(SELECT nd.title FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS title,
+  		(SELECT nd.description FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS description,
+		(SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) AS is_read
+		 FROM `ln_news` AS n
+		 WHERE n.status = 1
+		 ORDER BY 
+		 (SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) ASC,
+		 n.publish_date DESC, n.created_date DESC ";
+  	if (!empty($limit)){
+  		if (!is_numeric($limit)){
+  			$limit = 5;
+  		}
+  		$sql.=" LIMIT $limit";
+  	}
+  	return $db->fetchAll($sql);
+  }
+  
+  public function getNewNotreadByUser(){
+  	$db = $this->getAdapter();
+  	$user = $this->getUserInfo();
+  	$userid = empty($user['user_id'])?0:$user['user_id'];
+  	$sql="SELECT COUNT(n.id) AS notread
+		 FROM `ln_news` AS n
+		 WHERE n.status = 1
+		 AND
+		 n.id NOT IN (SELECT nr.new_feed_id FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid )";
+  	return $db->fetchOne($sql);
+  }
+  public function getDetailNews($id){
+  	$db = $this->getAdapter();
+  	$user = $this->getUserInfo();
+  	$currentLang = $this->currentlang();
+  	$userid = empty($user['user_id'])?0:$user['user_id'];
+  	$sql="SELECT n.*,
+	  	(SELECT nd.title FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS title,
+	  	(SELECT nd.description FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS description,
+	  	(SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) AS is_read
+	  	FROM `ln_news` AS n
+	  	WHERE n.status = 1 AND n.id = $id LIMIT 1";
+	  return $db->fetchRow($sql);
+  }
+  
 }
 ?>

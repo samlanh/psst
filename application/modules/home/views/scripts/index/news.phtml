@@ -1,0 +1,42 @@
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($this->detail['title']);
+?>
+			<div class="row ">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2><i class="fa fa-globe"></i> <?php echo $this->detail['title'];?><br />
+                    <!-- <small>Sample news detail design</small> -->
+                    </h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <section class="content invoice news">
+                      <!-- title row -->
+                      <div class="row">
+                        <div class="col-xs-12 invoice-header">
+                          <h1 class="pb-10 mb-20">
+                              <small class="pull-right">
+                              <i class="fa fa-calendar"></i> <?php echo date("d/M/Y",strtotime($this->detail['publish_date'])); ?>
+                              </small>
+                          </h1>
+                        </div>
+                        <!-- /.col -->
+                      </div>
+
+                      <!-- Table row -->
+                      <div class="row">
+                        <div class="col-xs-12 table">
+                        	<?php echo $this->detail['description'];?>
+                        </div>
+                        <!-- /.col -->
+                      </div>
+                      <!-- /.row -->
+
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </div>

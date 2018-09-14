@@ -1,0 +1,101 @@
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("NEWS"));
+?>
+			<div class="row ">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2><i class="fa fa-globe"></i> <?php echo $tr->translate("NEWS");?><br />
+                    <!-- <small>Sample news detail design</small> -->
+                    </h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <section class="content invoice news">
+
+                      <!-- Table row -->
+                      <div class="row">
+                        <div class="col-xs-12 table">
+                        	<?php //echo $this->detail['description'];?>
+                        </div>
+                        <!-- /.col -->
+                      </div>
+                      <!-- /.row -->
+                       <div class="col-md-8 col-sm-8 col-xs-12">
+                       		<?php foreach ($this->article as $article){?>
+							<?php 
+								
+								$images = $this->baseUrl().'/images/no-photo.png';
+								if (!empty($article['image_feature'])){
+									if (file_exists(PUBLIC_PATH.'/images/news/'.$article['image_feature'])) {
+										$images = $this->baseUrl().'/images/news/'.$article['image_feature'];
+									}
+								}
+								
+							?>
+							<article class="clearfix hentry <?php if ($article['is_read']!=1){ echo 'unread';}?>">
+								<div class="hentry__container ">
+									<div class="col-xs-12  col-lg-4">
+										<a href="<?php echo $this->baseUrl()."/home/index/news?id=".$article['id']; ?>">
+											<img src="<?php echo $images;?>" class="img-fluid margin-bottom-30" alt="102" >
+										</a>
+									</div>
+									<div class="col-xs-12  col-lg-8">
+										<header class="article-list">
+											<h2 class="hentry__title">
+												<a href="<?php echo $this->baseUrl()."/home/index/news?id=".$article['id']; ?>" rel="bookmark"><?php echo $article['title']?></a>
+											</h2>
+											<time datetime="2015-11-11T16:19:19+00:00" class="hentry__date"><i class="fa fa-calendar"></i> <?php echo date("d/M/Y",strtotime($article['publish_date']));?></time>
+										</header>
+										<div class="hentry__content">
+											<div>
+											<?php echo  mb_substr(strip_tags($article['description']),0,200, "utf-8")."...";?>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+								</div>
+							</article>
+							<?php }?>
+		                    
+		                    <?php 
+             	if($this->countPages>1){ 
+					$statpage = $this->currentPage - 5;
+					$endpage = $this->currentPage + 5;
+				 	if ($this->currentPage<=5){
+				 		$statpage = 1;
+				 		$endpage =10;
+				 	}
+                 if (!empty($this->countPages)){
+						 ?>
+						<div class="clearfix"></div>
+			            <div class="pagin text-center">
+			            	<nav aria-label="Page navigation example">
+							  <ul class="pagination">
+							  	<?php if($this->currentPage!=1){ ?>
+							    <li class="page-item"><a class="page-link" href="<?php echo $this->baseUrl()."/home/index/allnews?&pages=".$this->previousPage;?>"><?php echo $tr->translate('Previous');?></a></li>
+							    <?php }?>
+							     <?php  $i=0; for( $i=1; $i<=$this->countPages; $i++){?>
+			           			 	<?php if ($statpage<=$i && $endpage>=$i){?>
+							    <li class="page-item <?php if($i==$this->currentPage){ echo "active";}?>">
+							    	<a class="page-link" href="<?php echo $this->baseUrl()."/home/index/allnews?&pages=".$i;?>"><?php echo $i;?></a>
+							    </li>
+							    	<?php }
+								}?>
+								<?php if($this->countPages!= $this->currentPage){ ?>
+							    <li class="page-item"><a class="page-link" href="<?php echo $this->baseUrl()."/home/index/allnews?&pages=".$this->nextPage;?>"><?php echo $tr->translate('Next');?></a></li>
+							    <?php }?>
+							  </ul>
+							</nav>
+							<span><?php echo $tr->translate('Total Pages')." : ".$this->countPages." ".$tr->translate('Pages');?></span>
+			            </div>
+			             <?php }}?>
+                       </div>
+
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </div>

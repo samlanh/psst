@@ -30,12 +30,16 @@ $teacher_id = $session_t->teacher_id;
 	if(empty($username)){
 		$username =  $session_t->teacher_name;
 	}
-	    $class='soria';
-	    $them_style='soria';
-		$level=$session_user->level;
-		if($level!=1 AND $module=='rsvacl'){
-			Application_Form_FrmMessage::redirectUrl("/home");	
-		}
+    $class='soria';
+    $them_style='soria';
+	$level=$session_user->level;
+	if($level!=1 AND $module=='rsvacl'){
+		Application_Form_FrmMessage::redirectUrl("/home");	
+	}
+	
+	$news = $ddgb->getAllNew(10);
+	$notread = $ddgb->getNewNotreadByUser();
+	$notread = empty($notread)?0:$notread;
     ?>
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
@@ -194,6 +198,53 @@ $teacher_id = $session_t->teacher_id;
 					                    </li>
 				                  </ul>
 				                </li>
+					              <li role="presentation" class="dropdown">
+					                  <a title="<?php echo $tr->translate("NEWS");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+					                    <i class="fa fa-globe"></i>
+					                    <span id="countNews" class="badge bg-green"><?php if ($notread>0){ echo $notread;}?></span>
+					                  </a>
+					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+						                 <li class=" event title">
+						                  	<h4><?php echo $tr->translate("NEWS");?></h4>
+						                  </li>
+						                   <?php if(!empty($news)){?>
+					                  		<?php foreach($news as $key=> $announ){
+				                          	$url = $this->url(array('module'=>'home','controller'=>'index','action'=>'news'), null, true)."/id/".$announ['id'];
+					                          	$images = $this->baseUrl().'/images/no-photo.png';
+					                          	if (!empty($announ['image_feature'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/news/'.$announ['image_feature'])) {
+					                          			$images = $this->baseUrl().'/images/news/'.$announ['image_feature'];
+					                          		}
+					                          	}
+				                          	?>
+				                          <li class="event <?php if ($announ['is_read']!=1){ echo 'unread';}?>" title="<?php echo $announ['title'];?>">
+				                         	 <a href="<?php echo $url;?>">
+					                            <div class="pull-left profile-list ">
+					                              <img src="<?php echo $images;?>" />
+					                            </div>
+					                            <div class="media-body">
+					                              <span class="title" ><?php echo $announ['is_read'].$announ['title'];?></span>
+					                              <p> <small><?php echo $tr->translate("PUBLISH_DATE")." : ".date("d/M/Y",strtotime($announ['publish_date'])); ?></small>
+					                              <p>
+					                              	<?php echo  mb_substr(strip_tags($announ['description']),0,70, "utf-8")."...";?>
+					                              </p>
+					                              
+					                              </p>
+					                            </div>
+				                            </a>
+				                          </li>
+				                          <?php }?>
+				                          <li>
+						                      <div class="text-center">
+						                        <a href="<?php echo $this->baseUrl()."/home/index/allnews"?>">
+						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
+						                          <i class="fa fa-angle-right"></i>
+						                        </a>
+						                      </div>
+						                    </li>
+				                           <?php }?>
+					                  </ul>
+					              </li>
 				              
 				              <li class="">
 				                  	<a onclick="dijit.byId('popupCalculator').show();" href="javascript:;" title="<?php echo $tr->translate("CALCULATOR");?>"  class="user-profile " >

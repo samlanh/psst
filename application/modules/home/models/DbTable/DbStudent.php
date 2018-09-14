@@ -507,5 +507,22 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		AND sat.`group_id`=$group GROUP BY satd.`attendence_status`";
 		return $db->fetchAll($sql);
 	}
+	
+	function addReadNews($id){
+		try{
+			$db = $this->getAdapter();
+			$arr =array(
+					'new_feed_id'=>$id,
+					'cus_id'=>$this->getUserId(),
+					'is_read'=>1,
+					'is_click'=>1,
+					'date'=>date("Y-m-d H:i:s"),
+					);
+			$this->_name="ln_news__read";
+			$this->insert($arr);
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
 }
 

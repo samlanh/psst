@@ -279,7 +279,7 @@
 					'cost'    => $_data['cost'],
 					'schoolOption'    => $schooloption,
 					'modify_date' => date("Y-m-d H:i:s"),
-					'status'=> 1,
+					'status'=> $_data['status'],
 					'user_id'	  => $this->getUserId()
 			);
 			$this->_name = "rms_itemsdetail";

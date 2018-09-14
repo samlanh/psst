@@ -6,6 +6,7 @@ class Stock_ProductController extends Zend_Controller_Action {
 	public function init()
 	{
 		header('content-type: text/html; charset=utf8');
+		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function start(){
@@ -82,6 +83,10 @@ class Stock_ProductController extends Zend_Controller_Action {
     	array_unshift($branch, array ( 'id' => "",'name' => $tr->translate("SELECT_LOCATION")));
     	$this->view->branchopt = $branch;
     	
+    	$d_row = $model->getAllItems(3);
+    	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    	$this->view->degree = $d_row;
+    	
     }
     
     public function editAction(){
@@ -117,6 +122,10 @@ class Stock_ProductController extends Zend_Controller_Action {
     	$branch = $model->getAllBranchName();
     	array_unshift($branch, array ( 'id' => "",'name' => $tr->translate("SELECT_LOCATION")));
     	$this->view->branchopt = $branch;
+    	
+    	$d_row = $model->getAllItems(3);
+    	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    	$this->view->degree = $d_row;
 		
     }
 // 	function addNewProCateAction(){
@@ -161,6 +170,10 @@ class Stock_ProductController extends Zend_Controller_Action {
     	$branch = $model->getAllBranchName();
     	array_unshift($branch, array ( 'id' => "",'name' => $tr->translate("SELECT_LOCATION")));
     	$this->view->branchopt = $branch;
+    	
+    	$d_row = $model->getAllItems(3);
+    	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    	$this->view->degree = $d_row;
     
     }
 }

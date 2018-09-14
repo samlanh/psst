@@ -5,11 +5,6 @@
 	$frm_items= $this->frm_items;
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-    dojo.require("dijit.form.Textarea");
-</script>
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
 	width: 99%;
@@ -41,9 +36,12 @@
 				<div class="col-md-6 col-sm-6 col-xs-12">
 					<div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SERVICE_TYPE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                <div class="col-md-5 col-sm-5 col-xs-12">
 		                	<?php echo $frm_items->getElement("items_id");?>
 		                </div>
+		                <div class="col-md-2 col-sm-2 col-xs-12">
+		                <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshItems();"/>
+		            	</div>
 		             </div>
 		    		<div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PROGRAM_TITLE");?> </label>
@@ -97,8 +95,51 @@
 		</form>
     </div>
 </div>
+
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.ready(function(){
-});
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dojo.data.ItemFileWriteStore");  
+    dojo.ready(function(){
+    });
+    var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->degree));?> );
+    require(["dojo/ready"], function(ready){
+    	
+    	new dijit.form.FilteringSelect({
+    		name: "items_id",
+    		id: "items_id",
+    		searchAttr: "name",
+    		class: 'fullside',
+    		onChange: function() {
+    			checkaddItems();
+    	    }
+    		}, "items_id");
+    	
+    });
+    function checkaddItems(){
+    	dept_id = dijit.byId('items_id').get('value');
+    	if(dept_id==-1){
+    		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/accounting/servicecate/add?rightclick=true";?>','_blank');
+	    }
+    }
+	function getRefreshItems(){
+		var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
+			loadingBlock();
+			dojo.xhrPost({
+				url: url_getItems,
+				content:{
+					'items_type':2
+					},
+				handleAs:"json",
+				load: function(data) {
+					dept_store  = getDataStorefromJSON('id','name', data);
+				    dijit.byId('items_id').set('store',dept_store);  
+				   document.getElementsByClassName("overlay")[0].style.display="none";
+				},
+				error: function(err) {
+					document.getElementsByClassName("overlay")[0].style.display="none";
+				}
+			});
+	}
 </script>

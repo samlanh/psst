@@ -7,6 +7,7 @@ class Global_DegreeController extends Zend_Controller_Action {
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	
     public function indexAction()
@@ -117,6 +118,18 @@ class Global_DegreeController extends Zend_Controller_Action {
     	$sub = $parent->getAllSubjectParent(1);
     	$this->view->rs = $is_parent;
     	$this->view->sub = $sub;
+    }
+    
+    function refreshitemsAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$_dbgb = new Application_Model_DbTable_DbGlobal();
+    		$type = empty($data['items_type'])?null:$data['items_type'];
+    		$d_row = $_dbgb->getAllItems($type);
+    		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		print_r(Zend_Json::encode($d_row));
+    		exit();
+    	}
     }
 	function adddegreeAction(){
     	if($this->getRequest()->isPost()){

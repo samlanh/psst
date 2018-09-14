@@ -41,7 +41,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'missingMessage'=>$this->tr->translate("Forget Enter Shortcut")
     	));
     	
-    	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"),"-1"=>$this->tr->translate("ADD_NEW"));
     	$Option = $_dbgb->getAllItems($typeItems);
     	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
     	$_items_id = new Zend_Dojo_Form_Element_FilteringSelect("items_id");
@@ -49,6 +49,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_items_id->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'onChange'=>'checkaddItems();',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	

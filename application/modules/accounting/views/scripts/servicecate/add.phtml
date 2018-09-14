@@ -70,13 +70,13 @@ ul.opt-school {
 		                	<?php //echo $frm_degree->getElement("type");?>
 		                </div>
 		             </div>
-		              -->
+		              
 		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("School Option");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("School Option");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm_degree->getElement("schoolOption");?>
+		                	<?php //echo $frm_degree->getElement("schoolOption");?>
 		                </div>
-		             </div>
+		             </div>-->
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -99,7 +99,7 @@ ul.opt-school {
 	                	<span><input type="checkbox" class="checkbox"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style=" height: initial;"  />&nbsp;<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span></span>
 	                	<ul class="opt-school">
 	                		<?php $identityCheck = ""; if (!empty($this->schoolOption)) foreach ($this->schoolOption as $rs){?>
-	                		<li class="opt-items"> <input  type="checkbox"  class="checkbox"  value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" /> <span style="vertical-align: top;"><?php echo $rs['name'];?></span></li>
+	                		<li class="opt-items"> <input checked="checked" type="checkbox"  class="checkbox"  value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" /> <span style="vertical-align: top;"><?php echo $rs['name'];?></span></li>
 	                			<?php if (empty($identityCheck)){ $identityCheck = $rs['id'];}else{$identityCheck = $identityCheck.",".$rs['id'];}?>
 	                		<?php }?>
 	                	</ul>

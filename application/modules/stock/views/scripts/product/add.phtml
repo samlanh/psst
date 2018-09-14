@@ -99,9 +99,12 @@ input.btn_borwse_image {
 		             </div>
 					<div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PRODUCT_CATEGORY");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                <div class="col-md-4 col-sm-4 col-xs-12">
 		                	<?php echo $frm_items->getElement("items_id");?>
 		                </div>
+		                <div class="col-md-2 col-sm-2 col-xs-12">
+		                <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshItems();"/>
+		            	</div>
 		             </div>
 		             <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TYPE");?>
@@ -327,4 +330,44 @@ input.btn_borwse_image {
 	    readURL(this);
 	   
 	});
+
+	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->degree));?> );
+    require(["dojo/ready"], function(ready){
+    	
+    	new dijit.form.FilteringSelect({
+    		name: "items_id",
+    		id: "items_id",
+    		searchAttr: "name",
+    		class: 'fullside',
+    		onChange: function() {
+    			checkaddItems();
+    	    }
+    		}, "items_id");
+    	
+    });
+    function checkaddItems(){
+    	dept_id = dijit.byId('items_id').get('value');
+    	if(dept_id==-1){
+    		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/degree/add?rightclick=true";?>','_blank');
+	    }
+    }
+function getRefreshItems(){
+	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
+		loadingBlock();
+		dojo.xhrPost({
+			url: url_getItems,
+			content:{
+				'items_type':3
+				},
+			handleAs:"json",
+			load: function(data) {
+				dept_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('items_id').set('store',dept_store);  
+			   document.getElementsByClassName("overlay")[0].style.display="none";
+			},
+			error: function(err) {
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			}
+		});
+}
 </script>

@@ -74,6 +74,12 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     	$frm->FrmAddItemsDetail(null,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
+    	
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$_dbuser = new Application_Model_DbTable_DbUsers();
+    	$d_row = $_dbgb->getAllItems(2);
+    	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    	$this->view->degree = $d_row;
     }
     
     public function editAction(){
@@ -99,6 +105,12 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     	$frm->FrmAddItemsDetail($row,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
+    	
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$_dbuser = new Application_Model_DbTable_DbUsers();
+    	$d_row = $_dbgb->getAllItems(2);
+    	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    	$this->view->degree = $d_row;
 		
     }
 // function submitAction(){

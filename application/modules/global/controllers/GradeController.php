@@ -110,6 +110,13 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
 		
+    	
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$_dbuser = new Application_Model_DbTable_DbUsers();
+    	$d_row = $_dbgb->getAllItems(1);
+    	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    	$this->view->degree = $d_row;
+    	
     }
     
     public function copyAction(){

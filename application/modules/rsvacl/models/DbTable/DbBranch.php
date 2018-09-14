@@ -65,17 +65,17 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			'photo'   	    => $photo,
 	    			'schooloptionlist'		=>$schooloption,
 	    			);
-	    	$check = $this->getCheckHasBranch();
-	    	if (empty($check)){
-	    		$school = $this->getAllSchoolOption();
-	    		$list = "";
-	    		if (!empty($school)){
-	    			foreach ($school as $sss){
-	    				if (empty($list)){$list=$sss['id'];}else{$list=$list.",".$sss['id'];}
-	    			}
-	    		}
-	    		$_arr['schooloptionlist']=$list;
-	    	}
+// 	    	$check = $this->getCheckHasBranch();
+// 	    	if (empty($check)){
+// 	    		$school = $this->getAllSchoolOption();
+// 	    		$list = "";
+// 	    		if (!empty($school)){
+// 	    			foreach ($school as $sss){
+// 	    				if (empty($list)){$list=$sss['id'];}else{$list=$list.",".$sss['id'];}
+// 	    			}
+// 	    		}
+// 	    		$_arr['schooloptionlist']=$list;
+// 	    	}
 	    	$this->_name ="rms_branch";
 	    	$this->insert($_arr);//insert data
 	    	

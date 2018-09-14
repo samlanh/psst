@@ -10,7 +10,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
 		try{
-		$_arr = array(
+			$_arr = array(
 					'branch_id'		=>$data['branch_id'],
 					'title'			=>$data['title'],
 					'total_amount'	=>$data['total_amount'],
@@ -24,23 +24,24 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 					'user_id'		=>$this->getUserId(),
 					'create_date'	=>date('Y-m-d H:i:s'),
 				);
-		$expend_id = $this->insert($_arr);
-		$ids = explode(',', $data['identity']);
-		$this->_name='ln_expense_detail';
-		foreach ($ids as $j){
-			$arr = array(
-					'expense_id'	=>$expend_id,
-					'service_id'	=>$data['expense_id'.$j],
-					'description'	=>$data['remark'.$j],
-					'price_paid'	=>$data['price_paid'.$j],
-					'qty_paid'		=>$data['qty_paid'.$j],
-					'total_amount'	=>$data['total_paid'.$j]
-				);
-		   $this->insert($arr);
-		}
+			$expend_id = $this->insert($_arr);
+			$ids = explode(',', $data['identity']);
+			$this->_name='ln_expense_detail';
+			foreach ($ids as $j){
+				$arr = array(
+						'expense_id'	=>$expend_id,
+						'service_id'	=>$data['expense_id'.$j],
+						'description'	=>$data['remark'.$j],
+						'price_pain'	=>$data['price_pain'.$j],
+						'qty_pain'		=>$data['qty_pain'.$j],
+						'total_pain'	=>$data['total_pain'.$j],
+					);
+			   $this->insert($arr);
+			}
 			$_db->commit();
 		}catch(Exception $e){
 			$_db->rollBack();
+			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		//print_r($data); exit();
@@ -49,7 +50,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
  	$_db= $this->getAdapter();
  	$_db->beginTransaction();
  	try{
-	$arr = array('branch_id'=>$data['branch_id'],
+	$arr = array(	'branch_id'		=>$data['branch_id'],
 					'branch_id'		=>$data['branch_id'],
 					'title'			=>$data['title'],
 					'total_amount'	=>$data['total_amount'],
@@ -65,33 +66,36 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 	$where=" id = ".$data['id'];
 	$id = $this->update($arr, $where);
 	
-	$ids = explode(',', $data['identity']);
 	$this->_name='ln_expense_detail';
 	$where = "expense_id = ".$data['id'];
 	$this->delete($where);
-	
+	$ids = explode(',', $data['identity']);
 	foreach ($ids as $j){
 		$arr = array(
 				'expense_id'	=>$id,
 				'service_id'	=>$data['expense_id'.$j],
 				'description'	=>$data['remark'.$j],
-				'total_amount'	=>$data['total_paid'.$j]);
+				'price_pain'	=>$data['price_pain'.$j],
+				'qty_pain'		=>$data['qty_pain'.$j],
+				'total_pain'	=>$data['total_pain'.$j],);
 		$this->insert($arr);
 	}
 	$_db->commit();
 	}catch(Exception $e){
 		$_db->rollBack();
+		echo $e->getMessage();exit();
 		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	}
+	//print_r($data); exit();
 }
 function getexpensebyid($id){
 	$db = $this->getAdapter();
-	$sql=" SELECT * FROM ln_expense where id=$id ";
+	$sql="SELECT * FROM ln_expense where id=$id ";
 	return $db->fetchRow($sql);
 }
 function getexpenseDetailbyid($id){
 	$db = $this->getAdapter();
-	$sql=" SELECT * FROM ln_expense_detail WHERE expense_id=$id AND status=1";
+	$sql="SELECT * FROM ln_expense_detail WHERE expense_id=".$id;
 	return $db->fetchAll($sql);
 }
 

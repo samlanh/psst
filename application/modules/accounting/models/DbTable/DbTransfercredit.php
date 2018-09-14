@@ -28,9 +28,9 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				  s.stu_id = c.stu_idto
 			";
 		$where="";
-		if (!empty($search['title'])){
+		if (!empty($search['adv_search'])){
 			$s_where = array();
-			$s_search = trim(addslashes($search['title']));
+			$s_search = trim(addslashes($search['adv_search']));
 			$s_where[] = " (SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT stu_code FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[] = " CONCAT(stu_khname,'-',stu_enname) LIKE '%{$s_search}%'";
@@ -38,8 +38,8 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 			$s_where[] = " (SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.stu_name LIMIT 1) LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}
-		if($search['status_search']>-1){
-			$where.= " AND c.status  = ".$search['status_search'];
+		if($search['status']>-1){
+			$where.= " AND c.status  = ".$search['status'];
 		}
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);

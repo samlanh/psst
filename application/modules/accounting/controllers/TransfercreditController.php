@@ -17,8 +17,8 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    					'title' => '',
-    					'status_search' => -1,
+    					'adv_search' => '',
+    					'status' => -1,
     			);
     		}
     		$rs_rows= $db->getAllTransfer($search);

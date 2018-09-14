@@ -112,17 +112,14 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 // 		$invoice_no = $db->getInvoiceNo();
 // 		$invoice->setValue($invoice_no);
 		
-		$id = new Zend_Form_Element_Hidden("id");
-		
 		$payment_method = new Zend_Dojo_Form_Element_FilteringSelect('payment_method');
 		$payment_method->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
-				
 		));
 		$opt = $db->getViewById(8,1);
 		$payment_method->setMultiOptions($opt);
-	
+		$id = new Zend_Form_Element_Hidden("id");
 		if($data!=null){
 			$payment_method->setValue($data['payment_type']);
 			$_branch_id->setValue($data['branch_id']);

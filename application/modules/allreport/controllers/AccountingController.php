@@ -775,13 +775,25 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     					"adv_search"=>'',
     					"payment_type"=>-1,
     					"status"=>-1,
+    					"status_search"=>-1,
+    					'paid_transfer'=>-1,
     					'paid_status'=>'',
+    					'paid_type'=>0,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
     			);
     		}
-			$this->view->all_memo= $db->getAllCreditmemo($formdata);
+    		$_db = new Accounting_Model_DbTable_DbTransfercredit();
 			$this->view->search = $formdata;
+			if($formdata['paid_type']==0){
+				$this->view->all_memo= $db->getAllCreditmemo($formdata);
+				$this->view->all_memo_transfer = $_db->getAllTransfer($formdata);
+				
+				}else if($formdata['paid_type']==1){
+					$this->view->all_memo= $db->getAllCreditmemo($formdata);
+				}else if($formdata['paid_type']==2){
+					$this->view->all_memo_transfer= $_db->getAllTransfer($formdata);
+				}
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		echo $e->getMessage();

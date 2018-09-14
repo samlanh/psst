@@ -20,6 +20,13 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
+		$adv_search = new Zend_Dojo_Form_Element_TextBox('adv_search');
+		$adv_search->setAttribs(array(
+				'dojoType'=>$this->text,
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SEARCH")));
+		$adv_search->setValue($request->getParam("adv_search"));
+		
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
 		$_title->setAttribs(array(
 				'dojoType'=>$this->text,
@@ -335,14 +342,14 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
    		);
 		$pay_term->setMultiOptions($opt_term);
 		
-		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
+		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
-		$_status->setValue($request->getParam("status_search"));
+		$_status->setValue($request->getParam("status"));
 		
 		//date 
 		$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
@@ -548,7 +555,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 					$_day,$_teacher,$_subject,$study_status,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
-					$_session,$_time,$_degree,$_grade,$_grade_all,$_status,$service,$pay_term));
+					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term));
 	
 		return $this;
 	} 

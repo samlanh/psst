@@ -351,12 +351,12 @@ function initialize(){ //alert(1);
 		dojo.query("#head-title").append(temp);
 		title=1;
     }
-	template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+	template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 	template+='<td width="50px" align="center">'+no+'</td>';
 	template+='<td style="width:300px"><select style="width:100%" " dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
 	template+='<td><input type="text" required="1" " name="price_pain'+col+'" id="price_pain'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
 	template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_pain'+col+'" id="qty_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
-	template+='<td><input type="text" onkeyup="calculateTotal('+col+');" readonly="readonly" name="total_pain'+col+'" id="total_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
+	template+='<td><input type="text" readonly="readonly" name="total_pain'+col+'" id="total_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
 	template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:100%;" /><label id="subsub"></label></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
@@ -376,7 +376,6 @@ function initialize(){ //alert(1);
 	
 	<?php }}?>
 }
-
 var template = '';
 var service = '';
 var col = 0;
@@ -385,39 +384,38 @@ var title = 0;
 tmp = '';
 temp='';
 optexpense = '<?php echo $this->expenseopt;?>';
-function addRow() {
-	col++;no++;
-	template='';
-	if(title!=1){
-		temp+='<th><?php echo $tr->translate("DEL");?></th>';
-		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CATE_EXPENSE");?></th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("TOTAL");?></th>';
-		temp+='<th><?php echo $tr->translate("REMARK");?></th>';
-		dojo.query("#head-title").append(temp);
-		title=1;
-    }
-	template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-	template+='<td width="50px" align="center">'+no+'</td>';
-	template+='<td style="width:300px"><select style="width:100%" onchange="popupCateExpense('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
-	template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="price_pain'+col+'" id="price_pain'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
-	template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_pain'+col+'" id="qty_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
-	template+='<td><input type="text" onkeyup="calculateTotal('+col+');" readonly="readonly" name="total_pain'+col+'" id="total_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
-	template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>"  style="width:100%;" /><label id="subsub"></label></td>';
-	tmp='<tr id="row'+col+'">';
-	tmp+="</tr>";
-	dojo.query("#table_row").append(tmp);
-	if($("#identity").val()!="") {
-		var identity = $("#identity").val();
-		$("#identity").val(identity+','+col);
-	} else {$("#identity").val(col);}
-	dojo.html.set(dojo.byId("row"+col),template , {
-	     parseContent: true,
-	});
-	
-}
+function addRow() { 
+		col++;no++;
+		template='';
+		if(title!=1){  
+			temp+='<th><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CATE_EXPENSE");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("TOTAL");?></th>';
+			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+			dojo.query("#head-title").append(temp);
+			title=1;
+	    }
+		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="50px" align="center">'+no+'</td>';
+		template+='<td style="width:300px"><select style="width:100%" onchange="popupCateExpense('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
+		template+='<td><input type="text" required="1"  name="price_pain'+col+'" id="price_pain'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
+		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_pain'+col+'" id="qty_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
+		template+='<td><input type="text" readonly="readonly" name="total_pain'+col+'" id="total_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
+		template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:100%;" /><label id="subsub"></label></td>';
+		tmp='<tr id="row'+col+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+col);
+		} else {$("#identity").val(col);}
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
+ }
 
 function calculateTotal(index,type){
 	if(type==1){

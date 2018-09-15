@@ -64,7 +64,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 					//'create_date'=>date('Y-m-d H:i:s'),
 				);
 	$where=" id = ".$data['id'];
-	$id = $this->update($arr, $where);
+	$this->update($arr, $where);
 	
 	$this->_name='ln_expense_detail';
 	$where = "expense_id = ".$data['id'];
@@ -72,7 +72,7 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 	$ids = explode(',', $data['identity']);
 	foreach ($ids as $j){
 		$arr = array(
-				'expense_id'	=>$id,
+				'expense_id'	=>$data['id'],
 				'service_id'	=>$data['expense_id'.$j],
 				'description'	=>$data['remark'.$j],
 				'price_pain'	=>$data['price_pain'.$j],
@@ -83,7 +83,6 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 	$_db->commit();
 	}catch(Exception $e){
 		$_db->rollBack();
-		echo $e->getMessage();exit();
 		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	}
 	//print_r($data); exit();

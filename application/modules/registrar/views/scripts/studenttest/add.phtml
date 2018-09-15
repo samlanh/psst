@@ -711,7 +711,6 @@ function addNationBy(){
 		col++;no++;
 		template='';
 		temp = "";
-	
 		if(title!=1){
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
@@ -723,7 +722,6 @@ function addNationBy(){
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			
 		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" required="required" id="school_name'+col+'" name="school_name'+col+'" value="" type="text"  ></td>';	

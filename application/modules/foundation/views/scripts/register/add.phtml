@@ -653,7 +653,7 @@ dojo.ready(function(){
 	   } 
 	}, "nation");
 	dijit.byId('nation').attr('value',0);
-
+	
 	new dijit.form.FilteringSelect({
 		store: job_store,
 		queryExpr: "*${0}*",
@@ -698,6 +698,7 @@ dojo.ready(function(){
 	}, "gu_job");
 	dijit.byId('gu_job').attr('value',0);
 
+
 	new dijit.form.FilteringSelect({
 		store: language_store,
 		queryExpr: "*${0}*",
@@ -709,11 +710,11 @@ dojo.ready(function(){
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_LANGUAGE_LEVEL");?>", 
 	    onChange: function() {          
-	   	lang_level = dijit.byId('lang_level').get('value');
-	    if(lang_level==-1){
-			dijit.byId("popup_lang_level").show();
-	    }
-	   } 
+			lang_level = dijit.byId('lang_level').get('value');
+			if(lang_level==-1){
+				dijit.byId("popup_lang_level").show();
+			}
+	    } 
 	}, "lang_level");
 	dijit.byId('lang_level').attr('value',0);
 	
@@ -789,11 +790,11 @@ function getRefreshStudent(){
 		url:url_getstudent,
 		handleAs:"json",
 		load: function(data) {
-			nation_store  = getDataStorefromJSON('id','name', data.nation);
+			nation_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('nation').set('store',nation_store); 
 		     
-		    studen_store  = getDataStorefromJSON('id','name', data.studen_national);
-		    dijit.byId('studen_national').set('store',studen_store); 
+		    nation_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('studen_national').set('store',nation_store); 
 
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
@@ -871,6 +872,7 @@ function addNationBy(){
 					 name: dijit.byId('title_kh').get('value')
 				   };
 		   addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+		   dijit.byId('studen_national').set('store',nation_store); 
 		   dijit.byId('frm_nation_kh').reset();
 		   dijit.byId("popup_nation").hide();
 			},

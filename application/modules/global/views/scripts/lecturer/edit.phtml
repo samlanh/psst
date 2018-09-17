@@ -65,7 +65,7 @@ input.btn_borwse_image {
     			</div>
     		</div>
     	</div>
-    	<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'add')); ?>" 
+    	<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'edit')); ?>" 
 			dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
@@ -147,6 +147,13 @@ input.btn_borwse_image {
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("nationality");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("nation");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -354,7 +361,43 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 		 initialize();
 	});
 </script>
-
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate("ADD_NATION")?>'" style="width:500px;" id="popup_nation" >
+		<form  id='frm_nation_kh' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				<tr>
+					<td>
+						<fieldset >
+						<legend class="bold" align="center" ><?php echo $tr->translate('ADD_NATION');?></legend>
+							<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="10" >
+								<tr>
+								<td><?php echo $tr->translate('KH_NAME');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_kh" name="title_kh" value="" type="text"></td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate('EN_NAME');?></td>
+								<td>
+									<input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_en" name="title_en" value="" type="text">
+									<input type="hidden" id="status_na" name="status_na" value="1" />
+									<input type="hidden" id="indexkey" name="indexkey" value="1" />
+								</td>
+							</tr>
+								<tr>
+									<td colspan="4" align="center">
+										<input type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide_nation" name="hide_nation" dojoType="dijit.form.Button" 
+										​ ​​iconClass="dijitIconUndo" onclick="dijit.byId('popup_nation').hide();"/>
+										<input type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_nation" name="save_nation" dojoType="dijit.form.Button" 
+										 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNationBy();"/>
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>		
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_doc_type" >
 		<form style="background-color: buttonface;" id='frm_doc_type' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -442,7 +485,81 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 	$("#photo").change(function(){
 	    readURL(this);
 	});
-
+	require(["dojo/ready"], function(ready){
+		new dijit.form.FilteringSelect({
+			name: "nationality",
+			id: "nationality",
+			searchAttr: "name",
+			class: 'fullside',
+			onChange: function() {
+				popupNation(1);
+		    }
+			}, "nationality");
+		new dijit.form.FilteringSelect({
+			name: "nation",
+			id: "nation",
+			searchAttr: "name",
+			class: 'fullside',
+			onChange: function() {
+				popupNation(2);
+		    }
+			}, "nation");
+	});
+	function popupNation(key){
+		if(key==1){
+			var nation = dijit.byId('nationality').get('value');
+			$("#indexkey").val(key);
+		}else{
+			var nation = dijit.byId('nation').get('value');
+			$("#indexkey").val(key);
+		}
+		if(nation==''){
+			return false;
+		}
+		if(nation==-1){
+			dijit.byId("popup_nation").show();
+		}
+	}
+	var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+	var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
+		function addNationBy(){
+			if(dijit.byId('frm_nation_kh').validate()){
+				loadingBlock();	
+				dojo.xhrPost({
+					url:url_add_nation,
+					form: dojo.byId("frm_nation_kh"),
+					handleAs:"json",
+					load: function(data) {
+						var indexkey = $("#indexkey").val();
+							var Itemmake = { 
+								 id: data,
+								 name: dijit.byId('title_kh').get('value')
+							   };
+						   if(indexkey==1){
+							   addDataToSelectbox(dijit.byId('nationality'), nation_store, Itemmake, data);
+							   nation =  dijit.byId('nation').get('value');
+							   dijit.byId('nation').set('store', nation_store);
+							   if(nation!=""){
+							   dijit.byId('nation').set('value', nation);
+							   }
+						   }else{	   
+						   	  addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+							  dijit.byId('nationality').set('store', nation_store);
+							  nation =  dijit.byId('nationality').get('value');
+							  if(nation!=""){
+							  dijit.byId('nationality').set('value', nation);
+							  }
+						   }
+						   dijit.byId('frm_nation_kh').reset();
+						   dijit.byId("popup_nation").hide();
+						   HideloadingBlock();
+					},
+					error: function(err) {
+						alert(err);
+					}
+				});
+			}
+		}
 	var url_add_doc_type = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-doctype")); ?>';
 	function addDocType(){
 		if(dijit.byId('frm_doc_type').validate()){

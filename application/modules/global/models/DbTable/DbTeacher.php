@@ -39,6 +39,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'sex'				 => $_data['sex'],
 							'dob'				 => $_data['dob'],
 							'nationality'  		 => $_data['nationality'],
+							'nation'  		     => $_data['nation'],
 							'teacher_type'  	 => $_data['teacher_type'],
 					        'tel'  				 => $_data['phone'],
 							'address' 			 => $_data['address'],
@@ -108,6 +109,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						'sex'				 => $_data['sex'],
 						'dob'				 => $_data['dob'],
 						'nationality'  		 => $_data['nationality'],
+						'nation'  		     => $_data['nation'],
 						'teacher_type'  	 => $_data['teacher_type'],
 				        'tel'  				 => $_data['phone'],
 						'address' 			 => $_data['address'],
@@ -131,8 +133,8 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				        'create_date' 		 => date("Y-m-d"),
 				        'user_id'	  		 => $this->getUserId(),
 					);
-					$this->_name="rms_teacher";
-					$id = $this->insert($_arr);
+					$where=" id = ".$_data['id'];
+					$id = $this->update($_arr,$where);
 					
 					$this->_name = 'rms_teacher_document';
 					$where="stu_id = ".$_data["id"];
@@ -140,7 +142,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					$ids = explode(',', $_data['identity']);
 					foreach ($ids as $i){
 							$_arr = array(
-									'stu_id'		=>$id,
+									'stu_id'		=>$_data["id"],
 									'document_type'	=>$_data['document_type_'.$i],
 									'date_give'		=>$_data['date_give_'.$i],
 									'date_end'		=>$_data['date_end_'.$i],
@@ -182,7 +184,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = 'SELECT g.id, g.teacher_code, g.teacher_name_kh,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex, 
-				g.nationality,
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
 				g.tel,
 				g.email,

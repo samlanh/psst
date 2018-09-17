@@ -11,14 +11,15 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		//print_r($_data); exit();
 		try{
+			$title = trim($_data['occu_name']);
 			$sql="SELECT occupation_id FROM rms_occupation WHERE status =".$_data['status'];
-			$sql.=" AND occu_name='".$_data['occu_name']."'";
+			$sql.=" AND occu_name='".$title."'";
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;
 			}			
 		$_arr=array(
-				'occu_name'	  => $_data['occu_name'],
+				'occu_name'	  => $title,
 				'create_date' => Zend_Date::now(),
 				'status'  	  => $_data['status'],
 				'user_id'	  => $this->getUserId()

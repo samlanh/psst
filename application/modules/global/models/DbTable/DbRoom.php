@@ -10,8 +10,9 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 	public function addNewRoom($_data){
 		$db = $this->getAdapter();
 		try{
+			$title = trim($_data['classname']);
 			$sql="SELECT room_id FROM rms_room WHERE branch_id =".$_data['branch_id'];
-			$sql.=" AND room_name='".$_data['classname']."'";
+			$sql.=" AND room_name='".$title."'";
 			$sql.=" AND floor='".$_data['floor']."'";
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
@@ -20,7 +21,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 			$_arr=array(
 					'branch_id'	  => $_data['branch_id'],
 					'floor'	  	  => $_data['floor'],
-					'room_name'	  => $_data['classname'],
+					'room_name'	  => $title,
 					'max_std'	  => $_data['max_student'],
 					'modify_date' => Zend_Date::now(),
 					'is_active'   => $_data['status'],

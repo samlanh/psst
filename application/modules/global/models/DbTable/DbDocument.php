@@ -11,14 +11,15 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		//print_r($_data); exit();
 		try{
+			$title = trim($_data['name']);
 			$sql="SELECT id FROM rms_document_type WHERE status =".$_data['status'];
-			$sql.=" AND name='".$_data['name']."'";
+			$sql.=" AND name='".$title."'";
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;
 			}			
 		$_arr=array(
-				'name'	  => $_data['name'],
+				'name'	  	  => $title,
 				'create_date' => date("Y-m-d"),
 				'status'  	  => $_data['status'],
 				'user_id'	  => $this->getUserId()

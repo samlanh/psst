@@ -76,17 +76,26 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_user = new Zend_Dojo_Form_Element_TextBox('user_name');
 		$_user->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
 		
-		$_nationality =  new Zend_Dojo_Form_Element_FilteringSelect('nationality');
-		$_nationality->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'onChange'=>'getallGrade();getStudentNo()',
-		));
-		$rs_nation = $_db->getAllNation();
-		$arr_opt = array();
-		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
-		$_nationality->setMultiOptions($arr_opt);
-		
+		$_arr_opt_nation = array(""=>$this->tr->translate("PLEASE_SELECT"),"-1"=>$this->tr->translate("ADD_NEW"));
+    	$optionNation = $_db->getViewByType(21);//Nation
+    	if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
+    	$_nationality = new Zend_Dojo_Form_Element_FilteringSelect("nationality");
+    	$_nationality->setMultiOptions($_arr_opt_nation);
+    	$_nationality->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'popupNation(1);',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	 
+    	$_nation = new Zend_Dojo_Form_Element_FilteringSelect("nation");
+    	$_nation->setMultiOptions($_arr_opt_nation);
+    	$_nation->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'popupNation(2);',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
 		
 		$_position = new Zend_Dojo_Form_Element_TextBox('position_add');
 		$_position->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',));
@@ -144,6 +153,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$id=  new Zend_Form_Element_Hidden('id');
 		if(!empty($_data)){
  			$id->setValue($_data['id']);
+ 			$_nation->setValue($_data['nation']);
 			$code->setValue($_data['teacher_code']);
 			$_enname->setValue($_data['teacher_name_en']);
 			$_khname->setValue($_data['teacher_name_kh']);
@@ -165,7 +175,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$end_date->setValue($_data['end_date']);
 			$_agreement->setValue($_data['agreement']);
 		}
-		$this->addElements(array($id,$_enname,$_note,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
+		$this->addElements(array($id,$_enname,$_note,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
 	}

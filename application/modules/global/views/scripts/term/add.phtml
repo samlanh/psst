@@ -27,8 +27,31 @@
     	<form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">   
 	  			 if(this.validate()) {
-					dijit.byId('save_new').set('disabled',true);
-					dijit.byId('save_close').set('disabled',true);
+					academic_year = dijit.byId("academic_year").get('value');
+					if(academic_year=='' || academic_year==-1){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR");?>");
+						dijit.byId("academic_year").focus();
+						return false;
+					}
+					var rowId = $('#identity').val();
+					if(rowId==''){ 
+						alert("<?php echo $tr->translate("PLEASE_ADD_TERM_DURATION");?>");
+						return false;
+					}
+					if(rowId!=''){ 
+						var rowIDArray = rowId.split(',');
+						for(var n = 0; n < rowIDArray.length; n++){
+							var row_id = dijit.byId('title_'+rowIDArray[n]).get('value');
+							if(row_id==''){
+								alert("<?php echo $tr->translate("PLEASE_ENTER_TERM_TITLE");?>");
+								return false;
+							}
+						}
+						
+					}
+					loadingBlock();
+					//dijit.byId('save_new').set('disabled',true);
+					//dijit.byId('save_close').set('disabled',true);
 					return true;
 	  			 }else {
 					return false;
@@ -49,7 +72,7 @@
 		             </div>
 				</div>
 				<div class="col-md-8 col-sm-8 col-xs-12">
-					<table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;">
+					<table class="collape tablesorter" id="table_row" style="width:100%; white-space: nowrap;border:1px solid #ddd;">
 				    	<tr id="head-title" class="head-td" align="right"></tr>
 					</table>
 					<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >

@@ -97,7 +97,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		$dept = $_dbgb->getAllItems(1);//degree
 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->dept = $dept;
-		
 		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
@@ -311,8 +310,22 @@ class Global_GroupController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Global_Model_DbTable_DbGroup();
     		$teacher = $db->getAllTeacher();
+    		array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
     		print_r(Zend_Json::encode($teacher));
     		exit();
     	}
     }
+    function getroomAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$model = new Application_Model_DbTable_DbGlobal();
+    		$room = $model->getAllRoom();
+    		array_unshift($room, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		array_unshift($room, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT_ROOM")));
+    		print_r(Zend_Json::encode($room));
+    		exit();
+    	}
+    }
+    
+    
 }

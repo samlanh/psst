@@ -72,7 +72,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_time = new Zend_Dojo_Form_Element_TextBox('time');
 		$_time->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
 	
-		$_note = new Zend_Dojo_Form_Element_TextBox('note');
+		$_note = new Zend_Dojo_Form_Element_TextBox('notes');
 		$_note->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','style'=>'min-height: 70px;'));
 		
 // 		$_floor = new Zend_Dojo_Form_Element_TextBox('floor');

@@ -38,7 +38,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'status'   		=> 1,
 					'teacher_id'   	=> $_data['teacher_id'],
 					'teacher_assistance'=> $_data['teacher_ass'],
-					'note'   		=> $_data['note'],
+					'note'   		=> $_data['notes'],
 					'user_id'	 	=> $this->getUserId(),
 					'is_use' 		=> 0
 			);
@@ -91,7 +91,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'teacher_id'   	=> $_data['teacher_id'],
 					'teacher_assistance'=> $_data['teacher_ass'],
 					'status'   		=> $_data['status'],
-					'note'   		=> $_data['note'],
+					'note'   		=> $_data['notes'],
 					'is_pass'   	=> $_data['is_pass'],
 // 					'is_use'   		=> $_data['is_use'],
 					'user_id'	  	=> $this->getUserId()

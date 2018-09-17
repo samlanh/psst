@@ -44,17 +44,47 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'required'=>'true',
 				'class'=>'fullside'));
 		
-		$studen_national =  new Zend_Dojo_Form_Element_FilteringSelect('studen_national');
+// 		$studen_national =  new Zend_Dojo_Form_Element_FilteringSelect('studen_national');
+// 		$studen_national->setAttribs(array(
+// 				'dojoType'=>'dijit.form.FilteringSelect',
+// 				'class'=>'fullside',
+// 				'onChange'=>'getallGrade();getStudentNo()',
+		
+// 		));
+// 		$rs_nation = $_db->getAllNation();
+// 		$arr_opt = array();
+// 		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
+// 		$studen_national->setMultiOptions($arr_opt);
+		
+		$_arr_opt_nation = array(""=>$tr->translate("PLEASE_SELECT"),"-1"=>$tr->translate("ADD_NEW"));
+		$optionNation = $_db->getViewByType(21);//Nation
+		if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
+		$studen_national = new Zend_Dojo_Form_Element_FilteringSelect("studen_national");
+		$studen_national->setMultiOptions($_arr_opt_nation);
 		$studen_national->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'onChange'=>'getallGrade();getStudentNo()',
+				'required'=>'true',
+				'onChange'=>'popupNation(1);',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
 		
-		));
-		$rs_nation = $_db->getAllNation();
-		$arr_opt = array();
-		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
-		$studen_national->setMultiOptions($arr_opt);
+		$_nation = new Zend_Dojo_Form_Element_FilteringSelect("nation");
+		$_nation->setMultiOptions($_arr_opt_nation);
+		$_nation->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'onChange'=>'popupNation(2);',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		
+		$fa_national = new Zend_Dojo_Form_Element_FilteringSelect("fa_national");
+		$fa_national->setMultiOptions($_arr_opt_nation);
+		$fa_national->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'onChange'=>'popupNation(3);',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
 	
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
@@ -224,18 +254,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				));
 // 		$fa_dob->setValue();
-		$fa_national =  new Zend_Dojo_Form_Element_FilteringSelect('fa_national');
-		$fa_national->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'onChange'=>'getallGrade();getStudentNo()',
-		
-		));
-		$rs_nation = $_db->getAllNation();
-		$arr_opt = array();
-		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
-		$fa_national->setMultiOptions($arr_opt);
-		
 		$fa_phone = new Zend_Dojo_Form_Element_ValidationTextBox('fa_phone');
 		$fa_phone->setAttribs(array('dojoType'=>$this->tvalidate,
 				'class'=>'fullside'));
@@ -355,6 +373,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$guardian_national->setValue($data['guardian_nation']);
 			$guardian_phone->setValue($data['guardian_tel']);
 			
+			$_nation->setValue($data['nation']);
 			$from_school->setValue($data['from_school']);
 			$sponser->setValue($data['sponser']);
 			$sponser_phone->setValue($data['sponser_phone']);
@@ -368,6 +387,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$last_name,
 						$studen_national,
 						$_sex,
+						$_nation,
 						$date_of_birth,
 						$pob,
 						$_stutype,

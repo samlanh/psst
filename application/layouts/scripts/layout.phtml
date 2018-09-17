@@ -223,7 +223,7 @@ $teacher_id = $session_t->teacher_id;
 					                              <img src="<?php echo $images;?>" />
 					                            </div>
 					                            <div class="media-body">
-					                              <span class="title" ><?php echo $announ['is_read'].$announ['title'];?></span>
+					                              <span class="title" ><?php echo $announ['title'];?></span>
 					                              <p> <small><?php echo $tr->translate("PUBLISH_DATE")." : ".date("d/M/Y",strtotime($announ['publish_date'])); ?></small>
 					                              <p>
 					                              	<?php echo  mb_substr(strip_tags($announ['description']),0,70, "utf-8")."...";?>

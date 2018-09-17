@@ -33,6 +33,11 @@ dojo.require("dijit.form.CheckBox");
     	<form id='frm_degree' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
+					schoolOption = dijit.byId("schoolOption").get('value');
+					if(schoolOption=='' || schoolOption==-1){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_SCHOOL_OPTION");?>");
+						return false;
+					}
 					var rowId = $('#identity').val();
 					if(rowId!=''){ 
 						var rowIDArray = rowId.split(',');

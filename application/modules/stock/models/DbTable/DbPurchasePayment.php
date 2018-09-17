@@ -184,7 +184,7 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	 
     	$from_date =(empty($data['start_date']))? '1': " p.date >= '".date("Y-m-d",strtotime($data['start_date']))." 00:00:00'";
     	$to_date = (empty($data['end_date']))? '1': " p.date <= '".date("Y-m-d",strtotime($data['end_date']))." 23:59:59'";
-    	$sql.= " AND  ".$from_date." AND ".$to_date;
+//     	$sql.= " AND  ".$from_date." AND ".$to_date;
     	if (!empty($data['bypuchase_no'])){
     		$sql.=" AND p.supplier_no ='".addslashes(trim($data['bypuchase_no']))."'";
     	}

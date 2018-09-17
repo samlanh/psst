@@ -27,7 +27,7 @@ class Global_NewsController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","PUBLISH_DATE","STATUS","BY");
+			$collumns = array("TITLE","PUBLISH_DATE","STATUS","BY_USER");
 			$link=array(
 					'module'=>'global','controller'=>'news','action'=>'edit',
 			);

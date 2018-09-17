@@ -56,7 +56,7 @@ Class Global_Form_FrmNews extends Zend_Dojo_Form {
 		$_status_search->setValue($request->getParam('status_search'));
 		
 		$_adv_search = new Zend_Dojo_Form_Element_TextBox('adv_search');
-		$_adv_search->setAttribs(array('dojoType'=>$this->text,
+		$_adv_search->setAttribs(array('dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 				'placeholder'=>$this->tr->translate("ADVANCE_SEARCH")
 		));
@@ -67,7 +67,7 @@ Class Global_Form_FrmNews extends Zend_Dojo_Form {
 				//'required'=>'true',
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				'onchange'=>'CalculateDate();'));
+				));
 		$_date = $request->getParam("start_date");
 		
 		if(empty($_date)){

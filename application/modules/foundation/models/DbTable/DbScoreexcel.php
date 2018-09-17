@@ -26,7 +26,7 @@ class Foundation_Model_DbTable_DbScoreexcel extends Zend_Db_Table_Abstract
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
-			$dbpush->getTokenUser($_data['group'],null, 4);
+			$dbpush->getTokenUser(null,$_data['group'],4);
 			
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);

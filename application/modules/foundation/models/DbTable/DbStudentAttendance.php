@@ -71,7 +71,6 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 				if(!empty($ids))foreach ($ids as $i){
 					if ($_data['attedence'.$i]!=1){
 						if($_data['attedence'.$i]!=1){//ក្រៅពីមក sent all
-// 							$dbpush->pushSendNotification($_data['student_id'.$i], 2);
 							$dbpush->getTokenUser($_data['student_id'.$i],null, 2);
 						}
 						$arr = array(

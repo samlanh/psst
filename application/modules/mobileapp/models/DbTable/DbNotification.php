@@ -62,7 +62,6 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
             );
          $this->_name;
         if(!empty($data['id'])){  
-            // var_dump($_arr);exit();                            
             $where = 'id='.$data['id'];          
            $this->update($_arr, $where);                     
         }else{
@@ -72,9 +71,9 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
            
             $dbpush = new  Application_Model_DbTable_DbGlobal();
             if ($data['opt_notification']==2){
-            	$token =	$dbpush->getTokenUser($data['group']);
+            	$token =	$dbpush->getTokenUser(null,$data['group']);
             }else if ($data['opt_notification']==3){
-            	$token = $dbpush->getTokenUser(null,$data['student'],6);
+            	$token = $dbpush->getTokenUser($data['student'],null,6);
             }else{
             	$token = $dbpush->getTokenUser(null,null,6);
             }

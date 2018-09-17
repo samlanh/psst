@@ -822,10 +822,10 @@ function getAllgroupStudy($teacher_id=null){
    
    }
    /**notification alert*/
-   function gettokenbystudentid($student_id){
-   	$sql="SELECT token FROM `mobile_mobile_token` WHERE stu_id=$student_id";
-   	return $this->getAdapter()->fetchAll($sql);
-   }
+//    function gettokenbystudentid($student_id){
+//    	$sql="SELECT token FROM `mobile_mobile_token` WHERE stu_id=$student_id";
+//    	return $this->getAdapter()->fetchAll($sql);
+//    }
    function setTitleTonotification($title_id){
    	$db = $this->getAdapter();
    	$title_label = array(
@@ -841,91 +841,157 @@ function getAllgroupStudy($teacher_id=null){
    	$sql="SELECT keyValue FROM `moble_label` 
    		WHERE keyName='".$title_label[$title_id]."'";
    	return $db->fetchOne($sql);
-//    	$title_str = array(
-//    			1=>"Thanks your payment",
-//    			2=>"you got student attendance !",
-//    			3=>"you got student mistake !",
-//    			4=>"you got score result !",
-//    			5=>"you got news/events notification for psis!",
-//    	);
-//    	return $title_str[$title_id];
    }
-   function getTokenUser($group=null,$student=null,$title_id){
+   function getTokenUser($student=null,$group=null,$title_id){
    		$db = $this->getAdapter();
-   		if (!empty($group)){
-	   		$sql="
+   		if (!empty($group)){//select by gorup
+	   		$sql_android="
 		 		SELECT mb.`token`
 				FROM `rms_group_detail_student` AS sd
 				,`mobile_mobile_token` AS mb
 				WHERE sd.`group_id` = $group
-				AND sd.`stu_id` = mb.`stu_id`
-		 	";
-   		}else if (!empty($student)){
-   			$sql="SELECT t.`token` FROM `mobile_mobile_token` AS t WHERE t.`stu_id` =$student";
-   		}else{
-   			$sql="SELECT t.`token` FROM `mobile_mobile_token` AS t";
+				AND sd.`stu_id` = mb.`stu_id` AND device_type=1 ";
+	   		
+	   		$sql_ios="
+	   		SELECT mb.`token`
+	   		FROM `rms_group_detail_student` AS sd
+	   		,`mobile_mobile_token` AS mb
+	   		WHERE sd.`group_id` = $group
+	   		AND sd.`stu_id` = mb.`stu_id` AND device_type=0 ";
+	   		$androidToken =  $db->fetchCol($sql_android);
+	   		$iosToken =  $db->fetchCol($sql_ios);
+	   		$this->pushSendNotification($androidToken, $iosToken, $title_id);
+   		}else if (!empty($student)){//by student id
+   			$sql_android="SELECT t.`token` FROM `mobile_mobile_token` AS t WHERE device_type=1 AND t.`stu_id` =$student";
+   			$sql_ios="SELECT t.`token` FROM `mobile_mobile_token` AS t WHERE device_type=0 AND t.`stu_id` =$student";
+   			$androidToken =  $db->fetchCol($sql_android);
+   			$iosToken =  $db->fetchCol($sql_ios);
+   			$this->pushSendNotification($androidToken, $iosToken, $title_id);
+   		}else{//all 
+   			$this->sendMessageAllDevice($title_id);
    		}
-   		 $studentToken =  $db->fetchCol($sql);
-   		 $this->pushSendNotification($studentToken,$title_id);
    }
    
-   function pushSendNotification($studentToken,$title_id,$body='',$data=''){//$stu_id
-   	$key = new Application_Model_DbTable_DbKeycode();
-   	$dbset=$key->getKeyCodeMiniInv(TRUE);
-   	if($dbset['notification']==0){return 1;}
-   	$url = "https://fcm.googleapis.com/fcm/send";
-   	//$token = "f5-E45BencY:APA91bGLSiLBRH7vEWVvXr9s9vuuSxWnXH8cRvf6EsJUGtwQRjO8yyftsODIGZ7pPzt7CD_63vEbJjcQYSgSUHDaoDIdal46J_Tdi-R1y-Y02wSsJrmZ7v349_-fHy8-Sj34Hurdkwg-";
-   	$serverKey = 'AAAAFUl5wqk:APA91bFktDCO937lkDQ1JnP3fT5xT9YMfdEmBq0GH-QZs-GUGy9YbceyMvLQHNw3LBkgPbV9tZfDmzjti6oaJQyVHzhWrBmvoTdUaNhvD-q5DC3KNunJMVjDRTG3VLPrBVB8c8H9NNb_';
-   	//$title = $req->title;
-   	//$body = $req->message;
+//    function pushSendNotification($studentToken,$title_id,$body='',$data=''){//$stu_id//google
+//    	$key = new Application_Model_DbTable_DbKeycode();
+//    	$dbset=$key->getKeyCodeMiniInv(TRUE);
+//    	if($dbset['notification']==0){return 1;}
+//    	$url = "https://fcm.googleapis.com/fcm/send";
+//    	$serverKey = 'AAAAFUl5wqk:APA91bFktDCO937lkDQ1JnP3fT5xT9YMfdEmBq0GH-QZs-GUGy9YbceyMvLQHNw3LBkgPbV9tZfDmzjti6oaJQyVHzhWrBmvoTdUaNhvD-q5DC3KNunJMVjDRTG3VLPrBVB8c8H9NNb_';
    
+//    	$title = $this->setTitleTonotification($title_id);
+   	 
+//    	$data=array('id'=>1,
+//    			'title'=>$title,
+//    			'body'=>$body,
+//    			'type'=>$title_id
+//    	);
+   	 
+//    	$notification = array(
+//    			'title' =>$title ,
+//    			'text' => $body,
+//    			'sound' => 'psis',
+//    			'badge' => '1'
+//    	);
+   	 
+//    	$countToken = count($studentToken);
+//    		if ($countToken>0){
+// 	   			$arrayToSend = array(
+// 	   					'registration_ids' => $studentToken,
+// 	   					'notification' => $notification,
+// 	   					'priority'=>'high',
+// 	   					'data' =>$data
+// 	   			);
+// 	   			$json = json_encode($arrayToSend);
+// 	   			$headers = array();
+// 	   			$headers[] = 'Content-Type: application/json';
+// 	   			$headers[] = 'Authorization: key='. $serverKey;
+// 	   			$ch = curl_init();
+// 	   			curl_setopt($ch, CURLOPT_URL, $url);
+// 	   			curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+// 	   			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+// 	   			curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+// 	   			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+// 	   			//Send the request
+// 	   			$response = curl_exec($ch);
+// 	   			//Close request
+// 	   			if ($response === FALSE) {
+// 	   				//die('FCM Send Error: ' . curl_error($ch));
+// 	   			}
+// 	   			curl_close($ch);
+// 	   			//curl_setopt(CURLOPT_RETURNTRANSFER, true);
+//    		}
+//    }
+   function pushSendNotification($android_token,$ios_token,$title_id) {
+   		$title = $this->setTitleTonotification($title_id);
+	   	$content = array(
+	   			"en" => $title
+	   	);
+	   	$fields = array(
+	   			'app_id' => "cf9d5315-4a18-45fc-b0e2-78f7eda3eb1e",
+	   			'include_android_reg_ids' => $android_token,
+	   			'include_ios_tokens' => $ios_token,
+	   			'data' => array(
+	   					"title" => $title,
+	   					"type" => $title_id
+	   			),
+	   			'contents' => $content
+	   	);
+	   	 
+	   	$fields = json_encode($fields);
+	   	 
+	   	$ch = curl_init();
+	   	curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+	   	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+	   			'Content-Type: application/json; charset=utf-8',
+	   			'Authorization: Basic NmQ0ZjE1ZWMtNTJmMC00MTkwLTk3NjktMGFlY2JkOTY4NDEz'
+	   	));
+	   	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	   	curl_setopt($ch, CURLOPT_HEADER, FALSE);
+	   	curl_setopt($ch, CURLOPT_POST, TRUE);
+	   	curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+	   	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+	   	 
+	   	$response = curl_exec($ch);
+	   	curl_close($ch);
+   }
+   function sendMessageAllDevice($title_id) {
    	$title = $this->setTitleTonotification($title_id);
-//    	$rs_appuse = $this->gettokenbystudentid($student_id);
-   	 
-   	$data=array('id'=>1,
-   			'title'=>$title,
-   			'body'=>$body,
-   			'type'=>$title_id
-   	);
-   	 
-   	$notification = array(
-   			'title' =>$title ,
-   			'text' => $body,
-//    			'data' =>$data,
-   			'sound' => 'psis',
-   			'badge' => '1'
-   	);
-   	 
-   	$countToken = count($studentToken);
-//    	if(!empty($studentToken)){
-   		if ($countToken>0){
-	   			$arrayToSend = array(
-	   					'registration_ids' => $studentToken,
-	   					'notification' => $notification,
-	   					'priority'=>'high',
-	   					'data' =>$data
-	   			);
-	   			$json = json_encode($arrayToSend);
-	   			$headers = array();
-	   			$headers[] = 'Content-Type: application/json';
-	   			$headers[] = 'Authorization: key='. $serverKey;
-	   			$ch = curl_init();
-	   			curl_setopt($ch, CURLOPT_URL, $url);
-	   			curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
-	   			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-	   			curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
-	   			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	   			//Send the request
-	   			$response = curl_exec($ch);
-	   			//Close request
-	   			if ($response === FALSE) {
-	   				//die('FCM Send Error: ' . curl_error($ch));
-	   			}
-	   			curl_close($ch);
-	   			//curl_setopt(CURLOPT_RETURNTRANSFER, true);
-   		}
-//    	}
+	   	$content      = array(
+	   			"en" => $title
+	   	);
+	   	$fields = array(
+	   			'app_id' => "cf9d5315-4a18-45fc-b0e2-78f7eda3eb1e",
+	   			'included_segments' => array(
+	   					'All'
+	   			),
+	   			'data' => array(
+	   					"title" => $title,
+	   					"type" => $title_id
+	   			),
+	   			'contents' => $content
+	   	);
+	   
+	   	$fields = json_encode($fields);
+	   
+	   	$ch = curl_init();
+	   	curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+	   	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+	   			'Content-Type: application/json; charset=utf-8',
+	   			'Authorization: Basic NmQ0ZjE1ZWMtNTJmMC00MTkwLTk3NjktMGFlY2JkOTY4NDEz'
+	   	));
+	   	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	   	curl_setopt($ch, CURLOPT_HEADER, FALSE);
+	   	curl_setopt($ch, CURLOPT_POST, TRUE);
+	   	curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+	   	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+	   
+	   	$response = curl_exec($ch);
+	   	curl_close($ch);
    }
+   
+   //function for push all device
+   
    
    function resizeImase($image,$part,$new_imagename=null){
     $photo = $image;

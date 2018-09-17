@@ -8,7 +8,7 @@
 .hide{visibility:visible !important;
 }
 </style>
-<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+<div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table>
 			<tr>
@@ -48,7 +48,7 @@
 				<tr>
 					<td colspan="3" id="exportExcel">
 						<table  cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;"  border="1" >
-							<style> td{padding:0 3px; }
+							<style> td{padding:0 1px; }
 							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
 							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 							tr{ page-break-inside:avoid; page-break-after:auto }
@@ -87,8 +87,8 @@
 								$str.=",".($key+1);
 							}
 							?>
-							<tr id="<?php echo "row".$i?>" style="font-size:12px;height: 23px;"​ align="center">
-								<td><?php echo $i;?></td>
+							<tr id="<?php echo "row".$i?>" style="font-size:10px;height: 23px;"​ align="center">
+								<td width="10px"><?php echo $i;?></td>
 								<td><input type="hidden" name="student_<?php echo $i?>" id="student_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_code']?>" /><?php echo $row['stu_code']?></td>
 								<td align="left"><?php echo $row['kh_name'];?></td>
 								<td align="left"><?php echo $row['en_name'];?></td>
@@ -101,13 +101,13 @@
 								?></td>
 								<td><?php echo $row['nation'];?></td>
 								<td><?php echo date("d-m-Y",strtotime($row['dob']));?></td>
-								<td style="text-align: left;"  ><input type="hidden" constraints="{datePattern:'dd/MM/yyyy'}"  name="dob_<?php echo $i?>" id="dob_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo date("Y-m-d",strtotime($row['dob']));?>" /><?php echo date("d-m-Y",strtotime($row['dob']));?><?php echo $row['pob'];?></td>
+								<td style="text-align: left;max-width:300px;white-space: normal;"  ><input type="hidden" constraints="{datePattern:'dd/MM/yyyy'}"  name="dob_<?php echo $i?>" id="dob_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo date("Y-m-d",strtotime($row['dob']));?>" /><?php //echo date("d-m-Y",strtotime($row['dob']));?><?php echo $row['pob'];?></td>
 								<td><?php echo $row['father_name'];?></td>
 								<td><?php echo $row['father_job'];?></td>
 								<td><?php echo $row['mother_name'];?></td>
 								<td><?php echo $row['mother_job'];?></td>
-								<td><?php echo $row['address'];?></td>
-								<td><?php echo $row['tel'];?></td>
+								<td style="text-align: left;max-width:300px;white-space: normal;"><?php echo $row['address'];?></td>
+								<td style="text-align: left;max-width:170px;white-space: normal;"><?php echo $row['tel'];?></td>
 								<!--<td align="center"><img style="cursor:pointer" onclick="deleteRecord(<?php echo $i;?>)" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>-->
 							</tr>
 							<?php }?>	

@@ -25,7 +25,7 @@ Class Global_Form_FrmProvince extends Zend_Dojo_Form {
 		if(!empty($data)){
 			$_en_province->setValue($data['province_en_name']);
 			$_kh_province->setValue($data['province_kh_name']);
-			$_status->setValue($data['is_active']);
+			$_status->setValue($data['status']);
 		}
 		$this->addElements(array($_en_province,$_kh_province, $_status));
 		return $this;

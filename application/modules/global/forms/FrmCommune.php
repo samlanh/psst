@@ -44,12 +44,12 @@ Class Global_Form_FrmCommune extends Zend_Dojo_Form {
 		
 		$commune = new Zend_Dojo_Form_Element_TextBox('commune_name');
 		$commune->setAttribs(array('dojoType'=>'dijit.form.ValidationTextBox',
-				'required'=>'true','missingMessage'=>'Invalid Module!','class'=>'fullside'
+				'missingMessage'=>'Invalid Module!','class'=>'fullside'
 		));
 		
 		$commune_en = new Zend_Dojo_Form_Element_TextBox('commune_nameen');
 		$commune_en->setAttribs(array('dojoType'=>'dijit.form.ValidationTextBox',
-				'required'=>'true','missingMessage'=>'Invalid Module!','class'=>'fullside'
+				'missingMessage'=>'Invalid Module!','class'=>'fullside'
 		));
 		
 		$code = new Zend_Dojo_Form_Element_TextBox('code');
@@ -94,9 +94,12 @@ Class Global_Form_FrmCommune extends Zend_Dojo_Form {
 		$opt_province = array($this->tr->translate("SELECT_PROVINCE"));
 		if(!empty($rows_provice))foreach($rows_provice AS $row) $opt_province[$row['id']]=$row['name'];
 		$_province = new Zend_Dojo_Form_Element_FilteringSelect('province_name');
-		$_province->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect',
+		$_province->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
 				'onchange'=>'filterDistrict();',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
 		));
 		$_province->setMultiOptions($opt_province);
 // 		$_province->setAttribs(array(

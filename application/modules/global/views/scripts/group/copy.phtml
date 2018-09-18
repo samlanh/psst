@@ -23,7 +23,7 @@
                    		 return false;
 						}					
 					year=dijit.byId("academic_year").get("value");
-                	if(year==-1){
+                	if(year==-1 || year==''){
 						alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
 						dijit.byId('academic_year').focus();
                     	return false;

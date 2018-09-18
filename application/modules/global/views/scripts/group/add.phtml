@@ -25,7 +25,7 @@ $frm = $this->frm;
                     return false;
 				}
  				year=dijit.byId("academic_year").get("value");
-                if(year==-1){
+                if(year==-1 || year==''){
 					alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
 					dijit.byId('academic_year').focus();
                     return false;
@@ -559,61 +559,6 @@ function hideDialog() {
 }
 
 </script>
-<div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_room" >
-		<form style="background-color: buttonface; " id='form_add_room' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table cellspacing="10" width="100%" style="margin: 0 auto;">
-			<tr>
-				<td>
-					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate("ADD_ROOM")?></legend>
-					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
-						<tr>
-							<td style="width:100px"><?php echo $tr->translate("BRANCH")?></td>
-							<td><select class="fullside"  tabindex="3" name="branch_id" id="branch_id" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
-								<?php $row= new Application_Model_DbTable_DbGlobal();
-									  $rows=$row->getAllBranch();
-									  foreach($rows as $key =>$rs){?>
-										<option value="<?php echo $rs['id']?>" ><?php echo $rs['name'];?></option>
-								<?php }?>
-							</select><td/>
-						</tr>
-						<tr>
-							<td style="width:100px"><?php echo $tr->translate("CLASSNAME")?></td>
-							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="room_name" id="room_name" type="text" required="required" /></td>
-						</tr>
-						<tr>
-							<td style="width:100px"><?php echo $tr->translate("FLOOR")?></td>
-							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="floor" id="floor" type="text" /></td>
-						</tr>
-						<tr>
-							<td style="width:100px"><?php echo $tr->translate("MAX_STUDENT")?></td>
-							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="max_std" id="max_std" type="text" /></td>
-						</tr>
-						<tr>
-							<td style="width:100px"><?php echo $tr->translate("STATUS")?></td>
-							<td>
-								<select class="fullside"  tabindex="3" name="status_room" id="status_room" dojoType="dijit.form.FilteringSelect" >
-									    <option value="1"><?php echo $tr->translate("Active")?></option>
-									    <option value="0"><?php echo $tr->translate("Deactive")?></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2" align="center">
-								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("CANCEL");?>" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save" id="save_room" label="<?php echo $tr->translate("SAVECLOSE");?>" dojoType="dijit.form.Button" 
-									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addRoom();"/>
-							</td>
-						</tr>
-					</table>
-				</fieldset>
-				</td>
-			</tr>
-		</table>
-		</form>
-	</div>
-</div>
 
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popupsubject" >
@@ -726,9 +671,16 @@ function hideDialogDegree() {
 }
 
 function submitDataClose(){
+    branch_id=dijit.byId("branch_id").get("value");
+    if(branch_id==-1 || branch_id==''){
+		alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
+		dijit.byId('branch_id').focus();
+        return false;
+	}
 	year=dijit.byId("academic_year").get("value");
-    if(year==-1){
-		alert("Please Selected Year!!!");
+    if(year==-1 || year==''){
+		alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
+		dijit.byId('academic_year').focus();
         return false;
 	}
     var rowId = $('#identity1').val();

@@ -23,13 +23,14 @@ Class Global_Form_FrmVillage extends Zend_Dojo_Form {
 		$_title = new Zend_Dojo_Form_Element_TextBox('adv_search');
 		$_title->setAttribs(array('dojoType'=>$this->tvalidate,
 				'onkeyup'=>'this.submit()',
+				'class'=>'fullside',
 				'placeholder'=>$this->tr->translate("SEARCH_VILLAGE_INFO")
 		));
 		$_title->setValue($request->getParam("adv_search"));
 		
 		
 		$_status_search=  new Zend_Dojo_Form_Element_FilteringSelect('search_status');
-		$_status_search->setAttribs(array('dojoType'=>$this->filter));
+		$_status_search->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_status_opt = array(
 				-1=>$this->tr->translate("ALL"),
 				1=>$this->tr->translate("ACTIVE"),
@@ -45,7 +46,7 @@ Class Global_Form_FrmVillage extends Zend_Dojo_Form {
 		
 		$village_name = new Zend_Dojo_Form_Element_ValidationTextBox('village_name');
 		$village_name->setAttribs(array('dojoType'=>'dijit.form.ValidationTextBox',
-				'required'=>'true','missingMessage'=>'Invalid Module!','class'=>'fullside'
+				'missingMessage'=>'Invalid Module!','class'=>'fullside'
 		));
 		$village_namekh = new Zend_Dojo_Form_Element_ValidationTextBox('village_namekh');
 		$village_namekh->setAttribs(array('dojoType'=>'dijit.form.ValidationTextBox',
@@ -123,6 +124,8 @@ Class Global_Form_FrmVillage extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
 				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
 				'onchange'=>'filterDistrict();',
 				'invalidMessage'=>false
 				));

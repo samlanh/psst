@@ -159,7 +159,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getProvince(){
    	$db = $this->getAdapter();
-   	$sql ="SELECT province_en_name,province_id FROM rms_province WHERE is_active=1 AND province_en_name!='' ";
+   	$sql ="SELECT province_en_name,province_id FROM rms_province WHERE status=1 AND province_en_name!='' ";
    	return $db->fetchAll($sql);
    }
    public function getOccupation(){
@@ -506,7 +506,7 @@ function getAllgroupStudy($teacher_id=null){
    }
    function getAllProvince($opt=null,$option=null){
    	$db= $this->getAdapter();
-   	$sql="SELECT province_id as id,province_kh_name AS name FROM ln_province WHERE status=1 ";
+   	$sql="SELECT province_id as id,province_kh_name AS name FROM rms_province WHERE status=1 ";
    	$rows =  $db->fetchAll($sql);
    	if($opt==null){
    		return $rows;

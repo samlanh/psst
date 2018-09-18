@@ -22,7 +22,7 @@
 						dijit.byId('branch_id').focus();
                     	return false;
 					}
-                	if(year==-1){
+                	if(year==-1 || year==''){
 						alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
 						dijit.byId('academic_year').focus();
                     	return false;

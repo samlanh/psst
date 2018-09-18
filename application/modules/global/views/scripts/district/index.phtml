@@ -1,19 +1,21 @@
-<?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();?>
-<?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("SRMS_PROVINCE_LIST"));
-?>	
-<?php $frm =  $this->frm_search;?>
+<?php 
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate("DISTRICT_LIST"));
+$frm = $this->frm_district;
+?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
 			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-					<div class="col-md-2 col-sm-2 col-xs-12">	
-						<?php echo $frm->getElement("title");?>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("adv_search");?>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement('status_search');?>
+						<?php echo $frm->getElement("province_name");?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement('search_status');?>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -26,3 +28,4 @@
 		</div>
 	</div>
 </div>
+ 

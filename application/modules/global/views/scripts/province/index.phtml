@@ -1,11 +1,18 @@
 <?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();?>
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("SRMS_PROVINCE_LIST"));
+	echo $this->headTitle($tr->translate("PROVINCE_LIST"));
 ?>	
 <?php $frm =  $this->frm_search;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
+		<div class="col-sm-12 border-botom m-0">
+	    	<div class="col-sm-8 pd-0">
+    			<h4 class="m-b-0"><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('PROVINCE_LIST');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
 		<div class="card-box">
 			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">

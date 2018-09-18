@@ -1,6 +1,6 @@
 <?php
 class Global_DistrictController extends Zend_Controller_Action {
-	const REDIRECT_URL='/other';
+	const REDIRECT_URL='/global';
 	protected $tr;
 	public function init()
 	{
@@ -23,7 +23,7 @@ class Global_DistrictController extends Zend_Controller_Action {
 			$list = new Application_Form_Frmtable();
 			$collumns = array("DISTRICT_CODE","DISTRICT_KH","DISTRICT_ENG","PROVINCE","DATE","STATUS","BY_USER");
 			$link=array(
-					'module'=>'other','controller'=>'district','action'=>'edit',
+					'module'=>'global','controller'=>'district','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('code'=>$link,'district_name'=>$link,'district_namekh'=>$link));
 		}catch (Exception $e){
@@ -74,7 +74,7 @@ class Global_DistrictController extends Zend_Controller_Action {
 		$id = $this->getRequest()->getParam("id");
 		$row = $db_district->getDistrictById($id);
 		if(empty($row)){
-			$this->_redirect('other/district');
+			$this->_redirect('global/district');
 		}
 		$fm = new Global_Form_FrmDistrict();
 		$frm = $fm->FrmAddDistrict($row);

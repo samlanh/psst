@@ -83,7 +83,7 @@ class Global_VillageController extends Zend_Controller_Action {
 		$row = $db->getVillageById($id);
 		$this->view->row=$row;
 		if(empty($row)){
-			$this->_redirect('other/village');
+			$this->_redirect('global/village');
 		}		
 		$fm = new Global_Form_FrmVillage();
 		$frm = $fm->FrmAddVillage($row);

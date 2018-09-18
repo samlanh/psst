@@ -39,8 +39,9 @@ class Global_Model_DbTable_DbProvince extends Zend_Db_Table_Abstract
     }
     function getAllProvince($search=null){
     	$db = $this->getAdapter();
-    	$sql = " SELECT province_id AS id,province_en_name,province_kh_name,modify_date,status as status,
-    	(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id )AS user_name
+    	$sql = " SELECT province_id AS id,province_en_name,province_kh_name,modify_date,
+    	(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id )AS user_name,
+    	status
     	FROM rms_province
     	WHERE 1 ";
     	$order=" order by id DESC";

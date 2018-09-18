@@ -35,6 +35,18 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$code_num = $db->getTeacherCode();
 		$code->setValue($code_num);
 		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$optionBranch = $_dbgb->getAllBranch();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+		$_branch_id->setMultiOptions($_arr_opt_branch);
+		$_branch_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		
 		$phone = new Zend_Dojo_Form_Element_NumberTextBox('phone');
 		$phone->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true'));
 		
@@ -157,6 +169,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$code->setValue($_data['teacher_code']);
 			$_enname->setValue($_data['teacher_name_en']);
 			$_khname->setValue($_data['teacher_name_kh']);
+			$_branch_id->setValue($_data['branch_id']);
 			$sex->setValue($_data['sex']);
 			$phone->setValue($_data['tel']);
 			$_nationality->setValue($_data['nationality']);
@@ -175,7 +188,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$end_date->setValue($_data['end_date']);
 			$_agreement->setValue($_data['agreement']);
 		}
-		$this->addElements(array($id,$_enname,$_note,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
+		$this->addElements(array($id,$_enname,$_note,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
 	}

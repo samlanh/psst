@@ -108,6 +108,12 @@ input.btn_borwse_image {
 	                   </label>
 	                </div>
 	                <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("branch_id");?>
+		                </div>
+		             </div>
+	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ID_NUMBER");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -322,7 +328,6 @@ input.btn_borwse_image {
 			<div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="សម្អាត" dojoType="dijit.form.Button"/>
 					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
 						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'global','controller'=>"lecturer",'action'=>'index'),null,true); ?>';" />
 					<input type="submit" onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
@@ -369,7 +374,7 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 					<td>
 						<fieldset >
 						<legend class="bold" align="center" ><?php echo $tr->translate('ADD_NATION');?></legend>
-							<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="10" >
+							<table style="margin: 0 auto; width: 100%;  padding:10px; line-height: 35px;" cellspacing="10" >
 								<tr>
 								<td><?php echo $tr->translate('KH_NAME');?></td>
 								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_kh" name="title_kh" value="" type="text"></td>

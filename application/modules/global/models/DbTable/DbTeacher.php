@@ -33,6 +33,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						return -1;
 					}			
 					$_arr=array(
+							'branch_id' 		 => $_data['branch_id'],
 							'teacher_code'		 => $_data['code'],
 							'teacher_name_kh'	 => $_data['kh_name'],
 							'teacher_name_en'	 => $_data['kh_name'],
@@ -59,7 +60,6 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'password' 			 => md5($_data['password']),
 							//'status'   		 => $_data['status'],
 							'photo'  			 => $pho_name,
-							'branch_id' 		 => 1,
 					        'create_date' 		 => date("Y-m-d"),
 					        'user_id'	  		 => $this->getUserId(),
 						);
@@ -103,6 +103,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		////////////////////////////////////////////////////////////////////	
 				$teacher_code = $this->getTeacherCode();
 				$_arr=array(
+						'branch_id' 		 => $_data['branch_id'],
 						'teacher_code'		 => $_data['code'],
 						'teacher_name_kh'	 => $_data['kh_name'],
 						'teacher_name_en'	 => $_data['kh_name'],
@@ -129,7 +130,6 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						'password' 			 => md5($_data['password']),
 						//'status'   		 => $_data['status'],
 						'photo'  			 => $pho_name,
-						'branch_id' 		 => 1,
 				        'create_date' 		 => date("Y-m-d"),
 				        'user_id'	  		 => $this->getUserId(),
 					);

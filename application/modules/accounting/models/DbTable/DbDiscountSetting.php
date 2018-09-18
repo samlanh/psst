@@ -17,6 +17,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				return -1;
 			}			
 		$_arr=array(
+				'branch_id'   => $_data['branch_id'],
 				'disname_id'  => $_data['disname_id'],
 				'dis_max'	  => $_data['dis_max'],
 				'start_date'  => $_data['start_date'],
@@ -53,6 +54,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 	}
 	public function updateDiscountset($_data){
 		$_arr=array(
+				'branch_id'   => $_data['branch_id'],
 				'disname_id'  => $_data['disname_id'],
 				'dis_max'	  => $_data['dis_max'],
 				'start_date'  => $_data['start_date'],
@@ -69,6 +71,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 	$db = $this->getAdapter();
 		$sql = " SELECT 
 					g.discount_id AS id,
+					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id)AS branch,
 					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.disname_id )AS disc_name,
 					g.dis_max,
 					g.start_date,

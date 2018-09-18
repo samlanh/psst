@@ -104,6 +104,12 @@ input.btn_borwse_image {
 	                   </label>
 	                </div>
 	                <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("branch_id");?>
+		                </div>
+		             </div>
+	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ID_NUMBER");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -153,24 +159,24 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POSITION");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("phone");?>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EMAIL");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                  		<?php echo $frm->getElement("email");?>
+	                   		<?php echo $frm->getElement("position_add");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PASSPORT_NO");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                  		<?php echo $frm->getElement("address");?>
+	                   		<?php echo $frm->getElement("passport_no");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CARD_NO");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("card_no");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -193,25 +199,18 @@ input.btn_borwse_image {
 		                		<?php echo $frm->getElement("degree");?>
 						</div>
 		             </div>
+		             <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("phone");?>
+	                   </div>
+	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POSITION");?>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EMAIL");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("position_add");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PASSPORT_NO");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("passport_no");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CARD_NO");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("card_no");?>
+	                  		<?php echo $frm->getElement("email");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -226,6 +225,13 @@ input.btn_borwse_image {
 		               		<?php echo $frm->getElement("end_date");?>
 		                </div>
 		             </div>
+		             <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                  		<?php echo $frm->getElement("address");?>
+	                   </div>
+	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AGREEMENT");?>
 	                   </label>
@@ -360,7 +366,7 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 					<td>
 						<fieldset >
 						<legend class="bold" align="center" ><?php echo $tr->translate('ADD_NATION');?></legend>
-							<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="10" >
+							<table style="margin: 0 auto; width: 100%;  padding:10px; line-height: 35px;" cellspacing="10" >
 								<tr>
 								<td><?php echo $tr->translate('KH_NAME');?></td>
 								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_kh" name="title_kh" value="" type="text"></td>
@@ -619,7 +625,7 @@ function addRow(){
 	if($("#identity").val()!="") {
 		var identity = $("#identity").val();
 		$("#identity").val(identity+','+col);
-	} else {$("#identity").val(col);}
+	}else{$("#identity").val(col);}
 	dojo.html.set(dojo.byId("row"+col),template , {
 	     parseContent: true,
 	});

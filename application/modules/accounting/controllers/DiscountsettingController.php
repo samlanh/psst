@@ -30,11 +30,11 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 //   			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
         	
 			$list = new Application_Form_Frmtable();
-			$collumns = array("DISCOUNT_NAME","DIS_MAX","START_DATE","END_DATE","USER","STATUS");
+			$collumns = array("BRANCH","DISCOUNT_NAME","DIS_MAX","START_DATE","END_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'discountsetting','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('disc_name'=>$link,'dis_max'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('disc_name'=>$link,'dis_max'=>$link,'branch'=>$link));
 			}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

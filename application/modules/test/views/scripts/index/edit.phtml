@@ -502,7 +502,7 @@ a.btn.btn-primary.btn-xs {
 						<fieldset >
 						<legend class="bold" align="center" ><?php echo $tr->translate('ADD_NATION');?></legend>
 							<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="10" >
-								<tr>
+							<tr>
 								<td><?php echo $tr->translate('KH_NAME');?></td>
 								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_kh" name="title_kh" value="" type="text"></td>
 							</tr>
@@ -783,7 +783,6 @@ function addNationBy(){
 		col++;no++;
 		template='';
 		temp = "";
-	
 		if(title!=1){
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
@@ -795,7 +794,6 @@ function addNationBy(){
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			
 		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="school_name'+col+'" name="school_name'+col+'" value="" type="text"  ></td>';	

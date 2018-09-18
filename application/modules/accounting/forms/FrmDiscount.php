@@ -44,6 +44,18 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		));
 		$start_date->setValue(date('Y-m-d'));
 		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$optionBranch = $_dbgb->getAllBranch();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+		$_branch_id->setMultiOptions($_arr_opt_branch);
+		$_branch_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		
 		$end_date = new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$end_date->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
@@ -67,11 +79,12 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 		if (!empty($data)){
 			$_discount->setValue($data['disname_id']);
 			$_dismax->setValue($data['dis_max']);
+			$_branch_id->setValue($data['branch_id']);
 			$end_date->setValue($data['start_date']);
 			$start_date->setValue($data['end_date']);
 			$_status->setValue($data['status']);
 		}
-		$this->addElements(array($_dismax,$_discount,$start_date,$end_date,$_status));
+		$this->addElements(array($_dismax,$_discount,$_branch_id,$start_date,$end_date,$_status));
 		
 		return $this;
 		

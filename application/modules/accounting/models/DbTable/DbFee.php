@@ -43,8 +43,8 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     		$where.=" AND t.school_option=".$search['school_option'];
     	}
     	 
-    	if($search['status_search']>0){
-    		$where.=" AND t.status=".$search['status_search'];
+    	if($search['status']>-1){
+    		$where.=" AND t.status=".$search['status'];
     	}
     	 
     	$dbp = new Application_Model_DbTable_DbGlobal();

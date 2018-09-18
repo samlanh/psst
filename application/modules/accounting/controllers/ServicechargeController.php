@@ -21,7 +21,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 	    				'year' => '',
 	    				'branch_id'=>'',
     					'is_finished_search' => '',
-    					'status_search' =>-1,
+    					'status' =>-1,
     			);
     		}
     		

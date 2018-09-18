@@ -20,7 +20,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 	    					'branch_id'=>'',
     						'school_option'=>-1,
     						'is_finished_search' => '',
-    						'status_search' =>-1,
+    						'status' =>-1,
     					);
     		}
     		$db = new Accounting_Model_DbTable_DbFee();

@@ -72,8 +72,8 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     		$where.=" AND t.is_finished=".$search['is_finished_search'];
     	}
     	 
-    	if($search['status_search']>0){
-    		$where.=" AND t.status=".$search['status_search'];
+    	if($search['status']>-1){
+    		$where.=" AND t.status=".$search['status'];
     	}
     	 
     	$dbp = new Application_Model_DbTable_DbGlobal();

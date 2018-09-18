@@ -23,6 +23,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		try{
 			$_arr=array(
+					'branch_id' 	=> $_data['branch_id'],
 					'group_code' 	=> $_data['group_code'],
 					'room_id' 		=> $_data['room'],
 					'academic_year' => $_data['academic_year'],
@@ -75,7 +76,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+// 			print_r($_data);exit();
 			$_arr=array(
+					'branch_id' 	=> $_data['branch_id'],
 					'group_code' 	=> $_data['group_code'],
 					'room_id' 		=> $_data['room'],
 					'academic_year' => $_data['academic_year'],
@@ -97,6 +100,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'user_id'	  	=> $this->getUserId()
 			);
 			$where=$this->getAdapter()->quoteInto("id=?", $_data['id']);
+			$this->_name='rms_group';
 			$this->update($_arr, $where);
 			
 			$this->_name='rms_group_subject_detail';
@@ -233,7 +237,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	}
 	function getAllGroups($search){
 		$db = $this->getAdapter();
-		$sql = "SELECT `g`.`id`,`g`.`group_code` AS `group_code`,
+		$sql = "SELECT `g`.`id`,
+		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
+		`g`.`group_code` AS `group_code`,
 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS tuitionfee_id,		 
 		 `g`.`semester` AS `semester`, 
 		(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree,
@@ -282,6 +288,9 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['status'])>-1){
 			$where.=' AND g.status='.$search['status'];
+		}
+		if(!empty($search['branch_id'])){
+			$where.=' AND g.branch_id='.$search['branch_id'];
 		}
 		return $db->fetchAll($sql.$where.$order);
 	}

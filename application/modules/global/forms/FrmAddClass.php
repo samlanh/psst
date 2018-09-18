@@ -66,6 +66,19 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 	public function FrmAddGroup($data=null){
 		
 		$request=Zend_Controller_Front::getInstance()->getRequest();
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$optionBranch = $_dbgb->getAllBranch();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+		$_branch_id->setMultiOptions($_arr_opt_branch);
+		$_branch_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		
 		$_goup = new Zend_Dojo_Form_Element_TextBox('group_code');
 		$_goup->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
 		
@@ -134,6 +147,8 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			
 		$id = new Zend_Form_Element_hidden('id');
 		if($data!=null){
+			$id->setValue($data['id']);
+			$_branch_id->setValue($data['branch_id']);
 			$_goup->setValue($data['group_code']);
 			$_academic->setValue($data['academic_year']);
 			$_session->setValue($data['session']);
@@ -141,7 +156,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$_time->setValue($data['time']);
 			$_note->setValue($data['note']);
 		}
-		$this->addElements(array($_academic,$_time,$_note,$_session,$_calture,$_goup));
+		$this->addElements(array($id,$_branch_id,$_academic,$_time,$_note,$_session,$_calture,$_goup));
 		return $this;
 	}
 	

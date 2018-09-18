@@ -15,6 +15,7 @@ class Global_GroupController extends Zend_Controller_Action {
 			else{
 				$search = array(
 						'title' => '',
+						'branch_id' => '',
 						'study_year' => '',
 						'degree'=>'',
 						'grade' => '',
@@ -29,12 +30,12 @@ class Global_GroupController extends Zend_Controller_Action {
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			
-			$collumns = array("GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","NOTE","PROCESS_TYPE","STATUS");
+			$collumns = array("BRANCH","GROUP_CODE","YEARS","SEMESTER","DEGREE","GRADE","SESSION","ROOM_NAME","NOTE","PROCESS_TYPE","STATUS");
 			//"START_DATE","END_DATE",
 			$link=array(
 					'module'=>'global','controller'=>'group','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('group_code'=>$link,'tuitionfee_id'=>$link,'degree'=>$link,'grade'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'group_code'=>$link,'tuitionfee_id'=>$link,'degree'=>$link,'grade'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

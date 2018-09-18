@@ -20,6 +20,8 @@ class Global_DistrictController extends Zend_Controller_Action {
 						'search_status' => -1);
 			}
 			$rs_rows= $db->getAllDistrict($search);
+			$glClass = new Application_Model_GlobalClass();
+			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("DISTRICT_CODE","DISTRICT_KH","DISTRICT_ENG","PROVINCE","DATE","STATUS","BY_USER");
 			$link=array(

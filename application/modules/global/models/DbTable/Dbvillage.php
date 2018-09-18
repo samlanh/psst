@@ -61,7 +61,7 @@ class Global_Model_DbTable_DbVillage extends Zend_Db_Table_Abstract
 			v.vill_id,v.village_namekh,v.village_name,
 			(SELECT commune_namekh FROM ln_commune WHERE v.commune_id=com_id LIMIT 1) AS commune_name,
 			d.district_namekh,p.province_kh_name,
-			v.modify_date,(SELECT name_en FROM rms_view WHERE TYPE=3 AND key_code=v.status LIMIT 1) AS STATUS, 
+			v.modify_date,v.status, 
 			(SELECT first_name FROM rms_users WHERE id=v.user_id LIMIT 1) AS user_name
 			FROM ln_village AS v,`ln_commune` AS c, `ln_district` AS d , `rms_province` AS p
 			WHERE v.commune_id = c.com_id AND c.district_id = d.dis_id AND d.pro_id = p.province_id ";

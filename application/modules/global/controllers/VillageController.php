@@ -23,6 +23,8 @@ class Global_VillageController extends Zend_Controller_Action {
 						'commune_name'=>'');
 			}
 			$rs_rows= $db->getAllVillage($search);
+			$glClass = new Application_Model_GlobalClass();
+			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("VILLAGENAME_KH","VILLAGE_NAME","COMMNUE_NAME","DISTRICT_NAME","PROVINCE_NAME","DATE","STATUS","BY_USER");
 			$link=array(

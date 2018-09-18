@@ -66,8 +66,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 					}else{
 						if(isset($_data['save_close'])){
 							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register");
+							exit();
 						}else{
 							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add");
+							exit();
 						}
 						Application_Form_FrmMessage::message("INSERT_SUCCESS");
 					}

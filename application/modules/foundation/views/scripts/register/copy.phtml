@@ -52,7 +52,7 @@ input.btn_borwse_image {
       				// alert('<?php //echo $tr->translate("Image size more than 5Mb can not upload");?>');
       				 //return false;
       			//}
-				dijit.byId('save_close').set('disabled',true);	
+				loadingBlock();
 				return true;
 			}else {
 				return false;

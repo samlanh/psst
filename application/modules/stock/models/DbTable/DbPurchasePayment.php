@@ -147,7 +147,7 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql="SELECT pd.*,
 			(SELECT p.supplier_no FROM `rms_purchase` AS p WHERE p.id = pd.purchase_id LIMIT 1) AS supplier_no
-			 FROM `rms_purchase_payment_detail` AS pd WHERE pd.id =$payment_id ";
+			 FROM `rms_purchase_payment_detail` AS pd WHERE pd.payment_id =$payment_id ";
     	return $db->fetchAll($sql);
     }
     function getPaymentReceiptDetailByPaymentIdAndPurchaseId($payment_id,$purchase_id){

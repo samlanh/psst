@@ -42,13 +42,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 				tel ,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
-				(SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree LIMIT 1) AS degree,
-				(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=s.grade LIMIT 1) AS grade,
+				(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
 				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status
-				FROM rms_student AS s  WHERE  s.is_subspend=0 ";
+				FROM rms_student AS s  WHERE  s.is_subspend=0 AND s.customer_type=1";
 		$orderby = " ORDER BY stu_id DESC ";
 		if(empty($search)){
 			return $_db->fetchAll($sql.$orderby);
@@ -99,7 +99,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	public function getStudentById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT *,(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id FROM rms_student as s WHERE s.stu_id =".$id;
+		$sql = "SELECT *,(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id FROM rms_student as s WHERE s.stu_id =".$id." AND s.customer_type=1";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission();
 		return $db->fetchRow($sql);
@@ -223,6 +223,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'remark'		=>$_data['remark'],
 						'create_date'	=>date("Y-m-d H:i:s"),
 						'photo'			=>$photo,
+						'customer_type'			=>1,//Student
 						);
 				$id = $this->insert($_arr);
 				

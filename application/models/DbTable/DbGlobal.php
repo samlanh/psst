@@ -171,7 +171,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getAllLangLevel(){
 	   	$db = $this->getAdapter();
-	   	$sql = "SELECT title as id, title as name FROM rms_degree_language WHERE status=1 AND title!='' ORDER BY rms_degree_language.id ASC ";
+	   	$sql = "SELECT id as id, title as name FROM rms_degree_language WHERE status=1 AND title!='' ORDER BY rms_degree_language.id ASC ";
 	   	return $db->fetchAll($sql);
    }
    
@@ -183,7 +183,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getAllKnoyBy(){
    	$db = $this->getAdapter();
-   	$sql = "SELECT title as id, title as name FROM rms_know_by WHERE status=1 AND title!='' ORDER BY rms_know_by.id ASC ";
+   	$sql = "SELECT id as id, title as name FROM rms_know_by WHERE status=1 AND title!='' ORDER BY rms_know_by.id ASC ";
    	return $db->fetchAll($sql);
    }
    public function getAllKnowBy(){

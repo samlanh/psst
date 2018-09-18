@@ -137,9 +137,9 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'class'=>'fullside'));
 		
 		
-		$rs_province = $_db->getProvince();
+		$rs_province = $_db->getAllProvince();
 		$opt = '' ;//array(-1=>$this->tr->translate("SELECT_DEPT"));
-		if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['province_id']]=$row['province_en_name'];
+		if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['id']]=$row['name'];
 			
 		$_student_province = new Zend_Dojo_Form_Element_FilteringSelect("student_province");
 		$_student_province->setMultiOptions($opt);
@@ -147,6 +147,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'dojoType'=>$this->filter,
 				'required'=>'true',
 				'class'=>'fullside',
+				'onChange'=>'filterDistrict();',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
 		));

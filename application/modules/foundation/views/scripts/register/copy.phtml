@@ -158,6 +158,7 @@ input.btn_borwse_image {
 				            <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
 				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS");?> 
+				                  	 <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 				                   </label>
 				                </div>
 				                <div class="form-group">
@@ -178,21 +179,24 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("village_note");?>
+				                   		<?php //echo $frm->getElement("village_note");?>
+				                   		<input id="village_note"  />
 				                   </div>
 				                </div>
 				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("COMMUNE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("commun_note");?>
+				                   		<?php //echo $frm->getElement("commun_note");?>
+				                   		<input id="commun_note"  />
 				                   </div>
 				                </div>
 				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("distric_note");?>
+				                   		<?php //echo $frm->getElement("distric_note");?>
+				                   		<input id="distric_note"  />
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -507,7 +511,7 @@ input.btn_borwse_image {
 								<div class="form-group">
 									<div class="col-md-12 col-sm-12 col-xs-12">
 										<table border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-											<tr id="head-title" class="head-td"  align="right" style="background:#ececec;font-size:12px;"></tr>
+											<tr id="head-title" class="head-td"  align="right" style="font-size:12px;"></tr>
 										</table>
 										<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 												iconClass="dijitIconEditProperty" onclick="addRow();" />
@@ -550,6 +554,10 @@ var job_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::enco
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->group));?> );
 var knowby_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->know_by));?> );
 var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
+
+var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 
 dojo.ready(function(){
 	getStudentNo();
@@ -706,9 +714,161 @@ dojo.ready(function(){
 	if(know_by==''){
 		dijit.byId('know_by').attr('value',0);
 	}
-	
+
+	new dijit.form.FilteringSelect({
+		store: district_store,
+		autoComplete:false,
+		queryExpr:'*${0}*',
+		required: false,		           
+		name: "distric_note",
+		id: "distric_note",
+		searchAttr: "name",
+		class: 'fullside',
+		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
+			onChange: function() {
+				distric_note = dijit.byId('distric_note').get('value');
+				if(distric_note==-1){
+					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/district/add?rightclick=true";?>','_blank');
+				}
+					filterCommune();
+			}  
+		}, "distric_note");
+		 
+		new dijit.form.FilteringSelect({
+		store: commun_note,
+		autoComplete:false,
+		queryExpr:'*${0}*',
+		required: false,		           
+		name: "commun_note",
+		id: "commun_note",
+		searchAttr: "name",
+		class: 'fullside',
+		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឃុំ/សង្កាត់",	
+			onChange: function() {
+				commun_note = dijit.byId('commun_note').get('value');
+				if(commun_note==-1){
+					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/commune/add?rightclick=true";?>','_blank');
+				}
+				else{
+					filterVillage();
+				}
+	  }
+		}, "commun_note");
+		 
+		new dijit.form.FilteringSelect({
+		store: village_store,
+		autoComplete:false,
+		queryExpr:'*${0}*',
+		required: false,		           
+		name: "village_note",
+		id: "village_note",
+		searchAttr: "name",
+		class: 'fullside',
+		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះភូមិ!",	
+			onChange: function() {
+				vill = dijit.byId('village_note').get('value');
+				if(vill==-1){
+					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/village/add?rightclick=true";?>','_blank');
+				}
+			}
+		}, "village_note");
+		filterDistrict();
+		
 	dijit.byId('academic_year').attr('value',"<?php echo $this->rs['academic_year']?>");
 }); 
+
+function AllRefresh(){
+	loadingBlock();
+	pro_id = dijit.byId('student_province').get('value');
+	if(pro_id!=''){
+		filterDistrict();
+	}
+	distric_note = dijit.byId('distric_note').get('value');
+	if(distric_note!='' || distric_note!=-1){
+		filterCommune();
+	}
+	commun_note = dijit.byId('commun_note').get('value');
+	if(commun_note!='' || commun_note!=-1){
+		filterVillage();
+	}
+	
+}
+oldProvinceId = '<?php echo $this->rs['province_id'];?>';
+oldDistrict = '<?php echo $this->rs['district_name'];?>';
+oldcommune_name = '<?php echo $this->rs['commune_name'];?>';
+url_getdistrict = '<?php echo $this->url(array('module'=>'global','controller'=>'district','action'=>'get-district'));?>';
+function filterDistrict(){
+	pro_id = dijit.byId('student_province').get('value');
+	if(pro_id==0){
+		return false;}
+	dojo.xhrPost({
+		url:url_getdistrict,	
+		content:{ 
+			'pro_id': pro_id
+		},
+		handleAs:"json",
+		load: function(data) {	
+			district_store  = getDataStorefromJSON('id','name', data);		
+		    dijit.byId('distric_note').set('store', district_store);
+		    if(oldProvinceId==pro_id){
+		    	dijit.byId('distric_note').set('value', "<?php echo $this->rs['district_name'];?>");
+		    }
+		    document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});	
+}
+url_getcommune = '<?php echo $this->url(array('module'=>'global','controller'=>'commune','action'=>'get-commune'));?>';
+function filterCommune(){
+	distict_id = dijit.byId('distric_note').get('value');
+	if(distict_id==0){
+		return false;}
+	dojo.xhrPost({
+		url:url_getcommune,	
+		content:{ 
+			'district_id': distict_id
+		},
+		handleAs:"json",
+		load: function(data) {	
+			commune_store  = getDataStorefromJSON('id','name', data);		
+		    dijit.byId('commun_note').set('store', commune_store);
+		    if(oldDistrict==distict_id){
+		    	dijit.byId('commun_note').set('value', "<?php echo $this->rs['commune_name'];?>");
+		    }
+		    document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+url_getvillage = '<?php echo $this->url(array('module'=>'global','controller'=>'village','action'=>'get-allvillage'));?>';
+function filterVillage(){
+	commune_id = dijit.byId('commun_note').get('value');
+	if(commune_id==0){
+		return false;}
+	dojo.xhrPost({
+		url:url_getvillage,	
+		content:{ 
+			'commune_id': commune_id
+		},
+		handleAs:"json",
+		load: function(data) {	
+			village_store  = getDataStorefromJSON('id','name', data);		
+		    dijit.byId('village_note').set('store', village_store);
+		    if(oldcommune_name==commune_id){
+		    	dijit.byId('village_note').set('value', "<?php echo $this->rs['village_name'];?>");
+		    }
+		    document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallGrade(condition){
@@ -1140,6 +1300,7 @@ date_format = '"dd/MM/yyyy"';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
+			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_TO");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);

@@ -123,8 +123,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$db= new Foundation_Model_DbTable_DbStudent();
 		$row = $db->getStudentById($id);
+		$this->view->rs = $row;
 		if(empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_DATA","/foundation/register");
+			Application_Form_FrmMessage::Sucessfull("No Record","/foundation/register");
+			exit();
 		}
 		$rr = $db->getStudyHishotryById($id);
 		$this->view->rr = $rr;
@@ -254,8 +256,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$db= new Foundation_Model_DbTable_DbStudent();
 		$row = $db->getStudentById($id);
+		$this->view->rs = $row;
 		if(empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_DATA","/foundation/register");
+			Application_Form_FrmMessage::Sucessfull("No Record","/foundation/register");
+			exit();
 		}
 		$rr = $db->getStudyHishotryById($id);
 		$this->view->rr = $rr;

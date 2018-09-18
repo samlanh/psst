@@ -11,14 +11,14 @@ class Global_Model_DbTable_DbVillage extends Zend_Db_Table_Abstract
     }
 	public function addVillage($_data){
 		$_arr=array(
-				'code'	  => $_data['code'],
-				'commune_id'	  => $_data['commune_name'],
-				'village_name'	  => $_data['village_name'],
+				'code'	  		=> $_data['code'],
+				'commune_id'	=> $_data['commune_name'],
+				'village_name'	=> $_data['village_name'],
 				'village_namekh'	  => $_data['village_namekh'],
 				//'displayby'	  => $_data['display'],
-				'status'	  => $_data['status'],
-				'modify_date' => Zend_Date::now(),
-				'user_id'	  => $this->getUserId()
+				'status'	  	=> $_data['status'],
+				'modify_date' 	=> Zend_Date::now(),
+				'user_id'	  	=> $this->getUserId()
 		);
 		if(!empty($_data['id'])){
 			

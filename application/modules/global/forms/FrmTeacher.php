@@ -64,6 +64,21 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		));
 		$dob->setValue(date('Y-m-d'));
 		
+		$rs_province = $_dbgb->getProvince();
+		$opt = array();
+		if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['province_id']]=$row['province_en_name'];
+		
+		$_province_id = new Zend_Dojo_Form_Element_FilteringSelect("province_id");
+		$_province_id->setMultiOptions($opt);
+		$_province_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside',
+				'onChange'=>'filterDistrict();',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+		));
+		
 		$start_date = new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$start_date->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
@@ -127,6 +142,14 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_agreement = new Zend_Dojo_Form_Element_Textarea('agreement');
 		$_agreement->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
 		
+		$home_num = new Zend_Dojo_Form_Element_TextBox('home_num');
+		$home_num->setAttribs(array('dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside'));
+		 
+		$street_num = new Zend_Dojo_Form_Element_TextBox('street_num');
+		$street_num->setAttribs(array('dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside'));
+				
 		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
 		$_degree->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
 				'placeholder'=>$this->tr->translate("SERVIC"),
@@ -174,12 +197,14 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$phone->setValue($_data['tel']);
 			$_nationality->setValue($_data['nationality']);
 			$dob->setValue($_data['dob']);
-			$_adress->setValue($_data['address']);
 			$_email->setValue($_data['email']);
 			$_degree->setValue($_data['degree']);
 			$_note->setValue($_data['note']);
 			$_status->setValue($_data['status']);
+			$street_num->setValue($_data['street_num']);
+			$home_num->setValue($_data['home_num']);
 			
+			$_province_id->setValue($_data['province_id']);
 			$_position->setValue($_data['position_add']);
 			$_passport->setValue($_data['passport_no']);
 			$_experiences->setValue($_data['experiences']);
@@ -188,7 +213,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$end_date->setValue($_data['end_date']);
 			$_agreement->setValue($_data['agreement']);
 		}
-		$this->addElements(array($id,$_enname,$_note,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_adress,$_email,$start_date,$_degree,$_status,$_submit));
+		$this->addElements(array($id,$_enname,$home_num,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
 	}

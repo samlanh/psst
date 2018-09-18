@@ -23,7 +23,6 @@ var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
     width: 220px;
     height: 130px;
 }
-
 .button_browse {
     position: relative;
     overflow: hidden;
@@ -82,7 +81,7 @@ input.btn_borwse_image {
 			}else {
 				return false;
 			}
-			</script>
+		</script>
 			<div class="card-box">
 	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
 		            <li class="nav-item active">
@@ -99,9 +98,8 @@ input.btn_borwse_image {
 		    </div>
 	        <!-- Tab panels -->
         <div class="tab-content vertical">
-		    <div class="tab-pane fade in active" id="panel21" role="tabpanel">
+		   <div class="tab-pane fade in active" id="panel21" role="tabpanel">
 			<div class="card-box">
-				<!--/.Panel 1-->
 				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("LECTURER_INFO");?> 
@@ -128,126 +126,90 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 							<?php echo $frm->getElement("sex");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEACHER");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEACHER");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 							<?php echo $frm->getElement("teacher_type");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("dob");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("nationality");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("nation");?>
 	                   </div>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("phone");?>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EMAIL");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                  		<?php echo $frm->getElement("email");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ADDRESS");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                  		<?php echo $frm->getElement("address");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("note");?>
-	                   </div>
-	                </div>
-	            </div>
-	            <div class="col-md-4 col-sm-4 col-xs-12">
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CONTACT_INFO_EXPER");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS");?> 
+	                  	<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 	                   </label>
 	                </div>
-	                <div class="form-group">
-	                 	<label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                		<?php echo $frm->getElement("degree");?>
-						</div>
-		             </div>
 	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POSITION");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NUMBER_HOME");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("position_add");?>
+	                   		<?php echo $frm->getElement("home_num");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PASSPORT_NO");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STREET");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("passport_no");?>
+	                   		<?php echo $frm->getElement("street_num");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CARD_NO");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("card_no");?>
+	                   		<?php //echo $frm->getElement("village_name");?>
+	                   		<input id="village_name"/>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("START_DATE");?></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement("start_date");?>
-		                </div>
-		             </div>
-	                <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("END_DATE");?></label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		               		<?php echo $frm->getElement("end_date");?>
-		                </div>
-		             </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AGREEMENT");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("COMMUNE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("agreement");?>
+	                   		<?php //echo $frm->getElement("commune_name");?>
+	                   		<input id="commune_name"/>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EXPERIENCES");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("experiences");?>
+	                   		<?php //echo $frm->getElement("district_name");?>
+	                   		<input id="district_name"/>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PROVINCE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("province_id");?>
 	                   </div>
 	                </div>
 	            </div>
@@ -285,13 +247,7 @@ input.btn_borwse_image {
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<div class="account-image">
 								<div class="image-box">
-									<?php
-										$images = $this->baseUrl().'/images/no-profile.png';
-										 if (!empty($this->rs['photo'])){
-										$images = $this->baseUrl().'/images/'.$this->rs['photo'];
-										}										 
-									?>		
-									<img id="profile_wiew" src="<?php echo $images;?>" alt=""  />
+									<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
 								</div>
 								<div class="button_browse">
 								<div id='preview'></div>	
@@ -302,6 +258,95 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	            </div>
+	         </div>
+	         <div class="card-box">
+	         	<div class="col-md-4 col-sm-4 col-xs-12">  
+	                <div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CONTACT_INFO_EXPER");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                 	<label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                		<?php echo $frm->getElement("degree");?>
+						</div>
+		             </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POSITION");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("position_add");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("START_DATE");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement("start_date");?>
+		                </div>
+		             </div>
+	                <div class="form-group">
+		                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("END_DATE");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		               		<?php echo $frm->getElement("end_date");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AGREEMENT");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("agreement");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EXPERIENCES");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("experiences");?>
+	                   </div>
+	                </div>
+	            </div>
+	            <div class="col-md-4 col-sm-4 col-xs-12"> 
+	            	<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CONTACT_INFO");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("phone");?>
+	                   </div>
+	                </div>
+	                 <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("EMAIL");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                  		<?php echo $frm->getElement("email");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PASSPORT_NO");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("passport_no");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CARD_NO");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("card_no");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("note");?>
+	                   </div>
+	                </div>
+				</div>
 	           <!--/.Panel 1-->
 			</div>
 			</div>
@@ -347,6 +392,10 @@ dojo.require("dojo.NodeList-manipulate");
 
 var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->position));?> );
 var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
+
+var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
 		getTeacherID();
 		new dijit.form.FilteringSelect({
@@ -363,7 +412,64 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 		     	}
 		   } 
 		}, "staff_position");
-		 initialize();
+		new dijit.form.FilteringSelect({
+			store: district_store,
+			autoComplete:false,
+			queryExpr:'*${0}*',
+			required: false,		           
+			name: "district_name",
+			id: "district_name",
+			searchAttr: "name",
+			class: 'fullside',
+			missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
+				onChange: function() {
+					district_name = dijit.byId('district_name').get('value');
+					if(district_name==-1){
+						window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/district/add?rightclick=true";?>','_blank');
+					}
+						filterCommune();
+				}  
+			}, "district_name");
+			 
+			new dijit.form.FilteringSelect({
+			store: commune_name,
+			autoComplete:false,
+			queryExpr:'*${0}*',
+			required: false,		           
+			name: "commune_name",
+			id: "commune_name",
+			searchAttr: "name",
+			class: 'fullside',
+			missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឃុំ/សង្កាត់",	
+				onChange: function() {
+					commune_name = dijit.byId('commune_name').get('value');
+					if(commune_name==-1){
+						window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/commune/add?rightclick=true";?>','_blank');
+					}
+					else{
+						filterVillage();
+					}
+		  }
+			}, "commune_name");
+			 
+			new dijit.form.FilteringSelect({
+			store: village_store,
+			autoComplete:false,
+			queryExpr:'*${0}*',
+			required: false,		           
+			name: "village_name",
+			id: "village_name",
+			searchAttr: "name",
+			class: 'fullside',
+			missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះភូមិ!",	
+				onChange: function() {
+					vill = dijit.byId('village_name').get('value');
+					if(vill==-1){
+						window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/village/add?rightclick=true";?>','_blank');
+					}
+				}
+			}, "village_name");
+			filterDistrict();
 	});
 </script>
 <div class="dijitHidden">
@@ -441,6 +547,97 @@ var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 			handleAs:"json",
 			load: function(data) {
 				dijit.byId('code').attr('value',data);
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+	function AllRefresh(){
+		loadingBlock();
+		pro_id = dijit.byId('province_id').get('value');
+		if(pro_id!=''){
+			filterDistrict();
+		}
+		district_name = dijit.byId('district_name').get('value');
+		if(district_name!='' || district_name!=-1){
+			filterCommune();
+		}
+		commune_name = dijit.byId('commune_name').get('value');
+		if(commune_name!='' || commune_name!=-1){
+			filterVillage();
+		}
+	}
+	oldProvinceId = '<?php echo $this->rs['province_id'];?>';
+	oldDistrict = '<?php echo $this->rs['district_name'];?>';
+	oldcommune_name = '<?php echo $this->rs['commune_name'];?>';
+	url_getdistrict = '<?php echo $this->url(array('module'=>'global','controller'=>'district','action'=>'get-district'));?>';
+	function filterDistrict(){
+		pro_id = dijit.byId('province_id').get('value');
+		if(pro_id==0){
+			return false;}
+		dojo.xhrPost({
+			url:url_getdistrict,	
+			content:{ 
+				'pro_id': pro_id
+			},
+			handleAs:"json",
+			load: function(data) {	
+				district_store  = getDataStorefromJSON('id','name', data);		
+			    dijit.byId('district_name').set('store', district_store);
+			    if(oldProvinceId==pro_id){
+			    	dijit.byId('distric_note').set('value', "<?php echo $this->rs['district_name'];?>");
+			    }
+			    document.getElementsByClassName("overlay")[0].style.display="none";	
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});	
+	}
+	url_getcommune = '<?php echo $this->url(array('module'=>'global','controller'=>'commune','action'=>'get-commune'));?>';
+	function filterCommune(){
+		distict_id = dijit.byId('district_name').get('value');
+		if(distict_id==0){
+			return false;}
+		dojo.xhrPost({
+			url:url_getcommune,	
+			content:{ 
+				'district_id': distict_id
+			},
+			handleAs:"json",
+			load: function(data) {	
+				commune_store  = getDataStorefromJSON('id','name', data);		
+			    dijit.byId('commune_name').set('store', commune_store);
+			    if(oldDistrict==distict_id){
+			    	dijit.byId('commun_note').set('value', "<?php echo $this->rs['commune_name'];?>");
+			    }
+			    document.getElementsByClassName("overlay")[0].style.display="none";	
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+	url_getvillage = '<?php echo $this->url(array('module'=>'global','controller'=>'village','action'=>'get-allvillage'));?>';
+	function filterVillage(){
+		commune_id = dijit.byId('commune_name').get('value');
+		if(commune_id==0){
+			return false;}
+		dojo.xhrPost({
+			url:url_getvillage,	
+			content:{ 
+				'commune_id': commune_id
+			},
+			handleAs:"json",
+			load: function(data) {	
+				village_store  = getDataStorefromJSON('id','name', data);		
+			    dijit.byId('village_name').set('store', village_store);
+			    if(condition==1){
+			    	dijit.byId('grade').attr('value','<?php echo $this->rs['grade']; ?>');  
+			    }else{
+			    	dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
+			    }
 			},
 			error: function(err) {
 				alert(err);

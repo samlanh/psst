@@ -104,6 +104,7 @@ class Global_DistrictController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	
 	function addDistrictAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();

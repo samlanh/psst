@@ -43,8 +43,13 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'nation'  		     => $_data['nation'],
 							'teacher_type'  	 => $_data['teacher_type'],
 					        'tel'  				 => $_data['phone'],
-							'address' 			 => $_data['address'],
-							'note' 				 => $_data['note'],
+							
+							'village_name' 		 => $_data['village_name'],
+							'commune_name'  	 => $_data['commune_name'],
+							'district_name'  	 => $_data['district_name'],
+							'province_id'  	 	 => $_data['province_id'],
+							'home_num'  		 => $_data['home_num'],
+							'street_num'  		 => $_data['street_num'],
 							
 		 					'position_add' 		 => $_data['position_add'],
 		 					'passport_no' 		 => $_data['passport_no'],
@@ -84,6 +89,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	    		$_db->rollBack();
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
+	    	print_r($_data); exit();
 	}
 	public function updateStaff($_data){
 		$_db= $this->getAdapter();		
@@ -113,8 +119,14 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						'nation'  		     => $_data['nation'],
 						'teacher_type'  	 => $_data['teacher_type'],
 				        'tel'  				 => $_data['phone'],
-						'address' 			 => $_data['address'],
 						'note' 				 => $_data['note'],
+						
+						'village_name' 		 => $_data['village_name'],
+						'commune_name'  	 => $_data['commune_name'],
+						'district_name'  	 => $_data['district_name'],
+						'province_id'  	 	 => $_data['province_id'],
+						'home_num'  		 => $_data['home_num'],
+						'street_num'  		 => $_data['street_num'],
 						
 	 					'position_add' 		 => $_data['position_add'],
 	 					'passport_no' 		 => $_data['passport_no'],
@@ -157,6 +169,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
     		$_db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
+    	//print_r($_data); exit();
 	}
 	public function getTeacherById($id){
 		$db = $this->getAdapter();

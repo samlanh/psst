@@ -124,7 +124,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	function getStudentExist($name_en,$sex,$grade,$dob,$session){
 		$db = $this->getAdapter();
-		$sql = "select * from rms_student where stu_enname="."'$name_en'"." and sex=".$sex." and grade=".$grade." and dob="."'$dob'"." and session=".$session;                          
+		$sql = "SELECT * FROM rms_student WHERE customer_type=1 AND stu_enname="."'$name_en'"." AND sex=".$sex." 
+			AND grade=".$grade." AND dob="."'$dob'"." AND session=".$session;                          
 		return $db->fetchRow($sql);
 	}
 	function ifStudentIdExisting($stu_code){

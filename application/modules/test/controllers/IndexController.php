@@ -66,8 +66,10 @@ class Test_IndexController extends Zend_Controller_Action
 				$db->addStudentTest($data);
 				if(!empty($data['saveclose'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
+					exit();
 				}else{
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+					exit();
 				}		
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
 			} catch (Exception $e) {
@@ -97,6 +99,7 @@ class Test_IndexController extends Zend_Controller_Action
 //     			print_r($data);exit();
     			$db->updateStudentTest($data);
     			Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);
+    			exit();
     				
     		} catch (Exception $e) {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

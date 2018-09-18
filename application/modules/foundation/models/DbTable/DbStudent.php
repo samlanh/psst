@@ -532,9 +532,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	function getProvince(){
-		$db = $this->getAdapter();
-		$sql ="SELECT province_en_name as name,province_id as id FROM rms_province WHERE is_active=1 ";
-		return $db->fetchAll($sql);
+		$_db = new Application_Model_DbTable_DbGlobal();
+		return $_db->getAllProvince();
 	}
 	function getAllRoom(){
 		$db = $this->getAdapter();

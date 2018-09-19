@@ -142,7 +142,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$stu_code=$_data['student_id'];
 			$code = new Registrar_Model_DbTable_DbRegister();
 
-			$part= PUBLIC_PATH.'/images/';
+			$part= PUBLIC_PATH.'/images/photo/';
 			$name = $_FILES['photo']['name'];
 			$size = $_FILES['photo']['size'];
 			if (!file_exists($part)) {
@@ -370,7 +370,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
 					);
-			$part= PUBLIC_PATH.'/images/';
+			$part= PUBLIC_PATH.'/images/photo/';
 			$name = $_FILES['photo']['name'];
 			$size = $_FILES['photo']['size'];
 			if (!file_exists($part)) {

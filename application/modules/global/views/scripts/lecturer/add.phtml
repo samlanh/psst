@@ -476,7 +476,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				}
 			}, "village_name");
 			filterDistrict();
-			initialize();
+			//initialize();
 	});
 </script>
 <div class="dijitHidden">
@@ -573,6 +573,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		if(commune_name!='' || commune_name!=-1){
 			filterVillage();
 		}
+		
 	}
 	url_getdistrict = '<?php echo $this->url(array('module'=>'global','controller'=>'district','action'=>'get-district'));?>';
 	function filterDistrict(){

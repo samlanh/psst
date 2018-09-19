@@ -89,7 +89,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	    		$_db->rollBack();
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
-	    	print_r($_data); exit();
+	    	//print_r($_data); exit();
 	}
 	public function updateStaff($_data){
 		$_db= $this->getAdapter();		
@@ -173,11 +173,12 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	}
 	public function getTeacherById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_teacher WHERE id =".$db->quote($id);
+		$sql = "SELECT * FROM rms_teacher WHERE id =$id ";
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
 		return $row;
 	}
+	
 	function getAllDegree(){
 		$db=$this->getAdapter();
 		$sql="SELECT id,name_kh AS name FROM rms_view WHERE rms_view.type=3 AND name_kh!='' and status=1";

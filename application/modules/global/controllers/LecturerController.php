@@ -106,15 +106,19 @@ class Global_LecturerController extends Zend_Controller_Action {
 		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
 		$this->view->row = $_db->getTeacherDocumentById($id);
-		$db=new Global_Model_DbTable_DbTeacher();
-		$row = $db->getTeacherById($id);
+		
+		$row = $_db->getTeacherById($id);
 		$this->view->rs = $row;
+		
 		$tsub = new Global_Form_FrmTeacher();
 		$frm_techer = $tsub->FrmTecher($row);
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_update = $frm_techer;
 		
-		//print_r($row); exit();
+// 		$_db = new Test_Model_DbTable_DbStudentTest();
+// 		$rows  = $_db->getStudentTestById($id);
+// 		$this->view->rss = $rows;
+// 		print_r($this->view->rss); exit();
 	}
 	function addPositionAction(){
 		if($this->getRequest()->isPost()){

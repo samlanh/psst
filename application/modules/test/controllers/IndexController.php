@@ -89,6 +89,7 @@ class Test_IndexController extends Zend_Controller_Action
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_crm = $frm;
     }
+    
     public function editAction()
     {
     	$id = $this->getRequest()->getParam('id');
@@ -107,7 +108,8 @@ class Test_IndexController extends Zend_Controller_Action
     		}
     	}
     	$row  = $db->getStudentTestById($id);
-    	$this->view->rs = $row;
+    	$this->view->rs = $row; 
+    	//print_r($this->view->rs);exit();
     	$this->view->row_detail=$db->getStudentTestDetail($id);
     	if(empty($row)){
     		Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/test/index");
@@ -126,7 +128,6 @@ class Test_IndexController extends Zend_Controller_Action
     	$frm->FrmAddStudentTest($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_crm = $frm;
-    	
     }
     function profileAction(){
     	$id = $this->getRequest()->getParam('id');

@@ -7,12 +7,8 @@
 	$frm= $this->frm_update;
 	//print_r($frm); exit();
 ?>
-<script type="text/javascript">
-var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->position));?> );
-	dojo.ready(function(){
-	});
-</script>
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <style>
 .image-box {
     text-align: center;
@@ -397,7 +393,7 @@ var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json:
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
-		getTeacherID();
+		//getTeacherID();
 		new dijit.form.FilteringSelect({
 			store: position_store,
 			autoComplete: true,                        
@@ -412,6 +408,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		     	}
 		   } 
 		}, "staff_position");
+		
 		new dijit.form.FilteringSelect({
 			store: district_store,
 			autoComplete:false,
@@ -449,7 +446,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 					else{
 						filterVillage();
 					}
-		  }
+		  		}
 			}, "commune_name");
 			 
 			new dijit.form.FilteringSelect({
@@ -467,9 +464,10 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 					if(vill==-1){
 						window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/village/add?rightclick=true";?>','_blank');
 					}
+					filterDistrict();
 				}
 			}, "village_name");
-			filterDistrict();
+			
 	});
 </script>
 <div class="dijitHidden">

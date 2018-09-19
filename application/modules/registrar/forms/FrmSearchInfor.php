@@ -320,8 +320,9 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		));
 		$service->setValue($request->getParam("service"));
 		$opt_ser = array(''=>$this->tr->translate("SERVICE_NAME"));
-		$ser_rows=$db_years->getServicesAll();
-		if(!empty($ser_rows))foreach($ser_rows As $row)$opt_ser[$row['id']]=$row['title'];
+// 		$ser_rows=$db_years->getServicesAll();
+		$ser_rows = $db->getAllGradeStudy(2);
+		if(!empty($ser_rows))foreach($ser_rows As $row)$opt_ser[$row['id']]=$row['name'];
 		$service->setMultiOptions($opt_ser);
 		
 		$pay_term = new Zend_Dojo_Form_Element_FilteringSelect('pay_term');
@@ -452,7 +453,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$term->setValue($request->getParam("term"));
 		$db = new Application_Model_DbTable_DbGlobal();
 		$result = $db->getAllTerm();
-		$opt_stu_name = array(''=>$this->tr->translate("----- select term -----"));
+		$opt_stu_name = array(''=>$this->tr->translate("SELECT_TERM"));
 		if(!empty($result))foreach ($result As $rs)$opt_stu_name[$rs['id']]=$rs['name'];
 		$term->setMultiOptions($opt_stu_name);
 		
@@ -477,7 +478,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 				'required'=>false
 		));
 		$db = new Accounting_Model_DbTable_DbService();
-		$opt= $db->getServiceType(1,1);
+// 		$opt= $db->getServiceType(1,1);
+		$opt = array(''=>$this->tr->translate("PLEASE_SELECT"),'1'=>$this->tr->translate("TUITION_FEE"),'2'=>$this->tr->translate("SERVICE"));
 		$service_type->setMultiOptions($opt);
 		$service_type->setValue($request->getParam("service_type"));
 		

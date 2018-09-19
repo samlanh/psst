@@ -71,9 +71,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	public function getinvoiceservice($id){
 		$db= $this->getAdapter();
 		$sql="SELECT v.* ,
-		(SELECT p.title FROM rms_program_name AS p WHERE v.service_id = p.service_id LIMIT 1) as service_name,
-		(SELECT g.major_enname FROM rms_major AS g WHERE v.service_id = g.major_id LIMIT 1) as grade
-	
+		(SELECT p.title FROM rms_itemsdetail AS p WHERE v.service_id = p.id AND p.items_type = v.type LIMIT 1) as title
 		FROM 
 		rms_invoice_account_detail AS v 
 		WHERE vid='".$id."' ";

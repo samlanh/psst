@@ -63,11 +63,11 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 	    	}
     	}
 		$db = new Registrar_Model_DbTable_DbRegister();
-		$this->view->all_service = $db->getAllService();
+// 		$this->view->all_service = $db->getAllService();
 		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 		$this->view->all_student_code = $db->getAllGerneralOldStudent();
 		$_db = new Application_Model_DbTable_DbGlobal();
-		$this->view->all_grade =  $_db->getAllMajor();
+// 		$this->view->all_grade =  $_db->getAllMajor();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
@@ -89,13 +89,22 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 	    	}
     	}
 		$db = new Registrar_Model_DbTable_DbRegister();
-		$this->view->all_service = $db->getAllService();
+// 		$this->view->all_service = $db->getAllService();
 		$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 		$this->view->all_student_code = $db->getAllGerneralOldStudent();
 		$_db = new Application_Model_DbTable_DbGlobal();
-		$this->view->all_grade =  $_db->getAllMajor();
+// 		$this->view->all_grade =  $_db->getAllMajor();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
+	}
+	function getitemsdetailAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$grade = $db->getAllGradeStudy($data['items_type']);
+			print_r(Zend_Json::encode($grade));
+			exit();
+		}
 	}
 }

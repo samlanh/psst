@@ -750,7 +750,7 @@ function getAllgroupStudy($teacher_id=null){
    }
    function getAllStuCode(){
    	$db = $this->getAdapter();
-   	$sql=" select stu_id as id , stu_code from rms_student where status=1 and is_subspend=0 ";
+   	$sql=" select stu_id as id , stu_code from rms_student where status=1 AND customer_type=1 and is_subspend=0 ";
    	return $db->fetchAll($sql);
    }
    function getAllStuName(){

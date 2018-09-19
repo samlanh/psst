@@ -467,7 +467,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 					filterDistrict();
 				}
 			}, "village_name");
-			
+			filterDistrict();
 	});
 </script>
 <div class="dijitHidden">
@@ -584,7 +584,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				district_store  = getDataStorefromJSON('id','name', data);		
 			    dijit.byId('district_name').set('store', district_store);
 			    if(oldProvinceId==pro_id){
-			    	dijit.byId('distric_note').set('value', "<?php echo $this->rs['district_name'];?>");
+			    	dijit.byId('district_name').set('value', "<?php echo $this->rs['district_name'];?>");
 			    }
 			    document.getElementsByClassName("overlay")[0].style.display="none";	
 			},
@@ -608,7 +608,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				commune_store  = getDataStorefromJSON('id','name', data);		
 			    dijit.byId('commune_name').set('store', commune_store);
 			    if(oldDistrict==distict_id){
-			    	dijit.byId('commun_note').set('value', "<?php echo $this->rs['commune_name'];?>");
+			    	dijit.byId('commune_name').set('value', "<?php echo $this->rs['commune_name'];?>");
 			    }
 			    document.getElementsByClassName("overlay")[0].style.display="none";	
 			},
@@ -631,10 +631,8 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			load: function(data) {	
 				village_store  = getDataStorefromJSON('id','name', data);		
 			    dijit.byId('village_name').set('store', village_store);
-			    if(condition==1){
-			    	dijit.byId('grade').attr('value','<?php echo $this->rs['grade']; ?>');  
-			    }else{
-			    	dijit.byId('grade').set('value',dijit.byId('grade_fromgrouop').get('value'));
+			    if(oldcommune_name==commune_id){
+			    	dijit.byId('village_name').set('value', "<?php echo $this->rs['village_name'];?>");
 			    }
 			},
 			error: function(err) {
@@ -704,6 +702,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				popupNation(2);
 		    }
 			}, "nation");
+		
 	});
 	function popupNation(key){
 		if(key==1){

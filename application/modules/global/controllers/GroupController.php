@@ -179,7 +179,7 @@ class Global_GroupController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$groupExit = $db->checkGroupExits($data);
 				if (!empty($groupExit)){
-					Application_Form_FrmMessage::Sucessfull("This Group Already Exist", self::REDIRECT_URL."/index");
+					Application_Form_FrmMessage::Sucessfull("RECORD_EXIST", self::REDIRECT_URL."/index");
 				}
 				$db->AddNewGroup($data);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL."/index");

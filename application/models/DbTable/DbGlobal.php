@@ -177,7 +177,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getAllNation(){
    	$db = $this->getAdapter();
-   	$sql = "SELECT id, name_kh AS name FROM rms_view WHERE rms_view.type=21 AND name_kh!='' ORDER BY rms_view.id ASC";
+   	$sql = "SELECT key_code as id, name_kh AS name FROM rms_view WHERE rms_view.type=21 AND name_kh!='' ORDER BY rms_view.id ASC";
    	return $db->fetchAll($sql);
    }
    

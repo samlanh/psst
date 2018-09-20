@@ -16,7 +16,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name,
     	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year) as academic_year,
     	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=st.session limit 1)AS session,
-    	(select major_enname from rms_major where rms_major.major_id=st.grade limit 1)AS grade,
+    	
+    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=st.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+					  
 		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex )AS sex,
 		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
 		(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=st.group_id LIMIT 1 ) AS group_name,
@@ -135,9 +137,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		gr.day_id,gr.from_hour,gr.to_hour,
     		gr.subject_id,gr.techer_id,
 	    	(SELECT room_name AS NAME FROM `rms_room` WHERE is_active=1 AND room_name!='' AND rms_room.room_id=(SELECT g.room_id FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) )AS room_name,
-	    	(SELECT CONCAT(m.major_enname,' (',(SELECT d.en_name FROM rms_dept AS d WHERE m.dept_id=d.dept_id ),')')
-    	FROM rms_major AS m WHERE 1 AND major_enname!='' AND m.major_id=(SELECT g.grade FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1))AS grade_name,
-    	 
+	    	(SELECT CONCAT(m.title,' (',(SELECT d.title FROM rms_items AS d WHERE m.items_id=d.id ),')')
+    	FROM rms_itemsdetail AS m WHERE 1 AND title!='' AND m.id=(SELECT g.grade FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1))AS grade_name,
+					  
     	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times
     	FROM rms_group_reschedule AS gr";
     	 

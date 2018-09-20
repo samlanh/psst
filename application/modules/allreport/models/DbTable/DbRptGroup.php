@@ -80,13 +80,16 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				  	 `s`.`stu_code` AS `stu_code`,
 				     `s`.`stu_khname` AS `kh_name`,
 				     `s`.`stu_enname` AS `en_name`,
-				     `s`.`nationality` AS `nation`,
+				      `s`.`last_name` AS `last_name`,
 				     `s`.`address` AS `address`,
 				     s.pob,
 				     `s`.`tel` AS `tel`,
 				     `s`.`sex` AS `gender`,
 				     `s`.`dob` AS `dob`,
 				     s.father_enname AS father_name,
+				     (SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality,
+    				(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nation` LIMIT 1) AS nation,
+    	
 					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job,
 					 s.mother_enname AS mother_name,
 					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job,
@@ -132,8 +135,10 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	`g`.`group_code`    AS `group_code`,
 				   	(SELECT CONCAT(from_academic," - ",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
 				   	`g`.`semester` AS `semester`,
-				   	(SELECT en_name FROM `rms_dept`	WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) as degree,
-				   	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1) as grade,
+				   	(SELECT rms_items.title FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,
+				   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
+				   	
+		
 				   	(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
 				   	(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)LIMIT 1) AS `room_name`,
 				   	 g.amount_month,
@@ -197,8 +202,10 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	`g`.`group_code`    AS `group_code`,
 				   	(SELECT CONCAT(from_academic," - ",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
 				   	`g`.`semester` AS `semester`,
-				   	(SELECT en_name	FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) as degree,
-				   	(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`)) as grade,
+				   	(SELECT rms_items.title FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,
+				   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
+				   	
+				   	
 				   	(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
 				   	(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)) AS `room_name`,
 				   	`g`.`start_date`,

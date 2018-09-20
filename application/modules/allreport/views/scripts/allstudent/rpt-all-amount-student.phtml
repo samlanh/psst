@@ -49,6 +49,8 @@
 		<style>
 			table tr th{
 				border: 1px solid #000;	
+				text-align: center;
+				padding: 5px 2px;
 			}
 			ul li{list-style: none;}
 			table {page-break-inside:auto }
@@ -63,25 +65,25 @@
 				<div id="exportExcel">
 					<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 						<thead>
-						<tr style="font-size:14px; height: 20px;background: #ccd9ff;" align="center" >
-							<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
-							<th rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></th>
-							<th rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></th>
-							<th rowspan="2"><?php echo $tr->translate("NAME_KH");?></th>
-							<th rowspan="2"><?php echo $tr->translate("NAME_EN");?></th>
-							<th rowspan="2"><?php echo $tr->translate("SEX");?></th>
-							<th rowspan="2"><?php echo $tr->translate("NATIONALITY");?></th>
-							<th rowspan="2"><?php echo $tr->translate("PHONE");?></th>
-							<th rowspan="2"><?php echo $tr->translate("EMAIL");?></th>
-							<th colspan="5"><?php echo $tr->translate("STUDY_INFO");?></th>
+						<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
+							<th rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</th>
+							<th rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</th>
+							<th rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</th>
+							<th rowspan="2">&nbsp;<?php echo $tr->translate("NAME_KH");?>&nbsp;</th>
+							<th rowspan="2">&nbsp;<?php echo $tr->translate("NAME_EN");?>&nbsp;</th>
+							<th rowspan="2">&nbsp;<?php echo $tr->translate("SEX");?>&nbsp;</th>
+							<th rowspan="2">&nbsp;<?php echo $tr->translate("NATIONALITY");?>&nbsp;</th>
+							<th rowspan="2">&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</th>
+							<th rowspan="2">&nbsp;<?php echo $tr->translate("EMAIL");?>&nbsp;</th>
+							<th colspan="5">&nbsp;<?php echo $tr->translate("STUDY_INFO");?>&nbsp;</th>
 						</tr>
 						<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
 						<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
-							<th><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
-							<th><?php echo $tr->translate("DEGREE");?></th>
-							<th><?php echo $tr->translate("GRADE");?></th>
-							<th><?php echo $tr->translate("SESSION");?></th>
-							<th><?php echo $tr->translate("STATUS");?></th>
+							<th>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</th>
+							<th>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</th>
+							<th>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</th>
+							<th>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</th>
+							<th>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</th>
 						</tr>
 						</thead>
 					<?php $i=0;$degree=0;$count=0; 
@@ -102,20 +104,20 @@
 						<?php }?>
 						<?php $i++;$count++; ?>
 						<tr style="font-size:14px; height: 23px;" align="center" class="hover" >
-							<td ><?php echo $i;?></td>
-							<td ><?php echo $row['branch_name'];?></td>
-							<td ><?php echo $row['stu_code'];?></td>
+							<td >&nbsp;<?php echo $i;?>&nbsp;</td>
+							<td >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
+							<td >&nbsp;<?php echo $row['stu_code'];?></td>
 							<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_khname'];?>&nbsp;</td>
 							<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['name'];?>&nbsp;</td>
-							<td ><?php echo $row['sex'];?></td>	
-							<td ><?php echo $row['nationality'];?></td>
-							<td ><?php echo $row['tel'];?></td>
-							<td align="left">&nbsp;<?php echo $row['email'];?></td>
-							<td ><?php echo $row['academic_year'];?></td>
-							<td ><?php echo $row['degree'];?></td>
-							<td align="left">&nbsp;<?php echo $row['grade'];?></td>
-							<td ><?php echo $row['session'];?></td>	
-							<td <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>><?php echo $row['status'];?></td>	
+							<td >&nbsp;<?php echo $row['sex'];?>&nbsp;</td>	
+							<td >&nbsp;<?php echo $row['nationality'];?>&nbsp;</td>
+							<td >&nbsp;<?php echo $row['tel'];?>&nbsp;</td>
+							<td align="left">&nbsp;<?php echo $row['email'];?>&nbsp;</td>
+							<td >&nbsp;<?php echo $row['academic_year'];?>&nbsp;</td>
+							<td >&nbsp;<?php echo $row['degree'];?>&nbsp;</td>
+							<td align="left">&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
+							<td >&nbsp;<?php echo $row['session'];?>&nbsp;</td>	
+							<td <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>>&nbsp;<?php echo $row['status'];?>&nbsp;</td>	
 						</tr>
 						<?php $degree=$row['degree'];?>
 					<?php }?>	

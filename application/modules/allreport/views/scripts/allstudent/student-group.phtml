@@ -42,7 +42,7 @@
 	</form>	
 <style>
 .hidden{
-	display: block !important;
+	display: table-cell !important;
 }
 </style>
 	<div id="divPrint">
@@ -67,6 +67,7 @@
 							tr{ page-break-inside:avoid; page-break-after:auto }
 							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
 							.hover:hover{background: #ccc;}
+							.hidden{display: none;}
 						</style>
 						<?php 
 						$all_student = 0;
@@ -77,22 +78,22 @@
 						  <thead>
 						  <tr style="font-size:12px; height: 25px; font-weight: bold; background: #ccd9ff;" align="center">
 						    <td class="hidden"></td>
-						    <td><?php echo $tr->translate("NUM");?></td>
-						    <td><?php echo $tr->translate("STUDY_GROUP");?></td>
-						    <td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
-							<td><?php echo $tr->translate("SEMESTER");?></td>
-							<td><?php echo $tr->translate("DEGREE");?></td>
-							<td><?php echo $tr->translate("GRADE");?></td>
-							<td><?php echo $tr->translate("SESSION");?>&nbsp;</td>
-							<td><?php echo $tr->translate("CLASSES");?></td>
-							<td><?php echo $tr->translate("AMOUNT_MONTH");?></td>
-							<td><?php echo $tr->translate("START_DATE");?></td>
-							<td><?php echo $tr->translate("END_DATE");?></td>
-							<td><?php echo $tr->translate("STATUS");?></td>
-							<td><?php echo $tr->translate("TOTAL_STUDENT");?></td>
-							<td><?php echo $tr->translate("STUDENT_DROP");?></td>
-							<td><?php echo $tr->translate("STUDENT_STUDY");?></td>
-							<td><?php echo $tr->translate("NOTE");?></td>
+						    <td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("CLASSES");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("AMOUNT_MONTH");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("START_DATE");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("END_DATE");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("STUDENT_STUDY");?>&nbsp;</td>
+							<td>&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
 						  </tr>
 						  </thead>
 						  <?php $i=0; 
@@ -106,18 +107,18 @@
 						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>
 						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic']; ?></a></td>
 						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['semester']; ?></a></td>
-						    <td align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?></td>
-						    <td><?php echo $rs['grade']; ?></td>
-						    <td><?php echo $rs['session']; ?></td>
-						    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?></td>
-						    <td align="center"><?php echo $rs['amount_month']; ?></td>
-						    <td><?php echo date('d-M-Y',strtotime($rs['start_date'])); ?></td>
-						    <td><?php echo date('d-M-Y',strtotime($rs['expired_date'])); ?></td>
-						    <td><?php echo $rs['status']; ?></td>
-						    <td><?php echo $rs['Num_Student']; ?></td>
-						    <td><?php echo $rs['student_drop']; ?></td>
-						    <td><?php echo $rs['Num_Student']-$rs['student_drop']; ?></td>
-						    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?></td>
+						    <td align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
+						    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
+						    <td align="center">&nbsp;<?php echo $rs['amount_month']; ?>&nbsp;</td>
+						    <td>&nbsp;<?php echo date('d-M-Y',strtotime($rs['start_date'])); ?>&nbsp;</td>
+						    <td>&nbsp;<?php echo date('d-M-Y',strtotime($rs['expired_date'])); ?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;</td>
+						    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?>&nbsp;</td>
 						  </tr>
 						  <?php 
 						  	$all_student = $all_student+$rs['Num_Student'];
@@ -128,7 +129,6 @@
 						  	  <td align="center"><strong><?php echo $all_student;?></strong></td>
 						  	  <td align="center"><strong><?php echo $drop_student;?></strong></td>
 						  	  <td align="center"><strong><?php echo $all_student -$drop_student;?></strong></td>
-						  	  <td align="center"></td>
 						  </tr>
 						</table>
 						</div>

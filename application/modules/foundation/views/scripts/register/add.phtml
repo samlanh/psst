@@ -136,14 +136,14 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("nation");?>
+				                   		<input id="nation" />
 				                   </div>
 				                </div>
 				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("studen_national");?>
+				                   		<input id="studen_national" />
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -364,7 +364,7 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("fa_national");?>
+				                   		<input id="fa_national" />
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -405,7 +405,7 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("mom_nation");?>
+				                   		<input id="mom_nation" />
 				                   </div>
 				                </div> 
 				                <div class="form-group">
@@ -446,7 +446,7 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("guardian_national");?>
+				                   		<input id="guardian_national" />
 				                   </div>
 				                </div> 
 				                <div class="form-group">
@@ -679,7 +679,121 @@ dojo.ready(function(){
 	}, "gu_job");
 	dijit.byId('gu_job').attr('value',0);
 
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "nation",
+	    name: "nation",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	    nation = dijit.byId('nation').get('value');
+	    if(nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',1);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "nation");
+	dijit.byId('nation').attr('value',0);
 
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "studen_national",
+	    name: "studen_national",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	   	stu_nation = dijit.byId('studen_national').get('value');
+	    if(stu_nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',2);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "studen_national");
+	dijit.byId('studen_national').attr('value',0);
+
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "fa_national",
+	    name: "fa_national",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	    fa_nation = dijit.byId('fa_national').get('value');
+	    if(fa_nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',3);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "fa_national");
+	dijit.byId('fa_national').attr('value',0);
+
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "mom_nation",
+	    name: "mom_nation",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	    mom_nation = dijit.byId('mom_nation').get('value');
+	    if(mom_nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',4);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "mom_nation");
+	dijit.byId('mom_nation').attr('value',0);
+
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "guardian_national",
+	    name: "guardian_national",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	   	gurdian_nation = dijit.byId('guardian_national').get('value');
+	    if(gurdian_nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',5);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "guardian_national");
+	dijit.byId('guardian_national').attr('value',0);
+	
 	new dijit.form.FilteringSelect({
 		store: language_store,
 		queryExpr: "*${0}*",
@@ -864,36 +978,6 @@ function filterVillage(){
 	});
 }
 
-require(["dojo/ready"], function(ready){
-	
-	new dijit.form.FilteringSelect({
-		name: "studen_national",
-		id: "studen_national",
-		searchAttr: "name",
-		class: 'fullside',
-		onChange: function() {
-			popupNation(1);
-	    }
-		}, "studen_national");
-	new dijit.form.FilteringSelect({
-		name: "nation",
-		id: "nation",
-		searchAttr: "name",
-		class: 'fullside',
-		onChange: function() {
-			popupNation(2);
-	    }
-		}, "nation");
-	new dijit.form.FilteringSelect({
-		name: "fa_national",
-		id: "fa_national",
-		searchAttr: "name",
-		class: 'fullside',
-		onChange: function() {
-			popupNation(3);
-	    }
-		}, "fa_national");
-});
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallGrade(){
@@ -991,80 +1075,90 @@ function addLanguage(){
 		});
 	}
 }
-function popupNation(key){
-	if(key==1){
-		var nation = dijit.byId('studen_national').get('value');
-		$("#indexkey").val(key);
-	}else if(key==2){
-		var nation = dijit.byId('nation').get('value');
-		$("#indexkey").val(key);
-	}else if(key==3){
-		var nation = dijit.byId('fa_national').get('value');
-		$("#indexkey").val(key);
-	} 
-	if(nation==''){
-		return false;
-	}
-	if(nation==-1){
-		dijit.byId("popup_nation").show();
-	}
-}
+
 var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 var nation_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 var nation_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+var nation_store3  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+var nation_store4  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
 function addNationBy(){
 	if(dijit.byId('frm_nation_kh').validate()){
-		loadingBlock();	
-		dojo.xhrPost({
-			url:url_add_nation,
-			form: dojo.byId("frm_nation_kh"),
-			handleAs:"json",
-			load: function(data) {
-				var indexkey = $("#indexkey").val();
-					var Itemmake = { 
-						 id: data,
-						 name: dijit.byId('title_kh').get('value')
-					   };
-				   if(indexkey==1){
-					   addDataToSelectbox(dijit.byId('studen_national'), nation_store, Itemmake, data);
-					   addDataToSelectbox(dijit.byId('nation'), nation_store1, Itemmake, data);
-					   addDataToSelectbox(dijit.byId('fa_national'), nation_store1, Itemmake, data);
-					   dijit.byId('nation').set('store', nation_store);
-					   nation =  dijit.byId('nation').get('value');
-					   if(nation!=""){
-					   dijit.byId('nation').set('value', nation);
-					   }
-				   }else if(indexkey==2){	   
-					  addDataToSelectbox(dijit.byId('studen_national'), nation_store, Itemmake, data);
-					  addDataToSelectbox(dijit.byId('nation'), nation_store1, Itemmake, data);
-					  addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-					  dijit.byId('studen_national').set('store', nation_store);
-					  nation =  dijit.byId('studen_national').get('value');
-					  if(nation!=""){
-					  dijit.byId('studen_national').set('value', nation);
-					  }
-				   }else if(indexkey==3){	   
-					  addDataToSelectbox(dijit.byId('studen_national'), nation_store, Itemmake, data);
-					  addDataToSelectbox(dijit.byId('nation'), nation_store1, Itemmake, data);
-					  addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
-					  dijit.byId('fa_national').set('store', nation_store);
-					  nation =  dijit.byId('fa_national').get('value');
-					  if(nation!=""){
-					  dijit.byId('fa_national').set('value', nation);
-					  }
-				   }
-				   dijit.byId('frm_nation_kh').reset();
-				   dijit.byId("popup_nation").hide();
-				   HideloadingBlock();
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+	type=dijit.byId('value_j').get('value');
+	nation=dijit.byId('nation').get('value');
+	studen_national=dijit.byId('studen_national').get('value');
+	fa_national=dijit.byId('fa_national').get('value');
+	mom_nation=dijit.byId('mom_nation').get('value');
+	guardian_national=dijit.byId('guardian_national').get('value');
+	dojo.xhrPost({
+		url:url_add_nation,
+		form: dojo.byId("frm_nation_kh"),
+		handleAs:"json",
+		load: function(data) {
+			var Itemmake = { 
+			    		id: data,
+				        name: dijit.byId('title_kh').get('value')
+				   };
+		if(type==1){	   
+	 		addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+			dijit.byId('guardian_national').attr('value',fa_job);
+			dijit.byId('studen_national').attr('value',mo_job);
+			dijit.byId('mom_nation').attr('value',fa_job);
+			dijit.byId('fa_national').attr('value',fa_job);
+		}else if(type==2){
+			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+	 		dijit.byId('nation').attr('value',mo_job);
+			dijit.byId('guardian_national').attr('value',fa_job);
+			dijit.byId('mom_nation').attr('value',fa_job);
+			dijit.byId('fa_national').attr('value',fa_job);
+		}else if(type==3){
+			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+	 		dijit.byId('nation').attr('value',mo_job);
+			dijit.byId('guardian_national').attr('value',fa_job);
+			dijit.byId('studen_national').attr('value',mo_job);
+			dijit.byId('mom_nation').attr('value',fa_job);
+		}else if(type==4){
+			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+	 		dijit.byId('nation').attr('value',mo_job);
+			dijit.byId('guardian_national').attr('value',fa_job);
+			dijit.byId('studen_national').attr('value',mo_job);
+			dijit.byId('fa_national').attr('value',fa_job);
+		}else if(type==5){
+			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+			dijit.byId('nation').attr('value',mo_job);
+			dijit.byId('studen_national').attr('value',mo_job);
+			dijit.byId('mom_nation').attr('value',fa_job);
+			dijit.byId('fa_national').attr('value',fa_job);
+		}
+	    dijit.byId('frm_nation_kh').reset();
+	    dijit.byId("popup_nation").hide();
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 	}
 }
-
 var url_add_know_by = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-knowby")); ?>';
 function addKnowBy(){
 	if(dijit.byId('frm_know_by').validate()){
@@ -1125,6 +1219,9 @@ function hideDialog2() {
 function hideDialog3() {		
 	dijit.byId("popup_doc_type").hide();
 }
+function hideDialog4() {		
+	dijit.byId("popup_nation").hide();
+}
 
 var url_add_job = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-job")); ?>';
 function addJob(){
@@ -1177,6 +1274,7 @@ function addJob(){
 		<button type="button" onClick="take_snapshot()" class="btn btn-success btn-sm">ចុចថត</button>
 	</div>
 </div>
+
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_dept2" >
 		<form style="background-color: buttonface;" id='frm_add_tran1' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -1185,7 +1283,7 @@ function addJob(){
 				<td>
 					<fieldset style="background-color: buttonface;">
 					<legend align="center" ><?php echo $tr->translate('ADD_OCCUPATION');?></legend>
-						<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
+						<table style="margin: 0 auto; width: 100%;  padding:10px; line-height: 35px;" cellspacing="7" >
 							<tr>
 								<td><?php echo $tr->translate('TITLE');?></td>
 								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="occu_name" name="occu_name" value="" type="text"></td>
@@ -1224,7 +1322,7 @@ function addJob(){
 					<td>
 						<fieldset style="background-color: buttonface;">
 						<legend align="center" ><?php echo $tr->translate('ADD_NATION');?></legend>
-							<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
+							<table style="margin: 0 auto; width: 100%;  padding:10px; line-height:35px;" cellspacing="7" >
 								<tr>
 								<td><?php echo $tr->translate('KH_NAME');?></td>
 								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_kh" name="title_kh" value="" type="text"></td>
@@ -1244,7 +1342,7 @@ function addJob(){
 								<tr>
 									<td colspan="4" align="center">
 										<input type="button" value="ចាកចេញ" label="Close" id="hide_nation" name="hide_nation" dojoType="dijit.form.Button" 
-										​ ​​iconClass="dijitIconUndo" onclick="dijit.byId('popup_nation').hide();"/>
+										​ ​​iconClass="dijitIconUndo" onclick="hideDialog4();"/>
 										<input type="button" value="save" label="SAVE" id="save_nation" name="save_nation" dojoType="dijit.form.Button" 
 										 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNationBy();"/>
 									</td>

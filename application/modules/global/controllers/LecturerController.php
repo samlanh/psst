@@ -115,10 +115,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_update = $frm_techer;
 		
-// 		$_db = new Test_Model_DbTable_DbStudentTest();
-// 		$rows  = $_db->getStudentTestById($id);
-// 		$this->view->rss = $rows;
-// 		print_r($this->view->rss); exit();
+		//print_r($this->view->rs); exit();
 	}
 	function addPositionAction(){
 		if($this->getRequest()->isPost()){

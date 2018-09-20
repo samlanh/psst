@@ -56,35 +56,26 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 // 		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
 // 		$studen_national->setMultiOptions($arr_opt);
 		
-		$_arr_opt_nation = array(""=>$tr->translate("PLEASE_SELECT"),"-1"=>$tr->translate("ADD_NEW"));
-		$optionNation = $_db->getViewByType(21);//Nation
-		if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
-		$studen_national = new Zend_Dojo_Form_Element_FilteringSelect("studen_national");
-		$studen_national->setMultiOptions($_arr_opt_nation);
-		$studen_national->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
-				'onChange'=>'popupNation(1);',
-				'missingMessage'=>'Invalid Module!',
-				'class'=>'fullside height-text',));
+// 		$_arr_opt_nation = array(""=>$tr->translate("PLEASE_SELECT"),"-1"=>$tr->translate("ADD_NEW"));
+// 		$optionNation = $_db->getViewByType(21);//Nation
+// 		if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
+// 		$studen_national = new Zend_Dojo_Form_Element_FilteringSelect("studen_national");
+// 		$studen_national->setMultiOptions($_arr_opt_nation);
+// 		$studen_national->setAttribs(array(
+// 				'dojoType'=>'dijit.form.FilteringSelect',
+// 				'required'=>'true',
+// 				'onChange'=>'popupNation(1);',
+// 				'missingMessage'=>'Invalid Module!',
+// 				'class'=>'fullside height-text',));
 		
-		$_nation = new Zend_Dojo_Form_Element_FilteringSelect("nation");
-		$_nation->setMultiOptions($_arr_opt_nation);
-		$_nation->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
-				'onChange'=>'popupNation(2);',
-				'missingMessage'=>'Invalid Module!',
-				'class'=>'fullside height-text',));
-		
-		$fa_national = new Zend_Dojo_Form_Element_FilteringSelect("fa_national");
-		$fa_national->setMultiOptions($_arr_opt_nation);
-		$fa_national->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
-				'onChange'=>'popupNation(3);',
-				'missingMessage'=>'Invalid Module!',
-				'class'=>'fullside height-text',));
+// 		$_nation = new Zend_Dojo_Form_Element_FilteringSelect("nation");
+// 		$_nation->setMultiOptions($_arr_opt_nation);
+// 		$_nation->setAttribs(array(
+// 				'dojoType'=>'dijit.form.FilteringSelect',
+// 				'required'=>'true',
+// 				'onChange'=>'popupNation(2);',
+// 				'missingMessage'=>'Invalid Module!',
+// 				'class'=>'fullside height-text',));
 	
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
@@ -271,17 +262,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'class'=>'fullside',
 		));
 		// 		$fa_dob->setValue();
-		$mom_nation =  new Zend_Dojo_Form_Element_FilteringSelect('mom_nation');
-		$mom_nation->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'onChange'=>'getallGrade();getStudentNo()',
-		
-		));
-		$rs_nation = $_db->getAllNation();
-		$arr_opt = array();
-		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
-		$mom_nation->setMultiOptions($arr_opt);
 		
 		
 		$mon_phone = new Zend_Dojo_Form_Element_ValidationTextBox('mon_phone');
@@ -299,17 +279,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'class'=>'fullside',
 		));
 		// 		$fa_dob->setValue();
-		$guardian_national =  new Zend_Dojo_Form_Element_FilteringSelect('guardian_national');
-		$guardian_national->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'onChange'=>'getallGrade();getStudentNo()',
-		
-		));
-		$rs_nation = $_db->getAllNation();
-		$arr_opt = array();
-		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
-		$guardian_national->setMultiOptions($arr_opt);
 		
 		$from_school = new Zend_Dojo_Form_Element_TextBox('from_school');
 		$from_school->setAttribs(array('dojoType'=>$this->text,
@@ -333,7 +302,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$name_kh->setValue($data['stu_khname']);
 			$name_en->setValue($data['stu_enname']);
 			$last_name->setValue($data['last_name']);
-			$studen_national->setValue($data['nationality']);
 			$_sex->setValue($data['sex']);
 			if (!empty($data['dob'])){
 			$date_of_birth->setValue(date("Y-m-d",strtotime($data['dob'])));
@@ -341,7 +309,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$pob->setValue($data['pob']);
 			$phone->setValue($data['tel']);
 			$home_note->setValue($data['home_num']);
-			$_stutype->setValue($data['stu_denttype']);
+		//	$_stutype->setValue($data['stu_denttype']);
 			$way_note->setValue($data['street_num']);
 			$village_note->setValue($data['village_name']);
 			$commun_note->setValue($data['commune_name']);
@@ -359,22 +327,18 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			if (!empty($data['father_dob'])){
 			$fa_dob->setValue(date("Y-m-d",strtotime($data['father_dob'])));
 			}
-			$fa_national->setValue($data['father_nation']);
 			$fa_phone->setValue($data['father_phone']);
 			$mom_name_en->setValue($data['mother_enname']);
 			if (!empty($data['mother_dob'])){
 			$mo_dob->setValue(date("Y-m-d",strtotime($data['mother_dob'])));
 			}
-			$mom_nation->setValue($data['mother_nation']);
 			$mon_phone->setValue($data['mother_phone']);
 			$guardian_name_en->setValue($data['guardian_enname']);
 			if (!empty($data['guardian_dob'])){
 			$guardian_dob->setValue(date("Y-m-d",strtotime($data['guardian_dob'])));
 			}
-			$guardian_national->setValue($data['guardian_nation']);
 			$guardian_phone->setValue($data['guardian_tel']);
 			
-			$_nation->setValue($data['nation']);
 			$from_school->setValue($data['from_school']);
 			$sponser->setValue($data['sponser']);
 			$sponser_phone->setValue($data['sponser_phone']);
@@ -386,9 +350,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$name_kh,
 						$name_en,
 						$last_name,
-						$studen_national,
 						$_sex,
-						$_nation,
 						$date_of_birth,
 						$pob,
 						$_stutype,
@@ -409,15 +371,12 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$remark,
 						$fa_name_en,
 						$fa_dob,
-						$fa_national,
 						$fa_phone,
 						$mom_name_en,
 						$mo_dob,
-						$mom_nation,
 						$mon_phone,
 						$guardian_name_en,
 						$guardian_dob,
-						$guardian_national,
 						$guardian_phone,
 						$from_school,
 						$sponser,

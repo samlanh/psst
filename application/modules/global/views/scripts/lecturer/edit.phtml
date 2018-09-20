@@ -379,7 +379,6 @@ input.btn_borwse_image {
 		</form>
     </div>
  </div>
-
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.Textarea");
@@ -551,7 +550,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			}
 		});
 	}
-	function AllRefresh(){
+	function AllRefresh(){ 
 		loadingBlock();
 		pro_id = dijit.byId('province_id').get('value');
 		if(pro_id!=''){

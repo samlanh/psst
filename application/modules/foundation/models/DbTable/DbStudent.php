@@ -99,10 +99,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	public function getStudentById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT *,(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id FROM rms_student as s WHERE s.stu_id =".$id." AND s.customer_type=1";
+		$sql = "SELECT *,(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id 
+				FROM rms_student as s, 
+				rms_view AS vs 
+				WHERE s.stu_id =".$id." 
+				AND s.customer_type=1  AND vs.id = ".$id." ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission();
 		return $db->fetchRow($sql);
+		echo $sql; exit();
 	}
 	
 	public function getStudentDocumentById($id){
@@ -319,7 +324,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'stu_enname'	=>$_data['name_en'],
 					'stu_khname'	=>$_data['name_kh'],
 					'sex'			=>$_data['sex'],
-					'is_stu_new'	=>$_data['student_type'],
+			//		'is_stu_new'	=>$_data['student_type'],
 					'nationality'	=>$_data['studen_national'],
 					'nation'		=>$_data['nation'],
 					'dob'			=>$_data['date_of_birth'],
@@ -438,6 +443,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$arra=array(
 					'degree'	=>$_data['degree'],
 			);
+			
 			$where = " stu_id = ".$_data["id"];
 			$this->update($arra, $where);
 			

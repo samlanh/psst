@@ -155,6 +155,11 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_JOB")));
 		$this->view->occupation = $row;
 		
+		$row = $_db->getAllNation(); // Nation language
+		array_unshift($row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0, 'name' => $this->tr->translate("SELECT_NATION")));
+		$this->view->nation = $row;
+		
 		$row = $_db->getAllLangLevel(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));

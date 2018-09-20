@@ -104,33 +104,46 @@ input.btn_borwse_image {
 				                   		<?php echo $frm->getElement("name_kh");?>
 				                   </div>
 				                </div>
-				              
+				              	<div class="form-group">
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("Last Name");?> <span class="required">*</span> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("last_name");?>
+				                   </div>
+				                </div>
 				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_EN");?> <span class="required">*</span> :
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("First Name");?> <span class="required">*</span> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("name_en");?>
+				                   </div>
+				                </div>
+				                 <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("sex");?>
+				                   </div>
+				                </div>
+				                 <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_TYPE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("stu_denttype");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input id="nation" />
 				                   </div>
 				                </div>
 				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("studen_national");?>
-				                   </div>
-				                </div>
-								<div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("nation");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("sex");?>
+				                   		<input id="studen_national" />
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -358,7 +371,7 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("fa_national");?>
+				                   		<input id="fa_national" />
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -399,7 +412,7 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("mom_nation");?>
+				                   		<input id="mom_nation" />
 				                   </div>
 				                </div> 
 				                <div class="form-group">
@@ -440,7 +453,7 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("guardian_national");?>
+				                   		<input id="guardian_national" />
 				                   </div>
 				                </div> 
 				                <div class="form-group">
@@ -719,6 +732,142 @@ dojo.ready(function(){
 	}
 
 	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "nation",
+	    name: "nation",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	    nation = dijit.byId('nation').get('value');
+	    if(nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',1);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "nation");
+	dijit.byId('nation').attr('value',"<?php echo $this->rs['nation']?>");
+	nation = dijit.byId('nation').get('value');
+	if(nation==''){
+		dijit.byId('nation').attr('value',0);
+	}
+	 
+
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "studen_national",
+	    name: "studen_national",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	   	stu_nation = dijit.byId('studen_national').get('value');
+	    if(stu_nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',2);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "studen_national");
+	dijit.byId('studen_national').attr('value',"<?php echo $this->rs['nationality']?>");
+	nation = dijit.byId('studen_national').get('value');
+	if(nation==''){
+		dijit.byId('studen_national').attr('value',0);
+	}
+	
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "fa_national",
+	    name: "fa_national",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	    fa_nation = dijit.byId('fa_national').get('value');
+	    if(fa_nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',3);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "fa_national");
+	dijit.byId('fa_national').attr('value',"<?php echo $this->rs['father_nation']?>");
+	fa_nation = dijit.byId('fa_national').get('value');
+	if(fa_nation==''){
+		dijit.byId('fa_national').attr('value',0);
+	}
+
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "mom_nation",
+	    name: "mom_nation",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	    mom_nation = dijit.byId('mom_nation').get('value');
+	    if(mom_nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',4);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "mom_nation");
+	dijit.byId('mom_nation').attr('value',"<?php echo $this->rs['mother_nation']?>");
+	mom_nation = dijit.byId('mom_nation').get('value');
+	if(mom_nation==''){
+		dijit.byId('mom_nation').attr('value',0);
+	} 
+
+	new dijit.form.FilteringSelect({
+		store: nation_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,
+	    id: "guardian_national",
+	    name: "guardian_national",  
+	    queryExpr: "*${0}*",
+		autoComplete: true,
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
+	    onChange: function() {          
+	   	gurdian_nation = dijit.byId('guardian_national').get('value');
+	    if(gurdian_nation==-1){
+	   	 dijit.byId("popup_nation").show();
+		   	dijit.byId('value_j').attr('value',5);
+	     }
+	    else {
+	    }  
+	   } 
+	}, "guardian_national");
+	dijit.byId('guardian_national').attr('value',"<?php echo $this->rs['guardian_nation']?>");
+	guardian_nation = dijit.byId('guardian_national').get('value');
+	if(guardian_nation==''){
+		dijit.byId('guardian_national').attr('value',0);
+	}
+	
+	new dijit.form.FilteringSelect({
 		store: district_store,
 		autoComplete:false,
 		queryExpr:'*${0}*',
@@ -855,6 +1004,22 @@ function filterVillage(){
 	});
 }
 
+function AllRefresh(){
+	loadingBlock();
+	student_province = dijit.byId('student_province').get('value');
+	if(student_province!=''){
+		filterDistrict();
+	}
+	distric_note = dijit.byId('distric_note').get('value');
+	if(distric_note!='' || distric_note!=-1){
+		filterCommune();
+	}
+	commun_note = dijit.byId('commun_note').get('value');
+	if(commun_note!='' || commun_note!=-1){
+		filterVillage();
+	}
+	
+}
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
 	function getallGrade(condition){
@@ -978,6 +1143,93 @@ function hideDialog2() {
 function hideDialog3() {		
 	dijit.byId("popup_doc_type").hide();
 }
+function hideDialog4() {		
+	dijit.byId("popup_nation").hide();
+}
+
+var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+var nation_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+var nation_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+var nation_store3  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+var nation_store4  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
+function addNationBy(){
+	if(dijit.byId('frm_nation_kh').validate()){
+	type=dijit.byId('value_j').get('value');
+	nation=dijit.byId('nation').get('value');
+	studen_national=dijit.byId('studen_national').get('value');
+	fa_national=dijit.byId('fa_national').get('value');
+	mom_nation=dijit.byId('mom_nation').get('value');
+	guardian_national=dijit.byId('guardian_national').get('value');
+	dojo.xhrPost({
+		url:url_add_nation,
+		form: dojo.byId("frm_nation_kh"),
+		handleAs:"json",
+		load: function(data) {
+			var Itemmake = { 
+			    		id: data,
+				        name: dijit.byId('title_kh').get('value')
+				   };
+		if(type==1){	   
+	 		addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+			dijit.byId('guardian_national').attr('value',fa_job);
+			dijit.byId('studen_national').attr('value',mo_job);
+			dijit.byId('mom_nation').attr('value',fa_job);
+			dijit.byId('fa_national').attr('value',fa_job);
+		}else if(type==2){
+			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+	 		dijit.byId('nation').attr('value',mo_job);
+			dijit.byId('guardian_national').attr('value',fa_job);
+			dijit.byId('mom_nation').attr('value',fa_job);
+			dijit.byId('fa_national').attr('value',fa_job);
+		}else if(type==3){
+			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+	 		dijit.byId('nation').attr('value',mo_job);
+			dijit.byId('guardian_national').attr('value',fa_job);
+			dijit.byId('studen_national').attr('value',mo_job);
+			dijit.byId('mom_nation').attr('value',fa_job);
+		}else if(type==4){
+			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+	 		dijit.byId('nation').attr('value',mo_job);
+			dijit.byId('guardian_national').attr('value',fa_job);
+			dijit.byId('studen_national').attr('value',mo_job);
+			dijit.byId('fa_national').attr('value',fa_job);
+		}else if(type==5){
+			addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('studen_national'), nation_store1, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('fa_national'), nation_store2, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('mom_nation'), nation_store3, Itemmake, data);
+	 		addDataToSelectbox(dijit.byId('guardian_national'), nation_store4, Itemmake, data);
+			dijit.byId('nation').attr('value',mo_job);
+			dijit.byId('studen_national').attr('value',mo_job);
+			dijit.byId('mom_nation').attr('value',fa_job);
+			dijit.byId('fa_national').attr('value',fa_job);
+		}
+	    dijit.byId('frm_nation_kh').reset();
+	    dijit.byId("popup_nation").hide();
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+	}
+}
 
 var url_add_job = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-job")); ?>';
 function addJob(){
@@ -1022,44 +1274,35 @@ function addJob(){
 	});
 }
 </script>
+
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:500px" id="popup_dept2" >
-		<form style="background-color: buttonface; width:15cm;" id='frm_add_tran1' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_dept2" >
+		<form style="background-color: buttonface;" id='frm_add_tran1' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<legend align="center" ><?php echo $tr->translate('ADD_OCCUPATION');?></legend><br />
-						<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
+					<legend align="center" ><?php echo $tr->translate('ADD_OCCUPATION');?></legend>
+						<table style="margin: 0 auto; width: 100%;  padding:10px; line-height: 35px;" cellspacing="7" >
 							<tr>
-								<td><?php echo $tr->translate('OCCUPATION_KHNAME');?></td>
-								<td>
-									<input dojoType="dijit.form.ValidationTextBox"  class="fullside" id="occu_name" name="occu_name" value="" type="text">
-								</td>
+								<td><?php echo $tr->translate('TITLE');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="occu_name" name="occu_name" value="" type="text"></td>
 							</tr>
-							<tr>
-								<td><?php echo $tr->translate('OCCUPATION_ENNAME');?></td>
-								<td>
-									<input dojoType="dijit.form.TextBox" type="hidden" name="value_j" id="value_j" value=""   />
-									<input dojoType="dijit.form.ValidationTextBox"  class="fullside" id="occu_enname" name="occu_enname" value="" type="text">
-								</td>
-							</tr>
-							<tr>
 							<tr>
 								<td><?php echo $tr->translate('STATUS');?></td>
-								<td>
-									<select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"  class="fullside">
-	    								<option value="1" label="active">Active</option>
-	    								<option value="0" label="deactive">Deactive</option>
+								<td><select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"   class="fullside">
+	    								<option value="1" >Active</option>
+	    								<option value="0" >Deactive</option>
 									</select>
 								</td>
 							</tr>
+							<input type="hidden" name="" id="value_j" dojoType="dijit.form.TextBox" />
 							<tr>
 								<td colspan="4" align="center">
+									<input type="button" value="ចាកចេញ" label="Close" id="close" name="close" dojoType="dijit.form.Button" 
+									​ ​​iconClass="dijitIconUndo" onclick="hideDialog1();"/>
 									<input type="button" value="save" label="SAVE" id="save" name="save" dojoType="dijit.form.Button" 
 									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addJob();"/>
-									<input type="button" value="ចាកចេញ" label="ចាកចេញ" id="close" name="close" dojoType="dijit.form.Button" 
-									​ ​​iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog1();"/>
 								</td>
 							</tr>
 						</table>
@@ -1070,7 +1313,47 @@ function addJob(){
 		</form>
 	</div>
 </div>
-
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_nation" >
+		<form style="background-color: buttonface;" id='frm_nation_kh' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+				<tr>
+					<td>
+						<fieldset style="background-color: buttonface;">
+						<legend align="center" ><?php echo $tr->translate('ADD_NATION');?></legend>
+							<table style="margin: 0 auto; width: 100%;  padding:10px; line-height:35px;" cellspacing="7" >
+								<tr>
+								<td><?php echo $tr->translate('KH_NAME');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_kh" name="title_kh" value="" type="text"></td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate('EN_NAME');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_en" name="title_en" value="" type="text"></td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate('STATUS');?></td>
+								<td><select name="status_na" id="status_na" dojoType="dijit.form.FilteringSelect"   class="fullside">
+	    								<option value="1" >Active</option>
+	    								<option value="0" >Deactive</option>
+									</select>
+								</td>
+							</tr>
+								<tr>
+									<td colspan="4" align="center">
+										<input type="button" value="ចាកចេញ" label="Close" id="hide_nation" name="hide_nation" dojoType="dijit.form.Button" 
+										​ ​​iconClass="dijitIconUndo" onclick="hideDialog4();"/>
+										<input type="button" value="save" label="SAVE" id="save_nation" name="save_nation" dojoType="dijit.form.Button" 
+										 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addNationBy();"/>
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_lang_level" >
 		<form style="background-color: buttonface;" id='frm_lang_level' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -1101,7 +1384,6 @@ function addJob(){
 		</form>
 	</div>
 </div>
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_know_by" >
 		<form style="background-color: buttonface;" id='frm_know_by' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -1283,9 +1565,9 @@ date_format = '"dd/MM/yyyy"';
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DATE_END");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
+			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_TO");?></th>';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -1297,9 +1579,9 @@ date_format = '"dd/MM/yyyy"';
 					template+='<option value="'+'<?php echo $doc_type['id']?>'+'"><?php echo $doc_type['name'];?></option>';
 				<?php }}?>
 			template+='</select></td>';
-			template+='<td width="20%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="20%"><input type="text" class="fullside" name="date_give_'+col+'" id="date_give_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="20%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
+			template+='<td width="20%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="25%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
 		
 		tmp='<tr id="row'+col+'">';
@@ -1324,9 +1606,9 @@ date_format = '"dd/MM/yyyy"';
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DATE_BORROW");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
+			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_TO");?></th>';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -1338,9 +1620,9 @@ date_format = '"dd/MM/yyyy"';
 					template+='<option value="'+'<?php echo $doc_type['id']?>'+'"><?php echo $doc_type['name'];?></option>';
 				<?php }}?>
 			template+='</select></td>';
-			template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_give_'+col+'" id="date_give_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
+			template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="25%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
 		
 		tmp='<tr id="row'+col+'">';

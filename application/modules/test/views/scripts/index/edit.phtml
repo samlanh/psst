@@ -766,44 +766,44 @@ function popupNation(key){
 }
 var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
-function addNationBy(){
-	if(dijit.byId('frm_nation_kh').validate()){
-		loadingBlock();	
-		dojo.xhrPost({
-			url:url_add_nation,
-			form: dojo.byId("frm_nation_kh"),
-			handleAs:"json",
-			load: function(data) {
-				var indexkey = $("#indexkey").val();
-					var Itemmake = { 
-						 id: data,
-						 name: dijit.byId('title_kh').get('value')
-					   };
-				   if(indexkey==1){
-					   addDataToSelectbox(dijit.byId('nationality'), nation_store, Itemmake, data);
-					  	nation =  dijit.byId('nation').get('value');
-					   dijit.byId('nation').set('store', nation_store);
-					   if(nation!=""){
-					   dijit.byId('nation').set('value', nation);
-					   }
-				   }else{	   
-				   	  addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
-					  dijit.byId('nationality').set('store', nation_store);
-					  nation =  dijit.byId('nationality').get('value');
-					  if(nation!=""){
-					  dijit.byId('nationality').set('value', nation);
-					  }
-				   }
-				   dijit.byId('frm_nation_kh').reset();
-				   dijit.byId("popup_nation").hide();
-				   HideloadingBlock();
-			},
-			error: function(err) {
-				alert(err);
+		function addNationBy(){
+			if(dijit.byId('frm_nation_kh').validate()){
+				loadingBlock();	
+				dojo.xhrPost({
+					url:url_add_nation,
+					form: dojo.byId("frm_nation_kh"),
+					handleAs:"json",
+					load: function(data) {
+						var indexkey = $("#indexkey").val();
+							var Itemmake = { 
+								 id: data,
+								 name: dijit.byId('title_kh').get('value')
+							   };
+						   if(indexkey==1){
+							   addDataToSelectbox(dijit.byId('nationality'), nation_store, Itemmake, data);
+							  	nation =  dijit.byId('nation').get('value');
+							   dijit.byId('nation').set('store', nation_store);
+							   if(nation!=""){
+							   dijit.byId('nation').set('value', nation);
+							   }
+						   }else{	   
+						   	  addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+							  dijit.byId('nationality').set('store', nation_store);
+							  nation =  dijit.byId('nationality').get('value');
+							  if(nation!=""){
+							  dijit.byId('nationality').set('value', nation);
+							  }
+						   }
+						   dijit.byId('frm_nation_kh').reset();
+						   dijit.byId("popup_nation").hide();
+						   HideloadingBlock();
+					},
+					error: function(err) {
+						alert(err);
+					}
+				});
 			}
-		});
-	}
-}
+		}
 		dojo.require("dojo.data.ItemFileWriteStore");  
 		var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 		var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );

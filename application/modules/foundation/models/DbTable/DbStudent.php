@@ -319,7 +319,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$is_setgroup=1;
 			}
 			$_arr=array(
-// 					'branch_id'		=>$branch_id,
+ 					'branch_id'		=>$_data['branch_id'],
 					'user_id'		=>$this->getUserId(),
 					'stu_enname'	=>$_data['name_en'],
 					'stu_khname'	=>$_data['name_kh'],
@@ -451,6 +451,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where="stu_id = ".$_data["id"];
 			$this->delete($where);
 			
+			if(!empty($_data['identity'])){
 			$ids = explode(',', $_data['identity']);
 			foreach ($ids as $i){
 					$_arr = array(
@@ -463,7 +464,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					);
 					$this->insert($_arr);
 			}
-			
+			}
 			$db->commit();//if not errore it do....
 		}catch(Exception $e){
 			$db->rollBack();

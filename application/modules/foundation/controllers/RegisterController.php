@@ -115,6 +115,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->room = $row =$db->getAllRoom();
 		$this->view->province = $row =$db->getProvince();
 		
+		$_db = new Global_Model_DbTable_DbTeacher();
+		$this->view->branch_id = $_db->getAllBranch();
+		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister();
 		Application_Model_Decorator::removeAllDecorator($frm_register);
@@ -292,6 +295,11 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_JOB")));
 		$this->view->occupation = $row;
+		
+		$row = $_db->getAllNation(); // Nation language
+		array_unshift($row, array ( 'id' => -1,'name' => $this->tr->translate("ADD_NEW")));
+		array_unshift($row, array ( 'id' => 0, 'name' => $this->tr->translate("SELECT_NATION")));
+		$this->view->nation = $row;
 		
 		$row = $_db->getAllLangLevel(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));

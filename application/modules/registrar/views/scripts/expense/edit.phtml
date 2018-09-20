@@ -280,11 +280,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.store.Memory");
-dojo.ready(function(){
-	getReceiptNumber("");
-	addRow();
-	dijit.byId('payment_method').attr('value',1);
-});
 function hideDialog(){
 	dijit.byId('terms').hide();
 }
@@ -307,7 +302,6 @@ function getReceiptNumber(receipt){
 			alert(err);
 		}
 	});
-	initialize();
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();
@@ -334,7 +328,7 @@ function netTotal() {
 	}
 	dijit.byId('total_amount').attr('value',netTotal);
  }
-function initialize(){ //alert(1);
+function oldRow(){ //alert(1);
 	<?php  if(!empty($this->rows)){ //echo '111111';exit();
 		foreach($this->rows as $row){ 
 	?>
@@ -376,6 +370,9 @@ function initialize(){ //alert(1);
 	
 	<?php }}?>
 }
+dojo.ready(function(){ 
+	oldRow();
+});
 var template = '';
 var service = '';
 var col = 0;

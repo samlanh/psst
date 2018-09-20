@@ -151,6 +151,8 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					$this->_name = 'rms_teacher_document';
 					$where="stu_id = ".$_data["id"];
 					$this->delete($where);
+					
+					if(!empty($_data['identity'])){
 					$ids = explode(',', $_data['identity']);
 					foreach ($ids as $i){
 							$_arr = array(
@@ -163,7 +165,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 									'type'			=>2,
 							);
 						$this->insert($_arr);
-					}
+					}}
 					$_db->commit();
 		}catch(Exception $e){
     		$_db->rollBack();
@@ -195,7 +197,10 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	}
 	function getAllTeacher($search){
 		$db = $this->getAdapter();
-		$sql = 'SELECT g.id, g.teacher_code, g.teacher_name_kh,
+		$sql = 'SELECT g.id, 
+				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
+				g.teacher_code, 
+				g.teacher_name_kh,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,

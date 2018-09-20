@@ -7,7 +7,6 @@ class Global_LecturerController extends Zend_Controller_Action {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
-	
 	public function indexAction(){
 		try{
 			$db = new Global_Model_DbTable_DbTeacher();
@@ -26,9 +25,9 @@ class Global_LecturerController extends Zend_Controller_Action {
 			}
 			$rs_rows= $db->getAllTeacher($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("ID_NUMBER","TEACHER_NAME","SEX","NATIONALITY","DEGREE","PHONE","EMAIL","NOTE","STATUS");
+			$collumns = array("BRANCH_NAME","ID_NUMBER","TEACHER_NAME","SEX","NATIONALITY","DEGREE","PHONE","EMAIL","NOTE","STATUS");
 			$link=array('module'=>'global','controller'=>'lecturer','action'=>'edit',);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link,'branch_name'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -58,6 +57,13 @@ class Global_LecturerController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$optionNation = $_dbgb->getViewByType(21);//Nation
+		array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+		array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
+		$this->view->nation = $optionNation;
 		
 		$tsub=new Global_Form_FrmTeacher();
 		$frm_techer=$tsub->FrmTecher();

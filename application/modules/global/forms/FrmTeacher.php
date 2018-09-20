@@ -48,7 +48,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				'class'=>'fullside height-text',));
 		
 		$phone = new Zend_Dojo_Form_Element_NumberTextBox('phone');
-		$phone->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true'));
+		$phone->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true','placeholder'=>$this->tr->translate("PLEASE_SELECT_PHONE")));
 		
 		$sex = new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
@@ -134,7 +134,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_passport->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 		
 		$_card = new Zend_Dojo_Form_Element_NumberTextBox('card_no');
-		$_card->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true'));
+		$_card->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true','placeholder'=>$this->tr->translate("PLEASE_SELECT_CARD_NO")));
 		
 		$_experiences = new Zend_Dojo_Form_Element_Textarea('experiences');
 		$_experiences->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));

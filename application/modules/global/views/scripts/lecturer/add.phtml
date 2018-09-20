@@ -426,6 +426,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			id: "district_name",
 			searchAttr: "name",
 			class: 'fullside',
+			placeHolder:"<?php echo $tr->translate("PLEASE_DISTRICT_NAME");?>",
 			missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
 				onChange: function() {
 					district_name = dijit.byId('district_name').get('value');
@@ -445,6 +446,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			id: "commune_name",
 			searchAttr: "name",
 			class: 'fullside',
+			placeHolder:"<?php echo $tr->translate("PLEASE_COMMUNE_NAME");?>",
 			missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឃុំ/សង្កាត់",	
 				onChange: function() {
 					commune_name = dijit.byId('commune_name').get('value');
@@ -466,6 +468,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			id: "village_name",
 			searchAttr: "name",
 			class: 'fullside',
+			placeHolder:"<?php echo $tr->translate("PLEASE_VILLAGE_NAME");?>",
 			missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះភូមិ!",	
 				onChange: function() {
 					vill = dijit.byId('village_name').get('value');
@@ -641,10 +644,26 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 	}
 	function submitDataClose(){
 		degree=dijit.byId('degree').get('value');
+		nationality=dijit.byId('nationality').get('value');
+		nation=dijit.byId('nation').get('value');
+		branch_id=dijit.byId('branch_id').get('value');
+		if(branch_id==0){
+			alert('សូមជ្រើសរើសសាខា!');dijit.byId('branch_id').focus();return false;
+			return false;
+		}
+		if(nationality==0){
+			alert('សូមជ្រើសរើសសញ្ជាតិ!');dijit.byId('nationality').focus();return false;
+			return false;
+		}
+		if(nation==0){
+			alert('សូមជ្រើសរើសជនជាតិ!');dijit.byId('nation').focus();return false;
+			return false;
+		}
 		if(degree==0){
 			alert('សូមជ្រើសរើសកម្រិតសិក្សា!');dijit.byId('degree').focus();return false;
 			return false;
 		}
+		
 		if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
 			alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
 			dojo.byId('password').value = '';

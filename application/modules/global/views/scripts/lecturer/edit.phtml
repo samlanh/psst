@@ -215,14 +215,14 @@ input.btn_borwse_image {
 	                   </label>
 	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ACCOUNT_NAME");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ACCOUNT_NAME");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("user_name");?>
 	                   </div>
 	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PASSWORD");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PASSWORD");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
@@ -230,7 +230,7 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CONFIRM_PASSWORD");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CONFIRM_PASSWORD");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
@@ -238,12 +238,18 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name" style="line-height: 8.75;"><?php echo $tr->translate("SELECT_PICTURE");?>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name" style="line-height: 8.75;"><?php echo $tr->translate("SELECT_PICTURE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<div class="account-image">
 								<div class="image-box">
-									<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+										<?php
+										$images = $this->baseUrl().'/images/no-profile.png';
+										 if (!empty($this->rs['photo'])){
+										$images = $this->baseUrl().'/images/'.$this->rs['photo'];
+										}										 
+									?>					
+								<img id="profile_wiew" src="<?php echo $images;?>" alt=""  />
 								</div>
 								<div class="button_browse">
 								<div id='preview'></div>	
@@ -253,6 +259,13 @@ input.btn_borwse_image {
 							</div>		
 	                   </div>
 	                </div>
+	                <div class="form-group">
+	                 	<label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                		<?php echo $frm->getElement("status");?>
+						</div>
+		             </div>
 	            </div>
 	         </div>
 	         <div class="card-box">
@@ -470,6 +483,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				}
 			}, "village_name");
 			filterDistrict();
+			initialize();
 	});
 </script>
 <div class="dijitHidden">
@@ -556,7 +570,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 	function AllRefresh(){ 
 		loadingBlock();
 		pro_id = dijit.byId('province_id').get('value');
-		if(pro_id!=''){
+		if(pro_id!=''){ 
 			filterDistrict();
 		}
 		district_name = dijit.byId('district_name').get('value');
@@ -798,7 +812,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 	function hideDialog3() {		
 		dijit.byId("popup_doc_type").hide();
 	}
-	function initialize(){
+	function initialize(){ 
 		<?php if(!empty($this->row)){ //echo '111111';exit();
 			foreach($this->row as $row){ 
 		?>

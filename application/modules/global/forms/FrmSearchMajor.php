@@ -111,6 +111,25 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		));	
 		$degree_opt = $db->getAllDegree();
 		$_degree->setMultiOptions($degree_opt);
+		
+		
+		$_arr_opt_nation = array(""=>$this->tr->translate("SELECT_NATION"),);
+		$optionNation = $db->getViewByType(21);//Nation
+		if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
+		$_nationality = new Zend_Dojo_Form_Element_FilteringSelect("nationality");
+		$_nationality->setMultiOptions($_arr_opt_nation);
+		$_nationality->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside height-text',));
+		
+		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT_BRANCH"));
+		$optionBranch = $db->getAllBranch();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+		$_branch_id->setMultiOptions($_arr_opt_branch);
+		$_branch_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside height-text',));
  //		$_db = new Application_Model_DbTable_DbGlobal();
 // 		//$rows = $_db->getGlobalDb("SELECT DISTINCT subject_name_en FROM rms_teacher WHERE teacher_name_en!='' AND subject_name_en!=''");
 // 		$rows=array();
@@ -135,7 +154,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_status->setValue($request->getParam("status_search"));
 	
 	
-		$this->addElements(array($_title,$_degree,$_status));
+		$this->addElements(array($_title,$_degree,$_branch_id,$_nationality,$_status));
 		if(!empty($_data)){
 		}
 	

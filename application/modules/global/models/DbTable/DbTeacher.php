@@ -17,7 +17,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					$adapter->setDestination($part);
 					$adapter->receive();
 					$photo = $adapter->getFileInfo();
-						
+					//print_r($photo['photo']['name']); exit();
 					if(!empty($photo['photo']['name'])){
 						$pho_name = $photo['photo']['name'];
 					}else{
@@ -43,6 +43,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'nation'  		     => $_data['nation'],
 							'teacher_type'  	 => $_data['teacher_type'],
 					        'tel'  				 => $_data['phone'],
+							'note' 				 => $_data['note'],
 							
 							'village_name' 		 => $_data['village_name'],
 							'commune_name'  	 => $_data['commune_name'],
@@ -68,9 +69,10 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					        'create_date' 		 => date("Y-m-d"),
 					        'user_id'	  		 => $this->getUserId(),
 						);
-						$this->_name="rms_teacher";
 						$id = $this->insert($_arr);
+						
 						$this->_name = 'rms_teacher_document';
+						if(!empty($_data['identity'])){
 						$ids = explode(',', $_data['identity']);
 						foreach ($ids as $i){
 								$_arr = array(
@@ -83,7 +85,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 										'type'			=>2,
 								);
 							$this->insert($_arr);
-						}
+						}}
 						$_db->commit();
 			}catch(Exception $e){
 	    		$_db->rollBack();
@@ -101,6 +103,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				$adapter->setDestination($part);
 				$adapter->receive();
 				$photo = $adapter->getFileInfo();
+				//print_r($photo['photo']['name']); exit();
 				if(!empty($photo['photo']['name'])){
 					$pho_name = $photo['photo']['name'];
 				}else{
@@ -140,7 +143,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						
 						'user_name' 		 => $_data['user_name'],
 						'password' 			 => md5($_data['password']),
-						//'status'   		 => $_data['status'],
+						'status'   			 => $_data['status'],
 						'photo'  			 => $pho_name,
 				        'create_date' 		 => date("Y-m-d"),
 				        'user_id'	  		 => $this->getUserId(),
@@ -221,6 +224,12 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['degree'])){
 			$where.=' AND degree='.$search['degree'];
+		}
+		if(!empty($search['nationality'])){
+			$where.=' AND nationality='.$search['nationality'];
+		}
+		if(!empty($search['branch_id'])){
+			$where.=' AND branch_id='.$search['branch_id'];
 		}
 		if($search['status']>-1){
 			$where.=' AND status='.$search['status'];

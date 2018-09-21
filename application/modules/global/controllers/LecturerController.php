@@ -15,12 +15,16 @@ class Global_LecturerController extends Zend_Controller_Action {
 				$search = array(
 						'title'  => $_data['title'],
 						'degree' => $_data['degree'],
+						'nationality' => $_data['nationality'],
+						'branch_id' => $_data['branch_id'],
 						'status' => $_data['status_search']);
 			}
 			else{
 				$search = array(
 						'title' => '',
 						'degree' => '',
+						'nationality' => '',
+						'branch_id' => '',
 						'status' => -1);
 			}
 			$rs_rows= $db->getAllTeacher($search);
@@ -65,11 +69,6 @@ class Global_LecturerController extends Zend_Controller_Action {
 		array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
 		$this->view->nation = $optionNation;
 		
-		$tsub=new Global_Form_FrmTeacher();
-		$frm_techer=$tsub->FrmTecher();
-		Application_Model_Decorator::removeAllDecorator($frm_techer);
-		$this->view->frm_techer = $frm_techer;
-		
  		$_db = new Application_Model_DbTable_DbGlobal();
 		$row = $_db->getAllDocumentType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
@@ -78,11 +77,10 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
 		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
-		
-		$db = new Global_Model_DbTable_DbTeacher();
-// 		$position = $db->getAllPosition();
-// 		array_unshift($position, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
-// 		$this->view->position = $position;
+		$tsub=new Global_Form_FrmTeacher();
+		$frm_techer=$tsub->FrmTecher();
+		Application_Model_Decorator::removeAllDecorator($frm_techer);
+		$this->view->frm_techer = $frm_techer;
 	}
 	public function editAction()
 	{
@@ -115,13 +113,12 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
 		$row = $_db->getTeacherById($id);
 		$this->view->rs = $row;
-		
 		$tsub = new Global_Form_FrmTeacher();
 		$frm_techer = $tsub->FrmTecher($row);
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_update = $frm_techer;
 		
-		//print_r($this->view->rs); exit();
+		//print_r($this->view->row); exit();
 	}
 	function addPositionAction(){
 		if($this->getRequest()->isPost()){

@@ -23,6 +23,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_title->setAttribs(array('dojoType'=>'dijit.form.TextBox',
 				'onkeyup'=>'this.submit()',
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SEARCH")
 		));
 		$_title->setValue($request->getParam("adv_search"));
 		

@@ -7,7 +7,7 @@
 	$user_id=$session_user->user_id;
 	$frm =  $this->form_search;
 ?>
-<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+<div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
 	<div class="card-content collapse show">
 		<div class="card-box">
 			<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -111,22 +111,23 @@
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_EN"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
-											
-											<td colspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("TEST_DATE"); ?>&nbsp;</td>
+											<td colspan="3">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
 											
 											
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
-											<td rowspan="2">&nbsp;<?php echo $tr->translate("CREATE_DATE"); ?>&nbsp;</td>
+											
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
-											<!-- <td rowspan="2">&nbsp;<?php //echo $tr->translate("STATUS"); ?>&nbsp;</td> -->
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("RESULT_BY"); ?>&nbsp;</td>
 										  </tr>
 										 <tr style="font-size:12px; height: 20px; white-space:nowrap;background: #ccd9ff !important; line-height: 20px; font-weight: bold;" align="center">
 										 	<td>&nbsp;<?php echo $tr->translate("DEGREE"); ?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("RESULT_DATE"); ?>&nbsp;</td>
 										 </tr>
 										 <style> 
-											td{padding:0 3px; }
 											table { page-break-inside:auto }
 											tr{ page-break-inside:avoid; page-break-after:auto }
 										 </style>
@@ -140,13 +141,16 @@
 												    <td><?php echo $rs['stu_enname']." ".$rs['last_name']; ?></td>
 												    <td><?php echo $rs['sex']; ?></td>
 												    <td><?php echo $rs['tel']; ?></td>
+												     <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
 												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?></td>
 												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['grade_result_title']; }?></td>
+												    <td><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
 												    <td><?php echo $rs['note_result']; ?></td>
-												    <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
+												   
 													<td><?php echo $rs['user_id'];?></td>								    
 												    <td <?php if($rs['updated_result_de']==0){echo "style='color:red'";}?>><?php echo $rs['result_status']; ?></td>
-												    <!-- <td <?php //if($rs['register']==0){echo "style='color:red'";}?>><?php //echo $rs['register_status'];?></td> -->								    
+												    <td <?php if($rs['is_registered']==0){echo "style='color:red'";}?>>&nbsp;<?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?>&nbsp;</td>							    
+											  		<td>&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
 											  </tr>
 											  
 											  <?php 
@@ -163,18 +167,32 @@
 										  
 									</table>
 									<?php if (!empty($this->row)){?>
-									<table width="40%" border="1" align="right" style="border:1px solid #000; white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;font-size: 12px;margin-top: 10px;">
+									<table width="40%"  align="right" style=" white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;font-size: 12px;margin-top: 10px;">
+										<!-- 
 										<tr align="center" style="background: #ccd9ff;">
-											<td><?php echo $tr->translate("សិស្សសរុប");?></td>
-											<td><?php echo $tr->translate("បានទទួលលទ្ធផល");?></td>
-											<td><?php echo $tr->translate("មិនទាន់បានទទួលលទ្ធផល");?></td>
-											<!-- <td><?php //echo $tr->translate("បានចុះឈ្មោះ");?></td> -->
-										</tr>
-										<tr align="center">
-											<td><?php echo $i." នាក់";?></td>
-											<td><?php echo $updated_result." នាក់";?></td>
-											<td><?php echo ($i-$updated_result)." នាក់";?></td>
-											<!-- <td><?php //echo $register." នាក់";?></td> -->
+											<td></td>
+											<td><?php //echo $tr->translate("បានទទួលលទ្ធផល");?></td>
+											<td><?php //echo $tr->translate("មិនទាន់បានទទួលលទ្ធផល");?></td>
+											<td><?php //echo $tr->translate("បានចុះឈ្មោះ");?></td>
+										</tr> -->
+										<tr align="right">
+											<td>
+												<ul style=" list-style: none;    padding: 0;">
+													<li>
+														<?php echo $tr->translate("សិស្សសរុប");?> : <?php echo $i." នាក់";?>
+													</li>
+													<li>
+														<?php echo $tr->translate("បានទទួលលទ្ធផល");?> : <?php echo $updated_result." នាក់";?>
+													</li>
+													<li>
+														<?php echo $tr->translate("មិនទាន់បានទទួលលទ្ធផល");?> : <?php echo ($i-$updated_result)." នាក់";?>
+													</li>
+												</ul>
+											</td>
+											<!-- <td><?php //echo $i." នាក់";?></td>
+											<td><?php //echo $updated_result." នាក់";?></td>
+											<td><?php // echo ($i-$updated_result)." នាក់";?></td>
+											<td><?php //echo $register." នាក់";?></td> -->
 										</tr>
 									</table>
 									<?php }?>

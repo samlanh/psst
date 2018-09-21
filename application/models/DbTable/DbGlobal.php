@@ -127,15 +127,25 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			 FROM `rms_users` AS u WHERE u.active=1
 			AND u.is_system =0";
 	   	
-	   	// this case check all user that avaiable in all branch that current user can access
-	   	$sql.= $this->getAccessPermission("u.branch_id");
-	   	
+	   	$session_user=new Zend_Session_Namespace('authstu');
+	   	$branch_list = $session_user->branch_list;
+	   	$level = $session_user->level;
+	   
+	   	if ($level!=1){
+	   		$ids = explode(",", $branch_list);
+	   		$s_where = array();
+	   		foreach ($ids as $id){
+	   			$s_where[] = $id." IN (u.branch_list) ";
+	   		}
+	   		$sql.= ' AND ('.implode(' OR ',$s_where).')';
+	   	}
+// 	   	// this case check all user that avaiable in all branch that current user can access
+// 	   	$sql.= $this->getAccessPermission("u.branch_list");
 	   	//this for check more by branch record of data
 	   	//ex: when we enter register student in which branch filter only user in that branch
 	   	if (!empty($branchId)){
-	   		$sql.=" AND u.branch_id = $branchId";
+	   		$sql.=" AND $branchId IN (u.branch_list)";
 	   	}
-	   	
 	   	return $db->fetchAll($sql);
    }
    

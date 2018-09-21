@@ -138,10 +138,13 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
 					(SELECT first_name FROM rms_users WHERE rms_users.id = str.user_id LIMIT 1) AS user_id,
 					(SELECT name_kh FROM rms_view WHERE TYPE=15 AND key_code = str.updated_result LIMIT 1) AS result_status,
+					(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by,
 					str.create_date AS create_date_exam,
+					str.result_date,
 					str.test_date AS test_date_exam,
 					str.updated_result AS updated_result_de,
-					str.note AS note_result
+					str.note AS note_result,
+					str.is_registered
 					FROM `rms_student` AS st,
 					`rms_student_test_result` AS str
 					WHERE st.is_studenttest =1

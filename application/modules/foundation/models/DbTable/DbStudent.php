@@ -170,7 +170,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$session_user=new Zend_Session_Namespace('authstu');
 				$branch_id = $session_user->branch_id;
 				$_arr= array(
-						'branch_id'		=>$branch_id,
+						'branch_id'		=>$_data['branch_id'],
 						'user_id'		=>$this->getUserId(),
 						'stu_enname'	=>$_data['name_en'],
 						'stu_khname'	=>$_data['name_kh'],
@@ -279,9 +279,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$this->insert($arra);
 				
 				$this->_name = 'rms_student_document';
+				if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				foreach ($ids as $i){
-					if($_data['document_type_'.$i]!=0 AND $_data['document_type_'.$i] != -1){
+					//if($_data['document_type_'.$i]!=0 AND $_data['document_type_'.$i] != -1){
 						$_arr = array(
 								'stu_id'		=>$id,
 								'document_type'	=>$_data['document_type_'.$i],

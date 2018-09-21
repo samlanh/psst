@@ -133,6 +133,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	$branch_list = $session_user->branch_list;
 	   	$level = $session_user->level;
 	   
+	   	$result =array();
 	   	if ($level!=1){
 		   	$bra = explode(",", $branch_list);
 			if (!empty($bra)){
@@ -144,18 +145,22 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					$exp = explode(",", $rs['branch_list']);
 					foreach ($exp as $ss){
 						if (in_array($ss, $array)) {
-							$row[$key] = $rs;
+							$result[$key] = $rs;
 							break;
 						}
 					}
 				}
 			}
 	   	}
+	   	if (!empty($result)){
+	   		$row = $result;
+	   	}
 // 	   	// this case check all user that avaiable in all branch that current user can access
 // 	   	$sql.= $this->getAccessPermission("u.branch_list");
 	   	
 		//this for check more by branch record of data
 	   	//ex: when we enter register student in which branch filter only user in that branch
+	   	$result =array();
 	   	if (!empty($branchId)){
 	   		$bra = explode(",", $branch_list);
 			if (!empty($bra)){
@@ -167,12 +172,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					$exp = explode(",", $rs['branch_list']);
 					foreach ($exp as $ss){
 						if (in_array($ss, $array)) {
-							$row[$key] = $rs;
+							$result[$key] = $rs;
 							break;
 						}
 					}
 				}
 			}
+	   	}
+	   	if (!empty($result)){
+	   		$row = $result;
 	   	}
 	   	return $row;
    }

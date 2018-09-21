@@ -112,7 +112,8 @@ class Test_IndexController extends Zend_Controller_Action
     	//print_r($this->view->rs);exit();
     	$this->view->row_detail=$db->getStudentTestDetail($id);
     	if(empty($row)){
-    		Application_Form_FrmMessage::Sucessfull('You can not edit because student already registered !!! ', "/test/index");
+    		Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
+    		exit();
     	}
     	
     	$this->view->testresult = $db->getAllTestResult($id);

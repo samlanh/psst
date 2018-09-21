@@ -141,7 +141,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	}
 // 	   	// this case check all user that avaiable in all branch that current user can access
 // 	   	$sql.= $this->getAccessPermission("u.branch_list");
-	   	//this for check more by branch record of data
+	   	
+		//this for check more by branch record of data
 	   	//ex: when we enter register student in which branch filter only user in that branch
 	   	if (!empty($branchId)){
 	   		$sql.=" AND $branchId IN (u.branch_list)";

@@ -37,13 +37,22 @@ ul.opt-school {
 		<form id="frmUser" action="<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">				
 				if(this.validate()) {
+					 var identity = [];
+	    			 $('.checkbox:checked').each(function(i){
+	    				 identity[i] = $(this).val();
+	     			});
+					if(identity==""){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
+						return false;
+					}
 					if(dojo.byId('password').value != dojo.byId('con_password').value ){
 						alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
 						dojo.byId('password').value = '';
 						dojo.byId('con_password').value = '';
 						dijit.byId('password').focus();
 						return false;
-					}				
+					}		
+					loadingBlock();		
 					dojo.byId('agent').value = dijit.byId('agent_id').item.id;
 					return true;
 				}
@@ -139,7 +148,7 @@ ul.opt-school {
 	                   </label>
 	                </div>
 	                <div class="form-group">
-	                	<span><input type="checkbox" class="checkbox" checked="checked"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style=" height: initial;"  />&nbsp;<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span></span>
+	                	<span><input type="checkbox" class="" checked="checked"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style=" height: initial;"  />&nbsp;<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span></span>
 	                	<ul class="opt-school">
 	                		<?php $identityCheck = ""; if (!empty($this->rs_branch)) foreach ($this->rs_branch as $rs){?>
 	                		<li class="opt-items"> <input  type="checkbox"  class="checkbox"  value="<?php echo $rs['id'];?>" name="selector[]" onClick="CheckAllTotal(1);" /> <span style="vertical-align: top;"><?php echo $rs['name'];?></span></li>
@@ -306,7 +315,7 @@ function CheckAllTotal(index){
 	}else{
 		var a = $("input:checked").val();
 		 var identity = [];
-	     $(':checkbox:checked').each(function(i){
+	     $('.checkbox:checked').each(function(i){
 	    	 identity[i] = $(this).val();
 	     });
 	     var allidentity = $("#identityCheck").val();

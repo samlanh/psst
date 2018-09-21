@@ -238,6 +238,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function getStudentTestById($id){
 		$db = $this->getAdapter();
 		$sql=" SELECT * FROM rms_student WHERE stu_id=$id AND customer_type =4 AND is_studenttest=1 ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}	
 	

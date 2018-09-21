@@ -614,26 +614,20 @@ function getAllgroupStudy($teacher_id=null){
     } 
    public function getAccessPermission($branch_str='branch_id'){
 	   	$session_user=new Zend_Session_Namespace('authstu');
-	   	$branch_id = $session_user->branch_id;
+// 	   	$branch_id = $session_user->branch_id;
 	   	$branch_list = $session_user->branch_list;
-	   	if(!empty($branch_id)){
+	   	$result="";
+	   	if(!empty($branch_list)){
 		   	$level = $session_user->level;
-		   	if ($branch_id!=1){
-// 		   		$result = " AND $branch_str =".$branch_id;
-		   		$result = " AND $branch_str IN ($branch_list)";
-		   		return $result;
-		   	}
-		   	
-		   	if($level==1 OR $level==2){
-		   		$result = "";
-		   		return $result;
+		   	if($level==1 ){
+		   		$result.= "";
 		   	}
 		   	else{
-// 		   		$result = " AND $branch_str =".$branch_id;
-		   		$result = " AND $branch_str IN ($branch_list)";
-		   		return $result;
+		   		$result.= " AND $branch_str IN ($branch_list)";
 		   	}
 	   	}
+	   	return $result;
+	   	
 	   	$session_teacher=new Zend_Session_Namespace('authteacher');
 	   	$branch_id = $session_teacher->branch_id;
 	   	if(!empty($branch_id)){

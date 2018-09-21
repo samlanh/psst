@@ -162,7 +162,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	//ex: when we enter register student in which branch filter only user in that branch
 	   	$result =array();
 	   	if (!empty($branchId)){
-	   		$bra = explode(",", $branch_list);
+	   		$bra = explode(",", $branchId);
 			if (!empty($bra)){
 				$array = array();
 				foreach ($bra as $ss) {

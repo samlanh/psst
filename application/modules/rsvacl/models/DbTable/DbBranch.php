@@ -33,7 +33,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		}
     		$sql="SELECT br_id FROM rms_branch WHERE 1";
     		$sql.=" AND branch_nameen='".$_data['branch_nameen']."'";
-    		$sql.=" AND prefix='".$_data['prefix_code']."'";
+//     		$sql.=" AND prefix='".$_data['prefix_code']."'";
     		if (!empty($_data['main_branch_id'])){
     			$sql." AND parent =".$_data['main_branch_id'];
     		}

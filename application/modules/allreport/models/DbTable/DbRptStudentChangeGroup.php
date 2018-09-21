@@ -20,7 +20,8 @@ class Allreport_Model_DbTable_DbRptStudentChangeGroup extends Zend_Db_Table_Abst
 		
 		(select semester from rms_group where rms_group.id=rms_student_change_group.from_group limit 1 ) AS semester,
 		(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS session,
-		(select major_enname from rms_major where rms_major.major_id=(select grade from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS grade,
+		(SELECT rms_itemsdetail.title from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(select grade from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS grade,
+		
 		(select room_name from rms_room where rms_room.room_id=(select room_id from rms_group where rms_student_change_group.from_group=rms_group.id) limit 1) AS room_name,
 		(select start_date from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS start_date,
 		(select amount_month from rms_group where rms_group.id=rms_student_change_group.from_group limit 1) AS amount_month,

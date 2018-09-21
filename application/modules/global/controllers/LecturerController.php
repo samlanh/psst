@@ -29,7 +29,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 			}
 			$rs_rows= $db->getAllTeacher($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","ID_NUMBER","TEACHER_NAME","SEX","NATIONALITY","DEGREE","PHONE","EMAIL","NOTE","STATUS");
+			$collumns = array("BRANCH_NAME","ID_NUMBER","TEACHER_NAME","SEX","NATIONALITY","DEGREE","POSITION","PHONE","EMAIL","NOTE","STATUS");
 			$link=array('module'=>'global','controller'=>'lecturer','action'=>'edit',);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link,'branch_name'=>$link));
 		}catch (Exception $e){
@@ -62,14 +62,13 @@ class Global_LecturerController extends Zend_Controller_Action {
 			}
 		}
 		
-		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$_db = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$optionNation = $_dbgb->getViewByType(21);//Nation
+		$optionNation = $_db->getViewByType(21);//Nation
 		array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
 		array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
 		$this->view->nation = $optionNation;
 		
- 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row = $_db->getAllDocumentType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
@@ -102,6 +101,13 @@ class Global_LecturerController extends Zend_Controller_Action {
 			}
 		}
  		$_db = new Application_Model_DbTable_DbGlobal();
+ 		
+ 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+ 		$optionNation = $_db->getViewByType(21);//Nation
+ 		array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
+ 		array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
+ 		$this->view->nation = $optionNation;
+ 		
 		$row = $_db->getAllDocumentType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));

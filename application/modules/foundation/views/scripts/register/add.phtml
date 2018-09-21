@@ -632,6 +632,7 @@ dojo.ready(function(){
 	    onChange: function() {          
 	   	fa_job = dijit.byId('fa_job').get('value');
 	    if(fa_job==-1){
+	     dijit.byId("save").attr("disabled",false);
 	   	 dijit.byId("popup_dept2").show();
 		   	dijit.byId('value_j').attr('value',1);
 	     }
@@ -654,6 +655,7 @@ dojo.ready(function(){
 	    onChange: function() {          
 	   	mo_job = dijit.byId('mo_job').get('value');
 	    if(mo_job==-1){
+	     dijit.byId("save").attr("disabled",false);
 	   	 dijit.byId("popup_dept2").show();
 		   	dijit.byId('value_j').attr('value',2);
 	     }
@@ -676,6 +678,7 @@ dojo.ready(function(){
 	    onChange: function() {          
 	   	mo_job = dijit.byId('gu_job').get('value');
 	    if(mo_job==-1){
+	     dijit.byId("save").attr("disabled",false);
 	   	 dijit.byId("popup_dept2").show();
 		   	dijit.byId('value_j').attr('value',3);
 	     }
@@ -699,6 +702,7 @@ dojo.ready(function(){
 	    onChange: function() {          
 	    nation = dijit.byId('nation').get('value');
 	    if(nation==-1){
+	     dijit.byId("save_nation").attr("disabled",false);
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',1);
 	     }
@@ -722,6 +726,7 @@ dojo.ready(function(){
 	    onChange: function() {          
 	   	stu_nation = dijit.byId('studen_national').get('value');
 	    if(stu_nation==-1){
+	     dijit.byId("save_nation").attr("disabled",false);
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',2);
 	     }
@@ -745,6 +750,7 @@ dojo.ready(function(){
 	    onChange: function() {          
 	    fa_nation = dijit.byId('fa_national').get('value');
 	    if(fa_nation==-1){
+	     dijit.byId("save_nation").attr("disabled",false);
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',3);
 	     }
@@ -768,6 +774,7 @@ dojo.ready(function(){
 	    onChange: function() {          
 	    mom_nation = dijit.byId('mom_nation').get('value');
 	    if(mom_nation==-1){
+	     dijit.byId("save_nation").attr("disabled",false);
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',4);
 	     }
@@ -791,6 +798,7 @@ dojo.ready(function(){
 	    onChange: function() {          
 	   	gurdian_nation = dijit.byId('guardian_national').get('value');
 	    if(gurdian_nation==-1){
+	     dijit.byId("save_nation").attr("disabled",false);
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',5);
 	     }
@@ -1090,6 +1098,7 @@ var nation_store4  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::e
 var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
 function addNationBy(){
 	if(dijit.byId('frm_nation_kh').validate()){
+	dijit.byId("save_nation").attr("disabled",true);
 	type=dijit.byId('value_j').get('value');
 	nation=dijit.byId('nation').get('value');
 	studen_national=dijit.byId('studen_national').get('value');
@@ -1225,13 +1234,14 @@ function hideDialog2() {
 function hideDialog3() {		
 	dijit.byId("popup_doc_type").hide();
 }
-function hideDialog4() {		
+function hideDialog4() {
 	dijit.byId("popup_nation").hide();
 }
 
 var url_add_job = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-job")); ?>';
 function addJob(){
 	if(dijit.byId('frm_add_tran1').validate()){
+	dijit.byId("save").attr("disabled",true);
 	type=dijit.byId('value_j').get('value');
 	fa_job=dijit.byId('fa_job').get('value');
 	mo_job=dijit.byId('mo_job').get('value');
@@ -1565,8 +1575,8 @@ date_format = '"dd/MM/yyyy"';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_TO");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
+			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
 			temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -1578,9 +1588,9 @@ date_format = '"dd/MM/yyyy"';
 					template+='<option value="'+'<?php echo $doc_type['id']?>'+'"><?php echo $doc_type['name'];?></option>';
 				<?php }}?>
 			template+='</select></td>';
-			template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_give_'+col+'" id="date_give_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
+			template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="25%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
 		
 		tmp='<tr id="row'+col+'">';
@@ -1606,6 +1616,7 @@ date_format = '"dd/MM/yyyy"';
 	}
 	function popupDocType(index){
 		id = dijit.byId('document_type_'+index).get('value');
+		dijit.byId("save_doc_type").attr("disabled",false);
 		if(id==-1){
 			$('#popup_index').val(index);
 			dijit.byId("popup_doc_type").show();

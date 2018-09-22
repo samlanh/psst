@@ -297,7 +297,8 @@
 				                				<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
 				                				<td colspan="3"><?php echo $tr->translate("REQUEST_FOR");?></td>
 				                				<td colspan="5"><?php echo $tr->translate("RESULT");?></td>
-				                				<td class="borderright-none " rowspan="2"><?php echo $tr->translate("NOTE");?></td>
+				                				<td class=" " rowspan="2"><?php echo $tr->translate("NOTE");?></td>
+				                				<td class="borderright-none " rowspan="2"><?php echo $tr->translate("RESULT_BY");?></td>
 				                			</tr>
 				                			<tr class="head-title">
 				                				<td><?php echo $tr->translate("TEST_DATE");?></td>
@@ -311,7 +312,7 @@
 				                			</tr>
 											<?php $counts=count($this->testresultkh); foreach($this->testresultkh As $key=>$record){?>
 											<tr class="row-value">
-												<td align="center"  >&nbsp;<?php echo $key+1;?>&nbsp;</td>
+												<td align="center"  >&nbsp;<?php if ($record['is_current']==1){?><i class="fa fa-check" aria-hidden="true"></i><?php }?> <?php echo $key+1;?>&nbsp;</td>
 				                				<td align="center" >&nbsp;<?php echo date("d/M/Y",strtotime($record['test_date']))?>&nbsp;</td>
 				                				<td align="left" >&nbsp;<?php echo $record['degree_title'];?>&nbsp;</td>
 				                				<td align="center" >&nbsp;<?php echo $record['grade_title'];?>&nbsp;</td>
@@ -320,7 +321,8 @@
 				                				<td align="center" >&nbsp;<?php echo $record['grade_result_title'];?>&nbsp;</td>
 				                				<td align="center" >&nbsp;<?php echo $record['score'];?>&nbsp;</td>
 				                				<td align="center" >&nbsp;<?php echo $record['comment_title'];?>&nbsp;</td>
-				                				<td align="center" class="borderright-none ">&nbsp;<?php echo $record['note'];?>&nbsp;</td>
+				                				<td align="center" class="">&nbsp;<?php echo $record['note'];?>&nbsp;</td>
+				                				<td align="center" class="borderright-none ">&nbsp;<?php echo $record['result_by'];?>&nbsp;</td>
 											</tr>
 											<?php $subject = $db->getSubjectScoreByTest($record['id']);
 												if (!empty($subject)) foreach ($subject as $ss){
@@ -336,7 +338,7 @@
 												<td align="left" colspan="3" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $title;?></td>
 												<td align="center"  class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $ss['score']?>&nbsp;</td>
 												<td align="center"  class=" <?php if ($counts==$key+1){ echo "borderbottom-none";}?>"><?php echo $ss['comment_title'];?></td>
-												<td align="center"  class="borderright-none <?php if ($counts==$key+1){ echo "borderbottom-none";}?>"><?php echo $ss['note'];?></td>
+												<td align="center"  class=" <?php if ($counts==$key+1){ echo "borderbottom-none";}?>"><?php echo $ss['note'];?></td>
 											</tr>
 											<?php }?>
 											<?php }?>
@@ -361,7 +363,8 @@
 				                				<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
 				                				<td colspan="3"><?php echo $tr->translate("REQUEST_FOR");?></td>
 				                				<td colspan="5"><?php echo $tr->translate("RESULT");?></td>
-				                				<td class="borderright-none " rowspan="2"><?php echo $tr->translate("NOTE");?></td>
+				                				<td class=" " rowspan="2"><?php echo $tr->translate("NOTE");?></td>
+				                				<td class="borderright-none " rowspan="2"><?php echo $tr->translate("RESULT_BY");?></td>
 				                			</tr>
 				                			<tr class="head-title">
 				                				<td><?php echo $tr->translate("TEST_DATE");?></td>
@@ -375,7 +378,7 @@
 				                			</tr>
 											<?php $counts=count($this->testresulteng); foreach($this->testresulteng As $key=>$record){?>
 											<tr class="row-value">
-												<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>" >&nbsp;<?php echo $key+1;?>&nbsp;</td>
+												<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>" >&nbsp;<?php if ($record['is_current']==1){?><i class="fa fa-check" aria-hidden="true"></i><?php }?> <?php echo $key+1;?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo date("d/M/Y",strtotime($record['test_date']))?>&nbsp;</td>
 				                				<td align="left" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['degree_title'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['grade_title'];?>&nbsp;</td>
@@ -384,7 +387,8 @@
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['grade_result_title'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['score'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['comment_title'];?>&nbsp;</td>
-				                				<td align="center" class="borderright-none <?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['note'];?>&nbsp;</td>
+				                				<td align="center" class=" <?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['note'];?>&nbsp;</td>
+												<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?> borderright-none ">&nbsp;<?php echo $record['result_by'];?>&nbsp;</td>
 											</tr>
 											<?php }?>
 										</table>
@@ -408,7 +412,8 @@
 				                				<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
 				                				<td colspan="3"><?php echo $tr->translate("REQUEST_FOR");?></td>
 				                				<td colspan="5"><?php echo $tr->translate("RESULT");?></td>
-				                				<td class="borderright-none " rowspan="2"><?php echo $tr->translate("NOTE");?></td>
+				                				<td class=" " rowspan="2"><?php echo $tr->translate("NOTE");?></td>
+				                				<td class="borderright-none " rowspan="2"><?php echo $tr->translate("RESULT_BY");?></td>
 				                			</tr>
 				                			<tr class="head-title">
 				                				<td><?php echo $tr->translate("TEST_DATE");?></td>
@@ -422,7 +427,7 @@
 				                			</tr>
 											<?php $counts=count($this->testresultuniver); foreach($this->testresultuniver As $key=>$record){?>
 											<tr class="row-value">
-												<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>" >&nbsp;<?php echo $key+1;?>&nbsp;</td>
+												<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>" >&nbsp;<?php if ($record['is_current']==1){?><i class="fa fa-check" aria-hidden="true"></i><?php }?> <?php echo $key+1;?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo date("d/M/Y",strtotime($record['test_date']))?>&nbsp;</td>
 				                				<td align="left" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['degree_title'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['grade_title'];?>&nbsp;</td>
@@ -431,7 +436,8 @@
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['grade_result_title'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['score'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['comment_title'];?>&nbsp;</td>
-				                				<td align="center" class="borderright-none <?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['note'];?>&nbsp;</td>
+				                				<td align="center" class=" <?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['note'];?>&nbsp;</td>
+												<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?> borderright-none ">&nbsp;<?php echo $record['result_by'];?>&nbsp;</td>
 											</tr>
 											<?php }?>
 										</table>

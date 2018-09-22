@@ -550,7 +550,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 			(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
 			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
-			(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title
+			(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
+			(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by
 			FROM
 			`rms_student_test_result` AS str
 			WHERE 

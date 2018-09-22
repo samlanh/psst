@@ -184,11 +184,18 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PROVINCE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php //echo $frm->getElement("village_name");?>
-	                   		<input id="village_name"/>
+	                   		<?php echo $frm->getElement("province_id");?>
+	                   </div>
+	                </div>
+	                 <div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php //echo $frm->getElement("district_name");?>
+	                   		<input id="district_name"/>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -200,18 +207,11 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php //echo $frm->getElement("district_name");?>
-	                   		<input id="district_name"/>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PROVINCE");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("province_id");?>
+	                   		<?php //echo $frm->getElement("village_name");?>
+	                   		<input id="village_name"/>
 	                   </div>
 	                </div>
 	            </div>
@@ -738,6 +738,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		}
 	}
 	var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+	var nation_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 	var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
 		function addNationBy(){
 			if(dijit.byId('frm_nation_kh').validate()){
@@ -755,13 +756,15 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 							   };
 						   if(indexkey==1){
 							   addDataToSelectbox(dijit.byId('nationality'), nation_store, Itemmake, data);
+							   addDataToSelectbox(dijit.byId('nation'), nation_store1, Itemmake, data);
 							   nation =  dijit.byId('nation').get('value');
 							   dijit.byId('nation').set('store', nation_store);
 							   if(nation!=""){
 							   dijit.byId('nation').set('value', nation);
 							   }
-						   }else{	   
-						   	  addDataToSelectbox(dijit.byId('nation'), nation_store, Itemmake, data);
+						   }else{	  
+							  addDataToSelectbox(dijit.byId('nationality'), nation_store, Itemmake, data); 
+						   	  addDataToSelectbox(dijit.byId('nation'), nation_store1, Itemmake, data);
 							  dijit.byId('nationality').set('store', nation_store);
 							  nation =  dijit.byId('nationality').get('value');
 							  if(nation!=""){

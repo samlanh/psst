@@ -56,16 +56,21 @@ class Accounting_Form_FrmSpecail extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	
     	
+    	$_duration = new Zend_Dojo_Form_Element_TextBox('duration');
+    	$_duration->setAttribs(array('dojoType'=>$this->t_num,
+					'placeholder'=>$this->tr->translate("PERIOD"),
+    			'class'=>'fullside','required'=>'true'));
+    	
     	$db = new Application_Model_DbTable_DbGlobal();
-    	$_duration = new Zend_Dojo_Form_Element_FilteringSelect("duration");
-    	$_duration->setMultiOptions($_arr_opt);
-    	$_duration->setAttribs(array(
+    	$_duration_type = new Zend_Dojo_Form_Element_FilteringSelect("duration_type");
+    	$_duration_type->setMultiOptions($_arr_opt);
+    	$_duration_type->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$duration_opt = $db->getAllPaymentTerm(null,null);
-    	$_duration->setMultiOptions($duration_opt);
+    	$_duration_type->setMultiOptions($duration_opt);
     	
     	$db = new Application_Model_DbTable_DbGlobal();
     	$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
@@ -123,9 +128,10 @@ class Accounting_Form_FrmSpecail extends Zend_Dojo_Form
     		$_dis_type->setValue($data["dis_type"]);
     		$stu_name->setValue($data["stu_name"]);
     		$_duration->setValue($data["duration"]);
+    		$_duration_type->setValue($data["duration_type"]);
     		$expired_date->setValue($data["expired_date"]);
     		$phone->setValue($data["phone"]);
-    		$note->setValue($data["note"]);
+    		$note->setValue($data["notes"]);
     		$_status->setValue($data["status"]);
     		$id->setValue($data["id"]);
     		
@@ -138,6 +144,7 @@ class Accounting_Form_FrmSpecail extends Zend_Dojo_Form
     			$note,
     			$_status,
     			$_duration,
+    			$_duration_type,
     			$_save,
     			$phone,
     			$stu_name,

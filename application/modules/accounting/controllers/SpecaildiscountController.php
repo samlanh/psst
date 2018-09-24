@@ -68,45 +68,33 @@ class Accounting_SpecaildiscountController extends Zend_Controller_Action {
     }
     
     public function editAction(){
-    	$db = new Global_Model_DbTable_DbItems();
+    	$db = new Accounting_Model_DbTable_DbSpecailDis();
     	$id= $this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
     		try {
+    			$sms="INSERT_SUCCESS";
     			$_data = $this->getRequest()->getPost();
-    			$db->UpdateDegree($_data);
-    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
-    			exit();
+    			$specail_id= $db->UpdateSpecailDis($_data);
+    			if(!empty($_data['save_close'])){
+    				Application_Form_FrmMessage::Sucessfull($sms,"/accounting/specaildiscount");
+    			}
+    			Application_Form_FrmMessage::Sucessfull($sms,"/accounting/specaildiscount/add");
     		} catch (Exception $e) {
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			Application_Form_FrmMessage::message("Application Error!");
-    			echo $e->getMessage();
     		}
     	}
-    	$type=1; //Degree
-    	$row =$db->getDegreeById($id,$type);
-    	$rs =  $db->getDeptSubjectById($id);
-    	$this->view->row=$row;
-    	$this->view->rowdetail = $rs;
+    	$row = $db->getSpecailDis($id);
+    	$document = $db->getSpecailDisDetail($id);
+    	$this->view->document = $document;
     	if (empty($row)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    		Application_Form_FrmMessage::Sucessfull("No Record","/accounting/specaildiscount");
+    		exit();
     	}
-    	$frm = new Global_Form_FrmItems();
-    	$frm->FrmAddDegree($row);
+    	$frm = new Accounting_Form_FrmSpecail();
+    	$frm->FrmAddSpecailDocument($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_degree = $frm;
-    	
-    	$subject_exam=new Global_Form_FrmAddSubjectExam();
-    	$frm_subject_exam=$subject_exam->FrmAddSubjectExam();
-    	Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
-    	$this->view->frm_subject_exam = $frm_subject_exam;
-    	
-    	$_model = new Global_Model_DbTable_DbGroup();
-    	$this->view->subject = $_model->getAllSubjectStudy();
-    	 
-    	$parent = new Global_Model_DbTable_DbSubjectExam();
-    	$is_parent = $parent->getAllSubjectParent();
-    	$sub = $parent->getAllSubjectParent(1);
-    	$this->view->rs = $is_parent;
-    	$this->view->sub = $sub;
+    	$this->view->frm_specail = $frm;
     }
     
     function refreshitemsAction(){

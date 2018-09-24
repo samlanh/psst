@@ -1,7 +1,7 @@
 <?php
 class Accounting_Model_DbTable_DbBookAndUniform extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'rms_program_name';
+    protected $_name = 'rms_items';
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;

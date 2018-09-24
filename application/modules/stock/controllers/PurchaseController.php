@@ -184,9 +184,6 @@ class Stock_PurchaseController extends Zend_Controller_Action {
     		exit();
     	}
     }
-
-    
-    
     function refreshproductAction(){
     	if($this->getRequest()->isPost()){
     		try{

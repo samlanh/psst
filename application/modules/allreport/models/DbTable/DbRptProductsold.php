@@ -43,7 +43,7 @@ class Allreport_Model_DbTable_DbRptProductsold extends Zend_Db_Table_Abstract
     		$s_where[]= " receipt_number LIKE '%{$s_search}%'";
     		$s_where[]= " (SELECT stu_code FROM `rms_student` WHERE stu_id = student_id LIMIT 1) LIKE '%{$s_search}%'";
     		$s_where[]= " (SELECT stu_enname FROM `rms_student` WHERE stu_id = student_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT title FROM `rms_program_name` WHERE `rms_program_name`.`service_id` = spd.service_id LIMIT 1) LIKE '%{$s_search}%'";
+    		
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if(!empty($search['study_year'])){

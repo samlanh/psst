@@ -77,11 +77,10 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     				'pro_qty'=>$qty_order,
     		);
     		$this->insert($_arrs);
-    	}else {}
+    	}
     }
     
     public function addPurchase($_data){
-    	//print_r($_data);exit();
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
@@ -89,12 +88,10 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		$_arr = array(
 	    				'sup_name'		=>$_data['supplier_name'],
 	    				'purchase_no'	=>$_data['purchase_no'],
-	    				//'sup_old_new'	=>$_data['category_id'],
 	    				'sex'			=>$_data['sex'],
 	    				'tel'			=>$_data['phone'],
 	    				'email'			=>$_data['email'],
 	    				'address'		=>$_data['address'],
-// 	    				'amount_due'	=>$_data['amount_due'],
 	    				'status'		=>$_data['status'],
 	    				'date'			=>date("Y-m-d"),
 	    				'user_id'		=>$this->getUserId()
@@ -180,11 +177,6 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$this->_name = "rms_product";
     		$where = " id = ".$result['id'];
 			$this->update($array, $where);
-			
-			$this->_name = "rms_program_name";
-			$where1 = " ser_cate_id = ".$result['id']." and type = 1";
-			$this->update($array, $where1);
-    		//echo $last_cost;exit();
     	}
     	
     }
@@ -361,53 +353,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$sql.=$dbp->getAccessPermission('br_id');
     	return $db->fetchAll($sql);
     }
-    
-    public function ajaxAddProduct($data){
-    	$db = $this->getAdapter();
-    	$session_user=new Zend_Session_Namespace('authstu');
-    	$userName=$session_user->user_name;
-    	$GetUserId= $session_user->user_id;
-    	$_arr = array(
-    			'pro_name'	=>$data['product_name'],
-    			'pro_code'	=>$data['product_code'],
-    			'cat_id'	=>$data['category_id'],
-    			'pro_price'	=>$data['pro_price'],
-    			'cost'		=>$data['cost'],
-    			'pro_des'	=>$data['descript'],
-    			'pro_type'	=>$data['pro_type'],
-    			'status'	=>$data['p_status'],
-    			'date'		=>date("Y-m-d"),
-    			'user_id'	=>$this->getUserId()
-    	);
-    	$this->_name = "rms_product";
-    	$pro_id = $this->insert($_arr);
-    	
-    	$_arr = array(
-    			'pro_id'=>$pro_id,
-    			'brand_id'=>$data['location_id'],
-    			'pro_qty'=>0,
-    			'total_amount'=>0,
-    			'note'=>'',
-    	);
-    	$this->_name='rms_product_location';
-    	$this->insert($_arr);
-    	
-    	$array = array(
-    			'ser_cate_id'	=>$pro_id,
-    			'title'			=>$data['product_name'],
-    			'description'	=>$data['descript'],
-    			'price'			=>$data['pro_price'],
-    			'cost'			=>$data['cost'],
-    			'status'		=>1,
-    			'create_date'	=>date("Y-m-d H:i:s"),
-    			'user_id'		=>$this->getUserId(),
-    			'type'			=>1, // type=1 => product
-    			'pro_type'		=>$data['pro_type'], // 1=cut stock , 2=cut stock later
-    	);
-    	$this->_name='rms_program_name';
-    	$this->insert($array);
-    	return $pro_id;
-    }
+   
     function checkHaspayment($purchase_id){
     	$db = $this->getAdapter();
     	$sql="SELECT * FROM `rms_purchase_payment_detail` AS pr WHERE pr.`purchase_id`=$purchase_id

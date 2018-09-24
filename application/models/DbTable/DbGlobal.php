@@ -282,29 +282,9 @@ function getAllgroupStudy($teacher_id=null){
    }
    
    public function getAllServiceItemsName($status=1,$type=null){
-   	$db = $this->getAdapter();
-   	if($status==1){
-   		$sql ="SELECT DISTINCT title,service_id FROM rms_program_name WHERE title!='' AND status=1 ORDER BY title";
-   	}else{
-   		$sql ="SELECT DISTINCT title,service_id AS id FROM rms_program_name WHERE title!='' ORDER BY title";
-   	}
-   return $db->fetchAll($sql);
-   }
-//    public function getAllstudentRequest($type=null){
-//    	$db = $this->getAdapter();
-//    	if($type!=null){
-//    		$sql = " SELECT service_id as id,title as name FROM `rms_program_name` WHERE
-//    		 type=$type AND status = 1 AND title!=''";
-//    		return $db->fetchAll($sql);
-//    	}else{
-//    	$sql = 'SELECT service_id as id,pn.title as name FROM `rms_program_type` AS pt,`rms_program_name` AS pn 
-//    			WHERE pt.id = pn.ser_cate_id AND pt.type=1 
-//    				AND pn.status = 1 AND pn.title!=""';
-//    	}
-//    	return $db->fetchAll($sql);
-//    }
-   
-   
+   		$db = $this->getAdapter();
+   		return $this->getAllItems(null);
+   }   
    public function getAllSubjectStudy(){
    	$db = $this->getAdapter();
    		$sql = " SELECT id,subject_titlekh as name,shortcut FROM `rms_subject` WHERE

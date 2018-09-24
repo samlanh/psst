@@ -93,7 +93,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 //        $this->view->all_student_test = $db->getAllStudentTested();
        
        $this->view->all_year = $db->getAllYears();
-       $this->view->all_service = $db->getAllService();
        $this->view->all_product = $db->getAllProductName();
        
 	   $test = $this->view->branch_info = $db->getBranchInfo();

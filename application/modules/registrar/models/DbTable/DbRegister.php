@@ -1733,32 +1733,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     public function getAllService(){
     	$db = $this->getAdapter();
-//     	$sql = "SELECT 
+//     	$sql = "SELECT
 // 				  p.service_id ,
 // 				  p.`title`
 // 				FROM
 // 				  `rms_servicefee_detail` as sfd,
 // 				  `rms_servicefee`  as sf,
-// 				   rms_tuitionfee as tf,
 // 				  `rms_program_name` as p
 // 				WHERE `sf`.id = `sfd`.`service_feeid`
-// 				  and sf.academic_year = tf.id	 
-// 				  AND tf.`branch_id` = ".$this->getBranchId()."
 // 				  AND p.`service_id`=sfd.`service_id`
 // 				  or type=1
 // 				GROUP BY service_id ";
-    	$sql = "SELECT
-				  p.service_id ,
-				  p.`title`
-				FROM
-				  `rms_servicefee_detail` as sfd,
-				  `rms_servicefee`  as sf,
-				  `rms_program_name` as p
-				WHERE `sf`.id = `sfd`.`service_feeid`
-				  AND p.`service_id`=sfd.`service_id`
-				  or type=1
-				GROUP BY service_id ";
-    	return $db->fetchAll($sql);
+//     	return $db->fetchAll($sql);
     }
     
     function getAllProductName(){

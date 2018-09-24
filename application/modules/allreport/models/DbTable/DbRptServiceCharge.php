@@ -36,11 +36,7 @@ class Allreport_Model_DbTable_DbRptServiceCharge extends Zend_Db_Table_Abstract
     		$s_where[] = " tf.from_academic LIKE '%{$s_search}%'";
     		$s_where[] = " tf.to_academic LIKE '%{$s_search}%'";
     		$s_where[] = " tf.generation LIKE '%{$s_search}%'";
-    		//$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=(select service_id from rms_servicefee_detail where rms_servicefee_detail.service_feeid=rms_servicefee.id limit 1)) LIKE '%{$s_search}%'";
-//     		$s_where[] = " rms_tuitionfee.to_academic LIKE '%{$s_search}%'";
-//     		$s_where[] = " (SELECT major_enname FROM rms_major WHERE rms_major.major_id = (select class_id from rms_tuitionfee_detail where rms_tuitionfee_detail.fee_id = rms_tuitionfee.id  limit 1)) LIKE '%{$s_search}%'";
-//     		$s_where[] = " (select name_en from rms_view where rms_view.type=7 and rms_view.key_code=rms_tuitionfee.time) LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	
 //     	if(empty($search)){

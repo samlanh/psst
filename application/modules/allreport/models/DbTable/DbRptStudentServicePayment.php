@@ -17,7 +17,7 @@ class Allreport_Model_DbTable_DbRptStudentServicePayment extends Zend_Db_Table_A
 				(select stu_code from rms_student where rms_student.stu_id=sp.student_id limit 1)AS code,
 				(select CONCAT(stu_khname,' - ',stu_enname) from rms_student where rms_student.stu_id=sp.student_id limit 1)AS name,
 				(select sex from rms_student where rms_student.stu_id=sp.student_id limit 1)AS sex,
-				(select title from rms_program_name where rms_program_name.service_id=spd.service_id limit 1)AS service
+				
 				from rms_student_payment AS sp,rms_student_paymentdetail AS spd where spd.payment_id=sp.id and spd.balance>0
     		   ";
     	

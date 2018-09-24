@@ -597,6 +597,22 @@ article.clearfix.hentry {
 header.article-list time.hentry__date {
     color: #6b6868;
 }
+button.btn.btn-default.btn-choose {
+    background: #f7f7f7;
+    color: #212129;
+}
+button.btn.btn-default.addfile {
+    background: #009688;
+    color: #fff;
+}
+button.btn.btn-error.btn-reset {
+    background: #c00;
+    color: #fff;
+}
+a.btn.btn-error.btn-reset {
+    background: #0077c5;
+	color: #fff;
+}
 /*==============================
 	End Login Page
 ==============================*/

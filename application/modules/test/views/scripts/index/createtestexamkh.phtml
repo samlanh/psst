@@ -1,0 +1,385 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+
+if (!empty($this->detailscore)){$title = $tr->translate('UPDATE_TEST_EXAM_KH_RESULT');}else{$title = $tr->translate('CREATE_TEST_EXAM_KH');}
+echo $this->headTitle($title);
+$frm = $this->form;
+?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<style>
+.head-td td {
+    padding: 5px 3px;
+}
+</style>
+<div class="card">
+	<div class="card-content collapse show">
+		<form id='frm_teststudent' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
+			if(this.validate()) {
+				if(dijit.byId("branch_id").get("value")==''){
+                    alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
+					dijit.byId("branch_id").focus();
+					return false;
+				}
+				if(dijit.byId("degree").get("value")==''){
+                    alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
+					dijit.byId("degree").focus();
+					return false;
+				}
+				if(dijit.byId("grade").get("value")==''){
+                    alert("<?php echo $tr->translate("PLEASE_SELECT_GRADE");?>");
+					dijit.byId("grade").focus();
+					return false;
+				}
+				loadingBlock();
+				return true;
+			}else {
+				return false;
+			}
+			</script>
+			<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-file-code-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;
+		    			<?php echo $title;?>
+		    			
+		    			</h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    	</div>
+	    	<div class="card-box">
+	        	<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
+	                   </label>
+	                </div>
+	               
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("branch_id");?>
+	                   		<?php echo $frm->getElement("id");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("stu_test_id");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("degree");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GRADE")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input id="grade" />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEST_DATE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("test_date");?>
+	                   </div>
+	                </div>
+	                
+	             </div>
+	             <div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("RESULT_TEST");?> 
+	                   </label>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RESULT_DATE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("result_date");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SCORE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("score");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("COMMENTS");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("comment");?>
+	                   </div>
+	                </div>
+	                 <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm->getElement("degree_result");?>
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GRADE")?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input id="grade_result" />
+	                   </div>
+	                </div>
+	                
+	             </div>
+	              <div class="col-md-4 col-sm-4 col-xs-12">
+	              		<div class="form-group">
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE")?> :
+		                   </label>
+		                </div>
+		                <div class="form-group">
+		                   <div class="col-md-12 col-sm-12 col-xs-12">
+		                   		<?php echo $frm->getElement("note");?>
+		                   </div>
+		                </div>
+	              </div>
+	         </div>
+	         <div class="card-box">
+	         	<div class="col-md-8 col-sm-8 col-xs-12">
+	         		<div class="form-group">
+	         				<?php $identity="";?>
+			         	 	<table  id="table_row" style=" white-space:nowrap; width:100%; border-collapse: collapse; border:1px solid #ccc;">
+									<tr id="head-title" class="head-td" align="center" >
+										<td><?php echo $tr->translate("N_O");?></td>
+										<td><?php echo $tr->translate("SUBJECT");?></td>
+										<td><?php echo $tr->translate("SCORE");?></td>
+										<td><?php echo $tr->translate("COMMENTS");?></td>
+										<td><?php echo $tr->translate("NOTE");?></td>
+									</tr>
+									<?php if (!empty($this->subjectScore)){?>
+										<?php $i=1;  foreach ($this->subjectScore as $rs){ $i++;
+												$subjectitle="";
+												if ($rs['subjecttest_id']==1){
+													$subjectitle=$tr->translate("KHMER");
+												}else if ($rs['subjecttest_id']==2){
+													$subjectitle=$tr->translate("MATH");
+												}
+												if (empty($identity)){
+													$identity=$i;
+												}else{$identity=$identity.",".$i;
+												}
+										?>
+										<tr>
+											<td width="4%" align="center"><?php echo $i;?></td>
+											<td>&nbsp;<input  dojoType="dijit.form.TextBox" class="fullside" name="subjecttest_id_<?php echo $i;?>" id="subjecttest_id_<?php echo $i;?>" value="<?php echo $rs['subjecttest_id'];?>" type="hidden"><?php echo $subjectitle;?>&nbsp;</td>
+											<td><input dojoType="dijit.form.NumberTextBox" onKeyup="CalculateTotalScore()" class="fullside" name="score_<?php echo $i;?>" id="score_<?php echo $i;?>" value="<?php echo $rs['score'];?>" type="text"></td>	
+											<td>
+												<select dojoType="dijit.form.FilteringSelect" class="fullside" id="comment_<?php echo $i;?>" name="comment_<?php echo $i;?>" style="width:100%;">
+													<option value="1" <?php if ($rs['comment']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("GOOD")?></option>
+													<option value="2" <?php if ($rs['comment']==2){ echo 'selected="selected"';}?>><?php echo $tr->translate("GOOD_FAIR")?></option>
+													<option value="3" <?php if ($rs['comment']==3){ echo 'selected="selected"';}?>><?php echo $tr->translate("FAIR")?></option>
+													<option value="4" <?php if ($rs['comment']==4){ echo 'selected="selected"';}?>><?php echo $tr->translate("WEAK")?></option>
+												</select>
+												<input  dojoType="dijit.form.TextBox" class="fullside" name="detailid<?php echo $i;?>" id="detailid<?php echo $i;?>" value="<?php echo $rs['id'];?>" type="hidden">
+											</td>
+											<td><input  dojoType="dijit.form.TextBox" class="fullside" name="note_<?php echo $i;?>" id="note_<?php echo $i;?>" value="<?php echo $rs['note'];?>" type="text"></td>
+										</tr>
+											
+										<?php }?>
+									<?php }else{?>
+										<?php for ($i=1; $i<=2; $i++){
+												$subjectitle="";
+												if ($i==1){
+													$subjectitle=$tr->translate("KHMER");
+												}else if ($i==2){
+													$subjectitle=$tr->translate("MATH");
+												}
+												if (empty($identity)){$identity=$i;}else{$identity=$identity.",".$i;}
+											?>
+										<tr>
+											<td width="4%" align="center"><?php echo $i;?></td>
+											<td>&nbsp;<input  dojoType="dijit.form.TextBox" class="fullside" name="subjecttest_id_<?php echo $i;?>" id="subjecttest_id_<?php echo $i;?>" value="<?php echo $i;?>" type="hidden"><?php echo $subjectitle;?>&nbsp;</td>
+											<td><input dojoType="dijit.form.NumberTextBox" onKeyup="CalculateTotalScore()" class="fullside" name="score_<?php echo $i;?>" id="score_<?php echo $i;?>" value="" type="text"></td>	
+											<td>
+												<select dojoType="dijit.form.FilteringSelect" class="fullside" id="comment_<?php echo $i;?>" name="comment_<?php echo $i;?>" style="width:100%;">
+													<option value="1"><?php echo $tr->translate("GOOD")?></option>
+													<option value="2"><?php echo $tr->translate("GOOD_FAIR")?></option>
+													<option value="3"><?php echo $tr->translate("FAIR")?></option>
+													<option value="4"><?php echo $tr->translate("WEAK")?></option>
+												</select>
+											</td>
+											<td><input  dojoType="dijit.form.TextBox" class="fullside" name="note_<?php echo $i;?>" id="note_<?php echo $i;?>" value="" type="text"></td>
+										</tr>
+										<?php }?>
+									<?php }?>
+							</table>
+							<input type="hidden" name="identity" id="identity" value="<?php echo $identity;?>"  />
+			         	 </div>
+			        </div>
+	         </div>
+	         <div class="card-box">
+               	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+               		<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"
+					 iconClass="dijitIconClear"/>
+					<input label="<?php echo $tr->translate("SAVE_CLOSE")?>" name='saveclose' id='saveclose' value='saveclose' dojoType="dijit.form.Button" type="submit"  iconClass="dijitEditorIcon dijitEditorIconSave"/>
+	    		</div>
+	    	</div>
+	    </form>
+	 </div>
+</div>
+<script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+    dojo.require("dojo.data.ItemFileWriteStore");  
+    dojo.require("dijit.form.Textarea");
+</script>
+<script>
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var student_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+
+require(["dojo/ready"], function(ready){
+
+	/*new dijit.form.FilteringSelect({
+		name: "stu_test_id",
+		id: "stu_test_id",
+		searchAttr: "name",
+		class: 'fullside',
+		onChange: function() {
+			
+	    }
+	}, "stu_test_id");*/
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+			store: grade_store,
+			autoComplete: true,                        
+			required: false,
+			id: "grade",
+			name: "grade",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate('SELECT_GRADE');?>",          
+			onChange: function() {  
+				
+			}
+		}, "grade");
+
+		new dijit.form.FilteringSelect({
+			store: grade_result_store,
+			autoComplete: true,                        
+			required: false,
+			id: "grade_result",
+			name: "grade_result",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate('SELECT_GRADE');?>",          
+			onChange: function() {  
+				
+			}
+		}, "grade_result");
+		
+		getAllGrade();	
+		getAllGradeResult();
+		
+	});
+	
+});
+
+
+
+var url_get_stu = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'getstudenttestbybranch')); ?>';
+function getStudntTestByBranch(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id==''){
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_get_stu,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			student_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('stu_test_id').set('store',student_store);  
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+function getAllGrade(){
+	dijit.byId('grade').set('value',''); 
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){
+		return false;
+	}
+	dijit.byId('degree_result').set('value',dept_id);
+	dojo.xhrPost({
+		url:url_get_grade,
+		content:{
+			'dept_id':dept_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			grade_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade').set('store',grade_store);  
+			<?php if (!empty($this->detailscore['grade'])){?>
+				dijit.byId('grade').set('value',<?php echo $this->detailscore['grade'];?>);
+			<?php }?>
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+var url_get_grade = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
+function getAllGradeResult(){
+	dijit.byId('grade_result').set('value',''); 
+	dept_id = dijit.byId('degree_result').get('value');
+	if(dept_id==''){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_get_grade,
+		content:{
+			'dept_id':dept_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			grade_result_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade_result').set('store',grade_result_store);  
+			<?php if (!empty($this->detailscore['grade_result'])){?>
+				dijit.byId('grade_result').set('value',<?php echo $this->detailscore['grade_result'];?>);
+			<?php }?>
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+function CalculateTotalScore(){
+	var rowId = $('#identity').val();
+	if(rowId==""){
+		return false;
+	}
+	var totalscore=0;
+	var rowIDArray = rowId.split(',');
+	for(var n = 0; n < rowIDArray.length; n++) {
+		if(isNaN(dijit.byId('score_'+rowIDArray[n]).get('value'))){
+			totalscore+=0;
+		}else{
+			totalscore+= parseFloat(dijit.byId('score_'+rowIDArray[n]).get('value'));
+		}
+		
+	}
+	dijit.byId('score').set('value',totalscore); 
+}
+</script>
+
+

@@ -8,27 +8,30 @@
 	
 	function getAllItems($search = '',$type=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT d.id,d.title,
-		(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = d.schoolOption LIMIT 1) AS schoolOption,
-		(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
-		d.status FROM `rms_items` AS d WHERE 1 ";
-		$orderby = " ORDER BY d.type ASC, d.id DESC ";
+		$sql = " SELECT d.id,
+		d.request_name,
+		d.phone,
+		d.stu_name,
+		(SELECT so.dis_name FROM rms_discount AS so WHERE so.disco_id = d.dis_type LIMIT 1) AS discount_type,
+		expired_date,
+		(SELECT name_kh FROM rms_view WHERE TYPE=11 AND key_code =d.status) AS status,
+		(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name
+		FROM `rms_specail_discount` AS d WHERE 1 ";
+		$orderby = " ORDER BY d.dis_type ASC, d.id DESC ";
 		$where = ' ';
-		if(!empty($type)){
-			$where.= " AND d.type = ".$db->quote($type);
-		}
 		if(!empty($search['advance_search'])){
 			$s_where = array();
 	    		$s_search = addslashes(trim($search['advance_search']));
-		 		$s_where[] = " d.title LIKE '%{$s_search}%'";
-	    		$s_where[] = " d.shortcut LIKE '%{$s_search}%'";
+		 		$s_where[] = " d.request_name LIKE '%{$s_search}%'";
+	    		$s_where[] = " d.phone LIKE '%{$s_search}%'";
+	    		$s_where[] = " d.stu_name LIKE '%{$s_search}%'";
 	    		$sql .=' AND ( '.implode(' OR ',$s_where).')';	
 		}
-		if(!empty($search['schoolOption_search'])){
-			$where.= " AND d.schoolOption  = ".$db->quote($search['schoolOption_search']);
+		if(!empty($search['dis_type'])){
+			$where.= " AND d.dis_type  = ".$db->quote($search['dis_type']);
 		}
-		if($search['status_search']>-1){
-			$where.= " AND status = ".$db->quote($search['status_search']);
+		if(!empty($search['status_type'])){
+			$where.= " AND d.status = ".$db->quote($search['status_type']);
 		}
 		return $db->fetchAll($sql.$where.$orderby);
 	}

@@ -19,21 +19,20 @@ class Accounting_SpecaildiscountController extends Zend_Controller_Action {
     	else{
     		$search = array(
     				'advance_search' => "",
-    				'schoolOption_search'=>"",
-    				'status_search' => -1
+    				'dis_type'=>"",
+    				'status_type' => "",
     		);
     	}
-    	$type=1; //Degree
-        $rs_rows = $db_dept->getAllItems($search,$type);
-        $glClass = new Application_Model_GlobalClass();
-        $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
+        $rs_rows = $db_dept->getAllItems($search);
+//         $glClass = new Application_Model_GlobalClass();
+//         $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("TITLE","SCHOOL_OPTION","BY_USER","STATUS");
+    	$collumns = array("REQUEST_NAME","PHONE","STUDENT_NAME","DISCOUNT_TYPR","EXPIRE_DATE","STATUS","USER");
     	$link=array(
-    			'module'=>'global','controller'=>'degree','action'=>'edit',
+    			'module'=>'global','controller'=>'specaildiscount','action'=>'edit',
     	);
-    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'schoolOption'=>$link));
+    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('request_name'=>$link,'phone'=>$link,'stu_name'=>$link));
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);

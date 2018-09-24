@@ -45,7 +45,17 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	
-    	
+    	$model = new Application_Model_DbTable_DbGlobal();
+    	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$Option = $model->getAllDiscount();
+    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	$_dis_type = new Zend_Dojo_Form_Element_FilteringSelect("dis_type");
+    	$_dis_type->setMultiOptions($_arr_opt);
+    	$_dis_type->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
     	
     	$_typopt = array(""=>$this->tr->translate("PLEASE_SELECT"));
     	$OptionType = $_dbgb->getAllDegreetype();
@@ -64,6 +74,16 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			'class'=>'fullside',
     			'style'=>'font-family: inherit;  min-height:100px !important;'));
     	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$_status_type = new Zend_Dojo_Form_Element_FilteringSelect("status_type");
+    	$_status_type->setMultiOptions($_arr_opt);
+    	$_status_type->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$status_opt = $db->AllStatusRe();
+    	$_status_type->setMultiOptions($status_opt);
     	
     	$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
     	$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");
@@ -148,8 +168,10 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			$_schoolOption,
     			$_type,
     			$note,
-    			$_status,
+    			$_dis_type,
+    			$_status_type,
     			$_save,
+    			$_status,
     			$id,
     			$advance_search,
     			$_status_search,

@@ -380,6 +380,18 @@ function getAllgroupStudy($teacher_id=null){
    	if($id==null)return $rs;
    	return $rs[$id];
    }
+   public function AllStatusRe($id=null){
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+   	$rs = array(
+   			0=>$tr->translate("PLEASE_SELECT"),
+   			1=>$tr->translate("RELATIVE"),
+   			2=>$tr->translate("FRIEND"),
+   			3=>$tr->translate("BUSINESS_PARTNER"),
+   			4=>$tr->translate("OTHER")
+   			);
+   	if($id==null)return $rs;
+   	return $rs[$id];
+   }
    public static function getAllDegreeById($id=null){
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$rs = array(
@@ -400,6 +412,7 @@ function getAllgroupStudy($teacher_id=null){
    		return $opt_term;
    	}
    	$opt_term = array(
+   			0=>$this->tr->translate('PLEASE_SELECT'),
    			1=>$this->tr->translate('MONTHLY'),
    			2=>$this->tr->translate('QUARTER'),
    			3=>$this->tr->translate('SEMESTER'),

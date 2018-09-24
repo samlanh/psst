@@ -1,0 +1,213 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("ADD_DEGREE"));
+	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+ 	$frm_degree= $this->frm_specail;
+?>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.CheckBox");
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+</script>
+<style>
+.dijitTextArea[cols].dijitTextArea[cols]{
+	width: 99%;
+}
+</style>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-server " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_SPECAIL_DISCOUNT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+    	<form id='frm_degree' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					schoolOption = dijit.byId("schoolOption").get('value');
+					if(schoolOption=='' || schoolOption==-1){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_SCHOOL_OPTION");?>");
+						dijit.byId("schoolOption_year").focus();
+						return false;
+					}
+					var rowId = $('#identity').val();
+					if(rowId!=''){ 
+						var rowIDArray = rowId.split(',');
+						for(var n = 0; n < rowIDArray.length; n++){
+							var row_id = dijit.byId('subject_study_'+rowIDArray[n]).get('value');
+							if(row_id==''){
+								alert("Please select subject title!");
+								return false;
+							}
+						}
+					}
+					loadingBlock();
+                	//dijit.byId("save_new").set("disabled",true);
+					//dijit.byId("save_close").set("disabled",true);
+					return true;
+				}else {
+					return false;
+				}
+			</script>
+	    	<div class="card-box">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+		    		<div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REQUEST_NAME");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("request_name");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PHONE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("phone");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("stu_name");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_TYPR");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("dis_type");?>
+		                </div>
+		             </div>
+		              <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PERIOD");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("duration");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("notes");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("expired_date");?>
+		                </div>
+		             </div>
+		              <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("status");?>
+		                </div>
+		             </div>
+		         </div>
+		         <div class="col-md-8 col-sm-8 col-xs-12">
+		         	 <div class="form-group">
+		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+								<tr id="head-title" class="head-td" align="right"></tr>
+						</table>
+						<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
+											iconClass="dijitIconEditProperty" onclick="addRow();" />
+						<input type="hidden" name="identity" id="identity"  />
+		         	 </div>
+		         </div>
+		         <div class="clearfix"></div>
+		         <div class="card-box mt-20">
+	               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+	               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+	               		 <input type="submit" onClick="submitDataClose()"  label="<?php echo $tr->translate("SAVE_CLOSE");?>" id="save_close" name="save_close" value="save_close"
+						dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+						<input type="submit" id="save_new" value="save_new" name="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" />
+	               	</div>
+	             </div>
+	    	</div>
+    	</form>
+    </div>
+</div>
+ <script type="text/javascript">
+dojo.require("dojo.date.locale");
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.store.Memory");
+//dojo.require('dojox.form.BusyButton');
+dojo.ready(function(){
+	// getValue();
+	addRow();
+});
+var subject = '<?php echo $this->subject;?>';
+var col = 0;
+var no = 0;
+var title = 0;
+tmp = '';
+temp='';
+function addRow() {
+	col++;no++;
+	template='';
+	if(title!=1){
+		temp+='<th><?php echo $tr->translate("DEL");?></th>';
+		temp+='<th><?php echo $tr->translate("N_O");?></th>';
+		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("TITLE");?></th>';
+		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("ATTACT");?></th>';
+		temp+='<th id="lbl_titlemetion"><?php echo $tr->translate("FILE");?></th>';
+		dojo.query("#head-title").append(temp);
+		title=1;
+	}
+		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="4%" align="center">'+no+'</td>';
+		template+='<td><select style="width:100%;" dojoType="dijit.form.NumberTextBox"  autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" >'+subject+'</select></td>';
+		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" onkeyup="calculateTotalScore();" value="" type="text"></td>';	
+		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
+	tmp='<tr id="row'+col+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
+
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+col);
+	} else {$("#identity").val(col);}
+	dojo.html.set(dojo.byId("row"+col),template , {
+	     parseContent: true,
+	});
+}
+record_id=0;
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+}
+function submitDataClose(){
+	if(dijit.byId('add_discount').validate()) {
+		dis_type=dijit.byId('dis_type').get('value');
+		if(dis_type==''){
+			alert('Please Select Discount Type!');
+			return false;
+		}
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'specaildiscount','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("add_discount"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/specaildiscount";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
+</script>

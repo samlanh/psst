@@ -18,8 +18,8 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     			(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
     		    (select name_en from `rms_view` where `rms_view`.`type`=7 and `rms_view`.`key_code`=`rms_tuitionfee`.`time`)AS time,
     		    (SELECT name_en FROM `rms_view` WHERE `rms_view`.`type`=12 AND `rms_view`.`key_code`=`rms_tuitionfee`.`is_finished`)AS is_process,
-    			create_date ,status FROM `rms_tuitionfee`  WHERE   $branch_id  ";
-    	$sql.=" type= $type ";
+    			create_date ,status FROM `rms_tuitionfee`  WHERE 1  $branch_id  ";
+    	$sql.=" AND type= $type ";
     	$where= ' ';
     	$order=" ORDER BY id DESC ";
     	

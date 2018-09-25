@@ -528,9 +528,9 @@ function getAllgroupStudy($teacher_id=null){
    	return $pre.$new_acc_no.$last;
    }
    function getPrefixCode($branch_id){
-   	$db  = $this->getAdapter();
-   	$sql = " SELECT prefix FROM `rms_branch` WHERE br_id= $branch_id LIMIT 1 ";
-   	return $db->fetchOne($sql);
+	   	$db  = $this->getAdapter();
+	   	$sql = " SELECT prefix FROM `rms_branch` WHERE br_id = $branch_id LIMIT 1 ";
+	   	return $db->fetchOne($sql);
    }
    function getallComposition(){
    	$db  = $this->getAdapter();
@@ -1459,6 +1459,32 @@ function getAllgroupStudy($teacher_id=null){
 	  	WHERE n.status = 1 AND n.id = $id LIMIT 1";
 	  return $db->fetchRow($sql);
   }
-  
+  function getPrefixByDegree($degree){
+  	$db= $this->getAdapter();
+  	$sql=" SELECT shortcut FROM `rms_items` WHERE id=$degree LIMIT 1";
+  	return $db->fetchOne($sql);
+  }
+  function getnewStudentId($branch_id,$degree){//used global
+	  	$db = $this->getAdapter();
+	  	$option_type=1;//1 id by branch ,2 by degree
+	  	
+	  	$length = '';
+	  	$pre = '';
+	  	if($option_type==1){
+	  		$sql="SELECT COUNT(stu_id) FROM `rms_student` WHERE branch_id=".$branch_id;
+	  		$stu_num = $db->fetchOne($sql);
+	  		$pre = $this->getPrefixCode($branch_id);//by branch
+	  	}else{
+	  		$pre = $this->getPrefixByDegree($degree);
+	  		$sql="SELECT id_start FROM `rms_items` WHERE id= $degree ";
+	  		$stu_num = $db->fetchOne($sql);
+	  	}
+		  	$new_acc_no= (int)$stu_num+1;
+		  	$length = strlen((int)$new_acc_no);
+		  	for($i = $length;$i<4;$i++){
+		  		$pre.='0';
+		  	}
+	  	return $pre.$new_acc_no;
+  }
 }
 ?>

@@ -1398,51 +1398,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql=" SELECT shortcut FROM `rms_dept` WHERE dept_id=$degree LIMIT 1";
     	return $db->fetchOne($sql);
     }
-    public function getNewAccountNumber($dept_id){
-    	$db = $this->getAdapter();
-    	$length = '';
-    	$pre = '';
-    	
-    	$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree=$dept_id";    	
-//     	if($dept_id==1){//Kindergarten
-//     		$sql=" SELECT COUNT(stu_id) FROM rms_student_id WHERE degree IN (1) and status=1 ";
-//     		//$pre = 'K';
-//     	}else 
-		if($dept_id==6  || $dept_id==8 ){
-    		$sql="SELECT id_start FROM `rms_dept` WHERE dept_id= $dept_id";
-//     		$pre = 'G';
-//     	
-		}
-	//else{
-//     		$sql="SELECT COUNT(stu_id) FROM rms_student_id WHERE degree>4 and status=1 ";
-//     		$pre = 'GE';
-//     	}
-    	$pre = $this->getPrefixByDegree($dept_id);
-    	$pre.='';
-    	
-    	$acc_no = $db->fetchOne($sql);
-        if($dept_id==1){//primary
-//     		$acc_no = $acc_no-12;
-    		$sql="SELECT id_start FROM `rms_dept` WHERE dept_id= $dept_id";
-    		$acc_no = $db->fetchOne($sql);
-    	}elseif($dept_id==4){//kid
-    		$acc_no = $acc_no-9;
-    	}elseif($dept_id==2){//second
-    		$acc_no = $acc_no-5;
-    	}elseif($dept_id==3){//high
-    		$acc_no = $acc_no-1;
-    	}elseif($dept_id==6){  //gesl
-//     		$acc_no = $acc_no;
-    	}elseif($dept_id==8){  //gesl
-//     		$acc_no = $acc_no;
-    	}
-    	$new_acc_no= (int)$acc_no+1;
-    	$length = strlen((int)$new_acc_no);
-    	
-    	for($i = $length;$i<5;$i++){
-    		$pre.='0';
-    	}
-    	return $pre.$new_acc_no;
+    public function getNewAccountNumber($branch_id,$degree){
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	return $db->getnewStudentId($branch_id,$degree);
     }
     function resetReceipt(){
     	$db = $this->getAdapter();

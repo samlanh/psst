@@ -906,8 +906,7 @@ dojo.ready(function(){
 		}, "village_note");
 		filterDistrict();
 		getStudentNo();
-		
-
+		dijit.byId('student_province').attr('value',12)
 }); 
 
 
@@ -1037,15 +1036,17 @@ function getRefreshGroup(){
 	});
 }
 
-var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
+var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
 function getStudentNo(){
 	dept_id = dijit.byId('degree').get('value');
 	if(dept_id=='' || dept_id==-1){return false;}
-	//alert(dept_id);
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){return false;}
 	dojo.xhrPost({
 		url:url_getstuno,
 		content:{
-			'dept_id':dept_id
+			'dept_id':dept_id,
+			'branch_id':branch_id
 			},
 		handleAs:"json",
 		load: function(data) {

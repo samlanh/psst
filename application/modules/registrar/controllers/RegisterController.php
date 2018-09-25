@@ -93,7 +93,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 //        $this->view->all_student_test = $db->getAllStudentTested();
        
        $this->view->all_year = $db->getAllYears();
-       $this->view->all_product = $db->getAllProductName();
+//        $this->view->all_product = $db->getAllProductName();
        
 	   $test = $this->view->branch_info = $db->getBranchInfo();
 	   $db = new Foundation_Model_DbTable_DbStudent();
@@ -400,16 +400,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-   function getStuNoAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
-			$dept_id=$data['dept_id'];
-			$stu_no = $db->getNewAccountNumber($dept_id);
-			print_r(Zend_Json::encode($stu_no));
-			exit();
-		}
-	}
 //     function getPaymentTermAction(){
 //     	if($this->getRequest()->isPost()){
 //     		$data=$this->getRequest()->getPost();

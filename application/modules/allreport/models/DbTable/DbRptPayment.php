@@ -304,32 +304,28 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=s.sex LIMIT 1)AS sex,
 					stu_code,
 					is_subspend,
-					
 					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
-					(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year) AS academic_year,
+					(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic_year,
 					(SELECT name_en FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=s.session LIMIT 1)AS session,
 					(SELECT major_enname FROM rms_major WHERE rms_major.major_id=s.grade LIMIT 1)AS grade,
 					(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1)AS degree,
 					(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=s.is_subspend) AS STATUS,
-					(SELECT sp.create_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS create_date,
+					(SELECT sp.create_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS create_date,
 					
-					(SELECT spd.subtotal FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS subtotal,
-					(SELECT spd.late_fee FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS late_fee,
-					(SELECT spd.discount_percent FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS discount_percent,
-					(SELECT spd.discount_fix FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS discount_fix,
-					(SELECT spd.paidamount FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS paidamount,
+					(SELECT spd.subtotal FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS subtotal,
 					
-					(SELECT sp.receipt_number FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS receipt_number,
+					(SELECT spd.discount_percent FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS discount_percent,
 					
-					(SELECT spd.start_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS start_date,
-					(SELECT spd.validate FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1 ) AS validate,
+					(SELECT spd.paidamount FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS paidamount,
 					
-					(SELECT spd.payment_term FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS payment_term,
+					(SELECT sp.receipt_number FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS receipt_number,
 					
-					(SELECT scholarship_percent FROM rms_student_payment WHERE student_id=s.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_percent,
-					(SELECT scholarship_amount FROM rms_student_payment WHERE student_id=s.stu_id AND is_void=0 ORDER BY id DESC LIMIT 1) AS scholarship_amount,
+					(SELECT spd.start_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS start_date,
+					(SELECT spd.validate FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1 ) AS validate,
+					
+					(SELECT spd.payment_term FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS payment_term,
 					(SELECT tfd.tuition_fee FROM rms_tuitionfee_detail AS tfd WHERE academic_year = tfd.fee_id AND tfd.class_id=s.grade AND tfd.payment_term =4 LIMIT 1) AS tuition_fee,
-					(SELECT sp.note FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) as note,
+					(SELECT sp.note FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) as note,
 					s.group_id,
 					s.create_date as date_start_study
 				FROM 
@@ -338,7 +334,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					s.status=1 
 					AND s.is_subspend=0 
     		';
-    	//and (SELECT spd.service_id FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.service_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) = 4
+    	
     	$where = ' ';
     
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
@@ -348,7 +344,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	 
-    	//$order = " order by s.group_id ASC,degree ASC,s.grade ASC, s.stu_enname ASC";
+    	
     	$order = " order by degree ASC,s.grade ASC,s.group_id ASC ";
     	if($search['ordering']==1){
     		$order.=" , s.stu_enname ASC ";
@@ -407,11 +403,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    	sp.create_date,
 			    	sp.receipt_number,
 			    	sp.note,
-			    	
-			    	p.title as service_name,
-			    	p.ser_cate_id,
-			    	(select title from rms_program_type as pt where pt.id = p.ser_cate_id) as cate_name,
-			    	
+			    	item.title as service_name,
+			    	item.items_id,
 			    	spd.payment_term,
 			    	spd.start_date,
 			    	spd.validate,
@@ -419,14 +412,14 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    	
     			FROM
     				rms_student AS s,
+    				rms_itemsdetail as item,
     				rms_student_payment AS sp,
-    				rms_student_paymentdetail AS spd,
-    				rms_program_name as p
+    				rms_student_paymentdetail AS spd
+    				
     			WHERE
     				sp.student_id=s.stu_id
     				AND sp.id=spd.payment_id 
-    				and p.service_id = spd.service_id
-    				AND spd.type=3 
+    				AND item.id = spd.itemdetail_id
     				and spd.is_start=1
     				and spd.is_onepayment = 0
 			    	and s.status=1
@@ -443,7 +436,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$where.=$dbp->getAccessPermission("s.branch_id");
     
     	//$order="  order by academic_year DESC,degree ASC,grade ASC,session ASC,stu_id DESC";
-    	$order = " order by p.ser_cate_id ASC,spd.service_id ASC, s.stu_enname ASC";
+    	$order = " order by item.id ASC, item.items_id ,s.stu_enname ASC";
     	 
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
@@ -490,7 +483,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    	spd.id,
 			    	spd.type,
 			    	SUM(spd.fee*spd.qty) AS fee,
-			    	SUM(spd.late_fee) AS late_fee,
 			    	SUM(spd.extra_fee) AS extra_fee,
 			    	SUM(spd.paidamount) AS paidamount,
 			    	SUM(
@@ -517,15 +509,18 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    	sp.tuition_fee,
 			    	sp.create_date,
 			    	sp.degree,
+			    	
 			    	(SELECT p.title FROM rms_program_name AS p WHERE p.service_id=spd.service_id) AS service_name,
 			    	(SELECT en_name from rms_dept where rms_dept.dept_id=sp.degree limit 1) AS degree_name
 			    	
 			    FROM
+			    	rms_itemsdetail as item,
 				    rms_student_payment as sp,
 				    rms_student_paymentdetail as spd,
 				    rms_student as s
 			    WHERE
-			    	s.stu_id = sp.student_id
+			    	item.id = spd.itemdetail_id,
+			    	AND s.stu_id = sp.student_id
 			    	AND sp.id=spd.payment_id
     				AND is_void=0
     		";

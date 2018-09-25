@@ -176,7 +176,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'stu_khname'	=>$_data['name_kh'],
 						'last_name'		=>$_data['last_name'],
 						'sex'			=>$_data['sex'],
-						//'is_stu_new'	=>$_data['student_type'],
+						'is_stu_new'	=>$_data['student_type'],
 						'nationality'	=>$_data['studen_national'],
 						'nation'		=>$_data['nation'],
 						'dob'			=>$_data['date_of_birth'],
@@ -220,7 +220,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						/////other infomation tab /////
 						'lang_level'	=>$_data['lang_level'],
 						'from_school'	=>$_data['from_school'],
-						//'know_by'		=>$_data['know_by'],
+						'know_by'		=>$_data['know_by'],
 						'sponser'		=>$_data['sponser'],
 						'sponser_phone'	=>$_data['sponser_phone'],
 						//////////////////////////////////////////////				
@@ -270,19 +270,18 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$this->update($group, $where);
 				}
 				
-				$this->_name = 'rms_student_id';
-				$arra=array(
-						'branch_id'	=>$branch_id,
-						'stu_id'	=>$id,
-						'degree'	=>$_data['degree'],
-				);
-				$this->insert($arra);
+// 				$this->_name = 'rms_student_id';
+// 				$arra=array(
+// 						'branch_id'	=>$branch_id,
+// 						'stu_id'	=>$id,
+// 						'degree'	=>$_data['degree'],
+// 				);
+// 				$this->insert($arra);
 				
 				$this->_name = 'rms_student_document';
 				if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				foreach ($ids as $i){
-					//if($_data['document_type_'.$i]!=0 AND $_data['document_type_'.$i] != -1){
 						$_arr = array(
 								'stu_id'		=>$id,
 								'document_type'	=>$_data['document_type_'.$i],

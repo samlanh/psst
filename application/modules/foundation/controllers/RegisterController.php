@@ -239,8 +239,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$student_type=$data['dept_id'];
-			$stu_no = $db->getNewAccountNumber($student_type);
+			$degree=$data['dept_id'];
+			$branch_id=$data['branch_id'];
+			$stu_no = $db->getNewAccountNumber($branch_id,$degree);
 			print_r(Zend_Json::encode($stu_no));
 			exit();
 		}

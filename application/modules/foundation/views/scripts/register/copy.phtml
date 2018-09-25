@@ -1691,7 +1691,7 @@ date_format = '"dd/MM/yyyy"';
 		
 	}	
 		
-	var url_getstuno = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-stu-no')); ?>';
+	var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
 	function getStudentNo(){
 		dept_id = dijit.byId('degree').get('value');
 		if(dept_id=='' || dept_id==-1){return false;}

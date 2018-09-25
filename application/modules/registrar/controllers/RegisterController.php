@@ -48,8 +48,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-    	$data = new Registrar_Model_DbTable_DbRegister();
-    	$db=$this->view->rows_degree=$data->getDegree();
+//     	$data = new Registrar_Model_DbTable_DbRegister();
+//     	$db=$this->view->rows_degree=$data->getDegree();
     	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();

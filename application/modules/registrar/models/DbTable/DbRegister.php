@@ -1538,9 +1538,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     ///select degree searching 
 //     function getDegree(){
-//     	$db=$this->getAdapter();
-//     	$sql="SELECT dept_id AS id,CONCAT(en_name,'-',kh_name) AS `name` FROM rms_dept  WHERE 1";
-//     	return $db->fetchAll($sql);
+// //     	$db=$this->getAdapter();
+// //     	$sql="SELECT dept_id AS id,CONCAT(en_name,'-',kh_name) AS `name` FROM rms_dept  WHERE 1";
+// //     	return $db->fetchAll($sql);
+//     	$_dbg = new Application_Model_DbTable_DbGlobal();
+//     	return $_dbg->getAllItems(1,null);
 //     }
     //function add rms_student_detailpayment
     function addStudentPaymentDetail($data,$type,$paymentid,$complete,$comment,$payment_id_ser){

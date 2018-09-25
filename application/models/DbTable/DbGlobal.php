@@ -412,7 +412,7 @@ function getAllgroupStudy($teacher_id=null){
    		return $opt_term;
    	}
    	$opt_term = array(
-   			0=>$this->tr->translate('PLEASE_SELECT'),
+//    			0=>$this->tr->translate('PLEASE_SELECT'),
    			1=>$this->tr->translate('MONTHLY'),
    			2=>$this->tr->translate('QUARTER'),
    			3=>$this->tr->translate('SEMESTER'),
@@ -795,8 +795,9 @@ function getAllgroupStudy($teacher_id=null){
    }
    function getAllStuName(){
    	$db = $this->getAdapter();
-   	$sql=" select stu_id as id , CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END AS name from rms_student where status=1 and is_subspend=0 ";
-   	return $db->fetchAll($sql);
+//    	$sql=" select stu_id as id , CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END AS name from rms_student where status=1 and is_subspend=0 ";
+//    	return $db->fetchAll($sql);
+	return $this->getAllStudent();
    }
    function getStudentinfoById($stu_id){
 	   	$db=$this->getAdapter();

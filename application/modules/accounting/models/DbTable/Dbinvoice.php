@@ -10,6 +10,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		$sql="SELECT v.id ,
 					s.stu_code ,
 					s.stu_khname ,
+					s.stu_enname ,
+					s.last_name ,
 					(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2) AS sex,
 					DATE_FORMAT(v.invoice_date,'%d-%b-%Y') AS invoice_date,
 					v.invoice_num ,
@@ -24,7 +26,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 				WHERE 
 				    stu_id = student_id 
 					AND v.user_id=u.id
-					AND s.status=1 ";
+					AND s.status=1 
+					AND s.customer_type=1 ";
 		
     	$from_date =(empty($search['start_date']))? '1': " v.input_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " v.input_date <= '".$search['end_date']." 23:59:59'";
@@ -41,9 +44,9 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$s_where[]= " v.totale_amount LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-    	if($search['stu_code']!=""){
-    		$where.=" AND v.student_id=".$search['stu_code'];
-    	}
+//     	if($search['stu_code']!=""){
+//     		$where.=" AND v.student_id=".$search['stu_code'];
+//     	}
     	if($search['stu_name'] !=""){
     		$where.=" AND v.student_id=".$search['stu_name'];
     	}
@@ -63,7 +66,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	public function getinvoiceByid($id){
 		$db= $this->getAdapter();
 		$sql="SELECT v.* ,
-			s.stu_khname ,s.stu_enname ,s.stu_code,s.sex
+			s.stu_khname ,s.stu_enname,s.last_name,s.stu_code,s.sex
 			FROM rms_invoice_account  AS v ,
 			rms_student AS s WHERE stu_id = student_id and id=".$id." LIMIT 1";
 		return $db->fetchrow($sql);

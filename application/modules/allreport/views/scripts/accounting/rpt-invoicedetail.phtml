@@ -20,7 +20,7 @@ p.t_shadow {
 				ul li{line-height: 15px; list-style: none;}
 				ul{padding: 0;margin: 0;}
 				.value{border:1px solid #000 !important;
-					   padding:1px; height:22px !important;line-height: 24px;
+					   padding:1px; height:28px !important;line-height: 24px;
 					}
 				
 			</style>
@@ -63,7 +63,7 @@ p.t_shadow {
 									</ul>
 								</td>
 								<td width="25%" valign="top" style="white-space: nowrap;" ><div  class="value">
-									<?php echo $this->invoice['stu_khname']."/".$this->invoice['stu_enname']; ?>
+									<?php echo $this->invoice['stu_khname']."/".$this->invoice['stu_enname']." ".$this->invoice['last_name']; ?>
 										
 									</div></td>
 								<td></td>
@@ -96,20 +96,20 @@ p.t_shadow {
 							    <td colspan="5">
 								  <p>
 								  	<div style="font-weight: 900;">Dear Parents, </div>
-	 								We would like to inform you that <?php echo $this->invoice['stu_enname']; ?>’s fee to be paid for a term  is as below:
+	 								We would like to inform you that <?php echo $this->invoice['stu_enname']." ".$this->invoice['last_name']; ?>’s fee to be paid for a term  is as below:
 								  </p>
 								 </td>
 							</tr>
 							<tr>
 							    <td colspan="5">
 								    <table width="100%" style="font-size: 14px;border-collapse: collapse; white-space: nowrap;border:1px solid #000;">
-									    <tr style="background:#ccd9ff;height: 25px;text-align: center;font-weight: bolder;">
+									    <tr class="head-tr" style="background:#ccd9ff;height: 25px;text-align: center;font-weight: bolder;">
 										    <td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("N_O");?></td>
 											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("SERVICES");?></td>
 											
 											<?php $s=0; ?>
 											<?php  foreach ($payment_term as $value){?>
-											<?php echo '<th style="border:1px solid #000;white-space: nowrap;min-width:50px;">'.$value.'</th>'; ?>			
+											<?php echo '<td style="border:1px solid #000;white-space: nowrap;min-width:50px;">'.$value.'</td>'; ?>			
 											<?php }?>
 											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("START_DATE");?></td>
 											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("END_DATE");?></td>
@@ -121,7 +121,7 @@ p.t_shadow {
 										?>	
 										<tr style="text-align: center; font-size: 14px;">
 										    <td align="center" style="border:1px solid #000;"><?php echo $key; ?></td>
-											<td style="border:1px solid #000;">&nbsp;&nbsp;<?php if($row['type']==1) echo 'Tuition Fee('.$row['grade'].')';if($row['type']==2) echo $row['service_name']?></td>
+											<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;<?php if($row['type']==1){ echo $tr->translate("TUITION_FEE"); }elseif($row['type']==2){ echo $tr->translate("SERVICE");} echo " ".$row['title']; //if($row['type']==1) echo 'Tuition Fee('.$row['grade'].')';if($row['type']==2) echo $row['service_name']?></td>
 										    <td align="center" style="border:1px solid #000;"><?php if($row['month']!=0) echo '$&nbsp;'.number_format($row['month'],2); ?></td>
 										    <td align="center" style="border:1px solid #000;"><?php if($row['term']!=0) echo '$&nbsp;'.number_format($row['term'],2); ?></td>
 										    <td align="center" style="border:1px solid #000;"><?php if($row['semester']!=0) echo '$&nbsp;'.number_format($row['semester'],2); ?></td>

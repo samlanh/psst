@@ -245,10 +245,10 @@ function oldRow(){
 	 <?php if(!empty($this->invoice_service)) foreach($this->invoice_service  As $row_detail){?>
 	col++;no++;
 	template='';
-		template+='<td width="4%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
 		
-		template+='<td width="12%"><input type="hidden" dojoType="dijit.form.TextBox" required="true" id="type_'+col+'" name="type_'+col+'" value="<?php echo $row_detail['type']?>" /> ';
+		template+='<td ><input type="hidden" dojoType="dijit.form.TextBox" required="true" id="type_'+col+'" name="type_'+col+'" value="<?php echo $row_detail['type']?>" /> ';
 		<?php if ($row_detail['type']==1){?>
 		template+= '<?php echo $tr->translate("TUITION_FEE");?>';
 		<?php }else if ($row_detail['type']==2){?>
@@ -256,18 +256,18 @@ function oldRow(){
 		<?php }?>
 	    template+='</td>';	
 		
-		template+='<td width="12%"> <input type="hidden" dojoType="dijit.form.TextBox" required="true" id="service_'+col+'" name="service_'+col+'" value="<?php echo $row_detail['service_id']?>" /> ';
+		template+='<td > <input type="hidden" dojoType="dijit.form.TextBox" required="true" id="service_'+col+'" name="service_'+col+'" value="<?php echo $row_detail['service_id']?>" /> ';
 		template+='<?php echo $row_detail['title'];?></td>';
 		
 		//template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
-		template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
-		template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="term_'+col+'" name="term_'+col+'" value="0" type="text" required="required" ></td>';
-		template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="semester_'+col+'" name="semester_'+col+'" value="0" type="text" required="required" ></td>';
-		template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="year_'+col+'" name="year_'+col+'" value="0" type="text" required="required" ></td>';
+		template+='<td ><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
+		template+='<td ><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="term_'+col+'" name="term_'+col+'" value="0" type="text" required="required" ></td>';
+		template+='<td ><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="semester_'+col+'" name="semester_'+col+'" value="0" type="text" required="required" ></td>';
+		template+='<td ><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="year_'+col+'" name="year_'+col+'" value="0" type="text" required="required" ></td>';
 		
-		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
-		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
-		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
+		template+='<td ><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
+		template+='<td ><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
+		template+='<td ><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -309,24 +309,24 @@ function addRow() {
 		}
 		col++;no++;
 		template='';
-			template+='<td width="4%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td  align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td align="center" width="2%">'+no+'</td>';
 
-			template+='<td width="12%"><input type="hidden" dojoType="dijit.form.TextBox" required="true" id="type_'+col+'" name="type_'+col+'" value="'+items_type+'" /> ';
+			template+='<td ><input type="hidden" dojoType="dijit.form.TextBox" required="true" id="type_'+col+'" name="type_'+col+'" value="'+items_type+'" /> ';
 			template+= items_type_lable;
 		    template+='</td>';	
 			
-			template+='<td width="12%"> <input type="hidden" dojoType="dijit.form.TextBox" required="true" id="service_'+col+'" name="service_'+col+'" value="'+item+'" /> ';
+			template+='<td > <input type="hidden" dojoType="dijit.form.TextBox" required="true" id="service_'+col+'" name="service_'+col+'" value="'+item+'" /> ';
 			template+=item_Label+'</td>';
 			//template+='<td width="6%"><input dojoType="dijit.form.ValidationTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="term_'+col+'" name="term_'+col+'" value="0" type="text" required="required" ></td>';
-			template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="semester_'+col+'" name="semester_'+col+'" value="0" type="text" required="required" ></td>';
-			template+='<td width="6%"><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="year_'+col+'" name="year_'+col+'" value="0" type="text" required="required" ></td>';
+			template+='<td ><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="amount_'+col+'" name="amount_'+col+'" value="0" type="text" required="required" ></td>';	
+			template+='<td ><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="term_'+col+'" name="term_'+col+'" value="0" type="text" required="required" ></td>';
+			template+='<td ><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="semester_'+col+'" name="semester_'+col+'" value="0" type="text" required="required" ></td>';
+			template+='<td ><input dojoType="dijit.form.NumberTextBox" onkeyup="calulator('+col+');" class="fullside" id="year_'+col+'" name="year_'+col+'" value="0" type="text" required="required" ></td>';
 			
-			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
-			template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
-			template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
+			template+='<td ><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
+			template+='<td ><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
+			template+='<td ><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);

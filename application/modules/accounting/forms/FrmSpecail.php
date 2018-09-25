@@ -70,6 +70,7 @@ class Accounting_Form_FrmSpecail extends Zend_Dojo_Form
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$duration_opt = $db->getAllPaymentTerm(null,null);
+    	array_unshift($duration_opt, array ('0' =>$this->tr->translate("PLEASE_SELECT")));
     	$_duration_type->setMultiOptions($duration_opt);
     	
     	$db = new Application_Model_DbTable_DbGlobal();

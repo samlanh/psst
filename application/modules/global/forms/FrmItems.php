@@ -46,7 +46,7 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	
     	$model = new Application_Model_DbTable_DbGlobal();
-    	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT_DISTYPE"));
     	$Option = $model->getAllDiscount();
     	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
     	$_dis_type = new Zend_Dojo_Form_Element_FilteringSelect("dis_type");

@@ -23,14 +23,14 @@ class Accounting_SpecaildiscountController extends Zend_Controller_Action {
     				'status_type' => "",
     		);
     	}
-        $rs_rows = $db_dept->getAllItems($search);
+        $rs_rows = $db_dept->getAllSpecailDis($search);
 //         $glClass = new Application_Model_GlobalClass();
 //         $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("REQUEST_NAME","PHONE","STUDENT_NAME","DISCOUNT_TYPR","EXPIRE_DATE","STATUS","USER");
+    	$collumns = array("STUDENT_NAME","REQUEST_NAME","PHONE","DISCOUNT_TYPR","EXPIRE_DATE","STATUS","USER");
     	$link=array(
-    			'module'=>'global','controller'=>'specaildiscount','action'=>'edit',
+    			'module'=>'accounting','controller'=>'specaildiscount','action'=>'edit',
     	);
     	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('request_name'=>$link,'phone'=>$link,'stu_name'=>$link));
     	
@@ -95,37 +95,36 @@ class Accounting_SpecaildiscountController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_specail = $frm;
     }
-    
-    function refreshitemsAction(){
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    		$_dbgb = new Application_Model_DbTable_DbGlobal();
-    		$type = empty($data['items_type'])?null:$data['items_type'];
-    		$d_row = $_dbgb->getAllItems($type);
-    		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    		print_r(Zend_Json::encode($d_row));
-    		exit();
-    	}
-    }
-	function adddegreeAction(){
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    		$_dbmodel = new Global_Model_DbTable_DbItems();
-    		$type=1; //Degree
-    		$result=$_dbmodel->addItemsajax($data,$type);
-    		print_r(Zend_Json::encode($result));
-    		exit();
-    	}
-    }
-    function addsubjectajaxAction(){//At callecteral when click client
-    	if($this->getRequest()->isPost()){
-    		$data = $this->getRequest()->getPost();
-    		$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
-    		$option=$_dbmodel->addSubjectajax($data);
-    		$result = array("id"=>$option);
-    		print_r(Zend_Json::encode($result));
-    		exit();
-    	}
-    }
+//     function refreshitemsAction(){
+//     	if($this->getRequest()->isPost()){
+//     		$data = $this->getRequest()->getPost();
+//     		$_dbgb = new Application_Model_DbTable_DbGlobal();
+//     		$type = empty($data['items_type'])?null:$data['items_type'];
+//     		$d_row = $_dbgb->getAllItems($type);
+//     		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+//     		print_r(Zend_Json::encode($d_row));
+//     		exit();
+//     	}
+//     }
+// 	function adddegreeAction(){
+//     	if($this->getRequest()->isPost()){
+//     		$data = $this->getRequest()->getPost();
+//     		$_dbmodel = new Global_Model_DbTable_DbItems();
+//     		$type=1; //Degree
+//     		$result=$_dbmodel->addItemsajax($data,$type);
+//     		print_r(Zend_Json::encode($result));
+//     		exit();
+//     	}
+//     }
+//     function addsubjectajaxAction(){//At callecteral when click client
+//     	if($this->getRequest()->isPost()){
+//     		$data = $this->getRequest()->getPost();
+//     		$_dbmodel = new Global_Model_DbTable_DbSubjectExam();
+//     		$option=$_dbmodel->addSubjectajax($data);
+//     		$result = array("id"=>$option);
+//     		print_r(Zend_Json::encode($result));
+//     		exit();
+//     	}
+//     }
 }
 

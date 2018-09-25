@@ -6,12 +6,12 @@
     	return $_dbgb->getUserId();
     }
 	
-	function getAllItems($search = '',$type=null){
+	function getAllSpecailDis($search = '',$type=null){
 		$db = $this->getAdapter();
 		$sql = " SELECT d.id,
+		d.stu_name,
 		d.request_name,
 		d.phone,
-		d.stu_name,
 		(SELECT so.dis_name FROM rms_discount AS so WHERE so.disco_id = d.dis_type LIMIT 1) AS discount_type,
 		expired_date,
 		(SELECT name_kh FROM rms_view WHERE TYPE=11 AND key_code =d.status) AS status,
@@ -58,7 +58,6 @@
 		return $db->fetchAll($sql.$where.$orderby);
 	}
 	public function AddSpecailDis($_data){
-		//$_db= $this->getAdapter();
 		try{
 			$_arr=array(
 					'request_name'	=> $_data['request_name'],
@@ -106,7 +105,6 @@
 					}
 				}
 			}
-				//$_db->commit();
 			}catch(Exception $e){
 	    		//$_db->rollBack();
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -116,7 +114,6 @@
 	
 	
 	public function UpdateSpecailDis($_data){
-		//$_db= $this->getAdapter();
 		try{
 			$_arr=array(
 					'request_name'	=> $_data['request_name'],
@@ -209,12 +206,10 @@
 				}
 			}
 			
-			//$_db->commit();
 		}catch(Exception $e){
 			//$_db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		//print_r($_data); exit();
 	}
 	public function getSpecailDis($id){
 		$db = $this->getAdapter();

@@ -40,17 +40,17 @@ dojo.require("dijit.form.CheckBox");
 						dijit.byId("duration_type").focus();
 						return false;
 					}
-					var rowId = $('#identity').val();
-					if(rowId!=''){ 
-						var rowIDArray = rowId.split(',');
-						for(var n = 0; n < rowIDArray.length; n++){
-							var row_id = $('#attachment'+rowIDArray[n]).val();
-							if(row_id==''){
-								alert("<?php echo $tr->translate("PLEASE_ATTACH_FILE");?>");
-								return false;
-							}
-						}
-					}
+					//var rowId = $('#identity').val();
+					//if(rowId!=''){ 
+						//var rowIDArray = rowId.split(',');
+						//for(var n = 0; n < rowIDArray.length; n++){
+						//	var row_id = $('#attachment'+rowIDArray[n]).val();
+						//	if(row_id==''){
+							//	alert("<?php// echo $tr->translate("PLEASE_ATTACH_FILE");?>");
+							//	return false;
+							//}
+						//}
+					//}
 					loadingBlock();
 					return true;
 				}else {
@@ -72,7 +72,7 @@ dojo.require("dijit.form.CheckBox");
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAMES");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_degree->getElement("stu_name");?>
 		                </div>
@@ -86,10 +86,10 @@ dojo.require("dijit.form.CheckBox");
 		              <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PERIOD");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<div class="col-md-7 col-sm-7 col-xs-12">
+		                	<div class="col-md-5 col-sm-5 col-xs-12">
 		                	<?php echo $frm_degree->getElement("duration");?>
 		                	</div>
-		                	<div class="col-md-4 col-sm-4 col-xs-12">
+		                	<div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_degree->getElement("duration_type");?>
 		                	</div>
 		                </div>

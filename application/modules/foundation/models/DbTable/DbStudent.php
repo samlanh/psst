@@ -534,11 +534,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	public function getAllFecultyName(){
-		$db = $this->getAdapter();
-		$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' ORDER BY id DESC";
-		//$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' AND dept_id IN(1,2,3,4) ORDER BY id DESC";
+// 		$db = $this->getAdapter();
+// 		$sql ="SELECT dept_id AS id, en_name AS name,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' ORDER BY id DESC";
+// 		//$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' AND dept_id IN(1,2,3,4) ORDER BY id DESC";
 		
-		return $db->fetchAll($sql);
+// 		return $db->fetchAll($sql);
+		$_dbg = new Application_Model_DbTable_DbGlobal();
+		return $_dbg->getAllItems(1,null);
 	}
 	function getProvince(){
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -574,9 +576,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fa_job,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS gu_job,
-		(SELECT CONCAT(major_enname,' ',major_khname) FROM  rms_major WHERE rms_major.major_id=s.grade LIMIT 1) AS grade_name,
-		(SELECT CONCAT(en_name,'-',kh_name) FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1) AS degree_name,
-		(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1) AS degreeTitle,
+		(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
+		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
+		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degreeTitle,
+				
 		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic_year,
 			   (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS start_year,
 			   (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS end_year,

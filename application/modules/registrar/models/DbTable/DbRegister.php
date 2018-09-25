@@ -1230,8 +1230,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS NAME,
 	    			s.sex,
 	    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS YEAR,
-	    	        (SELECT en_name FROM rms_dept WHERE dept_id=sp.degree)AS degree,
-			        (SELECT CONCAT(major_enname) FROM rms_major WHERE major_id=sp.grade ) AS grade,
+	    	        (SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
+			        (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+				
 	 		       sp.grand_total,sp.penalty,sp.credit_memo, sp.create_date ,
 	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS USER,
 	 		       (SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void) AS void,
@@ -1395,7 +1396,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 //     
     function getPrefixByDegree($degree){
     	$db= $this->getAdapter();
-    	$sql=" SELECT shortcut FROM `rms_dept` WHERE dept_id=$degree LIMIT 1";
+    	$sql=" SELECT shortcut FROM `rms_items` WHERE id=$degree AND type=1  LIMIT 1";
     	return $db->fetchOne($sql);
     }
     public function getNewAccountNumber($branch_id,$degree){
@@ -1536,11 +1537,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->getStudentinfoById($stu_id);
     }
     ///select degree searching 
-    function getDegree(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT dept_id AS id,CONCAT(en_name,'-',kh_name) AS `name` FROM rms_dept  WHERE 1";
-    	return $db->fetchAll($sql);
-    }
+//     function getDegree(){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT dept_id AS id,CONCAT(en_name,'-',kh_name) AS `name` FROM rms_dept  WHERE 1";
+//     	return $db->fetchAll($sql);
+//     }
     //function add rms_student_detailpayment
     function addStudentPaymentDetail($data,$type,$paymentid,$complete,$comment,$payment_id_ser){
     	$db=$this->getAdapter();
@@ -1602,14 +1603,16 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     function getAllDegree(){
     	$db=$this->getAdapter();
-    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE is_active=1 AND en_name!='' ";
-    	return $db->fetchAll($sql);
+//     	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE is_active=1 AND en_name!='' ";
+//     	return $db->fetchAll($sql);
+    	$_dbg = new Application_Model_DbTable_DbGlobal();
+    	return $_dbg->getAllItems(1,null);
     }
-    function getAllDegreeGEP(){
-    	$db=$this->getAdapter();
-    	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE en_name!=''  AND is_active=1 ";
-    	return $db->fetchAll($sql);
-    }
+//     function getAllDegreeGEP(){
+//     	$db=$this->getAdapter();
+//     	$sql="SELECT dept_id AS id,en_name AS `name` FROM rms_dept WHERE en_name!=''  AND is_active=1 ";
+//     	return $db->fetchAll($sql);
+//     }
     
     function getAllDegreeBac($type){
     	$db=new Application_Model_DbTable_DbGlobal();
@@ -1760,7 +1763,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		 s.sex,
 	    		 s.stu_code,
 	    		 s.is_stu_new,
-	    		 (SELECT en_name FROM rms_dept WHERE dept_id=s.degree)AS degree,
+	    		 (SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
+	    		 
 	    		 (SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
 	    		 (select first_name from rms_users as u where u.id=sp.user_id) as first_name,
 	    		 (select last_name from rms_users as u where u.id=sp.user_id) as last_name

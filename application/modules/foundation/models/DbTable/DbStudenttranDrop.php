@@ -42,8 +42,8 @@ class Foundation_Model_DbTable_DbStudenttranDrop extends Zend_Db_Table_Abstract
 		if($search['session']){
 			$where.=" AND s.session =".$search['session'];
 		}
-		if($search['status_search']>-1){
-			$where.=" AND s.status =".$search['status_search'];
+		if($search['status']>-1){
+			$where.=" AND status =".$search['status'];
 		}
 		//echo $sql.$where; exit();
 		return $_db->fetchAll($sql.$where);

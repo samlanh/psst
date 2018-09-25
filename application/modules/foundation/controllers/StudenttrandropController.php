@@ -18,7 +18,7 @@ class Foundation_StudenttrandropController extends Zend_Controller_Action {
 						'academic_year'	=> '',
 						'degree'		=> '',
 						'session'		=> '',
-						'status_search'	=> -1,
+						'status'	=> -1,
 				);
 			}
 			$this->view->search = $search;

@@ -323,6 +323,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'user_id'		=>$this->getUserId(),
 					'stu_enname'	=>$_data['name_en'],
 					'stu_khname'	=>$_data['name_kh'],
+					'last_name'		=>$_data['last_name'],
 					'sex'			=>$_data['sex'],
 			//		'is_stu_new'	=>$_data['student_type'],
 					'nationality'	=>$_data['studen_national'],

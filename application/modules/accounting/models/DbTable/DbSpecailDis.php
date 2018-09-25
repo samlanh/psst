@@ -78,7 +78,6 @@
 			if (!file_exists($part)) {
 				mkdir($part, 0777, true);
 			}
-			
 			if (!empty($_data['identity'])){
 				$identity = $_data['identity'];
 				$ids = explode(',', $identity);

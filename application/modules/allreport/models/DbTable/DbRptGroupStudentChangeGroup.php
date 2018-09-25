@@ -73,11 +73,14 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
 				  (SELECT name_en FROM rms_view WHERE rms_view.`type`=2 AND rms_view.`key_code`=st.sex) AS sex,
   
 				  (select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(SELECT rms_group.academic_year FROM rms_group WHERE rms_group.id=gscg.`from_group`)) AS academic_year,
-				  (select major_enname from rms_major where rms_major.major_id=(SELECT rms_group.grade FROM rms_group WHERE rms_group.id=gscg.`from_group`)) AS grade,
+				  
+				  (SELECT rms_itemsdetail.title from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(SELECT rms_group.grade FROM rms_group WHERE rms_group.id=gscg.`from_group`) limit 1) AS grade,
+		
 				  (select name_en from rms_view where rms_view.type=4 and key_code=(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gscg.`from_group`)) AS session,
 				  gscg.`to_group` ,
 				  (select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year ) AS to_academic_year,
-				  (select major_enname from rms_major where rms_major.major_id=g.grade) AS to_grade,
+				  (SELECT rms_itemsdetail.title from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=g.grade limit 1) AS to_grade,
+		
 				  (select name_en from rms_view where rms_view.type=4 and key_code=g.session) AS to_session,
 				  (select name_kh from rms_view where type=17 and key_code=gscg.change_type) as change_type
 				

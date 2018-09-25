@@ -857,6 +857,7 @@
 				        <div class="tab-pane fade in " id="panel26" role="tabpanel">
 				        	<div class="card-box">
 					        	<div class="col-md-12 col-sm-12 col-xs-12">
+					        		<?php if (!empty($this->student_attendance)){?>
 									<table cellpadding="5"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 										<thead>
 										<?php 
@@ -864,7 +865,7 @@
 											$i=0; 
 											$old_groupid=0; 
 											$old_student_id=0; 
-										if (!empty($this->student_attendance)) foreach ($this->student_attendance as $key => $rs){
+										 foreach ($this->student_attendance as $key => $rs){
 											if ($rs['sex']==1){$sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
 										?>
 										<?php if ($old_groupid!=$rs['group_id']){ ?>
@@ -1000,6 +1001,7 @@
 											</td>
 										</tr>
 									</table>
+									<?php }?>
 					        	</div>
 					        </div>
 				        </div>
@@ -1010,6 +1012,7 @@
 				        <div class="tab-pane fade in " id="panel27" role="tabpanel">
 				        	<div class="card-box">
 					        	<div class="col-md-12 col-sm-12 col-xs-12">
+					        		<?php if (!empty($this->student_mistake)) {?>
 									<table cellpadding="5"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 										<thead>
 										<?php 
@@ -1017,7 +1020,7 @@
 											$i=0; 
 											$old_groupid=0; 
 											$old_student_id=0; 
-										if (!empty($this->student_mistake)) foreach ($this->student_mistake as $key => $rs){
+										 foreach ($this->student_mistake as $key => $rs){
 											if ($rs['sex']==1){$sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
 										?>
 										<?php if ($old_groupid!=$rs['group_id']){ ?>
@@ -1163,6 +1166,7 @@
 											</td>
 										</tr>
 									</table>
+									<?php }?>
 					        	</div>
 					        </div>
 				        </div>

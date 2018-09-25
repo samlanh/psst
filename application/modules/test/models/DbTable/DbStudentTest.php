@@ -316,6 +316,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql=" SELECT 
 					*,
+					(SELECT name_en FROM rms_view where type=21 and key_code=rms_student.nationality LIMIT 1) AS nationality,
+    			(SELECT name_en FROM rms_view where type=21 and key_code=rms_student.nation LIMIT 1) AS nation,
 					CASE    
 				WHEN  student_status = 1 THEN '".$tr->translate("SINGLE")."'
 				WHEN  student_status = 2 THEN '".$tr->translate("MARRIED")."'

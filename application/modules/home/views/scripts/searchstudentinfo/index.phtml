@@ -160,7 +160,9 @@ a.btn.btn-default.btn-detail:hover {
                        	<div class="thumb-xl member-thumb m-b-10 center-block">
                        		<?php $photo = $this->baseUrl()."/images/no-profile.png";
                        			if (!empty($rs['photo'])){
-                       				$photo = $this->baseUrl()."/images/".$rs['photo'];
+                       				if (file_exists(PUBLIC_PATH."/images/photo/".$rs['photo'])){
+                       					$photo = $this->baseUrl().'/images/photo/'.$rs['photo'];
+                       				}
                        			}
                        		?>
                            	<img src="<?php echo $photo;?>" class=" img-thumbnail" alt="profile-image">

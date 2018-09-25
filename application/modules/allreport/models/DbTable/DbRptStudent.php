@@ -11,7 +11,11 @@ class Allreport_Model_DbTable_DbRptStudent extends Zend_Db_Table_Abstract
 //     }
     public function getAllStudent($search){
     	$db = $this->getAdapter();
-    	$sql ='select stu_id,CONCAT(stu_enname," - ",stu_khname)AS name,nationality,tel,email,stu_code,home_num,street_num,village_name,
+    	$sql ='select stu_id,CONCAT(stu_enname," - ",stu_khname)AS name,
+    		 (SELECT name_en FROM rms_view where type=21 and key_code=rms_student.nationality LIMIT 1) AS nationality,
+    		 (SELECT name_en FROM rms_view where type=21 and key_code=rms_student.nation LIMIT 1) AS nation,
+    	
+    			tel,email,stu_code,home_num,street_num,village_name,
     		  commune_name,district_name,CONCAT(father_enname," - ",father_khname)AS father_name,father_nation,father_phone,
     		  CONCAT(mother_enname," - ",mother_khname)AS mother_name,mother_nation,mother_phone,
     		  CONCAT(guardian_enname," - ",guardian_khname)AS guardian_name,guardian_nation,guardian_document,guardian_tel,guardian_email,
@@ -22,8 +26,10 @@ class Allreport_Model_DbTable_DbRptStudent extends Zend_Db_Table_Abstract
     		  (select occu_enname from rms_occupation where rms_occupation.occupation_id=rms_student.mother_job limit 1)AS mother_job,
     		  (select occu_enname from rms_occupation where rms_occupation.occupation_id=rms_student.guardian_job limit 1)AS guardian_job,
     		  (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
-    		  (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1)AS grade,
-    		  (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1)AS degree,
+    		  
+    		  (SELECT i.title FROM `rms_items` AS i WHERE i.id = rms_student.degree AND i.type=1 LIMIT 1) AS degree,
+			 (SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = rms_student.grade AND idd.items_type=1 LIMIT 1) AS grade,
+		
     		  (select province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,	   	
     		  (select name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex
     		  from rms_student ';

@@ -18,20 +18,25 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,s.stu_khname,s.stu_enname,
 				s.is_subspend,
+				(SELECT name_en FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+    			(SELECT name_en FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
+    			
 				(SELECT name_kh from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
 				CONCAT(s.stu_khname,'-',s.stu_enname) AS name,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 				tel ,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=s.group_id LIMIT 1) AS group_name,
-				(SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree LIMIT 1) AS degree,
-				(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=s.grade LIMIT 1) AS grade,
+				
+			  (SELECT i.title FROM `rms_items` AS i WHERE i.id = s.degree AND i.type=1 LIMIT 1) AS degree,
+			  (SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = s.grade AND idd.items_type=1 LIMIT 1) AS grade,
+			 
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
 				s.sex as sexcode,
 				status,
 				photo
-				FROM rms_student AS s  WHERE  s.status = 1 ";
+				FROM rms_student AS s  WHERE  s.status = 1 AND s.customer_type = 1";
 // 				(SELECT name_kh FROM `rms_view` WHERE TYPE=1 AND key_code = status LIMIT 1) AS status,
 		$orderby = " ORDER BY s.stu_enname,s.stu_khname ASC ";
 		if(empty($search)){
@@ -92,7 +97,19 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 // 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 // 		$where = " AND ".$from_date." AND ".$to_date;
 
- 		$sql = "SELECT *,(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+ 		$sql = "SELECT s.*,
+ 				
+ 				(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
+    			
+    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS father_nation,
+    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS mother_nation,
+    			(SELECT name_kh FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardian_nation,
+    			
+ 				(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+				(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+		    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+		    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
 				(SELECT province_en_name FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_name,
 				
 				(SELECT CONCAT(g.group_code,' ',
@@ -100,12 +117,16 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				 FROM rms_group AS g WHERE g.id=s.group_id )  AS group_name,
 				 
 				 (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')')AS years FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year GROUP BY from_academic,to_academic,generation,TIME ) AS year_name,
-				 (SELECT en_name FROM rms_dept WHERE dept_id=s.degree LIMIT 1) AS degree_name,
-				 (SELECT major_enname FROM rms_major WHERE major_id=s.grade LIMIT 1) AS grade_name,
+				 
+				(SELECT i.title FROM `rms_items` AS i WHERE i.id = s.degree AND i.type=1 LIMIT 1) AS degree_name,
+			    (SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = s.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
+			  
 				 (SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1 ) AS room_name,
 				  (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
 				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job
+				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+				 (SELECT k.title FROM `rms_know_by` AS k WHERE k.id = s.know_by LIMIT 1) AS know_by,
+				 (SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
 				  
 				FROM rms_student as s WHERE 1 AND s.stu_id=$stu_id";
 		
@@ -161,9 +182,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
-// 		$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
-// 		$to_date   = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
-// 		$where = " AND ".$from_date." AND ".$to_date;
 	
 		$sql=" Select
 		spd.id,
@@ -193,67 +211,23 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		s.stu_code,
 		s.stu_khname,
 		s.stu_enname,
-		p.title AS service_name,
-		(SELECT pg.name_kh FROM `rms_pro_category` AS pg WHERE pg.id = (SELECT pp.cat_id FROM `rms_product` AS pp WHERE pp.id = p.ser_cate_id LIMIT 1) LIMIT 1) AS product_category,
-		(SELECT major_enname FROM `rms_major` WHERE major_id=sp.grade LIMIT 1) As major_name,
+		p.title,
+		(SELECT i.title FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,
+		
 		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 		(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
-		(select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status,
-		(select title from rms_program_type where rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate
+		(select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status
 		FROM
 		rms_student_payment as sp,
 		rms_student_paymentdetail as spd,
 		rms_student as s,
-		rms_program_name as p
-		where
+		rms_itemsdetail as p
+		WHERE
 		s.stu_id = sp.student_id
 		AND sp.id=spd.payment_id
-		AND p.service_id=spd.service_id
-
+		AND p.id=spd.service_id
+			AND s.customer_type=1
 		AND s.stu_id=$stu_id AND sp.is_void=0 ORDER BY sp.id DESC ";
-// 		if(!empty($search['adv_search'])){
-// 			$s_where = array();
-// 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
-// 			$s_where[] = " REPLACE(stu_code,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[] = " REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[] = " REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[] = " REPLACE(p.title,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[] = " REPLACE(receipt_number,' ','')LIKE '%{$s_search}%'";
-// 			$where .=' AND ( '.implode(' OR ',$s_where).')';
-// 		}
-		
-// 		if($search['branch_id']>0){
-// 			$where .= " and sp.branch_id = ".$search['branch_id'];
-// 		}
-// 		if($search['payment_by']>0){
-// 			$where .= " and spd.type = ".$search['payment_by'];
-// 		}
-// 		if(!empty($search['service'])){
-// 			$where .= " AND spd.type!=1 AND spd.service_id = ".$search['service'];
-// 		}
-// 		if($search['study_year']>0){
-// 			$where .= " and sp.year = ".$search['study_year'];
-// 		}
-// 		if($search['degree']>0){
-// 			$where .= " and sp.degree = ".$search['degree'];
-// 		}
-// 		if($search['grade_all']>0){
-// 			$where .= " AND spd.type=1 AND sp.grade = ".$search['grade_all'];
-// 		}
-// 		if(!empty($search['session'])){
-// 			$where.=" AND sp.session=".$search['session'];
-// 		}
-// 		if($search['user']>0){
-// 			$where .= " and sp.user_id = ".$search['user'];
-// 		}
-// 		if($order_no==1){
-// 			$order=" ORDER BY payment_id DESC, spd.type DESC";
-// 		}elseif($order_no==2){//used order by student
-// 			$order=" ORDER BY sp.student_id DESC ";
-// 		}else{
-// 			$order=" ORDER BY spd.type DESC, p.ser_cate_id DESC ";
-// 		}
-		//echo $sql.$where;
 		return $db->fetchAll($sql);
 	}
 	 
@@ -261,9 +235,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
-// 		$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
-// 		$to_date   = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
-// 		$where = " AND ".$from_date." AND ".$to_date;
 	
 		$sql=" Select
 		spd.id,
@@ -294,70 +265,26 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		s.stu_khname,
 		s.stu_enname,
 		p.title AS service_name,
-		(SELECT pg.name_kh FROM `rms_pro_category` AS pg WHERE pg.id = (SELECT pp.cat_id FROM `rms_product` AS pp WHERE pp.id = p.ser_cate_id LIMIT 1) LIMIT 1) AS product_category,
-		(SELECT major_enname FROM `rms_major` WHERE major_id=sp.grade LIMIT 1) As major_name,
+ 		(SELECT i.title FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,		
+		(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = sp.grade LIMIT 1) AS items_name,
+			  
 		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 		(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
-		(select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status,
-		(select title from rms_program_type where rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate
+		(select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status
+		
 		FROM
 		rms_student_payment as sp,
 		rms_student_paymentdetail as spd,
 		rms_student as s,
-		rms_program_name as p
-		where
+		rms_itemsdetail as p
+		WHERE
 		s.stu_id = sp.student_id
 		AND sp.id=spd.payment_id
-		AND p.service_id=spd.service_id
-
+		AND p.id=spd.service_id
 		AND spd.is_suspend=0 
 		AND spd.type=3
-		
+		AND s.customer_type=1
 		AND s.stu_id=$stu_id";
-// 		if(!empty($search['adv_search'])){
-// 			$s_where = array();
-// 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
-// 			//print_r($s_search);exit();
-// 			$s_where[] = "REPLACE(stu_code,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[] = "REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[] = "REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[] = "REPLACE(p.title,' ','')  		LIKE '%{$s_search}%'";
-// 			$s_where[] = "REPLACE(receipt_number,' ','')LIKE '%{$s_search}%'";
-// 			$where .=' AND ( '.implode(' OR ',$s_where).')';
-// 		}
-	
-// 		if($search['branch_id']>0){
-// 			$where .= " and sp.branch_id = ".$search['branch_id'];
-// 		}
-// 		if($search['payment_by']>0){
-// 			$where .= " and spd.type = ".$search['payment_by'];
-// 		}
-// 		if(!empty($search['service'])){
-// 			$where .= " AND spd.type!=1 AND spd.service_id = ".$search['service'];
-// 		}
-// 		if($search['study_year']>0){
-// 			$where .= " and sp.year = ".$search['study_year'];
-// 		}
-// 		if($search['degree']>0){
-// 			$where .= " and sp.degree = ".$search['degree'];
-// 		}
-// 		if($search['grade_all']>0){
-// 			$where .= " AND spd.type=1 AND sp.grade = ".$search['grade_all'];
-// 		}
-// 		if(!empty($search['session'])){
-// 			$where.=" AND sp.session=".$search['session'];
-// 		}
-// 		if($search['user']>0){
-// 			$where .= " and sp.user_id = ".$search['user'];
-// 		}
-// 		if($order_no==1){
-// 			$order=" ORDER BY payment_id DESC, spd.type DESC";
-// 		}elseif($order_no==2){//used order by student
-// 			$order=" ORDER BY sp.student_id DESC ";
-// 		}else{
-// 			$order=" ORDER BY spd.type DESC, p.ser_cate_id DESC ";
-// 		}
-		//echo $sql.$where;
 		return $db->fetchAll($sql);
 	}
 	 
@@ -365,8 +292,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql=" SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
     	(SELECT room_name AS NAME FROM `rms_room` WHERE is_active=1 AND room_name!='' AND rms_room.room_id=(SELECT g.room_id FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) )AS room_name,
-    	(SELECT CONCAT(m.major_enname,' (',(SELECT d.en_name FROM rms_dept AS d WHERE m.dept_id=d.dept_id ),')')
-    	FROM rms_major AS m WHERE 1 AND major_enname!='' AND m.major_id=(SELECT g.grade FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1))AS grade_name,
+    	
+    	(SELECT CONCAT(rms_itemsdetail.title,' ',(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_itemsdetail.items_id AND rms_items.type=1 LIMIT 1)) FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT g.grade FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
+				
     	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times ,
     	gd.stu_id
     	FROM rms_group_reschedule AS gr,rms_group_detail_student AS gd
@@ -390,8 +318,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					g.id as group_id,
 					g.`group_code`,
 					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-					(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
-					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+				
 					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 					`g`.`semester` AS `semester`,
 					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
@@ -443,8 +372,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					g.id AS group_id,
 					g.`group_code`,
 					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-					(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`) LIMIT 1) AS degree,
-					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`) LIMIT 1 )AS grade,
+					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+				
 					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 					`g`.`semester` AS `semester`,
 					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,

@@ -303,7 +303,7 @@
 					                   </label>
 					                </div>
 					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("HOME");?> 
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NUMBER_HOME");?> 
 					                   </label>
 					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
 					                   		<?php echo $this->rs['home_num'];?>
@@ -565,12 +565,8 @@
 									?>	
 									<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
 										  <thead>
-											  <tr style="text-align:center;background-color: #e8e6e6;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
+											  <tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
 											    <td><?php echo $tr->translate('N_O');?></td>
-											    <!-- 
-											    <td><?php //echo $tr->translate('STUDENT_ID');?></td>
-												<td><?php //echo $tr->translate('STUDENT_NAME');?></td>
-											     -->
 												<td><?php echo $tr->translate('SERVICE_CATE');?></td>
 												<td><?php echo $tr->translate('SERVICE_NAME');?></td>
 												<td><?php echo $tr->translate('PAID_DATE');?></td>
@@ -596,20 +592,11 @@
 											td{padding:0 2px; }
 											.hover:hover{background: #ccc;}
 										</style>
-										  <?php $i=0;if(!empty($this->row)){foreach($this->row as $rs){ $i++;?>
+										  <?php $i=0;if(!empty($this->row)){ foreach($this->row as $rs){ $i++;?>
 										  <tr class="hover" style="font-size:12px; color:#000; height: 18px;"​ align="center">
 										  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
-										  	<!-- <td align="center"><?php //echo $rs['stu_code']; ?></td>
-										    <td style="text-align:left"><?php //echo $rs['stu_khname'].'-'.$rs['stu_enname']; ?></td> -->
-										    <?php if($rs['type']==1){//tuition fee
-											    	$rs['service_cate']="Tuition Fee";
-											    	$rs['service_name']=$rs['major_name'];
-										    	}elseif($rs['type']==4){//for procut
-										    		$rs['service_cate']=$rs['product_category'];
-										    	}
-										    ?>
-										    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
-										    <td style="text-align:left"><?php echo $rs['service_name']; ?></td>
+										    <td style="text-align:left"><?php echo $rs['category']; ?></td>
+										    <td style="text-align:left"><?php echo $rs['title']; ?></td>
 										    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 										    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
 										    <td align="center"><?php echo $rs['scholarship_percent']; ?>%</td>
@@ -651,12 +638,8 @@
 									?>	
 									<table class="padd" width="100%" border="1" align="center" style="border:1px solid #000;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
 										  <thead>
-											  <tr style="text-align:center;background-color: #e8e6e6;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
+											  <tr style="text-align:center;background-color: #ccd9ff;line-height: 30px;font-weight: bold;font-size:12px; height: 20px; align="center" >
 											    <td><?php echo $tr->translate('N_O');?></td>
-											    <!-- 
-											    <td><?php //echo $tr->translate('STUDENT_ID');?></td>
-												<td><?php //echo $tr->translate('STUDENT_NAME');?></td>
-											     -->
 												<td><?php echo $tr->translate('SERVICE_CATE');?></td>
 												<td><?php echo $tr->translate('SERVICE_NAME');?></td>
 												<td><?php echo $tr->translate('PAID_DATE');?></td>
@@ -685,17 +668,8 @@
 										  <?php $i=0;if(!empty($this->service)){foreach($this->service as $rs){ $i++;?>
 										  <tr class="hover" style="font-size:12px; color:#000; height: 18px;"​ align="center">
 										  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
-										  	 <!-- <td align="center"><?php //echo $rs['stu_code']; ?></td>
-										    <td style="text-align:left"><?php //echo $rs['stu_khname'].'-'.$rs['stu_enname']; ?></td>-->
-										    <?php if($rs['type']==1){//tuition fee
-											    	$rs['service_cate']="Tuition Fee";
-											    	$rs['service_name']=$rs['major_name'];
-										    	}elseif($rs['type']==4){//for procut
-										    		$rs['service_cate']=$rs['product_category'];
-										    	}
-										    ?>
-										    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
-										    <td style="text-align:left"><?php echo $rs['service_name']; ?></td>
+										    <td style="text-align:left"><?php echo $rs['category']; ?></td>
+										    <td style="text-align:left"><?php echo $rs['title']; ?></td>
 										    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 										    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
 										    <td align="center"><?php echo $rs['scholarship_percent']; ?>%</td>

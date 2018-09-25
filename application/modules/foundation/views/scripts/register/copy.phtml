@@ -103,6 +103,13 @@ input.btn_borwse_image {
 					                	<?php echo $frm->getElement("branch_id");?>
 					                </div>
 					             </div>
+					             <div class="form-group">
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_TYPE");?> <span class="required">*</span> :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("stu_denttype");?>
+				                   </div>
+				                </div>
 				                <div class="form-group">
 				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_KH");?> <span class="required">*</span> :
 				                   </label>
@@ -118,18 +125,11 @@ input.btn_borwse_image {
 				                   		<?php echo $frm->getElement("name_en");?>
 				                   </div>
 				                </div>
-				              	                 <div class="form-group">
+				              	<div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("sex");?>
-				                   </div>
-				                </div>
-				                 <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_TYPE");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("stu_denttype");?>
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -154,13 +154,6 @@ input.btn_borwse_image {
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POB");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("pob");?>
-				                   </div>
-				                </div>
-				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -170,9 +163,16 @@ input.btn_borwse_image {
 				            </div>
 				            <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
-				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS");?> 
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS_POB");?> 
 				                  	 <input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 				                   </label>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POB");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("pob");?>
+				                   </div>
 				                </div>
 				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("HOME");?>  :
@@ -189,11 +189,18 @@ input.btn_borwse_image {
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?>  :
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PROVINCE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("village_note");?>
-				                   		<input id="village_note"  />
+				                   		<?php echo $frm->getElement("student_province");?>
+				                   </div>
+				                </div>
+				                 <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php //echo $frm->getElement("distric_note");?>
+				                   		<input id="distric_note"  />
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -205,18 +212,11 @@ input.btn_borwse_image {
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?>  :
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("distric_note");?>
-				                   		<input id="distric_note"  />
-				                   </div>
-				                </div>
-				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PROVINCE");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("student_province");?>
+				                   		<?php //echo $frm->getElement("village_note");?>
+				                   		<input id="village_note"  />
 				                   </div>
 				                </div>
 				            </div>

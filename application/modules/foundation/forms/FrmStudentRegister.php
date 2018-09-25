@@ -107,7 +107,9 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$pob = new Zend_Dojo_Form_Element_Textarea('pob');
 		$pob->setAttribs(array('dojoType'=>$this->textarea,
 				'class'=>'fullside',
-				'style'=>'min-height:40px;',
+				//'value'=>'ភ្នំពេញ',
+				//'placeholder'=>$tr->translate("SELECT_YEAR"),
+				'style'=>'min-height:55px;',
 				));
 		
 		
@@ -237,7 +239,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$_stutype->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
 		$type_opt = array(
 				1=>$tr->translate("NEW_STUDENT"),
-				2=>$tr->translate("OLD_STUDENT"));
+				0=>$tr->translate("OLD_STUDENT"));
 		$_stutype->setMultiOptions($type_opt);
 		
 		$remark = new Zend_Dojo_Form_Element_Textarea('remark');

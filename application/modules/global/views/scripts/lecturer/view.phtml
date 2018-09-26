@@ -1,0 +1,217 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
+	echo $this->headTitle(''); 
+	$sex='';
+	if($this->rs['sex']==1){
+		$sex=$tr->translate("MALE");
+	}else{
+		$sex=$tr->translate("FEMALE");
+	}
+	$photo='no-profile.png';
+	if(!empty($this->rs['photo'])){
+		$photo=$this->rs['photo'];
+	}
+?>	
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="dojo/method" event="onSubmit">			
+	if(this.validate()) {
+				return true;
+			} else {
+				return false;
+			}
+</script>
+<style>
+tr.head td h2 {
+    font-size: 16px !important;
+    line-height: 27px !important;
+}
+.b{ font-weight: bold; }
+
+p.padding-left {
+    line-height: 24px !important;
+}
+
+table#exportExcel tr td {
+    font-size: 14px !important;
+}
+label.title {
+    font-size: 14px !important;
+    min-width: 100px !important;
+}
+label.value {
+    font-size: 14px !important;
+    min-width: 100px !important;
+}
+</style>
+<script type="text/javascript">
+dojo.require("dijit.form.NumberTextBox");
+dojo.ready(function(){
+	 
+}); 
+ 
+</script>
+ 
+		<table width="100%">
+		      <tr>
+		           <td></td>
+			       <td>
+						<div class="menureport">
+							<ul>
+								<li class="preview"><a title="Preview" href="#" onclick="preview();"></a></li>
+								<li class="print"><a href="#" title="Print" onclick="doPrint();" ></a></li>
+								<li class="excel"><a href="#"  title="Export"  onclick="exportExcel();"></a></li>
+							</ul>
+						</div>
+			      </td>
+			</tr>
+		   </table>
+		<div style="border: 1px dotted #000;background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+			<div id="divPrint">
+				<style>
+		   			label.value{
+		   				font-weight: initial;
+		   				min-width: 90px;
+		   				font-size: 14px;
+		   				display: inline-block;
+					}
+					p.padding-left {
+					    padding-left: 10px;
+						    line-height: 20px;
+					}
+					label.title {
+					    font-size: 14px;
+					    min-width: 80px;
+					    display: inline-block;
+					}
+					.border {
+					    
+					    display: block;
+					    width: 100%;
+					    height: 1px;
+					    margin-bottom: 10px;
+					}
+		  		 </style>
+				<table width="100%" style="font-size:12px; font-family:Tahoma,'Khmer OS Battambang';"> 
+					<tr class="head">
+						<td width="40%" valign="middle">
+							<img alt="" src="<?php echo $this->baseUrl()."/images/logo.png"?>" style="width: 60px;display: inline-block;margin-right: 10px;">
+							<div style=" display: inline-block;    vertical-align: top;">
+							<h2 style="font-size:14px;     line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" >សាលាបញ្ញាសាស្ត្រអន្តរជាតិ</h2>
+					   		<h2 style="font-size:14px;     line-height: 14px; font-weight: initial; font-family:'Times New Roman';">Paññāsāstra International School</h2>
+							</div>
+					   </td>
+					   <td width="30%" align="center">
+					   		
+					   </td>
+					   <td width="30%" align="center">
+					   		<h2 style="font-size:16px;     line-height: 14px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
+					   		<h2 style="font-size:14px;     line-height: 14px; font-weight: initial; font-family:'Khmer OS Battambang';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
+					   		<img alt="" src="<?php echo $this->baseUrl()."/images/sign.PNG"?>" style=" width: 120px;">
+					   </td>
+					</tr>
+					<tr class="head">
+					   <td colspan="3" align="center">
+					   		<h2 style="font-size:16px;font-weight: initial;font-family:'Khmer OS Muol Light';text-decoration: underline;" >ប្រវត្តិរូបសង្ខេប</h2>
+					   </td>
+					</tr>
+					<tr>
+					   <td colspan="3">
+					   		<table id="exportExcel" style="font-family:'Khmer OS Battambang'; border-collapse:collapse;  font-size:14px; white-space: nowrap;" width="100%" cellspacing="0">
+						    	<tr>
+						    		<td align="center" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			<img src="<?php echo $this->baseUrl();?>/images/<?php echo $photo;?>" style="width:100px;max-height: 120px;border: solid 1px #a29f9f;"/>
+						    		</td>
+						    	</tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			I. <?php echo $tr->translate("LECTURER_INFO");?>
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+						    			<p class="padding-left">
+						    			<label class="title">ឈ្មោះគ្រូ</label> : <label class="value"><?php echo $this->rs['teacher_name_kh'];?></label> <label class="title">ភេទ</label> : <label class="value"><?php echo $this->rs['sex'];?></label> <label class="title">អត្តលេខ</label> : <label class="value"><?php echo $this->rs['teacher_code'];?></label>
+						    			</p>
+						    			<p class="padding-left">
+						    			<label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['nationality'];?></label> <label class="title">ជនជាតិ</label> : <label class="value"><?php echo $this->rs['nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></label>
+						    			</p>
+						    			<p class="padding-left">
+						    			<label class="title">គ្រូបង្រៀន</label> : <label class="value"><?php echo $this->rs['teacher_type'];?></label> 
+						    			</p>
+						    			<p class="padding-left">
+						    			<label class="title">អ៊ីម៉ែល</label> : <label class="value"><?php echo $this->rs['email'];?></label> 
+						    			</p>
+						    		</td>
+						    	</tr>
+						    	<tr><td>&nbsp;</td></tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			II. អាស័យដ្ឋានបច្ចុប្បន្
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+						    			<p class="padding-left">
+						    			<label class="title">រាជធានី/ខេត្ត </label> : <label class="value"><?php echo $this->rs['province_kh_name'];?></label> <label class="title">ស្រុក /ខណ្ឌ</label> : <label class="value"><?php echo $this->rs['district_namekh'];?></label> <label class="title">លេខផ្ទះ</label> : <label class="value"><?php echo $this->rs['home_num'];?></label>
+						    			</p>
+						    			<p class="padding-left">
+						    			 <label class="title">ឃុំ/សង្កាត់ </label> : <label class="value"><?php echo $this->rs['commune_namekh'];?></label> <label class="title">ភូមិ</label> : <label class="value"><?php echo $this->rs['village_namekh'];?></label>​ <label class="title">ផ្លូវលេខ</label> : <label class="value"><?php echo $this->rs['street_num'];?></label>
+						    			</p>
+						    		</td>
+						    	</tr>
+						    	<tr><td>&nbsp;</td></tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+						    			III. ព័ត៌មានទំនាក់ទំនង
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+						    			<p class="padding-left">
+						    			<label class="title">លេខទូរស័ព្ទ </label> : <label class="value"><?php echo $this->rs['tel'];?></label>  <label class="title">អ៊ីម៉ែល </label> : <label class="value"><?php echo $this->rs['email'];?></label> <label class="title">សម្គាល់  </label> : <label class="value"><?php echo $this->rs['note'];?></label> 
+						    			</p>
+						    			<p class="padding-left">
+						    			<label class="title">លេខអត្តសញ្ញាណប័ណ្ណ</label> : <label class="value"><?php echo $this->rs['card_no'];?></label> 
+						    			</p>
+						    			<p class="padding-left">
+						    			<label class="title">លិខិតឆ្លងដែនលេខ</label> : <label class="value"><?php echo $this->rs['passport_no'];?></label>
+						    			</p>
+						    		</td>
+						    	</tr>
+						    </table>
+					   </td>
+					</tr>
+	  		 	</table>
+	   		</div>
+		 </div>
+<script type="text/javascript">
+function doPrint() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+function preview()
+{ 
+  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+      disp_setting+="scrollbars=no,width=1200, height=700, left=100, top=25"; 
+  var content_vlue = document.getElementById("divPrint").innerHTML; 
+  
+  var docprint=window.open("","",disp_setting); 
+   docprint.document.open(); 
+   docprint.document.write('<html><head>'); 
+   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+   docprint.document.write(content_vlue);          
+   docprint.document.write('</center></div></html>'); 
+   docprint.document.close(); 
+   docprint.focus(); 
+}
+function exportExcel(){
+	$('#exportExcel').tableExport({type:'excel',escape:'false'});
+}
+</script>
+

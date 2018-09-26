@@ -1,6 +1,9 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("LECTURER"));
+	
+	$urlCopy = $this->baseUrl()."/global/lecturer/copy/id/";
+	$urlView = $this->baseUrl()."/global/lecturer/view/id/";
 ?>	
 <?php $frm =  $this->frm_search;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -41,3 +44,41 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+dojo.require("dijit.form.CheckBox"); 
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.DateTextBox");
+	
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+			
+				var m = "clicked: " + key;
+				if(key=="view"){
+					url='<?php echo $urlView;?>';
+				}else if(key=="copy"){
+					url='<?php echo $urlCopy;?>';
+				}
+				gotoAction();
+				//window.console && console.log(m) || alert(m); 
+			},
+			items: {
+				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+				"view": {name: "<?php echo $tr->translate("Profile");?>", icon: "fa-user"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+	var recordid ='';
+	function gotoAction(){
+		window.open(url+row, '_blank');
+		 //window.open(url+row);
+	}
+</script> 

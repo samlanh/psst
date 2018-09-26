@@ -34,10 +34,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				$link=array(
 						'module'=>'foundation','controller'=>'register','action'=>'edit',
 				);
-				$link1=array(
-						'module'=>'foundation','controller'=>'register','action'=>'view',
-				);
-				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link1,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'stu_enname'=>$link,'grade'=>$link));
+				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'name'=>$link,'stu_khname'=>$link,'stu_enname'=>$link,'grade'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -263,6 +260,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$db= new Foundation_Model_DbTable_DbStudent();
 		$this->view->rs = $db->getStudentViewDetailById($id);
 	}
+	
 	public function copyAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db= new Foundation_Model_DbTable_DbStudent();

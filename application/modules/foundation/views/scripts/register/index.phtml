@@ -9,6 +9,7 @@
 	
 	$urlCopy = $this->baseUrl()."/foundation/register/copy/id/";
 	$urlEdit = $this->baseUrl()."/foundation/register/edit/id/";
+	$urlView = $this->baseUrl()."/foundation/register/view/id/";
 	$urlTrandrop = $this->baseUrl()."/foundation/studenttrandrop/stutrandrop/id/";
 ?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -106,6 +107,9 @@ dojo.require("dijit.form.DateTextBox");
 					url='<?php echo $urlEdit;?>';
 				}else if(key=="copy"){
 					url='<?php echo $urlCopy;?>';
+				}
+				else if(key=="view"){
+					url='<?php echo $urlView;?>';
 				}else if(key=="stutrandrop"){
 					url='<?php echo $urlTrandrop;?>';
 				}
@@ -116,6 +120,7 @@ dojo.require("dijit.form.DateTextBox");
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
 				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
+				"view": {name: "<?php echo $tr->translate("Profile");?>", icon: "fa-user"},
 				"stutrandrop": {name: "<?php echo $tr->translate("TRANDROP");?>", icon: "copy"},
 			}
 		});

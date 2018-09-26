@@ -237,6 +237,32 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		}
 		return $db->fetchAll($sql.$where.$order_by);
 	}
+	
+	public function getViewById($id){
+		$db = $this->getAdapter();
+		$sql = "SELECT *, 
+				p.province_kh_name,			
+				d.district_namekh,
+				c.commune_namekh,
+				v.village_namekh,				
+				g.teacher_code, 
+				g.teacher_name_kh,
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex, 
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nation) AS nation, 
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
+				g.position_add,
+				g.tel,
+				g.email,
+				g.note				
+				FROM rms_teacher AS g ,
+				ln_village AS v,`ln_commune` AS c, `ln_district` AS d , `rms_province` AS p 
+				WHERE v.commune_id = c.com_id AND c.district_id = d.dis_id AND d.pro_id = p.province_id AND id=$id";
+		$sql.=" LIMIT 1";
+		$row=$db->fetchRow($sql);
+		return $row;
+	}
+	
 	public function addNewPosition($data){//ajax
 		$this->_name = "rms_staff_position" ;
 		$_arr=array(

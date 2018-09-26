@@ -64,10 +64,9 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		));
 		$dob->setValue(date('Y-m-d'));
 		
-		$rs_province = $_dbgb->getProvince();
+		$rs_province = $_dbgb->getAllProvince();
 		$opt = array();
-		if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['province_id']]=$row['province_en_name'];
-		
+		if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['id']]=$row['name'];
 		$_province_id = new Zend_Dojo_Form_Element_FilteringSelect("province_id");
 		$_province_id->setMultiOptions($opt);
 		$_province_id->setAttribs(array(

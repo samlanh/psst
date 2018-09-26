@@ -18,7 +18,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	 */
 	function currentlang(){
 		$session_lang=new Zend_Session_Namespace('lang');
-		return $session_lang->lang_id;
+		$lang = $session_lang->lang_id;
+		if (empty($session_lang->lang_id)){
+			$lang = 1;
+		}
+		return $lang;
 	}
 	public function getGlobalDb($sql)
   	{
@@ -205,7 +209,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getProvince(){
    	$db = $this->getAdapter();
-   	$sql ="SELECT province_en_name,province_id FROM rms_province WHERE status=1 AND province_en_name!='' ";
+   	$lang = $this->currentlang();
+   	$field = 'province_en_name';
+   	if ($lang==1){
+   		$field = 'province_kh_name';
+   	}
+   	$sql ="SELECT $field as province_en_name,province_id FROM rms_province WHERE status=1 AND province_en_name!='' ";
    	return $db->fetchAll($sql);
    }
    public function getOccupation(){
@@ -223,7 +232,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getAllNation(){
    	$db = $this->getAdapter();
-   	$sql = "SELECT key_code as id, name_kh AS name FROM rms_view WHERE rms_view.type=21 AND name_kh!='' ORDER BY rms_view.id ASC";
+   	$lang = $this->currentlang();
+   	$field = 'name_en';
+   	if ($lang==1){
+   		$field = 'name_kh';
+   	}
+   	$sql = "SELECT key_code as id, $field AS name FROM rms_view WHERE rms_view.type=21 AND name_kh!='' ORDER BY rms_view.id ASC";
    	return $db->fetchAll($sql);
    }
    
@@ -287,7 +301,13 @@ function getAllgroupStudy($teacher_id=null){
    }   
    public function getAllSubjectStudy(){
    	$db = $this->getAdapter();
-   		$sql = " SELECT id,subject_titlekh as name,shortcut FROM `rms_subject` WHERE
+
+   	$lang = $this->currentlang();
+   	$field = 'subject_titleen';
+   	if ($lang==1){
+   		$field = 'subject_titlekh';
+   	}
+   		$sql = " SELECT id,$field as name,shortcut FROM `rms_subject` WHERE
    		is_parent=1 AND status = 1 and subject_titlekh!='' ";
    	return $db->fetchAll($sql);
    }
@@ -545,7 +565,12 @@ function getAllgroupStudy($teacher_id=null){
    }
    function getAllProvince($opt=null,$option=null){
    	$db= $this->getAdapter();
-   	$sql="SELECT province_id as id,province_kh_name AS name FROM rms_province WHERE status=1 ";
+   	$lang = $this->currentlang();
+   	$field = 'province_en_name';
+   	if ($lang==1){
+   		$field = 'province_kh_name';
+   	}
+   	$sql="SELECT province_id as id,$field AS name FROM rms_province WHERE status=1 ";
    	$rows =  $db->fetchAll($sql);
    	if($opt==null){
    		return $rows;
@@ -562,14 +587,28 @@ function getAllgroupStudy($teacher_id=null){
    
    public function getAllDistrict(){
    	$this->_name='ln_district';
-   	$sql = " SELECT dis_id,pro_id,CONCAT(district_name,'-',district_namekh) district_name FROM $this->_name WHERE status=1 AND district_name!='' ";
+   	$lang = $this->currentlang();
+   	$field = 'district_name';
+   	if ($lang==1){
+   		$field = 'district_namekh';
+   	}
+//    	$sql = " SELECT dis_id,pro_id,CONCAT(district_name,'-',district_namekh) district_name FROM $this->_name WHERE status=1 AND district_name!='' ";
+   	$sql = " SELECT dis_id,pro_id,$field AS district_name FROM $this->_name WHERE status=1 AND district_name!='' ";
    	$db = $this->getAdapter();
    	return $db->fetchAll($sql);
    }
    
    public function getAllsubject(){
    	$db = $this->getAdapter();
-   	$sql = "SELECT id ,CONCAT(subject_titleen,'-',subject_titlekh) AS  subject_name
+   	
+   	$lang = $this->currentlang();
+   	$field = 'subject_titleen';
+   	if ($lang==1){
+   		$field = 'subject_titlekh';
+   	}
+//    	$sql = "SELECT id ,CONCAT(subject_titleen,'-',subject_titlekh) AS  subject_name
+//    	FROM `rms_subject` WHERE status=1 AND(subject_titleen!='' OR subject_titlekh!='')";
+   	$sql = "SELECT id ,$field AS  subject_name
    	FROM `rms_subject` WHERE status=1 AND(subject_titleen!='' OR subject_titlekh!='')";
    	return $db->fetchAll($sql);
    }
@@ -622,7 +661,13 @@ function getAllgroupStudy($teacher_id=null){
    }
    function getGender(){
    	$db=$this->getAdapter();
-   	$sql="SELECT key_code,CONCAT(name_en,'-',name_kh) AS view_name FROM rms_view WHERE `type`=2 AND `status`=1";
+   	$lang = $this->currentlang();
+   	$field = 'name_en';
+   	if ($lang==1){
+   		$field = 'name_kh';
+   	}
+//    	$sql="SELECT key_code,CONCAT(name_en,'-',name_kh) AS view_name FROM rms_view WHERE `type`=2 AND `status`=1";
+   	$sql="SELECT key_code,$field AS view_name FROM rms_view WHERE `type`=2 AND `status`=1";
    	return $db->fetchAll($sql);
    }
    function getAllBranchName(){
@@ -711,7 +756,14 @@ function getAllgroupStudy($teacher_id=null){
    }
    function getViewByType($type,$is_opt=null){
    	$db=$this->getAdapter();
-   	$sql="SELECT key_code as id ,name_kh AS name FROM rms_view WHERE `type`=$type AND `status`=1 ORDER BY name_kh ASC ";
+   	
+   	$lang = $this->currentlang();
+   	$field = 'name_en';
+   	if ($lang==1){
+   		$field = 'name_kh';
+   	}
+   	
+   	$sql="SELECT key_code as id ,$field AS name FROM rms_view WHERE `type`=$type AND `status`=1 ORDER BY name_kh ASC ";
    	$rows = $db->fetchAll($sql);
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$options= array(-1=>$tr->translate("CHOOSE"));
@@ -849,11 +901,12 @@ function getAllgroupStudy($teacher_id=null){
    	$db= $this->getAdapter();
    	$sql="SELECT  DISTINCT(generation) AS generation FROM `rms_tuitionfee` WHERE generation!=''ORDER BY id DESC ";
    	$rows =  $db->fetchAll($sql);
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	if($opt==null){
    		return $rows;
    	}else{
    		if($option!=null){
-   			$opt_gen = array(-1=>"Please Select Type");
+   			$opt_gen = array(-1=>$tr->translate("Please Select Type"));
    		}else{
    			$opt_gen=array();
    		}
@@ -1080,7 +1133,12 @@ function getAllgroupStudy($teacher_id=null){
   
   public function getAllSubjectName(){
   	$db = $this->getAdapter();
-  	$sql=" SELECT id ,subject_titlekh AS name FROM `rms_subject` WHERE STATUS=1 AND subject_titlekh != '' order by id DESC ";
+  	$lang = $this->currentlang();
+  	$field = 'subject_titleen';
+  	if ($lang==1){
+  		$field = 'subject_titlekh';
+  	}
+  	$sql=" SELECT id ,$field AS name FROM `rms_subject` WHERE STATUS=1 AND subject_titlekh != '' order by id DESC ";
   	return $db->fetchAll($sql);
   }
    
@@ -1092,7 +1150,12 @@ function getAllgroupStudy($teacher_id=null){
    
   public function getAllDayName(){
   	$db = $this->getAdapter();
-  	$sql=" SELECT key_code as id ,name_en AS name FROM `rms_view` WHERE status=1 AND name_en!= '' AND TYPE=18";
+  	$lang = $this->currentlang();
+  	$field = 'name_en';
+  	if ($lang==1){
+  		$field = 'name_kh';
+  	}
+  	$sql=" SELECT key_code as id ,$field AS name FROM `rms_view` WHERE status=1 AND name_en!= '' AND TYPE=18";
   	return $db->fetchAll($sql);
   }
 
@@ -1401,7 +1464,12 @@ function getAllgroupStudy($teacher_id=null){
   }
   function getProcessTypeView(){
   	$db = $this->getAdapter();
-  	$sql="SELECT key_code AS id , name_en AS `name` FROM rms_view  WHERE `status`=1 AND type=12";
+  	$lang = $this->currentlang();
+  	$field = 'name_en';
+  	if ($lang==1){
+  		$field = 'name_kh';
+  	}
+  	$sql="SELECT key_code AS id , $field AS `name` FROM rms_view  WHERE `status`=1 AND type=12";
   	return $db->fetchAll($sql);
   }
   function getAllDiscountName(){

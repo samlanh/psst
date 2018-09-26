@@ -139,7 +139,13 @@ class Global_Model_DbTable_DbVillage extends Zend_Db_Table_Abstract
 // 	}
        public function getAllvillagebyCommune($village_id){
 		$db = $this->getAdapter();
-		$sql = "SELECT vill_id AS id,village_namekh AS name FROM $this->_name WHERE village_name!='' AND status=1 AND commune_id=".$db->quote($village_id);
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$lang = $_dbgb->currentlang();
+		$field = 'village_name';
+		if ($lang==1){
+			$field = 'village_namekh';
+		}
+		$sql = "SELECT vill_id AS id,$field AS name FROM $this->_name WHERE village_name!='' AND status=1 AND commune_id=".$db->quote($village_id);
 		$rows=$db->fetchAll($sql);
 		return $rows;
 	}	

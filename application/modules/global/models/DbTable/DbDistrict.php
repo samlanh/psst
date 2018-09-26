@@ -79,7 +79,13 @@ class Global_Model_DbTable_DbDistrict extends Zend_Db_Table_Abstract
 	}	
 	public function getDistrictByIdProvince($pro_id){
 		$db = $this->getAdapter();
-		$sql = "SELECT dis_id AS id ,district_namekh AS name FROM $this->_name WHERE status=1 AND pro_id = ".$db->quote($pro_id);
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$lang = $_dbgb->currentlang();
+		$field = 'district_name';
+		if ($lang==1){
+			$field = 'district_namekh';
+		}
+		$sql = "SELECT dis_id AS id ,$field AS name FROM $this->_name WHERE status=1 AND pro_id = ".$db->quote($pro_id);
 		$rows=$db->fetchAll($sql);
 		return $rows;
 	}

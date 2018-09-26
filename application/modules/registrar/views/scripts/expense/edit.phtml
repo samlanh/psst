@@ -324,7 +324,7 @@ function netTotal() {
 	var rowId = $('#identity').val();
 	var rowIDArray = rowId.split(',');
 	for(var n = 0; n < rowIDArray.length; n++) {
-		netTotal += dijit.byId('total_pain'+rowIDArray[n]).get('value');
+		netTotal += dijit.byId('total_'+rowIDArray[n]).get('value');
 	}
 	dijit.byId('total_amount').attr('value',netTotal);
  }
@@ -347,11 +347,11 @@ function oldRow(){ //alert(1);
     }
 	template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 	template+='<td width="50px" align="center">'+no+'</td>';
-	template+='<td style="width:300px"><select style="width:100%" " dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
-	template+='<td><input type="text" required="1" " name="price_pain'+col+'" id="price_pain'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
-	template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_pain'+col+'" id="qty_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
-	template+='<td><input type="text" readonly="readonly" name="total_pain'+col+'" id="total_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
-	template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:100%;" /><label id="subsub"></label></td>';
+	template+='<td style="width:300px"><select style="width:100%" " dojoType="dijit.form.FilteringSelect" id="expense_id_'+col+'" name="expense_id_'+col+'">'+optexpense+'</select></td>';	
+	template+='<td><input type="text" required="1" " name="price_'+col+'" id="price_'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
+	template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
+	template+='<td><input type="text" readonly="readonly" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
+	template+='<td><input type="text" name="remark_'+col+'" id="remark_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:100%;" /><label id="subsub"></label></td>';
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -362,11 +362,11 @@ function oldRow(){ //alert(1);
 	dojo.html.set(dojo.byId("row"+col),template , {
 	     parseContent: true,
 	});
-	dijit.byId('expense_id'+col).attr('value',"<?php echo $row['service_id'];?>");
-	dijit.byId('price_pain'+col).attr('value',"<?php echo $row['price_pain'];?>");
-	dijit.byId('qty_pain'+col).attr('value',"<?php echo $row['qty_pain'];?>");
-	dijit.byId('total_pain'+col).attr('value',"<?php echo $row['total_pain'];?>");
-	dijit.byId('remark'+col).attr('value',"<?php echo $row['description'];?>");
+	dijit.byId('expense_id_'+col).attr('value',"<?php echo $row['service_id'];?>");
+	dijit.byId('price_'+col).attr('value',"<?php echo $row['price'];?>");
+	dijit.byId('qty_'+col).attr('value',"<?php echo $row['qty'];?>");
+	dijit.byId('total_'+col).attr('value',"<?php echo $row['total'];?>");
+	dijit.byId('remark_'+col).attr('value',"<?php echo $row['description'];?>");
 	
 	<?php }}?>
 }
@@ -397,11 +397,11 @@ function addRow() {
 	    }
 		template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="50px" align="center">'+no+'</td>';
-		template+='<td style="width:300px"><select style="width:100%" onchange="popupCateExpense('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id'+col+'" name="expense_id'+col+'">'+optexpense+'</select></td>';	
-		template+='<td><input type="text" required="1"  name="price_pain'+col+'" id="price_pain'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
-		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_pain'+col+'" id="qty_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
-		template+='<td><input type="text" readonly="readonly" name="total_pain'+col+'" id="total_pain'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
-		template+='<td><input type="text" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:100%;" /><label id="subsub"></label></td>';
+		template+='<td style="width:300px"><select style="width:100%" onchange="popupCateExpense('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id_'+col+'" name="expense_id_'+col+'">'+optexpense+'</select></td>';	
+		template+='<td><input type="text" required="1"  name="price_'+col+'" id="price_'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
+		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
+		template+='<td><input type="text" readonly="readonly" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
+		template+='<td><input type="text" name="remark_'+col+'" id="remark_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:100%;" /><label id="subsub"></label></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -415,16 +415,16 @@ function addRow() {
  }
 
 function calculateTotal(index,type){
-	if(type==1){
-		price = dijit.byId('price_pain'+index).get('value');
-		price = isNaN(price)?0:price;
-		
-		qty = dijit.byId('qty_pain'+index).get('value');
-		qty = isNaN(qty)?0:qty;
-		
-		dijit.byId('total_pain'+index).attr('value',price * qty);
-		
-	}
+	price = dijit.byId('price_'+index).get('value');
+	price = isNaN(price)?0:price;
+	
+	qty = dijit.byId('qty_'+index).get('value');
+	qty = isNaN(qty)?0:qty;
+	
+	dijit.byId('total_'+index).attr('value',price * qty);
+	
+	dijit.byId('total_amount').attr('value',netTotal);	
+	netTotal();
 }
 
 function printSave(new_receipt){	
@@ -468,9 +468,9 @@ function printSave(new_receipt){
 				  n=0;
 				i=1;  for(var n = 0; n < rowIDArray.length; n++) {
 				  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-				  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
-				  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
-				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+"$ "+dijit.byId("total_pain"+rowIDArray[n]).attr('displayedValue')+'</td>';
+				  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
+				  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark_"+rowIDArray[n]).get('value')+'</td>';
+				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+"$ "+dijit.byId("total_"+rowIDArray[n]).attr('displayedValue')+'</td>';
 				  i++;
 				  temp+='</tr>';
 				}
@@ -511,7 +511,7 @@ function checkValidateAddRow(){
 	if(rowId!=''){
 		var rowIDArray = rowId.split(',');
 		for(var n = 0; n < rowIDArray.length; n++) {
-			expense = dijit.byId('expense_id'+rowIDArray[n]).get('value');
+			expense = dijit.byId('expense_id_'+rowIDArray[n]).get('value');
 			if(expense<=0){
 				return false;
 			}
@@ -521,7 +521,7 @@ function checkValidateAddRow(){
 
 function popupCateExpense(index){
 	dijit.byId("ex_save_new").attr("disabled",false);
-	expense_id = dijit.byId("expense_id"+index).get('value');
+	expense_id = dijit.byId("expense_id_"+index).get('value');
 	$("#tow_value").val(index);
 	if(expense_id==-1){
 		dijit.byId("popup_cate_expense").show();

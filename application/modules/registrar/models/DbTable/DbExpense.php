@@ -30,11 +30,11 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 			foreach ($ids as $j){
 				$arr = array(
 						'expense_id'	=>$expend_id,
-						'service_id'	=>$data['expense_id'.$j],
-						'description'	=>$data['remark'.$j],
-						'price_pain'	=>$data['price_pain'.$j],
-						'qty_pain'		=>$data['qty_pain'.$j],
-						'total_pain'	=>$data['total_pain'.$j],
+						'service_id'	=>$data['expense_id_'.$j],
+						'description'	=>$data['remark_'.$j],
+						'price'			=>$data['price_'.$j],
+						'qty'			=>$data['qty_'.$j],
+						'total'			=>$data['total_'.$j],
 					);
 			   $this->insert($arr);
 			}
@@ -73,11 +73,11 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 	foreach ($ids as $j){
 		$arr = array(
 				'expense_id'	=>$data['id'],
-				'service_id'	=>$data['expense_id'.$j],
-				'description'	=>$data['remark'.$j],
-				'price_pain'	=>$data['price_pain'.$j],
-				'qty_pain'		=>$data['qty_pain'.$j],
-				'total_pain'	=>$data['total_pain'.$j],);
+				'service_id'	=>$data['expense_id_'.$j],
+				'description'	=>$data['remark_'.$j],
+				'price'			=>$data['price_'.$j],
+				'qty'			=>$data['qty_'.$j],
+				'total'			=>$data['total_'.$j],);
 		$this->insert($arr);
 	}
 	$_db->commit();

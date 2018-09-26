@@ -107,7 +107,7 @@ function getAllExpense($search=null){
 	
 	$sql=" SELECT id,
 	(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id =branch_id LIMIT 1) AS branch_name,
-	title,invoice,
+	receiver,title,invoice,
 	(SELECT name_kh FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_type limit 1) AS payment_type,
 	total_amount,description,date,
 	(SELECT first_name FROM `rms_users` WHERE id=1 LIMIT 1) as user_name,
@@ -118,6 +118,7 @@ function getAllExpense($search=null){
 			$s_search = trim(addslashes($search['adv_search']));
 			$s_where[] = " title LIKE '%{$s_search}%'";
 			$s_where[] = " invoice LIKE '%{$s_search}%'";
+			$s_where[] = " receiver LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}
 		if($search['status']>-1){

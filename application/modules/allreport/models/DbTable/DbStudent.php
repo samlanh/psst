@@ -125,6 +125,66 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where);
 	}
 	
+	function getAllCRMDailyContact($search = ''){
+		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql="
+			SELECT 
+			cc.id,
+			cc.crm_id,
+			cc.contact_date,
+			cc.feedback,cc.next_contact,
+			cc.user_contact,
+			(SELECT CONCAT(first_name) FROM rms_users WHERE cc.user_contact=id LIMIT 1 ) AS user_contact,
+			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+			(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=id LIMIT 1 ) AS userby,
+			 CASE
+				WHEN  c.sex = 1 THEN '".$tr->translate("MALE")."'
+				WHEN  c.sex = 2 THEN '".$tr->translate("FEMALE")."'
+			END AS sexTitle,
+			CASE
+			WHEN  cc.proccess = 0 THEN '".$tr->translate("DROPPED")."'
+			WHEN  cc.proccess = 1 THEN '".$tr->translate("PROCCESSING")."'
+			WHEN  cc.proccess = 2 THEN '".$tr->translate("WAITING_TEST")."'
+			WHEN  cc.proccess = 3 THEN '".$tr->translate("COMPLETED")."'
+			END AS crm_status_title,
+			 c.kh_name,c.first_name,c.last_name,c.tel FROM `rms_crm` AS c,
+			`rms_crm_history_contact` AS cc
+			WHERE cc.crm_id = c.id
+		";
+		
+		$where = ' ';
+		$from_date =(empty($search['start_date']))? '1': " cc.contact_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " cc.contact_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+		$where.= " AND  ".$from_date." AND ".$to_date;
+		if(!empty($search['advance_search'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['advance_search']));
+			$s_where[] = " c.kh_name LIKE '%{$s_search}%'";
+			$s_where[] = " c.first_name LIKE '%{$s_search}%'";
+			$s_where[] = " c.last_name LIKE '%{$s_search}%'";
+			$s_where[] = " c.tel LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['branch_search'])){
+			$where.= " AND c.branch_id = ".$db->quote($search['branch_search']);
+		}
+		if(!empty($search['ask_for_search'])){
+			$where.= " AND c.ask_for = ".$db->quote($search['ask_for_search']);
+		}
+		if(!empty($search['crm_list'])){
+			$where.= " AND cc.crm_id = ".$db->quote($search['crm_list']);
+		}
+		
+		if($search['status_search']>-1){
+			$where.= " AND cc.proccess = ".$db->quote($search['status_search']);
+		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('c.branch_id');
+		$where.=" ORDER BY cc.id DESC";
+		return $db->fetchAll($sql.$where);
+	}
+	
 	function getAllStudentTest($search=null){
 		try{
 			$_db = new Application_Model_DbTable_DbGlobal();

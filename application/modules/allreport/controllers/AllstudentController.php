@@ -784,6 +784,37 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$this->view->prevconcern = $prevCon;
 	}
+	
+	function rptCrmDailyContactAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'advance_search' => "",
+						'branch_search' => "",
+						'ask_for_search' => "",
+						'crm_list'  => "",
+						'status_search' => -1,
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+				);
+			}
+				
+			$db = new Allreport_Model_DbTable_DbStudent();
+			$rs_rows = $db->getAllCRMDailyContact($search);
+			$this->view->row = $rs_rows;
+			$this->view->search  = $search;
+		
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$frm = new Home_Form_FrmCrm();
+		$frm->FrmAddCRM(null);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_crm = $frm;
+	}
 	function rptStudenttestAction(){
 		try{
 			if($this->getRequest()->isPost()){

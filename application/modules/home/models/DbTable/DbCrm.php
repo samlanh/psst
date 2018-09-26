@@ -387,4 +387,10 @@
 		FROM `rms_student` AS st WHERE st.customer_type = 3 ";
 		return $db->fetchAll($sql);
 	}
+	
+	function getAllCrmFilter(){
+		$db = $this->getAdapter();
+		$sql="SELECT c.id,CONCAT(c.kh_name,'/',c.first_name,' ',c.last_name) AS name FROM `rms_crm` AS c WHERE 1";
+		return $db->fetchAll($sql);
+	}
 }

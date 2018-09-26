@@ -17,6 +17,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	$userid = $_dbgb->getUserId();
     	$userinfo = $_dbuser->getUserInfo($userid);
     	
+    	$dbCRM = new Home_Model_DbTable_DbCRM();
+    	
     	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
     	$optionBranch = $_dbgb->getAllBranch();
     	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
@@ -272,6 +274,19 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	}
     	$end_date->setValue($_date);
     	
+    	$_arr_opt_crm = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$optionCRM = $dbCRM->getAllCrmFilter();
+    	if(!empty($optionCRM))foreach($optionCRM AS $row) $_arr_opt_crm[$row['id']]=$row['name'];
+    	$_crm_list = new Zend_Dojo_Form_Element_FilteringSelect("crm_list");
+    	$_crm_list->setMultiOptions($_arr_opt_crm);
+    	$_crm_list->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'missingMessage'=>'Invalid Module!',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'class'=>'fullside height-text',));
+    	$_crm_list->setValue($request->getParam("crm_list"));
+    	
     	if(!empty($data)){
     		
     		$_branch_id->setValue($data["branch_id"]);
@@ -316,7 +331,8 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			$_branch_search,
     			$_status_search,
     			$start_date,
-    			$end_date
+    			$end_date,
+    			$_crm_list
     			));
     	return $this;
     }

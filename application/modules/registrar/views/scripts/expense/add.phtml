@@ -242,7 +242,7 @@ $frm = $this->frm_expense;
 											</td>
 											<td colspan="2" valign="top">
 												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
-													Received By : &nbsp;<label id="lb_receiver"> </label>
+													<h4>Received By :</h4> &nbsp;<label id="lb_receiver"> </label>
 												</div>
 											</td>
 											<td></td>
@@ -349,7 +349,7 @@ function addRow() {
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("CATE_EXPENSE");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("AMOUNT");?></th>';
-			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("TOTAL");?></th>';
+			temp+='<th id="lbl_titlemetion" width="150px"><?php echo $tr->translate("TOTAL");?></th>';
 			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -359,7 +359,7 @@ function addRow() {
 		template+='<td style="width:300px"><select style="width:100%" onchange="popupCateExpense('+col+');" dojoType="dijit.form.FilteringSelect" id="expense_id_'+col+'" name="expense_id_'+col+'">'+optexpense+'</select></td>';	
 		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';	
 		template+='<td><input type="text" required="1" onkeyup="calculateTotal('+col+',1);" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';
-		template+='<td><input type="text" onkeyup="calculateTotal('+col+');" readonly="readonly" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:120px;" /></td>';		
+		template+='<td><input type="text" onkeyup="calculateTotal('+col+');" readonly="readonly" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:150px;" /></td>';		
 		template+='<td><input type="text" name="remark_'+col+'" id="remark_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:100%;" /><label id="subsub"></label></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";
@@ -501,7 +501,7 @@ function addCateExpense(){
 				        name: dijit.byId('account_name').get('value')
 				         };
 					index=$("#tow_value").val();
-				    addDataToSelectbox(dijit.byId('expense_id'+index), cate_expense_store, Itemmake, data.id);
+				    addDataToSelectbox(dijit.byId('expense_id_'+index), cate_expense_store, Itemmake, data.id);
 
 			  optexpense = data.new_array;
 					  

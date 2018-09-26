@@ -214,11 +214,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 //    	return $db->fetchAll($sql);
 //    }
 
-   public function getProvince(){
-   	$db = $this->getAdapter();
-   	$sql ="SELECT province_en_name,province_id FROM rms_province WHERE status=1 AND province_en_name!='' ";
-   	return $db->fetchAll($sql);
-   }
 
    public function getProvince(){
    	$db = $this->getAdapter();

@@ -209,7 +209,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	
     	$rs_province = $_dbgb->getProvince();
     	$opt = array();
-    	if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['province_id']]=$row['province_en_name'];
+    	if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['province_id']]=$row['province_kh_name'];
     		
     	$_province_id = new Zend_Dojo_Form_Element_FilteringSelect("province_id");
     	$_province_id->setMultiOptions($opt);
@@ -221,6 +221,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',
     	));
+    	$_province_id->setValue(12);
     	
 //     	$address=  new Zend_Form_Element_Textarea('address');
 //     	$address->setAttribs(array(

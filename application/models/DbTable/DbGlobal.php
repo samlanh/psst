@@ -819,11 +819,11 @@ function getAllgroupStudy($teacher_id=null){
 	   	$sql.=" ORDER BY stu_id DESC";
 	   	return $db->fetchAll($sql);
    }
-   function getStudentTestbyId($stu_test_id){
-   		$db=$this->getAdapter();
-   		$sql="SELECT * FROM rms_student_test WHERE id = $stu_test_id ";
-   		return $db->fetchRow($sql);
-   }
+//    function getStudentTestbyId($stu_test_id){
+//    		$db=$this->getAdapter();
+//    		$sql="SELECT * FROM rms_student_test WHERE id = $stu_test_id ";
+//    		return $db->fetchRow($sql);
+//    }
    /*end blog student*/
    function getDeduct(){
 	   	$db = $this->getAdapter();

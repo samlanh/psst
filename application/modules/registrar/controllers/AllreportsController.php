@@ -213,7 +213,6 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		if(!empty($search['all_payment'])){
     			
     			$data1=$this->view->row = $db->getDailyReport($search);
-    			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
     			
     			$data3=$this->view->change_product = $db->getAllChangeProduct($search);
     			
@@ -235,9 +234,9 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     		if(!empty($search['student_payment'])){
     			$data1=$this->view->row = $db->getDailyReport($search);
     		}
-    		if(!empty($search['student_test'])){
-    			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
-    		}
+//     		if(!empty($search['student_test'])){
+//     			$data2=$this->view->stu_test = $db->getAllStudentTest($search);
+//     		}
     		if(!empty($search['income'])){
     			if($user_type==1){
 	    			$_db = new Allreport_Model_DbTable_DbRptOtherIncome();

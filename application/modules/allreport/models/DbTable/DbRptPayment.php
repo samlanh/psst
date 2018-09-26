@@ -40,13 +40,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
     
-
-    public function getService(){
-    	$db = $this->getAdapter();
-    	$sql="SELECT `service_id`,title FROM `rms_program_name` WHERE `type`=2  AND `status`=1";
-    	return $db->fetchAll($sql);
-    }
-    
     public function getPaymentDetailByType($search){
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
@@ -135,7 +128,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					s.stu_khname,
 					s.stu_enname,
 					s.create_date AS date_start_study,				  
-					(SELECT major_enname FROM `rms_major` WHERE major_id=sp.grade LIMIT 1) AS major_name,
+					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS major_name,
 					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 					(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
 					spd.payment_term AS payment_id,
@@ -481,49 +474,31 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$where = " AND ".$from_date." AND ".$to_date;
     	$sql=" SELECT
 			    	spd.id,
-			    	spd.type,
+			    	
 			    	SUM(spd.fee*spd.qty) AS fee,
 			    	SUM(spd.extra_fee) AS extra_fee,
 			    	SUM(spd.paidamount) AS paidamount,
-			    	SUM(
-						CASE 
-							WHEN sp.`payment_type`<3 AND spd.type < 3 THEN sp.deduct
-							WHEN sp.`payment_type`=3 THEN sp.deduct END
-					  ) AS deduct,
-					  
-					SUM(
-						CASE 
-							WHEN sp.`payment_type`<3 AND spd.type < 3 THEN sp.fine
-							WHEN sp.`payment_type`=3 THEN sp.fine END
-					  ) AS fine,
-					  
-					SUM(
-						CASE 
-							WHEN sp.`payment_type`<3 AND spd.type < 3 THEN sp.credit_memo
-							WHEN sp.`payment_type`=3 THEN sp.credit_memo END
-					  ) AS credit_memo,
-					  
+			    	
 			    	spd.subtotal,
 			    	spd.discount_percent,
-			    	spd.discount_fix,
-			    	sp.tuition_fee,
+			    	spd.fee,
+			    	sp.penalty,
+			    	sp.credit_memo,
 			    	sp.create_date,
 			    	sp.degree,
-			    	
-			    	(SELECT p.title FROM rms_program_name AS p WHERE p.service_id=spd.service_id) AS service_name,
-			    	(SELECT en_name from rms_dept where rms_dept.dept_id=sp.degree limit 1) AS degree_name
+			    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=spd.itemdetail_id AND rms_items.type=1 LIMIT 1) AS service_name,
+			    	(SELECT title FROM `rms_items` WHERE id=sp.degree LIMIT 1) AS degree_name
 			    	
 			    FROM
-			    	rms_itemsdetail as item,
-				    rms_student_payment as sp,
-				    rms_student_paymentdetail as spd,
-				    rms_student as s
+			    	rms_itemsdetail AS item,
+				    rms_student_payment AS sp,
+				    rms_student_paymentdetail AS spd,
+				    rms_student AS s
 			    WHERE
-			    	item.id = spd.itemdetail_id,
+			    	item.id = spd.itemdetail_id
 			    	AND s.stu_id = sp.student_id
 			    	AND sp.id=spd.payment_id
-    				AND is_void=0
-    		";
+    				AND is_void=0 ";
     	if(!empty($search['title'])){
     		$s_where = array();
 //     		$s_search = addslashes(trim($search['title']));
@@ -538,23 +513,23 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($search['branch_id']>0){
     		$where .= " and sp.branch_id = ".$search['branch_id'];
     	}
-    	if($search['payment_by']>0){
-    		$where .= " and spd.type = ".$search['payment_by'];
-    	}
-    	if(!empty($search['service'])){
-    		$where .= " AND spd.type!=1 AND spd.service_id = ".$search['service'];
-    	}
+//     	if($search['payment_by']>0){
+//     		$where .= " and spd.type = ".$search['payment_by'];
+//     	}
+//     	if(!empty($search['service'])){
+//     		$where .= " AND spd.type!=1 AND spd.service_id = ".$search['service'];
+//     	}
     	if($search['study_year']>0){
     		$where .= " and sp.year = ".$search['study_year'];
     	}
     	if($search['degree']>0){
     		$where .= " and sp.degree = ".$search['degree'];
     	}
-    	if($search['grade_all']>0){
-    		$where .= " AND spd.type=1 AND sp.grade = ".$search['grade_all'];
-    	}
-    	$order=" GROUP BY sp.degree ASC ,spd.type ASC
-    	ORDER BY sp.degree DESC,spd.type ASC, spd.service_id DESC ";
+//     	if($search['grade_all']>0){
+//     		$where .= " AND spd.type=1 AND sp.grade = ".$search['grade_all'];
+//     	}
+    	$order=" GROUP BY sp.degree ASC 
+    	ORDER BY sp.degree DESC,spd.itemdetail_id DESC ";
     	return $db->fetchAll($sql.$where.$order);
     }
     

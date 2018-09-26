@@ -24,16 +24,21 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 	    	$sql=" SELECT 
 				    i.title AS category_name,
 				    i.type,
+				    SUM(s.penalty) AS total_penalty,
+				    SUM(s.credit_memo) AS credit_memo,
 				    SUM(sp.paidamount) AS total_paidamount
-				FROM rms_items AS i,
-						rms_itemsdetail AS d,
-						rms_student_payment AS s,
-						rms_student_paymentdetail AS sp
-						WHERE i.id = d.items_id
-						AND s.id = sp.payment_id
-						AND d.id = sp.itemdetail_id ";
-	    	$where = " AND ".$from_date." AND ".$to_date;
-	    	$where.=" GROUP BY i.id ";
+				FROM 
+					rms_items AS i,
+					rms_itemsdetail AS d,
+					rms_student_payment AS s,
+					rms_student_paymentdetail AS sp
+					
+				WHERE i.id = d.items_id
+					AND s.id = sp.payment_id
+					AND d.id = sp.itemdetail_id ";
+	    	
+			    	$where = " AND ".$from_date." AND ".$to_date;
+			    	$where.=" GROUP BY i.id ";
 	    	return $db->fetchAll($sql.$where);
 		}catch(Exception $e){
 			echo $e->getMessage();

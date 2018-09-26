@@ -58,7 +58,7 @@
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CUSTOMER_TYPE");?> <span class="required">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect" onchange="netTotal();">
+	                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect" onchange="clearControll();">
 				    			<option value="1">Student Payment</option>
 				    			<option value="2">Customer Payment</option>
 				    		</select>
@@ -106,7 +106,7 @@
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEX");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select type="text" name="sex" id="sex" class="fullside" dojoType="dijit.form.FilteringSelect" >
+	                   		<select type="text" name="sex" id="sex" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" >
 								<option value="1"><?php echo $tr->translate("MALE");?></option>
 								<option value="2"><?php echo $tr->translate("FEMALE");?></option>
 							</select>
@@ -468,8 +468,8 @@
 			class:'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 			onChange: function() {
-				dijit.byId('discount_percent').attr('value','0');
-				dijit.byId('discount_fix').attr('value','0');
+				//dijit.byId('discount_percent').attr('value','0');
+				//dijit.byId('discount_fix').attr('value','0');
 			}
 		}, "grade");
 
@@ -1095,6 +1095,29 @@ function getPaymentHistory(student_id){
 function clearControll(){
 	dijit.byId('kh_name').attr('value','');
 	dijit.byId('en_name').attr('value','');
+	dijit.byId('last_name').attr('value','');
+	dijit.byId('parent_phone').attr('value','');
+	customer_type = dijit.byId('customer_type').get('value');
+	if(customer_type==2){//for customer
+		
+		dijit.byId("group_name").attr('value','');
+		dijit.byId("old_stu").attr('value','');
+		dijit.byId("group").set('readOnly',true);
+		dijit.byId("study_year").set('readOnly',false);
+		dijit.byId("degree_culture").set('readOnly',true);
+		dijit.byId("dept").set('readOnly',true);
+		dijit.byId("grade").set('readOnly',true);
+
+		dijit.byId("session").set('readOnly',true);
+		dijit.byId("study_hour").set('readOnly',true);
+		dijit.byId("room").set('readOnly',true);
+		dijit.byId("student_type").set('readOnly',true);
+		dijit.byId("old_stu").set('readOnly',true);
+		
+	}else{
+		dijit.byId("student_type").set('readOnly',false);
+		dijit.byId("old_stu").set('readOnly',false);
+	}
 }
 ///get Gerneral old student
 function getOldStudentInfo(){
@@ -1108,6 +1131,7 @@ function getOldStudentInfo(){
 	}
 	
 	student_id=dijit.byId('old_stu').get('value');
+	if(student_id==''){return false;}
 	dijit.byId('kh_name').attr('value','');
 	dijit.byId('en_name').attr('value','');
 	dijit.byId('sex').attr('value','');
@@ -1175,8 +1199,21 @@ tmp = '';
 temp='';
 date_format = '"dd/MM/yyyy"';
 function addRow() {
+		customer_type = dijit.byId('customer_type').get('value');
+		if(customer_type==1){//for customer
+			studentid = dijit.byId('old_stu').get('value');
+			if(studentid==''){
+				alert("Please select student !!!");
+				dijit.byId('old_stu').focus();
+				return false;
+			}
+		}else{
+
+		}
 		label = dijit.byId("item").attr('displayedValue');
 		service_id = dijit.byId("item").get("value");
+		if(service_id ==''){return false;}
+		
 		col++;no++;
 		template='';
 		if(title!=1){
@@ -1313,7 +1350,7 @@ function calculateTotal(index){
 		var grandTotal=0;
 		var rowId = $('#identity').val();
 		var rowIDArray = rowId.split(',');
-		total_payment = dijit.byId('grand_total').get('value');
+		total_payment = 0; //dijit.byId('grand_total').get('value');
 	/////////////////////////////////////////////////////////////////////	
 		var customer_type = dijit.byId("customer_type").get("value");
 		if(customer_type!=2 || customer_type!=4){
@@ -1365,17 +1402,14 @@ function calculateTotal(index){
 			dijit.byId('paid_amount').focus();
 		}
 	}
-	function onKeyUpDeduct(){
-		grandTotal = dijit.byId('grand_total').get('value');
+function onKeyUpDeduct(){
+		/*grandTotal = dijit.byId('grand_total').get('value');
 		grandTotal = isNaN(grandTotal)?0:grandTotal;
-		fine = dijit.byId('fine').get('value');
-		fine = isNaN(fine)?0:fine;
+		
 		credit_memo = dijit.byId('credit_memo').get('value');
 		credit_memo = isNaN(credit_memo)?0:credit_memo;
-		deduct = dijit.byId('deduct').get('value');
-		deduct = isNaN(deduct)?0:deduct;
-		netAmount = grandTotal + fine - credit_memo - deduct;
 		
+		netAmount = grandTotal  - credit_memo - deduct;
 		if(netAmount<0){
 			dijit.byId('net_amount').attr('value',0);
 			dijit.byId('credit_memo_after').attr('value',abs(netAmount));
@@ -1384,9 +1418,9 @@ function calculateTotal(index){
 			dijit.byId('credit_memo_after').attr('value',0);
 		}
 		
-		readMoneyInKhmer(netAmount.toFixed(2));
+		readMoneyInKhmer(netAmount.toFixed(2));*/
 		netTotal();
-	}
+}
 function readMoneyInKhmer(netTotal){
 		var str = netTotal.toString();
         str_cent = 'សេន';
@@ -1414,12 +1448,7 @@ var url_service_fee = "<?php echo $this->url(array('module'=>'registrar','contro
 function getservicefee(key){
 		service_type = dijit.byId('service_type_'+key).get('value');
 	 	stu_type = dijit.byId('student_type').get('value');
- 		studentid = dijit.byId('old_stu').get('value');
-			if(studentid==''){
-				alert("Please select student !!!");
-				dijit.byId('old_stu').focus();
-				return false;
-			}
+ 			studentid = dijit.byId('old_stu').get('value');
 			
  			service_id = dijit.byId('item_id'+key).get('value');
  			term = dijit.byId('term_'+key).get('value');

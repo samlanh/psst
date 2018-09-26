@@ -51,7 +51,7 @@ class Allreport_Model_DbTable_DbRptOtherExpense extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	 
-    	$sql = "SELECT SUM(ed.total_amount) as total_expense,
+    	$sql = "SELECT SUM(ed.total) as total_expense,
     	(SELECT a.account_name FROM rms_account_name  as a WHERE a.id=ed.service_id) AS account_name
     	FROM 
     		ln_expense AS e,

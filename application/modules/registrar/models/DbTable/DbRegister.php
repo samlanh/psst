@@ -123,7 +123,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$receipt_number =$this->getRecieptNo();
 			try{
 				$this->_name='rms_student';
-				if($data['student_type']==1){//ករណីសិស្សចាស់កែប្រែពត៍មានចាស់របស់សិស្ស ករណី ឈ្មោះសរសេមិនត្រូវ	
+				if($data['student_type']==1 AND $data['customer_type']==1){//ករណីសិស្សចាស់កែប្រែពត៍មានចាស់របស់សិស្ស ករណី ឈ្មោះសរសេមិនត្រូវ	
 						$id=$data['old_stu'];
 						$arr = array(
 								'academic_year'=>$data['study_year'],
@@ -140,7 +140,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								);
 						$where = ' stu_id = '.$id;
 						$this->update($arr, $where);
-				}elseif($data['student_type']==5){//ករណីសិស្សថ្មីត្រូវបញ្ចូលថ្មី
+				}else{//ករណីសិស្សថ្មីត្រូវបញ្ចូលថ្មី
 					    $arr=array(
 								'stu_code'		=>$stu_code,
 					    		'customer_type'	=>$data['customer_type'],
@@ -163,7 +163,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							);
 				    	$id = $this->insert($arr);
 				    	
-				    	if($data['group']>-1){//សិស្សថ្មីបញ្ចូលសិស្សចូលក្រុម
+				    	if($data['group']>-1 AND ($data['student_type']==5 OR $data['student_type']==2)){//សិស្សថ្មី or សិស្សធ្វើតេសជាប់បញ្ចូលសិស្សចូលក្រុម
 				    		$this->_name='rms_group_detail_student';
 				    		$arra = array(
 				    				'group_id'	=>$data['group'],
@@ -178,35 +178,34 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 					$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
 					if($cut_credit_memo<0){
-						$data['credit_memo'] =abs($cut_credit_memo);
+						$cut_credit_memo = abs($cut_credit_memo);
+					}else{
+						$cut_credit_memo = $data['credit_memo'];
 					}
 					$arr=array(
-							'branch_id'		=> $this->getBranchId(),
-							'revenue_type'  => $data['customer_type'],
-							'data_from'		=> $data['student_type'],
-							'student_id'	=> $id,
-							'receipt_number'=> $receipt_number,
-							//'student_type'	=> $data['student_type'],
-							
-							'penalty'		=> $data['penalty'],
-							'grand_total'	=> $data['grand_total'],
-							'credit_memo'	=> $cut_credit_memo,
-							'memo_id'		=> $data['credit_memo'],
-							'paid_amount'	=> $data['paid_amount'],
-							'balance_due'	=> $data['balance_due'],
-							'amount_in_khmer'=> $data['money_in_khmer'],
-							'payment_method'=> $data['payment_method'],
-							'number'	    => $data['number'],
-							
-							'note'			=> $data['note'],
-							'academic_year'	=> $data['study_year'],
-							'degree'		=> $data['dept'],
-							'grade'			=> $data['grade'],
-							'session'		=> $data['session'],
-							'time'			=> $data['study_hour'],
-							'room_id'		=> $data['room'],
-							'create_date'	=> $paid_date,
-							'user_id'		=> $this->getUserId(),
+						'branch_id'		=> $this->getBranchId(),
+						'revenue_type'  => $data['customer_type'],
+						'data_from'		=> $data['student_type'],
+						'student_id'	=> $id,
+						'receipt_number'=> $receipt_number,
+						'penalty'		=> $data['penalty'],
+						'grand_total'	=> $data['grand_total'],
+						'credit_memo'	=> $cut_credit_memo,
+						'memo_id'		=> $data['credit_memo'],
+						'paid_amount'	=> $data['paid_amount'],
+						'balance_due'	=> $data['balance_due'],
+						'amount_in_khmer'=> $data['money_in_khmer'],
+						'payment_method'=> $data['payment_method'],
+						'number'	    => $data['number'],
+						'note'			=> $data['note'],
+						'academic_year'	=> $data['study_year'],
+						'degree'		=> $data['dept'],
+						'grade'			=> $data['grade'],
+						'session'		=> $data['session'],
+						'time'			=> $data['study_hour'],
+						'room_id'		=> $data['room'],
+						'create_date'	=> $paid_date,
+						'user_id'		=> $this->getUserId(),
 					);
 					
 					$this->_name='rms_student_payment';
@@ -284,28 +283,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				// 		             	}
 					}
 					
-					
-			/////////////// បញ្ចូលប្រវត្តិសិក្សារបស់សិស្ស /////////////////////////////////////////////		
-// 					$this->_name='rms_study_history';
-// 					if($data['student_type']!=3){
-// 						$array = array(
-// 								'stu_id'	=> $id,
-// 								'stu_type'	=> $stu_type,
-// 								'stu_code'	=> $stu_code,
-// 								'academic_year'=>$data['study_year'],
-// 								'degree'	=> $data['dept'],
-// 								'grade'		=> $data['grade'],
-// 								'session'	=> $data['session'],
-// 								'room'		=> $data['room'],
-// 								'remark'	=> $data['not'],
-// 								'user_id'	=> $this->getUserId(),
-// 								'branch_id'	=> $this->getBranchId(),
-// 								'payment_id'=> $paymentid,
-// 								'create_date'=>$paid_date,
-// 						);
-// 						$this->insert($array);
-// 					}
-		////////////////// ករណីសិស្សចាស់គណនារក credit memo/////////////////			
 					
 		/////////////////////// ករណីសិស្សមកពីធ្វើតេស ត្រូវupdate ថាបានចូលរៀនហើយ //////////////			
 // 					if($data['stu_test']>0){
@@ -1227,20 +1204,21 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				sp.id,
     				sp.receipt_number,
 	    			s.stu_code,
-	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS NAME,
+	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name,
 	    			s.sex,
 	    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS YEAR,
 	    	        (SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
 			        (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-				
-	 		       sp.grand_total,sp.penalty,sp.credit_memo, sp.create_date ,
-	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id) AS USER,
-	 		       (SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void) AS void,
-	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by) AS void_by,
-	 		       'TEST'
+	 		        sp.penalty,sp.grand_total,sp.credit_memo,sp.paid_amount,sp.balance_due,
+					(SELECT name_en FROM `rms_view` WHERE type=8 AND key_code=payment_method LIMIT 1) AS payment_method,
+					number,sp.create_date ,
+	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
+	 		       (SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void LIMIT 1) AS void,
+	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
+	 		       
  			   FROM 
     				rms_student AS s,
-					rms_student_payment AS sp 
+				rms_student_payment AS sp
 				WHERE 
 					s.stu_id=sp.student_id 
 					$user 
@@ -1255,12 +1233,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$s_search=addslashes(trim($search['adv_search']));
     		$s_where[]= " stu_code LIKE '%{$s_search}%'";
     		$s_where[]=" receipt_number LIKE '%{$s_search}%'";
-    		//$s_where[]= " stu_khname LIKE '%{$s_search}%'";
+    		$s_where[]= " stu_khname LIKE '%{$s_search}%'";
     		$s_where[]= " stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]= " last_name LIKE '%{$s_search}%'";
     		$s_where[]= " sp.grade LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-    	
     	
     	if(($search['branch_id']>0)){
     		$where.= " AND sp.branch_id = ".$search['branch_id'];
@@ -1272,9 +1250,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	if(!empty($search['study_year'])){
     		$where.=" AND sp.year=".$search['study_year'];
     	}
-//     	if(!empty($search['time'])){
-//     		$where.=" AND sp.time=".$search['time'];
-//     	}
     	if(!empty($search['session'])){
     		$where.=" AND sp.session=".$search['session'];
     	}
@@ -1284,7 +1259,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	if(!empty($search['user'])){
     		$where.=" AND sp.user_id=".$search['user'];
     	}
-    	//$order=" ORDER By stu_id DESC ";
     	$order=" ORDER BY sp.id DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -1536,14 +1510,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$db = new Application_Model_DbTable_DbGlobal();
     	return $db->getStudentinfoById($stu_id);
     }
-    ///select degree searching 
-//     function getDegree(){
+
+//  function getDegree(){
 // //     	$db=$this->getAdapter();
 // //     	$sql="SELECT dept_id AS id,CONCAT(en_name,'-',kh_name) AS `name` FROM rms_dept  WHERE 1";
 // //     	return $db->fetchAll($sql);
 //     	$_dbg = new Application_Model_DbTable_DbGlobal();
 //     	return $_dbg->getAllItems(1,null);
 //     }
+
     //function add rms_student_detailpayment
     function addStudentPaymentDetail($data,$type,$paymentid,$complete,$comment,$payment_id_ser){
     	$db=$this->getAdapter();
@@ -1871,7 +1846,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	}
 	function getStudentTestInfo($stu_test_id){
 		$_db = new Application_Model_DbTable_DbGlobal();
-		return $_db->getStudentTestbyId($stu_test_id);
+		return $_db->getStudentinfoById($stu_test_id);
 	}
 	function getCreditMemoByStuId($stu_id){
 		$db=$this->getAdapter();

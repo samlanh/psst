@@ -29,7 +29,6 @@
 				<div style="margin: 10px 0px;">
 					<input type="checkBox" style="margin-left: 1%;" dojoType="dijit.form.CheckBox" value="all" id="all_payment" name="all_payment"  <?php if(!empty($this->search['all_payment'])){if($this->search['all_payment']=="all"){echo "checked='checked'";}}?> /><?php echo $tr->translate("RPT_ALLPAYMENTREPORT");?>
 					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>
-					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="2" id="student_test" name="student_test"  <?php if(!empty($this->search['student_test'])){if($this->search['student_test']==2){echo "checked='checked'";}}?> /><?php echo $tr->translate("STUDENTTEST_PAYMENT");?>
 					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> <?php echo $tr->translate("OTHER_INCOME");?>
 					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /><?php echo $tr->translate("OTHER_EXPENSE");?>
 					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="5" id="change_product" name="change_product"  <?php if(!empty($this->search['change_product'])){if($this->search['change_product']==5){echo "checked='checked'";}}?> /><?php echo $tr->translate("CHANGE_PRODUCT");?>
@@ -238,70 +237,6 @@
 							</tr>
 							<?php }?>
 							
-							<?php if(!empty($this->stu_test)){ ?>
-							<tr >
-								<td colspan="2"><strong style="font-size: 14px;"><?php echo $tr->translate("STUDENTTEST_PAYMENT");?></strong></td>
-							</tr>
-							<tr >
-								<td colspan="2">
-									<table class="padd" border="1" width="100%" align="center" style="margin-top:5px;font-family: Khmer OS Battambang,Times new roman;">
-									 <thead>
-										<tr style=" white-space: nowrap;font-size:12px; height: 20px;border: 1px solid #000;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
-											<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
-											<td><?php echo $tr->translate("RECEIPT_NO");?></td>
-											<td><?php echo $tr->translate("PAID_DATE");?></td>
-											<td><?php echo $tr->translate("STUDENT_NAME");?></td>
-											<td><?php echo $tr->translate('SEX')?></td>
-											<td><?php echo $tr->translate('PHONE')?></td>
-											<td><?php echo $tr->translate('SERIAL')?></td>
-											<td><?php echo $tr->translate('DEGREE')?></td>
-											<td><?php echo $tr->translate('OLD_SCHOOL')?></td>
-											<td><?php echo $tr->translate('OLD_GRADE')?></td>
-											<td><?php echo $tr->translate('TOTAL')?></td>
-											<td><?php echo $tr->translate('NOTE')?></td>
-											<td><?php echo $tr->translate('USER')?></td>
-											<td><?php echo $tr->translate('STATUS')?></td>
-										</tr>
-									 </thead>
-										 <style> td{padding:0 3px; }</style>
-									<?php $i=0;foreach($this->stu_test as $stu_test){ $i++;?>
-										<tr class="hover" style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
-											<td style="border: 1px solid #000;"><?php echo $i;?></td>
-											<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-test-payment','id'=>$stu_test['id']));?>" target="blank"><?php echo $stu_test['receipt_no']; ?></a></td>
-											
-											<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-test-payment','id'=>$stu_test['id']));?>" target="blank"><?php echo $stu_test['paid_date']; ?></a></td>
-											<td style="border: 1px solid #000;text-align: left;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-test-payment','id'=>$stu_test['id']));?>" target="blank"><?php echo $stu_test['kh_name'].'-'.$stu_test['en_name']; ?></a></td>
-											<td style="border: 1px solid #000;"><?php echo $stu_test['sex'];?></td>	
-											<td style="border: 1px solid #000;"><?php echo $stu_test['phone'];?></td>
-											<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'reprint-test-payment','id'=>$stu_test['id']));?>" target="blank"><?php echo $stu_test['serial']; ?></a></td>
-											<td style="border: 1px solid #000;"><?php echo $stu_test['degree'];?></td>
-											<td style="border: 1px solid #000;"><?php echo $stu_test['old_school'];?></td>
-											<td style="border: 1px solid #000;"><?php echo $stu_test['old_grade'];?></td>
-											<td style="border: 1px solid #000;"><?php echo '$ '.number_format($stu_test['total_price'],2);?></td>
-											<td style="border: 1px solid #000;"><?php echo $stu_test['note'];?></td>
-											<td style="border: 1px solid #000;"><?php echo $stu_test['user'];?></td>
-											<?php 
-												if($stu_test['register']==1){
-													$status="Registered";
-												}else{
-													$status="";
-												}
-											?>
-											<td style="border: 1px solid #000;"><?php echo $status;?></td>
-										</tr>
-											<?php 
-												$total_stu_test = $total_stu_test + $stu_test['total_price'];
-											?> 
-										 <?php } ?>
-										 <tr>
-											<td colspan="12"></td>
-											<td style="width:120px;background-color: #ccc; font-weight:bold; font-size: 12px;">&nbsp;<?php echo $tr->translate("GRAND_TOTAL"); ?>&nbsp;</td>
-											<td style="width:120px;color:#F00; font-weight:bold; font-size: 12px;">$ <?php echo number_format($total_stu_test,2);?></td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<?php }?>
 							<?php if(!empty($this->income)){?>
 							<tr>
 								<td colspan="2"><strong style="font-size: 14px;"><?php echo $tr->translate("OTHER_INCOME");?></strong> </td>

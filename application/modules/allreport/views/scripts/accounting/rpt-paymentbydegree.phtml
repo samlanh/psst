@@ -93,12 +93,12 @@
 									  <?php $i=1;
 									  $total_bydegree=0;
 									  }
-									  if($rs['type']==4){
-										  $rs['service_cate']="ទំនិញ";
-									  }
-									  else if($rs['type']==3){
-										  $rs['service_cate']="សេវាកម្ម";
-									  }
+// 									  if($rs['type']==4){
+// 										  $rs['service_cate']="ទំនិញ";
+// 									  }
+// 									  else if($rs['type']==3){
+// 										  $rs['service_cate']="សេវាកម្ម";
+// 									  }
 									  ?>
 									  <thead>
 									  <tr style="font-size:10px; color:#000; height: 23px; border-left:1px solid #fff; border-right:1px solid #fff; border-top: 1px solid #fff;"​ align="center">
@@ -118,33 +118,27 @@
 									  </thead>
 								<?php 
 									  }
-									  $rs['service_cate']="សេវាកម្ម";
-								   	  if($rs['type']==1 OR $rs['type']==2){//tuition fee
-										    $rs['service_cate']="បង់ថ្លៃសិក្សា";
-										   // $rs['service_name']=$rs['major_name'];
-										   
-										    
-										    
-									  }elseif($rs['type']==4){//for procut
-									    	//$rs['service_cate']=$rs['product_category'];
-									    	$rs['service_cate']="ទំនិញ";
-									  }
+// 									  $rs['service_cate']="សេវាកម្ម";
+// 								   	  if($rs['type']==1 OR $rs['type']==2){//tuition fee
+// 										    $rs['service_cate']="បង់ថ្លៃសិក្សា";
+// 									  }elseif($rs['type']==4){//for procut
+// 									    	$rs['service_cate']="ទំនិញ";
+// 									  }
 									 $degree = $rs['degree'];
 									 $total_paid = $total_paid + $rs['paidamount'];
 									 $grand_total = $grand_total+$rs['paidamount'];
 									 $total_bydegree=$total_bydegree+$rs['paidamount'];
 									 
-									 $deduct = $deduct+$rs['deduct'];
-									 $fine= $fine+$rs['fine'];
+									 $fine= $fine+$rs['penalty'];
 									 $credit_memo= $credit_memo+$rs['credit_memo'];
 						 		?>
 						   <tr class="hover" style="font-size:12px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang';"​ align="center">
 							  	<td><?php echo $i;?></td>
-							    <td style="text-align:left"><?php echo $rs['service_cate']; ?></td>
+							    <td style="text-align:left"><?php //echo $rs['service_cate']; ?></td>
 							    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
-							    <td><?php if($rs['fine']>0){echo '$ '.number_format($rs['fine'],2);}?></td>
-							    <td><?php if($rs['deduct']>0){echo '$ '.number_format($rs['deduct'],2);}?></td>
-							    <td><?php if($rs['credit_memo']>0){echo '$ '.number_format($rs['credit_memo'],2);}?></td>
+							    <td><?php if($rs['penalty']>0){echo '$ '.number_format($rs['penalty'],2);}?></td>
+							    <td><?php //if($rs['deduct']>0){echo '$ '.number_format($rs['deduct'],2);}?></td>
+							    <td><?php //if($rs['credit_memo']>0){echo '$ '.number_format($rs['credit_memo'],2);}?></td>
 							    <td>$ <?php echo number_format($rs['paidamount'],2); ?></td>
 						 </tr>
 						  <?php } ?>

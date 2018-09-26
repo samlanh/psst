@@ -73,11 +73,11 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->row_detail = $db->getStudentPaymentDetail($search,3);
 			$this->view->row = $db->getStudentPayment($search);
 			
-			$this->view->service = $db->getService();
 			$this->view->search = $search;
 			
 		}catch(Exception $e){
 			echo $e->getMessage();exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error");
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
@@ -967,7 +967,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}
 			$db = new Allreport_Model_DbTable_DbRptPayment();
 			$this->view->row_detail = $db->getStudentPaymentbyDegree($search,3);
-			$this->view->service = $db->getService();
 			$this->view->search = $search;
 			
 		}catch(Exception $e){

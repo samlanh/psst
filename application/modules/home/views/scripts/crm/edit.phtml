@@ -92,6 +92,14 @@ table.history-record tbody tr td {
 		                </div>
 		             </div>
 		             <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?>
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<?php echo $frm_items->getElement("tel");?>
+	                   </div>
+	                </div>
+	                
+		             <div class="form-group">
 		               <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ASK_FOR");?> </label>
 		               <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("ask_for");?>
@@ -111,13 +119,7 @@ table.history-record tbody tr td {
 		                	<?php echo $frm_items->getElement("know_by");?>
 		                </div>
 		             </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEL");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm_items->getElement("tel");?>
-	                   </div>
-	                </div>
+	                
 	                <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_SCHOOL");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">

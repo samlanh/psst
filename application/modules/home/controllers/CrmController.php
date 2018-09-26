@@ -21,7 +21,8 @@ class Home_CrmController extends Zend_Controller_Action
 	    	else{
 	    		$search = array(
 	    				'advance_search' => "",
-	    				'branch_search' => "",
+	    				'branch_search'  => "",
+	    				'ask_for_search' => "",
 	    				'status_search' => -1,
 	    				'start_date'=> date('Y-m-d'),
 	    				'end_date'=>date('Y-m-d'),

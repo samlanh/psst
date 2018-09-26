@@ -50,9 +50,10 @@
     	if(!empty($search['branch_search'])){
     		$where.= " AND c.branch_id = ".$db->quote($search['branch_search']);
     	}
-    	if(!empty($search['askfor_search'])){
-    		$where.= " AND c.ask_for = ".$db->quote($search['askfor_search']);
+    	if(!empty($search['ask_for_search'])){
+    		$where.= " AND c.ask_for = ".$db->quote($search['ask_for_search']);
     	}
+    	
     	if($search['status_search']>-1){
     		$where.= " AND c.crm_status = ".$db->quote($search['status_search']);
     	}

@@ -226,6 +226,17 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	}
     	$_branch_search->setValue($request->getParam("branch_search"));
     	
+    	$_arr = array(""=>$this->tr->translate("PLEASE_SELECT"),1=>$this->tr->translate("KHMER_KNOWLEDGE"),2=>$this->tr->translate("ENGLISH"),3=>$this->tr->translate("UNIVERSITY"),4=>$this->tr->translate("OTHER"));
+    	$_ask_for_search = new Zend_Dojo_Form_Element_FilteringSelect("ask_for_search");
+    	$_ask_for_search->setMultiOptions($_arr);
+    	$_ask_for_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	
+    	$_ask_for_search->setValue($request->getParam("ask_for_search"));
+    	
     	$_arr = array(-1=>$this->tr->translate("ALL"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"),0=>$this->tr->translate("DROPPED"));
     	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
     	$_status_search->setMultiOptions($_arr);
@@ -301,6 +312,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			$_degree,
     			
     			$advance_search,
+    			$_ask_for_search,
     			$_branch_search,
     			$_status_search,
     			$start_date,

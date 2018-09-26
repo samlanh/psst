@@ -33,7 +33,7 @@ class Home_CrmController extends Zend_Controller_Action
 	    	$rs_rows = $db->getAllCRM($search);
 	    	
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("BRANCH","STUDENT_NAMEKHMER","First Name","Last Name","GENDER","TEL","ASK_FOR","DATE",
+	    	$collumns = array("BRANCH","STUDENT_NAMEKHMER","First Name","Last Name","GENDER","PHONE","ASK_FOR","DATE",
 	    			"STATUS","Amount Contacted","BY_USER");
 	    	$link=array(
 	    			'module'=>'home','controller'=>'crm','action'=>'edit',

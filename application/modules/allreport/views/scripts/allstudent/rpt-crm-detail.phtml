@@ -32,7 +32,8 @@
 						    padding: 1px 0;
 						    border-bottom: solid 1px #000;
 						}
-						table.data-value tbody tr td span.label-title {
+						table.data-value tbody tr td span.label-title,
+						td.data-value span.label-title {
 						    line-height: 22px;
 						    display: inline-block;
 						    min-width: 75px;
@@ -45,7 +46,8 @@
 						    border-top: none;
 						    border-left: none;
 						}
-						table.data-value tbody tr.row-value td{
+						table.data-value tbody tr.row-value td
+						{
 							border: solid 1px #000;
 						    border-left: none;
 						}
@@ -79,7 +81,7 @@
 											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("GENDER");?></span>&nbsp;: <?php echo $this->rs['sexTitle'];?></td>
 										</tr>
 										<tr>
-											<td class="borderbottom-none">&nbsp;<span class="label-title"><?php echo $tr->translate("TEL");?></span>&nbsp;: <?php echo $this->rs['tel'];?></td>
+											<td class="borderbottom-none">&nbsp;<span class="label-title"><?php echo $tr->translate("PHONE");?></span>&nbsp;: <?php echo $this->rs['tel'];?></td>
 										</tr>
 									</table>
 								</td>
@@ -101,12 +103,12 @@
 								</td>
 							</tr>
 							<tr>
-								<td valign="top" colspan="2">
+								<td valign="top" colspan="2" class="data-value">
 									&nbsp;<span class="label-title"><?php echo $tr->translate("REASON");?></span>&nbsp;: <?php echo $this->rs['reason'];?>
 								</td>
 							</tr>
 							<tr>
-								<td valign="top" colspan="2">
+								<td valign="top" colspan="2" class="data-value">
 									&nbsp;<span class="label-title"><?php echo $tr->translate("NOTE");?></span>&nbsp;: <?php echo $this->rs['note'];?>
 								</td>
 							</tr>

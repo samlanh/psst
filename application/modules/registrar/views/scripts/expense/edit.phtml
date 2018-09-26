@@ -240,9 +240,7 @@ $frm = $this->frm_expense;
 											</td>
 											<td colspan="2" valign="top">
 												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
-													<?php 
-													   echo"Received By :........................ &nbsp;&nbsp;";
-													?>
+													Received By : &nbsp;<label id="lb_receiver"> </label>
 												</div>
 											</td>
 											<td></td>
@@ -453,6 +451,7 @@ function printSave(new_receipt){
 		dojo.byId("bl_payfor").innerHTML = dijit.byId("title").get('value');
 		dojo.byId("lb_total_received").innerHTML = '$ ' + dijit.byId("total_amount").get('value');
 		dojo.byId("lb_note").innerHTML = dijit.byId("Description").get('value');
+		dojo.byId("lb_receiver").innerHTML = dijit.byId("receiver").get('value');
 		dojo.byId("lb_paymentmehtod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
 		
 		var rowId = $('#identity').val();

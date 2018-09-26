@@ -390,7 +390,7 @@
 	
 	function getAllCrmFilter(){
 		$db = $this->getAdapter();
-		$sql="SELECT c.id,CONCAT(c.kh_name,'/',c.first_name,' ',c.last_name) AS name FROM `rms_crm` AS c WHERE 1";
+		$sql="SELECT c.id,CONCAT(c.kh_name,'/',c.first_name,' ',c.last_name) AS name FROM `rms_crm` AS c WHERE (c.kh_name !='' OR c.first_name!= '' OR c.last_name!='')";
 		return $db->fetchAll($sql);
 	}
 }

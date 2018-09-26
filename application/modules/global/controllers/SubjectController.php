@@ -79,10 +79,10 @@ class Global_SubjectController extends Zend_Controller_Action {
 		$parent = new Global_Model_DbTable_DbSubjectExam();
 		$is_parent = $parent->getAllSubjectParent();
 		$this->view->rs = $is_parent;
-		$db = new Global_Model_DbTable_DbGrade();
-    	$dept = $db->getAllDept();
-    	array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    	$this->view->degree_store = $dept;
+// 		$db = new Global_Model_DbTable_DbGrade();
+//     	$dept = $db->getAllDept();
+//     	array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+//     	$this->view->degree_store = $dept;
 	}
 	function addsubjectAction(){//At callecteral when click client
 		if($this->getRequest()->isPost()){

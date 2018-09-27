@@ -147,19 +147,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$stu_code=$_data['student_id'];
 			$code = new Registrar_Model_DbTable_DbRegister();
 
-			$part= PUBLIC_PATH.'/images/photo/';
-			$name = $_FILES['photo']['name'];
-			$size = $_FILES['photo']['size'];
-			if (!file_exists($part)) {
-				mkdir($part, 0777, true);
-			}
-			$photo='';
-			$dbg = new Application_Model_DbTable_DbGlobal();
-			if (!empty($name)){
-				$tem =explode(".", $name);
-				$new_image_name = "studentprofile".date("Y").date("m").date("d").time().".".end($tem);
-				$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
-			}
+			$adapter = new Zend_File_Transfer_Adapter_Http();
+					$part = PUBLIC_PATH.'/images';
+					$adapter->setDestination($part);
+					$adapter->receive();
+					$photo = $adapter->getFileInfo();
+					//print_r($photo['photo']['name']); exit();
+					if(!empty($photo['photo']['name'])){
+						$pho_name = $photo['photo']['name'];
+					}else{
+						$pho_name = '';
+					}
 			$_db= $this->getAdapter();
 			$_db->beginTransaction();
 			try{	
@@ -228,7 +226,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'status'		=>$_data['status'],
 						'remark'		=>$_data['remark'],
 						'create_date'	=>date("Y-m-d H:i:s"),
-						'photo'			=>$photo,
+						'photo'  			 => $pho_name,
 						'customer_type'			=>1,//Student
 						);
 				$id = $this->insert($_arr);
@@ -318,6 +316,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(!empty($_data['group']) AND $_data['group']!=-1){
 				$is_setgroup=1;
 			}
+			$adapter = new Zend_File_Transfer_Adapter_Http();
+			$part = PUBLIC_PATH.'/images';
+			$adapter->setDestination($part);
+			$adapter->receive();
+			$photo = $adapter->getFileInfo();
+			//print_r($photo['photo']['name']); exit();
+			if(!empty($photo['photo']['name'])){
+				$pho_name = $photo['photo']['name'];
+			}else{
+				$pho_name = '';
+			}
 			$_arr=array(
  					'branch_id'		=>$_data['branch_id'],
 					'user_id'		=>$this->getUserId(),
@@ -357,7 +366,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'mother_nation'	=>$_data['mom_nation'],
 					'mother_job'	=>$_data['mo_job'],
 					'mother_phone'	=>$_data['mon_phone'],
-					
+					'photo'  			 => $pho_name,
 					'guardian_enname'=>$_data['guardian_name_en'],
 					'guardian_dob'	=>$_data['guardian_dob'],
 					'guardian_nation'=>$_data['guardian_national'],
@@ -376,21 +385,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
 					);
-			$part= PUBLIC_PATH.'/images/photo/';
-			$name = $_FILES['photo']['name'];
-			$size = $_FILES['photo']['size'];
-			if (!file_exists($part)) {
-				mkdir($part, 0777, true);
-			}
-			$photo='';
-			$dbg = new Application_Model_DbTable_DbGlobal();
-			if (!empty($name)){
-				$tem =explode(".", $name);
-				$new_image_name = "studentprofile".date("Y").date("m").date("d").time().".".end($tem);
-				$photo = $dbg->resizeImase($_FILES['photo'], $part,$new_image_name);
-				$_arr['photo']=$photo;
-			}
-			
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
 			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 			$this->update($_arr, $where);
@@ -580,7 +574,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
 		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
 		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degreeTitle,
-				
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.nationality) AS nationality,
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.father_nation) AS father_nation,
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.mother_nation) AS mother_nation,
+		(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.guardian_nation) AS guardian_nation, 		
 		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic_year,
 			   (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS start_year,
 			   (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS end_year,

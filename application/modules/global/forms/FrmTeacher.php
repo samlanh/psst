@@ -178,7 +178,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_teacher->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_teacher_opt = array(
 				1=>$this->tr->translate("TEACHER_KHMER"),
-				2=>$this->tr->translate("TEACHER_FOREIGNER"));
+				0=>$this->tr->translate("TEACHER_FOREIGNER"));
 		$_teacher->setMultiOptions($_teacher_opt);
 		
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');

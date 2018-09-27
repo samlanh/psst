@@ -384,6 +384,34 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 	}
+	
+	public function rptTeacherAction(){
+			$db = new Global_Model_DbTable_DbTeacher();
+			if($this->getRequest()->isPost()){
+				$_data=$this->getRequest()->getPost();
+				$search = array(
+						'title'  => $_data['title'],
+						'degree' => $_data['degree'],
+						'nationality' => $_data['nationality'],
+						'branch_id' => $_data['branch_id'],
+						'status' => $_data['status_search']
+				);
+			}
+			else{
+				$search = array(
+						'title' => '',
+						'degree' => '',
+						'nationality' => '',
+						'branch_id' => '',
+						'status' => -1);
+			}
+		$this->view->rs= $db->getAllTeacher($search);
+		$frm = new Application_Form_FrmOther();
+		$this->view->add_major = $frm->FrmAddMajor(null);
+		$frm = new Global_Form_FrmSearchMajor();
+		$this->view->frm_search = $frm->frmSearchTeacher();
+		Application_Model_Decorator::removeAllDecorator($frm);
+	}
 // 	public function rptAttendenceHighschoolAction(){
 // 		if($this->getRequest()->isPost()){
 // 			$search=$this->getRequest()->getPost();

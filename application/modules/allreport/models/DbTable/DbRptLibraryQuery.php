@@ -42,7 +42,8 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     	(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
     	(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_name,
     	(SELECT name_en FROM rms_view WHERE rms_view.type=2 AND key_code=(SELECT sex FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1))AS sex,
-    	(SELECT major_enname FROM rms_major WHERE major_id = (SELECT grade FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1)) AS grade,
+    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.items_type = 1 AND rms_itemsdetail.id = (SELECT grade FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1)) AS grade,
+    	
     	b.borrow_date,b.return_date,bd.borr_qty
     	FROM rms_borrow AS b,rms_borrowdetails AS bd
     	WHERE b.id=bd.borr_id

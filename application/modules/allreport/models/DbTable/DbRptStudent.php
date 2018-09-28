@@ -44,13 +44,14 @@ class Allreport_Model_DbTable_DbRptStudent extends Zend_Db_Table_Abstract
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
     	}
+    	
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " CONCAT(stu_enname,stu_khname) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select en_name from rms_dept where rms_dept.dept_id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select rms_items.title from rms_items where rms_items.type=1 AND rms_items.id=rms_student.degree limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (select rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.items_type=1 AND rms_itemsdetail.id=rms_student.grade limit 1) LIKE '%{$s_search}%'";
     		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}

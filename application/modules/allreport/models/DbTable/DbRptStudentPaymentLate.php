@@ -13,6 +13,8 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
     	$db=$this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
+    	
+    	
     	$sql="SELECT 
 				  sp.`receipt_number` AS receipt,
 				  s.stu_id AS code,
@@ -27,7 +29,7 @@ class Allreport_Model_DbTable_DbRptStudentPaymentLate extends Zend_Db_Table_Abst
 				  spd.id AS payment_id,
 				  spd.is_onepayment,
 				   sp.create_date,
-				  (select major_enname from rms_major where major_id = s.grade LIMIT 1) as grade,
+				  (select rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.items_type=1 AND rms_itemsdetail.id = s.grade LIMIT 1) as grade,
 				  (select name_en from rms_view where type=4 and key_code =s.session LIMIT 1) as session,
 				  (SELECT title FROM rms_program_type WHERE rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_type
 				  

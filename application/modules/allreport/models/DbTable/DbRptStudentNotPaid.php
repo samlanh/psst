@@ -38,6 +38,7 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
 // 				  AND s.`stu_id` NOT IN 
 // 				  (SELECT student_id FROM rms_student_payment AS sp,`rms_student_paymentdetail` AS spd WHERE sp.id=spd.`payment_id` AND spd.`service_id`=4)
 //     			  $branch_id ";
+
     	$sql="SELECT
 	    	s.stu_id,
 	    	(CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) AS name,
@@ -46,8 +47,8 @@ class Allreport_Model_DbTable_DbRptStudentNotPaid extends Zend_Db_Table_Abstract
 	    	s.`stu_khname`,
 	    	s.`stu_enname`,
 	    	s.tel,
-	    	(SELECT en_name FROM rms_dept WHERE dept_id = g.`degree`) AS degree,
-	    	(SELECT major_enname FROM rms_major WHERE major_id = g.grade ) AS grade,
+	    	(SELECT rms_items.title FROM rms_items WHERE rms_items.type=1 AND rms_items.id = g.`degree`) AS degree,
+	    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.items_type =1 AND rms_itemsdetail.id = g.grade ) AS grade,
 	    	(SELECT name_en FROM rms_view WHERE `type` = 4 AND key_code = g.`session`) AS `session`,
 	    	(SELECT group_code FROM `rms_group` WHERE id=gds.group_id LIMIT 1) as group_name
 	    	FROM

@@ -12,6 +12,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$db=$this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
+    	
     	$sql="SELECT 
 				  sp.`receipt_number` AS receipt,
 				  s.stu_code AS code,
@@ -24,7 +25,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				  sp.create_date,
 				  (SELECT title FROM `rms_program_type` WHERE id=pn.ser_cate_id LIMIT 1) AS service_type,
 				  (SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
-				  (SELECT major_enname from rms_major where major_id = s.grade LIMIT 1) as grade,
+				  (SELECT rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.items_type =1 AND rms_itemsdetail.id = s.grade LIMIT 1) as grade,
 				  (SELECT name_en from rms_view where type=4 and key_code =s.session LIMIT 1) as session,
 				  (SELECT title FROM rms_program_type WHERE rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate,
 				   spd.`type`

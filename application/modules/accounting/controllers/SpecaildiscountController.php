@@ -28,7 +28,7 @@ class Accounting_SpecaildiscountController extends Zend_Controller_Action {
 //         $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("STUDENT_NAME","REQUEST_NAME","PHONE","DISCOUNT_TYPR","EXPIRE_DATE","STATUS","USER");
+    	$collumns = array("STUDENT_NAME","REQUEST_NAME","PHONE","DISCOUNT_TYPR","EXPIRE_DATE","STATUS","NOTE","USER");
     	$link=array(
     			'module'=>'accounting','controller'=>'specaildiscount','action'=>'edit',
     	);

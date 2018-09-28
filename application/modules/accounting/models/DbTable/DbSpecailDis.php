@@ -14,7 +14,7 @@
 		d.phone,
 		(SELECT so.dis_name FROM rms_discount AS so WHERE so.disco_id = d.dis_type LIMIT 1) AS discount_type,
 		expired_date,
-		(SELECT name_kh FROM rms_view WHERE TYPE=11 AND key_code =d.status) AS status,
+		(SELECT name_kh FROM rms_view WHERE TYPE=11 AND key_code =d.status) AS status,notes,
 		(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name
 		FROM `rms_specail_discount` AS d WHERE 1 ";
 		$orderby = " ORDER BY d.dis_type ASC, d.id DESC ";

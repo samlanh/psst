@@ -11,17 +11,21 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$_db= $this->getAdapter();		
 		$_db->beginTransaction();
 			try{
-			/// add photo ////////////////////////////////////////////////////
-					$adapter = new Zend_File_Transfer_Adapter_Http();
-					$part = PUBLIC_PATH.'/images';
-					$adapter->setDestination($part);
-					$adapter->receive();
-					$photo = $adapter->getFileInfo();
-					//print_r($photo['photo']['name']); exit();
-					if(!empty($photo['photo']['name'])){
-						$pho_name = $photo['photo']['name'];
-					}else{
-						$pho_name = '';
+					$part= PUBLIC_PATH.'/images/photo/';
+					if (!file_exists($part)) {
+						mkdir($part, 0777, true);
+					}
+					$photo = "";
+					$name = $_FILES['photo']['name'];
+					if (!empty($name)){
+						$ss = 	explode(".", $name);
+						$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+						$tmp = $_FILES['photo']['tmp_name'];
+						if(move_uploaded_file($tmp, $part.$image_name)){
+							$photo = $image_name;
+						}
+						else
+							$string = "Image Upload failed";
 					}
 			////////////////////////////////////////////////////////////////////////	
 					$teacher_code = $this->getTeacherCode();
@@ -65,7 +69,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'user_name' 		 => $_data['user_name'],
 							'password' 			 => md5($_data['password']),
 							//'status'   		 => $_data['status'],
-							'photo'  			 => $pho_name,
+							'photo'  			 => $photo,
 					        'create_date' 		 => date("Y-m-d"),
 					        'user_id'	  		 => $this->getUserId(),
 						);
@@ -96,20 +100,13 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	public function updateStaff($_data){
 		$_db= $this->getAdapter();		
 		$_db->beginTransaction();
-		try{
-		/// add photo ////////////////////////////////////////////////////
-				$adapter = new Zend_File_Transfer_Adapter_Http();
-				$part = PUBLIC_PATH.'/images';
-				$adapter->setDestination($part);
-				$adapter->receive();
-				$photo = $adapter->getFileInfo();
-				//print_r($photo['photo']['name']); exit();
-				if(!empty($photo['photo']['name'])){
-					$pho_name = $photo['photo']['name'];
-				}else{
-					$pho_name = '';
-				}
+		try{	
+				$part= PUBLIC_PATH.'/images/photo/';
+					if (!file_exists($part)) {
+						mkdir($part, 0777, true);
+					}
 		////////////////////////////////////////////////////////////////////	
+				
 				$teacher_code = $this->getTeacherCode();
 				$_arr=array(
 						'branch_id' 		 => $_data['branch_id'],
@@ -144,17 +141,26 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						'user_name' 		 => $_data['user_name'],
 						'password' 			 => md5($_data['password']),
 						'status'   			 => $_data['status'],
-						'photo'  			 => $pho_name,
+						//'photo'  			 => $photo,
 				        'create_date' 		 => date("Y-m-d"),
 				        'user_id'	  		 => $this->getUserId(),
 					);
+					$photo = "";
+					$name = $_FILES['photo']['name'];
+					if (!empty($name)){
+						$ss = 	explode(".", $name);
+						$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+						$tmp = $_FILES['photo']['tmp_name'];
+						if(move_uploaded_file($tmp, $part.$image_name)){
+							$array['photo']=$image_name;
+						}
+					}
 					$where=" id = ".$_data['id'];
 					$id = $this->update($_arr,$where);
 					
 					$this->_name = 'rms_teacher_document';
 					$where="stu_id = ".$_data["id"];
 					$this->delete($where);
-					
 					if(!empty($_data['identity'])){
 					$ids = explode(',', $_data['identity']);
 					foreach ($ids as $i){
@@ -204,7 +210,8 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
 				g.teacher_code, 
 				g.teacher_name_kh,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex, 
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex,
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=22 AND rms_view.key_code=g.teacher_type) AS teacher_type, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
 				g.position_add,
@@ -253,6 +260,10 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				g.dob,
 				g.card_no,
 				g.photo,
+				g.start_date,
+				g.end_date,
+				g.agreement,
+				g.experiences,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=22 AND rms_view.key_code=g.teacher_type) AS teacher_type, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 

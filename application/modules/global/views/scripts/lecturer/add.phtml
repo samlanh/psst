@@ -113,6 +113,13 @@ input.btn_borwse_image {
 		                	<?php echo $frm->getElement("branch_id");?>
 		                </div>
 		             </div>
+		              <div class="form-group">
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEACHER_TYPE");?> <span class="required">*</span> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+							<?php echo $frm->getElement("teacher_type");?>
+	                   </div>
+	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ID_NUMBER");?>
 	                   </label>
@@ -132,13 +139,6 @@ input.btn_borwse_image {
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 							<?php echo $frm->getElement("sex");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TEACHER");?>
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-							<?php echo $frm->getElement("teacher_type");?>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -359,7 +359,7 @@ input.btn_borwse_image {
 					<div class="form-group">
 					<div class="col-md-12 col-sm-12 col-xs-12">
 						<table border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-							<tr id="head-title" class="head-td"  align="right" style="background:#ececec;font-size:12px;"></tr>
+							<tr id="head-title" class="head-td"  align="right" style="background:#blue;font-size:12px;"></tr>
 						</table>
 						<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 								iconClass="dijitIconEditProperty" onclick="addRow();" />

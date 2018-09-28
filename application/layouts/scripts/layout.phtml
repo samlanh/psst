@@ -36,13 +36,11 @@ $teacher_id = $session_t->teacher_id;
 	if($level!=1 AND $module=='rsvacl'){
 		Application_Form_FrmMessage::redirectUrl("/home");	
 	}
-	
 	$news = $ddgb->getAllNew(10);
 	$notread = $ddgb->getNewNotreadByUser();
 	$notread = empty($notread)?0:$notread;
     ?>
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-
 <html>
 <head>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -301,7 +299,6 @@ $teacher_id = $session_t->teacher_id;
 												<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
 												<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
 											</div>
-											
 										</div>
 									</div>
 								</div>
@@ -361,7 +358,6 @@ $teacher_id = $session_t->teacher_id;
 </style>
 <!-- Custom Theme Scripts -->
 <script>
-
 var url_changelang = '<?php echo $this->url(array('module'=>'default','controller'=>'index','action'=>'changelange'));?> ';
 function changeLange(lang){
 	jQuery.ajax({
@@ -379,7 +375,6 @@ function changeLange(lang){
 </script>
 
 <script type="text/javascript">
-
 function loadingBlock(){
   document.getElementsByClassName("overlay")[0].style.display="block";
 }
@@ -392,7 +387,6 @@ jQuery(function () {
 	jQuery(".ptss__toggle-btn").click(function () {	
 		jQuery('.js-ptss-frame').toggleClass('is-opened');
 	});
-	
 	jQuery('.ptss__layout-wrapper > div').click(function(){
 		
 		jQuery(this).closest('.ptss__setting-control').find('.ptss__layout-wrapper').removeClass('is-selected');
@@ -414,7 +408,6 @@ jQuery(function () {
 			jQuery('#ptss__boxed-bg').show();
 			
 		}
-		
 	});
 })
 <?php if($module=='allreport' AND $action!='index' OR $action='allreports' OR $action='studentnearlyendservice' OR $action='studentpaymentlate'){?>

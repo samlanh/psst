@@ -239,11 +239,9 @@ input.btn_borwse_image {
 											<div class="image-box">
 												<?php
 													$images = $this->baseUrl().'/images/no-profile.png';
-													 if (!empty($this->rs['photo'])){
-														if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
-															$images = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
-														}
-													 }
+														 if (!empty($this->rs['photo'])){
+														$images = $this->baseUrl().'/images/'.$this->rs['photo'];
+														}	
 												?>
 											
 												<img id="profile_wiew" src="<?php echo $images;?>" alt=""  />

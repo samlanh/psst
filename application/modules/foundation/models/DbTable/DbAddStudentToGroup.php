@@ -164,8 +164,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 					`g`.`id`,
 					`g`.`group_code` AS `group_code`,
 					(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) as academic,
-					(SELECT en_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`)) as degree,
-					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`)) as grade,
+					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) as degree,
+					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
 					(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))) AS `session`,
 					(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)) AS `room_name`,
 					`g`.`semester` AS `semester`,
@@ -217,9 +217,11 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	}
 	
 	public function getAllFecultyName(){
-		$db = $this->getAdapter();
-		$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!=''  ORDER BY id DESC";
-		return $db->fetchAll($sql);
+// 		$db = $this->getAdapter();
+// 		$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!=''  ORDER BY id DESC";
+// 		return $db->fetchAll($sql);
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		return $_dbgb->getAllItems(1,null);
 	}
 	
 	function getSearchStudent($search){

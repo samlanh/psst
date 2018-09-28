@@ -133,8 +133,11 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 	function getGradeAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbScore();
-			$grade = $db->getAllGrade($data['degree']);
+// 			$db = new Foundation_Model_DbTable_DbScore();
+// 			$grade = $db->getAllGrade($data['degree']);
+			
+			$_dbgb = new Application_Model_DbTable_DbGlobal();
+			$grade = $_dbgb->getAllGradeStudyByDegree($data['degree']);
 			//print_r($grade);exit();
 			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 			print_r(Zend_Json::encode($grade));

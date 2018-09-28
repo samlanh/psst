@@ -15,7 +15,7 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			$search=array(
 					'title'	=>'',
 					'study_year' => '',
-					'grade_bac'	=>'',
+					'grade'	=>'',
 					'session' => '',
 			);
 		}

@@ -34,12 +34,13 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$_db = $this->getAdapter();
 		$sql = "SELECT rms_group_student_change_group.id,(select group_code from rms_group where rms_group.id=rms_group_student_change_group.from_group) as group_code,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id=rms_group_student_change_group.from_group)) AS academic,
-				(select major_enname from rms_major where rms_major.major_id=(select grade from rms_group where rms_group.id=rms_group_student_change_group.from_group) limit 1) as grade,
+				(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=rms_group_student_change_group.from_group) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
+				
 				(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=(select session from rms_group where rms_group.id=rms_group_student_change_group.from_group) limit 1 ) as session,
 				
 				group_code as to_group_code,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year) AS to_academic,
-				(select major_enname from rms_major where rms_major.major_id=rms_group.grade) as to_grade,
+				(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=rms_group.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as to_grade,
 				(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_group.session) as to_session,
 				
 				moving_date,rms_group_student_change_group.note,
@@ -58,10 +59,12 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$s_search = addslashes(trim($search['title']));
 			$s_where[] = " (select group_code from rms_group where rms_group.id=rms_group_student_change_group.from_group limit 1) LIKE '%{$s_search}%'";
 			$s_where[] = " (select group_code from rms_group where rms_group.id=rms_group_student_change_group.to_group limit 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT major_enname FROM rms_major WHERE rms_major.major_id=(select grade from rms_group where rms_group.id=
-							rms_group_student_change_group.from_group limit 1)) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT major_enname FROM rms_major WHERE rms_major.major_id=(select grade from rms_group where rms_group.id=
-							rms_group_student_change_group.to_group limit 1)) LIKE '%{$s_search}%'";
+			
+			$s_where[] = " (SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=
+							rms_group_student_change_group.from_group limit 1) ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=
+							rms_group_student_change_group.to_group limit 1) ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) LIKE '%{$s_search}%'";
+			
 			$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(select session from rms_group where rms_group.id=
 							rms_group_student_change_group.to_group limit 1)) LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT name_en FROM rms_view WHERE rms_view.type=4 and key_code=(select session from rms_group where rms_group.id=
@@ -72,8 +75,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		if(!empty($search['study_year'])){
 			$where.=" AND rms_group.academic_year=".$search['study_year'];
 		}
-		if(!empty($search['grade_bac'])){
-			$where.=" AND rms_group.grade=".$search['grade_bac'];
+		if(!empty($search['grade'])){
+			$where.=" AND rms_group.grade=".$search['grade'];
 		}
 		if(!empty($search['session'])){
 			$where.=" AND rms_group.session=".$search['session'];

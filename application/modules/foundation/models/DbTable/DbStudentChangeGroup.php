@@ -47,12 +47,12 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 		
 		(select group_code from rms_group where rms_group.id = scg.from_group limit 1)AS from_group,
 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=(select academic_year from rms_group where rms_group.id = scg.from_group limit 1)) AS from_academic,
-		(SELECT `major_enname` FROM `rms_major` WHERE `major_id`=(select grade from rms_group where rms_group.id = scg.from_group limit 1))AS from_grade,
+		(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id = scg.from_group LIMIT 1)) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as from_grade,
 		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = (select session from rms_group where rms_group.id = scg.from_group limit 1))) LIMIT 1) AS `from_session`,
 		
 		group_code AS to_group,
 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year limit 1) AS to_academic,
-		(SELECT `major_enname` FROM `rms_major` WHERE `major_id`=rms_group.grade ) AS to_grade,
+		(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=rms_group.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as to_grade,
 		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = rms_group.session )) LIMIT 1) AS `to_session`,
 		
 		moving_date,scg.note from `rms_student_change_group` as scg,rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 and scg.status=1";

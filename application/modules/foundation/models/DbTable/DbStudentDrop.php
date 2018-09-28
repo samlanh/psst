@@ -55,8 +55,9 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$_db = $this->getAdapter();
 		$sql = "SELECT  s.id,				
 				s.stu_code,
-				(SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree LIMIT 1) AS degree,
-				(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=s.grade LIMIT 1) AS grade,
+				(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
+				(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+				
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group LIMIT 1 ) AS group_name,
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1) AS room,
@@ -74,14 +75,14 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
 			$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT `en_name` FROM `rms_dept` WHERE `dept_id`=s.degree LIMIT 1) AS degree LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['study_year'])){
 			$where.=" AND rms_student.academic_year = ".$search['study_year'];
 		}
-		if(!empty($search['grade_bac'])){
-			$where.=" AND rms_student.grade=".$search['grade_bac'];
+		if(!empty($search['grade'])){
+			$where.=" AND rms_student.grade=".$search['grade'];
 		}
 		if(!empty($search['session'])){
 			$where.=" AND rms_student.session=".$search['session'];

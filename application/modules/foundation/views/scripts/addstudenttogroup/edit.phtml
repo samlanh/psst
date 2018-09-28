@@ -75,7 +75,7 @@ table .set-style tr td a {
 				                   		<select class="fullside"  name="degree" id="degree" dojoType="dijit.form.FilteringSelect" onchange="getallGrade();">
 											<option value=""><?php echo $tr->translate("SELECT_DEGREE");?></option>		
 											<?php if(!empty($this->degree))foreach ($this->degree as $row){?>
-												<option value="<?php echo $row['dept_id']?>"<?php if($row['dept_id']==$this->value['degree']) echo "selected='selected'"?>><?php echo $row['en_name']?></option>
+												<option value="<?php echo $row['id']?>"<?php if($row['id']==$this->value['degree']) echo "selected='selected'"?>><?php echo $row['name']?></option>
 											<?php }?>
 										</select>
 				                   </div>

@@ -26,7 +26,8 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 					gs.id,
 					g.group_code,
 					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year limit 1) AS academic,
-					(select major_enname from rms_major where rms_major.major_id=g.grade limit 1) as grade,
+					(select rms_itemsdetail.title from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade,
+					
 					(select name_en from rms_view where rms_view.type=4 and rms_view.key_code = g.session limit 1 ) as session,
 					
 					(select name_en from rms_view where type=5 and key_code = gs.type) as type,
@@ -68,8 +69,8 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['study_year'])){
 			$where.=" AND rms_group.academic_year=".$search['study_year'];
 		}
-		if(!empty($search['grade_bac'])){
-			$where.=" AND rms_group.grade=".$search['grade_bac'];
+		if(!empty($search['grade'])){
+			$where.=" AND rms_group.grade=".$search['grade'];
 		}
 		if(!empty($search['session'])){
 			$where.=" AND rms_group.session=".$search['session'];

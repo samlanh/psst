@@ -30,8 +30,9 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 					s.`mother_phone`,
 					
 					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=s.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-					(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`s`.`degree`) LIMIT 1) AS degree,
-					(SELECT major_enname FROM `rms_major` WHERE (`rms_major`.`major_id`=`s`.`grade`) LIMIT 1 )AS grade,
+					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`s`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`s`.`grade`) AND  (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+    				
 					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `s`.`room`) LIMIT 1) AS `room_name`,
 					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`))LIMIT 1) AS `session`
 				FROM

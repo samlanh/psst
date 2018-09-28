@@ -31,8 +31,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
     	
     	(select CONCAT(from_academic,'-',to_academic,' (',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) as academic_year,
     	
-		(SELECT kh_name FROM `rms_dept` WHERE (`rms_dept`.`dept_id`=`g`.`degree`))AS degree,
-		(SELECT major_khname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`)) AS grade,`g`.`amount_month`,
+		(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+		(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) lIMIT 1) AS grade,`g`.`amount_month`,
+		
 		(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
 		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`)) AS `room_name`,
@@ -46,6 +47,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
    		if(empty($search)){
 	   		return $db->fetchAll($sql.$order);
 	   	}
+	   	
 	   	if(!empty($search['title'])){
 	   		$s_where = array();
 	   		$s_search = addslashes(trim($search['title']));
@@ -54,8 +56,8 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				$s_where[] = " (SELECT rms_view.name_en	FROM rms_view WHERE ((rms_view.type = 4)
 								AND (rms_view.key_code = g.session))LIMIT 1) LIKE '%{$s_search}%'";
 		   		//$s_where[] = " (select CONCAT(from_academic,'-',to_academic)) LIKE '%{$s_search}%'";
-	    		$s_where[] = " (SELECT major_khname FROM `rms_major` WHERE (`rms_major`.`major_id`=`g`.`grade`)) LIKE '%{$s_search}%'";
-	   			$s_where[] = " (select kh_name from rms_dept where rms_dept.dept_id=g.degree) LIKE '%{$s_search}%'";
+	    		$s_where[] = " (SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) lIMIT 1) LIKE '%{$s_search}%'";
+	   			$s_where[] = " (SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) LIKE '%{$s_search}%'";
 	   		$where .=' AND ( '.implode(' OR ',$s_where).')';
 	   	}
 	   	if(!empty($search['study_year'])){

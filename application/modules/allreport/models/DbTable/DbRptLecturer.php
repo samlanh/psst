@@ -70,7 +70,7 @@ class Allreport_Model_DbTable_DbRptLecturer extends Zend_Db_Table_Abstract
 				  a.`generation`,
 				  a.`time`,
 				  d.`en_name` AS degree_name,
-				  m.`major_enname` AS grade_name,
+				  m.`title` AS grade_name,
 				  t.`teacher_name_en`,
 				  s.`stu_type`,
 				  (SELECT v.name_en FROM `rms_view` AS v WHERE v.key_code = t.`sex` AND v.type = 2) AS `gender`,
@@ -85,7 +85,7 @@ class Allreport_Model_DbTable_DbRptLecturer extends Zend_Db_Table_Abstract
 				  `rms_branch` AS b,
 				  `rms_tuitionfee` AS a,
 				  `rms_dept` AS d,
-				  `rms_major` AS m,
+				  `rms_itemsdetail` AS m,
 				  `rms_teacher` AS t,
 				  `rms_student` AS s 
 				WHERE s.`branch_id` = b.`br_id` 
@@ -97,7 +97,8 @@ class Allreport_Model_DbTable_DbRptLecturer extends Zend_Db_Table_Abstract
 				  AND s.`branch_id` = t.`branch_id`
 				  $branch_id 
 			";
-			$where ='';
+		
+		$where ='';
 			if($search['degree']>-1){
 				$where .=' AND s.`degree`='.$search['degree'];
 			}
@@ -123,18 +124,22 @@ class Allreport_Model_DbTable_DbRptLecturer extends Zend_Db_Table_Abstract
 			$s_where[] = "  a.`generation` LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-	$order =" ORDER BY 	s.`stu_code`,d.`en_name`,m.`major_enname` ASC";
+	$order =" ORDER BY 	s.`stu_code`,d.`en_name`,m.`title` ASC";
 		return $db->fetchAll($sql.$where);
 	}
    public function getAllDegree(){
-	   $db = $this->getAdapter();
-	   $sql="SELECT d.`dept_id` AS id, d.`en_name` AS `name` FROM `rms_dept` AS d WHERE d.`is_active`=1";
-	   return $db->fetchAll($sql);
+// 	   $db = $this->getAdapter();
+// 	   $sql="SELECT d.`dept_id` AS id, d.`en_name` AS `name` FROM `rms_dept` AS d WHERE d.`is_active`=1";
+// 	   return $db->fetchAll($sql);
+	   $_dbgb = new Application_Model_DbTable_DbGlobal();
+	   return $_dbgb->$_dbgb->getAllItems(1);
    }
     public function getAllGrade(){
-	   $db = $this->getAdapter();
-	   $sql="SELECT m.`major_id` AS id, m.`major_enname` AS `name` FROM `rms_major` AS m WHERE m.`is_active` =1";
-	   return $db->fetchAll($sql);
+// 	   $db = $this->getAdapter();
+// 	   $sql="SELECT m.`major_id` AS id, m.`major_enname` AS `name` FROM `rms_major` AS m WHERE m.`is_active` =1";
+// 	   return $db->fetchAll($sql);
+	   $_dbgb = new Application_Model_DbTable_DbGlobal();
+	   return $_dbgb->getAllGradeStudy(1);
    }
    public function getAcademicyear(){
 	   $dbglobal = new Application_Model_DbTable_DbGlobal();

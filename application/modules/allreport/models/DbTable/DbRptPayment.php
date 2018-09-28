@@ -27,8 +27,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				sp.penalty AS fine,
     				(SELECT CONCAT(from_academic,'-',to_academic) 
 						FROM rms_tuitionfee where rms_tuitionfee.id=sp.academic_year LIMIT 1) AS academic_year,
-    				(select en_name from rms_dept where dept_id = sp.degree LIMIT 1) as degree,
-					(select major_enname from rms_major where major_id = sp.grade LIMIT 1) as grade,
+					
+					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
+					(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1)AS degree,
+					
 					(select name_en from rms_view where rms_view.type = 4 and key_code=sp.session LIMIT 1) as session
     			from
     				rms_student_payment as sp,
@@ -251,7 +253,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    	(SELECT title FROM `rms_itemsdetail` WHERE items_id=spd.itemdetail_id LIMIT 1) AS service,
 			    	
 			    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
-			    	(SELECT major_enname from rms_major where major_id = sp.grade LIMIT 1) as grade,
+			    	
+			    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
+					
 			    	spd.subtotal,
 			    	spd.paidamount,
 			    	sp.receipt_number as receipt_number,
@@ -300,9 +304,12 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
 					(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic_year,
 					(SELECT name_en FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=s.session LIMIT 1)AS session,
-					(SELECT major_enname FROM rms_major WHERE rms_major.major_id=s.grade LIMIT 1)AS grade,
-					(SELECT en_name FROM rms_dept WHERE rms_dept.dept_id=s.degree LIMIT 1)AS degree,
+					
 					(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=s.is_subspend) AS STATUS,
+					
+					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
+					(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1)AS degree,
+					
 					(SELECT sp.create_date FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS create_date,
 					
 					(SELECT spd.subtotal FROM rms_student_payment AS sp,rms_student_paymentdetail AS spd WHERE sp.id=spd.payment_id AND spd.itemdetail_id=4 AND sp.student_id=s.stu_id AND sp.is_void=0 ORDER BY sp.id DESC LIMIT 1) AS subtotal,

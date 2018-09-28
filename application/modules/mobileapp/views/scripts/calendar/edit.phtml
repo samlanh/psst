@@ -109,8 +109,8 @@ if (!empty($dept)) {
 	                		<?php 
 								if (!empty($this->faculty)) foreach ($this->faculty as $rs){
 								?>
-								<input <?php if (in_array($rs['dept_id'], $array)) { echo "checked";}?> style=" display: inline-block;  height: 15px; margin-right: 10px;" type="checkbox"  class="checkbox" id="depts<?php echo $rs['dept_id'];?>" value="<?php echo $rs['dept_id'];?>"  name="selector[]"/>
-								<span><?php echo $rs['en_name'];?></span>
+								<input <?php if (in_array($rs['id'], $array)) { echo "checked";}?> style=" display: inline-block;  height: 15px; margin-right: 10px;" type="checkbox"  class="checkbox" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]"/>
+								<span><?php echo $rs['name'];?></span>
 								<br />
 							<?php } ?>
 	                	</div>

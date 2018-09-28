@@ -95,7 +95,7 @@ Class Mobileapp_Form_Frmcalendar extends Zend_Dojo_Form {
 		
 		$rows = $_db->getAllFecultyNamess(1);
 		$opt = '' ;
-		if(!empty($rows))foreach($rows AS $row) $opt[$row['dept_id']]=$row['en_name'];
+		if(!empty($rows))foreach($rows AS $row) $opt[$row['id']]=$row['name'];
 		 
 		$_dept = new Zend_Dojo_Form_Element_FilteringSelect("dept");
 		$_dept->setMultiOptions($opt);

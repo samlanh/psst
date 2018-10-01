@@ -64,7 +64,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'total_amountafter'=>$data['total_amount'],
 				'note'=>$data['Description'],
 				'prob'=>$data['prob'],
-				'type'=>1,
+				'type'=>0,
 				'date'=>$data['Date'],
 				'end_date'=>$data['end_date'],
 				
@@ -86,7 +86,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'total_amountafter'=>0,
 				'note'			=>$data['Description'],
 				'prob'			=>$data['prob'],
-				'type'			=>0,
+				'type'			=>1,
 				'date'			=>$data['Date'],
 				'end_date'		=>$data['end_date'],
 				'status'		=>$data['status'],

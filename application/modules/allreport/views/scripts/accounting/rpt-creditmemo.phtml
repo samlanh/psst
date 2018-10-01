@@ -74,7 +74,8 @@
 										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_CODE");?></th>
 										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></th>
 										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TOTAL_AMOUNT");?></th>
-										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("FOR_DATE");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("START_DATE");?></th>
+										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("END_DATE");?></th>
 										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("NOTE");?></th>
 										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("PAID_TRANSFER");?></th>
 										<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></th>
@@ -90,6 +91,7 @@
 										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['student_name']; ?></td>
 										<td style="border:1px solid #000;text-align: center;"><?php echo "$ ".number_format($rs["total_amount"],2);?></td>
 										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['date']; ?></td>
+										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['end_date']; ?></td>
 										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['note']; ?></td>
 										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['paid_transfer']; ?></td>
 										<td style="border:1px solid #000;text-align: center;"><?php echo $rs['user_name']; ?></td>

@@ -29,6 +29,8 @@
 				student_id = dijit.byId('student_id').get('value');
        			 if(student_id==0){
 					alert("សូមជ្រើសរើសសិស្ស");dijit.byId('student_id').focus();return false;}
+					dijit.byId("savenew").set("disabled",true);
+        			dijit.byId("saveclose").set("disabled",true);
 					return true;
 			}else {
 				return false;

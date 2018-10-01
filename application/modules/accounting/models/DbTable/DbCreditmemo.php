@@ -17,8 +17,8 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				total_amount,
 				total_amountafter,
 				c.date,
-				c.note,
 				c.end_date,
+				c.note,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=20 AND key_code=c.type LIMIT 1) AS paid_transfer,
 				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) AS user_name,
 				c.status 
@@ -50,6 +50,16 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function addCreditmemo($data){
+// 		$db = $this->getAdapter();
+// 		try{
+// 		$sql="SELECT id FROM rms_transfer_credit WHERE branch_id =".$data['branch_id'];
+// 		$sql.=" AND student_id='".$data['student_id']."'";
+// 		$sql.=" AND total_amount='".$data['total_amount']."'";
+// 		$sql.=" AND total_amountafter='".$data['total_amount']."'";
+// 		$rs = $db->fetchOne($sql);
+// 		if(!empty($rs)){
+// 			return -1;
+// 		}
 		$arr = array(
 			'branch_id'		=>$data['branch_id'],
 			'student_id'	=>$data['student_id'],
@@ -57,12 +67,16 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			'total_amountafter'=>$data['total_amount'],
 			'note'			=>$data['Description'],
 			'prob'			=>$data['prob'],
-			'type'			=>1,
+			'type'			=>0,
 			'date'			=>$data['Date'],
 			'end_date'		=>$data['end_date'],
 			'status'		=>$data['status'],
 			'user_id'		=>$this->getUserId(),);
 		$this->insert($arr);
+// 		}catch (Exception $e){
+// 			$db->rollBack();
+// 			echo $e->getMessage();exit();
+// 		}
 		//print_r($data); exit();
  }
 	 function updatcreditMemo($data){
@@ -73,7 +87,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				'total_amountafter'=>$data['total_amount'],
 				'note'=>$data['Description'],
 				'prob'=>$data['prob'],
-				'type'=>1,
+				'type'=>0,
 				'date'=>$data['Date'],
 				'end_date'=>$data['end_date'],
 				'status'=>$data['status'],

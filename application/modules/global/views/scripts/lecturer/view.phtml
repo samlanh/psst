@@ -143,7 +143,7 @@ dojo.ready(function(){
 						    			<label class="title">ឈ្មោះគ្រូ</label> : <label class="value"><?php echo $this->rs['teacher_name_kh'];?></label> <label class="title">ភេទ</label> : <label class="value"><?php echo $this->rs['sex'];?></label> <label class="title">អត្តលេខ</label> : <label class="value"><?php echo $this->rs['teacher_code'];?></label>
 						    			</p>
 						    			<p class="padding-left">
-						    			<label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['nationality'];?></label> <label class="title">ជនជាតិ</label> : <label class="value"><?php echo $this->rs['nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></label>
+						    			 <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></label><label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['nationality'];?></label> <label class="title">ជនជាតិ</label> : <label class="value"><?php echo $this->rs['nation'];?></label>
 						    			</p>
 						    			<p class="padding-left">
 						    			<label class="title">ប្រភេទគ្រូ</label> : <label class="value"><?php echo $this->rs['teacher_type'];?></label> 
@@ -153,7 +153,47 @@ dojo.ready(function(){
 						    	<tr><td>&nbsp;</td></tr>
 						    	<tr>
 						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Battambang';">
-						    			II. <?php echo $tr->translate("CONTACT_INFO_EXPER");?>
+						    			II. <?php echo $tr->translate("CURRENT_ADDRESS");?>
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+						    			<p class="padding-left">
+						    			<label class="title">លេខផ្ទះ</label> : <label class="value"><?php echo $this->rs['home_num'];?></label><label class="title">ផ្លូវលេខ</label> : <label class="value"><?php echo $this->rs['street_num'];?></label><label class="title">រាជធានី/ខេត្ត </label> : <label class="value"><?php echo $this->rs['province_name'];?></label>  
+						    			</p>
+						    			<p class="padding-left">
+						    			 <label class="title">ស្រុក /ខណ្ឌ</label> : <label class="value"><?php echo $this->rs['dis_name'];?></label><label class="title">ឃុំ/សង្កាត់ </label> : <label class="value"><?php echo $this->rs['com_name'];?></label> <label class="title">ភូមិ</label> : <label class="value"><?php echo $this->rs['Village_name'];?></label>​ 
+						    			</p>
+						    		</td>
+						    	</tr>
+						    	<tr><td>&nbsp;</td></tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Battambang';">
+						    			III. <?php echo $tr->translate("CONTACT_INFO");?>
+						    			<div class="border"></div>
+						    		</td>
+						    	</tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+						    			<p class="padding-left">
+						    			<label class="title">លេខទូរស័ព្ទ </label> : <label class="value"><?php echo $this->rs['tel'];?></label><label class="title">អ៊ីម៉ែល </label> : <label class="value"><?php echo $this->rs['email'];?></label> 
+						    			</p>
+						    			<p class="padding-left">
+						    			<label class="title">លេខអត្តសញ្ញាណប័ណ្ណ</label> : <label class="value"><?php echo $this->rs['card_no'];?></label>  <label class="title">លិខិតឆ្លងដែនលេខ</label> : <label class="value"><?php echo $this->rs['passport_no'];?></label>
+						    			</p>
+						    			<p class="padding-left">
+						    			 
+						    			</p>
+						    			<p class="padding-left">
+						    			 <label class="title">សម្គាល់  </label> : <label class="value"><?php echo $this->rs['note'];?></label> 
+						    			</p>
+						    		</td>
+						    	</tr>
+						    	<tr><td>&nbsp;</td></tr>
+						    	<tr>
+						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Battambang';">
+						    			VI. <?php echo $tr->translate("CONTACT_INFO_EXPER");?>
 						    			<div class="border"></div>
 						    		</td>
 						    	</tr>
@@ -170,46 +210,6 @@ dojo.ready(function(){
 						    			</p>
 						    			<p class="padding-left">
 						    			<label class="title">កិច្ចព្រមព្រៀង </label> : <label class="value"><?php echo $this->rs['agreement'];?></label> 
-						    			</p>
-						    		</td>
-						    	</tr>
-						    	<tr><td>&nbsp;</td></tr>
-						    	<tr>
-						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Battambang';">
-						    			III. <?php echo $tr->translate("CURRENT_ADDRESS");?>
-						    			<div class="border"></div>
-						    		</td>
-						    	</tr>
-						    	<tr>
-						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
-						    			<p class="padding-left">
-						    			<label class="title">លេខផ្ទះ</label> : <label class="value"><?php echo $this->rs['home_num'];?></label><label class="title">រាជធានី/ខេត្ត </label> : <label class="value"><?php echo $this->rs['province_name'];?></label> <label class="title">ស្រុក /ខណ្ឌ</label> : <label class="value"><?php echo $this->rs['dis_name'];?></label> 
-						    			</p>
-						    			<p class="padding-left">
-						    			 <label class="title">ផ្លូវលេខ</label> : <label class="value"><?php echo $this->rs['street_num'];?></label><label class="title">ឃុំ/សង្កាត់ </label> : <label class="value"><?php echo $this->rs['com_name'];?></label> <label class="title">ភូមិ</label> : <label class="value"><?php echo $this->rs['Village_name'];?></label>​ 
-						    			</p>
-						    		</td>
-						    	</tr>
-						    	<tr><td>&nbsp;</td></tr>
-						    	<tr>
-						    		<td style="font-size:14px; font-weight: initial; font-family:'Khmer OS Battambang';">
-						    			VI. <?php echo $tr->translate("CONTACT_INFO");?>
-						    			<div class="border"></div>
-						    		</td>
-						    	</tr>
-						    	<tr>
-						    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
-						    			<p class="padding-left">
-						    			<label class="title">លេខអត្តសញ្ញាណប័ណ្ណ</label> : <label class="value"><?php echo $this->rs['card_no'];?></label>  <label class="title">លិខិតឆ្លងដែនលេខ</label> : <label class="value"><?php echo $this->rs['passport_no'];?></label>
-						    			</p>
-						    			<p class="padding-left">
-						    			<label class="title">លេខទូរស័ព្ទ </label> : <label class="value"><?php echo $this->rs['tel'];?></label>
-						    			</p>
-						    			<p class="padding-left">
-						    			 <label class="title">អ៊ីម៉ែល </label> : <label class="value"><?php echo $this->rs['email'];?></label> 
-						    			</p>
-						    			<p class="padding-left">
-						    			 <label class="title">សម្គាល់  </label> : <label class="value"><?php echo $this->rs['note'];?></label> 
 						    			</p>
 						    		</td>
 						    	</tr>

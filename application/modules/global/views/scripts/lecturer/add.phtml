@@ -745,6 +745,8 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			if(dijit.byId('frm_nation_kh').validate()){
 				dijit.byId("save_nation").attr("disabled",true);
 				loadingBlock();	
+				nationality=dijit.byId('nationality').get('value');
+				nation=dijit.byId('nation').get('value');
 				dojo.xhrPost({
 					url:url_add_nation,
 					form: dojo.byId("frm_nation_kh"),

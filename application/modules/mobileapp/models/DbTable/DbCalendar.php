@@ -39,62 +39,57 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 	function add($data)
 	{
 		if(!empty($data['note'])){
-			$des =  $data['note'];
-		}else{
-			$des = '';
-		}
-      	$db = $this->getAdapter();
-        $db->beginTransaction();
-        try{
-            $dept = "";
-           if (!empty($data['selector'])) foreach ( $data['selector'] as $rs){
-                if (empty($dept)){ $dept = $rs;}else{ $dept = $dept.",".$rs;}
-            }
-          
-            if($data['amount_day']>1){
-            	$date_next=$data['start_date'];
-            	for($i=1;$i<=$data['amount_day'];$i++){
-            		$d = new DateTime($date_next);
-            		$str_next = '+1 day';
-            		
-            		$d->modify($str_next);
-            		$date_next =  $d->format( 'Y-m-d' );
-            		$data['start_date']=$date_next;
-            
-		            $_arr=array(
-						'title' => $data['holiday_name'],
-						'start_date' => $data['start_date'],
-						'end_date' => $data['end_date'],
-						'amount_day' => $data['amount_day'],					
-						'description' => $des,                  
-						'active' => $data['status'],//use instead status
-						'date'=> $data['start_date'],
-						'modify_date'=>date("Y-m-d H:i:s"),
-						'user_id'=>$this->getUserId(),
-						'status' => 1,		
-						'dept' => $dept,					
-		            );
-		         $this->_name;
-		         
-		         
-		        if(!empty($data['id'])){  
-		            $where = 'id='.$data['id'];
-		           $this->update($_arr, $where); 
-		        }else{
-					$_arr['create_date']=date("Y-m-d H:i:s");
-		            $this->insert($_arr);
-		        }  
-        	}
-        }
-        $db->commit();
-     }catch(exception $e){
-//             Application_Form_FrmMessage::message("Application Error");
-            Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-            $db->rollBack();
-    }
-
+				$des =  $data['note'];
+			}else{
+				$des = '';
+			}
+	      	$db = $this->getAdapter();
+	        $db->beginTransaction();
+	        try{
+	            $dept = "";
+	           if (!empty($data['selector'])) foreach ( $data['selector'] as $rs){
+	                if (empty($dept)){ $dept = $rs;}else{ $dept = $dept.",".$rs;}
+	            }
+				if(!empty($data['id'])){
+				  $where = 'id='.$data['id'];
+				  $this->delete($where);
+				}		  
+					   
+	            if($data['amount_day']>1){
+	            	$date_next=$data['start_date'];
+	            	for($i=1;$i<=$data['amount_day'];$i++){
+						if($i>1){
+							$d = new DateTime($date_next);
+							$str_next = '+1 day';
+							
+							$d->modify($str_next);
+							$date_next =  $d->format( 'Y-m-d' );
+							$data['start_date']=$date_next;
+						}
+	            
+			            $_arr=array(
+							'title' => $data['holiday_name'],
+							'start_date' => $data['start_date'],
+							'end_date' => $data['end_date'],
+							'amount_day' => $data['amount_day'],					
+							'description' => $des,                  
+							'active' => $data['status'],//use instead status
+							'date'=> $data['start_date'],
+							'modify_date'=>date("Y-m-d H:i:s"),
+							'user_id'=>$this->getUserId(),
+							'status' => 1,		
+							'dept' => $dept,					
+			            );
+			        
+						$_arr['create_date']=date("Y-m-d H:i:s");
+			            $this->insert($_arr);
+			        
+	        	}
+	        }
+	        $db->commit();
+	     }catch(exception $e){
+	            Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	            $db->rollBack();
+	    }
 	}
- 
-
-
 }

@@ -575,7 +575,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Allreport_Model_DbTable_DbRptGroup();
-			$db->submitDateList($data);
+			//$db->submitDateList($data);
 			$db->UpdateAmountStudent($data);
 // 			Application_Form_FrmMessage::message("INSERT_SUCCESS");
 // 			$this->_redirect("/allreport/allstudent/student-group");

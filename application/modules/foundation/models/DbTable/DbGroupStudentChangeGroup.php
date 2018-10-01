@@ -8,7 +8,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->user_id;
 	}
-	
 	public function getfromGroup(){
 		$db = $this->getAdapter();
 		$sql = "SELECT g.id,g.`group_code`,
@@ -19,7 +18,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			  WHERE  gds.type=1 AND gds.group_id = g.id AND group_code!=''";
 			$request=Zend_Controller_Front::getInstance()->getRequest();
 			if($request->getActionName()=='add'){
-				$sql.=" AND gds.is_pass=0 ";
+				$sql.=" AND gds.is_pass=2 ";
 			}
 			$sql.=" GROUP BY gds.group_id ";
 		return $db->fetchAll($sql);
@@ -422,7 +421,12 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$db=$this->getAdapter();
 		$sql="select gds.stu_id as stu_id,st.stu_enname,st.stu_khname,st.stu_code,
 			 (select name_en from rms_view where rms_view.type=2 and rms_view.key_code=st.sex) as sex
-			 from rms_group_detail_student as gds,rms_student as st where st.is_subspend = 0 and gds.type=1 and is_pass=0 and gds.stu_id=st.stu_id and gds.group_id=$from_group";
+			 FROM rms_group_detail_student as gds,rms_student as st 
+			WHERE st.is_subspend = 0 AND 
+				gds.type=1 
+				and gds.stu_id=st.stu_id 
+				and gds.group_id=$from_group";
+		//remove and is_pass=0  but bat old student when have repeat student 
 		return $db->fetchAll($sql);
 	}
 	

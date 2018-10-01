@@ -69,7 +69,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$db->rollBack();
 			echo $e->getMessage();exit();
 		}
-		print_r($_data); exit();
+		
 	}
 	
 	public function updateGroup($_data){

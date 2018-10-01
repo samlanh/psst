@@ -213,11 +213,12 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=22 AND rms_view.key_code=g.teacher_type) AS teacher_type, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
+
 				g.position_add,
 				g.tel,
 				g.email,
 				g.note,
-				(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1) AS `status`
+				(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1 LIMIT 1) AS `status`
 				FROM rms_teacher AS g WHERE 1';
 		$order_by=" order by id DESC";
 		$where = '';

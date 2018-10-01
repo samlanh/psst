@@ -173,8 +173,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'is_studenttest'	=>1,
 					'modify_date' => date("Y-m-d H:i:s")
 			);
-			
-			
 			$photo = "";
 			$name = $_FILES['photo']['name'];
 			if (!empty($name)){
@@ -228,7 +226,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					$this->insert($arr);
 				}
 			}
-			
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			echo $e->getMessage();

@@ -1,4 +1,5 @@
 <?php
+	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$frm = $this->frm_callteral;
 	echo $this->headTitle($tr->translate("ADD_TECHER_NAME"));
@@ -249,7 +250,8 @@ input.btn_borwse_image {
 													if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
 													$image = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
 													}
-										}	//print_r($image);exit();									 
+										}	
+										//print_r($image);exit();									 
 									?>					
 								<img id="profile_wiew" src="<?php echo $image;?>" alt=""  />
 								</div>

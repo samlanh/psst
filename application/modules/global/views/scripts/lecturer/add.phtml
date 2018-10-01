@@ -751,15 +751,15 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 					handleAs:"json",
 					load: function(data) {
 						var indexkey = $("#indexkey").val();
-							var Itemmake = { 
-								 id: data,
-								 name: dijit.byId('title_kh').get('value')
-							   };
+						var Itemmake = { 
+							 id: data,
+							 name: dijit.byId('title_kh').get('value')
+						   };
 						   if(indexkey==1){
 							   addDataToSelectbox(dijit.byId('nationality'), nation_store, Itemmake, data);
 							   addDataToSelectbox(dijit.byId('nation'), nation_store1, Itemmake, data);
-							   nation =  dijit.byId('nation').get('value');
 							   dijit.byId('nation').set('store', nation_store);
+							   nation =  dijit.byId('nation').get('value');
 							   if(nation!=""){
 							   dijit.byId('nation').set('value', nation);
 							   }
@@ -778,6 +778,27 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 					},
 					error: function(err) {
 						alert(err);
+					}
+				});
+			}
+		}
+		function getNationli(){
+			var donor_id  = $("#donor_id").val();	
+			if(donor_id!=-1){				
+				$.ajax({
+					url:  "<?php echo $this->baseUrl()?>/donors/donate/get-donate-detail",
+					type: "post",
+					data: {donor_id:donor_id},
+					success: function(data){
+					//	alert(1);		
+						rs = $.parseJSON(data);
+						if(rs){
+							$('#donor_address').val(rs.address);
+							$('#note').val(rs.detail_kh);
+						}
+					},
+					error:function(err){
+						alert("failed");
 					}
 				});
 			}
@@ -828,7 +849,7 @@ function addRow(){
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
-		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
+		temp+='<th ><?php echo $tr->translate("NOTE");?></th>';
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}

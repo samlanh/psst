@@ -1608,7 +1608,7 @@ date_format = '"dd/MM/yyyy"';
 	function deleteRecord(index) {
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
-		for(var i=0;i<arrays.length;i++) {
+		for(var i=0;i<arrays.length;i++){
 		if(arrays[i] == index) arrays.splice(i,1);
 		}
 		var strings = arrays.join(',');

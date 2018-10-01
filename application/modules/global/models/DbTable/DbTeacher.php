@@ -35,7 +35,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					$rs = $_db->fetchOne($sql);
 					if(!empty($rs)){
 						return -1;
-					}			
+					}
 					$_arr=array(
 							'branch_id' 		 => $_data['branch_id'],
 							'teacher_code'		 => $_data['code'],
@@ -102,11 +102,10 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$_db->beginTransaction();
 		try{	
 				$part= PUBLIC_PATH.'/images/photo/';
-					if (!file_exists($part)) {
-						mkdir($part, 0777, true);
-					}
+				if (!file_exists($part)) {
+					mkdir($part, 0777, true);
+				}
 		////////////////////////////////////////////////////////////////////	
-				
 				$teacher_code = $this->getTeacherCode();
 				$_arr=array(
 						'branch_id' 		 => $_data['branch_id'],

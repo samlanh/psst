@@ -126,6 +126,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
 		//print_r($this->view->row); exit();
 	}
+	
 	public function copyAction()
 	{
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();

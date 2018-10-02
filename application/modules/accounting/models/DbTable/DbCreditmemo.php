@@ -16,10 +16,11 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				CONCAT(stu_khname,'-',stu_enname) AS student_name,
 				total_amount,
 				total_amountafter,
+				c.create_date,
 				c.date,
 				c.end_date,
 				c.note,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=20 AND key_code=c.type LIMIT 1) AS paid_transfer,
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=23 AND key_code=c.type LIMIT 1) AS paid_transfer,
 				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) AS user_name,
 				c.status 
 			  FROM 
@@ -72,6 +73,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			'note'			=>$data['Description'],
 			'prob'			=>$data['prob'],
 			'type'			=>0,
+			'create_date' => Zend_Date::now(),
 			'date'			=>$data['Date'],
 			'end_date'		=>$data['end_date'],
 			'status'		=>$data['status'],
@@ -92,6 +94,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				'note'=>$data['Description'],
 				'prob'=>$data['prob'],
 				'type'=>0,
+				'create_date' => Zend_Date::now(),
 				'date'=>$data['Date'],
 				'end_date'=>$data['end_date'],
 				'status'=>$data['status'],

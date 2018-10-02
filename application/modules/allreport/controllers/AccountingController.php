@@ -932,12 +932,11 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'end_date'=>date('Y-m-d'),
 				);
 			}
-	
 			$db = new Registrar_Model_DbTable_DbRptByType();
 			$this->view->row = $db->getIncomebyCategory($search,1);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
@@ -1093,6 +1092,89 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+	}
+	public function rptDailyAction()
+	{
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'adv_search' =>'',
+						'degree'     =>'',
+						'grade_all'  =>'',
+						'session'    =>'',
+						'all_payment'=>'all',
+						'student_payment'=>'',
+						'student_test'=>'',
+						'income'    =>'',
+						'stu_code'  =>'',
+						'stu_name'  =>'',
+						'expense'   =>'',
+						'change_product'=>'',
+						'customer_payment'=>'',
+						'clear_balance'=>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'  => date('Y-m-d'),
+				);
+			}
+	
+			//print_r($search);
+	
+			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
+			$user_type=$db->getUserType();
+	
+			if(!empty($search['all_payment'])){
+				$data1=$this->view->row = $db->getDailyReport($search);
+				$data3=$this->view->change_product = $db->getAllChangeProduct($search);
+				$data4=$this->view->customer_payment = $db->getAllCustomerPayment($search);
+				$user_type=$db->getUserType();
+				if($user_type==1){
+					$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
+					$this->view->income = $_db->getAllOtherIncome($search);
+						
+					$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
+					$this->view->expense = $_db1->getAllOtherExpense($search);
+				}
+				$data5=$this->view->clear_balance = $db->getAllStudentClearBalance($search);
+			}
+	
+			if(!empty($search['student_payment'])){
+				$data1=$this->view->row = $db->getDailyReport($search);
+			}
+			if(!empty($search['income'])){
+				if($user_type==1){
+					$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
+					$this->view->income = $_db->getAllOtherIncome($search);
+				}
+			}
+			if(!empty($search['expense'])){
+				if($user_type==1){
+					$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
+					$this->view->expense = $_db1->getAllOtherExpense($search);
+				}
+			}
+			if(!empty($search['change_product'])){
+				$data3=$this->view->change_product = $db->getAllChangeProduct($search);
+			}
+			if(!empty($search['customer_payment'])){
+				$data4=$this->view->customer_payment = $db->getAllCustomerPayment($search);
+			}
+			if(!empty($search['clear_balance'])){
+				$data5=$this->view->clear_balance = $db->getAllStudentClearBalance($search);
+			}
+	
+	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			echo $e->getMessage();
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
 	}
 	
 }

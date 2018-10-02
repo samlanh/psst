@@ -386,8 +386,7 @@
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREDIT_MEMO");?>  :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text"  onkeyup="" readOnly="1"  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" />
-							<input type="hidden" name="credit_memo_after" id="credit_memo_after" dojoType="dijit.form.TextBox" value="0" />
+	                   		<input type="text"  onkeyup="" readOnly="true"  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" />
 	                   </div>
 	                </div>
 					<div class="form-group">
@@ -685,6 +684,7 @@ function getInfoBygroup(){
 			dijit.byId('session').set('readOnly',true);
 			dijit.byId('room').set('value',data.room_id);
 			dijit.byId('group_name').attr('value',data.group_code);
+			dijit.byId('degree_culture').set('readOnly',true);
 		},
 		error: function(err) {
 			alert(err+"5");
@@ -1147,7 +1147,7 @@ function getOldStudentInfo(){
 		handleAs:"json",
 		load: function(data) {
 			   if(data){
-				   if(student_type==1){//student info
+				   if(student_type==1){//old student info
 					   if(data.group_id!= null && data.group_id>0){
 							dijit.byId('group').attr('value',data.group_id);
 							getInfoBygroup();
@@ -1160,10 +1160,11 @@ function getOldStudentInfo(){
 							getgradebyDegree(data.degree,data.grade,1);
 						}
 					 
-					   dijit.byId('degree_culture').attr('value',data.calture);
+					    dijit.byId('degree_culture').attr('value',data.calture);
 						dijit.byId('kh_name').attr('value',data.stu_khname);
 						dijit.byId('en_name').attr('value',data.stu_enname);
 						dijit.byId('last_name').attr('value',data.last_name);
+						
 						
 						dijit.byId('sex').attr('value',data.sex);
 						dijit.byId('parent_phone').attr('value',data.tel);
@@ -1173,6 +1174,10 @@ function getOldStudentInfo(){
 						}else{
 							$('#profile_wiew').attr('src', "<?php echo $this->baseUrl().'/images/no-profile.png';?>");
 						}
+						
+						dijit.byId('credit_memo').attr('value',data.total_amountafter);
+						dijit.byId('credit_memo_id').attr('value',data.credit_memo_id);
+						
 				 	}else if(student_type==2){//testing info
 						dijit.byId("kh_name").attr("value",data.kh_name);
 						dijit.byId("en_name").attr("value",data.en_name);
@@ -1378,10 +1383,8 @@ function calculateTotal(index){
 		
 		if(netAmount<0){
 			dijit.byId('paid_amount').attr('value',0);
-			dijit.byId('credit_memo_after').attr('value',abs(netAmount));
 		}else{
 			dijit.byId('paid_amount').attr('value',netAmount.toFixed(2));
-			dijit.byId('credit_memo_after').attr('value',0);
 		}
 		readMoneyInKhmer(netAmount.toFixed(2));
 	}
@@ -1412,10 +1415,8 @@ function onKeyUpDeduct(){
 		netAmount = grandTotal  - credit_memo - deduct;
 		if(netAmount<0){
 			dijit.byId('net_amount').attr('value',0);
-			dijit.byId('credit_memo_after').attr('value',abs(netAmount));
 		}else{
 			dijit.byId('net_amount').attr('value',netAmount.toFixed(2));
-			dijit.byId('credit_memo_after').attr('value',0);
 		}
 		
 		readMoneyInKhmer(netAmount.toFixed(2));*/
@@ -1635,8 +1636,8 @@ function printSave(new_stu_id,new_receipt,submit){
 }	
 /////////////// get student test info ////////////////////////////////////////////////////////
 
-var url_creditmemo = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-credit-memo')); ?>";
-function getCreditMemo(){
+//var url_creditmemo = "<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-credit-memo')); ?>";
+/*function getCreditMemo(){
 	stu_type = dijit.byId('student_type').get('value');
 	if(stu_type==3){
 		stu_id = dijit.byId('old_stu').get('value');
@@ -1657,12 +1658,11 @@ function getCreditMemo(){
 					}
 				},
 				error: function(err) {
-					alert(err+"33");
 				}
 			});	
 		} 
 	}
-}
+}*/
 var url_get_start_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date')); ?>';	
 function getOldVildateToStartDateRegister(){
 	stu_type = dijit.byId('student_type').get('value');

@@ -37,12 +37,13 @@
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;
 					}	
+					#exportExcel th{text-align: center;}
 				</style>
 				<tr>
 					<td colspan="3" id="exportExcel">
 						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
 							<thead>
-							<tr style="font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
+							<tr style="text-align:center !important;font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
 								<th style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></th>
 								<th style="border: 1px solid #000;"><?php echo $tr->translate('EXPENSE_TITLE')?></th>
 								<th style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></th>

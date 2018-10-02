@@ -179,8 +179,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
 					if($cut_credit_memo<0){
 						$cut_credit_memo = abs($cut_credit_memo);
+						$credit_after = $cut_credit_memo;
 					}else{
 						$cut_credit_memo = $data['credit_memo'];
+						$credit_after=0;
 					}
 					$arr=array(
 						'branch_id'		=> $this->getBranchId(),
@@ -211,23 +213,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->_name='rms_student_payment';
 					$paymentid = $this->insert($arr);
 			
-// 					$this->_name='rms_creditmemo';
-// 					if($data['student_type']==3){ // only old_student can have credit_memo
-// 						if(!empty($data['credit_memo_id'])){
-// 							if($data['credit_memo_after']>0){
-// 								$array=array(
-// 										'total_amountafter'=>$data['credit_memo_after'],
-// 								);
-// 							}else{
-// 								$array=array(
-// 										'total_amountafter'=>0,
-// 										'type'=>1, // បង់រួច
-// 								);
-// 							}
-// 							$where = " id = ".$data['credit_memo_id'];
-// 							$this->update($array, $where);
-// 						}
-// 					}
+					if($data['student_type']==1 AND $data['customer_type']==1){ // only old_student can have credit_memo
+						if(!empty($data['credit_memo_id'])){
+							if($data['credit_memo']>0){
+								$array=array(
+										'total_amountafter'=>$credit_after,
+								);
+								$this->_name='rms_creditmemo';
+								$where = " id = ".$data['credit_memo_id'];
+								$this->update($array, $where);
+							}
+						}
+					}
 					
 				    /*alert ទៅទូរសព្ទដៃអាណាព្យាបាលសិស្ស*/
 // 					$dbpush = new  Application_Model_DbTable_DbGlobal();
@@ -1850,7 +1847,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	}
 	function getCreditMemoByStuId($stu_id){
 		$db=$this->getAdapter();
-		$sql="select id, total_amountafter from rms_creditmemo where student_id = $stu_id and type=0 ";
+		$sql="SELECT id, total_amountafter from rms_creditmemo where student_id = $stu_id and total_amountafter>0 ";
 		return $db->fetchRow($sql);
 	}
 	

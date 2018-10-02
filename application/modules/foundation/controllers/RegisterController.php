@@ -22,7 +22,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 						'degree'=> '',
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
-						'status'=> '',
+						'status'=> -1,
+						'branch_id'=>''
 					);
 				
 			}

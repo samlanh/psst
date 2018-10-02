@@ -862,9 +862,11 @@ function getAllgroupStudy($teacher_id=null){
    }
    function getStudentinfoById($stu_id){
 	   	$db=$this->getAdapter();
-	   	$sql="SELECT s.*
-	   	FROM rms_student as s
-	   	WHERE s.stu_id=$stu_id LIMIT 1 ";
+	   	$sql="SELECT s.*,
+	   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
+	   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id
+	   		FROM rms_student as s
+	   			WHERE s.stu_id=$stu_id LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
    /*test student*/

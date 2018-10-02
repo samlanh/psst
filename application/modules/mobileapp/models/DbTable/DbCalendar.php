@@ -55,7 +55,7 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 				  $this->delete($where);
 				}		  
 					   
-	            if($data['amount_day']>1){
+	            //if($data['amount_day']>1){
 	            	$date_next=$data['start_date'];
 	            	for($i=1;$i<=$data['amount_day'];$i++){
 						if($i>1){
@@ -85,7 +85,7 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 			            $this->insert($_arr);
 			        
 	        	}
-	        }
+	        //}
 	        $db->commit();
 	     }catch(exception $e){
 	            Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

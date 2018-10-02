@@ -143,10 +143,10 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						s.stu_code,
 						s.stu_khname,
 						s.stu_enname,
-						(SELECT generation FROM rms_tuitionfee WHERE rms_tuitionfee.id = s.academic_year ) AS type,
-						(SELECT en_name FROM rms_dept WHERE dept_id = s.degree LIMIT 1) AS degree,
-						(SELECT major_enname FROM rms_major WHERE major_id = s.grade LIMIT 1) AS grade,
-						(SELECT name_en FROM rms_view WHERE rms_view.type = 4 AND key_code=s.session LIMIT 1) AS session,
+						(SELECT generation FROM rms_tuitionfee WHERE rms_tuitionfee.id = s.academic_year LIMIT 1 ) AS type,
+						(SELECT title FROM `rms_items` WHERE rms_items.id=sp.degree LIMIT 1 ) AS degree,
+						(SELECT title FROM `rms_itemsdetail` WHERE id=1 OR items_id=sp.grade LIMIT 1) AS grade,
+						(SELECT name_en FROM rms_view WHERE rms_view.type = 4 AND key_code=sp.session LIMIT 1) AS session,
 						sp.create_date,
 						sp.is_void,
 						(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=sp.academic_year LIMIT 1) AS YEAR,
@@ -159,7 +159,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 						sp.paid_amount,
 						sp.balance_due,
 						sp.note,
-						(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by) AS void_by
+						(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
 				  FROM
 						rms_student AS s,
 						rms_student_payment AS sp
@@ -202,6 +202,7 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 // 			echo $sql.$where.$order;exit();
 			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
+			echo $e->getMessage();exit();
 		}
 	}   
 	

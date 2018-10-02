@@ -90,8 +90,11 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['session'])){
 			$where.=" AND s.session=".$search['session'];
 		}
-		if($search['status'] != ""){
+		if($search['status']>0){
 			$where.=" AND s.status=".$search['status'];
+		}
+		if($search['branch_id']!=''){
+			$where.=" AND s.branch_id=".$search['branch_id'];
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();
@@ -153,7 +156,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$adapter->setDestination($part);
 					$adapter->receive();
 					$photo = $adapter->getFileInfo();
-					//print_r($photo['photo']['name']); exit();
 					if(!empty($photo['photo']['name'])){
 						$pho_name = $photo['photo']['name'];
 					}else{
@@ -196,13 +198,13 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'room'			=>$_data['room'],
 						'session'		=>$_data['session'],
 						'father_enname'	=>$_data['fa_name_en'],
-						//'father_khname'=>$_data['fa_name_kh'],
+						
 						'father_dob'	=>$_data['fa_dob'],
 						'father_nation'	=>$_data['fa_national'],
 						'father_job'	=>$_data['fa_job'],
 						'father_phone'	=>$_data['fa_phone'],
 						
-						//'mother_khname'=>$_data['mom_name_kh'],
+						
 						'mother_enname'	=>$_data['mom_name_en'],
 						'mother_dob'	=>$_data['mo_dob'],
 						'mother_nation'	=>$_data['mom_nation'],
@@ -210,7 +212,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'mother_phone'	=>$_data['mon_phone'],
 
 						'guardian_enname'=>$_data['guardian_name_en'],
-						//'guardian_khname'=>$_data['guardian_name_kh'],
 						'guardian_dob'	=>$_data['guardian_dob'],
 						'guardian_nation'=>$_data['guardian_national'],
 						'guardian_job'	=>$_data['gu_job'],

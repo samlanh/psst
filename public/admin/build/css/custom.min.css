@@ -579,6 +579,17 @@ input#e15 {
 .select2-results .select2-selected {
     display: none;
 }
+div#s2id_e15 {
+    width: 99% !important;
+}
+div#s2id_e15 ul.select2-choices {
+       border: 1px solid #8ba0bd !important;
+    min-height: 28px;
+    padding: 0 5px;
+}	
+.select2-container-multi .select2-choices .select2-search-field input {
+    color: #aaaaaa;
+}
 
 .top_nav .dropdown-menu li.event.unread {
     background: #e4f3e8;

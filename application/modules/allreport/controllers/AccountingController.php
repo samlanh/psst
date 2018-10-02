@@ -1130,13 +1130,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$data3=$this->view->change_product = $db->getAllChangeProduct($search);
 				$data4=$this->view->customer_payment = $db->getAllCustomerPayment($search);
 				$user_type=$db->getUserType();
-				if($user_type==1){
+				//if($user_type==1){
 					$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
 					$this->view->income = $_db->getAllOtherIncome($search);
 						
 					$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
 					$this->view->expense = $_db1->getAllOtherExpense($search);
-				}
+				//}
 				$data5=$this->view->clear_balance = $db->getAllStudentClearBalance($search);
 			}
 	
@@ -1144,16 +1144,16 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$data1=$this->view->row = $db->getDailyReport($search);
 			}
 			if(!empty($search['income'])){
-				if($user_type==1){
+				//if($user_type==1){
 					$_db = new Allreport_Model_DbTable_DbRptOtherIncome();
 					$this->view->income = $_db->getAllOtherIncome($search);
-				}
+				//}
 			}
 			if(!empty($search['expense'])){
-				if($user_type==1){
+				//if($user_type==1){
 					$_db1 = new Allreport_Model_DbTable_DbRptOtherExpense();
 					$this->view->expense = $_db1->getAllOtherExpense($search);
-				}
+				//}
 			}
 			if(!empty($search['change_product'])){
 				$data3=$this->view->change_product = $db->getAllChangeProduct($search);

@@ -146,8 +146,8 @@
 								</td>
 							    <td><?php echo $rs['qty'];?></td>
 							    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
-							    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
-							    <td><?php //$rs['discount_percent']; ?> </td>
+							    <td><?php echo '$ '.$rs['extra_fee'];?></td>
+							    <td><?php echo $rs['discount_type']; ?> </td>
 							    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
 							    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
 							    <td><?php if($rs['is_onepayment']==0){

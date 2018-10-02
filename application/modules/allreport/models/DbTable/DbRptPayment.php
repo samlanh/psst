@@ -115,6 +115,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					spd.qty,
 					spd.subtotal,
 					spd.extra_fee,
+					(SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
 					spd.discount_percent,
 					spd.paidamount,
 					spd.note,
@@ -131,13 +132,13 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					s.stu_enname,
 					s.create_date AS date_start_study,				  
 					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS major_name,
-					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 					(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
 					spd.payment_term AS payment_id,
 					(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status,
 					(SELECT generation FROM rms_tuitionfee WHERE rms_tuitionfee.id = s.academic_year ) AS academic_type,
 					d.items_id,
 					d.title AS service_name,
+					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 					(SELECT rms_items.title FROM rms_items  WHERE rms_items.id = d.items_id LIMIT 1 ) AS category                             
 					FROM 
 					    rms_student_payment AS sp,

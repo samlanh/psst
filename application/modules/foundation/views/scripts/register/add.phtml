@@ -826,7 +826,6 @@ dojo.ready(function(){
 	    } 
 	}, "lang_level");
 	
-	
 	new dijit.form.FilteringSelect({
 		store: knowby_store,
 		queryExpr: "*${0}*",
@@ -845,8 +844,6 @@ dojo.ready(function(){
 	   } 
 	}, "know_by");
 	
-
-
 	new dijit.form.FilteringSelect({
 		store: district_store,
 		autoComplete:false,
@@ -905,7 +902,6 @@ dojo.ready(function(){
 			}
 		}, "village_note");
 		filterDistrict();
-		getStudentNo();
 		dijit.byId('student_province').attr('value',12)
 }); 
 

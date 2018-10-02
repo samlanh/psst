@@ -1342,11 +1342,15 @@ function calculateTotal(index){
 		
 		additional_fee = dijit.byId('extra_fee'+index).get('value');
 		additional_fee = isNaN(additional_fee)?0:additional_fee;
+		
+		total = subtotal + additional_fee ;
+		
 		discount = dijit.byId('discount_amount'+index).get('value');
 		discount = isNaN(discount)?0:discount;
-		total = subtotal + additional_fee ;
-		total_pay = total -discount ;
-		dijit.byId('total_amount'+index).attr('value',subtotal);
+		
+		total_pay = parseFloat(total) - parseFloat(discount) ;
+		
+		dijit.byId('total_amount'+index).attr('value',total_pay);
 		netTotal();
 }
 	function netTotal() {

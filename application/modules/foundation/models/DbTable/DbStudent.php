@@ -177,7 +177,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'stu_khname'	=>$_data['name_kh'],
 						'last_name'		=>$_data['last_name'],
 						'sex'			=>$_data['sex'],
-						'is_stu_new'	=>$_data['student_type'],
+						'is_stu_new'	=>$_data['stu_denttype'],
 						'nationality'	=>$_data['studen_national'],
 						'nation'		=>$_data['nation'],
 						'dob'			=>$_data['date_of_birth'],

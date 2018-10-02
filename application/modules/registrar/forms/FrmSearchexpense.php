@@ -79,19 +79,14 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		}
 		$_dateline->setValue($_date);
 		
-		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
+		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT_BRANCH"));
+		$optionBranch = $db->getAllBranch();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+		$_branch_id->setMultiOptions($_arr_opt_branch);
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside'
-		));
-		
-		$rows = $db->getAllBranch();
-		$options=array(-1=>'---Select Branch---');
-			if(!empty($rows))foreach($rows AS $row){
-				$options[$row['id']]=$row['name'];
-			}
-		$_branch_id->setMultiOptions($options);
-		$_branch_id->setValue($request->getParam("branch_id"));
+				'class'=>'fullside height-text',));
 		
 		
 		$this->addElements(array($_title,$_branch_id,$payment_method,$_transfer,$_releasedate

@@ -27,7 +27,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 			  WHERE
 				  s.stu_id = c.stu_idto
 			";
-		$where="";
+ 		$where="";
 		if (!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['adv_search']));
@@ -37,6 +37,9 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 			$s_where[] = " (SELECT s.stu_code FROM `rms_student` WHERE rms_student.stu_id = c.stu_idto LIMIT 1) LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.stu_name LIMIT 1) LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['branch_id'])){
+			$where.=' AND c.branch_id='.$search['branch_id'];
 		}
 		if($search['status']>-1){
 			$where.= " AND c.status  = ".$search['status'];
@@ -51,8 +54,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 		try{
 			$sql="SELECT id FROM rms_transfer_credit WHERE branch_id =".$data['branch_id'];
 			$sql.=" AND student_id='".$data['student_id']."'";
-			$sql.=" AND total_amount='".$data['total_amount']."'";
-			$sql.=" AND total_amountafter='".$data['total_amount']."'";
+ 		//	$sql.=" AND stu_name='".$data['stu_name']."'";
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;
@@ -98,9 +100,9 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 			echo $e->getMessage();exit();
 		}
 	}
-// 	function getCreditmemobyid($id){
-// 		$db = $this->getAdapter();
-// 		$sql=" SELECT * FROM rms_creditmemo where id=$id ";
-// 		return $db->fetchRow($sql);
-// 	}
+	function getTransferbyid($id){
+		$db = $this->getAdapter();
+		$sql=" SELECT * FROM rms_transfer_credit where id=$id ";
+		return $db->fetchRow($sql);
+	}
 }

@@ -17,8 +17,9 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-    					'adv_search' => '',
-    					'status' => -1,
+    					'adv_search' 	=> '',
+    					'branch_id' 	=> '',
+    					'status'		 => -1,
     			);
     		}
     		$rs_rows= $db->getAllTransfer($search);
@@ -29,7 +30,7 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     		$link=array(
     				'module'=>'accounting','controller'=>'transfercredit','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('branch_name'=>$link,'stu_id'=>$link,'stu_idname'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('stu_name'=>$link,'sfwe'=>$link,'stu_idname'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -41,52 +42,61 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     	$this->view->frm_search=$form;
     	
     }
-    public function addAction()
+	 public function addAction()
     {
     	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Accounting_Model_DbTable_DbCreditmemo();
-    		try {
-    			$db->addCreditmemo($data);
-    			if(!empty($data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/creditmemo");
-    			}else{
-    				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-    			}
-    		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("INSERT_FAIL");
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		}
-    	}
+			$data=$this->getRequest()->getPost();	
+			$db = new Accounting_Model_DbTable_DbCreditmemo();				
+			try {
+				$sms = "INSERT_SUCCESS";
+				$_transfer = $db->addCreditmemo($data);
+				if($_transfer==-1){
+					$sms = "RECORD_EXIST";
+				}
+				if(!empty($data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull($sms,"/accounting/creditmemo");
+				}else{
+					Application_Form_FrmMessage::message($sms);
+				}				
+			} catch (Exception $e) {
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemo();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_credit=$frm;
     }
     public function editAction()
-    {
+ 	{
     	$id = $this->getRequest()->getParam('id');
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$data['id'] = $id;
-    		$db = new Accounting_Model_DbTable_DbCreditmemo();
     		try {
-    			$db->updatcreditMemo($data);
-    			Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);
+    			$sms="INSERT_SUCCESS";
+    			$db = new Accounting_Model_DbTable_DbTransfercredit();
+    			$_transfer = $db->transfercreditMemo($data);
+    			if($_transfer==-1){
+    				$sms = "RECORD_EXIST";
+    			}
+    			Application_Form_FrmMessage::Sucessfull($sms, "/accounting/transfercredit");
     		} catch (Exception $e) {
     			$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
     		}
     	}
-    
     	$id = $this->getRequest()->getParam('id');
-    	$db = new Accounting_Model_DbTable_DbCreditmemo();
-    	$row  = $db->getCreditmemobyid($id);
+    	$db = new Accounting_Model_DbTable_DbTransfercredit();
+    	$row  = $db->getTransferbyid($id);
+    	$this->view->row = $row;
     
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemo($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_credit=$frm;
     }
+    
     public function transferAction()
     {
     	$id = $this->getRequest()->getParam('id');
@@ -115,23 +125,4 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_credit=$frm;
     }
-// 	public function editAction(){
-// 		$db = new Accounting_Model_DbTable_DbTransferstock();
-// 		if($this->getRequest()->isPost()){
-// 			try{
-// 				$data = $this->getRequest()->getPost();
-// 				$db->updateTransferStock($data);
-// 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/accounting/transfer");
-// 			}catch(Exception $e){
-// 				Application_Form_FrmMessage::message("APPLICATION_ERROR");
-// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 			}
-// 		}
-// 		$id=$this->getRequest()->getParam("id");
-// 		$this->view->rs = $db->getTransferById($id);
-// 		$this->view->rsdetail = $db->getTransferByIdDetail($id);
-// 		$db = new Application_Model_DbTable_DbGlobal();
-// 		$this->view->rsbranch = $db->getAllBranchName();
-// 		$this->view->rsproduct = $db->getallProductName();
-// 	}
 }

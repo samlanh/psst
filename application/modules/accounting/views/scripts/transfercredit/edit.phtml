@@ -1,8 +1,9 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$frm = $this->frm_credit;
+	$row = $this->row;
 ?>
-<title><?php echo $tr->translate("Credit Memo");?></title>
+<title><?php echo $tr->translate("TRANSFER_CREDIT");?></title>
 <style>	
 .fullside {
 	width: 100%;
@@ -17,25 +18,30 @@
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('Credit Memo');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('Credit Memo Transfer');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
     		</div>
     	</div>
-    	<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'creditmemo','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+    	<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'transfercredit','action'=>'transfer')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-				student_id = dijit.byId('student_id').get('value');
-       			 if(student_id==0){
-					alert("សូមជ្រើសរើសសិស្ស");dijit.byId('student_id').focus();return false;}
+				stu_idto = dijit.byId('stu_idto').get('value');
+       			 if(stu_idto==0){
+					alert("សូមជ្រើសរើសអត្តលេខសិស្ស");dijit.byId('stu_idto').focus();return false;}
+        			dijit.byId("saveclose").set("disabled",true);
 					return true;
 			}else {
 				return false;
 			}
 			</script>
 			<div class="card-box">
-				<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="col-md-5 col-sm-5 col-xs-12">
+					<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("INFORMATION_TO");?> 
+	                   </label>
+	                </div>
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -66,10 +72,8 @@
 		               	 <?php echo $frm->getElement('end_date');?>
 		                </div>
 		             </div>
-		         </div>
-		         <div class="col-md-4 col-sm-4 col-xs-12">
 		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_EXPENSE");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SPACE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm->getElement('total_amount');?>
 		                </div>
@@ -85,6 +89,49 @@
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input type="hidden" id="identity" name="identity" />
 		                	<?php echo $frm->getElement('Description');?>
+		                </div>
+		             </div>
+		         </div>
+		         <div class="col-md-5 col-sm-5 col-xs-12">
+		         	<div class="form-group">
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("INFORMATION_RECEIVE");?> 
+	                   </label>
+	                </div>
+	                 <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_CODE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement('stu_idto');?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                <?php echo $frm->getElement('stu_name');?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CREATED_DATE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	 <input type="text" name="start_date" readOnly="readOnly" id="start_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		               	 <input type="text" name="end_dates" readOnly="readOnly" id="end_dates" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['end_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm->getElement('problem');?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE")?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input type="hidden" id="identity" name="identity" />
+		                	<?php echo $frm->getElement('Descriptions');?>
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -120,6 +167,13 @@ function setSelected(type){
 	}else{
 		student_id = dijit.byId("student_name").get('value');
 		dijit.byId("student_id").attr('value',student_id);
+	}
+	if(type==1){
+		stu_idto = dijit.byId("stu_idto").get('value');
+		dijit.byId("stu_name").attr('value',stu_idto);
+	}else{
+		stu_idto = dijit.byId("stu_name").get('value');
+		dijit.byId("stu_idto").attr('value',stu_idto);
 	}
 }
 </script>

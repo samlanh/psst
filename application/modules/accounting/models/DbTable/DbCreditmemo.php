@@ -27,7 +27,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				rms_student AS s
 			  WHERE
 				s.stu_id = c.student_id";
-		//$where ='';
+		//$where = ' ';
 		$from_date =(empty($search['start_date']))? '1': " c.date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': " c.date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
@@ -40,26 +40,30 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			$s_where[] = " stu_enname LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}
+		if(!empty($search['branch_id'])){
+			$where.= " AND c.branch_id = ".$search['branch_id'];
+		}
+		if($search['paid_transfer']>-1){
+			$where.= " AND type = ".$search['paid_transfer'];
+		}
 		if($search['status']>-1){
 			$where.= " AND c.status = ".$search['status'];
 		}
-		if($search['paid_transfer']>-1){
-			$where.= " AND c.type = ".$search['paid_transfer'];
-		}
-		$order=" order by id desc ";
+		$order=" order by id DESC";
+		//echo $sql.$where.$order; exit();
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function addCreditmemo($data){
-// 		$db = $this->getAdapter();
-// 		try{
-// 		$sql="SELECT id FROM rms_transfer_credit WHERE branch_id =".$data['branch_id'];
-// 		$sql.=" AND student_id='".$data['student_id']."'";
-// 		$sql.=" AND total_amount='".$data['total_amount']."'";
+		$db = $this->getAdapter();
+		try{
+		$sql="SELECT id FROM rms_transfer_credit WHERE branch_id =".$data['branch_id'];
+		$sql.=" AND student_id='".$data['student_id']."'";
+ //		$sql.=" AND total_amount='".$data['total_amount']."'";
 // 		$sql.=" AND total_amountafter='".$data['total_amount']."'";
-// 		$rs = $db->fetchOne($sql);
-// 		if(!empty($rs)){
-// 			return -1;
-// 		}
+		$rs = $db->fetchOne($sql);
+		if(!empty($rs)){
+			return -1;
+		}
 		$arr = array(
 			'branch_id'		=>$data['branch_id'],
 			'student_id'	=>$data['student_id'],
@@ -73,12 +77,12 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			'status'		=>$data['status'],
 			'user_id'		=>$this->getUserId(),);
 		$this->insert($arr);
-// 		}catch (Exception $e){
-// 			$db->rollBack();
-// 			echo $e->getMessage();exit();
-// 		}
+		}catch (Exception $e){
+			$db->rollBack();
+			echo $e->getMessage();exit();
+		}
 		//print_r($data); exit();
- }
+ 	}
 	 function updatcreditMemo($data){
 			$arr = array(
 				'branch_id'=>$data['branch_id'],

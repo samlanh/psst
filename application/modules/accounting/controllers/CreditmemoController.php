@@ -19,6 +19,7 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
     		else{
     			$formdata = array(
     					"adv_search"	=>'',
+    					"branch_id"		=>'',
     					"paid_transfer"	=>-1,
     					"status"		=>-1,
     					'start_date'	=> date('Y-m-d'),
@@ -53,11 +54,15 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 			$data=$this->getRequest()->getPost();	
 			$db = new Accounting_Model_DbTable_DbCreditmemo();				
 			try {
-				$db->addCreditmemo($data);
+				$sms = "INSERT_SUCCESS";
+				$_transfer = $db->addCreditmemo($data);
+				if($_transfer==-1){
+					$sms = "RECORD_EXIST";
+				}
 				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/accounting/creditmemo");
+					Application_Form_FrmMessage::Sucessfull($sms,"/accounting/creditmemo");
 				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::message($sms);
 				}				
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -65,7 +70,7 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 			}
 		}
     	$pructis=new Accounting_Form_Frmcreditmemo();
-    	$frm = $pructis->Frmcreditmemo();
+    	$frm = $pructis->Frmcreditmemoadd();
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_credit=$frm;
     }
@@ -90,7 +95,7 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 		$row  = $db->getCreditmemobyid($id);
 		
     	$pructis=new Accounting_Form_Frmcreditmemo();
-    	$frm = $pructis->Frmcreditmemo($row);
+    	$frm = $pructis->Frmcreditmemoadd($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_credit=$frm;
     }

@@ -20,27 +20,35 @@
 		<div class="card-box">
 			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
 				 <div class="form-group">
-                   	<div class="col-md-3 col-sm-3 col-xs-12">
+                   	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement("advance_search");?>
 				 	</div>
-				 	<div class="col-md-3 col-sm-3 col-xs-12">
+				 	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement("branch_search");?>
 				 	</div>
-				 	<div class="col-md-3 col-sm-3 col-xs-12">
+				 	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement("ask_for_search");?>
 				 	</div>
-				 	<div class="col-md-3 col-sm-3 col-xs-12">
+				 	<div class="col-md-2 col-sm-2 col-xs-12">
+				 		<?php echo $frm_items->getElement("know_by_search");?>
+				 	</div>
+				 	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement('status_search');?>
 				 	</div>
 				 </div>
 				 <div class="form-group">
-				 	<div class="col-md-3 col-sm-3 col-xs-12">
+				 	<!-- 
+				 	<div class="col-md-4 col-sm-4 col-xs-12">
+	                	<input value="<?php //echo $this->search['prev_concern'];?>" type="text" id="e15" name="prev_concern" style="width: 100%">
+	                </div>
+				 	 -->
+				 	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement("start_date");?>
 				 	</div>
-				 	<div class="col-md-3 col-sm-3 col-xs-12">
+				 	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<?php echo $frm_items->getElement("end_date");?>
 				 	</div>
-				 	<div class="col-md-3 col-sm-3 col-xs-12">
+				 	<div class="col-md-2 col-sm-2 col-xs-12">
 				 		<button IconClass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 				 	</div>
 				 </div>
@@ -51,7 +59,28 @@
 		</div>
 	</div>
 </div>
+<!-- 
+ <link href="<?php //echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.css" /> 
+ <script src="<?php //echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.js"></script>
+  -->
+ <?php 
+//  $tags="";
+//  if (!empty($this->prev_concern)) foreach ($this->prev_concern as $rs){
+//  	if (empty($tags)){
+//  		$tags = '"'.$rs['name'].'"';
+//  	}else{
+//  		if (!empty($rs['name'])){
+//  		$tags=$tags.',"'.$rs['name'].'"';
+//  		}
+//  	}
+//  }
+?>
 <script type="text/javascript">
+/*require(["dojo/ready"], function(ready){
+	ready(function(){
+		 $("#e15").select2({tags:[<?php //echo $tags;?>],placeholder: "<?php //echo $tr->translate("Previous Concern");?>",allowClear: true});
+	});
+});*/
 
 	var row=0;
 	var url="";

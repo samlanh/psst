@@ -383,6 +383,59 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	));
     	$advance_search->setValue($request->getParam("advance_search"));
     	
+    	
+    	$_arr_opt = array(""=>$this->tr->translate("SELECT_DEGREE"));
+    	$Option = $_dbgb->getAllItems(1);
+    	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+    	$_degree_search = new Zend_Dojo_Form_Element_FilteringSelect("degree_search");
+    	$_degree_search->setMultiOptions($_arr_opt);
+    	$_degree_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'onChange'=>'getAllGrade();',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_degree_search->setValue($request->getParam("degree_search"));
+    	
+    	$_arr_opt_nation = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$optionNation = $_dbgb->getViewByType(21);//Nation
+    	if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
+    	$_nation_search = new Zend_Dojo_Form_Element_FilteringSelect("nation_search");
+    	$_nation_search->setMultiOptions($_arr_opt_nation);
+    	$_nation_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_nation_search->setValue($request->getParam("nation_search"));
+    	
+    	
+    	$_arr = array(""=>$this->tr->translate("PLEASE_SELECT"),1=>$this->tr->translate("STUDENT"),2=>$this->tr->translate("WORKING"),3=>$this->tr->translate("OWN_BUSSINESS"));
+    	$_student_option_search = new Zend_Dojo_Form_Element_FilteringSelect("student_option_search");
+    	$_student_option_search->setMultiOptions($_arr);
+    	$_student_option_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_student_option_search->setValue($request->getParam("student_option_search"));
+    	
+    	
+    	$rs_province = $_dbgb->getProvince();
+    	$opt = array(""=>$this->tr->translate("PROVINCE"));
+    	if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['province_id']]=$row['province_en_name'];
+    	$_province_search = new Zend_Dojo_Form_Element_FilteringSelect("province_search");
+    	$_province_search->setMultiOptions($opt);
+    	$_province_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'class'=>'fullside',
+    			'onChange'=>'filterDistrict();',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    	));
+    	$_province_search->setValue($request->getParam("province_search"));
+    	
     	$_arr = array(-1=>$this->tr->translate("ALL"),0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("COMPLETED"));
     	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
     	$_status_search->setMultiOptions($_arr);
@@ -515,6 +568,10 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			$_province_id,
     			
     			$advance_search,
+    			$_degree_search,
+    			$_nation_search,
+    			$_student_option_search,
+    			$_province_search,
     			$_status_search,
     			$start_date,
     			$end_date,
@@ -823,6 +880,16 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	));
     	$advance_search->setValue($request->getParam("advance_search"));
     	 
+    	$_arr_opt_nation = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$_nation_search = new Zend_Dojo_Form_Element_FilteringSelect("nation_search");
+    	$_nation_search->setMultiOptions($_arr_opt_nation);
+    	$_nation_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_nation_search->setValue($request->getParam("nation_search"));
+    	
     	$_arr = array(-1=>$this->tr->translate("ALL"),0=>$this->tr->translate("DROPPED"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("COMPLETED"));
     	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
     	$_status_search->setMultiOptions($_arr);
@@ -951,6 +1018,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			$id,
     			 
     			$advance_search,
+    			$_nation_search,
     			$_status_search,
     			$start_date,
     			$end_date

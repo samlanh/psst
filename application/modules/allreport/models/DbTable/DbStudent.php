@@ -116,15 +116,43 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['ask_for_search'])){
 			$where.= " AND c.ask_for = ".$db->quote($search['ask_for_search']);
 		}
+		if(!empty($search['know_by_search'])){
+			$where.= " AND c.know_by = ".$db->quote($search['know_by_search']);
+		}
 		if($search['status_search']>-1){
 			$where.= " AND c.crm_status = ".$db->quote($search['status_search']);
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('c.branch_id');
 		$where.=" ORDER BY c.id DESC";
-		return $db->fetchAll($sql.$where);
+		$row = $db->fetchAll($sql.$where);
+		$resutl = $row;
+		if (!empty($search['prev_concern'])){
+			$resutl = array();
+			$epl = explode(",", $search['prev_concern']);
+			$array = array();
+			foreach ($epl as $ss){
+				$key = $this->checkPrevConcern($ss);
+				$array[$key] = $key;
+			}
+			
+			if (!empty($row)) foreach ($row as $key => $rs){
+				$exp = explode(",", $rs['prev_concern']);
+				foreach ($exp as $ss){
+					if (in_array($ss, $array)) {
+						$resutl[$key] = $rs;
+						break;
+					}
+				}
+			}
+		}
+		return $resutl;
 	}
-	
+	function checkPrevConcern($value){
+		$db = $this->getAdapter();
+		$sql="SELECT v.key_code FROM `rms_view` AS v WHERE v.name_kh = '$value' AND v.type=22  LIMIT 1";
+		return $db->fetchOne($sql);
+	}
 	function getAllCRMDailyContact($search = ''){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -222,25 +250,31 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 			$where = " AND ".$from_date." AND ".$to_date;
 	
-			if(!empty($search['adv_search'])){
-			$s_where=array();
-			$s_search= addslashes(trim($search['adv_search']));
-			$s_where[]= " st.serial LIKE '%{$s_search}%'";
-			$s_where[]= " st.stu_code LIKE '%{$s_search}%'";
-			$s_where[]= " st.stu_khname LIKE '%{$s_search}%'";
-			$s_where[]= " st.stu_enname LIKE '%{$s_search}%'";
-			$s_where[]= " st.last_name LIKE '%{$s_search}%'";
-			$s_where[]= " st.tel LIKE '%{$s_search}%'";
-			$where.=' AND ('.implode(' OR ', $s_where).')';
+			if(!empty($search['advance_search'])){
+				$s_where=array();
+				$s_search= addslashes(trim($search['advance_search']));
+				$s_where[]= " st.serial LIKE '%{$s_search}%'";
+				$s_where[]= " st.stu_code LIKE '%{$s_search}%'";
+				$s_where[]= " st.stu_khname LIKE '%{$s_search}%'";
+				$s_where[]= " st.stu_enname LIKE '%{$s_search}%'";
+				$s_where[]= " st.last_name LIKE '%{$s_search}%'";
+				$s_where[]= " st.tel LIKE '%{$s_search}%'";
+				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
-			if(($search['branch_id']>0)){
-			$where.= " AND st.branch_id = ".$search['branch_id'];
-		}
+			if(($search['branch_search']>0)){
+				$where.= " AND st.branch_id = ".$search['branch_search'];
+			}
 		if(!empty($search['user'])){
 			$where.= " AND str.user_id = ".$search['user'];
 		}
-		if(!empty($search['degree'])){
-		$where .= " and str.degree_result = ".$search['degree'];
+		if(!empty($search['degree_search'])){
+			$where .= " and str.degree_result = ".$search['degree_search'];
+		}
+		if(!empty($search['student_option_search'])){
+			$where .= " and st.student_option = ".$search['student_option_search'];
+		}
+		if(!empty($search['province_search'])){
+			$where .= " and st.province_id = ".$search['province_search'];
 		}
 // 		if($search['register_status']!=''){
 // 		$where .= " and st.register = ".$search['register_status'];

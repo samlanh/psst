@@ -765,6 +765,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'advance_search' => "",
 						'branch_search' => "",
 						'ask_for_search' => "",
+						'know_by_search' => "",
+						'prev_concern' => "",
 						'status_search' => -1,
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
@@ -779,6 +781,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$pevconcer = $_dbgb->getViewByType(22);
+		$this->view->prev_concern = $pevconcer;
+		
 		$frm = new Home_Form_FrmCrm();
 		$frm->FrmAddCRM(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
@@ -850,9 +856,13 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'adv_search' =>'',
+						'advance_search' =>'',
 						'user'=>'',
-						'branch_id'=>0,
+						'branch_search'=>0,
+						'degree_search' =>'',
+						'nation_search' =>'',
+						'student_option_search' =>'',
+						'province_search' =>'',
 						'result_status' => '',
 						'register_status' => '',
 						'start_date'=> date('Y-m-d'),
@@ -867,11 +877,16 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
+// 		$form=new Registrar_Form_FrmSearchInfor();
+// 		$form->FrmSearchRegister();
+// 		Application_Model_Decorator::removeAllDecorator($form);
+// 		$this->view->form_search=$form;
 		$this->view->search = $search;
+		
+		$frm = new Test_Form_FrmStudentTest();
+		$frm->FrmAddStudentTest(null);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->form_search = $frm;
 	}
 	
 }

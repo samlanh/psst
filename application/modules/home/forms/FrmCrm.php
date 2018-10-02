@@ -239,6 +239,18 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     	
     	$_ask_for_search->setValue($request->getParam("ask_for_search"));
     	
+    	$_arr_opt_know = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$optionKnowBy = $_dbgb->getAllKnowBy();
+    	if(!empty($optionKnowBy))foreach($optionKnowBy AS $row) $_arr_opt_know[$row['id']]=$row['name'];
+    	$_know_by_search = new Zend_Dojo_Form_Element_FilteringSelect("know_by_search");
+    	$_know_by_search->setMultiOptions($_arr_opt_know);
+    	$_know_by_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_know_by_search->setValue($request->getParam("know_by_search"));
+    	
     	$_arr = array(-1=>$this->tr->translate("ALL"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"),0=>$this->tr->translate("DROPPED"));
     	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
     	$_status_search->setMultiOptions($_arr);
@@ -287,6 +299,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_crm_list->setValue($request->getParam("crm_list"));
     	
+    	
     	if(!empty($data)){
     		
     		$_branch_id->setValue($data["branch_id"]);
@@ -329,6 +342,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			$advance_search,
     			$_ask_for_search,
     			$_branch_search,
+    			$_know_by_search,
     			$_status_search,
     			$start_date,
     			$end_date,

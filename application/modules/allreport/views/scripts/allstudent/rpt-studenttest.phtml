@@ -13,25 +13,32 @@
 			<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>" placeholder="Search" type="text" >
+                   		<?php echo $frm->getElement("advance_search");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("branch_id");?>
+                   		<?php echo $frm->getElement("branch_search");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("degree");?>
+                   		<?php echo $frm->getElement("degree_search");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
+    	               	<?php echo $frm->getElement("nation_search");?>
+	               		<?php //echo $frm->getElement("user");?>
+                   </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+    	               	<?php echo $frm->getElement("student_option_search");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+    	               	<?php echo $frm->getElement("province_search");?>
+                   </div>
+                </div>
+                <div class="form-group">
+               		<div class="col-md-2 col-sm-2 col-xs-12">
                    		<input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" value="<?php  echo $this->search['start_date']; ?>"  type="text">
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text">
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("user");?>
-                   </div>
-                </div>
-                <div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
 			   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>>ប្រភេទលទ្ធផល </option>

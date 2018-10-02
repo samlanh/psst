@@ -23,12 +23,14 @@ class Home_CrmController extends Zend_Controller_Action
 	    				'advance_search' => "",
 	    				'branch_search'  => "",
 	    				'ask_for_search' => "",
+	    				'know_by_search' => "",
+	    				'prev_concern' => "",
 	    				'status_search' => -1,
 	    				'start_date'=> date('Y-m-d'),
 	    				'end_date'=>date('Y-m-d'),
 	    		);
 	    	}
-	    	
+	    	$this->view->search = $search;
 	    	$db = new Home_Model_DbTable_DbCRM();
 	    	$rs_rows = $db->getAllCRM($search);
 	    	
@@ -44,6 +46,11 @@ class Home_CrmController extends Zend_Controller_Action
     	}catch (Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
+    	
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	$pevconcer = $_dbgb->getViewByType(22);
+    	$this->view->prev_concern = $pevconcer;
+    	
     	$frm = new Home_Form_FrmCrm();
     	$frm->FrmAddCRM(null);
     	Application_Model_Decorator::removeAllDecorator($frm);

@@ -34,16 +34,16 @@
                 <div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-			   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>>ប្រភេទលទ្ធផល </option>
-			   				<option value="0" <?php if($this->search['result_status']==0){echo "selected='selected'";}?>> មិនទាន់បាន </option>
-			   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>> បានទទួល </option>
+			   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>><?php echo $tr->translate("RESULT_TYPE"); ?></option>
+			   				<option value="0" <?php if($this->search['result_status']==0){echo "selected='selected'";}?>><?php echo $tr->translate("NOT_YET"); ?></option>
+			   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>><?php echo $tr->translate("GOT_IT"); ?> </option>
 			   			</select>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<select name="register_status" id="register_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-			   				<option value="" <?php if($this->search['register_status']==""){echo "selected='selected'";}?>>ប្រភេទចុះឈ្មោះ </option>
-			   				<option value="0" <?php if($this->search['register_status']==0){echo "selected='selected'";}?>> មិនទាន់ចុះឈ្មោះ </option>
-			   				<option value="1" <?php if($this->search['register_status']==1){echo "selected='selected'";}?>> បានចុះឈ្មោះ </option>
+			   				<option value="" <?php if($this->search['register_status']==""){echo "selected='selected'";}?>><?php echo $tr->translate("REGISTRATION_TYPR"); ?> </option>
+			   				<option value="0" <?php if($this->search['register_status']==0){echo "selected='selected'";}?>><?php echo $tr->translate("NOT_REGISTERED"); ?> </option>
+			   				<option value="1" <?php if($this->search['register_status']==1){echo "selected='selected'";}?>><?php echo $tr->translate("REGISTERED"); ?>  </option>
 			   			</select>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">

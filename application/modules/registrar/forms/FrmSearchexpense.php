@@ -13,7 +13,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'));
 		$_status_opt = array(
-				-1=>$this->tr->translate("ជ្រើសរើសស្ថានការ"),
+				-1=>$this->tr->translate("PLEASE_SELECT_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);

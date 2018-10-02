@@ -71,7 +71,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
 		$row = $_db->getAllDocumentType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
 		
 		$_db = new Global_Model_DbTable_DbTeacher();
@@ -110,7 +110,7 @@ class Global_LecturerController extends Zend_Controller_Action {
  		
 		$row = $_db->getAllDocumentType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
 		
 		$_db = new Global_Model_DbTable_DbTeacher();
@@ -156,7 +156,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 			
 		$row = $_db->getAllDocumentType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
 	
 		$_db = new Global_Model_DbTable_DbTeacher();

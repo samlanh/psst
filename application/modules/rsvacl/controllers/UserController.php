@@ -12,7 +12,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$db=new Application_Model_DbTable_DbGlobal();
     	$sql = "SELECT u.user_type_id AS id,u.user_type AS name FROM `rms_acl_user_type` u where u.`status`=1";
     	$this->user_typelist = $db->getGlobalDb($sql);
@@ -88,7 +88,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			
 			$user_type = $this->user_typelist;
 			$this->view->user_typelist =$user_type;
-			array_unshift($user_type, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
+			array_unshift($user_type, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 			$this->view->user_type = $user_type;
 			$this->view->schoolOption = $db->getAllSchoolOption();
 	}
@@ -114,7 +114,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			$user_type = $this->user_typelist;
 			$this->view->user_typelist =$user_type;
 				
-			array_unshift($user_type, array('id'=>-1,'name'=>'បន្ថែមថ្មី'));
+			array_unshift($user_type, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 			$this->view->user_type = $user_type;
 			
 			$db  = new Application_Model_DbTable_DbGlobal();

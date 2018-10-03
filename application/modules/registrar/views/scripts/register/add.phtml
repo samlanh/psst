@@ -70,10 +70,10 @@
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getallstudentname();" >
 								<option value="1"><?php echo $tr->translate("Old Student");?></option>
+								<option value="5"><?php echo $tr->translate("New Student");?></option>
 								<option value="2"><?php echo $tr->translate("Tested Student");?></option>
 								<option value="3"><?php echo $tr->translate("CRM");?></option>
 								<option value="4"><?php echo $tr->translate("Placement Test");?></option>
-								<option value="5"><?php echo $tr->translate("New Student");?></option>
 							</select>
 	                   </div>
 	                </div>
@@ -81,6 +81,13 @@
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span>:</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 							<input id="old_stu" />
+	                   </div>
+	                </div>
+	                <div class="form-group">
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_CODE");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<input type="text" name="stu_code" id="stu_code" class="fullside" dojoType="dijit.form.TextBox"/>
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -95,10 +102,10 @@
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<div class="col-md-6 col-sm-6 col-xs-6">
-	                   			<input type="text" name="en_name" id="en_name" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox"/>
+	                   			<input type="text" name="last_name" id="last_name" placeHolder="Last name" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox"/>
 	                   		</div>
 	                   		<div class="col-md-6 col-sm-6 col-xs-6">
-	                   			<input type="text" name="last_name" id="last_name" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox"/>
+	                   			<input type="text" name="en_name" id="en_name" placeHolder="First name" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox"/>
 	                   		</div>
 	                   </div>
 	                </div>
@@ -482,7 +489,6 @@
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function() {  
 				stu_id = dijit.byId('old_stu').get('value');
-				//getPaymentHistory(stu_id);
 				getOldStudentInfo();
 			}
 		}, "old_stu");
@@ -1165,7 +1171,6 @@ function getOldStudentInfo(){
 						dijit.byId('en_name').attr('value',data.stu_enname);
 						dijit.byId('last_name').attr('value',data.last_name);
 						
-						
 						dijit.byId('sex').attr('value',data.sex);
 						dijit.byId('parent_phone').attr('value',data.tel);
 						dijit.byId('dob').attr('value',data.dob);
@@ -1205,7 +1210,8 @@ temp='';
 date_format = '"dd/MM/yyyy"';
 function addRow() {
 		customer_type = dijit.byId('customer_type').get('value');
-		if(customer_type==1){//for customer
+		student_type = dijit.byId('student_type').get('value');
+		if(customer_type==1 && student_type==1){//for student
 			studentid = dijit.byId('old_stu').get('value');
 			if(studentid==''){
 				alert("Please select student !!!");
@@ -1638,35 +1644,7 @@ function printSave(new_stu_id,new_receipt,submit){
 			}
 		}
 }	
-/////////////// get student test info ////////////////////////////////////////////////////////
 
-//var url_creditmemo = "<?php //echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-credit-memo')); ?>";
-/*function getCreditMemo(){
-	stu_type = dijit.byId('student_type').get('value');
-	if(stu_type==3){
-		stu_id = dijit.byId('old_stu').get('value');
-		if(stu_id != ""){
-			dojo.xhrPost({
-				url:url_creditmemo,
-				content:{
-					'stu_id':stu_id,
-					},
-				handleAs:"json",
-				load: function(data){
-					if(data){
-						dijit.byId("credit_memo").attr("value",data.total_amountafter);
-						dijit.byId("credit_memo_id").attr("value",data.id);
-					}else{
-						dijit.byId("credit_memo").attr("value",0);
-						dijit.byId("credit_memo_id").attr("value",'');
-					}
-				},
-				error: function(err) {
-				}
-			});	
-		} 
-	}
-}*/
 var url_get_start_date = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-start-date')); ?>';	
 function getOldVildateToStartDateRegister(){
 	stu_type = dijit.byId('student_type').get('value');

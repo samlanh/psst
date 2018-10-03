@@ -823,7 +823,7 @@ function getAllgroupStudy($teacher_id=null){
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$sql="SELECT s.stu_id AS id,s.stu_id AS stu_id,
    			stu_code,
-		   	CONCAT(s.stu_code,'-',s.stu_khname,'-',s.stu_enname,' ',s.last_name) AS name
+		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS name
 		   	FROM rms_student AS s
 		   	WHERE
 		   	(stu_enname!='' OR s.stu_khname!='')

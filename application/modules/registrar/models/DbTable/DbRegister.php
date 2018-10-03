@@ -146,6 +146,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					    		'customer_type'	=>$data['customer_type'],
 								'stu_khname'	=>$data['kh_name'],
 								'stu_enname'	=>$data['en_name'],
+					    		'last_name'	=>$data['last_name'],
 								'sex'			=>$data['sex'],
 					    		'tel'			=>$data['parent_phone'],
 					    		'dob'			=>empty($data['dob'])?null:$data['dob'],

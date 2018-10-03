@@ -9,8 +9,6 @@ dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.CheckBox");
 </script>
-
-
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -52,21 +50,20 @@ dojo.require("dijit.form.CheckBox");
 							    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $row){?>
 										<option value="<?php echo $row['stu_id']?>"><?php echo $row['stu_code']?></option>
 									<?php }?>
-								</select>
+							</select>
 		                </div>
 		            </div>
 		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select class="fullside" required="true" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="setID();" >
-										    	<option value="-1"> </option>
-										    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
-													<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
-												<?php }?>
-											</select>
+						    	<option value="-1"> </option>
+						    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
+									<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
+								<?php }?>
+							</select>
 		                </div>
 		            </div>
-										
 		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SEX");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -77,26 +74,85 @@ dojo.require("dijit.form.CheckBox");
 		                </div>
 		            </div>
 		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CULTURE_LEVEL");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		              	  <input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="academic_year" name="academic_year" value="" type="text">
+		                	<select dojoType="dijit.form.FilteringSelect" required="true" readonly="readonly"  class="fullside" id="calture" name="calture" type="text">
+								<option value="0"><?php echo $tr->translate("SELECT_DEGREE")?></option>
+								<option value="1"><?php echo $tr->translate("ASSOCIATE")?></option>
+								<option value="2"><?php echo $tr->translate("BACHELOR")?></option>
+								<option value="3"><?php echo $tr->translate("MASTER")?></option>
+								<option value="4"><?php echo $tr->translate("DOCTORATE")?></option>
+								<option value="5"><?php echo $tr->translate("English Program")?></option>
+								<option value="6"><?php echo $tr->translate("Computer Course")?></option>
+								<option value="7"><?php echo $tr->translate("Other")?></option>
+							</select>
 		                </div>
 		            </div>
 		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input id="academic_year" />
+		                </div>
+		            </div>
+		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="grade" name="grade" value="" type="text">
+		                	<select id="grade" name="grade" onchange="" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+									<option value="-1"><?php echo $tr->translate("SELECT_GRADE")?></option>
+									<?php if(!empty($this->grade)){foreach ($this->grade as $grade){?>
+										<option value="<?php echo $grade['id'];?>"><?php echo $grade['name'];?></option>
+									<?php }}?>
+								</select>
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<select id="degree" name="degree" onchange=""class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+									<option value="-1"><?php echo $tr->translate("SELECT_DEGREE")?></option>
+								<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
+									<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
+								<?php }}?>
+							</select>
 		                </div>
 		            </div>
 		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input dojoType="dijit.form.TextBox" readonly="readonly" class="fullside" id="session" name="session" value="" type="text">
+		                	<select id="session" name="session"  class="fullside" dojoType="dijit.form.FilteringSelect" type="text" >
+								<option value="-1"><?php echo $tr->translate("CHOOSE_SESSION")?></option>
+							<?php if(!empty($this->session)){foreach ($this->session as $session){?>
+								<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
+							<?php }}?>
+							</select>
 		                </div>
 		            </div>
 		        </div>
+		        
 		        <div class="col-md-4 col-sm-4 col-xs-12">
-		    		<div class="form-group">
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+							<select class="fullside" tabindex="15" name="group"  id="group" dojoType="dijit.form.FilteringSelect" >
+								<option value=""><?php echo $tr->translate("SELECT_GROUP");?></option>
+								<?php if(!empty($this->group))foreach ($this->group as $row){?>
+								<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
+								<?php }?>
+							</select>
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ROOM_NAME");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+	                		<select id="room" name="room" class="fullside" type="text" value="-1" dojoType="dijit.form.FilteringSelect" >
+						   		<option value="-1"><?php echo $tr->translate("SELECT_ROOM")?></option>
+						   		<?php if(!empty($this->room)){foreach ($this->room as $room){?>
+						   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
+						   		<?php }}?>
+						   </select>
+		                </div>
+		            </div>
+		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="type" name="type" type="text">
@@ -113,6 +169,14 @@ dojo.require("dijit.form.CheckBox");
 		                	<input dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="datestop" name="datestop" value="now" type="text">
 		                </div>
 		            </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input style="min-height: 100px" dojoType="dijit.form.Textarea" class="fullside" id="reason" name="reason" value="" required="true"  >
+		                </div>
+		            </div>
+		        </div>
+		        <div class="col-md-4 col-sm-4 col-xs-12">
 		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS")?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -120,12 +184,6 @@ dojo.require("dijit.form.CheckBox");
 								<option value="1"><?php echo $tr->translate("ACTIVE")?></option>
 								<option value="0"><?php echo $tr->translate("DEACTIVE")?></option>
 							</select>
-		                </div>
-		            </div>
-		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REASON");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input style="min-height: 100px" dojoType="dijit.form.Textarea" class="fullside" id="reason" name="reason" value="" required="true"  >
 		                </div>
 		            </div>
 		        </div>
@@ -144,6 +202,24 @@ dojo.require("dijit.form.CheckBox");
 	</div>
 </div>
 <script type="text/javascript">
+var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+	    store:years_store,
+	    autoComplete: true,                        
+	    required: true,
+	    id: "academic_year",
+	    name: "academic_year",   
+	   // readOnly:true,           
+	    class: 'fullside',  
+	    required:'true',
+	    placeHolder:"<?php echo $tr->translate("SELECT_YEAR")?>",          
+	    onChange: function() {  
+	    }
+	}, "academic_year");
+
+});
+
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
@@ -214,10 +290,13 @@ function setID(){
 
 var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'get-student')); ?>';
 function getStudentInfo(){
-	
 			studentid = dijit.byId('studentid').get('value');
 			dijit.byId('studentname').attr('value',studentid);
-			
+			studentid = dijit.byId('studentid').get('value');
+			if(studentid==''){
+				alert("Please Select Student");
+				return false;
+			}
 			dojo.xhrPost({
 				url:url_student,
 				content:{
@@ -227,10 +306,21 @@ function getStudentInfo(){
 				load: function(data) {
 					//dijit.byId("studentname").attr("value",data.name);
 					dijit.byId("gender").attr("value",data.sex);
+					dijit.byId('gender').set('readOnly',true);
 					dijit.byId("academic_year").attr("value",data.academic_year);
-					dijit.byId("grade").attr("value",data.grade);
+					dijit.byId('academic_year').set('readOnly',true);
 					dijit.byId("session").attr("value",data.session);
+					dijit.byId('session').set('readOnly',true);
+					dijit.byId("calture").attr("value",data.calture);
+					dijit.byId('session').set('readOnly',true);
+					dijit.byId("group").attr("value",data.group_name);
+					//dijit.byId('group').set('readOnly',true);
 
+					dijit.byId('degree').set('value',data.degree);
+					dijit.byId('degree').set('readOnly',true);
+					dijit.byId('grade').set('value',data.grade);
+					dijit.byId('grade').set('readOnly',true);
+					dijit.byId('room').set('value',data.room);
 				},
 				error: function(err) {
 					alert(err);

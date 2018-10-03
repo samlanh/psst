@@ -40,7 +40,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 				$link=array(
 						'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 				);
-				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('code'=>$link,'kh_name'=>$link,'en_name'=>$link));
+				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('degree'=>$link,'kh_name'=>$link,'en_name'=>$link));
 	
 			$this->view->adv_search = $search;
 		}catch(Exception $e){
@@ -68,7 +68,14 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$this->view->stu_id = $db->getAllStudentID();
 			$this->view->stu_name = $db->getAllStudentName();
 			$this->view->type = $db->getAllDropType();
-		
+						
+			$db_global = new Application_Model_DbTable_DbGlobal();
+			$this->view->degree = $db_global->getAllFecultyName();
+			$this->view->group = $db->getAllgroupStudy();
+			$this->view->room = $row =$db_global->getAllRoom();
+			$this->view->grade = $db_global->getAllGrade();
+			$this->view->session=$db_global->getSession();
+			$this->view->row_year=$db_global->getAllYear();
 		}catch(Exception $e){
 			echo $e->getMessage();
 		}

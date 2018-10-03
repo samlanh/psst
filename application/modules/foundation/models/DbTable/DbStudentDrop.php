@@ -18,6 +18,15 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		return $_db->fetchAll($sql.$orderby);		
 	}
 	
+	function getAllgroupStudy(){
+		$db = $this->getAdapter();
+		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+		FROM `rms_group` AS `g` WHERE g.status=1 and g.is_pass!=1";
+	
+		return $db->fetchAll($sql);
+	}
+	
 	function getAllStudentName(){
 		$_db = $this->getAdapter();
 		
@@ -54,7 +63,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	public function getAllStudentDrop($search){
 		$_db = $this->getAdapter();
 		$sql = "SELECT  s.id,				
-				s.stu_code,
 				(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
 				(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 				
@@ -65,7 +73,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				reason,
 				(SELECT first_name FROM `rms_users` WHERE id=S.user_id LIMIT 1) AS user_name,
 				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS STATUS
-				FROM `rms_student_trandrop` AS s  ";
+				FROM `rms_student_drop` AS s  ";
 		$order_by=" order by id DESC";
 		$where = "";
 		if(empty($search)){
@@ -96,19 +104,29 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	}
 	public function addStudentDrop($_data){
 		$_db= $this->getAdapter();
-		$_db->beginTransaction();
+		//$_db->beginTransaction();
+		//print_r($_data); exit();
 			try{	
 				$_arr= array(
-						'user_id'	=>$this->getUserId(),
 						'stu_id'	=>$_data['studentid'],
+						'studentname'=>$_data['studentname'],
 						'type'		=>$_data['type'],
 						'status'	=>$_data['status'],
 						'date_stop'	=>$_data['datestop'],
 						'reason'	=>$_data['reason'],
 						'create_date'=>date('Y-m-d'),
+						'gender'	=>$_data['gender'],
+						
+						'group'		=>$_data['group'],
+						'academic_year'	=>$_data['academic_year'],
+						'calture'	=>$_data['calture'],
+						'session'	=>$_data['session'],
+						'degree'	=>$_data['degree'],
+						'grade'		=>$_data['grade'],
+						'room'		=>$_data['room'],
+						'user_id'	=>$this->getUserId(),
 						);
 				$id = $this->insert($_arr);
-				
 				$this->_name='rms_student';
 				$where=" stu_id=".$_data['studentid'];
 				if($_data['status']==1){
@@ -121,8 +139,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 					);
 				}
 				$this->update($arr, $where);
-				
-				
 				$this->_name='rms_student_payment';
 				$where=" student_id=".$_data['studentid'];
 				if($_data['status']==1){
@@ -135,9 +151,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 					);
 				}
 				$this->update($arr, $where);
-				
-				
-				
 				$this->_name='rms_group_detail_student';
 				$where = " stu_id=".$_data['studentid']." and is_pass = 0";
 				if($_data['status']==1){
@@ -150,7 +163,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 					);
 				}
 				$this->update($ar, $where);
-				
 				$_db->commit();
 			}catch(Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -166,7 +178,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 					'type'		=>$_data['type'],
 					'date_stop'	=>$_data['datestop'],
 					'reason'	=>$_data['reason'],
-					//'note'		=>$_data['note'],
 					'status'	=>$_data['status'],
 					);
 			$where=$this->getAdapter()->quoteInto("id=?", $_data["id"]);
@@ -228,13 +239,10 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	}
 	function getStudentInfoById($stu_id){
 		$db = $this->getAdapter();
-		$sql = "SELECT 		
-		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name,
-		st.sex,		
-			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=st.academic_year) as academic_year, 
-			(SELECT CONCAT(`major_enname`) FROM `rms_major` WHERE `major_id`=st.grade ) AS grade,
-			(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE `rms_view`.`type` = 4 AND `rms_view`.`key_code` = st.session ) AS session
-			FROM `rms_student` as st WHERE stu_id=$stu_id LIMIT 1 ";
+		$sql = "SELECT 	*,
+			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=st.group_id LIMIT 1 ) AS group_name,
+			(SELECT r.room_name FROM rms_room AS r WHERE r.room_id = st.room LIMIT 1 )AS room_id
+			FROM rms_student AS st WHERE stu_id=$stu_id LIMIT 1";
 		return $db->fetchRow($sql);
 	}
 	

@@ -223,187 +223,193 @@ a.btn.btn-default.btn-detail:hover {
 	                   </div>
 	                </div>
 	           </div>
-	           <div class="col-md-4 col-sm-4 col-xs-12">
+	           <div class="col-md-8 col-sm-8 col-xs-12">
 	           		<div class="text-center card-box-border">
 	                   	<div class="member-card">
-	                      	<span class="user-badge bg-warning" <?php //if($rs['is_subspend']!=0){echo 'style="background: red !important;"';}?>><?php //echo ($key+1).".) ";echo $rs['status_student'];?></span>
-	                       	<div class="thumb-xl member-thumb m-b-10 center-block">
-	                       		<?php //$photo = $this->baseUrl()."/images/no-profile.png";
-	                       			//if //(!empty($rs['photo'])){
-	                       				//if (file_exists(PUBLIC_PATH."/images/photo/".$rs['photo'])){
-	                       				//	$photo = $this->baseUrl().'/images/photo/'.$rs['photo'];
-	                       				//}
-	                       			//}
-	                       		?>
-	                           	<img src="<?php //echo $photo;?>" class=" img-thumbnail" alt="profile-image">
-	                            <?php //if ($rs['sexcode']==1){?>
-	                            <i class="fa fa-male member-star text-active" title="verified user"></i>
-	                            <?php //}else{?>
-	                            <i class="fa fa-female member-star text-deactive" title="verified user"></i>
-	                            <?php //}?>
+	                      	<span class="user-badge bg-warning" <?php //if($rs['is_subspend']!=0){echo 'style="background: red !important;"';}?>>Old Student</span>
+	                       	<div class="col-md-4 col-sm-4 col-xs-12">
+		                       	<div class="thumb-xl member-thumb m-b-10 center-block">
+		                       		<?php $photo = $this->baseUrl()."/images/no-profile.png";
+		                       			//if //(!empty($rs['photo'])){
+		                       				//if (file_exists(PUBLIC_PATH."/images/photo/".$rs['photo'])){
+		                       				//	$photo = $this->baseUrl().'/images/photo/'.$rs['photo'];
+		                       				//}
+		                       			//}
+		                       		?>
+		                           	<img src="<?php echo $photo;?>" class=" img-thumbnail" alt="profile-image">
+		                            <?php //if ($rs['sexcode']==1){?>
+		                            <i class="fa fa-male member-star text-active" title="verified user"></i>
+		                            <?php //}else{?>
+		                            <i class="fa fa-female member-star text-deactive" title="verified user"></i>
+		                            <?php //}?>
+		                        </div>
+		                        <div class="center">
+		                       		<h4 class="blue m-b-5">TS00001&nbsp;</h4>
+		                       		<h4 class="m-b-5">សុខ សារី<?php //echo $rs['stu_khname'];?>&nbsp;</h4>
+		                       		<h4 class="m-b-5">Sok Sary<?php //echo $rs['stu_enname'];?>&nbsp;</h4>
+		                            <p class="text-muted"><span><?php //echo $rs['academic'];?>&nbsp;</span></p>
+		                       </div>
 	                        </div>
-	
-	                       <div class="">
-	                       		<h4 class="blue m-b-5"><?php //echo $rs['stu_code'];?>&nbsp;</h4>
-	                       		<h4 class="m-b-5"><?php //echo $rs['stu_khname'];?>&nbsp;</h4>
-	                       		<h4 class="m-b-5"><?php //echo $rs['stu_enname'];?>&nbsp;</h4>
-	                            <p class="text-muted"><span><?php //echo $rs['academic'];?>&nbsp;</span></p>
-	                       </div>
-	                       <p class="text-muted info-list font-13">
-	                       		<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span class="inf-value" title="<?php //echo $rs['group_name'];?>"><?php //echo $rs['group_name'];?></span><br />
-	                            <span class="title-info"><?php echo $tr->translate('CULTURE_LEVEL');?></span> : <span class="inf-value" title="<?php //echo $rs['group_name'];?>"><?php //echo $rs['group_name'];?></span><br />
-	                            <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span class="inf-value" title="<?php //echo $rs['degree'];?>"><?php //echo $rs['degree'];?></span> <br />
-	                            <span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span class="inf-value" title="<?php //echo $rs['grade'];?>"><?php //echo $rs['grade'];?></span><br />
-	                            <span class="title-info"><?php echo $tr->translate('SESSION');?></span> : <span class="inf-value" title="<?php //echo $rs['session'];?>"><?php //echo $rs['session'];?></span><br />
-	                            <span class="title-info"><?php echo $tr->translate('ROOM');?></span> : <span class="inf-value" title="<?php //echo $rs['room'];?>"><?php //echo $rs['room'];?></span><br />
-	                            <span class="title-info"><?php echo $tr->translate('TEL');?></span> : <span class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
-	                        </p>
+	                        <div class="col-md-8 col-sm-8 col-xs-12">
+		                       <p class="text-muted info-list font-13">
+		                       		<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span class="inf-value" title="<?php //echo $rs['group_name'];?>"><?php //echo $rs['group_name'];?></span><br />
+		                            <span class="title-info"><?php echo $tr->translate('CULTURE_LEVEL');?></span> : <span class="inf-value" title="<?php //echo $rs['group_name'];?>"><?php //echo $rs['group_name'];?></span><br />
+		                            <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span class="inf-value" title="<?php //echo $rs['degree'];?>"><?php //echo $rs['degree'];?></span> <br />
+		                            <span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span class="inf-value" title="<?php //echo $rs['grade'];?>"><?php //echo $rs['grade'];?></span><br />
+		                            <span class="title-info"><?php echo $tr->translate('SESSION');?></span> : <span class="inf-value" title="<?php //echo $rs['session'];?>"><?php //echo $rs['session'];?></span><br />
+		                            <span class="title-info"><?php echo $tr->translate('ROOM');?></span> : <span class="inf-value" title="<?php //echo $rs['room'];?>"><?php //echo $rs['room'];?></span><br />
+		                            <span class="title-info"><?php echo $tr->translate('PHONE');?></span> : <span class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
+		                        </p>
+	                        </div>
+	                         <div style="clear: both;"></div>
 	                     </div>
-                      <a class="btn btn-default btn-detail btn-sm m-t-10" href="<?php //echo $this->baseUrl()."/home/searchstudentinfo/student-detail/id/".$rs['stu_id'];?>"><i class="fa fa-eye" aria-hidden="true"></i> <?php echo $tr->translate('VIEW_DETAIL');?></a>
                		</div>
 	           </div>
-	           <div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDY_INFO");?> 
-	                   </label>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP");?> <span class="required">*</span> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select required="false" name="group" id="group" type="text"  onchange="getInfoBygroup();"  class="fullside" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*"  >
-				    			<option value="-1"> -----<?php echo $tr->translate("SELECT_GROUP");?>----- </option>
-				    			<?php if(!empty($this->group)){foreach ($this->group as $group){?>
-				    			<option value="<?php echo $group['id']?>"><?php echo $group['name']?></option>
-				    			<?php }}?>
-				    		</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="study_year" id="study_year" autoComplete="false" queryExpr="*${0}*"  >
-								<option value=""><?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?></option>
-								<?php if(!empty($this->all_year)){foreach ($this->all_year as $year){?>
-								<option value="<?php echo $year['id']?>"><?php echo $year['years']?></option>
-								<?php }}?>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CULTURE_LEVEL");?> :</label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="degree_culture" id="degree_culture" autoComplete="false" queryExpr="*${0}*"  >
-								<?php if(!empty($this->degreeculture)){foreach ($this->degreeculture as $index => $rs){?>
-								<option value="<?php echo $index?>"><?php echo $rs;?></option>
-								<?php }}?>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEGREE");?> <span class="required red">*</span> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="dept" />
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CLASS");?> <span class="required red">*</span>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="grade" /> 
-							 <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
-							 <input type="hidden" name="group_name" id="group_name" class="fullside" dojoType="dijit.form.TextBox"/>
-	                   </div>
-	                </div>
-	                 <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SESSION");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select type="text" name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*" >
-								<?php if(!empty($this->all_session)){foreach ($this->all_session as $session){?>
-								<option value="<?php echo $session['id']?>"><?php echo $session['name']?></option>		
-								<?php }}?>						
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TIME");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.TextBox"  class="fullside" id="study_hour" name="study_hour"  type="text">
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ROOM_NAME");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select required="false" type="text" name="room" id="room"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
-								<option value="0"><?php echo $tr->translate("SELECT_ROOM");?></option>
-								<?php if(!empty($this->all_room)){foreach ($this->all_room as $room){?>
-								<option value="<?php echo $room['id']?>"><?php echo $room['name']?></option>
-								<?php }}?>
-							</select>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_DATE");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="<?php echo date("Y-m-d");?>" name="paid_date" id="paid_date" class="fullside"/>
-	                   </div>
-	                </div>
-	           </div>
-	           <div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PHOTO");?> 
-	                   </label>
-	                </div>
-					<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<div class="account-image" style="padding-right: 821px;">
-								<div class="image-box">
-									<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+	       </div>
+	       <div class="card-box" >
+	            	 <div class="col-md-4 col-sm-4 col-xs-12">
+						<div class="form-group">
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDY_INFO");?> 
+		                   </label>
+		                </div>
+		                 <div class="form-group">
+		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP");?> <span class="required">*</span> :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<select required="false" name="group" id="group" type="text"  onchange="getInfoBygroup();"  class="fullside" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*"  >
+					    			<option value="-1"> -----<?php echo $tr->translate("SELECT_GROUP");?>----- </option>
+					    			<?php if(!empty($this->group)){foreach ($this->group as $group){?>
+					    			<option value="<?php echo $group['id']?>"><?php echo $group['name']?></option>
+					    			<?php }}?>
+					    		</select>
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="study_year" id="study_year" autoComplete="false" queryExpr="*${0}*"  >
+									<option value=""><?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?></option>
+									<?php if(!empty($this->all_year)){foreach ($this->all_year as $year){?>
+									<option value="<?php echo $year['id']?>"><?php echo $year['years']?></option>
+									<?php }}?>
+								</select>
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CULTURE_LEVEL");?> :</label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="degree_culture" id="degree_culture" autoComplete="false" queryExpr="*${0}*"  >
+									<?php if(!empty($this->degreeculture)){foreach ($this->degreeculture as $index => $rs){?>
+									<option value="<?php echo $index?>"><?php echo $rs;?></option>
+									<?php }}?>
+								</select>
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEGREE");?> <span class="required red">*</span> :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<input id="dept" />
+		                   </div>
+		                </div>
+		                 <div class="form-group">
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CLASS");?> <span class="required red">*</span>  :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<input id="grade" /> 
+								 <input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
+								 <input type="hidden" name="group_name" id="group_name" class="fullside" dojoType="dijit.form.TextBox"/>
+		                   </div>
+		                </div>
+		                 <div class="form-group">
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SESSION");?>  :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<select type="text" name="session" id="session" class="fullside" dojoType="dijit.form.FilteringSelect" autoComplete="false" queryExpr="*${0}*" >
+									<?php if(!empty($this->all_session)){foreach ($this->all_session as $session){?>
+									<option value="<?php echo $session['id']?>"><?php echo $session['name']?></option>		
+									<?php }}?>						
+								</select>
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TIME");?> :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<input dojoType="dijit.form.TextBox"  class="fullside" id="study_hour" name="study_hour"  type="text">
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ROOM_NAME");?> :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<select required="false" type="text" name="room" id="room"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
+									<option value="0"><?php echo $tr->translate("SELECT_ROOM");?></option>
+									<?php if(!empty($this->all_room)){foreach ($this->all_room as $room){?>
+									<option value="<?php echo $room['id']?>"><?php echo $room['name']?></option>
+									<?php }}?>
+								</select>
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_DATE");?>  :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="<?php echo date("Y-m-d");?>" name="paid_date" id="paid_date" class="fullside"/>
+		                   </div>
+		                </div>
+		           </div>
+		           <div class="col-md-4 col-sm-4 col-xs-12">
+						<div class="form-group">
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("PHOTO");?> 
+		                   </label>
+		                </div>
+						<div class="form-group">
+		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" >
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<div class="account-image" style="padding-right: 821px;">
+									<div class="image-box">
+										<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+									</div>
 								</div>
-							</div>
-	                   </div>
-	                </div>
-					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OFFICIAL_RECEIPT");?> 
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input readonly type="text" style="color: red;" required="1" dojoType="dijit.form.ValidationTextBox" name="receipt_no" id="receipt_no" class="fullside" />
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BALANCE");?> <span class="required red">*</span> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-							<input type="text"  name="balance" id="balance" class="fullside" dojoType="dijit.form.NumberTextBox"/>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ចុចសងប្រាក់");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="start_date" id="start_date" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="note" id="note" class="fullside"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
-	                   </div>
-	                </div>
-	           </div>
+		                   </div>
+		                </div>
+						<div class="form-group">
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OFFICIAL_RECEIPT");?> 
+		                   </label>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?>  :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<input readonly type="text" style="color: red;" required="1" dojoType="dijit.form.ValidationTextBox" name="receipt_no" id="receipt_no" class="fullside" />
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BALANCE");?> <span class="required red">*</span> :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+								<input type="text"  name="balance" id="balance" class="fullside" dojoType="dijit.form.NumberTextBox"/>
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ចុចសងប្រាក់");?>  :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<input type="text" name="start_date" id="start_date" value="now" class="fullside" dojoType="dijit.form.DateTextBox"/>
+		                   </div>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>  :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+		                   		<input type="text" name="note" id="note" class="fullside"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
+		                   </div>
+		                </div>
+		           </div>
+	            </div>
 	           <div class="card-box" >
 		           <div class="form-group" style="background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
 			           <div class="col-md-3 col-sm-3 col-xs-12">
@@ -434,7 +440,6 @@ a.btn.btn-default.btn-detail:hover {
 			           <div style="clear: both;"></div>
 		           </div>
 		        </div>
-	       </div>
 	       <!-- Tab Menu -->
 	    	<div class="card-box">
 	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
@@ -563,6 +568,11 @@ a.btn.btn-default.btn-detail:hover {
 		</form>
 	</div>
 </div>
+<style>
+span.user-badge.bg-warning {
+    z-index: 1;
+}		                       		
+</style>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");

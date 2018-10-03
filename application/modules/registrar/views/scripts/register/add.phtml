@@ -225,7 +225,8 @@ a.btn.btn-default.btn-detail:hover {
 	           </div>
 	           <div class="col-md-8 col-sm-8 col-xs-12">
 	           		<div class="text-center card-box-border">
-	                   	<div class="member-card">
+	                   	<div class="member-card card-display-reg">
+	                   		<div class="img-back"></div>
 	                      	<span class="user-badge bg-warning" <?php //if($rs['is_subspend']!=0){echo 'style="background: red !important;"';}?>>Old Student</span>
 	                       	<div class="col-md-4 col-sm-4 col-xs-12">
 		                       	<div class="thumb-xl member-thumb m-b-10 center-block">
@@ -259,6 +260,7 @@ a.btn.btn-default.btn-detail:hover {
 		                            <span class="title-info"><?php echo $tr->translate('SESSION');?></span> : <span class="inf-value" title="<?php //echo $rs['session'];?>"><?php //echo $rs['session'];?></span><br />
 		                            <span class="title-info"><?php echo $tr->translate('ROOM');?></span> : <span class="inf-value" title="<?php //echo $rs['room'];?>"><?php //echo $rs['room'];?></span><br />
 		                            <span class="title-info"><?php echo $tr->translate('PHONE');?></span> : <span class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
+		                        	<span class="title-info"><?php echo $tr->translate('PARENT_PHONE');?></span> : <span class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
 		                        </p>
 	                        </div>
 	                         <div style="clear: both;"></div>
@@ -571,6 +573,19 @@ a.btn.btn-default.btn-detail:hover {
 <style>
 span.user-badge.bg-warning {
     z-index: 1;
+}
+div.img-back {
+    background: url('<?php echo $this->baseUrl()?>/images/logo.png');
+    height: 190px;
+    width: 190px;
+    background-size: 100%;
+    position: absolute;
+    left: 40%;
+    opacity: 0.1;
+    top: 30px;
+}
+*, :after, :before {
+    box-sizing: border-box;
 }		                       		
 </style>
 <script type="text/javascript">

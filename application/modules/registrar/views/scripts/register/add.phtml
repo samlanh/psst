@@ -21,6 +21,95 @@
 .tablesorter tr td{
 		border: 1px solid #000;	
 	}
+.card-box-border {
+    background-color: #ffffff;
+    border: 1px solid rgba(98, 103, 115, 0.2);
+    padding: 10px;
+    margin-bottom: 20px;
+        color: #000;
+        box-shadow: 1px 1px 2px #ccc;
+}
+span.user-badge.bg-warning {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    padding: 5px 15px;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.bg-warning {
+    background: #009bcc !important;
+}
+.thumb-xl.member-thumb {
+    position: relative;
+}
+.thumb-xl.member-thumb {
+    height: 130px;
+    width: 120px;
+}
+.member-card p.text-muted.info-list {
+    text-align: left;
+    color: #0f2a5b;
+}
+.member-card img.img-thumbnail {
+    width: 100%;
+    height: 100%;
+}
+.member-card h4 {
+    margin: 0;
+    padding: 2px 0;
+}
+span.title-info {
+    min-width: 30%;
+    display: inline-block;
+    font-weight: 600;
+    color: #0f2a5b;
+}
+span.inf-value {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline-block;
+    width: 63%;
+    overflow: hidden;
+    vertical-align: bottom;
+}
+
+.member-card .member-star {
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    background-color: #ffffff;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    line-height: 26px;
+    text-align: center;
+    font-size: 18px;
+    border: solid 2px;
+}
+.text-active {
+    color: #009688;
+}
+.text-deactive {
+    color: #ff1203;
+}
+.card-box.search-list {
+    min-height: 400px;
+}
+a.btn.btn-default.btn-detail {
+    background: #009688;
+    padding: 10px;
+    color: #fff;
+}
+a.btn.btn-default.btn-detail:hover {
+    opacity: 0.8;
+}
+.blue{
+	color: #08086b;
+}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -133,6 +222,45 @@
 	                   		<input type="text" name="parent_phone" id="parent_phone" class="fullside" dojoType="dijit.form.TextBox"/>
 	                   </div>
 	                </div>
+	           </div>
+	           <div class="col-md-4 col-sm-4 col-xs-12">
+	           		<div class="text-center card-box-border">
+	                   	<div class="member-card">
+	                      	<span class="user-badge bg-warning" <?php //if($rs['is_subspend']!=0){echo 'style="background: red !important;"';}?>><?php //echo ($key+1).".) ";echo $rs['status_student'];?></span>
+	                       	<div class="thumb-xl member-thumb m-b-10 center-block">
+	                       		<?php //$photo = $this->baseUrl()."/images/no-profile.png";
+	                       			//if //(!empty($rs['photo'])){
+	                       				//if (file_exists(PUBLIC_PATH."/images/photo/".$rs['photo'])){
+	                       				//	$photo = $this->baseUrl().'/images/photo/'.$rs['photo'];
+	                       				//}
+	                       			//}
+	                       		?>
+	                           	<img src="<?php //echo $photo;?>" class=" img-thumbnail" alt="profile-image">
+	                            <?php //if ($rs['sexcode']==1){?>
+	                            <i class="fa fa-male member-star text-active" title="verified user"></i>
+	                            <?php //}else{?>
+	                            <i class="fa fa-female member-star text-deactive" title="verified user"></i>
+	                            <?php //}?>
+	                        </div>
+	
+	                       <div class="">
+	                       		<h4 class="blue m-b-5"><?php //echo $rs['stu_code'];?>&nbsp;</h4>
+	                       		<h4 class="m-b-5"><?php //echo $rs['stu_khname'];?>&nbsp;</h4>
+	                       		<h4 class="m-b-5"><?php //echo $rs['stu_enname'];?>&nbsp;</h4>
+	                            <p class="text-muted"><span><?php //echo $rs['academic'];?>&nbsp;</span></p>
+	                       </div>
+	                       <p class="text-muted info-list font-13">
+	                       		<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span class="inf-value" title="<?php //echo $rs['group_name'];?>"><?php //echo $rs['group_name'];?></span><br />
+	                            <span class="title-info"><?php echo $tr->translate('CULTURE_LEVEL');?></span> : <span class="inf-value" title="<?php //echo $rs['group_name'];?>"><?php //echo $rs['group_name'];?></span><br />
+	                            <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span class="inf-value" title="<?php //echo $rs['degree'];?>"><?php //echo $rs['degree'];?></span> <br />
+	                            <span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span class="inf-value" title="<?php //echo $rs['grade'];?>"><?php //echo $rs['grade'];?></span><br />
+	                            <span class="title-info"><?php echo $tr->translate('SESSION');?></span> : <span class="inf-value" title="<?php //echo $rs['session'];?>"><?php //echo $rs['session'];?></span><br />
+	                            <span class="title-info"><?php echo $tr->translate('ROOM');?></span> : <span class="inf-value" title="<?php //echo $rs['room'];?>"><?php //echo $rs['room'];?></span><br />
+	                            <span class="title-info"><?php echo $tr->translate('TEL');?></span> : <span class="inf-value" title="<?php //echo $rs['tel'];?>"><?php //echo $rs['tel'];?></span>
+	                        </p>
+	                     </div>
+                      <a class="btn btn-default btn-detail btn-sm m-t-10" href="<?php //echo $this->baseUrl()."/home/searchstudentinfo/student-detail/id/".$rs['stu_id'];?>"><i class="fa fa-eye" aria-hidden="true"></i> <?php echo $tr->translate('VIEW_DETAIL');?></a>
+               		</div>
 	           </div>
 	           <div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
@@ -1190,8 +1318,10 @@ function getOldStudentInfo(){
 						dijit.byId("dob").attr("value",data.dob);
 						dijit.byId("parent_phone").attr("value",data.phone);
 						dijit.byId("dept").attr("value",data.degree_result);
-						dijit.byId("session").attr("value",data.session_result);
-						//getgradebyDegree(data.degree_result,data.grade_result,1);
+						dijit.byId("degree_culture").attr("value",data.calture);
+
+						dijit.byId("dept").attr("value",data.degree);
+						getgradebyDegree(data.degree,data.grade,1);
 			     }
 			 }
 		},

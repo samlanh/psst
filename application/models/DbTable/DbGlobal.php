@@ -864,7 +864,9 @@ function getAllgroupStudy($teacher_id=null){
 	   	$db=$this->getAdapter();
 	   	$sql="SELECT s.*,
 	   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
-	   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id
+	   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
+	   		(SELECT degree FROM `rms_student_test_result` WHERE stu_test_id = $stu_id LIMIT 1) AS degree,
+	   		(SELECT grade FROM `rms_student_test_result` WHERE stu_test_id = $stu_id LIMIT 1) AS grade
 	   		FROM rms_student as s
 	   			WHERE s.stu_id=$stu_id LIMIT 1 ";
 	   	return $db->fetchRow($sql);
@@ -873,9 +875,9 @@ function getAllgroupStudy($teacher_id=null){
    function getAllstudentTest($branch=null){//get all
 	   	$db=$this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
-	   	$sql="SELECT stu_id as id,CONCAT(stu_khname,' [',stu_enname,' ',last_name,']') AS name
+	   	$sql="SELECT stu_id as id,CONCAT(COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
 	   	FROM rms_student
-	   	WHERE (stu_khname!='' OR stu_enname!='') AND 1=1 AND status=1 AND customer_type=4 $branch_id  ";
+	   	WHERE (stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=4 $branch_id  ";
 	   	if (!empty($branch)){
 	   		$sql.=" AND branch_id = $branch";
 	   	}

@@ -29,6 +29,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 			);
 			 return $this->insert($_arr);
 		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message('INSERT_FAIL');
 			echo $e->getMessage();exit();
 		}

@@ -104,8 +104,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     }
     public function getStudentPaymentDetail($search,$order_no){//
     	$db = $this->getAdapter();
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date   = (empty($search['end_date']))? '1': " sp.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
@@ -117,6 +115,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					spd.extra_fee,
 					(SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
 					spd.discount_percent,
+					spd.discount_amount,
 					spd.paidamount,
 					spd.note,
 					spd.start_date,
@@ -130,8 +129,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					s.stu_code,
 					s.stu_khname,
 					s.stu_enname,
+					s.last_name,
 					s.create_date AS date_start_study,				  
-					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS major_name,
 					(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
 					spd.payment_term AS payment_id,
 					(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status,
@@ -139,6 +138,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					d.items_id,
 					d.title AS service_name,
 					(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
+					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS major_name,
 					(SELECT rms_items.title FROM rms_items  WHERE rms_items.id = d.items_id LIMIT 1 ) AS category                             
 					FROM 
 					    rms_student_payment AS sp,
@@ -148,13 +148,13 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				    WHERE 
 				    	s.stu_id = sp.student_id
 				    	AND sp.id=spd.payment_id 
-				    	AND d.id = spd.itemdetail_id
-    				";
+				    	AND d.id = spd.itemdetail_id ";
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
+    		$s_where[] = " last_name LIKE '%{$s_search}%'";
     		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
     		$s_where[] = " receipt_number LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
@@ -162,12 +162,12 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($search['branch_id']>0){
     		$where .= " and sp.branch_id = ".$search['branch_id'];
     	}
-//     	if($search['payment_by']>0){
-//     		$where .= " and spd.type = ".$search['payment_by'];
-//     	}
-//     	if(!empty($search['service'])){
-//     		$where .= " AND spd.type!=1 AND spd.service_id = ".$search['service'];
-//     	}
+    	if($search['payment_by']>0){
+    		$where .= " and d.items_type = ".$search['payment_by'];
+    	}
+    	if(!empty($search['service'])){
+    		$where .= " AND spd.itemdetail_id = ".$search['service'];
+    	}
     	if($search['study_year']>0){
     		$where .= " and sp.academic_year = ".$search['study_year'];
     	}
@@ -187,6 +187,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 //     	}else{
 //     		$order="  ";
 //     	}
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$where.= $_db->getAccessPermission();
     	$order=" ORDER BY d.items_id ";
     	return $db->fetchAll($sql.$where.$order);
     }

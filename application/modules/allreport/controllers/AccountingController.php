@@ -72,9 +72,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbRptPayment();
 			$this->view->row_detail = $db->getStudentPaymentDetail($search,3);
 			$this->view->row = $db->getStudentPayment($search);
-			
+			$db = new Allreport_Model_DbTable_DbRptOtherIncome();
+			$this->view->rsincome = $db->getAllOtherIncome($search);
 			$this->view->search = $search;
-			
 		}catch(Exception $e){
 			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -928,12 +928,16 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			else{
 				$search = array(
 					'adv_search' =>'',
+					'branch_id' =>'',
 					'start_date'=> date('Y-m-d'),
 					'end_date'=>date('Y-m-d'),
 				);
 			}
 			$db = new Registrar_Model_DbTable_DbRptByType();
 			$this->view->row = $db->getIncomebyCategory($search,1);
+			
+			$db = new Allreport_Model_DbTable_DbRptOtherIncome();
+			$this->view->rsincome = $db->getAllOtherIncomebyCate($search);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

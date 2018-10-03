@@ -1,21 +1,22 @@
 <?php 
-$frm = $this->form_search;
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm = $this->form_search;
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
 ?>
-<title>របាយការណ៏សរុបតាមប្រភេទ</title>
+<title><?php echo $tr->translate('RPT_INCOMEBYCATE');?></title>
 <script>
 	dojo.require('dijit.form.Button');
 	dojo.require("dijit.form.DateTextBox");
 </script>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">			
 <form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-	<table width="50%" align="left"​ style="margin: 0 auto;"> 
-	   <tr>
-	   		<td><input dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="start_date" name="start_date" value="<?php echo $this->search['start_date']; ?>"  type="text"></td>
-			<td><input dojoType="dijit.form.DateTextBox"  constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="end_date" name="end_date" value="<?php echo $this->search['end_date'];?>" type="text"></td>
-	   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-	   </tr>
+	<table style="width:100%;font-family:'khmer os battambang';">
+		  <tr> 
+			   <td><?php echo $frm->getElement("branch_id");?></td>
+			   <td><?php echo $frm->getElement("start_date");?></td>
+	           <td><?php echo $frm->getElement("end_date");?></td>
+	           <td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+	   	  </tr>
 	</table>
 </form>
 <div id="divPrint">
@@ -26,19 +27,19 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 				</td>
 				<td align="center" width=70%">
 					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_INCOMEBYCATE');?></strong><br />
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 				</td>
 				<td width="15%" align="center"></td>
 			</tr>
 			<tr>
 				<td colspan="3">
-					<style> th,td{ padding:0 1px;}</style>
-						<style type="text/css">
-							table{ border-collapse:collapse; margin:0 auto;
-							border-color:#000; }
-							.padd tr td{  text-align:left}
-							.padd tr th{  background-color: #ccc; }
-						</style>
+					<style type="text/css">
+						table{ border-collapse:collapse; margin:0 auto;
+						border-color:#000; }
+						.padd tr td{  text-align:left}
+						.padd tr th{  background-color: #ccc; }
+						th,td{ padding:0 1px;}
+					</style>
 					<table class="padd" width="100%" align="left" style="white-space:nowrap;font-family: Khmer OS Battambang;">
 						<thead>
 							<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
@@ -56,32 +57,43 @@ $base_url = Application_Form_FrmMessage::getUrl("/");
 							$no=0;
 						 ?>
 						 <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
-								<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
-									<td style=""></td>
-									<td style="text-align: right;"><?php echo $rs['category_name'];?></td>
-									<td style="white-space: nowrap;width:200px;">...................................................................................</td>
-									<td style=""><?php echo number_format($rs['total_paidamount'],2);?></td>
-								</tr>
+							<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;"><?php echo $rs['category_name'];?></td>
+								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style=""><?php echo number_format($rs['total_paidamount'],2);?></td>
+							</tr>
 								<?php 
 								 	$grand_total = $grand_total + $rs['total_paidamount']+$rs['total_penalty']-$rs['credit_memo'];
 								 	$total_penalty = $total_penalty + $rs['total_penalty'];
 								 	$credit_memo = $credit_memo + $rs['credit_memo'];
 						 	 	?>
 						  <?php }}if($total_penalty>0){ ?>
-						  		<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
-									<td style=""></td>
-									<td style="text-align: right;"><?php echo $tr->translate('FINE');?></td>
-									<td style="white-space: nowrap;width:200px;">...................................................................................</td>
-									<td style=""><?php echo number_format($total_penalty,2);?></td>
-								</tr>
+					  		<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;"><?php echo $tr->translate('FINE');?></td>
+								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style=""><?php echo number_format($total_penalty,2);?></td>
+							</tr>
 						  <?php }if($credit_memo>0){?>
 						  	<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
-									<td style=""></td>
-									<td style="text-align: right;"><?php echo $tr->translate('Credit Memo');?>(-)</td>
-									<td style="white-space: nowrap;width:200px;">...................................................................................</td>
-									<td style=""><?php echo number_format($credit_memo,2);?></td>
-								</tr>
+								<td style=""></td>
+								<td style="text-align: right;"><?php echo $tr->translate('Credit Memo');?>(-)</td>
+								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style=""><?php echo number_format($credit_memo,2);?></td>
+							</tr>
 						  <?php }?>
+						   <?php if(!empty($this->rsincome)){ foreach($this->rsincome as $key => $rs){?>
+							  <tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;"><?php echo $rs['income_category'];?></td>
+								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style=""><?php echo number_format($rs['total_income'],2);?></td>
+							  </tr>
+								<?php 
+								 	$grand_total = $grand_total + $rs['total_income'];
+						 	 	}}
+						 	 	?>
 						  <tr>
 								<td colspan="3"></td>
 								<td>$&nbsp;<strong style="border-bottom: 5px double #000;"><?php echo number_format($grand_total,2);?></strong></td>

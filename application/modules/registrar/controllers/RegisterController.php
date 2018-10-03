@@ -66,44 +66,39 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       		$db = new Registrar_Model_DbTable_DbRegister();
       		$db->addRegister($_data);
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
-      		if(isset($_data['save_new'])){
-      			//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
-      		}else{
-      			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL . '/register/index');
-      		}
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
       		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
-       $this->view->all_dept = $_db->getAllDegreeName();
+//     $this->view->all_dept = $_db->getAllDegreeName();
        $this->view->exchange_rate = $_db->getExchangeRate();
-       $this->view->deduct = $_db->getDeduct();
-       $this->view->degreeculture = $_db->getAllDegreeStu();
-       $this->view->all_session = $_db->getSession();
-       $this->view->all_room = $_db->getAllRoom();
+//     $this->view->deduct = $_db->getDeduct();
+//     $this->view->degreeculture = $_db->getAllDegreeStu();
+//     $this->view->all_session = $_db->getSession();
+//     $this->view->all_room = $_db->getAllRoom();
        $this->view->all_paymentterm = $_db->getAllTerm();
        $this->view->rs_type = $_db->getAllItems();
        $this->view->rsdiscount = $_db->getAllDiscountName();
        $this->view->rs_paymenttype = $_db->getViewById(8,null);
        
        $db = new Registrar_Model_DbTable_DbRegister();
-//        $this->view->all_student_code = $db->getAllGerneralOldStudent();
-//        $this->view->all_student_test = $db->getAllStudentTested();
        
        $this->view->all_year = $db->getAllYears();
-//        $this->view->all_product = $db->getAllProductName();
        
 	   $test = $this->view->branch_info = $db->getBranchInfo();
-	   $db = new Foundation_Model_DbTable_DbStudent();
-	   $this->view->group = $db->getAllgroup();
+// 	   $db = new Foundation_Model_DbTable_DbStudent();
+// 	   $this->view->group = $db->getAllgroup();
 	   
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	   
 	   $_db = new Application_Form_FrmGlobal();
 	   $this->view->header = $_db->getHeaderReceipt();
+	   $db = new Application_Model_DbTable_DbGlobal();
+	   $rs = $db->getStudentProfileblog(1);
+// 	   print_r($rs);exit();
     }
     public function addkentridgeAction(){
     	if($this->getRequest()->isPost()){
@@ -421,9 +416,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     function getstudentinfoAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$db = new Registrar_Model_DbTable_DbRegister();
-    		$general = $db->getStudentById($data['student_id']);
-    		print_r(Zend_Json::encode($general));
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$rs = $db->getStudentProfileblog($data['student_id']);
+    		print_r(Zend_Json::encode($rs));
     		exit();
     	}
     }
@@ -491,7 +486,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getStartDateAction(){
+	/*function getStartDateAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
@@ -499,7 +494,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			print_r(Zend_Json::encode($validate));
 			exit();
 		}
-	}
+	}*/
 	function getStudentpaymenthistoryAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
@@ -515,7 +510,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		$db = new Registrar_Model_DbTable_DbRegister();
 		$this->view->rs = $db->getStudentPaymentByID($id);
 	}
-	function getStartDateEndDateAction(){
+	/*function getStartDateEndDateAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
@@ -523,7 +518,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			print_r(Zend_Json::encode($date));
 			exit();
 		}
-	}
+	}*/
 	function getstudentpaidexistAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -560,14 +555,4 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 // 			exit();
 // 		}
 // 	}
-	
-	function getStudentbalanceAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
-			$rows = $db->getStudentBalance($data['stu_id']);
-			print_r(Zend_Json::encode($rows));
-			exit();
-		}
-	}
 }

@@ -863,10 +863,16 @@ function getAllgroupStudy($teacher_id=null){
    function getStudentinfoById($stu_id){
 	   	$db=$this->getAdapter();
 	   	$sql="SELECT s.*,
+	   		(SELECT group_code FROM `rms_group` WHERE id=s.group_id LIMIT 1) as group_name,
+	   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
 	   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 	   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
-	   		(SELECT degree FROM `rms_student_test_result` WHERE stu_test_id = $stu_id LIMIT 1) AS degree,
-	   		(SELECT grade FROM `rms_student_test_result` WHERE stu_test_id = $stu_id LIMIT 1) AS grade
+	   		(SELECT degree FROM `rms_student_test_result` WHERE stu_test_id = $stu_id LIMIT 1) AS degree_test,
+	   		(SELECT grade FROM `rms_student_test_result` WHERE stu_test_id = $stu_id LIMIT 1) AS grade_test,
+	   		(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=s.grade LIMIT 1) as grade_label,
+	   		(SELECT title FROM `rms_items` WHERE rms_items.id=s.degree LIMIT 1) as degree_label,
+	   		(SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
+	   		(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label
 	   		FROM rms_student as s
 	   			WHERE s.stu_id=$stu_id LIMIT 1 ";
 	   	return $db->fetchRow($sql);
@@ -1566,6 +1572,59 @@ function getAllgroupStudy($teacher_id=null){
 		  		$pre.='0';
 		  	}
 	  	return $pre.$new_acc_no;
+  }
+  function getStudentProfileblog($student_id){
+  	$db = $this->getAdapter();
+  	$rs = $this->getStudentinfoById($student_id);
+  	$tr = $this->tr;
+  	$str = '';
+//   	print_r($rs);exit();
+  	//if($rs["is_subspend"]!=0){style="background: red !important;";}
+  	if(!empty($rs)){
+  		$str='<div class="text-center card-box-border">
+  			<div class="member-card card-display-reg">
+  				<div class="img-back"></div>
+  				<span class="user-badge bg-warning" >Old Student</span>
+  		   	 		<div class="col-md-4 col-sm-4 col-xs-12">
+  			                       	<div class="thumb-xl member-thumb m-b-10 center-block">';
+  			                       		$photo = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/no-profile.png";
+  			                       		if (!empty($rs["photo"])){
+  			                       				if (file_exists(PUBLIC_PATH."/images/photo/".$rs["photo"])){
+  			                       				$photo = $this->baseUrl()."/images/photo/".$rs["photo"];
+  			                       			}
+  			                       		}
+  			                       		
+  			                           	$str.='<img src='.$photo.' class=" img-thumbnail" alt="profile-image">';
+  			                            if ($rs["sex"]==1){
+  			                            	$str.='<input type="hidden" id="lbl_gender" value="Male"><i class="fa fa-male member-star text-active" title="verified user"></i>';
+  			                            }else{
+  			                           	 	$str.='<input type="hidden" id="lbl_gender" value="Female"><i class="fa fa-female member-star text-deactive" title="verified user"></i>';
+  			                            }
+  			                        $str.='</div>
+  			                        <div class="center">
+  			                       </div>
+  		                        </div>
+  		                        <div class="col-md-8 col-sm-8 col-xs-12">
+  			                       <p class="text-muted info-list font-13">
+  			                       		<span class="title-info">'.$tr->translate("STUDENT_CODE").'</span> : <span id="lbl_stucode" class="inf-value" >'.$rs["stu_code"].'</span><br />
+  			                       		<span class="title-info">'.$tr->translate("NAME_KH").'</span> : <span id="lbl_namekh" class="inf-value" >'.$rs["stu_khname"].'</span><br />
+  			                       		<span class="title-info">'.$tr->translate("NAME_EN").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"].$rs["stu_enname"].'</span><br />
+  			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
+  			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
+  			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['tel'].'</span>
+  			                       		<span class="title-info">'.$tr->translate("GROUP").'</span> : <span id="lbl_group" class="inf-value" >'.$rs['group_name'].'</span><br />
+  			                            <span class="title-info">'.$tr->translate("CULTURE_LEVEL").'</span> : <span id="lbl_culturelevel" class="inf-value" >'.$rs['degree_culture'].'</span><br />
+  			                            <span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />
+  			                            <span class="title-info">'.$tr->translate("GRADE").'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span><br />
+  			                            <span class="title-info">'.$tr->translate("SESSION").'</span> : <span id="lbl_session" class="inf-value">'.$rs['session_label'].'</span><br />
+  			                            <span class="title-info">'.$tr->translate("ROOM").'</span> : <span id="lbl_room" class="inf-value">'. $rs['room_label'].'</span><br />
+  			         	 		  </p>
+  		          </div>
+  		      <div style="clear: both;"></div>
+  		 </div>
+  	</div>';
+  	}
+  	return $str;
   }
 }
 ?>

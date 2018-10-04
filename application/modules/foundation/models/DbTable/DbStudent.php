@@ -103,7 +103,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	public function getStudentById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT *,
-				(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id 
+				(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name 
 				FROM rms_student as s, 
 				rms_view AS vs 
 				WHERE s.stu_id =".$id." 

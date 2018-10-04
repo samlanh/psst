@@ -41,6 +41,10 @@ input.btn_borwse_image {
     width: 120px;
     margin: 0 auto;
 }
+a.print-card.btn.btn-primary.btn-xs {
+    padding: 9px;
+    margin: 0;
+}
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <div class="card">
@@ -59,12 +63,14 @@ input.btn_borwse_image {
 			}
 			</script>
 			<div class="card-box">
-               	<div class="col-sm-12 border-botom">
-		    		<div class="col-sm-8 pd-0">
+               	<div class="col-sm-12 border-botom pd-0">
+		    		<div class="col-sm-8 ">
 		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_REGISTER');?></h4>
 	    			</div>
-	    			<div class="col-sm-4 text-right">
+	    			<div class="col-sm-4 pd-0 text-right">
+	    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="PrintDiv()"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("Print Card");?></a>
 	    			</div>
+	    			<div class="clearfix"></div>
 	    		</div>
 	    	</div>
 	    	<!-- Tab Menu -->
@@ -544,7 +550,89 @@ input.btn_borwse_image {
 										<input type="hidden" id="identity" name="identity" />
 										<input type="hidden" id="popup_index" name="popup_index" />
 									</div>		
-								</div>	
+								</div>
+								<div class="form-group">
+								 	<div id="divPrint" style="margin: 0; padding: 0; display: none;" >
+				                    		<style>
+												.card-content-student-print{
+														background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+													 background-size: 100%;background-repeat: no-repeat;								
+													}
+												.profile-card-block {
+												    position: relative;
+												}
+												.profile-card-block .photo {
+												    text-align: center;
+												    width: 100%;
+												    position: absolute;
+												    top: 96px;
+													left: -0.58px;
+												}
+												.photo img {
+												    width: 70.7px;
+												    height: 92px;
+												}
+												.name-card-block {
+												    position: relative;
+												}
+										
+												.name-card-block ul.list-data {
+												    list-style-type: none;
+												    padding: 0;
+												    width: 100%;
+												    position: absolute;
+												    text-align: center;
+												    top: 182.5px;
+												    color: #01049f;
+												    font-weight: bold;
+												    font-size: 12px;
+												}	
+											.name-card-block ul.list-data li{
+												line-height: 16px;	    
+											}											.name-card-block ul.list-data li.sdudent-id{
+												margin-top:10px;
+												color: #01731b;
+											}
+											.foot-left-block {
+											    position: relative;
+											}
+											.qrimages {
+											    position: absolute;
+											    top: 262px;
+											    width: 100%;
+											    text-align: center;
+											}
+											.qrimages img {
+											    width: 80%;
+											    text-align: center;
+											}
+										</style>
+				                    	<div class="card-content-student-print" style=" line-height: 16.285px;  width: 5.1cm; height:8.35cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+				                    		<div class="profile-card-block">
+				                    			<div class="photo">
+				                    				<img  src="<?php echo $image;?>" alt="profile-image" >
+				                    			</div>
+				                    		</div>
+				                    		<div class="name-card-block">
+					                    		<ul class="list-data">
+					                    			<li><span class="title_value">&nbsp;<?php echo $this->rs['stu_khname'];?></span></li>
+					                    			<li><span class="title_value">&nbsp;Grade: <?php echo str_replace("Grade","",$this->rs['group_name']);?></span></li>
+													<li class="sdudent-id"><span class="title_value">&nbsp;ID: <?php echo $this->rs['stu_code'];?></span></li>
+					                    		</ul>
+					                    	</div>
+					                    	<?php  
+					                    	$barcode = $this->data["prefix_barcode_grade_school"]."-".$this->rs['stu_code']."-".date("y");
+					                    	$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
+					                    	<div class="foot-left-block">
+				                    			<div class="qrimages">
+				                    				<img  src="<?php echo $url;?>" alt="profile-image" >
+				                    			</div>
+				                    		</div>
+				                    		<div class="foot-right-block">
+				                    		</div>
+				                    	</div>
+				                    </div>
+								 </div>			
 							 </div>
 				         </div>
 			        </div>
@@ -1683,7 +1771,28 @@ date_format = '"dd/MM/yyyy"';
 		
 	}	
 		
-		
+	function PrintDiv() {
+		loadingBlock();
+	  	 var contents = document.getElementById("divPrint").innerHTML;
+	 	  var frame1 = document.createElement('iframe');
+	    frame1.name = "frame1";
+	    frame1.style.position = "absolute";
+	    frame1.style.top = "-1000000px";
+	    document.body.appendChild(frame1);
+	    var frameDoc = (frame1.contentWindow) ? frame1.contentWindow : (frame1.contentDocument.document) ? frame1.contentDocument.document : frame1.contentDocument; frameDoc.document.open();
+	    frameDoc.document.write('<html><head><title>Employee ID</title>');
+	    frameDoc.document.write('</head><body>');
+	    frameDoc.document.write(contents);
+	    frameDoc.document.write('</body></html>');
+	    frameDoc.document.close();
+	    setTimeout(function () {
+	        window.frames["frame1"].focus();
+	        window.frames["frame1"].print();
+	        document.body.removeChild(frame1);
+	        HideloadingBlock();
+	    }, 2000);
+	   return false;
+	}		
 </script>
 <div class="overlay">
 	<div class="overlay-load">

@@ -66,8 +66,12 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->rs = $rs_rows = $group->getAllStudent($search);
+		$rs_rows = $group->getAllStudent($search);
+		$this->view->rs = $rs_rows;
+		
 		$this->view->search=$search;
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
 	public function rptAllStudentOldAction(){
 		if($this->getRequest()->isPost()){

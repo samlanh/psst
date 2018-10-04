@@ -21,6 +21,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	       tel,email,stu_code,home_num,street_num,
     	
     		   is_subspend,dob,degree as dept,
+    		   (SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
     		   (SELECT CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
     		   (SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as start_year,
     		   (SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as end_year,

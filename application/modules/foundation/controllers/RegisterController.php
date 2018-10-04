@@ -193,6 +193,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$frm_register=$tsub->FrmStudentRegister($test);
 		Application_Model_Decorator::removeAllDecorator($frm_register);
 		$this->view->frm = $frm_register;
+		
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
 	function getGradeAction(){
 		if($this->getRequest()->isPost()){

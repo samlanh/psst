@@ -124,6 +124,8 @@ class Global_LecturerController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_update = $frm_techer;
 		
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 		//print_r($this->view->row); exit();
 	}
 	

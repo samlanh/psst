@@ -256,7 +256,15 @@ class IndexController extends Zend_Controller_Action
     		exit();
     	}
     }
-
+    public function barcodeAction(){
+    	$loan_code = $this->getRequest()->getParam('codereader');
+    	header('Content-type: image/png');
+    	$this->_helper->layout()->disableLayout();
+    	$barcodeOptions = array('text' => $loan_code,'barHeight' => 10);
+    	$rendererOptions = array();
+    	$renderer = Zend_Barcode::factory('Code128', 'image', $barcodeOptions, $rendererOptions)->render();
+    	echo $renderer; exit();
+    }
 
 }
 

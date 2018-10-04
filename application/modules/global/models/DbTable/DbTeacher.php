@@ -19,7 +19,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					$name = $_FILES['photo']['name'];
 					if (!empty($name)){
 						$ss = 	explode(".", $name);
-						$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+						$image_name = "profile_lecturer".date("Y").date("m").date("d").time().".".end($ss);
 						$tmp = $_FILES['photo']['tmp_name'];
 						if(move_uploaded_file($tmp, $part.$image_name)){
 							$photo = $image_name;
@@ -148,10 +148,10 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					$name = $_FILES['photo']['name'];
 					if (!empty($name)){
 						$ss = 	explode(".", $name);
-						$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+						$image_name = "profile_lecturer".date("Y").date("m").date("d").time().".".end($ss);
 						$tmp = $_FILES['photo']['tmp_name'];
 						if(move_uploaded_file($tmp, $part.$image_name)){
-							$array['photo']=$image_name;
+							$_arr['photo']=$image_name;
 						}
 					}
 					$where=" id = ".$_data['id'];

@@ -151,16 +151,33 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$stu_code=$_data['student_id'];
 			$code = new Registrar_Model_DbTable_DbRegister();
 
-			$adapter = new Zend_File_Transfer_Adapter_Http();
-					$part = PUBLIC_PATH.'/images';
-					$adapter->setDestination($part);
-					$adapter->receive();
-					$photo = $adapter->getFileInfo();
-					if(!empty($photo['photo']['name'])){
-						$pho_name = $photo['photo']['name'];
-					}else{
-						$pho_name = '';
-					}
+// 			$adapter = new Zend_File_Transfer_Adapter_Http();
+// 					$part = PUBLIC_PATH.'/images';
+// 					$adapter->setDestination($part);
+// 					$adapter->receive();
+// 					$photo = $adapter->getFileInfo();
+// 					if(!empty($photo['photo']['name'])){
+// 						$pho_name = $photo['photo']['name'];
+// 					}else{
+// 						$pho_name = '';
+// 					}
+					
+			$part= PUBLIC_PATH.'/images/photo/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}	
+			$photo = "";
+			$name = $_FILES['photo']['name'];
+			if (!empty($name)){
+				$ss = 	explode(".", $name);
+				$image_name = "profile_student_".date("Y").date("m").date("d").time().".".end($ss);
+				$tmp = $_FILES['photo']['tmp_name'];
+				if(move_uploaded_file($tmp, $part.$image_name)){
+					$photo = $image_name;
+				}
+				else
+					$string = "Image Upload failed";
+			}
 			$_db= $this->getAdapter();
 			$_db->beginTransaction();
 			try{	
@@ -228,7 +245,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'status'		=>$_data['status'],
 						'remark'		=>$_data['remark'],
 						'create_date'	=>date("Y-m-d H:i:s"),
-						'photo'  			 => $pho_name,
+						'photo'  			 => $photo,
 						'customer_type'			=>1,//Student
 						);
 				$id = $this->insert($_arr);
@@ -305,8 +322,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);
 				$_db->commit();
 			}catch(Exception $e){
-				$_db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				$_db->rollBack();
 			}
 			//print_r($_data); exit();
 	}
@@ -318,16 +335,20 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(!empty($_data['group']) AND $_data['group']!=-1){
 				$is_setgroup=1;
 			}
-			$adapter = new Zend_File_Transfer_Adapter_Http();
-			$part = PUBLIC_PATH.'/images';
-			$adapter->setDestination($part);
-			$adapter->receive();
-			$photo = $adapter->getFileInfo();
-			//print_r($photo['photo']['name']); exit();
-			if(!empty($photo['photo']['name'])){
-				$pho_name = $photo['photo']['name'];
-			}else{
-				$pho_name = '';
+// 			$adapter = new Zend_File_Transfer_Adapter_Http();
+// 			$part = PUBLIC_PATH.'/images';
+// 			$adapter->setDestination($part);
+// 			$adapter->receive();
+// 			$photo = $adapter->getFileInfo();
+// 			//print_r($photo['photo']['name']); exit();
+// 			if(!empty($photo['photo']['name'])){
+// 				$pho_name = $photo['photo']['name'];
+// 			}else{
+// 				$pho_name = '';
+// 			}
+			$part= PUBLIC_PATH.'/images/photo/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
 			}
 			$_arr=array(
  					'branch_id'		=>$_data['branch_id'],
@@ -368,7 +389,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'mother_nation'	=>$_data['mom_nation'],
 					'mother_job'	=>$_data['mo_job'],
 					'mother_phone'	=>$_data['mon_phone'],
-					'photo'  			 => $pho_name,
+// 					'photo'  			 => $pho_name,
 					'guardian_enname'=>$_data['guardian_name_en'],
 					'guardian_dob'	=>$_data['guardian_dob'],
 					'guardian_nation'=>$_data['guardian_national'],
@@ -387,6 +408,18 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
 					);
+			
+			$photo = "";
+			$name = $_FILES['photo']['name'];
+			if (!empty($name)){
+				$ss = 	explode(".", $name);
+				$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+				$tmp = $_FILES['photo']['tmp_name'];
+				if(move_uploaded_file($tmp, $part.$image_name)){
+					$_arr['photo']=$image_name;
+				}
+			}
+			
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
 			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 			$this->update($_arr, $where);

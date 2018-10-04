@@ -454,12 +454,21 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 	
 	public function FrmsearchDiscount(){
 		$request=Zend_Controller_Front::getInstance()->getRequest();
-	
+		$db = new Application_Model_DbTable_DbGlobal();
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
 		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
 				'placeholder'=>$this->tr->translate("SEARCH_DISCOUNT_TITLE")));
 		$_title->setValue($request->getParam("title"));
-	
+		
+		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT_BRANCH"));
+		$optionBranch = $db->getAllBranch();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+		$_branch_id->setMultiOptions($_arr_opt_branch);
+		$_branch_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside height-text',));
+		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
 		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
 		$_status_opt = array(
@@ -468,7 +477,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
-		$this->addElements(array($_title,$_status));
+		$this->addElements(array($_title,$_status,$_branch_id));
 	
 		return $this;
 	}

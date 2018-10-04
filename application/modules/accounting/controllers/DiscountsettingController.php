@@ -17,11 +17,13 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 				$_data=$this->getRequest()->getPost();
 				$search = array(
 						'title' => $_data['title'],
+						'branch_id' => $_data['branch_id'],
 						'status' => $_data['status_search']);
 			}
 			else{
 				$search = array(
 						'title' => '',
+						'branch' => '',
 						'status' => -1);
 			}
 			$db = new Accounting_Model_DbTable_DbDiscountSetting();

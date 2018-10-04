@@ -46,7 +46,7 @@ dojo.require("dijit.form.CheckBox");
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_ID");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select class="fullside"  name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" queryExpr="*${0}*" autoComplete="false" onchange="getStudentInfo();" >
-							    	<option value="-1"> </option>
+							    	<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?> </option>
 							    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $row){?>
 										<option value="<?php echo $row['stu_id']?>"><?php echo $row['stu_code']?></option>
 									<?php }?>
@@ -57,7 +57,7 @@ dojo.require("dijit.form.CheckBox");
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select class="fullside" required="true" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="setID();" >
-						    	<option value="-1"> </option>
+						    	<option value="-1"><?php echo $tr->translate("SELECT_STUDEN_NAME")?> </option>
 						    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
 									<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
 								<?php }?>
@@ -94,10 +94,10 @@ dojo.require("dijit.form.CheckBox");
 		                	<input id="academic_year" />
 		                </div>
 		            </div>
-		             <div class="form-group">
+		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GRADE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select id="grade" name="grade" onchange="" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+		                	<select id="grade" name="grade" onchange="" class="fullside" readonly="readonly" dojoType="dijit.form.FilteringSelect" type="text"  >
 									<option value="-1"><?php echo $tr->translate("SELECT_GRADE")?></option>
 									<?php if(!empty($this->grade)){foreach ($this->grade as $grade){?>
 										<option value="<?php echo $grade['id'];?>"><?php echo $grade['name'];?></option>
@@ -108,7 +108,7 @@ dojo.require("dijit.form.CheckBox");
 		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select id="degree" name="degree" onchange=""class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+		                	<select id="degree" name="degree" onchange=""class="fullside" readonly="readonly" dojoType="dijit.form.FilteringSelect" type="text"  >
 									<option value="-1"><?php echo $tr->translate("SELECT_DEGREE")?></option>
 								<?php if(!empty($this->degree)){foreach ($this->degree as $degree){?>
 									<option value="<?php echo $degree['id'];?>"><?php echo $degree['name'];?></option>
@@ -119,7 +119,7 @@ dojo.require("dijit.form.CheckBox");
 		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select id="session" name="session"  class="fullside" dojoType="dijit.form.FilteringSelect" type="text" >
+		                	<select id="session" name="session"  class="fullside" readonly="readonly" dojoType="dijit.form.FilteringSelect" type="text" >
 								<option value="-1"><?php echo $tr->translate("CHOOSE_SESSION")?></option>
 							<?php if(!empty($this->session)){foreach ($this->session as $session){?>
 								<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
@@ -128,19 +128,7 @@ dojo.require("dijit.form.CheckBox");
 		                </div>
 		            </div>
 		        </div>
-		        
 		        <div class="col-md-4 col-sm-4 col-xs-12">
-		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-							<select class="fullside" tabindex="15" name="group"  id="group" dojoType="dijit.form.FilteringSelect" >
-								<option value=""><?php echo $tr->translate("SELECT_GROUP");?></option>
-								<?php if(!empty($this->group))foreach ($this->group as $row){?>
-								<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
-								<?php }?>
-							</select>
-		                </div>
-		            </div>
 		            <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ROOM_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -150,6 +138,17 @@ dojo.require("dijit.form.CheckBox");
 						   		<option value="<?php echo $room['id'];?>"><?php echo $room['name'];?></option>
 						   		<?php }}?>
 						   </select>
+		                </div>
+		            </div>
+		             <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+							<select class="fullside" tabindex="15" name="group"  id="group" dojoType="dijit.form.FilteringSelect" type="text" onchange="getStudentInfo();">
+								<option value=""><?php echo $tr->translate("SELECT_GROUP");?></option>
+								<?php if(!empty($this->group))foreach ($this->group as $row){?>
+								<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
+								<?php }?>
+							</select>
 		                </div>
 		            </div>
 		            <div class="form-group">
@@ -210,7 +209,7 @@ dojo.ready(function(){
 	    required: true,
 	    id: "academic_year",
 	    name: "academic_year",   
-	   // readOnly:true,           
+	    readOnly:true,           
 	    class: 'fullside',  
 	    required:'true',
 	    placeHolder:"<?php echo $tr->translate("SELECT_YEAR")?>",          
@@ -286,12 +285,15 @@ function submitDataAddnew(){
 function setID(){
 	stu_id = dijit.byId('studentname').get('value');
 	dijit.byId('studentid').attr('value',stu_id);
+	dijit.byId('group').attr('value',stu_id);
 }
 
 var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'get-student')); ?>';
 function getStudentInfo(){
 			studentid = dijit.byId('studentid').get('value');
 			dijit.byId('studentname').attr('value',studentid);
+			dijit.byId('group').attr('value',studentid);
+			
 			studentid = dijit.byId('studentid').get('value');
 			if(studentid==''){
 				alert("Please Select Student");
@@ -313,7 +315,7 @@ function getStudentInfo(){
 					dijit.byId('session').set('readOnly',true);
 					dijit.byId("calture").attr("value",data.calture);
 					dijit.byId('session').set('readOnly',true);
-					dijit.byId("group").attr("value",data.group_name);
+					//dijit.byId("group").attr("value",data.group_id);
 					//dijit.byId('group').set('readOnly',true);
 
 					dijit.byId('degree').set('value',data.degree);
@@ -321,6 +323,7 @@ function getStudentInfo(){
 					dijit.byId('grade').set('value',data.grade);
 					dijit.byId('grade').set('readOnly',true);
 					dijit.byId('room').set('value',data.room);
+					dijit.byId('room').set('readOnly',true);
 				},
 				error: function(err) {
 					alert(err);

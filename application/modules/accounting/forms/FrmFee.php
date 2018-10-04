@@ -130,7 +130,7 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 		));
 		
 		$rsschool = $db->getAllSchoolOption();
-		$options=array(-1=>"SELECT_SCHOOLOPTION");
+		$options=array(-1=>$this->tr->translate("SELECT_SCHOOL_OPTIONS"));
 		if(!empty($rsschool))foreach($rsschool AS $row){
 			$options[$row['id']]=$row['name'];
 		}

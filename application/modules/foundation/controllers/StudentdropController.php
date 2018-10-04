@@ -36,11 +36,11 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 				else{
 					$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 				}
-				$collumns = array("STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","GRADE","SESSION","TYPE","REASON","STOP_DATE","STATUS");
+				$collumns = array("STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","STOP_DATE","REASON","USER","STATUS");
 				$link=array(
 						'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 				);
-				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('degree'=>$link,'kh_name'=>$link,'en_name'=>$link));
+				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('academic'=>$link,'stu_id'=>$link,'student_name'=>$link,'sex'=>$link));
 	
 			$this->view->adv_search = $search;
 		}catch(Exception $e){
@@ -63,7 +63,6 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				}
 			}
-			
 			$db = new Foundation_Model_DbTable_DbStudentDrop();
 			$this->view->stu_id = $db->getAllStudentID();
 			$this->view->stu_name = $db->getAllStudentName();
@@ -76,6 +75,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$this->view->grade = $db_global->getAllGrade();
 			$this->view->session=$db_global->getSession();
 			$this->view->row_year=$db_global->getAllYear();
+			
 		}catch(Exception $e){
 			echo $e->getMessage();
 		}
@@ -106,6 +106,14 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$this->view->stu_id = $db->getAllStudentIDEdit();
 			$this->view->stu_name = $db->getAllStudentNameEdit();
 			$this->view->type = $db->getAllDropType();
+			
+			$db_global = new Application_Model_DbTable_DbGlobal();
+			$this->view->degree = $db_global->getAllFecultyName();
+			$this->view->group = $db->getAllgroupStudy();
+			$this->view->room = $row =$db_global->getAllRoom();
+			$this->view->grade = $db_global->getAllGrade();
+			$this->view->session=$db_global->getSession();
+			$this->view->row_year=$db_global->getAllYear();
 			
 		}catch(Exception $e){
 			echo $e->getMessage();

@@ -93,6 +93,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			$s_where[] = " dis_max LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
+		if($search['branch_id']){
+			$where.=' AND g.branch_id='.$search['branch_id'];
+		}
 		if($search['status']>-1){
 			$where.=' AND status='.$search['status'];
 		}

@@ -30,7 +30,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_transfer=  new Zend_Dojo_Form_Element_FilteringSelect('paid_transfer');
 		$_transfer->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'));
 		$_status_opt = array(
-				-1=>$this->tr->translate("ជ្រើសរើសប្រភេទផ្ទេរ"),
+				-1=>$this->tr->translate("PLEASE_SELECT_TRANSFER"),
 				1=>$this->tr->translate("TRANSFER_OTHER"),
 				0=>$this->tr->translate("CREATE_NEW"));
 		$_transfer->setMultiOptions($_status_opt);

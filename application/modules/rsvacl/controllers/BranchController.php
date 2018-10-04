@@ -27,7 +27,7 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
            $glClass = new Application_Model_GlobalClass();
 			$rs_rowshow = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","PARENT_BRANCH","PREFIX_CODE","CODE","ADDRESS","PHONE","AMOUNT","OTHERS","STATUS");
+			$collumns = array("BRANCH_NAME","PARENT_BRANCH","PREFIX_CODE","CODE","ADDRESS","PHONE","BRANCH_FAX","NOTE","STATUS");
 			$link=array(
 					      'module'=>'rsvacl','controller'=>'branch','action'=>'edit',
 			);

@@ -24,6 +24,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $db->getAllStudentSelected($condition);
+		
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
 	
 	public function pickupselectedAction(){

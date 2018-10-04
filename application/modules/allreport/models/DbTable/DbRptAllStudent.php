@@ -151,6 +151,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			    	CONCAT(stu_enname," ",last_name) AS stu_enname,
 			    	(SELECT name_kh FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
        				(SELECT name_kh FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
+					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
 			    	tel,
 			    	email,
 			    	stu_code,

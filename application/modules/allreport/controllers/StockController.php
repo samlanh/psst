@@ -405,6 +405,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$ds=$this->view->rows=$db->getAllProduct($search);
 	
 		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			echo $e->getMessage();//exit();
 		}

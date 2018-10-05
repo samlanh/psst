@@ -49,17 +49,22 @@ input.btn_borwse_image {
     width: 220px;
     margin: 0 auto;
 }
+a.print-card.btn.btn-primary.btn-xs {
+    padding: 9px;
+    margin: 0;
+}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
-               	<div class="col-sm-12 border-botom">
-		    		<div class="col-sm-8 pd-0">
+               	<div class="col-sm-12 border-botom pd-0">
+		    		<div class="col-sm-8 ">
 		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_TEACHER');?></h4>
     			</div>
-    			<div class="col-sm-4 text-right">
-    				<button class="btn btn-primary btn-xs" onclick="PrintDiv()"><?php echo $tr->translate("PRINT_CARD");?></button>
+    			<div class="col-sm-4 pd-0 text-right">
+    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="PrintDiv()"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("Print Card");?></a>
     			</div>
+    			<div class="clearfix"></div>
     		</div>
     	</div>
     	<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'edit')); ?>" 
@@ -391,7 +396,11 @@ input.btn_borwse_image {
 				 	<div id="divPrint" style="margin: 0; padding: 0; display: none;" >
                     		<style>
 								.card-content-print{
-										background-image: url('<?php echo $this->baseUrl()."/images/card/teacher_card_bg.jpg";?>');
+									 background-image: url('<?php echo $this->baseUrl()."/images/card/teacher_card_bg.jpg";?>');
+									 background-size: 100%;background-repeat: no-repeat;								
+									}
+								.card-content-print.staff-2{
+									 background-image: url('<?php echo $this->baseUrl()."/images/card/staff_card_bg.jpg";?>');
 									 background-size: 100%;background-repeat: no-repeat;								
 									}
 								.profile-card-block {
@@ -426,6 +435,14 @@ input.btn_borwse_image {
 							.name-card-block ul.list-data li{
 								line-height: 16px;	    
 							}
+							.card-content-print.staff-2 .name-card-block ul.list-data li .staff-id{
+								color:#fe0000;
+							}		    
+								
+							.name-card-block ul.list-data li.utiliy-value{
+								font-size: 10px;
+								line-height: 14px;
+							}
 							.foot-left-block {
 							    position: relative;
 							}
@@ -443,7 +460,7 @@ input.btn_borwse_image {
 				
 				
 				</style>
-                    	<div class="card-content-print" style=" line-height: 16.285px;  width: 5.1cm; height:8.35cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+                    	<div class="card-content-print staff-<?php echo $this->rs['staff_type'];?>" style=" line-height: 16.285px;  width: 5.1cm; height:8.35cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
                     		<div class="profile-card-block">
                     			<div class="photo">
                     				<img  src="<?php echo $image;?>" alt="profile-image" >
@@ -452,11 +469,17 @@ input.btn_borwse_image {
                     		<div class="name-card-block">
 	                    		<ul class="list-data">
 	                    			<li><span class="title_value">&nbsp;<?php echo $this->rs['teacher_name_en'];?></span></li>
-	                    			<li><span class="title_value">&nbsp;ID: <?php echo $this->rs['teacher_code'];?></span></li>
+	                    			<li class="utiliy-value"><span class="title_value">Position:&nbsp;<?php echo $this->rs['position_add'];?></span></li>
+	                    			<li class="utiliy-value"><span class="title_value">Dept:&nbsp;<?php echo $this->rs['dept_name'];?></span></li>
+	                    			<li><span class="title_value staff-id">&nbsp;ID: <?php echo $this->rs['teacher_code'];?></span></li>
 	                    		</ul>
 	                    	</div>
 	                    	<?php  
-	                    	$barcode = $this->data["prefix_barcode_teacher"]."-".$this->rs['teacher_code']."-".date("y");
+	                    	$prefix = $this->data["prefix_barcode_teacher"];
+	                    	if ($this->rs['staff_type']==2){
+	                    		$prefix = $this->data["prefix_barcode_staff"];
+	                    	}
+	                    	$barcode = $prefix."-".$this->rs['teacher_code']."-".date("y");
 	                    	$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
 	                    	<div class="foot-left-block">
                     			<div class="qrimages">

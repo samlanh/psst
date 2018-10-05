@@ -17,7 +17,8 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 	}
 	public function FrmSearchProduct($data=null){ 
 		$request=Zend_Controller_Front::getInstance()->getRequest();
-	
+		$_dbg = new Application_Model_DbTable_DbGlobal();
+		
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
 		$_title->setAttribs(array(
 				'dojoType'=>$this->text,
@@ -135,8 +136,9 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		));
 		$location->setValue($request->getParam("location"));
 		$opt_ls = array(''=>$this->tr->translate("SELECT_LOCATION"));
-		$opt_l=new Accounting_Model_DbTable_DbProduct();
-		$row=$opt_l->getLocation();
+// 		$opt_l=new Accounting_Model_DbTable_DbProduct();
+// 		$row=$opt_l->getLocation();
+		$row = $_dbg->getAllBranch();
 		if(!empty($row))foreach ($row As $rs)$opt_ls[$rs['id']]=$rs['name'];
 		$location->setMultiOptions($opt_ls);
 		//branc controll 
@@ -157,9 +159,12 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$cate->setValue($request->getParam("category_id"));
 		
 		$opt_ls = array(''=>$this->tr->translate("PRODUCT_CATEGORY"));
-		$opt_l=new Accounting_Model_DbTable_DbProduct();
+// 		$opt_l=new Accounting_Model_DbTable_DbProduct();
+// 		$row=$opt_l->getProductCategory();
 		
-		$row=$opt_l->getProductCategory();
+		
+		$row =  $_dbg->getAllItems(3);
+		
 		if(!empty($row))foreach ($row As $rs)$opt_ls[$rs['id']]=$rs['name'];
 		$cate->setMultiOptions($opt_ls);
 		

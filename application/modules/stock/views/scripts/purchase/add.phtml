@@ -130,7 +130,7 @@ span.oldsup input[type=checkbox] {
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input id="branch"/>
+	                   		<input  id="branch"/>
 	                   </div>
 	                </div>
 	               
@@ -229,7 +229,7 @@ span.oldsup input[type=checkbox] {
 		required: true,
 		id: "branch",
 		name: "branch",           
-		class: "full", 
+		class: "fullside", 
 		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>​",          
 		onChange: function() {  
 			branch_id = dijit.byId('branch').get('value');

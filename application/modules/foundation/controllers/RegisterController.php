@@ -176,21 +176,19 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
-		
 		$this->view->degree = $db->getAllFecultyName();
 		
 		$this->view->province = $db->getProvince();
 		
-		$test =  $db->getStudentById($id);
-		$this->view->rs = $test;
+		$student_rs =  $db->getStudentById($id);
+		$this->view->rs = $student_rs;
 		$this->view->row = $db->getStudentDocumentById($id);
-		//echo $test['group_id'];exit();
 		
 		$this->view->year = $db->getAllYear();
 		$this->view->room = $row =$db->getAllRoom();
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
-		$frm_register=$tsub->FrmStudentRegister($test);
+		$frm_register=$tsub->FrmStudentRegister($student_rs);
 		Application_Model_Decorator::removeAllDecorator($frm_register);
 		$this->view->frm = $frm_register;
 		

@@ -1590,12 +1590,18 @@ function getAllgroupStudy($teacher_id=null){
   	$tr = $this->tr;
   	$str = '';
 //   	print_r($rs);exit();
-  	//if($rs["is_subspend"]!=0){style="background: red !important;";}
+  	$student_type=$tr->translate("Old Student");
+  	$style="style='color:white'";
+  	if($rs["is_stu_new"]==1){
+  		$student_type=$tr->translate("New Student");
+  		$style="style='color:#99e5fd'";
+  	}
+  	 //if($rs["is_subspend"]!=0){style="background: red !important;";}
   	if(!empty($rs)){
   		$str='<div class="text-center card-box-border">
   			<div class="member-card card-display-reg">
   				<div class="img-back"></div>
-  				<span class="user-badge bg-warning" >Old Student</span>
+  				<span class="user-badge bg-warning" '.$style.'>'.$student_type.'</span>
   		   	 		<div class="col-md-4 col-sm-4 col-xs-12">
   			                       	<div class="thumb-xl member-thumb m-b-10 center-block">';
   			                       		$photo = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/no-profile.png";

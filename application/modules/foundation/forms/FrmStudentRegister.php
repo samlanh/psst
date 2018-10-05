@@ -357,6 +357,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$from_school->setValue($data['from_school']);
 			$sponser->setValue($data['sponser']);
 			$sponser_phone->setValue($data['sponser_phone']);
+			$_stutype->setValue($data['is_stu_new']);
 		}
 	
 		$this->addElements(

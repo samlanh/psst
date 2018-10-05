@@ -73,14 +73,13 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
 					id,
 					CONCAT (name_kh) AS name_english,
 					CONCAT (name_en) AS name_khmer,					
-					STATUS
+					status
 				FROM 
 					rms_view
 				WHERE 
 					name_en!='' AND TYPE=25";
-		
-		$order = ' ORDER BY id DESC '; 
-		$where = ' WHERE name_en!="" ';
+		$where = ' AND name_en!="" ';
+		$order = ' ORDER BY id DESC ';
 		if(empty($search)){
 			return $db->fetchAll($sql.$order);
 		}

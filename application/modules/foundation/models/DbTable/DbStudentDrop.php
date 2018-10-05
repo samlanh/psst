@@ -257,10 +257,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	}
 	function getStudentInfoById($stu_id){
 		$db = $this->getAdapter();
-		$sql = "SELECT 	*,stu_id,
-			(SELECT r.room_name FROM rms_room AS r WHERE r.room_id = st.room LIMIT 1 )AS room_id,
-			(SELECT g.group_code FROM `rms_group` as g WHERE g.id=st.group_id LIMIT 1 ) AS group_id
-			FROM rms_student AS st WHERE stu_id=$stu_id LIMIT 1";
+		$sql = "SELECT 	* FROM rms_student AS st WHERE stu_id=$stu_id LIMIT 1";
 		return $db->fetchRow($sql);
 	}
 	

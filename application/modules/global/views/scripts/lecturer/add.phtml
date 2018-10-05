@@ -728,6 +728,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				popupNation(2);
 		    }
 			}, "nation");
+		setNation();
 	});
 	function popupNation(key){
 		dijit.byId("save_nation").attr("disabled",false);
@@ -751,9 +752,9 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		function addNationBy(){
 			if(dijit.byId('frm_nation_kh').validate()){
 				dijit.byId("save_nation").attr("disabled",true);
-				loadingBlock();	
-				nationality=dijit.byId('nationality').get('value');
-				nation=dijit.byId('nation').get('value');
+				loadingBlock();
+				nation = dijit.byId('nationality').get('value');
+				dijit.byId('nation').attr('value',nation);	
 				dojo.xhrPost({
 					url:url_add_nation,
 					form: dojo.byId("frm_nation_kh"),

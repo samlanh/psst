@@ -691,6 +691,12 @@ function getAllgroupStudy($teacher_id=null){
    	return $db->fetchAll($sql);
    }
    
+   function getAllDepartment(){
+   	$db = $this->getAdapter();
+   	$sql="SELECT id,CONCAT (name_kh) AS name FROM rms_view WHERE name_en!='' AND TYPE=25";
+   	return $db->fetchAll($sql);
+   }
+   
    function getallProductName(){
    	$db = $this->getAdapter();
    	$sql=" SELECT id ,pro_name as name FROM `rms_product` 

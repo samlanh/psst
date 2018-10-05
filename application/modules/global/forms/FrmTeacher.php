@@ -47,6 +47,18 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT_DEPARTMENT"));
+		$optionBranch = $_dbgb->getAllDepartment();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$_depart_id = new Zend_Dojo_Form_Element_FilteringSelect("department");
+		$_depart_id->setMultiOptions($_arr_opt_branch);
+		$_depart_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		
 		$phone = new Zend_Dojo_Form_Element_NumberTextBox('phone');
 		$phone->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true','placeholder'=>$this->tr->translate("PLEASE_SELECT_PHONE")));
 		
@@ -192,6 +204,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$_enname->setValue($_data['teacher_name_en']);
 			$_khname->setValue($_data['teacher_name_kh']);
 			$_branch_id->setValue($_data['branch_id']);
+			$_depart_id->setValue($_data['department']);
 			$sex->setValue($_data['sex']);
 			$phone->setValue($_data['tel']);
 			$_nationality->setValue($_data['nationality']);
@@ -212,7 +225,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$end_date->setValue($_data['end_date']);
 			$_agreement->setValue($_data['agreement']);
 		}
-		$this->addElements(array($id,$_enname,$home_num,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_email,$start_date,$_degree,$_status,$_submit));
+		$this->addElements(array($id,$_depart_id,$_enname,$home_num,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
 	}

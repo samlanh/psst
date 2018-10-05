@@ -49,6 +49,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 					        'tel'  				 => $_data['phone'],
 							'note' 				 => $_data['note'],
 							
+							'department' 		 => $_data['department'],
 							'village_name' 		 => $_data['village_name'],
 							'commune_name'  	 => $_data['commune_name'],
 							'district_name'  	 => $_data['district_name'],
@@ -120,6 +121,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				        'tel'  				 => $_data['phone'],
 						'note' 				 => $_data['note'],
 						
+						'department' 		 => $_data['department'],
 						'village_name' 		 => $_data['village_name'],
 						'commune_name'  	 => $_data['commune_name'],
 						'district_name'  	 => $_data['district_name'],

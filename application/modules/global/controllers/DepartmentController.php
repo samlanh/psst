@@ -25,15 +25,13 @@ class Global_DepartmentController extends Zend_Controller_Action {
 			}
  			$db = new Global_Model_DbTable_DbDepart();
  			$rs_rows= $db->getAllDepartment($search);
- 			$glClass = new Application_Model_GlobalClass();
- 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("KH_NAME","NAME_EN","STATUS");
+			$collumns = array("KH_NAME","NAME_EN","CREATE_DATE","STATUS","USER");
 			$link=array(
-					'module'=>'accounting','controller'=>'discount','action'=>'edit',
+					'module'=>'global','controller'=>'department','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('dis_name'=>$link,'doc_name'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('depart_namekh'=>$link,'depart_nameen'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -66,32 +64,32 @@ class Global_DepartmentController extends Zend_Controller_Action {
 			}		
 		}
 	}
-// 	public function editAction(){
-// 		if($this->getRequest()->isPost())
-// 		{
-// 			try{
-// 				$data = $this->getRequest()->getPost();
-// 				$db = new Accounting_Model_DbTable_DbDiscount();
-// 				$db->updateDiscount($data);
-// 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/accounting/discount/index");
-// 			}catch(Exception $e){
-// 				Application_Form_FrmMessage::message("EDIT_FAIL");
-// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 			}
-// 		}
-// 		$id=$this->getRequest()->getParam("id");
-// 		$db = new Accounting_Model_DbTable_DbDiscount();
-// 		$this->view->rs=$db->getDiscountById($id);
-// 	}
-// 	function addcompositionAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data = $this->getRequest()->getPost();
-// 			$db = new Accounting_Model_DbTable_DbDiscount();
-// 			$id = $db->addDiscounttion($data);
-// 			print_r(Zend_Json::encode($id));
-// 			exit();
-// 		}
-// 	}
+	public function editAction(){
+		if($this->getRequest()->isPost())
+		{
+			try{
+				$data = $this->getRequest()->getPost();
+				$db = new Global_Model_DbTable_DbDepart();
+				$db->updateDepartment($data);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/department/index");
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("EDIT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		$id=$this->getRequest()->getParam("id");
+		$db = new Global_Model_DbTable_DbDepart();
+		$this->view->rs=$db->getDepartmentById($id);
+	}
+	function addcompositionAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Accounting_Model_DbTable_DbDiscount();
+			$id = $db->addDiscounttion($data);
+			print_r(Zend_Json::encode($id));
+			exit();
+		}
+	}
 	
 }
 

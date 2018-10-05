@@ -693,7 +693,7 @@ function getAllgroupStudy($teacher_id=null){
    
    function getAllDepartment(){
    	$db = $this->getAdapter();
-   	$sql="SELECT id,CONCAT (name_kh) AS name FROM rms_view WHERE name_en!='' AND TYPE=25";
+   	$sql="  SELECT depart_id AS id,depart_namekh AS name FROM `rms_department` WHERE STATUS=1 AND depart_namekh!=''  ";
    	return $db->fetchAll($sql);
    }
    

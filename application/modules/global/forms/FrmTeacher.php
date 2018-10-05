@@ -161,20 +161,17 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$street_num->setAttribs(array('dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside'));
 				
-		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
-		$_degree->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("SERVIC"),
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));	
-		$degree_opt = $db->getAllDegree();
-		$_degree->setMultiOptions($degree_opt);
-		
-		$_note =  new Zend_Dojo_Form_Element_TextBox('note');
-		$_note->setAttribs(array('dojoType'=>'dijit.form.TextBox',
-				'class'=>'fullside'));
+		$_arr_opt_degree = array(""=>$this->tr->translate("PLEASE_SELECT_DEGREE"));
+		$optionDegree = $_db->getAllDegreeMent(21);//Nation
+		if(!empty($optionDegree))foreach($optionDegree AS $row) $_arr_opt_degree[$row['id']]=$row['name'];
+		$_degree = new Zend_Dojo_Form_Element_FilteringSelect("degree");
+		$_degree->setMultiOptions($_arr_opt_degree);
+		$_degree->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'onChange'=>'popupNation(1);',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
 
 		$_photo = new Zend_Form_Element_File('photo');
 		

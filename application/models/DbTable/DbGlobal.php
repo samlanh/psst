@@ -662,6 +662,11 @@ function getAllgroupStudy($teacher_id=null){
    	$sql=" SELECT room_id AS id ,room_name As name FROM `rms_room` WHERE is_active=1 AND room_name!='' order by room_id DESC ";
    	return $db->fetchAll($sql);
    }
+   public function getAllDegreeMent(){
+   	$db = $this->getAdapter();
+   	$sql=" SELECT key_code AS id, name_kh AS name FROM rms_view WHERE STATUS=1 AND TYPE=3 AND name_kh!='' ORDER BY rms_view.key_code ASC ";
+   	return $db->fetchAll($sql);
+   }
    function getSession(){
    	$db=$this->getAdapter();
    	$sql="SELECT key_code AS id,key_code,name_en aS name,name_en AS view_name 

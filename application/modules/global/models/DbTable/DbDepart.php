@@ -57,7 +57,7 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
 				  depart_namekh,
 				  depart_nameen,
 				  create_date,
-				  (SELECT name_kh FROM rms_view WHERE key_code=status AND TYPE=1 LIMIT 1) AS `status`,
+				  status,
 				  (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name
 				  FROM `rms_department` where 1";
 		$where = '';

@@ -64,9 +64,9 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'class'=>'fullside',
 				));
 		$_status_opt = array(
-				1=>$this->tr->translate("ALL_STATUS"),
+				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("ACTIVE"),
-				'0'=>$this->tr->translate("DACTIVE"));
+				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
 		

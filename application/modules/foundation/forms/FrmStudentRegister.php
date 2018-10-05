@@ -202,16 +202,17 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		if(!empty($rs_degree))foreach($rs_degree AS $row) $arr_opt[$row['id']]=$row['name'];
 		$degree->setMultiOptions($arr_opt);
 		
-		$degree_stu =  new Zend_Dojo_Form_Element_FilteringSelect('calture');
+		$_arr_opt_degree = array(""=>$tr->translate("PLEASE_SELECT_DEGREE"));
+		$optionDegree = $_db->getAllDegreeMent(21);//Nation
+		if(!empty($optionDegree))foreach($optionDegree AS $row) $_arr_opt_degree[$row['id']]=$row['name'];
+		$degree_stu = new Zend_Dojo_Form_Element_FilteringSelect("calture");
+		$degree_stu->setMultiOptions($_arr_opt_degree);
 		$degree_stu->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'onChange'=>'getallGrade();getStudentNo()',
-		
-		));
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$arr_degree = $_db->getAllDegreeStu();
-		$degree_stu->setMultiOptions($arr_degree);
+				'required'=>'true',
+				'onChange'=>'popupNation(1);',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
 		
 		
 		$room =  new Zend_Dojo_Form_Element_FilteringSelect('room');

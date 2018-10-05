@@ -69,7 +69,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$this->view->type = $db->getAllDropType();
 						
 			$db_global = new Application_Model_DbTable_DbGlobal();
-			$this->view->degree = $db_global->getAllFecultyName();
+			$this->view->degree = $db_global->getAllDegreeMent();
 			$this->view->group = $db->getAllgroupStudy();
 			$this->view->room = $row =$db_global->getAllRoom();
 			$this->view->grade = $db_global->getAllGrade();
@@ -108,7 +108,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$this->view->type = $db->getAllDropType();
 			
 			$db_global = new Application_Model_DbTable_DbGlobal();
-			$this->view->degree = $db_global->getAllFecultyName();
+			$this->view->degree = $db_global->getAllDegreeMent();
 			$this->view->group = $db->getAllgroupStudy();
 			$this->view->room = $row =$db_global->getAllRoom();
 			$this->view->grade = $db_global->getAllGrade();

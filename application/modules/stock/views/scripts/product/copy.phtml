@@ -18,12 +18,12 @@
 }
 .image-box {
     text-align: center;
-    width: 170px;
+    width: 215px;
     height: 110px;
 }
 .image-box img {
-    width: 215px;
-    height: 130px;
+        width: 170px;
+    height: 110px;
 }
 
 .button_browse {
@@ -52,7 +52,7 @@ input.btn_borwse_image {
 }
 .account-image {
     border: solid 1px #eee;
-    width: 215px;
+    width: 200px;
     margin: 0 auto;
 }
 </style>
@@ -129,8 +129,8 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 		             <div class="form-group">
-		             	 <label class="control-label  col-md-12 col-sm-12 col-xs-12" style="line-height: 8.75;"><?php echo $tr->translate("IMAGE");?> </label>
-		                <div class="col-md-12 col-sm-12 col-xs-12 text-center" style="padding-left: 40%;">
+		             	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" style=" vertical-align: top;"><?php echo $tr->translate("IMAGE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12 text-center" style="padding-left: 40%;">
 		                	<?php 
 							$images = $this->baseUrl().'/images/noimage.jpg';
 							if (!empty($this->row['images'])){

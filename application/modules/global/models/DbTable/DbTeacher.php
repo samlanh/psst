@@ -186,7 +186,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	public function getTeacherById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT t.*,
-		(SELECT name_en FROM rms_view WHERE rms_view.type=25 AND rms_view.key_code=t.department) AS dept_name
+		(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=t.department) AS dept_name
 		FROM rms_teacher AS t WHERE t.id =$id ";
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);

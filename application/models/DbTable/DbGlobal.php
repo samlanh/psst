@@ -1693,5 +1693,10 @@ function getAllgroupStudy($teacher_id=null){
   	}
   	return $str;
   }
+  function getCardBackground($branch,$schoolOption){
+	  $db = $this->getAdapter();
+	  $sql="SELECT c.* FROM `rms_cardbackground` AS c WHERE c.branch_id=$branch AND c.schoolOption=$schoolOption AND c.default=1 ORDER BY c.id DESC LIMIT 1";
+	  return $db->fetchRow($sql);
+  }
 }
 ?>

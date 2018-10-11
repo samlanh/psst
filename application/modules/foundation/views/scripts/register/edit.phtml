@@ -1,4 +1,6 @@
 <?php
+	$_dbgb = new Application_Model_DbTable_DbGlobal();
+	
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
 	echo $this->headTitle(''); 
@@ -554,8 +556,18 @@ a.print-card.btn.btn-primary.btn-xs {
 								<div class="form-group">
 								 	<div id="divPrint" style="margin: 0; padding: 0; display: none;" >
 				                    		<style>
+												<?php 
+												$imagebg = $this->baseUrl().'/images/card/default_card_bg.jpg';
+													$bg = $_dbgb->getCardBackground($this->rs['branch_id'],$this->rs['schoolOption']);
+													if(!empty($bg['background'])){
+														if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+														$imagebg = $this->baseUrl().'/images/card/'.$bg['background'];
+														}
+														
+													}
+												?>
 												.card-content-student-print{
-														background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+														background-image: url('<?php echo $imagebg;?>');
 													 background-size: 100%;background-repeat: no-repeat;								
 													}
 												.profile-card-block {

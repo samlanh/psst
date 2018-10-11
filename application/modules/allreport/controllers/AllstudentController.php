@@ -72,6 +72,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$rs_rows = $group->getAllStudent($search);
 		$this->view->rs = $rs_rows;
 		
+		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
+		
 		$this->view->search=$search;
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);

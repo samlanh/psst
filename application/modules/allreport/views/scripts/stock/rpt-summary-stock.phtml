@@ -8,38 +8,38 @@
 	$db=new Allreport_Model_DbTable_DbRptSummaryStock();
 	
 ?>
-<form action="" dojoType="dijit.form.Form" method="post">
-	 <table width="100%" >
-	    <tr>
-	        <td><?php echo $frm->getElement('title');?></td>
-	        <td><?php echo $frm->getElement('branch_id');?></td>
-	        
-	        <td>
-	        	<select name="pro_type" id="pro_type" class="fullside" dojoType="dijit.form.FilteringSelect">
-	        		<option value="">select product type</option>
-	        		<?php if(!empty($this->pro_type)){foreach ($this->pro_type as $pro_type){?>
-	        			<option value="<?php echo $pro_type['id']?>" <?php if($pro_type['id']==$this->search['pro_type']){echo "selected='selected'";}?>><?php echo $pro_type['name']?></option>
-	        		<?php }}?>
-	        	</select>
-	        </td>
-	        <td>
-	        	<select name="pro_name" id="pro_name" class="fullside" dojoType="dijit.form.FilteringSelect">
-	        		<option value="">select product code</option>
-	        		<?php if(!empty($this->pro_name)){foreach ($this->pro_name as $name){?>
-	        			<option value="<?php echo $name['id']?>" <?php if($name['id']==$this->search['pro_name']){echo "selected='selected'";}?>><?php echo $name['name']?></option>
-	        		<?php }}?>
-	        	</select>
-	        </td>
-	    	<td><?php echo $frm->getElement('start_date');?></td>
-	    	<td><?php echo $frm->getElement('end_date');?></td>
-	    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
-	    </tr>
-	</table>
-</form>
-<style>
-#footer{display: none;}
-</style>	
-<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+<div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<form action="" dojoType="dijit.form.Form" method="post">
+		 <table width="100%" >
+		    <tr>
+		        <td><?php echo $frm->getElement('title');?></td>
+		        <td><?php echo $frm->getElement('branch_id');?></td>
+		        
+		        <td>
+		        	<select name="pro_type" id="pro_type" class="fullside" dojoType="dijit.form.FilteringSelect">
+		        		<option value="">select product type</option>
+		        		<?php if(!empty($this->pro_type)){foreach ($this->pro_type as $pro_type){?>
+		        			<option value="<?php echo $pro_type['id']?>" <?php if($pro_type['id']==$this->search['pro_type']){echo "selected='selected'";}?>><?php echo $pro_type['name']?></option>
+		        		<?php }}?>
+		        	</select>
+		        </td>
+		        <td>
+		        	<select name="pro_name" id="pro_name" class="fullside" dojoType="dijit.form.FilteringSelect">
+		        		<option value="">select product code</option>
+		        		<?php if(!empty($this->pro_name)){foreach ($this->pro_name as $name){?>
+		        			<option value="<?php echo $name['id']?>" <?php if($name['id']==$this->search['pro_name']){echo "selected='selected'";}?>><?php echo $name['name']?></option>
+		        		<?php }}?>
+		        	</select>
+		        </td>
+		    	<td><?php echo $frm->getElement('start_date');?></td>
+		    	<td><?php echo $frm->getElement('end_date');?></td>
+		    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
+		    </tr>
+		</table>
+	</form>
+	<style>
+	#footer{display: none;}
+	</style>	
 	<div id="divPrint">
 		<style>
 			a{text-decoration: none;color: 000;}
@@ -80,11 +80,11 @@
 							<tr style="font-size: 12px;" class="hover">
 								<td style="border:1px solid #000;text-align: center;"><?php echo $i; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['branch_namekh']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_code']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_name']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['code']; ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['title']; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);} ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['stockOut']>0){echo number_format($rs_row['stockOut']);} ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['request']>0){echo number_format($rs_row['request']);} ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php //if($rs_row['stockOut']>0){echo number_format($rs_row['stockOut']);} ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php //if($rs_row['request']>0){echo number_format($rs_row['request']);} ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);} ?> </td>
 							</tr>
 						<?php

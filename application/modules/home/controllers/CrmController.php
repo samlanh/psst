@@ -125,7 +125,7 @@ class Home_CrmController extends Zend_Controller_Action
     	
     	$pre = explode(",", $row['prev_concern']);
     	$prevCon="";
-    	if (!empty($pre)) foreach ($pre as $a){
+    	if (!empty($row['prev_concern'])) foreach ($pre as $a){
     		$title = $db->getPrevTilteByKeyCode($a);
     		if (empty($prevCon)){ $prevCon = $title;
     		}else {

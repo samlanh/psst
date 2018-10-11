@@ -893,9 +893,11 @@ function getAllgroupStudy($teacher_id=null){
 	   	(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
 	   	(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 	   	(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,  	
-	   	(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=t.grade LIMIT 1) as grade_label,
-		(SELECT title FROM `rms_items` WHERE rms_items.id=t.degree LIMIT 1) as degree_label,
-	    	(SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
+	   	(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=t.grade_result LIMIT 1) as grade_label,
+		(SELECT title FROM `rms_items` WHERE rms_items.id=t.degree_result LIMIT 1) as degree_label,
+		t.degree_result AS degree,t.grade_result AS grade,t.session_result AS session,
+		t.id,
+	    (SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
 	   	(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label
 	   	FROM rms_student as s,
 	   	rms_student_test_result As t
@@ -1631,7 +1633,7 @@ function getAllgroupStudy($teacher_id=null){
   }
   function getStudentProfileblog($student_id,$data_from=1){
   	$db = $this->getAdapter();
-  	if($data_from==1){
+  	if($data_from==1 OR $data_from==3){
   		$rs = $this->getStudentinfoById($student_id);
     }elseif($data_from==2){
   		$rs = $this->getStudentTestinfoById($student_id);

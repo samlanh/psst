@@ -123,9 +123,38 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$receipt_number =$this->getRecieptNo();
 			try{
 				$gdb = new  Application_Model_DbTable_DbGlobal();
-				$rs_stu = $gdb->getStudentinfoById($stu_code);
+				//$this->_name='rms_student';
 				
-				$this->_name='rms_student';
+					$customer_type=1;
+					if($data['student_type']==1){//existing student
+						$rs_stu = $gdb->getStudentinfoById($stu_code);
+					}elseif($data['student_type']==2){//testing student
+						$rs_stu = $gdb->getStudentTestinfoById($stu_code);
+						$arr = array(
+								'is_registered'=>1,
+								);
+						$this->_name='rms_student_test_result';
+						$where="id = ".$rs_stu['id'];
+						$this->update($arr, $where);
+						
+						$arr = array(
+							'customer_type' =>1,
+						);
+						$this->_name='rms_student';
+						$where="stu_id = ".$stu_code;
+						$this->update($arr, $where);
+						
+					}elseif($data['student_type']==3){//from crm
+						$rs_stu = $gdb->getStudentinfoById($stu_code);
+						$arr = array(
+								'customer_type' =>4,
+								'is_studenttest'=>1
+						);
+						$this->_name='rms_student';
+						$where="stu_id = ".$stu_code;
+						$this->update($arr, $where);
+					}
+				
 					$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
 					if($cut_credit_memo<0){
 						$cut_credit_memo = abs($cut_credit_memo);

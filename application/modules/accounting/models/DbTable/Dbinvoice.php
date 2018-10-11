@@ -80,8 +80,21 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		WHERE vid='".$id."' ";
 		return $db->fetchAll($sql);
 	}
+	function getInvoiceExisting($invoice_num){
+		$db = $this->getAdapter();
+		$sql="SELECT id FROM  rms_invoice_account WHERE invoice_num ='".$invoice_num."'";
+		return $db->fetchOne($sql);
+	}
     public function addinviceaccount($data){
-    	try{$db= $this->getAdapter();
+    	$db= $this->getAdapter();
+    	$db->beginTransaction();
+    	try{
+    			$rs = $this->getInvoiceExisting($data['invoice_num']);
+    			if(!empty($rs)){
+    				$dbiv = new Accounting_Model_DbTable_Dbinvoice();
+    				$data['invoice_num']= $this->getvCode();
+    			}
+
 		    	$arr = array(
 		    			'student_id'=>$data['student_id'],
 		    			'student_name'=>$data['student_name'],
@@ -111,8 +124,9 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					$this->_name='rms_invoice_account_detail';	
 					$this->insert($arr_s);
 				}
-		    	
+		    	$db->commit();
     	}catch(Exception $e){
+    		$db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }

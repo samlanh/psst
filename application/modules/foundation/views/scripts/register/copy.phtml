@@ -48,10 +48,11 @@ input.btn_borwse_image {
 		<form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-  				//if(maxSize == 1){
-      				// alert('<?php //echo $tr->translate("Image size more than 5Mb can not upload");?>');
-      				 //return false;
-      			//}
+  				branch_id = dijit.byId('branch_id').get('value');
+				if(branch_id==''){
+					dijit.byId('branch_id').focus();
+					return false;
+				}
 				loadingBlock();
 				return true;
 			}else {

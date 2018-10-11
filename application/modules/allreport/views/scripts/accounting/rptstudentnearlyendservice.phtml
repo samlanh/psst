@@ -6,13 +6,12 @@
 ?>	
 <?php
 ?>
-<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+<div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptstudentnearlyendservice')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<table>	
 			<tr>
-				<td>
-					<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
-				</td>
+				<td> <?php echo $frm->getElement("adv_search");?></td>
+				<td> <?php echo $frm->getElement("branch_id");?></td>
 				<td> <?php echo $frm->getElement("service_type");?></td>
 				<td> <?php echo $frm->getElement("service");?></td>
 				<td> <?php echo $frm->getElement("grade_all");?></td>
@@ -53,6 +52,7 @@
 						  page-break-inside:avoid; page-break-after:auto;
 						}
 					.hover:hover{background: #ccc;}
+					#exportExcel th{text-align: center;}
 				</style>
 				<tr>
 					<td colspan="3">
@@ -64,16 +64,16 @@
 								<th style="border: 1px solid #000;"><?php echo $tr->translate("STUDENT_ID"); ?></th>
 								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</th>
 								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate("TEL");?>&nbsp;</th>
+								<th>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</th>
 								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</th>
 							    <th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</th>
 								<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("SESSION"); ?>&nbsp;</th>
-								<th style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_NAME"); ?></th>
 								<th style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_TYPE"); ?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("SERVICE_NAME"); ?></th>
 							    <th style="border: 1px solid #000;"><?php echo $tr->translate("PAID_DATE"); ?></th>
 								<th style="border: 1px solid #000;"><?php echo $tr->translate("START_DATE"); ?></th>
 								<th style="border: 1px solid #000;"><?php echo $tr->translate("VALIDATE"); ?></th>
-								<th style="border: 1px solid #000;"><?php echo $tr->translate("REMAIN_DAY"); ?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?></th>
 							</tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
@@ -91,26 +91,19 @@
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['group_name'];?></td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['grade'];?></td>
 								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['session'];?></td>
-								<?php 
-									if($row['type']==1){
-										$row['service_type']="Tuition Fee";
-									}else if($row['type']==4){//product
-										$row['service_type']="ទំនិញ";
-									}
-								?>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['service_type'];?></td>
-								<td align="left" style="border: 1px solid #000;">&nbsp;<?php if ($row['type']==1){ echo $row['grade'];}else{ echo $row['service'];};?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['category_name'];?></td>
+								<td align="left" style="border: 1px solid #000;">&nbsp;<?php  echo $row['service_name'];?></td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
 								<td style="border: 1px solid #000;">&nbsp;<?php echo date("d-M-Y",strtotime($row['start']));?>&nbsp;</td>
 								<td style="border: 1px solid #000;color: red;">&nbsp;<?php echo date("d-M-Y",strtotime($row['end']));?>&nbsp;</td>
 								<?php 
-								$daylate =$tr->translate("Remain")." ".abs($day);
-// 								if($day>=0){
-// 									$daylate ="Late ".abs($day);
-// 								}else{
-// 									$daylate ="Remain ".abs($day);
-// 								}?>
-								<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;"<?php //if($day>=0){echo"background:red;color:#fff;";}?>">&nbsp;<?php echo $daylate;?> days</td>
+								$daylate =$day;
+								if($day>=0){
+									$daylate ="Remain".abs($day);
+								}else{
+									$daylate ="Late".abs($day);
+								}?>
+								<td align="center" style="border: 1px solid #000;color: red;font-weight: bold;">&nbsp;<?php echo $daylate;?> (Days)</td>
  							</tr>
 							<?php }}?>	 
 						</table>

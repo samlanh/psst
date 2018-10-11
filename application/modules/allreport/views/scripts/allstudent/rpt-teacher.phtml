@@ -11,13 +11,11 @@
 		<table width="100%">
 	       <tr>
 	           <td><?php echo $frm->getElement("title");?></td>
+	           <td><?php echo $frm->getElement("branch_id");?></td>
 	           <td><?php echo $frm->getElement("degree");?></td>
 	           <td><?php echo $frm->getElement("nationality");?></td>
-	           <td><?php echo $frm->getElement("branch_id");?></td>
-			</tr>
-			<tr>
-				<td><?php echo $frm->getElement("status_search");?></td>
-				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+			   <td><?php echo $frm->getElement("status_search");?></td>
+			   <td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 		 	</tr>
 		</table>		
 	</form>

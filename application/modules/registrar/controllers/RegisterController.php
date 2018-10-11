@@ -417,7 +417,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
-    		$rs = $db->getStudentProfileblog($data['student_id']);
+    		$rs = $db->getStudentProfileblog($data['student_id'],$data['data_from']);
     		print_r(Zend_Json::encode($rs));
     		exit();
     	}
@@ -546,6 +546,16 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	function getallstudentcrmAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$rows = $db->getAllCrmstudent(null,3);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
+	
 // 	function getallstudentcodeAction(){
 // 		if($this->getRequest()->isPost()){
 // 			$data = $this->getRequest()->getPost();

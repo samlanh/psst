@@ -878,8 +878,6 @@ function getAllgroupStudy($teacher_id=null){
 	   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
 	   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 	   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
-	   		(SELECT degree FROM `rms_student_test_result` WHERE stu_test_id = $stu_id LIMIT 1) AS degree_test,
-	   		(SELECT grade FROM `rms_student_test_result` WHERE stu_test_id = $stu_id LIMIT 1) AS grade_test,
 	   		(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=s.grade LIMIT 1) as grade_label,
 	   		(SELECT title FROM `rms_items` WHERE rms_items.id=s.degree LIMIT 1) as degree_label,
 	   		(SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
@@ -888,18 +886,65 @@ function getAllgroupStudy($teacher_id=null){
 	   			WHERE s.stu_id=$stu_id LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
-   /*test student*/
-   function getAllstudentTest($branch=null){//get all
+   function getStudentTestinfoById($stu_id){//for student with result
+   	$db=$this->getAdapter();
+   	$sql="SELECT s.*,
+	   	(SELECT group_code FROM `rms_group` WHERE id=s.group_id LIMIT 1) as group_name,
+	   	(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
+	   	(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
+	   	(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,  	
+	   	(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=t.grade LIMIT 1) as grade_label,
+		(SELECT title FROM `rms_items` WHERE rms_items.id=t.degree LIMIT 1) as degree_label,
+	    	(SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
+	   	(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label
+	   	FROM rms_student as s,
+	   	rms_student_test_result As t
+	   	WHERE 
+	   	t.stu_test_id=$stu_id
+	   	AND t.is_current=1 AND updated_result=1
+	   	AND s.stu_id=$stu_id LIMIT 1 ";
+   	return $db->fetchRow($sql);
+   }
+   /*tested student*/
+   function getAllstudentTest($branch=null,$result=0){//get all
 	   	$db=$this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
-	   	$sql="SELECT stu_id as id,CONCAT(COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
-	   	FROM rms_student
-	   	WHERE (stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=4 $branch_id  ";
-	   	if (!empty($branch)){
-	   		$sql.=" AND branch_id = $branch";
+	   	if($result==0){//មិនទាន់គិតធ្វើតេស និងចេញលទ្ធផល
+	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
+	   		FROM rms_student
+	   		WHERE
+	   		(stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=4 $branch_id  ";
+	   		if (!empty($branch)){
+	   			$sql.=" AND branch_id = $branch";
+	   		}
+	   		$sql.=" ORDER BY stu_id DESC";
+	   	}else{//ban ធ្វើតេស
+	   		
+	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
+	   		FROM rms_student,rms_student_test_result AS result
+	   		WHERE
+	   		stu_id = result.stu_test_id AND result.updated_result=1 AND
+	   		(stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=4 $branch_id  ";
+	   		if (!empty($branch)){
+	   			$sql.=" AND branch_id = $branch";
+	   		}
+	   		$sql.=" ORDER BY stu_id DESC";
 	   	}
-	   	$sql.=" ORDER BY stu_id DESC";
+	   
 	   	return $db->fetchAll($sql);
+   }
+   /*crm student*/
+   function getAllCrmstudent($branch=null,$type){//get all
+   	$db=$this->getAdapter();
+   	$branch_id = $this->getAccessPermission();
+   	$sql="SELECT stu_id as id,CONCAT(COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
+   	FROM rms_student
+   	WHERE (stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=3 $branch_id  ";
+   	if (!empty($branch)){
+   		$sql.=" AND branch_id = $branch";
+   	}
+   	$sql.=" ORDER BY stu_id DESC";
+   	return $db->fetchAll($sql);
    }
 //    function getStudentTestbyId($stu_test_id){
 //    		$db=$this->getAdapter();
@@ -1584,9 +1629,13 @@ function getAllgroupStudy($teacher_id=null){
 		  	}
 	  	return $pre.$new_acc_no;
   }
-  function getStudentProfileblog($student_id){
+  function getStudentProfileblog($student_id,$data_from=1){
   	$db = $this->getAdapter();
-  	$rs = $this->getStudentinfoById($student_id);
+  	if($data_from==1){
+  		$rs = $this->getStudentinfoById($student_id);
+    }elseif($data_from==2){
+  		$rs = $this->getStudentTestinfoById($student_id);
+  	}
   	$tr = $this->tr;
   	$str = '';
 //   	print_r($rs);exit();
@@ -1596,6 +1645,7 @@ function getAllgroupStudy($teacher_id=null){
   		$student_type=$tr->translate("New Student");
   		$style="style='color:#99e5fd'";
   	}
+  	
   	 //if($rs["is_subspend"]!=0){style="background: red !important;";}
   	if(!empty($rs)){
   		$str='<div class="text-center card-box-border">

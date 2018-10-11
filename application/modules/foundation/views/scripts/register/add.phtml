@@ -1503,6 +1503,12 @@ function uploadcomplete(event){
 	function getInfoBygroup(){
 		url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 		group = dijit.byId('group').get('value');
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			dijit.byId('group').attr('value','');
+			dijit.byId('branch_id').focus();
+			return false;
+		}
 		if(group=='' || group==-1){
 			dijit.byId('academic_year').set('readOnly',false);
 			dijit.byId('degree').set('readOnly',false);
@@ -1532,6 +1538,7 @@ function uploadcomplete(event){
 				dijit.byId('session').set('value',data.session);
 				dijit.byId('session').set('readOnly',true);
 				dijit.byId('room').set('value',data.room_id);
+				getStudentNo();
 			},
 			error: function(err) {
 				alert(err);

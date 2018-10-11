@@ -193,21 +193,17 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    	(SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
        			(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
 		    	tel,email,stu_code,home_num,street_num,
-			    	
 		    	is_subspend,
-		    	(select CONCAT(from_academic,"-",to_academic,"(",generation,")") from rms_tuitionfee where rms_tuitionfee.id=academic_year) as academic_year,
-		    	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
-
+		    	(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
+		    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
 		    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 				(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
-				
-		    	(select name_kh from rms_view where type=5 and key_code=is_subspend) as status,    
-		    	
+		    	(SELECT name_kh from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,    
 		    	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_name,
 		    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
 		    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
-		    	(select province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,
-		    	(select name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
+		    	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,
+		    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
 		    	(SELECT room_name FROM `rms_room` AS r WHERE r.room_id = room LIMIT 1) AS room
     	FROM rms_student ';
     	$where=' WHERE status=1 AND customer_type=1';
@@ -227,8 +223,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-    		$s_where[] = " CONCAT(stu_enname,stu_khname,last_name) LIKE '%{$s_search}%'";
-    		$s_where[] = " (SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_enname LIKE '%{$s_search}%'";
+    		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
+    		$s_where[] = " last_name LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['study_year'])){
@@ -459,34 +456,26 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	(SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
     	(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
     	tel,email,stu_code,home_num,street_num,
-    	
     	CONCAT(father_enname," - ",father_khname)AS father_name,father_nation,father_phone,
     	CONCAT(mother_enname," - ",mother_khname)AS mother_name,mother_nation,mother_phone,
     	CONCAT(guardian_enname," - ",guardian_khname)AS guardian_name,guardian_nation,guardian_document,guardian_tel,guardian_email,
-    
-    	(SELECT name_en from rms_view where type=5 and key_code=is_subspend) as status,
-    
+    	(SELECT name_en from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
     	(SELECT occu_enname FROM rms_occupation where rms_occupation.occupation_id=rms_student.father_job LIMIT 1)AS father_job,
     	(SELECT occu_enname FROM rms_occupation where rms_occupation.occupation_id=rms_student.mother_job LIMIT 1)AS mother_job,
     	(SELECT occu_enname FROM rms_occupation where rms_occupation.occupation_id=rms_student.guardian_job LIMIT 1)AS guardian_job,
     	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session LIMIT 1)AS session,
-    	
-    	
     	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
-
 		(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_name,
     	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
     	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
     	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id LIMIT 1)AS province,
     	(SELECT name_en FROM rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex LIMIT 1)AS sex
     	FROM rms_student ';
-    	$where=' WHERE degree IN (2,3,4) AND customer_type=1 ';
-    	 
+    	$where=' WHERE customer_type=1 ';    	 
     	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;
-    	 
     	$order=" order by stu_id DESC";
     	 
     	if(empty($search)){
@@ -502,7 +491,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	 
     	if(!empty($search['study_year'])){
     		$where.=' AND academic_year='.$search['study_year'];
     	}
@@ -513,10 +501,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=' AND session='.$search['session'];
     	}
     	return $db->fetchAll($sql.$where.$order);
-    
     }
-     
-    function getStudentAttendance($search){
+   function getStudentAttendance($search){
     	$db = $this->getAdapter();
     	$sql="SELECT 
 		    	 	(SELECT b.branch_namekh FROM `rms_branch` AS b WHERE b.br_id=s.`branch_id` LIMIT 1) AS branch_name,

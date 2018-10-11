@@ -1776,7 +1776,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	}    
 	function getAllStudentTested(){//get all student test
 		$_db = new Application_Model_DbTable_DbGlobal();
-		return $_db->getAllstudentTest();
+		return $_db->getAllstudentTest(null,1);
 	}
 	function getStudentTestInfo($stu_test_id){
 		$_db = new Application_Model_DbTable_DbGlobal();

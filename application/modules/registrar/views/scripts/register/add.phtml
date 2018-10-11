@@ -167,7 +167,6 @@ table.collape tbody td{padding: 0px !important;}
 								<option value="1"><?php echo $tr->translate("Existing Student");?></option>
 								<option value="2"><?php echo $tr->translate("Tested Student");?></option>
 								<option value="3"><?php echo $tr->translate("CRM");?></option>
-								<option value="4"><?php echo $tr->translate("Placement Test");?></option>
 							</select>
 	                   </div>
 	                </div>
@@ -790,10 +789,7 @@ function getallstudentname(){//
 	}else if(student_type==2){//tested student
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudenttest')); ?>';
 	}else if(student_type==3){//crm
-		url_data='';
-	}
-	else if(student_type==4){//new test
-		return false;
+		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
 	}
 	dojo.xhrPost({
 		url:url_data,
@@ -890,12 +886,15 @@ function getPaymentHistory(student_id){
 ///get Gerneral old student
 function getOldStudentInfo(){
 	student_type = dijit.byId("student_type").attr("value");
+	data_from= 1;
 	if(student_type==1){//old
 		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
 	}else if(student_type==2){//tested student
-		var url_getdata = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studenttestinfo')); ?>";
+		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
+		data_from=2;
 	}else if(student_type==3){//crm
-		url_getdata='';
+		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
+		data_from=3;
 	}
 	student_id=dijit.byId('old_stu').get('value');
 	if(student_id==''){return false;}
@@ -904,6 +903,7 @@ function getOldStudentInfo(){
 		url:url_getdata,
 		content:{
 			'student_id':student_id,
+			'data_from':data_from
 			},
 		handleAs:"json",
 		load: function(data) {

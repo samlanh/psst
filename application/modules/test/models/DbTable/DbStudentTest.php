@@ -449,13 +449,13 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			);
 			
 			if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
-				
 				$array['score']=$data['score'];
 				$array['comment']=$data['comment'];
 				$array['degree_result']=$data['degree_result'];
 				$array['grade_result']=$data['grade_result'];
 				$array['result_date']=empty($data['result_date'])?date("Y-m-d"):$data['result_date'];
 				$array['updated_result']=1;
+				$array['is_current']=1;
 				$array['result_by']=$this->getUserId();
 			}
 			if (!empty($data['id'])){

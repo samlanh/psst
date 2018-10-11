@@ -15,7 +15,9 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	 (SELECT name_kh FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
 		        (SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = spd.pro_id LIMIT 1) AS pro_name,
 					spd.qty,spd.cost,spd.amount,sp.date,sp.status
-		     		   FROM rms_supplier AS s,rms_purchase AS sp,rms_purchase_detail AS spd 
+		     		   FROM rms_supplier AS s,
+		     		   rms_purchase AS sp,
+		     		   rms_purchase_detail AS spd 
 					WHERE s.id=sp.sup_id AND sp.id=spd.supproduct_id";
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
@@ -39,6 +41,9 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	}
     	if(!empty($search['supplier_id'])){
     		$where.=" AND s.id=".$search['supplier_id'];
+    	}
+    	if(!empty($search['branch_id'])){
+    		$where.=" AND sp.branch_id=".$search['branch_id'];
     	}
     	if($search['status_search']==1 OR $search['status_search']==0){
     		$where.=" AND sp.status=".$search['status_search'];

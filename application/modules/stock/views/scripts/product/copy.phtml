@@ -61,7 +61,7 @@ input.btn_borwse_image {
 		<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-copy " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_PRODUCT');?></h4>
+	    			<h4 class="m-b-0"><i class="fa fa-copy " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_PRODUCT');?> <small id="msg_deplicate" class="red italic"></small></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -70,12 +70,25 @@ input.btn_borwse_image {
     	<form  id='edit-major' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
-					loadingBlock();		
+						
 					items_id = dijit.byId('items_id').get('value');
 					if(items_id=="" || items_id==-1){
 						alert("<?php echo $tr->translate("PLEASE_PRODUCT_CATEGORY");?>");
 						return false;
-					}			
+					}	
+					identity =dijit.byId("identity").get('value');
+					if(identity=='' || identity==null){
+						alert("<?php echo $tr->translate("PLEASE_SET_PRODUCT_FOR_BRANCH");?>");
+						dijit.byId("branch").focus();
+						return false;
+					}
+					if(is_deplicate==2){
+						alert("<?php echo $tr->translate("This Product Already Exit");?>");
+						$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Product Already Exit");?>");
+						dijit.byId("title").focus();
+						return false;
+					}	
+					loadingBlock();		
 					return true;
 				}else {
 					return false;
@@ -122,7 +135,7 @@ input.btn_borwse_image {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("UNIT_COST");?>
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("COST");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm_items->getElement("cost");?>
@@ -163,7 +176,7 @@ input.btn_borwse_image {
 	                   <div class="clearfix"></div>
 	                </div>
 	                <div class="form-group">
-	             		<table id="table_row" border="1" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
+	             		<table id="table_row" border="1" style="width:100%; border-collapse: collapse; border:1px solid #ccc; white-space: nowrap;">
 							<tr id="head-title" class="head-td" align="right">
 								<th><?php echo $tr->translate("DEL");?></th>
 								<th><?php echo $tr->translate("N_O");?></th>
@@ -222,6 +235,10 @@ input.btn_borwse_image {
 			}
 		}, "branch");
 		oldRow();
+
+		$("#title").keyup(function(){
+			deplicateItem();
+		});
 	});	
 
 	var template = '';
@@ -382,6 +399,7 @@ input.btn_borwse_image {
     		class: 'fullside',
     		onChange: function() {
     			checkaddItems();
+    			deplicateItem();
     	    }
     		}, "items_id");
     	
@@ -405,6 +423,35 @@ function getRefreshItems(){
 				dept_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('items_id').set('store',dept_store);  
 			   document.getElementsByClassName("overlay")[0].style.display="none";
+			},
+			error: function(err) {
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			}
+		});
+}
+var is_deplicate=1;
+function deplicateItem(){
+	var url_deplicate = '<?php echo $this->url(array("module"=>"stock","controller"=>"product","action"=>"deplicatepro"));?>';										
+		//loadingBlock();
+		category = dijit.byId('items_id').get('value');
+		titles = dijit.byId('title').get('value');
+		if(category=="" || category==-1){
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_deplicate,
+			content:{
+				'title':titles,'category':category
+				},
+			handleAs:"json",
+			load: function(data) {
+				if(data==2){
+					$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Product Already Exit");?>");
+					dijit.byId("title").focus();
+				}else{
+					$( "#msg_deplicate" ).html("");
+				}
+				is_deplicate=data;
 			},
 			error: function(err) {
 				document.getElementsByClassName("overlay")[0].style.display="none";

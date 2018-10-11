@@ -39,13 +39,13 @@ span.oldsup input[type=checkbox] {
     	<form id='suspend_service' action="<?php echo $this->url(array('module'=>'stock','controller'=>'purchase','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
- 				pro_id=dijit.byId("pro_id").get('value');
-				if(pro_id=='' || pro_id==null){
+ 				identity=dijit.byId("identity").get('value');
+				if(identity=='' || identity==null){
+					alert("<?php echo $tr->translate("PLEASE_SET_PRODUCT_FOR_PURCHASE");?>");
 					dijit.byId("pro_id").focus();
 					return false;
 				}
-                dijit.byId("save_close").attr("disabled",true);
-				dijit.byId("save_new").attr("disabled",true);
+                loadingBlock();
 				return true;
 			} else {
 				return false;
@@ -178,7 +178,7 @@ span.oldsup input[type=checkbox] {
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" onclick="submitDataClose();" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+					<input type="submit"  name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave" />
 					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 							 iconClass="dijitEditorIcon dijitEditorIconSave" />

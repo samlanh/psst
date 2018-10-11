@@ -657,4 +657,20 @@
 		}
 	}
 	
+	
+	
+	function CheckProductHasExit($data){
+		$db = $this->getAdapter();
+		$sql="SELECT ite.* FROM `rms_itemsdetail` AS ite WHERE ite.title='".$data['title']."' AND ite.items_type=3 AND ite.items_id=".$data['category']." ";
+		if (!empty($data['id'])){
+			$sql.=" AND ite.id != ".$data['id'];
+		}
+		$sql.=" LIMIT 1";
+		$row = $db->fetchRow($sql);
+		if (empty($row)) {
+			return 1;
+		}else{
+			return 2;
+		}
+	}
 }

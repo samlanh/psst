@@ -176,4 +176,14 @@ class Stock_ProductController extends Zend_Controller_Action {
     	$this->view->degree = $d_row;
     
     }
+    
+    function deplicateproAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$db = new Global_Model_DbTable_DbItemsDetail();
+    		$pro_cate = $db->CheckProductHasExit($data);
+    		print_r(Zend_Json::encode($pro_cate));
+    		exit();
+    		}
+    }
 }

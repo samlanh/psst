@@ -148,6 +148,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'class'=>'fullside',
 				'required'=>false
 		));
+		$branch_id->setMultiOptions($opt_ls);
 		$branch_id->setValue($request->getParam("branch_id"));
 		
 		$cate= new Zend_Dojo_Form_Element_FilteringSelect('category_id');

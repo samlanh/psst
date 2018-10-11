@@ -20,6 +20,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
     			$search=array(
     							'title' => '',
     							'product' => '',
+    							'branch_id' => '',
     					        'supplier_id'=>'',
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),

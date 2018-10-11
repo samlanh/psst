@@ -210,7 +210,7 @@
 		 dijit.byId("qty_"+index).focus();
 		}
 	}
-	var url_getproduct = '<?php echo $this->url(array('module'=>'accounting','controller'=>'transfer','action'=>'getcurrentproduct')); ?>';
+	var url_getproduct = '<?php echo $this->url(array('module'=>'stock','controller'=>'transfer','action'=>'getcurrentproduct')); ?>';
 	function chcekcProductLocation(){
 		pro_id=dijit.byId("pro_id").get("value");
 		location_id = dijit.byId("f_branch").get("value");

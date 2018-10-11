@@ -327,7 +327,7 @@ function oldRow() {
 	});
  <?php }?>
 }
-var url_getsuplier = "<?php echo $this->url(array('module'=>'accounting','controller'=>'purchase','action'=>'get-supplier-info')); ?>";
+var url_getsuplier = "<?php echo $this->url(array('module'=>'stock','controller'=>'purchase','action'=>'get-supplier-info')); ?>";
 function getSuplierInfo(){
 			sup_id = dijit.byId('sup_id').get('value');
 			if(sup_id !=''){

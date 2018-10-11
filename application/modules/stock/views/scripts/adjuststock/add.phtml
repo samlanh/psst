@@ -255,7 +255,7 @@ function submitDataClose(){
 	if(dijit.byId('suspend_service').validate()) {
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'adjuststock','action'=>'add')); ?>';
+		var url_submit = '<?php echo $this->url(array('module'=>'stock','controller'=>'adjuststock','action'=>'add')); ?>';
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("suspend_service"),		    

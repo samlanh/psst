@@ -407,7 +407,7 @@ function getTotal(){
 }
 
 //get old customer info 
-var url_getcusinfo = '<?php echo $this->url(array('module'=>'accounting','controller'=>'customerpayment','action'=>'get-customer-info')); ?>';
+var url_getcusinfo = '<?php echo $this->url(array('module'=>'stock','controller'=>'customerpayment','action'=>'get-customer-info')); ?>';
 function getOldCustomerInfo(){
 	var old_cus = dijit.byId("old_cus").get('value');
 	if(old_cus==0 || old_cus==''){

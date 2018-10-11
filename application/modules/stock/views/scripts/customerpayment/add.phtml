@@ -388,7 +388,7 @@ function getTotal(){
 }
 
 //get old customer info 
-var url_getcusinfo = '<?php echo $this->url(array('module'=>'accounting','controller'=>'customerpayment','action'=>'get-customer-info')); ?>';
+var url_getcusinfo = '<?php echo $this->url(array('module'=>'stock','controller'=>'customerpayment','action'=>'get-customer-info')); ?>';
 function getOldCustomerInfo(){
 	var old_cus = dijit.byId("old_cus").get('value');
 	if(old_cus==0 || old_cus==''){
@@ -430,7 +430,7 @@ function submitDataClose(){
 	if(dijit.byId('frm_customer').validate()) {
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'customerpayment','action'=>'add')); ?>';
+		var url_submit = '<?php echo $this->url(array('module'=>'stock','controller'=>'customerpayment','action'=>'add')); ?>';
 		dojo.xhrPost({
 		    url: url_submit,	
 			form: dojo.byId("frm_customer"),		    

@@ -413,7 +413,7 @@ function initailize() {
 		dojo.query("#head-title").append(temp);
 		title=1;
 	}
-		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="4%"align="center"><?php if ($rs['customer_type']==3){?><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"><?php }?></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="kh_name_'+col+'" id="kh_name_'+col+'" value="<?php echo $rs['stu_khname'];?>" type="hidden"><?php echo $rs['stu_khname'];?>&nbsp;</td>';	
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("First Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="first_name_'+col+'" id="first_name_'+col+'" value="<?php echo $rs['stu_enname'];?>" type="hidden"><?php echo $rs['stu_enname'];?>&nbsp;</td>';	

@@ -28,6 +28,19 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 			  GROUP BY pd.pro_id
 			  LIMIT 1
 			) AS purchaseQty,
+			(SELECT 
+		    	SUM(qty_receive) 
+		  	FROM
+			    rms_request_order AS req,
+			    rms_request_orderdetail AS req_d 
+		  	WHERE 
+		  		req.id = req_d.request_id 
+		  		and req_d.pro_id = d.id
+		  		and req_d.branch_id = pl.brand_id
+		  		AND req.request_date >= '$from_date' 
+			    AND req.request_date <= '$to_date'
+			    and req.status=1
+		  	LIMIT 1) AS request,
 			pl.pro_qty
 			FROM `rms_itemsdetail` AS d,
 			rms_product_location AS pl

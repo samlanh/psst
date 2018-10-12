@@ -84,7 +84,7 @@
 								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['title']; ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);} ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php //if($rs_row['stockOut']>0){echo number_format($rs_row['stockOut']);} ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php //if($rs_row['request']>0){echo number_format($rs_row['request']);} ?></td>
+								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['request']>0){echo number_format($rs_row['request']);} ?></td>
 								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);} ?> </td>
 							</tr>
 						<?php

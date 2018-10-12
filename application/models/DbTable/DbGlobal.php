@@ -1680,7 +1680,7 @@ function getAllgroupStudy($teacher_id=null){
   			                       		<span class="title-info">'.$tr->translate("NAME_EN").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"].$rs["stu_enname"].'</span><br />
   			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
   			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
-  			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['tel'].'</span>
+  			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
   			                       		<span class="title-info">'.$tr->translate("GROUP").'</span> : <span id="lbl_group" class="inf-value" >'.$rs['group_name'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("CULTURE_LEVEL").'</span> : <span id="lbl_culturelevel" class="inf-value" >'.$rs['degree_culture'].'</span><br />
   			                            <span class="title-info">'.$tr->translate("DEGREE").'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span> <br />

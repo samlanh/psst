@@ -440,15 +440,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    function getProductFeeAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Registrar_Model_DbTable_DbRegister();
-    		$product_fee = $db->getProductFee($data['service_id']);
-    		print_r(Zend_Json::encode($product_fee));
-    		exit();
-    	}
-    }
+//     function getProductFeeAction(){
+//     	if($this->getRequest()->isPost()){
+//     		$data=$this->getRequest()->getPost();
+//     		$db = new Registrar_Model_DbTable_DbRegister();
+//     		$product_fee = $db->getProductFee($data['service_id']);
+//     		print_r(Zend_Json::encode($product_fee));
+//     		exit();
+//     	}
+//     }
 	function getTeacherAction(){
 		if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -481,7 +481,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$credit_memo = $db->getCreditMemoByStuId($data['stu_id']);
+			$credit_memo = $db->getStudentInfoBalance($data['stu_id']);
 			print_r(Zend_Json::encode($credit_memo));
 			exit();
 		}
@@ -504,12 +504,12 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function congratulationletterAction(){
-		$id=$this->getRequest()->getParam('id');
-		if(empty($id)){$this->_redirect("registrar/register");}
-		$db = new Registrar_Model_DbTable_DbRegister();
-		$this->view->rs = $db->getStudentPaymentByID($id);
-	}
+// 	function congratulationletterAction(){
+// 		$id=$this->getRequest()->getParam('id');
+// 		if(empty($id)){$this->_redirect("registrar/register");}
+// 		$db = new Registrar_Model_DbTable_DbRegister();
+// 		$this->view->rs = $db->getStudentPaymentByID($id);
+// 	}
 	/*function getStartDateEndDateAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -519,15 +519,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}*/
-	function getstudentpaidexistAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
-			$data = $db->getStudentPaidExist($data['stu_id'],$data['start_date'],$data['end_date']);
-			print_r(Zend_Json::encode($data));
-			exit();
-		}
-	}
+// 	function getstudentpaidexistAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data = $this->getRequest()->getPost();
+// 			$db = new Registrar_Model_DbTable_DbRegister();
+// 			$data = $db->getStudentPaidExist($data['stu_id'],$data['start_date'],$data['end_date']);
+// 			print_r(Zend_Json::encode($data));
+// 			exit();
+// 		}
+// 	}
 	function getallstudenttestAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -555,7 +555,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 // 	function getallstudentcodeAction(){
 // 		if($this->getRequest()->isPost()){
 // 			$data = $this->getRequest()->getPost();

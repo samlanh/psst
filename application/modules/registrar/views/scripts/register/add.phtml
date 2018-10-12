@@ -204,7 +204,7 @@ table.collape tbody td{padding: 0px !important;}
 		              <div class="form-group">
 		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BALANCE");?></label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-								<input type="text"  name="balance" id="balance" class="fullside" dojoType="dijit.form.NumberTextBox"/>
+								<input style="color:red;" type="text" readonly="readonly"  name="balance" id="balance" class="fullside" dojoType="dijit.form.NumberTextBox"/>
 		                   </div>
 		              </div>
 		              <div class="form-group">
@@ -498,9 +498,9 @@ function getgradebyDegree(dept_id,a,type=1){
 					item_store  = getDataStorefromJSON('id','name', data);
 				    dijit.byId('item').set('store',item_store);  	
 				}
-	},
-	error: function(err) {
-	}
+		},
+		error: function(err) {
+		}
 	});
 }
 
@@ -520,7 +520,6 @@ function getReceiptNo(stu_id,submit){
 			  }
 		},
 		error: function(err) {
-			alert(err+"2");
 		}
 	});
 }
@@ -568,7 +567,7 @@ function getMonthByNumber(m){
 		 "11",
 		 "12",
 		];
-		return (monthName[m-1]);
+	return (monthName[m-1]);
 }
 </script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
@@ -1116,22 +1115,28 @@ function netTotal() {
 		readMoneyInKhmer(netAmount.toFixed(2));
 }	
 function onPaidAmount(){
-	net_amount = dijit.byId('net_amount').get('value');
-	net_amount = isNaN(net_amount)?0:net_amount;
+	grand_total = dijit.byId('grand_total').get('value');
+	grand_total = isNaN(grand_total)?0:grand_total;
 		
+    credit_memo = dijit.byId('credit_memo').get('value');
+    credit_memo = isNaN(credit_memo)?0:credit_memo;
+
     paid_amount = dijit.byId('paid_amount').get('value');
     paid_amount = isNaN(paid_amount)?0:paid_amount;
-		
-	if(net_amount>=paid_amount){
-		dijit.byId('balance_due').attr('value',(net_amount-paid_amount).toFixed(2));
-	}else{
-		alert("Can not paid more than total amount !!! ");
-		dijit.byId('paid_amount').attr('value',(net_amount).toFixed(2));
-		dijit.byId('balance_due').attr('value',0);
-		dijit.byId('paid_amount').focus();
-	}
-}
 
+    balance = grand_total-credit_memo-paid_amount;
+	if(balance>0){
+		dijit.byId('balance_due').attr('value',balance);
+	}else{
+		dijit.byId('balance_due').attr('value',0);
+		if(grand_total-paid_amount<0){
+			alert("received can not biger then total amount");
+			dijit.byId('paid_amount').attr('value',grand_total)
+			paid_amount = grand_total;
+		}
+	}
+	readMoneyInKhmer(paid_amount.toFixed(2));
+}
 function readMoneyInKhmer(netTotal){
 	var str = netTotal.toString();
     str_cent = 'សេន';
@@ -1191,7 +1196,7 @@ function getservicefee(key){
  					if(data.validate!=null){
  						dijit.byId("date_start_"+key).attr("value",data.validate);
  	 	 			}else{
- 	 	 				dijit.byId('date_start_'+index).attr('value','<?php echo date('Y-m-d');?>');
+ 	 	 				dijit.byId('date_start_'+key).attr('value','<?php echo date('Y-m-d');?>');
  	 	 	 		}
  			},
  			error: function(err) {
@@ -1341,6 +1346,8 @@ function getCreditMemo(){
 				if(data){
 					dijit.byId("credit_memo").attr("value",data.total_amountafter);
 					dijit.byId("credit_memo_id").attr("value",data.id);
+					dijit.byId("study_year").attr("value",data.academic_year);
+					dijit.byId("balance").attr("value",data.balance);
 				}else{
 					dijit.byId("credit_memo").attr("value",0);
 					dijit.byId("credit_memo_id").attr("value",'');

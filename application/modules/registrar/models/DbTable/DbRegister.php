@@ -163,6 +163,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$cut_credit_memo = $data['credit_memo'];
 						$credit_after=0;
 					}
+					
+					$arr = array(
+						'balance_due'=>0
+						);
+					$this->_name='rms_student_payment';
+					$where="student_id = ".$stu_code;
+					$this->update($arr, $where);//clear old balance
+					
 					$arr=array(
 						'branch_id'		=> $this->getBranchId(),
 						'revenue_type'  => $data['customer_type'],
@@ -190,7 +198,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'room_id'		=> $rs_stu['room'],
 					);
 					
-					$this->_name='rms_student_payment';
 					$paymentid = $this->insert($arr);
 			
 					if($data['student_type']==1 AND $data['customer_type']==1){ // only old_student can have credit_memo
@@ -1267,43 +1274,27 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	 		
 //     	return $db->fetchRow($sql);
     }
-    function getBalance($serviceid,$studentid,$type){
+    function getStudentInfoBalance($studentid){
     	$db = $this->getAdapter();
     	$sql = "SELECT 
-				  spd.id,
-				  spd.start_date,
-				  spd.validate,
-				  spd.balance,
-				  sp.year,
-				  spd.payment_term,
-				  sp.session
+				  s.stu_id,
+				  s.academic_year,
+				  (SELECT id FROM rms_creditmemo WHERE student_id = $studentid AND total_amountafter>0 LIMIT 1) AS id,
+				  (SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $studentid AND total_amountafter>0 LIMIT 1) AS total_amountafter,
+				  (SELECT SUM(sp.balance_due) FROM rms_student_payment AS sp WHERE sp.student_id=$studentid LIMIT 1 )AS balance
 				FROM
-				  rms_student_paymentdetail AS spd,
-				  rms_student_payment AS sp
-				WHERE sp.id = spd.payment_id 
-				  AND spd.service_id = $serviceid 
-				  AND sp.student_id = $studentid 
-				  AND is_complete = 0 
-				  AND spd.type = $type
-    			limit 1
-    		";
-    	
-    	$row=$db->fetchRow($sql);
-    	if($row['balance'] > 0){
-    	    $row['sms']='លុយជំពាក់ពីមុន';
-    		return $row;
-    	}else{
-    		return $row;
-    	}
+				  rms_student AS s
+				WHERE s.stu_id=$studentid LIMIT 1 ";
+    	return $db->fetchRow($sql);
     }
    
-    function getAllYearsProgramFee(){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years,(select name_en from rms_view where type=7 and key_code=time) as time FROM rms_tuitionfee
-    	        WHERE `status`=1 GROUP BY from_academic,to_academic,generation,time ";
-    	$order=' ORDER BY id DESC';
-    	return $db->fetchAll($sql.$order);
-    }
+//     function getAllYearsProgramFee(){
+//     	$db = $this->getAdapter();
+//     	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS years,(select name_en from rms_view where type=7 and key_code=time) as time FROM rms_tuitionfee
+//     	        WHERE `status`=1 GROUP BY from_academic,to_academic,generation,time ";
+//     	$order=' ORDER BY id DESC';
+//     	return $db->fetchAll($sql.$order);
+//     }
     
     function getAllYears($type=1){
     	$db = $this->getAdapter();
@@ -1316,8 +1307,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql = "SELECT id,CONCAT(from_academic,'-',to_academic) AS years FROM rms_servicefee WHERE `status`=1";
     	$order=' ORDER BY id DESC';
     	return $db->fetchAll($sql.$order);
-    }
-//     
+    }     
     function getPrefixByDegree($degree){
     	$db= $this->getAdapter();
     	$sql=" SELECT shortcut FROM `rms_items` WHERE id=$degree AND type=1  LIMIT 1";

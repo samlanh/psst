@@ -45,6 +45,7 @@ GROUP BY tu.from_academic,tu.to_academic,tu.generation,tu.time LIMIT 1) AS `acad
 				$ids = explode(',', $data['identity']);
 				foreach ($ids as $i){
 					$arr = array(
+							'branch_id'=>$data['branch_id'],
 							'academic_year'=>$data['academic_year'],
 							'title'=>$data['title_'.$i],
 							'start_date'=>$data['startdate_'.$i],
@@ -66,6 +67,7 @@ GROUP BY tu.from_academic,tu.to_academic,tu.generation,tu.time LIMIT 1) AS `acad
 		$db= $this->getAdapter();
 		try{
 			$arr = array(
+					'branch_id'=>$data['branch_id'],
 					'academic_year'=>$data['academic_year'],
 					'title'=>$data['title'],
 					'start_date'=>$data['start_date'],

@@ -15,19 +15,19 @@
 	    max-height: 300px;
 	   
 	}
-.tab-content.vertical div.tab-pane {
-    min-height: 0px !important;
-}
-.tablesorter tr td{
+	.tab-content.vertical div.tab-pane {
+    	min-height: 0px !important;
+	}
+	.tablesorter tr td{
 		border: 1px solid #000;	
 	}
-.card-box-border {
-    background-color: #ffffff;
-    border: 1px solid rgba(98, 103, 115, 0.2);
-    padding: 10px;
-    margin-bottom: 20px;
-    color: #000;
-}
+	.card-box-border {
+    	background-color: #ffffff;
+    	border: 1px solid rgba(98, 103, 115, 0.2);
+    	padding: 10px;
+    	margin-bottom: 20px;
+    	color: #000;
+	}
 span.user-badge.bg-warning {
     position: absolute;
     top: 33px;
@@ -1098,6 +1098,7 @@ function netTotal() {
 		dijit.byId('grand_total').attr('value',grandTotal);
 		if(netAmount<0){
 			dijit.byId('paid_amount').attr('value',0);
+			netAmount=0;
 		}else{
 			dijit.byId('paid_amount').attr('value',netAmount.toFixed(2));
 		}
@@ -1143,9 +1144,13 @@ function readMoneyInKhmer(netTotal){
 	last_money_decimal_en = read_in_english_from_0_to_9(last_decimal)
 	money_english=read_money_in_english(netTotal);
 	read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'
-
-	read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+' Dollar Only )'
-	dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'+read_eng);
+	
+	english_amount = 'Dollar Only';
+	if(netTotal==0){english_amount='';}
+	read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+english_amount+')'
+	khmer_amount = 'ដុល្លារគត់';
+	if(netTotal==0){khmer_amount='';}
+	dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+khmer_amount+read_eng);
 }
 //get service fee or balance fee that student not yet pay
 var url_service_fee = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getservicefee')); ?>";

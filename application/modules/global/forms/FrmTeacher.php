@@ -145,7 +145,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_passport->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 		
 		$_card = new Zend_Dojo_Form_Element_NumberTextBox('card_no');
-		$_card->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true','placeholder'=>$this->tr->translate("PLEASE_SELECT_CARD_NO")));
+		$_card->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside','required'=>'true','placeholder'=>$this->tr->translate("PLEASE_SELECT_CARD_NO")));
 		
 		$_experiences = new Zend_Dojo_Form_Element_Textarea('experiences');
 		$_experiences->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
@@ -208,7 +208,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$dob->setValue($_data['dob']);
 			$_email->setValue($_data['email']);
 			$_degree->setValue($_data['degree']);
-			$_note->setValue($_data['note']);
+// 			$_note->setValue($_data['note']);
 			$_status->setValue($_data['status']);
 			$street_num->setValue($_data['street_num']);
 			$home_num->setValue($_data['home_num']);
@@ -222,7 +222,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$end_date->setValue($_data['end_date']);
 			$_agreement->setValue($_data['agreement']);
 		}
-		$this->addElements(array($id,$_depart_id,$_enname,$home_num,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_email,$start_date,$_degree,$_status,$_submit));
+		$this->addElements(array($id,$_depart_id,$_enname,$home_num,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
 	}

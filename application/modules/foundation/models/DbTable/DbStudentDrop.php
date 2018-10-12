@@ -8,34 +8,25 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		return $session_user->user_id;
 	}
 	public function getAllStudentID(){
-		$_db = $this->getAdapter();
-		
 		$db=new Application_Model_DbTable_DbGlobal();
-		$branch_id = $db->getAccessPermission();
-		
-		$sql = "SELECT stu_id,stu_code FROM `rms_student` where status = 1 and is_subspend=0  $branch_id ";
-		$orderby = " ORDER BY stu_code ";
-		return $_db->fetchAll($sql.$orderby);		
+		return $db->getAllStuCode();
 	}
 	
 	function getAllgroupStudy(){
-		$db = $this->getAdapter();
-		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-		FROM `rms_group` AS `g` WHERE g.status=1 and g.is_pass!=1";
-	
-		return $db->fetchAll($sql);
+		$db=new Application_Model_DbTable_DbGlobal();
+		return $db->getAllgroupStudy();
 	}
 	
 	function getAllStudentName(){
 		$_db = $this->getAdapter();
-		
 		$db=new Application_Model_DbTable_DbGlobal();
-		$branch_id = $db->getAccessPermission();
+		return $db->getAllStudent();
+// 		$branch_id = $db->getAccessPermission();
 		
-		$sql = "SELECT stu_id,CONCAT(stu_khname,'-',stu_enname) as name FROM `rms_student` where status = 1 and is_subspend=0  $branch_id ";
-		$orderby = " ORDER BY stu_enname ";
-		return $_db->fetchAll($sql.$orderby);
+// 		$sql = "SELECT stu_id,CONCAT(stu_khname,'-',stu_enname) as name FROM `rms_student` 
+// 			WHERE (stu_khname!='' OR stu_enname!='') AND status = 1 and is_subspend=0  $branch_id ";
+// 		$orderby = " ORDER BY stu_enname ";
+// 		return $_db->fetchAll($sql.$orderby);
 	}
 	
 	public function getAllStudentIDEdit(){

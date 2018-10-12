@@ -728,13 +728,13 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				popupNation(2);
 		    }
 			}, "nation");
-		setNation();
 	});
 	function popupNation(key){
 		dijit.byId("save_nation").attr("disabled",false);
 		if(key==1){
 			var nation = dijit.byId('nationality').get('value');
 			$("#indexkey").val(key);
+			dijit.byId('nation').attr('value',nation);
 		}else{
 			var nation = dijit.byId('nation').get('value');
 			$("#indexkey").val(key);

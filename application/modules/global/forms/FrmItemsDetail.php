@@ -88,6 +88,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_cost->setAttribs(array(
     			'dojoType'=>'dijit.form.NumberTextBox',
     			'class'=>' fullside height-text',
+    			'required'=>'true',
     			'placeholder'=>$this->tr->translate("UNIT_COST"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Cost")
     	));

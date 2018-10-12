@@ -68,7 +68,6 @@ class Stock_ProductController extends Zend_Controller_Action {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}
-    			
     	}
     	$type=3; //Product
     	$frm = new Global_Form_FrmItemsDetail();
@@ -86,7 +85,6 @@ class Stock_ProductController extends Zend_Controller_Action {
     	$d_row = $model->getAllItems(3);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
-    	
     }
     
     public function editAction(){

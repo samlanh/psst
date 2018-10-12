@@ -855,9 +855,11 @@ function getAllgroupStudy($teacher_id=null){
    }
    function getAllStuCode(){
    	$db = $this->getAdapter();
-//    	$sql=" select stu_id as id , stu_code from rms_student where status=1 AND customer_type=1 and is_subspend=0 ";
    	$branch_id = $this->getAccessPermission();
-   	$sql="SELECT s.stu_id As id,s.stu_id As stu_id,s.stu_code As stu_code,
+   	$sql="SELECT 
+   	s.stu_id As id,
+   	s.stu_id As stu_id,
+   	s.stu_code As stu_code,
    	s.stu_code AS name,
    	(CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) AS stu_name
    	FROM rms_student AS s

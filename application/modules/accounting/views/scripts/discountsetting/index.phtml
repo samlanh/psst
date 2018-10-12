@@ -1,7 +1,7 @@
 <?php
 	$request = Zend_Controller_Front::getInstance ()->getRequest ();
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("DISCOUNT"));
+	echo $this->headTitle($tr->translate("DISCOUNTSETTING"));
 ?>	
 <?php $frm =  $this->form_search;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -29,6 +29,3 @@
 		</div>
 	</div>
 </div>
- 
-   
-   

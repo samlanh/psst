@@ -56,6 +56,8 @@ class Global_TermController extends Zend_Controller_Action {
     	}
     	$db = new Accounting_Model_DbTable_DbFee();
     	$this->view->year = $db->getAceYear();
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rsbranch = $db->getAllBranch();
     }
 	public function editAction(){
 		$db = new Global_Model_DbTable_DbTerm();
@@ -76,6 +78,8 @@ class Global_TermController extends Zend_Controller_Action {
     	$db = new Accounting_Model_DbTable_DbFee();
     	$this->view->year = $db->getAceYear();
     	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rsbranch = $db->getAllBranch();
 	}
 	
 }

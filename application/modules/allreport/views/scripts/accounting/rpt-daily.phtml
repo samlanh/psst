@@ -8,39 +8,39 @@
 	$frm =  $this->form_search;
 ?>
 <div style="min-height:10cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">	
-<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-	<table width="100%" style="margin: 0px; font-family:'khmer os battambang';">
-		<tr> 
-			<td><input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>" placeholder="Search" type="text" ></td>
-			<td><?php echo $frm->getElement("start_date");?></td>
-			<td><?php echo $frm->getElement("end_date");?></td>
-			<td><?php echo $frm->getElement("stu_code");?></td>
-			<td><?php echo $frm->getElement("stu_name");?></td>
-		</tr>
-		<tr>
-			<td> <?php echo $frm->getElement("degree");?></td>
-			<td> <?php echo $frm->getElement("grade_all");?></td>
-			<td> <?php echo $frm->getElement("session");?></td>
-			<td> <?php echo $frm->getElement("user");?></td>
-			<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-		<tr>
-			<td colspan="5">
-				<div style="margin: 10px 0px;">
-					<input type="checkBox" style="margin-left: 1%;" dojoType="dijit.form.CheckBox" value="all" id="all_payment" name="all_payment"  <?php if(!empty($this->search['all_payment'])){if($this->search['all_payment']=="all"){echo "checked='checked'";}}?> /><?php echo $tr->translate("RPT_ALLPAYMENTREPORT");?>
-					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>
-					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> <?php echo $tr->translate("OTHER_INCOME");?>
-					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /><?php echo $tr->translate("OTHER_EXPENSE");?>
-					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="5" id="change_product" name="change_product"  <?php if(!empty($this->search['change_product'])){if($this->search['change_product']==5){echo "checked='checked'";}}?> /><?php echo $tr->translate("CHANGE_PRODUCT");?>
-					<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="6" id="customer_payment" name="customer_payment"  <?php if(!empty($this->search['customer_payment'])){if($this->search['customer_payment']==6){echo "checked='checked'";}}?> /><?php echo $tr->translate("CUSTOMER_PAYMENT");?>
-				</div>
-				<div style="margin: 10px 0px;">
-					<input type="checkBox" style="margin-left: 1%;" dojoType="dijit.form.CheckBox" value="7" id="clear_balance" name="clear_balance"  <?php if(!empty($this->search['clear_balance'])){if($this->search['clear_balance']==7){echo "checked='checked'";}}?> /><?php echo $tr->translate("STUDENT_CLEAR_BALANCE");?>
-				</div>
-			</td>
-		</tr>
-	</table>
-</form>
+	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<table width="100%" style="margin: 0px; font-family:'khmer os battambang';">
+			<tr> 
+				<td><input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>" placeholder="Search" type="text" ></td>
+				<td><?php echo $frm->getElement("start_date");?></td>
+				<td><?php echo $frm->getElement("end_date");?></td>
+				<td><?php echo $frm->getElement("stu_code");?></td>
+				<td><?php echo $frm->getElement("stu_name");?></td>
+			</tr>
+			<tr>
+				<td> <?php echo $frm->getElement("degree");?></td>
+				<td> <?php echo $frm->getElement("grade_all");?></td>
+				<td> <?php echo $frm->getElement("session");?></td>
+				<td> <?php echo $frm->getElement("user");?></td>
+				<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+			</tr>
+			<tr>
+				<td colspan="5">
+					<div style="margin: 10px 0px;">
+						<input type="checkBox" style="margin-left: 1%;" dojoType="dijit.form.CheckBox" value="all" id="all_payment" name="all_payment"  <?php if(!empty($this->search['all_payment'])){if($this->search['all_payment']=="all"){echo "checked='checked'";}}?> /><?php echo $tr->translate("RPT_ALLPAYMENTREPORT");?>
+						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="1" id="student_payment" name="student_payment"  <?php if(!empty($this->search['student_payment'])){if($this->search['student_payment']==1){echo "checked='checked'";}}?>/><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>
+						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="3" id="income" name="income"  <?php if(!empty($this->search['income'])){if($this->search['income']==3){echo "checked='checked'";}}?> /> <?php echo $tr->translate("OTHER_INCOME");?>
+						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="4" id="expense" name="expense"  <?php if(!empty($this->search['expense'])){if($this->search['expense']==4){echo "checked='checked'";}}?> /><?php echo $tr->translate("OTHER_EXPENSE");?>
+						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="5" id="change_product" name="change_product"  <?php if(!empty($this->search['change_product'])){if($this->search['change_product']==5){echo "checked='checked'";}}?> /><?php echo $tr->translate("CHANGE_PRODUCT");?>
+						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="6" id="customer_payment" name="customer_payment"  <?php if(!empty($this->search['customer_payment'])){if($this->search['customer_payment']==6){echo "checked='checked'";}}?> /><?php echo $tr->translate("CUSTOMER_PAYMENT");?>
+					</div>
+					<div style="margin: 10px 0px;">
+						<input type="checkBox" style="margin-left: 1%;" dojoType="dijit.form.CheckBox" value="7" id="clear_balance" name="clear_balance"  <?php if(!empty($this->search['clear_balance'])){if($this->search['clear_balance']==7){echo "checked='checked'";}}?> /><?php echo $tr->translate("STUDENT_CLEAR_BALANCE");?>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
 <style>
 .hover:hover{ background: #ddd;}
 </style>
@@ -65,7 +65,7 @@
 								<td colspan="2"><strong><?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?></strong></td>
 							</tr>
 							<?php }?>
-							<tr >
+							<tr>
 								<td colspan="2">
 									<table class="padd" width="100%" align="center" style="font-family: Khmer OS Battambang,Times new roman;">
 										 <?php 
@@ -76,16 +76,12 @@
 										 	$total_income_kh = 0;
 										 	$total_expense_dollar = 0;
 										 	$total_expense_kh =0;
-										 	$total_stu_test=0;
-											$total_stu_clear_balance=0;
 										 	$total_payment=0;
 										 	$fine = 0;
 										 	$credit_memo = 0;
 										 	$deduct = 0;
 										 	$total_payment_change_product = 0;
 										 	$total_credit_memo_change_product = 0;
-										 	
-										 	$total_customer_payment = 0;
 										 	
 										 	$net_amount = 0;
 											$paid_amount = 0;
@@ -120,7 +116,7 @@
 										    <td><?php echo $rs['receipt_number']; ?></td>
 										    <td><?php echo $rs['stu_code']; ?></td>
 										    <td style=" white-space:nowrap; text-align:left">&nbsp;<a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'registrar','controller'=>'allreports','action'=>'rptreceiptdetail','id'=>$rs['id']))?>"><?php echo !empty($rs['stu_khname'])?$rs['stu_khname']:$rs['stu_enname']; ?></a></td>
-											<td><?php //echo $rs['type']; ?></td>
+											<td><?php echo $rs['type']; ?></td>
 											<td><?php echo $rs['degree']; ?></td>
 											<td><?php echo $rs['grade']; ?></td>
 											<td><?php echo $rs['session']; ?></td>
@@ -291,42 +287,38 @@
 							<tr>
 								<td colspan="2">
 								<?php 
-									$final_total_dollar= $net_amount + $total_stu_test + $total_income_dollar + $total_payment_change_product + $total_customer_payment + $total_stu_clear_balance - $total_expense_dollar;
-									$final_total_income = $net_amount + $total_stu_test + $total_income_dollar + $total_payment_change_product + $total_customer_payment + $total_stu_clear_balance;
-									$final_total_expense = $total_expense_dollar;
+									$final_total_income = $net_amount + $fine + $total_income_dollar + $total_payment_change_product - $credit_memo - $total_expense_dollar ;
 								?>								
-								<table width="100%" border="1"  style="margin-top:5px;white-space:nowrap;">
-									<tr style="background-color: #ccd9ff;font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman; "​ align="center">
-						 				<td style="font-weight:bold;" colspan="5">&nbsp;<?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>&nbsp;</td>
-						 				<td style="font-weight:bold;" rowspan="2">&nbsp;<?php echo $tr->translate("OTHER_INCOME"); ?>&nbsp;</td>
-						 				<td style="font-weight:bold;" rowspan="2">&nbsp;<?php echo $tr->translate("CHANGE_PRODUCT"); ?>&nbsp;</td>
-						 				<td style="font-weight:bold;" rowspan="2">&nbsp;<?php echo $tr->translate("OTHER_EXPENSE"); ?>&nbsp;</td>
-							  		</tr>
-							  		<tr align="center" style="font-size:12px; color:#000; height: 23px; background-color: #ccd9ff;font-family: Khmer OS Battambang,Times new roman;font-weight: bold;"​ >
-						 				<td style=""><?php echo $tr->translate("FINE");?></td>
-						 				<td style=""><?php echo $tr->translate("NET_AMOUNT");?></td>
-						 				<td style=""><?php echo $tr->translate("CREDIT_MEMO");?></td>
-										<td style=""><?php echo $tr->translate("PAID_AMOUNT");?></td>
-										<td style=""><?php echo $tr->translate("BALANCE");?></td>
-						  			</tr>
-							  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
-						 				<td style=""><?php echo '$ '.number_format($fine,2);?></td>
-						 				<td style=""><?php echo '$ '.number_format($credit_memo,2);?></td>
-						 				<td style=""><?php echo '$ '.number_format($total_payment,2);?></td>						 				
-										<td style=""><?php echo '$ '.number_format($paid_amount,2);?></td>
-										<td style=""><?php echo '$ '.number_format($balance,2);?></td>
-											  		
-										<td style=" color:#F00; font-weight:bold;"> <?php echo number_format($total_income_dollar,2);?> $​ </td>
-										<td style=" color:#F00; font-weight:bold;"> <?php echo number_format($total_payment_change_product,2);?> $ </td>
-										<td style=" color:#F00; font-weight:bold;"> <?php echo number_format($total_expense_dollar,2);?> $ </td>
-							  		</tr>
-							  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
-						  				<td style="font-weight:bold;"> Net Amount ($)</td>
-										<td colspan="6" style=" color:#006d1f; font-weight:bold;font-size: 15px;"> <?php echo number_format($final_total_income,2);?> $ </td>
-										<td style=" color:#F00; font-weight:bold;font-size: 15px;"> <?php echo number_format($final_total_expense,2);?> $ </td>
-							  		</tr>
-							    </table>
-										<?php }?>
+									<table width="100%" border="1"  style="margin-top:5px;white-space:nowrap;">
+										<tr style="background-color: #ccd9ff;font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman; "​ align="center">
+							 				<td style="font-weight:bold;" colspan="5">&nbsp;<?php echo $tr->translate("STUDENT_PAYMENT_INCOME");?>&nbsp;</td>
+							 				<td style="font-weight:bold;" rowspan="2">&nbsp;<?php echo $tr->translate("OTHER_INCOME"); ?>&nbsp;</td>
+							 				<td style="font-weight:bold;" rowspan="2">&nbsp;<?php echo $tr->translate("CHANGE_PRODUCT"); ?>&nbsp;</td>
+							 				<td style="font-weight:bold;" rowspan="2">&nbsp;<?php echo $tr->translate("OTHER_EXPENSE"); ?>&nbsp;</td>
+								  		</tr>
+								  		<tr align="center" style="font-size:12px; color:#000; height: 23px; background-color: #ccd9ff;font-family: Khmer OS Battambang,Times new roman;font-weight: bold;"​ >
+							 				<td style=""><?php echo $tr->translate("FINE");?></td>
+							 				<td style=""><?php echo $tr->translate("NET_AMOUNT");?></td>
+							 				<td style=""><?php echo $tr->translate("CREDIT_MEMO");?>(-)</td>
+											<td style=""><?php echo $tr->translate("PAID_AMOUNT");?></td>
+											<td style=""><?php echo $tr->translate("BALANCE");?></td>
+							  			</tr>
+								  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
+							 				<td style=""><?php echo '$ '.number_format($fine,2);?></td>
+							 				<td style=""><?php echo '$ '.number_format($credit_memo,2);?></td>
+							 				<td style=""><?php echo '$ '.number_format($total_payment,2);?></td>						 				
+											<td style=""><?php echo '$ '.number_format($paid_amount,2);?></td>
+											<td style=""><?php echo '$ '.number_format($balance,2);?></td>
+											<td style=" color:#F00; font-weight:bold;"><?php echo number_format($total_income_dollar,2);?> $​ </td>
+											<td style=" color:#F00; font-weight:bold;"><?php echo number_format($total_payment_change_product,2);?> $ </td>
+											<td style=" color:#F00; font-weight:bold;"><?php echo number_format($total_expense_dollar,2);?> $ </td>
+								  		</tr>
+								  		<tr style="font-size:12px; color:#000; height: 23px;font-family: Khmer OS Battambang,Times new roman;"​ align="center">
+							  				<td style="font-weight:bold;"> Net Amount ($)</td>
+											<td colspan="7" style=" color:#006d1f; font-weight:bold;font-size: 15px;"> <?php echo number_format($final_total_income,2);?> $ </td>
+								  		</tr>
+								    </table>
+									<?php }?>
 								</td>
 							</tr>
 						</table>

@@ -157,11 +157,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				
 					$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
 					if($cut_credit_memo<0){
-						$cut_credit_memo = abs($cut_credit_memo);
-						$credit_after = $cut_credit_memo;
+						$credit_after=abs($cut_credit_memo);
+						$cut_credit_memo = $data['grand_total'];
 					}else{
 						$cut_credit_memo = $data['credit_memo'];
-						$credit_after=0;
+						$credit_after = 0;
 					}
 					
 					$arr = array(
@@ -191,6 +191,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'user_id'		=> $this->getUserId(),
 						'academic_year'	=> $data['study_year'],
 							
+						'paystudent_type'=>$rs_stu['paystudent_type'],
 						'degree'		=> $rs_stu['degree'],
 						'grade'			=> $rs_stu['grade'],
 						'session'		=> $rs_stu['session'],
@@ -1816,51 +1817,38 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	}
 	function getStudentPaymentHistory($studentid){
 		$db = $this->getAdapter();
-		 
-		$sql = "Select 
+		$sql = "SELECT 
     			  spd.id,
-    			  spd.type,
-    			  sp.scholarship_percent,
-    			  sp.scholarship_amount,
-				  sp.tuition_fee,
 				  spd.fee,
 				  spd.qty,
 				  spd.subtotal,
-				  spd.late_fee,
 				  spd.extra_fee,
 				  spd.discount_percent,
-				  spd.discount_fix,
+				  spd.discount_amount,
+				  (SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
 				  spd.paidamount,
-				  spd.balance,
 				  spd.note,
+				  spd.is_onepayment,
 				  DATE_FORMAT(spd.start_date, '%d-%m-%Y') AS start_date ,
 				  DATE_FORMAT(spd.validate, '%d-%m-%Y') AS validate ,
-				  spd.is_start,
-				  spd.is_parent ,
-				  spd.is_complete,
 				  sp.receipt_number,
 				  DATE_FORMAT(sp.create_date, '%d-%m-%Y') AS create_date ,
 				  sp.is_void,
-				  s.stu_code,
-				  s.stu_khname,
-				  s.stu_enname,
-				  p.title AS service_name,
-				  (SELECT pg.name_kh FROM `rms_pro_category` AS pg WHERE pg.id = (SELECT pp.cat_id FROM `rms_product` AS pp WHERE pp.id = p.ser_cate_id LIMIT 1) LIMIT 1) AS product_category,
-				  (SELECT major_enname FROM `rms_major` WHERE major_id=sp.grade LIMIT 1) As major_name,
-				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
+				  item.title as item_name,
+				  (SELECT rms_items.title FROM rms_items WHERE item.items_type LIMIT 1) AS category,
+				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user_name,
 				  (SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
-				  (select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status,
-				  (select title from rms_program_type where rms_program_type.id=p.ser_cate_id AND p.type=2 LIMIT 1) service_cate                             
-    			FROM 
-    				rms_student_payment as sp,
-    				rms_student_paymentdetail as spd,
-    				rms_student as s,
-    				rms_program_name as p
-    			where 
-    				s.stu_id = sp.student_id
+				  (SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status                  
+			FROM 
+    				rms_student_payment AS sp,
+    				rms_student_paymentdetail AS spd,
+    				rms_student AS s,
+    				rms_itemsdetail AS item
+    			WHERE 
+					item.id=spd.itemdetail_id
+    				AND s.stu_id = sp.student_id
     				AND sp.id=spd.payment_id 
-    				AND p.service_id=spd.service_id 
-    				AND sp.student_id= $studentid ORDER BY create_date DESC,spd.type ASC";
+    				AND sp.student_id = $studentid ORDER BY create_date DESC,item.id ASC";
 			return $db->fetchAll($sql);
 	}
 	

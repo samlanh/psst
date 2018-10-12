@@ -456,9 +456,11 @@ div.img-back {
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function() {  
-				stu_id = dijit.byId('old_stu').get('value');
+				
 				getOldStudentInfo();
 				getCreditMemo();
+				stu_id = dijit.byId('old_stu').get('value');
+				getPaymentHistory(stu_id);
 			}
 		}, "old_stu");
 
@@ -804,12 +806,9 @@ function getallstudentname(){//
 		}
 	});
 }
-function setID(){
-	stu_id = dijit.byId('old_stu').get('value');
-	getPaymentHistory(stu_id);
-}
 var url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
 function getPaymentHistory(student_id){
+	if(student_id==-1 || student_id==''){return false;}
 	tem='';
 	dojo.xhrPost({
 		url:url_studentpayment,
@@ -818,22 +817,19 @@ function getPaymentHistory(student_id){
 		},
 		handleAs:"json",
 		load: function(respone) {
-			tem='<table class="collape tablesorter" style="font-size:12px;" id="table" width="100%">'
-				+'<thead><tr><th class="tdheader"><?php echo $tr->translate('NO');?></th>'
+			tem='<table class="collape tablesorter" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;" id="table_row" >'
+				+'<thead><tr id="head-title" class="head-td" style="background:#ececec;font-size:10px;color:#000"><th class="tdheader"><?php echo $tr->translate('NO');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('SERVICE_CATE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('SERVICE_NAME');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('SERVICES');?></th>'
 				+'<th class="tdheader" ><?php echo $tr->translate('PAID_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('RECEIPT_NO');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('SCHOLARSHIP');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('SCHOLARSHIP_AMOUNT');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('PAYMENT_TERM');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('QTY');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('PRICE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('LATE_FEE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('EXTRA_FEE');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('DISCOUND');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('QTY');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('SUBTOTAL');?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>'
+				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT_TYPE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('DISCOUNT');?></th>'
-				+'<th class="tdheader"><?php echo $tr->translate('PAID_AMOUNT');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('START_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('END_DATE');?></th>'
 				+'<th class="tdheader"><?php echo $tr->translate('REMARK');?></th>'
@@ -843,36 +839,29 @@ function getPaymentHistory(student_id){
 			no=0;
 			for(i=0;i<respone.length;i++){
 				no++;
-				scholarship_percent='-';
-				scholarship_amount='-';
-				if(respone[i].type==1){//tution fee
-					respone[i].service_cate="Tuition Fee";
-					respone[i].service_name=respone[i].major_name;
-				}else if(respone[i].type==4){//product
-					respone[i].service_cate=respone[i].product_category;
-					respone[i].payment_term='';
-				}
-				tem+= '<tr id=tr_'+i+' style="background-color:none;font-size:12px;text-align:center;">';
+				tem+= '<tr id=tr_'+i+' style="background-color:none;font-size:11px;text-align:center;">';
 				tem += '<td>'+no+'</td>';
-				tem += '<td style="text-align:left;">'+respone[i].service_cate+'</td>';
-				tem += '<td>'+respone[i].service_name+'</td>';
+				tem += '<td style="text-align:left;">'+respone[i].category+'</td>';
+				tem += '<td>'+respone[i].item_name+'</td>';
 				tem += '<td>'+respone[i].create_date+'</td>';
 				tem += '<td>'+respone[i].receipt_number+'</td>';
-				tem += '<td>'+respone[i].scholarship_percent+'</td>';
-				tem += '<td>'+respone[i].scholarship_amount+'</td>';
 				tem += '<td>'+respone[i].payment_term+'</td>';
 				tem += '<td>'+respone[i].qty+'</td>';
 				tem += '<td>'+respone[i].fee+'</td>';
-				tem += '<td>'+respone[i].late_fee+'</td>';
+				tem += '<td>'+respone[i].subtotal+'</td>';
 				tem += '<td>'+respone[i].extra_fee+'</td>';
-				tem += '<td>'+respone[i].discount_percent+'</td>';
-				tem += '<td>'+respone[i].discount_fix+'</td>';
-				tem += '<td>'+respone[i].paidamount+'</td>';
-				tem += '<td>'+respone[i].start_date+'</td>';
-				tem += '<td>'+respone[i].validate+'</td>';
+				tem += '<td>'+respone[i].discount_type+'</td>';
+				tem += '<td>'+respone[i].discount_percent+'/'+respone[i].discount_amount+'</td>';
+				start_date='';
+				validate='';
+				if(respone[i].is_onepayment==1){start_date=respone[i].start_date;}
+				if(respone[i].is_onepayment==1){validate=respone[i].validate;}
+				tem += '<td>'+start_date+'</td>';
+				tem += '<td>'+validate+'</td>';
 				tem += '<td>'+respone[i].note+'</td>';
 				tem += '<td>'+respone[i].void_status+'</td>';
-				tem += '<td>'+respone[i].user+'</td>';
+				tem += '<td>'+respone[i].user_name+'</td>';
+				//tem += '<td>'+respone[i].paidamount+'</td>';
 				tem+="</tr>";
 			}
 			tem+='</table>';

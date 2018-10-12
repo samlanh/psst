@@ -142,7 +142,11 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$db = new Application_Model_DbTable_DbGlobal();
-		$calture_opt = $db->getAllDegree();
+// 		$calture_opt = $db->getAllDegree();
+		
+		$calture_opt = array(""=>$this->tr->translate("PLEASE_SELECT_EDUCATION_LEVEL"));
+		$optionDegree = $_dbgb->getAllDegreeMent(21);//Education Level
+		if(!empty($optionDegree))foreach($optionDegree AS $row) $calture_opt[$row['id']]=$row['name'];
 		$_calture->setMultiOptions($calture_opt);
 			
 		$id = new Zend_Form_Element_hidden('id');

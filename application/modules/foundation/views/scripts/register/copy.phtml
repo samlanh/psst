@@ -581,7 +581,6 @@ var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 
 dojo.ready(function(){
-	getStudentNo();
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    autoComplete: true,                        
@@ -754,10 +753,12 @@ dojo.ready(function(){
 	    nation = dijit.byId('nation').get('value');
 	    if(nation==-1){
 	    	dijit.byId("save_nation").attr("disabled",false);
-	   	 dijit.byId("popup_nation").show();
+	   	 	dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',1);
 	     }
 	    else {
+	    	nation = dijit.byId('nation').get('value');
+			dijit.byId('studen_national').attr('value',nation);
 	    }  
 	   } 
 	}, "nation");
@@ -940,6 +941,8 @@ dojo.ready(function(){
 		filterDistrict();
 		
 	dijit.byId('academic_year').attr('value',"<?php echo $this->rs['academic_year']?>");
+
+	getStudentNo();
 }); 
 
 function AllRefresh(){
@@ -1692,7 +1695,8 @@ date_format = '"dd/MM/yyyy"';
 		
 	}	
 		
-	var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
+	/*
+	var url_getstuno = '<?php //echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
 	function getStudentNo(){
 		dept_id = dijit.byId('degree').get('value');
 		if(dept_id=='' || dept_id==-1){return false;}
@@ -1709,8 +1713,29 @@ date_format = '"dd/MM/yyyy"';
 				alert(err);
 			}
 		});
-	}		
-		
+	}	
+	*/	
+	var url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
+	function getStudentNo(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id=='' || dept_id==-1){return false;}
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){return false;}
+		dojo.xhrPost({
+			url:url_getstuno,
+			content:{
+				'dept_id':dept_id,
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data) {
+				dijit.byId('student_id').attr('value',data);   
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}	
 </script>
 <div class="overlay">
 	<div class="overlay-load">

@@ -712,6 +712,8 @@ dojo.ready(function(){
 		   	dijit.byId('value_j').attr('value',1);
 	     }
 	    else {
+	    	nation = dijit.byId('nation').get('value');
+			dijit.byId('studen_national').attr('value',nation);
 	    }  
 	   } 
 	}, "nation");
@@ -907,7 +909,7 @@ dojo.ready(function(){
 			}
 		}, "village_note");
 		filterDistrict();
-		dijit.byId('student_province').attr('value',12)
+		dijit.byId('student_province').attr('value',12);
 }); 
 
 

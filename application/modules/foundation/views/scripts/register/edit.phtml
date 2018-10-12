@@ -558,13 +558,16 @@ a.print-card.btn.btn-primary.btn-xs {
 								 	<div id="divPrint" style="margin: 0; padding: 0; display: none;" >
 				                    		<style>
 												<?php 
+												$stu_name = $this->rs['stu_enname']." ".$this->rs['last_name'];
 												$imagebg = $this->baseUrl().'/images/card/default_card_bg.jpg';
 													$bg = $_dbgb->getCardBackground($this->rs['branch_id'],$this->rs['schoolOption']);
 													if(!empty($bg['background'])){
 														if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
 														$imagebg = $this->baseUrl().'/images/card/'.$bg['background'];
 														}
-														
+														if ($bg['display_by']==2){
+															$stu_name = $this->rs['stu_khname'];
+														}
 													}
 												?>
 												.card-content-student-print{
@@ -628,7 +631,7 @@ a.print-card.btn.btn-primary.btn-xs {
 				                    		</div>
 				                    		<div class="name-card-block">
 					                    		<ul class="list-data">
-					                    			<li><span class="title_value">&nbsp;<?php echo $this->rs['stu_khname'];?></span></li>
+					                    			<li><span class="title_value">&nbsp;<?php echo $stu_name;?></span></li>
 					                    			<li><span class="title_value">&nbsp;Grade: <?php echo str_replace("Grade","",$this->rs['group_name']);?></span></li>
 													<li class="sdudent-id"><span class="title_value">&nbsp;ID: <?php echo $this->rs['stu_code'];?></span></li>
 					                    		</ul>

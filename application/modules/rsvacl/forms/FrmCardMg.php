@@ -71,6 +71,14 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 		$options = array(1=>$this->tr->translate("ACTIVE"), 0=>$this->tr->translate("DEACTIVE"));
 		$status->setMultiOptions($options);
 		
+		$display_by = new Zend_Dojo_Form_Element_FilteringSelect('display_by');
+		$display_by->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				// 				'readonly'=>true
+		));
+		$options = array(1=>$this->tr->translate("ENGLISH"), 2=>$this->tr->translate("KHMER"));
+		$display_by->setMultiOptions($options);
 	
 		
 		$_adv_search = new Zend_Dojo_Form_Element_TextBox('adv_search');
@@ -99,6 +107,7 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 			$note->setValue($data['note']);
 			$status->setValue($data['status']);
 			$_id->setValue($data['id']);
+			$display_by->setValue($data['display_by']);
 		}
 		
 		$this->addElements(array(
@@ -107,6 +116,7 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 				$_schoolOption,
 				$note,
 				$status,
+				$display_by,
 				$_adv_search,
 				$status_search,
 				$_id

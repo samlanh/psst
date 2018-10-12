@@ -47,7 +47,7 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 				'user_id'	=>$this->getUserId(),		
 			);
 			$this->_name ="rms_cardbackground";
-			$whereother="id=".$id." AND branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption'];
+			$whereother=" branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption'];
 			$this->update($_arrother, $whereother);
 			
 	    	$_arr = array(
@@ -57,6 +57,7 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 	    			'schoolOption'		=>$_data['schoolOption'],
 					//'valid'	=>$_data['valid'],
 					'note'	=>$_data['note'],
+	    			'display_by'	=>$_data['display_by'],
 	    			'default'	=>1,
 	    			'status'	=>1,
 					'modify_date'	=>date("Y-m-d H:i:s"),
@@ -104,7 +105,7 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 					'user_id'	=>$this->getUserId(),		
 				);
 				$this->_name ="rms_cardbackground";
-				$whereother="id=".$id." AND branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption'];
+				$whereother="id!=".$id." AND branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption'];
 				$this->update($_arrother, $whereother);
 				
 				$default=1;
@@ -114,6 +115,7 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 				'title' =>$_data['title'],
 				'schoolOption'		=>$_data['schoolOption'],
 				'note'	=>$_data['note'],
+				'display_by'	=>$_data['display_by'],
 				'default'	=>$default,
 				'status'	=>1,
 				'modify_date'	=>date("Y-m-d H:i:s"),
@@ -142,8 +144,16 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
    	
     function getAllBranch($search){
     	$db = $this->getAdapter();
-    	$sql = "SELECT b.id,b.title,
+    	$check = '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
+    	$uncheck = '<i class="fa fa-square-o" aria-hidden="true"></i>';
+    	$sql = "SELECT b.id,
+    	CASE    
+				WHEN  b.default = 1 THEN '$check'
+				WHEN  b.default = 0 THEN '$uncheck'
+				END AS student_statustitle,
+    	b.title,
 		    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.branch_id LIMIT 1) as branch_name,
+		    	(SELECT sp.title FROM `rms_schooloption` AS sp WHERE sp.id = b.schoolOption LIMIT 1) AS schoolOption,
 		    	b.note,b.status FROM rms_cardbackground AS b  ";
     	$where = ' WHERE  b.title !="" ';   	
     	if(!empty($search['adv_search'])){

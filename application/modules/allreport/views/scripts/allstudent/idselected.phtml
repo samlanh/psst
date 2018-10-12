@@ -1,5 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$_dbgb = new Application_Model_DbTable_DbGlobal();
 ?>	
 <script type="text/javascript">
 function getKHMonthByNumber(m){
@@ -29,6 +30,25 @@ function getKHMonthByNumber(m){
 						 background-size: 100%;background-repeat: no-repea
 						 page-break-after:always					
 						}
+						
+						<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+						$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+						
+						$bg = $_dbgb->getCardBackground($bck['branch_id'],$bck['schoolOption']);
+						if(!empty($bg['background'])){
+							if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+							$image = $this->baseUrl().'/images/card/'.$bg['background'];
+							}
+						}
+						?>
+						
+					.card-content-student-print<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+						background-image: url('<?php echo $image;?>');
+						 background-size: 100%;background-repeat: no-repea
+						 page-break-after:always;					
+					}
+					<?php }?>
+					
 					.profile-card-block {
 					    position: relative;
 					}
@@ -89,6 +109,11 @@ function getKHMonthByNumber(m){
 				$image = $this->baseUrl().'/images/photo/'.$row['photo'];
 				}
 			}
+			$stu_name = $row['en_name']." ".$row['last_name'];
+			$bg = $_dbgb->getCardBackground($row['branch_id'],$row['schoolOption']);
+			if ($bg['display_by']==2){
+				$stu_name = $row['stu_khname'];
+			}
 			?>
 				<?php if ($key==0){?>
 				<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
@@ -96,7 +121,7 @@ function getKHMonthByNumber(m){
 				<?php if ($i==1){?>
 				<div style="display:inline-block; margin-right:10px; height:8.3cm; width: 1px; background: #000"></div>
 				<?php }?>
-				<div class="card-content-student-print" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8.3cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+				<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8.3cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
 					<div class="profile-card-block">
 						<div class="photo">
 							<img  src="<?php echo $image;?>" alt="profile-image" >
@@ -104,7 +129,7 @@ function getKHMonthByNumber(m){
 					</div>
 					<div class="name-card-block">
 						<ul class="list-data">
-							<li><span class="title_value">&nbsp;<?php echo $row['stu_khname'];?></span></li>
+							<li><span class="title_value">&nbsp;<?php echo $stu_name;?></span></li>
 							<li><span class="title_value">&nbsp;Grade: <?php echo str_replace("Grade","",$row['group_name']);?></span></li>
 							<li class="sdudent-id"><span class="title_value">&nbsp;ID: <?php echo $row['stu_code'];?></span></li>
 						</ul>

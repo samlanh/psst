@@ -1,11 +1,10 @@
 <?php
-$request = Zend_Controller_Front::getInstance ()->getRequest ();
-
-$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
-echo $this->headTitle($tr->translate('PURCHASE_PAYMENT'));
-$frm = $this->frm_payment;
-
-$urlVoid = $this->baseUrl()."/stock/purchasepayment/void/id/";
+	$request = Zend_Controller_Front::getInstance ()->getRequest ();
+	
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
+	echo $this->headTitle($tr->translate('PURCHASE_PAYMENT'));
+	$frm = $this->frm_payment;
+	$urlVoid = $this->baseUrl()."/stock/purchasepayment/void/id/";
 ?>
 <meta charset="utf-8">
 <div class="card pb-10 pt-10 pl-10 pr-10">

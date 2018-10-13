@@ -945,8 +945,8 @@ function addRow() {
 			temp+='<th><?php echo $tr->translate("SUBTOTAL");?></th>';
 			temp+='<th><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>';
 			temp+='<th><?php echo $tr->translate("DISCOUNT_TYPE");?></th>';
-			temp+='<th><?php echo $tr->translate("DISCOUNT");?> %</th>';
 			temp+='<th><?php echo $tr->translate("DISCOUNT");?>$</th>';
+			temp+='<th><?php echo $tr->translate("DISCOUNT");?> %</th>';
 			temp+='<th><?php echo $tr->translate("TOTAL_PAYMENT");?></th>';
 			temp+='<th><?php echo $tr->translate("DATE_START");?></th>';
 			temp+='<th><?php echo $tr->translate("END_DATE");?></th>';
@@ -973,9 +973,8 @@ function addRow() {
 				template+='<option value="'+<?php echo $rsdis['id']?>+'"><?php echo $rsdis['dis_name'];?></option>';
 			<?php }?>
 			template+='</select></td>';
-			
-			template+='<td><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td><input type="text" class="fullside" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal('+col+');netTotal('+col+');"  name="total_amount'+col+'" value="0" id="total_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+="<td style='width:170px;font-size:12px;'><input type='text' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" value='now' name='date_start_"+col+"' onchange='getValidate("+col+");' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
 			template+='<td style="width:170px;font-size:12px;"><input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
@@ -1062,6 +1061,10 @@ function calculateTotal(index){
 		discount = isNaN(discount)?0:discount;
 		
 		total_pay = parseFloat(total) - parseFloat(discount) ;
+
+		discount_percent = dijit.byId('discount_'+index).get('value');
+		discount_percent = isNaN(discount_percent)?0:discount_percent;
+		total_pay = total_pay-(total_pay*discount_percent/100)
 		
 		dijit.byId('total_amount'+index).attr('value',total_pay);
 		netTotal();

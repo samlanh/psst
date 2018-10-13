@@ -156,19 +156,12 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				Application_Form_FrmMessage::Sucessfull("STUDENT_EXISTRING","/foundation/register/add");
 				return -1;
 			}
-			$stu_code=$_data['student_id'];
-			$code = new Registrar_Model_DbTable_DbRegister();
-
-// 			$adapter = new Zend_File_Transfer_Adapter_Http();
-// 					$part = PUBLIC_PATH.'/images';
-// 					$adapter->setDestination($part);
-// 					$adapter->receive();
-// 					$photo = $adapter->getFileInfo();
-// 					if(!empty($photo['photo']['name'])){
-// 						$pho_name = $photo['photo']['name'];
-// 					}else{
-// 						$pho_name = '';
-// 					}
+			$stu_code=$_data['student_id'];//id duplicate is check new
+			$existing = $this->ifStudentIdExisting($stu_code);
+			if(!empty($existing)){
+				$dbg = new Application_Model_DbTable_DbGlobal();
+				$stu_code = $dbg->getnewStudentId($_data['branch_id'],$_data['degree']);
+			}
 					
 			$part= PUBLIC_PATH.'/images/photo/';
 			if (!file_exists($part)) {
@@ -228,7 +221,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'father_nation'	=>$_data['fa_national'],
 						'father_job'	=>$_data['fa_job'],
 						'father_phone'	=>$_data['fa_phone'],
-						
 						
 						'mother_enname'	=>$_data['mom_name_en'],
 						'mother_dob'	=>$_data['mo_dob'],
@@ -295,14 +287,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$this->update($group, $where);
 				}
 				
-// 				$this->_name = 'rms_student_id';
-// 				$arra=array(
-// 						'branch_id'	=>$branch_id,
-// 						'stu_id'	=>$id,
-// 						'degree'	=>$_data['degree'],
-// 				);
-// 				$this->insert($arra);
-				
 				$this->_name = 'rms_student_document';
 				if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
@@ -329,11 +313,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$where="id = ".$_data['degree'];
 					$this->update($arr, $where);
 				$_db->commit();
-			}catch(Exception $e){
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				$_db->rollBack();
-			}
-			//print_r($_data); exit();
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+		}
 	}
 	public function updateStudent($_data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
@@ -343,17 +326,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(!empty($_data['group']) AND $_data['group']!=-1){
 				$is_setgroup=1;
 			}
-// 			$adapter = new Zend_File_Transfer_Adapter_Http();
-// 			$part = PUBLIC_PATH.'/images';
-// 			$adapter->setDestination($part);
-// 			$adapter->receive();
-// 			$photo = $adapter->getFileInfo();
-// 			//print_r($photo['photo']['name']); exit();
-// 			if(!empty($photo['photo']['name'])){
-// 				$pho_name = $photo['photo']['name'];
-// 			}else{
-// 				$pho_name = '';
-// 			}
+			$adapter = new Zend_File_Transfer_Adapter_Http();
+			$part = PUBLIC_PATH.'/images';
+			$adapter->setDestination($part);
+			$adapter->receive();
+			$photo = $adapter->getFileInfo();
+			
+			if(!empty($photo['photo']['name'])){
+				$pho_name = $photo['photo']['name'];
+			}else{
+				$pho_name = $_data['old_photo'];
+			}
 			$part= PUBLIC_PATH.'/images/photo/';
 			if (!file_exists($part)) {
 				mkdir($part, 0777, true);
@@ -397,7 +380,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'mother_nation'	=>$_data['mom_nation'],
 					'mother_job'	=>$_data['mo_job'],
 					'mother_phone'	=>$_data['mon_phone'],
-// 					'photo'  			 => $pho_name,
+					'photo'  			 => $pho_name,
 					'guardian_enname'=>$_data['guardian_name_en'],
 					'guardian_dob'	=>$_data['guardian_dob'],
 					'guardian_nation'=>$_data['guardian_national'],

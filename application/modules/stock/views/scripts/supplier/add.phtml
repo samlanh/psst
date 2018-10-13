@@ -46,8 +46,8 @@ span.oldsup input[type=checkbox] {
 					return false;
 				}
 				if(is_deplicate==2){
-						alert("<?php echo $tr->translate("This Supplier Already Exit");?>");
-						$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Supplier Already Exit");?>");
+						alert("<?php echo $tr->translate("This Supplier Already Existing");?>");
+						$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Supplier Already Existing");?>");
 						dijit.byId("supplier_name").focus();
 						return false;
 					}
@@ -140,7 +140,7 @@ function deplicateItem(){
 			handleAs:"json",
 			load: function(data) {
 				if(data==2){
-					$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Supplier Already Exit");?>");
+					$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Supplier Already Existing");?>");
 					dijit.byId("supplier_name").focus();
 				}else{
 					$( "#msg_deplicate" ).html("");

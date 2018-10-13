@@ -83,8 +83,8 @@ input.btn_borwse_image {
 						return false;
 					}
 					if(is_deplicate==2){
-						alert("<?php echo $tr->translate("This Product Already Exit");?>");
-						$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Product Already Exit");?>");
+						alert("<?php echo $tr->translate("This Product Already Existing");?>");
+						$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Product Already Existing");?>");
 						dijit.byId("title").focus();
 						return false;
 					}	
@@ -446,7 +446,7 @@ function deplicateItem(){
 			handleAs:"json",
 			load: function(data) {
 				if(data==2){
-					$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Product Already Exit");?>");
+					$( "#msg_deplicate" ).html("<?php echo $tr->translate("This Product Already Existing");?>");
 					dijit.byId("title").focus();
 				}else{
 					$( "#msg_deplicate" ).html("");

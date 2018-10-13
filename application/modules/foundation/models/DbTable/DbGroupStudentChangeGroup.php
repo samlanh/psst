@@ -439,14 +439,16 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	}
 	
 	function getGroupStudentChangeGroup1ById($id,$type){
-		$db = $this->getAdapter();
-		$sql = "SELECT start_date,expired_date,
-		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=rms_group.academic_year )AS year ,
-		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
-	    (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE `rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-		(SELECT name_en from `rms_view` where `rms_view`.`type`=4 and `rms_view`.`key_code`=`rms_group`.`session` LIMIT 1)AS session
-		FROM `rms_group` WHERE  id=$id";
-		return $db->fetchRow($sql);
+// 		$db = $this->getAdapter();
+// 		$sql = "SELECT start_date,expired_date,
+// 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=rms_group.academic_year )AS year ,
+// 		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
+// 	    (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE `rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+// 		(SELECT name_en from `rms_view` where `rms_view`.`type`=4 and `rms_view`.`key_code`=`rms_group`.`session` LIMIT 1)AS session
+// 		FROM `rms_group` WHERE  id=$id";
+// 		return $db->fetchRow($sql);
+		$db = new Application_Model_DbTable_DbGlobal();
+		return $db->getStudentGroupInfoById($id);
 	}
 	
 	function getAllYears(){

@@ -170,15 +170,7 @@
 
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'graduatedstudent','action'=>'get-to-group')); ?>';
 function toStudentGroup(type){
-	//alert(type);
-	if(type==1){
-		togroup = dijit.byId('from_group').get('value');
-
-		if(togroup==0){alert("Please Select Group"); return false;}
-	}else{
-		togroup = dijit.byId('to_group').get('value');
-		if(togroup==0 ){alert("Please Select Group"); return false;}
-		}
+	togroup = dijit.byId('from_group').get('value');
 	dojo.xhrPost({
 		url:url_to_group,
 		content:{
@@ -187,12 +179,7 @@ function toStudentGroup(type){
 			},
 		handleAs:"json",
 		load: function(data) {
-			//alert(data.year);
-			if(type==1){
-				dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<br /><span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
-			}else{
-				dojo.byId('lbltogroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
-			}
+			dojo.byId('lblfromgroup').innerHTML='<span style="color:red;"><?php echo $tr->translate("ACADEMIC_YEAR")?> :  </span>'+data.year+'<span style="color:red;">  <?php echo $tr->translate("DEGREE")?> :  </span>'+data.degree+'<span style="color:red;">  <?php echo $tr->translate("GRADE")?> :  </span>'+data.grade+'<br /><span style="color:red;">  <?php echo $tr->translate("SESSION")?> :  </span>'+data.session+'<span style="color:red;">  <?php echo $tr->translate("START_DATE")?> :  </span>'+data.start_date+'<span style="color:red;">  <?php echo $tr->translate("EXPIRE_DATE")?> :  </span>'+data.expired_date;
 			if(type==1){
 				dijit.byId('identity').attr('value','');
 			}else{

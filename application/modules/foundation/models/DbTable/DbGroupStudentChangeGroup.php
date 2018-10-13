@@ -441,10 +441,10 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	function getGroupStudentChangeGroup1ById($id,$type){
 		$db = $this->getAdapter();
 		$sql = "SELECT start_date,expired_date,
-		(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=rms_group.academic_year )AS year ,
-		(select major_enname from `rms_major` where `rms_major`.`major_id`=`rms_group`.`grade`)AS grade,
-		(select en_name from rms_dept where rms_dept.dept_id=rms_group.degree) as degree,
-		(select name_en from `rms_view` where `rms_view`.`type`=4 and `rms_view`.`key_code`=`rms_group`.`session`)AS session
+		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=rms_group.academic_year )AS year ,
+		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
+	    (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE `rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+		(SELECT name_en from `rms_view` where `rms_view`.`type`=4 and `rms_view`.`key_code`=`rms_group`.`session` LIMIT 1)AS session
 		FROM `rms_group` WHERE  id=$id";
 		return $db->fetchRow($sql);
 	}

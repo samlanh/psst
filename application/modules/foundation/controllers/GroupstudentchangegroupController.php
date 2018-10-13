@@ -57,6 +57,7 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 		$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 		
 		$this->view->row = $add =$db->getfromGroup();
+// 		$this->view->row = $add =$db->gettoGroup();
 		$this->view->rs = $add =$db->gettoGroup();
 		$g_new=$db->getGroupNewAll();
 		array_unshift($g_new,array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
@@ -120,8 +121,10 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 	function getToGroupAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-			$grade = $db->getGroupStudentChangeGroup1ById($data['to_group'],$data['type']);
+// 			$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
+// 			$grade = $db->getGroupStudentChangeGroup1ById($data['to_group'],$data['type']);
+			$db = new Application_Model_DbTable_DbGlobal();
+			$grade = $db->getStudentGroupInfoById($data['to_group']);
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

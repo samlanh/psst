@@ -1702,5 +1702,22 @@ function getAllgroupStudy($teacher_id=null){
 	  $sql="SELECT c.* FROM `rms_cardbackground` AS c WHERE c.branch_id=$branch AND c.schoolOption=$schoolOption AND c.default=1 ORDER BY c.id DESC LIMIT 1";
 	  return $db->fetchRow($sql);
   }
+  function getStudentGroupInfoById($id){
+  	$db = $this->getAdapter();
+  	$sql = "SELECT start_date,expired_date,
+  	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year,
+  	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
+  	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE `rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+  	(SELECT name_en FROM `rms_view` WHERE `rms_view`.`type`=4 AND `rms_view`.`key_code`=`rms_group`.`session` LIMIT 1)AS SESSION,
+  	(SELECT room_name FROM rms_room WHERE room_id = rms_group.room_id LIMIT 1) AS room,
+  	academic_year AS academic_year_id,
+  	degree AS degree_id,
+  	grade AS grade_id,
+  	SESSION AS session_id,
+  	room_id
+  	FROM
+  	`rms_group` WHERE id=$id LIMIT 1 ";
+  	return $db->fetchRow($sql);
+  }
 }
 ?>

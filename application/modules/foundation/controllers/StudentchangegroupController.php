@@ -112,21 +112,25 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		}
 	}
 	
-	function getGroupAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbStudentChangeGroup();
-			$grade = $db->getStudentChangeGroupById($data['from_group']);
-			print_r(Zend_Json::encode($grade));
-			exit();
-		}
-	}
+// 	function getGroupAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data=$this->getRequest()->getPost();
+// // 			$db = new Foundation_Model_DbTable_DbStudentChangeGroup();
+// // 			$grade = $db->getStudentChangeGroupById($data['from_group']);
+// 			$db = new Application_Model_DbTable_DbGlobal();
+// 			$grade = $db->getStudentGroupInfoById($data['from_group']);
+// 			print_r(Zend_Json::encode($grade));
+// 			exit();
+// 		}
+// 	}
 	
 	function getToGroupAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbStudentChangeGroup();
-			$grade = $db->getStudentChangeGroup1ById($data['to_group']);
+// 			$db = new Foundation_Model_DbTable_DbStudentChangeGroup();
+// 			$grade = $db->getStudentChangeGroup1ById($data['to_group']);
+			$db = new Application_Model_DbTable_DbGlobal();
+			$grade = $db->getStudentGroupInfoById($data['to_group']);
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

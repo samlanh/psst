@@ -441,6 +441,13 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			value:"<?php echo $this->rs['department'];?>",   
 			class: 'fullside',
 			placeHolder:"<?php echo $tr->translate("PLEASE_SELECT_DEPARTMENT");?>",
+			onChange: function() {
+		    	depart = dijit.byId('department').get('value');
+		    	if(depart==-1){
+					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/department/add";?>','_blank');
+				}
+		    	getRefreshDepartment();
+    	    }
 			}, "department");
 		
 		new dijit.form.FilteringSelect({

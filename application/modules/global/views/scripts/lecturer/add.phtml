@@ -69,6 +69,7 @@ input.btn_borwse_image {
 			dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+			loadingBlock();
 				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
 					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
 					dojo.byId('password').value = '';
@@ -406,12 +407,10 @@ dojo.require("dijit.form.DateTextBox");
 dojo.require("dojo.NodeList-manipulate");
 var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->position));?> );
 var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
-
-var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->department_type));?> );
-
 var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->department_type));?> );
 	dojo.ready(function(){
 		getTeacherID();
 		new dijit.form.FilteringSelect({
@@ -436,6 +435,13 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		    name: "department",  
 		    class: 'fullside',  
 		    placeHolder:"<?php echo $tr->translate("PLEASE_SELECT_DEPARTMENT");?>",
+		    onChange: function() {
+		    	depart = dijit.byId('department').get('value');
+		    	if(depart==-1){
+					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/department/add";?>','_blank');
+				}
+		    	getRefreshDepartment();
+    	    }
 		}, "department");
 		
 		new dijit.form.FilteringSelect({
@@ -604,6 +610,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 	}
 	var url_getdepartment = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"getdepartment"));?>';										
 	function getRefreshDepartment(){
+		loadingBlock();
 		dojo.xhrPost({
 			url:url_getdepartment,
 			handleAs:"json",
@@ -790,9 +797,9 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		function addNationBy(){
 			if(dijit.byId('frm_nation_kh').validate()){
 				dijit.byId("save_nation").attr("disabled",true);
-				loadingBlock();
 				nation = dijit.byId('nationality').get('value');
-				dijit.byId('nation').attr('value',nation);	
+				dijit.byId('nation').attr('value',nation);
+				loadingBlock();	
 				dojo.xhrPost({
 					url:url_add_nation,
 					form: dojo.byId("frm_nation_kh"),

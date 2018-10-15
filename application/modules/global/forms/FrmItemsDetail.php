@@ -3,10 +3,12 @@
 class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
 {
 	protected  $tr;
+	protected $filter;
 
     public function init()
     {
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();	
+    	$this->filter = 'dijit.form.FilteringSelect';
     }
     function FrmAddItemsDetail($data,$typeItems=null){
     	
@@ -19,7 +21,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	
     	$code = new Zend_Dojo_Form_Element_TextBox('code');
     	$code->setAttribs(array(
-    			'dojoType'=>'dijit.form.TextBox',
+    			'dojoType'=>'filter',
     			'class'=>'fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter Title")
     	));
@@ -48,7 +50,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_items_id->setMultiOptions($_arr_opt);
     	$_items_id->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+// 				'required'=>false,
     			'onChange'=>'checkaddItems();',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));

@@ -129,7 +129,7 @@
 			
 		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
-		template+='<td width="10%"><input required="1" dojoType="dijit.form.ValidationTextBox" class="fullside" id="title_'+col+'" name="title_'+col+'" placeholder="'+'<?php echo $tr->translate("TERM")." ";?>'+col+'" value="" type="text"  ></td>';	
+		template+='<td width="10%"><input required="1" dojoType="dijit.form.ValidationTextBox" class="fullside" id="title_'+col+'" name="title_'+col+'" placeholder="'+'<?php echo $tr->translate("TERM")." ";?> " value="" type="text"  ></td>';	
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	

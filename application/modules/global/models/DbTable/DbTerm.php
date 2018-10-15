@@ -13,9 +13,9 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 		$sql="SELECT 
 					id,
 					(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
+					title,
 					(SELECT CONCAT(tu.from_academic,'-',tu.to_academic,'(',tu.generation,')') FROM rms_tuitionfee AS tu WHERE tu.`status`=1 AND tu.id = academic_year 
 					GROUP BY tu.from_academic,tu.to_academic,tu.generation,tu.time LIMIT 1) AS `academic_year`,
-					title,
 					start_date,
 					end_date,
 					note,
@@ -30,6 +30,8 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
     	if(!empty($search['search'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['search']));
+    		$s_where[]= " branch_id LIKE '%{$s_search}%'";
+    		$s_where[]= " title LIKE '%{$s_search}%'";
     		$s_where[]= " note LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}

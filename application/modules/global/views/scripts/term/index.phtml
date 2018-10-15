@@ -23,6 +23,15 @@ $formList = new Application_Form_Frmtable();
 					<div class="col-md-2 col-sm-2 col-xs-12">
 					 	<input dojoType="dijit.form.ValidationTextBox" placeholder="<?php echo $tr->translate("SEARCH");?>..." class="fullside" id="search" name="search" value="<?php echo $this->search['search']?>" type="text" >
 					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+						<select dojoType="dijit.form.FilteringSelect" class="fullside" id="branch_id" name="branch_id" type="text">
+								<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+								<?php if(!empty($this->branch)){ foreach ($this->branch as $year){?>	
+									<option value="<?php echo $year['id'];?>" <?php if ($this->search['branch_id']==$year['id']){ echo 'selected="selected"';}?>><?php echo $year['name'];?></option>
+								<?php }}?>
+							</select>	
+					 </div>
+					 
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<select dojoType="dijit.form.FilteringSelect" class="fullside" id="academic_year" name="academic_year" type="text">
 								<option value=""><?php echo $tr->translate("SELECT_YEAR");?></option>

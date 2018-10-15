@@ -14,6 +14,7 @@ class Global_TermController extends Zend_Controller_Action {
     		else{
     			$search=array(
 					'search'=>"",
+    				'branch_id'=>"",
     				'academic_year'=>"",
 				);
     		}
@@ -24,7 +25,7 @@ class Global_TermController extends Zend_Controller_Action {
 			$rs_rows = $db->getAllTerm($search);
 			
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("ACADEMIC_YEAR","TITLE","START_DATE","END_DATE","NOTE","CREATE_DATE","USER");
+    		$collumns = array("BRANCH_NAME","ACADEMIC_YEAR","TITLE","START_DATE","END_DATE","NOTE","CREATE_DATE","USER");
     		$link=array(
     				'module'=>'global','controller'=>'term','action'=>'edit',
     		);
@@ -32,6 +33,8 @@ class Global_TermController extends Zend_Controller_Action {
 			
     		$db = new Accounting_Model_DbTable_DbFee();
     		$this->view->year = $db->getAceYear();
+    		$_db = new Application_Model_DbTable_DbGlobal();
+    		$this->view->branch = $_db->getAllBranch();
     		
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

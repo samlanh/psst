@@ -58,7 +58,7 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     				$sms = "RECORD_EXIST";
     			}
     			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/index");
+    				Application_Form_FrmMessage::Sucessfull($sms,"/accounting/service");
     			}else{
     				Application_Form_FrmMessage::message($sms);
     			}

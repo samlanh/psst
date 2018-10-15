@@ -25,8 +25,12 @@
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
 					loadingBlock();
-                	//dijit.byId("save_new").attr("disabled",true);
-					//dijit.byId("save_close").attr("disabled",true);
+					items_id = dijit.byId('items_id').get('value');
+        			if(items_id==0){
+						alert("សូមជ្រើសរើសសេវាកម្ម");dijit.byId('items_id').focus();return false;
+					}
+                	dijit.byId("save_new").attr("disabled",true);
+					dijit.byId("save_close").attr("disabled",true);
 					return true;
 				}else {
 					return false;
@@ -84,7 +88,7 @@
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 		               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-							<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+							<input type="submit"  onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />
 							<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />
@@ -142,4 +146,27 @@
 				}
 			});
 	}
+</script>
+<script>
+function submitDataClose(){
+	items_id = dijit.byId('items_id').get('value');
+	if(items_id==0){
+		alert("សូមជ្រើសរើសសេវាកម្ម");dijit.byId('items_id').focus();return false;
+	}
+	if(dijit.byId('office_receipt').validate()) {
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("office_receipt"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/service";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
 </script>

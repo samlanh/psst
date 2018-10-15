@@ -63,10 +63,10 @@ class Stock_ProductcateController extends Zend_Controller_Action {
     	}
     	
     	$_dbgb  = new Application_Model_DbTable_DbGlobal();
-    	$_dbuser = new Application_Model_DbTable_DbUsers();
-    	$userid = $_dbgb->getUserId();
-    	$userinfo = $_dbuser->getUserInfo($userid);
-    	$this->view->schoolOption = $_dbgb->getAllSchoolOption($userinfo['branch_id']);
+//     	$_dbuser = new Application_Model_DbTable_DbUsers();
+//     	$userid = $_dbgb->getUserId();
+//     	$userinfo = $_dbuser->getUserInfo($userid);
+    	$this->view->schoolOption = $_dbgb->getAllSchoolOption();
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
@@ -96,10 +96,10 @@ class Stock_ProductcateController extends Zend_Controller_Action {
     	$this->view->row = $row;
     	
     	$_dbgb  = new Application_Model_DbTable_DbGlobal();
-    	$_dbuser = new Application_Model_DbTable_DbUsers();
-    	$userid = $_dbgb->getUserId();
-    	$userinfo = $_dbuser->getUserInfo($userid);
-    	$this->view->schoolOption = $_dbgb->getAllSchoolOption($userinfo['branch_id']);
+//     	$_dbuser = new Application_Model_DbTable_DbUsers();
+//     	$userid = $_dbgb->getUserId();
+//     	$userinfo = $_dbuser->getUserInfo($userid);
+    	$this->view->schoolOption = $_dbgb->getAllSchoolOption();
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree($row);

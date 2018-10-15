@@ -294,9 +294,12 @@ a.print-card.btn.btn-primary.btn-xs {
 		             <div class="form-group">
 	                 	<label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEPARTMENT");?>
 	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                		<?php echo $frm->getElement("department");?>
+	                   <div class="col-md-4 col-sm-4 col-xs-12">
+		                	<input id="department" />
 						</div>
+						<div class="col-md-3 col-sm-3 col-xs-12">
+		                   	<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefreshDepart();"/>
+		                 </div>
 		             </div>
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POSITION");?>
@@ -517,6 +520,8 @@ dojo.require("dojo.NodeList-manipulate");
 var position_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->position));?> );
 var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
 
+var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->department_type));?> );
+
 var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -536,7 +541,19 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		     	}
 		   } 
 		}, "staff_position");
-		
+
+		new dijit.form.FilteringSelect({
+			store: department_store,
+			autoComplete:false,
+			queryExpr:'*${0}*',
+			required: false,		           
+			name: "department",
+			id: "department",
+			value:"<?php echo $this->rs['department'];?>",   
+			class: 'fullside',
+			placeHolder:"<?php echo $tr->translate("PLEASE_SELECT_DEPARTMENT");?>",
+			}, "department");
+
 		new dijit.form.FilteringSelect({
 			store: district_store,
 			autoComplete:false,
@@ -683,6 +700,29 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			}
 		});
 	}
+
+	function AllRefreshDepart(){
+		loadingBlock();
+		getRefreshDepartment();
+	}
+
+	var url_getdepartment = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"getdepartment"));?>';										
+	function getRefreshDepartment(){
+		dojo.xhrPost({
+			url:url_getdepartment,
+			handleAs:"json",
+			load: function(data) {
+				teacher_storeass  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('department').set('store',teacher_storeass);  
+			    document.getElementsByClassName("overlay")[0].style.display="none";
+			},
+			error: function(err) {
+				alert(err);
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			}
+		});
+	}
+	
 	function AllRefresh(){ 
 		loadingBlock();
 		pro_id = dijit.byId('province_id').get('value');

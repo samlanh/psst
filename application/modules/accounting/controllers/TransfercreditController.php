@@ -78,9 +78,9 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     			$sms="INSERT_SUCCESS";
     			$db = new Accounting_Model_DbTable_DbTransfercredit();
     			$_transfer = $db->transfercreditMemo($data);
-    			if($_transfer==-1){
-    				$sms = "RECORD_EXIST";
-    			}
+    		//	if($_transfer==-1){
+    		//		$sms = "RECORD_EXIST";
+    		//	}
     			Application_Form_FrmMessage::Sucessfull($sms, "/accounting/transfercredit");
     		} catch (Exception $e) {
     			$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';

@@ -82,7 +82,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			echo $e->getMessage();exit();
 		}
 		//print_r($data); exit();
- 	}
+ 	 }
 	 function updatcreditMemo($data){
 			$arr = array(
 				'branch_id'=>$data['branch_id'],

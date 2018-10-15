@@ -74,6 +74,10 @@ class Global_LecturerController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
 		
+		$row = $_db->getAllDepartment(); // degree language
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
+		$this->view->department_type = $row;
+		
 		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
 		$tsub=new Global_Form_FrmTeacher();
@@ -112,6 +116,10 @@ class Global_LecturerController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
+		
+		$row = $_db->getAllDepartment(); // degree language
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
+		$this->view->department_type = $row;
 		
 		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
@@ -160,6 +168,10 @@ class Global_LecturerController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
+		
+		$row = $_db->getAllDepartment(); // degree language
+		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
+		$this->view->department_type = $row;
 	
 		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
@@ -183,6 +195,17 @@ class Global_LecturerController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	
+	function getdepartmentAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Global_Model_DbTable_DbTeacher();
+			$teacher = $db->getAllDepartment();
+			print_r(Zend_Json::encode($teacher));
+			exit();
+		}
+	}
+	
 	public function viewAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db= new Global_Model_DbTable_DbTeacher();

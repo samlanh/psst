@@ -51,6 +51,14 @@
 			$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
 			$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
 			}
+			$sql="SELECT id FROM rms_itemsdetail WHERE items_id =".$_data['items_id'];
+			$sql.=" AND items_type='".$_data['items_type']."'";
+			//		$sql.=" AND total_amount='".$data['total_amount']."'";
+			// 		$sql.=" AND total_amountafter='".$data['total_amount']."'";
+			$rs = $_db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
+			}
 			$_arr=array(
 					'items_id'=> $_data['items_id'],
 					'items_type'=> $_data['items_type'],

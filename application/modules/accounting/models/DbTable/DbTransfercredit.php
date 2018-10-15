@@ -51,14 +51,14 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	function transfercreditMemo($data){
 		$db = $this->getAdapter();
 		//print_r($data); exit();
-		try{
-			$sql="SELECT id FROM rms_transfer_credit WHERE branch_id =".$data['branch_id'];
-			$sql.=" AND student_id='".$data['student_id']."'";
- 		//	$sql.=" AND stu_name='".$data['stu_name']."'";
-			$rs = $db->fetchOne($sql);
-			if(!empty($rs)){
-				return -1;
-			}
+// 		try{
+// 			$sql="SELECT id FROM rms_transfer_credit WHERE branch_id =".$data['branch_id'];
+// 			$sql.=" AND student_id='".$data['student_id']."'";
+//  			$sql.=" AND stu_name='".$data['stu_name']."'";
+// 			$rs = $db->fetchOne($sql);
+// 			if(!empty($rs)){
+// 				return -1;
+// 			}
 		$arr = array(
 				'branch_id'=>$data['branch_id'],
 				'student_id'=>$data['student_id'],
@@ -79,7 +79,8 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'status'=>$data['status'],
 				'user_id'=>$this->getUserId(),);
 		$this->_name='rms_transfer_credit';
-		$this->insert($arr);
+		$where=$this->getAdapter()->quoteInto("id=?", $data["id"]);
+		$this->update($arr, $where);
 		
 		$arr = array(
 				'branch_id'		=>$data['branch_id'],
@@ -95,10 +96,10 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'user_id'		=>$this->getUserId(),);
 		$this->_name='rms_creditmemo';
 		$this->insert($arr);
-		}catch (Exception $e){
-			$db->rollBack();
-			echo $e->getMessage();exit();
-		}
+// 		}catch (Exception $e){
+// 			$db->rollBack();
+// 			echo $e->getMessage();exit();
+// 		}
 	}
 	function getTransferbyid($id){
 		$db = $this->getAdapter();

@@ -207,6 +207,13 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$sql = "SELECT * FROM rms_teacher_document as s WHERE s.stu_id =".$id;
 		return $db->fetchAll($sql);
 	}
+	
+	function getAllDepartment(){
+		$db = $this->getAdapter();
+		$sql = " SELECT depart_id AS id,depart_namekh AS name FROM `rms_department` WHERE STATUS=1 AND depart_namekh!='' ";
+		return $db->fetchAll($sql);
+	}
+	
 	function getAllTeacher($search){
 		$db = $this->getAdapter();
 		$sql = 'SELECT g.id, 

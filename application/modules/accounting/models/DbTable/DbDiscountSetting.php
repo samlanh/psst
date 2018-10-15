@@ -43,8 +43,6 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$this->_name="rms_discount";
 		return  $this->insert($_arr);
 	}
-	
-	
 	public function getDiscountsetById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_dis_setting WHERE discount_id = ".$db->quote($id);

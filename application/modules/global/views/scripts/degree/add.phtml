@@ -36,7 +36,7 @@ dojo.require("dijit.form.CheckBox");
 					schoolOption = dijit.byId("schoolOption").get('value');
 					if(schoolOption=='' || schoolOption==-1){
 						alert("<?php echo $tr->translate("PLEASE_SELECT_SCHOOL_OPTION");?>");
-						dijit.byId("schoolOption_year").focus();
+						dijit.byId("schoolOption").focus();
 						return false;
 					}
 					var rowId = $('#identity').val();

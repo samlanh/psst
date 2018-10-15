@@ -27,11 +27,10 @@
 					items_id = dijit.byId("items_id").get('value');
 					if(items_id=='' || items_id==-1){
 						alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
+						dijit.byId("items_id").focus();
 						return false;
 					}
 					loadingBlock();
-                	//dijit.byId("save_new").attr("disabled",true);
-					//dijit.byId("save_close").attr("disabled",true);
 					return true;
 				}else {
 					return false;

@@ -78,7 +78,7 @@ class Stock_ProductController extends Zend_Controller_Action {
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	
     	$model = new Application_Model_DbTable_DbGlobal();
-    	$branch = $model->getAllBranchName();
+    	$branch = $model->getAllBranch();
     	array_unshift($branch, array ( 'id' => "",'name' => $tr->translate("SELECT_LOCATION")));
     	$this->view->branchopt = $branch;
     	
@@ -117,7 +117,7 @@ class Stock_ProductController extends Zend_Controller_Action {
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	 
     	$model = new Application_Model_DbTable_DbGlobal();
-    	$branch = $model->getAllBranchName();
+    	$branch = $model->getAllBranch();
     	array_unshift($branch, array ( 'id' => "",'name' => $tr->translate("SELECT_LOCATION")));
     	$this->view->branchopt = $branch;
     	
@@ -165,7 +165,7 @@ class Stock_ProductController extends Zend_Controller_Action {
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     
     	$model = new Application_Model_DbTable_DbGlobal();
-    	$branch = $model->getAllBranchName();
+    	$branch = $model->getAllBranch();
     	array_unshift($branch, array ( 'id' => "",'name' => $tr->translate("SELECT_LOCATION")));
     	$this->view->branchopt = $branch;
     	

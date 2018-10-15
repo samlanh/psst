@@ -65,7 +65,7 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	$_dbuser = new Application_Model_DbTable_DbUsers();
     	$userid = $_dbgb->getUserId();
     	$userinfo = $_dbuser->getUserInfo($userid);
-    	$this->view->schoolOption = $_dbgb->getAllSchoolOption($userinfo['branch_id']);
+    	$this->view->schoolOption = $_dbgb->getAllSchoolOption();
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
@@ -98,7 +98,7 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	$_dbuser = new Application_Model_DbTable_DbUsers();
     	$userid = $_dbgb->getUserId();
     	$userinfo = $_dbuser->getUserInfo($userid);
-    	$this->view->schoolOption = $_dbgb->getAllSchoolOption($userinfo['branch_id']);
+    	$this->view->schoolOption = $_dbgb->getAllSchoolOption();
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree($row);

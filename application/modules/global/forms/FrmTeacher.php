@@ -160,9 +160,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				'onChange'=>'popupNation(1);',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
-
 		$_photo = new Zend_Form_Element_File('photo');
-		
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));

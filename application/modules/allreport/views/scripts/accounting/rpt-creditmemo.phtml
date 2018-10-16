@@ -10,6 +10,7 @@
 	  <table width="100%">
 		   <tr>  
 		        <td><?php echo $frm->getElement("adv_search");?></td>
+		        <td><?php echo $frm->getElement('branch_id');?></td>
 		        <td><?php echo $frm->getElement('status');?></td>
 		   		<td><?php echo $frm->getElement('paid_transfer');?></td>
 		   		<!-- <td>
@@ -21,7 +22,7 @@
 		   		</td> -->
 		   		<td>
 		   			<select name="paid_type" id="paid_type" dojoType="dijit.form.FilteringSelect" class="fullside"  >
-		        		<option value="0" <?php if($this->search['paid_type']==0){echo "selected='selected'";}?>>ជ្រើសរើសប្រភេទ</option>
+		        		<option value="0" <?php if($this->search['paid_type']==0){echo "selected='selected'";}?>><?php echo $tr->translate('SELECT_FORM_REPORT');?></option>
 						<option value="1" <?php if($this->search['paid_type']==1){echo "selected='selected'";}?>>Credit Memo</option>
 						<option value="2" <?php if($this->search['paid_type']==2){echo "selected='selected'";}?>>Credit Memo Transfer</option>	
 		        	</select>
@@ -181,7 +182,6 @@
 				                </tbody>
 				           		</table>
 								<?php }?>
-							</div>
 						</td>
 					</tr>
 					<tr>
@@ -204,6 +204,5 @@
 					</table>
 				</td>
 			</tr>
-		  </table>
 	</div>	
 </div>

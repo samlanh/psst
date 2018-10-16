@@ -341,22 +341,16 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		}
 		return $teacher_options;
 	}
-	
-	
-	
 	function getParentSubject(){
 		$db = $this->getAdapter();
 		$sql = "select id,subject_titlekh as name from rms_subject where is_parent =1 and status=1 ";
 		return $db->fetchAll($sql);
 	}
-	
-	
 	function getAllYear(){
 		$db = $this->getAdapter();
 		$sql = "select id,CONCAT(from_academic,'-',to_academic,'(',generation,')')as years from rms_tuitionfee ";
 		return $db->fetchAll($sql);
 	}
-	
 	public function getAllFecultyName(){
 		//$db = $this->getAdapter();
 		//$sql ="SELECT dept_id AS id, en_name AS NAME,en_name,dept_id,shortcut FROM rms_dept WHERE is_active=1 AND en_name!='' ORDER BY en_name";

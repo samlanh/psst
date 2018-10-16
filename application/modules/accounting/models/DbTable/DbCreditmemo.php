@@ -28,7 +28,6 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			  WHERE
 				s.stu_id = c.student_id";
 		//$where = ' ';
-		
 		$str_date=' c.date ';
 		//$str_date=' c.end_date ';
 		if(!empty($search['by_date'])==0){

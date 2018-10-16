@@ -774,6 +774,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     		else{
     			$formdata = array(
     					"adv_search"=>'',
+    					"branch_id"=>'',
     					"payment_type"=>-1,
     					"status"=>-1,
     					"status_search"=>-1,

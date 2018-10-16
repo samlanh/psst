@@ -1,5 +1,4 @@
 <?php class Global_Model_DbTable_DbItemsDetail extends Zend_Db_Table_Abstract{
-
 	protected $_name = 'rms_itemsdetail';
     public function getUserId(){
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -38,6 +37,7 @@
 		
 		return $db->fetchAll($sql.$where.$orderby);
 	}
+	
 	public function getItemsDetailById($degreeId,$type=null){
 		$db = $this->getAdapter();
 		$sql=" SELECT ide.* FROM $this->_name AS ide WHERE ide.`id` = $degreeId ";
@@ -48,6 +48,7 @@
 		$sql.= $dbp->getSchoolOptionAccess('ide.schoolOption');
 		return $db->fetchRow($sql);
 	}
+	
 	public function AddItemsDetail($_data){
 		$_db= $this->getAdapter();
 		try{
@@ -64,19 +65,19 @@
 				return -1;
 			}
 			$_arr=array(
-					'items_id'=> $_data['items_id'],
-					'items_type'=> $_data['items_type'],
-					'title'	  => $_data['title'],
-					'shortcut' => $_data['shortcut'],
+					'items_id'		=> $_data['items_id'],
+					'items_type'	=> $_data['items_type'],
+					'title'	 		=> $_data['title'],
+					'shortcut' 		=> $_data['shortcut'],
 					'is_onepayment' => $_data['is_onepayment'],
-					'note'    => $_data['note'],
-					'ordering'    => $_data['ordering'],
+					'note'   		=> $_data['note'],
+					'ordering'    	=> $_data['ordering'],
 // 					'is_onepayment' => $_data['is_onepayment'],
-					'schoolOption'    => $schooloption,
-					'create_date' => date("Y-m-d H:i:s"),
-					'modify_date' => date("Y-m-d H:i:s"),
-					'status'=> $_data['status'],
-					'user_id'	  => $this->getUserId()
+					'schoolOption'  => $schooloption,
+					'create_date' 	=> date("Y-m-d H:i:s"),
+					'modify_date' 	=> date("Y-m-d H:i:s"),
+					'status'		=> $_data['status'],
+					'user_id'	  	=> $this->getUserId()
 			);
 			$this->_name = "rms_itemsdetail";
 			$id =  $this->insert($_arr);
@@ -86,6 +87,7 @@
 			Application_Form_FrmMessage::message("Application Error!");
 			echo $e->getMessage();
 		}
+		print_r($schooloption); exit();
 	}
 	public function updateItemsDetail($_data){
 		$_db= $this->getAdapter();
@@ -97,18 +99,18 @@
 			$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
 			}
 			$_arr=array(
-					'items_id'=> $_data['items_id'],
-					'items_type'=> $_data['items_type'],
-					'title'	  => $_data['title'],
-					'shortcut' => $_data['shortcut'],
-					'note'    => $_data['note'],
-					'ordering'    => $_data['ordering'],
+					'items_id'		=> $_data['items_id'],
+					'items_type'	=> $_data['items_type'],
+					'title'	  		=> $_data['title'],
+					'shortcut' 		=> $_data['shortcut'],
+					'note'    		=> $_data['note'],
+					'ordering'    	=> $_data['ordering'],
 					'is_onepayment' => $_data['is_onepayment'],
-					'schoolOption'    => $schooloption,
-// 					'create_date' => date("Y-m-d H:i:s"),
-					'modify_date' => date("Y-m-d H:i:s"),
-					'status'=> $_data['status'],
-					'user_id'	  => $this->getUserId()
+					'schoolOption'  => $schooloption,
+// 					'create_date' 	=> date("Y-m-d H:i:s"),
+					'modify_date' 	=> date("Y-m-d H:i:s"),
+					'status'		=> $_data['status'],
+					'user_id'	  	=> $this->getUserId()
 			);
 			$this->_name = "rms_itemsdetail";
 			$id = $_data["id"];

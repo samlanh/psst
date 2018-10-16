@@ -64,7 +64,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		return $this;		
 	}
 	public function FrmAddGroup($data=null){
-		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -83,7 +83,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_goup->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
 		
 		$_time = new Zend_Dojo_Form_Element_TextBox('time');
-		$_time->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
+		$_time->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 	
 		$_note = new Zend_Dojo_Form_Element_TextBox('notes');
 		$_note->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','style'=>'min-height: 70px;'));
@@ -117,21 +117,18 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$_academic->setMultiOptions($opt);
 		
-		$_session = new Zend_Dojo_Form_Element_FilteringSelect('session');
-		$_session->setAttribs(array(
+		$session = new Zend_Dojo_Form_Element_FilteringSelect("session");
+		$opt_session = array(
+				1=>$tr->translate('MORNING'),
+				2=>$tr->translate('AFTERNOON'),
+				3=>$tr->translate('EVERNING'),
+				4=>$tr->translate('WEEKEND'),
+		);
+		$session->setMultiOptions($opt_session);
+		$session->setAttribs(array(
 				'dojoType'=>$this->filter,
-				'placeholder'=>$this->tr->translate("SESSION"),
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-				));
-		$_session->setValue($request->getParam("session"));
-		$opt_ses=new Application_Model_DbTable_DbGlobal();
-		$opt_sesion=$opt_ses->getSession();
-		$opt_session = array(''=>$this->tr->translate("SESSION"));
-		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
-		$_session->setMultiOptions($opt_session);
+				'required'=>'true',
+				'class'=>'fullside',));
 		
 		$_calture = new Zend_Dojo_Form_Element_FilteringSelect('calture');
 		$_calture->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
@@ -155,12 +152,12 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$_branch_id->setValue($data['branch_id']);
 			$_goup->setValue($data['group_code']);
 			$_academic->setValue($data['academic_year']);
-			$_session->setValue($data['session']);
+			$session->setValue($data['session']);
 			$_calture->setValue($data['calture']);
 			$_time->setValue($data['time']);
 			$_note->setValue($data['note']);
 		}
-		$this->addElements(array($id,$_branch_id,$_academic,$_time,$_note,$_session,$_calture,$_goup));
+		$this->addElements(array($id,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
 		return $this;
 	}
 	

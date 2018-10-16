@@ -197,7 +197,8 @@ $techer= $this->frm_techer;
 ?>
 <script type="text/javascript">
 dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.require("dijit.form.FilteringSelect"); 
 
 dojo.require("dojo.html");
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
@@ -229,8 +230,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: teacher_storeass,
 		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: true,                        
+		autoComplete: true,                  
 		required: false,
 		id: "teacher_ass",
 		name: "teacher_ass",           
@@ -265,6 +265,7 @@ dojo.ready(function(){
 			}
 		}
 	}, "subject_id");
+	
 	new dijit.form.FilteringSelect({
 		store: dept_store,
 		queryExpr: "*${0}*",
@@ -285,7 +286,6 @@ dojo.ready(function(){
 		}
 	}, "degree");	
 	
-
 	new dijit.form.FilteringSelect({
 		store: grade_store,
 		queryExpr: "*${0}*",
@@ -329,11 +329,9 @@ function AllRefresh(){
 	dept_id = dijit.byId('degree').get('value');
 	if(dept_id!='' || dept_id!=-1){getallGrade();}
 	getRefreshRoom();
-		
 }
 function getRefreshItems(){
 	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
-		
 		dojo.xhrPost({
 			url: url_getItems,
 			content:{
@@ -654,11 +652,11 @@ function getValue(){
 		par = 1;
 		dijit.byId('parent').attr('value','');
 		dijit.byId("parent").set('readOnly',true);
-		 dijit.byId('parent').set('required',false);  
+		dijit.byId('parent').set('required',false);  
 	}else{
 		par=0;
 		dijit.byId("parent").set('readOnly',false);
-		 dijit.byId('parent').set('required',true);  
+		dijit.byId('parent').set('required',true);  
 	}
 	$('#par').val(par);
 }

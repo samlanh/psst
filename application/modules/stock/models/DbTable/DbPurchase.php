@@ -106,10 +106,13 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    			$sup_id = $this->insert($_arr);
 	    		}
 	    		//Purchasing Order Product
+	    		
+	    		$dbgb = new Application_Model_DbTable_DbGlobal();
+	    		$purchase_no = $dbgb->getPuchaseNo($_data['branch']);
 	    		$this->_name='rms_purchase';
 	    		$_arr = array(
 	    				'sup_id'		=>$sup_id,
-	    				'supplier_no'	=>$_data['purchase_no'],
+	    				'supplier_no'	=>$purchase_no,
 	    				'amount_due'	=>$_data['amount_due'],
 	    				'amount_due_after'	=>$_data['amount_due'],
 	    				'branch_id'		=>$_data['branch'],
@@ -303,17 +306,19 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     }
     
-    function getPurchaseCode(){
-    	$db = $this->getAdapter();
-    	$sql="SELECT id FROM rms_purchase WHERE STATUS=1 ORDER BY id DESC LIMIT 1";
-    	$acc_no = $db->fetchOne($sql);
-    	$new_acc_no= (int)$acc_no+1;
-    	$acc_no= strlen((int)$acc_no+1);
-    	$pre='PU-';
-    	for($i = $acc_no;$i<4;$i++){
-    		$pre.='0';
-    	}
-    	return $pre.$new_acc_no;
+    function getPurchaseCode($branch_id=null){
+//     	$db = $this->getAdapter();
+//     	$sql="SELECT id FROM rms_purchase WHERE STATUS=1 ORDER BY id DESC LIMIT 1";
+//     	$acc_no = $db->fetchOne($sql);
+//     	$new_acc_no= (int)$acc_no+1;
+//     	$acc_no= strlen((int)$acc_no+1);
+//     	$pre='PU-';
+//     	for($i = $acc_no;$i<4;$i++){
+//     		$pre.='0';
+//     	}
+//     	return $pre.$new_acc_no;
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	return $db->getPuchaseNo($branch_id);
     }
     function getSuplierName(){
     	$db=$this->getAdapter();

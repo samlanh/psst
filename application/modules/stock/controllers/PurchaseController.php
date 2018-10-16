@@ -172,4 +172,14 @@ class Stock_PurchaseController extends Zend_Controller_Action {
     		}
     	}
     }
+    
+    function getpuchasecodeAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$stu_no = $db->getPuchaseNo($data['branch_id']);
+    		print_r(Zend_Json::encode($stu_no));
+    		exit();
+    	}
+    }
 }

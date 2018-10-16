@@ -1736,5 +1736,22 @@ function getAllgroupStudy($teacher_id=null){
   	`rms_group` WHERE id=$id LIMIT 1 ";
   	return $db->fetchRow($sql);
   }
+  function getPuchaseNo($branch_id){//used global
+  	$db = $this->getAdapter();
+  	$branch_id = empty($branch_id)?0:$branch_id;
+  
+  	$db = $this->getAdapter();
+  	$sql="SELECT COUNT(id) FROM rms_purchase WHERE branch_id=$branch_id ORDER BY id DESC";
+  	$stu_num = $db->fetchOne($sql);
+  	$pre = $this->getPrefixCode($branch_id);//by branch
+  	$pre.='PO-';
+  	$new_acc_no= (int)$stu_num+1;
+  	$length = strlen((int)$new_acc_no);
+  	for($i = $length;$i<4;$i++){
+  		$pre.='0';
+  	}
+  	return $pre.$new_acc_no;
+
+  }
 }
 ?>

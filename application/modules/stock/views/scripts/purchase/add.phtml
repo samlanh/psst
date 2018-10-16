@@ -232,11 +232,13 @@ span.oldsup input[type=checkbox] {
 		class: "fullside", 
 		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>​",          
 		onChange: function() {  
-			branch_id = dijit.byId('branch').get('value');
-			if(branch_id==-1){
-				dijit.byId("popup_add_branch").show();
+				branch_id = dijit.byId('branch').get('value');
+				if(branch_id==-1){
+					dijit.byId("popup_add_branch").show();
 				}
+				getPurchaseNo();
 			}
+			
 		}, "branch");
 
 		 
@@ -523,6 +525,25 @@ function submitDataClose(){
 			}
 		});
 	}
+}
+
+var url_getstuno = '<?php echo $this->url(array('module'=>'stock','controller'=>'purchase','action'=>'getpuchasecode')); ?>';
+function getPurchaseNo(){
+	branch_id = dijit.byId('branch').get('value');
+	if(branch_id=='' || branch_id==-1){return false;}
+	dojo.xhrPost({
+		url:url_getstuno,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId('purchase_no').attr('value',data);   
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 </script>
 

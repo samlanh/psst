@@ -32,12 +32,11 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PURCHASE_NO","SUPPLIER_NAME","SEX","TEL","EMAIL","PRODUCT_NAME","QTY",
-					"COST","TOTAL","DATE","STATUS");
+			$collumns = array("BRANCH","PURCHASE_NO","SUPPLIER_NAME","SEX","TEL","EMAIL","TOTAL","DATE","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'purchase','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('purchase_no'=>$link,'sup_name'=>$link,'sex'=>$link,));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array( 'branch_name'=>$link,'supplier_no'=>$link,'sup_name'=>$link,'sex'=>$link,));
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}

@@ -11,14 +11,14 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getAllSupPurchase($search=null){
     	$db = $this->getAdapter();
-    	$sql="SELECT sp.id,sp.supplier_no,s.sup_name,
+    	$sql="SELECT sp.id,
+    	(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,
+    	sp.supplier_no,s.sup_name,
     	 (SELECT name_kh FROM rms_view WHERE rms_view.key_code=s.sex AND rms_view.type=2) AS sex,s.tel,s.email, 
-		        (SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = spd.pro_id LIMIT 1) AS pro_name,
-					spd.qty,spd.cost,spd.amount,sp.date,sp.status
+		        sp.amount_due,sp.date,sp.status
 		     		   FROM rms_supplier AS s,
-		     		   rms_purchase AS sp,
-		     		   rms_purchase_detail AS spd 
-					WHERE s.id=sp.sup_id AND sp.id=spd.supproduct_id";
+		     		   rms_purchase AS sp
+					WHERE s.id=sp.sup_id ";
     	$where="";
     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.date <= '".$search['end_date']." 23:59:59'";
@@ -30,15 +30,13 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$s_where[]="  s.sup_name LIKE '%{$s_search}%'";
     		$s_where[]= " s.tel LIKE '%{$s_search}%'";
     		$s_where[]= " s.email LIKE '%{$s_search}%'";
-    		$s_where[]= " spd.qty LIKE '%{$s_search}%'";
-    		$s_where[]= " spd.cost LIKE '%{$s_search}%'";
-    		$s_where[]= " spd.amount LIKE '%{$s_search}%'";
+    		$s_where[]= " sp.amount_due LIKE '%{$s_search}%'";
     		 
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-    	if(!empty($search['product'])){
-    		$where.=" AND spd.pro_id=".$search['product'];
-    	}
+//     	if(!empty($search['product'])){
+//     		$where.=" AND spd.pro_id=".$search['product'];
+//     	}
     	if(!empty($search['supplier_id'])){
     		$where.=" AND s.id=".$search['supplier_id'];
     	}
@@ -336,7 +334,10 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="SELECT sp.*,s.sup_name,s.purchase_no,s.sex,s.tel,s.email,s.address,sp.amount_due,sp.branch_id,sp.status
 		       FROM rms_supplier AS s,rms_purchase AS sp
-		       WHERE s.id=sp.sup_id AND sp.id=$id";
+		       WHERE s.id=sp.sup_id AND sp.id=$id ";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('sp.branch_id');
+    	$sql.="LIMIT 1";
     	return $db->fetchRow($sql);
     }
     function getSupplierProducts($id){

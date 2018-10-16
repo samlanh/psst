@@ -76,7 +76,12 @@ class Global_TermController extends Zend_Controller_Action {
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
     	}
-    	$this->view->row = $db->getTermById($id);
+    	$row = $db->getTermById($id);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+    		exit();
+    	}
+    	$this->view->row = $row;
     	
     	$db = new Accounting_Model_DbTable_DbFee();
     	$this->view->year = $db->getAceYear();

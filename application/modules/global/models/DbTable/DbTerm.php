@@ -41,6 +41,8 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
     	if (!empty($search['academic_year'])){
     		$where.=" AND academic_year= ".$search['academic_year'];
     	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission('branch_id');
 		$order=" ORDER BY id DESC";
 		return $db->fetchAll($sql.$where.$order);
 	}
@@ -92,9 +94,12 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 	function getTermById($id=null){
 		$db = $this->getAdapter();
 		$sql=" select * from rms_startdate_enddate WHERE 1 ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
 		if (!empty($id)){
 			$sql.=" AND id = $id LIMIT 1";
 		}
+		
 		return $db->fetchRow($sql);
 	}
 }

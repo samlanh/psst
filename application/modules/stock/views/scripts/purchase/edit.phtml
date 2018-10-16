@@ -40,7 +40,13 @@ span.oldsup input[type=checkbox] {
 		<form id='suspend_service' action="<?php echo $this->url(array('module'=>'stock','controller'=>'purchase','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-				pro_id=dijit.byId("pro_id").get('value');
+				identity= $("#identity").val();
+				if(identity=='' || identity==null){
+					alert("<?php echo $tr->translate("PLEASE_SET_PRODUCT_FOR_PURCHASE");?>");
+					dijit.byId("pro_id").focus();
+					return false;
+				}
+                loadingBlock();
 				return true;
 			} else {
 				return false;

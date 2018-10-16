@@ -172,7 +172,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);//clear old balance
 					
 					$arr=array(
-						'branch_id'		=> $this->getBranchId(),
+						'branch_id'		=> $data['branch_id'],
 						'revenue_type'  => $data['customer_type'],
 						'data_from'		=> $data['student_type'],
 						'student_id'	=> $data['old_stu'],
@@ -190,7 +190,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'create_date'	=> $paid_date,
 						'user_id'		=> $this->getUserId(),
 						'academic_year'	=> $data['study_year'],
-							
 						'paystudent_type'=>$rs_stu['paystudent_type'],
 						'degree'		=> $rs_stu['degree'],
 						'grade'			=> $rs_stu['grade'],
@@ -198,7 +197,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'degree_culture'=> $rs_stu['calture'],
 						'room_id'		=> $rs_stu['room'],
 					);
-					
 					$paymentid = $this->insert($arr);
 			
 					if($data['student_type']==1 AND $data['customer_type']==1){ // only old_student can have credit_memo
@@ -252,8 +250,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'note'			=>$data['remark'.$i],
 						);
 						$this->insert($_arr);
-						
-						
 						
 				// 		if($data['service_type_'.$i]==1){// បង់លើផលិតផល
 				// 		$this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
@@ -1794,9 +1790,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$sql = " select vill_id as id , village_namekh as name from ln_village where status=1 ";
 		return $db->fetchAll($sql);
 	}    
-	function getAllStudentTested(){//get all student test
+	function getAllStudentTested($branch_id){//get all student test
 		$_db = new Application_Model_DbTable_DbGlobal();
-		return $_db->getAllstudentTest(null,1);
+		return $_db->getAllstudentTest($branch_id,1);
 	}
 	function getStudentTestInfo($stu_test_id){
 		$_db = new Application_Model_DbTable_DbGlobal();

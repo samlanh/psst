@@ -10,7 +10,7 @@
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql="SELECT c.id,
 			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
-			c.kh_name,c.first_name,c.last_name,
+			c.kh_name,c.last_name,c.first_name,
 			CASE    
 				WHEN  c.sex = 1 THEN '".$tr->translate("MALE")."'
 				WHEN  c.sex = 2 THEN '".$tr->translate("FEMALE")."'

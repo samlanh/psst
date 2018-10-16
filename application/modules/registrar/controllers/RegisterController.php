@@ -72,6 +72,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	}
       }
        $_db = new Application_Model_DbTable_DbGlobal();
+       $this->view->rsbranch = $_db->getAllBranch();
 //     $this->view->all_dept = $_db->getAllDegreeName();
        $this->view->exchange_rate = $_db->getExchangeRate();
 //     $this->view->deduct = $_db->getDeduct();
@@ -84,12 +85,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $this->view->rs_paymenttype = $_db->getViewById(8,null);
        
        $db = new Registrar_Model_DbTable_DbRegister();
-       
        $this->view->all_year = $db->getAllYears();
-       
 	   $test = $this->view->branch_info = $db->getBranchInfo();
-// 	   $db = new Foundation_Model_DbTable_DbStudent();
-// 	   $this->view->group = $db->getAllgroup();
 	   
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
@@ -98,7 +95,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $this->view->header = $_db->getHeaderReceipt();
 	   $db = new Application_Model_DbTable_DbGlobal();
 	   $rs = $db->getStudentProfileblog(1);
-// 	   print_r($rs);exit();
     }
     public function addkentridgeAction(){
     	if($this->getRequest()->isPost()){
@@ -532,7 +528,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$rows = $db->getAllStudentTested();
+			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
+			$rows = $db->getAllStudentTested($branch_id);
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}
@@ -551,7 +548,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
-			$rows = $db->getAllCrmstudent(null,3);
+			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
+			$rows = $db->getAllCrmstudent($branch_id,3);
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}

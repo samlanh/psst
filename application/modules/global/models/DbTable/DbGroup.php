@@ -132,7 +132,12 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	}
 	public function getGroupById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_group WHERE id = ".$db->quote($id);
+		$sql = "SELECT g.* FROM rms_group as g WHERE g.id = ".$db->quote($id);
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('g.branch_id');
+		$sql.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1)');
+		
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
 		return $row;
@@ -293,6 +298,10 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$where.=' AND g.branch_id='.$search['branch_id'];
 		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('g.branch_id');
+		$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1)');
+// 		echo $sql.$where.$order;exit();
 		return $db->fetchAll($sql.$where.$order);
 	}
 	

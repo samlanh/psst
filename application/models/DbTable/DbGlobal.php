@@ -720,6 +720,7 @@ function getAllgroupStudy($teacher_id=null){
 	   	$session_user=new Zend_Session_Namespace('authstu');
 // 	   	$branch_id = $session_user->branch_id;
 	   	$branch_list = $session_user->branch_list;
+	  
 	   	$result="";
 	   	if(!empty($branch_list)){
 		   	$level = $session_user->level;
@@ -738,6 +739,19 @@ function getAllgroupStudy($teacher_id=null){
 	   		$result = " AND $branch_str =".$branch_id;
 	   		return $result;
 	   	}
+   }
+   
+   function getSchoolOptionAccess($schooloption_coloum="schoolOption"){
+	   	$user = $this->getUserInfo();
+	   	$schooloptionlist = $user['schoolOption'];
+	   	$slist = explode(",", $schooloptionlist);
+	   	$sql="";
+	   	$s_where = array();
+	   	foreach ($slist as $option){
+	   		$s_where[] = " $schooloption_coloum IN ($option)";
+	   	}
+	   	$sql .=' AND ( '.implode(' OR ',$s_where).')';
+	   	return $sql;
    }
    
    public function getUserAccessPermission($user_id='user_id'){

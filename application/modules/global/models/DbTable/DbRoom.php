@@ -51,6 +51,8 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 	public function getRoomById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_room WHERE room_id = ".$db->quote($id);
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.= $dbp->getAccessPermission('branch_id');
 		$sql.=" LIMIT 1 ";
 		$row=$db->fetchRow($sql);
 		return $row;
@@ -105,6 +107,9 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.= " AND is_active = ".$search['status'];
 		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.= $dbp->getAccessPermission('branch_id');
+		
 		return $db->fetchAll($sql.$where.$order);	
 	}	
 }

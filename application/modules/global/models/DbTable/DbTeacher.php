@@ -188,6 +188,8 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$sql = "SELECT t.*,
 		(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=t.department) AS dept_name
 		FROM rms_teacher AS t WHERE t.id =$id ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.= $dbp->getAccessPermission('t.branch_id');
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
 		return $row;
@@ -224,15 +226,14 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
-
 				g.position_add,
 				g.tel,
 				g.email,
 				g.note,
 				(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1 LIMIT 1) AS `status`
 				FROM rms_teacher AS g WHERE 1';
-		$order_by=" order by id DESC";
-		$where = '';
+		
+		$where='';
 		if(!empty($search['title'])){
 		    $s_where = array();
 			$s_search = addslashes(trim($search['title']));
@@ -253,6 +254,11 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.=' AND status='.$search['status'];
 		}
+		$order_by=" ORDER BY id DESC";
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.= $dbp->getAccessPermission('g.branch_id');		
+		
 		return $db->fetchAll($sql.$where.$order_by);
 	}
 	

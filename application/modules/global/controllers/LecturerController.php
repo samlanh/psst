@@ -126,6 +126,10 @@ class Global_LecturerController extends Zend_Controller_Action {
 		$this->view->row = $_db->getTeacherDocumentById($id);
 		
 		$row = $_db->getTeacherById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/global/lecturer");
+			exit();
+		}
 		$this->view->rs = $row;
 		$tsub = new Global_Form_FrmTeacher();
 		$frm_techer = $tsub->FrmTecher($row);

@@ -123,6 +123,10 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		//$this->view->rs = $group_info = $db->getGroupById($id);
 		$row = $group_info = $db->getGroupById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
+			exit();
+		}
 		$this->view->rs = $row;
 		if($group_info['is_pass']==1){
 			//Application_Form_FrmMessage::Sucessfull("ក្រុមសិក្សាត្រូវបានបញ្ចប់ មិនអាចកែបានទេ !!! ", "/global/group/index");

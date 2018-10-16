@@ -32,14 +32,20 @@
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.= $dbp->getSchoolOptionAccess('ide.schoolOption');
+		
 		return $db->fetchAll($sql.$where.$orderby);
 	}
 	public function getItemsDetailById($degreeId,$type=null){
 		$db = $this->getAdapter();
-		$sql=" SELECT * FROM $this->_name WHERE `id` = $degreeId ";
+		$sql=" SELECT ide.* FROM $this->_name AS ide WHERE ide.`id` = $degreeId ";
 		if (!empty($type)){
-			$sql.=" AND items_type=$type";
+			$sql.=" AND ide.items_type=$type";
 		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.= $dbp->getSchoolOptionAccess('ide.schoolOption');
 		return $db->fetchRow($sql);
 	}
 	public function AddItemsDetail($_data){

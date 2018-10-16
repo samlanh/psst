@@ -34,6 +34,11 @@
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+// 		$sql.=$dbp->getAccessPermission('g.branch_id');
+		$sql.= $dbp->getSchoolOptionAccess('d.schoolOption');
+		
 		return $db->fetchAll($sql.$where.$orderby);
 	}
 	function getAllItemsOption($search = '',$type=null){
@@ -67,10 +72,13 @@
 	}
 	public function getDegreeById($degreeId,$type=null){
 		$db = $this->getAdapter();
-		$sql=" SELECT * FROM $this->_name WHERE `id` = $degreeId ";
+		$sql=" SELECT d.* FROM $this->_name AS d WHERE d.`id` = $degreeId ";
 		if (!empty($type)){
-			$sql.=" AND type=$type";
+			$sql.=" AND d.type=$type";
 		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.= $dbp->getSchoolOptionAccess('d.schoolOption');
+		
 		return $db->fetchRow($sql);
 	}
 	public function AddDegree($_data){

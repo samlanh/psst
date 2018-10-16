@@ -23,8 +23,8 @@
     	</div>
     	<form  id='edit-major' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">
-				items_id = dijit.byId('items_id').get('value');
-        			if(items_id==0){
+					items_id = dijit.byId('items_id').get('value');
+        			if(items_id=='' || items_id==-1){
 						alert("សូមជ្រើសរើសសេវាកម្ម");dijit.byId('items_id').focus();return false;
 					}			
 				if(this.validate()) {

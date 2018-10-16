@@ -91,8 +91,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	   
-	   $_db = new Application_Form_FrmGlobal();
-	   $this->view->header = $_db->getHeaderReceipt();
 	   $db = new Application_Model_DbTable_DbGlobal();
 	   $rs = $db->getStudentProfileblog(1);
     }
@@ -554,13 +552,13 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-// 	function getallstudentcodeAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data = $this->getRequest()->getPost();
-// 			$db = new Registrar_Model_DbTable_DbRegister();
-// 			$rows = $db->getAllGerneralOldStudent();
-// 			print_r(Zend_Json::encode($rows));
-// 			exit();
-// 		}
-// 	}
+	function getbranchinfoAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Form_FrmGlobal();
+			$rows = $db->getHeaderReceipt($data['branch_id']);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
 }

@@ -29,29 +29,46 @@ class Application_Form_FrmGlobal{
 				return $str;
 	}
 	
-	public function getHeaderReceipt(){
-		
+	public function getHeaderReceipt($branch_id=null){
 		$key = new Application_Model_DbTable_DbKeycode();
 		$setting = $key->getKeyCodeMiniInv(TRUE);
-		
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$str="";
-		
+		if($branch_id==null){
+			$img = 'logo.png';
+			$school_name = $tr->translate('SCHOOL_NAME');
+			$address = $tr->translate('CUSTOMER_ADDRESS');
+			$tel = $tr->translate('CUSTOMER_TEL');
+			$email =  $tr->translate('CUSTOMER_EMAIL');
+			$website = $tr->translate('CUSTOMER_WEBSITE');
+		}
+		else{
+			$db = new Application_Model_DbTable_DbGlobal();
+			$rs = $db->getBranchInfo($branch_id);
+			if(!empty($rs)){
+				$img = $rs['photo'];
+				$school_name = $rs['branch_namekh'];
+				$address = $rs['br_address'];
+				$tel = $rs['branch_tel'];
+				$email = $rs['email'];
+				$website = $rs['website'];
+			}
+		}
 		if($setting['show_header_receipt']==1){
 			$str="<table width='100%' style='white-space:nowrap;'>
-					<tr>
-						<td width='17%' valign='top'>
-							<img style='width: 70%' src=".Zend_Controller_Front::getInstance()->getBaseUrl().'/images/logo.png'.">
-						</td>
-						<td width='83%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
-							<div style='font-size:22px;margin-top: 10px;'>".$tr->translate('SCHOOL_NAME')."</div>
-							<div style='line-height: 18px;'>".$tr->translate('CUSTOMER_ADDRESS')."</div>
-							<div style='line-height: 18px;'>".$tr->translate('CUSTOMER_TEL')."</div>
-						</td>
-					</tr>
-				</table>";
+				<tr>
+					<td width='17%' valign='top'>
+						<img style='max-width: 98%;max-height:100px;' src=".Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$img.">
+					</td>
+					<td width='83%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
+						<div style='font-size:18px;margin-top: 10px;'>".$school_name."</div>
+						<div style='line-height: 16px;'>".$address."</div>
+						<div style='line-height: 16px;'>".$tel."</div>
+						<div style='line-height: 16px;'>".$email.' / '.$website."</div>
+					</td>
+				</tr>
+			</table>";
 		}
 		return $str;
 	}
 }
-

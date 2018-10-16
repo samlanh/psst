@@ -257,8 +257,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		(select name_kh from rms_view where type=9 and key_code=is_pass) as group_status,
 		g.status
 		FROM `rms_group` AS `g`";
-		//`g`.`start_date`,`g`.`expired_date`,
-		//(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1) AS `status`
+		
 		$where =' WHERE 1 ';
 		$from_date =(empty($search['start_date']))? '1': "g.date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "g.date <= '".$search['end_date']." 23:59:59'";
@@ -301,10 +300,8 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('g.branch_id');
 		$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1)');
-// 		echo $sql.$where.$order;exit();
 		return $db->fetchAll($sql.$where.$order);
 	}
-	
 	function getAllGrade($grade_id){
 		$db = $this->getAdapter();
 		$sql = "SELECT major_id As id,major_enname As name FROM rms_major WHERE dept_id=".$grade_id;

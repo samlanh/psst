@@ -1183,5 +1183,21 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 		$this->view->search = $search;
 	}
-	
+	function rptreceiptdetailAction(){
+		$id=$this->getRequest()->getParam("id");
+		$db = new Allreport_Model_DbTable_DbRptPayment();
+		$rs = $db->getStudentPaymentByid($id);
+		$this->view->rr = $rs;
+		$this->view->row =  $db->getPaymentReciptDetail($id);
+		 
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+		 
+		$branch_id=null;
+		if(!empty($rs)){
+			$branch_id = $rs['branch_id'];
+		}
+		$_db = new Application_Form_FrmGlobal();
+		$this->view->header = $_db->getHeaderReceipt($branch_id);
+	}
 }

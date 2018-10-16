@@ -66,19 +66,7 @@ class Registrar_AllreportsController extends Zend_Controller_Action {
     	$db = new Registrar_Model_DbTable_DbReportStudentByuser();
     	$data=$this->view->row = $db->getAllService();    	
     }
-    function rptreceiptdetailAction(){
-    	$id=$this->getRequest()->getParam("id");
-    	$db = new Allreport_Model_DbTable_DbRptPayment();
     
-    	$this->view->rr = $db->getStudentPaymentByid($id);
-    	$this->view->row =  $db->getPaymentReciptDetail($id);
-    	
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    	
-    	$_db = new Application_Form_FrmGlobal();
-    	$this->view->header = $_db->getHeaderReceipt();
-    }
     function updateReceiptAction(){
     	$id=$this->getRequest()->getParam("id");
     	$db = new Allreport_Model_DbTable_DbRptPayment();

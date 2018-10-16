@@ -742,6 +742,12 @@ function getAllgroupStudy($teacher_id=null){
    }
    
    function getSchoolOptionAccess($schooloption_coloum="schoolOption"){
+	   	$session_user=new Zend_Session_Namespace('authstu');
+	   	$level = $session_user->level;
+	   	if($level==1){
+	   		return ;
+	   	}	
+   	
 	   	$user = $this->getUserInfo();
 	   	$schooloptionlist = $user['schoolOption'];
 	   	$slist = explode(",", $schooloptionlist);

@@ -190,7 +190,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'create_date'	=> $paid_date,
 						'user_id'		=> $this->getUserId(),
 						'academic_year'	=> $data['study_year'],
-						'paystudent_type'=>$rs_stu['paystudent_type'],
+						'paystudent_type'=> $rs_stu['is_stu_new'],
 						'degree'		=> $rs_stu['degree'],
 						'grade'			=> $rs_stu['grade'],
 						'session'		=> $rs_stu['session'],

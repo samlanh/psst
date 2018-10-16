@@ -11,20 +11,26 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     public function getStudentPaymentByid($id){
     	$db = $this->getAdapter();
     	$sql = "select 
+    				s.branch_id,
     				s.stu_code,
     				s.stu_khname,
     				s.stu_enname,
+    				s.last_name,
     				s.tel,
     				s.dob,
-    				(select name_kh from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
+    				(select name_en from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				sp.receipt_number,
     				sp.create_date,
-    				(select last_name from rms_users where id=sp.user_id LIMIT 1) as last_name,
-    				(select first_name from rms_users where id=sp.user_id LIMIT 1) as user,
+    				(SELECT CONCAT(last_name,' ',first_name) FROM rms_users where id=sp.user_id LIMIT 1) as user,
     				sp.is_void,
     				sp.grand_total,
     				sp.credit_memo,
     				sp.penalty AS fine,
+    				sp.paid_amount,
+    				sp.balance_due,
+    				sp.note,
+    			   (SELECT name_en from rms_view where rms_view.type = 8 and key_code=sp.payment_method LIMIT 1) AS payment_method,
+    			   sp.number,
     				(SELECT CONCAT(from_academic,'-',to_academic) 
 						FROM rms_tuitionfee where rms_tuitionfee.id=sp.academic_year LIMIT 1) AS academic_year,
 					
@@ -246,30 +252,32 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     public function getPaymentReciptDetail($id){
     	$db = $this->getAdapter();
     	$sql=" SELECT 
-			    	spd.id,
-			    	spd.payment_id,
-			    	spd.is_onepayment,
 			    	(SELECT `rms_student`.`stu_khname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS kh_name,
 			    	(SELECT `rms_student`.`stu_enname` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) AS en_name,
 			    	(SELECT `rms_view`.`name_kh` FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` =(SELECT `rms_student`.`sex` FROM `rms_student` WHERE (`rms_student`.`stu_id` = sp.`student_id`) LIMIT 1) )))  as sex,
-			    	spd.fee,spd.qty,spd.subtotal,
-			    	(SELECT title FROM `rms_itemsdetail` WHERE items_id=spd.itemdetail_id LIMIT 1) AS service,
-			    	
+			    	(SELECT title FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS service,
 			    	(SELECT `name_en` FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS payment_term,
-			    	
-			    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
-					
-			    	spd.subtotal,
-			    	spd.paidamount,
+			    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			    	sp.receipt_number as receipt_number,
 			    	sp.`grand_total` AS total_payment,
 			    	sp.`paid_amount` as paid_amount,
 			    	sp.`balance_due` as balance_due,
 			    	sp.`amount_in_khmer` as amount_in_khmer,
 			    	(SELECT CONCAT (`last_name`,' ', `first_name`) FROM `rms_users` WHERE `rms_users`.id = sp.user_id LIMIT 1) as user,
+			    	spd.id,
+			    	spd.payment_id,
+			    	spd.is_onepayment,
+			    	spd.subtotal,
+			    	spd.paidamount,
+			    	spd.fee,
+			    	spd.qty,
+			    	spd.extra_fee,
+			    	spd.subtotal,
 			    	spd.note,
 			    	spd.start_date,
 			    	spd.validate,
+			    	(SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
+			    	spd.discount_amount,
 			    	spd.discount_percent
     			FROM 
 			    	rms_student_payment as sp,

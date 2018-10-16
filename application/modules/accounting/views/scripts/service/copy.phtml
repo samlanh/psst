@@ -20,7 +20,11 @@
     		</div>
     	</div>
     	<form  id='edit-major' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<script type="dojo/method" event="onSubmit">			
+			<script type="dojo/method" event="onSubmit">	
+				items_id = dijit.byId('items_id').get('value');
+        			if(items_id==0){
+						alert("សូមជ្រើសរើសសេវាកម្ម");dijit.byId('items_id').focus();return false;
+					}		
 				if(this.validate()) {
 					loadingBlock();					
 					return true;
@@ -138,4 +142,27 @@
 				}
 			});
 	}
+</script>
+<script>
+function submitDataClose(){
+	items_id = dijit.byId('items_id').get('value');
+	if(items_id==0){
+		alert("សូមជ្រើសរើសសេវាកម្ម");dijit.byId('items_id').focus();return false;
+	}
+	if(dijit.byId('office_receipt').validate()) {
+		dijit.byId('save_close').set('disabled',true);
+		dijit.byId('save_new').set('disabled',true);
+		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'service','action'=>'add')); ?>';
+		dojo.xhrPost({
+		    url: url_submit,	
+			form: dojo.byId("office_receipt"),		    
+			load: function(data) {
+				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
+				window.location.href ="<?php echo $this->baseUrl();?>/accounting/service";
+			},
+			error: function(e) {
+			}
+		});
+	}
+}
 </script>

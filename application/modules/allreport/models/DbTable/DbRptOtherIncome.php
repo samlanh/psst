@@ -12,6 +12,7 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	
     	$sql = "SELECT 
     				*,
+    				(SELECT category_name FROM rms_cate_income_expense WHERE id = cate_income) AS cate_income, 
 	    			(select category_name from rms_cate_income_expense where rms_cate_income_expense.id = cate_income) as income_category,
 	    			(SELECT name_en FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method) AS payment_method,
 	    			(select CONCAT(first_name) from rms_users as u where u.id = user_id)  as name
@@ -26,7 +27,9 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
     	$where .= "  AND ".$from_date." AND ".$to_date;
-    	
+    	if(!empty($search['cate_income'])){
+    		$where.=" AND cate_income = ".$search['cate_income'] ;
+    	}
     	if(!empty($search['branch_id'])){
     		$where.=" AND branch_id = ".$search['branch_id'] ;
     	}

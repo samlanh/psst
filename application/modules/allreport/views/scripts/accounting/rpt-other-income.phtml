@@ -12,6 +12,7 @@
 				<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text">
 			</td>
 			<td> <?php echo $frm->getElement("branch_id");?></td>
+			<td> <?php echo $frm->getElement("cate_income");?></td>
 			<td> <?php echo $frm->getElement("user");?></td>
 			<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->search['start_date'];?>" type="text"></td>
 			<td><input dojoType="dijit.form.DateTextBox" class="fullside"  id="end_date" name="end_date"  value="<?php echo $this->search['end_date'];?>" type="text"></td>
@@ -43,6 +44,7 @@
 							<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;"  border="1" >
 								<tr style="font-size:11px; height: 20px;border: 1px solid #000;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></td>
+									<td style="border: 1px solid #000;"><?php echo $tr->translate('INCOME_CATEGORY')?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('INCOME_TITLE')?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></td>
 									<td style="border: 1px solid #000;"><?php echo $tr->translate('CURRENCY_TYPE')?></td>
@@ -53,6 +55,7 @@
 							<?php $i=0; foreach ($this->row AS $row) { $i++;?>
 								<tr class="hover" style="font-size:11px; height: 20px;border: 1px solid #000;" align="center" >
 									<td style="border: 1px solid #000;"><?php echo $i;?></td>
+									<td style="border: 1px solid #000;"><?php echo $row['cate_income'];?></td>
 									<td style="border: 1px solid #000;"><?php echo $row['title'];?></td>
 									<td style="border: 1px solid #000;"><?php echo $row['invoice'];?></td>
 									<td align="canter" style="border: 1px solid #000;"><?php //echo $row['curr_name'];?></td>	

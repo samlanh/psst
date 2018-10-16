@@ -28,8 +28,18 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			  WHERE
 				s.stu_id = c.student_id";
 		//$where = ' ';
-		$from_date =(empty($search['start_date']))? '1': " c.date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " c.date <= '".$search['end_date']." 23:59:59'";
+		
+		$str_date=' c.date ';
+		//$str_date=' c.end_date ';
+		if(!empty($search['by_date'])==0){
+		}else if($search['by_date']==1){//create
+			$str_date=' c.date ';
+		}else if($search['by_date']==2){//expired
+			$str_date=' c.end_date ';
+		}
+		$from_date =(empty($search['start_date']))? '1': " $str_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " $str_date <= '".$search['end_date']." 23:59:59'";
+		
 		$where = " AND ".$from_date." AND ".$to_date;
 		if (!empty($search['adv_search'])){
 			$s_where = array();

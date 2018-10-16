@@ -36,6 +36,16 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_transfer->setMultiOptions($_status_opt);
 		$_transfer->setValue($request->getParam("paid_transfer"));
 		
+		$_bydate=  new Zend_Dojo_Form_Element_FilteringSelect('by_date');
+		$_bydate->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside'));
+		$_date_opt = array(
+				0=>$this->tr->translate("PLEASE_SELECT_DATE"),
+				1=>$this->tr->translate("START_DATE"),
+				2=>$this->tr->translate("END_DATE"));
+				
+		$_bydate->setMultiOptions($_date_opt);
+		$_bydate->setValue($request->getParam("by_date"));
+		
 // 		$_currency_type = new Zend_Dojo_Form_Element_FilteringSelect('payment_id');
 // 		$_currency_type->setAttribs(array(
 // 				'dojoType'=>'dijit.form.FilteringSelect',
@@ -89,7 +99,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 				'class'=>'fullside height-text',));
 		
 		
-		$this->addElements(array($_title,$_branch_id,$payment_method,$_transfer,$_releasedate
+		$this->addElements(array($_title,$_branch_id,$_bydate,$payment_method,$_transfer,$_releasedate
 				,$_dateline,$_status));
 		return $this;
 		

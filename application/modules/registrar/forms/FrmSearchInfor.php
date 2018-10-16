@@ -94,6 +94,21 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
 		$_group->setMultiOptions($opt_group);
 		
+		$_cate = new Zend_Dojo_Form_Element_FilteringSelect('cate_income');
+		$_cate->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$_cate->setValue($request->getParam("cate_income"));
+		$_db = new Registrar_Model_DbTable_DbIncome();	
+		$result = $_db->getCateIncome();
+		$opt_cate = array(''=>$this->tr->translate("SELECT_CATEGORY"));
+		if(!empty($result))foreach ($result As $rs)$opt_cate[$rs['id']]=$rs['name'];
+		$_cate->setMultiOptions($opt_cate);
+		
 		$term_test = new Zend_Dojo_Form_Element_FilteringSelect('term_test');
 		$term_test->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -554,7 +569,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_day->setMultiOptions($opt_group);
 		
 		$this->addElements(array($finished_status,$term_test,$term,$stuname_con,
-					$_day,$_teacher,$_subject,$study_status,$_group,$payment_by,$study_year,$academic_year,
+					$_day,$_cate,$_teacher,$_subject,$study_status,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
 					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term));

@@ -400,6 +400,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$search=array(
 						'txtsearch' =>'',
 						'branch_id'	=>'',
+						'cate_income'	=>'',
 						'user'	=>'',
 						'start_date'=>date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
@@ -778,6 +779,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     					"status_search"=>-1,
     					'paid_transfer'=>-1,
     					'paid_status'=>'',
+    					'by_date'=>0,
     					'paid_type'=>0,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),

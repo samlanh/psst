@@ -252,7 +252,7 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="SELECT sp.branch_id,sp.id,sp.supplier_no,s.sup_name,s.tel,
     	(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id LIMIT 1) AS branch_name,
-    	sp.amount_due,sp.date,
+    	sp.amount_due,sp.amount_due_after,sp.date,
     	(SELECT name_kh FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1 LIMIT 1) AS `status`
     	FROM rms_purchase AS sp,rms_supplier AS s
     	WHERE sp.sup_id=s.id AND sp.status=1 AND sp.is_paid=0 ";

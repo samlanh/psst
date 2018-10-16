@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Payment Late'); 
+	$this->headTitle('Report Supplier Balance'); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
@@ -33,7 +33,7 @@
 					</td>
 					<td align="center" width="70%">
 						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
-						<strong style="padding-left: 10px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_PURCHASE');?></strong><br>
+						<strong style="padding-left: 10px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('Report Supplier Balance');?></strong><br>
 						<span style="font-weight: bold;font-size: 12px; "><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;<?php echo $tr->translate('TO');?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));}?></span>
 					</td>
 					<td width="15%" align="center">
@@ -59,14 +59,15 @@
 									<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate('TEL');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('TOTAL_AMOUNT');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('REMAIN_BALANCE');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate('PRINT');?>&nbsp;</td>
 						   </tr>
 							</thead>
-						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_code))foreach ($this->pur_code AS $rs) { $i++;
+						<?php $i=0;$totalpaid=0;
+						$totalremainbalance=0;
+						$totalbalance=0; if(!empty($this->pur_code))foreach ($this->pur_code AS $rs) { $i++;
 						       
 						  ?>
 							<tr class="hover" style="font-size:11px; height: 18px;"​ align="center">
@@ -74,14 +75,16 @@
 								    <td align="left">&nbsp;<?php echo $rs['branch_name'];?></td>
 								    <td >&nbsp;<a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/stock/rpt-purchase-supplier/id/<?php echo $rs['id'];?>"><?php echo $rs['supplier_no'];?></a>&nbsp;</td>
 								    <td><?php echo $rs['sup_name'];?></td>
-								    <td><?php echo $rs['tel'];?></td>
-								    <td>&nbsp;$&nbsp;<?php echo number_format($rs['amount_due'],2);?></td>
-								    <td>&nbsp;$&nbsp;<?php echo number_format($rs['amount_due_after'],2);?></td>
+								    <td align="right">&nbsp;$&nbsp;<?php echo number_format($rs['amount_due'],2);?>&nbsp;</td>
+								    <td align="right">&nbsp;$&nbsp;<?php echo number_format($rs['amount_due_after'],2);?>&nbsp;</td>
 								    <td><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
 								    <td><a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/stock/rpt-purchase-supplier/id/<?php echo $rs['id'];?>"><?php echo $tr->translate('PRINT');?></a></td>
 							 </tr>
-						  
-										<?php $totalbalance=$totalbalance+$rs['amount_due'];}?>	 
+							<?php 
+								$totalbalance=$totalbalance+$rs['amount_due'];
+								$totalremainbalance=$totalremainbalance+$rs['amount_due_after'];
+								}
+							?>	 
 							
 						</table>	
 					</td>
@@ -91,6 +94,9 @@
 					     <table width="20%"  style="border: 0px solid #000;border-collapse: collapse;"  >
 					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
 					               <td>Total Amount :</td><td>&nbsp;$&nbsp;<?php echo number_format($totalbalance,2);?>&nbsp;</td>
+					           </tr>
+					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
+					               <td>Total Remain :</td><td>&nbsp;$&nbsp;<?php echo number_format($totalremainbalance,2);?>&nbsp;</td>
 					           </tr>
 					     </table>
 					</td>

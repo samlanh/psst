@@ -2,7 +2,7 @@
 class Stock_CutstockController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	private $type = array(1=>'service',2=>'program');
-	const REDIRECT_URL = '/stock/purchasepayment';
+	const REDIRECT_URL = '/stock/cutstock';
 	public function init()
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -21,29 +21,28 @@ class Stock_CutstockController extends Zend_Controller_Action {
     			$search=array(
     							'branch_search' => '',
     							'adv_search' => '',
-    					        'supplier_search'=>'',
-    							'paid_by_search'=>'',
+    					        'student_id'=>'',
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
     							'status_search'=>1,
     					);
     		}
-			$db =  new Stock_Model_DbTable_DbPurchasePayment();
-			$rows = $db->getAllPurchasePayment($search);
+			$db =  new Stock_Model_DbTable_DbCutStock();
+			$rows = $db->getAllCutStock($search);
 			$rs_rows=new Application_Model_GlobalClass();
 			$rs_rows=$rs_rows->getImgActive($rows, BASE_URL);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","RECEIPT_NO","SUPPLIER_NAME","BALANCE","TOTAL_PAID","TOTAL_DUE","PAID_BY",
+			$collumns = array("BRANCH","RECEIPT_NO","STUDENT","BALANCE","TOTAL_RECEIVED","TOTAL_QTY_DUE",
 					"DATE","STATUS");
 			$link=array(
-					'module'=>'stock','controller'=>'purchasepayment','action'=>'edit',
+					'module'=>'stock','controller'=>'cutstock','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'receipt_no'=>$link,'supplier_name'=>$link,));
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-			$frm = new Stock_Form_FrmPurchasePayment();
-			$frm->FrmAddPurchasePayment(null);
+			$frm = new Stock_Form_FrmCutStock();
+			$frm->FrmAddCutStock(null);
 			Application_Model_Decorator::removeAllDecorator($frm);
 			$this->view->frm_payment = $frm;
 		
@@ -52,8 +51,8 @@ class Stock_CutstockController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 		$_data = $this->getRequest()->getPost();
 			try{
-				$db = new Stock_Model_DbTable_DbPurchasePayment();
-				$row = $db->addPaymentReceipt($_data);
+				$db = new Stock_Model_DbTable_DbCutStock();
+				$row = $db->addCutStock($_data);
 				
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
@@ -68,8 +67,8 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			}
 		}
 		
-		$frm = new Stock_Form_FrmPurchasePayment();
-		$frm->FrmAddPurchasePayment(null);
+		$frm = new Stock_Form_FrmCutStock();
+		$frm->FrmAddCutStock(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_payment = $frm;
 		

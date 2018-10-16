@@ -50,10 +50,10 @@ tr.head-td th {
 					dijit.byId("branch_id").focus();
 					return false;
 				}
-				supplier_id = dijit.byId('supplier_id').get('value');
-				if(supplier_id==""){
-					alert("<?php echo $tr->translate('PLEASE_SELECT_SUPPLIER');?>");
-					dijit.byId("supplier_id").focus();
+				student_id = dijit.byId('student_id').get('value');
+				if(student_id==""){
+					alert("<?php echo $tr->translate('PLEASE_SELECT_STUDENT');?>");
+					dijit.byId("student_id").focus();
 					return false;
 				}
 				if($('#identity').val()==""){
@@ -104,7 +104,7 @@ tr.head-td th {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RECEIPT_NO");?> 
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("receipt_no");?>
+				                   		<?php echo $frm->getElement("serailno");?>
 				                   </div>
 				                </div>
 				               

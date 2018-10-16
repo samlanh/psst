@@ -466,4 +466,33 @@ class Allreport_StockController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
+	
+	public function rptSupplierBalanceAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'title' =>'',
+						'location' =>'',
+						'status_search'=>1,
+						'supplier_id'=>-1,
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+				);
+			}
+			$this->view->search = $search;
+			$db = new Allreport_Model_DbTable_DbPurchase();
+			$this->view->pur_code = $db->getSuplierPuchaseBalance($search);
+		
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$form=new Accounting_Form_FrmSearchProduct();
+		$form=$form->FrmSearchProduct();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+	}
 }

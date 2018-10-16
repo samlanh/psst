@@ -842,7 +842,7 @@ function getAllgroupStudy($teacher_id=null){
    	return $db->fetchAll($sql);
    }
    /*blog get student*/
-   function getAllStudent($opt=null,$type=2){
+   function getAllStudent($opt=null,$type=2,$branch_id=null){
    	$db=$this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -852,8 +852,11 @@ function getAllgroupStudy($teacher_id=null){
 		   	FROM rms_student AS s
 		   	WHERE
 		   	(stu_enname!='' OR s.stu_khname!='')
-		   	AND s.status=1 AND s.is_subspend=0 AND customer_type=1
-		   	ORDER BY degree DESC,stu_khname ASC ";
+		   	AND s.status=1 AND s.is_subspend=0 AND customer_type=1 ";
+   	if($branch_id!=null){
+   		$sql.=" AND branch_id=".$branch_id;
+   	}
+   	$sql.=" ORDER BY degree DESC,stu_khname ASC";
    	$rows = $db->fetchAll($sql);
    	if($opt!=null){
    		$options=array(0=>$tr->translate("CHOOSE"));

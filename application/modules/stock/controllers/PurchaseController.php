@@ -70,21 +70,6 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->bran_name=$_pur->getAllBranch();
-
-// 		$pro=$_pur->getProductName();
-// 		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->product= $pro;
-		
-// 		$db_gr=new Global_Model_DbTable_DbGrade();
-// 		$d_row=$db_gr->getNameGradeAll();
-// 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->grade_name=$d_row;
-		
-// 		$_pro = new Accounting_Model_DbTable_DbProduct();
-// 		$this->view->pro_code=$_pro->getProCode();
-// 		$pro_cate = $_pro->getProductCategory();
-// 		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>$this->tr->translate("ADD_NEW")));
-// 		$this->view->cat_rows = $pro_cate;
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$branch = $model->getAllBranchName();
@@ -125,7 +110,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 			$_data['id']=$id;
 			try{
 				$db = new Stock_Model_DbTable_DbPurchase();
-				$row = $db->updateProduct($_data,$id);
+				$row = $db->updatePurchase($_data,$id);
 		
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/purchase");
@@ -140,22 +125,11 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 				echo $e->getMessage();
 			}
 		}
-		
-// 		$this->view->product= $_pur->getProductNames();
-// 		$pro=$_pur->getProductName();
-// 		array_unshift($pro, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->products= $pro;
 		$this->view->pu_code=$_pur->getPurchaseCode();
 		$this->view->sup_ids=$_pur->getSuplierName();
 		$this->view->row_sup=$row;
 		$this->view->row_pur_detai=$_pur->getSupplierProducts($id);		
 		$this->view->bran_name=$_pur->getAllBranch();
-		
-// 		$_pro = new Accounting_Model_DbTable_DbProduct();
-// 		$this->view->pro_code=$_pro->getProCode();
-// 		$pro_cate = $_pro->getProductCategory();
-// 		array_unshift($pro_cate, array('id'=>'-1' , 'name'=>$this->tr->translate("ADD_NEW")));
-// 		$this->view->cat_rows = $pro_cate;
 		
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$d_row= $db->getAllProductsNormal();
@@ -163,8 +137,6 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 		$this->view->products= $d_row;
 	}
-
-	
     function getSupplierInfoAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

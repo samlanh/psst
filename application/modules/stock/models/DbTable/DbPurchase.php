@@ -57,12 +57,10 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     
     function updateStock($pro_id,$location_id,$qty_order){
-    	
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission('brand_id');
-    	
+//     	$_db = new Application_Model_DbTable_DbGlobal();
+//     	$branch_id = $_db->getAccessPermission('brand_id');
     	$db=$this->getAdapter();
-    	$sql="select * from rms_product_location where pro_id=$pro_id AND brand_id=$location_id  $branch_id";
+    	$sql="SELECT * FROM rms_product_location WHERE pro_id=$pro_id AND brand_id=$location_id ";
     	$qty_stock = $db->fetchRow($sql);
     	
     	$this->_name="rms_product_location";
@@ -80,6 +78,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     				'pro_id'=>$pro_id,
     				'brand_id'=>$location_id,
     				'pro_qty'=>$qty_order,
+    				'price'=>0,
     		);
     		$this->insert($_arrs);
     	}
@@ -89,7 +88,6 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
-    			// Supplier info insert/update
 	    		$_arr = array(
 	    				'sup_name'		=>$_data['supplier_name'],
 	    				'purchase_no'	=>$_data['purchase_no'],
@@ -109,7 +107,6 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		}else{
 	    			$sup_id = $this->insert($_arr);
 	    		}
-	    		
 	    		//Purchasing Order Product
 	    		$this->_name='rms_purchase';
 	    		$_arr = array(
@@ -139,9 +136,9 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    						'amount'=>$_data['amount_'.$i],
 	    						'note'	=>$_data['note_'.$i],
 	    				);
-	    				$this->insert($_arr);
-	    				$this->updateProductCost($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i],$_data['amount_'.$i]);
-	    				$this->updateStock($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i]);
+    				$this->insert($_arr);
+    				$this->updateProductCost($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i],$_data['amount_'.$i]);
+    				$this->updateStock($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i]);
 	    		}
     			$db->commit();
 		   	}catch (Exception $e){
@@ -150,26 +147,23 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 		   		$db->rollBack();
 		   	}
     }
-    
     function updateProductCost($pro_id,$branch,$qty,$total_amount_purchase){
     	$db = $this->getAdapter();
-    	$sql=" 
-    			select 
+    	$sql="SELECT 
     				p.id,
     				p.cost,
-    				pl.pro_qty
+    				SUM(pl.pro_qty) pro_qty
     			from
-    				rms_product as p,
+    				rms_itemsdetail as p,
     				rms_product_location as pl
     			where 
     				p.id = pl.pro_id
     				and p.status = 1
-    				and p.id = $pro_id
-    				and pl.brand_id = $branch
-    		";
+    				and p.id = $pro_id ";
     	$result = $db->fetchRow($sql);
     	
     	if(!empty($result)){
+    		
     		$total_amount_in_stock = $result['pro_qty'] * $result['cost'];
     		$total_qty_sum = $result['pro_qty'] + $qty;
     		
@@ -179,20 +173,19 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     				"cost"=>$last_cost,
     				);
     		
-    		$this->_name = "rms_product";
+    		$this->_name = "rms_itemsdetail";
     		$where = " id = ".$result['id'];
 			$this->update($array, $where);
     	}
-    	
     }
-    
     function updateStockBack($id){
     	$db = $this->getAdapter();
     	$sql = "SELECT 
 				  sp.branch_id,
 				  spd.id,
 				  spd.pro_id,
-				  spd.qty 
+				  spd.qty,
+				  spd.amount 
 				FROM
 				  rms_purchase AS sp,
 				  rms_purchase_detail AS spd 
@@ -203,7 +196,9 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	
     	if(!empty($result)){
     		foreach ($result as $row){
-				$sql1 = "select id,pro_qty from rms_product_location where pro_id =".$row['pro_id']." and brand_id = ".$row['branch_id'] ;
+    			$this->updateProductCost($row['pro_id'],$row['branch_id'],-$row['qty'],-$row['amount']);
+    			
+				$sql1 = "SELECT id,pro_qty FROM rms_product_location where pro_id =".$row['pro_id']." and brand_id = ".$row['branch_id'] ;
 				$result1 = $db->fetchRow($sql1);
 				$qty = $result1['pro_qty'] - $row['qty']; 
 				$this->_name = "rms_product_location";
@@ -216,13 +211,11 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	}
     }
     
- 	function updateProduct($_data,$id){
+ 	function updatePurchase($_data,$id){
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{ 
-    		$this->updateStockBack($id);
-    		
-    		// Supplier info insert/update
+    		$this->updateStockBack($_data['id']);//to back history data
     		$this->_name = "rms_supplier";
 	    		$_arr = array(
 	    				'sup_name'		=>$_data['supplier_name'],
@@ -249,7 +242,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				'sup_id'		=>$sup_id,
 	    				'supplier_no'	=>$_data['purchase_no'],
 	    				'amount_due'	=>$_data['amount_due'],
-	    				'amount_due_after'	=>$_data['amount_due'],
+	    				'amount_due_after'=>$_data['amount_due'],
 	    				'branch_id'		=>$_data['branch_id'],
 	    				'date'			=>date("Y-m-d"),
 	    				'status'		=>$_data['status'],
@@ -275,6 +268,8 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     						'note'			=>$_data['note_'.$i],
     				);
     				$this->insert($_arr);
+    				
+    				$this->updateProductCost($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i],$_data['amount_'.$i]);
 	    			$this->updateStock($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i]);
 	    		}
     			$db->commit();

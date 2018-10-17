@@ -12,7 +12,7 @@
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-money " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('PURCHASE_PAYMENT');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-money " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('CUTSTOCK');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -70,11 +70,12 @@
 			queryExpr: "*${0}*",                     
 			id: "student_id",
 			name: "student_id",   
+			value:"<?php echo $this->search['student_id'];?>",
 			required:true,        
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		}, "student_id");
-		
+		getallstudentname();
 		 var branch_id = dijit.byId('branch_search');
 		 	branch_id.on('change', function(evt) {
 				getallstudentname();
@@ -98,6 +99,10 @@
 			load: function(data) {
 				student_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('student_id').set('store',student_store);  
+			    <?php if (!empty($this->search['student_id'])){?>
+			    dijit.byId('student_id').set('value','<?php echo $this->search['student_id'];?>'); 
+			   
+			    <?php }?>
 			},
 			error: function(err) {
 			}

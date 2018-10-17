@@ -41,6 +41,7 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
+			$this->view->search = $search;
 			$frm = new Stock_Form_FrmCutStock();
 			$frm->FrmAddCutStock(null);
 			Application_Model_Decorator::removeAllDecorator($frm);

@@ -171,6 +171,11 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     			);
     			$this->_name ='rms_cutstock_detail';
     			$this->insert($arrs);
+    			
+    			//cut stock
+    			$dbpu = new Stock_Model_DbTable_DbPurchase();
+//     			$dbpu->updateProductCost($_data['itemdetail_id'.$i],$_data['branch_id'],$_data['qty_receive'.$i],$_data['amount_'.$i]);
+    			$dbpu->updateStock($_data['itemdetail_id'.$i],$_data['branch_id'],$_data['qty_receive'.$i]);
     		}
     		return $cut_id;
     	}catch(Exception $e){

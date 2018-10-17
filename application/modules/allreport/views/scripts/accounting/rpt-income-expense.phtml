@@ -9,6 +9,7 @@
 		<table style="width: 100%">	
 			<tr>
 				<td><input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="Search....." value="<?php echo $this->search['txtsearch'];?>" type="text"></td>
+				<td><?php echo $frm->getElement("branch_id");?></td>
 				<td><?php echo $frm->getElement("start_date");?></td>
 				<td><?php echo $frm->getElement("end_date");?></td>
 				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
@@ -45,6 +46,8 @@
 							<thead>
 							<tr style="text-align:center !important;font-size:13px; height: 20px;border: 1px solid #000;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
 								<th style="border: 1px solid #000;"><?php echo $tr->translate('N_O')?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH_NAME')?></th>
+								<th style="border: 1px solid #000;"><?php echo $tr->translate('INFORS_RECEIVE')?></th>
 								<th style="border: 1px solid #000;"><?php echo $tr->translate('EXPENSE_TITLE')?></th>
 								<th style="border: 1px solid #000;"><?php echo $tr->translate('INVOICE_NO')?></th>
 								<th style="border: 1px solid #000;"><?php echo $tr->translate('PAYMENT_METHOD')?></th>
@@ -61,6 +64,8 @@
 							?>
 							<tr class="hover" style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" >
 								<td style="border: 1px solid #000;"><?php echo $key;?></td>
+								<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['branch_name']; ?></a></td>
+								<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['receiver']; ?></a></td>
 								<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['title']; ?></a></td>
 								<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['invoice']; ?></a></td>
 								<td style="border: 1px solid #000;"><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'accounting','action'=>'rpt-income-expense-detail','id'=>$row['id']));?>" target="blank"><?php echo $row['pay']; ?></a></td>

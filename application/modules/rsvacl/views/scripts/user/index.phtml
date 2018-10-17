@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle('SRMS System | User page'); 
 	echo $this->headTitle();
+	$frm = $this->frm_user;
 ?>	
 <style>
 	#grid{
@@ -30,12 +31,7 @@
 						</select>
 	               </div>
 	               <div class="col-md-2 col-sm-2 col-xs-12">
-	               		<select class="fullside" name="active" id="active"  onChange="document.frmlist_agent.submit();" style=" height: 30px;" dojoType="dijit.form.FilteringSelect"> 
-							<option value="-1" <?php if($this->active == -1) echo 'selected="selected"';?> ><?php echo $tr->translate("PLEASE_SELECT_STATUS");?></option> 
-							<?php foreach ($this->activelist as $key => $at) : ?>
-								<option value="<?php echo $key;?>" <?php if($key == $this->active) echo 'selected'?>><?php echo $at;?></option>
-							<?php endforeach;?>	 
-						</select>
+	               		<?php echo $frm->getElement('status_search');?>
 	               </div>
 	               <div class="col-md-2 col-sm-2 col-xs-12">
 	               		<button dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH")?></button>

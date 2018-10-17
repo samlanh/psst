@@ -2,6 +2,7 @@
 
 class RsvAcl_UserController extends Zend_Controller_Action
 {
+	
 	const REDIRECT_URL = '/rsvacl';
 	const MAX_USER = 20;
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
@@ -20,10 +21,9 @@ class RsvAcl_UserController extends Zend_Controller_Action
 // 			$this->user_typelist[$r['id']] = $r['name'];    
 // 		}		
     }
-
+	
     public function indexAction()
     {
-    	
 		$db_user=new Application_Model_DbTable_DbUsers();
                 
         $this->view->activelist =$this->activelist;       
@@ -34,7 +34,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
         	$_data=$this->getRequest()->getPost();
         }else{
         	$_data = array(
-        			'active'=>-1,
+        			'status_search'=>-1,
         			'user_type'=>-1,
         			'txtsearch'=>''
         	);
@@ -64,9 +64,13 @@ class RsvAcl_UserController extends Zend_Controller_Action
         );
         $this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('user_type'=>$link,'branch_name'=>$link,'user_name'=>$link,'name'=>$link));
     	$this->view->user_type = $_data['user_type'];
-    	$this->view->active = $_data['active'];
+    //	$this->view->active = $_data['active'];
     	$this->view->txtsearch = $_data['txtsearch'];
     	
+    	$frm = new Global_Form_FrmItems();
+    	$frm->FrmAddDegree(null);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_user = $frm;
     }
 	public function addAction()
 	{
@@ -76,10 +80,14 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			if($this->getRequest()->isPost()){
 				$userdata=$this->getRequest()->getPost();
 				try {
-					$db = $db_user->insertUser($userdata);
-					Application_Form_FrmMessage::Sucessfull('INSERT_SUCCESS', self::REDIRECT_URL);
+					$sms="INSERT_SUCCESS";
+					$_user = $db_user->insertUser($userdata);
+					if($_user==-1){
+						$sms = "RECORD_EXIST";
+					}
+					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL);
 				} catch (Exception $e) {
-					$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+					$this->view->msg = $sms;
 				}
 			}
 			
@@ -91,6 +99,7 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			array_unshift($user_type, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
 			$this->view->user_type = $user_type;
 			$this->view->schoolOption = $db->getAllSchoolOption();
+			//echo $db->getAllSchoolOption(); exit();
 	}
 	public function editAction()
 	    {

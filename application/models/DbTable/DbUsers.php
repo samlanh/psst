@@ -129,8 +129,8 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		if(empty($search)){
 			return $sql.$where.$orderby;
 		}
-		if ($search['active'] >= 0){
-			$where = 'AND u.`active` = '.$search['active'];
+		if ($search['status_search'] >= 0){
+			$where = 'AND u.`active` = '.$search['status_search'];
 		}
 		
 		if (!empty($search['txtsearch'])){
@@ -242,7 +242,8 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	}
 	
 	function insertUser($data){
-		
+		$db = $this->getAdapter();
+		try{
 		$branchList="";
 		if (!empty($data['selector'])){
 			foreach ($data['selector'] as $rs){
@@ -252,7 +253,13 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 				}
 			}
 		}
-		
+		$sql="SELECT id FROM rms_users WHERE user_name ='".$data['user_name']."'";
+		//echo $sql; exit();
+		//$sql.=" AND password='".$data['password']."'";
+		$rs = $db->fetchOne($sql);
+		if(!empty($rs)){
+			return -1;
+		}
 		$_user_data=array(
 	    	'last_name'=>$data['last_name'],
 			'first_name'=>$data['first_name'],
@@ -264,8 +271,11 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 			'schoolOption'=>$data['schoolOption'],
 			'active'=> 1			
 	    ); 
-	    	           	    	   
 		return  $this->insert($_user_data);
+		}catch (Exception $e){
+			$db->rollBack();
+			echo $e->getMessage();exit();
+		}
 	}
 	
 	function updateUser($data){	

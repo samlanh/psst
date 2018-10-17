@@ -42,8 +42,8 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
 	public function getAllexspan($search){//report expense
 	   $db=$this->getAdapter();
 	   $sql="SELECT e.* ,
-				b.branch_namekh AS branch ,
-				u.user_name ,u.first_name,
+				(SELECT b.branch_nameen FROM `rms_branch` AS b WHERE b.br_id =e.branch_id LIMIT 1) AS branch_name,
+				u.user_name ,u.first_name,e.receiver,
 				(select name_en from rms_view where rms_view.type=8 and key_code=payment_type) as payment_type,
 				(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type LIMIT 1) AS pay
 				
@@ -63,9 +63,13 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
 	   	$s_where = array();
 	   	$s_search = addslashes(trim($search['txtsearch']));
 	   	$s_where[] = " e.invoice LIKE '%{$s_search}%'";
+	   	$s_where[] = " e.receiver LIKE '%{$s_search}%'";
 	   	$s_where[] = " e.title LIKE '%{$s_search}%'";
 	   	$s_where[] = " e.description LIKE '%{$s_search}%'";
 	   	$where .=' AND ( '.implode(' OR ',$s_where).')';
+	   }
+	   if($search['branch_id']){
+	   	$where.= " AND e.branch_id = ".$search['branch_id'];
 	   }
 	   return $db->fetchAll($sql.$where);
 	}

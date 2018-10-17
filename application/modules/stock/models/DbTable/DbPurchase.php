@@ -114,7 +114,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				'sup_id'		=>$sup_id,
 	    				'supplier_no'	=>$purchase_no,
 	    				'amount_due'	=>$_data['amount_due'],
-	    				'amount_due_after'	=>$_data['amount_due'],
+	    				'amount_due_after'=>$_data['amount_due'],
 	    				'branch_id'		=>$_data['branch'],
 	    				'date'			=>date("Y-m-d"),
 	    				'status'		=>$_data['status'],
@@ -144,7 +144,6 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     			$db->commit();
 		   	}catch (Exception $e){
 		   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		   		echo $e->getMessage();
 		   		$db->rollBack();
 		   	}
     }

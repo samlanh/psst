@@ -1074,6 +1074,7 @@ function calculateTotal(index){
 		qty=isNaN(qty)?1:qty;
 		if(qty==1){dijit.byId('qty_'+index).attr('value',qty);}
 		subtotal = price * qty;
+		dijit.byId('subtotal_'+index).attr('value',subtotal);
 		
 		additional_fee = dijit.byId('extra_fee'+index).get('value');
 		additional_fee = isNaN(additional_fee)?0:additional_fee;

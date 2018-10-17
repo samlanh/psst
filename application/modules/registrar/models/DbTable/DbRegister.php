@@ -1156,6 +1156,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		
     	$sql=" SELECT 
     				sp.id,
+    				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
     				sp.receipt_number,
 	    			s.stu_code,
 	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS name,
@@ -1172,7 +1173,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	 		       
  			   FROM 
     				rms_student AS s,
-				rms_student_payment AS sp
+					rms_student_payment AS sp
 				WHERE 
 					s.stu_id=sp.student_id 
 					$user 

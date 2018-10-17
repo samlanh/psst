@@ -35,7 +35,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$rs_rows = $glClass->getGernder($rs_rows, BASE_URL );
     		$list = new Application_Form_Frmtable();
     		
-    		$collumns = array("RECEIPT","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","FINE",
+    		$collumns = array("BRANCH_NAME","RECEIPT","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","CLASS","FINE",
     				"TOTAL_PAYMENT","CREDIT_MEMO","PAID","BALANCE",
     							"PAYMENT_METHOD","NUMBER","DATE_PAY","USER","STATUS","VOID_BY");
     		

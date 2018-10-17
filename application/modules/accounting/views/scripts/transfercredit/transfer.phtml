@@ -27,16 +27,15 @@
     	<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'transfercredit','action'=>'transfer')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-				stu_idto = dijit.byId('stu_idto').get('value');
-
 				stu_name = dijit.byId('stu_name').get('value');
 				stu_idfrom = dijit.byId('student_name').get('value');
 				if(stu_idfrom == stu_name){
-					alert ("ឈ្មោះដូចគ្នាមិនអាចបញ្ចូលបានទេ!");
+					alert ("<?php echo $tr->translate("MESSAGE_DON_INOUT");?>");
 					return false; 
 				}else{ 
-					return false;}
-					
+					return true;}
+
+				stu_idto = dijit.byId('stu_idto').get('value');s	
        			 if(stu_idto==0){
 					alert("សូមជ្រើសរើសអត្តលេខសិស្ស");dijit.byId('stu_idto').focus();return false;}
         			dijit.byId("saveclose").set("disabled",true);

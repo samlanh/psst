@@ -777,6 +777,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 				popupNation(2);
 		    }
 			}, "nation");
+			setSelected();
 	});
 	function popupNation(key){
 		dijit.byId("save_nation").attr("disabled",false);
@@ -795,14 +796,16 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 			dijit.byId("popup_nation").show();
 		}
 	}
+	function setSelected(){
+		nationality = dijit.byId("nationality").get('value');
+		dijit.byId("nation").attr('value',nationality);
+	}
 	var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 	var nation_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
 	var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-nation")); ?>';
 		function addNationBy(){
 			if(dijit.byId('frm_nation_kh').validate()){
 				dijit.byId("save_nation").attr("disabled",true);
-				nation = dijit.byId('nationality').get('value');
-				dijit.byId('nation').attr('value',nation);
 				loadingBlock();	
 				dojo.xhrPost({
 					url:url_add_nation,

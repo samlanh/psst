@@ -6,6 +6,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 	protected $t_date;
 	protected $t_num;
 	protected $text;
+	protected $textarea=null;
 	//protected $check;
 	public function init()
 	{
@@ -15,6 +16,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$this->t_date = 'dijit.form.DateTextBox';
 		$this->t_num = 'dijit.form.NumberTextBox';
 		$this->text = 'dijit.form.TextBox';
+		$this->textarea = 'dijit.form.Textarea';
 		//$this->check='dijit.form.CheckBox';
 	}
 	public function FrmAddClass($data=null){
@@ -85,22 +87,10 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_time = new Zend_Dojo_Form_Element_TextBox('time');
 		$_time->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 	
-		$_note = new Zend_Dojo_Form_Element_TextBox('notes');
-		$_note->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','style'=>'min-height: 70px;'));
+		$_note = new Zend_Dojo_Form_Element_Textarea('notes');
+		$_note->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:80px;',));
 		
-// 		$_floor = new Zend_Dojo_Form_Element_TextBox('floor');
-// 		$_floor->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
-	
-// 		$_student = new Zend_Dojo_Form_Element_TextBox('max_student');
-// 		$_student->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
-	
-// 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
-// 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
-// 		$_status_opt = array(
-// 				1=>$this->tr->translate("ACTIVE"),
-// 				0=>$this->tr->translate("DACTIVE"));
-// 		$_status->setMultiOptions($_status_opt);
-	
+		
 		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
 		$_academic->setAttribs(array('dojoType'=>$this->filter,
 				//	'placeholder'=>$this->tr->translate("SERVIC"),
@@ -155,7 +145,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$session->setValue($data['session']);
 			$_calture->setValue($data['calture']);
 			$_time->setValue($data['time']);
-			$_note->setValue($data['note']);
+			//$_note->setValue($data['notes']);
 		}
 		$this->addElements(array($id,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
 		return $this;

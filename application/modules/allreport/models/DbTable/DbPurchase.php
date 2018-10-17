@@ -246,16 +246,17 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	(SELECT p.supplier_no FROM `rms_purchase` AS p WHERE p.id = pd.purchase_id LIMIT 1) AS supplier_no
     	FROM `rms_purchase_payment_detail` AS pd WHERE pd.id =$payment_id ";
     	return $db->fetchAll($sql);
-    }
-    
+    }   
     function getSuplierPuchaseBalance($search=null){
     	$db=$this->getAdapter();
     	$sql="SELECT sp.branch_id,sp.id,sp.supplier_no,s.sup_name,s.tel,
-    	(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id LIMIT 1) AS branch_name,
-    	sp.amount_due,sp.amount_due_after,sp.date,
-    	(SELECT name_kh FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1 LIMIT 1) AS `status`
-    	FROM rms_purchase AS sp,rms_supplier AS s
-    	WHERE sp.sup_id=s.id AND sp.status=1 AND sp.is_paid=0 ";
+    		(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id LIMIT 1) AS branch_name,
+    		(SELECT SUM(payment_amount) FROM `rms_purchase_payment_detail` WHERE purchase_id=sp.id LIMIT 1) AS paid_amount,
+    		sp.amount_due,sp.amount_due_after,sp.date,
+    		(SELECT name_kh FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1 LIMIT 1) AS `status`
+    	FROM 
+    		rms_purchase AS sp,rms_supplier AS s
+    			WHERE sp.sup_id=s.id AND sp.status=1 AND sp.is_paid=0 ";
     	 
     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.date <= '".$search['end_date']." 23:59:59'";
@@ -275,12 +276,8 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	if($search['supplier_id']>0){
     		$where.=" AND sp.sup_id=".$search['supplier_id'];
     	}
-    
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('branch_id');
     	return $db->fetchAll($sql.$where);
     }
 }
-
-
-

@@ -2,7 +2,7 @@
 	$request = Zend_Controller_Front::getInstance ()->getRequest ();
 	
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage ();
-	echo $this->headTitle($tr->translate('PURCHASE_PAYMENT'));
+	echo $this->headTitle($tr->translate('CUTSTOCK'));
 	$frm = $this->frm_payment;
 	$urlVoid = $this->baseUrl()."/stock/purchasepayment/void/id/";
 ?>

@@ -72,6 +72,8 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 		}
 		$this->view->group = $db->getAllgroupStudy();
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->branch_id=$db_global->getAllBranch();
+		$this->view->branch_name = $db_global->getAllBranch();
 		$this->view->row_year = $db_global->getAllYear();
 		$this->view->session = $db_global->getSession();
 		$this->view->degree = $db_global->getDegree();
@@ -101,6 +103,7 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 		$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
 		//print_r($this->view->allstudentBygroup);exit();
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->branch_id=$db_global->getAllBranch();
 		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();
@@ -128,19 +131,27 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
-	
-	function getGradeAction(){
+	function getAllstubygroupAction(){
 		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Foundation_Model_DbTable_DbStudentScore();
-			$grade = $db->getAllGrade($data['degree']);
-			//print_r($grade);exit();
-			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
-			print_r(Zend_Json::encode($grade));
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$data=$db->getAllgroupStu($data['branch_id']);
+			print_r(Zend_Json::encode($data));
 			exit();
 		}
 	}
+	
+// 	function getGradeAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data=$this->getRequest()->getPost();
+// 			$db = new Foundation_Model_DbTable_DbStudentScore();
+// 			$grade = $db->getAllGrade($data['degree']);
+// 			//print_r($grade);exit();
+// 			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
+// 			print_r(Zend_Json::encode($grade));
+// 			exit();
+// 		}
+// 	}
 	function getStudentBygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();

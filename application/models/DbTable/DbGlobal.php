@@ -276,12 +276,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
  public function getAllFecultyName(){
    	$db = $this->getAdapter();
    	return $this->getAllItems(1,null);
-}   
+} 
+  
 function getAllgroupStudy($teacher_id=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
    			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
-   		FROM `rms_group` AS `g`  ";
+   		FROM `rms_group` AS `g` ";
    	if($teacher_id!=null){
    		$sql.=" ,rms_group_subject_detail AS gsd WHERE g.id =gsd.group_id AND gsd.teacher= ".$teacher_id;
    	}else{
@@ -290,7 +291,17 @@ function getAllgroupStudy($teacher_id=null){
    	$sql.=" AND g.status =1 AND group_code!=''";
    	return $db->fetchAll($sql);
 }
-   function getAllgroupStudyNotPass($action=null){
+
+function getAllgroupStu($branch_id=null){
+	$db = $this->getAdapter();
+	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation limit 1) ) AS name
+	FROM `rms_group` AS `g` where branch_id=$branch_id ";
+	$sql.=" AND g.status =1 AND group_code!=''";
+	return $db->fetchAll($sql);
+}
+
+function getAllgroupStudyNotPass($action=null){
    	$db = $this->getAdapter();
    	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
    	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
@@ -852,7 +863,7 @@ function getAllgroupStudy($teacher_id=null){
    	$db=$this->getAdapter();
    	$branch_id = $this->getAccessPermission();
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-   	$sql="SELECT s.stu_id AS id,s.stu_id AS stu_id,
+   	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
    			stu_code,
 		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS name
 		   	FROM rms_student AS s

@@ -94,7 +94,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
-								<option value="-1">select year</option>
+								<option value="-1"><?php echo $tr->translate("SELECT_YEAR")?></option>
 								<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
 									<option value="<?php echo $year['id'];?>"><?php echo $year['years'];?></option>
 								<?php }}?>

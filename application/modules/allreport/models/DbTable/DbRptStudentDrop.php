@@ -81,6 +81,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql = "SELECT 
     	gr.group_id,
+    	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
     	(SELECT CONCAT(rms_tuitionfee.from_academic,'-',rms_tuitionfee.to_academic,'(',rms_tuitionfee.generation,')')
     	 FROM rms_tuitionfee WHERE rms_tuitionfee.status=1 AND rms_tuitionfee.is_finished=0 AND rms_tuitionfee.id=gr.year_id LIMIT 1) AS years,
     	(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
@@ -106,6 +107,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " gr.`note` LIKE '%{$s_search}%'";
     		$where .=' AND ('.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND gr.branch_id='.$search['branch_id'];
     	}
     	if(!empty($search['study_year'])){
     		$where.=' AND gr.year_id='.$search['study_year'];

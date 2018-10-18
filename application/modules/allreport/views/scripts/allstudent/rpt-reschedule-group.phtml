@@ -66,6 +66,7 @@
 		<table width="100%" cellspacing="5">
 	       <tr>
 	           <td><?php echo $frm->getElement("title");?></td>
+	           <td> <?php echo $frm->getElement("branch_id");?></td>
 	           <td> <?php echo $frm->getElement("study_year");?></td>
 	           <td> <?php echo $frm->getElement("group");?></td>
 	           <td> <?php echo $frm->getElement("teacher");?></td>
@@ -124,6 +125,7 @@
 						<thead>
 						<tr style="font-size:13px; height: 20px;background: #ccd9ff;" align="center" >
 							<th >No.</th>
+							<th ><?php echo $tr->translate("BRANCH_NAME");?></th>
 							<th ><?php echo $tr->translate("STUDY_YEAR");?></th>
 							<th ><?php echo $tr->translate("GROUP");?></th>
 							<th ><?php echo $tr->translate("SESSION");?></th>
@@ -144,6 +146,7 @@
 					?>
 						<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 							<td ><?php echo $i;?></td>
+							<td ><?php echo $row['branch_name'];?></td>
 							<td ><?php echo $row['years'];?></td>
 							<td align="left">&nbsp;&nbsp;<?php echo $row['group_code'];?></td>
 							<td ><?php echo $session;?></td>

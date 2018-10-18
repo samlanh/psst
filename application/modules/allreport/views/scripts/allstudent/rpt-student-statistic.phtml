@@ -52,11 +52,12 @@
 					<thead>
 					<tr style="font-size:14px; height: 20px;background: #ccd9ff; font-weight:bold;" align="center" >
 						<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
-						<th colspan="8"><?php echo $tr->translate("STUDY_INFO");?>
+						<th colspan="9"><?php echo $tr->translate("STUDY_INFO");?>
 							<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
 						</th>
 					</tr>
 					<tr style="font-size:14px; font-weight:bold; height: 20px;background: #ccd9ff;" align="center" >
+						<th><?php echo $tr->translate("BRANCH_NAME");?></th>
 						<th><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
 						<th><?php echo $tr->translate("DEGREE");?></th>
 						<th><?php echo $tr->translate("GRADE");?></th>
@@ -77,6 +78,7 @@
 						$total_amount_student_drop = 0;
 						$drop_student=0;
 						$academic_name = "";
+						$branch_id="";
 						$degree_name = "";
 						$grade_name = "";
 						$session_name = "";
@@ -85,6 +87,7 @@
 						<?php if(($academic_year != $row['academic_year'] || $degree != $row['degree'] || $grade != $row['grade'] || $session != $row['session']) && $key>0){ $i++; ?>
 								<tr style="font-size:14px !important; line-height: 20px;" align="center" class="hover" >
 									<td><?php echo $i;?></td>
+									<td><?php echo $branch_id;?></td>
 									<td><?php echo $academic_name;?></td>
 									<td><?php echo $degree_name;?></td>
 									<td><?php echo $grade_name;?></td>
@@ -125,6 +128,7 @@
 						<?php 
 							$academic_year = $row['academic_year'];
 							$degree = $row['degree'];
+							$branch_id = $row['branch_name'];
 							$grade = $row['grade'];
 							$session = $row['session'];
 							$academic_name = $row['academic_year_name'];
@@ -140,6 +144,7 @@
 						?>
 								<tr style="font-size:12px;line-height:20px;" align="center" class="hover" >
 									<td><?php echo ++$i;?></td>
+									<td><?php echo $branch_id;?></td>
 									<td><?php echo $academic_name;?></td>
 									<td><?php echo $degree_name;?></td>
 									<td><?php echo $grade_name;?></td>
@@ -150,7 +155,7 @@
 									<td><?php echo $amount_student - $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 								</tr>
 								<tr align="center" class="hover">
-									<td colspan="5">Total</td>
+									<td colspan="6">Total</td>
 									<td><?php echo $total_amount_student." ".$tr->translate("STUDENT_UNIT");;?></td>	
 									<td><?php echo $total_amount_student_new." ".$tr->translate("STUDENT_UNIT");?></td>	
 									<td><?php echo $total_amount_student_drop." ".$tr->translate("STUDENT_UNIT");?></td>

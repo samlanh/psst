@@ -134,6 +134,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	$db = $this->getAdapter();
 	   	$sql = 'SELECT
 				   	`g`.`id`,
+				   	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 				   	`g`.`group_code`    AS `group_code`,
 				   	(SELECT CONCAT(from_academic," - ",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
 				   	`g`.`semester` AS `semester`,
@@ -167,6 +168,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   		$s_where[] = "  (SELECT	name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = g.session LIMIT 1) LIKE '%{$s_search}%'";
 	   		$s_where[] = "  (SELECT	name_en FROM rms_view WHERE rms_view.type = 9 AND rms_view.key_code = g.is_pass LIMIT 1) LIKE '%{$s_search}%'";
 	   		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+	   	}
+	   	if(!empty($search['branch_id'])){
+	   		$where.=' AND g.branch_id='.$search['branch_id'];
 	   	}
 	   	if(!empty($search['study_year'])){
 	   		$where.=' AND g.academic_year='.$search['study_year'];

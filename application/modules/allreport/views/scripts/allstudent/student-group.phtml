@@ -10,6 +10,7 @@
 		<table width="100%">
 	       <tr>
 	           <td><?php echo $frm->getElement("title");?></td>
+	            <td><?php echo $frm->getElement("branch_id");?></td>
 	           <td><?php echo $frm->getElement("teacher");?></td>
 	           <td><?php echo $frm->getElement("study_status");?></td>
 			   <td><?php echo $frm->getElement("study_year");?></td>
@@ -79,6 +80,7 @@
 						  <tr style="font-size:12px; height: 25px; font-weight: bold; background: #ccd9ff;" align="center">
 						    <td class="hidden"></td>
 						    <td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
 							<td>&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
@@ -102,6 +104,7 @@
 								<input type="hidden" name="group_id<?php echo $i;?>" id="group_id<?php echo $i;?>" value="<?php echo $rs['id'];?>" dojoType="dijit.form.TextBox" />
 							</td>
 						   	<td><?php echo $i;?></td>
+						   	<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['branch_name']; ?></a></td>
 						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>
 						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic']; ?></a></td>
 						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['semester']; ?></a></td>

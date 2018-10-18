@@ -15,6 +15,7 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 				$ids = explode(',', $_data['identity1']);
 				foreach ($ids as $i){
 					$arr = array(
+							'branch_id'		=>$_data['branch_id'],
 							'group_id'		=>$_data['group_code'],
 							'year_id'		=>$_data['academic_year'],
 							'day_id'		=>$_data['day_id_'.$i],
@@ -48,6 +49,7 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 				$ids = explode(',', $_data['identity1']);
 				foreach ($ids as $i){
 					$arr = array(
+							'branch_id'		=>$_data['branch_id'],
 							'group_id'		=>$_data['group_code'],
 							'year_id'		=>$_data['academic_year'],
 							'day_id'		=>$_data['day_id_'.$i],
@@ -182,12 +184,13 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 	function getAllRescheduleGroup($search){
 		$db = $this->getAdapter();
 		$sql = "SELECT gr.group_id,
+			(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
 			(SELECT CONCAT(rms_tuitionfee.from_academic,'-',rms_tuitionfee.to_academic,'(',rms_tuitionfee.generation,')') 
        		FROM rms_tuitionfee WHERE rms_tuitionfee.status=1 AND rms_tuitionfee.is_finished=0 AND rms_tuitionfee.id=gr.year_id LIMIT 1) AS years,
        		(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
        		(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1)AS days,
        		gr.from_hour,gr.to_hour,
-       		(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.status = 1 AND subject_titlekh!='' LIMIT 1) AS subject_name,
+       		(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
        		(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.status=1 AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
        		DATE_FORMAT(gr.create_date,'%d-%m-%Y'), (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS USER,
        		(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.status AND rms_view.type=1 LIMIT 1) AS STATUS
@@ -202,6 +205,15 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 			$s_search = addslashes(trim($search['title']));
 			$s_where[] = " gr.`note` LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['branch_id'])){
+			$where.=' AND gr.branch_id='.$search['branch_id'];
+		}
+		if(!empty($search['subject'])){
+			$where.=' AND gr.subject_id='.$search['subject'];
+		}
+		if(!empty($search['day'])){
+			$where.=' AND gr.day_id='.$search['day'];
 		}
 		if(!empty($search['study_year'])){
 			$where.=' AND gr.year_id='.$search['study_year'];

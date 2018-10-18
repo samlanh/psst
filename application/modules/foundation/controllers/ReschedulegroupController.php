@@ -15,6 +15,8 @@ class Foundation_ReschedulegroupController extends Zend_Controller_Action {
 			else{
 				$search = array(
 						'title' => '',
+						'branch_id' => '',
+						'day' => '',
 						'study_year' => '',
 						'group' => '',
 						'start_date'=>date("Y-m-d"),
@@ -26,11 +28,11 @@ class Foundation_ReschedulegroupController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
 			$list = new Application_Form_Frmtable();
-			$collumns = array("STUDY_YEAR","GROUP","DAY","FROM_HOUR","TO_HOUR","SUBJECT","TEACHER","DATE","USER","STATUS");
+			$collumns = array("BRANCH_NAME","STUDY_YEAR","GROUP","DAY","FROM_HOUR","TO_HOUR","SUBJECT","TEACHER","DATE","USER","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'reschedulegroup','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('group_code'=>$link,'years'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'group_code'=>$link,'years'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -87,6 +89,7 @@ class Foundation_ReschedulegroupController extends Zend_Controller_Action {
 		array_unshift($room, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		array_unshift($room, array ( 'id' => 0,'name' => 'Select Room'));
 		$this->view->room = $room;
+		$this->view->branch_name = $model->getAllBranch();
 		
 		$db=new Global_Model_DbTable_DbGrade();
 // 		$d_row=$db->getNameGradeAll();
@@ -143,6 +146,8 @@ class Foundation_ReschedulegroupController extends Zend_Controller_Action {
 		array_unshift($room, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));
 		array_unshift($room, array ( 'id' => 0,'name' => 'Select Room'));
 		$this->view->room = $room;
+		
+		$this->view->branch_name = $model->getAllBranch();
 		
 		$db=new Global_Model_DbTable_DbGrade();
 // 		$d_row=$db->getNameGradeAll();

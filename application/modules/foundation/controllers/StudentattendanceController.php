@@ -37,7 +37,7 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'foundation','controller'=>'studentattendance','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('branch_name'=>$link,'group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");

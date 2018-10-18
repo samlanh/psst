@@ -203,6 +203,10 @@
 						}
 					}
 				}
+			}else{
+				$this->_name = "rms_specail_discount_document";
+				$where1 =" discount_id=".$id;
+				$this->delete($where1);
 			}
 			
 		}catch(Exception $e){

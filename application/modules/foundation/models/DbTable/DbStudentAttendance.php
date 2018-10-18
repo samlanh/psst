@@ -196,7 +196,6 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 		return $db->fetchAll($sql.$order);
 	}
 	
-	
 	function getStudent($year,$grade,$session){
 		$db=$this->getAdapter();
 		$sql="SELECT stu_id,stu_code,CONCAT(stu_enname,' - ',stu_khname) AS stu_name,sex

@@ -225,7 +225,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 	var subject_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
 	var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade));?> );
-	
 	var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->group));?> );
 	
 	dojo.ready(function(){

@@ -79,7 +79,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	    			<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select name="branch_id" class="fullside" id="branch_id" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="" onChange="getSubjectajax()">
+		                	<select name="branch_id" class="fullside" id="branch_id" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="" >
 								<option value="-1"><?php echo $tr->translate("SELECT_BRANCH")?></option>
 								<?php if(!empty($this->branch_name)){foreach($this->branch_name as $name){?>
 									<option value="<?php echo $name['id'];?>"><?php echo $name['name'];?></option>
@@ -90,12 +90,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP_CODE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select name="group_code" class="fullside" id="group_code" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="" onChange="getSubjectajax()">
-								<option value="-1"><?php echo $tr->translate("SELECT_GROUP")?></option>
-								<?php if(!empty($this->group_code)){foreach($this->group_code as $name){?>
-									<option value="<?php echo $name['id'];?>"><?php echo $name['name'];?></option>
-								<?php }}?>
-							</select>
+							<input id="group_code" />
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -148,7 +143,7 @@ var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::enc
 //var dept_store  = getDataStorefromJSON('id','name', <?php //print_r(Zend_Json::encode($this->dept));?> );
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
 var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
-
+var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->group_code));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: teacher_store,
@@ -185,6 +180,7 @@ dojo.ready(function(){
 			}
 		}
 	}, "subject_id");
+
 	/*
 
 			new dijit.form.FilteringSelect({
@@ -257,9 +253,49 @@ dojo.ready(function(){
 			}
 		}
 	}, "room");
+	new dijit.form.FilteringSelect({
+		store:group_store,
+		autoComplete: true,                        
+		required: false,               
+		id: "group_code",
+		name: "group_code",   
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",
+		 onChange: function() {  
+			 getInfoBygroup();    
+		    }
+	}, "group_code");
+	getallgroupby();
+	 var branch_id = dijit.byId('branch_id');
+	 	branch_id.on('change', function(evt) {
+	 		getallgroupby();
+	    });
 	addRow();
 	getValue();
 });
+
+function getallgroupby(){// 
+	var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'get-allstubygroup')); ?>';
+	branch_id = dijit.byId("branch_id").attr("value");
+	if(branch_id==''){  
+		dijit.byId("branch_id").focus();
+		return false;}
+	 
+	dojo.xhrPost({
+		url:url_data,
+		content:{
+			'branch_id':branch_id,
+		},
+		handleAs:"json",
+		load: function(data) {
+			group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group_code').set('store',group_store);
+		    document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+		}
+	});
+}
 function setEndDate(){
 	amount_date = dijit.byId('amountmonth').get('value');
 	release_date = dijit.byId("start_date").get('value');//just update follow by first payment

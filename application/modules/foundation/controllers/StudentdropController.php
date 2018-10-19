@@ -48,6 +48,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 	}
+	
 	function addAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -80,6 +81,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 	}
+	
 	public function editAction(){
 		try{	
 			$id=$this->getRequest()->getParam("id");

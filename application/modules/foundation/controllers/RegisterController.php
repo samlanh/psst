@@ -280,9 +280,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$data["id"]=$id;
 				$row=$db->addStudent($data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/register/index");
+				Application_Form_FrmMessage::Sucessfull("COPY_SUCCESS","/foundation/register/index");
 			}catch(Exception $e){
-				Application_Form_FrmMessage::message("EDIT_FAIL");
+				Application_Form_FrmMessage::message("COPY_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}

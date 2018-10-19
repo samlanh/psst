@@ -42,26 +42,20 @@ dojo.require("dijit.form.CheckBox");
 			</script>
 			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
-		    		<div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_ID");?> </label>
+					<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside"  name="studentid" id="studentid" dojoType="dijit.form.FilteringSelect" placeholder="<?php echo $tr->translate("SELECT_STUDENT_ID")?>" queryExpr="*${0}*" autoComplete="false" onchange="getStudentInfo();" >
-							    	<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?> </option>
-							    	<?php if(!empty($this->stu_id))foreach ($this->stu_id as $row){?>
-										<option value="<?php echo $row['stu_id']?>"><?php echo $row['stu_code']?></option>
-									<?php }?>
-							</select>
-		                </div>
-		            </div>
-		            <div class="form-group">
+	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" >
+				    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
+				    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+				    			<?php }?>
+				    		</select>
+	                   </div>
+		             </div>
+		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside" required="true" name="studentname" id="studentname" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="<?php echo $tr->translate("SELECT_STUDENT_NAME")?>" onchange="setID();" >
-						    	<option value="-1"><?php echo $tr->translate("SELECT_STUDEN_NAME")?> </option>
-						    	<?php if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
-									<option value="<?php echo $row['stu_id']?>"><?php echo $row['name']?></option>
-								<?php }?>
-							</select>
+							<input id="studentid" />
 		                </div>
 		            </div>
 		            <div class="form-group">
@@ -216,24 +210,54 @@ dojo.ready(function(){
 	    onChange: function() {  
 	    }
 	}, "academic_year");
-
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "studentid",
+		name: "studentid",   
+		required:true,        
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function() { 
+			getStudentInfo();
+		}
+	}, "studentid");
+	getallstudentname();
+	 var branch_id = dijit.byId('branch_id');
+	 	branch_id.on('change', function(evt) {
+	 		getallstudentname();
+	    });
 });
-
+var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+function getallstudentname(){//
+	branch_id = dijit.byId("branch_id").attr("value");
+	if(branch_id==''){  
+		dijit.byId("branch_id").focus();
+		return false;}
+	dojo.xhrPost({
+		url:url_data,
+		content:{
+			'branch_id':branch_id
+		},
+		handleAs:"json",
+		load: function(data) {
+			student_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('studentid').set('store',student_store);  
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
 function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
 function submitDataClose(){
 	if(dijit.byId('add_studentdrop').validate()) {
 		 studentid=dijit.byId('studentid').get('value');
-		 studentname=dijit.byId('studentname').get('value');
       		 if(studentid==0 || studentid=='' || studentid ==-1){
 				alert('Select studentid feld!');
 				dijit.byId('studentid').focus();
-				return false;
-			}
-			if(studentname==0 || studentname=='' || studentname ==-1){
-				alert('Select student name feld!');
-				dijit.byId('studentname').focus();
 				return false;
 			}
 		dijit.byId('save_close').set('disabled',true);
@@ -255,15 +279,9 @@ function submitDataClose(){
 function submitDataAddnew(){
 	if(dijit.byId('add_studentdrop').validate()) {
 		 studentid=dijit.byId('studentid').get('value');
-		 studentname=dijit.byId('studentname').get('value');
       		 if(studentid==0 || studentid=='' || studentid ==-1){
 				alert('Select studentid feld!');
 				dijit.byId('studentid').focus();
-				return false;
-			}
-			if(studentname==0 || studentname=='' || studentname ==-1){
-				alert('Select student name feld!');
-				dijit.byId('studentname').focus();
 				return false;
 			}
 		dijit.byId('save_new').set('disabled',true);
@@ -282,15 +300,9 @@ function submitDataAddnew(){
 		});
 	}
 }
-function setID(){
-	stu_id = dijit.byId('studentname').get('value');
-	dijit.byId('studentid').attr('value',stu_id);
-}
 
 var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'get-student')); ?>';
 function getStudentInfo(){
-			studentid = dijit.byId('studentid').get('value');
-			dijit.byId('studentname').attr('value',studentid);
 			
 			studentid = dijit.byId('studentid').get('value');
 			if(studentid==''){

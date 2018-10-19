@@ -43,19 +43,17 @@ $frm = $this->frm_credit;
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement('branch_id');?>
-		                </div>
-		             </div>
-		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_CODE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement('student_id');?>
-		                </div>
+	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" >
+				    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
+				    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+				    			<?php }?>
+				    		</select>
+	                   </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement('student_name');?>
+		                	<input id="student_id" />
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -116,20 +114,48 @@ $frm = $this->frm_credit;
 
 <script type="text/javascript">
 dojo.require("dijit.form.Textarea");
-//dojo.require("dojo.data.ItemFileWriteStore");  
-//dojo.require("dojo.NodeList-manipulate");
-//dojo.require("dojo.data.ObjectStore");
-//dojo.require("dojo.store.Memory");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.store.Memory");
 dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "student_id",
+		name: "student_id",   
+		required:true,        
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function() {  
+		}
+	}, "student_id");
+	getallstudentname();
+	 var branch_id = dijit.byId('branch_id');
+	 	branch_id.on('change', function(evt) {
+	 		getallstudentname();
+	    });
 });
-function setSelected(type){
-	if(type==1){
-		student_id = dijit.byId("student_id").get('value');
-		dijit.byId("student_name").attr('value',student_id);
-	}else{
-		student_id = dijit.byId("student_name").get('value');
-		dijit.byId("student_id").attr('value',student_id);
-	}
+var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+function getallstudentname(){//
+	branch_id = dijit.byId("branch_id").attr("value");
+	if(branch_id==''){  
+		dijit.byId("branch_id").focus();
+		return false;}
+	dojo.xhrPost({
+		url:url_data,
+		content:{
+			'branch_id':branch_id
+		},
+		handleAs:"json",
+		load: function(data) {
+			student_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('student_id').set('store',student_store);  
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 </script>
 

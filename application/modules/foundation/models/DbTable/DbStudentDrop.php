@@ -53,9 +53,10 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	
 	public function getAllStudentDrop($search){
 		$_db = $this->getAdapter();
-		$sql = "SELECT  s.id,			
+		$sql = "SELECT  s.id,
+				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,			
 				(SELECT stu_code FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS stu_id,
-				(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.studentname LIMIT 1) AS student_name,
+				(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_name,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.gender LIMIT 1) AS sex,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
 				(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND TYPE=1 LIMIT 1) AS degree,
@@ -82,8 +83,11 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
 			$s_where[] = " (SELECT stu_code FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.studentname LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['branch_id'])){
+			$where.=" AND s.branch_id = ".$search['branch_id'];
 		}
 		if(!empty($search['study_year'])){
 			$where.=" AND s.academic_year = ".$search['study_year'];
@@ -107,6 +111,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		//print_r($_data); exit();
 			try{	
 				$_arr= array(
+						'branch_id'	=>$_data['branch_id'],
 						'stu_id'	=>$_data['studentid'],
 						'studentname'=>$_data['studentname'],
 						'type'		=>$_data['type'],
@@ -171,6 +176,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$db= $this->getAdapter();
 		try{	
 			$_arr=array(
+						'branch_id'	=>$_data['branch_id'],
 						'stu_id'	=>$_data['studentid'],
 						'studentname'=>$_data['studentname'],
 						'type'		=>$_data['type'],

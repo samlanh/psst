@@ -9,25 +9,28 @@
 		<div class="card-box">
 			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<div class="form-group">
-					 <div class="col-md-3 col-sm-3 col-xs-12">
+					 <div class="col-md-2 col-sm-2 col-xs-12">
 					 	<?php echo $frm->getElement("title");?>
 					 </div>
-					  <div class="col-md-3 col-sm-3 col-xs-12">
+					  <div class="col-md-2 col-sm-2 col-xs-12">
 					  	<?php echo $frm->getElement("study_year");?>
 					 </div>
-					  <div class="col-md-3 col-sm-3 col-xs-12">
+					  <div class="col-md-2 col-sm-2 col-xs-12">
 					  	<?php echo $frm->getElement("grade");?>
 					 </div>
-					  <div class="col-md-3 col-sm-3 col-xs-12">
+					  <div class="col-md-2 col-sm-2 col-xs-12">
 					  	<?php echo $frm->getElement("session");?>
+					 </div>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					 	<?php echo $frm->getElement("start_date");?>
+					 </div>
+					  <div class="col-md-2 col-sm-2 col-xs-12">
+					  <?php echo $frm->getElement("end_date");?>
 					 </div>
 				</div>
 				<div class="form-group">
-					 <div class="col-md-3 col-sm-3 col-xs-12">
-					 	<?php echo $frm->getElement("start_date");?>
-					 </div>
-					  <div class="col-md-3 col-sm-3 col-xs-12">
-					  <?php echo $frm->getElement("end_date");?>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+					  	<?php echo $frm->getElement("branch_id");?>
 					 </div>
 					  <div class="col-md-2 col-sm-2 col-xs-12">
 					  	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>

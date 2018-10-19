@@ -15,6 +15,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			else{
 				$search=array(
 					'title'	=>'',
+					'branch_id'=> '',
 					'study_year'=> '',
 					'grade'=> '',
 					'session'=> '',
@@ -36,11 +37,11 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 				else{
 					$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 				}
-				$collumns = array("STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","STOP_DATE","REASON","USER","STATUS");
+				$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","STOP_DATE","REASON","USER","STATUS");
 				$link=array(
 						'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 				);
-				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('academic'=>$link,'stu_id'=>$link,'student_name'=>$link,'sex'=>$link));
+				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'academic'=>$link,'stu_id'=>$link,'student_name'=>$link,'sex'=>$link));
 	
 			$this->view->adv_search = $search;
 		}catch(Exception $e){
@@ -64,11 +65,10 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 				}
 			}
 			$db = new Foundation_Model_DbTable_DbStudentDrop();
-			$this->view->stu_id = $db->getAllStudentID();
-			$this->view->stu_name = $db->getAllStudentName();
 			$this->view->type = $db->getAllDropType();
 						
 			$db_global = new Application_Model_DbTable_DbGlobal();
+			$this->view->rsbranch = $db_global->getAllBranch();
 			$this->view->degree = $db_global->getAllDegreeMent();
 			$this->view->group = $db->getAllgroupStudy();
 			$this->view->room = $row =$db_global->getAllRoom();
@@ -103,11 +103,11 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			}	
 			
 			$db = new Foundation_Model_DbTable_DbStudentDrop();
-			$this->view->stu_id = $db->getAllStudentIDEdit();
-			$this->view->stu_name = $db->getAllStudentNameEdit();
+			$this->view->stu_id = $db->getAllStudentNameEdit();
 			$this->view->type = $db->getAllDropType();
 			
 			$db_global = new Application_Model_DbTable_DbGlobal();
+			$this->view->rsbranch = $db_global->getAllBranch();
 			$this->view->degree = $db_global->getAllDegreeMent();
 			$this->view->group = $db->getAllgroupStudy();
 			$this->view->room = $row =$db_global->getAllRoom();

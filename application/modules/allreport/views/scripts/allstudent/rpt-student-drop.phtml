@@ -9,6 +9,7 @@
 		<table width="100%" cellspacing="5">
 	       <tr>
 	           <td><?php echo $frm->getElement("title");?></td>
+	            <td> <?php echo $frm->getElement("branch_id");?></td>
 	           <td> <?php echo $frm->getElement("study_year");?></td>
 	           <td> <?php echo $frm->getElement("grade_bac");?></td>
 			   <td> <?php echo $frm->getElement("session");?></td>
@@ -54,6 +55,7 @@
 						<thead>
 						<tr style="font-size:12px;  background: #ccd9ff;" align="center" >
 							<th ><?php echo $tr->translate("NUM")?></th>
+							<th ><?php echo $tr->translate("BRANCH_NAME")?></th>
 							<th ><?php echo $tr->translate("STUDENT_ID")?></th>
 							<th ><?php echo $tr->translate("STUDENT_NAME")?></th>
 							<th ><?php echo $tr->translate("GENDER")?></th>
@@ -69,6 +71,7 @@
 					<?php $i=0;foreach ($this->rs AS $row) { $i++;?>
 						<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
 							<th ><?php echo $i;?></th>
+							<th ><?php echo $row['branch_name'];?></th>
 							<th ><?php echo $row['stu_id'];?></th>
 							<th align="left">&nbsp;&nbsp;<?php echo $row['name'];?></th>
 							<th ><?php echo $row['sex'];?></th>

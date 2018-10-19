@@ -12,7 +12,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     public function getAllStudentDrop($search){
     	$db = $this->getAdapter();
     	$sql = "SELECT st.stu_code as stu_id, 
-		
+		(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = stdp.branch_id LIMIT 1) AS branch_name,
 		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name,
     	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year) as academic_year,
     	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=st.session limit 1)AS session,
@@ -47,15 +47,17 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		$s_where[] = "  (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type`) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND stdp.branch_id='.$search['branch_id'];
+    	}
     	if(!empty($search['study_year'])){
-    		$where.=' AND academic_year='.$search['study_year'];
+    		$where.=' AND st.academic_year='.$search['study_year'];
     	}
     	if(!empty($search['grade_bac'])){
-    		$where.=' AND grade='.$search['grade_bac'];
+    		$where.=' AND stdp.grade='.$search['grade_bac'];
     	}
     	if(!empty($search['session'])){
-    		$where.=' AND session='.$search['session'];
+    		$where.=' AND stdp.session='.$search['session'];
     	}
     	
 //     	$searchs=$search['txtsearch'];

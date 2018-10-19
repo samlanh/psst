@@ -198,21 +198,21 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'onchange'=>'setSelected(1)'
-		));
-		$optstu = $db->getAllStudent(1,1);
-		$student_id->setMultiOptions($optstu);
-	
-		$student_name = new Zend_Dojo_Form_Element_FilteringSelect('student_name');
-		$student_name->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'autoComplete'=>"true",
-				'queryExpr'=>'*${0}*',
 				'onchange'=>'setSelected(2)'
 		));
 		$optstu = $db->getAllStudent(1,2);
-		$student_name->setMultiOptions($optstu);
+		$student_id->setMultiOptions($optstu);
+	
+// 		$student_name = new Zend_Dojo_Form_Element_FilteringSelect('student_name');
+// 		$student_name->setAttribs(array(
+// 				'dojoType'=>'dijit.form.FilteringSelect',
+// 				'class'=>'fullside',
+// 				'autoComplete'=>"true",
+// 				'queryExpr'=>'*${0}*',
+// 				'onchange'=>'setSelected(2)'
+// 		));
+// 		$optstu = $db->getAllStudent(1,2);
+// 		$student_name->setMultiOptions($optstu);
 	
 		$stu_name = new Zend_Dojo_Form_Element_FilteringSelect('stu_name');
 		$stu_name->setAttribs(array(
@@ -310,7 +310,7 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 			$_stutas->setValue($data['status']);
 			$id->setValue($data['id']);
 		}
-		$this->addElements(array($student_name,$student_id,$Description_s,$_Date,$_stutas,$prob,$_enddate,$_Description,
+		$this->addElements(array($student_id,$Description_s,$_Date,$_stutas,$prob,$_enddate,$_Description,
 				$total_amount,$_branch_id,$id,));
 		return $this;
 	

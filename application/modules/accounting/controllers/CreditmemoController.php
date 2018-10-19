@@ -69,6 +69,9 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->rsbranch = $_db->getAllBranch();
+		
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemoadd();
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -93,7 +96,8 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
 		$id = $this->getRequest()->getParam('id');
 		$db = new Accounting_Model_DbTable_DbCreditmemo();
 		$row  = $db->getCreditmemobyid($id);
-		
+		$this->view->row = $row;
+		//print_r($row); exit();
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemoadd($row);
     	Application_Model_Decorator::removeAllDecorator($frm);

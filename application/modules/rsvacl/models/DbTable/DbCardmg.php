@@ -36,6 +36,9 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
     		if (!empty($_data['schoolOption'])){
     			$sql." AND schoolOption =".$_data['schoolOption'];
     		}
+    		if (!empty($_data['card_type'])){
+    			$sql." AND card_type =".$_data['card_type'];
+    		}
     		$rs = $_db->fetchOne($sql);
     		if(!empty($rs)){
     			return -1;
@@ -47,15 +50,18 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 				'user_id'	=>$this->getUserId(),		
 			);
 			$this->_name ="rms_cardbackground";
-			$whereother=" branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption'];
+			$whereother=" branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption']." AND card_type=".$_data['card_type'];
 			$this->update($_arrother, $whereother);
 			
 	    	$_arr = array(
 	    			'branch_id'	    =>$_data['branch_id'],
 	    			'title' =>$_data['title'],
 	    			'background' =>$photo,
+	    			'card_type'	=>$_data['card_type'],
+	    			'card_prefix'	=>$_data['card_prefix'],
+	    			'colorcode'	=>$_data['colorcode'],
 	    			'schoolOption'		=>$_data['schoolOption'],
-					//'valid'	=>$_data['valid'],
+					'valid'	=>$_data['valid'],
 					'note'	=>$_data['note'],
 	    			'display_by'	=>$_data['display_by'],
 	    			'default'	=>1,
@@ -93,6 +99,9 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
     		if (!empty($_data['schoolOption'])){
     			$sql." AND schoolOption =".$_data['schoolOption'];
     		}
+    		if (!empty($_data['card_type'])){
+    			$sql." AND card_type =".$_data['card_type'];
+    		}
     		$rs = $_db->fetchOne($sql);
     		if(!empty($rs)){
     			return -1;
@@ -105,7 +114,7 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 					'user_id'	=>$this->getUserId(),		
 				);
 				$this->_name ="rms_cardbackground";
-				$whereother="id!=".$id." AND branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption'];
+				$whereother="id!=".$id." AND branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption']." AND card_type=".$_data['card_type'];
 				$this->update($_arrother, $whereother);
 				
 				$default=1;
@@ -113,7 +122,11 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 			$_arr = array(
 				'branch_id'	    =>$_data['branch_id'],
 				'title' =>$_data['title'],
+				'card_type'	=>$_data['card_type'],
+				'card_prefix'	=>$_data['card_prefix'],
+				'colorcode'	=>$_data['colorcode'],
 				'schoolOption'		=>$_data['schoolOption'],
+				'valid'	=>$_data['valid'],
 				'note'	=>$_data['note'],
 				'display_by'	=>$_data['display_by'],
 				'default'	=>$default,
@@ -144,6 +157,7 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
    	
     function getAllBranch($search){
     	$db = $this->getAdapter();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$check = '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
     	$uncheck = '<i class="fa fa-square-o" aria-hidden="true"></i>';
     	$sql = "SELECT b.id,
@@ -152,9 +166,14 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 				WHEN  b.default = 0 THEN '$uncheck'
 				END AS student_statustitle,
     	b.title,
-		    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.branch_id LIMIT 1) as branch_name,
-		    	(SELECT sp.title FROM `rms_schooloption` AS sp WHERE sp.id = b.schoolOption LIMIT 1) AS schoolOption,
-		    	b.note,b.status FROM rms_cardbackground AS b  ";
+    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.branch_id LIMIT 1) as branch_name,
+    	(SELECT sp.title FROM `rms_schooloption` AS sp WHERE sp.id = b.schoolOption LIMIT 1) AS schoolOption,
+    	CASE    
+				WHEN  b.card_type = 1 THEN '".$tr->translate("STUDENT")."'
+				WHEN  b.card_type = 2 THEN '".$tr->translate("TEACHER")."'
+				END AS card_type,
+				b.valid,
+    	b.note,b.status FROM rms_cardbackground AS b  ";
     	$where = ' WHERE  b.title !="" ';   	
     	if(!empty($search['adv_search'])){
     		$s_where=array();

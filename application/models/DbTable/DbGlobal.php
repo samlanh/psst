@@ -1731,9 +1731,15 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	return $str;
   }
-  function getCardBackground($branch,$schoolOption){
+  function getCardBackground($branch,$card_type,$schoolOption=null){
 	  $db = $this->getAdapter();
-	  $sql="SELECT c.* FROM `rms_cardbackground` AS c WHERE c.branch_id=$branch AND c.schoolOption=$schoolOption AND c.default=1 ORDER BY c.id DESC LIMIT 1";
+	  $sql="SELECT c.* FROM `rms_cardbackground` AS c WHERE c.branch_id=$branch 
+	  AND c.default=1  AND c.card_type=$card_type 
+	  ";
+	  if (!empty($schoolOption)){
+	  	$sql.=" AND c.schoolOption=$schoolOption ";
+	  }
+	  $sql.=" ORDER BY c.id DESC LIMIT 1";
 	  return $db->fetchRow($sql);
   }
   function getStudentGroupInfoById($id){

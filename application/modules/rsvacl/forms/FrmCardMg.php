@@ -29,6 +29,20 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 				'required'=>true,
 				));
 		
+		$card_prefix = new Zend_Dojo_Form_Element_ValidationTextBox('card_prefix');
+		$card_prefix->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		
+		$colorcode = new Zend_Dojo_Form_Element_ValidationTextBox('colorcode');
+		$colorcode->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+				'class'=>'fullside',
+		));
+		$colorcode->setValue("000000");
+		
 		$branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
 		$branch_id->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("BRANCH"),
@@ -79,6 +93,26 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 		));
 		$options = array(1=>$this->tr->translate("ENGLISH"), 2=>$this->tr->translate("KHMER"));
 		$display_by->setMultiOptions($options);
+		
+		$card_type = new Zend_Dojo_Form_Element_FilteringSelect('card_type');
+		$card_type->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'onChange'=>'checkCardType()',
+				// 				'readonly'=>true
+		));
+		$options = array(1=>$this->tr->translate("STUDENT"),2=>$this->tr->translate("TEACHER"));
+		$card_type->setMultiOptions($options);
+		
+		$valid = new Zend_Dojo_Form_Element_DateTextBox('valid');
+		
+		$date = date("Y-m-d",strtotime("+1 Year"));
+		$valid->setAttribs(array(
+				'data-dojo-Type'=>"dijit.form.DateTextBox",
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'class'=>'fullside',
+				'required'=>true));
+		$valid->setValue($date);
 	
 		
 		$_adv_search = new Zend_Dojo_Form_Element_TextBox('adv_search');
@@ -108,6 +142,11 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 			$status->setValue($data['status']);
 			$_id->setValue($data['id']);
 			$display_by->setValue($data['display_by']);
+			
+			$card_prefix->setValue($data['card_prefix']);
+			$colorcode->setValue($data['colorcode']);
+			$card_type->setValue($data['card_type']);
+			$valid->setValue($data['valid']);
 		}
 		
 		$this->addElements(array(
@@ -115,6 +154,10 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 				$branch_id,
 				$_schoolOption,
 				$note,
+				$card_prefix,
+				$colorcode,
+				$card_type,
+				$valid,
 				$status,
 				$display_by,
 				$_adv_search,

@@ -165,11 +165,14 @@ display: table-cell !important;
 					}
 					<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
 						$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
-						
-						$bg = $_dbgb->getCardBackground($bck['branch_id'],$bck['schoolOption']);
+						$color = "000000";
+						$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
 						if(!empty($bg['background'])){
 							if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
 							$image = $this->baseUrl().'/images/card/'.$bg['background'];
+							}
+							if (!empty($bg['colorcode'])){
+								$color = str_replace("#", "", $bg['colorcode']);
 							}
 						}
 						?>
@@ -179,6 +182,10 @@ display: table-cell !important;
 						 background-size: 100%;background-repeat: no-repea
 						 page-break-after:always;					
 					}
+					
+					.name-card-block ul.list-data li.sdudent-id.color-<?php echo "card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+					color:#<?php echo $color;?>;
+				}
 					<?php }?>
 					
 					.profile-card-block {
@@ -230,10 +237,24 @@ display: table-cell !important;
 				    width: 80%;
 				    text-align: center;
 					height: 17px;}
-				</style>
+				
+				.validdate {
+				    position: relative;
+				}
+				.validdate .exp_date {
+					color: #01049f;
+				    position: absolute;
+				    top: 250px;
+				    right: 5px;
+				    font-size: 5px;
+				    font-weight: 700 !important;
+				}
+	</style>
 		<?php $con=4;$i=0; $student= count($this->rs);
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
 					<?php 
+					$prefix="";
+					$validDate="";
 						$stu_name = $row['stu_enname']." ".$row['last_name'];
 						$image = $this->baseUrl().'/images/no-profile.png';
 						if(!empty($row['photo'])){
@@ -242,9 +263,13 @@ display: table-cell !important;
 							}
 							
 						}
-						$bg = $_dbgb->getCardBackground($row['branch_id'],$row['schoolOption']);
-						if ($bg['display_by']==2){
-							$stu_name = $row['stu_khname'];
+						$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
+						if (!empty($bg)){
+							if ($bg['display_by']==2){
+								$stu_name = $row['stu_khname'];
+							}
+							$prefix = $bg['card_prefix'];
+							$validDate = $bg['valid'];
 						}
 						?>
 						<?php if ($key==0){?>
@@ -263,12 +288,16 @@ display: table-cell !important;
 	                    		<ul class="list-data">
 	                    			<li><span class="title_value">&nbsp;<?php echo $stu_name;?></span></li>
                     				<li><span class="title_value">&nbsp;Grade: <?php echo str_replace("Grade","",$row['group_name']);?></span></li>
-									<li class="sdudent-id"><span class="title_value">&nbsp;ID: <?php echo $row['stu_code'];?></span></li>
+									<li class="sdudent-id color-<?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>"><span class="title_value">&nbsp;ID: <?php echo $row['stu_code'];?></span></li>
                     			</ul>
                     		</div>
+                    		<div class="validdate">
+	                    		<span class="exp_date"><?php echo date("F j , Y",strtotime($validDate))?></span>
+	                    	</div>
                     	<?php  
-                    	$prefix = $this->data["prefix_barcode_grade_school"];
-                    	$barcode = $prefix."-".$row['stu_code']."-".date("y");
+//                     	$prefix = $this->data["prefix_barcode_grade_school"];
+//                     	$barcode = $prefix."-".$row['stu_code']."-".date("y");
+                    	$barcode = $prefix."-".$row['stu_code']."-".date("y",strtotime($validDate));
                     	$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
 	                    	<div class="foot-left-block">
                     			<div class="qrimages">

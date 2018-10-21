@@ -558,9 +558,12 @@ a.print-card.btn.btn-primary.btn-xs {
 								 	<div id="divPrint" style="margin: 0; padding: 0; display: none;" >
 				                    		<style>
 												<?php 
+												$prefix ="";
+												$validDate="";
+												$color = "000000";
 												$stu_name = $this->rs['stu_enname']." ".$this->rs['last_name'];
 												$imagebg = $this->baseUrl().'/images/card/default_card_bg.jpg';
-													$bg = $_dbgb->getCardBackground($this->rs['branch_id'],$this->rs['schoolOption']);
+													$bg = $_dbgb->getCardBackground($this->rs['branch_id'],1,$this->rs['schoolOption']);
 													if(!empty($bg['background'])){
 														if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
 														$imagebg = $this->baseUrl().'/images/card/'.$bg['background'];
@@ -568,6 +571,11 @@ a.print-card.btn.btn-primary.btn-xs {
 														if ($bg['display_by']==2){
 															$stu_name = $this->rs['stu_khname'];
 														}
+														if (!empty($bg['colorcode'])){
+															$color = str_replace("#", "", $bg['colorcode']);
+														}
+														$prefix = $bg['card_prefix'];
+														$validDate = $bg['valid'];
 													}
 												?>
 												.card-content-student-print{
@@ -607,7 +615,7 @@ a.print-card.btn.btn-primary.btn-xs {
 												line-height: 16px;	    
 											}											.name-card-block ul.list-data li.sdudent-id{
 												margin-top:10px;
-												color: #01731b;
+												color: #<?php echo $color;?>;
 											}
 											.foot-left-block {
 											    position: relative;
@@ -623,7 +631,18 @@ a.print-card.btn.btn-primary.btn-xs {
 											    text-align: center;
 												height: 17px;
 											}
-										</style>
+													
+											.validdate {
+											    position: relative;
+											}
+											.validdate .exp_date {
+													 color: #01049f;
+											    position: absolute;
+											    top: 245.5px;
+											    right: 5px;
+											    font-size: 5px;
+											    font-weight: 700 !important;
+											}</style>
 				                    	<div class="card-content-student-print" style=" line-height: 16.285px;  width: 5.1cm; height:8.35cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
 				                    		<div class="profile-card-block">
 				                    			<div class="photo">
@@ -637,8 +656,12 @@ a.print-card.btn.btn-primary.btn-xs {
 													<li class="sdudent-id"><span class="title_value">&nbsp;ID: <?php echo $this->rs['stu_code'];?></span></li>
 					                    		</ul>
 					                    	</div>
+					                    	<div class="validdate">
+					                    		<span class="exp_date"><?php echo date("F j , Y",strtotime($validDate))?></span>
+					                    	</div>
 					                    	<?php  
-					                    	$barcode = $this->data["prefix_barcode_grade_school"]."-".$this->rs['stu_code']."-".date("y");
+// 					                    	$barcode = $this->data["prefix_barcode_grade_school"]."-".$this->rs['stu_code']."-".date("y");
+					                    	$barcode = $prefix."-".$this->rs['stu_code']."-".date("y",strtotime($validDate));
 					                    	$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
 					                    	<div class="foot-left-block">
 				                    			<div class="qrimages">

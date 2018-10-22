@@ -8,6 +8,13 @@ $frm = $this->frm_expense;
 	width: 100%;
 	height: 30px;
 }
+#lbl_header {
+    display: initial !important;
+}
+table.collape tbody td {
+    padding: 2px;
+    border-bottom: solid 1px #eee;
+}
 </style>
  <script>
 	require(["dijit/form/DateTextBox","dijit/form/NumberTextBox"]);
@@ -137,15 +144,14 @@ $frm = $this->frm_expense;
 	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
 		<div id="printexpense" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
-				
 				<tr height="90px;">
 					<td colspan="10"  style="" align="center" valign="top">
-						<?php echo $this->header?>
+						<label id="lbl_header"></label>
 					</td>
 				</tr>
 				<tr>
 				    <td colspan="10"  style="" align="center">
-						<table width="100%" style="font-size: 10px;margin-top: -20px;">
+						<table width="100%" style="font-size: 10px;margin-top:-10px;">
 							<tr>
 								<td width="30%">
 								</td>
@@ -154,7 +160,7 @@ $frm = $this->frm_expense;
 									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:0px;font-weight: bold;">PAYMENT VOUCHER</div> 
 								</td>
 								<td width="30%">
-									<div style="font-size: 16px;font-weight:bold;text-align:center;">
+									<div style="font-size: 12px;font-weight:bold;text-align:center;">
 										N<sup>o</sup> : <label id="lb_receipt_no"></label>
 									</div>
 								</td>
@@ -164,7 +170,7 @@ $frm = $this->frm_expense;
 				</tr>
 				<tr>
 					<td colspan="10">
-						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
+						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-1px;line-height: 17px;">
 							<tr >
 								<td width="10%"></td>
 								<td width="18%"></td>
@@ -206,22 +212,9 @@ $frm = $this->frm_expense;
 											<td width="15%"></td>
 										</tr>
 										<tr>
-											<td colspan="2"  align="center">
-												<div style="margin-top:-5px;"></div>
-											</td>
-											<td colspan="2">
-												&nbsp;
-											</td>
-											<td>
-												<div style="margin-top:-15px;"></div>
-											</td>
-											<td>
-											</td>
-										</tr>
-										<tr>
 											<td colspan="4"></td>
 											<td>
-												<div style="margin-top:-20px;">ចំណាយសរុប <br />Paid Amount</div>
+												<div style="margin-top:4px;">ចំណាយសរុប <br />Paid Amount</div>
 											</td>
 											<td>
 												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<label id="lb_total_received"> </label></div>
@@ -486,14 +479,12 @@ function printSave(new_receipt){
 	}
 }
 function submitData(){
-	if(dijit.byId('office_receipt').validate()) {
-		
+	if(dijit.byId('office_receipt').validate()) {		
 		condition = checkValidateAddRow();
 		if(condition==false){
 			alert("Please select category expense !!! ");
 			return false;
-		}
-		
+		}		
 		dijit.byId('saveclose').set('disabled',true);
 		dijit.byId('office_receipt').submit();
 	}
@@ -504,7 +495,6 @@ function doPrintInvoice() {
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
 }
-
 function checkValidateAddRow(){
 	var rowId = $('#identity').val();
 	if(rowId!=''){
@@ -517,7 +507,6 @@ function checkValidateAddRow(){
 		}
 	}
 }
-
 function popupCateExpense(index){
 	dijit.byId("ex_save_new").attr("disabled",false);
 	expense_id = dijit.byId("expense_id_"+index).get('value');
@@ -526,7 +515,6 @@ function popupCateExpense(index){
 		dijit.byId("popup_cate_expense").show();
 	}
 }
-
 var cate_expense_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->cate_expense));?> );
 var url_add_cate_expense = '<?php echo $this->url(array("module"=>"registrar","controller"=>"expense","action"=>"add-cate-expense")); ?>';
 function addCateExpense(){
@@ -541,11 +529,9 @@ function addCateExpense(){
 				        id: data.id,
 				        name: dijit.byId('account_name').get('value')
 				         };
-					index=$("#tow_value").val();
-				    addDataToSelectbox(dijit.byId('expense_id_'+index), cate_expense_store, Itemmake, data.id);
-
+			  index=$("#tow_value").val();
+		      addDataToSelectbox(dijit.byId('expense_id_'+index), cate_expense_store, Itemmake, data.id);
 			  optexpense = data.new_array;
-					  
 			  dijit.byId('add_cate_expense').reset();
 			  dijit.byId("popup_cate_expense").hide();
 			},
@@ -563,30 +549,27 @@ function addCateExpense(){
 				<tr>
 					<td>
 						<fieldset style="background-color:menu;">
-									<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_NEW_SUBJECT");?></strong></legend>
-									<table style="margin: 0 auto; width: 95%;white-space: nowrap; line-height:35px;" cellspacing="10">
-										
-										<tr>
-											<td><?php echo $tr->translate("TITLE")?></td>
-											<td>
-												<input name="account_name" id="account_name" dojoType="dijit.form.ValidationTextBox" required="required" class="fullside" />
-											</td>
-										</tr>
-										
-										<tr>
-											<td><?php echo $tr->translate("ACCOUNT_CODE")?></td>
-											<td>
-												<input name="account_code" id="account_code" dojoType="dijit.form.TextBox" required="required" class="fullside" />
-											</td>
-										</tr>
-										
-										<tr>
-											<td colspan="2" align="center">
-												<input type="button" onclick="addCateExpense();" value="save_new" name="ex_save_new"  id="ex_save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-													iconClass="dijitEditorIcon dijitEditorIconSave" />
-											</td>
-										</tr>
-									</table>	
+							<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_NEW_SUBJECT");?></strong></legend>
+							<table style="margin: 0 auto; width: 95%;white-space: nowrap; line-height:35px;" cellspacing="10">
+								<tr>
+									<td><?php echo $tr->translate("TITLE")?></td>
+									<td>
+										<input name="account_name" id="account_name" dojoType="dijit.form.ValidationTextBox" required="required" class="fullside" />
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo $tr->translate("ACCOUNT_CODE")?></td>
+									<td>
+										<input name="account_code" id="account_code" dojoType="dijit.form.TextBox" required="required" class="fullside" />
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" align="center">
+										<input type="button" onclick="addCateExpense();" value="save_new" name="ex_save_new"  id="ex_save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+											iconClass="dijitEditorIcon dijitEditorIconSave" />
+									</td>
+								</tr>
+							</table>	
 						</fieldset>		
 					</td>
 				</tr>
@@ -595,3 +578,32 @@ function addCateExpense(){
  			</form>
 	</div>
 </div>
+<script>
+require(["dojo/ready"], function(ready){
+	ready(function(){
+		getbranchinfo();
+	});
+});	
+function filterClient(){
+	getbranchinfo();
+}
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+function getbranchinfo(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id != ""){
+		dojo.xhrPost({
+			url:url_getbranch,
+			content:{
+				'branch_id':branch_id,
+				},
+			handleAs:"json",
+			load: function(data){
+				dojo.byId('lbl_header').innerHTML=data;
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});	
+	} 
+}
+</script>

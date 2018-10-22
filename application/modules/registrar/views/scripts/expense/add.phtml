@@ -4,11 +4,18 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 $frm = $this->frm_expense;
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
-<title><?php echo $tr->translate("EDIT_OTHER_EXPENSE")?></title>
+<title><?php echo $tr->translate("ADD_OTHER_EXPENSE")?></title>
 <style>	
 .fullside {
 	width: 100%;
 	height: 30px;
+}
+#lbl_header {
+    display: initial !important;
+}
+table.collape tbody td {
+    padding: 2px;
+    border-bottom: solid 1px #eee;
 }
 </style>
  <script>
@@ -139,15 +146,14 @@ $frm = $this->frm_expense;
 	<div data-dojo-type="dijit.Dialog" style="width:21cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("ប័ណ្ណចំណាយ");?>'" id="terms" >
 		<div id="printexpense" style="width: 19cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
-				
 				<tr height="90px;">
 					<td colspan="10"  style="" align="center" valign="top">
-						<?php echo $this->header?>
+						<label id="lbl_header"></label>
 					</td>
 				</tr>
 				<tr>
 				    <td colspan="10"  style="" align="center">
-						<table width="100%" style="font-size: 10px;margin-top: -20px;">
+						<table width="100%" style="font-size: 10px;margin-top: -10px;">
 							<tr>
 								<td width="30%">
 								</td>
@@ -156,7 +162,7 @@ $frm = $this->frm_expense;
 									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:0px;font-weight: bold;">PAYMENT VOUCHER</div> 
 								</td>
 								<td width="30%">
-									<div style="font-size: 16px;font-weight:bold;text-align:center;">
+									<div style="font-size: 12px;font-weight:bold;text-align:center;">
 										N<sup>o</sup> : <label id="lb_receipt_no"></label>
 									</div>
 								</td>
@@ -166,7 +172,7 @@ $frm = $this->frm_expense;
 				</tr>
 				<tr>
 					<td colspan="10">
-						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
+						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-1px;line-height: 17px;">
 							<tr >
 								<td width="10%"></td>
 								<td width="18%"></td>
@@ -554,3 +560,32 @@ function addCateExpense(){
  			</form>
 	</div>
 </div>
+<script>
+require(["dojo/ready"], function(ready){
+	ready(function(){
+		getbranchinfo();
+	});
+});	
+function filterClient(){
+	getbranchinfo();
+}
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+function getbranchinfo(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id != ""){
+		dojo.xhrPost({
+			url:url_getbranch,
+			content:{
+				'branch_id':branch_id,
+				},
+			handleAs:"json",
+			load: function(data){
+				dojo.byId('lbl_header').innerHTML=data;
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});	
+	} 
+}
+</script>

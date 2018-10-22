@@ -169,7 +169,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$_data = $this->getRequest()->getPost();
     		try {
     			$db = new Registrar_Model_DbTable_DbRegister();
-    			$db->updateRegister($_data,$id);
+//     			$db->updateRegister($_data,$id);
     			if(isset($_data['save_new'])){
     				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register/index');
     			}else{
@@ -178,7 +178,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
     			echo $e->getMessage();
-    			
     		}
     	}
     	$_db = new Application_Model_DbTable_DbGlobal();
@@ -191,7 +190,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	 
     	$db = new Registrar_Model_DbTable_DbRegister();
     	$this->view->all_year = $db->getAllYears();
-//     	$this->view->branch_info = $db->getBranchInfo();
     	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
@@ -199,55 +197,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$db = new Application_Model_DbTable_DbGlobal();
     	$rs = $db->getStudentProfileblog(1);
     	
-//     	$db = new Registrar_Model_DbTable_DbRegister();
-//         $form_row=$db->getRegisterById($id);
-//         $is_start=$form_row['is_start'];
-//         if($is_start==0 || $form_row['is_void']>0){
-//         	//Application_Form_FrmMessage::Sucessfull($this->tr->translate('Can not Edit'), self::REDIRECT_URL . '/register/index');
-//         }
-//     	$_db = new Application_Model_DbTable_DbGlobal();
-//     	$this->view->all_dept = $_db->getAllDegreeName();
-    	
-//     	$db = new Registrar_Model_DbTable_DbRegister();
-    	
-//     	$this->view->teacher = $db->getTeacherEdit($id);
-    	
-// 	    $rspayment =  $db->getStudentPaymentByID($id);
-// 	    $this->view->payment =$rspayment;
-    	
-//     	$session_user=new Zend_Session_Namespace('authstu');
-//     	$user_type_id = $session_user->level;
-//     	$payment_date = date("Y-m-d",strtotime($rspayment['create_date']));
-//     	$current_date = date("Y-m-d");
-//     	if($user_type_id!=1 AND $current_date>$payment_date){
-//     		Application_Form_FrmMessage::Sucessfull("you data is more then a day.so can not edit", self::REDIRECT_URL . '/register/index');
-//     	}
-//     	// for loop in initialize
-//     	$this->view->payment_detail_service = $db->getStudentPaymentDetailServiceByID($id);
-//     	// for information in  register
-// //     	$this->view->payment_detail_register = $db->getStudentPaymentDetailRegisterByID($id);
-    	
-//     	$this->view->service_only = $db->getServiceOnlyByID($id);
-    	
-//     	$this->view->product_only = $db->getProductOnlyByID($id);
-    	
-//     	$this->view->all_student_code = $db->getAllGerneralOldStudent();
-//     	$this->view->all_student_name = $db->getAllGerneralOldStudentName();
-//     	$this->view->all_year = $db->getAllYears();
-// //     	$this->view->all_session = $db->getAllSession();
-// //     	$this->view->all_paymentterm = $db->getAllpaymentTerm();
-//     	$this->view->all_service = $db->getAllService();
-// //     	$this->view->all_room = $db->getAllRoom();
-
-//     	$test = $this->view->branch_info = $db->getBranchInfo();
-//     	$db = new Foundation_Model_DbTable_DbStudent();
-//     	$this->view->group = $db->getAllgroup();
-    	
-//     	$key = new Application_Model_DbTable_DbKeycode();
-//     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    	
-//     	$_db = new Application_Form_FrmGlobal();
-//     	$this->view->header = $_db->getHeaderReceipt();
+    	$db = new Registrar_Model_DbTable_DbRegister();
+	    $rspayment =  $db->getStudentPaymentByID($id);
+	    $this->view->payment =$rspayment;
+	    $this->view->rs_detail = $db->getStudentPaymentDetailServiceByID($id);
     }
     
     public function editcustomerpaymentAction(){

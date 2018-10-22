@@ -1774,7 +1774,11 @@ function getAllgroupStudyNotPass($action=null){
   		$pre.='0';
   	}
   	return $pre.$new_acc_no;
-
+  }
+  function ifStudentinGroupReady($student_id,$group_id){
+  	$db = $this->getAdapter();
+  	$sql="SELECT * FROM rms_group_detail_student WHERE stu_id=$student_id AND group_id=$group_id";
+  	return $db->fetchRow($sql);
   }
 }
 ?>

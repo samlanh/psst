@@ -1,6 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('Add Student Register')); 
+	$rspayment = $this->payment;
 ?>
 <style>
 	select{ width:100%;}
@@ -167,8 +168,8 @@ table.collape tbody td{padding: 0px !important;}
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect" onchange="">
-				    			<option value="1">Student Payment</option>
-				    			<option value="2">Customer Payment</option>
+				    			<option value="1" <?php if($rspayment['paystudent_type']==1){echo "selected='selected'";}?>>Student Payment</option>
+				    			<option value="2" <?php if($rspayment['paystudent_type']==2){echo "selected='selected'";}?>>Customer Payment</option>
 				    		</select>
 	                   </div>
 	                </div>
@@ -177,9 +178,9 @@ table.collape tbody td{padding: 0px !important;}
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getallstudentname();" >
-								<option value="1"><?php echo $tr->translate("Existing Student");?></option>
-								<option value="2"><?php echo $tr->translate("Tested Student");?></option>
-								<option value="3"><?php echo $tr->translate("CRM");?></option>
+								<option value="1" <?php if($rspayment['data_from']==1){echo "selected='selected'";}?>><?php echo $tr->translate("Existing Student");?></option>
+								<option value="2" <?php if($rspayment['data_from']==2){echo "selected='selected'";}?>><?php echo $tr->translate("Tested Student");?></option>
+								<option value="3" <?php if($rspayment['data_from']==3){echo "selected='selected'";}?>><?php echo $tr->translate("CRM");?></option>
 							</select>
 	                   </div>
 	                </div>
@@ -211,7 +212,7 @@ table.collape tbody td{padding: 0px !important;}
 		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		<input readonly type="text" style="color: red;" required="1" dojoType="dijit.form.ValidationTextBox" name="receipt_no" id="receipt_no" class="fullside" />
+		                   		<input readonly type="text" style="color: red;" dojoType="dijit.form.ValidationTextBox" value="<?php echo $rspayment['receipt_number']; ?>" name="receipt_no" id="receipt_no" class="fullside" />
 		                   </div>
 		              </div>
 		              <div class="form-group">
@@ -223,7 +224,7 @@ table.collape tbody td{padding: 0px !important;}
 		              <div class="form-group">
 		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?></label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		<input type="text" name="note" id="note" class="fullside"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
+		                   		<input type="text" name="note" id="note" class="fullside" value="<?php echo $rspayment['note']; ?>"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
 		                   </div>
 	                  </div>
 	           </div>
@@ -235,12 +236,10 @@ table.collape tbody td{padding: 0px !important;}
 		           		<div class="text-center card-box-border">
 		                   	<div class="member-card card-display-reg">
 		                   		<div class="img-back"></div>
-		                      	<span class="user-badge bg-warning" <?php //if($rs['is_subspend']!=0){echo 'style="background: red !important;"';}?>>Old Student</span>
+		                      	<span class="user-badge bg-warning">Old Student</span>
 		                       	<div class="col-md-4 col-sm-4 col-xs-12">
 			                       	<div class="thumb-xl member-thumb m-b-10 center-block">
-			                       		<?php 
-			                       			$photo = $this->baseUrl()."/images/no-profile.png";
-			                       		?>
+			                       		<?php $photo = $this->baseUrl()."/images/no-profile.png"; ?>
 			                           	<img src="<?php echo $photo;?>" class=" img-thumbnail" alt="profile-image">
 			                            <i class="fa fa-male member-star text-active" title="verified user"></i>
 			                        </div>
@@ -287,13 +286,10 @@ table.collape tbody td{padding: 0px !important;}
 			           <div class="col-md-6 col-sm-6 col-xs-12">
 			           		 <div class="form-group">
 			                   <label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("COURSE_SERVICE_PRODUCT");?><?php echo $tr->translate("PRODUCT");?></label>
-			                   <div class="col-md-7 col-sm-7 col-xs-12">
-			                   		<input id="item" name="item" />
-			                   </div>
+			                   <div class="col-md-7 col-sm-7 col-xs-12"><input id="item" name="item" /></div>
 			                </div>
 			           </div>
-			           <div class="col-md-3 col-sm-3 col-xs-12">
-			           </div>
+			           <div class="col-md-3 col-sm-3 col-xs-12"></div>
 			           <div style="clear: both;"></div>
 		           </div>
 		        </div>
@@ -311,60 +307,53 @@ table.collape tbody td{padding: 0px !important;}
 		        </ul>
 		    </div>
 		    <div class="tab-content vertical">
-			        <!--Panel 1-->
-			        <div class="tab-pane fade in active" id="panel21" role="tabpanel">
-			        	 <div class="card-box">
-			        	 	<div class="col-md-12 col-sm-12 col-xs-12">
-			        	 		<table border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-								 	<tr id="head-title" class="head-td"  align="right" style="background:#ececec;font-size:12px;color:#000"></tr>
-								</table>
-			        	 	</div>
-			        	 </div>
-			       	</div>
-			       	<!--/.Panel 1-->
-			       	<!--Panel 2-->
-			        <div class="tab-pane fade in " id="panel22" role="tabpanel">
-			        	 <div class="card-box">
-			        	 	<div class="col-md-12 col-sm-12 col-xs-12">
-			        	 		<table border="1" id="table_paymenthistory" style="width:100%;border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-									 <tr id="head-paymenttitle" class="head-td" align="right" style="background:#dff7fd;font-size:12px;"></tr>
-									</table>
-			        	 	</div>
-			        	 </div>
-			       	</div>
+		        <!--Panel 1-->
+		        <div class="tab-pane fade in active" id="panel21" role="tabpanel">
+		        	 <div class="card-box">
+		        	 	<div class="col-md-12 col-sm-12 col-xs-12">
+		        	 		<table border="1" id="table_row" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
+							 	<tr id="head-title" class="head-td"  align="right" style="background:#ececec;font-size:12px;color:#000"></tr>
+							</table>
+		        	 	</div>
+		        	 </div>
+		       	</div>
+		       	<!--/.Panel 1-->
+		       	<!--Panel 2-->
+		        <div class="tab-pane fade in " id="panel22" role="tabpanel">
+		        	 <div class="card-box">
+		        	 	<div class="col-md-12 col-sm-12 col-xs-12">
+		        	 		<table border="1" id="table_paymenthistory" style="width:100%;border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
+							 <tr id="head-paymenttitle" class="head-td" align="right" style="background:#dff7fd;font-size:12px;"></tr>
+							</table>
+		        	 	</div>
+		        	 </div>
+		       	</div>
 			</div>
 			<div class="card-box">
-	        	<div class="col-md-4 col-sm-4 col-xs-12">
-	        	</div>
+	        	<div class="col-md-4 col-sm-4 col-xs-12"></div>
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_DATE");?>  :
-	                   </label>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_DATE");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="<?php echo date("Y-m-d");?>" name="paid_date" id="paid_date" class="fullside"/>
+	                   	  <input type="text" dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" required="1" value="<?php echo date('Y-m-d',strtotime($rspayment['create_date']));?>" name="paid_date" id="paid_date" class="fullside"/>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?>  :
-	                   </label>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAYMENT_METHOD");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select required="false" type="text" name="payment_method" id="payment_method" class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" >
 								<?php if(!empty($this->rs_paymenttype)){foreach ($this->rs_paymenttype as $rs){?>
-								<option value="<?php echo $rs['key_code']?>"><?php echo $rs['view_name']?></option>
+								<option value="<?php echo $rs['key_code']?>" <?php if($rspayment['payment_method']==$rs['key_code']){echo "selected";}?>><?php echo $rs['view_name']?></option>
 								<?php }}?>
 	                   		</select>
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NUMBER");?>  :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="number" id="number" dojoType="dijit.form.TextBox" class="fullside" />
-	                   </div>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NUMBER");?>  :</label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12"><input type="text" name="number" id="number" dojoType="dijit.form.TextBox" class="fullside" value="<?php echo $rspayment['number'];?>" /></div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("READ_IN_KHMER");?>  :
-	                   </label>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("READ_IN_KHMER");?>:</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<Textarea type="text" name="money_in_khmer" id="money_in_khmer" readonly="readonly" dojoType="dijit.form.TextBox" class="fullside" ></Textarea>
 	                   </div>
@@ -372,38 +361,33 @@ table.collape tbody td{padding: 0px !important;}
 	        	</div>
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FINE");?>  :
-	                   </label>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FINE");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" onkeyup="netTotal();" name="penalty" id="penalty" value="0" dojoType="dijit.form.NumberTextBox" class="fullside" />
+	                   		<input type="text" onkeyup="netTotal();" name="penalty" id="penalty" value="0" dojoType="dijit.form.NumberTextBox" class="fullside" value="<?php echo $rspayment['penalty'];?>"/>
 	                   </div>
 	                </div>
 	        		<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_PAYMENT");?>  :
-	                   </label>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_PAYMENT");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" readonly="readonly" name="grand_total" id="grand_total" value="0" dojoType="dijit.form.NumberTextBox" class="fullside" />
+	                   		<input type="text" readonly="readonly" name="grand_total" id="grand_total" value="<?php echo $rspayment['grand_total'];?>" dojoType="dijit.form.NumberTextBox" class="fullside" />
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREDIT_MEMO");?>  :
-	                   </label>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREDIT_MEMO");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text"  onkeyup="" readOnly="true"  name="credit_memo" id="credit_memo"  value="0" dojoType="dijit.form.NumberTextBox" class="fullside" />
+	                   		<input type="text"  onkeyup="" readOnly="true"  name="credit_memo" id="credit_memo" value="<?php echo $rspayment['credit_memo'];?>" dojoType="dijit.form.NumberTextBox" class="fullside" />
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_AMOUNT");?>  :
-	                   </label>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PAID_AMOUNT");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="paid_amount" id="paid_amount" value="0" onkeyup="onPaidAmount();" dojoType="dijit.form.NumberTextBox" class="fullside" />
+	                   		<input type="text" name="paid_amount" id="paid_amount" value="<?php echo $rspayment['paid_amount'];?>" onkeyup="onPaidAmount();" dojoType="dijit.form.NumberTextBox" class="fullside" />
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BALANCE");?>  :
-	                   </label>
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BALANCE");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" name="balance_due" readonly="readonly" id="balance_due" value="0" style="color:red;" dojoType="dijit.form.NumberTextBox" class="fullside" />
+	                   		<input type="text" name="balance_due" readonly="readonly" id="balance_due" value="<?php echo $rspayment['balance_due'];?>" style="color:red;" dojoType="dijit.form.NumberTextBox" class="fullside" />
 	                   </div>
 	                </div>
 	        	</div>
@@ -462,10 +446,9 @@ require(["dojo/ready"], function(ready){
 			getbranchinfo();
 			getallstudentname();
 			getgradebyDegree(-1,1,2);
-			getReceiptNo('','');
+			Initialize();
 		});
 		
-
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
 			queryExpr: "*${0}*",                     
@@ -475,7 +458,6 @@ require(["dojo/ready"], function(ready){
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function() {  
-				
 				getOldStudentInfo();
 				getCreditMemo();
 				stu_id = dijit.byId('old_stu').get('value');
@@ -496,7 +478,93 @@ require(["dojo/ready"], function(ready){
 			}
 		}, "item");
 });	
-	
+var template = '';
+var service = '';
+var col = 0;
+var no = 0;
+var title = 0;
+tmp = '';
+temp='';
+function Initialize() {
+<?php if(!empty($this->rs_detail)){ 
+		foreach($this->rs_detail as $row){ ?>
+			label='<?php echo $row['item_name']?>';
+			service_id='<?php echo $row['itemdetail_id']?>';
+			col++;no++;
+			template='';
+			if(title!=1){
+				temp+='<th><?php echo $tr->translate("DEL");?></th>';
+				temp+='<th><?php echo $tr->translate("N_O");?></th>';
+				temp+='<th><?php echo $tr->translate("SERVICES");?></th>';
+				temp+='<th><?php echo $tr->translate("PAYMENT_TERM");?></th>';
+				temp+='<th><?php echo $tr->translate("PRICE");?></th>';
+				temp+='<th><?php echo $tr->translate("AMOUNT");?></th>';
+				temp+='<th><?php echo $tr->translate("SUBTOTAL");?></th>';
+				temp+='<th><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>';
+				temp+='<th><?php echo $tr->translate("DISCOUNT_TYPE");?></th>';
+				temp+='<th><?php echo $tr->translate("DISCOUNT");?>$</th>';
+				temp+='<th><?php echo $tr->translate("DISCOUNT");?> %</th>';
+				temp+='<th><?php echo $tr->translate("TOTAL_PAYMENT");?></th>';
+				temp+='<th><?php echo $tr->translate("DATE_START");?></th>';
+				temp+='<th><?php echo $tr->translate("END_DATE");?></th>';
+				temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+				dojo.query("#head-title").append(temp);
+				title=1;
+			}
+			template+='<td width="30px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="30px" align="center">'+no+'</td>';
+			template+='<td style="width:150px;font-size:12px;"><label id="item_label_'+col+'">'+label+'<label><input type="hidden" value="'+service_id+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/>';
+			template+='<td style="width:180px"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';
+				<?php if(!empty($this->all_paymentterm))foreach($this->all_paymentterm as $term){?>
+					template+='<option value="'+<?php echo $term['id']?>+'"><?php echo $term['name'];?></option>';
+				<?php }?>
+			template+='</select><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/></td>';
+			column = 0;
+			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';	
+			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
+			template+='<td style="width:70px"><input type="text" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="extra_fee'+col+'" id="extra_fee'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td style="width:100px"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
+			template+='<option value="0"></option>';	
+			<?php if(!empty($this->rsdiscount))foreach($this->rsdiscount as $rsdis){?>
+				template+='<option value="'+<?php echo $rsdis['id']?>+'"><?php echo $rsdis['dis_name'];?></option>';
+			<?php }?>
+			template+='</select></td>';
+			template+='<td><input type="text" class="fullside" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+='<td><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal('+col+');netTotal('+col+');"  name="total_amount'+col+'" value="0" id="total_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
+			template+="<td style='width:170px;font-size:12px;'><input type='text' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" value='now' name='date_start_"+col+"' onchange='getValidate("+col+");' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
+			template+='<td style="width:170px;font-size:12px;"><input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
+			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:140px;" />';
+			template+='<input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
+		tmp='<tr id="row'+col+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+col);
+		} else {$("#identity").val(col);}
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
+		//getservicefee(col);
+		//getValidate(col);
+		dijit.byId('term_'+col).attr('value','<?php echo $row['payment_term'];?>');
+		dijit.byId('price_'+col).attr('value','<?php echo $row['fee'];?>');
+		dijit.byId('qty_'+col).attr('value','<?php echo $row['qty'];?>');
+		dijit.byId('subtotal_'+col).attr('value','<?php echo $row['subtotal'];?>');
+		dijit.byId('extra_fee'+col).attr('value','<?php echo $row['extra_fee'];?>');
+		dijit.byId('discount_type'+col).attr('value','<?php echo $row['discount_type'];?>');
+		dijit.byId('discount_amount'+col).attr('value','<?php echo $row['discount_amount'];?>');
+		dijit.byId('discount_'+col).attr('value','<?php echo $row['discount_percent'];?>');
+		dijit.byId('total_amount'+col).attr('value','<?php echo $row['paidamount'];?>');
+		dijit.byId('date_start_'+col).attr('value','<?php echo $row['start_date'];?>');
+		dijit.byId('validate_'+col).attr('value','<?php echo $row['validate'];?>');
+		dijit.byId('remark'+col).attr('value','<?php echo $row['note'];?>');
+		dijit.byId('onepayment_'+col).attr('value','<?php echo $row['is_onepayment'];?>');
+		
+	<?php } }?>
+}	
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 function getgradebyDegree(dept_id,a,type=1){
@@ -517,26 +585,6 @@ function getgradebyDegree(dept_id,a,type=1){
 					item_store  = getDataStorefromJSON('id','name', data);
 				    dijit.byId('item').set('store',item_store);  	
 				}
-		},
-		error: function(err) {
-		}
-	});
-}
-
-var url_getreceipt_no = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
-function getReceiptNo(stu_id,submit){
-	dojo.xhrPost({
-		url:url_getreceipt_no,
-		content:{
-			'dept_id':1
-			},
-		handleAs:"json",
-		load: function(data) {
-			  dijit.byId('receipt_no').attr('value',data); 
-			  if(stu_id!=''){
-				  dojo.byId("lb_receipt_no").innerHTML = data;
-				  printSave(stu_id,data,submit);
-			  }
 		},
 		error: function(err) {
 		}
@@ -811,7 +859,6 @@ function getallstudentname(){//
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
 	}
 	branch_id = dijit.byId("branch_id").attr("value");
-	
 	dojo.xhrPost({
 		url:url_data,
 		content:{
@@ -821,7 +868,9 @@ function getallstudentname(){//
 		handleAs:"json",
 		load: function(data) {
 			student_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('old_stu').set('store',student_store);  
+		    dijit.byId('old_stu').set('store',student_store); 
+		    //alert(<?php //echo $rspayment['stu_id'];?>);
+		    dijit.byId('old_stu').attr('value','<?php echo $rspayment['student_id'];?>'); 
 		},
 		error: function(err) {
 			alert(err);
@@ -926,13 +975,7 @@ function getOldStudentInfo(){
 		}
 	});
 }
-var template = '';
-var service = '';
-var col = 0;
-var no = 0;
-var title = 0;
-tmp = '';
-temp='';
+
 date_format = '"dd/MM/yyyy"';
 function addRow() {
 		study_year = dijit.byId('study_year').get('value');
@@ -954,28 +997,8 @@ function addRow() {
 		label = dijit.byId("item").attr('displayedValue');
 		service_id = dijit.byId("item").get("value");
 		if(service_id ==''){return false;}
-		
-		col++;no++;
-		template='';
-		if(title!=1){
-			temp+='<th><?php echo $tr->translate("DEL");?></th>';
-			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th><?php echo $tr->translate("SERVICES");?></th>';
-			temp+='<th><?php echo $tr->translate("PAYMENT_TERM");?></th>';
-			temp+='<th><?php echo $tr->translate("PRICE");?></th>';
-			temp+='<th><?php echo $tr->translate("AMOUNT");?></th>';
-			temp+='<th><?php echo $tr->translate("SUBTOTAL");?></th>';
-			temp+='<th><?php echo $tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT");?></th>';
-			temp+='<th><?php echo $tr->translate("DISCOUNT_TYPE");?></th>';
-			temp+='<th><?php echo $tr->translate("DISCOUNT");?>$</th>';
-			temp+='<th><?php echo $tr->translate("DISCOUNT");?> %</th>';
-			temp+='<th><?php echo $tr->translate("TOTAL_PAYMENT");?></th>';
-			temp+='<th><?php echo $tr->translate("DATE_START");?></th>';
-			temp+='<th><?php echo $tr->translate("END_DATE");?></th>';
-			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
-			dojo.query("#head-title").append(temp);
-			title=1;
-		}
+			col++;no++;
+			template='';
 			template+='<td width="30px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="30px" align="center">'+no+'</td>';
 			template+='<td style="width:150px;font-size:12px;"><label id="item_label_'+col+'">'+label+'<label><input type="hidden" value="'+service_id+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/>';
@@ -1246,20 +1269,11 @@ function printSave(new_stu_id,new_receipt,submit){
 				dijit.byId("item").focus();
 				return false;
 			}
-			receipt=dijit.byId("receipt_no").get("value");
+			new_receipt=dijit.byId("receipt_no").get("value");
 			stu_type = dijit.byId('student_type').get('value');
 			stu_id = dijit.byId("old_stu").attr('displayedValue');
 			
-			stu_id = dijit.byId("old_stu").attr('displayedValue');
-			if(new_receipt==''){
-				getReceiptNo(stu_id);
-				
-			}else{
-				receipt = new_receipt;
-			}
-				
 			if(new_receipt==""){
-				getReceiptNo(1,submit);
 				submit=0;
 			}
 			today = dijit.byId("paid_date").get("value");

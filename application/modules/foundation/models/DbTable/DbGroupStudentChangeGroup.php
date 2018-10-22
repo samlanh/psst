@@ -160,20 +160,24 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$where = " stu_id=".$_data['stu_id_'.$j];
 						$this->update($array, $where);
 					}
-					
+					$dbg = new Application_Model_DbTable_DbGlobal();
 					$this->_name='rms_group_detail_student';
 					$ids=explode(',', $_data['identity']);
 					foreach ($ids as $i){
-						$arr=array(
-								'group_id'	=>$_data['to_group'],
-								'stu_id'	=>$_data['stu_id_'.$i],
-								'user_id'	=>$this->getUserId(),
-								'status'	=>1,
-								'date'		=>date('Y-m-d'),
-								'type'		=>1,
-								'old_group'	=>$_data['from_group'],
-						);
-						$this->insert($arr);
+						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$i],$_data['to_group']);
+						if(empty($rsexist)){
+							$arr=array(
+									'group_id'	=>$_data['to_group'],
+									'stu_id'	=>$_data['stu_id_'.$i],
+									'user_id'	=>$this->getUserId(),
+									'status'	=>1,
+									'date'		=>date('Y-m-d'),
+									'type'		=>1,
+									'old_group'	=>$_data['from_group'],
+							);
+							$this->insert($arr);
+						}
+						
 					}
 					
 				$this->_name = 'rms_group';

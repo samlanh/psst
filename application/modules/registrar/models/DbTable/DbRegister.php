@@ -1737,7 +1737,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getStudentPaymentDetailServiceByID($id){
     	$db=$this->getAdapter();
-    	$sql="SELECT * FROM rms_student_paymentdetail WHERE payment_id=$id ";
+    	$sql="SELECT sd.*,
+			(SELECT (title) FROM `rms_itemsdetail` WHERE id=itemdetail_id LIMIT 1) as item_name
+    	FROM rms_student_paymentdetail AS sd 
+    	
+    	WHERE sd.payment_id=$id ";
     	return $db->fetchAll($sql);
     }
     

@@ -21,7 +21,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	
     	$code = new Zend_Dojo_Form_Element_TextBox('code');
     	$code->setAttribs(array(
-    			'dojoType'=>'filter',
+    			'dojoType'=>'dijit.form.TextBox',
     			'class'=>'fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter Title")
     	));

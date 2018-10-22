@@ -206,6 +206,8 @@ class Foundation_ReschedulegroupController extends Zend_Controller_Action {
 		array_unshift($room, array ( 'id' => 0,'name' => 'Select Room'));
 		$this->view->room = $room;
 		
+		$this->view->branch_name = $model->getAllBranch();
+		
 		$db=new Global_Model_DbTable_DbGrade();
 // 		$d_row=$db->getNameGradeAll();
 // 		array_unshift($d_row, array ( 'id' => -1,'name' => 'បន្ថែមថ្មី'));

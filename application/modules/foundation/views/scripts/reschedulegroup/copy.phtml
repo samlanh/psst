@@ -1,7 +1,7 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_callteral;
-echo $this->headTitle($tr->translate("ADD_RESCHEDULE_GROUP"));
+echo $this->headTitle($tr->translate("EDIT_RESCHEDULE_GROUP"));
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 //print_r($this->row_g);
 ?>
@@ -16,13 +16,13 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-calendar " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_RESCHEDULE_GROUP');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_RESCHEDULE_GROUP');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
     		</div>
     	</div>
-    	<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
 				group_code=dijit.byId("group_code").get("value");
@@ -71,7 +71,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	    			<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select name="branch_id" class="fullside" id="branch_id" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="" onChange="getSubjectajax()">
+		                	<select name="branch_id" class="fullside" id="branch_id" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" placeholder="">
 								<option value="-1"><?php echo $tr->translate("SELECT_BRANCH")?></option>
 								<?php if(!empty($this->branch_name)){foreach($this->branch_name as $name){?>
 									<option value="<?php echo $name['id'];?>"><?php echo $name['name'];?></option>
@@ -82,19 +82,14 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP_CODE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select name="group_code" class="fullside" id="group_code" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
-								<option value="-1"><?php echo $tr->translate("SELECT_GROUP")?></option>
-								<?php if(!empty($this->group_code)){foreach($this->group_code as $name){?>
-									<option value="<?php echo $name['id'];?>"><?php echo $name['name'];?></option>
-								<?php }}?>
-							</select>
+		                	<input id="group_code" />
 		                </div>
 		           </div>
 		           <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select name="academic_year" class="fullside" id="academic_year" placeholder="Select Year" type="text" dojoType="dijit.form.FilteringSelect" placeholder="">
-								<option value="-1">select year</option>
+								<option value="-1"><?php echo $tr->translate("SELECT_YEAR")?></option>
 								<?php if(!empty($this->row_year)){foreach($this->row_year as $year){?>
 									<option value="<?php echo $year['id'];?>"><?php echo $year['years'];?></option>
 								<?php }}?>
@@ -137,6 +132,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::en
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->dept));?> );
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
 var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
+var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->group_code));?> );
 
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
@@ -240,9 +236,51 @@ dojo.ready(function(){
 			}
 		}
 	}, "room");
+	new dijit.form.FilteringSelect({
+		store:group_store,
+		autoComplete: true,                        
+		required: false,               
+		id: "group_code",
+		name: "group_code",   
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",
+		 onChange: function() {  
+			 //getInfoBygroup();    
+		    }
+	}, "group_code");
 	oldaddRow();
+	getallgroupby();
+	 var branch_id = dijit.byId('branch_id');
+	 	branch_id.on('change', function(evt) { 
+	 		getallgroupby();
+	    });
+	 	
 	getValue();
 });
+
+function getallgroupby(){// 
+	var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'get-allstubygroup')); ?>';
+	branch_id = dijit.byId("branch_id").get("value");
+	if(branch_id==''){  
+		dijit.byId("branch_id").focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_data,
+		content:{
+			'branch_id':branch_id,
+		},
+		handleAs:"json",
+		load: function(data) {  
+			group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group_code').set('store',group_store);
+		    document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+		}
+	});
+}
+
 function setEndDate(){
 	amount_date = dijit.byId('amountmonth').get('value');
 	release_date = dijit.byId("start_date").get('value');//just update follow by first payment

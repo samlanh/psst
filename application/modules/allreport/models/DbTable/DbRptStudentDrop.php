@@ -139,6 +139,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="SELECT gr.id,gr.year_id,
     		gr.group_id,
+    		(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
     		(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
     		gr.day_id,gr.from_hour,gr.to_hour,
     		gr.subject_id,gr.techer_id,
@@ -172,6 +173,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	}
     	if(!empty($search['study_year'])){
     		$where.=' AND gr.year_id='.$search['study_year'];
+    	}
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND gr.branch_id='.$search['branch_id'];
     	}
     	if(!empty($search['group'])){
     		$where.=' AND gr.group_id='.$search['group'];

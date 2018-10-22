@@ -484,7 +484,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 							'note'			=>$_data['note_'.$i]
 					);
 					$this->insert($_arr);
-			}
+				}
 			}
 			$db->commit();//if not errore it do....
 		}catch(Exception $e){

@@ -52,11 +52,15 @@ class Registrar_CateincomeController extends Zend_Controller_Action
 			$data=$this->getRequest()->getPost();	
 			$db = new Registrar_Model_DbTable_DbCateIncome();				
 			try {
-				$db->addCateIncome($data);
-				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/cateincome");
+				$sms="INSERT_SUCCESS";
+				$cate = $db->addCateIncome($data);
+				if($cate==-1){
+					$sms = "RECORD_EXIST";
+				}
+				if(!empty($data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull($sms,"/registrar/cateincome");
 				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::Sucessfull($sms,'/registrar/cateincome/add');
 				}				
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");

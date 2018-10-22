@@ -14,6 +14,15 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 	}
 	
 	function addCateIncome($data){
+		$_db= $this->getAdapter();
+		try{
+			$sql="SELECT id FROM rms_cate_income_expense WHERE category_name ='".$data['title']."'";
+			//echo $sql; exit();
+			//$sql.=" AND category_name='".$data['title']."'";
+			$rs = $_db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
+			}
 		$array = array(
 					'category_name'	=>$data['title'],
 					'account_code'	=>$data['acc_code'],
@@ -21,6 +30,12 @@ class Registrar_Model_DbTable_DbCateIncome extends Zend_Db_Table_Abstract
 					'create_date'	=>date('Y-m-d'),
 				);
 		$this->insert($array);
+		$_db->commit();
+		}catch(Exception $e){
+			$_db->rollBack();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		//print_r($data); exit();
  	 }
  	 
 	 function updateCateIncome($data){

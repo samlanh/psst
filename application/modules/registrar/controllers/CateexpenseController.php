@@ -53,13 +53,17 @@ class Registrar_CateexpenseController extends Zend_Controller_Action
     {
     	if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();	
-			$db = new Registrar_Model_DbTable_DbCateExpense();				
 			try {
-				$db->addCateExpense($data);
+				$db = new Registrar_Model_DbTable_DbCateExpense();
+				$sms="INSERT_SUCCESS";
+				$cate = $db->addCateExpense($data);
+				if($cate==-1){
+					$sms = "RECORD_EXIST";
+				}
 				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/cateexpense");
+					Application_Form_FrmMessage::Sucessfull($sms,"/registrar/cateexpense");
 				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					Application_Form_FrmMessage::message($sms);
 				}				
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");

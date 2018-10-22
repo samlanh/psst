@@ -14,15 +14,27 @@ class Registrar_Model_DbTable_DbCateExpense extends Zend_Db_Table_Abstract
 	}
 	
 	function addCateExpense($data){
+		$db= $this->getAdapter();
+		try{
+			$sql="SELECT id FROM rms_account_name where account_name ='".$data['title']."'";
+			//$sql.=" AND account_code='".$$data['acc_code']."'";
+			$rs = $db->fetchOne($sql);
+			if(!empty($rs)){
+				return -1;
+			}
 		$array = array(
 					'account_name'	=>$data['title'],
 					'account_code'	=>$data['acc_code'],
 					'account_type'	=>5,
 					'user_id'		=>$this->getUserId(),
-				
 					'date'	=>date('Y-m-d'),
 				);
 		$this->insert($array);
+		}catch (Exception $e){
+			$db->rollBack();
+			echo $e->getMessage();exit();
+		}
+		//print_r($data); exit();
  	 }
  	 
 	 function updateCateExpense($data){

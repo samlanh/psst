@@ -65,7 +65,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 	function addCreditmemo($data){
 		$db = $this->getAdapter();
 		try{
-		$sql="SELECT id FROM rms_transfer_credit WHERE branch_id =".$data['branch_id'];
+		$sql="SELECT id FROM rms_creditmemo WHERE branch_id =".$data['branch_id'];
 		$sql.=" AND student_id='".$data['student_id']."'";
 //		$sql.=" AND total_amount='".$data['total_amount']."'";
 // 		$sql.=" AND total_amountafter='".$data['total_amount']."'";

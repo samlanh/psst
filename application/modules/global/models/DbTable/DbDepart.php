@@ -9,9 +9,10 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
     }
 	public function addNewDepartment($_data){
 		$db = $this->getAdapter();
+		$db->beginTransaction();
 		//print_r($_data); exit();
 		try{
-  		$sql="SELECT depart_id FROM rms_department WHERE status =".$_data['status'];
+  		$sql="SELECT depart_id FROM rms_department where status =".$_data['status'];
   		$sql.=" AND depart_namekh='".$_data['depart_namekh']."'";
   		$rs = $db->fetchOne($sql);
   		if(!empty($rs)){

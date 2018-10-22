@@ -7,34 +7,29 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->user_id;
 	}
-	
 	public function getBranchId(){
 		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->branch_id;
-	}
-	
+	}	
 	function addIncome($data){
-		
 		$db = new Registrar_Model_DbTable_DbRegister();
 	    $receipt_no = $db->getRecieptNo();
-		
 		$array = array(
-					'branch_id'		=>$this->getBranchId(),
-					'title'			=>$data['title'],
-					'cate_income'	=>$data['cate_income'],
-					'total_amount'	=>$data['total_income'],
-					'invoice'		=>$receipt_no,
-					'payment_method'=>$data['payment_method'],
-					'cheqe_no'		=>$data['cheqe_no'],
-					'description'	=>$data['note'],
-					'date'			=>$data['date'],
-					'status'		=>$data['status'],
-					'user_id'		=>$this->getUserId(),
-					'create_date'	=>date('Y-m-d'),
+					'branch_id'		=> $this->getBranchId(),
+					'title'			=> $data['title'],
+					'cate_income'	=> $data['cate_income'],
+					'total_amount'	=> $data['total_income'],
+					'invoice'		=> $receipt_no,
+					'payment_method'=> $data['payment_method'],
+					'cheqe_no'		=> $data['cheqe_no'],
+					'description'	=> $data['note'],
+					'date'			=> $data['date'],
+					'status'		=> $data['status'],
+					'user_id'		=> $this->getUserId(),
+					'create_date'	=> date('Y-m-d'),
 				);
 		$this->insert($array);
- 	 }
- 	 
+ 	} 	 
 	 function updateIncome($data){
 		$arr = array(
 					'branch_id'		=>$this->getBranchId(),

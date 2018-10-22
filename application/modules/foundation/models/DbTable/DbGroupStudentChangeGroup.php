@@ -134,9 +134,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$where=" stu_id=".$_data['stu_id_'.$k];
 						$this->update($stu, $where);
 					}
-					
-
-				$this->_name = 'rms_student';
+					$this->_name = 'rms_student';
 
 					$group_detail = $this->getGroupDetail($_data['to_group']);
 					$idss=explode(',', $_data['identity']);

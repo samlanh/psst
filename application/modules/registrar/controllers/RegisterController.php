@@ -77,7 +77,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        
        $db = new Registrar_Model_DbTable_DbRegister();
        $this->view->all_year = $db->getAllYears();
-	   $test = $this->view->branch_info = $db->getBranchInfo();
 	   
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
@@ -192,7 +191,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	 
     	$db = new Registrar_Model_DbTable_DbRegister();
     	$this->view->all_year = $db->getAllYears();
-    	$test = $this->view->branch_info = $db->getBranchInfo();
+//     	$this->view->branch_info = $db->getBranchInfo();
     	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);

@@ -76,7 +76,6 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-// 			print_r($_data);exit();
 			$_arr=array(
 					'branch_id' 	=> $_data['branch_id'],
 					'group_code' 	=> $_data['group_code'],

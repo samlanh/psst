@@ -1,5 +1,8 @@
 <?php
-	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$session_lang=new Zend_Session_Namespace('lang');
+	$session_lang->lang_id=1;
+
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage(1);
 	$this->headTitle($this->data["system_name"]."-Student Management System"); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");

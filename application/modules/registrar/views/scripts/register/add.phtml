@@ -1083,10 +1083,22 @@ function calculateTotal(index){
 		
 		discount = dijit.byId('discount_amount'+index).get('value');
 		discount = isNaN(discount)?0:discount;
+		if(discount>total){
+			alert("the value must be <="+total);
+			dijit.byId('discount_amount'+index).attr('value','');
+			calculateTotal(index);
+			dijit.byId('discount_amount'+index).get('value').focus();
+		}
 		
 		total_pay = parseFloat(total) - parseFloat(discount) ;
 
 		discount_percent = dijit.byId('discount_'+index).get('value');
+		if(discount_percent>100){
+			alert("the value must be <=100% !");
+			dijit.byId('discount_'+index).attr('value','');
+			calculateTotal(index);
+			dijit.byId('discount_'+index).get('value').focus();
+		}
 		discount_percent = isNaN(discount_percent)?0:discount_percent;
 		total_pay = total_pay-(total_pay*discount_percent/100)
 		
@@ -1306,7 +1318,16 @@ function printSave(new_stu_id,new_receipt,submit){
 					  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
 					  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
 					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_type"+rowIDArray[n]).attr('displayedValue')+' </td>';
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("discount_amount"+rowIDArray[n]).get('value')+' </td>';
+					  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
+					  disc_amount=isNaN(disc_amounts)?'':'$ '+disc_amounts;
+					  percents = dijit.byId("discount_"+rowIDArray[n]).get('value');
+					  percent = isNaN(percents)?'':percents+'%';
+
+					  sign='';					  
+					  if(!isNaN(disc_amounts) && !isNaN(disc_amounts)){
+						  sign=' & ';
+					  }
+					  temp+='<td style="border:1px solid #000;">'+disc_amount+sign+percent+'</td>';
 					  temp+='<td style="border:1px solid #000;">$ '+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
 
 					  service_type = dijit.byId("onepayment_"+rowIDArray[n]).get('value');

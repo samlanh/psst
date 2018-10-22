@@ -1246,9 +1246,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     function getRegisterById($id){
     	$db=$this->getAdapter();
-    	$sql=" SELECT s.stu_id,s.stu_code,sp.receipt_number,s.academic_year,s.stu_khname,s.stu_enname,s.sex,s.session,s.degree,s.grade,
-		    	sp.payment_term,sp.tuition_fee,sp.discount_percent,sp.other_fee,sp.admin_fee,sp.total,sp.paid_amount,sp.is_void,sp.create_date,
-		    	sp.balance_due,sp.amount_in_khmer,sp.note,sp.student_type,sp.time,sp.end_hour,spd.start_date,spd.validate,spd.is_start,spd.is_parent
+    	$sql=" SELECT s.stu_id,
+    			s.stu_code,
+    			sp.receipt_number,
+    			s.academic_year,
+    			s.stu_khname,
+    			s.stu_enname,
+    			s.sex,
+    			s.session,
+    			s.degree,
+    			s.grade,
+		    	sp.paid_amount,
+		    	sp.is_void,sp.create_date,
+		    	sp.balance_due,sp.amount_in_khmer,
+		    	sp.note,sp.time,
+		    	spd.start_date,
+		    	spd.validate,spd.is_start
 		    	FROM rms_student AS s,rms_student_payment AS sp ,rms_student_paymentdetail AS spd
 		    	WHERE s.stu_id=sp.student_id AND sp.id=spd.payment_id AND sp.id=".$id;
     	$dbl = new Application_Model_DbTable_DbGlobal();
@@ -1724,26 +1737,20 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     
     function getStudentPaymentDetailServiceByID($id){
     	$db=$this->getAdapter();
-    	$sql="select * from rms_student_paymentdetail where payment_id=$id and type NOT IN(1,2)";
+    	$sql="SELECT * FROM rms_student_paymentdetail WHERE payment_id=$id ";
     	return $db->fetchAll($sql);
     }
     
     function getServiceOnlyByID($id){
     	$db=$this->getAdapter();
-    	$sql="select * from rms_student_paymentdetail where payment_id=$id and type NOT IN(1,2,4)";
+    	$sql="select * from rms_student_paymentdetail where payment_id=$id ";
     	return $db->fetchAll($sql);
     }
     
     function getProductOnlyByID($id){
     	$db=$this->getAdapter();
-    	$sql="select * from rms_student_paymentdetail where payment_id=$id and type NOT IN(1,2,3)";
+    	$sql="select * from rms_student_paymentdetail where payment_id=$id ";
     	return $db->fetchAll($sql);
-    }
-    
-    function getStudentPaymentDetailRegisterByID($id){
-    	$db=$this->getAdapter();
-    	$sql="select * from rms_student_paymentdetail where payment_id=$id and type IN(1,2)";
-    	return $db->fetchRow($sql);
     }
     
     function getBranchInfo(){

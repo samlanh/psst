@@ -81,6 +81,10 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
     	$this->view->cate_expense = $cate_expense;
     	
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$cate_expense = $_db->getAllBranch();
+    	array_unshift($cate_expense, array('id'=>-1 , 'name'=>$this->tr->translate("ADD_NEW")));
+    	
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
     }

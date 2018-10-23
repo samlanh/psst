@@ -102,13 +102,8 @@
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		 <div class="col-md-7 col-sm-7 col-xs-12">
-		                   			<select style="width: 100%;" dojoType="dijit.form.FilteringSelect" required="required"  id="to_group" name="to_group" type="text"   queryExpr="*${0}*" autoComplete="false" placeholder="to group" onchange="toStudentGroup(2);popupAddGroup();">
-										<option value="0" ><?php echo $tr->translate("SELECT_GROUP")?></option>
-										<option value="-1" ><?php echo $tr->translate("ADD_NEW")?></option>
-										<?php if(!empty($this->rs))foreach ($this->rs as $_row){?>
-											<option value="<?php echo $_row['id']?>"><?php echo $_row['group_code']?></option>
-										<?php }?>
-									</select>
+		                   		 	<input id="to_group" />
+		                   			
 		                   		</div>
 		                   		<div class="col-md-3 col-sm-3 col-xs-12">
 		                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
@@ -450,9 +445,12 @@ function setValue(i){
 }
 
 function check(i){
-	if(dojo.byId('checkall').checked){
+	//if(dojo.byId('checkall').checked){
+	if($('#checkall').is(":checked")){
 		for(var j=1;j<=i;j++){
-			$("#checkbox"+j).attr('checked', 'checked');
+			$('#checkbox'+j).each(function() { //loop through each checkbox
+	            this.checked = true;  
+			});
 		}
 	}else{
 		for(var j=1;j<=i;j++){

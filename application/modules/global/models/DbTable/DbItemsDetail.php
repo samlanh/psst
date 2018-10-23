@@ -60,6 +60,7 @@
 			}
 			$sql="SELECT id FROM rms_itemsdetail WHERE items_id =".$_data['items_id'];
 			$sql.=" AND items_type='".$_data['items_type']."'";
+			$sql.=" AND title='".$_data['title']."'";
 			$rs = $_db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;

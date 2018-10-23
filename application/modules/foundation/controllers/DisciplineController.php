@@ -20,6 +20,7 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
+						'branch_id' => '',
 						'group_name' => '',
 						'study_year'=> '',
 						'grade'=> '',
@@ -33,7 +34,7 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array( "GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","MISTAKE_DATE","STATUS");
+			$collumns = array( "BRANCH","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","MISTAKE_DATE","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'discipline','action'=>'edit',
 			);
@@ -69,8 +70,13 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$this->view->group = $db->getAllgroupStudy();
+// 		$this->view->group = $db->getAllgroupStudy();
+		
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		
+		$branch = $db_global->getAllBranch();
+		$this->view->branch = $branch;
+		
 		$this->view->row_year = $db_global->getAllYear();
 		$this->view->session = $db_global->getSession();
 		$this->view->degree = $db_global->getDegree();
@@ -96,10 +102,18 @@ class Foundation_DisciplineController extends Zend_Controller_Action {
 			}
 		}
 		$result = $_model->getAttendencetByID($id);
+		if (empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/discipline");
+			exit();
+		}
 		$this->view->row=$result;
 		$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		
+		$branch = $db_global->getAllBranch();
+		$this->view->branch = $branch;
+		
 		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();

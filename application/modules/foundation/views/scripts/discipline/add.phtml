@@ -54,7 +54,19 @@ ol{margin: 10px;}
     	 <form id='office_receipt' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'discipline','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
   				 if(this.validate()) {
-					dijit.byId('save_new').set('disabled',true);	
+					branch_id = dijit.byId('branch_id').get('value');
+					if(branch_id==''){
+						alert('<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>');
+						dijit.byId('branch_id').focus();
+						return false;
+					}
+					group= dijit.byId('group').get('value');
+					if(group==''){
+						alert('<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>');
+						dijit.byId('group').focus();
+						return false;
+					}
+					loadingBlock();
     				return true;
   				 }else {
     				return false;
@@ -62,15 +74,22 @@ ol{margin: 10px;}
 			</script>
 	    	<div class="card-box">
 	    		<div class="col-md-4 col-sm-4 col-xs-12">
+	    			<div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php $counbranhc = count($this->branch);?>
+		                	<select class="fullside" <?php if ($counbranhc==1){ echo 'readonly="readonly"';}?> tabindex="15" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getAllGroupByBranch();">
+								<option value=""><?php echo $tr->translate("PLEASE_SELECT_BRANCH");?></option>
+								<?php if(!empty($this->branch))foreach ($this->branch as $row){?>
+								<option value="<?php echo $row['id']?>" <?php if ($counbranhc==1){ echo 'selected="selected"';}?>><?php echo $row['name']?></option>
+								<?php }?>
+							</select>
+		                </div>
+		             </div>
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside" tabindex="15" name="" queryExpr="*${0}*" autoComplete="false" id="group" dojoType="dijit.form.FilteringSelect" onchange="getInfoBygroup();">
-								<option value=""><?php echo $tr->translate("SELECT_GROUP");?></option>
-								<?php if(!empty($this->group))foreach ($this->group as $row){?>
-								<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
-								<?php }?>
-							</select>
+		                	<input id="group" />
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -399,7 +418,9 @@ function getInfoBygroup(){
 	url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getgroupinfo'));?>';
 	group = dijit.byId('group').get('value');
 	if(group==''){
-		alert("Please Select Group");
+		//alert("Please Select Group");
+		 document.getElementById("table_row").innerHTML = '';
+		dijit.byId('group').focus();
 		return false;
 	}
 	dojo.xhrPost({
@@ -538,5 +559,51 @@ function CheckAll(){
 	    	}
 		}
 	}
+}
+
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: group_store,
+	    queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                      
+	    id: "group",
+	    name: "group",  
+	    class: 'fullside', 
+	    readonly:false,
+	    required:false,
+	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+	    onChange: function() {  
+	    	group_id = dijit.byId('group').get('value');
+	    	getInfoBygroup();
+	    }
+	}, "group");
+	getAllGroupByBranch();
+}); 
+url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+function getAllGroupByBranch(){
+	dijit.byId('group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getgroup,
+		content:{
+			'branch_id':branch_id,'noaddnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+		    group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group').set('store',group_store);   
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 </script> 

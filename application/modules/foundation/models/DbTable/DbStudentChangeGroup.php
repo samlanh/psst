@@ -40,7 +40,9 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 	
 	public function selectAllStudentChangeGroup($search){
 		$_db = $this->getAdapter();
-		$sql = "SELECT scg.id,(SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) AS code,
+		$sql = "SELECT scg.id,
+		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = scg.branch_id LIMIT 1) AS branch_name,
+		(SELECT stu_code FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) AS code,
 		(SELECT stu_khname FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) AS kh_name,
 		(SELECT stu_enname FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) AS en_name,
 		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=(SELECT sex FROM `rms_student` WHERE `rms_student`.`stu_id`=`scg`.`stu_id` limit 1) limit 1)AS sex,
@@ -55,7 +57,8 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 		(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=rms_group.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as to_grade,
 		(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = rms_group.session )) LIMIT 1) AS `to_session`,
 		
-		moving_date,scg.note from `rms_student_change_group` as scg,rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 and scg.status=1";
+		moving_date,scg.note from `rms_student_change_group` as scg,
+		rms_student as st,rms_group where scg.to_group=rms_group.id and scg.stu_id=st.stu_id and st.is_subspend=0 and scg.status=1";
 		$order_by=" order by id DESC";
 		$where=' ';
 		
@@ -82,11 +85,21 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 		if(!empty($search['session'])){
 			$where.=" AND rms_group.session=".$search['session'];
 		}
+		if(!empty($search['branch_id'])){
+			$where.=" AND scg.branch_id=".$search['branch_id'];
+		}
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('scg.branch_id');
+		
 		return $_db->fetchAll($sql.$where.$order_by);
 	}
 	public function getAllStudentChangeGroupById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_student_change_group WHERE id =".$id;
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('branch_id');
+		
 		return $db->fetchRow($sql);
 	}
 	public function getDegreeAndGradeToGroup($group){
@@ -101,6 +114,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 			try{	
 				$stu_id=$_data['studentid'];
 				$_arr= array(
+						'branch_id'=>$_data['branch_id'],
 						'user_id'=>$this->getUserId(),
 						'stu_id'=>$_data['studentid'],
 						'from_group'=>$_data['from_group'],
@@ -166,6 +180,7 @@ class Foundation_Model_DbTable_DbStudentChangeGroup extends Zend_Db_Table_Abstra
 			if($_data['status']==1){
 				$stu_id=$_data['studentid'];
 				$_arr=array(
+						'branch_id'=>$_data['branch_id'],
 						'user_id'	=>$this->getUserId(),
 						'from_group'=>$_data['from_group'],
 						'to_group'	=>$_data['to_group'],

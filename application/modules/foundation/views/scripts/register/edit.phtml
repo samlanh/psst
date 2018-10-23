@@ -704,7 +704,7 @@ var language_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::
 var job_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
 var job_store1  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
 var job_store2  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->occupation));?> );
-var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->group));?> );
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var knowby_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->know_by));?> );
 var doctype_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->doc_type));?> );
 
@@ -1071,6 +1071,8 @@ dojo.ready(function(){
 		}, "village_note");
 		filterDistrict();
 	dijit.byId('academic_year').attr('value',"<?php echo $this->rs['academic_year']?>");
+
+	getAllGroupByBranch();
 }); 
 
 oldProvinceId = '<?php echo $this->rs['province_id'];?>';
@@ -1601,7 +1603,9 @@ function addJob(){
 			dijit.byId('degree').set('readOnly',false);
 			dijit.byId('calture').set('readOnly',false);
 			dijit.byId('session').set('readOnly',false);
-			alert("Please Select Group");
+			dijit.byId('group').focus();
+			//alert("Please Select Group");
+			
 			return false;
 		}
 		dojo.xhrPost({
@@ -1835,6 +1839,34 @@ date_format = '"dd/MM/yyyy"';
 	    }, 2000);
 	   return false;
 	}		
+	url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+	var oldbranch = '<?php echo $this->rs['branch_id']?>';
+	function getAllGroupByBranch(){
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('group').set('store',group_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getgroup,
+			content:{
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data) {
+			    group_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('group').set('store',group_store);   
+			    if(oldbranch==branch_id){
+			    	dijit.byId('group').set('value','<?php echo $this->rs['group_id']?>');   
+			    }
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
 </script>
 <div class="overlay">
 	<div class="overlay-load">

@@ -543,16 +543,18 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 	}
 	function getAllgroup(){
-		//$db = $this->getAdapter();
-// 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
-// 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
-// 		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
+// 		//$db = $this->getAdapter();
+// // 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+// // 		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+// // 		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
 		
-		$db = $this->getAdapter();
-		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
- 		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
- 		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
-		return $db->fetchAll($sql);
+// 		$db = $this->getAdapter();
+// 		$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+//  		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+//  		FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ORDER BY `g`.`id` DESC ";
+// 		return $db->fetchAll($sql);
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		return $_dbgb->getAllGroupByBranch();
 	}
 	function getGroupInforByID($group_id){
 		$db = $this->getAdapter();

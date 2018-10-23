@@ -50,6 +50,7 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
     function getAllDiscipline($search=null){
     	$db=$this->getAdapter();
     	$sql="SELECT sa.`id`,
+    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sa.branch_id LIMIT 1) AS branch_name,
     	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS group_name,
     	(SELECT (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS academy,
     	(SELECT (SELECT rms_items.`title` FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) AS degree,
@@ -64,7 +65,10 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
     	$from_date =(empty($search['start_date']))? '1': " sa.date_attendence >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sa.date_attendence <= '".$search['end_date']." 23:59:59'";
     	$where.= " AND ".$from_date." AND ".$to_date;
-    
+    	
+    	if(!empty($search['branch_id'])){
+    		$where.= " AND sa.`branch_id` =".$search['branch_id'];
+    	}
     	if(!empty($search['group_name'])){
     		$where.= " AND sa.`group_id` =".$search['group_name'];
     	}
@@ -80,6 +84,8 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
     	if(!empty($search['room'])){
     		$where.=" AND (select `g`.`room_id` FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1 )=".$search['room'];
     	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission('sa.`branch_id`');
     	$order=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -88,10 +94,10 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 		$db->beginTransaction();
 		$db_sub = new Global_Model_DbTable_DbHomeWorkScore();
 		try{
-			$session_user=new Zend_Session_Namespace('authstu');
-			$branch_id = $session_user->branch_id;
+// 			$session_user=new Zend_Session_Namespace('authstu');
+// 			$branch_id = $session_user->branch_id;
 			$_arr = array(
-					'branch_id'=>$branch_id,
+					'branch_id'=>$_data['branch_id'],
 					'group_id'=>$_data['group'],
 // 					'mistake_date'=>date("Y-m-d",strtotime($_data['discipline_date'])),
 					'date_attendence'=>date("Y-m-d",strtotime($_data['discipline_date'])),
@@ -130,6 +136,7 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 			}
 		  $db->commit();
 		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
 		}
    }
@@ -138,10 +145,10 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$session_user=new Zend_Session_Namespace('authstu');
-			$branch_id = $session_user->branch_id;
+// 			$session_user=new Zend_Session_Namespace('authstu');
+// 			$branch_id = $session_user->branch_id;
 			$_arr = array(
-					'branch_id'=>$branch_id,
+					'branch_id'=>$_data['branch_id'],
 					'group_id'=>$_data['group'],
 // 					'mistake_date'=>date("Y-m-d",strtotime($_data['discipline_date'])),
 					'date_attendence'=>date("Y-m-d",strtotime($_data['discipline_date'])),
@@ -275,6 +282,8 @@ class Foundation_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstrac
 		$db=$this->getAdapter();
 // 		$sql="SELECT * FROM `rms_student_attendence` sd WHERE  sd.`id`=".$id;
 		$sql="SELECT * FROM `rms_student_attendence` sd WHERE  sd.`id`=".$id." AND sd.type=2";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('sd.`branch_id`');
 		return $db->fetchRow($sql);
 	}
 	

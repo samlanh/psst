@@ -53,8 +53,15 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'onChange'=>'getAllGroupByBranch();',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
+		if (count($optionBranch)==1){
+			$_branch_id->setAttribs(array('readonly'=>'readonly'));
+			if(!empty($optionBranch))foreach($optionBranch AS $row){
+				$_branch_id->setValue($row['id']);
+			}
+		}
 // 		$studen_national =  new Zend_Dojo_Form_Element_FilteringSelect('studen_national');
 // 		$studen_national->setAttribs(array(
 // 				'dojoType'=>'dijit.form.FilteringSelect',

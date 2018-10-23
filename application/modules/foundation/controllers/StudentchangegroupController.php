@@ -14,6 +14,7 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 			$search = $this->getRequest()->getPost();
 		}else{
 			$search=array(
+				'branch_id'	=>'',
 				'title'	=>'',
 				'study_year'=> '',
 				'grade'=> '',
@@ -34,7 +35,7 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 			else{
 				$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 			}
-			$collumns = array("STUDENT_ID","NAME_KH","NAME_EN","SEX","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE");
+			$collumns = array("BRANCH","STUDENT_ID","NAME_KH","NAME_EN","SEX","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE");
 			$link=array(
 					'module'=>'foundation','controller'=>'studentchangegroup','action'=>'edit',
 			);
@@ -59,12 +60,14 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		
 		$_add = new Foundation_Model_DbTable_DbStudentChangeGroup();
 		
-		$this->view->stu_id = $_add->getAllStudentID();
-		$this->view->stu_name  = $_add->getAllStudentName();
+// 		$this->view->stu_id = $_add->getAllStudentID();
+// 		$this->view->stu_name  = $_add->getAllStudentName();
 		
-		$this->view->row = $add =$_add->getAllGroup();
+// 		$this->view->row = $add =$_add->getAllGroup();
 		
-// 		$_db = new Application_Model_DbTable_DbGlobal();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$branch = $_db->getAllBranch();
+		$this->view->branch = $branch;
 // 		$this->view->degree = $rows = $_db->getAllFecultyName();
 // 		$this->view->occupation = $row =$_db->getOccupation();
 // 		$this->view->province = $row =$_db->getProvince();
@@ -73,7 +76,12 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		
 		$db= new Foundation_Model_DbTable_DbStudentChangeGroup();
-		$row = $this->view->rows = $db->getAllStudentChangeGroupById($id);
+		$row = $db->getAllStudentChangeGroupById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/studentchangegroup/index");
+			exit();
+		}
+		$this->view->rows = $row;
 		
 		if($this->getRequest()->isPost())
 		{
@@ -94,9 +102,11 @@ class Foundation_StudentchangegroupController extends Zend_Controller_Action {
 		
 		$this->view->stu_id = $_add->getAllStudentID();
 		$test = $this->view->stu_name  = $_add->getAllStudentName();
-		
 		$this->view->row = $add =$_add->getAllGroup();
 		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$branch = $_db->getAllBranch();
+		$this->view->branch = $branch;
 		
 	}
 

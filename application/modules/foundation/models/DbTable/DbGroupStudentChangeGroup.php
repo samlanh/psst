@@ -135,7 +135,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$this->update($stu, $where);
 					}
 					$this->_name = 'rms_student';
-
 					$group_detail = $this->getGroupDetail($_data['to_group']);
 					$idss=explode(',', $_data['identity']);
 					foreach ($idss as $j){
@@ -157,6 +156,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'room'			=>$group_detail['room_id'],
 								'stu_type'		=>$stu_type,
 								);
+						if ($_data['change_type']==2){
+							$array['is_stu_new']==0;
+						}
 						$where = " stu_id=".$_data['stu_id_'.$j];
 						$this->update($array, $where);
 					}

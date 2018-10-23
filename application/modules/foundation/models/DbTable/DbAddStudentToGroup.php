@@ -162,6 +162,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		$db = $this->getAdapter();
 		$sql = " SELECT
 					`g`.`id`,
+					(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 					`g`.`group_code` AS `group_code`,
 					(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year LIMIT 1) as academic,
 					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) as degree,
@@ -212,6 +213,11 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($search['room'])){
 			$where.=' AND g.room_id='.$search['room'];
 		}
+		if(!empty($search['branch_id'])){
+			$where.=' AND g.branch_id='.$search['branch_id'];
+		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('g.`branch_id`');
 		
 		return $db->fetchAll($sql.$where.$order);
 	}
@@ -234,12 +240,15 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				sex,
 				degree,
 				grade,
-				academic_year 
+				academic_year ,
+				(SELECT `title` FROM `rms_items` WHERE `id`=degree AND type=1 LIMIT 1) AS degree_title,
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=grade AND items_type=1 LIMIT 1) AS grade_title
 			  from 
 			  	rms_student 
 		 	  WHERE 
 				`status`=1 
 				AND is_setgroup = 0 
+				AND customer_type = 1 
 				and is_subspend=0 ";
 		if(!empty($search['academy'])){
 			$sql.=" AND academic_year =".$search['academy'];
@@ -253,6 +262,10 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($search['session'])){
 			$sql.=" AND session =".$search['session'];
 		}
+		if(!empty($search['branch_id'])){
+			$sql.=" AND branch_id =".$search['branch_id'];
+		}
+		
 		$sql.=" ORDER BY stu_enname ASC ";
 		//echo $sql;
 		

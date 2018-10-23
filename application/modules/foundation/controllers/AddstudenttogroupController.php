@@ -19,6 +19,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 			else{
 				$search = array(
 						'adv_search' => '',
+						'branch_id' => '',
 						'study_year' => '',
 						'degree' => '',
 						'grade_all' => '',
@@ -35,7 +36,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 			else{
 				$result = Application_Model_DbTable_DbGlobal::getResultWarning();
 			}
-			$collumns = array("GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","START_DATE","END_DATE","NOTE","STATUS","AMOUNT_STUDENT","REMAIN_STUDENT");
+			$collumns = array("BRANCH","GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","START_DATE","END_DATE","NOTE","STATUS","AMOUNT_STUDENT","REMAIN_STUDENT");
 			$link=array(
 					'module'=>'foundation','controller'=>'addstudenttogroup','action'=>'edit',
 			);
@@ -51,15 +52,12 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		try{
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
-				$search = array(
-						'degree' => $_data['degree'],
-						'grade' => $_data['grade'],
-						'session' => $_data['session'],
-						'academy'=> $_data['academy']);
+				$search = $_data;
 				$rs =$db->getSearchStudent($search);
 				$this->view->rs = $rs;
 			}else{
 				$search = array(
+						'branch_id' => '',
 						'degree' => '',
 						'grade' => '',
 						'session' => '',
@@ -73,12 +71,15 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		$this->view->academy = $db->getAllYear();
 		$this->view->degree = $db->getAllFecultyName();
 		
-		$group_option = $db->getGroup();
-		array_unshift($group_option, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")) );
-		$this->view->group = $group_option;
+// 		$group_option = $db->getGroup();
+// 		array_unshift($group_option, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")) );
+// 		$this->view->group = $group_option;
 		$this->view->room = $db->getRoom();
+		
 		$db=new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_session=$db->getSession();
+		$branch = $db->getAllBranch();
+		$this->view->branch = $branch;
 	}
 	public function submitAction(){
 		if($this->getRequest()->isPost()){
@@ -122,6 +123,8 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		$this->_redirect('/foundation/addstudenttogroup/index');
 	}
 	function editAction(){
+		$this->_redirect('/foundation/addstudenttogroup');
+		exit();
 		$id=$this->getRequest()->getParam("id");
 		$_db = new Foundation_Model_DbTable_DbAddStudentToGroup();
 		$g_id = $_db->getGroupById($id);

@@ -69,6 +69,9 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->degree = $_db->getAllDegreeName();
 		
+		$branch = $_db->getAllBranch();
+		$this->view->branch = $branch;
+		
 		$db=new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_session=$db->getSession();
 		

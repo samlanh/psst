@@ -121,6 +121,9 @@ function getAllExpense($search=null){
 			$s_where[] = " receiver LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}
+		if($search['branch_id']){
+			$where.= " AND branch_id = ".$search['branch_id'];
+		}
 		if($search['status']>-1){
 			$where.= " AND status = ".$search['status'];
 		}

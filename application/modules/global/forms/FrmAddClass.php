@@ -93,10 +93,8 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		
 		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
 		$_academic->setAttribs(array('dojoType'=>$this->filter,
-				//	'placeholder'=>$this->tr->translate("SERVIC"),
+				'placeholder'=>$this->tr->translate("SERVIC"),
 				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
 				'required'=>false
 		));
 		$_academic->setValue($request->getParam("academic_year"));
@@ -126,6 +124,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
+				'missingMessage'=>'Invalid Module!',
 				'required'=>false
 		));
 		$db = new Application_Model_DbTable_DbGlobal();

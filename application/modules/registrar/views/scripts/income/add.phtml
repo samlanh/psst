@@ -17,12 +17,17 @@
 	<div class="card-content collapse show">
 		<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
-			if(this.validate()) {
-				cate_income = dijit.byId('cate_income').get('value');
-				if(cate_income==0 || cate_income==-1){
-					alert('Please select category income !!! ');
+				branch_id=dijit.byId('branch_id').get('value');
+				if(branch_id==-1 || branch_id==''){
+					alert('សូមជ្រើសរើសសាខា!');dijit.byId('branch_id').focus();return false;
 					return false;
 				}
+				cate_income=dijit.byId('cate_income').get('value');
+			if(cate_income==0 || branch_id==''){
+				alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');dijit.byId('cate_income').focus();return false;
+				return false;
+			}
+		if(this.validate()) {
 				return true;
 			}else {
 				return false;
@@ -39,6 +44,18 @@
 	    	</div>
 	    	<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
+	        		<div class="form-group">
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> :
+	                   </label>
+	                   <div class="col-md-7 col-sm-7 col-xs-12">
+	                   		<select name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" >
+								<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");//ជ្រើសរើសប្រភេទបង់ប្រាក់?></option>
+								<?php if(!empty($this->branch_name)){foreach ($this->branch_name as $branch){?>
+									<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
+								<?php }}?>
+							</select>
+	                   </div>
+	                </div>
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RECEIPT_NO");?> :
 	                   </label>
@@ -65,7 +82,6 @@
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select name="payment_method" id="payment_method" class="fullside" onchange="setReadonlyCheqe();" dojoType="dijit.form.FilteringSelect" >
-								<option value="-1"><?php echo $tr->translate("SELECT_PAYMENT_METHOD");//ជ្រើសរើសប្រភេទបង់ប្រាក់?></option>
 								<?php if(!empty($this->payment_method)){foreach ($this->payment_method as $payment_method){?>
 									<option value="<?php echo $payment_method['id']?>"><?php echo $payment_method['name']?></option>
 								<?php }}?>
@@ -119,7 +135,7 @@
                			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"  iconClass="dijitIconClear"/>
 						<input  label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' id='saveclose' value='saveclose' type="button" onclick="submitDataClose();" dojoType="dijit.form.Button"
 							 iconClass="dijitIconNewTask"/>
-						<input  label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' type="button" onclick="submitDataAddNew();" dojoType="dijit.form.Button"
+						<input  label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' type="submit" onclick="submitDataAddNew();" dojoType="dijit.form.Button"
 							 iconClass="dijitIconNewTask"/>
 						<input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button" iconClass="dijitIconNewTask"  onclick="printReceipt('');"   />
 	    		</div>
@@ -141,8 +157,8 @@ dojo.require("dojo.store.Memory");
 		setReadonlyCheqe();
 		new dijit.form.FilteringSelect({
 			store: cate_income_store,
-			autoComplete: true,                        
-			required: true,                      
+			autoComplete: false,                        
+			required: false,                      
 		    id: "cate_income",
 		    name: "cate_income",  
 		    tabindex: "1",  
@@ -285,8 +301,21 @@ dojo.require("dojo.store.Memory");
 		dijit.byId('terms').hide();
 	}
 	function submitDataClose(){
+		branch_id=dijit.byId('branch_id').get('value');
+		if(branch_id==-1 || branch_id==''){
+			alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');dijit.byId('branch_id').focus();return false;
+			return false;
+		}
+
+		cate_income=dijit.byId('cate_income').get('value');
+		if(cate_income==0 || branch_id==''){
+			alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');dijit.byId('cate_income').focus();return false;
+			return false;
+		}
+
 		if(dijit.byId('frm_add_tran').validate()) {
-			dijit.byId('saveclose').set('disabled',true);
+			dijit.byId("save_new").attr("disabled",true);	
+			dijit.byId("save_close").attr("disabled",true);	
 			
 			var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>';
 			loading();
@@ -420,11 +449,11 @@ function submitDataAddNew(){
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_cate" >
 		<form style="background-color: buttonface;" id='frm_add_cate_income' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+			<table cellspacing="10" width="100%"  style="margin: 0 auto;">
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
+					<table style="margin: 0 auto; width: 95%; line-height: 35px;" cellspacing="5">
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("TITLE")?></td>
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="cate_title" id="cate_title" type="text" required="true" /></td>

@@ -21,6 +21,7 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     					"adv_search"=>'',
     					"payment_type"=>-1,
     					"status"=>-1,
+    					"branch_id"=>'',
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
     			);

@@ -21,6 +21,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     			$search = array(
     					"adv_search"=>'',
     					"currency_type"=>-1,
+    					"branch_id"=>'',
     					"status"=>-1,
     					'start_date'=> date('Y-m-d'),
     					'end_date'=>date('Y-m-d'),
@@ -36,11 +37,11 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQE_NO","NOTE","PAID_DATE","STATUS");
+    		$collumns = array("BRANCH_NAME","INCOME_CATEGORY","INCOME_TITLE","RECEIPT_NO","PAYMENT_METHOD","TOTAL_INCOME","CHEQE_NO","NOTE","PAID_DATE","STATUS");
     		$link=array(
     				'module'=>'registrar','controller'=>'income','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('branch_name'=>$link,'cate_name'=>$link,'title'=>$link,'invoice'=>$link,'payment_method'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -82,6 +83,10 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	array_unshift($cate_income, array('id'=>'-1','name'=>$this->tr->translate("ADD_NEW")));
     	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$branch_income= $db->getAllBranch();
+    	$this->view->branch_name = $branch_income;
     	
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
@@ -129,6 +134,9 @@ class Registrar_IncomeController extends Zend_Controller_Action
     	array_unshift($cate_income, array('id'=>'0','name'=>$this->tr->translate("SELECT_CATEGORY")));
     	$this->view->cate_income = $cate_income;
     	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$branch_income= $db->getAllBranch();
+    	$this->view->branch_name = $branch_income;
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();
     }

@@ -55,19 +55,21 @@ class Global_GroupController extends Zend_Controller_Action {
 	}
 	function addAction(){
 		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
 			try {
 				$sms="INSERT_SUCCESS";
-				$data = $this->getRequest()->getPost();
 				$db= new Global_Model_DbTable_DbGroup();
-				
 				$group_id= $db->AddNewGroup($data);
-				if(!empty($data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL."/index");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", self::REDIRECT_URL."/add");
+				if($group_id==-1){
+					$sms = "RECORD_EXIST";
 				}
-				Application_Form_FrmMessage::message("RECORD_EXIST");
-			} catch (Exception $e) {
+				if(!empty($data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/index");
+				}else{
+					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL."/add");
+				}
+				Application_Form_FrmMessage::message($sms);
+			}catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 			}

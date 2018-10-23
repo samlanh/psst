@@ -84,6 +84,47 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $db = new Application_Model_DbTable_DbGlobal();
 	   $rs = $db->getStudentProfileblog(1);
     }
+    public function editAction(){
+    	$id=$this->getRequest()->getParam('id');
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		try {
+    			$db = new Registrar_Model_DbTable_DbRegister();
+    			$db->updateRegister($_data,$id);
+    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register');
+    		} catch (Exception $e) {
+    			Application_Form_FrmMessage::message("UPDATE_FAIL");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
+    	}
+    	$db = new Registrar_Model_DbTable_DbRegister();
+    	$rspayment =  $db->getStudentPaymentByID($id);
+    	if(empty($rspayment)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL . '/register');
+    	}
+    	$this->view->payment =$rspayment;
+    	$this->view->rs_detail = $db->getStudentPaymentDetailServiceByID($id);
+//     	print_r($db->getStudentPaymentDetailServiceByID($id));
+    	 
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rsbranch = $_db->getAllBranch();
+    	$this->view->exchange_rate = $_db->getExchangeRate();
+    	$this->view->all_paymentterm = $_db->getAllTerm();
+    	$this->view->rs_type = $_db->getAllItems();
+    	$this->view->rsdiscount = $_db->getAllDiscountName();
+    	$this->view->rs_paymenttype = $_db->getViewById(8,null);
+    
+    	$db = new Registrar_Model_DbTable_DbRegister();
+    	$this->view->all_year = $db->getAllYears();
+    	 
+    	$key = new Application_Model_DbTable_DbKeycode();
+    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	 
+    	//     	$db = new Application_Model_DbTable_DbGlobal();
+    	//     	$rs = $_db->getStudentProfileblog(1);
+       
+       
+    }
     public function addkentridgeAction(){
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
@@ -162,45 +203,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$test = $this->view->branch_info = $db->getBranchInfo();
     	$db = new Foundation_Model_DbTable_DbStudent();
     	$this->view->group = $db->getAllgroup();
-    }
-    public function editAction(){
-    	$id=$this->getRequest()->getParam('id');
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		try {
-    			$db = new Registrar_Model_DbTable_DbRegister();
-//     			$db->updateRegister($_data,$id);
-    			if(isset($_data['save_new'])){
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register/index');
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL . '/register/index');
-    			}
-    		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-    			echo $e->getMessage();
-    		}
-    	}
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->rsbranch = $_db->getAllBranch();
-    	$this->view->exchange_rate = $_db->getExchangeRate();
-    	$this->view->all_paymentterm = $_db->getAllTerm();
-    	$this->view->rs_type = $_db->getAllItems();
-    	$this->view->rsdiscount = $_db->getAllDiscountName();
-    	$this->view->rs_paymenttype = $_db->getViewById(8,null);
-    	 
-    	$db = new Registrar_Model_DbTable_DbRegister();
-    	$this->view->all_year = $db->getAllYears();
-    	
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-    	
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$rs = $db->getStudentProfileblog(1);
-    	
-    	$db = new Registrar_Model_DbTable_DbRegister();
-	    $rspayment =  $db->getStudentPaymentByID($id);
-	    $this->view->payment =$rspayment;
-	    $this->view->rs_detail = $db->getStudentPaymentDetailServiceByID($id);
     }
     
     public function editcustomerpaymentAction(){

@@ -250,23 +250,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						);
 				$id = $this->insert($_arr);
 				
-				$this->_name='rms_study_history';
-				$arr= array(
-						'branch_id'	=>$branch_id,
-						'user_id'	=>$this->getUserId(),
-						'stu_id'	=>$id,
-						'stu_code'	=>$_data['student_id'],
-						'academic_year'	=>$_data['academic_year'],
-						'degree'	=>$_data['degree'],
-						'grade'		=>$_data['grade'],
-						'session'	=>$_data['session'],
-						'room'		=>$_data['room'],
-						'create_date'	=>date("Y-m-d"),
-						'status'		=>$_data['status'],
-						'remark'		=>$_data['remark']
-						);
-				$this->insert($arr);
-				
 				if($_data['group']!=-1 AND $_data['group']!='' AND $_data['group']!=0){
 					$this->_name='rms_group_detail_student';
 					$arr_group_history= array(
@@ -414,20 +397,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);
 			$db = Zend_Db_Table_Abstract::getDefaultAdapter();
 			$this->update($_arr, $where);
-			
-			$this->_name = 'rms_study_history';
-				$arr= array(
-						'user_id'		=>$this->getUserId(),
-						'academic_year'	=>$_data['academic_year'],
-						'degree'		=>$_data['degree'],
-						'grade'			=>$_data['grade'],
-						'session'		=>$_data['session'],
-						'room'			=>$_data['room'],
-						'status'		=>$_data['status'],
-						'remark'		=>$_data['remark'],
-				);
-			$where=$this->getAdapter()->quoteInto("stu_id = ?", $_data["id"]);
-			$this->update($arr, $where);
 			
 			if(!empty($_data['old_group_id'])){
 				$this->_name='rms_group_detail_student';

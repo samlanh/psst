@@ -116,7 +116,7 @@ table.collape tbody td{padding: 0px !important;}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
-		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
    				if(this.validate()) {
     				year = dijit.byId('study_year').get('value');
@@ -158,7 +158,7 @@ table.collape tbody td{padding: 0px !important;}
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();">
 				    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
-				    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+				    			<option value="<?php echo $rs['id'];?>" <?php if($rspayment['branch_id']==$rs['id']){echo "selected='selected'";}?>><?php echo $rs['name'];?></option>
 				    			<?php }?>
 				    		</select>
 	                   </div>
@@ -199,7 +199,7 @@ table.collape tbody td{padding: 0px !important;}
 	                   		<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="study_year" id="study_year" autoComplete="false" queryExpr="*${0}*"  >
 								<option value=""><?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?></option>
 								<?php if(!empty($this->all_year)){foreach ($this->all_year as $year){?>
-								<option value="<?php echo $year['id']?>"><?php echo $year['years']?></option>
+								<option value="<?php echo $year['id'];?>" <?php if($rspayment['academic_year']==$year['id']){echo "selected='selected'";}?>><?php echo $year['years']?></option>
 								<?php }}?>
 							</select>
 	                   </div>
@@ -227,6 +227,15 @@ table.collape tbody td{padding: 0px !important;}
 		                   		<input type="text" name="note" id="note" class="fullside" value="<?php echo $rspayment['note']; ?>"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
 		                   </div>
 	                  </div>
+	                  <div class="form-group" style="background: #ffcccc;padding:2px">
+		                  <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("IS_VOID");?></label>
+		                  <div class="col-md-7 col-sm-7 col-xs-12">
+							  <select name="void" id="void" dojoType="dijit.form.FilteringSelect" class="fullside" <?php if($this->payment['is_void'] == 1){echo "readonly";}?>>
+								 <option value="0" <?php if($this->payment['is_void'] == 0){echo "selected='selected'";}?>><?php echo $tr->translate("ACTIVE");?></option>
+								 <option value="1" <?php if($this->payment['is_void'] == 1){echo "selected='selected'";}?>><?php echo $tr->translate("VOID");?></option>
+							   </select>
+		                   </div>
+	                 </div>
 	           </div>
 	           <div class="col-md-8 col-sm-8 col-xs-12">
 	           		<div class="form-group">
@@ -266,6 +275,12 @@ table.collape tbody td{padding: 0px !important;}
 		                     </div>
 	               		</div>
                		</div>
+               		<div class="form-group" >
+		                  <label class="control-label  col-md-3 col-sm-3 col-xs-12" ><?php echo $tr->translate("VOID_NOTE");?></label>
+		                  <div class="col-md-7 col-sm-7 col-xs-12">
+							  <input type="text" name="void_note" id="void_note" class="fullside" value="<?php echo $rspayment['void_note']; ?>"  style="min-height:40px;" dojoType="dijit.form.Textarea"/>
+		                   </div>
+	                 </div>
 	           </div>
 	       </div>
 	           <div class="card-box" >
@@ -375,7 +390,7 @@ table.collape tbody td{padding: 0px !important;}
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CREDIT_MEMO");?>  :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text"  onkeyup="" readOnly="true"  name="credit_memo" id="credit_memo" value="<?php echo $rspayment['credit_memo'];?>" dojoType="dijit.form.NumberTextBox" class="fullside" />
+	                   		<input type="text" readOnly="true"  name="credit_memo" id="credit_memo" value="<?php echo $rspayment['credit_memo'];?>" dojoType="dijit.form.NumberTextBox" class="fullside" />
 	                   </div>
 	                </div>
 					<div class="form-group">
@@ -447,6 +462,7 @@ require(["dojo/ready"], function(ready){
 			getallstudentname();
 			getgradebyDegree(-1,1,2);
 			Initialize();
+			readMoneyInKhmer('<?php echo $rspayment['paid_amount'];?>');
 		});
 		
 		new dijit.form.FilteringSelect({
@@ -514,14 +530,14 @@ function Initialize() {
 			template+='<td width="30px" align="center"><img onclick="deleteRecord('+col+');calculateTotal('+col+');calculatePaidAmount('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="30px" align="center">'+no+'</td>';
 			template+='<td style="width:150px;font-size:12px;"><label id="item_label_'+col+'">'+label+'<label><input type="hidden" value="'+service_id+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/>';
-			template+='<td style="width:180px"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+');" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';
+			template+='<td style="width:180px"><select class="fullside" onchange="getservicefee('+col+');getValidate('+col+',1);" required="false" dojoType="dijit.form.FilteringSelect" id="term_'+col+'" name="term_'+col+'" >';
 				<?php if(!empty($this->all_paymentterm))foreach($this->all_paymentterm as $term){?>
 					template+='<option value="'+<?php echo $term['id']?>+'"><?php echo $term['name'];?></option>';
 				<?php }?>
 			template+='</select><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/></td>';
 			column = 0;
 			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';	
-			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+');" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
+			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');getValidate('+col+',1);" name="qty_'+col+'" id="qty_'+col+'" value="1" dojoType="dijit.form.NumberTextBox"  /></td>';	
 			template+='<td style="width:70px"><input type="text" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td style="width:70px"><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="extra_fee'+col+'" id="extra_fee'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td style="width:100px"><select class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
@@ -533,7 +549,7 @@ function Initialize() {
 			template+='<td><input type="text" class="fullside" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td><input type="text" class="fullside" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
 			template+='<td><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal('+col+');netTotal('+col+');"  name="total_amount'+col+'" value="0" id="total_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></td>';
-			template+="<td style='width:170px;font-size:12px;'><input type='text' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" value='now' name='date_start_"+col+"' onchange='getValidate("+col+");' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
+			template+="<td style='width:170px;font-size:12px;'><input type='text' class='fullside' constraints="+"{datePattern:'dd/MM/yyyy'}"+" value='now' name='date_start_"+col+"' onchange='getValidate("+col+",1);' id='date_start_"+col+"' dojoType='dijit.form.DateTextBox' /></td>";
 			template+='<td style="width:170px;font-size:12px;"><input type="text" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></td>';
 			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" style="width:140px;" />';
 			template+='<input type="hidden" name="onepayment_'+col+'" id="onepayment_'+col+'" dojoType="dijit.form.TextBox" /></td>';
@@ -559,10 +575,9 @@ function Initialize() {
 		dijit.byId('discount_'+col).attr('value','<?php echo $row['discount_percent'];?>');
 		dijit.byId('total_amount'+col).attr('value','<?php echo $row['paidamount'];?>');
 		dijit.byId('date_start_'+col).attr('value','<?php echo $row['start_date'];?>');
-		dijit.byId('validate_'+col).attr('value','<?php echo $row['validate'];?>');
+		dijit.byId('validate_'+col).attr('value','<?php echo date("Y-m-d",strtotime($row['validate']));?>');
 		dijit.byId('remark'+col).attr('value','<?php echo $row['note'];?>');
 		dijit.byId('onepayment_'+col).attr('value','<?php echo $row['is_onepayment'];?>');
-		
 	<?php } }?>
 }	
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
@@ -601,7 +616,7 @@ function submitDataAddNew(){
 			return false;
 		}
 		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>';
+		var url_submit = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'edit')); ?>';
 		loading();
 		dojo.xhrPost({
 		    url: url_submit,	
@@ -609,7 +624,7 @@ function submitDataAddNew(){
 			load: function(data) {
 				document.getElementsByClassName("overlay")[0].style.display="none";		
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/registrar/register/add";
+				window.location.href ="<?php echo $this->baseUrl();?>/registrar/register";
 			},
 			error: function(e) {
 			}
@@ -662,7 +677,7 @@ function getMonthByNumber(m){
 									<div>Official Receipt</div>
 								</td>
 								<td width="25%" valign="top" align="left">
-									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
+									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label><label style="color:red;" id="lb_receiptvoid"></label></div> 
 									<div style="font-size: 14px;font-weight: bold;font-family: arail">Pmt Date : <label id="lb_date" class=" one bold"></label></div>
 									<div style="font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
 								</td>
@@ -1050,7 +1065,8 @@ function deleteRecord(index) {
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
 }
- function getValidate(key){
+ function getValidate(key,type=0){
+	 if(type==1){return false;}
 	 service_type = dijit.byId('service_type_'+key).get('value');
 	 onepayment = dijit.byId('onepayment_'+key).get('value');
 	 if(onepayment == 0){
@@ -1280,6 +1296,9 @@ function printSave(new_stu_id,new_receipt,submit){
 			var dd = today.getDate();
 			var mon = today.toDateString().substr(4,3); //January is 0!
 			var yyyy = today.getFullYear();
+			if(dijit.byId("void").get("value")==1){
+				dojo.byId("lb_receiptvoid").innerHTML = '(Void)';
+			}
 			dojo.byId("lb_stu_id").innerHTML = dojo.byId("lbl_stucode").innerHTML ;//stu_id;		
 			dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
 			dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');

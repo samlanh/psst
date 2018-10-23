@@ -124,7 +124,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			try{
 				$gdb = new  Application_Model_DbTable_DbGlobal();
 				//$this->_name='rms_student';
-				
 					$customer_type=1;
 					if($data['student_type']==1){//existing student
 						$rs_stu = $gdb->getStudentinfoById($stu_code);
@@ -222,15 +221,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$spd_id = $this->getStudentPaymentStart($data['old_stu'], $data['item_id'.$i],1);
 		             	$this->_name="rms_student_paymentdetail";
 		             	if(!empty($spd_id)){
-		             		$where=" id = $spd_id";
 		             		$arr = array(
 		             				'is_start'=>0
 		             		);
+		             		$where=" id = ".$spd_id;
 		             		$this->update($arr,$where);
 		             	}
-						$where=" itemdetail_id= ".$data['item_id'.$i];
 						
-						$_arr = array(
+							$_arr = array(
 								'payment_id'	=>$paymentid,
 								'service_type'	=>$data['item_id'.$i],
 								'itemdetail_id'	=>$data['item_id'.$i],
@@ -248,42 +246,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'validate'		=>$data['validate_'.$i],
 								'is_start'		=>1,
 								'note'			=>$data['remark'.$i],
-						);
+								'is_parent'     =>$spd_id,
+							);
 						$this->insert($_arr);
 						
-				// 		if($data['service_type_'.$i]==1){// បង់លើផលិតផល
-				// 		$this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
-				// 		             	$spd_id = $this->getStudentPaymentStart($id, $data['service_'.$i],$payfor_type);
-				// 		             	$this->_name="rms_student_paymentdetail";
-				// 		             	if(!empty($spd_id)){
-				// 		             		$where="id = $spd_id";
-				// 		             		$arr = array(
-				// 		             				'is_start'=>0
-				// 		             		);
-				// 		             		$this->update($arr,$where);
-				// 		             	}else{
-				// 		             		$spd_id=0;
-				// 		             	}
-					}
-					
-					
-		/////////////////////// ករណីសិស្សមកពីធ្វើតេស ត្រូវupdate ថាបានចូលរៀនហើយ //////////////			
-// 					if($data['stu_test']>0){
-// 						$this->_name='rms_student_test';
-// 						$array = array(
-// 								'register'=>1,
-// 								'stu_code'=>$data['stu_id']
-// 								);
-// 						$where= " id = ".$data['stu_test'];
-// 						$this->update($array, $where);
-// 					}
-					//update is_start=0 ដើម្បីអោយដឹងថា Service និង ឈប់ប្រើ រឺ  expired នៅពេលដែលសិស្សចាស់បង់លុយម្តងទៀត រួច store ID record that updated in is_parent of new record
-					
-// 					$expired_record_id = $this->getStudentPaymentStart($id,$service,$type);
-// 					if(empty($expired_record_id)){
-// 						$expired_record_id=0;
-// 					}
-				
+				// បង់លើផលិតផល
+				// $this->updateStock($data['service_'.$i],$data['qty_'.$i],$data['product_type_'.$i]);
+				}
 				$db->commit();
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
@@ -393,45 +362,23 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	}
 	
 	function updatePaymentInfoBack($payment_id,$type){
-	
 		$db = $this->getAdapter();
 		$sql="select * from rms_student_paymentdetail where payment_id = $payment_id ";
-		
 //	if $type=1 we use fetchAll cuz student pay both or service (service AND tuition fee) more than 1 row, $type=2 fetchRow cuz student pay only tuition fee
-		if($type==1){
-			$id_old_record = $db->fetchAll($sql);
-			if(!empty($id_old_record)){
-				foreach ($id_old_record as $result){
-					if($result['is_parent']>0 && $result['type'] != 4){
-						$this->_name="rms_student_paymentdetail";
-						$array = array(
-								'is_start'=>1,
-								);
-						$where = " id = ".$result['is_parent'];
-						$this->update($array, $where);
-					}
-					
-					//if($result['type']==4){ // type=4 is product payment
-						//$this->updateStockBack($payment_id);
-					//}
+		$id_old_record = $db->fetchAll($sql);
+		if(!empty($id_old_record)){
+			foreach ($id_old_record as $result){
+				if($result['is_parent']>0 && $result['type'] != 4){
+					$this->_name="rms_student_paymentdetail";
+					$array = array(
+							'is_start'=>1,
+							);
+					$where = " id = ".$result['is_parent'];
+					$this->update($array, $where);
 				}
-				$this->updateStockBack($payment_id);
 			}
-			
-		}else{
-			$id_old_record = $db->fetchRow($sql);
-			
-			if(!empty($id_old_record['is_parent'])){
-				$this->_name="rms_student_paymentdetail";
-				$arr = array(
-						'is_start'=>1,
-						);
-				$where = " id = ".$id_old_record['is_parent'];
-				$this->update($arr, $where);
-			}			
-		}
+		}			
 	}
-	
 	function deleteFromGroup($stu_id,$group_id){
 		$db = $this->getAdapter();
 		$where = " group_id = $group_id and stu_id = $stu_id";
@@ -472,674 +419,158 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		
 		if($data['void']==1){  // void
-			// if void=1 that mean this record is useless so we only update is_void to 1 no need to update info anymore
 			try{	
 				$this->_name='rms_student_payment';
 				$arra=array(
-						'is_void'=>$data['void'],
-						'void_by'=>$this->getUserId(),
-						);
+					'is_void'=>$data['void'],
+					'void_by'=>$this->getUserId(),
+					'void_note'=>$data['void_note'],
+				);
 				$where = " id = ".$payment_id;
 				$this->update($arra, $where);
-				
-				if(!empty($data['credit_memo_id'])){
+			
+				if(!empty($data['credit_memo_id'])){//check again because it old code
 					$this->updateCreditMemoBack($data);
-				}
-				
-//&&&&&&&&&&&&&&&&&&&&&&&&  if payment_type=1 (pay both tuition_fee and service or product)	$%%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$			
-				if($data['payment_type']==1){
-					
-				// get id record that we have updated to update it to using again when new record is void
-					$parentIdStuHis = $this->getParentIdStudentHistory($payment_id);
-				// update old study info to using 	
-					if(!empty($parentIdStuHis)){
-						
-						$this->_name="rms_study_history";
-						$array = array(
-								'is_finished'=>'0',
-								'finished_date'=>null,
-								);
-						$where = " id = $parentIdStuHis ";
-						$this->update($array, $where);
-					  //update student info back to old info
-						$this->UpdateStudentInfoBack($parentIdStuHis,$payment_id);
-					}
-					
+				}				
 				// update payment and validate of service and tuition fee info back ,  and update stock back to origin	
-					
-					$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
-					
-					if($data['is_new_stu']==1){  // 1 = is new student 
-						$this->deleteFromGroup($data['old_stu_name'],$data['group']);
-					}
-					
-				}else if($data['payment_type']==2){
-					
-					// get id record that we have updated to update it to using again when new record is void
-					$parentIdStuHis = $this->getParentIdStudentHistory($payment_id);
-					// update old study info to using
-					if(!empty($parentIdStuHis)){
-					
-						$this->_name="rms_study_history";
-						$array = array(
-								'is_finished'=>'0',
-								'finished_date'=>null,
-						);
-						$where = " id = $parentIdStuHis ";
-						$this->update($array, $where);
-					
-						$this->UpdateStudentInfoBack($parentIdStuHis,$payment_id);
-					}
-					
-					$this->updatePaymentInfoBack($payment_id,2);   // 2 is pay for only tuition fee 
-					
-					if($data['is_new_stu']==1){  // 1 = is new student
-						$this->deleteFromGroup($data['old_stu_name'],$data['group']);
-					}
-					
-					
-				}else if($data['payment_type']==3){
-					
-					$this->updatePaymentInfoBack($payment_id,1);
-				
-				}
-				
+				$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
 				$db->commit();
 				return 0;
 			}catch (Exception $e){
 				$db->rollBack();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				echo $e->getMessage();exit();
 			}
-		}else if($data['void']==2){ // delete
-					
-			if(!empty($data['credit_memo_id'])){
-				$this->updateCreditMemoBack($data);
-			}		
-			
-			if($data['payment_type']==1){
-				if($data['student_type']==3){ // do when old student 
-				// get id record that we have updated to update it to using again when new record is void
-					$parentIdStuHis = $this->getParentIdStudentHistory($payment_id);
-				// update old study info to using 	
-					if(!empty($parentIdStuHis)){
-						$this->_name="rms_study_history";
-						
-						//update student info back to old info
-						$this->UpdateStudentInfoBack($parentIdStuHis,$payment_id);
-						
-						$where = " id = $parentIdStuHis ";
-						$this->delete($where);
-					}
-				}
-			// update payment and validate of service and tuition fee info back ,  and update stock back to origin	
-				
-				$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
-				
-				if($data['student_type']!=3){  // 3 = old student 
-					$this->deleteFromGroup($data['old_stu_name'],$data['group']);
-					$this->deleteStudent($data['old_stu_name']);
-				}
-					
-			}else if($data['payment_type']==2){
-				if($data['student_type']==3){ // do when old student 	
-					// get id record that we have updated to update it to using again when new record is void
-					$parentIdStuHis = $this->getParentIdStudentHistory($payment_id);
-					// update old study info to using
-					if(!empty($parentIdStuHis)){
-						
-						$this->_name="rms_study_history";
-						$this->UpdateStudentInfoBack($parentIdStuHis,$payment_id);
-						$where = " id = $parentIdStuHis ";
-						$this->delete($array, $where);
-					}
-				}
-				
-				$this->updatePaymentInfoBack($payment_id,2);   // 2 is pay for only tuition fee 
-				
-				if($data['student_type']!=3){  // 3 = old student 
-					$this->deleteFromGroup($data['old_stu_name'],$data['group']);
-					$this->deleteStudent($data['old_stu_name']);
-				}
-				
-				
-			}else if($data['payment_type']==3){
-				
-				$this->updatePaymentInfoBack($payment_id,1);
-			
-			}		
-			
-			$this->_name='rms_student_payment';
-			$where = " id = ".$payment_id;
-			$this->delete($where);
-			
-			$this->_name='rms_student_paymentdetail';
-			$where = " payment_id = ".$payment_id;
-			$this->delete($where);		
-				
-			$db->commit();
-			return 0;				
-		}else{
-			return 0;			
 		}
-		
-		
-			try{
-				
+		try{
 			//update is_void=0 ,if this record already set is_void=1 for last time so we update it to is_void=0	so this record is use
+				$paid_date = $data['paid_date'];
 				$this->_name='rms_student_payment';
 				$array=array(
-						'is_void'=>0,
+					'is_void'=>0,
 				);
 				$where = " id = $payment_id ";
 				$this->update($array, $where);
-				
-			//update stock to first amount by sum up by old qty we orderded	
-				$this->updateStockBack($payment_id);
-				
+								
 				$this->_name='rms_student_paymentdetail';
 				$rows = $this->getParentIDToUpdateBack($payment_id);
-				
 				if(!empty($rows)){foreach ($rows as $id_update_back){
 					$arr = array(
-							'is_start' => 1,
-							);
+						'is_start' => 1,
+						);
 					$where = ' id = '.$id_update_back['is_parent'];
 					$this->update($arr, $where);
 				}}
 				
 				$where = " payment_id = $payment_id";
 				$this->delete($where);
-
-// ###################################### pay for both ####################################################################
 				
-				if($data['payment_type']==1){
-					if($data['student_type']==3){//old
-						$this->_name = "rms_student";
-						$stu_type='';
-						$payfor_type='';
-						if($data['dept']==1){
-							$stu_type=3;
-							$payfor_type=1;  // BacII student
-						}else if($data['dept']==2 || $data['dept']==3 || $data['dept']==4){
-							$stu_type=1;  
-							$payfor_type=1;  // BacII student
-						}else{
-							$stu_type=2;  
-							$payfor_type=2;  // GEP student
-						}
-						// update student information to grade that input
-						$stu_id=$data['old_studens'];
-						$arr = array(
-								'stu_khname'=>$data['kh_name'],
-								'stu_enname'=>$data['en_name'],
-								'sex'		=>$data['sex'],
-								'tel'		=>$data['parent_phone'],
-								'session'	=>$data['session'],
-								'degree'	=>$data['dept'],
-								'grade'		=>$data['grade'],
-								'room'		=>$data['room'],
-								'academic_year'=>$data['study_year'],
-								'stu_type'	=>$stu_type,
-						);
-						$where = ' stu_id = '.$stu_id;
-						$this->update($arr, $where);
-						
-						
-						$this->_name='rms_study_history';
-						
-						$array = array(
-								'stu_id'	=> $stu_id,
-								'stu_type'	=> $stu_type,
-								//'stu_code'	=> $data['stu_id'],
-								'academic_year'=>$data['study_year'],
-								'degree'	=> $data['dept'],
-								'grade'		=> $data['grade'],
-								'session'	=> $data['session'],
-								'user_id'	=> $this->getUserId(),
-								//'create_date'=>date('Y-m-d H:i:s'),
-						);
-						$where = " stu_id = ".$stu_id;
-						$this->update($array, $where);
-						
-					}
+				$gdb = new  Application_Model_DbTable_DbGlobal();
+				$customer_type=1;
+				$stu_code = $data['old_stu'];
+				if($data['student_type']==1){//existing student
+					$rs_stu = $gdb->getStudentinfoById($stu_code);
+				}elseif($data['student_type']==2){//testing student
+					$rs_stu = $gdb->getStudentTestinfoById($stu_code);
+					$arr = array(
+							'is_registered'=>1,
+					);
+					$this->_name='rms_student_test_result';
+					$where="id = ".$rs_stu['id'];
+					$this->update($arr, $where);
+				
+					$arr = array(
+							'customer_type' =>1,
+					);
+					$this->_name='rms_student';
+					$where="stu_id = ".$stu_code;
+					$this->update($arr, $where);
+				
+				}elseif($data['student_type']==3){//from crm
+					$rs_stu = $gdb->getStudentinfoById($stu_code);
+					$arr = array(
+							'customer_type' =>4,
+							'is_studenttest'=>1
+					);
+					$this->_name='rms_student';
+					$where="stu_id = ".$stu_code;
+					$this->update($arr, $where);
+				}
 					
+					$cut_credit_memo = $data['grand_total']-$data['credit_memo'];
+					if($cut_credit_memo<0){
+						$credit_after=abs($cut_credit_memo);
+						$cut_credit_memo = $data['grand_total'];
+					}else{
+						$cut_credit_memo = $data['credit_memo'];
+						$credit_after = 0;
+					}
 					
 					$this->_name='rms_student_payment';
 					$arr=array(
-							'student_id'	=>$stu_id,
-							//'receipt_number'=>$data['reciept_no'],
-							'payment_type'	=> $data['payment_type'],
-							'payfor_type'	=>$payfor_type,
-							'year'			=>$data['study_year'],
-							'degree'		=>$data['dept'],
-							'grade'			=>$data['grade'],
-							'time'			=>$data['study_hour'],
-							'session'		=>$data['session'],
-							'room_id'			=>$data['room'],
-							'payment_term'	=>$data['payment_term'],
-							'tuition_fee'	=>$data['tuitionfee'],
-							'discount_percent'=>$data['discount'],
-							//'other_fee'		=>$data['remark'],
-							//'admin_fee'		=>$data['addmin_fee'],
-							'total'			=>$data['total_payment'],
-							'total_payment'	=>$data['total_payment'],
-							'paid_amount'	=>$data['paid_amount'],
-							'receive_amount'=>$data['paid_amount'],
-							'balance_due'	=>$data['balance'],
-							'note'			=>$data['not'],
-							//'student_type'	=>$data['student_type'],  // new or old
-							//'create_date'	=>date('Y-m-d H:i:s'),
-							//'amount_in_khmer'=>$data['char_price'],
-							'user_id'=>$this->getUserId(),
-				
-							'grand_total'	=>$data['grand_total'],
-							'grand_paid_amount'	=>$data['total_received'],
-							'grand_balance'	=>$data['total_balance'],
-							//'grand_return'	=>$data['total_return'],
-				
+						'branch_id'		=> $data['branch_id'],
+						'revenue_type'  => $data['customer_type'],
+						'data_from'		=> $data['student_type'],
+						'student_id'	=> $data['old_stu'],
+// 						'receipt_number'=> $receipt_number,
+						'penalty'		=> $data['penalty'],
+						'grand_total'	=> $data['grand_total'],
+						'credit_memo'	=> $cut_credit_memo,
+						'memo_id'		=> $data['credit_memo'],
+						'paid_amount'	=> $data['paid_amount'],
+						'balance_due'	=> $data['balance_due'],
+						'amount_in_khmer'=> $data['money_in_khmer'],
+						'payment_method'=> $data['payment_method'],
+						'number'	    => $data['number'],
+						'note'			=> $data['note'],
+						'create_date'	=> $paid_date,
+						'user_id'		=> $this->getUserId(),
+						'academic_year'	=> $data['study_year'],
+						'paystudent_type'=> $rs_stu['is_stu_new'],
+						'degree'		=> $rs_stu['degree'],
+						'grade'			=> $rs_stu['grade'],
+						'session'		=> $rs_stu['session'],
+						'degree_culture'=> $rs_stu['calture'],
+						'room_id'		=> $rs_stu['room'],
 					);
-					
 					$where = " id = $payment_id";
 					$this->update($arr, $where);
 					
-					
-					$this->_name='rms_student_paymentdetail';
-					//update is_start=0 ដើម្បីអោយដឹងថា Service និង ឈប់ប្រើ រឺ  expired នៅពេលដែលសិស្សចាស់បង់លុយម្តងទៀត រួច store ID record that updated in is_parent of new record
-					$service = 4; // លេខ 4 ជាសេវាកម្មចុះឈ្មោះចូលរៀន
-					$type=$payfor_type; // លេខ 1 ជាប្រភេទសិស្សពី kindergarten ដល់ ទី12 , 2 GEP Student
-					$expired_record_id = $this->getStudentPaymentStart($stu_id,$service,$type);
-					if(empty($expired_record_id)){
-						$expired_record_id=0;
-					}
-					$where=" id = $expired_record_id ";
-					$arr = array(
-							'is_start'=>0
-					);
-					$this->update($arr,$where);
-					//update is_complete = 1 ពេលសិស្សមកបង់ថ្លៃដែលបានជំពាក់
-					$this->_name='rms_student_paymentdetail';
-					if(!empty($data['id_balance_record'])){
-						$where="id=".$data['id_balance_record'];
-						$arr = array(
-								'is_complete'=>1,
-								'comment'=>"បង់រួច",
-						);
-						$this->update($arr,$where);
-					}
-					$complete=1;
-					if($data['balance']>0){
-						$complete=0;
-						$comment="មិនទាន់បង់";
-					}else{
-						$complete=1;
-						$comment="បង់រួច";
-					}
-				
-					if($data){
-						$service_type=4; // tuition_fee service
-						$fee = $data["tuitionfee"];
-						$subtotal=$data["total_payment"];
-						//$subtotal = $subtotal + $data["remark"]+$data["addmin_fee"] ;
-						$discount=$data['discount'];
-						$paidamount=$data['paid_amount'];
-						$balance= $subtotal - $paidamount;
-				
-						$arr=array(
-								'payment_id'=>$payment_id,
-								'type'=>$payfor_type,
-								'service_id'=>$service_type,
-								'payment_term'=>$data['payment_term'],
-								'fee'=>$fee,
-								'qty'=>1,
-								//'subtotal'=>$data['total'],
-								'subtotal'=>$subtotal,//$subtotal,
-								'paidamount'=>$paidamount,//$paidamount,
-								'balance'=>$balance,
-								'discount_percent'=>$discount,//$discount,
-								'discount_fix'=>0,
-								'note'=>$data['not'],
-								'start_date'=>$data['start_date'],
-								'validate'=>$data['end_date'],
-								'references'=>'frome registration',
-								'is_parent'		=>$expired_record_id, // store id record that updated to already used
-								'is_complete'	=>$complete,
-								'comment'		=>$comment,
-								'user_id'=>$this->getUserId(),
-						);
-						$this->insert($arr);
-					}
-				
-				
 					$this->_name="rms_student_paymentdetail";
 					$ids = explode(',', $data['identity']);
-					
-					foreach ($ids as $i){
-						 
-						$payfor_type=0;
-						$start_date = '';
-						$validate='';
-						if($data['service_type_'.$i]==1){ // ជាការបង់ product
-							$payfor_type = 4; // product payment
-							$start_date = null;
-							$validate = null; // no need validate
-							
-							$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
-							
-						}else{ // ជាការបង់ Service
-							$payfor_type = 3; // service payment
-							$start_date = $data['date_start_'.$i];
-							$validate = $data['validate_'.$i];
-						}
-						 
-						// update old record to finish if old student
-				
-						$spd_id = $this->getStudentPaymentStart($stu_id, $data['service_'.$i],$payfor_type);
+					if(!empty($ids))foreach ($ids as $i){
+						$spd_id = $this->getStudentPaymentStart($data['old_stu'], $data['item_id'.$i],1);
+						$this->_name="rms_student_paymentdetail";
 						if(!empty($spd_id)){
-							$where="id = $spd_id";
-							$arr = array(
+								$arr = array(
 									'is_start'=>0
-							);
-							$this->update($arr,$where);
-						}else{
-							$spd_id=0;
+								);
+								$where=" id = ".$spd_id;
+								$this->update($arr,$where);
 						}
-						// check balance
-						$complete=1;
-						if($data['subtotal_'.$i]-$data['paidamount_'.$i]>0){
-							$complete=0;
-							$status="មិនទាន់បង់";
-						}else{
-							$complete=1;
-							$status="បង់រួច";
-						}
-						
-						$this->_name='rms_student_paymentdetail';
-						
-						$_arr = array(
+						   $_arr = array(
 								'payment_id'	=>$payment_id,
-								'service_id'	=>$data['service_'.$i],
+								'service_type'	=>$data['item_id'.$i],
+								'itemdetail_id'	=>$data['item_id'.$i],
 								'payment_term'	=>$data['term_'.$i],
 								'fee'			=>$data['price_'.$i],
 								'qty'			=>$data['qty_'.$i],
-								'discount_percent'	=>$data['discount_'.$i],
 								'subtotal'		=>$data['subtotal_'.$i],
-								'paidamount'	=>$data['paidamount_'.$i],
-								'balance'		=>$data['subtotal_'.$i]-$data['paidamount_'.$i],
-								'start_date'	=>$start_date,
-								'validate'		=>$validate,
+								'extra_fee'		=>$data['extra_fee'.$i],
+								'discount_type'=>$data['discount_type'.$i],
+								'discount_percent'=>$data['discount_'.$i],
+								'discount_amount'=>$data['discount_amount'.$i],
+								'paidamount'	=>$data['total_amount'.$i],
+								'is_onepayment'=>$data['onepayment_'.$i],
+								'start_date'	=>$data['date_start_'.$i],
+								'validate'		=>$data['validate_'.$i],
+								'is_start'		=>1,
 								'note'			=>$data['remark'.$i],
-								'type'			=>$payfor_type,
-								'is_parent'		=>$spd_id,
-								'is_complete'   =>$complete,
-								'comment'		=>$status,
-								'user_id'		=>$this->getUserId(),
-						);
+								'is_parent'     =>$spd_id,
+						    );
 						$this->insert($_arr);
-				
-					}
-				
-				}
-				
-				
-// ================================= pay only tuition fee ===========================================================================================
-				
-				else if($data['payment_type']==2){
-				
-						
-					if($data['student_type']==3){//old
-						$this->_name = "rms_student";
-						$stu_type='';
-						$payfor_type='';
-						if($data['dept']==1){
-							$stu_type=3;
-							$payfor_type=1;  // BacII student
-						}else if($data['dept']==2 || $data['dept']==3 || $data['dept']==4){
-							$stu_type=1;
-							$payfor_type=1;  // BacII student
-						}else{
-							$stu_type=2;
-							$payfor_type=2;  // GEP student
-						}
-						// update student information to grade that input
-						$stu_id=$data['old_studens'];
-						$arr = array(
-								'stu_khname'=>$data['kh_name'],
-								'stu_enname'=>$data['en_name'],
-								'sex'		=>$data['sex'],
-								'tel'		=>$data['parent_phone'],
-								'session'	=>$data['session'],
-								'degree'	=>$data['dept'],
-								'grade'		=>$data['grade'],
-								'room'		=>$data['room'],
-								'academic_year'=>$data['study_year'],
-								'stu_type'	=>$stu_type,
-						);
-						$where = ' stu_id = '.$stu_id;
-						$this->update($arr, $where);
-						
-						
-						$this->_name='rms_study_history';
-						
-						$array = array(
-								'stu_id'	=> $stu_id,
-								'stu_type'	=> $stu_type,
-								//'stu_code'	=> $data['stu_id'],
-								'academic_year'=>$data['study_year'],
-								'degree'	=> $data['dept'],
-								'grade'		=> $data['grade'],
-								'session'	=> $data['session'],
-								'user_id'	=> $this->getUserId(),
-								//'create_date'=>date('Y-m-d H:i:s'),
-						);
-						$where = " stu_id = ".$stu_id;
-						$this->update($array, $where);
-						
-					}
-					
-					
-					$this->_name='rms_student_payment';
-					$arr=array(
-							'student_id'	=>$stu_id,
-							//'receipt_number'=>$data['reciept_no'],
-							'payment_type'	=> $data['payment_type'],
-							'payfor_type'	=>$payfor_type,
-							'year'			=>$data['study_year'],
-							'degree'		=>$data['dept'],
-							'grade'			=>$data['grade'],
-							'time'			=>$data['study_hour'],
-							'session'		=>$data['session'],
-							'room_id'			=>$data['room'],
-							'payment_term'	=>$data['payment_term'],
-							'tuition_fee'	=>$data['tuitionfee'],
-							'discount_percent'=>$data['discount'],
-							//'other_fee'		=>$data['remark'],
-							//'admin_fee'		=>$data['addmin_fee'],
-							'total'			=>$data['total_payment'],
-							'total_payment'	=>$data['total_payment'],
-							'paid_amount'	=>$data['paid_amount'],
-							'receive_amount'=>$data['paid_amount'],
-							'balance_due'	=>$data['balance'],
-							'note'			=>$data['not'],
-							//'student_type'	=>$data['student_type'],
-							//'create_date'	=>date('Y-m-d H:i:s'),
-							//'amount_in_khmer'=>$data['char_price'],
-							'user_id'=>$this->getUserId(),
-				
-							'grand_total'	=>$data['grand_total'],
-							'grand_paid_amount'	=>$data['total_received'],
-							'grand_balance'	=>$data['total_balance'],
-							//'grand_return'	=>$data['total_return'],
-					);
-					$where =  " id = $payment_id " ; 
-					$this->update($arr, $where);
-					
-					$this->_name='rms_student_paymentdetail';
-					//update is_start=0 ដើម្បីអោយដឹងថា Service និង ឈប់ប្រើ រឺ  expired នៅពេលដែលសិស្សចាស់បង់លុយម្តងទៀត រួច store ID record that updated in is_parent of new record
-					$service = 4; // លេខ 4 ជាសេវាកម្មចុះឈ្មោះចូលរៀន
-					$type=$payfor_type; // លេខ 1 ជាប្រភេទសិស្សពី kindergarten ដល់ ទី12 , 2 GEP Student
-					$expired_record_id = $this->getStudentPaymentStart($stu_id,$service,$type);
-					if(empty($expired_record_id)){
-						$expired_record_id=0;
-					}
-					$where=" id = $expired_record_id ";
-					$arr = array(
-							'is_start'=>0
-					);
-					$this->update($arr,$where);
-					//update is_complete = 1 ពេលសិស្សមកបង់ថ្លៃដែលបានជំពាក់
-					$this->_name='rms_student_paymentdetail';
-					if(!empty($data['id_balance_record'])){
-						$where="id=".$data['id_balance_record'];
-						$arr = array(
-								'is_complete'=>1,
-								'comment'=>"បង់រួច",
-						);
-						$this->update($arr,$where);
-					}
-					$complete=1;
-					if($data['balance']>0){
-						$complete=0;
-						$comment="មិនទាន់បង់";
-					}else{
-						$complete=1;
-						$comment="បង់រួច";
-					}
-				
-					if($data){
-						$service_type=4; // tuition_fee service
-						$fee = $data["tuitionfee"];
-						$subtotal=$data["total_payment"];
-						//$subtotal = $subtotal + $data["remark"]+$data["addmin_fee"] ;
-						$discount=$data['discount'];
-						$paidamount=$data['paid_amount'];
-						$balance= $subtotal - $paidamount;
-				
-						$arr=array(
-								'payment_id'=>$payment_id,
-								'type'=>$payfor_type,
-								'service_id'=>$service_type,
-								'payment_term'=>$data['payment_term'],
-								'fee'=>$fee,
-								'qty'=>1,
-								//'subtotal'=>$data['total'],
-								'subtotal'=>$subtotal,//$subtotal,
-								'paidamount'=>$paidamount,//$paidamount,
-								'balance'=>$balance,
-								'discount_percent'=>$discount,//$discount,
-								'discount_fix'=>0,
-								'note'=>$data['not'],
-								'start_date'=>$data['start_date'],
-								'validate'=>$data['end_date'],
-								'references'=>'frome registration',
-								'is_parent'		=>$expired_record_id, // store record that updated to already used
-								'is_complete'	=>$complete,
-								'comment'		=>$comment,
-								'user_id'=>$this->getUserId(),
-						);
-						$this->insert($arr);
-							
-					}
-				
-				}
-				
-
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& pay for service only &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-				
-					
-				else if($data['payment_type']==3){ // pay for service only for old studnet
-				
-					$this->_name="rms_student_payment";
-				
-					$array=array(
-							'student_id'	=> $data['old_studens'],
-							'payfor_type'	=> 3, // service and product
-							'payment_type'	=> $data['payment_type'],
-							//'student_type'	=> $data['student_type'],  // new or old
-							//'grand_return'	=> $data['total_return'],
-							//'create_date'	=> date('Y-m-d'),
-							'user_id'		=>$this->getUserId(),
-							
-							'grand_total'	=> $data['grand_total'],
-							'grand_paid_amount'	=> $data['total_received'],
-							'grand_balance'	=> $data['total_balance'],
-							
-					);
-					$where = " id = $payment_id ";
-					$this->update($array, $where);
-				
-				
-					$this->_name="rms_student_paymentdetail";
-				
-					$ids = explode(',', $data['identity']);
-					foreach ($ids as $i){
-				
-						$payfor_type=0;
-						$start_date = '';
-						$validate='';
-						if($data['service_type_'.$i]==1){
-							$payfor_type = 4; // product payment
-							$start_date = null;
-							$validate = null; // no need validate
-							
-							$this->updateStock($data['service_'.$i],$data['qty_'.$i]);
-							
-						}else{
-							$payfor_type = 3; // service payment
-							$start_date = $data['date_start_'.$i];
-							$validate = $data['validate_'.$i];
-						}
-				
-						// update old record to finish if old student
-				
-						$spd_id = $this->getStudentPaymentStart($data['old_studens'], $data['service_'.$i],$payfor_type);
-						if(!empty($spd_id)){
-							$where="id = $spd_id";
-							$arr = array(
-									'is_start'=>0
-							);
-							$this->update($arr,$where);
-						}else{
-							$spd_id=0;
-						}
-						// check balance
-						$complete=1;
-						if($data['subtotal_'.$i]-$data['paidamount_'.$i]>0){
-							$complete=0;
-							$status="មិនទាន់បង់";
-						}else{
-							$complete=1;
-							$status="បង់រួច";
-						}
-						
-						$this->_name='rms_student_paymentdetail';
-						
-						$_arr = array(
-								'payment_id'	=>$payment_id,
-								'service_id'	=>$data['service_'.$i],
-								'payment_term'	=>$data['term_'.$i],
-								'fee'			=>$data['price_'.$i],
-								'qty'			=>$data['qty_'.$i],
-								'discount_percent'	=>$data['discount_'.$i],
-								'subtotal'		=>$data['subtotal_'.$i],
-								'paidamount'	=>$data['paidamount_'.$i],
-								'balance'		=>$data['subtotal_'.$i]-$data['paidamount_'.$i],
-								'start_date'	=>$start_date,
-								'validate'		=>$validate,
-								'note'			=>$data['remark'.$i],
-								'type'			=>$payfor_type,
-								'is_parent'		=>$spd_id,
-								'is_complete'   =>$complete,
-								'comment'		=>$status,
-								'user_id'		=>$this->getUserId(),
-						);
-						$this->insert($_arr);
-				
-					}
-				
-				}
-				
-				
-			 //$db->commit();//if not errore it do....
+					  }
+			 	$db->commit();//if not errore it do....
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 				echo $e->getMessage();exit();
@@ -1714,7 +1145,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		  	rms_student as s
     		where 
     			s.stu_id = sp.student_id
-    			AND sp.id=$id ";
+    			AND sp.id=$id AND is_closed=0 ";
     	return $db->fetchRow($sql);
     }
     

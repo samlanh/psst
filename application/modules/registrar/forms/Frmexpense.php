@@ -52,7 +52,6 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		));
 		
 		$db = new Application_Model_DbTable_DbGlobal();
-		//$options = array(""=>$this->tr->translate("PLEASE_SELECT"));
 		$rows = $db->getAllBranch();
 		$options=array();
 		if(!empty($rows))foreach($rows AS $row){$options[$row['id']]=$row['name'];}

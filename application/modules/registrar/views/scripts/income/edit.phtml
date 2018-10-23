@@ -18,7 +18,7 @@ $frm = $this->frm_expense;
 			<script type="dojo/method" event="onSubmit">
 			branch_id=dijit.byId('branch_id').get('value');
 				if(branch_id==-1 || branch_id==''){
-					alert('សូមជ្រើសរើសសាខា!');dijit.byId('branch_id').focus();return false;
+					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');dijit.byId('branch_id').focus();return false;
 					return false;
 				}
 				cate_income=dijit.byId('cate_income').get('value');

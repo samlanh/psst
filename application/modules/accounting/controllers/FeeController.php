@@ -93,10 +93,10 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$this->view->frm_fee = $frm;
     	
     	$dbgb = new Application_Model_DbTable_DbGlobal();
-    	$d_row= $dbgb->getAllGradeStudy();
-//     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    	array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
-    	$this->view->grade_name=$d_row;
+//     	$d_row= $dbgb->getAllGradeStudy();
+// //     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+//     	array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+//     	$this->view->grade_name=$d_row;
     	
     	$model = new Application_Model_DbTable_DbGlobal();
     	$this->view->payment_term = $model->getAllPaymentTerm(null,null);
@@ -119,6 +119,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam("id");
 		$row = $_db->getFeeById($id);
 		$this->view->rs = $row;
+		$schoolOption = $row['school_option'];
 		if(empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_DATA","/accounting/fee");
 		}
@@ -128,11 +129,11 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_fee = $frm;
 		 
-		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$d_row= $dbgb->getAllGradeStudy();
-		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
-		$this->view->grade_name=$d_row;
-		$this->view->all_grade = $dbgb ->getAllGradeStudyOption();
+// 		$dbgb = new Application_Model_DbTable_DbGlobal();
+// 		$d_row= $dbgb->getAllGradeStudy();
+// 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+// 		$this->view->grade_name=$d_row;
+		$this->view->all_grade = $_db->getAllGradeStudyOption(1,$schoolOption);
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
@@ -192,11 +193,13 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		$this->view->frm_fee = $frm;
 		 
 		$dbgb = new Application_Model_DbTable_DbGlobal();
-		$d_row= $dbgb->getAllGradeStudy();
-// 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
-		$this->view->grade_name=$d_row;
-		$this->view->all_grade = $dbgb ->getAllGradeStudyOption();
+// 		$d_row= $dbgb->getAllGradeStudy();
+// // 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+// 		$this->view->grade_name=$d_row;
+// 		$this->view->all_grade = $dbgb ->getAllGradeStudyOption();
+		$schoolOption = $row['school_option'];
+		$this->view->all_grade = $_db->getAllGradeStudyOption(1,$schoolOption);
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
@@ -229,5 +232,15 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		}
 	   $this->view->rows =$rs_rows;
 	}	
-    
+	public function getgradeAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$dbgb = new Accounting_Model_DbTable_DbFee();
+			$d_row= $dbgb->getAllGradeStudySchoolOption(1,$data['school_option']);
+			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_GRADE")));
+			$this->view->grade_name=$d_row;
+			print_r(Zend_Json::encode($d_row));
+			exit();
+		}
+	}
 }

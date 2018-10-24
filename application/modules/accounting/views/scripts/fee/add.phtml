@@ -48,6 +48,18 @@ ul.opt-school {
     	<form id='frm_fee' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
   			 if(this.validate()) {
+				branch_id = dijit.byId('branch_id').get('value');
+				if(branch_id==""){
+					alert("<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>");
+					dijit.byId("branch_id").focus();
+					return false;
+				}
+				school_option = dijit.byId('school_option').get('value');
+				if(school_option==""){
+					alert("<?php echo $tr->translate('PLEASE_SELECT_SCHOOLOPTION');?>");
+					dijit.byId("school_option").focus();
+					return false;
+				}
 				identity = dijit.byId('identity').get('value');
 				if(identity==''){
 					alert('Please set fee for grade !!! ');
@@ -106,17 +118,22 @@ ul.opt-school {
 		                 <div class="clearfix"></div>
 	             	</div>
 	             	<div class="form-group">
-	             		<table id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;">
-							<tr id="head-title" class="head-td" align="right" style="width: 100%;">
-								<th width="47px"><?php echo $tr->translate("DEL");?></th>
-								<th width="50px"><?php echo $tr->translate("N_O");?></th>
-								<th width="20%"><?php echo $tr->translate("GRADE");?></th>
-								<?php $s=0; ?>
-								<?php  foreach ($payment_term as $value){?>
-								<th width="11%"><?php echo"$value"; ?></th>			
-								<?php }?>
-								<th width="25%"><?php echo $tr->translate("REMARK");?></th>
-							</tr>
+	             		<table  border="1px" style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
+							<thead>
+								<tr id="head-title" class="head-td" align="right" style="width: 100%;">
+									<th width="47px"><?php echo $tr->translate("DEL");?></th>
+									<th width="50px"><?php echo $tr->translate("N_O");?></th>
+									<th width="20%"><?php echo $tr->translate("GRADE");?></th>
+									<?php $s=0; ?>
+									<?php  foreach ($payment_term as $value){?>
+									<th width="11%"><?php echo"$value"; ?></th>			
+									<?php }?>
+									<th width="25%"><?php echo $tr->translate("REMARK");?></th>
+								</tr>
+							</thead>
+							<tbody id="table_row">
+							
+							</tbody>
 						</table>
 							<?php $id=0; for($i = 0;$i < count($payment_term);$i++){ ?>
 								<?php $id++;if($i==0) $term = $id; 
@@ -164,7 +181,7 @@ ul.opt-school {
 	</div>
 </div>
 <script>
-var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: grade_store,
@@ -185,7 +202,39 @@ dojo.ready(function(){
 			}
 		}
 	}, "grade");
+
+	 var school_option = dijit.byId('school_option');
+	 school_option.on('change', function(evt) {
+		 getAllGradeBySchoolOption();
+	});
+	 getAllGradeBySchoolOption();
 });
+url_getgrade = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getgrade'));?>';
+function getAllGradeBySchoolOption(){
+	dojo.query("#table_row").append("");
+	dijit.byId('grade').reset();
+	school_option = dijit.byId('school_option').get('value');
+	if(school_option=='' || school_option==-1){
+		var grade_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('grade').set('store',grade_store);  
+		dijit.byId('school_option').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getgrade,
+		content:{
+			'school_option':school_option
+			},
+		handleAs:"json",
+		load: function(data) {
+			grade_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('grade').set('store',grade_store);   
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
 </script>
 <script type="text/javascript">
 function alertBeforeSubmit(save_type){

@@ -182,4 +182,28 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 //     	$oder=" ORDER BY id DESC ";
 //     	return $db->fetchAll($sql.$oder);
     }
+    //for get Grade By School Option
+    function getAllGradeStudySchoolOption($option=1,$schoolOption){
+    	$db = $this->getAdapter();
+    	$sql="SELECT i.id,
+    	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+    	FROM `rms_itemsdetail` AS i
+    	WHERE i.status =1 ";
+    	if($option!=null){
+    		$sql.=" AND i.items_type=".$option;
+    	}
+    	$sql.=" AND i.schoolOption=$schoolOption";
+    	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+    	return $db->fetchAll($sql);
+    }
+    public function getAllGradeStudyOption($type=1,$schooloption){
+    	$rows = $this->getAllGradeStudySchoolOption($type,$schooloption);
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	array_unshift($rows, array('id'=>-1,'name'=>$tr->translate("PLEASE_SELECT")));
+    	$options = '';
+    	if(!empty($rows))foreach($rows as $value){
+    		$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+    	}
+    	return $options;
+    }
 }

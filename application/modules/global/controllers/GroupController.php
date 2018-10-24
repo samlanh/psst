@@ -75,7 +75,7 @@ class Global_GroupController extends Zend_Controller_Action {
 			}
 		}
 		$_db = new Global_Model_DbTable_DbGroup();
-		$this->view->degree = $rows = $_db->getAllFecultyName();
+// 		$this->view->degree = $rows = $_db->getAllFecultyName();
 		$this->view->row_year=$_db->getAllYears();
 		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
 		
@@ -95,9 +95,9 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->room = $room;
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		$dept = $_dbgb->getAllItems(1);//degree
-		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->dept = $dept;
+// 		$dept = $_dbgb->getAllItems(1);//degree
+// 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->dept = $dept;
 		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
@@ -160,10 +160,10 @@ class Global_GroupController extends Zend_Controller_Action {
 // 		$this->view->dept = $dept;
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		$dept = $_dbgb->getAllItems(1);//degree
-		$this->view->degree = $dept;
-		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->dept = $dept;
+// 		$dept = $_dbgb->getAllItems(1);//degree
+// 		$this->view->degree = $dept;
+// 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+// 		$this->view->dept = $dept;
 		
 		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
@@ -340,6 +340,31 @@ class Global_GroupController extends Zend_Controller_Action {
     		array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     		}
     		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
+    		print_r(Zend_Json::encode($group));
+    		exit();
+    	}
+    }
+    function getacademicAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$group = $db->getAllYearByBranch($data['branch_id']);
+    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_ACADEMIC_YEAR")));
+    		print_r(Zend_Json::encode($group));
+    		exit();
+    	}
+    }
+    function getdegreeAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		
+    		$_db = new Accounting_Model_DbTable_DbFee();
+    		$row = $_db->getFeeById($data['academic_year']);
+    		$schoolOption = $row['school_option'];
+    		
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$group = $db->getAllItems(1,null,$schoolOption);
+    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_DEGREE")));
     		print_r(Zend_Json::encode($group));
     		exit();
     	}

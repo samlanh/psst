@@ -50,13 +50,14 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
  	$_db= $this->getAdapter();
  	$_db->beginTransaction();
  	try{
-	$arr = array(	'branch_id'		=>$data['branch_id'],
+	$arr = array(	
 					'branch_id'		=>$data['branch_id'],
 					'title'			=>$data['title'],
 					'total_amount'	=>$data['total_amount'],
 					'invoice'		=>$data['invoice'],
 					'payment_type'	=>$data['payment_method'],
 					'description'	=>$data['Description'],
+					'receiver'		=>$data['receiver'],
 					'cheque_no'		=>$data['cheque_num'],
 					'date'			=>$data['Date'],
 					'status'		=>$data['Stutas'],

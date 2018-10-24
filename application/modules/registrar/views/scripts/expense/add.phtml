@@ -25,11 +25,7 @@ table.collape tbody td {
 	<div class="card-content collapse show">
 		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">	
-				branch_id=dijit.byId('branch_id').get('value');
-				if(branch_id==-1 || branch_id==''){
-					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');dijit.byId('branch_id').focus();return false;
-					return false;
-				}		
+				 		
 				if(this.validate()) {
 					return true;
 				}else {
@@ -308,7 +304,7 @@ function getReceiptNumber(receipt){
 			'branch_id':dijit.byId('branch_id').get('value')
 			},
 		handleAs:"json",
-		load: function(data) {
+		load: function(data){
 			 dijit.byId('invoice').attr('value',data);
 			 if(receipt!=''){
 				 printSave(data);
@@ -533,7 +529,7 @@ function addCateExpense(){
 				<tr>
 					<td>
 						<fieldset style="background-color:menu;">
-									<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_NEW_SUBJECT");?></strong></legend>
+									<legend align="center" style="font-size: 18px;"><strong><?php echo $tr->translate("ADD_CATE_EXPENSE");?></strong></legend>
 									<table style="margin: 0 auto; width: 95%;white-space: nowrap; line-height: 35px;" cellspacing="10">
 										
 										<tr>

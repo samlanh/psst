@@ -41,8 +41,7 @@ class Application_Form_FrmGlobal{
 			$tel = $tr->translate('CUSTOMER_TEL');
 			$email =  $tr->translate('CUSTOMER_EMAIL');
 			$website = $tr->translate('CUSTOMER_WEBSITE');
-		}
-		else{
+		}else{
 			$db = new Application_Model_DbTable_DbGlobal();
 			$rs = $db->getBranchInfo($branch_id);
 			if(!empty($rs)){

@@ -48,8 +48,7 @@ $frm = $this->frm_expense;
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" >
-								<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");//ជ្រើសរើសប្រភេទបង់ប្រាក់?></option>
+	                   		<select name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="filterClient();" >
 								<?php if(!empty($this->branch_name)){foreach ($this->branch_name as $branch){?>
 									<option value="<?php echo $branch['id']?>"<?php if($branch['id']==$this->rs['branch_id']){echo 'selected="selected"';}?>><?php echo $branch['name']?></option>
 								<?php }}?>
@@ -117,7 +116,7 @@ $frm = $this->frm_expense;
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   	<textarea name="note" id="note" class="fullside"  value="<?php echo $this->rs['description'];?>" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:40px;" ></textarea>							
+	                   	<textarea name="note" id="note" class="fullside"  value="<?php echo $this->rs['description'];?>" dojoType="dijit.form.SimpleTextarea" style="font-size:14px;font-family: 'Khmer OS Battambang';height:50px;" ></textarea>							
 	                   </div>
 	                </div>
 	                <div class="form-group">
@@ -280,6 +279,35 @@ dojo.require("dojo.store.Memory");
 		document.getElementsByClassName("overlay")[0].style.display="block";
 	}
 </script>
+<script>
+require(["dojo/ready"], function(ready){
+	ready(function(){
+		getbranchinfo();
+	});
+});	
+function filterClient(){
+	getbranchinfo();
+}
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+function getbranchinfo(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id != ""){
+		dojo.xhrPost({
+			url:url_getbranch,
+			content:{
+				'branch_id':branch_id,
+				},
+			handleAs:"json",
+			load: function(data){
+				dojo.byId('lbl_header').innerHTML=data;
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});	
+	} 
+}
+</script>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 <?php $keycode = $this->keycode;?>
 	<div data-dojo-type="dijit.Dialog" style="width:24cm;height: 14cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("OFFICIAL_RECEIPT");?>'" id="payment_transaction" >
@@ -287,8 +315,8 @@ dojo.require("dojo.store.Memory");
 		<div id="PrintReceipt" style="width: 20cm !important; height: 11cm ; padding: 0px; margin-bottom:30px; ">
 			<table width="100%" height="49%" class="print" cellspacing="0"  cellpadding="0" style="white-space:nowrap;">
 				<tr height="90px;">
-					<td colspan="10"  style="" align="center" valign="top">
-						<?php echo $this->header?>
+					<td colspan="10"  style="" align="left" valign="top">
+						<label id="lbl_header"></label>
 					</td>
 				</tr>
 				<tr>

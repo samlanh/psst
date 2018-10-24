@@ -597,15 +597,14 @@ function getMonthByNumber(m){
 		</style>
 		<div id="PrintReceipt" style="width: 22cm !important; padding: 0px;">
 			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:13cm; font-family: 'Khmer OS Battambang' !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;">
-				<tr height="90px;">
+				<tr>
 					<td colspan="10"  style="" align="center" valign="top">
-						<?php //echo $this->header?>
 						<label id="lbl_header"></label>
 					</td>
 				</tr>
-				<tr height="40px;">
+				<tr>
 					<td colspan="10"  style="" align="center" valign="top">
-						<table width="100%" style="font-size: 10px;margin-bottom: 0px;" >
+						<table width="100%" style="font-size: 10px;margin-top:-10px" >
 							<tr>
 								<td width="25%">&nbsp;
 								</td>
@@ -954,6 +953,7 @@ function addRow() {
 		label = dijit.byId("item").attr('displayedValue');
 		service_id = dijit.byId("item").get("value");
 		if(service_id ==''){return false;}
+		dijit.byId("item").attr('value','');
 		
 		col++;no++;
 		template='';
@@ -1197,8 +1197,10 @@ function getservicefee(key){
 		service_type = dijit.byId('service_type_'+key).get('value');
 	 	stu_type = dijit.byId('student_type').get('value');
  		studentid = dijit.byId('old_stu').get('value');
+ 		branch_id = dijit.byId('branch_id').get('value');
+ 		if(branch_id==''){dijit.byId('branch_id').focus();return false;}
 			
- 		service_id = dijit.byId('item_id'+key).get('value');
+ 		item_id = dijit.byId('item_id'+key).get('value');
  		term = dijit.byId('term_'+key).get('value');
  		if(term==''){
  	 		return false;
@@ -1216,9 +1218,10 @@ function getservicefee(key){
  				url:url_service_fee,
  				content:{
  					'term':term,
- 					'service':service_id,
+ 					'service':item_id,
  					'year':study_year,
  					'studentid':studentid,
+ 					'branch_id':branch_id
  				},
  				handleAs:"json",
  				load: function(data) {

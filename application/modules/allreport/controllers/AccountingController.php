@@ -63,6 +63,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'service_type'=>'',
 						'payment_by'=>-1,
 						'study_year'=>-1,
+						'item'=>'',
+						'group'=>'',
 						'degree'=>-1,
 						'grade_all'=>-1,
 						'user'=>-1,
@@ -76,7 +78,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->rsincome = $db->getAllOtherIncome($search);
 			$this->view->search = $search;
 		}catch(Exception $e){
-			echo $e->getMessage();exit();
+// 			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error");
 		}

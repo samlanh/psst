@@ -189,6 +189,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'create_date'	=> $paid_date,
 						'user_id'		=> $this->getUserId(),
 						'academic_year'	=> $data['study_year'],
+						'group_id'      => $rs_stu['group_id'],
 						'paystudent_type'=> $rs_stu['is_stu_new'],
 						'degree'		=> $rs_stu['degree'],
 						'grade'			=> $rs_stu['grade'],
@@ -526,6 +527,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'create_date'	=> $paid_date,
 						'user_id'		=> $this->getUserId(),
 						'academic_year'	=> $data['study_year'],
+						'group_id'      => $rs_stu['group_id'],
 						'paystudent_type'=> $rs_stu['is_stu_new'],
 						'degree'		=> $rs_stu['degree'],
 						'grade'			=> $rs_stu['grade'],
@@ -1079,44 +1081,56 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
     
-    public function getServiceFee($year,$serviceid,$termid,$student_id){
+    public function getServiceFee($year,$item_id,$termid,$student_id,$branch_id){
     	$db=$this->getAdapter();
-    	$branch = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $branch->getAccessPermission();
+//     	$branch = new Application_Model_DbTable_DbGlobal();
+//     	$branch_id = $branch->getAccessPermission();
     	
-    	$sql="SELECT items_type FROM `rms_itemsdetail` WHERE id=$serviceid LIMIT 1";
-    	$item_type=$db->fetchOne($sql);
-    	
+    	$sql="SELECT items_type,is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1";
+    	$rs_pro=$db->fetchRow($sql);
+    	$item_type = $rs_pro['items_type'];
+    	$is_set = $rs_pro['is_productseat'];
     	if($item_type==1 OR $item_type==2){//grade or service
     		$sql="SELECT tfd.id,tfd.tuition_fee AS price,
-				(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$serviceid LIMIT 1) as onepayment,
+				(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as onepayment,
 				(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-					WHERE sp.student_id = $student_id AND spd.itemdetail_id = $serviceid 
+					WHERE sp.student_id = $student_id AND spd.itemdetail_id = $item_id 
 				 ANd spd.is_start=1 AND sp.`id`=spd.`payment_id` AND sp.is_void=0 ORDER BY spd.validate DESC LIMIT 1) AS validate 
     		 
     		 FROM 
     		 	rms_tuitionfee AS tf,
     		 	rms_tuitionfee_detail AS tfd 
     		  WHERE tf.id = tfd.fee_id
-    				AND tfd.class_id = $serviceid AND tfd.payment_term = $termid ";
-    		if($item_type==2){
-    			$sql.=" AND tf.id = $year ";
+    				AND tfd.class_id = $item_id AND tfd.payment_term = $termid ";
+    		if($item_type==1){// grade
+    			$sql.=" AND tf.type =1 AND tf.id = $year ";
     		}
-    		$sql.=" $branch_id";
+    		if($item_type==2){//service
+    			$sql.=" AND tf.type = 2 ";
+    		}
+    		$sql.=" AND branch_id = $branch_id LIMIT 1";
     		return $db->fetchRow($sql);
     	}elseif ($item_type==3){//product
-    		$sql="SELECT 
-    				price,
-					(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$serviceid LIMIT 1) as onepayment,
-					(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
-						WHERE sp.student_id = $student_id AND spd.itemdetail_id = $serviceid 
-				ANd spd.is_start=1 AND sp.`id`=spd.`payment_id` AND sp.is_void=0 ORDER BY spd.validate DESC LIMIT 1) AS validate 
-    				FROM `rms_product_location` WHERE pro_id=$serviceid";
-//     		$sql.=" $branch_id";
+    		if($is_set==1){//for set
+    			$sql="SELECT
+    			 price,
+    			is_onepayment as onepayment,
+    			(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
+    				WHERE sp.student_id = $student_id AND spd.itemdetail_id = $item_id
+    				   ANd spd.is_start=1 AND sp.`id`=spd.`payment_id` AND sp.is_void=0 ORDER BY spd.validate DESC LIMIT 1) AS validate
+    					FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1";
+    		}else{
+    			$sql="SELECT
+    		 	price,
+    			(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as onepayment,
+    			(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
+    			WHERE sp.student_id = $student_id AND spd.itemdetail_id = $item_id
+    			ANd spd.is_start=1 AND sp.`id`=spd.`payment_id` AND sp.is_void=0 ORDER BY spd.validate DESC LIMIT 1) AS validate
+    			FROM `rms_product_location` WHERE pro_id=$item_id AND brand_id = $branch_id LIMIT 1";
+    		}
+    		
     		return $db->fetchRow($sql);
-    		//$sql = "SELECT spd.validate from rms_student_payment as sp,rms_student_paymentdetail as spd
-				//where sp.student_id = $stu_id and spd.service_id = $service_id and spd.is_complete=1 and spd.is_start=1 AND sp.`id`=spd.`payment_id` and sp.is_void=0 ";
-		//$order=' ORDER BY spd.id DESC';
+    		
     	}
     }
     

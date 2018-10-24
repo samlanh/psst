@@ -1,9 +1,7 @@
 <?php
 class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 {
-
     protected $_name = 'rms_saledetail';
-    
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
@@ -122,20 +120,19 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     
     function addCutStock($_data){
     	try{
-    		
     		$_arr=array(
-    				'branch_id'	  => $_data['branch_id'],
-    				'serailno'	      => $_data['serailno'],
-    				'student_id'	      => $_data['student_id'],
+    				'branch_id'	   => $_data['branch_id'],
+    				'serailno'	   => $_data['serailno'],
+    				'student_id'   => $_data['student_id'],
     				'balance'      => $_data['balance'],
     				'total_received'=> $_data['total_paid'],
-    				'total_qty_due'      => $_data['total_due'],
-    				'received_date'      => $_data['date_payment'],
-    				'create_date'=> date("Y-m-d H:i:s"),
-    				'modify_date'	  => date("Y-m-d H:i:s"),
-    				'status'=> 1,
-    				'user_id'  =>$this->getUserId(),
-    				'note'=>$_data['note'],
+    				'total_qty_due' => $_data['total_due'],
+    				'received_date' => $_data['date_payment'],
+    				'create_date'   => date("Y-m-d H:i:s"),
+    				'modify_date'	=> date("Y-m-d H:i:s"),
+    				'status'        => 1,
+    				'user_id'       => $this->getUserId(),
+    				'note'          => $_data['note'],
     		);
     		$this->_name ='rms_cutstock';
     		$cut_id =  $this->insert($_arr);
@@ -174,8 +171,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     			
     			//cut stock
     			$dbpu = new Stock_Model_DbTable_DbPurchase();
-//     			$dbpu->updateProductCost($_data['itemdetail_id'.$i],$_data['branch_id'],$_data['qty_receive'.$i],$_data['amount_'.$i]);
-    			$dbpu->updateStock($_data['itemdetail_id'.$i],$_data['branch_id'],$_data['qty_receive'.$i]);
+    			$dbpu->updateStock($_data['itemdetail_id'.$i],$_data['branch_id'],-$_data['qty_receive'.$i]);
     		}
     		return $cut_id;
     	}catch(Exception $e){

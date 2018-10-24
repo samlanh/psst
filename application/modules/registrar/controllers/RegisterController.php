@@ -392,7 +392,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
-    		$service_fee = $db->getServiceFee($data['year'],$data['service'],$data['term'],$data['studentid']);
+    		$service_fee = $db->getServiceFee($data['year'],$data['service'],$data['term'],$data['studentid'],$data['branch_id']);
     		print_r(Zend_Json::encode($service_fee));
     		exit();
     	}

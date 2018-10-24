@@ -53,33 +53,69 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	//echo $where;
     	return $db->fetchAll($sql.$where.$order);
     }
-    
-    function updateStock($pro_id,$location_id,$qty_order){
-//     	$_db = new Application_Model_DbTable_DbGlobal();
-//     	$branch_id = $_db->getAccessPermission('brand_id');
+    function getAllProductsetbyId($pro_id){
     	$db=$this->getAdapter();
-    	$sql="SELECT * FROM rms_product_location WHERE pro_id=$pro_id AND brand_id=$location_id ";
-    	$qty_stock = $db->fetchRow($sql);
-    	
-    	$this->_name="rms_product_location";
-    	if(!empty($qty_stock)){
-    		$qty = $qty_stock['pro_qty'] + $qty_order;
-    		$array = array(
-    				'pro_qty'=>$qty,
-    				);
-    		$where = " id = ".$qty_stock['id'];
-    		$this->update($array, $where);
-    		
-    	}elseif(empty($qty_stock)){
+    	$sql="SELECT * FROM `rms_product_setdetail` WHERE pro_id=$pro_id";
+    	return $db->fetchAll($sql);
+    }
+    function updateStock($pro_id,$location_id,$qty_order){
+    	$db=$this->getAdapter();
+    	$sql="SELECT * FROM `rms_itemsdetail` WHERE id=$pro_id LIMIT 1 ";
+    	$rs_pro = $db->fetchRow($sql);
+    	if($rs_pro['is_product_seat']==1){//for set
+    		$rs_set = $this->getAllProductsetbyId($pro_id);
     		$this->_name="rms_product_location";
-    		$_arrs = array(
-    				'pro_id'=>$pro_id,
-    				'brand_id'=>$location_id,
-    				'pro_qty'=>$qty_order,
-    				'price'=>0,
-    		);
-    		$this->insert($_arrs);
+    		if(!empty($rs_set)){
+    			foreach($rs_set AS $rs){
+    				$sql="SELECT * FROM rms_product_location WHERE pro_id=".$rs_set['subpro_id']." AND brand_id=$location_id ";
+    				$qty_stock = $db->fetchRow($sql);
+    				
+    				$qty = $qty_stock['pro_qty'] + ($qty_order*$rs_set['qty']);
+    				if(!empty($qty_stock)){
+    					
+    					$array = array(
+    							'pro_qty'=>$qty,
+    					);
+    					$where = " id = ".$rs_set['subpro_id'];
+    					$this->update($array, $where);
+    				
+    				}elseif(empty($qty_stock)){
+    					$this->_name="rms_product_location";
+    					$_arrs = array(
+    							'pro_id'=>$rs_set['subpro_id'],
+    							'brand_id'=>$location_id,
+    							'pro_qty'=>$qty,
+    							'price'=>0,
+    					);
+    					$this->insert($_arrs);
+    				}
+    			}
+    		}
+    	}else{//for normal product
+    		$sql="SELECT * FROM rms_product_location WHERE pro_id=$pro_id AND brand_id=$location_id ";
+    		$qty_stock = $db->fetchRow($sql);
+    		 
+    		$this->_name="rms_product_location";
+    		if(!empty($qty_stock)){
+    			$qty = $qty_stock['pro_qty'] + $qty_order;
+    			$array = array(
+    					'pro_qty'=>$qty,
+    			);
+    			$where = " id = ".$qty_stock['id'];
+    			$this->update($array, $where);
+    		
+    		}elseif(empty($qty_stock)){
+    			$this->_name="rms_product_location";
+    			$_arrs = array(
+    					'pro_id'=>$pro_id,
+    					'brand_id'=>$location_id,
+    					'pro_qty'=>$qty_order,
+    					'price'=>0,
+    			);
+    			$this->insert($_arrs);
+    		}
     	}
+    	
     }
     
     public function addPurchase($_data){

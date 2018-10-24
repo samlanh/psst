@@ -171,6 +171,12 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	if($search['payment_by']>0){
     		$where .= " and d.items_type = ".$search['payment_by'];
     	}
+    	if(!empty($search['group'])){
+    		$where .= " AND spd.group_id = ".$search['group'];
+    	}
+    	if(!empty($search['item'])){
+    		$where .= " AND d.items_id = ".$search['item'];
+    	}
     	if(!empty($search['service'])){
     		$where .= " AND spd.itemdetail_id = ".$search['service'];
     	}
@@ -194,7 +200,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 //     		$order="  ";
 //     	}
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$where.= $_db->getAccessPermission();
+    	$where.= $_db->getAccessPermission('sp.branch_id');
     	$order=" ORDER BY d.items_id ";
     	return $db->fetchAll($sql.$where.$order);
     }

@@ -54,7 +54,6 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			try{
 				$db = new Stock_Model_DbTable_DbCutStock();
 				$row = $db->addCutStock($_data);
-				
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
 				}else{

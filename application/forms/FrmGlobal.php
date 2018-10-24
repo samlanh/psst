@@ -58,7 +58,7 @@ class Application_Form_FrmGlobal{
 			$str="<table width='100%' style='white-space:nowrap;'>
 				<tr>
 					<td width='17%' valign='top'>
-						<img style='max-width: 98%;max-height:100px;' src=".Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$img.">
+						<img style='max-width: 98%;max-height:90px;' src=".Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$img.">
 					</td>
 					<td width='83%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
 						<div style='font-size:18px;margin-top: 10px;'>".$school_name."</div>

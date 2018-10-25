@@ -107,6 +107,9 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 				$s_where[] = " invoice LIKE '%{$s_search}%'";
 				$where .=' AND ('.implode(' OR ',$s_where).')';
 			}
+			if(!empty($search['cate_income'])){
+				$where.= " AND cate_income = ".$search['cate_income'];
+			}
 			if(!empty($search['branch_id'])){
 				$where.= " AND branch_id = ".$search['branch_id'];
 			}

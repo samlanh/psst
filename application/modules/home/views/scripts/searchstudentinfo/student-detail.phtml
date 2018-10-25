@@ -599,15 +599,15 @@
 										    <td style="text-align:left"><?php echo $rs['title']; ?></td>
 										    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 										    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
-										    <td align="center"><?php echo $rs['scholarship_percent']; ?>%</td>
-										    <td align="center"><?php echo $rs['scholarship_amount']; ?></td>
+										    <td align="center"><?php //echo $rs['scholarship_percent']; ?>%</td>
+										    <td align="center"><?php// echo $rs['scholarship_amount']; ?></td>
 										    <td align="center"><?php echo $rs['payment_term']; ?></td>
 										    <td><?php echo $rs['qty'];?></td>
 										    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
-										    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
+										    <td><?php //if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
 										    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
 										    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
-										    <td><?php echo $rs['discount_fix']; ?> </td>
+										    <td><?php// echo $rs['discount_fix']; ?> </td>
 										    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
 										    <td><?php echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?></td>
 										    <td><?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); ?></td>
@@ -669,24 +669,24 @@
 										  <tr class="hover" style="font-size:12px; color:#000; height: 18px;"​ align="center">
 										  	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $i;?></td>
 										    <td style="text-align:left"><?php echo $rs['category']; ?></td>
-										    <td style="text-align:left"><?php echo $rs['title']; ?></td>
+										    <td style="text-align:left"><?php// echo $rs['title']; ?></td>
 										    <td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 										    <td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
-										    <td align="center"><?php echo $rs['scholarship_percent']; ?>%</td>
-										    <td align="center"><?php echo $rs['scholarship_amount']; ?></td>
+										    <td align="center"><?php //echo $rs['scholarship_percent']; ?>%</td>
+										    <td align="center"><?php //echo $rs['scholarship_amount']; ?></td>
 										    <td align="center"><?php echo $rs['payment_term']; ?></td>
 										    <td><?php echo $rs['qty'];?></td>
 										    <td>$ <?php echo number_format($rs['fee'],2); ?></td>
-										    <td><?php if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
+										    <td><?php //if($rs['late_fee']>0){echo '$ '.$rs['late_fee'];}?></td>
 										    <td><?php if($rs['extra_fee']>0){echo '$ '.$rs['extra_fee'];}?></td>
 										    <td><?php if($rs['discount_percent']>0){echo $rs['discount_percent'].' %';} ?> </td>
-										    <td><?php echo $rs['discount_fix']; ?> </td>
+										    <td><?php //echo $rs['discount_fix']; ?> </td>
 										    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>>$ <?php echo $rs['paidamount']; ?></td>
 										    <td><?php echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?></td>
 										    <td><?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); ?></td>
 										    <td style="font-size: 9px;"><?php echo $rs['note']; ?></td>
 										   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status']; ?></td>
-										  	 <td><?php echo $rs['user']; ?></td>
+										  	 <td><?php //echo $rs['user']; ?></td>
 										  </tr>
 										  <?php 
 										 	if($rs['is_void']==0){

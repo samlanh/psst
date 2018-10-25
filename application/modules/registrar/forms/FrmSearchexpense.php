@@ -75,7 +75,15 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 			$_releasedate->setValue($_date);
 		}
 		
-		
+		$_db = new Registrar_Model_DbTable_DbIncome();
+		$_arr_opt_cate = array(""=>$this->tr->translate("PLEASE_SELECT_CATEGORY_INCOME"));
+		$optionCate = $_db->getCateIncome();
+		if(!empty($optionCate))foreach($optionCate AS $row) $_arr_opt_cate[$row['id']]=$row['name'];
+		$_cate = new Zend_Dojo_Form_Element_FilteringSelect("cate_income");
+		$_cate->setMultiOptions($_arr_opt_cate);
+		$_cate->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside height-text',));
 		
 		$_dateline = new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$_dateline->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
@@ -99,7 +107,7 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 				'class'=>'fullside height-text',));
 		
 		
-		$this->addElements(array($_title,$_branch_id,$_bydate,$payment_method,$_transfer,$_releasedate
+		$this->addElements(array($_title,$_branch_id,$_cate,$_bydate,$payment_method,$_transfer,$_releasedate
 				,$_dateline,$_status));
 		return $this;
 		

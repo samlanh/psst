@@ -183,27 +183,18 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
 	
-		$sql=" Select
-		spd.id,
-		spd.type,
+		$sql=" SELECT
+		spd.id,		 
 		spd.fee,
 		spd.qty,
 		spd.subtotal,
-		spd.late_fee,
 		spd.extra_fee,
-		spd.discount_percent,
-		spd.discount_fix,
-		spd.paidamount,
-		spd.balance,
+		spd.discount_percent,		
+		spd.paidamount,		
 		spd.note,
 		spd.start_date,
 		spd.validate,
-		spd.is_start,
-		spd.is_parent ,
-		spd.is_complete,
-		sp.scholarship_percent,
-		sp.scholarship_amount,
-		sp.tuition_fee,
+		spd.is_start,		
 		sp.student_id,
 		sp.receipt_number,
 		sp.create_date,
@@ -213,19 +204,18 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		s.stu_enname,
 		p.title,
 		(SELECT i.title FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,
-		
-		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
+		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS `user`,
 		(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
-		(select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status
+		(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status
 		FROM
-		rms_student_payment as sp,
-		rms_student_paymentdetail as spd,
-		rms_student as s,
-		rms_itemsdetail as p
+		rms_student_payment AS sp,
+		rms_student_paymentdetail AS spd,
+		rms_student AS s,
+		rms_itemsdetail AS p
 		WHERE
 		s.stu_id = sp.student_id
 		AND sp.id=spd.payment_id
-		AND p.id=spd.service_id
+		
 			AND s.customer_type=1
 		AND s.stu_id=$stu_id AND sp.is_void=0 ORDER BY sp.id DESC ";
 		return $db->fetchAll($sql);
@@ -236,28 +226,27 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
 	
-		$sql=" Select
+		$sql=" SELECT
 		spd.id,
-		spd.type,
+		
 		spd.fee,
 		spd.qty,
 		spd.subtotal,
-		spd.late_fee,
+		
 		spd.extra_fee,
 		spd.discount_percent,
-		spd.discount_fix,
+		
 		spd.paidamount,
-		spd.balance,
+		
 		spd.note,
 		spd.start_date,
 		spd.validate,
 		spd.is_start,
-		spd.is_parent ,
-		spd.is_complete,
-		sp.scholarship_percent,
-		sp.scholarship_amount,
-		sp.tuition_fee,
-		sp.student_id,
+		
+		
+		
+		
+		
 		sp.receipt_number,
 		sp.create_date,
 		sp.is_void,
@@ -268,21 +257,21 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
  		(SELECT i.title FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,		
 		(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = sp.grade LIMIT 1) AS items_name,
 			  
-		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
+		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS USER,
 		(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
-		(select name_en from rms_view where type=10 and key_code=sp.is_void LIMIT 1) as void_status
+		(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status
 		
 		FROM
-		rms_student_payment as sp,
-		rms_student_paymentdetail as spd,
-		rms_student as s,
-		rms_itemsdetail as p
+		rms_student_payment AS sp,
+		rms_student_paymentdetail AS spd,
+		rms_student AS s,
+		rms_itemsdetail AS p
 		WHERE
 		s.stu_id = sp.student_id
 		AND sp.id=spd.payment_id
-		AND p.id=spd.service_id
+		
 		AND spd.is_suspend=0 
-		AND spd.type=3
+		
 		AND s.customer_type=1
 		AND s.stu_id=$stu_id";
 		return $db->fetchAll($sql);

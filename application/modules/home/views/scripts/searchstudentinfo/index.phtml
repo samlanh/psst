@@ -12,6 +12,7 @@
 	if (!empty($urlsting)){
 		$sign="&";
 	}
+	//print_r($this->row); exit();
 ?>
 <style>
 .card-box-border {
@@ -149,7 +150,6 @@ a.btn.btn-default.btn-detail:hover {
 		</div>
 		<div class="card-box">	
 			<?php echo $this->list;?>
-							
 		</div>
 		<div class="card-box search-list">
 			<?php if (!empty($this->row)) foreach ($this->row as $key => $rs){?>

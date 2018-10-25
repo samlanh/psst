@@ -20,6 +20,7 @@ class Registrar_IncomeController extends Zend_Controller_Action
     		else{
     			$search = array(
     					"adv_search"=>'',
+    					"cate_income"=>'',
     					"currency_type"=>-1,
     					"branch_id"=>'',
     					"status"=>-1,

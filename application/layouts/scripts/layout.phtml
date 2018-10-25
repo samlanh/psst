@@ -1,4 +1,7 @@
 <?php 
+header('Cache-Control: no cache'); //no cache
+session_cache_limiter('private_no_expire');
+
 $session_user=new Zend_Session_Namespace('authstu');
 $username = $session_user->first_name;
 $them_style =  $session_user->theme_style;

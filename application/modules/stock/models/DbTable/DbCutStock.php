@@ -140,7 +140,6 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		$ids = explode(',', $_data['identity']);
     		$qtyfter=0;
     		foreach ($ids as $i){
-    			
     			$stupaydetail = $this->getStudentPaymentDetailById($_data['paymentdetail_id'.$i],$_data['payment_id'.$i]);
     			$qtyreceive = $_data['qty_receive'.$i];
     			

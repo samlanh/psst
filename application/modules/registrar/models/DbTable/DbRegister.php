@@ -236,6 +236,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'payment_term'	=>$data['term_'.$i],
 								'fee'			=>$data['price_'.$i],
 								'qty'			=>$data['qty_'.$i],
+								'qty_balance'	=>$data['qty_'.$i],
 								'subtotal'		=>$data['subtotal_'.$i],
 								'extra_fee'		=>$data['extra_fee'.$i],
 								'discount_type'=>$data['discount_type'.$i],
@@ -283,12 +284,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				$sql1 = "select ser_cate_id,pro_type from rms_program_name where service_id = ". $i['service_id'];
 				$pro_id = $db->fetchRow($sql1);
 				if(!empty($pro_id)){
-					
 					if($pro_id['pro_type']==0){ // product រាយ
-					
 						$sql2 = "select id,pro_qty from rms_product_location where pro_id = ".$pro_id['ser_cate_id']."  $branch_id ";
 						$result = $db->fetchRow($sql2);
-						
 						if(!empty($result)){
 							$qty = $result['pro_qty'] + $i['qty'];
 							
@@ -557,6 +555,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'payment_term'	=>$data['term_'.$i],
 								'fee'			=>$data['price_'.$i],
 								'qty'			=>$data['qty_'.$i],
+						   		'qty_balance'	=>$data['qty_'.$i],
 								'subtotal'		=>$data['subtotal_'.$i],
 								'extra_fee'		=>$data['extra_fee'.$i],
 								'discount_type'=>$data['discount_type'.$i],

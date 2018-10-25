@@ -62,27 +62,26 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="SELECT * FROM `rms_itemsdetail` WHERE id=$pro_id LIMIT 1 ";
     	$rs_pro = $db->fetchRow($sql);
-    	if($rs_pro['is_product_seat']==1){//for set
+    	if($rs_pro['is_productseat']==1){//for set
     		$rs_set = $this->getAllProductsetbyId($pro_id);
+    		
     		$this->_name="rms_product_location";
     		if(!empty($rs_set)){
     			foreach($rs_set AS $rs){
-    				$sql="SELECT * FROM rms_product_location WHERE pro_id=".$rs_set['subpro_id']." AND brand_id=$location_id ";
+    				$sql="SELECT * FROM rms_product_location WHERE pro_id=".$rs['subpro_id']." AND brand_id=$location_id ";
     				$qty_stock = $db->fetchRow($sql);
-    				
-    				$qty = $qty_stock['pro_qty'] + ($qty_order*$rs_set['qty']);
+    				$qty = $qty_stock['pro_qty'] + ($qty_order*$rs['qty']);
+
     				if(!empty($qty_stock)){
-    					
     					$array = array(
     							'pro_qty'=>$qty,
     					);
-    					$where = " id = ".$rs_set['subpro_id'];
-    					$this->update($array, $where);
-    				
+    					$where = " id = ".$qty_stock['id'];
+    					$this->update($array, $where);   				
     				}elseif(empty($qty_stock)){
     					$this->_name="rms_product_location";
     					$_arrs = array(
-    							'pro_id'=>$rs_set['subpro_id'],
+    							'pro_id'=>$rs['subpro_id'],
     							'brand_id'=>$location_id,
     							'pro_qty'=>$qty,
     							'price'=>0,

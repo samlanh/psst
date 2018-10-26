@@ -1,15 +1,10 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('EDIT_PURCHASE_PAYMENT')); 
+	echo $this->headTitle($tr->translate('EDIT_CUTSTOCK')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
 	$frm = $this->frm_payment;
 ?>	
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dijit.form.Textarea");
-</script>
  <style>
 	select{ width:100%;}
 	fieldset{  background:none;}
@@ -25,13 +20,22 @@ span.oldsup input[type=checkbox] {
     padding: 0;
     height: initial;
 }
+label.invoicelabel {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 120px;
+}
+tr.head-td th {
+    white-space: nowrap;
+}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-edit  " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_PURCHASE_PAYMENT');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_CUTSTOCK');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -46,14 +50,20 @@ span.oldsup input[type=checkbox] {
 					dijit.byId("branch_id").focus();
 					return false;
 				}
-				supplier_id = dijit.byId('supplier_id').get('value');
-				if(supplier_id==""){
-					alert("<?php echo $tr->translate('PLEASE_SELECT_SUPPLIER');?>");
-					dijit.byId("supplier_id").focus();
+				student_id = dijit.byId('student_id').get('value');
+				if(student_id==""){
+					alert("<?php echo $tr->translate('PLEASE_SELECT_STUDENT');?>");
+					dijit.byId("student_id").focus();
 					return false;
 				}
 				if($('#identity').val()==""){
-					alert("<?php echo $tr->translate('PLEASE_CHECK_PURCHASE_PAYMENT');?>");
+					alert("<?php echo $tr->translate('PLEASE_CHECK_PRODUCT_TO_RETURN');?>");
+					return false;
+				}
+				total_paid = dijit.byId('total_paid').get('value');
+				if(total_paid==""){
+					alert("<?php echo $tr->translate('PLEASE_ENTER_QTY_TO_RETURN');?>");
+					dijit.byId("amount").focus();
 					return false;
 				}
                 loadingBlock();
@@ -62,89 +72,79 @@ span.oldsup input[type=checkbox] {
 				return false;
 			}
 			</script>
-			<div class="card-box">
-	        	<div class="col-md-6 col-sm-6 col-xs-12">
-					<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("branch_id");?>
-	                   		<?php echo $frm->getElement("id");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SUPPLIER_NAME");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("supplier_id");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BALANCE");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("balance");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ALL_BALANCE");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("all_balance");?>
-	                   </div>
-	                </div>
-	            </div>
-	            <div class="col-md-6 col-sm-6 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RECEIPT_NO");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("receipt_no");?>
-	                   </div>
-	                </div>
-	               
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DATE");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("date_payment");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PAID_BY");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("paid_by");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT");?> 
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("amount");?>
-	                   </div>
-	                </div>
-	            </div>
-	         </div>    
 	          <div class="card-box">
 	          		 <div class="col-md-12 col-sm-12 col-xs-12">
 	          		 	<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
-			                <label style=" margin: 0; line-height: 30px; " class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("FILTER_BY_DATE");?> </label>
-			                 <div class="col-md-3 col-sm-3 col-xs-12">
-			                		<?php echo $frm->getElement("start_date");?>
-			                </div>
-			                <label style=" margin: 0; line-height: 30px; text-align: center;" class="control-label bold col-md-1 col-sm-1 col-xs-12"><?php echo $tr->translate("TO");?> </label>
-			                <div class="col-md-3 col-sm-3 col-xs-12">
-			                	<?php echo $frm->getElement("end_date");?>
-	                   		</div>
-	                   		<div class="col-md-3 col-sm-3 col-xs-12">
-	                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('SEARCH');?>" dojoType="dijit.form.Button" onclick="getSupplierInfo();"/>
-	                   		</div>
-			                 <div class="clearfix"></div>
+			                 <div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> 
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("branch_id");?>
+				                   		<?php echo $frm->getElement("id");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_NAME");?> 
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input id="student_id" />
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("REMAIN");?> 
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("balance");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ALL_QTY_BALANCE");?> 
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("all_balance");?>
+				                   </div>
+				                </div>
+				            </div>
+				            <div class="col-md-6 col-sm-6 col-xs-12">
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RECEIPT_NO");?> 
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("serailno");?>
+				                   </div>
+				                </div>
+				               
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RECEIVED_DATE");?> 
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("date_payment");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php //echo $tr->translate("PAID_BY");?> 
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php //echo $frm->getElement("paid_by");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT");?> 
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("amount");?>
+				                   </div>
+				                </div>
+				            </div>
+			           <div class="form-group">      
 			                 <label style=" margin: 0; line-height: 30px; " class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("FILTER_BY_PURCHASE_NO");?> </label>
 			                 <div class="col-md-7 col-sm-7 col-xs-12">
 			                		<?php echo $frm->getElement("bypuchase_no");?>
 			                </div>
+			                <div class="col-md-3 col-sm-3 col-xs-12">
+	                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('SEARCH');?>" dojoType="dijit.form.Button" onclick="getStudentProductPaymentDetail();"/>
+	                   		</div>
 			                <div class="clearfix"></div>
 			                <div class="clearfix">
 			               		 <input type="checkbox" class="checkbox"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style="display: inline-block;height: initial;"  />&nbsp;
@@ -158,12 +158,12 @@ span.oldsup input[type=checkbox] {
 										<th>&nbsp;</th>
 										<th><?php echo $tr->translate("NUM");?></th>
 										<th style=" min-width: 105px;"><?php echo $tr->translate("DATE");?></th>
-										<th ><?php echo $tr->translate("INVOICE_NO");?></th>
+										<th ><?php echo $tr->translate("RECEIPT_NO");?></th>
 										<th ><?php echo $tr->translate("ORIG");?></th>
 										<th ><?php echo $tr->translate("DUE");?></th>
-										<th ><?php echo $tr->translate("DISCOUNT");?></th>
-										<th ><?php echo $tr->translate("PAYMENT_AMOUNT");?></th>
+										<th ><?php echo $tr->translate("RECEIVE_QTY");?></th>
 										<th ><?php echo $tr->translate("REMAIN");?></th>
+										<th ><?php echo $tr->translate("REMIDE_DATE");?></th>
 									</tr>
 								</thead>
 								<tbody id="table_row">
@@ -193,13 +193,13 @@ span.oldsup input[type=checkbox] {
           		 </div>
           		 <div class="col-md-4 col-sm-4 col-xs-12">
           		 	<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TOTAL_PAID");?> 
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TOTAL_RECEIVED");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("total_paid");?>
 	                   </div>
 	                </div>
-	                <div class="form-group">
+	                <div class="form-group" style="display: none;">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TOTAL_DISCOUNT");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -207,7 +207,7 @@ span.oldsup input[type=checkbox] {
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TOTAL_DUE");?> 
+	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("TOTAL_QTY_DUE");?> 
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<?php echo $frm->getElement("total_due");?>
@@ -221,6 +221,8 @@ span.oldsup input[type=checkbox] {
                		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 					<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave" />
+					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
+							 iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>  
 		</form>
@@ -229,61 +231,84 @@ span.oldsup input[type=checkbox] {
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dijit.form.Textarea");
 	dojo.ready(function(){
-		getSupplierInfo(1);
+		new dijit.form.FilteringSelect({
+			autoComplete: false,
+			queryExpr: "*${0}*",                     
+			id: "student_id",
+			name: "student_id",   
+			required:true,        
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+			onChange: function(){
+					getStudentProductPaymentDetail();
+			}
+		}, "student_id");
+		
+		 var branch_id = dijit.byId('branch_id');
+		 	branch_id.on('change', function(evt) {
+				getallstudentname();
+		 		getStudentProductPaymentDetail();
+		    });
+		    
+		 	getallstudentname();
+	 		getStudentProductPaymentDetail();
 	});
-	var keyindex=1;
-	var url_getSupplier = '<?php echo $this->url(array('module'=>'stock','controller'=>'purchasepayment','action'=>'getallpuchasebysupplieredit')); ?>';
-	function getSupplierInfo(type=""){
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id==""){
-			alert("<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>");
+
+	var oldBranch = '<?php echo $this->row['branch_id'];?>';
+	function getallstudentname(){//
+		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+		branch_id = dijit.byId("branch_id").attr("value");
+		if(branch_id==''){
 			dijit.byId("branch_id").focus();
 			return false;
 		}
-		supplier_id = dijit.byId('supplier_id').get('value');
-		if(supplier_id==""){
-			alert("<?php echo $tr->translate('PLEASE_SELECT_SUPPLIER');?>");
-			dijit.byId("supplier_id").focus();
-			return false;
-		}
 		
-		var start_date = dijit.byId('start_date').get('value');
-		if(start_date==""){
+		dojo.xhrPost({
+			url:url_data,
+			content:{
+				'student_name':1,
+				'branch_id':branch_id,
+			},
+			handleAs:"json",
+			load: function(data) {
+				student_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('student_id').set('store',student_store);  
+			    if(oldBranch == branch_id){
+			    	dijit.byId('student_id').set('value','<?php echo $this->row['student_id'];?>');  
+			    }
+			},
+			error: function(err) {
+			}
+		});
+	}
+	var keyindex=1;
+	var url_getSupplier = '<?php echo $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'getallpaydetailbystudentedit')); ?>';
+	function getStudentProductPaymentDetail(){
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id==""){
+			dijit.byId("branch_id").focus();
 			return false;
 		}
-		var end_date = dijit.byId('end_date').get('value');
-		if(end_date==""){
+		student_id = dijit.byId('student_id').get('value');
+		if(student_id==""){
+			dijit.byId("student_id").focus();
 			return false;
 		}
 		invoicesearch = dijit.byId('bypuchase_no').get('value');
-		var day = start_date.getDate();
-		if(day <= 9) {day = "0" +day;}
-		var m = start_date.getMonth()+1;
-		if(m <= 9) {m = "0" +m;}
-		var year = start_date.getFullYear();
-		start_date = year+"-"+m+"-"+day;
-
-		var day = end_date.getDate();
-		if(day <= 9) {day = "0" +day;}
-		var m = end_date.getMonth()+1;
-		if(m <= 9) {m = "0" +m;}
-		var year = end_date.getFullYear();
-		end_date = year+"-"+m+"-"+day;
-
-		payment_id = $('#id').val();
+		cutstockid = $('#id').val();
 		loadingBlock();
 		dojo.xhrPost({
 			url: url_getSupplier,
 			content:{
-				'payment_id':payment_id,'branch_id':branch_id,'supplier_id':supplier_id,'keyindex':keyindex,'start_date':start_date,'end_date':end_date,'bypuchase_no':invoicesearch,
+				'cutstockid':cutstockid,'branch_id':branch_id,'student_id':student_id,'keyindex':keyindex,'bypuchase_no':invoicesearch,
 	 			},
 			handleAs:"json",
 			load: function(data) {
 				keyindex=data.keyindex;
-				if(type==1){
+
 					$("#identity").val(data.identitycheck);
-				}
 				$("#old_identity").val(data.identity);
 				dojo.html.set(dojo.byId("table_row"),data.stringrow , {
 				     parseContent: true,
@@ -293,7 +318,6 @@ span.oldsup input[type=checkbox] {
 				HideloadingBlock();
 			},
 			error: function(err) {
-				alert(err);
 				HideloadingBlock();
 			}
 		});
@@ -331,9 +355,8 @@ span.oldsup input[type=checkbox] {
 					$('#check_all').attr('checked', true); // checks it
 				}
 			if($('#mfdid_'+index).is(":checked")){
-				
 			}else{
-				dijit.byId('payment_amount'+index).set('value',0);
+				dijit.byId('qty_receive'+index).set('value',0);
 				calculateAmountCheckByKeyup();
 				ResetPayment();
 			}
@@ -341,14 +364,13 @@ span.oldsup input[type=checkbox] {
 		calculateAmountCheck();
 		calBalance();
 	}
-
 	function ResetPayment(){
 		var old_identity = $("#old_identity").val();
 		var rowIDArray = old_identity.split(',');
 		for(var n = 0; n < rowIDArray.length; n++) {
-			dijit.byId('payment_amount'+rowIDArray[n]).set('value',0);
-			amountrow = parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
-			discount = parseFloat(dijit.byId('discount'+rowIDArray[n]).get('value'));
+			dijit.byId('qty_receive'+rowIDArray[n]).set('value',0);
+			amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
+			discount = 0;
 			amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
 			amountrowafterdis = amountrow - amountrowdis; //amount after discount
 			amountrow = parseFloat(dijit.byId('remain'+rowIDArray[n]).set('value',amountrowafterdis.toFixed(2)));
@@ -362,10 +384,9 @@ span.oldsup input[type=checkbox] {
 		}
 		var rowIDArray = rowId.split(',');
 		for(var n = 0; n < rowIDArray.length; n++) {
-			//balance+= parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
 			if($('#mfdid_'+rowIDArray[n]).is(":checked")){
-				amountrow = parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
-				discount = parseFloat(dijit.byId('discount'+rowIDArray[n]).get('value'));
+				amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
+				discount = 0;
 				amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
 		
 				amountrowafterdis = amountrow - amountrowdis; //amount after discount
@@ -404,8 +425,8 @@ span.oldsup input[type=checkbox] {
 			var paid=0;
 			for(var n = 0; n < rowIDArray.length; n++) {
 				
-				amountrow = parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
-				discount = parseFloat(dijit.byId('discount'+rowIDArray[n]).get('value'));
+				amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
+				discount =0;
 				amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
 
 				amountrowafterdis = amountrow - amountrowdis; //amount after discount
@@ -414,14 +435,14 @@ span.oldsup input[type=checkbox] {
 				totaldis+=  totaldis+parseFloat(amountrowdis);
 				if(amount_paid>=0){
 					payment+= amountrowafterdis;
-					dijit.byId('payment_amount'+rowIDArray[n]).set('value',amountrowafterdis.toFixed(2));
+					dijit.byId('qty_receive'+rowIDArray[n]).set('value',amountrowafterdis.toFixed(2));
 					dijit.byId('remain'+rowIDArray[n]).set('value',0);
 					
 					due+= 0;
 				}else{
 					remain = Math.abs(amount_paid);
-					paid = parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value')) - parseFloat(remain);
-					dijit.byId('payment_amount'+rowIDArray[n]).set('value',paid.toFixed(2));
+					paid = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value')) - parseFloat(remain);
+					dijit.byId('qty_receive'+rowIDArray[n]).set('value',paid.toFixed(2));
 					dijit.byId('remain'+rowIDArray[n]).set('value',remain.toFixed(2));
 					payment+= paid;
 					due+= remain;
@@ -447,41 +468,30 @@ span.oldsup input[type=checkbox] {
 		var rowIDArray = rowId.split(',');
 		var amountrowdis = 0;
 		for(var n = 0; n < rowIDArray.length; n++) {
-			//credit+= parseFloat(dijit.byId('credit'+rowIDArray[n]).get('value'));
-			payment+= parseFloat(dijit.byId('payment_amount'+rowIDArray[n]).get('value'));
+			payment+= parseFloat(dijit.byId('qty_receive'+rowIDArray[n]).get('value'));
 			due+= parseFloat(dijit.byId('remain'+rowIDArray[n]).get('value'));
 
-			amountrow = parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
-			discount = parseFloat(dijit.byId('discount'+rowIDArray[n]).get('value'));
+			amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
+			discount = 0;
 			amountrowafterdis = ((amountrow*parseFloat(discount))/100).toFixed(2);
 			totaldis= totaldis+parseFloat(amountrowafterdis);
 		}
 		dijit.byId('total_discount').attr('value',totaldis);
 		dijit.byId('total_paid').attr('value',payment.toFixed(2));
-		//dijit.byId('total_credit').attr('value',credit.toFixed(2));
 		dijit.byId('total_due').attr('value',due.toFixed(2));
 	}
 	function calculateamount(index){
-		var due = dijit.byId('due_val'+index).get('value');
-		var discount = dijit.byId('discount'+index).get('value');
-		//var credit = dijit.byId('credit'+index).get('value');
-		var payment = dijit.byId('payment_amount'+index).get('value');
+		var due = dijit.byId('qty_balance'+index).get('value');
+		var discount = 0;
+		var payment = dijit.byId('qty_receive'+index).get('value');
 		var paid =0;
 		var subtotal=0;
-		if(discount>100){ //check discount
-			discount=100;
-			dijit.byId('discount'+index).set('value',100);
-		}else if(discount<0 || isNaN(discount) ){
-			discount=0;
-			dijit.byId('discount'+index).set('value',0);
-		}
-		//paid = parseFloat(payment)+ parseFloat(credit);
+		
 		paid = parseFloat(payment);
 		subtotal= parseFloat(due) - ((parseFloat(due)*parseFloat(discount))/100).toFixed(2);
-		dijit.byId('discount_amount'+index).set('value',((parseFloat(due)*parseFloat(discount))/100).toFixed(2));
+		//dijit.byId('discount_amount'+index).set('value',((parseFloat(due)*parseFloat(discount))/100).toFixed(2));
 		if(paid > subtotal){
-			dijit.byId('payment_amount'+index).set('value',subtotal.toFixed(2));
-			//dijit.byId('credit'+index).set('value',0);
+			dijit.byId('qty_receive'+index).set('value',subtotal.toFixed(2));
 			dijit.byId('remain'+index).set('value',0);
 		}else{
 			dijit.byId('remain'+index).set('value',(subtotal-paid).toFixed(2));
@@ -494,7 +504,6 @@ span.oldsup input[type=checkbox] {
 		if(rowId==""){
 			return false;
 		}
-		//var credit=0;
 		var payment=0;
 		var amount = 0;
 		var due = 0;
@@ -503,20 +512,17 @@ span.oldsup input[type=checkbox] {
 		var amountrow = 0;
 		var rowIDArray = rowId.split(',');
 			for(var n = 0; n < rowIDArray.length; n++) {
-				//credit+= parseFloat(dijit.byId('credit'+rowIDArray[n]).get('value'));
-				payment+= parseFloat(dijit.byId('payment_amount'+rowIDArray[n]).get('value'));
+				payment+= parseFloat(dijit.byId('qty_receive'+rowIDArray[n]).get('value'));
 				due+= parseFloat(dijit.byId('remain'+rowIDArray[n]).get('value'));
 		
-				amountrow = parseFloat(dijit.byId('due_val'+rowIDArray[n]).get('value'));
-				discount = parseFloat(dijit.byId('discount'+rowIDArray[n]).get('value'));
+				amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
+				discount = 0;
 				amountrowafterdis = ((amountrow*parseFloat(discount))/100).toFixed(2);
 				totaldis= totaldis+parseFloat(amountrowafterdis);
 			}
-//		amount = (parseFloat(credit)+parseFloat(payment)).toFixed(2);
 		amount = parseFloat(payment).toFixed(2);
 		dijit.byId('total_discount').attr('value',totaldis.toFixed(2));
 		dijit.byId('total_paid').attr('value',payment.toFixed(2));
-		//dijit.byId('total_credit').attr('value',credit.toFixed(2));
 		dijit.byId('total_due').attr('value',due.toFixed(2));
 		dijit.byId('amount').attr('value',parseFloat(amount).toFixed(2));
 	}

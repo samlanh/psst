@@ -212,6 +212,7 @@ dojo.ready(function(){
 url_getgrade = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getgrade'));?>';
 function getAllGradeBySchoolOption(){
 	dojo.query("#table_row").append("");
+	$("#identity").val("");
 	dijit.byId('grade').reset();
 	school_option = dijit.byId('school_option').get('value');
 	if(school_option=='' || school_option==-1){

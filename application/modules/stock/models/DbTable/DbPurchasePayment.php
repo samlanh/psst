@@ -235,7 +235,7 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
 	    					<label id="origtotallabel'.$no.'">'.number_format($rowpaymentdetail['amount_due'],2).'</label>
 	    				</td>
 	    				<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 100px; ">&nbsp;
-		    				<label id="duelabel'.$no.'">'.number_format($rowpaymentdetail['amount_due_after'],2).'</label>
+		    				<label id="duelabel'.$no.'">'.number_format($duevalu,2).'</label>
 		    				<input type="hidden" dojoType="dijit.form.TextBox" name="due_val'.$no.'" id="due_val'.$no.'" value="'.$duevalu.'" >
 	    				</td>
 	    				<td>
@@ -494,48 +494,52 @@ class Stock_Model_DbTable_DbPurchasePayment extends Zend_Db_Table_Abstract
     	}
     }
     function voidPaymentReceipt($id,$branch_id){
-    	$_arr=array(
-    			'status'	      => 0,
-    			'user_id'  =>$this->getUserId(),
-    			'modify_date'	  => date("Y-m-d H:i:s"),
-    	);
-    	$this->_name ='rms_purchase_payment';
-    	$where = ' id = '.$id;
-    	$this->update($_arr, $where);
-    	$payment_id = $id;
-    	
-    	$row = $this->getPurchasePaymentDetail($payment_id);
-    	if (!empty($row)) foreach ($row as $pay_detail){
-    		$rowpaymentdetail = $this->getPaymentReceiptDetailByPaymentIdAndPurchaseId($payment_id, $pay_detail['purchase_id']);
-    		 
-    		if (!empty($rowpaymentdetail)){
-    			$purchase = $this->getPruchaseById($pay_detail['purchase_id'],$branch_id);
-    				
-    			$duevalu=$rowpaymentdetail['payment_amount'];
-    			$paymenttailbysale = $this->getSumPaymentReceiptDetailByPurchaseId($pay_detail['purchase_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
-    			$dueafters = $purchase['amount_due_after']+$duevalu;
-    			//     				echo $dueafters;exit();
-    			if (!empty($paymenttailbysale['tolalpayamount'])){
-    				$duevalu = ($rowpaymentdetail['amount_due']-$paymenttailbysale['tolalpayamount']);
-    				$dueafters =$duevalu;
-    			}
-    	
-    			if ($dueafters>0){
-    				$is_payments=0;
-    			}else{
-    				$is_payments=1;
-    			}
-    	
-    			// update Purchase Balance
-    			$array=array(
-    					'is_paid'=>$is_payments,
-    					'amount_due_after'=>$dueafters,
-    					'purchase_id'=>$pay_detail['purchase_id'],
-    					'branch_id'=>$branch_id,
-    			);
-    			$this->updatePurchase($array);
-    	
-    		}
+    	try{
+	    	$_arr=array(
+	    			'status'	      => 0,
+	    			'user_id'  =>$this->getUserId(),
+	    			'modify_date'	  => date("Y-m-d H:i:s"),
+	    	);
+	    	$this->_name ='rms_purchase_payment';
+	    	$where = ' id = '.$id;
+	    	$this->update($_arr, $where);
+	    	$payment_id = $id;
+	    	
+	    	$row = $this->getPurchasePaymentDetail($payment_id);
+	    	if (!empty($row)) foreach ($row as $pay_detail){
+	    		$rowpaymentdetail = $this->getPaymentReceiptDetailByPaymentIdAndPurchaseId($payment_id, $pay_detail['purchase_id']);
+	    		 
+	    		if (!empty($rowpaymentdetail)){
+	    			$purchase = $this->getPruchaseById($pay_detail['purchase_id'],$branch_id);
+	    				
+	    			$duevalu=$rowpaymentdetail['payment_amount'];
+	    			$paymenttailbysale = $this->getSumPaymentReceiptDetailByPurchaseId($pay_detail['purchase_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
+	    			$dueafters = $purchase['amount_due_after']+$duevalu;
+	    			//     				echo $dueafters;exit();
+	    			if (!empty($paymenttailbysale['tolalpayamount'])){
+	    				$duevalu = ($rowpaymentdetail['amount_due']-$paymenttailbysale['tolalpayamount']);
+	    				$dueafters =$duevalu;
+	    			}
+	    	
+	    			if ($dueafters>0){
+	    				$is_payments=0;
+	    			}else{
+	    				$is_payments=1;
+	    			}
+	    	
+	    			// update Purchase Balance
+	    			$array=array(
+	    					'is_paid'=>$is_payments,
+	    					'amount_due_after'=>$dueafters,
+	    					'purchase_id'=>$pay_detail['purchase_id'],
+	    					'branch_id'=>$branch_id,
+	    			);
+	    			$this->updatePurchase($array);
+	    	
+	    		}
+	    	}
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
     

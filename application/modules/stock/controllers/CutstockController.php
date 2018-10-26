@@ -24,7 +24,7 @@ class Stock_CutstockController extends Zend_Controller_Action {
     					        'student_id'=>'',
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
-    							'status_search'=>1,
+    							'status_search'=>'',
     					);
     		}
 			$db =  new Stock_Model_DbTable_DbCutStock();
@@ -73,12 +73,79 @@ class Stock_CutstockController extends Zend_Controller_Action {
 		$this->view->frm_payment = $frm;
 		
 	}
+	public function editAction(){
+		$id = $this->getRequest()->getParam("id");
+		$db = new Stock_Model_DbTable_DbCutStock();
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			try{
+				$row = $db->updateCutStock($_data);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS",self::REDIRECT_URL."/index");
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("EDIT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				echo $e->getMessage();
+			}
+		}
+	
+		$row = $db->getCutStockBYId($id);
+		$this->view->row = $row;
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD",self::REDIRECT_URL."/index");
+			exit();
+		}
+		$frm = new Stock_Form_FrmCutStock();
+		$frm->FrmAddCutStock($row);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_payment = $frm;
+	
+	}
+	
+	function voidAction(){
+		$db = new Stock_Model_DbTable_DbCutStock();
+		$id=$this->getRequest()->getParam('id');
+		if (!empty($id)){
+			try{
+				$row = $db->getCutStockBYId($id);
+				if (empty($row)){
+					Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL."/index");
+					exit();
+				}else if ($row['is_closed']==1){
+					Application_Form_FrmMessage::Sucessfull("This Payment already closing",self::REDIRECT_URL."/index");
+					exit();
+				}else if ($row['status']==0){
+					Application_Form_FrmMessage::Sucessfull("This Record already void",self::REDIRECT_URL."/index");
+					exit();
+				}
+				$db->voidCutStock($id,$row['branch_id']);
+				Application_Form_FrmMessage::Sucessfull("Void Successfully",self::REDIRECT_URL."/index");
+			}catch (Exception $e){
+				Application_Form_FrmMessage::message("Void Payment Faile");
+				echo $e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}else{
+			Application_Form_FrmMessage::message("No Payment Receipt to void! please check again.");
+			$this->_redirect("/sale/paymentreceipt");
+	
+		}
+			
+	}
 	
 	function getallpaydetailbystudentAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db_com = new Stock_Model_DbTable_DbCutStock();
 			$id = $db_com->getStudentProductPaymentDetail($data);
+			print_r(Zend_Json::encode($id));
+			exit();
+		}
+	}
+	function getallpaydetailbystudenteditAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db_com = new Stock_Model_DbTable_DbCutStock();
+			$id = $db_com->getStudentProductPaymentDetailEdit($data);
 			print_r(Zend_Json::encode($id));
 			exit();
 		}

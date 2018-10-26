@@ -112,7 +112,7 @@ table .set-style td, table .set-style th {
 		                 <div class="clearfix"></div>
 	             	</div>
 	             	<div class="form-group ">
-	             		<table  border="1px" style="border-collapse: collapse; border:1px solid #ccc;">
+	             		<table  border="1px" style="border-collapse: collapse; border:1px solid #ccc; width: 100%;">
 							<thead>
 								<tr id="head-title" class="head-td" align="center" style="text-align: center;"></tr>
 							</thead>
@@ -237,7 +237,7 @@ function ResetRecordRecord() {
 	}
 }
 var template = '';
-var grade = '<?php echo $this->all_grade; ?>';
+var gradeoption = '<?php echo $this->all_grade; ?>';
 var payment_term = '<?php echo count($this->payment_term);?>';
 
 var col = 0;
@@ -330,6 +330,7 @@ url_getgrade = '<?php echo $this->url(array('module'=>'accounting','controller'=
 var oldSchoolOption = '<?php echo $this->rs['school_option'];?>';
 function getAllGradeBySchoolOption(){
 	dojo.query("#table_row").append("");
+	$("#identity").val("");
 	dijit.byId('grade').reset();
 	school_option = dijit.byId('school_option').get('value');
 	if(school_option=='' || school_option==-1){
@@ -377,7 +378,7 @@ function initailize(){
 	}
 		template+='<td width="47px"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="50px" align="center">'+no+'</td>';
-		template+='<td width="20%" ><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+grade+'</select></td>';			
+		template+='<td width="20%" ><select dojoType="dijit.form.FilteringSelect" class="fullside" id="class_'+col+'" name="class_'+col+'">'+gradeoption+'</select></td>';			
 		column = 0;
 		for(j=0;j<payment_term;j++){ column++;
 			template+='<td width="11%" ><input type="text" id="fee'+col+'_'+column+'"  required="true" class="fullside" name="fee'+col+'_'+column+'" dojoType="dijit.form.NumberTextBox"  /></td>';

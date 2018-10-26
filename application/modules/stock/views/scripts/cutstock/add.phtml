@@ -57,7 +57,13 @@ tr.head-td th {
 					return false;
 				}
 				if($('#identity').val()==""){
-					alert("<?php echo $tr->translate('PLEASE_CHECK_PURCHASE_PAYMENT');?>");
+					alert("<?php echo $tr->translate('PLEASE_CHECK_PRODUCT_TO_RETURN');?>");
+					return false;
+				}
+				total_paid = dijit.byId('total_paid').get('value');
+				if(total_paid==""){
+					alert("<?php echo $tr->translate('PLEASE_ENTER_QTY_TO_RETURN');?>");
+					dijit.byId("amount").focus();
 					return false;
 				}
                 loadingBlock();

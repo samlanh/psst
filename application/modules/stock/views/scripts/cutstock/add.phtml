@@ -331,11 +331,13 @@ function confirmBeforePrint(){
 			i++;
 	      	temp+='<tr class="hearder_table" style=" font-size:12px;">';
 		 	temp+='<td style="border:1px solid #000;">'+i+'</td>';
-		  	temp+='<td style="border:1px solid #000;>'+dojo.byId("invoicelabel"+rowIDArray[n]).attr('displayedValue')+'</td>';
-		  	temp+='<td style="border:1px solid #000;>'+dijit.byId("qty_balance"+rowIDArray[n]).attr('displayedValue')+'</td>';
-		  	temp+='<td style="border:1px solid #000;>'+dijit.byId("qty_receive"+rowIDArray[n]).attr('displayedValue')+'</td>';
-		  	temp+='<td style="border:1px solid #000;>'+dijit.byId("qty_receive"+rowIDArray[n]).attr('displayedValue')+'</td>';
-		  	temp+='<td style="border:1px solid #000;>'+dijit.byId("remide_date"+rowIDArray[n]).attr('displayedValue')+'</td>';
+		 	lable_item= $('#invoicelabel'+rowIDArray[n]);
+		 	var text = lable_item.text();
+		  	temp+='<td style="border:1px solid #000;">Uniform Set 000007</td>';
+		  	temp+='<td style="border:1px solid #000;"></td>';
+		  	temp+='<td style="border:1px solid #000;"></td>';
+		  	temp+='<td style="border:1px solid #000;"></td>';
+		  	temp+='<td style="border:1px solid #000;"></td>';
 			temp+='</tr>';
 		}
 		temp+='</table>';

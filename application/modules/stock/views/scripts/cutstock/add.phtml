@@ -2,14 +2,12 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_CUTSTOCK')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	
 	$frm = $this->frm_payment;
 ?>	
  <style>
-	select{ width:100%;}
-	fieldset{  background:none;}
-	.red{ color: red; padding-left:5px;}
-	
+select{ width:100%;}
+fieldset{  background:none;}
+.red{ color: red; padding-left:5px;}
 span.oldsup {
     font-style: normal;
     padding-left: 10px;
@@ -35,7 +33,7 @@ tr.head-td th {
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-cubes " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_CUTSTOCK');?></h4>
+		    		<h4 class="m-b-0"><i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_CUTSTOCK');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -75,7 +73,7 @@ tr.head-td th {
 	          <div class="card-box">
 	          		 <div class="col-md-12 col-sm-12 col-xs-12">
 	          		 	<div class="form-group" style="background: #d8e0e2;padding: 5px 15px;margin: 0;border: solid 1px #697996;border-radius: 2px;margin-top: 10px;">
-			                 <div class="col-md-6 col-sm-6 col-xs-12">
+			                   <div class="col-md-6 col-sm-6 col-xs-12">
 								<div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> 
 				                   </label>
@@ -113,7 +111,6 @@ tr.head-td th {
 				                   		<?php echo $frm->getElement("serailno");?>
 				                   </div>
 				                </div>
-				               
 				                <div class="form-group">
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RECEIVED_DATE");?> 
 				                   </label>
@@ -136,44 +133,40 @@ tr.head-td th {
 				                   </div>
 				                </div>
 				            </div>
-			           <div class="form-group">      
-			                 <label style=" margin: 0; line-height: 30px; " class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("FILTER_BY_PURCHASE_NO");?> </label>
-			                 <div class="col-md-7 col-sm-7 col-xs-12">
-			                		<?php echo $frm->getElement("bypuchase_no");?>
-			                </div>
-			                <div class="col-md-3 col-sm-3 col-xs-12">
-	                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('SEARCH');?>" dojoType="dijit.form.Button" onclick="getStudentProductPaymentDetail();"/>
-	                   		</div>
-			                <div class="clearfix"></div>
-			                <div class="clearfix">
-			               		 <input type="checkbox" class="checkbox"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style="display: inline-block;height: initial;"  />&nbsp;
-								<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span>
-							</div>
-		             	</div>
-		             	<div class="form-group">
-		          			<table  style="margin: 0 auto; width: 100%; border-collapse: collapse; border: 1px #ccc solid;">
-								<thead>
-									<tr id="head-title" class="head-td" align="right">
-										<th>&nbsp;</th>
-										<th><?php echo $tr->translate("NUM");?></th>
-										<th style=" min-width: 105px;"><?php echo $tr->translate("DATE");?></th>
-										<th ><?php echo $tr->translate("RECEIPT_NO");?></th>
-										<th ><?php echo $tr->translate("ORIG");?></th>
-										<th ><?php echo $tr->translate("DUE");?></th>
-										<th ><?php echo $tr->translate("RECEIVE_QTY");?></th>
-										<th ><?php echo $tr->translate("REMAIN");?></th>
-										<th ><?php echo $tr->translate("REMIDE_DATE");?></th>
-									</tr>
-								</thead>
-								<tbody id="table_row">
-								<tbody>
-							</table>
-							<input type="hidden" id="identity" name="identity" />
-							<input type="hidden" name="old_identity" id="old_identity"  value="" >
-						<!-- 
-						<input type="button" label="<?php //echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" id="btn_add_row"
-									 		iconClass="dijitIconEditProperty" onclick="addRow();" />
-						 -->
+				           <div class="form-group">      
+				                 <label style=" margin: 0; line-height: 30px; " class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("FILTER_BY_PURCHASE_NO");?> </label>
+				                 <div class="col-md-7 col-sm-7 col-xs-12">
+				                		<?php echo $frm->getElement("bypuchase_no");?>
+				                </div>
+				                <div class="col-md-3 col-sm-3 col-xs-12">
+		                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('SEARCH');?>" dojoType="dijit.form.Button" onclick="getStudentProductPaymentDetail();"/>
+		                   		</div>
+				                <div class="clearfix"></div>
+				                <div class="clearfix">
+				               		 <input type="checkbox" class="checkbox"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style="display: inline-block;height: initial;"  />&nbsp;
+									<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span>
+								</div>
+			             	</div>
+			             	<div class="form-group">
+			          			<table  style="margin: 0 auto; width: 100%; border-collapse: collapse; border: 1px #ccc solid;">
+									<thead>
+										<tr id="head-title" class="head-td" align="right">
+											<th>&nbsp;</th>
+											<th><?php echo $tr->translate("NUM");?></th>
+											<th style=" min-width: 105px;"><?php echo $tr->translate("DATE");?></th>
+											<th><?php echo $tr->translate("RECEIPT_NO");?></th>
+											<th><?php echo $tr->translate("ORIG");?></th>
+											<th><?php echo $tr->translate("DUE");?></th>
+											<th><?php echo $tr->translate("RECEIVE_QTY");?></th>
+											<th><?php echo $tr->translate("REMAIN");?></th>
+											<th><?php echo $tr->translate("REMIDE_DATE");?></th>
+										</tr>
+									</thead>
+									<tbody id="table_row">
+									<tbody>
+								</table>
+								<input type="hidden" id="identity" name="identity" />
+								<input type="hidden" name="old_identity" id="old_identity"  value="" >
 						 </div>
 	          		</div>
 	          </div>
@@ -219,14 +212,61 @@ tr.head-td th {
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 					<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
-					 iconClass="dijitEditorIcon dijitEditorIconSave" />
-					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-							 iconClass="dijitEditorIcon dijitEditorIconSave" />
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					<input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconSave" />
+					<input type="button" id="popup" value="popup" label="<?php echo $tr->translate('popup');?>" onclick="confirmBeforePrint();" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconTask" />
                	</div>
              </div>  
 		</form>
     </div>
- </div>
+</div>
+<div class="dijitHidden" style="padding: 0px; margin: 0px;">
+	<div id="alertBeforePrint" data-dojo-type="dijit.Dialog" style="width:27cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>'"  >
+		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
+			<tr>
+				<td colspan="4"><label id="lbl_header"></label></td>
+			</tr>
+			<tr>
+				<td colspan="4" align="center">
+					<strong style="font-family:'Khmer OS Muol';">បង្កាន់ទទួលទំនិញ</strong>
+				</td>
+			</tr>
+			<tr>
+				<td>Student's ID</td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Student's Name</td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Ref Receipt No.</td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td  colspan="4">
+					<div id="t_amountmoneytype"></div>
+				</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="4">
+					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+						type="button" onclick="hideDialog1();">No</button>
+					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+						type="button" onclick="printSave('','',1)"><?php echo $tr->translate("Yes");?></button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
@@ -245,14 +285,64 @@ tr.head-td th {
 			}
 		}, "student_id");
 		
-		 var branch_id = dijit.byId('branch_id');
-		 	branch_id.on('change', function(evt) {
-				getallstudentname();
-		 		getStudentProductPaymentDetail();
-		    });
-	});
-	
-	function getallstudentname(){//
+		var branch_id = dijit.byId('branch_id');
+	 	branch_id.on('change', function(evt) {
+	 		getbranchinfo();
+			getallstudentname();
+	 		getStudentProductPaymentDetail();
+	    });
+		    
+});	
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+function getbranchinfo(){
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id != ""){
+			dojo.xhrPost({
+				url:url_getbranch,
+				content:{
+					'branch_id':branch_id,
+					},
+				handleAs:"json",
+				load: function(data){
+					dojo.byId('lbl_header').innerHTML=data;
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});	
+		} 
+	}
+function confirmBeforePrint(){
+	template="";
+	temp='';
+    temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
+		  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
+			  temp+='<td style="border:1px solid #000;">No</td>';
+			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
+			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
+			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty Received</strong></td>';
+			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty Balance</strong></td>';
+			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Remain Date</strong></td>';
+		  temp+='</tr>';
+		  var rowId = $('#identity').val();
+			var rowIDArray = rowId.split(',');
+			i=0;
+			for(var n = 0; n < rowIDArray.length; n++) {
+			i++;
+	      	temp+='<tr class="hearder_table" style=" font-size:12px;">';
+		 	temp+='<td style="border:1px solid #000;">'+i+'</td>';
+		  	temp+='<td style="border:1px solid #000;>'+dojo.byId("invoicelabel"+rowIDArray[n]).attr('displayedValue')+'</td>';
+		  	temp+='<td style="border:1px solid #000;>'+dijit.byId("qty_balance"+rowIDArray[n]).attr('displayedValue')+'</td>';
+		  	temp+='<td style="border:1px solid #000;>'+dijit.byId("qty_receive"+rowIDArray[n]).attr('displayedValue')+'</td>';
+		  	temp+='<td style="border:1px solid #000;>'+dijit.byId("qty_receive"+rowIDArray[n]).attr('displayedValue')+'</td>';
+		  	temp+='<td style="border:1px solid #000;>'+dijit.byId("remide_date"+rowIDArray[n]).attr('displayedValue')+'</td>';
+			temp+='</tr>';
+		}
+		temp+='</table>';
+	dojo.byId('t_amountmoneytype').innerHTML = temp;
+	dijit.byId("alertBeforePrint").show();	
+}
+function getallstudentname(){//
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
 		branch_id = dijit.byId("branch_id").attr("value");
 		if(branch_id==''){
@@ -289,7 +379,6 @@ tr.head-td th {
 			return false;
 		}
 		invoicesearch = dijit.byId('bypuchase_no').get('value');
-		
 		loadingBlock();
 		dojo.xhrPost({
 			url: url_getSupplier,
@@ -312,7 +401,6 @@ tr.head-td th {
 			}
 		});
 	}
-	
 	function CheckAllTotal(index){
 		var total = 0;
 		var descriptionr="";
@@ -337,10 +425,8 @@ tr.head-td th {
 		     $(':checkbox:checked').each(function(i){
 		    	 identity[i] = $(this).val();
 		     });
-		    
 		     $("#identity").val(identity);
 		     var newIdentity = $("#identity").val();
-
 				if(old_identity == newIdentity ){
 					$('#check_all').attr('checked', true); // checks it
 				}
@@ -378,14 +464,11 @@ tr.head-td th {
 				amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
 				discount = 0;
 				amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
-		
 				amountrowafterdis = amountrow - amountrowdis; //amount after discount
-		
 				balance = balance + parseFloat(amountrowafterdis);
 			}
 		}
 		dijit.byId('balance').attr('value',balance.toFixed(2));
-
 	}
 	function checkAmout(){
 		amount_paid = parseFloat(dijit.byId('amount').get('value'));
@@ -414,14 +497,11 @@ tr.head-td th {
 		if(amount_paid>0){
 			var paid=0;
 			for(var n = 0; n < rowIDArray.length; n++) {
-				
 				amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
 				discount =0;
 				amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
-
 				amountrowafterdis = amountrow - amountrowdis; //amount after discount
 				amount_paid = amount_paid - parseFloat(amountrowafterdis);
-				
 				totaldis+=  totaldis+parseFloat(amountrowdis);
 				if(amount_paid>=0){
 					payment+= amountrowafterdis;
@@ -438,7 +518,6 @@ tr.head-td th {
 					due+= remain;
 					break;
 				}
-				
 			}
 		}
 		calculateLastTotal();
@@ -476,10 +555,8 @@ tr.head-td th {
 		var payment = dijit.byId('qty_receive'+index).get('value');
 		var paid =0;
 		var subtotal=0;
-		
 		paid = parseFloat(payment);
 		subtotal= parseFloat(due) - ((parseFloat(due)*parseFloat(discount))/100).toFixed(2);
-		//dijit.byId('discount_amount'+index).set('value',((parseFloat(due)*parseFloat(discount))/100).toFixed(2));
 		if(paid > subtotal){
 			dijit.byId('qty_receive'+index).set('value',subtotal.toFixed(2));
 			dijit.byId('remain'+index).set('value',0);
@@ -517,5 +594,3 @@ tr.head-td th {
 		dijit.byId('amount').attr('value',parseFloat(amount).toFixed(2));
 	}
 </script>
-
-

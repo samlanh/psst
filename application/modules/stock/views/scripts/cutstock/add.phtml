@@ -223,7 +223,7 @@ tr.head-td th {
     </div>
 </div>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div id="alertBeforePrint" data-dojo-type="dijit.Dialog" style="width:27cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>'"  >
+	<div id="alertBeforePrint" data-dojo-type="dijit.Dialog" style="width:27cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>' "  id="terms">
 		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
 			<tr>
 				<td colspan="4"><label id="lbl_header"></label></td>
@@ -235,7 +235,6 @@ tr.head-td th {
 			</tr>
 			<tr>
 				<td>Student's ID</td>
-				<td> : &nbsp;&nbsp;<label id="lb_stu_id" class="one bold"></label></td>
 			</tr>
 			<tr>
 				<td>Student's Name</td>
@@ -259,7 +258,7 @@ tr.head-td th {
 					<div style="margin-top:40px;font-size:10px;"></div>
 					<?php echo $tr->translate("INFORS_TO");?>
 				</td>
-				<td  style="padding-left: 15%;">
+				<td  style="padding-left: 20%;">
 					<div style="margin-top:40px;font-size:10px;"></div>
 					<?php echo $tr->translate("INFORS_RECEIVE");?>
 				</td>
@@ -269,7 +268,7 @@ tr.head-td th {
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 						type="button" onclick="hideDialog1();">No</button>
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-						type="button" onclick="printSave('','',1)"><?php echo $tr->translate("Print");?></button>
+						type="button" onclick="printSubmit();"><?php echo $tr->translate("Print");?></button>
 				</td>
 			</tr>
 		</table>
@@ -409,6 +408,17 @@ function getallstudentname(){//
 				HideloadingBlock();
 			}
 		});
+	}
+	function hideDialog1(){
+		dijit.byId('terms').hide();
+	}
+
+	function printSubmit(){
+		window.frames["print_frame"].document.body.innerHTML = dojo.byId('alertBeforePrint').innerHTML;
+	    window.frames["print_frame"].window.focus();
+	    window.frames["print_frame"].window.print();
+		loading();
+	    dijit.byId('frm_add_tran').submit();
 	}
 	function CheckAllTotal(index){
 		var total = 0;

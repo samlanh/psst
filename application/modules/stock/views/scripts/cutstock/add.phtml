@@ -235,9 +235,7 @@ tr.head-td th {
 			</tr>
 			<tr>
 				<td>Student's ID</td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td> : &nbsp;&nbsp;<label id="lb_stu_id" class="one bold"></label></td>
 			</tr>
 			<tr>
 				<td>Student's Name</td>
@@ -257,11 +255,21 @@ tr.head-td th {
 				</td>
 			</tr>
 			<tr>
+				<td style="padding-left: 15%;">
+					<div style="margin-top:40px;font-size:10px;"></div>
+					<?php echo $tr->translate("INFORS_TO");?>
+				</td>
+				<td  style="padding-left: 15%;">
+					<div style="margin-top:40px;font-size:10px;"></div>
+					<?php echo $tr->translate("INFORS_RECEIVE");?>
+				</td>
+			</tr>
+			<tr>
 				<td align="center" colspan="4">
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
 						type="button" onclick="hideDialog1();">No</button>
 					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-						type="button" onclick="printSave('','',1)"><?php echo $tr->translate("Yes");?></button>
+						type="button" onclick="printSave('','',1)"><?php echo $tr->translate("Print");?></button>
 				</td>
 			</tr>
 		</table>
@@ -351,7 +359,6 @@ function getallstudentname(){//
 			dijit.byId("branch_id").focus();
 			return false;
 		}
-		
 		dojo.xhrPost({
 			url:url_data,
 			content:{

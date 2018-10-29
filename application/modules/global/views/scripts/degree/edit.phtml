@@ -205,7 +205,7 @@ function addRow() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+');calculateTotalAverage();" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="popupsubject('+col+');" >'+subject+'</select></td>';
+		template+='<td><select style="width:100%;" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="popupsubject('+col+');" >'+subject+'</select></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" onkeyup="calculateTotalAverage();" value="0" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="0" type="text"></td>';
 		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';

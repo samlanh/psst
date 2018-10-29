@@ -31,6 +31,8 @@
 						return false;
 					}
 					loadingBlock();
+					dijit.byId("save_close").attr("disabled",true);
+               		dijit.byId("save_new").attr("disabled",true);
 					return true;
 				}else {
 					return false;

@@ -6,13 +6,13 @@
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.CheckBox");
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox");
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.parser");
 </script>
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
@@ -85,14 +85,6 @@ dojo.require("dijit.form.CheckBox");
 		                	<input name="pass_average" id="pass_average" dojoType="dijit.form.TextBox"  class="fullside" />
 		                </div>
 		             </div>
-		             <!-- 
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php //echo $frm_degree->getElement("type");?>
-		                </div>
-		             </div>
-		              -->
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("School Option");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -208,7 +200,7 @@ var no = 0;
 var title = 0;
 tmp = '';
 temp='';
-function addRow() {
+function addRow(){
 	col++;no++;
 	template='';
 	if(title!=1){
@@ -234,7 +226,6 @@ function addRow() {
 	tmp='<tr id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
-
 	if($("#identity").val()!="") {
 		var identity = $("#identity").val();
 		$("#identity").val(identity+','+col);
@@ -243,6 +234,7 @@ function addRow() {
 	     parseContent: true,
 	});
 }
+
 function getValue(){
 	var par='';
 	if(dojo.byId('is_parent').checked){

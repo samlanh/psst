@@ -44,8 +44,8 @@ $frm = $this->frm_credit;
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" >
-				    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
-				    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+				    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $row){?>
+				    			<option value="<?php echo $row['id']?>"><?php echo $row['name'];?></option>
 				    			<?php }?>
 				    		</select>
 	                   </div>

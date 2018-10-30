@@ -531,10 +531,8 @@ function alerterror(index){
 	}
 }
 
-
 function printSave(new_receipt){		
 	if(dijit.byId('office_receipt').validate()) {
-
 		stu_type = dijit.byId('stu_type').get('value');
     	stu_test = dijit.byId('stu_test').get('value');
 		if(stu_type==1){
@@ -544,13 +542,11 @@ function printSave(new_receipt){
          		return false;
     		}
 		}
-
 		if(new_receipt==''){
 			getReceiptNo(1);
 		}else{
 			receipt = new_receipt;
 		}
-		
 		//receipt='';
 		//receipt=dijit.byId("receipt_no").get("value");
 		//degree = dijit.byId('degree').get('value');

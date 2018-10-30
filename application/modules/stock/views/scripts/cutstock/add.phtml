@@ -39,7 +39,7 @@ tr.head-td th {
     			</div>
     		</div>
     	</div>
-    	<form id='suspend_service' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+    	<form id=office_receipt action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
  				branch_id = dijit.byId('branch_id').get('value');
@@ -215,7 +215,7 @@ tr.head-td th {
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 					<input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
-					<input type="button" id="popup" value="popup" label="<?php echo $tr->translate('popup');?>" onclick="confirmBeforePrint();" dojoType="dijit.form.Button" 
+					<input type="button" id="popup" value="popup" label="<?php echo $tr->translate('popup');?>" onclick="printSave();" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconTask" />
                	</div>
              </div>  
@@ -223,30 +223,46 @@ tr.head-td th {
     </div>
 </div>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div id="alertBeforePrint" data-dojo-type="dijit.Dialog" style="width:27cm;height: 15cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>' "  id="terms">
+	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>'"  >
+	<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
 		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
 			<tr>
 				<td colspan="4"><label id="lbl_header"></label></td>
 			</tr>
-			<tr>
-				<td colspan="4" align="center">
-					<strong style="font-family:'Khmer OS Muol';">បង្កាន់ទទួលទំនិញ</strong>
+			<tr height="40px;">
+				<td colspan="10"  style="" align="center" valign="top">
+					<table width="100%" style="font-size: 10px;margin-top: -15px;" >
+						<tr>
+							<td width="30%">
+							</td>
+							<td align="center" width="40%" style="font-size: 16px;font-weight: bold;line-height: 20px;">
+								<div style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;">បង្កាន់ទទួលទំនិញ</div>
+								OFFICIAL RECEIPT
+							</td>
+							<td width="30%" valign="center" align="center">
+								<span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_branch" class=" one bold"></label></span>
+							</td>
+						</tr>
+					</table>
 				</td>
 			</tr>
 			<tr>
 				<td>Student's ID</td>
+				<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
+				<td><?php echo $tr->translate("RECEIVED_DATE");?>:</td>
+				<td> : &nbsp;&nbsp;<label id="lb_date" class="one bold"></label> </td>
 			</tr>
 			<tr>
 				<td>Student's Name</td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
+				<td><?php echo $tr->translate("DEPOSIT");?></td>
+				<td> : &nbsp;&nbsp;<label id="lb_amount" class="one bold"></label> </td>
 			</tr>
 			<tr>
 				<td>Ref Receipt No.</td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td colspan="1"> : &nbsp;&nbsp;<label id="lb_receipt_no" class="one bold"></label> </td>
+				<td><?php echo $tr->translate("REMAINING");?></td>
+				<td> : &nbsp;&nbsp;<label id="lb_due" class="one bold"></label> </td>
 			</tr>
 			<tr>
 				<td  colspan="4">
@@ -254,31 +270,43 @@ tr.head-td th {
 				</td>
 			</tr>
 			<tr>
-				<td style="padding-left: 15%;">
-					<div style="margin-top:40px;font-size:10px;"></div>
+				<td style="padding-left: 10%;">
+					<div style="margin-top:10px;font-size:10px;"></div>
 					<?php echo $tr->translate("INFORS_TO");?>
 				</td>
-				<td  style="padding-left: 20%;">
-					<div style="margin-top:40px;font-size:10px;"></div>
+				<td  style="padding-left: 32%;">
+					<div style="margin-top:10px;font-size:10px;"></div>
 					<?php echo $tr->translate("INFORS_RECEIVE");?>
 				</td>
-			</tr>
-			<tr>
-				<td align="center" colspan="4">
-					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-						type="button" onclick="hideDialog1();">No</button>
-					<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-						type="button" onclick="printSubmit();"><?php echo $tr->translate("Print");?></button>
+				<td  style="padding-left: 15%;">
+					<td align="center">
+					<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 30%;"> 
+						<?php 
+						   $session_user=new Zend_Session_Namespace('authstu');
+						   $last_name=$session_user->last_name;
+						   $username = $session_user->first_name;
+						   echo "".$last_name." ".$username;
+						?>
+						<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+					</div>
+				</td>
 				</td>
 			</tr>
 		</table>
 	</div>
+	<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+			type="button" onclick="hideDialog();">Cancel</button>
+			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+				type="button" onclick="printSubmit();"><?php echo $tr->translate("Print");?></button>
+</div>
 </div>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dijit.form.Textarea");
 	dojo.ready(function(){
+		//getReceiptNo('');
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
 			queryExpr: "*${0}*",                     
@@ -319,7 +347,18 @@ function getbranchinfo(){
 			});	
 		} 
 	}
-function confirmBeforePrint(){
+function printSave(new_receipt){
+	if(dijit.byId('office_receipt').validate()) {
+
+		today = dijit.byId("date_payment").get("value");
+		var dd = today.getDate();
+		var mon = today.toDateString().substr(4,3); //January is 0!
+		var yyyy = today.getFullYear();
+		dojo.byId("lb_receipt_no").innerHTML = dijit.byId("serailno").get('value');
+		dojo.byId("lb_name").innerHTML =  dijit.byId("student_id").attr('displayedValue');
+		dojo.byId("lb_date").innerHTML = dijit.byId("date_payment").attr('displayedValue');
+		dojo.byId("lb_amount").innerHTML = dijit.byId("amount").attr('displayedValue');
+		dojo.byId("lb_due").innerHTML = dijit.byId("total_due").attr('displayedValue');
 	template="";
 	temp='';
     temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
@@ -349,7 +388,8 @@ function confirmBeforePrint(){
 		}
 		temp+='</table>';
 	dojo.byId('t_amountmoneytype').innerHTML = temp;
-	dijit.byId("alertBeforePrint").show();	
+	dijit.byId("terms").show();	
+	}
 }
 function getallstudentname(){//
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
@@ -409,16 +449,19 @@ function getallstudentname(){//
 			}
 		});
 	}
-	function hideDialog1(){
+	function hideDialog(){
 		dijit.byId('terms').hide();
 	}
 
+	 
+
 	function printSubmit(){
-		window.frames["print_frame"].document.body.innerHTML = dojo.byId('alertBeforePrint').innerHTML;
+		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
 		loading();
-	    dijit.byId('frm_add_tran').submit();
+		hideDialog();
+	    dijit.byId('office_receipt').submit();
 	}
 	function CheckAllTotal(index){
 		var total = 0;

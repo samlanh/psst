@@ -86,6 +86,7 @@ tr.head-td th {
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<input id="student_id" />
+				                   		<input type="hidden" name="student_name" id="student_name"  value="<?php echo $this->exchange_rate;?>" class="form-control" />
 				                   </div>
 				                </div>
 				                <div class="form-group">
@@ -248,7 +249,7 @@ tr.head-td th {
 			</tr>
 			<tr>
 				<td>Student's ID</td>
-				<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
+				<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> 
 				<td><?php echo $tr->translate("RECEIVED_DATE");?>:</td>
 				<td> : &nbsp;&nbsp;<label id="lb_date" class="one bold"></label> </td>
 			</tr>
@@ -279,7 +280,7 @@ tr.head-td th {
 					<?php echo $tr->translate("INFORS_RECEIVE");?>
 				</td>
 				<td  style="padding-left: 15%;">
-					<td align="center">
+				<td align="center">
 					<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 30%;"> 
 						<?php 
 						   $session_user=new Zend_Session_Namespace('authstu');
@@ -306,7 +307,6 @@ tr.head-td th {
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dijit.form.Textarea");
 	dojo.ready(function(){
-		//getReceiptNo('');
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
 			queryExpr: "*${0}*",                     
@@ -348,8 +348,7 @@ function getbranchinfo(){
 		} 
 	}
 function printSave(new_receipt){
-	if(dijit.byId('office_receipt').validate()) {
-
+	if(dijit.byId('office_receipt').validate()){
 		today = dijit.byId("date_payment").get("value");
 		var dd = today.getDate();
 		var mon = today.toDateString().substr(4,3); //January is 0!

@@ -663,28 +663,28 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 				GROUP BY sd.student_id ";
 	   	return $this->getAdapter()->fetchRow($sql);
    }
-   public function getSubjectScoreGroup($group_id){
-   	$db = $this->getAdapter();
-   	$sql = "SELECT
-			 	s.`id`,
-			 	sd.`group_id`,
-			 	sd.`student_id`,
-			 	sj.`subject_titlekh`,
-			 	sj.`subject_titleen`,
-			 	sj.shortcut,
-			 	sd.`score`,
-			 	sd.`subject_id`
-			FROM `rms_score` AS s, 
-			    `rms_score_detail` AS sd,
-			    `rms_subject` AS sj
-		   WHERE 
-		   		s.`id`=sd.`score_id` 
-		 		AND sj.`id`=sd.`subject_id` 
-		 		AND sd.`is_parent`=1
-		 		AND sd.`group_id`=$group_id 
-		   GROUP BY 
-		   		sd.`subject_id`	";
-   	return $db->fetchAll($sql);
+   public function getSubjectScoreGroup($group_id,$teacher_id=null,$exam_type=1){
+   	$db = new Foundation_Model_DbTable_DbScore();
+//    	$sql = "SELECT
+// 			 	s.`id`,
+// 			 	sd.`group_id`,
+// 			 	sd.`student_id`,
+// 			 	sj.`subject_titlekh`,
+// 			 	sj.`subject_titleen`,
+// 			 	sj.shortcut,
+// 			 	sd.`score`,
+// 			 	sd.`subject_id`
+// 			FROM `rms_score` AS s, 
+// 			    `rms_score_detail` AS sd,
+// 			    `rms_subject` AS sj
+// 		   WHERE 
+// 		   		s.`id`=sd.`score_id` 
+// 		 		AND sj.`id`=sd.`subject_id` 
+// 		 		AND sd.`is_parent`=1
+// 		 		AND sd.`group_id`=$group_id 
+// 		   GROUP BY 
+// 		   		sd.`subject_id`	";
+   	return $db->getSubjectByGroup($group_id,$teacher_id=null,$exam_type=1);
    }
    
    public function getScoreBySubject($score_id,$student_id,$subject_id){

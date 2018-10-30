@@ -27,7 +27,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'title_score'=>$_data['title'],
 					'group_id'=>$_data['group'],
-					//'reportdate'=>$_data['reportdate'],
+					'max_score'=>$_data['max_score'],
 			        'exam_type'=>$_data['exam_type'],
 					'date_input'=>date("Y-m-d"),
 					'note'=>$_data['note'],
@@ -39,83 +39,84 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			);
 			$id=$this->insert($_arr);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
-			$dbpush->getTokenUser($_data['group'],null, 4);
+// 			$dbpush->getTokenUser($_data['group'],null, 4);
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				$k=0;
+				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
 				if(!empty($ids))foreach ($ids as $i){
 					$k=$k+1;
 						//$dbpush->pushSendNotification($_data['stu_id_'.$k], 4);//notification for score result 
-						foreach ($this->getSubjectByGroup($_data['group']) as $index => $rs_parent){
-							$parent_id = $rs_parent["subject_id"];
-							$getChildren= $this->getChildSubject($parent_id);
-								if(!empty($getChildren)){
-									$no = $index + 1;
+						foreach ($rssubject as $index => $rs_parent){
+// 							$parent_id = $rs_parent["subject_id"];
+// 								$getChildren= $this->getChildSubject($parent_id);
+// 								if(!empty($getChildren)){
+// 									$no = $index + 1;
 
-									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
-									$sub_name = $_data['stu_id_'.$k].$sub_name;
-									$subject_id = $rs_parent['subject_id'];
+// 									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
+// 									$sub_name = $_data['stu_id_'.$k].$sub_name;
+// 									$subject_id = $rs_parent['subject_id'];
 									
-// 									if(!$_data["$sub_name".$i]==''){
-									$arr=array(
-											'score_id'=>$id,
-											'group_id'=>$_data['group'],
-											'student_id'=>$_data['stu_id_'.$k],
-											'subject_id'=> $subject_id,
-											'score'=> $_data["$sub_name".$no],
-											'status'=>1,
-											'user_id'=>$this->getUserId(),
-											'is_parent'=> $rs_parent["is_parent"]
-									);
-									$this->_name='rms_score_detail';
-									$this->insert($arr);
-// 									}
-									foreach ($this->getChildSubject($parent_id) as $key2 => $rs_sub){  
-										$no2= $key2+1;/////////if parent have subjects
-										$subject_id = $rs_sub["id"];
-										$sub_name = str_replace(' ','',$rs_sub["subject_titleen"]);
-										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
+// // 									if(!$_data["$sub_name".$i]==''){
+// 									$arr=array(
+// 											'score_id'=>$id,
+// 											'group_id'=>$_data['group'],
+// 											'student_id'=>$_data['stu_id_'.$k],
+// 											'subject_id'=> $subject_id,
+// 											'score'=> $_data["$sub_name".$no],
+// 											'status'=>1,
+// 											'user_id'=>$this->getUserId(),
+// 											'is_parent'=> $rs_parent["is_parent"]
+// 									);
+// 									$this->_name='rms_score_detail';
+// 									$this->insert($arr);
+// // 									}
+// 									foreach ($this->getChildSubject($parent_id) as $key2 => $rs_sub){  
+// 										$no2= $key2+1;/////////if parent have subjects
+// 										$subject_id = $rs_sub["id"];
+// 										$sub_name = str_replace(' ','',$rs_sub["subject_titleen"]);
+// 										$sub_name = "child".$_data['stu_id_'.$k].$sub_name;
 										
-										$arr=array(
-												'score_id'=>$id,
-												'group_id'=>$_data['group'],
-												'student_id'=>$_data['stu_id_'.$k],
-												'subject_id'=> $subject_id,
-												'score'=> $_data["$sub_name".$no2],
-												'status'=>1,
-												'user_id'=>$this->getUserId(),
-												'is_parent'=> $rs_sub["is_parent"]
-										);
-										$this->_name='rms_score_detail';
-										$this->insert($arr);
+// 										$arr=array(
+// 												'score_id'=>$id,
+// 												'group_id'=>$_data['group'],
+// 												'student_id'=>$_data['stu_id_'.$k],
+// 												'subject_id'=> $subject_id,
+// 												'score'=> $_data["$sub_name".$no2],
+// 												'status'=>1,
+// 												'user_id'=>$this->getUserId(),
+// 												'is_parent'=> $rs_sub["is_parent"]
+// 										);
+// 										$this->_name='rms_score_detail';
+// 										$this->insert($arr);
 									    
-									}
-								}else{/////////if parent have not subjects
-									$no3 = $index+1;
-									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
-									$sub_name = $_data['stu_id_'.$k].$sub_name;
+// 									}
+// 								}else{/////////if parent have not subjects
+// 									$no3 = $index+1;
+// 									$sub_name = str_replace(' ','',$rs_parent["subject_titleen"]);
+// 									$sub_name = $_data['stu_id_'.$k].$sub_name;
 									$subject_id = $rs_parent['subject_id'];
 									
 									$arr=array(
 											'score_id'=>$id,
 											'group_id'=>$_data['group'],
-											'student_id'=>$_data['stu_id_'.$k],
+											'student_id'=>$_data['student_id'.$k],
 											'subject_id'=> $subject_id,
-											'score'=> $_data["$sub_name".$no3],
+											'score'=> $_data["score_".$k."_".$index],
 											'status'=>1,
 											'user_id'=>$this->getUserId(),
 											'is_parent'=> $rs_parent["is_parent"]
 									);
 									$this->_name='rms_score_detail';
 									$this->insert($arr);
-								   
-								}
+// 								}
 						}
 				}
 			}
 		  $db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }
    public function updateStudentScore($_data){
@@ -227,6 +228,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		  $db->commit();
 		}catch (Exception $e){
 			$db->rollBack();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }
 	function getStudyYears(){
@@ -247,17 +249,17 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$sql="SELECT s.id,s.title_score,
 			(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
 			s.for_semester,
-			(SELECT month_kh FROM `rms_month` WHERE id=s.for_month) as for_month,
+			(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
 			
 			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
-			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_id,
+			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
 			(SELECT rms_items.`title` FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
 			(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			
-			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session`) AS session_id,
+			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			s.status
-			FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1";
+			FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id AND s.status=1 ";
 		//before add more =>AND g.degree IN(1,2) 
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
@@ -380,8 +382,10 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
 			(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
 			(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
+			(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
 			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen
-			 FROM rms_group_subject_detail AS gsjd WHERE gsjd.group_id = ".$group_id;
+			 FROM rms_group_subject_detail AS gsjd 
+				WHERE gsjd.group_id = ".$group_id;
 		if($teacher_id!=null){
 			$sql.=" AND teacher = ".$teacher_id;
 		}

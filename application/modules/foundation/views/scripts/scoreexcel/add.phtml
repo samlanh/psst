@@ -295,17 +295,13 @@ function filterStudent(){
 	grade = dijit.byId('grade').get('value');
 	session = dijit.byId('session').get('value');
 	group = dijit.byId('group').get('value');
-	if(year==''){
-		//return false;
+	if(year==''){		
 	}
 	if(grade==''){
-		//return false;
 	}
 	if(session==''){
-		//return false;
 	}
 	if(group==''){
-		//return false;
 	}
 	dojo.xhrPost({
 	    url: url_getStudent,

@@ -75,7 +75,7 @@ dojo.ready(function(){
 							$old_groupid=0; $i=0; $count_fail=0; $count=0;
 							 if (!empty($this->studentgroup)) foreach($this->studentgroup as $key=> $rs){ 
 								if ($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
-								$subj = $db->getSubjectScoreGroup($rs['group_id']);
+								$subj = $db->getSubjectScoreGroup($rs['group_id'],null,$rs['exam_type']);
 							?>
 							<?php if ($old_groupid!=$rs['group_id']){ $count = count($subj); ?>
 								<?php if ($key>0){ 
@@ -113,7 +113,7 @@ dojo.ready(function(){
 								<td><?php echo $tr->translate("STUDENT_NAME");?></td>
 								<td><?php echo $tr->translate("SEX");?></td>
 								<?php  if (!empty($subj)) foreach ($subj as $subject){?>
-								<td><?php echo $subject['subject_titlekh'];?></td>
+								<td class="rotate"><?php echo $subject['subject_titlekh'];?></td>
 								<?php }?>
 								<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<td><?php echo $tr->translate("AVERAGE");?></td>

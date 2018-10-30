@@ -183,8 +183,13 @@
 	    	</div>
 	    	<div class="card-box">
                	<div class="col-sm-12">
-               		<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;     white-space: nowrap;">
+               		<table  border="1" style="border-collapse: collapse; border:1px solid #ccc;     white-space: nowrap;">
+						<thead>
 						<tr id="head-title" class="head-td" align="right"></tr>
+						</thead>
+						<tbody id="table_row">
+						
+						</tbody>
 					</table>
     			</div>
     			<div class="clearfix"></div>
@@ -363,7 +368,7 @@ dojo.ready(function(){
 	dijit.byId('room').attr('value','<?php echo $this->rs['room_id'];?>');
 	dijit.byId('grade').attr('value','<?php echo $this->rs['grade'];?>');
 	getallGrade();
-	Initailize();
+	//Initailize();
 	getValue();
 
 	 var branch_id = dijit.byId('branch_id');
@@ -482,6 +487,7 @@ function setEndDate(){
 }
 
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+var oldDegree = '<?php echo $this->rs['degree'];?>';
 function getallGrade(){
 	dept_id = dijit.byId('degree').get('value');
 		dojo.xhrPost({
@@ -493,7 +499,11 @@ function getallGrade(){
 			load: function(data) {
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);   
-			    dijit.byId('grade').attr('value',<?php echo $this->rs['grade'];?>);   
+			    
+			    if(oldDegree==dept_id){
+			    	dijit.byId('grade').attr('value',<?php echo $this->rs['grade'];?>);   
+				    Initailize();
+				 }
 			},
 			error: function(err) {
 				alert(err);
@@ -549,6 +559,8 @@ var title = 0;
 tmp = '';
 temp='';
 function Initailize() {
+	$("#identity").val("");
+	$("#table_row").html("");
 	<?php if(!empty($this->row)){ 
 		foreach ($this->row as $rows){?>
 	
@@ -649,6 +661,10 @@ function hideDialog(){
 var url_dept_subject = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getsubjectbydegree')); ?>';
 function getSubjectByDegree(){
 	dept_id = dijit.byId('degree').get('value');
+	if(oldDegree==dept_id){
+		//Initailize();
+		return false;
+	}
 		dojo.xhrPost({
 			url:url_dept_subject,
 			content:{

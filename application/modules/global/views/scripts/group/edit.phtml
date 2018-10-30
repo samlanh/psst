@@ -193,8 +193,13 @@
 	    	</div>
 	    	<div class="card-box">
                	<div class="col-sm-12">
-               		<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;     white-space: nowrap;">
-						<tr id="head-title" class="head-td" align="right"></tr>
+               		<table  border="1" style="border-collapse: collapse; border:1px solid #ccc;     white-space: nowrap;">
+						<thead>
+							<tr id="head-title" class="head-td" align="right"></tr>
+						</thead>
+						<tbody id="table_row">
+						
+						</tbody>
 					</table>
     			</div>
     			<div class="clearfix"></div>
@@ -425,7 +430,7 @@ dojo.ready(function(){
 	dijit.byId('grade').attr('value','<?php echo $this->rs['grade'];?>');
 	//dijit.byId('academic_year').attr('value','<?php //echo $this->rs['academic_year'];?>');
 	getallGrade();
-	Initailize();
+	//Initailize();
 
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
@@ -597,6 +602,7 @@ function setEndDate(){
 }
 
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-grade')); ?>';
+var oldDegree = '<?php echo $this->rs['degree'];?>';
 function getallGrade(){
 	dept_id = dijit.byId('degree').get('value');
 	if(dept_id=='' || dept_id==null || dept_id==-1){
@@ -611,7 +617,10 @@ function getallGrade(){
 				dijit.byId('grade').attr('value','');
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);   
+			    if(oldDegree==dept_id){
 			    dijit.byId('grade').attr('value',<?php echo $this->rs['grade'];?>);   
+			    Initailize();
+			    }
 			},
 			error: function(err) {
 				alert(err);
@@ -627,6 +636,8 @@ var title = 0;
 tmp = '';
 temp='';
 function Initailize() {
+	$("#identity").val("");
+	$("#table_row").html("");
 	<?php if(!empty($this->row)){ 
 		foreach ($this->row as $rows){?>
 	col++;no++;
@@ -724,6 +735,10 @@ function hideDialog(){
 var url_dept_subject = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getsubjectbydegree')); ?>';
 function getSubjectByDegree(){
 	dept_id = dijit.byId('degree').get('value');
+	if(oldDegree==dept_id){
+		//Initailize();
+		return false;
+	}
 		dojo.xhrPost({
 			url:url_dept_subject,
 			content:{
@@ -756,10 +771,10 @@ function getSubjectByDegree(){
 						}
 							template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 							template+='<td width="4%" align="center">'+no+'</td>';
-							template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+							template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject+'</select></td>';
 							template+='<td width="50px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
 							template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
-							template+='<td width="35%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
+							template+='<td width="35%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';		
 							template+='<td width="24%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 							template+=teacher_option;  
 							template+='</select></td>';
@@ -775,8 +790,8 @@ function getSubjectByDegree(){
 						dojo.html.set(dojo.byId("row"+col),template , {
 							 parseContent: true,
 						});
-						dijit.byId('group_subject_study_'+col).attr('value',data[i].subject_id);
-						dijit.byId('group_note_'+col).attr('value',data[i].note);
+						dijit.byId('subject_study_'+col).attr('value',data[i].subject_id);
+						dijit.byId('note_'+col).attr('value',data[i].note);
 					}
 			    }
 			},

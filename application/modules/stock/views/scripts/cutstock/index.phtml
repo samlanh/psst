@@ -5,6 +5,7 @@
 	echo $this->headTitle($tr->translate('CUTSTOCK'));
 	$frm = $this->frm_payment;
 	$urlVoid = $this->baseUrl()."/stock/cutstock/void/id/";
+	$urlreceipt = $this->baseUrl()."/stock/cutstock/receipt/id/";
 ?>
 <meta charset="utf-8">
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -110,6 +111,8 @@
 				var m = "clicked: " + key;
 				if(key=="void"){
 					url='<?php echo $urlVoid;?>';
+				}else if(key=="receipt"){
+					url='<?php echo $urlreceipt;?>';
 				}
 				
 				gotoAction();
@@ -117,6 +120,7 @@
 			},
 			items: {
 				"void": {name: "<?php echo $tr->translate("VOID");?>", icon: "edit", accesskey: "e"},
+				"receipt": {name: "<?php echo $tr->translate("បង្កាន់ទទួលទំនិញ");?>", icon: "fa-print"},
 			}
 		});
 	});

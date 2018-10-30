@@ -150,5 +150,29 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	function receiptAction(){
+		$db = new Stock_Model_DbTable_DbCutStock();
+		$id=$this->getRequest()->getParam('id');
+		if (!empty($id)){
+			try{
+				$row = $db->getCutStockBYId($id);
+				if (empty($row)){
+					Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL."/index");
+					exit();
+				}
+				$this->view->row = $row;
+				$this->view->rowdetail = $db->getCutStockDetailBYId($id);
+			}catch (Exception $e){
+				Application_Form_FrmMessage::message("err");
+				echo $e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}else{
+			Application_Form_FrmMessage::message("No Payment Receipt ! please check again.");
+			$this->_redirect("/stock/cutstock");
+	
+		}
+			
+	}
 	
 }

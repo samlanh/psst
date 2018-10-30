@@ -242,13 +242,21 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     }
     function getCutStockBYId($id){
     	$db = $this->getAdapter();
-    	$sql="SELECT pp.* FROM rms_cutstock AS pp WHERE pp.id = $id ";
+    	$sql="SELECT pp.*,
+(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_khname,
+(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_enname,
+(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS last_name,
+(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_code
+    	FROM rms_cutstock AS pp WHERE pp.id = $id ";
     	$sql.=" LIMIT 1";
     	return $db->fetchRow($sql);
     }
     function getCutStockDetailBYId($cutstockid){
     	$db=$this->getAdapter();
-    	$sql="SELECT ct.* FROM `rms_cutstock_detail` AS ct
+    	$sql="SELECT ct.*,
+(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = ct.product_id LIMIT 1) AS items_name,
+(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE sp.id = (SELECT spd.payment_id FROM `rms_student_paymentdetail` AS spd WHERE spd.id = ct.student_paymentdetail_id LIMIT 1) LIMIT 1) AS receipt_number
+    	 FROM `rms_cutstock_detail` AS ct
 				WHERE ct.cutstock_id=$cutstockid";
     	return $db->fetchAll($sql);
     }

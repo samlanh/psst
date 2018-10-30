@@ -60,6 +60,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'study_year' 	=>'',
 					'grade_all' 	=>'',
 					'session' 		=>'',
+					'group'			=>'',
 					'stu_type'=>'',
 					'start_date'	=> date('Y-m-d'),
 					'end_date'		=> date('Y-m-d'),
@@ -118,6 +119,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'grade_all' 	=>'',
 					'session' 		=>'',
 					'branch_id'=>0,
+					'group'			=>'',
 					'degree'=>0,
 					'study_type'=>'',
 					'start_date'	=> date('Y-m-d'),
@@ -524,6 +526,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}else{
 			$search=array(
 					'title' => '',
+					'branch_id' => '',
 					'study_year' => '',
 					'grade_bac' => '',
 					'session' => '',
@@ -547,6 +550,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		else{
 			$search=array(
 					'title' => '',
+					'branch_id' => '',
 					'study_year' => '',
 					'grade_bac' => '',
 					'session' => '',

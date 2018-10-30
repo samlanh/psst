@@ -75,6 +75,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['study_year'])){
     		$where.=' AND academic_year='.$search['study_year'];
     	}
+    	if(!empty($search['group'])){
+    		$where.=' AND group_id='.$search['group'];
+    	}
     	if(!empty($search['degree'])){
     		$where.=' AND degree='.$search['degree'];
     	}
@@ -90,6 +93,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['stu_type'])){
     		$where.=' AND is_stu_new = '.$search['stu_type'];
     	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
     }
 	public function getAllStudentGroupbyBranchAndSchoolOption($search){
@@ -134,6 +139,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['study_year'])){
     		$where.=' AND academic_year='.$search['study_year'];
     	}
+    	if(!empty($search['group'])){
+    		$where.=' AND group_id='.$search['group'];
+    	}
     	if(!empty($search['degree'])){
     		$where.=' AND degree='.$search['degree'];
     	}
@@ -149,6 +157,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['stu_type'])){
     		$where.=' AND is_stu_new = '.$search['stu_type'];
     	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getAmountStudent(){//count to dashboard
@@ -305,6 +315,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['study_year'])){
     		$where.=' AND academic_year='.$search['study_year'];
     	}
+    	if(!empty($search['group'])){
+    		$where.=' AND rms_student.group_id='.$search['group'];
+    	}
     	if(!empty($search['grade_all'])){
     		$where.=' AND grade='.$search['grade_all'];
     	}
@@ -326,6 +339,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     			$where.=' AND is_subspend!=0';
     		}
     	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
     }
     public function getAllStudentgep($search){
@@ -643,7 +658,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					`g`.`semester` AS `semester`,
 					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 					gsd.`stu_id`,
-					st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`sex`
+					st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`last_name`,st.`sex`
 				FROM 
 					`rms_group_detail_student` AS gsd,
 					`rms_group` AS g,
@@ -681,6 +696,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=" AND `g`.`session`=".$search['session'];
     	}
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission('`g`.`branch_id`');
     	
     	$order =" GROUP BY sta.group_id,gsd.stu_id 
     		ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC,st.stu_khname ASC ";

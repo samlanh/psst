@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Group Change Group'); 
+	$this->headTitle($tr->translate('STUDNET_TRANDSFORMATION')); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$ac = null;
@@ -15,24 +15,47 @@
 	$frm =  $this->form_search;
 ?>	
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+		<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDNET_TRANDSFORMATION');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
 		<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rptgroupstudentchangegroup')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table width="80%">
-		       <tr>
-		           <td><?php echo $frm->getElement("title");?></td>
-		           <td> <?php echo $frm->getElement("study_year");?></td>
-		           <td> <?php echo $frm->getElement("grade_bac");?></td>
-				   <td> <?php echo $frm->getElement("session");?></td>
-				   <td>
-				   		<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="change_type" name="change_type" type="text">
+			<div class="form-group">
+            	<div class="col-md-2 col-sm-2 col-xs-12">
+            		<?php echo $frm->getElement("title");?>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                	<?php echo $frm->getElement("branch_id");?>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                	<?php //echo $frm->getElement("study_year");?>
+		           		<input id="study_year" />
+                </div>
+               <!-- 
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                	<?php //echo $frm->getElement("grade_bac");?>
+                </div>
+                -->
+            	<div class="col-md-2 col-sm-2 col-xs-12">
+            		<?php echo $frm->getElement("session");?>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                	<select  class="fullside" dojoType="dijit.form.FilteringSelect"  class="fullside" id="change_type" name="change_type" type="text">
 							<option value=""><?php echo $tr->translate("SELECT_TYPE");?></option>
 							<?php if(!empty($this->change_type)){foreach ($this->change_type as $rs){?>
 								<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->search['change_type']){echo 'selected="selected"';}?>><?php echo $rs['name']?></option>
 							<?php }}?>
 						</select>
-				   </td>
-				   <td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		       </tr>
-			</table>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                </div>
+            </div>
 		</form>
 	<div id="divPrint">
 		<style> 
@@ -105,10 +128,12 @@
 							<td style="width: 30%;"><?php echo $stu['sex'];?></td>
 						</tr>
 					<?php }?>
+					<?php if(!empty($this->rs)){?>
 					<tr>
 						<td align="right" colspan="3" style="font-size: 12px;font-weight: bold;">Total Students &nbsp;</td>
 						<td align="center"><?php echo number_format($i,0);?></td>
 					</tr>
+					<?php }?>
 					</table>	
 				</td>
 			</tr>
@@ -130,3 +155,64 @@
 		</table>			
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.require("dijit.form.FilteringSelect"); 
+
+dojo.require("dojo.html");
+var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: academic_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                     
+		id: "study_year",
+		name: "study_year",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+		onChange: function() {  
+			academic_year = dijit.byId('study_year').get('value');
+		}
+	}, "study_year");
+	
+	 var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
+		 getAllAcademicByBranch();
+    });
+	 getAllAcademicByBranch();
+});
+url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+var oldBranch = "<?php echo $this->search['branch_id']?>";
+function getAllAcademicByBranch(){
+	dijit.byId('study_year').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('study_year').set('store',academic_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getacademic,
+		content:{
+			'branch_id':branch_id,'noaddnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			academic_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('study_year').set('store',academic_store);  
+		    if(oldBranch==branch_id){
+		    	dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  
+		    }
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+</script>

@@ -113,7 +113,9 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND st.branch_id='.$search['branch_id'];
+    	}
     	if(!empty($search['study_year'])){
     		$where.=' AND g.academic_year='.$search['study_year'];
     	}

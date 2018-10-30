@@ -68,7 +68,7 @@ img.view{height: 70px !important;}
 							  		<td align="center">&nbsp;<?php echo $row['due_amount']?>&nbsp;</td>
 							  		<td align="center">&nbsp;<?php echo $row['qty_receive']?>&nbsp;</td>
 							  		<td align="center"> &nbsp;<?php echo $row['remain']?>&nbsp;</td>
-							  		<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['remide_date']));?>&nbsp;</td>
+							  		<td align="center">&nbsp;<?php if (!empty($row['remain']) OR $row['remain']>0){ echo date("d/M/Y",strtotime($row['remide_date']));}else{ echo '-';}?>&nbsp;</td>
 							  	</tr>
 							  	<?php }?>
 							 </table>

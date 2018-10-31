@@ -296,7 +296,7 @@ tr.head-td th {
 			type="button" onclick="hideDialog();">Cancel</button>
 			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
 				type="button" onclick="printSubmit();"><?php echo $tr->translate("Print");?></button>
-</div>
+	</div>
 </div>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
@@ -489,7 +489,10 @@ function getallstudentname(){//
 		dojo.xhrPost({
 			url: url_getSupplier,
 			content:{
-				'branch_id':branch_id,'student_id':student_id,'keyindex':keyindex,'bypuchase_no':invoicesearch,
+				'branch_id':branch_id,
+				'student_id':student_id,
+				'keyindex':keyindex,
+				'bypuchase_no':invoicesearch,
 	 			},
 			handleAs:"json",
 			load: function(data) {
@@ -515,11 +518,10 @@ function getallstudentname(){//
 			}
 		});
 	}
+	
 	function hideDialog(){
 		dijit.byId('terms').hide();
 	}
-
-	 
 
 	function printSubmit(){
 		getReceiptNo();

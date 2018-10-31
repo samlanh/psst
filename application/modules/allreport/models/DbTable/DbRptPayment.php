@@ -218,9 +218,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	FROM `rms_specail_discount` AS d WHERE 1 ";
     	$orderby = " ORDER BY d.dis_type ASC, d.id DESC ";
     	$where = ' ';
-    	if(!empty($search['advance_search'])){
+    	if(!empty($search['title'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['advance_search']));
+    		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " d.request_name LIKE '%{$s_search}%'";
     		$s_where[] = " d.phone LIKE '%{$s_search}%'";
     		$s_where[] = " d.stu_name LIKE '%{$s_search}%'";

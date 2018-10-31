@@ -48,7 +48,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-					'advance_search' => "",
+					'title' => "",
     				'dis_type'=>"",
     				'status_type' => "",
 				);

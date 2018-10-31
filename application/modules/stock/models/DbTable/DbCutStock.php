@@ -31,7 +31,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$student_id = $data['student_id'];
     	$branch_id = $data['branch_id'];
     	
-    	$sql="SELECT 
+    	$sql=" SELECT 
 			spd.*,
 			sp.branch_id,
 			sp.receipt_number,

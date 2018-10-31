@@ -7,7 +7,7 @@ dojo.require("dijit.form.DateTextBox");
 img.view{height: 70px !important;}
 </style>
 <?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();?>
-<title><?php echo $tr->translate("RECEIPT");?></title>
+<title><?php echo $tr->translate("បង្កាន់ទទួលទំនិញ");?></title>
  <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div id="divPrint" style="width: 100%;">
 			<style>
@@ -49,6 +49,12 @@ img.view{height: 70px !important;}
 						<td></td>
 					</tr>
 					<tr>
+						<td>Received Date : <?php echo date("d/M/Y",strtotime($this->row['received_date']));?></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
 						<td  colspan="4">
 							<table border="1" align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; ">
 							  	<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">
@@ -71,31 +77,40 @@ img.view{height: 70px !important;}
 							  		<td align="center">&nbsp;<?php if (!empty($row['remain']) OR $row['remain']>0){ echo date("d/M/Y",strtotime($row['remide_date']));}else{ echo '-';}?>&nbsp;</td>
 							  	</tr>
 							  	<?php }?>
+							  	<tr class="rowlist">
+									<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Received :</td>
+									<td align="center">&nbsp;&nbsp;<?php echo $this->row['total_received'];?>&nbsp;</td>
+								</tr>
+								<tr class="rowlist">
+									<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Remain :</td>
+									<td align="center">&nbsp;&nbsp;<?php echo $this->row['total_qty_due'];?>&nbsp;</td>
+								</tr>
 							 </table>
 						</td>
 					</tr>
 					<tr>
-						<td style="padding-left: 15%;">
+						<td colspan="2" width="50%" align="center">
 							<div style="margin-top:40px;font-size:10px;"></div>
 							<?php echo $tr->translate("INFORS_TO");?>
 						</td>
-						<td  style="padding-left: 20%;">
+						<td colspan="2" width="50%" align="center">
 							<div style="margin-top:40px;font-size:10px;"></div>
 							<?php echo $tr->translate("INFORS_RECEIVE");?>
 						</td>
 					</tr>
 					<tr>
-						<td style="padding-left: 15%;">
+						<td colspan="2" width="50%" align="center">
 							<div style="margin-top:30px;font-size:10px;"></div>
+							
+							<?php echo $this->row['user_name'];?>
 						</td>
-						<td  style="padding-left: 20%;">
+						<td colspan="2" width="50%" align="center">
 							<div style="margin-top:30px;font-size:10px;"></div>
 							<?php echo $this->row['stu_enname']." ".$this->row['last_name'];?>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2" align="right">
-							<div style="padding-top:20px; font-size: 11px;font-weight: bold;font-family: arail">Date : <label id="lb_date" class=" one bold"><?php echo date("d/M/Y",strtotime($this->row['received_date']));;?></label></div>
+						<td colspan="4" align="right">
 							<div style="font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
 						</td>
 					</tr>

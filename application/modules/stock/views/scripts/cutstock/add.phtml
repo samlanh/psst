@@ -216,7 +216,7 @@ tr.head-td th {
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 					<input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
-					<input type="button" id="popup" value="popup" label="<?php echo $tr->translate('popup');?>" onclick="printSave();" dojoType="dijit.form.Button" 
+					<input type="button" id="popup" value="popup" label="<?php echo $tr->translate('SAVE_PRINT');?>" onclick="printSave();" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconTask" />
                	</div>
              </div>  
@@ -226,44 +226,46 @@ tr.head-td th {
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>'"  >
 	<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
-		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
+		<style>
+			.print tr td{
+					padding:0px 2px 0px 2px; 
+				}
+				tr.hearder_table td {
+				    padding: 5px;
+				}
+		</style>
+		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Times New Roman','Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
 			<tr>
 				<td colspan="4"><label id="lbl_header"></label></td>
 			</tr>
-			<tr height="40px;">
-				<td colspan="10"  style="" align="center" valign="top">
-					<table width="100%" style="font-size: 10px;margin-top: -15px;" >
-						<tr>
-							<td width="30%">
-							</td>
-							<td align="center" width="40%" style="font-size: 16px;font-weight: bold;line-height: 20px;">
-								<div style="font-family:Khmer OS Muol, Times New Roman;font-size: 16px;">បង្កាន់ទទួលទំនិញ</div>
-								OFFICIAL RECEIPT
-							</td>
-							<td width="30%" valign="center" align="center">
-								<span style="font-size: 14px;font-weight: bold;font-family: arail"><label id="lb_branch" class=" one bold"></label></span>
-							</td>
-						</tr>
-					</table>
+			<tr>
+				<td colspan="4" align="center">
+					<strong style="font-family:'Khmer OS Muol';">បង្កាន់ទទួលទំនិញ</strong>
 				</td>
 			</tr>
 			<tr>
-				<td>Student's ID</td>
-				<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> 
-				<td><?php echo $tr->translate("RECEIVED_DATE");?>:</td>
-				<td> : &nbsp;&nbsp;<label id="lb_date" class="one bold"></label> </td>
+				<td>Student's ID : &nbsp;&nbsp;<span id="lb_id"></span> </td>
+				<td></td>
+				<td></td>
+				<td></td>
 			</tr>
 			<tr>
-				<td>Student's Name</td>
-				<td colspan="1"> : &nbsp;&nbsp;<label id="lb_name" class="one bold"></label> </td>
-				<td><?php echo $tr->translate("DEPOSIT");?></td>
-				<td> : &nbsp;&nbsp;<label id="lb_amount" class="one bold"></label> </td>
+				<td>Student's Name : &nbsp;&nbsp;<span id="lb_name"></span></td>
+				<td></td>
+				<td></td>
+				<td></td>
 			</tr>
 			<tr>
-				<td>Ref Receipt No.</td>
-				<td colspan="1"> : &nbsp;&nbsp;<label id="lb_receipt_no" class="one bold"></label> </td>
-				<td><?php echo $tr->translate("REMAINING");?></td>
-				<td> : &nbsp;&nbsp;<label id="lb_due" class="one bold"></label> </td>
+				<td>Ref Receipt No. : &nbsp;&nbsp;<span style="color:red;" id="lb_receipt_no" class="one bold"></span></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Received Date : &nbsp;&nbsp;<span id="lb_date" class="one bold"></span></td>
+				<td></td>
+				<td></td>
+				<td></td>
 			</tr>
 			<tr>
 				<td  colspan="4">
@@ -271,26 +273,34 @@ tr.head-td th {
 				</td>
 			</tr>
 			<tr>
-				<td style="padding-left: 10%;">
-					<div style="margin-top:10px;font-size:10px;"></div>
+				<td colspan="2" width="50%" align="center">
+					<div style="margin-top:40px;font-size:10px;"></div>
 					<?php echo $tr->translate("INFORS_TO");?>
 				</td>
-				<td  style="padding-left: 32%;">
-					<div style="margin-top:10px;font-size:10px;"></div>
+				<td colspan="2" width="50%" align="center">
+					<div style="margin-top:40px;font-size:10px;"></div>
 					<?php echo $tr->translate("INFORS_RECEIVE");?>
 				</td>
-				<td  style="padding-left: 15%;">
-				<td align="center">
-					<div style="font-weight:bold;color:#000; font-size: 11px;font-family:'Khmer OS Battambang';margin-top: 30%;"> 
-						<?php 
+			</tr>
+			<tr>
+				<td colspan="2" width="50%" align="center">
+					<div style="margin-top:30px;font-size:10px;"></div>
+					<?php 
 						   $session_user=new Zend_Session_Namespace('authstu');
 						   $last_name=$session_user->last_name;
 						   $username = $session_user->first_name;
 						   echo "".$last_name." ".$username;
 						?>
-						<div style="margin-top:-2px;font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
-					</div>
 				</td>
+				<td colspan="2" width="50%" align="center">
+					<div style="margin-top:30px;font-size:10px;"></div>
+					<span id="studentpay"></span>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4" align="right">
+					<!-- <div style=" font-size: 11px;font-weight: bold;font-family: arail">Date : <label id="lb_date" class=" one bold"><?php //echo date("d/M/Y",strtotime($this->row['received_date']));;?></label></div> -->
+					<div style="padding-top:20px; font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
 				</td>
 			</tr>
 		</table>
@@ -340,6 +350,7 @@ function getbranchinfo(){
 				handleAs:"json",
 				load: function(data){
 					dojo.byId('lbl_header').innerHTML=data;
+					getReceiptNo();
 				},
 				error: function(err) {
 					alert(err);
@@ -347,48 +358,110 @@ function getbranchinfo(){
 			});	
 		} 
 	}
+var url_getreceipt_no = '<?php echo $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'getreceipt')); ?>';
+function getReceiptNo(){
+	var branch_id = dijit.byId('branch_id').get('value'); 
+	if(branch_id==""){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_getreceipt_no,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId('serailno').attr('value',data); 
+			dojo.byId("lb_receipt_no").innerHTML = data;
+		},
+		error: function(err) {
+		}
+	});
+}
 function printSave(new_receipt){
 	if(dijit.byId('office_receipt').validate()){
+		getReceiptNo();
 		today = dijit.byId("date_payment").get("value");
 		var dd = today.getDate();
 		var mon = today.toDateString().substr(4,3); //January is 0!
 		var yyyy = today.getFullYear();
-		dojo.byId("lb_receipt_no").innerHTML = dijit.byId("serailno").get('value');
-		dojo.byId("lb_name").innerHTML =  dijit.byId("student_id").attr('displayedValue');
+		//dojo.byId("lb_receipt_no").innerHTML = dijit.byId("serailno").get('value');
+		//dojo.byId("lb_name").innerHTML =  dijit.byId("student_id").attr('displayedValue');
 		dojo.byId("lb_date").innerHTML = dijit.byId("date_payment").attr('displayedValue');
-		dojo.byId("lb_amount").innerHTML = dijit.byId("amount").attr('displayedValue');
-		dojo.byId("lb_due").innerHTML = dijit.byId("total_due").attr('displayedValue');
+		//dojo.byId("lb_amount").innerHTML = dijit.byId("amount").attr('displayedValue');
+		//dojo.byId("lb_due").innerHTML = dijit.byId("total_due").attr('displayedValue');
 	template="";
 	temp='';
-    temp='<table class="collape tablesorter"  align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; " id="table">'
+    temp='<table border="1" align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; ">'
 		  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
-			  temp+='<td style="border:1px solid #000;">No</td>';
-			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Item Name</strong></td>';
-			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty</strong></td>';
-			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty Received</strong></td>';
-			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Qty Balance</strong></td>';
-			  temp+='<td style="border:1px solid #000;><strong style="color:#000;">Remain Date</strong></td>';
+			  temp+='<td >No</td>';
+			  temp+='<td >Receipt</td>';
+			  temp+='<td >Item Name</td>';
+			  temp+='<td >Qty</td>';
+			  temp+='<td >Qty Received</td>';
+			  temp+='<td >Qty Balance</td>';
+			  temp+='<td >Remain Date</td>';
 		  temp+='</tr>';
 		  var rowId = $('#identity').val();
 			var rowIDArray = rowId.split(',');
 			i=0;
 			for(var n = 0; n < rowIDArray.length; n++) {
-			i++;
-	      	temp+='<tr class="hearder_table" style=" font-size:12px;">';
-		 	temp+='<td style="border:1px solid #000;">'+i+'</td>';
-		 	lable_item= $('#invoicelabel'+rowIDArray[n]);
-		 	var text = lable_item.text();
-		  	temp+='<td style="border:1px solid #000;">Uniform Set 000007</td>';
-		  	temp+='<td style="border:1px solid #000;"></td>';
-		  	temp+='<td style="border:1px solid #000;"></td>';
-		  	temp+='<td style="border:1px solid #000;"></td>';
-		  	temp+='<td style="border:1px solid #000;"></td>';
+				i++;
+				remain = $('#remain'+rowIDArray[n]).val();
+				dateremide="-";
+				if(remain!=0){
+					var b = new Date(dijit.byId("remide_date"+rowIDArray[n]).get('value'));
+					  mm = b.getMonth()+1;
+					  var dd = b.getDate();
+					  if(dd<10){
+						dd = "0"+dd;
+					  }
+					  var mon = getMonthByNumber(mm);
+					  if(mm<10){
+						mm = "0"+mm;
+					  }
+					  var y = b.getFullYear();
+					  var dateremide = dd + '/' + mon + '/' + y ;
+				}
+		      	temp+='<tr class="rowlist">';
+			 	temp+='<td align="center">&nbsp;'+i+'&nbsp;</td>';
+			 	temp+='<td align="center">&nbsp;'+$('#receipt_number'+rowIDArray[n]).val()+'&nbsp;</td>';
+			  	temp+='<td>&nbsp;'+$('#productname'+rowIDArray[n]).val()+'&nbsp;</td>';
+			  	temp+='<td align="center">&nbsp;'+$('#qty_balance'+rowIDArray[n]).val()+'&nbsp;</td>';
+			  	temp+='<td align="center">'+$('#qty_receive'+rowIDArray[n]).val()+'</td>';
+			  	temp+='<td align="center">&nbsp;'+remain+'&nbsp;</td>';
+			  	temp+='<td align="center">&nbsp;'+dateremide+'&nbsp;</td>';
+				temp+='</tr>';
+			}
+			temp+='<tr class="rowlist">';
+				temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Received :</td>';
+				temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_paid').get('value')+'&nbsp;</td>';
 			temp+='</tr>';
-		}
+			temp+='<tr class="rowlist">';
+				temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Remain :</td>';
+				temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_due').get('value')+'&nbsp;</td>';
+			temp+='</tr>';
 		temp+='</table>';
 	dojo.byId('t_amountmoneytype').innerHTML = temp;
 	dijit.byId("terms").show();	
 	}
+}
+function getMonthByNumber(m){
+	var monthName=[
+	         "Jan",
+      		 "Feb",
+      		 "Mar",
+      		 "Apr",
+      		 "May",
+      		 "Jun",
+      		 "Jul",
+      		 "Aug",
+      		 "Sept",
+      		 "Oct",
+      		 "Nov",
+      		 "Dec",
+		];
+	return (monthName[m-1]);
 }
 function getallstudentname(){//
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
@@ -436,10 +509,18 @@ function getallstudentname(){//
 			load: function(data) {
 				keyindex=data.keyindex;
 				$("#old_identity").val(data.identity);
+				$("#identity").val(data.identity);
 				dojo.html.set(dojo.byId("table_row"),data.stringrow , {
 				     parseContent: true,
 					});
 				dijit.byId('all_balance').set('value',data.all_balance);
+				dijit.byId('amount').set('value',data.all_balance);
+
+				dojo.byId("lb_name").innerHTML =  data.stuName;
+				dojo.byId("lb_id").innerHTML =  data.stucode;
+				dojo.byId("studentpay").innerHTML =  data.stuName;
+				
+				calculateAmountCheck();
 				calBalance();
 				HideloadingBlock();
 			},
@@ -455,11 +536,12 @@ function getallstudentname(){//
 	 
 
 	function printSubmit(){
+		getReceiptNo();
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
-		loading();
-		hideDialog();
+	    loadingBlock();
+	    HideloadingBlock();
 	    dijit.byId('office_receipt').submit();
 	}
 	function CheckAllTotal(index){

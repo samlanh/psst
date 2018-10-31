@@ -221,6 +221,9 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 			$_status->setValue($data["status"]);
 			$id->setValue($data["id"]);
 			$note->setValue($data["note"]);
+			$_branch_id->setAttribs(array(
+					'readonly'=>'readonly',
+					));
 		}
 		$this->addElements(array(
 				$_branch_id,

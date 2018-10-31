@@ -6,11 +6,18 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
     }
-    public function getCutStockode(){
+    public function getCutStockode($branch_id=null){
     	$db = $this->getAdapter();
-    	$sql="SELECT COUNT(id) FROM rms_cutstock WHERE 1 ORDER BY id DESC";
+    	$pre="";
+    	$sql="SELECT COUNT(id) FROM rms_cutstock WHERE 1 ";
+    	if (!empty($branch_id)){
+    		$sql.=" AND branch_id=".$branch_id;
+    		$_dbgb = new Application_Model_DbTable_DbGlobal();
+    		$pre.= $_dbgb->getPrefixCode($branch_id);//by branch
+    	}
+    	$sql.=" ORDER BY id DESC";
     	$stu_num = $db->fetchOne($sql);
-    	$pre='ST-';
+    	$pre.='ST-';
     	$new_acc_no= (int)$stu_num+1;
     	$length = strlen((int)$new_acc_no);
     	for($i = $length;$i<4;$i++){
@@ -30,6 +37,9 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 			sp.receipt_number,
 			sp.create_date AS payment_date,
 			(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS student_name,
+			(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_enname,
+			(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS last_name,
+			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
 			(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
 			(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type
 			FROM `rms_student_payment` AS sp,
@@ -45,7 +55,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		$sql.= " AND sp.receipt_number LIKE '%{$s_search}%'";
     	}
     	$rs = $db->fetchAll($sql);
-    	 
+    	$stuName="";
+    	$stuCode="";
     	$string='';
     	$no = $data['keyindex'];
     	$identity='';
@@ -56,15 +67,18 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     				$identity=$no;
     			}else{$identity=$identity.",".$no;
     			}
+    			$stuName=$row['stu_enname']." ".$row['last_name'];
+    			$stuCode=$row['stu_code'];
     			$string.='
     			<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
-	    			<td align="center" style="  padding: 0 10px;"><input  OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
+	    			<td align="center" style="  padding: 0 10px;"><input checked="checked"  OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
 	    			<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
 	    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
 	    			<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" value="'.$row['itemdetail_id'].'" >
+	    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
     			</td>
     			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
     			<label title="'.$row['items_name'].' ('.$row['receipt_number'].')" class="invoicelabel" id="invoicelabel'.$no.'">'.$row['items_name'].' ('.$row['receipt_number'].')</label>
@@ -72,13 +86,14 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     			</td>
     			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
     			<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
+    			<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
     			</td>
     			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
     			<label id="duelabel'.$no.'">'.number_format($row['qty_balance'],2).'</label>
     			<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_balance'].'" >
     			</td>
-    			<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="0" style="text-align: center;" ></td>
-    			<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$row['qty_balance'].'" style="text-align: center;" ></td>
+    			<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_balance'].'" style="text-align: center;" ></td>
+    			<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
     			<td >
     				<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
     			</td>
@@ -93,7 +108,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	if (!empty($userbalace)){
     		$all_balance = $userbalace;
     	}
-    	$array = array('stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'all_balance'=>$all_balance);
+    	$array = array('stuName'=>$stuName,'stucode'=>$stuCode,'stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'all_balance'=>$all_balance);
     	return $array;
     }
     function getCurrentBalanceByStudent($data){
@@ -246,7 +261,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_khname,
 (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_enname,
 (SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS last_name,
-(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_code
+(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_code,
+(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=pp.user_id LIMIT 1) As user_name
     	FROM rms_cutstock AS pp WHERE pp.id = $id ";
     	$sql.=" LIMIT 1";
     	return $db->fetchRow($sql);
@@ -297,6 +313,11 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 	    	(SELECT sp.create_date FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS payment_date,
 	    	
 	    	(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS student_name,
+	    	(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_enname,
+	    	(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS last_name,
+	    	(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_code,
+	    	
+	    	
 	    	(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
 	    	(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type
 	    	FROM  `rms_student_paymentdetail` AS spd
@@ -319,6 +340,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$no = $data['keyindex'];
     	$identity='';
     	$identityedit='';
+    	$stuName="";
+    	$stuCode="";
     	$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
     	if(!empty($rs)){
 	    	foreach ($rs as $key => $row){
@@ -326,6 +349,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 		    		$identity=$no;
 			    }else{$identity=$identity.",".$no;
 			    }
+			    $stuName=$row['stu_enname']." ".$row['last_name'];
+			    $stuCode=$row['stu_code'];
 			    $rowpaymentdetail = $this->getCutstockDetailByCutstockIdAndStuDetailId($data['cutstockid'], $row['id']);
 			    if (!empty($rowpaymentdetail)){
 			    	if (empty($identityedit)){
@@ -347,6 +372,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				    	<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" value="'.$row['itemdetail_id'].'" >
+				    		<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
+				    		
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
 				    	<label title="'.$row['items_name'].' ('.$row['receipt_number'].')" class="invoicelabel" id="invoicelabel'.$no.'">'.$row['items_name'].' ('.$row['receipt_number'].')</label>
@@ -354,6 +381,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
 				    		<label id="origtotallabel'.$no.'">'.number_format($rowpaymentdetail['qty'],2).'</label>
+				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$rowpaymentdetail['qty'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
 				    		<label id="duelabel'.$no.'">'.number_format($duevalu,2).'</label>
@@ -377,6 +405,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" value="'.$row['itemdetail_id'].'" >
+				    	<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
 				    		<label title="'.$row['items_name'].' ('.$row['receipt_number'].')" class="invoicelabel" id="invoicelabel'.$no.'">'.$row['items_name'].' ('.$row['receipt_number'].')</label>
@@ -384,6 +413,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
 				    		<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
+				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
 				    		<label id="duelabel'.$no.'">'.number_format($row['qty_balance'],2).'</label>
@@ -407,7 +437,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 	    if (!empty($userbalace)){
 	   	 	$all_balance = $userbalace;
 	    }
-	    $array = array('stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'identitycheck'=>$identityedit,'all_balance'=>$all_balance,'sql'=>$sql);
+	    $array = array('stuName'=>$stuName,'stucode'=>$stuCode,'stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'identitycheck'=>$identityedit,'all_balance'=>$all_balance,'sql'=>$sql);
 	    return $array;
     }
     function getSumCutStockDetailByStuPayDetId($stupaydetail_id,$cutstockdetailid){

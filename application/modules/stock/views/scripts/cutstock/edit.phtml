@@ -41,7 +41,7 @@ tr.head-td th {
     			</div>
     		</div>
     	</div>
-    	<form id='suspend_service' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+    	<form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
  				branch_id = dijit.byId('branch_id').get('value');
@@ -223,11 +223,102 @@ tr.head-td th {
 					 iconClass="dijitEditorIcon dijitEditorIconSave" />
 					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 							 iconClass="dijitEditorIcon dijitEditorIconSave" />
+					<input type="button" id="popup" value="<?php echo $tr->translate('SAVE_PRINT');?>" label="<?php echo $tr->translate('SAVE_PRINT');?>" onclick="printSave();" dojoType="dijit.form.Button" 
+						iconClass="dijitEditorIcon dijitEditorIconTask" />
                	</div>
              </div>  
 		</form>
     </div>
  </div>
+ <div class="dijitHidden" style="padding: 0px; margin: 0px;">
+	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>'"  >
+	<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
+		<style>
+			.print tr td{
+					padding:0px 2px 0px 2px; 
+				}
+				tr.hearder_table td {
+				    padding: 5px;
+				}
+		</style>
+		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Times New Roman','Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
+			<tr>
+				<td colspan="4"><label id="lbl_header"></label></td>
+			</tr>
+			<tr>
+				<td colspan="4" align="center">
+					<strong style="font-family:'Khmer OS Muol';">បង្កាន់ទទួលទំនិញ</strong>
+				</td>
+			</tr>
+			<tr>
+				<td>Student's ID : &nbsp;&nbsp;<span id="lb_id"></span> </td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Student's Name : &nbsp;&nbsp;<span id="lb_name"></span></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Ref Receipt No. : &nbsp;&nbsp;<span style="color:red;" id="lb_receipt_no" class="one bold"></span></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Received Date : &nbsp;&nbsp;<span id="lb_date" class="one bold"></span></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td  colspan="4">
+					<div id="t_amountmoneytype"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" width="50%" align="center">
+					<div style="margin-top:40px;font-size:10px;"></div>
+					<?php echo $tr->translate("INFORS_TO");?>
+				</td>
+				<td colspan="2" width="50%" align="center">
+					<div style="margin-top:40px;font-size:10px;"></div>
+					<?php echo $tr->translate("INFORS_RECEIVE");?>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" width="50%" align="center">
+					<div style="margin-top:30px;font-size:10px;"></div>
+					<?php 
+						   $session_user=new Zend_Session_Namespace('authstu');
+						   $last_name=$session_user->last_name;
+						   $username = $session_user->first_name;
+						   echo "".$last_name." ".$username;
+						?>
+				</td>
+				<td colspan="2" width="50%" align="center">
+					<div style="margin-top:30px;font-size:10px;"></div>
+					<span id="studentpay"></span>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4" align="right">
+					<!-- <div style=" font-size: 11px;font-weight: bold;font-family: arail">Date : <label id="lb_date" class=" one bold"><?php //echo date("d/M/Y",strtotime($this->row['received_date']));;?></label></div> -->
+					<div style="padding-top:20px; font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
+			type="button" onclick="hideDialog();">Cancel</button>
+			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
+				type="button" onclick="printSubmit();"><?php echo $tr->translate("Print");?></button>
+</div>
+</div>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
@@ -238,7 +329,8 @@ tr.head-td th {
 			queryExpr: "*${0}*",                     
 			id: "student_id",
 			name: "student_id",   
-			required:true,        
+			required:true,  
+			readOnly:true,        
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function(){
@@ -250,12 +342,128 @@ tr.head-td th {
 		 	branch_id.on('change', function(evt) {
 				getallstudentname();
 		 		getStudentProductPaymentDetail();
+		 		getbranchinfo();
 		    });
 		    
 		 	getallstudentname();
 	 		getStudentProductPaymentDetail();
+	 		getbranchinfo();
 	});
+	var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+	function getbranchinfo(){
+			branch_id = dijit.byId('branch_id').get('value');
+			if(branch_id != ""){
+				dojo.xhrPost({
+					url:url_getbranch,
+					content:{
+						'branch_id':branch_id,
+						},
+					handleAs:"json",
+					load: function(data){
+						dojo.byId('lbl_header').innerHTML=data;
+					},
+					error: function(err) {
+						alert(err);
+					}
+				});	
+			} 
+		}
+	function printSave(new_receipt){
+		if(dijit.byId('office_receipt').validate()){
+			today = dijit.byId("date_payment").get("value");
+			var dd = today.getDate();
+			var mon = today.toDateString().substr(4,3); //January is 0!
+			var yyyy = today.getFullYear();
+			dojo.byId("lb_receipt_no").innerHTML = dijit.byId("serailno").get('value');
+			//dojo.byId("lb_name").innerHTML =  dijit.byId("student_id").attr('displayedValue');
+			dojo.byId("lb_date").innerHTML = dijit.byId("date_payment").attr('displayedValue');
+			//dojo.byId("lb_amount").innerHTML = dijit.byId("amount").attr('displayedValue');
+			//dojo.byId("lb_due").innerHTML = dijit.byId("total_due").attr('displayedValue');
+		template="";
+		temp='';
+	    temp='<table border="1" align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; ">'
+			  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
+				  temp+='<td >No</td>';
+				  temp+='<td >Receipt</td>';
+				  temp+='<td >Item Name</td>';
+				  temp+='<td >Qty</td>';
+				  temp+='<td >Qty Received</td>';
+				  temp+='<td >Qty Balance</td>';
+				  temp+='<td >Remain Date</td>';
+			  temp+='</tr>';
+			  var rowId = $('#identity').val();
+				var rowIDArray = rowId.split(',');
+				i=0;
+				for(var n = 0; n < rowIDArray.length; n++) {
+					i++;
+					remain = $('#remain'+rowIDArray[n]).val();
+					dateremide="-";
+					if(remain!=0){
+						var b = new Date(dijit.byId("remide_date"+rowIDArray[n]).get('value'));
+						  mm = b.getMonth()+1;
+						  var dd = b.getDate();
+						  if(dd<10){
+							dd = "0"+dd;
+						  }
+						  var mon = getMonthByNumber(mm);
+						  if(mm<10){
+							mm = "0"+mm;
+						  }
+						  var y = b.getFullYear();
+						  var dateremide = dd + '/' + mon + '/' + y ;
+					}
+			      	temp+='<tr class="rowlist">';
+				 	temp+='<td align="center">&nbsp;'+i+'&nbsp;</td>';
+				 	temp+='<td align="center">&nbsp;'+$('#receipt_number'+rowIDArray[n]).val()+'&nbsp;</td>';
+				  	temp+='<td>&nbsp;'+$('#productname'+rowIDArray[n]).val()+'&nbsp;</td>';
+				  	temp+='<td align="center">&nbsp;'+$('#qty_balance'+rowIDArray[n]).val()+'&nbsp;</td>';
+				  	temp+='<td align="center">'+$('#qty_receive'+rowIDArray[n]).val()+'</td>';
+				  	temp+='<td align="center">&nbsp;'+remain+'&nbsp;</td>';
+				  	temp+='<td align="center">&nbsp;'+dateremide+'&nbsp;</td>';
+					temp+='</tr>';
+				}
+				temp+='<tr class="rowlist">';
+					temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Received :</td>';
+					temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_paid').get('value')+'&nbsp;</td>';
+				temp+='</tr>';
+				temp+='<tr class="rowlist">';
+					temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Remain :</td>';
+					temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_due').get('value')+'&nbsp;</td>';
+				temp+='</tr>';
+			temp+='</table>';
+		dojo.byId('t_amountmoneytype').innerHTML = temp;
+		dijit.byId("terms").show();	
+		}
+	}
+	function hideDialog(){
+		dijit.byId('terms').hide();
+	}
 
+	function printSubmit(){
+		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
+	    window.frames["print_frame"].window.focus();
+	    window.frames["print_frame"].window.print();
+	    loadingBlock();
+	    HideloadingBlock();
+	    dijit.byId('office_receipt').submit();
+	}
+	function getMonthByNumber(m){
+		var monthName=[
+		         "Jan",
+	      		 "Feb",
+	      		 "Mar",
+	      		 "Apr",
+	      		 "May",
+	      		 "Jun",
+	      		 "Jul",
+	      		 "Aug",
+	      		 "Sept",
+	      		 "Oct",
+	      		 "Nov",
+	      		 "Dec",
+			];
+		return (monthName[m-1]);
+	}
 	var oldBranch = '<?php echo $this->row['branch_id'];?>';
 	function getallstudentname(){//
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
@@ -314,6 +522,10 @@ tr.head-td th {
 				     parseContent: true,
 					});
 				dijit.byId('all_balance').set('value',data.all_balance);
+
+				dojo.byId("lb_name").innerHTML =  data.stuName;
+				dojo.byId("lb_id").innerHTML =  data.stucode;
+				dojo.byId("studentpay").innerHTML =  data.stuName;
 				calBalance();
 				HideloadingBlock();
 			},

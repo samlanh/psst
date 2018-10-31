@@ -466,6 +466,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(($search['branch_id'])>0){
     		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("s.branch_id");
+    	
     	return $db->fetchAll($sql.$where.$group_by.$order_by);
     }
     public function getAllStudyHistory($search){
@@ -580,6 +583,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND branch_id='.$search['branch_id'];
+    	}
     	if(!empty($search['study_year'])){
     		$where.=' AND academic_year='.$search['study_year'];
     	}
@@ -589,6 +595,12 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=' AND session='.$search['session'];
     	}
+    	if(!empty($search['group'])){
+    		$where.=' AND group_id='.$search['group'];
+    	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("branch_id");
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
    function getStudentAttendance($search){
@@ -775,6 +787,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['group'])){
     		$where.= " AND g.id =".$search['group'];
     	}
+    	if(!empty($search['branch_id'])){
+    		$where.=" AND `g`.`branch_id`=".$search['branch_id'];
+    	}
     	if(!empty($search['study_year'])){
     		$where.=" AND g.academic_year =".$search['study_year'];
     	}
@@ -787,6 +802,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=" AND `g`.`session`=".$search['session'];
     	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("g.branch_id");
     	
     	$order =" GROUP BY g.id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC";
     	return $db->fetchAll($sql.$where.$order);

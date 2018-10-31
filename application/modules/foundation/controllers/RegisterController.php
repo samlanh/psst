@@ -16,6 +16,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				$search = array(
 						'adv_search' => '',
 						'study_year'=> '',
+						'group'=> '',
 						'grade'=> '',
 						'session'=> '',
 						'time'=> '',

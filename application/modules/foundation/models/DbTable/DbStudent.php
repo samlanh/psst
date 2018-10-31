@@ -81,6 +81,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['study_year'])){
 			$where.=" AND s.academic_year=".$search['study_year'];
 		}
+		if(!empty($search['group'])){
+			$where.=" AND s.group_id=".$search['group'];
+		}
 		if(!empty($search['degree'])){
 			$where.=" AND s.degree=".$search['degree'];
 		}

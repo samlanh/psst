@@ -220,7 +220,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		else{
 			$search=array(
 					'title'  	=>'',
+					'branch_id'  	=>'',
 					'study_year'=>'',
+					'group'  	=>'',
 					'grade' =>'',
 					'session'  	=>'',
 					'start_date'=> date('Y-m-d'),
@@ -228,7 +230,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			);
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	

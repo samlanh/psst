@@ -41,6 +41,30 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	function rptSpecaildiscountAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+					'advance_search' => "",
+    				'dis_type'=>"",
+    				'status_type' => "",
+				);
+			}
+			$this->view->search = $search;
+			$db = new Allreport_Model_DbTable_DbRptPayment();
+			$this->view->row = $db->getAllSpecailDis($search);
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($form);
+    	$this->view->form_search=$form;
+	}
 	function submitlistAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();

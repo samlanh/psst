@@ -22,6 +22,7 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.ValidationTextBox',
     			'required'=>'true',
     			'class'=>'fullside height-text',
+    			'placeholder'=>$this->tr->translate("SEARCH"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Title")
     	));
     	

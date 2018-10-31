@@ -49,6 +49,18 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($years))foreach($years AS $row) $opt[$row['id']]=$row['name'];
 		$study_year->setMultiOptions($opt);
 		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$_status_type = new Zend_Dojo_Form_Element_FilteringSelect("status_type");
+		$_status_type->setMultiOptions($_arr_opt);
+		$_status_type->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$status_opt = $db->AllStatusRe();
+		$_status_type->setMultiOptions($status_opt);
+		
 		$item = new Zend_Dojo_Form_Element_FilteringSelect('item');
 		$item->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -62,6 +74,18 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$opt = array(''=>$this->tr->translate("SELECT_CATEGORY"));
 		if(!empty($items))foreach($items AS $row) $opt[$row['id']]=$row['name'];
 		$item->setMultiOptions($opt);
+		
+		$model = new Application_Model_DbTable_DbGlobal();
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT_DISTYPE"));
+		$Option = $model->getAllDiscount();
+		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+		$_dis_type = new Zend_Dojo_Form_Element_FilteringSelect("dis_type");
+		$_dis_type->setMultiOptions($_arr_opt);
+		$_dis_type->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
 		
 		$academic_year = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
 		$academic_year->setAttribs(array(
@@ -523,8 +547,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		$_day->setMultiOptions($opt_group);
 		
 		$this->addElements(array($item,$finished_status,$term_test,$term,$stuname_con,
-					$_day,$_cate,$_teacher,$_subject,$study_status,$_group,$payment_by,$study_year,$academic_year,
-					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_room,$branch_id,$start_date,
+					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
+					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
 					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term));
 	

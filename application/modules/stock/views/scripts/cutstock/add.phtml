@@ -246,26 +246,12 @@ tr.head-td th {
 			<tr>
 				<td>Student's ID : &nbsp;&nbsp;<span id="lb_id"></span> </td>
 				<td></td>
-				<td></td>
-				<td></td>
+				<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Ref Receipt No.</span> : <span id="lb_receipt_no" style="text-align:left; color:red; min-width: 100px; display: inline-block;"></span></td>
 			</tr>
 			<tr>
 				<td>Student's Name : &nbsp;&nbsp;<span id="lb_name"></span></td>
 				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>Ref Receipt No. : &nbsp;&nbsp;<span style="color:red;" id="lb_receipt_no" class="one bold"></span></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>Received Date : &nbsp;&nbsp;<span id="lb_date" class="one bold"></span></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Received Date</span> : <span id="lb_date" style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date("d/M/Y",strtotime($this->row['received_date']));?></span></td>
 			</tr>
 			<tr>
 				<td  colspan="4">

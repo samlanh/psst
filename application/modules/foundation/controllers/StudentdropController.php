@@ -43,7 +43,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 				);
 				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'academic'=>$link,'stu_id'=>$link,'student_name'=>$link,'sex'=>$link));
 	
-			$this->view->adv_search = $search;
+			$this->view->search = $search;
 		}catch(Exception $e){
 			echo $e->getMessage();
 		}

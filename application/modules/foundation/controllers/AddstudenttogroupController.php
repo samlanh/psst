@@ -14,13 +14,13 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 			
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-				$this->view->adv_search=$search;
 			}
 			else{
 				$search = array(
 						'adv_search' => '',
 						'branch_id' => '',
 						'study_year' => '',
+						'group' => '',
 						'degree' => '',
 						'grade_all' => '',
 						'session' => '',
@@ -30,7 +30,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 			
 			$rs= $db->getGroupDetail($search);
 			$list = new Application_Form_Frmtable();
-			
+			$this->view->search = $search;
 			if(!empty($rs)){
 			}
 			else{

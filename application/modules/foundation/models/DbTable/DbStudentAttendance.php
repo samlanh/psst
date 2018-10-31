@@ -28,8 +28,8 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
     	if(!empty($search['branch_id'])){
     		$where.= " AND sa.`branch_id` =".$search['branch_id'];
     	}
-    	if(!empty($search['group_name'])){
-    		$where.= " AND sa.`group_id` =".$search['group_name'];
+    	if(!empty($search['group'])){
+    		$where.= " AND sa.`group_id` =".$search['group'];
     	}
     	if(!empty($search['study_year'])){
     		$where.=" AND (SELECT g.academic_year FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1) =".$search['study_year'];
@@ -44,6 +44,10 @@ class Foundation_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstrac
 			$where.=" AND (select `g`.`room_id` FROM `rms_group` AS g WHERE g.id = sa.`group_id` LIMIT 1 )=".$search['room'];
 		}
     	$order=" ORDER BY id DESC ";
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission('sa.branch_id');
+    	
     	return $db->fetchAll($sql.$where.$order);
     }
 	public function addStudentAttendece($_data){

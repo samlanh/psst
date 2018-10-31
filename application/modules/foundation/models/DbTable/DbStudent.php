@@ -50,9 +50,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status
 				FROM rms_student AS s  WHERE  s.is_subspend=0 AND s.customer_type=1";
 		$orderby = " ORDER BY stu_id DESC ";
-		if(empty($search)){
-			return $_db->fetchAll($sql.$orderby);
-		}
+// 		if(empty($search)){
+// 			return $_db->fetchAll($sql.$orderby);
+// 		}
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));

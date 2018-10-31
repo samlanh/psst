@@ -1,6 +1,6 @@
   <?php 
 	  $tr = Application_Form_FrmLanguages::getCurrentlanguage();  
-	  echo $this->headTitle($tr->translate("ALL_STUDENT_REPORT"));
+	  echo $this->headTitle($tr->translate("RPT_FOUNDATION"));
   ?>
   <style>
   ul.link-rpt li a {
@@ -27,6 +27,8 @@
 	<div class="card">
 		<div class="card-content collapse show">
 			<div class="card-box report-list">
+				<h3 style="font-family:'khmer os muol light';font-size:14px;text-align: center; color: #666;padding:2px 0;"><?php echo $tr->translate("RPT_FOUNDATION");?></h3><hr>
+				
 				<div class="row top_tiles">
 					<?php
 					   $db_user=new Application_Model_DbTable_DbUsers();

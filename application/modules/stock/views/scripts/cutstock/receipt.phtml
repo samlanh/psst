@@ -35,24 +35,14 @@ img.view{height: 70px !important;}
 					</tr>
 					<tr>
 						<td>Student's ID : <?php echo $this->row['stu_code'];?></td>
+						<td></td>
+						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Ref Receipt No.</span> : <span style="text-align:left; color:red; min-width: 100px; display: inline-block;"><?php echo $this->row['serailno'];?></span></td>
 					</tr>
 					<tr>
 						<td>Student's Name : <?php echo $this->row['stu_enname']." ".$this->row['last_name'];?></td>
 						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>Ref Receipt No. : <span style="color:red;"><?php echo $this->row['serailno'];?></span></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>Received Date : <?php echo date("d/M/Y",strtotime($this->row['received_date']));?></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Received Date</span> : <span style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date("d/M/Y",strtotime($this->row['received_date']));?></span></td>
+						
 					</tr>
 					<tr>
 						<td  colspan="4">

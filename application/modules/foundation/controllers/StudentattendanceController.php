@@ -20,7 +20,8 @@ class Foundation_StudentattendanceController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'group_name' => '',
+						'branch_id' => '',
+						'group' => '',
 						'study_year'=> '',
 						'grade'=> '',
 						'session'=> '',

@@ -204,6 +204,9 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($search['study_year'])){
 			$where.=' AND g.academic_year='.$search['study_year'];
 		}
+		if(!empty($search['group'])){
+			$where.=' AND g.id='.$search['group'];
+		}
 		if(!empty($search['grade_all'])){
 			$where.=' AND g.grade='.$search['grade_all'];
 		}

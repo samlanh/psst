@@ -43,18 +43,16 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 // 			$dbpush->getTokenUser($_data['group'],null, 4);
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
-				$k=0;
 				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
 				if(!empty($ids))foreach ($ids as $i){
-					$k=$k+1;
 					//$dbpush->pushSendNotification($_data['stu_id_'.$k], 4);//notification for score result 
 					foreach ($rssubject as $index => $rs_parent){
 						$arr=array(
 								'score_id'=>$id,
 								'group_id'=>$_data['group'],
-								'student_id'=>$_data['student_id'.$k],
+								'student_id'=>$_data['student_id'.$i],
 								'subject_id'=> $rs_parent['subject_id'],
-								'score'=> $_data["score_".$k."_".$index],
+								'score'=> $_data["score_".$i."_".$index],
 								'status'=>1,
 								'user_id'=>$this->getUserId(),
 								'is_parent'=> $rs_parent["is_parent"]
@@ -97,17 +95,15 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		
 		if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
-				$k=0;
 				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
 				if(!empty($ids))foreach ($ids as $i){
-					$k=$k+1;
 					foreach ($rssubject as $index => $rs_parent){
 						$arr=array(
 								'score_id'=>$id,
 								'group_id'=>$_data['group'],
-								'student_id'=>$_data['student_id'.$k],
+								'student_id'=>$_data['student_id'.$i],
 								'subject_id'=> $rs_parent['subject_id'],
-								'score'=> $_data["score_".$k."_".$index],
+								'score'=> $_data["score_".$i."_".$index],
 								'status'=>1,
 								'user_id'=>$this->getUserId(),
 								'is_parent'=> $rs_parent["is_parent"]

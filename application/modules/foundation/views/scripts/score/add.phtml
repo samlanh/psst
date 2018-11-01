@@ -4,18 +4,28 @@
 	$current_month = date("m");
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>	
-<head>
-  <meta charset="utf-8">
-</head>
 <style>
 	select{ width:100%;}
-	fieldset{  background:none;}
-	table tr.head-title{ background: none repeat scroll 0% 0% rgba(213, 249, 244, 1); padding:2px;}
-	ol{margin: 10px;}
+	 td.rotate {
+				height: 130px;
+	    		vertical-align: bottom;
+	 			border:1px solid #000;
+		}				
+	td.rotate > div {
+		transform: rotate(270deg);
+		width: 30px;
+	}
+	td.rotate span{
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: inline-block;
+	}
+	
 </style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
+//dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
 
@@ -33,7 +43,6 @@ dojo.ready(function(){
 		    required:'true',
 		    placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
 		    onChange: function() {  
-		    	filterStudent();
 		    }
 		}, "year_study");
 		
@@ -45,7 +54,6 @@ dojo.ready(function(){
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 			onChange: function() {
-				filterStudent();
 			}
 		}, "grade");
 
@@ -57,8 +65,8 @@ dojo.ready(function(){
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 			onChange: function() {
-				getSubjectByGroup();
 				getInfoBygroup();
+				getSubjectByGroup();
 			}
 		}, "group");
 		getAllGroupByBranch();
@@ -85,19 +93,12 @@ function filterGrade(){
 
 var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
 function filterStudent(){
+	loadingBlock();
 	year = dijit.byId('year_study').get('value');
 	grade = dijit.byId('grade').get('value');
 	session = dijit.byId('session').get('value');
 	group = dijit.byId('group').get('value');
-	if(year==''){
-		return false;
-	}
-	if(grade==''){
-		return false;
-	}
-	if(session==''){
-		return false;
-	}
+	
 	if(group==''){
 		return false;
 	}
@@ -109,11 +110,13 @@ function filterStudent(){
 	   handleAs:"json", 
 	   load: function(data) {
 		   tem="";
+		   temp='';
 	       if(data!=""){
 				num =0;
 				title=0;
 				temp='';
 				str='';
+				inx='';
 				column = 0;
 				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;" id="table" width="100%">'
 					+'<thead><tr style="border:1px solid #000;"><th class="tdheader" ><?php echo $tr->translate('DEL');?></th>'
@@ -125,24 +128,23 @@ function filterStudent(){
 				  for(j=0;j<subject.length;j++){
 	      			  no++;
 	      			  stringsname = subject[j].subject_titleen.replace(' ','');
-		      	      temp+='<th class="" style="height:130px;transform: rotate(-90deg);border:1px solid #000;width:50px !important;font-weight:500">'+stringsname+'</th>';
+		      	      temp+='<td class="rotate"><div><span>'+no+'-'+stringsname+'</span></div></td>';
 	              }
 				  temp+='<th class=""><?php echo $tr->translate('NOTE');?></th>'+'</thead></tr>';
+				  
 				for(i=0;i<data.length;i++){
-					inx = i+1;
 					num++;
 					inx = i+1;
-					num++;
-					temp+= '<tr class="hover normal" id="row'+inx+'">';
-					temp+='<td width="4%"align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+					temp += '<tr class="hover normal" id="row'+inx+'">';
+					temp +='<td width="4%" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 					temp += '<td align="center">&nbsp;'+inx+'</td>';
-					temp += '<td>&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" type="hidden" ></td>';
+					temp += '<td>&nbsp;'+data[i].stu_code+'<input dojoType="dijit.form.TextBox" name="student_id'+inx+'"   value="'+data[i].stu_id+'" type="hidden" ></td>';
 					temp += '<td style="min-width:100px;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
 					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){
-						temp += '<td id="score_'+j+'"><input required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+j+'" name="score_'+inx+'_'+j+'" /></td>';
+						temp += '<td id="score_'+j+'"><input required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text"  name="score_'+inx+'_'+j+'" /></td>';
 					}
-					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'" id="note_'+inx+'"  value="" type="text" ></td>';
+					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
 					temp+= '</tr>';
 					
 					var no=0;
@@ -162,12 +164,12 @@ function filterStudent(){
 				});
 	       }else{
 		    	$('#identity').val('');
-		    	//document.getElementById("liststudent").innerHTML = '';
 	       }
 	   },		
 	    error: function(err) {
 	    }
 	});
+	HideloadingBlock();
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();
@@ -201,6 +203,7 @@ function gender(sex){
 			<script type="dojo/method" event="onSubmit">   
    			if(this.validate()) {
 				dijit.byId('save_new').set('disabled',true);
+				loadingBlock();
     			return true;
    			}else {
     			return false;
@@ -233,7 +236,7 @@ function gender(sex){
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TYPE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
+		                	<select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();getSubjectByGroup();"  dojoType="dijit.form.FilteringSelect" >
 							   	<option value="1">ប្រចាំខែ</option>
 							   	<option value="2">ប្រលងឆមាស</option>
 							</select>
@@ -297,7 +300,7 @@ function gender(sex){
 			             <div class="form-group">
 			                <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION");?> </label>
 			                <div class="col-md-7 col-sm-7 col-xs-12">
-			                	<select id="session" name="session" onchange="filterStudent();" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
+			                	<select id="session" name="session" onchange="" class="fullside" dojoType="dijit.form.FilteringSelect" type="text"  >
 									<option value="-1"><?php echo $tr->translate("CHOOSE_SESSION");?></option>
 								<?php if(!empty($this->session)){foreach ($this->session as $session){?>
 									<option value="<?php echo $session['key_code'];?>"><?php echo $session['view_name'];?></option>
@@ -318,7 +321,6 @@ function gender(sex){
 		    		<div class="form-group">
 		    			<input type="hidden" name="identity" id="identity"  value="" >
 		    			<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
-							<tr id="head-title" class="head-td" align="right"></tr>
 						</table>
 		    		</div>
 		    	</div>
@@ -390,6 +392,7 @@ function getSubjectByGroup(){
 	   handleAs:"json", 
 	   load: function(data) {
 		   subject = data;
+		   filterStudent()
 	   },		
 	    error: function(err) {
 		 

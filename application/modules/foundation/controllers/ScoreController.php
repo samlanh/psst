@@ -16,7 +16,8 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 			else{
 				$search = array(
 						'title'=>'',
-						'group_name' => '',
+						'branch_id' => '',
+						'group' => '',
 						'study_year'=> '',
 						'degree'=>0,
 						'grade'=> 0,

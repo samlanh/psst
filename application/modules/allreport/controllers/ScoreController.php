@@ -54,8 +54,8 @@ public function init()
     		$search = array(
     				'group_name' => '',
     				'study_year'=> '',
-    				'grade_bac'=> '',
-    				'degree_bac'=>'',
+    				'grade'=> '',
+    				'degree'=>'',
     				'session'=> '',
     				'for_month'=>'',
     		);

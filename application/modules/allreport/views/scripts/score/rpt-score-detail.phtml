@@ -10,15 +10,7 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-	$day = array(
-			"Mon" =>'ច័ន្ទ',
-			"Tue" =>'អង្គារ',
-			"Wed" =>'ពុធ',
-			"Thu" =>'ព្រហស្បតិ៍',
-			"Fri" =>'សុក្រ',
-			"Sat" =>'សៅរ៍',
-			"Sun" =>'អាទិត្យ',
-	);
+	
 	$month = array(
 				"01"=>"មករា",
 				"02"=>"កុម្ភៈ",
@@ -54,13 +46,13 @@ dojo.ready(function(){
 		}, "group_name");
 });
 </script>
-<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
 	<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-detail')); ?>" dojoType="dijit.form.Form" method="post">
 		<table style="width:100%;margin: 0 auto;">
 			<tr> 
 				<td><input id="group_name" /></td>
-				<td><?php echo $frm->getElement("degree_bac");?></td>
-				<td><?php echo $frm->getElement("grade_bac");?></td>
+				<td><?php echo $frm->getElement("degree");?></td>
+				<td><?php echo $frm->getElement("grade");?></td>
 				<td><?php echo $frm->getElement("session");?></td>
 			</tr>
 			<tr>
@@ -76,7 +68,7 @@ dojo.ready(function(){
 			</tr>
 		</table>
 	</form>
-		<div id="divPrint">
+	<div id="divPrint">
 		<style type="text/css">
 			.style{
 				line-height: 20px; font-size: 14px !important;
@@ -91,7 +83,6 @@ dojo.ready(function(){
 			  page-break-inside:avoid; page-break-after:auto;
 			}
 			.cheader{height: 30px;font-weight: bold; background: #8ba7fb; white-space: nowrap;}
-			
 			.hover:hover{background: #ccc;}
 			 td.rotate {
 				height: 130px;
@@ -251,8 +242,8 @@ dojo.ready(function(){
 							</tr>
 							
 							<?php 
-							$old_totalscore = $rs['average'];
-							$old_groupid=$rs['group_id']; ?>
+								$old_totalscore = $rs['average'];
+								$old_groupid=$rs['group_id']; ?>
 							<?php }}?>
 							</table>
 							<?php if (!empty($this->studentgroup)){?>

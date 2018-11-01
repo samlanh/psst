@@ -316,14 +316,14 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	if(!empty($search['group_name'])){
    		$where.= " AND sd.group_id =".$search['group_name'];
    	}
-   	if(!empty($search['degree_bac'])){
-   		$where.=" AND `g`.`degree` =".$search['degree_bac'];
+   	if(!empty($search['degree'])){
+   		$where.=" AND `g`.`degree` =".$search['degree'];
    	}
    	if(!empty($search['study_year'])){
    		$where.=" AND s.for_academic_year =".$search['study_year'];
    	}
-   	if(!empty($search['grade_bac'])){
-   		$where.=" AND `g`.`grade` =".$search['grade_bac'];
+   	if(!empty($search['grade'])){
+   		$where.=" AND `g`.`grade` =".$search['grade'];
    	}
    	if(!empty($search['session'])){
    		$where.=" AND `g`.`session` =".$search['session'];

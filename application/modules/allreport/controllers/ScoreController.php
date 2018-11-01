@@ -18,6 +18,7 @@ public function init()
     	else{
     		$search = array(
     				'title',
+    				'branch_id'=> '',
     				'room'=>0,
     				'exam_type'=>-1,
     				'group_name' => 0,

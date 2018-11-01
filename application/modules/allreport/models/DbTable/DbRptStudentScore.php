@@ -201,12 +201,14 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    public function getStundetScoreGroup($search){ // fro rpt-score
    	$db = $this->getAdapter();
-   	$sql="SELECT s.`id`, s.`group_id`, g.`group_code`,title_score,s.for_month,s.for_semester,s.note,
+   	$sql="SELECT s.`id`, s.`group_id`, g.`group_code`,title_score,s.for_semester,s.note,
    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') 
 		FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year
  		,(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree, 
  	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
- 	`g`.`semester` AS `semester`, 
+ 	`g`.`semester` AS `semester`,
+ 	(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
+ 	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name, 
  	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
  	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
  	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month,
@@ -226,6 +228,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    				$s_where[]=" s.note LIKE '%{$s_search}%'";
    				$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
    				$where.=' AND ('.implode(' OR ', $s_where).')';
+   	}
+   	if(!empty($search['branch_id'])){
+   		$where.= " AND s.branch_id =".$search['branch_id'];
    	}
    	if(!empty($search['group_name'])){
    		$where.= " AND g.id =".$search['group_name'];

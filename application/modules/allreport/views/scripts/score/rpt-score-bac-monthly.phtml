@@ -54,6 +54,7 @@ dojo.ready(function(){
 	<table style="width:100%;margin: 0 auto;">
 		<tr> 
 			<td><?php echo $frm->getElement("title");?></td>
+			<td><?php echo $frm->getElement("branch_id");?></td>
 			<td><?php echo $frm->getElement("study_year");?></td>
 			<td><input id="group_name" /></td>
 			<td><?php echo $frm->getElement("degree");?></td>
@@ -117,6 +118,7 @@ dojo.ready(function(){
 								  <tr style="background:#ccd9ff;" class="cheader" align="center">
 								    <td><?php echo $tr->translate("NUM");?></td>
 								    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
+								    <td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 								    <td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
@@ -137,6 +139,7 @@ dojo.ready(function(){
 							?>
 							<tr style="font-size:12px; height: 18px;white-space: nowrap;"​ align="center" class='padding hover'>
 							    <td><?php echo $key+1;?></td>
+							    <td><?php echo $rs['branch_name']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['group_code']; ?></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic_year']; ?></a></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['for_semester']; ?></a></td>
@@ -145,7 +148,7 @@ dojo.ready(function(){
 							    <td><?php echo $rs['session']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['title_score']; ?></td>
-							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo ($rs['exam_type']==1)?$rs['for_month']:""; ?></a></td>
+							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['for_month']; ?></a></td>
 							    <td><?php echo $rs['for_semester']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $tr->translate("PRINT"); ?></a></td>

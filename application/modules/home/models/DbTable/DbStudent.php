@@ -67,6 +67,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			//$s_where[]="(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
+		if(!empty($search['branch_id'])){
+			$where.=" AND s.branch_id=".$search['branch_id'];
+		}
 		if(!empty($search['study_year'])){
 			$where.=" AND s.academic_year=".$search['study_year'];
 		}

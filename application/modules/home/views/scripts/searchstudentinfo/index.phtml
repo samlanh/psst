@@ -113,6 +113,9 @@ a.btn.btn-default.btn-detail:hover {
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input dojoType="dijit.form.TextBox"   id="adv_search" name="adv_search" placeholder="<?php echo $tr->translate('SEARCH');?>....." value="<?php echo $this->adv_search['adv_search']; ?>" class="fullside" type="text">
                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("branch_id");?>
+                   </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("study_year");?>
                    </div>

@@ -399,16 +399,18 @@
 												<tr align="center" style="font-size:14px;height:27px;font-weight:bold;background-color: #e8e6e6;">
 													<td><?php echo $tr->translate("N_O");?></td>
 													<td><?php echo $tr->translate("DOCUMENT_TYPE");?></td>
-													<?php /*?><td><?php echo $tr->translate("DATE_GIVE");?></td><?php */?>
+													<td><?php echo $tr->translate("DATE_GIVE");?></td>
 													<td><?php echo $tr->translate("RECEIVED");?></td>
+													<td><?php echo $tr->translate("DATE_BACK");?></td>
 													<td><?php echo $tr->translate("NOTE");?></td>
 												</tr>
 												<?php $i=0;if(!empty($this->document)){foreach($this->document as $rs){$i++;?>
 												<tr style="font-size:13px;height:23px;">
 													<td align="center"><?php echo $i;?></td>
 													<td><?php echo $rs['document_type'];?></td>
-													<?php /*?><td align="center"><?php echo date("d/m/Y",strtotime($rs['date_give']));?></td><?php */?>
+													<td align="center"><?php echo date("d/m/Y",strtotime($rs['date_give']));?></td>
 													<td><?php if($rs['is_receive']==1){echo $tr->translate("RECEIVED");}else{echo $tr->translate("NOT_RECEIVED");}?></td>
+													<td align="center"><?php echo date("d/m/Y",strtotime($rs['date_end']));?></td>
 													<td><?php echo $rs['note'];?></td>
 												</tr>
 												<?php }}?>

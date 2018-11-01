@@ -134,9 +134,10 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     
     function addCutStock($_data){
     	try{
+    		$itemsCode = $this->getCutStockode($_data['branch_id']);
     		$_arr=array(
     				'branch_id'	   => $_data['branch_id'],
-    				'serailno'	   => $_data['serailno'],
+    				'serailno'	   => $itemsCode,
     				'student_id'   => $_data['student_id'],
     				'balance'      => $_data['balance'],
     				'total_received'=> $_data['total_paid'],

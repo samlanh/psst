@@ -35,7 +35,7 @@ $frm = $this->form_search;
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<select name="for_section" id="for_section" dojoType="dijit.form.FilteringSelect" class="fullside" >
-							<option value="-1"><?php echo $tr->translate('SELECT_REQUEST_FOR')?></option>
+							<option value="-1"><?php echo $tr->translate('SELECT_REQUEST_FOR_DEPT')?></option>
 							<?php if(!empty($this->for_section)){foreach($this->for_section as $for_sec){?>
 								<option value="<?php echo $for_sec['id']?>" <?php if($for_sec['id']==$this->search['for_section']){echo "selected='selected'";}?> ><?php echo $for_sec['name']?></option>
 							<?php }}?>

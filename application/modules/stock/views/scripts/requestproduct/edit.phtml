@@ -65,7 +65,7 @@ fieldset{  background:none;}
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); ">								
+	                   		<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); getbranchinfo();">								
 								<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
 										<option value="<?php echo $branch['id']?>" <?php if($row['branch_id']==$branch['id']) echo 'selected="selected"';?>><?php echo $branch['name'];?></option>
 								<?php }?> 
@@ -223,8 +223,30 @@ dojo.require("dojo.NodeList-manipulate");
 		
 		
 		dijit.byId('for_section').attr('value','<?php echo $row['for_section']?>');
-		
+		getbranchinfo();
 	});	
+	var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+	function getbranchinfo(){
+			branch_id = dijit.byId('branch').get('value');
+			if(branch_id==""){
+				return false;
+			}
+			if(branch_id != ""){
+				dojo.xhrPost({
+					url:url_getbranch,
+					content:{
+						'branch_id':branch_id,
+						},
+					handleAs:"json",
+					load: function(data){
+						dojo.byId('lbl_header').innerHTML=data;
+					},
+					error: function(err) {
+						alert(err);
+					}
+				});	
+			} 
+	}
 </script>
 
 
@@ -236,14 +258,15 @@ dojo.require("dojo.NodeList-manipulate");
 				    <td colspan="10"  style="" align="center">
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
 							<tr>
+								<td colspan="3"><label id="lbl_header"></label></td>
+							</tr>
+							<tr>
 								<td width="30%">
-									<img style="width: 55%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo_print.png'?>"><br />
 								</td>
 								<td width="40%" align="center" valign="top" style="">
-									<div style="font-size: 14px;text-align:center;font-family: Khmer OS Muol Light;"><?php echo $tr->translate('CUSTOMER_BRANCH');?></div>
-									<div style="font-size: 12px;font-family:Battambang,Arial,Helvetica,sans-serif"><?php echo $tr->translate('SCHOOL_NAME');?></div> 
 									<div style="font-size: 13px;font-family: khmer OS Muol Light;">ប័ណ្ណស្នើស្តុក</div> 
 									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:2px;">REQUEST STOCK VOUCHER</div> 
+										<br />
 								</td>
 								<td width="30%">
 									<div style="font-size: 16px;font-weight:bold;text-align:center;">
@@ -440,9 +463,6 @@ tmp = '';
 temp='';
 function oldRow() {
 	<?php if(!empty($this->row_detail)) foreach($this->row_detail As $key=>$detail){ ?>
-	label_proname = dijit.byId("pro_id").attr('displayedValue');
-	pro_id=dijit.byId("pro_id").get("value");
-	branch_id=dijit.byId("branch").get("value");
 		col++;no++;
 		template='';
 		if(title!=1){
@@ -477,7 +497,7 @@ function oldRow() {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-		getQtyById(col);
+		//getQtyById(col);
 		dijit.byId("curr_qty"+col).attr('value',<?php echo $detail['qty_curr']?>);
 		dijit.byId("cost_"+col).attr('value',<?php echo $detail['price']?>);
 		dijit.byId("request_qty"+col).attr('value',<?php echo $detail['qty_request']?>);

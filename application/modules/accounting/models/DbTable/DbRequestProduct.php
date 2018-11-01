@@ -84,8 +84,10 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			$_pur = new Accounting_Model_DbTable_DbRequestProduct();
+			$receipt = $this->getRequestCode($data["branch"]);
 			$arr=array(
-					"request_no"    => 	$data["request_no"],
+					"request_no"    => 	$receipt,
 					"request_for"   => 	$data["request_for"],
 					"for_section"   => 	$data["for_section"],
 					"purpose"     	=> 	$data["purpose"],
@@ -284,13 +286,20 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
 //     	return $db->fetchAll($sql);
 //     }
 
-    function getRequestCode(){
+    function getRequestCode($branch_id=null){
     	$db = $this->getAdapter();
-    	$sql="SELECT id FROM rms_request_order WHERE STATUS=1 ORDER BY id DESC LIMIT 1";
+    	$sql="SELECT COUNT(id) FROM rms_request_order WHERE STATUS=1 ";
+    	$pre="";
+    	if (!empty($branch_id)){
+    		$sql.=" AND branch_id=".$branch_id;
+    		$_dbgb = new Application_Model_DbTable_DbGlobal();
+    		$pre.= $_dbgb->getPrefixCode($branch_id);//by branch
+    	}
+    	$sql.=" ORDER BY id DESC LIMIT 1";
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
     	$acc_no= strlen((int)$acc_no+1);
-    	$pre='RQ-';
+    	$pre.='RQ-';
     	for($i = $acc_no;$i<4;$i++){
     		$pre.='0';
     	}

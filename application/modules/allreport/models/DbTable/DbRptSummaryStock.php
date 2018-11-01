@@ -3,141 +3,7 @@
 class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'rms_product';
-    
-    public function getAllProduct($search){
-    	$db = $this->getAdapter();
-    	
-    	$from_date =(empty($search['start_date']))? '1': $search['start_date']." 00:00:00";
-    	$to_date = (empty($search['end_date']))? '1': $search['end_date']." 23:59:59";
-    	
-    	$sql="SELECT d.*,
-			(SELECT b.branch_namekh FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_namekh,
-			(SELECT b.branch_nameen FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_nameen,
-			(SELECT 
-			    SUM(pd.qty) 
-			  FROM
-			    rms_purchase_detail AS pd,
-			    rms_purchase AS pu 
-			  WHERE pu.id = pd.supproduct_id 
-			    AND pd.pro_id = d.id 
-			    AND pu.branch_id = pl.`brand_id`
-			    AND pu.date >= '$from_date' 
-			    AND pu.date <= '$to_date' 
-			    AND pu.status = 1 
-			  GROUP BY pd.pro_id
-			  LIMIT 1
-			) AS purchaseQty,
-			(SELECT 
-		    	SUM(qty_receive) 
-		  	FROM
-			    rms_request_order AS req,
-			    rms_request_orderdetail AS req_d 
-		  	WHERE 
-		  		req.id = req_d.request_id 
-		  		and req_d.pro_id = d.id
-		  		and req_d.branch_id = pl.brand_id
-		  		AND req.request_date >= '$from_date' 
-			    AND req.request_date <= '$to_date'
-			    and req.status=1
-		  	LIMIT 1) AS request,
-			pl.pro_qty
-			FROM `rms_itemsdetail` AS d,
-			rms_product_location AS pl
-			 WHERE 
-			d.id = pl.pro_id
-			AND 
-			 d.items_type=3
-			AND d.status=1";
-    	
-//     	$sql = "SELECT 
-// 					  pl.brand_id,
-// 					  p.*,
-// 					  (SELECT b.branch_namekh FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_namekh,
-// 					  (SELECT b.branch_nameen FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_nameen,
-// 					  (SELECT 
-// 						    SUM(pd.qty) 
-// 						  FROM
-// 						    rms_purchase_detail AS pd,
-// 						    rms_purchase AS pu 
-// 						  WHERE pu.id = pd.supproduct_id 
-// 						    AND pd.pro_id = p.id 
-// 						    AND pu.branch_id = pl.`brand_id`
-// 						    AND pu.date >= '$from_date' 
-// 						    AND pu.date <= '$to_date' 
-// 						    AND pu.status = 1 
-// 						  GROUP BY pd.pro_id
-// 						  LIMIT 1
-// 					   ) AS purchaseQty,
-					  
-// 					  (SELECT 
-// 						    SUM(sal.qty) 
-// 						  FROM
-// 						    rms_saledetail AS sal,
-// 						    rms_student_payment AS sp,
-// 						    rms_program_name AS pn 
-// 						  WHERE 
-// 						  	pn.service_id = sal.pro_id 
-// 						    AND sp.id = sal.payment_id 
-// 						    AND pn.ser_cate_id = p.id 
-// 						    and sp.branch_id = pl.brand_id
-// 						    AND sp.create_date >= '$from_date' 
-// 						    AND sp.create_date <= '$to_date' 
-// 						    AND sp.is_void = 0 
-// 						  GROUP BY sal.pro_id
-// 					  	LIMIT 1
-// 					  ) AS stockOut,
-					  
-// 					  (SELECT 
-// 					    	SUM(qty_receive) 
-// 					  	FROM
-// 						    rms_request_order AS req,
-// 						    rms_request_orderdetail AS req_d 
-// 					  	WHERE 
-// 					  		req.id = req_d.request_id 
-// 					  		and req_d.pro_id = p.id
-// 					  		and req_d.branch_id = pl.brand_id
-// 					  		AND req.request_date >= '$from_date' 
-// 						    AND req.request_date <= '$to_date'
-// 						    and req.status=1
-// 					  	LIMIT 1) AS request,
-// 					  pl.pro_qty 
-// 				from 
-// 					rms_product as p,
-// 					rms_product_location as pl
-// 				where 
-// 					p.id=pl.pro_id	
-// 					and p.status=1	
-//     		";
-    	
-    	$where=' ';
-    	$group_by = " ";
-    	$order=" ORDER BY pl.brand_id ASC,d.id ASC";
-    	
-    	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
-    	}
-    	if(!empty($search['txtsearch'])){
-    		$s_where = array();
-    		$s_search = addslashes(trim($search['txtsearch']));
-    		$s_where[] = " d.title LIKE '%{$s_search}%'";
-    		$s_where[] = " d.code LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
-    	}
-    	
-    	if(!empty($search['branch_id'])){
-    		$where .=' AND pl.brand_id = '.$search['branch_id'];
-    	}
-    	if(!empty($search['pro_type'])){
-    		$where .=' AND d.items_id = '.$search['pro_type'];
-    	}
-    	if(!empty($search['pro_name'])){
-    		$where .=' AND d.id = '.$search['pro_name'];
-    	}
-//     	echo $sql.$where.$group_by.$order;//exit();
-    	return $db->fetchAll($sql.$where.$group_by.$order);
-    }
-   
+    protected $_name = 'rms_itemsdetail';
     function getAllProductName(){
     	$db = $this->getAdapter();
     	$sql="select id , CONCAT(code,' => ',title) as name FROM rms_itemsdetail WHERE status=1 AND items_type=3";
@@ -148,5 +14,297 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     	$sql="select id , title as name FROM rms_items WHERE status=1 AND type=3";
     	return $db->fetchAll($sql);
     }
+    function getAllRequestProduct($search=null){
+    	$db = $this->getAdapter();
+    	$sql="SELECT
+    	re.*,
+    	(select title from rms_request_for as rf where rf.id = request_for) as request_for,
+    	(select title from rms_for_section as fs where fs.id = for_section) as for_section,
+    	(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
+    	(select first_name from rms_users as u where u.id = re.user_id) as user,
+    	(select name_en from rms_view where type=1 and key_code = re.status) as status
+    	FROM
+    	rms_request_order AS re
+    	WHERE
+    	1
+    	";
+    	$where="";
     
+    	$from_date =(empty($search['start_date']))? '1': " re.request_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " re.request_date <= '".$search['end_date']." 23:59:59'";
+    	$where = " AND ".$from_date." AND ".$to_date;
+    
+    	if(!empty($search['title'])){
+    		$s_where=array();
+    		$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
+    		$s_where[]= " REPLACE(re.request_no,' ','') LIKE '%{$s_search}%'";
+    		$s_where[]="  REPLACE(re.request_name,' ','') LIKE '%{$s_search}%'";
+    		$s_where[]= " REPLACE(re.purpose,' ','') LIKE '%{$s_search}%'";
+    		$where.=' AND ('.implode(' OR ', $s_where).')';
+    	}
+    	if($search['request_for']>0){
+    		$where.=" AND request_for=".$search['request_for'];
+    	}
+    	if($search['for_section']>0){
+    		$where.=" AND for_section=".$search['for_section'];
+    	}
+    	if($search['status']>0){
+    		$where.=" AND status=".$search['status'];
+    	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('branch_id');
+    	$order=" ORDER BY re.id DESC";
+    	return $db->fetchAll($sql.$where.$order);
+    }
+    function getRequestProductById($id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT
+    	re.*,
+    	(select title from rms_request_for as rf where rf.id = request_for) as request_for,
+    	(select title from rms_for_section as fs where fs.id = for_section) as for_section,
+    	(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
+    	(select first_name from rms_users as u where u.id = re.user_id) as user,
+    	(select name_en from rms_view where type=1 and key_code = re.status) as status
+    	FROM
+    	rms_request_order AS re
+    	WHERE
+    	re.id = $id
+    	";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('branch_id');
+    	return $db->fetchRow($sql);
+    }
+    
+    function getAllRequestProductDetailById($id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT
+    	*,
+    	(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
+    	(SELECT d.title FROM `rms_itemsdetail` AS d WHERE d.items_type=3 AND d.id = pro_id LIMIT 1) AS pro_name
+    	FROM
+    	rms_request_orderdetail
+    	WHERE
+    	request_id = $id
+    	";
+    	return $db->fetchAll($sql);
+    }
+    
+    
+    public function getAllProduct($search){
+    	try{
+	    	$db = $this->getAdapter();
+	    	$from_date =(empty($search['start_date']))? '1': $search['start_date']." 00:00:00";
+	    	$to_date = (empty($search['end_date']))? '1': $search['end_date']." 23:59:59";
+	    	$sql="SELECT d.*,
+				(SELECT b.branch_namekh FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_namekh,
+				(SELECT b.branch_nameen FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_nameen,
+				(SELECT 
+				    SUM(pd.qty) 
+				  FROM
+				    rms_purchase_detail AS pd,
+				    rms_purchase AS pu 
+				  WHERE pu.id = pd.supproduct_id 
+				    AND pd.pro_id = d.id 
+				    AND pu.branch_id = pl.`brand_id`
+				    AND pu.date >= '$from_date' 
+				    AND pu.date <= '$to_date' 
+				    AND pu.status = 1 
+				  GROUP BY pd.pro_id
+				  LIMIT 1
+				) AS purchaseQty,
+				(SELECT 
+			    	SUM(qty_receive) 
+			  	FROM
+				    rms_request_order AS req,
+				    rms_request_orderdetail AS req_d 
+			  	WHERE 
+			  		req.id = req_d.request_id 
+			  		and req_d.pro_id = d.id
+			  		and req_d.branch_id = pl.brand_id
+			  		AND req.request_date >= '$from_date' 
+				    AND req.request_date <= '$to_date'
+				    and req.status=1
+			  	LIMIT 1) AS request,
+				pl.pro_qty
+				FROM `rms_itemsdetail` AS d,
+				rms_product_location AS pl
+				 WHERE 
+				d.id = pl.pro_id
+				AND 
+				 d.items_type=3
+				AND d.status=1";
+	    	$where=' ';
+	    	$group_by = " ";
+	    	$order=" ORDER BY pl.brand_id ASC,d.id ASC";
+	    	if(!empty($search['txtsearch'])){
+	    		$s_where = array();
+	    		$s_search = addslashes(trim($search['txtsearch']));
+	    		$s_where[] = " d.title LIKE '%{$s_search}%'";
+	    		$s_where[] = " d.code LIKE '%{$s_search}%'";
+	    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+	    	}
+	    	
+	    	if(!empty($search['branch_id'])){
+	    		$where .=' AND pl.brand_id = '.$search['branch_id'];
+	    	}
+	    	if(!empty($search['pro_type'])){
+	    		$where .=' AND d.items_id = '.$search['pro_type'];
+	    	}
+	    	if(!empty($search['pro_name'])){
+	    		$where .=' AND d.id = '.$search['pro_name'];
+	    	}
+	    	$dbp = new Application_Model_DbTable_DbGlobal();
+	    	$where.=$dbp->getAccessPermission("pl.brand_id");
+	    	return $db->fetchAll($sql.$where.$group_by.$order);
+    	}catch (Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    }
+    public function getAllStudentProduct($search,$new=null){
+    	try{
+    		$db = $this->getAdapter();
+    		
+    		$dbp = new Application_Model_DbTable_DbGlobal();
+    		$currentLang = $dbp->currentlang();
+    		$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
+    		if ($currentLang==1){
+    			$stuname="s.stu_khname";
+    		}
+    		
+    		$from_date =(empty($search['start_date']))? '1': $search['start_date']." 00:00:00";
+    		$to_date = $search['end_date'];
+    		$sql ="
+			SELECT 
+			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=sp.branch_id LIMIT 1) AS branch_name,
+			(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=sp.branch_id LIMIT 1) AS branch_logo,
+			sp.student_id as stu_id,
+			$stuname AS student_name,
+			s.stu_khname ,
+			s.stu_enname AS stu_enname,
+			s.last_name  AS last_name,
+			s.stu_code AS stu_code,
+			(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
+			(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
+			(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
+			s.tel AS tel,
+			s.photo AS photo,
+			(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
+			(SELECT ie.images FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS pro_images,
+			(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type,
+			spd.*,
+			sp.branch_id,
+			sp.receipt_number,
+			sp.create_date AS payment_date,
+			(SELECT ctd.remide_date FROM `rms_cutstock_detail` AS ctd WHERE ctd.student_paymentdetail_id=spd.id ORDER BY ctd.remide_date DESC LIMIT 1 ) AS remide_date
+			FROM `rms_student_payment` AS sp,
+			`rms_student_paymentdetail` AS spd,
+			`rms_student` AS s
+			WHERE spd.payment_id = sp.id
+			AND s.stu_id = sp.student_id
+			AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
+			AND is_void=0
+			AND qty_balance >0
+					";
+    		$where="";
+    		if(!empty($search['title'])){
+    			$s_where = array();
+    			$s_search = addslashes(trim($search['title']));
+    			$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
+    			$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
+    			$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
+    			$s_where[] = " s.last_name LIKE '%{$s_search}%'";
+    			$s_where[] = " (SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) LIKE '%{$s_search}%'";
+    			$where .=' AND ( '.implode(' OR ',$s_where).')';
+    		}
+    		if(!empty($search['study_year'])){
+    			$where.=' AND s.academic_year='.$search['study_year'];
+    		}
+    		if(!empty($search['group'])){
+    			$where.=' AND s.group_id='.$search['group'];
+    		}
+    		if(!empty($search['grade_all'])){
+    			$where.=' AND s.grade='.$search['grade_all'];
+    		}
+    		if($search['degree']>0){
+    			$where.=' AND s.degree='.$search['degree'];
+    		}
+    		if(($search['branch_id'])>0){
+    			$where.=' AND sp.branch_id='.$search['branch_id'];
+    		}
+    		$order="";
+    		if (!empty($new)){
+    			// 			$where = " AND spd.id NOT IN (SELECT ctd.student_paymentdetail_id FROM `rms_cutstock_detail` AS ctd ) ";
+    			$where.= " AND spd.qty_balance = spd.qty ";
+    			$order = " ORDER BY sp.id DESC";
+    		}else{
+    			$to_date = (empty($to_date))? '1': " (SELECT ctd.remide_date FROM `rms_cutstock_detail` AS ctd WHERE ctd.student_paymentdetail_id=spd.id ORDER BY ctd.remide_date DESC LIMIT 1 ) <= '".$to_date." 23:59:59'";
+    			$where.= " AND ".$to_date;
+    			$order=" ORDER BY (SELECT ctd.remide_date FROM `rms_cutstock_detail` AS ctd WHERE ctd.student_paymentdetail_id=spd.id ORDER BY ctd.remide_date DESC LIMIT 1 ) DESC ";
+    		
+    		}
+    		
+    		$where.=$dbp->getAccessPermission("sp.branch_id");
+    		return $db->fetchAll($sql.$where.$order);
+    	}catch (Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    }
+    function getAllCutStock($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$dbp = new Application_Model_DbTable_DbGlobal();
+    		$currentLang = $dbp->currentlang();
+    		$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
+    		if ($currentLang==1){
+    			$stuname="s.stu_khname";
+    		}
+    		$sql="
+    		SELECT
+			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+			s.stu_khname,
+			$stuname AS student_name,
+			s.stu_enname,
+			s.last_name,
+			s.stu_code,
+			s.tel,
+			(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
+			(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
+			(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
+			pp.*
+			FROM `rms_cutstock` AS pp,
+			`rms_student` AS s
+			WHERE s.stu_id = pp.student_id
+    		";
+    		$from_date =(empty($search['start_date']))? '1': " pp.received_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+    		$to_date = (empty($search['end_date']))? '1': " pp.received_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+    		$sql.= " AND  ".$from_date." AND ".$to_date;
+    		$where="";
+    		if(!empty($search['adv_search'])){
+    			$s_where=array();
+    			$s_search=addslashes(trim($search['adv_search']));
+    			$s_where[]= " pp.serailno LIKE '%{$s_search}%'";
+    			$s_where[]= " pp.balance LIKE '%{$s_search}%'";
+    			$s_where[]= " pp.total_received LIKE '%{$s_search}%'";
+    			$s_where[]= " pp.total_qty_due LIKE '%{$s_search}%'";
+    
+    			$where.=' AND ('.implode(' OR ', $s_where).')';
+    		}
+    		if(!empty($search['student_id'])){
+    			$where.=" AND pp.student_id=".$search['student_id'];
+    		}
+    		if(!empty($search['status_search'])){
+    			$where.=" AND pp.status=".$search['status_search'];
+    		}
+    		if(!empty($search['branch_search'])){
+    			$where.=" AND pp.branch_id=".$search['branch_search'];
+    		}
+    		
+    		$where.=$dbp->getAccessPermission('pp.branch_id');
+    		$order=" ORDER BY pp.id DESC";
+    		return $db->fetchAll($sql.$where.$order);
+    
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    }
 }

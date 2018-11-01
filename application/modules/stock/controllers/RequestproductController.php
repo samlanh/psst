@@ -202,5 +202,18 @@ class Stock_RequestproductController extends Zend_Controller_Action {
     		exit();
     	}
     }
-
+    function getreceiptAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$branch_id = $data['branch_id'];
+//     		$_dbcht = new Stock_Model_DbTable_DbCutStock();
+//     		$itemsCode = $_dbcht->getCutStockode($branch_id);
+    		
+    		$_pur = new Accounting_Model_DbTable_DbRequestProduct();
+    		$itemsCode=$_pur->getRequestCode($branch_id);
+    		
+    		print_r(Zend_Json::encode($itemsCode));
+    		exit();
+    	}
+    }
 }

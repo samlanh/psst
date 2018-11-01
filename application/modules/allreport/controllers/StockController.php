@@ -221,12 +221,11 @@ class Allreport_StockController extends Zend_Controller_Action {
 						'branch_id'		=>  '',
 						'start_date'	=>	date('Y-m-d'),
 						'end_date'		=>	date('Y-m-d'),
-						'status_search'	=> 1
+						'status'	=> 1
 				);
 			}
-			$db=new Allreport_Model_DbTable_DbRequestStock();
-			$ds=$this->view->rows=$db->getAllRequestProduct($search);
-	
+			$db=new Allreport_Model_DbTable_DbRptSummaryStock();
+			$this->view->rows=$db->getAllRequestProduct($search);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -238,7 +237,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		
 		$for_section = $_pur->getAllForSection();
 		$this->view->for_section = $for_section;
-		
 		$this->view->search = $search;
 		
 		$form=new Registrar_Form_FrmSearchInfor();
@@ -295,9 +293,15 @@ class Allreport_StockController extends Zend_Controller_Action {
 	
 	
 	public function reprintRequestProductAction(){
-		$db = new Allreport_Model_DbTable_DbRequestStock();
+		$db = new Allreport_Model_DbTable_DbRptSummaryStock();
 		$id=$this->getRequest()->getParam("id");
-		$this->view->req = $db->getRequestProductById($id);
+		$id = empty($id)?0:$id;
+		$row = $db->getRequestProductById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/stock/rpt-request-product");
+			exit();
+		}
+		$this->view->req =$row;
 		$this->view->req_detail = $db->getAllRequestProductDetailById($id);
 	}
 	function rptAdjustStockdetailAction(){
@@ -494,5 +498,58 @@ class Allreport_StockController extends Zend_Controller_Action {
 		$form=$form->FrmSearchProduct();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+	}
+	public function rptStudentProductAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'branch_id'=>0,
+					'group'			=>'',
+					'degree'=>0,
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		
+		$stock= new Allreport_Model_DbTable_DbRptSummaryStock();
+		$this->view->rs = $stock->getAllStudentProduct($search);
+		$this->view->rsnew = $stock->getAllStudentProduct($search,1);
+		$this->view->search=$search;
+	}
+	public function rptStudentGetProductAction(){
+		try{
+			if($this->getRequest()->isPost()){
+    			$search = $this->getRequest()->getPost();
+    		}
+    		else{
+    			$search=array(
+    							'branch_search' => '',
+    							'adv_search' => '',
+    					        'student_id'=>'',
+    							'start_date'=> date('Y-m-d'),
+    							'end_date'=>date('Y-m-d'),
+    							'status_search'=>'',
+    					);
+    		}
+			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();
+			$rows = $db->getAllCutStock($search);
+			$this->view->rs=$rows;
+			
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$this->view->search = $search;
+		$frm = new Stock_Form_FrmCutStock();
+		$frm->FrmAddCutStock(null);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_payment = $frm;
 	}
 }

@@ -69,7 +69,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 		array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
 		$this->view->nation = $optionNation;
 		
-		$row = $_db->getAllDocumentType(); // degree language
+		$row = $_db->getAllDocteacherType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
@@ -112,7 +112,7 @@ class Global_LecturerController extends Zend_Controller_Action {
  		array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
  		$this->view->nation = $optionNation;
  		
-		$row = $_db->getAllDocumentType(); // degree language
+		$row = $_db->getAllDocteacherType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
@@ -168,7 +168,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 		array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
 		$this->view->nation = $optionNation;
 			
-		$row = $_db->getAllDocumentType(); // degree language
+		$row = $_db->getAllDocteacherType(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
@@ -197,6 +197,21 @@ class Global_LecturerController extends Zend_Controller_Action {
 			$id = $db->addNewPosition($data);
 			print_r(Zend_Json::encode($id));
 			exit();
+		}
+	}
+	
+	function addDoctypeAction(){
+		if($this->getRequest()->isPost()){
+			try{
+				$data = $this->getRequest()->getPost();
+				$db = new Application_Model_DbTable_DbGlobal();
+				$row = $db->addDoctecherType($data);
+				print_r(Zend_Json::encode($row));
+				exit();
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
 		}
 	}
 	

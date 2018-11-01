@@ -27,7 +27,6 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     }
     public function getStudentProductPaymentDetail($data){
     	$db = $this->getAdapter();
-    	
     	$student_id = $data['student_id'];
     	$branch_id = $data['branch_id'];
     	

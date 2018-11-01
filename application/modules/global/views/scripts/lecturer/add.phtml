@@ -865,7 +865,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 				});
 			}
 		}
-	var url_add_doc_type = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-doctype")); ?>';
+	var url_add_doc_type = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"add-doctype")); ?>';
 	function addDocType(){
 		if(dijit.byId('frm_doc_type').validate()){
 			dijit.byId("save_doc_type").attr("disabled",true);

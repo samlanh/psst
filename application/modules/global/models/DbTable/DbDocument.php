@@ -21,6 +21,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		$_arr=array(
 				'name'	  	  => $title,
 				'create_date' => date("Y-m-d"),
+				'type'		  => $_data['type'],
 				'status'  	  => $_data['status'],
 				'user_id'	  => $this->getUserId()
 		);
@@ -54,6 +55,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 				'name' => $_data['name'],
 				'create_date' => date("Y-m-d"),
 				'status'   => $_data['status'],
+				'type'		  => $_data['type'],
 				'user_id'	  => $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("id=?", $_data["id"]);

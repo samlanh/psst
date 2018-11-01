@@ -262,6 +262,28 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order_by);
 	}
 	
+	function getTeachDocumentAlert(){
+		$db = $this->getAdapter();
+		$day = 5;
+		$end_date = date('Y-m-d',strtotime(" +$day day"));
+		$sql =" SELECT s.branch_id,
+			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
+			s.teacher_code,s.teacher_name_kh,s.tel,
+			s.email,
+			sd.* 
+			FROM `rms_teacher_document` AS sd, `rms_teacher` AS s
+			WHERE s.id = sd.stu_id
+			AND sd.is_receive=0
+		";
+		$where ='';
+		$to_date = (empty($end_date))? '1': " sd.date_end <= '".$end_date." 23:59:59'";
+		$where.= " AND ".$to_date;
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission("s.branch_id");
+		$order=" ORDER BY sd.date_end DESC, sd.stu_id ASC";
+		return $db->fetchAll($sql.$where.$order);
+	}
+	
 	public function getViewById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT id, 

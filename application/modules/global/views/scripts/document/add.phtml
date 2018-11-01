@@ -16,6 +16,11 @@
 		<form id='add_document' action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
   				 if(this.validate()) {
+				type=dijit.byId('type').get('value');
+					if(type==0){
+						alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?> !');dijit.byId('type').focus();return false;
+					return false;
+				}
     				dijit.byId("save_close").attr("disabled",true);
 					dijit.byId("save_new").attr("disabled",true);
    					 return true;
@@ -36,7 +41,7 @@
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOCUMENT_TYPE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="type" id="type" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
+	                   		<select name="types" id="types" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
 	                   				<option value="0" ><?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?></option>
     								<option value="1" label="<?php echo $tr->translate('STUDENT_DOCUMENT');?>"><?php echo $tr->translate('STUDENT_DOCUMENT');?></option>
     								<option value="2" label="<?php echo $tr->translate('TEACHER_DOCUMENT');?>"><?php echo $tr->translate('TEACHER_DOCUMENT');?></option>
@@ -71,6 +76,11 @@
 <script>
 function submitDataClose(){
 	if(dijit.byId('add_document').validate()) {
+		type=dijit.byId('type').get('value');
+		if(type==0){
+			alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?> !');dijit.byId('type').focus();return false;
+			return false;
+		}
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'document','action'=>'add')); ?>';

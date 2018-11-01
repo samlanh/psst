@@ -38,10 +38,10 @@
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOCUMENT_TYPE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="type" id="type" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
+	                   		<select name="types" id="types" dojoType="dijit.form.FilteringSelect" required="true" class="fullside">
 	                   				<option value="0" ><?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?></option>
-    								<option value="1" <?php if ($rs["type"]==1){echo "selected='selected'";}?> label="<?php echo $tr->translate('STUDENT_DOCUMENT');?>"><?php echo $tr->translate('STUDENT_DOCUMENT');?></option>
-    								<option value="2" <?php if ($rs["type"]==2){echo "selected='selected'";}?> label="<?php echo $tr->translate('TEACHER_DOCUMENT');?>"><?php echo $tr->translate('TEACHER_DOCUMENT');?></option>
+    								<option value="1" <?php if ($rs["types"]==1){echo "selected='selected'";}?> label="<?php echo $tr->translate('STUDENT_DOCUMENT');?>"><?php echo $tr->translate('STUDENT_DOCUMENT');?></option>
+    								<option value="2" <?php if ($rs["types"]==2){echo "selected='selected'";}?> label="<?php echo $tr->translate('TEACHER_DOCUMENT');?>"><?php echo $tr->translate('TEACHER_DOCUMENT');?></option>
 							</select>
 	                   </div>
 	                </div>

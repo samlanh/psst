@@ -21,7 +21,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		$_arr=array(
 				'name'	  	  => $title,
 				'create_date' => date("Y-m-d"),
-				'type'		  => $_data['type'],
+				'types'		  => $_data['type'],
 				'status'  	  => $_data['status'],
 				'user_id'	  => $this->getUserId()
 		);
@@ -55,7 +55,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 				'name' => $_data['name'],
 				'create_date' => date("Y-m-d"),
 				'status'   => $_data['status'],
-				'type'		  => $_data['type'],
+				'types'		  => $_data['types'],
 				'user_id'	  => $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("id=?", $_data["id"]);
@@ -67,6 +67,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 				    id,
 					name,
 					create_date,
+				   (SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=types) AS type_document,
 				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
 					status
 				FROM 
@@ -82,6 +83,9 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 			$s_search = addslashes(trim($search['title']));
 			$s_where[] = "name LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if($search['type_search']){
+			$where.=' AND types='.$search['type_search'];
 		}
 		if($search['status']>-1){
 			$where.=' AND status='.$search['status'];

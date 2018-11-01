@@ -262,13 +262,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    public function getAllDocumentType(){
    	$db = $this->getAdapter();
-   	$sql = "SELECT name as id, name FROM rms_document_type WHERE type=1 AND name!='' ORDER BY rms_document_type.id ASC ";
+   	$sql = "SELECT name as id, name FROM rms_document_type WHERE types=1 AND name!='' ORDER BY rms_document_type.id ASC ";
    	return $db->fetchAll($sql);
    }
    
    public function getAllDocteacherType(){
    	$db = $this->getAdapter();
-   	$sql = "SELECT name as id, name FROM rms_document_type WHERE type=2 AND name!='' ORDER BY rms_document_type.id ASC ";
+   	$sql = "SELECT name as id, name FROM rms_document_type WHERE types=2 AND name!='' ORDER BY rms_document_type.id ASC ";
    	return $db->fetchAll($sql);
    }
    
@@ -1404,7 +1404,7 @@ function getAllgroupStudyNotPass($action=null){
   function addDocstudentType($data){
   	$array = array(
   			"name"		=>$data['title_doc_type'],
-  			"type"		=>1,
+  			"types"		=>1,
   			"user_id"	=>$this->getUserId(),
   			"create_date"=>date("Y-m-d H:i:s"),
   	);
@@ -1415,7 +1415,7 @@ function getAllgroupStudyNotPass($action=null){
   function addDoctecherType($data){
   	$array = array(
   			"name"		=>$data['title_doc_type'],
-  			"type"		=>2,
+  			"types"		=>2,
   			"user_id"	=>$this->getUserId(),
   			"create_date"=>date("Y-m-d H:i:s"),
   	);

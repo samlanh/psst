@@ -489,6 +489,15 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_title->setAttribs(array('dojoType'=>$this->text,"class"=>"fullside",
 				'placeholder'=>$this->tr->translate("SEARCH_DOCUMENT_TITLE")));
 		$_title->setValue($request->getParam("title"));
+		
+		$_type=  new Zend_Dojo_Form_Element_FilteringSelect('type_search');
+		$_type->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
+		$_type_opt = array(
+				0=>$this->tr->translate("PLEASE_SELECT_CATEGORY"),
+				1=>$this->tr->translate("STUDENT_DOCUMENT"),
+				2=>$this->tr->translate("TEACHER_DOCUMENT"));
+		$_type->setMultiOptions($_type_opt);
+		$_type->setValue($request->getParam("type_search"));
 	
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
 		$_status->setAttribs(array('dojoType'=>$this->filter,"class"=>"fullside",));
@@ -498,7 +507,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
-		$this->addElements(array($_title,$_status));
+		$this->addElements(array($_title,$_type,$_status));
 	
 		return $this;
 	}

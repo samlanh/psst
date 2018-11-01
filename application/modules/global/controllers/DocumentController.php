@@ -15,12 +15,14 @@ class Global_DocumentController extends Zend_Controller_Action {
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = array(
-						'title' => $_data['title'],
-						'status' => $_data['status_search']);
+						'title' 	=> $_data['title'],
+						'type_search' => $_data['type_search'],
+						'status' 		=> $_data['status_search']);
 			}
 			else{
 				$search = array(
 						'title' => '',
+						'type_search' => 0,
 						'status' => -1);
 			}
  			$db = new Global_Model_DbTable_DbDocument();
@@ -29,7 +31,7 @@ class Global_DocumentController extends Zend_Controller_Action {
  			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("DOCUMENT_NAME","CREATED_DATE","BY_USER","STATUS");
+			$collumns = array("DOCUMENT_NAME","CREATED_DATE","DOCUMENT_TYPE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'document','action'=>'edit',
 			);

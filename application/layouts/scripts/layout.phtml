@@ -310,6 +310,16 @@ $teacher_id = $session_t->teacher_id;
 				                          </li>
 				                          	<?php }?>
 						                  <?php }?>
+						                  <?php if ((count($stuproduct)+count($stuproductNew))>19){?>
+						                  <li>
+						                      <div class="text-center">
+						                        <a href="<?php echo $this->baseUrl()."/allreport/stock/rpt-student-product"?>">
+						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
+						                          <i class="fa fa-angle-right"></i>
+						                        </a>
+						                      </div>
+						                    </li>
+						                  <?php }?>
 						              </ul>
 						         </li>
 				                <li role="presentation" class="dropdown">

@@ -79,7 +79,8 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission("sp.branch_id");
-		return $db->fetchAll($sql.$where.$order);
+		$limit=" LIMIT 10";
+		return $db->fetchAll($sql.$where.$order.$limit);
 	}
 }
 ?>

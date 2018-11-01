@@ -8,53 +8,10 @@
   <meta charset="utf-8">
 </head>
 <style>
-select{ width:100%;}
-fieldset{  background:none;}
-table tr.head-title{ background: none repeat scroll 0% 0% rgba(213, 249, 244, 1); padding:2px;}
-table tr td.null-border{ background: #fff; border-left:none !important;}
-table .set-style td,table .set-style th{ padding: 0px; border:1px solid #ccc;font-size: 12px;}
-table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
-div.panel {
-    padding: 0 18px;
-    display: none;
-    background-color: white;
-}
-div.panel.show {
-    display: block;
-}
-.ui-accordion .ui-accordion-content {
-    min-height: 200px;
-}
-.ui-widget {
-    font-family: Verdana,Arial,sans-serif,'Khmer OS Battambang' !important;
-}
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-    color: #212121 !important;
-    background: #94d3e6 !important;
-}
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
-    background: #cae694 !important;
-}
-.ui-accordion .ui-accordion-header {
-    margin: 0 !important;
-}
-.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
-    border-bottom-right-radius: 0px !important;
-}
-.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
-    border-bottom-left-radius: 0px !important;
-}
-.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
-    border-top-right-radius: 0px !important;
-}
-.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-    border-top-left-radius: 0px !important;
-}
-</style>
-<style>
-ul.blogscoresubject li{list-style: none;width:10%;float: left; }
-ol.blogscoresubject li{list-style: none;width:10%;float: left; }
-ol{margin: 10px;}
+	select{ width:100%;}
+	fieldset{  background:none;}
+	table tr.head-title{ background: none repeat scroll 0% 0% rgba(213, 249, 244, 1); padding:2px;}
+	ol{margin: 10px;}
 </style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
@@ -66,9 +23,10 @@ dojo.ready(function(){
 	var subject = [];
 		var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
 		new dijit.form.FilteringSelect({
-		    store:years_store,
-		    autoComplete: true,                        
+		    store:years_store,		                    
 		    required: true,
+		    queryExpr: "*${0}*",
+			autoComplete: false,     			
 		    id: "year_study",
 		    name: "year_study",           
 		    class: 'fullside',  
@@ -78,10 +36,10 @@ dojo.ready(function(){
 		    	filterStudent();
 		    }
 		}, "year_study");
-
 		
 		new dijit.form.FilteringSelect({
-			autoComplete: true,                        
+			queryExpr: "*${0}*",
+			autoComplete: false,                        
 			id: "grade",
 			name: "grade",           
 			class: 'fullside', 
@@ -90,6 +48,20 @@ dojo.ready(function(){
 				filterStudent();
 			}
 		}, "grade");
+
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,             
+			id: "group",
+			name: "group",           
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+			onChange: function() {
+				getSubjectByGroup();
+				getInfoBygroup();
+			}
+		}, "group");
+		getAllGroupByBranch();
 });
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-grade')); ?>';
@@ -156,9 +128,7 @@ function filterStudent(){
 		      	      temp+='<th class="" style="height:130px;transform: rotate(-90deg);border:1px solid #000;width:50px !important;font-weight:500">'+stringsname+'</th>';
 	              }
 				  temp+='<th class=""><?php echo $tr->translate('NOTE');?></th>'+'</thead></tr>';
-				  rowspan=data.length;
-				  first_row=0;
-				for(i=0;i<data.length;i++){ //alert(data[i].stu_id);
+				for(i=0;i<data.length;i++){
 					inx = i+1;
 					num++;
 					inx = i+1;
@@ -238,20 +208,26 @@ function gender(sex){
 			</script>
 			<div class="card-box">
 				<div class="col-md-6 col-sm-6 col-xs-12">
-		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_TITLE");?> </label>
+		    		 <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" />
+		                	<select class="fullside" tabindex="15" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getAllGroupByBranch();">
+								<?php if(!empty($this->row_branch))foreach ($this->row_branch as $row){?>
+								<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
+								<?php }?>
+							</select>
 		                </div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside" tabindex="15" name="group"   queryExpr="*${0}*" autoComplete="false" id="group" dojoType="dijit.form.FilteringSelect" onchange="getSubjectByGroup(); getInfoBygroup();">
-								<?php if(!empty($this->group))foreach ($this->group as $row){?>
-								<option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
-								<?php }?>
-							</select>
+							<input id="group">
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT_TITLE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input type="text" name="title" id="title" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" />
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -267,10 +243,10 @@ function gender(sex){
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("របបពិន្ទុ");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select class="fullside" tabindex="15" name="max_score" id="max_score"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" >
-									<option value="10">10</option>
-									<option value="50">50</option>
-									<option value="100">100</option>
-								</select>
+								<option value="10">10</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+							</select>
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -420,35 +396,29 @@ function getSubjectByGroup(){
 	    }
 	});
 }
-
-var url_getChileSubject = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-childsubject')); ?>';
-function CalculateTotalScore(mainSubjectId , stu_id , main_subject_name , main_subject_number){
+url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+function getAllGroupByBranch(){
+	dijit.byId('group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
 	dojo.xhrPost({
-	    url: url_getChileSubject,
-	    content : { 
-			'subject_id':mainSubjectId,
-		},				    
-	   handleAs:"json", 
-	   load: function(data) {
-			sum_sub_score = 0;
-			if(data!=""){
-				   no=0;
-				   for(i=0;i<data.length;i++){
-					   no++;
-					   stringsname = data[i].subject_titleen.replace(' ','');
-
-						control_name = "child"+stu_id+stringsname+no;
-
-					    child_score = $('#child'+stu_id+stringsname+no).val();
-					    if(child_score==''){child_score=0;}
-						sum_sub_score = sum_sub_score + parseFloat(child_score);
-				   }
-				   $('#'+stu_id+main_subject_name+main_subject_number).val(sum_sub_score);
-			}
-	   },		
-	    error: function(err) {
-			   alert(err);
-		    }
-		});
+		url: url_getgroup,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+		    group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group').set('store',group_store);   
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 </script>

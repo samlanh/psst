@@ -1,10 +1,9 @@
 <?php
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$frm = $this->frm_callteral;
-echo $this->headTitle($tr->translate("ADD_STUDY_GROUP"));
-$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-$frm = $this->frm;
-//print_r($this->calture); exit();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$frm = $this->frm_callteral;
+	echo $this->headTitle($tr->translate("ADD_STUDY_GROUP"));
+	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+	$frm = $this->frm;
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">

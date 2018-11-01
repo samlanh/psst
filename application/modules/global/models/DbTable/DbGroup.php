@@ -268,10 +268,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$from_date =(empty($search['start_date']))? '1': "g.date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "g.date <= '".$search['end_date']." 23:59:59'";
 		$where.= " AND ".$from_date." AND ".$to_date;
-		$order =  ' ORDER BY `g`.`id` DESC ' ;
-		if(empty($search)){
-			return $db->fetchAll($sql.$order);
-		}
+		
 		if(!empty($search['title'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
@@ -306,6 +303,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('g.branch_id');
 		$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1)');
+		$order =  ' ORDER BY `g`.`id` DESC ' ;
 		return $db->fetchAll($sql.$where.$order);
 	}
 	function getAllGrade($grade_id){

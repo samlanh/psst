@@ -27,14 +27,13 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 			}
 			$this->view->search = $search;
 			$rs_rows = $db->getAllScore($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
+			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("SUBJECT_TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+			$collumns = array("BRANCH_NAME","SUBJECT_TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'score','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('exam_type'=>$link,'title_score'=>$link,
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'exam_type'=>$link,'title_score'=>$link,
 					'for_semester'=>$link,'for_month'=>$link,'academic_id'=>$link,'degree'=>$link,'group_id'=>$link));
 		
 		}catch (Exception $e){
@@ -54,6 +53,7 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
+			
 			if($dbset['scoreresulttye']==1){
 				$db = new Foundation_Model_DbTable_DbScore();//by subject
 			}else{
@@ -67,24 +67,25 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 					$rs =  $db->addStudentScore($_data);
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/score");
 				}
+				print_r($_data);exit();
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->row_branch=$db_global->getAllBranch();
 		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result= $db_global->getAllgroupStudy();
-		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
-		$this->view->group = $result;
+// 		$result= $db_global->getAllgroupStudy();
+// 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
+// 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();
-			
 		$db = new Foundation_Model_DbTable_DbScore();
-		$this->view->month = $db->getAllMonth();
+		$this->view-> month = $db->getAllMonth();
 	}
 	public	function editAction(){
 		$id=$this->getRequest()->getParam('id');
@@ -117,14 +118,15 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 		$this->view->row_g=$_model->getGroupStudent($id);
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		$this->view->row_branch=$db_global->getAllBranch();
 		$this->view->row_year=$db_global->getAllYear();
 		$this->view->session=$db_global->getSession();
 		$this->view->degree=$db_global->getDegree();
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$result = $db_global->getAllgroupStudy();
-		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
-		$this->view->group = $result;
+// 		$result = $db_global->getAllgroupStudy();
+// 		array_unshift($result, array ( 'id' => '', 'name' =>$this->tr->translate("SELECT_GROUP")) );
+// 		$this->view->group = $result;
 		$this->view->room = $row =$db_global->getAllRoom();		
 		
 		$db = new Foundation_Model_DbTable_DbScore();

@@ -42,6 +42,11 @@ $teacher_id = $session_t->teacher_id;
 	$news = $ddgb->getAllNew(10);
 	$notread = $ddgb->getNewNotreadByUser();
 	$notread = empty($notread)?0:$notread;
+	
+	$dbNotification = new Application_Model_DbTable_DbNotification();
+	$stu_doc = $dbNotification->getStuDocumentAlert();
+	$stuproduct = $dbNotification->getStuProductAlert();
+	$stuproductNew = $dbNotification->getStuProductAlert(1);
     ?>
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -149,7 +154,23 @@ $teacher_id = $session_t->teacher_id;
 	 
 	<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>
 	<link href="<?php echo $this->baseUrl()."/datatable/bootstrap-custome.css"?>" media="screen" rel="stylesheet" type="text/css">
-	 
+	 <style>
+		.top_nav .dropdown-menu li div.bg-style{
+			height: 70px;
+		    width: 70px;
+		    position: absolute;
+		    left: 30%;
+		    opacity: 0.1;
+		    top: 2px;
+		}
+		.top_nav .dropdown-menu li div.media-body span.title.stu {
+			white-space: nowrap;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    width: 97%;
+		    display: block;
+		}
+	</style>
 </head>
 <body class="nav-md soria footer_fixed ">
 	<div class="container body">
@@ -201,6 +222,148 @@ $teacher_id = $session_t->teacher_id;
 					                    </li>
 				                  </ul>
 				                </li>
+				                <li role="presentation" class="dropdown">
+					                  <a title="<?php echo $tr->translate("STUDENT_PRODUCT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+					                    <i class="fa fa-cubes "></i>
+					                    <span id="countNews" class="badge bg-green"><?php if ((count($stuproduct)+count($stuproductNew))>0){ echo (count($stuproduct)+count($stuproductNew));}?></span>
+					                  </a>
+					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+						                 <li class=" event title">
+						                  	<h4><i class="fa fa-cubes "></i> <?php echo $tr->translate("STUDENT_PRODUCT");?></h4>
+						                  </li>
+						                  <?php if(!empty($stuproductNew)){?>
+						                  <li class=" event ">
+						                  	<span><i class="fa fa-cubes "></i> <?php echo $tr->translate("NEW_RECEIPT_PRODUCT");?></span>
+						                  </li>
+						                  	<?php foreach($stuproductNew as $key=> $rspro){
+				                          	$url = $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'add'), null, true)."/id/".$rspro['stu_id'];
+					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
+					                          	if (!empty($rspro['photo'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rspro['photo'])) {
+					                          			$profileimg = $this->baseUrl().'/images/photo/'.$rspro['photo'];
+					                          		}
+					                          	}
+					                          	$style="";
+					                          	if (!empty($rspro['pro_images'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/proimage/'.$rspro['pro_images'])) {
+					                          			$style="background: url(".$this->baseUrl()."/images/proimage/".$rspro['pro_images'].");  background-repeat: no-repeat; background-size: 100%;";
+					                          		}
+					                          	}
+				                          	?>
+				                          	<li class="event " title="<?php echo $rspro['items_name'];?>">
+				                         	 <a href="<?php echo $url;?>">
+				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
+					                            <div class="pull-left profile-list ">
+					                              <img src="<?php echo $profileimg;?>" />
+					                            </div>
+					                            <div class="media-body">
+					                              <span class="title stu bold" ><?php echo $rspro['stu_code'];?>  <?php echo $rspro['stu_enname']." ".$rspro['last_name'];?></span>
+					                              <span class="title" ><?php echo $tr->translate("RECEIPT")." : ".$rspro['receipt_number'];?></span><br />
+					                              <span class="title" ><?php echo $rspro['items_name'];?></span><br />
+					                              <span ><?php echo $tr->translate("AMOUNT")." <strong>".$rspro['qty_balance']."</strong>";?></span>
+					                            </div>
+				                            </a>
+				                          </li>
+				                          	<?php }?>
+						                  <?php }?>
+						                  <?php if(!empty($stuproduct)){?>
+						                  <li class=" event ">
+						                  	<span><i class="fa fa-cubes "></i> <?php echo $tr->translate("OLD_RECEIPT_PRODUCT");?></span>
+						                  </li>
+						                  	<?php foreach($stuproduct as $key=> $rspro){
+				                          	$url = $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'add'), null, true)."/id/".$rspro['stu_id'];
+					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
+					                          	if (!empty($rspro['photo'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rspro['photo'])) {
+					                          			$profileimg = $this->baseUrl().'/images/photo/'.$rspro['photo'];
+					                          		}
+					                          	}
+					                          	$style="";
+						                  		if (!empty($rspro['pro_images'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/proimage/'.$rspro['pro_images'])) {
+					                          			$style="background: url(".$this->baseUrl()."/images/proimage/".$rspro['pro_images'].");  background-repeat: no-repeat; background-size: 100%;";
+					                          		}
+					                          	}
+					                          	$end_dat=date("Y-m-d");
+					                          	$total_day=strtotime($end_dat)-strtotime($rspro['remide_date']);
+					                          	$total_late_day=$total_day/(60*60*24);
+				                          	?>
+				                          	<li class="event " title="<?php echo $rspro['items_name'];?>">
+				                         	 <a href="<?php echo $url;?>">
+				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
+					                            <div class="pull-left profile-list ">
+					                              <img src="<?php echo $profileimg;?>" />
+					                            </div>
+					                            <div class="media-body">
+					                              <span class="title stu bold" ><?php echo $rspro['stu_code'];?>  <?php echo $rspro['stu_enname']." ".$rspro['last_name'];?></span>
+					                              <span class="title" ><?php echo $tr->translate("RECEIPT")." : ".$rspro['receipt_number'];?></span><br />
+					                              <span class="title" ><?php echo $rspro['items_name'];?></span><br />
+					                              <span  ><?php echo $tr->translate("AMOUNT")." <strong>".$rspro['qty_balance']."</strong>";?></span>
+					                              <p> 
+					                              <?php if ($total_late_day>0){?>
+					                              <small><?php echo $tr->translate("LATE")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
+					                              <?php }?>
+					                              <small><?php echo $tr->translate("DATE_GIVE")." : ".date("d/M/Y",strtotime($rspro['remide_date'])); ?></small>
+					                              </p>
+					                            </div>
+				                            </a>
+				                          </li>
+				                          	<?php }?>
+						                  <?php }?>
+						              </ul>
+						         </li>
+				                <li role="presentation" class="dropdown">
+					                  <a title="<?php echo $tr->translate("STUDENT_DOCUMENT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+					                    <i class="fa fa-file-text-o "></i>
+					                    <span id="countNews" class="badge bg-green"><?php if (count($stu_doc)>0){ echo count($stu_doc);}?></span>
+					                  </a>
+					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+						                 <li class=" event title">
+						                  	<h4><i class="fa fa-file-text-o "></i> <?php echo $tr->translate("STUDENT_DOCUMENT");?></h4>
+						                  </li>
+						                  <?php if(!empty($stu_doc)){?>
+						                  	<?php foreach($stu_doc as $key=> $rsdoc){
+				                          	$url = $this->url(array('module'=>'foundation','controller'=>'register','action'=>'edit'), null, true)."/id/".$rsdoc['stu_id'];
+					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
+					                          	if (!empty($rsdoc['photo'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rsdoc['photo'])) {
+					                          			$profileimg = $this->baseUrl().'/images/photo/'.$rsdoc['photo'];
+					                          		}
+					                          	}
+					                          	$style="";
+					                          	if (!empty($rsdoc['branch_logo'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/'.$rsdoc['branch_logo'])) {
+					                          			$style="background: url(/elt/trunk/public/images/".$rsdoc['branch_logo'].");  background-repeat: no-repeat; background-size: 100%;";
+					                          		}
+					                          	}
+					                          	$end_dat=date("Y-m-d");
+					                          	$total_day=strtotime($end_dat)-strtotime($rsdoc['date_end']);
+					                          	$total_late_day=$total_day/(60*60*24);
+				                          	?>
+				                          	<li class="event " title="<?php echo $rsdoc['document_type'];?>">
+				                         	 <a href="<?php echo $url;?>">
+				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
+					                            <div class="pull-left profile-list ">
+					                              <img src="<?php echo $profileimg;?>" />
+					                            </div>
+					                            <div class="media-body">
+					                              <span ><?php echo $rsdoc['stu_code'];?>  
+					                              </span><br />
+					                              <span class="title bold" ><?php echo $rsdoc['stu_enname']." ".$rsdoc['last_name'];?></span><br />
+					                              <span class="title" ><?php echo $rsdoc['document_type'];?></span>
+					                              <p> 
+					                               <?php if ($total_late_day>0){?>
+					                              <small><?php echo $tr->translate("LATE")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
+					                              <?php }?>
+					                              <small><?php echo $tr->translate("DATE_GIVE")." : ".date("d/M/Y",strtotime($rsdoc['date_end'])); ?></small>
+					                              </p>
+					                            </div>
+				                            </a>
+				                          </li>
+				                          	<?php }?>
+						                  <?php }?>
+						               </ul>
+					            </li>
 					              <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("NEWS");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-globe"></i>

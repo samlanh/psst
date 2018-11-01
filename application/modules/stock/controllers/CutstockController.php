@@ -66,6 +66,12 @@ class Stock_CutstockController extends Zend_Controller_Action {
 				echo $e->getMessage();
 			}
 		}
+		$id=$this->getRequest()->getParam('id');
+		$stuid = empty($id)?0:$id;
+		$db= new Foundation_Model_DbTable_DbStudent();
+		$row = $db->getStudentById($stuid);
+// 		print_r($row);exit();
+		$this->view->stu = $row;
 		
 		$frm = new Stock_Form_FrmCutStock();
 		$frm->FrmAddCutStock(null);

@@ -90,6 +90,27 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_note = new Zend_Dojo_Form_Element_Textarea('notes');
 		$_note->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:80px;',));
 		
+		$_reason = new Zend_Dojo_Form_Element_Textarea('reason');
+		$_reason->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:80px;',));
+		
+		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
+		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_status_opt = array(
+				1=>$this->tr->translate("ACTIVE"),
+				0=>$this->tr->translate("DACTIVE"));
+		$_status->setMultiOptions($_status_opt);
+		
+		$degree =  new Zend_Dojo_Form_Element_FilteringSelect('degree');
+		$degree->setAttribs(array('readOnly'=>'readOnly',
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'onChange'=>'getallGrade();getStudentNo()',
+		
+		));
+		$rs_degree = $_dbgb->getAllFecultyName();
+		$arr_opt = array();
+		if(!empty($rs_degree))foreach($rs_degree AS $row) $arr_opt[$row['id']]=$row['name'];
+		$degree->setMultiOptions($arr_opt);
 		
 		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
 		$_academic->setAttribs(array('dojoType'=>$this->filter,
@@ -97,6 +118,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>false
 		));
+		
 		$_academic->setValue($request->getParam("academic_year"));
 		$db = new Global_Model_DbTable_DbGroup();
 		$rows= $db->getAllYears();
@@ -105,21 +127,55 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$_academic->setMultiOptions($opt);
 		
+		$_type = new Zend_Dojo_Form_Element_FilteringSelect('type');
+		$_type->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>false
+		));
+		
+		$_type->setValue($request->getParam("type"));
+		$db = new Foundation_Model_DbTable_DbStudentDrop();
+		$rows= $db->getAllDropType();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_TYPE")));
+		$opt=array();
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$_type->setMultiOptions($opt);
+		
+		$room =  new Zend_Dojo_Form_Element_FilteringSelect('room');
+		$room->setAttribs(array('readOnly'=>'readOnly',
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+		
+		));
+		$rs_roow = $_dbgb->getAllRoom();
+		$arr_room = array(-1=>$tr->translate("SELECT_ROOM"));
+		if(!empty($rs_roow))foreach($rs_roow AS $row) $arr_room[$row['id']]=$row['name'];
+		$room->setMultiOptions($arr_room);
+		
 		$session = new Zend_Dojo_Form_Element_FilteringSelect("session");
+		$session->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readOnly'=>'readOnly'));
 		$opt_session = array(
 				1=>$tr->translate('MORNING'),
 				2=>$tr->translate('AFTERNOON'),
 				3=>$tr->translate('EVERNING'),
 				4=>$tr->translate('WEEKEND'),
 		);
+		
 		$session->setMultiOptions($opt_session);
 		$session->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'required'=>'true',
 				'class'=>'fullside',));
+		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('gender');
+		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readOnly'=>'readOnly'));
+		$sex_opt = array(
+				1=>$tr->translate("MALE"),
+				2=>$tr->translate("FEMALE"));
+		$_sex->setMultiOptions($sex_opt);
+		
 		
 		$_calture = new Zend_Dojo_Form_Element_FilteringSelect('calture');
-		$_calture->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
+		$_calture->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readOnly'=>'readOnly',
 				'placeholder'=>$this->tr->translate("SERVIC"),
 				'class'=>'fullside',
 				'autoComplete'=>"false",
@@ -139,14 +195,15 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		if($data!=null){
 			$id->setValue($data['id']);
 			$_branch_id->setValue($data['branch_id']);
-			$_goup->setValue($data['group_code']);
+			$_type->setValue($data['type']);
+			//$_goup->setValue($data['group_code']);
 			$_academic->setValue($data['academic_year']);
 			$session->setValue($data['session']);
-			$_calture->setValue($data['calture']);
-			$_time->setValue($data['time']);
-			//$_note->setValue($data['notes']);
+			//$_calture->setValue($data['calture']);
+			//$_time->setValue($data['time']);
+			$_reason->setValue($data['reason']);
 		}
-		$this->addElements(array($id,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
+		$this->addElements(array($id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
 		return $this;
 	}
 	

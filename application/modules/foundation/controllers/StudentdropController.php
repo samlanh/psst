@@ -72,10 +72,14 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$this->view->rsbranch = $db_global->getAllBranch();
 			$this->view->degree = $db_global->getAllDegreeMent();
 			$this->view->group = $db->getAllgroupStudy();
-			$this->view->room = $row =$db_global->getAllRoom();
-			$this->view->grade = $db_global->getAllGrade();
 			$this->view->session=$db_global->getSession();
-			$this->view->row_year=$db_global->getAllYear();
+			
+			$d_row= $db_global->getAllGradeStudy();
+			$this->view->grade_name=$d_row;
+			$tsub= new Global_Form_FrmAddClass();
+			$frm_group=$tsub->FrmAddGroup();
+			Application_Model_Decorator::removeAllDecorator($frm_group);
+			$this->view->frm = $frm_group;
 			
 		}catch(Exception $e){
 			echo $e->getMessage();
@@ -112,10 +116,15 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$this->view->rsbranch = $db_global->getAllBranch();
 			$this->view->degree = $db_global->getAllDegreeMent();
 			$this->view->group = $db->getAllgroupStudy();
-			$this->view->room = $row =$db_global->getAllRoom();
-			$this->view->grade = $db_global->getAllGrade();
 			$this->view->session=$db_global->getSession();
-			$this->view->row_year=$db_global->getAllYear();
+			
+			$d_row= $db_global->getAllGradeStudy();
+			$this->view->grade_name=$d_row;
+			$tsub= new Global_Form_FrmAddClass();
+			$frm_group=$tsub->FrmAddGroup();
+			Application_Model_Decorator::removeAllDecorator($frm_group);
+			$this->view->frm = $frm_group;
+			//print_r($row); exit();
 			
 		}catch(Exception $e){
 			echo $e->getMessage();

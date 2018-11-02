@@ -67,7 +67,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 				    id,
 					name,
 					create_date,
-				   (SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=types) AS type_document,
+				   (SELECT name_kh FROM rms_view WHERE rms_view.type=25 AND rms_view.key_code=types) AS type_document,
 				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
 					status
 				FROM 

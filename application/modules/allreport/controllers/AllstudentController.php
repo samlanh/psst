@@ -430,14 +430,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function rptTeacheralertAction(){
 		$db = new Global_Model_DbTable_DbTeacher();
 		if($this->getRequest()->isPost()){
-			$_data=$this->getRequest()->getPost();
-			$search = array(
-					'title'  => $_data['title'],
-					'degree' => $_data['degree'],
-					'nationality' => $_data['nationality'],
-					'branch_id' => $_data['branch_id'],
-					'status' => $_data['status_search']
-			);
+			$search=$this->getRequest()->getPost();
 		}
 		else{
 			$search = array(
@@ -445,7 +438,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'degree' => '',
 					'nationality' => '',
 					'branch_id' => '',
-					'status' => -1);
+					'end_date'=>date('Y-m-d'),
+					);
 		}
 		$this->view->rs= $db->getTeachDocumentAlert($search);
 		$frm = new Application_Form_FrmOther();

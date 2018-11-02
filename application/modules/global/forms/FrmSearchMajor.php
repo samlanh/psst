@@ -112,6 +112,19 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$degree_opt = $db->getAllDegree();
 		$_degree->setMultiOptions($degree_opt);
 		
+		$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
+		$date = date("Y-m-d");
+		$end_date->setAttribs(array(
+				'dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+		));
+		$_date = $request->getParam("end_date");
+		if(empty($_date)){
+			$_date = date("Y-m-d");
+		}
+		$end_date->setValue($_date);
+		
 		
 		$_arr_opt_nation = array(""=>$this->tr->translate("SELECT_NATION"),);
 		$optionNation = $db->getViewByType(21);//Nation
@@ -154,7 +167,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_status->setValue($request->getParam("status_search"));
 	
 	
-		$this->addElements(array($_title,$_degree,$_branch_id,$_nationality,$_status));
+		$this->addElements(array($_title,$_degree,$_branch_id,$end_date,$_nationality,$_status));
 		if(!empty($_data)){
 		}
 	

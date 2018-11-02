@@ -104,21 +104,18 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 						'end_date'=>date('Y-m-d'));
 			}
 		    $id= $this->getRequest()->getParam('id');
-		    
 			$this->view->adv_search=$search;
 			$this->view->rs =$db->getStudentById($id);
 			$this->view->document =$db->getStudentDocumentById($id);
 			
 			$rs=$this->view->row = $db->getStudentPaymentDetail($id);
-			$re=$this->view->re_row=$db->getRescheduleByGroupId($id);
 			$this->view->service=$db->getStudentServiceUsing($id,$search, 1);
 			
-			
+			$re=$this->view->re_row=$db->getRescheduleByGroupId($id);
 			
 			$this->view->student_mistake = $db->getStudentMistake($id);
 			
 			$this->view->student_attendance = $db->getStudentAttendence($id);
-				
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

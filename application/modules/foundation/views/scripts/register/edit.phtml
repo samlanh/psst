@@ -246,13 +246,15 @@ a.print-card.btn.btn-primary.btn-xs {
 				                  <div class="col-md-7 col-sm-7 col-xs-12">
 				                    	<div class="account-image">
 											<div class="image-box">
-												<?php
-										$images = $this->baseUrl().'/images/noimage.jpg';
-										 if (!empty($this->rs['photo'])){
-										$images = $this->baseUrl().'/images/'.$this->rs['photo'];
-										}										 
-									?>		
-												<img id="profile_wiew" src="<?php echo $images;?>" alt=""  />
+												<?php 
+												$image = $this->baseUrl().'/images/no-profile.png';
+												if(!empty($this->rs['photo'])){
+													if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
+														$image = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
+													}
+													
+												}?>
+												<img id="profile_wiew" src="<?php echo $image;?>" alt=""  />
 											</div>
 											<div class="button_browse">
 											<div id='preview'></div>	

@@ -21,6 +21,7 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 			(SELECT b.photo FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
 			s.stu_code,s.stu_khname,s.stu_enname,s.last_name,
 			s.photo,
+			s.sex,
 			sd.*
 			FROM `rms_student_document` AS sd,`rms_student` AS s
 			WHERE s.stu_id = sd.stu_id
@@ -32,7 +33,8 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission("s.branch_id");
 		$order=" ORDER BY sd.date_end DESC, sd.stu_id ASC";
-		return $db->fetchAll($sql.$where.$order);
+		$limit=" LIMIT 20";
+		return $db->fetchAll($sql.$where.$order.$limit);
 	}
 	
 	function getStuProductAlert($new=null){

@@ -937,5 +937,31 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->form_search = $frm;
 	}
+	public function rptStudentDocumentAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'branch_id'		=>0,
+					'degree'		=>0,
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'group'			=>'',
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d',strtotime("+5 day")),
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$rs_rows = $group->getStuDocumentNotEnough($search);
+		$this->view->rs = $rs_rows;
+	
+		$this->view->search=$search;
+	}
 }

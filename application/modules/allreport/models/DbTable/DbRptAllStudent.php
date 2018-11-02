@@ -47,9 +47,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;    	
     	$order=" ORDER BY stu_id,degree,grade,academic_year DESC";
-    	if(empty($search)){
-    		return $db->fetchAll($sql.$order);
-    	}
+//     	if(empty($search)){
+//     		return $db->fetchAll($sql.$order);
+//     	}
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
@@ -1007,5 +1007,77 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		FROM rms_group_subject_detail AS gsjd WHERE gsjd.group_id = ".$group_id;
     	$rs = $db->fetchAll($sql);
     	return $rs;
+    }
+    
+    function getStuDocumentNotEnough($search){
+    	$db = $this->getAdapter();
+    	$to_date = $search['end_date'];
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$currentLang = $dbp->currentlang();
+    	$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
+    	if ($currentLang==1){
+    		$stuname="s.stu_khname";
+    	}
+    	$sql ="
+    	SELECT s.branch_id,
+    	(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
+    	(SELECT b.photo FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
+    	s.stu_code,s.stu_khname,s.stu_enname,s.last_name,
+    	$stuname AS student_name,
+    	s.photo,
+    	s.sex,
+    	s.tel,
+    	(SELECT name_en FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+       			(SELECT name_en FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
+    	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=s.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+    	(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`s`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+    	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`s`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+    	sd.*
+    	FROM `rms_student_document` AS sd,`rms_student` AS s
+    	WHERE s.stu_id = sd.stu_id
+    	AND sd.is_receive=0
+    	";
+    	$where ='';
+    	$to_date = (empty($to_date))? '1': " sd.date_end <= '".$to_date." 23:59:59'";
+    	$where.= " AND ".$to_date;
+    	
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
+    		$s_where[]=" stu_code LIKE '%{$s_search}%'";
+    		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
+    		$s_where[]=" stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" tel LIKE '%{$s_search}%'";
+    		$s_where[]=" father_phone LIKE '%{$s_search}%'";
+    		$s_where[]=" mother_phone LIKE '%{$s_search}%'";
+    		$s_where[]=" guardian_tel LIKE '%{$s_search}%'";
+    		$s_where[]=" father_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" mother_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" guardian_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" remark LIKE '%{$s_search}%'";
+    		$s_where[]=" home_num LIKE '%{$s_search}%'";
+    		$s_where[]=" street_num LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['study_year'])){
+    		$where.=' AND s.academic_year='.$search['study_year'];
+    	}
+    	if(!empty($search['group'])){
+    		$where.=' AND s.group_id='.$search['group'];
+    	}
+    	if(!empty($search['degree'])){
+    		$where.=' AND s.degree='.$search['degree'];
+    	}
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND s.branch_id='.$search['branch_id'];
+    	}
+    	if(!empty($search['grade_all'])){
+    		$where.=' AND s.grade='.$search['grade_all'];
+    	}
+    	
+    	$where.=$dbp->getAccessPermission("s.branch_id");
+    	$order=" ORDER BY sd.date_end DESC, sd.stu_id ASC";
+    	return $db->fetchAll($sql.$where.$order);
     }
 }

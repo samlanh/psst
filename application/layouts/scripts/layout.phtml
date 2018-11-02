@@ -372,6 +372,16 @@ $teacher_id = $session_t->teacher_id;
 				                          </li>
 				                          	<?php }?>
 						                  <?php }?>
+						                  <?php if (count($stu_doc)>15){?>
+						                  <li>
+						                      <div class="text-center">
+						                        <a href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-document"?>">
+						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
+						                          <i class="fa fa-angle-right"></i>
+						                        </a>
+						                      </div>
+						                    </li>
+						                   <?php }?>
 						               </ul>
 					            </li>
 					              <li role="presentation" class="dropdown">

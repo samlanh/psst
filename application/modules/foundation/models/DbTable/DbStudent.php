@@ -312,17 +312,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(!empty($_data['group']) AND $_data['group']!=-1){
 				$is_setgroup=1;
 			}
-			$adapter = new Zend_File_Transfer_Adapter_Http();
-			$part = PUBLIC_PATH.'/images';
-			$adapter->setDestination($part);
-			$adapter->receive();
-			$photo = $adapter->getFileInfo();
+// 			$adapter = new Zend_File_Transfer_Adapter_Http();
+// 			$part = PUBLIC_PATH.'/images';
+// 			$adapter->setDestination($part);
+// 			$adapter->receive();
+// 			$photo = $adapter->getFileInfo();
 			
-			if(!empty($photo['photo']['name'])){
-				$pho_name = $photo['photo']['name'];
-			}else{
-				$pho_name = $_data['old_photo'];
-			}
+// 			if(!empty($photo['photo']['name'])){
+// 				$pho_name = $photo['photo']['name'];
+// 			}else{
+// 				$pho_name = $_data['old_photo'];
+// 			}
 			$part= PUBLIC_PATH.'/images/photo/';
 			if (!file_exists($part)) {
 				mkdir($part, 0777, true);
@@ -366,7 +366,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'mother_nation'	=>$_data['mom_nation'],
 					'mother_job'	=>$_data['mo_job'],
 					'mother_phone'	=>$_data['mon_phone'],
-					'photo'  			 => $pho_name,
+// 					'photo'  			 => $pho_name,
 					'guardian_enname'=>$_data['guardian_name_en'],
 					'guardian_dob'	=>$_data['guardian_dob'],
 					'guardian_nation'=>$_data['guardian_national'],

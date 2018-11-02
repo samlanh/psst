@@ -424,6 +424,8 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	
+	// Start Blog Action Purchase Payment
 	public function rptPurchasePaymentAction(){
 		try{
 		if($this->getRequest()->isPost()){
@@ -437,6 +439,9 @@ class Allreport_StockController extends Zend_Controller_Action {
     							'paid_by_search'=>'',
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
+    							'status'=>"",
+    							'first'=>1,
+    					
     					);
     		}
 			$this->view->search = $search;
@@ -456,7 +461,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 	public function rptPaymentReceiptAction(){
 		try{
 			$id=$this->getRequest()->getParam('id');
-			
+			$id = empty($id)?0:$id;
 			$db = new Allreport_Model_DbTable_DbPurchase();
 			$row = $db->getPurchasePaymentById($id);
 			if (empty($row)){
@@ -470,6 +475,60 @@ class Allreport_StockController extends Zend_Controller_Action {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
+	
+	public function rptClosingPurchasepaymentAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search = $this->getRequest()->getPost();
+			}
+			else{
+				$search=array(
+						'branch_search' => '',
+						'adv_search' => '',
+						'supplier_search'=>'',
+						'paid_by_search'=>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+						'status'=>"",
+						'user_id'=>"",
+						'first'=>1,
+							
+				);
+			}
+			$this->view->search = $search;
+			$db = new Allreport_Model_DbTable_DbPurchase();
+			$this->view->row = $db->getAllPurchasePaymentForClose($search);
+	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$frm = new Stock_Form_FrmPurchasePayment();
+		$frm->FrmAddPurchasePayment(null);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_payment = $frm;
+	}
+	public function closingpurchasepaymentAction(){
+		try{
+			$db =  new Allreport_Model_DbTable_DbPurchase();
+			if($this->getRequest()->isPost()){
+				$_data = $this->getRequest()->getPost();
+				if (empty($_data['selector'])){
+					Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/stock/rpt-closing-purchasepayment");
+					exit();
+				}
+				$db->closingPurchasePayment($_data);
+				Application_Form_FrmMessage::Sucessfull("CLOSING_SUCCESS", "/allreport/stock/rpt-closing-purchasepayment");
+				exit();
+			}
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/stock/rpt-closing-purchasepayment");
+			exit();
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
+	// End Blog Action Purchase Payment
+	
 	
 	public function rptSupplierBalanceAction(){
 		try{
@@ -536,7 +595,7 @@ class Allreport_StockController extends Zend_Controller_Action {
     					        'student_id'=>'',
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
-    							'status_search'=>'',
+    							'status'=>'',
     					);
     		}
 			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();
@@ -551,5 +610,53 @@ class Allreport_StockController extends Zend_Controller_Action {
 		$frm->FrmAddCutStock(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_payment = $frm;
+	}
+	public function rptClosingProductstudentAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search = $this->getRequest()->getPost();
+			}
+			else{
+				$search=array(
+						'branch_search' => '',
+						'adv_search' => '',
+						'student_id'=>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+						'status_search'=>'',
+						'user_id'=>"",
+				);
+			}
+			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();
+			$rows = $db->getAllCutStockForClose($search);
+			$this->view->rs=$rows;
+				
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$this->view->search = $search;
+		$frm = new Stock_Form_FrmCutStock();
+		$frm->FrmAddCutStock(null);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_payment = $frm;
+	}
+	public function closingstuproductAction(){
+		try{
+			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();
+			if($this->getRequest()->isPost()){
+				$_data = $this->getRequest()->getPost();
+				if (empty($_data['selector'])){
+					Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/stock/rpt-closing-productstudent");
+					exit();
+				}
+				$db->closingStuProduct($_data);
+				Application_Form_FrmMessage::Sucessfull("CLOSING_SUCCESS", "/allreport/stock/rpt-closing-productstudent");
+				exit();
+			}
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/stock/rpt-closing-productstudent");
+			exit();
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 	}
 }

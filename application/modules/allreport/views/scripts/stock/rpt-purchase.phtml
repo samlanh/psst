@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Payment Late'); 
+	$this->headTitle($tr->translate('RPT_PURCHASE')); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
@@ -8,20 +8,37 @@
 ?>	
 <meta charset="utf-8">
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_PURCHASE');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<form action="" dojoType="dijit.form.Form" method="post">
-		<table style="width: 100%">
-			<tr>
-				<td><?php echo $frm->getElement("title");?></td>
-				<td><?php echo $frm->getElement("location");?></td>
-				<td> <?php echo $frm->getElement("supplier_id");?></td>
-				<td> <?php echo $frm->getElement("start_date");?></td>
-				<td> <?php echo $frm->getElement("end_date");?></td>
-				<td>
-					<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+		<div class="form-group">
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement("title");?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement("location");?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement("supplier_id");?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement("start_date");?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement("end_date");?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 						showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-				</td>
-			</tr>
-		</table>
+        	</div>
+        </div>
 	</form>
  
 	<div style="min-height:22cm; margin:0 auto;">
@@ -54,31 +71,45 @@
 					<td colspan="3" id="exportExcel">
 						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
-							<tr style="font-size:12px; height: 20px;background-color: #CCD9FF;line-height: 30px;font-weight: bold;" align="center">
-									<th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('TEL');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('TOTAL_AMOUNT');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('PRINT');?>&nbsp;</th>
-						   </tr>
+								<tr style="font-size:12px; height: 20px; background-color: #CCD9FF;line-height: 30px;font-weight: bold;" align="center">
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
+									<td colspan="2">&nbsp;<?php echo $tr->translate("SUPPLIER_INFO");?>&nbsp;</td>
+									<td colspan="4">&nbsp;<?php echo $tr->translate("PURCHASE_INFO");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("PRINT");?>&nbsp;</td>
+								</tr>
+								<tr style="font-size:12px; height: 20px; background-color: #CCD9FF;line-height: 30px;font-weight: bold;" align="center">
+										<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('PHONE');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('PURCHASE_NO');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('TOTAL_AMOUNT');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
+										<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+							   </tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->pur_code))foreach ($this->pur_code AS $rs) { $i++;
 						       
 						  ?>
 							<tr class="hover" style="font-size:11px; height: 18px;"​ align="center">
-								    <td> <?php echo $i; ?></td>
-								    <td ><a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/stock/rpt-purchase-supplier/id/<?php echo $rs['id'];?>"><?php echo $rs['supplier_no'];?></a></td>
-								    <td><?php echo $rs['branch_name'];?></td>
-								    <td><?php echo $rs['sup_name'];?></td>
-								    <td><?php echo $rs['tel'];?></td>
-								    <td>&nbsp;$&nbsp;<?php echo $rs['amount_due'];?></td>
-								    <td><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
-								    <td><?php echo $rs['status']; ?></td>
-								    <td><a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/stock/rpt-purchase-supplier/id/<?php echo $rs['id'];?>"><?php echo $tr->translate('PRINT');?></a></td>
+								<td>&nbsp;<?php echo $i; ?>&nbsp;</td>
+								<td>&nbsp;<?php echo $rs['branch_name'];?>&nbsp;</td>
+								<td>&nbsp;<?php echo $rs['sup_name'];?>&nbsp;</td>
+								<td>&nbsp;<?php echo $rs['tel'];?>&nbsp;</td>
+								<td >&nbsp;
+								   	<a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/stock/rpt-purchase-supplier/id/<?php echo $rs['id'];?>">
+								     		<strong><?php echo $rs['supplier_no'];?></strong>
+								   	</a>&nbsp;
+								</td>
+								   
+								<td>&nbsp;$&nbsp;<?php echo $rs['amount_due'];?></td>
+								<td>&nbsp;<?php echo date("d/m/Y",strtotime($rs['date']));?>&nbsp;</td>
+								<td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
+								<td>&nbsp;<?php //echo $rs['status']; ?>&nbsp;</td>
+								<td>&nbsp;
+									<a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/stock/rpt-purchase-supplier/id/<?php echo $rs['id'];?>"><?php echo $tr->translate('PRINT');?></a>
+									&nbsp;
+								</td>
 							 </tr>
 						  
 										<?php $totalbalance=$totalbalance+$rs['amount_due'];}?>	 
@@ -87,14 +118,20 @@
 					</td>
 				</tr>
 				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<?php if(!empty($this->pur_code)){?>
+				<tr>
 					<td colspan="3" align="right">
-					     <table width="20%"  style="border: 0px solid #000;border-collapse: collapse;"  >
-					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccc;line-height: 30px;font-weight: bold;" align="center">
-					               <td>Total Amount :</td><td>&nbsp;$&nbsp;<?php echo number_format($totalbalance,2);?>&nbsp;</td>
+					     <table width="25%"  style=" border: 1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1"  >
+					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+					               <td><?php echo $tr->translate('Total Amount');?> :</td>
+					               <td><strong>&nbsp;$&nbsp;<?php echo number_format($totalbalance,2);?>&nbsp;</strong></td>
 					           </tr>
 					     </table>
 					</td>
 				</tr>
+				<?php }?>
 				<tr>
 					<td colspan="3">&nbsp;</td>
 				</tr>

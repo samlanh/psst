@@ -99,7 +99,14 @@ class Stock_CutstockController extends Zend_Controller_Action {
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD",self::REDIRECT_URL."/index");
 			exit();
+		}else if ($row['is_closed']==1){
+			Application_Form_FrmMessage::Sucessfull("This record already closing",self::REDIRECT_URL."/index");
+			exit();
+		}else if ($row['status']==0){
+			Application_Form_FrmMessage::Sucessfull("This Record already void",self::REDIRECT_URL."/index");
+			exit();
 		}
+		
 		$frm = new Stock_Form_FrmCutStock();
 		$frm->FrmAddCutStock($row);
 		Application_Model_Decorator::removeAllDecorator($frm);

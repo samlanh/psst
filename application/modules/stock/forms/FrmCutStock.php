@@ -207,6 +207,24 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 				'class'=>'fullside height-text',));
 		$_status_search->setValue($request->getParam("status_search"));
 		
+		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
+		$userinfo = $_dbgb->getUserInfo();
+		$optionUser = $_dbgb->getAllUser();
+		if(!empty($optionUser))foreach($optionUser AS $row) $_arr_opt_user[$row['id']]=$row['name'];
+		$_user_id = new Zend_Dojo_Form_Element_FilteringSelect("user_id");
+		$_user_id->setMultiOptions($_arr_opt_user);
+		$_user_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		if ($userinfo['level']!=1){
+			$_user_id->setAttribs(array(
+					'readonly'=>true,
+			));
+			$_user_id->setValue($userinfo['user_id']);
+		}
+		$_user_id->setValue($request->getParam("user_id"));
 		
 		if(!empty($data)){
 			$_branch_id->setValue($data["branch_id"]);
@@ -245,7 +263,8 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 				$_bypuchase_no,
 				$_adv_search,
 				$_paid_by_search,
-				$_status_search
+				$_status_search,
+				$_user_id
 				));
 		
 		return $this;

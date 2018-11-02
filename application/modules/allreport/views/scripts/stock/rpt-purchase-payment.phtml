@@ -1,12 +1,21 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Payment Late'); 
+	$this->headTitle($tr->translate('RPT_PURCHASE_PAYMENT')); 
 	echo $this->headTitle(''); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->frm_payment;
 ?>	
 <meta charset="utf-8">
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_PURCHASE_PAYMENT');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<div class="card-box">
 			<form action=""
 				dojoType="dijit.form.Form" method="post">
@@ -23,6 +32,13 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("paid_by_search");?>
                    </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+		        		<select name="status" id="status" dojoType="dijit.form.FilteringSelect" class="fullside" >
+							<option value=""><?php echo $tr->translate('STATUS')?></option>
+							<option value="1" <?php if ($this->search['status']==1){ echo 'selected=selected';}?>><?php echo $tr->translate('VOID')?></option>
+							<option value="2" <?php if ($this->search['status']==2){ echo 'selected=selected';}?>><?php echo $tr->translate('CLOSED')?></option>
+						</select>
+					</div>
                 </div>
                 <div class="form-group">
                 	<div class="col-md-2 col-sm-2 col-xs-12">
@@ -51,7 +67,7 @@
 					</td>
 					<td align="center" width="70%">
 						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
-						<strong style="padding-left: 10px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_PURCHASE');?></strong><br>
+						<strong style="padding-left: 10px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_PURCHASE_PAYMENT');?></strong><br>
 						<span style="font-weight: bold;font-size: 12px; "><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;<?php echo $tr->translate('TO');?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));}?></span>
 					</td>
 					<td width="15%" align="center">
@@ -73,17 +89,19 @@
 						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
 							<tr style="font-size:12px; height: 20px;background-color: #CCD9FF;line-height: 30px;font-weight: bold;" align="center">
-									<th>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?>&nbsp;</th>
+									<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('BRANCH_NAME');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('RECEIPT_NO');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?>&nbsp;</td>
 									
-									<th>&nbsp;<?php echo $tr->translate('BALANCE');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('TOTAL_PAID');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('TOTAL_DUE');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('PAID_BY');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate('PRINT');?>&nbsp;</th>
+									<td>&nbsp;<?php echo $tr->translate('BALANCE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('TOTAL_PAID');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('TOTAL_DUE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PAID_BY');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PRINT');?>&nbsp;</td>
 						   </tr>
 							</thead>
 						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row))foreach ($this->row AS $rs) { $i++;
@@ -99,6 +117,9 @@
 								    <td>&nbsp;$&nbsp;<?php echo number_format($rs['total_due'],2);?>&nbsp;</td>
 								    <td>&nbsp;<?php echo $rs['paid_by']; ?>&nbsp;</td>
 								    <td>&nbsp;<?php echo date("d/m/Y",strtotime($rs['date_payment']));?>&nbsp;</td>
+								    <td align="center" >&nbsp;<?php if($rs['is_closed']==1){ echo $tr->translate("CLOSED");}else if($rs['status']==0){ echo $tr->translate("VOID");}else{ echo "-";}?>&nbsp;</td>
+									<td align="center" >&nbsp;<?php if($rs['is_closed']==1){ echo $rs['user_close'];}else if($rs['status']==0){ echo $rs['user_enter'];}else{ echo "-";}?>&nbsp;</td>
+						
 								    <td>&nbsp;<a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/stock/rpt-payment-receipt/id/<?php echo $rs['id'];?>"><?php echo $tr->translate('PRINT');?></a>&nbsp;</td>
 							 </tr>
 							<?php 
@@ -108,6 +129,10 @@
 						</table>	
 					</td>
 				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<?php if(!empty($this->row)){?>
 				<tr>
 					<td colspan="3" align="right">
 					     <table width="25%"  style=" border: 1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1"  >
@@ -120,6 +145,7 @@
 					     </table>
 					</td>
 				</tr>
+				<?php }?>
 				<tr>
 					<td colspan="3">&nbsp;</td>
 				</tr>
@@ -144,7 +170,23 @@
 		</div>		
 	</div>
 </div>
+<script type="text/javascript">
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.require("dijit.form.FilteringSelect"); 
 
+dojo.require("dojo.html");
+var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	<?php if (!empty($this->search['first'])){?>
+	 dijit.byId('start_date').set('value',null);  
+	 <?php }?>
+	 <?php if (!empty($this->search['start_date'])){?>
+	 dijit.byId('start_date').set('value',null);  
+	 <?php }?>
+});
+</script>
 
 
 

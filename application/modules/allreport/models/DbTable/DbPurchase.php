@@ -179,6 +179,7 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where);
     }
     
+    // Start Blog Action Purchase Payment
     function getAllPurchasePayment($search){
     	$db = $this->getAdapter();
     	try{
@@ -192,8 +193,10 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		pp.total_paid,pp.total_due,
     		(SELECT v.name_kh FROM `rms_view` AS v WHERE v.key_code = pp.paid_by AND v.type=8 LIMIT 1) AS paid_by,
     		pp.date_payment,
-    		pp.status
-    		FROM `rms_purchase_payment` AS pp WHERE pp.status=1 
+    		pp.status,
+    		(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.closed_by LIMIT 1) as user_close,
+	    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.user_id LIMIT 1) as user_enter
+    		FROM `rms_purchase_payment` AS pp WHERE 1
     		";
     		$from_date =(empty($search['start_date']))? '1': " pp.date_payment >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
     		$to_date = (empty($search['end_date']))? '1': " pp.date_payment <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
@@ -212,14 +215,74 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		if(!empty($search['supplier_search'])){
     			$where.=" AND pp.supplier_id=".$search['supplier_search'];
     		}
-    		if(!empty($search['status_search'])){
-    			$where.=" AND pp.status=".$search['status_search'];
+    		if(!empty($search['status'])){
+    			if($search['status']==1){
+    				$where.=' AND pp.status=0';
+    			}else if($search['status']==2){
+    				$where.=' AND pp.is_closed=1';
+    			}
     		}
     		if(!empty($search['branch_search'])){
     			$where.=" AND pp.branch_id=".$search['branch_search'];
     		}
     		$dbp = new Application_Model_DbTable_DbGlobal();
     		$where.=$dbp->getAccessPermission('pp.branch_id');
+    		$order=" ORDER BY pp.id DESC";
+    
+    		return $db->fetchAll($sql.$where.$order);
+    
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    }
+    function getAllPurchasePaymentForClose($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$sql="
+    		SELECT
+    		pp.*,
+    		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+    		pp.receipt_no,
+    		(SELECT s.sup_name FROM `rms_supplier` AS s WHERE s.id = pp.supplier_id LIMIT 1 ) AS supplier_name,
+    		pp.balance,
+    		pp.total_paid,pp.total_due,
+    		(SELECT v.name_kh FROM `rms_view` AS v WHERE v.key_code = pp.paid_by AND v.type=8 LIMIT 1) AS paid_by,
+    		pp.date_payment,
+    		pp.status,
+    		(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.closed_by LIMIT 1) as user_close,
+    		(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.user_id LIMIT 1) as user_enter
+    		FROM `rms_purchase_payment` AS pp WHERE pp.status=1
+    		AND pp.is_closed = 0
+    		";
+    		$from_date =(empty($search['start_date']))? '1': " pp.date_payment >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+    		$to_date = (empty($search['end_date']))? '1': " pp.date_payment <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+    		$sql.= " AND  ".$from_date." AND ".$to_date;
+    		$where="";
+    		if(!empty($search['adv_search'])){
+    			$s_where=array();
+    			$s_search=addslashes(trim($search['adv_search']));
+    			$s_where[]= " pp.receipt_no LIKE '%{$s_search}%'";
+    			$s_where[]= " pp.balance LIKE '%{$s_search}%'";
+    			$s_where[]= " pp.total_paid LIKE '%{$s_search}%'";
+    			$s_where[]= " pp.total_due LIKE '%{$s_search}%'";
+    
+    			$where.=' AND ('.implode(' OR ', $s_where).')';
+    		}
+    		if(!empty($search['supplier_search'])){
+    			$where.=" AND pp.supplier_id=".$search['supplier_search'];
+    		}
+    		if(!empty($search['branch_search'])){
+    			$where.=" AND pp.branch_id=".$search['branch_search'];
+    		}
+    		$dbp = new Application_Model_DbTable_DbGlobal();
+    		$where.=$dbp->getAccessPermission('pp.branch_id');
+    		$user = $dbp->getUserInfo();
+    		if ($user['level']!=1){
+    			$where.=" AND pp.user_id=".$user['user_id'];
+    		}
+    		if(!empty($search['user_id'])){
+    			$where.=" AND pp.user_id=".$search['user_id'];
+    		}
     		$order=" ORDER BY pp.id DESC";
     
     		return $db->fetchAll($sql.$where.$order);
@@ -246,7 +309,36 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	(SELECT p.supplier_no FROM `rms_purchase` AS p WHERE p.id = pd.purchase_id LIMIT 1) AS supplier_no
     	FROM `rms_purchase_payment_detail` AS pd WHERE pd.id =$payment_id ";
     	return $db->fetchAll($sql);
-    }   
+    } 
+
+    function closingPurchasePayment($_data){
+    	$_db= $this->getAdapter();
+    	$_db->beginTransaction();
+    	try{
+    		$dbg = new Application_Model_DbTable_DbGlobal();
+    		if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+    			if (!empty($rs)){
+    				$_arr = array(
+    						'is_closed'=> 1,
+    						'modify_date'=> date("Y-m-d H:i:s"),
+    						'closed_by'=> $dbg->getUserId(),
+    				);
+    				$this->_name ="rms_purchase_payment";
+    				$where = $_db->quoteInto("id=?", $rs);
+    				$this->update($_arr, $where);
+    			}
+    		}
+    
+    		$_db->commit();
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$_db->rollBack();
+    		echo $e->getMessage(); exit();
+    	}
+    }
+    
+    // End Blog Action Purchase Payment
+    
     function getSuplierPuchaseBalance($search=null){
     	$db=$this->getAdapter();
     	$sql="SELECT sp.branch_id,sp.id,sp.supplier_no,s.sup_name,s.tel,

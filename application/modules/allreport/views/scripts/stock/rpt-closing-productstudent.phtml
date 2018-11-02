@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('RPT_STUDENT_GOT_PRODUCT')); 
+	$this->headTitle($tr->translate('CLOSING_STUDENT_GOT_PRODUCT')); 
 	echo $this->headTitle(''); 
 	$frm = $this->frm_payment;
 ?>	
@@ -10,7 +10,7 @@
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_STUDENT_GOT_PRODUCT');?></h4>
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('CLOSING_STUDENT_GOT_PRODUCT');?></h4>
     		</div>
     		<div class="col-sm-4 text-right">
     		</div>
@@ -34,19 +34,17 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("end_date");?>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<div class="col-md-7 col-sm-7 col-xs-12">
-			        		<select name="status" id="status" dojoType="dijit.form.FilteringSelect" class="fullside" >
-								<option value=""><?php echo $tr->translate('STATUS')?></option>
-								<option value="1" <?php if ($this->search['status']==1){ echo 'selected=selected';}?>><?php echo $tr->translate('VOID')?></option>
-								<option value="2" <?php if ($this->search['status']==2){ echo 'selected=selected';}?>><?php echo $tr->translate('CLOSED')?></option>
-							</select>
-						</div>
-						<div class="col-md-5 col-sm-5 col-xs-12">
-							<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                    	 <div class="col-md-7 col-sm-7 col-xs-12">
+                   			<?php echo $frm->getElement("user_id");?>
+                   		</div>
+                   		<div class="col-md-5 col-sm-5 col-xs-12">
+                   			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 								showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-						</div>
-		        	</div>
+                   		</div>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   </div>
                 </div>
 			</form>
 		</div>
@@ -59,7 +57,7 @@
 				<td width="70%"  align="center">
 					<ul>
 						<li><strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong></li>
-						<li><strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_GOT_PRODUCT");?></strong></li>
+						<li><strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CLOSING_STUDENT_GOT_PRODUCT");?></strong></li>
 						<li><?php if(!empty($this->search['start_date'])){echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';} echo date("d/m/Y",strtotime($this->search['end_date']));?></li>
 					</ul>
 				</td>
@@ -86,49 +84,62 @@
 		</style>
 			<tr>
 				<td colspan="3">
-				<div id="exportExcel">
-					<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
-						<thead>
-							<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
-								<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-								<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
-								<td colspan="4">&nbsp;<?php echo $tr->translate("GETPRODUCT_INFO");?>&nbsp;</td>
-								<td colspan="5">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
-								<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
-								<td rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
+				 <form id="list" name="list" action="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'closingstuproduct')); ?>" dojoType="dijit.form.Form" method="post">
+						
+					<div id="exportExcel">
+						<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
+							<thead>
+								<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
+									<td rowspan="2">
+										<input  onchange="checkall();" type="checkbox"  class="checkbox" id="check_all"  name="check_all"/>
+		                			</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
+									<td colspan="4">&nbsp;<?php echo $tr->translate("GETPRODUCT_INFO");?>&nbsp;</td>
+									<td colspan="5">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
+								</tr>
+								<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
+									<td>&nbsp;<?php echo $tr->translate("Ref Receipt No");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("Received Date");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("Total Received");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("Total Remain");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
+									
+								</tr>
+							</thead>
+							<?php $i=0; if (!empty($this->rs)) foreach ($this->rs as $key=> $row){$i++;?>
+							<tr style="font-size:14px; height: 23px;" class="hover" >
+								<td align="center">
+									<input  style="height: 15px;margin-top: 5px;"  type="checkbox"  class="checkbox" id="close_<?php echo $row['id'];?>" value="<?php echo $row['id'];?>"  name="selector[]"/>
+								</td>
+								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
+								<td >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
+								<td align="center"><a style="text-decoration: none; color: #000;" href="<?php echo $this->baseUrl()."/stock/cutstock/receipt/id/".$row['id'];?>">&nbsp;<?php echo $row['serailno'];?>&nbsp;</a></td>
+								<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['received_date']))?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo $row['total_received'];?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo $row['total_qty_due'];?>&nbsp;</td>
+								
+								<td align="center">&nbsp;<?php echo $row['stu_code'];?></td>
+								<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['student_name'];?>&nbsp;</td>
+								<td >&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
+								<td >&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
+								<td >&nbsp;<?php echo $row['tel'];?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo $row['user_enter']; ?>&nbsp;</td>
 							</tr>
-							<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
-								<td>&nbsp;<?php echo $tr->translate("Ref Receipt No");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("Received Date");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("Total Received");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("Total Remain");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
-							</tr>
-						</thead>
-						<?php $i=0; if (!empty($this->rs)) foreach ($this->rs as $key=> $row){$i++;?>
-						<tr style="font-size:14px; height: 23px;" class="hover" >
-							<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
-							<td >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
-							<td align="center"><a style="text-decoration: none; color: #000;" href="<?php echo $this->baseUrl()."/stock/cutstock/receipt/id/".$row['id'];?>">&nbsp;<?php echo $row['serailno'];?>&nbsp;</a></td>
-							<td align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['received_date']))?>&nbsp;</td>
-							<td align="center">&nbsp;<?php echo $row['total_received'];?>&nbsp;</td>
-							<td align="center">&nbsp;<?php echo $row['total_qty_due'];?>&nbsp;</td>
-							
-							<td align="center">&nbsp;<?php echo $row['stu_code'];?></td>
-							<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['student_name'];?>&nbsp;</td>
-							<td >&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
-							<td >&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
-							<td >&nbsp;<?php echo $row['tel'];?>&nbsp;</td>
-							<td align="center" >&nbsp;<?php if($row['is_closed']==1){ echo $tr->translate("CLOSED");}else if($row['status']==0){ echo $tr->translate("VOID");}else{ echo "-";}?>&nbsp;</td>
-							<td align="center" >&nbsp;<?php if($row['is_closed']==1){ echo $row['user_close'];}else if($row['status']==0){ echo $row['user_enter'];}else{ echo "-";}?>&nbsp;</td>
-						</tr>
-						<?php }?>
-					</table>	
-				</div>	
+							<?php }?>
+						</table>	
+					</div>	
+					<div class="card-box">
+               			<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+							<button iconclass="dijitIconSave" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("Closing Entry");?></button>
+						</div>
+					</div>
+				</form>
 				</td>
 			</tr>
 			<tr>
@@ -204,5 +215,14 @@
 			error: function(err){
 			}
 		});
+	}
+
+
+	function checkall(){
+		if ($('#check_all').is(':checked')) {
+			$(".checkbox").prop('checked', true);
+		}else{
+			$(".checkbox").prop('checked', false);
+		}
 	}
 </script>

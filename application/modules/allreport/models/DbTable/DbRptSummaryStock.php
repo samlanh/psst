@@ -270,7 +270,9 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 			(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
 			(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
 			(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
-			pp.*
+			pp.*,
+			(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.closed_by LIMIT 1) as user_close,
+	    		(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.user_id LIMIT 1) as user_enter
 			FROM `rms_cutstock` AS pp,
 			`rms_student` AS s
 			WHERE s.stu_id = pp.student_id
@@ -298,13 +300,116 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		if(!empty($search['branch_search'])){
     			$where.=" AND pp.branch_id=".$search['branch_search'];
     		}
-    		
+    		if(!empty($search['status'])){
+    			if($search['status']==1){
+    				$where.=' AND pp.status=0';
+    			}else if($search['status']==2){
+    				$where.=' AND pp.is_closed=1';
+    			}
+    		}
     		$where.=$dbp->getAccessPermission('pp.branch_id');
     		$order=" ORDER BY pp.id DESC";
     		return $db->fetchAll($sql.$where.$order);
     
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    }
+    function getAllCutStockForClose($search){
+    	$db = $this->getAdapter();
+	    	try{
+	    		$dbp = new Application_Model_DbTable_DbGlobal();
+	    		$currentLang = $dbp->currentlang();
+	    		$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
+	    		if ($currentLang==1){
+	    			$stuname="s.stu_khname";
+	    		}
+	    		$sql="
+	    		SELECT
+	    		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+	    		s.stu_khname,
+	    		$stuname AS student_name,
+	    		s.stu_enname,
+	    		s.last_name,
+	    		s.stu_code,
+	    		s.tel,
+	    		(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
+	    		(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
+	    		(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
+	    		pp.*,
+	    		(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.closed_by LIMIT 1) as user_close,
+	    		(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = pp.user_id LIMIT 1) as user_enter
+	    		FROM `rms_cutstock` AS pp,
+	    		`rms_student` AS s
+	    		WHERE s.stu_id = pp.student_id
+	    		AND pp.is_closed = 0
+	    		AND pp.status = 1
+	    		";
+	    		$from_date =(empty($search['start_date']))? '1': " pp.received_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+	    		$to_date = (empty($search['end_date']))? '1': " pp.received_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+	    		$sql.= " AND  ".$from_date." AND ".$to_date;
+	    		$where="";
+	    		if(!empty($search['adv_search'])){
+	    		$s_where=array();
+	    				$s_search=addslashes(trim($search['adv_search']));
+	    				$s_where[]= " pp.serailno LIKE '%{$s_search}%'";
+	    				$s_where[]= " pp.balance LIKE '%{$s_search}%'";
+	    		$s_where[]= " pp.total_received LIKE '%{$s_search}%'";
+	    		$s_where[]= " pp.total_qty_due LIKE '%{$s_search}%'";
+	    
+	    		$where.=' AND ('.implode(' OR ', $s_where).')';
+	    		}
+	    		if(!empty($search['student_id'])){
+	    		$where.=" AND pp.student_id=".$search['student_id'];
+	    	}
+	    	if(!empty($search['status_search'])){
+	    	$where.=" AND pp.status=".$search['status_search'];
+	    	}
+	    	if(!empty($search['branch_search'])){
+	    		$where.=" AND pp.branch_id=".$search['branch_search'];
+	    	}
+	    
+	    	$where.=$dbp->getAccessPermission('pp.branch_id');
+	    	
+	    	$user = $dbp->getUserInfo();
+	    	if ($user['level']!=1){
+	    		$where.=" AND pp.user_id=".$user['user_id'];
+	    	}
+	    	
+	    	if(!empty($search['user_id'])){
+	    		$where.=" AND pp.user_id=".$search['user_id'];
+	    	}
+	    	$order=" ORDER BY pp.id DESC";
+// 	    	echo $sql.$where.$order;exit();
+	    	return $db->fetchAll($sql.$where.$order);
+	    
+	    	}catch(Exception $e){
+	    	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	    	}
+    	}
+    function closingStuProduct($_data){
+    	$_db= $this->getAdapter();
+    	$_db->beginTransaction();
+    	try{
+    		$dbg = new Application_Model_DbTable_DbGlobal();
+    		if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+    			if (!empty($rs)){
+    				$_arr = array(
+    						'is_closed'=> 1,
+    						'modify_date'=> date("Y-m-d H:i:s"),
+    						'closed_by'=> $dbg->getUserId(),
+    				);
+    				$this->_name ="rms_cutstock";
+    				$where = $_db->quoteInto("id=?", $rs);
+    				$this->update($_arr, $where);
+    			}
+    		}
+    
+    		$_db->commit();
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$_db->rollBack();
+    		echo $e->getMessage(); exit();
     	}
     }
 }

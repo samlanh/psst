@@ -77,9 +77,9 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$d_row= $db_global->getAllGradeStudy();
 			$this->view->grade_name=$d_row;
 			$tsub= new Global_Form_FrmAddClass();
-			$frm_group=$tsub->FrmAddGroup();
-			Application_Model_Decorator::removeAllDecorator($frm_group);
-			$this->view->frm = $frm_group;
+			$frm_student=$tsub->FrmAddGroup();
+			Application_Model_Decorator::removeAllDecorator($frm_student);
+			$this->view->frm = $frm_student;
 			
 		}catch(Exception $e){
 			echo $e->getMessage();
@@ -121,9 +121,9 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$d_row= $db_global->getAllGradeStudy();
 			$this->view->grade_name=$d_row;
 			$tsub= new Global_Form_FrmAddClass();
-			$frm_group=$tsub->FrmAddGroup();
-			Application_Model_Decorator::removeAllDecorator($frm_group);
-			$this->view->frm = $frm_group;
+			$frm_student=$tsub->FrmAddDrup($row);
+			Application_Model_Decorator::removeAllDecorator($frm_student);
+			$this->view->frm = $frm_student;
 			//print_r($row); exit();
 			
 		}catch(Exception $e){

@@ -546,11 +546,31 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		if(!empty($result))foreach ($result As $rs)$opt_group[$rs['id']]=$rs['name'];
 		$_day->setMultiOptions($opt_group);
 		
+		
+		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
+		$userinfo = $_dbgb->getUserInfo();
+		$optionUser = $_dbgb->getAllUser();
+		if(!empty($optionUser))foreach($optionUser AS $row) $_arr_opt_user[$row['id']]=$row['name'];
+		$_user_id = new Zend_Dojo_Form_Element_FilteringSelect("user_id");
+		$_user_id->setMultiOptions($_arr_opt_user);
+		$_user_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		if ($userinfo['level']!=1){
+			$_user_id->setAttribs(array(
+					'readonly'=>true,
+			));
+			$_user_id->setValue($userinfo['user_id']);
+		}
+		$_user_id->setValue($request->getParam("user_id"));
+		
 		$this->addElements(array($item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
-					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term));
+					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id));
 	
 		return $this;
 	} 

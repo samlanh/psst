@@ -3,6 +3,7 @@ class Allreport_StockController extends Zend_Controller_Action {
     public function init()
     {    	
     	header('content-type: text/html; charset=utf8');
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	public function indexAction(){
 	}
@@ -61,6 +62,8 @@ class Allreport_StockController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 	}
+	
+	//Start Block Purchase
 	public function rptPurchaseAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -70,7 +73,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 				$search = array(
 						'title' =>'',
 						'location' =>'',
-						'status_search'=>1,
+						'status'=>"",
 						'supplier_id'=>-1,
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'),
@@ -148,6 +151,8 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	//End Block Purchase
+	
 	public function rptProductsoldAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -362,25 +367,29 @@ class Allreport_StockController extends Zend_Controller_Action {
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
-						'adv_search' 	=>'',
+						'advance_search' 	=>'',
 						'start_date'	=>date("Y-m-d"),
 						'end_date'		=>date("Y-m-d"),
-						'pro_name'		=>'',
-						'pro_cate'		=>'',
-						'user'=>''
+						'branch_search'		=>'',
+						'items_search'		=>'',
+						'pro_id'=>''
 				);
 			}
-			$db = new Registrar_Model_DbTable_DbProductsold();
+			$db = new Allreport_Model_DbTable_DbRptSummaryStock();
 			$this->view->rspro = $db->getProductSold($search);
+			$type=3;//product
+			$frm = new Global_Form_FrmItemsDetail();
+	    	$frm->FrmAddItemsDetail(null,$type);
+	    	Application_Model_Decorator::removeAllDecorator($frm);
+	    	$this->view->form_search = $frm;
 			
-			$this->view->pro_cate = $db->getAllProductCategory();
-			$this->view->all_pro = $db->getAllProductInProgramName();
-				
-			$form=new Registrar_Form_FrmSearchInfor();
-			$form->FrmSearchRegister();
-			Application_Model_Decorator::removeAllDecorator($form);
-			$this->view->form_search=$form;
 			$this->view->search = $search;
+			
+			$db = new Global_Model_DbTable_DbItemsDetail();
+			$d_row= $db->getAllProductsNormal();
+			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+			$this->view->product= $d_row;
+			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

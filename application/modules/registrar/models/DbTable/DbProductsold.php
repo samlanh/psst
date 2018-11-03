@@ -48,18 +48,18 @@ class Registrar_Model_DbTable_DbProductsold extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchAll($sql.$where.$order_by);
     }	
-    function getAllProductInProgramName(){
-    	$db = $this->getAdapter();
-    	$sql="SELECT service_id as id,title from rms_program_name 
-    		WHERE type=1 and status=1 ";
-    	return $db->fetchAll($sql);
-    }
+//     function getAllProductInProgramName(){
+//     	$db = $this->getAdapter();
+//     	$sql="SELECT service_id as id,title from rms_program_name 
+//     		WHERE type=1 and status=1 ";
+//     	return $db->fetchAll($sql);
+//     }
     
-    function getAllProductCategory(){
-    	$db = $this->getAdapter();
-    	$sql="select id,name_kh as name from rms_pro_category where status=1 ";
-    	return $db->fetchAll($sql);
-    }
+//     function getAllProductCategory(){
+//     	$db = $this->getAdapter();
+//     	$sql="select id,name_kh as name from rms_pro_category where status=1 ";
+//     	return $db->fetchAll($sql);
+//     }
     
     
 }

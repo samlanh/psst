@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Payment Late'); 
+	$this->headTitle($tr->translate("Purchase Order List")); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
@@ -8,21 +8,6 @@
 // 	print_r($this->purchase);exit();
 ?>	
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
-	<!-- 
-	<form action="" dojoType="dijit.form.Form" method="post">
-		<table style="width: 50%">
-			<tr>
-				<td><?php //echo $frm->getElement("title");?></td>
-				<td><?php //echo $frm->getElement("location");?></td>
-				<td> <?php //echo $frm->getElement("status_search");?></td>
-				<td>
-					<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
-					showLabel="true" type="submit"><?php //echo $tr->translate("SEARCH");?></button>
-				</td>
-			</tr>
-		</table>
-	</form>
-	 -->
 	 <style>
 		div#divPrint tr td {
 		    padding: 3px 0;
@@ -38,10 +23,14 @@
 				}
 			</style>
 			<table style="font-family:'Khmer OS Battambang'; background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">
-				
+				<tr>
+					<td colspan="3">
+						<div class="lbl_header"></div>
+					</td>
+				</tr>
 				<tr>
 					<td width="25%" align="left">
-						<img style="width: 35%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+						<!-- <img style="width: 35%;" src="<?php //echo $this->baseUrl().'/images/logo.png'?>"> -->
 					</td>
 					<td align="center" width="50%">
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';">បញ្ជីការបញ្ជារទិញ</strong><br />
@@ -139,7 +128,33 @@
 		</div>		
 	</div>
 </div>
-
+<script type="text/javascript">
+dojo.ready(function(){
+	getbranchinfo();
+});
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+function getbranchinfo(){
+		branch_id = '<?php echo $this->purchase['branch_id'];?>';
+		
+		if(branch_id != ""){
+			loadingBlock();
+			dojo.xhrPost({
+				url:url_getbranch,
+				content:{
+					'branch_id':branch_id,
+					},
+				handleAs:"json",
+				load: function(data){
+					$(".lbl_header").html(data);
+					HideloadingBlock();
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});	
+		} 
+	}
+</script>
 
 
 

@@ -184,4 +184,14 @@ class Stock_ProductController extends Zend_Controller_Action {
     		exit();
     		}
     }
+    function getproductbyacateAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$group = $db->getAllGradeStudyByDegree($data['category']);
+    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_PRODUCT")));
+    		print_r(Zend_Json::encode($group));
+    		exit();
+    	}
+    }
 }

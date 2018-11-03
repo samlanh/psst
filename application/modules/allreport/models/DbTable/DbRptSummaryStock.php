@@ -98,12 +98,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    	$sql="SELECT d.*,
 				(SELECT b.branch_namekh FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_namekh,
 				(SELECT b.branch_nameen FROM rms_branch AS b WHERE b.br_id = pl.brand_id LIMIT 1) AS branch_nameen,
-				(SELECT 
-				    SUM(pd.qty) 
-				  FROM
-				    rms_purchase_detail AS pd,
-				    rms_purchase AS pu 
-				  WHERE pu.id = pd.supproduct_id 
+				(SELECT  SUM(pd.qty) FROM rms_purchase_detail AS pd,rms_purchase AS pu WHERE pu.id = pd.supproduct_id 
 				    AND pd.pro_id = d.id 
 				    AND pu.branch_id = pl.`brand_id`
 				    AND pu.date >= '$from_date' 
@@ -112,6 +107,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 				  GROUP BY pd.pro_id
 				  LIMIT 1
 				) AS purchaseQty,
+				(SELECT SUM(ctd.qty_receive) FROM `rms_cutstock` AS ct,`rms_cutstock_detail` AS ctd WHERE ct.id = ctd.cutstock_id AND ctd.product_id = d.id AND ct.branch_id = pl.brand_id AND ct.received_date >= '$from_date' AND ct.received_date <= '$to_date' AND ct.status=1 LIMIT 1) AS saleqty,
 				(SELECT 
 			    	SUM(qty_receive) 
 			  	FROM
@@ -381,6 +377,8 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    	}
 	    	$order=" ORDER BY pp.id DESC";
 // 	    	echo $sql.$where.$order;exit();
+	    	$dbp = new Application_Model_DbTable_DbGlobal();
+	    	$where.=$dbp->getAccessPermission('pp.branch_id');
 	    	return $db->fetchAll($sql.$where.$order);
 	    
 	    	}catch(Exception $e){
@@ -411,5 +409,47 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		$_db->rollBack();
     		echo $e->getMessage(); exit();
     	}
+    }
+    
+    function getProductSold($search){
+    	$db = $this->getAdapter();
+    	$sql="SELECT 
+			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sp.branch_id LIMIT 1) AS branch_name,
+			sp.receipt_number,
+			spd.*,
+			(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
+			(SELECT ie.code FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS code
+			 FROM `rms_student_payment` AS sp,
+			`rms_student_paymentdetail` AS spd
+			WHERE sp.id = spd.payment_id
+			AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
+    		AND sp.status=1
+    		AND sp.is_void = 0
+    	";
+    	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " sp.create_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+    	$sql.= " AND  ".$from_date." AND ".$to_date;
+    	$where="";
+    	if(!empty($search['advance_search'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['advance_search']));
+    		$s_where[] = " (SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT ie.code FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
+    		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['items_search'])){
+    		$where.= " AND (SELECT ie.items_id FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) = ".$db->quote($search['items_search']);
+    	}
+    	if(!empty($search['pro_id'])){
+    		$where.= " AND spd.itemdetail_id= ".$db->quote($search['pro_id']);
+    	}
+    	if(!empty($search['branch_search'])){
+    		$where.= " AND sp.branch_id= ".$db->quote($search['branch_search']);
+    	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission('sp.branch_id');
+//     	echo $sql.$where;exit();
+    	return $db->fetchAll($sql.$where);
     }
 }

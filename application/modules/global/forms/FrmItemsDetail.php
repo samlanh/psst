@@ -181,6 +181,18 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	}
     	$end_date->setValue($_date);
     	
+    	$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+    	$optionBranch = $_dbgb->getAllBranch();
+    	if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+    	$_branch_search = new Zend_Dojo_Form_Element_FilteringSelect("branch_search");
+    	$_branch_search->setMultiOptions($_arr_opt_branch);
+    	$_branch_search->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    	
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
+    	$_branch_search->setValue($request->getParam("branch_search"));
     	if(!empty($data)){
     		$title->setValue($data["title"]);
     		$_shortcut->setValue($data["shortcut"]);
@@ -215,7 +227,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			$code,
     			$_product_type,
     			$_cost,
-    			$_price
+    			$_price,
+    			
+    			$_branch_search
     			));
     	return $this;
     }

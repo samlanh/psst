@@ -9,33 +9,51 @@
 	
 ?>
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_SUMMARY_STOCK');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<form action="" dojoType="dijit.form.Form" method="post">
-		 <table width="100%" >
-		    <tr>
-		        <td><?php echo $frm->getElement('title');?></td>
-		        <td><?php echo $frm->getElement('branch_id');?></td>
-		        
-		        <td>
-		        	<select name="pro_type" id="pro_type" class="fullside" dojoType="dijit.form.FilteringSelect">
-		        		<option value="">select product type</option>
+		 <div class="form-group">
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement('title');?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement('branch_id');?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<select name="pro_type" id="pro_type" class="fullside" dojoType="dijit.form.FilteringSelect">
+		        		<option value=""><?php echo $tr->translate('SELECT_CATEGORY')?></option>
 		        		<?php if(!empty($this->pro_type)){foreach ($this->pro_type as $pro_type){?>
 		        			<option value="<?php echo $pro_type['id']?>" <?php if($pro_type['id']==$this->search['pro_type']){echo "selected='selected'";}?>><?php echo $pro_type['name']?></option>
 		        		<?php }}?>
 		        	</select>
-		        </td>
-		        <td>
-		        	<select name="pro_name" id="pro_name" class="fullside" dojoType="dijit.form.FilteringSelect">
-		        		<option value="">select product code</option>
-		        		<?php if(!empty($this->pro_name)){foreach ($this->pro_name as $name){?>
-		        			<option value="<?php echo $name['id']?>" <?php if($name['id']==$this->search['pro_name']){echo "selected='selected'";}?>><?php echo $name['name']?></option>
-		        		<?php }}?>
-		        	</select>
-		        </td>
-		    	<td><?php echo $frm->getElement('start_date');?></td>
-		    	<td><?php echo $frm->getElement('end_date');?></td>
-		    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
-		    </tr>
-		</table>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<select name="pro_name" id="pro_name" class="fullside" dojoType="dijit.form.FilteringSelect">
+	        		<option value=""><?php echo $tr->translate('SELECT_PRODUCT')?></option>
+	        		<?php if(!empty($this->pro_name)){foreach ($this->pro_name as $name){?>
+	        			<option value="<?php echo $name['id']?>" <?php if($name['id']==$this->search['pro_name']){echo "selected='selected'";}?>><?php echo $name['name']?></option>
+	        		<?php }}?>
+	        	</select>
+        	</div>
+        </div>
+         <div class="form-group">
+         	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement('start_date');?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement('end_date');?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+        	</div>
+        </div>
 	</form>
 	<style>
 	#footer{display: none;}
@@ -51,41 +69,49 @@
 					<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> 
 				</td>
 				<td align="center" width="70%">
-					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
+					<strong style=" font-weight:bold; font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
 					<strong style="padding-left: 10px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_SUMMARY_STOCK');?></strong> 
-					<div><?php if(!empty($this->search['start_date'])){echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';}?><?php echo date("d/m/Y",strtotime($this->search['end_date']));?></div>
+					<div style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';}?><?php echo date("d/m/Y",strtotime($this->search['end_date']));?></div>
 				</td>
 				<td width="15%" align="center">
 				</td>
 			</tr>
 			<tr>
 				<td colspan="3">
-					<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
-						<tr style="background: #CCD9FF;font-size: 12px; line-height: 30px;font-weight: bold;" align="center">
-							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH");?></td>
-							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("PRODUCT_CODE");?></td>
-							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("PRODUCT_NAME");?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("PURCHASE_IN");?></td>
-							<td style="border:1px solid #000;text-align: center;" ><?php echo $tr->translate("SELL_OUT");?></td>
-							<td style="border:1px solid #000;text-align: center;" ><?php echo $tr->translate("REQUEST_QTY");?></td>
-							<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("CURR_QTY");?></td>
-						</tr>
+					<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
+						<thead>
+							<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+								<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+								<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
+								<td colspan="2">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
+								<td colspan="4">&nbsp;<?php echo $tr->translate("IN_OUT_STOCK_PROCESS");?>&nbsp;</td>
+							</tr>
+							<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+								
+								<td nowrap><?php echo $tr->translate("PRODUCT_CODE");?></td>
+								<td nowrap><?php echo $tr->translate("PRODUCT_NAME");?></td>
+								<td><?php echo $tr->translate("PURCHASE_IN");?></td>
+								<td ><?php echo $tr->translate("SELL_OUT");?></td>
+								<td ><?php echo $tr->translate("REQUEST_QTY");?></td>
+								<td nowrap><?php echo $tr->translate("CURR_QTY");?></td>
+							</tr>
+						</thead>
+						
 						<?php 
 						$gender=array(1=>"Male",2=>"Female");
 						$i=0;
 						if(!empty($this->rows)) foreach($this->rows As $key=> $rs_row){	$i++;
 							
 						?>
-							<tr style="font-size: 12px;" class="hover">
-								<td style="border:1px solid #000;text-align: center;"><?php echo $i; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['branch_namekh']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['code']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['title']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);} ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php //if($rs_row['stockOut']>0){echo number_format($rs_row['stockOut']);} ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['request']>0){echo number_format($rs_row['request']);} ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);} ?> </td>
+							<tr class="hover" style="font-size:11px; line-height:16px; "​ align="center">
+								<td>&nbsp;<?php echo $i; ?>&nbsp;</td>
+								<td align="left">&nbsp;<?php echo $rs_row['branch_namekh']; ?>&nbsp;</td>
+								<td>&nbsp;<?php echo $rs_row['code']; ?>&nbsp;</td>
+								<td align="left">&nbsp;<?php echo $rs_row['title']; ?>&nbsp;</td>
+								<td>&nbsp;<?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);} ?>&nbsp;</td>
+								<td>&nbsp;<?php if($rs_row['saleqty']>0){echo number_format($rs_row['saleqty']);} ?>&nbsp;</td>
+								<td>&nbsp;<?php if($rs_row['request']>0){echo number_format($rs_row['request']);} ?>&nbsp;</td>
+								<td>&nbsp;<?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);} ?>&nbsp;</td>
 							</tr>
 						<?php
 							}

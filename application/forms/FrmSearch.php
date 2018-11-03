@@ -17,6 +17,7 @@ Class Application_Form_FrmSearch extends Zend_Dojo_Form {
 	}
 	public function FrmSearch($_data=null){
 	
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		
 		$_title = new Zend_Dojo_Form_Element_TextBox('adv_search');
@@ -67,12 +68,34 @@ Class Application_Form_FrmSearch extends Zend_Dojo_Form {
 		}
 		$_enddate->setValue($_date);
 
+		$_arr_opt_user = array(""=>$this->tr->translate("PLEASE_SELECT_USER"),);
+		$userinfo = $_dbgb->getUserInfo();
+		$optionUser = $_dbgb->getAllUser();
+		if(!empty($optionUser))foreach($optionUser AS $row) $_arr_opt_user[$row['id']]=$row['name'];
+		$_user_id = new Zend_Dojo_Form_Element_FilteringSelect("user_id");
+		$_user_id->setMultiOptions($_arr_opt_user);
+		$_user_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		if ($userinfo['level']!=1){
+			$_user_id->setAttribs(array(
+					'readonly'=>true,
+			));
+			$_user_id->setValue($userinfo['user_id']);
+		}
+		$_user_id->setValue($request->getParam("user_id"));
+		
 		if(!empty($_data)){
 		
 		}
+		
+		
 		$this->addElements(array($_btn_search,
 		$_status_search,
 		$_title,
+		$_user_id,
 		$_startdate,$_enddate));
 		return $this;
 	}

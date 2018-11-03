@@ -43,12 +43,13 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getPurchaseCodeSuplier($search=null){
     	$db=$this->getAdapter();
-    	$sql="SELECT sp.branch_id,sp.id,sp.supplier_no,s.sup_name,s.tel,
+    	$sql="SELECT s.sup_name,s.tel,
 				(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id LIMIT 1) AS branch_name,
-				sp.amount_due,sp.date,
-				(SELECT name_kh FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1 LIMIT 1) AS `status`
+				sp.*,
+				(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = sp.user_id LIMIT 1) as user_name
 				FROM rms_purchase AS sp,rms_supplier AS s 
-			    WHERE sp.sup_id=s.id AND sp.status=1 ";
+			    WHERE sp.sup_id=s.id  ";//AND sp.status=1
+    	///(SELECT name_kh FROM rms_view WHERE rms_view.key_code=sp.status AND rms_view.type=1 LIMIT 1) AS `status`,
     	
     	$from_date =(empty($search['start_date']))? '1': " sp.date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.date <= '".$search['end_date']." 23:59:59'";
@@ -68,7 +69,15 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	if($search['supplier_id']>0){
     		$where.=" AND sp.sup_id=".$search['supplier_id'];
     	}
-    	 
+    	if(!empty($search['status'])){
+    		if($search['status']==1){
+    			$where.=' AND sp.status=0';
+    		}else if($search['status']==2){
+    			$where.=' AND sp.amount_due > sp.amount_due_after AND sp.amount_due_after>0 ';
+    		}else if($search['status']==2){
+    			$where.=' AND sp.is_paid=1';
+    		}
+    	} 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('branch_id');
     	return $db->fetchAll($sql.$where);

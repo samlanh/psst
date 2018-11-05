@@ -63,16 +63,19 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 	}
 	function getAllDocument($search){
 		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql = " SELECT 
 				    id,
 					name,
 					create_date,
-				   (SELECT name_kh FROM rms_view WHERE rms_view.type=25 AND rms_view.key_code=types) AS type_document,
+					CASE    
+					WHEN  types = 1 THEN '".$tr->translate("STUDENT_DOCUMENT")."'
+					WHEN  types = 2 THEN '".$tr->translate("TEACHER_DOCUMENT")."'
+					END types,
 				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name,
 					status
 				FROM 
 					rms_document_type ";
-		
 		$order = ' ORDER BY id DESC '; 
 		$where = ' WHERE name!="" ';
 		if(empty($search)){

@@ -21,7 +21,7 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		$_arr=array(
 				'name'	  	  => $title,
 				'create_date' => date("Y-m-d"),
-				'types'		  => $_data['type'],
+				'types'		  => $_data['types'],
 				'status'  	  => $_data['status'],
 				'user_id'	  => $this->getUserId()
 		);

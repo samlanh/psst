@@ -358,7 +358,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		
 		$db = new Allreport_Model_DbTable_DbMistakeCertificate();
 		$this->view->student_info = $db->getStudentInfo($group_id,$stu_id);
-		$this->view->student_mistake = $db->getMistakeRecord($search,$group_id,$stu_id);
+// 		$this->view->student_mistake = $db->getMistakeRecord($search,$group_id,$stu_id);
 		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();

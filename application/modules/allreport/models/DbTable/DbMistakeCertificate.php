@@ -58,44 +58,44 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 		return $db->fetchRow($sql);
 	}
 	
-	public function getMistakeRecord($search,$group_id,$stu_id){
-		$db = $this->getAdapter();
-		$sql="
-			SELECT 
-			g.id AS group_id,
-			g.`group_code`,
-			(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year, 
+// 	public function getMistakeRecord($search,$group_id,$stu_id){
+// 		$db = $this->getAdapter();
+// 		$sql="
+// 			SELECT 
+// 			g.id AS group_id,
+// 			g.`group_code`,
+// 			(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year, 
 			
-			(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-			(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
-			`g`.`semester` AS `semester`,
-			(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-			sdd.`stu_id`, 
-			st.`stu_code`, 
-			st.`stu_enname`, 
-			st.`stu_khname`, 
-			st.`sex`
+// 			(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+// 			(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+// 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
+// 			`g`.`semester` AS `semester`,
+// 			(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+// 			sdd.`stu_id`, 
+// 			st.`stu_code`, 
+// 			st.`stu_enname`, 
+// 			st.`stu_khname`, 
+// 			st.`sex`
 			
-			FROM 
-				 `rms_group` AS g, `rms_student` AS st, 
-				 rms_student_attendence AS sd, 
-				 `rms_student_attendence_detail` AS sdd 
-			WHERE 
-				 (sd.type=2 OR sdd.`attendence_status` IN (4,5)) 
-				 AND sd.`id` = sdd.`attendence_id` 
-				 AND sd.group_id = g.id AND sd.status=1 
-				 AND st.`stu_id` = sdd.`stu_id` AND st.is_subspend = 0
-				 AND st.`stu_id`=$stu_id
-				 AND g.id = $group_id
-		";
+// 			FROM 
+// 				 `rms_group` AS g, `rms_student` AS st, 
+// 				 rms_student_attendence AS sd, 
+// 				 `rms_student_attendence_detail` AS sdd 
+// 			WHERE 
+// 				 (sd.type=2 OR sdd.`attendence_status` IN (4,5)) 
+// 				 AND sd.`id` = sdd.`attendence_id` 
+// 				 AND sd.group_id = g.id AND sd.status=1 
+// 				 AND st.`stu_id` = sdd.`stu_id` AND st.is_subspend = 0
+// 				 AND st.`stu_id`=$stu_id
+// 				 AND g.id = $group_id
+// 		";
 		
-		$where = " ";
-// 		$from_date =(empty($search['start_date']))? '1': "sd.mistake_date >= '".$search['start_date']." 00:00:00'";
-//     	$to_date = (empty($search['end_date']))? '1': "sd.mistake_date <= '".$search['end_date']." 23:59:59'";
-//     	$where .= " AND ".$from_date." AND ".$to_date;
-		return $db->fetchAll($sql.$where);
-	}
+// 		$where = " ";
+// // 		$from_date =(empty($search['start_date']))? '1': "sd.mistake_date >= '".$search['start_date']." 00:00:00'";
+// //     	$to_date = (empty($search['end_date']))? '1': "sd.mistake_date <= '".$search['end_date']." 23:59:59'";
+// //     	$where .= " AND ".$from_date." AND ".$to_date;
+// 		return $db->fetchAll($sql.$where);
+// 	}
 	
 	public function getMistakeRecordByDate($date,$group_id,$stu_id){
 		$db = $this->getAdapter();

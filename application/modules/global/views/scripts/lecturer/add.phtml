@@ -508,6 +508,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 			filterDistrict();
 			dijit.byId('province_id').attr('value',12)
 			//initialize();
+			oldRow();
 	});
 </script>
 <div class="dijitHidden">
@@ -937,6 +938,44 @@ function addRow(){
 	dojo.html.set(dojo.byId("row"+col),template , {
 	     parseContent: true,
 	});
+}
+function oldRow(){
+	<?php if(!empty($this->doc)){ //echo '111111';exit();
+		foreach($this->doc as $row){ 
+	?>
+	col++;no++;
+	template='';
+	if(title!=1){
+		temp+='<th><?php echo $tr->translate("DEL");?></th>';
+		temp+='<th><?php echo $tr->translate("N_O");?></th>';
+		temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
+		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
+		temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
+		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
+		temp+='<th ><?php echo $tr->translate("NOTE");?></th>';
+		dojo.query("#head-title").append(temp);
+		title=1;
+	}
+		template+='<td width="5%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="5%" align="center">'+no+'</td>';
+		template+='<td width="20%"><label style="padding: 3px 1px;"><?php echo $row['name']?></label><input type="hidden" class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" dojoType="dijit.form.TextBox" value="<?php echo $row['id']?>" />';
+		template+='</td>';
+		template+='<td width="15%"><input type="text" class="fullside" name="date_give_'+col+'" id="date_give_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
+		template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';
+		template+='<td width="15%"><input type="text" class="fullside" name="date_end_'+col+'" id="date_end_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
+		template+='<td width="20%"><input type="text" class="fullside" name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("NOTE");?>" /></td>';
+	
+	tmp='<tr id="row'+col+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+col);
+	}else{$("#identity").val(col);}
+	dojo.html.set(dojo.byId("row"+col),template , {
+	     parseContent: true,
+	});
+	<?php }}?>
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();

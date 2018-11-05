@@ -70,6 +70,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 		$this->view->nation = $optionNation;
 		
 		$row = $_db->getAllDocteacherType(); // degree language
+		$this->view->doc = $row;
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;

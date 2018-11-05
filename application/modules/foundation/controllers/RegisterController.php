@@ -105,6 +105,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->know_by = $row;
 		
 		$row = $_db->getAllDocumentType(); // degree language
+		$this->view->doc = $row;
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;

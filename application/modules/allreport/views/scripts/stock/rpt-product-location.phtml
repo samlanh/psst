@@ -1,26 +1,42 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Product By Branch'); 
+	$this->headTitle($tr->translate('RPT_PRODUCT_LOCATION')); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	?>	
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
-		<form
-			dojoType="dijit.form.Form" method="post">
-			<table style="width: 100%">
-				<tr>
-					<td><?php echo $frm->getElement("title");?></td>
-					<td><?php echo $frm->getElement("location");?></td>
-					<td><?php echo $frm->getElement("category_id");?></td>
-					<td><?php echo $frm->getElement("product");?></td>
-					<td> <?php echo $frm->getElement("status_search");?></td>
-					<td>
-						<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_PRODUCT_LOCATION');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
+		<form dojoType="dijit.form.Form" method="post">
+			<div class="form-group">
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement("title");?>
+				</div>
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement("location");?>
+				</div>
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement("category_id");?>
+				</div>
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement("product");?>
+				</div>
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement("status_search");?>
+				</div>
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 							showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-					</td>
-				</tr>
-			</table>
+				</div>
+			</div>
 		</form>
 	<div style="min-height:22cm; margin:0 auto;">
 		<div id="divPrint">
@@ -38,33 +54,38 @@
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-					<style>
-						table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
-						tr{ page-break-inside:avoid; page-break-after:auto }
-						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
-						#header {
-						  display: table-header-group;
-						  page-break-inside:avoid; page-break-after:auto;
-						}
-					.hover:hover{background:#eee;}										
-					</style>
-						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
+						<style>
+							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+							tr{ page-break-inside:avoid; page-break-after:auto }
+							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
+							#header {
+							  display: table-header-group;
+							  page-break-inside:avoid; page-break-after:auto;
+							}
+						.hover:hover{background:#eee;}										
+						</style>
+						<table cellpadding="5"​ style="font-family:'Times New Roman','Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
-							<tr style="font-size:12px; height: 20px;background-color:#ccd9ff;line-height: 30px;font-weight: bold;" align="center">
-								<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('PRODUCT_CODE');?>&nbsp;</td>
-								<!-- <td>&nbsp;<?php //echo $tr->translate('BAR_CODE');?>&nbsp;</td> -->
-								<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('UNIT_PRICE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('DATE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
-						   </tr>
+								<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+									<td colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
+									<td colspan="5">&nbsp;<?php echo $tr->translate("STOCK_INFO");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("DATE");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+								</tr>
+								<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PRODUCT_CODE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
+									
+									<td>&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('UNIT_PRICE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									
+							   </tr>
 						   </thead>
 						<?php 
 							$branch_name =''; 
@@ -102,22 +123,28 @@
 								<?php
 									} 
 								?>
-							<tr>
-								<td colspan="9" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"></td>
-								<td colspan="2">&nbsp;<strong><?php echo $tr->translate("TOTAL_UNIT_PRICE");?></strong></td>
-								<td>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?></td>
-							</tr>
-							<tr>
-								<td colspan="9" style="border: 1px solid #fff;border-right: 1px solid #000;border-top: 1px solid #000;"></td>
-								<td colspan="2">&nbsp;<strong><?php echo $tr->translate("TOTAL_SELL_PRICE");?></strong></td>
-								<td>&nbsp;$&nbsp;<?php echo number_format($total_sell,2);?></td>
-							</tr>
 						</table>	
 					</td>
 				</tr>
 				<tr>
 					<td colspan="3">&nbsp;</td>
 				</tr>
+				<?php if(!empty($this->pro_loc)){?>
+				<tr>
+					<td colspan="3" align="right">
+					     <table width="25%"  style="font-family:'Times New Roman','Khmer OS Battambang'; border: 1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1"  >
+					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+					               <td><?php echo $tr->translate('TOTAL_UNIT_PRICE');?> :</td>
+					               <td align="right"><strong>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</strong></td>
+					           </tr>
+					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+					               <td><?php echo $tr->translate('TOTAL_SELL_PRICE');?> :</td>
+					               <td align="right"><strong>&nbsp;$&nbsp;<?php echo number_format($total_sell,2);?>&nbsp;</strong></td>
+					           </tr>
+					     </table>
+					</td>
+				</tr>
+				<?php }?>
 				<tr>
 					<td colspan="3" width="100%">
 						<table width="100%" style="font-family:'Khmer OS Battambang';">

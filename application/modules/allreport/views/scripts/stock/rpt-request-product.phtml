@@ -84,33 +84,38 @@
 				</tr>
 				<tr>
 					<td colspan="3">
-						<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
-							<tr style="background: #CCD9FF;font-size: 12px; line-height: 30px;font-weight: bold;" align="center">
-								<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH");?></td>
-								<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("REQUEST_NO");?></td>
-								<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("REQUEST_FOR");?></td>
-								<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("FOR_SECTION");?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("PURPOSE");?></td>
-								<td style="border:1px solid #000;text-align: center;" ><?php echo $tr->translate("REQUEST_DATE");?></td>
-								<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("USER");?></td>
-								<td style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("STATUS");?></td>
-							</tr>
+						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
+							<thead>
+								<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
+									<td colspan="5">&nbsp;<?php echo $tr->translate("REQUEST_INFO");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+								</tr>
+								<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+									<td  nowrap><?php echo $tr->translate("REQUEST_NO");?></td>
+									<td  nowrap><?php echo $tr->translate("REQUEST_FOR");?></td>
+									<td  nowrap><?php echo $tr->translate("FOR_SECTION");?></td>
+									<td ><?php echo $tr->translate("PURPOSE");?></td>
+									<td  ><?php echo $tr->translate("REQUEST_DATE");?></td>
+								</tr>
+							</thead>
 							<?php 
 							$gender=array(1=>"Male",2=>"Female");
 							$i=0;
 							if(!empty($rows)) foreach($rows As $key=> $rs_row){	$i++;
 							?>
-								<tr style="font-size: 12px;" class="hover">
-									<td style="border:1px solid #000;text-align: center;"><?php echo $i; ?></td>
-									<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['branch_name'];; ?></td>
-									<td style="border:1px solid #000;text-align: center;"><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'reprint-request-product','id'=>$rs_row['id']))?>"><?php echo $rs_row['request_no']; ?></a></td>
-									<td style="border:1px solid #000;text-align: center;"><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'reprint-request-product','id'=>$rs_row['id']))?>"><?php echo $rs_row['request_for']; ?></a></td>
-									<td style="border:1px solid #000;text-align: center;"><a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'reprint-request-product','id'=>$rs_row['id']))?>"><?php echo $rs_row['for_section']; ?></a></td>   
-									<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['purpose']; ?></td>
-									<td style="border:1px solid #000;text-align: center;"><?php echo date("d-M-Y",strtotime($rs_row['request_date'])); ?></td>
-									<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['user']; ?> </td>
-									<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['status']; ?> </td>
+								<tr class="hover" style="font-size:12px; height: 18px;"​ align="center">
+									<td >&nbsp;<?php echo $i; ?>&nbsp;</td>
+									<td >&nbsp;<?php echo $rs_row['branch_name'];; ?>&nbsp;</td>
+									<td >&nbsp;<a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'reprint-request-product','id'=>$rs_row['id']))?>"><strong><?php echo $rs_row['request_no']; ?></strong></a>&nbsp;</td>
+									<td >&nbsp;<a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'reprint-request-product','id'=>$rs_row['id']))?>"><?php echo $rs_row['request_for']; ?></a>&nbsp;</td>
+									<td >&nbsp;<a style="color: #000;" target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'reprint-request-product','id'=>$rs_row['id']))?>"><?php echo $rs_row['for_section']; ?></a>&nbsp;</td>   
+									<td >&nbsp;<?php echo $rs_row['purpose']; ?>&nbsp;</td>
+									<td >&nbsp;<?php echo date("d-M-Y",strtotime($rs_row['request_date'])); ?>&nbsp;</td>
+									<td >&nbsp;<?php echo $rs_row['user']; ?>&nbsp;</td>
+									<td >&nbsp;<?php if ($rs_row['status']==1){ echo $tr->translate("ACTIVE"); }else{ echo $tr->translate("DEACTIVE"); }?>&nbsp;</td>
 								</tr>
 							<?php
 							}

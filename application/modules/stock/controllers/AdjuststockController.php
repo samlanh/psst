@@ -140,5 +140,15 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
     		exit();
     	}
     }
-
+    
+    function getreceiptAction(){
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$branch_id = $data['branch_id'];
+    		$_dbcht = new Accounting_Model_DbTable_DbAdjustStock();
+    		$itemsCode = $_dbcht->getAjustCode($branch_id);
+    		print_r(Zend_Json::encode($itemsCode));
+    		exit();
+    	}
+    }
 }

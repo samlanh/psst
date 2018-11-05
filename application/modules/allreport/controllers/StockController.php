@@ -153,6 +153,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 	}
 	//End Block Purchase
 	
+	//Start Block Sale Product
 	public function rptProductsoldAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -161,6 +162,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 			else{
 				$search = array(
 						'title' =>'',
+						'branch_id'=>'',
 						'study_year'=>'',
 						'user' 		=>'',
 						'product'=>'',
@@ -170,7 +172,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 				);
 			}
 			$this->view->search = $search;
-			$db = new Allreport_Model_DbTable_DbRptProductsold();
+			$db = new Allreport_Model_DbTable_DbRptSummaryStock();
 			$this->view->product_sold = $db->getAllProductSold($search);
 	
 		}catch(Exception $e){
@@ -183,6 +185,44 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
+	
+	public function rptproductqtysoldAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}else{
+				$search=array(
+						'advance_search' 	=>'',
+						'start_date'	=>date("Y-m-d"),
+						'end_date'		=>date("Y-m-d"),
+						'branch_search'		=>'',
+						'items_search'		=>'',
+						'pro_id'=>''
+				);
+			}
+			$db = new Allreport_Model_DbTable_DbRptSummaryStock();
+			$this->view->rspro = $db->getProductSold($search);
+			$type=3;//product
+			$frm = new Global_Form_FrmItemsDetail();
+			$frm->FrmAddItemsDetail(null,$type);
+			Application_Model_Decorator::removeAllDecorator($frm);
+			$this->view->form_search = $frm;
+				
+			$this->view->search = $search;
+				
+			$db = new Global_Model_DbTable_DbItemsDetail();
+			$d_row= $db->getAllProductsNormal();
+			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+			$this->view->product= $d_row;
+				
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
+		}
+	}
+	//End Block Sale Product
+	
     public function rptTransferAction(){
 		$db = new Accounting_Model_DbTable_DbTransferstock();
     	try{
@@ -213,6 +253,8 @@ class Allreport_StockController extends Zend_Controller_Action {
 		$this->view->rs = $db->getTransferById($id);
 		$this->view->rsdetail = $db->getTransferByIdDetail($id);
 	}
+	
+	//Start Block Request Product
 	function rptRequestProductAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -249,7 +291,19 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
-	
+	public function reprintRequestProductAction(){
+		$db = new Allreport_Model_DbTable_DbRptSummaryStock();
+		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
+		$row = $db->getRequestProductById($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/stock/rpt-request-product");
+			exit();
+		}
+		$this->view->req =$row;
+		$this->view->req_detail = $db->getAllRequestProductDetailById($id);
+	}
+	//End Block Request Product
 	
 	function rptSummaryRequestProductAction(){
 		try{
@@ -297,18 +351,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 	}
 	
 	
-	public function reprintRequestProductAction(){
-		$db = new Allreport_Model_DbTable_DbRptSummaryStock();
-		$id=$this->getRequest()->getParam("id");
-		$id = empty($id)?0:$id;
-		$row = $db->getRequestProductById($id);
-		if (empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/stock/rpt-request-product");
-			exit();
-		}
-		$this->view->req =$row;
-		$this->view->req_detail = $db->getAllRequestProductDetailById($id);
-	}
 	function rptAdjustStockdetailAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -320,12 +362,14 @@ class Allreport_StockController extends Zend_Controller_Action {
 						'branch_id'		=>  '',
 						'start_date'	=>	date('Y-m-d'),
 						'end_date'		=>	date('Y-m-d'),
-						'status_search'	=> 1
+						'status_search'	=> "",
+						'user_id'	=> "",
+						
 				);
 			}
 			$this->view->search = $search;
 			$db=new Allreport_Model_DbTable_DbRequestStock();
-			$ds=$this->view->rows=$db->getAllAdjustStockDetail($search);
+			$this->view->rows=$db->getAllAdjustStockDetail($search);
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -361,42 +405,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
-	public function rptproductqtysoldAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}else{
-				$search=array(
-						'advance_search' 	=>'',
-						'start_date'	=>date("Y-m-d"),
-						'end_date'		=>date("Y-m-d"),
-						'branch_search'		=>'',
-						'items_search'		=>'',
-						'pro_id'=>''
-				);
-			}
-			$db = new Allreport_Model_DbTable_DbRptSummaryStock();
-			$this->view->rspro = $db->getProductSold($search);
-			$type=3;//product
-			$frm = new Global_Form_FrmItemsDetail();
-	    	$frm->FrmAddItemsDetail(null,$type);
-	    	Application_Model_Decorator::removeAllDecorator($frm);
-	    	$this->view->form_search = $frm;
-			
-			$this->view->search = $search;
-			
-			$db = new Global_Model_DbTable_DbItemsDetail();
-			$d_row= $db->getAllProductsNormal();
-			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
-			$this->view->product= $d_row;
-			
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
-		}
-	}
-	
 	function rptSummaryStockAction(){
 		try{
 			if($this->getRequest()->isPost()){

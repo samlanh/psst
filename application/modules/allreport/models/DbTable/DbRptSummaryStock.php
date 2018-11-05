@@ -17,17 +17,16 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     function getAllRequestProduct($search=null){
     	$db = $this->getAdapter();
     	$sql="SELECT
-    	re.*,
-    	(select title from rms_request_for as rf where rf.id = request_for) as request_for,
-    	(select title from rms_for_section as fs where fs.id = for_section) as for_section,
-    	(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
-    	(select first_name from rms_users as u where u.id = re.user_id) as user,
-    	(select name_en from rms_view where type=1 and key_code = re.status) as status
+	    	re.*,
+	    	(select title from rms_request_for as rf where rf.id = request_for) as request_for,
+	    	(select title from rms_for_section as fs where fs.id = for_section) as for_section,
+	    	(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
+	    	(select CONCAT(last_name,' ',first_name) from rms_users as u where u.id = re.user_id) as user,
+	    	re.status
     	FROM
     	rms_request_order AS re
     	WHERE
-    	1
-    	";
+    	1";
     	$where="";
     
     	$from_date =(empty($search['start_date']))? '1': " re.request_date >= '".$search['start_date']." 00:00:00'";
@@ -417,6 +416,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sp.branch_id LIMIT 1) AS branch_name,
 			sp.receipt_number,
 			spd.*,
+			(SELECT i.title FROM `rms_items` AS i WHERE i.id = (SELECT ie.items_id FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1)  LIMIT 1) AS category,
 			(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
 			(SELECT ie.code FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS code
 			 FROM `rms_student_payment` AS sp,
@@ -425,6 +425,67 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 			AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
     		AND sp.status=1
     		AND sp.is_void = 0
+    	";
+    	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " sp.create_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+    	$sql.= " AND  ".$from_date." AND ".$to_date;
+    	$where="";
+    	if(!empty($search['advance_search'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['advance_search']));
+    		$s_where[] = " (SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " (SELECT ie.code FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) LIKE '%{$s_search}%'";
+    		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
+    		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['items_search'])){
+    		$where.= " AND (SELECT ie.items_id FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) = ".$db->quote($search['items_search']);
+    	}
+    	if(!empty($search['pro_id'])){
+    		$where.= " AND spd.itemdetail_id= ".$db->quote($search['pro_id']);
+    	}
+    	if(!empty($search['branch_search'])){
+    		$where.= " AND sp.branch_id= ".$db->quote($search['branch_search']);
+    	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission('sp.branch_id');
+    	return $db->fetchAll($sql.$where);
+    }
+    function getAllProductSold($search){
+    	$db = $this->getAdapter();
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$currentLang = $dbp->currentlang();
+    	$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
+    	if ($currentLang==1){
+    		$stuname="s.stu_khname";
+    	}
+    	$sql="SELECT
+    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sp.branch_id LIMIT 1) AS branch_name,
+    	s.stu_khname,
+    		$stuname AS student_name,
+    		s.stu_enname,
+    		s.last_name,
+    		s.stu_code,
+    		s.tel,
+    	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year LIMIT 1) AS academic,
+    		(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
+    		(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=s.grade AND items_type=1 LIMIT 1) AS grade,
+    	sp.receipt_number,
+    	sp.create_date,
+    	spd.*,
+    	(SELECT i.title FROM `rms_items` AS i WHERE i.id = (SELECT ie.items_id FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1)  LIMIT 1) AS category,
+    	(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
+    	(SELECT ie.code FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS code,
+    	(SELECT ie.cost FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS cost, 
+    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = sp.user_id LIMIT 1) as user
+    	FROM `rms_student_payment` AS sp,
+    	`rms_student_paymentdetail` AS spd,
+    	`rms_student` AS s
+    	WHERE sp.id = spd.payment_id
+    	AND s.stu_id = sp.student_id
+    	AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
+    	AND sp.status=1
+    	AND sp.is_void = 0
     	";
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.create_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";

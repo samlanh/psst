@@ -333,7 +333,7 @@ $teacher_id = $session_t->teacher_id;
 						                  </li>
 						                  <?php if(!empty($stu_doc)){?>
 						                  	<?php foreach($stu_doc as $key=> $rsdoc){
-				                          	$url = $this->url(array('module'=>'foundation','controller'=>'register','action'=>'edit'), null, true)."/id/".$rsdoc['stu_id'];
+				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rsdoc['stu_id'];
 					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
 					                          	if (!empty($rsdoc['photo'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rsdoc['photo'])) {

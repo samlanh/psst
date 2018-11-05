@@ -76,8 +76,11 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			
+			$itemsCode = $this->getAjustCode($data["branch"]);
 			$arr=array(
-					"adjust_no"    	=> 	$data["adjust_no"],
+					"branch_id"    	=> 	$data["branch"],
+					"adjust_no"    	=> 	$itemsCode,
 					"request_name"  => 	$data["request_name"],
 					"note"     		=> 	$data["note"],
 					"request_date"  => 	date("Y-m-d"),
@@ -269,13 +272,20 @@ class Accounting_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 //     	return $db->fetchAll($sql);
 //     }
 
-    function getAjustCode(){
+    function getAjustCode($branch_id=null){
     	$db = $this->getAdapter();
-    	$sql="SELECT id FROM rms_adjuststock WHERE STATUS=1 ORDER BY id DESC LIMIT 1";
+    	$sql="SELECT id FROM rms_adjuststock WHERE STATUS=1 ";
+    	$pre="";
+    	if (!empty($branch_id)){
+    		$sql.=" AND branch_id=".$branch_id;
+    		$_dbgb = new Application_Model_DbTable_DbGlobal();
+    		$pre.= $_dbgb->getPrefixCode($branch_id);//by branch
+    	}
+    	$sql.=" ORDER BY id DESC LIMIT 1";
     	$acc_no = $db->fetchOne($sql);
     	$new_acc_no= (int)$acc_no+1;
     	$acc_no= strlen((int)$acc_no+1);
-    	$pre='RQ-';
+    	$pre.='RQ-';
     	for($i = $acc_no;$i<4;$i++){
     		$pre.='0';
     	}

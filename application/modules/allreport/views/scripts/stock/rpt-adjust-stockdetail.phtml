@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Adjust Stock Detail'); 
+	$this->headTitle($tr->translate('RPT_ADJUST_STOCK')); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
@@ -8,17 +8,36 @@
 	//print_r($rows);
 ?>
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_ADJUST_STOCK');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<form action="" dojoType="dijit.form.Form" method="post">
-		 <table width="100%" >
-		    <tr>
-		         <td><?php echo $frm->getElement('title');?></td>
-		        <td><?php echo $frm->getElement('branch_id');?></td>
-		    	<td><?php echo $frm->getElement('start_date');?></td>
-		    	<td><?php echo $frm->getElement('end_date');?></td>
-		    	<td><?php echo $frm->getElement('status_search');?></td>
-		    	<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button> </td>
-		    </tr>
-		</table>
+		 <div class="form-group">
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement('title');?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement('branch_id');?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement('start_date');?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement('end_date');?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<?php echo $frm->getElement('user_id');?>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+        	</div>
+        </div>
 	</form>
 	<style>
 	#footer{display: none;}
@@ -50,44 +69,58 @@
 					#header {
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;
-					}							
+					}		
+					thead tr td {
+						font-weight: bold;
+						padding: 6px 2px;
+					}					
 				</style>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+						<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
-							<tr style="background: #bdccf9;font-size: 12px; line-height: 30px;font-weight: bold;" align="center">
-								<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></th>
-								<th style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("BRANCH");?></th>
-								<th style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("ADJUST_NO");?></th>
-								<th style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("REQUEST_NAME");?></th>
-								<th style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("PRODUCT_NAME");?></th>
-								<th style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("QTY_BEFOR");?></th>
-								<th style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("QUANTITY_NEW");?></th>
-								<th style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("STOCK_SPACING");?></th>
-								<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("NOTE");?></th>
-								<th style="border:1px solid #000;text-align: center;" ><?php echo $tr->translate("ADJUST_DATE");?></th>
-								<th style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("USER");?></th>
-								<th style="border:1px solid #000;text-align: center;" nowrap><?php echo $tr->translate("STATUS");?></th>
-							</tr>
+								<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
+									<td colspan="2">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
+									<td colspan="7">&nbsp;<?php echo $tr->translate("ADJUST_INFO");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
+									<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+								</tr>
+								
+								<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
+									<td><?php echo $tr->translate("CATEGORY");?></td>
+									<td><?php echo $tr->translate("PRODUCT_NAME");?></td>
+									
+									<td><?php echo $tr->translate("ADJUST_NO");?></td>
+									<td><?php echo $tr->translate("TITLE");?></td>
+									<td><?php echo $tr->translate("QTY_BEFOR");?></td>
+									<td><?php echo $tr->translate("QUANTITY_NEW");?></td>
+									<td><?php echo $tr->translate("STOCK_SPACING");?></td>
+									<td><?php echo $tr->translate("NOTE");?></td>
+									<td><?php echo $tr->translate("ADJUST_DATE");?></td>
+								</tr>
 							</thead>
 							<?php 
 							$gender=array(1=>"Male",2=>"Female");
 							if(!empty($rows))foreach($rows As $key=> $rs_row){
 							?>
-							<tr style="font-size: 12px;">
-								<td style="border:1px solid #000;text-align: center;"><?php echo $key+1; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['branch_name']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['adjust_no']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['request_name']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['pro_name']; ?> </td>
-								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['qty_befor']!=0) echo $rs_row['qty_befor']; ?> </td>
-								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['qty_after']!=0) echo $rs_row['qty_after']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php if($rs_row['difference']!=0) echo $rs_row['difference']; ?> </td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['note']; ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs_row['request_date'])); ?></td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['user_name']; ?> </td>
-								<td style="border:1px solid #000;text-align: center;"><?php echo $rs_row['status']; ?> </td>
+							<tr style="font-size:12px; height: 23px;" class="hover" >
+								<td >&nbsp;<?php echo $key+1; ?>&nbsp;</td>
+								<td >&nbsp;<?php echo $rs_row['branch_name']; ?>&nbsp;</td>
+								<td >&nbsp;<?php echo $rs_row['category']; ?>&nbsp;</td>
+								<td >&nbsp;<?php echo $rs_row['pro_name']; ?>&nbsp;</td>
+								
+								<td align="center">&nbsp;<strong><?php echo $rs_row['adjust_no']; ?></strong>&nbsp;</td>
+								<td >&nbsp;<?php echo $rs_row['request_name']; ?>&nbsp;</td>
+								
+								<td align="center">&nbsp;<?php if($rs_row['qty_befor']!=0) echo $rs_row['qty_befor']; ?>&nbsp;</td>
+								<td align="center">&nbsp;<?php if($rs_row['qty_after']!=0) echo $rs_row['qty_after']; ?>&nbsp;</td>
+								<td align="center">&nbsp;<?php if($rs_row['difference']!=0) echo $rs_row['difference']; ?>&nbsp;</td>
+								<td >&nbsp;<?php echo $rs_row['note']; ?></td>
+								<td align="center">&nbsp;<?php echo date("d/m/Y",strtotime($rs_row['request_date'])); ?>&nbsp;</td>
+								<td align="center">&nbsp;<?php echo $rs_row['user_name']; ?>&nbsp;</td>
+								<td align="center">&nbsp;<?php if ($rs_row['status']==1){ echo $tr->translate("ACTIVE"); }else{ echo $tr->translate("DEACTIVE");} ?>&nbsp;</td>
 							</tr>
 							<?php
 							}

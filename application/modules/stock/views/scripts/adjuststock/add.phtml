@@ -56,7 +56,7 @@ fieldset{  background:none;}
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); ">								
+	                   		<select dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getProByBranch(); getReceiptNo();">								
 								<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
 										<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
 								<?php }?> 
@@ -187,6 +187,28 @@ dojo.require("dojo.NodeList-manipulate");
 </script>
 
 <script type="text/javascript">
+dojo.ready(function(){
+	getReceiptNo();
+});	
+var url_getreceipt_no = '<?php echo $this->url(array('module'=>'stock','controller'=>'adjuststock','action'=>'getreceipt')); ?>';
+function getReceiptNo(){
+	var branch_id = dijit.byId('branch').get('value'); 
+	if(branch_id==""){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_getreceipt_no,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId('adjust_no').attr('value',data); 
+		},
+		error: function(err) {
+		}
+	});
+}
 var template = '';
 var product_name = '<?php //echo $this->product; ?>';
 var col = 0;

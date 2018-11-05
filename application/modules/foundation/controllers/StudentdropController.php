@@ -85,7 +85,6 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			echo $e->getMessage();
 		}
 	}
-	
 	public function editAction(){
 		try{	
 			$id=$this->getRequest()->getParam("id");
@@ -107,10 +106,13 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				}
 			}	
-			
 			$db = new Foundation_Model_DbTable_DbStudentDrop();
 			$this->view->stu_id = $db->getAllStudentNameEdit();
 			$this->view->type = $db->getAllDropType();
+			
+			$db = new Application_Model_DbTable_DbGlobal();
+			$stu = $db->getAllStudentName();
+			$this->view->stuname=$stu;
 			
 			$db_global = new Application_Model_DbTable_DbGlobal();
 			$this->view->rsbranch = $db_global->getAllBranch();

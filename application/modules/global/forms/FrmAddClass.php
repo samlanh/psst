@@ -216,7 +216,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
 		$_branch_id->setMultiOptions($_arr_opt_branch);
-		$_branch_id->setAttribs(array(
+		$_branch_id->setAttribs(array('readOnly'=>'readOnly',
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
 				'missingMessage'=>'Invalid Module!',
@@ -254,7 +254,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$degree->setMultiOptions($arr_opt);
 	
 		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
-		$_academic->setAttribs(array('dojoType'=>$this->filter,
+		$_academic->setAttribs(array('dojoType'=>$this->filter,'readOnly'=>'readOnly',
 				'placeholder'=>$this->tr->translate("SERVIC"),
 				'class'=>'fullside',
 				'required'=>false
@@ -341,10 +341,13 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$_academic->setValue($data['academic_year']);
 			$session->setValue($data['session']);
 			$_calture->setValue($data['calture']);
-			//$_time->setValue($data['time']);
+			$degree->setValue($data['degree']);
+			$degree->setValue($data['degree']);
+			$_sex->setValue($data['gender']);
+			$room->setValue($data['room']);
 			$_reason->setValue($data['reason']);
 		}
-		$this->addElements(array($id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
+		$this->addElements(array($id,$degree,$_status,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
 		return $this;
 	}
 	

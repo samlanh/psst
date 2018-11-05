@@ -338,8 +338,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    public function getStundetScorebySemester($group_id,$semester){ // fro rpt-score by semester I+II
    	$db = $this->getAdapter();
-   	$sql="
-		   	SELECT
+   	$sql=" SELECT
 			   	s.`id`,
 			   	sd.`group_id`,
 			   	g.`group_code`,
@@ -395,9 +394,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   		AND s.exam_type=1 ";
    	
    	$where='';
-   	
    	$order = "GROUP BY sd.`student_id` ORDER BY (total_score+total_exam) DESC,s.for_academic_year,s.for_semester ASC ";
-
    	return $db->fetchAll($sql.$where.$order);
    }
    public function getStundetScorebyYear($group_id,$semester){ // score result for yearly

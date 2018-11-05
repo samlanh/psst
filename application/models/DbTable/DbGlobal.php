@@ -719,6 +719,35 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
    
+   function getAllStudentName($opt=null,$type=2,$branchid=null){
+   	$db=$this->getAdapter();
+   	$branch_id = $this->getAccessPermission();
+   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+   	$sql=" SELECT s.stu_id AS id,s.stu_id AS stu_id,
+   			stu_code,
+		   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,''),' ',COALESCE(s.last_name,'')) AS name
+		   	FROM rms_student AS s
+		   	WHERE
+		   	(stu_enname!='' OR s.stu_khname!='')
+		   ";
+   	if($branchid!=null){
+   		$sql.=" AND branch_id=".$branchid;
+   	}
+   	$sql.=" ORDER BY degree DESC,stu_khname ASC";
+   	$rows = $db->fetchAll($sql);
+   	if($opt!=null){
+   		$options=array(0=>$tr->translate("CHOOSE"));
+   		if(!empty($rows))foreach($rows AS $row){
+   			$lable = $row['stu_code'];
+   			if($type==2){$lable = $row['name'];}
+   			$options[$row['id']]=$lable;
+   		}
+   		return $options;
+   	}else{
+   		return $rows;
+   	}
+   }
+   
    function getallProductName(){
    	$db = $this->getAdapter();
    	$sql=" SELECT id ,pro_name as name FROM `rms_product` 

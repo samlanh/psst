@@ -117,9 +117,9 @@ class Global_LecturerController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT_DOCUMENT")));
 		$this->view->doc_type = $row;
 		
-		$row = $_db->getAllDepartment(); // degree language
+		$rows = $_db->getAllDepartment(); // degree language
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-		$this->view->department_type = $row;
+		$this->view->department_type = $rows;
 		
 		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();

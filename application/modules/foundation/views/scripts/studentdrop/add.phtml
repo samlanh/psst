@@ -156,7 +156,7 @@ dojo.ready(function(){
 	    required: true,
 	    id: "group",
 	    name: "group",   
-	    readOnly:true,           
+	    //readOnly:true,           
 	    class: 'fullside',  
 	    required:'true',
 	    placeHolder:"<?php echo $tr->translate("SELECT_YEAR")?>",          
@@ -171,7 +171,7 @@ dojo.ready(function(){
 		id: "grade",
 		name: "grade",           
 		class: 'fullside', 
-		readOnly:true,  
+		//readOnly:true,  
 		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
 		}
@@ -290,7 +290,7 @@ function getStudentInfo(){
 			dijit.byId("session").attr("value",data.session);
 			dijit.byId('session').set('readOnly',true);
 			dijit.byId("calture").attr("value",data.calture);
-			dijit.byId('session').set('readOnly',true);
+			dijit.byId('calture').set('readOnly',true);
 			dijit.byId("group").attr("value",data.group_id);
 			dijit.byId('group').set('readOnly',true);
 

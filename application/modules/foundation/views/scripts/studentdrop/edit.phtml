@@ -173,6 +173,7 @@ dojo.require("dijit.form.CheckBox");
 	</table>	
 </form>
 <script type="text/javascript">
+var stuid_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->stuname));?> );
 var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->group));?> );
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->grade_name));?> );
 dojo.ready(function(){
@@ -183,7 +184,8 @@ dojo.ready(function(){
 	    id: "group",
 	    name: "group",   
 	    readOnly:true,           
-	    class: 'fullside',  
+	    class: 'fullside', 
+	    value:'<?php echo $this->row['group'];?>',         
 	    required:'true',
 	    placeHolder:"<?php echo $tr->translate("SELECT_YEAR")?>",          
 	    onChange: function() {  
@@ -195,19 +197,24 @@ dojo.ready(function(){
 		autoComplete: false,                                           
 		id: "grade",
 		name: "grade", 
-		readOnly:true,           
+		readOnly:true, 
+		value:'<?php echo $this->row['grade'];?>',          
 		class: 'fullside',  
 		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
 		}
 	}, "grade");
+	
 	new dijit.form.FilteringSelect({
+		store: stuid_store,
 		autoComplete: false,
 		queryExpr: "*${0}*",                     
 		id: "studentid",
-		name: "studentid",   
+		name: "studentid",  
+		readOnly:true,  
 		required:true,        
 		class: 'fullside',
+		value:'<?php echo $this->row['stu_id'];?>',
 		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		onChange: function() { 
 			getStudentInfo();
@@ -247,18 +254,6 @@ function loading(){
 }
 function submitDataClose(){
 	if(dijit.byId('add_studentdrop').validate()) {
-		 studentid=dijit.byId('studentid').get('value');
-		 studentname=dijit.byId('studentname').get('value');
-      		 if(studentid==0 || studentid=='' || studentid ==-1){
-				alert('Select studentid feld!');
-				dijit.byId('studentid').focus();
-				return false;
-			}
-			if(studentname==0 || studentname=='' || studentname ==-1){
-				alert('Select student name feld!');
-				dijit.byId('studentname').focus();
-				return false;
-			}
 		dijit.byId('save_close').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'edit')); ?>';
 		loading();

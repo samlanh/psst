@@ -709,8 +709,7 @@ dojo.ready(function(){
 	     dijit.byId("save_nation").attr("disabled",false);
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',1);
-	     }
-	    else {
+	     } else {
 	    	nation = dijit.byId('nation').get('value');
 			dijit.byId('studen_national').attr('value',nation);
 	    }  
@@ -759,8 +758,11 @@ dojo.ready(function(){
 	     dijit.byId("save_nation").attr("disabled",false);
 	   	 dijit.byId("popup_nation").show();
 		   	dijit.byId('value_j').attr('value',3);
-	     }
-	    else {
+	     } else {
+	    	nation = dijit.byId('fa_national').get('value');
+			dijit.byId('mom_nation').attr('value',nation);
+			dijit.byId('guardian_national').attr('value',nation);
+		    
 	    }  
 	   } 
 	}, "fa_national");

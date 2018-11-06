@@ -324,8 +324,6 @@ var oldStudent = '<?php echo empty($this->stu['stu_id'])?'':$this->stu['stu_id']
 			getallstudentname();
 	 		getStudentProductPaymentDetail();
 	    });
-	 	
-	 	
 	 	dijit.byId('branch_id').set('value',oldBranch);
 	 	getbranchinfo();
 		getallstudentname();
@@ -510,7 +508,7 @@ function getallstudentname(){//
 				keyindex=data.keyindex;
 				$("#old_identity").val(data.identity);
 				$("#identity").val(data.identity);
-				dojo.html.set(dojo.byId("table_row"),data.stringrow , {
+				dojo.html.set(dojo.byId("table_row"),data.stringrow,{
 				     parseContent: true,
 					});
 				dijit.byId('all_balance').set('value',data.all_balance);

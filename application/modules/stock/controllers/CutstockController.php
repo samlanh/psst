@@ -46,7 +46,6 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			$frm->FrmAddCutStock(null);
 			Application_Model_Decorator::removeAllDecorator($frm);
 			$this->view->frm_payment = $frm;
-		
 	}
 	public function addAction(){
 		if($this->getRequest()->isPost()){

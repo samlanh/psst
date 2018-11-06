@@ -602,7 +602,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 	 		       (SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code = sp.is_void LIMIT 1) AS void,
 	 		       (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.void_by LIMIT 1) AS void_by
-	 		       
  			   FROM 
     				rms_student AS s,
 					rms_student_payment AS sp

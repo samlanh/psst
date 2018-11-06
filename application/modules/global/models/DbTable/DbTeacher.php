@@ -46,6 +46,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'nationality'  		 => $_data['nationality'],
 							'nation'  		     => $_data['nation'],
 							'teacher_type'  	 => $_data['teacher_type'],
+							'sta_teacher'  	 	 => $_data['sta_teacher'],
 					        'tel'  				 => $_data['phone'],
 							'note' 				 => $_data['note'],
 							
@@ -118,6 +119,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						'nationality'  		 => $_data['nationality'],
 						'nation'  		     => $_data['nation'],
 						'teacher_type'  	 => $_data['teacher_type'],
+						'sta_teacher'  	 	 => $_data['sta_teacher'],
 				        'tel'  				 => $_data['phone'],
 						'note' 				 => $_data['note'],
 						
@@ -223,7 +225,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				g.teacher_code, 
 				g.teacher_name_kh,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type, 
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=26 AND rms_view.key_code=g.sta_teacher) AS staff_teacher,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
 				g.position_add,
@@ -250,6 +252,9 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['branch_id'])){
 			$where.=' AND branch_id='.$search['branch_id'];
+		}
+		if(!empty($search['sta_teacher'])){
+			$where.=' AND sta_teacher='.$search['sta_teacher'];
 		}
 		if($search['status']>-1){
 			$where.=' AND status='.$search['status'];

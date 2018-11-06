@@ -803,7 +803,7 @@ dojo.ready(function(){
 		autoComplete: true,
 	    class: 'fullside',  
 	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
-	    onChange: function() {          
+	    onChange: function(){          
 	   	gurdian_nation = dijit.byId('guardian_national').get('value');
 	    if(gurdian_nation==-1){
 	     dijit.byId("save_nation").attr("disabled",false);

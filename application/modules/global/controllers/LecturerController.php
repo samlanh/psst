@@ -16,20 +16,21 @@ class Global_LecturerController extends Zend_Controller_Action {
 						'title'  => $_data['title'],
 						'degree' => $_data['degree'],
 						'nationality' => $_data['nationality'],
+						'sta_teacher' => $_data['sta_teacher'],
 						'branch_id' => $_data['branch_id'],
 						'status' => $_data['status_search']);
-			}
-			else{
+			}else{
 				$search = array(
 						'title' => '',
 						'degree' => '',
+						'sta_teacher' => '',
 						'nationality' => '',
 						'branch_id' => '',
 						'status' => -1);
 			}
 			$rs_rows= $db->getAllTeacher($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","ID_NUMBER","TEACHER_NAME","SEX","TEACHER_TYPE","NATIONALITY","DEGREE","POSITION","PHONE","EMAIL","NOTE","STATUS");
+			$collumns = array("BRANCH_NAME","ID_NUMBER","TEACHER_NAME","SEX","TYPE","NATIONALITY","DEGREE","POSITION","PHONE","EMAIL","NOTE","STATUS");
 			$link=array('module'=>'global','controller'=>'lecturer','action'=>'edit',);
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link,'branch_name'=>$link));
 		}catch (Exception $e){

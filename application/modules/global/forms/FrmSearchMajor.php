@@ -156,6 +156,13 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 // 				'placeholder'=>$this->tr->translate("INPUT_VALUE_SETTING")));
 // 		$_subject->setValue($request->getParam('subjec_name'));
 		
+		$_staff=  new Zend_Dojo_Form_Element_FilteringSelect('sta_teacher');
+		$_staff->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_staff_opt = array(
+				0=>$this->tr->translate("SELECT_TYPE"),
+				1=>$this->tr->translate("TEACHER"),
+				2=>$this->tr->translate("STAFF"));
+		$_staff->setMultiOptions($_staff_opt);
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
@@ -165,12 +172,13 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
-	
-	
-		$this->addElements(array($_title,$_degree,$_branch_id,$end_date,$_nationality,$_status));
-		if(!empty($_data)){
+		
+		if($_data!=null){
+			$_branch_id->setValue($_data['branch_id']);
+			$_staff->setValue($_data['sta_teacher']);
 		}
-	
+		$this->addElements(array($_title,$_degree,$_staff,$_branch_id,$end_date,$_nationality,$_status));
+		
 		return $this;
 	}
 	public function searchRoom(){

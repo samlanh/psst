@@ -93,6 +93,7 @@ function filterGrade(){
 
 var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
 function filterStudent(){
+	$('#identity').val('');
 	loadingBlock();
 	year = dijit.byId('year_study').get('value');
 	grade = dijit.byId('grade').get('value');
@@ -202,9 +203,17 @@ function gender(sex){
 		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
    			if(this.validate()) {
-				dijit.byId('save_new').set('disabled',true);
-				loadingBlock();
-    			return true;
+				var txt;
+				var r = confirm("Are you sure to submit ?");
+				if (r == true) {
+    				 dijit.byId('save_new').set('disabled',true);
+					 loadingBlock();
+    				 return true;
+				} else {
+  					  return false;
+				}
+
+				
    			}else {
     			return false;
    			}
@@ -243,7 +252,7 @@ function gender(sex){
 		                </div>
 		             </div>
 		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("របបពិន្ទុ");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCORE_LEVEL");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<select class="fullside" tabindex="15" name="max_score" id="max_score"   queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" >
 								<option value="10">10</option>

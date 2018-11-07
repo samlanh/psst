@@ -30,7 +30,7 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 			$rs_rows = $db->getAllScore($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","SUBJECT_TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
+			$collumns = array("BRANCH_NAME","SUBJECT_TITLE","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","SCORE_LEVEL","STUDENT_GROUP","STUDY_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'score','action'=>'edit',
 			);
@@ -68,7 +68,6 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 					$rs =  $db->addStudentScore($_data);
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/score");
 				}
-				print_r($_data);exit();
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

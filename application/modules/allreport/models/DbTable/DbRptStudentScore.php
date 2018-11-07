@@ -305,12 +305,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	`rms_student` AS st,
 		   	`rms_group` AS g
    		WHERE
-		   	s.`id`=sd.`score_id`
-		   	AND st.`stu_id`=sd.`student_id`
-		   	AND g.`id`=s.`group_id`
+		   	st.`stu_id`=sd.`student_id`
+		   	AND g.`id` = s.`group_id`
 		   	AND sd.`is_parent`=1
+		   	AND s.`id`=sd.`score_id`
 		   	AND s.status = 1
-		   	AND s.type_score=1 AND s.id= $id ";
+		   	AND s.type_score=1 AND s.id = $id ";
    	$where='';
    
    	if(!empty($search['group_name'])){
@@ -334,6 +334,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	}else{
    		$limit = " ";
    	}
+//    	echo $sql.$where.$order.$limit."testing 1<br/ ><br/ ><br/ >";
    	return $db->fetchAll($sql.$where.$order.$limit);
    }
    public function getStundetScorebySemester($group_id,$semester){ // fro rpt-score by semester I+II
@@ -363,6 +364,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	st.photo,
 			   	s.for_semester,
 			   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject,
+			   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject_sem,
 			   	(SELECT COUNT(ss.id) FROM `rms_score` AS ss WHERE ss.group_id=g.`id` AND ss.exam_type=1 AND ss.for_semester=$semester LIMIT 1) AS amount_month,
 
 			   	(SELECT SUM(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc 
@@ -686,7 +688,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 // 		 		AND sd.`group_id`=$group_id 
 // 		   GROUP BY 
 // 		   		sd.`subject_id`	";
-   	return $db->getSubjectByGroup($group_id,$teacher_id=null,$exam_type=1);
+   	return $db->getSubjectByGroup($group_id,$teacher_id=null,$exam_type);
    }
    
    public function getScoreBySubject($score_id,$student_id,$subject_id){

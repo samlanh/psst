@@ -45,7 +45,6 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$ids = explode(',', $_data['identity']);
 				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
 				if(!empty($ids))foreach ($ids as $i){
-					//$dbpush->pushSendNotification($_data['stu_id_'.$k], 4);//notification for score result 
 					foreach ($rssubject as $index => $rs_parent){
 						$arr=array(
 								'score_id'=>$id,
@@ -141,6 +140,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
 			s.for_semester,
 			(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
+			s.max_score,
 			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
 			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
 			(SELECT rms_items.`title` FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
@@ -285,8 +285,9 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$sql.=" AND amount_subject_sem >0 ";
 		}
 		$sql.=' ORDER BY gsjd.subject_id ASC ';
-		$rs = $db->fetchAll($sql);
-		return $rs;
+// 		echo $sql;
+		return $db->fetchAll($sql);
+		
 	}
 	function getChildSubject($subject_id){
 		$db=$this->getAdapter();

@@ -109,7 +109,8 @@ dojo.ready(function(){
 				 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
 				 if($rs['sex']==1){ $sex = $tr->translate("MALE_SHORT");$m = $m+1;}
 				 else{$sex = $tr->translate("FEMALE_SHORT");$f=$f+1;}
-				 $subj = $db->getSubjectScoreGroup($rs['group_id'],null,$rs['exam_type']);
+				 	$subj = $db->getSubjectScoreGroup($rs['group_id'],null,$rs['exam_type']);
+				 	
 				?>
 				<?php if ($old_groupid!=$rs['group_id']){ $count = count($subj); ?>
 				<?php $i=0; $count_fail=0;?>
@@ -196,7 +197,7 @@ dojo.ready(function(){
 								<?php 
 									if($this->data['scoreresulttye']==1){
 									$total_score = 0; 
-									$subj = $db->getSubjectScoreGroup($rs['group_id'],$rs['exam_type']); 
+// 									$subj = $db->getSubjectScoreGroup($rs['group_id'],null,$rs['exam_type']); 
 									if (!empty($subj)) foreach ($subj as $subject){
 								?>
 								<td align="center">
@@ -216,6 +217,7 @@ dojo.ready(function(){
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
 									}//
+									//echo $rs['total_score'];exit();
 									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
 								?>
 								<td align="center"><?php
@@ -225,7 +227,7 @@ dojo.ready(function(){
 									$total_subject =($rs['exam_type']==2)?$rs['amount_subjectsem']:$rs['amount_subject'];//$rs['exam_type']==2 for subject semester else for month
 									$average = number_format($rs['total_score']/$total_subject,2);//amount_subjectsem
 								?>
-								<td align="center"><?php echo str_replace(".00", "", $average);?></td>
+								<td align="center"><?php echo number_format($average,2);?></td>
 								<td align="center"><?php echo calCulateGrade($average,$rs['max_score']);?></td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<td align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>

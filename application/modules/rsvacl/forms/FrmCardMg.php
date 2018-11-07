@@ -101,7 +101,7 @@ Class RsvAcl_Form_FrmCardMg extends Zend_Dojo_Form {
 				'onChange'=>'checkCardType()',
 				// 				'readonly'=>true
 		));
-		$options = array(1=>$this->tr->translate("STUDENT"),2=>$this->tr->translate("TEACHER"));
+		$options = array(1=>$this->tr->translate("STUDENT"),2=>$this->tr->translate("TEACHER"),3=>$this->tr->translate("STAFF"));
 		$card_type->setMultiOptions($options);
 		
 		$valid = new Zend_Dojo_Form_Element_DateTextBox('valid');

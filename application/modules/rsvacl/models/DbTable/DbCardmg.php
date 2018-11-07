@@ -171,6 +171,7 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
     	CASE    
 				WHEN  b.card_type = 1 THEN '".$tr->translate("STUDENT")."'
 				WHEN  b.card_type = 2 THEN '".$tr->translate("TEACHER")."'
+				WHEN  b.card_type = 3 THEN '".$tr->translate("STAFF")."'
 				END AS card_type,
 				b.valid,
     	b.note,b.status FROM rms_cardbackground AS b  ";

@@ -228,6 +228,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=26 AND rms_view.key_code=g.staff_type) AS staff_type,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
+				(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
 				g.position_add,
 				g.tel,
 				g.email,

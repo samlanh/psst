@@ -91,6 +91,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 	
 		return $this;
 	}
+	
 	public function frmSearchTeacher($_data=null){
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 	
@@ -177,7 +178,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		if(!empty($_data)){
 			$_id->setValue($_data['id']);
 			$_branch_id->setValue($_data['branch_id']);
-			$_staff->setValue($_data['sta_teacher']);
+			$_staff->setValue($_data['staff_type']);
 		}
 		$this->addElements(array($_id,$_title,$_degree,$_staff,$_branch_id,$end_date,$_nationality,$_status));
 		

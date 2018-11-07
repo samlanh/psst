@@ -557,11 +557,11 @@ function getAllgroupStudyNotPass($action=null){
    		batch = $batch AND `payment_type`=$payment_type";
    	}
    	return $db->fetchOne($sql);
-   	
    }
+   
    function getTeacherCode(){
    	$db = $this->getAdapter();
-   	$sql ="SELECT COUNT(id) AS number FROM `rms_teacher` LIMIT 1 ";
+   	$sql =" SELECT COUNT(id) AS number FROM `rms_teacher` LIMIT 1 ";
    	$acc_no = $db->fetchOne($sql);
    
    	$new_acc_no= (int)$acc_no+1;
@@ -573,6 +573,7 @@ function getAllgroupStudyNotPass($action=null){
    	$last = '/CAS';
    	return $pre.$new_acc_no.$last;
    }
+   
    function getPrefixCode($branch_id){
 	   	$db  = $this->getAdapter();
 	   	$sql = " SELECT prefix FROM `rms_branch` WHERE br_id = $branch_id LIMIT 1 ";

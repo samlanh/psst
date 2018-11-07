@@ -250,19 +250,19 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	function getAllGroups($search){
 		$db = $this->getAdapter();
 		$sql = "SELECT `g`.`id`,
-		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
-		`g`.`group_code` AS `group_code`,
-		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS tuitionfee_id,		 
-		 `g`.`semester` AS `semester`, 
-		(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree,
-		(SELECT id.title FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,
-		(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-		`g`.`note`,
-		(select name_kh from rms_view where type=9 and key_code=is_pass) as group_status,
-		g.status
-		FROM `rms_group` AS `g`";
+			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
+			`g`.`group_code` AS `group_code`,
+			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS tuitionfee_id,		 
+			 `g`.`semester` AS `semester`, 
+			(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree,
+			(SELECT id.title FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,
+			(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
+			AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+			`g`.`note`,
+			(select name_kh from rms_view where type=9 and key_code=is_pass) as group_status,
+			g.status
+			FROM `rms_group` AS `g`";
 		
 		$where =' WHERE 1 ';
 		$from_date =(empty($search['start_date']))? '1': "g.date >= '".$search['start_date']." 00:00:00'";

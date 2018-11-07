@@ -176,7 +176,6 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($_data)){
-			$_id->setValue($_data['id']);
 			$_branch_id->setValue($_data['branch_id']);
 			$_staff->setValue($_data['staff_type']);
 		}

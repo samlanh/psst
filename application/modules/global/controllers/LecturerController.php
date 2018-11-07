@@ -40,7 +40,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmOther();
 		$this->view->add_major = $frm->FrmAddMajor(null);
 		$frm = new Global_Form_FrmSearchMajor();
-		$this->view->frm_search = $frm->frmSearchTeacher();
+		$this->view->frm_search = $frm->frmSearchTeacher($search);
 		Application_Model_Decorator::removeAllDecorator($frm);
 	}
 	

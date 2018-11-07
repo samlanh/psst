@@ -15,7 +15,7 @@
     		</div>
     	</div>
     </div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("title");?>
@@ -59,10 +59,10 @@
         </div>
         <div class="form-group">
             <div class="col-md-12 col-sm-12 col-xs-12">
-            	<button onclick="getstudentlist();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("STUDENT_LIST");?></button>
-            	<button onclick="gettotalatt();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("Total Attendance List");?></button>
-            	<button onclick="getTranscript();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("TRANSCRIPT");?></button>
-            	<button onclick="getAttendancelist();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></button>
+            	<button onclick="getResultsemester1();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("RESULT_SEMESTER1");?></button>
+            	<button onclick="getHonorsemester1();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("HONOR_SEMESTER1");?></button>
+            	<button onclick="getResultsemester2();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("RESULT_SEMESTER2");?></button>
+		      	<button onclick="getHonorsemester2();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("HONOR_SEMESTER2");?></button>
 		     	<button onclick="getResultyearly();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("YEARLY_EXAM");?></button>
            		<button onclick="getHonoryearly();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("HONOR_YEARLY");?></button>
 	       		<input type="hidden" name="group_id" id="group_id" dojoType="dijit.form.TextBox" />
@@ -298,25 +298,25 @@ function setValue(index){
 		dijit.byId('group_id').attr('value',group_id);
 	}
 }
-function getstudentlist(){
+function getResultsemester1(){
 	id = dijit.byId('group_id').get('value');
 	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'allstudent','action'=>'rpt-student-list'));?>'+'/id/'+id,'_blank');
+	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-resultbysemester'));?>'+'/id/'+id+'/type/1','_blank');
 }
-function gettotalatt(){
+function getHonorsemester1(){
 	id = dijit.byId('group_id').get('value');
 	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'allstudent','action'=>'rpt-totalattendance'));?>'+'/id/'+id,'_blank');
+	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'semester-outstanding-student'));?>'+'/id/'+id+'/type/1','_blank');
 }
-function getTranscript(){
+function getResultsemester2(){
 	id = dijit.byId('group_id').get('value');
 	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'allstudent','action'=>'rpt-student-group'));?>'+'/id/'+id,'_blank');
+	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-resultbysemester'));?>'+'/id/'+id+'/type/2','_blank');
 }
-function getAttendancelist(){
+function getHonorsemester2(){
 	id = dijit.byId('group_id').get('value');
 	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'allstudent','action'=>'rpt-att-list'));?>'+'/id/'+id,'_blank');
+	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'semester-outstanding-student'));?>'+'/id/'+id+'/type/2','_blank');
 }
 function getResultyearly(){
 	id = dijit.byId('group_id').get('value');

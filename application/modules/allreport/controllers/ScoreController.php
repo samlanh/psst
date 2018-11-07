@@ -99,6 +99,37 @@ public function init()
     	$this->view->form_search=$form;
     }
     
+    public function studentGroupAction()
+    {
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search = array(
+    				'title' 		=> "",
+    				'group' 		=> "",
+    				'branch_id' 	=> "",
+    				'study_year'	=> "",
+    				'grade' 		=> "",
+    				'session' 		=> "",
+    				'teacher' 		=> "",
+    				'room'=>0,
+    				'degree'=>0,
+    				'study_status'=>-1,
+    		);
+    	}
+    	$db = new Allreport_Model_DbTable_DbRptGroup();
+    	$rs= $db->getGroupDetail($search);
+    	$this->view->rs = $rs;
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$_db = new Global_Model_DbTable_DbGroup();
+    	$teacher = $_db->getAllTeacher();
+    	$this->view->teacher = $teacher;
+    }
     
     function rptResultbysemesterAction(){
     	$group_id=$this->getRequest()->getParam("id");
@@ -113,7 +144,7 @@ public function init()
     		}
     	}
     	if(empty($result_semester)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/allstudent/student-group");
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
     	}
     	array_multisort($array_score, SORT_DESC, $result_semester);
     	$this->view->studentgroup = $result_semester;
@@ -132,7 +163,7 @@ public function init()
     		}
     	}
     	if(empty($result_semester)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/allstudent/student-group");
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
     	}
     	array_multisort($array_score, SORT_DESC, $result_semester);
     	$this->view->studentgroup = $result_semester;
@@ -156,7 +187,7 @@ public function init()
     		    }
        }
        if(empty($result_semester2)){
-       		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/allstudent/student-group");
+       		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
        }
        array_multisort($array_score, SORT_DESC, $result_semester1);
        $this->view->studentgroup = $result_semester1;
@@ -180,7 +211,7 @@ public function init()
 	    	}
     	}
     	if(empty($result_semester2)){
-    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/allstudent/student-group");
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
     	}
     	array_multisort($array_score, SORT_DESC, $result_semester1);
     	$this->view->studentgroup = $result_semester1;

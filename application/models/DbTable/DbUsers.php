@@ -279,7 +279,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	}
 	
 	function updateUser($data){	
-
+		$db = $this->getAdapter();
 		$branchList="";
 		if (!empty($data['selector'])){
 			foreach ($data['selector'] as $rs){
@@ -289,7 +289,13 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 				}
 			}
 		}
-		
+		$sql="SELECT id FROM rms_users WHERE user_name ='".$data['user_name']."'";
+		//echo $sql; exit();
+		//$sql.=" AND password='".$data['password']."'";
+		$rs = $db->fetchOne($sql);
+		if(!empty($rs)){
+			return -1;
+		}
 		$_user_data=array(
 	    	'last_name'=>$data['last_name'],
 			'first_name'=>$data['first_name'],

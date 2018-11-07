@@ -107,12 +107,15 @@ class RsvAcl_UserController extends Zend_Controller_Action
 	    	$db_user=new Application_Model_DbTable_DbUsers();
 	    	if($this->getRequest()->isPost()){
 				$userdata=$this->getRequest()->getPost();	
-				
 				try {
-					$db = $db_user->updateUser($userdata);				
-					Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);		
+					$sms="INSERT_SUCCESS";
+					$_user = $db = $db_user->updateUser($userdata);	
+					if($_user==-1){
+						$sms = "RECORD_EXIST";
+					}			
+					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL);		
 				} catch (Exception $e) {
-					$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
+					$this->view->msg = $sms;
 				}
 			}
 			$us_id = $this->getRequest()->getParam('id');

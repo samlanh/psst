@@ -445,7 +445,6 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_status_search->setValue($request->getParam("status_search"));
     	
-    	
     	$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
     	$start_date->setAttribs(array(
     			'dojoType'=>"dijit.form.DateTextBox",
@@ -482,9 +481,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	$_branch_search->setValue($request->getParam("branch_search"));
-    	
     	if(!empty($data)){
-    		
     		$_branch_id->setValue($data["branch_id"]);
     		$kh_name->setValue($data["stu_khname"]);
     		$_first_name->setValue($data["stu_enname"]);

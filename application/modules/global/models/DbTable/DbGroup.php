@@ -401,7 +401,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	
 	function getAllTeacher(){
 		$db = $this->getAdapter();
-		$sql = "SELECT id,teacher_name_kh  as name FROM rms_teacher WHERE status=1 and teacher_name_kh!='' ";
+		$sql = " SELECT id,teacher_name_kh  as name FROM rms_teacher WHERE status=1 and staff_type=1 and teacher_name_kh!='' ";
 		return $db->fetchAll($sql);
 	}
 	function getTeacherByID($teacher_id){

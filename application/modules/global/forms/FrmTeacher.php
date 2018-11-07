@@ -179,7 +179,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				0=>$this->tr->translate("TEACHER_FOREIGNER"));
 		$_teacher->setMultiOptions($_teacher_opt);
 		
-		$_staff=  new Zend_Dojo_Form_Element_FilteringSelect('sta_teacher');
+		$_staff=  new Zend_Dojo_Form_Element_FilteringSelect('staff_type');
 		$_staff->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_staff_opt = array(
 				1=>$this->tr->translate("TEACHER"),
@@ -197,7 +197,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$_enname->setValue($_data['teacher_name_en']);
 			$_khname->setValue($_data['teacher_name_kh']);
 			$_branch_id->setValue($_data['branch_id']);
-			$_staff->setValue($_data['sta_teacher']);
+			$_staff->setValue($_data['staff_type']);
 			$sex->setValue($_data['sex']);
 			$phone->setValue($_data['tel']);
 			$_nationality->setValue($_data['nationality']);

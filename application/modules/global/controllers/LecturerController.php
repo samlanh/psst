@@ -16,14 +16,14 @@ class Global_LecturerController extends Zend_Controller_Action {
 						'title'  => $_data['title'],
 						'degree' => $_data['degree'],
 						'nationality' => $_data['nationality'],
-						'sta_teacher' => $_data['sta_teacher'],
+						'staff_type' => $_data['staff_type'],
 						'branch_id' => $_data['branch_id'],
 						'status' => $_data['status_search']);
 			}else{
 				$search = array(
 						'title' => '',
 						'degree' => '',
-						'sta_teacher' => '',
+						'staff_type' => '',
 						'nationality' => '',
 						'branch_id' => '',
 						'status' => -1);
@@ -43,6 +43,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 		$this->view->frm_search = $frm->frmSearchTeacher();
 		Application_Model_Decorator::removeAllDecorator($frm);
 	}
+	
 	function addAction(){
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
@@ -87,8 +88,9 @@ class Global_LecturerController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
 		$this->view->frm_techer = $frm_techer;
 	}
-	public function editAction()
-	{
+	
+	public function editAction(){
+		
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$id=$this->getRequest()->getParam("id");	   
 		if($this->getRequest()->isPost())

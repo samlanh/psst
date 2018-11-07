@@ -407,6 +407,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'title'  => $_data['title'],
 						'degree' => $_data['degree'],
 						'nationality' => $_data['nationality'],
+						'staff_type' => $_data['staff_type'],
 						'branch_id' => $_data['branch_id'],
 						'status' => $_data['status_search']
 				);
@@ -415,6 +416,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 				$search = array(
 						'title' => '',
 						'degree' => '',
+						'staff_type' => '',
 						'nationality' => '',
 						'branch_id' => '',
 						'status' => -1);

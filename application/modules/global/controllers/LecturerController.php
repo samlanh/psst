@@ -135,6 +135,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 			exit();
 		}
 		$this->view->rs = $row;
+		
 		$tsub = new Global_Form_FrmTeacher();
 		$frm_techer = $tsub->FrmTecher($row);
 		Application_Model_Decorator::removeAllDecorator($frm_techer);

@@ -1,4 +1,5 @@
 <?php
+	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle('របាយការណ៍ព័ត៌មានគ្រូ'); 
 	echo $this->headTitle(''); 
@@ -117,6 +118,147 @@
 		</table>
 		</div>
 </div>
+<table width="100%">
+		<tr>
+			<td align="center">
+				<input type="button" onclick="printIDCard();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
+			</td>
+		</tr>
+</table>
+<div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
+	<div data-dojo-type="dijit.Dialog"  align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
+		
+		<div id="print_teacher_card" >
+			<style>
+					.card-content-student-print{
+						background-image: url('<?php echo $this->baseUrl()."/images/card/teacher_card_bg.jpg";?>');
+						 background-size: 100%;background-repeat: no-repea
+						 page-break-after:always;					
+					}
+					.card-content-print.staff-2{
+						 background-image: url('<?php echo $this->baseUrl()."/images/card/staff_card_bg.jpg";?>');
+						 background-size: 100%;background-repeat: no-repeat;								
+						}
+					.profile-card-block {
+					    position: relative;
+					}
+					.profile-card-block .photo {
+					    text-align: center;
+					    width: 100%;
+					    position: absolute;
+					    top: 96px;
+						left: -0.58px;
+					}
+					.photo img {
+					    width: 70.7px;
+					    height: 92px;
+					}
+					.name-card-block {
+					    position: relative;
+					}
+			
+					.name-card-block ul.list-data {
+					    list-style-type: none;
+					    padding: 0;
+					    width: 100%;
+					    position: absolute;
+					    text-align: center;
+					    top: 175.9px;
+					    color: #01049f;
+					    font-weight: bold;
+					    font-size: 12px;
+					}	
+				.name-card-block ul.list-data li{
+					line-height: 15px;	    
+				}
+				.name-card-block ul.list-data li.sdudent-id{
+						margin-top:10px;
+						color: #01731b;
+					}
+				.foot-left-block {
+				    position: relative;
+				}
+				.qrimages {
+				    position: absolute;
+				    top: 262px;
+				    width: 100%;
+				    text-align: center;
+				}
+				.title_value {
+					top: 262px;
+					color: blue;
+					font-size: 10px;
+				}
+				.sdudent_id{
+					font-size: 12;
+					color: red;
+				}
+				.qrimages img {
+				    width: 80%;
+				    text-align: center;
+					height: 17px;}
+				
+				.validdate {
+				    position: relative;
+				}
+				.validdate .exp_date {
+					color: #01049f;
+				    position: absolute;
+				    top: 250px;
+				    right: 5px;
+				    font-size: 5px;
+				    font-weight: 700 !important;
+				}
+	</style>
+		<?php $con=4;$i=0; $teacher= count($this->rs);
+			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
+					<?php 
+					$prefix="";
+					$validDate="";
+						$stu_name = $row['teacher_name_kh'];
+						$image = $this->baseUrl().'/images/no-profile.png';
+						if(!empty($row['photo'])){
+							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+							}
+							
+						}
+						?>
+						<div class="card-content-student-print <?php echo "card".$row['schoolOption'];?>" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8.3cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+                    		<div class="profile-card-block">
+                    			<div class="photo">
+                    				<img  src="<?php echo $image;?>" alt="profile-image" >
+                    			</div>
+                    		</div>
+                    		<div class="name-card-block">
+	                    		<ul class="list-data">
+	                    			<li><span class="title_value">&nbsp;<?php echo $stu_name;?></span></li>
+                    				<li><span class="title_value">&nbsp;Position: <?php echo str_replace("position","",$row['position_add']);?></span></li>
+                    				<li><span class="title_value">&nbsp;Dept: <?php echo str_replace("dept","",$row['dept_name']);?></span></li>
+									<li><span class="sdudent-id">&nbsp;ID: <?php echo $row['teacher_code'];?></span></li>
+                    			</ul>
+                    		</div>
+                    		 
+                    	<?php  
+                    	$barcode = $prefix."-".$row['teacher_code']."-".date("y",strtotime($validDate));
+                    	$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
+	                    	<div class="foot-left-block">
+                    			<div class="qrimages">
+                    				<img  src="<?php echo $url;?>" alt="profile-image" >
+                    			</div>
+                    		</div>
+                    	</div>	
+                    	<?php if ($teacher>1){?>
+                    	<div style="display:inline-block; margin:0 10px; height:8.3cm; width: 1px; background: #000"></div>
+                    	<?php }?>
+                    	<?php if ($i==4){ $i=0;?>
+                    	<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
+                    	<?php }?>
+		<?php }
+			}?>
+		</div>		
+	</div>
+</div>
 <script type="text/javascript">
 	function setID(type){
 		if(type==1){
@@ -126,5 +268,33 @@
 			id = dijit.byId('stu_name').get('value');
 			dijit.byId('stu_id').attr('value',id);
 		}
+	}
+
+	function print(){
+		window.frames["print_frame"].document.body.innerHTML=dojo.byId('print_teacher_card').innerHTML;
+	    window.frames["print_frame"].window.focus();
+	    window.frames["print_frame"].window.print();
+	}
+	function printIDCard(){
+		loadingBlock();
+	  	 var contents = document.getElementById("print_teacher_card").innerHTML;
+	 	  var frame1 = document.createElement('iframe');
+	    frame1.name = "frame1";
+	    frame1.style.position = "absolute";
+	    frame1.style.top = "-1000000px";
+	    document.body.appendChild(frame1);
+	    var frameDoc = (frame1.contentWindow) ? frame1.contentWindow : (frame1.contentDocument.document) ? frame1.contentDocument.document : frame1.contentDocument; frameDoc.document.open();
+	    frameDoc.document.write('<html><head><title>Employee ID</title>');
+	    frameDoc.document.write('</head><body>');
+	    frameDoc.document.write(contents);
+	    frameDoc.document.write('</body></html>');
+	    frameDoc.document.close();
+	    setTimeout(function () {
+	        window.frames["frame1"].focus();
+	        window.frames["frame1"].print();
+	        document.body.removeChild(frame1);
+	        HideloadingBlock();
+	    }, 10000);
+	   return false;
 	}
 </script>

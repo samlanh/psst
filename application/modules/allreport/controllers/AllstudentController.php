@@ -400,7 +400,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	
 	public function rptTeacherAction(){
-			$db = new Global_Model_DbTable_DbTeacher();
+			$db = new Allreport_Model_DbTable_DbTeacher();
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = array(
@@ -421,7 +421,12 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'branch_id' => '',
 						'status' => -1);
 			}
+		
 		$this->view->rs= $db->getAllTeacher($search);
+ 
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+		
 		$frm = new Application_Form_FrmOther();
 		$this->view->add_major = $frm->FrmAddMajor(null);
 		$frm = new Global_Form_FrmSearchMajor();

@@ -366,7 +366,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject,
 			   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject_sem,
 			   	(SELECT COUNT(ss.id) FROM `rms_score` AS ss WHERE ss.group_id=g.`id` AND ss.exam_type=1 AND ss.for_semester=$semester LIMIT 1) AS amount_month,
-
 			   	(SELECT SUM(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc 
 			   		WHERE 
 			   		sc.id=sdd.score_id
@@ -891,9 +890,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 	   	s.reportdate
 	   	FROM `rms_teacherscore` AS s, `rms_group` AS g WHERE  g.`id`=s.`group_id` AND s.status = 1 AND s.type_score=1 ";
    	$where='';
-   	//    	$from_date =(empty($search['for_month']))? '1': " s.formonth >= '".$search['for_month']." 00:00:00'";
-   	//    	$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
-   	//    	$where = " AND ".$from_date;
    	if(!empty($search['title'])){
    		$s_where=array();
    		$s_search=addslashes(trim($search['title']));
@@ -926,6 +922,10 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	if($search['for_month']>0){
    		$where.= " AND s.for_month =".$search['for_month'];
    	}
+   	
+   	$_db = new Application_Model_DbTable_DbGlobal();
+   	$where.= $_db->getAccessPermission('branch_id');
+   	
    	$order = "  ORDER BY g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
    	return $db->fetchAll($sql.$where.$order);
    }

@@ -652,8 +652,7 @@ function getAllgroupStudyNotPass($action=null){
     
    public function getAllTeacherSubject(){
    	$db = $this->getAdapter();
-   	$_db = new Application_Model_DbTable_DbGlobal();
-   	$branch_id = $_db->getAccessPermission();
+   	$branch_id = $this->getAccessPermission();
    	$sql = "SELECT  id ,CONCAT(teacher_name_en) AS name FROM `rms_teacher`
    	                        WHERE status = 1  $branch_id  Order BY id DESC";
    	return $db->fetchAll($sql);
@@ -758,8 +757,7 @@ function getAllgroupStudyNotPass($action=null){
    
 	function getAllBranch(){
     	$db = $this->getAdapter();
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission('br_id');
+    	$branch_id = $this->getAccessPermission('br_id');
     	$sql="select br_id as id, CONCAT(branch_nameen) as name from rms_branch WHERE branch_nameen!='' AND  status=1  $branch_id ";
     	return $db->fetchAll($sql);
     } 
@@ -901,8 +899,7 @@ function getAllgroupStudyNotPass($action=null){
    }
    public function getExpenseIncome($type){
    	$db = $this->getAdapter();
-   	$_db = new Application_Model_DbTable_DbGlobal();
-   	$branch_id = $_db->getAccessPermission();
+   	$branch_id = $this->getAccessPermission();
    	$sql = "SELECT id ,account_name as name FROM `rms_account_name` WHERE status=1 AND account_name!=''
    			AND account_type = ".$type;
    	return $db->fetchAll($sql);

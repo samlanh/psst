@@ -34,13 +34,9 @@
 			); 
 ?>	
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.data.ObjectStore");
 dojo.ready(function(){
 });
 </script>
-<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'semester-outstanding-student')); ?>" dojoType="dijit.form.Form" method="post">
-</form>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div id="divPrint">
 		<style type="text/css">
@@ -67,7 +63,7 @@ dojo.ready(function(){
 					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ $i++;
 						if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");$female++;}
 						
-						$score_average = ($rs['avg_exam']+$rs['average'])/2;
+						$score_average = (($rs['total_score']/$rs['amount_subject'])+($rs['total_exam']/$rs['amount_subject']))/2;
 						if($score_average == $old_totalscore){
 							if($key==1){
 								$rank2=$old_rank;
@@ -144,7 +140,7 @@ dojo.ready(function(){
 								<td align="center" style="font-family: Khmer MEF2;font-size: 18px;">
 									<span style="font-size: 20px;">តារាងកិត្តិយស </span><br />
 									ប្រចាំឆមាស <?php // echo $semester[$this->studentgroup[0]['for_semester']];?> ឆ្នាំសិក្សា  <label id="academic_year"></label><br />
-									ថ្នាក់ <?php //echo $this->studentgroup[0]['grade'];?>
+									ថ្នាក់ <?php echo $this->studentgroup[0]['group_code'];?>
 								</td>
 								
 								<script type="text/javascript">

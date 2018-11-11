@@ -152,19 +152,20 @@ public function init()
     
     function semesterOutstandingStudentAction(){
     	$group_id=$this->getRequest()->getParam("id");
-    	$type=$this->getRequest()->getParam("type");
+    	$semester=$this->getRequest()->getParam("type");
     	$search= array();
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$result_semester = $db->getStundetScorebySemester($group_id,$type);
+    	$result_semester = $db->getStundetScorebySemester($group_id,$semester);
     	$array_score = array();
     	if(!empty($result_semester)){
     		foreach ($result_semester as $key => $row){
-    			$array_score[$key]['score_average'] = ($row['average']+$row['avg_exam'])/2;
+    			$array_score[$key]['score_average'] = (($row['total_score']/$row['amount_subject'])+($row['total_exam']/$row['amount_subject']))/2;
     		}
     	}
     	if(empty($result_semester)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
     	}
+    	
     	array_multisort($array_score, SORT_DESC, $result_semester);
     	$this->view->studentgroup = $result_semester;
     }

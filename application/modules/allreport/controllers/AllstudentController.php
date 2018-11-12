@@ -230,7 +230,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			);
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
-		Application_Model_Decorator::removeAllDecorator($forms);
+		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();

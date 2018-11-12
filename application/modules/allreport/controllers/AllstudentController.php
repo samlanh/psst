@@ -408,6 +408,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'degree' => $_data['degree'],
 						'nationality' => $_data['nationality'],
 						'staff_type' => $_data['staff_type'],
+						'teacher_type' => $_data['teacher_type'],
 						'branch_id' => $_data['branch_id'],
 						'status' => $_data['status_search']
 				);
@@ -419,6 +420,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 						'staff_type' => '',
 						'nationality' => '',
 						'branch_id' => '',
+						'teacher_type' => -1,
 						'status' => -1);
 			}
 		
@@ -430,7 +432,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmOther();
 		$this->view->add_major = $frm->FrmAddMajor(null);
 		$frm = new Global_Form_FrmSearchMajor();
-		$this->view->frm_search = $frm->frmSearchTeacher();
+		$this->view->frm_search = $frm->frmSearchTeacher($search);
 		Application_Model_Decorator::removeAllDecorator($frm);
 	}
 	

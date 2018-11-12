@@ -264,6 +264,9 @@ class Allreport_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.=' AND status='.$search['status'];
 		}
+		if($search['teacher_type']>-1){
+			$where.=' AND teacher_type='.$search['teacher_type'];
+		}
 		$order_by=" ORDER BY id DESC";
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();

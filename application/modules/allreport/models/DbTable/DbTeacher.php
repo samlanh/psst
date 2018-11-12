@@ -218,29 +218,6 @@ class Allreport_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function getAllTeacherselected($tea_id){
-		$db = $this->getAdapter();
-		$sql = " SELECT g.id, 
-				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
-				g.teacher_code, 
-				g.teacher_name_kh,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=g.sex) AS sex,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=26 AND rms_view.key_code=g.staff_type) AS staff_type,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=g.nationality) AS nationality, 
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=g.degree) AS degree,
-				(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
-				(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=g.teacher_type) AS teacher_type,
-				(SELECT depart_nameen FROM rms_department WHERE rms_department.depart_id=g.department) AS dept_name,
-				g.position_add,
-				g.tel,
-				g.photo,
-				g.email,
-				g.note,
-				(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1 LIMIT 1) AS `status`
-				FROM rms_teacher AS g where id=".$tea_id;
-		return $db->fetchAll($sql);
-	}
-	
 	function getAllTeacher($search){
 		$db = $this->getAdapter();
 		$sql = 'SELECT g.id, 

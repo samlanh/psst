@@ -201,7 +201,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    public function getStundetScoreGroup($search){ // fro rpt-score
    	$db = $this->getAdapter();
-   	$sql="SELECT s.`id`, s.`group_id`, g.`group_code`,title_score,s.for_semester,s.note,
+   	$sql="SELECT s.`id`, s.`group_id`, g.`group_code`,
+   		(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as examtype,
+   		title_score,s.for_semester,s.note,
    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') 
 		FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year
  		,(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree, 

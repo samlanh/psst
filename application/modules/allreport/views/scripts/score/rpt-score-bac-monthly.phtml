@@ -125,6 +125,7 @@ dojo.ready(function(){
 									<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("CLASSES");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("EXAM_TYPE");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("RESULT_FOR");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("FOR_MONTH");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("FOR_SEMESTER");?>&nbsp;</td>
@@ -137,7 +138,7 @@ dojo.ready(function(){
 							 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_average = 0; $old_rank=0;
 							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
 							?>
-							<tr style="font-size:12px; height: 18px;white-space: nowrap;"​ align="center" class='padding hover'>
+							<tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; height: 18px;white-space: nowrap;"​ align="center" class='padding hover context-menu-one'>
 							    <td><?php echo $key+1;?></td>
 							    <td><?php echo $rs['branch_name']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['group_code']; ?></td>
@@ -147,6 +148,7 @@ dojo.ready(function(){
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['grade']; ?></a></td>
 							    <td><?php echo $rs['session']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?></td>
+							    <td align="left">&nbsp;&nbsp;<?php echo $rs['examtype']; ?></td>
 							    <td align="left">&nbsp;&nbsp;<?php echo $rs['title_score']; ?></td>
 							    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'score','action'=>'rpt-score-detail','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['for_month']; ?></a></td>
 							    <td><?php echo $rs['for_semester']; ?></td>
@@ -188,3 +190,4 @@ dojo.ready(function(){
 			</table>
 		</div>
 	</div>
+</script> 

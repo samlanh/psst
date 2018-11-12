@@ -30,14 +30,9 @@
 			);
 ?>	
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.data.ObjectStore");
-dojo.ready(function(){
-});
+
 </script>
-<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-detail')); ?>" dojoType="dijit.form.Form" method="post">
-</form>
-	<div style="border: 1px dotted #000;background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+	<div style="background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 		<div id="divPrint">
 		<style type="text/css">
 			.style{
@@ -48,13 +43,13 @@ dojo.ready(function(){
 			.padding{ padding: 0 1px !important;}
 			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 			tr{ page-break-inside:avoid; page-break-after:auto }
-			.cheader{height: 27px;font-weight: bold; background: #ccc; white-space: nowrap;}
+			.cheader{height: 27px;font-weight: bold; background: #ccd9ff; white-space: nowrap;}
 			#header {
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
 		</style>
-		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+		<table style="background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
 				$semester_str = array(1=>"I",2=>"II");
 							 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;

@@ -36,7 +36,7 @@
 					   $report_url=$db_user->getArrAclReport(1,'stock');	  		
 					   if(!empty($report_url)){
 						   foreach($report_url as $url){
-						   if($url['controller']=='stock' AND $url['action']!='index' AND $url['action']!='rpt-paymentrecieptdetail' AND $url['action']!='rpt-request-product-detail' AND $url['action']!='rpt-request-productdetail' AND $url['action']!='rpt-transferdetail'){
+						   if($url['controller']=='stock' AND $url['action']!='index' AND $url['action']!='rpt-paymentrecieptdetail' AND $url['action']!='rpt-request-product-detail' AND $url['action']!='rpt-request-productdetail' AND $url['action']!='rpt-transferdetail' AND $url['action']!='reprint-request-product'){
 					  ?>
 				   <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
 						<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">

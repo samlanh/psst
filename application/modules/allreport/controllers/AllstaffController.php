@@ -29,35 +29,36 @@ public function init()
 		//echo $condition;
 		$db = new Allreport_Model_DbTable_DbRptAllStaff();
 		$this->view->rs = $rs_rows = $db->getAllStaffSelected($condition);
-		
+		$this->view->groupByType = $rs_rows = $db->getAllStaffSelectedGroupBy($condition);
 		
 	}
 	
 	public function rptAllStaffAction(){
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search=array(
-					'title' 		=>'',
-					'branch_id'		=>0,
-					'degree'		=>0,
-					'study_year' 	=>'',
-					'grade_all' 	=>'',
-					'session' 		=>'',
-					'stu_type' 		=>-1,
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d'),
-			);
-		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
+		$db = new Allreport_Model_DbTable_DbRptAllStaff();
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'title' => '',
+						'degree' => '',
+						'staff_type' => '',
+						'nationality' => '',
+						'branch_id' => '',
+						'status' => -1);
+			}
 		
-		$group= new Allreport_Model_DbTable_DbRptAllStaff();
-		$this->view->rs = $rs_rows = $group->getAllStaff($search);
-		$this->view->search=$search;
+		$this->view->rs= $db->getAllTeacher($search);
+		$this->view->groupByType = $db->getAllTeacherCard($search);
+		
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+		
+		$frm = new Application_Form_FrmOther();
+		$this->view->add_major = $frm->FrmAddMajor(null);
+		$frm = new Global_Form_FrmSearchMajor();
+		$this->view->frm_search = $frm->frmSearchTeacher();
+		Application_Model_Decorator::removeAllDecorator($frm);
 	}
 	
 	

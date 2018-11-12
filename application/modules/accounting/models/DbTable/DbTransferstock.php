@@ -164,7 +164,7 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     }
     function checkisProductSet($product_id){//if product is set
     	$db = $this->getAdapter();
-    	$sql="SELECT * FROM  rms_product WHERE sale_set=1 AND id = ".$product_id;
+    	$sql="SELECT * FROM  rms_itemsdetail WHERE is_productseat=1 AND id = ".$product_id;
     	return $db->fetchRow($sql);
     }
     function getTransferNo(){

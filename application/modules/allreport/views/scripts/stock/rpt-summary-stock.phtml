@@ -84,7 +84,7 @@
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 								<td colspan="2">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-								<td colspan="5">&nbsp;<?php echo $tr->translate("IN_OUT_STOCK_PROCESS");?>&nbsp;</td>
+								<td colspan="6">&nbsp;<?php echo $tr->translate("IN_OUT_STOCK_PROCESS");?>&nbsp;</td>
 							</tr>
 							<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
 								
@@ -93,8 +93,9 @@
 								<td><?php echo $tr->translate("PURCHASE_IN");?></td>
 								<td ><?php echo $tr->translate("SELL_OUT");?></td>
 								<td ><?php echo $tr->translate("REQUEST_QTY");?></td>
+								<td ><?php echo $tr->translate("TRANSFER_IN_OUT");?></td>
 								<td ><?php echo $tr->translate("ADJUST_STOCK");?></td>
-								<td nowrap><?php echo $tr->translate("CURR_QTY");?></td>
+								<td><?php echo $tr->translate("CURR_QTY");?></td>
 							</tr>
 						</thead>
 						
@@ -109,11 +110,12 @@
 								<td align="left">&nbsp;<?php echo $rs_row['branch_namekh']; ?>&nbsp;</td>
 								<td>&nbsp;<?php echo $rs_row['code']; ?>&nbsp;</td>
 								<td align="left">&nbsp;<?php echo $rs_row['title']; ?>&nbsp;</td>
-								<td>&nbsp;<?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);} ?>&nbsp;</td>
-								<td>&nbsp;<?php if($rs_row['saleqty']>0){echo number_format($rs_row['saleqty']);} ?>&nbsp;</td>
-								<td>&nbsp;<?php if($rs_row['request']>0){echo number_format($rs_row['request']);} ?>&nbsp;</td>
-								<td>&nbsp;<?php if($rs_row['pro_qty']>0){echo number_format(-1*$rs_row['adjustQty']);} ?>&nbsp;</td>
-								<td>&nbsp;<?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);} ?>&nbsp;</td>
+								<td>&nbsp;<?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);}else{ echo "-";} ?>&nbsp;</td>
+								<td>&nbsp;<?php if($rs_row['saleqty']>0){echo number_format($rs_row['saleqty']);}else{ echo "-";} ?>&nbsp;</td>
+								<td>&nbsp;<?php if($rs_row['request']>0){echo number_format($rs_row['request']);}else{ echo "-";} ?>&nbsp;</td>
+								<td>&nbsp;<?php if(!empty($rs_row['tran_in'])){echo number_format($rs_row['tran_in']);}else if($rs_row['tran_out']){ echo number_format(-1*$rs_row['tran_out']);}else{ echo "-";} ?>&nbsp;</td>
+								<td>&nbsp;<?php if(!empty($rs_row['adjustQty'])){echo number_format(-1*$rs_row['adjustQty']);}else{ echo "-";} ?>&nbsp;</td>
+								<td>&nbsp;<?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);}else{ echo "-";} ?>&nbsp;</td>
 								
 							</tr>
 						<?php

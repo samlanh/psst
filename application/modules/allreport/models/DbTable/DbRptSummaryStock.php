@@ -121,6 +121,8 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 				    and req.status=1
 			  	LIMIT 1) AS request,
 			  	(SELECT SUM(difference) FROM rms_adjuststock AS adj, rms_adjuststock_detail AS adj_d WHERE adj.id = adj_d.adjuststock_id AND adj_d.pro_id = d.id AND adj_d.branch_id = pl.brand_id AND adj.request_date >= '$from_date' AND adj.request_date <= '$to_date' AND adj.status=1 LIMIT 1) AS adjustQty, 
+			  	(SELECT SUM(qty) FROM `rms_transferstock` AS tra, rms_transferdetail AS tra_d WHERE tra.id = tra_d.transferid AND tra_d.pro_id = d.id AND tra.from_location = pl.brand_id AND tra.transfer_date >= '$from_date' AND tra.transfer_date <= '$to_date' AND tra.status=1 LIMIT 1) AS tran_out, 
+				(SELECT SUM(qty) FROM `rms_transferstock` AS tra, rms_transferdetail AS tra_d WHERE tra.id = tra_d.transferid AND tra_d.pro_id = d.id AND tra.to_location = pl.brand_id AND tra.transfer_date >= '$from_date' AND tra.transfer_date <= '$to_date' AND tra.status=1 LIMIT 1) AS tran_in, 
 				pl.pro_qty
 				FROM `rms_itemsdetail` AS d,
 				rms_product_location AS pl

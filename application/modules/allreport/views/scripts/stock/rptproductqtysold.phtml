@@ -64,13 +64,13 @@
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 									<td colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-									<td colspan="4">&nbsp;<?php echo $tr->translate("SALE_INFO");?>&nbsp;</td>
+									<td colspan="3">&nbsp;<?php echo $tr->translate("SALE_INFO");?>&nbsp;</td>
 								</tr>
 							<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
 								<td>&nbsp;<?php echo $tr->translate("CATEGORY");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("PRODUCT_CODE");?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $tr->translate("PRODUCT_NAME");?>&nbsp;</td>
-							    <td>&nbsp;<?php echo $tr->translate("RECEIPT");?>&nbsp;</td>
+							    <!-- <td>&nbsp;<?php //echo $tr->translate("RECEIPT");?>&nbsp;</td> -->
 							    <td>&nbsp;<?php echo $tr->translate("PRICE");?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $tr->translate("QTY");?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $tr->translate("TOTAL");?>&nbsp;</td>
@@ -82,7 +82,7 @@
 								<td align="center">&nbsp;<?php echo $rs['category'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo $rs['code'];?>&nbsp;</td>
 								<td align="left">&nbsp;<?php echo $rs['items_name'];?>&nbsp;</td>
-								<td>&nbsp;<strong><?php echo $rs['receipt_number'];?></strong>&nbsp;</td>
+								<!-- <td>&nbsp;<strong><?php //echo $rs['receipt_number'];?></strong>&nbsp;</td> -->
 								<td>&nbsp;<?php echo $rs['fee'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo $rs['qty'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo number_format($rs['subtotal'],2);?>&nbsp;</td>
@@ -91,7 +91,7 @@
 						$grand_total = $grand_total + $rs['subtotal'];
 						}?>
 	 						<tr style="font-size:13px; height: 20px;border: 1px solid #000;font-weight: bold;" align="center" class="hover" >
-								<td colspan="8" ><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
+								<td colspan="7" ><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
 								<td align="center" style="border: 1px solid #000;font-weight: bolder;">&nbsp;<?php echo "$ ".number_format($grand_total,2);?></td>
 	 						</tr>
 						</table>

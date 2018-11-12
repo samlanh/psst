@@ -10,8 +10,6 @@
 	dojo.require("dojo.data.ItemFileWriteStore");  
 </script>
 <title><?php echo $tr->translate("CATEGORY");?></title>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -194,9 +192,6 @@ tmp = '';
 temp='';
 function oldRow() {
 	<?php if(!empty($row_detail)) foreach($row_detail As $rows){?>
-	label_proname = dijit.byId("pro_id").attr('displayedValue');
-	pro_id=dijit.byId("pro_id").get("value");
-	branch_id=dijit.byId("branch").get("value");
 		col++;no++;
 		template='';
 		if(title!=1){
@@ -229,7 +224,7 @@ function oldRow() {
 		dojo.html.set(dojo.byId("row"+col),template , {
 		     parseContent: true,
 		});
-		getQtyById(col);
+		//getQtyById(col);
 		dijit.byId("branch_id_"+col).set("value",<?php echo $rows['branch_id']?>);
 		dijit.byId("product_name_"+col).set("value",<?php echo $rows['pro_id']?>);
 		dijit.byId("curr_qty"+col).set("value",<?php echo $rows['qty_befor']?>);
@@ -404,6 +399,7 @@ function getCurrQty(r){
 	curr_qty=dijit.byId("curr_qty"+r).get("value");
 	request_qty=dijit.byId("request_qty"+r).get("value");
 	var spacing_qty=parseFloat(curr_qty-request_qty);
+	/*
 	if(curr_qty<request_qty){
 		alert("Request​​ quantity not enough !!!");
 		dijit.byId("request_qty"+r).attr("value",curr_qty);
@@ -412,5 +408,7 @@ function getCurrQty(r){
 	}else{
 		dijit.byId("spacing_qty"+r).attr("value",spacing_qty);
 	}
+	*/
+	dijit.byId("spacing_qty"+r).attr("value",spacing_qty);
 }
 </script>

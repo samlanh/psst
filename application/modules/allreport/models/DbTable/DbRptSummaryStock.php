@@ -120,6 +120,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 				    AND req.request_date <= '$to_date'
 				    and req.status=1
 			  	LIMIT 1) AS request,
+			  	(SELECT SUM(difference) FROM rms_adjuststock AS adj, rms_adjuststock_detail AS adj_d WHERE adj.id = adj_d.adjuststock_id AND adj_d.pro_id = d.id AND adj_d.branch_id = pl.brand_id AND adj.request_date >= '$from_date' AND adj.request_date <= '$to_date' AND adj.status=1 LIMIT 1) AS adjustQty, 
 				pl.pro_qty
 				FROM `rms_itemsdetail` AS d,
 				rms_product_location AS pl
@@ -416,6 +417,8 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sp.branch_id LIMIT 1) AS branch_name,
 			sp.receipt_number,
 			spd.*,
+			sum(spd.qty) as qty,
+			sum(spd.subtotal) as subtotal,
 			(SELECT i.title FROM `rms_items` AS i WHERE i.id = (SELECT ie.items_id FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1)  LIMIT 1) AS category,
 			(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
 			(SELECT ie.code FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS code
@@ -449,6 +452,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('sp.branch_id');
+    	$where.=" GROUP BY sp.branch_id, spd.itemdetail_id";
     	return $db->fetchAll($sql.$where);
     }
     function getAllProductSold($search){

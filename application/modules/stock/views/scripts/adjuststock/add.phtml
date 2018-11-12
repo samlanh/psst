@@ -8,9 +8,6 @@
     dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 </script>
-<title><?php echo $tr->translate("CATEGORY");?></title>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/convertion.js"></script>
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -108,8 +105,12 @@ fieldset{  background:none;}
                   		 <div class="clearfix"></div>
 	                </div>
 	                <div class="form-group">
-	                 	 <table id="table_row" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
-								<tr id="head-title" class="head-td" align="right"></tr>
+	                 	 <table  style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
+								<thead>
+									<tr id="head-title" class="head-td" align="right"></tr>
+								</thead>
+								<tbody id="table_row">
+								</tbody>
 						</table>
 						<input type="hidden" id="identity" name="identity" />
 	                </div>
@@ -189,6 +190,12 @@ dojo.require("dojo.NodeList-manipulate");
 <script type="text/javascript">
 dojo.ready(function(){
 	getReceiptNo();
+
+	 var branch_id = dijit.byId('branch');
+	 branch_id.on('change', function(evt) {
+		 dojo.query("#table_row").append("");
+		 $("#identity").val("");
+    });
 });	
 var url_getreceipt_no = '<?php echo $this->url(array('module'=>'stock','controller'=>'adjuststock','action'=>'getreceipt')); ?>';
 function getReceiptNo(){
@@ -352,13 +359,14 @@ function getCurrQty(r){
 	curr_qty=dijit.byId("curr_qty"+r).get("value");
 	request_qty=dijit.byId("request_qty"+r).get("value");
 	var spacing_qty=parseFloat(curr_qty-request_qty);
-	if(curr_qty<request_qty){
+	/*if(curr_qty<request_qty){
 		alert("Request​​ quantity not enough !!!");
 		dijit.byId("request_qty"+r).attr("value",curr_qty);
 		dijit.byId("spacing_qty"+r).attr("value",0);
 		return false;
 	}else{
 		dijit.byId("spacing_qty"+r).attr("value",spacing_qty);
-	}
+	}*/
+	dijit.byId("spacing_qty"+r).attr("value",spacing_qty);
 }
 </script>

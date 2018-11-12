@@ -59,9 +59,6 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	if(!empty($search['staff_type'])){
     	$where.=' AND staff_type='.$search['staff_type'];
     	}
-    	if($search['status']>-1){
-    	$where.=' AND status='.$search['status'];
-    	}
     	$order_by=" GROUP BY g.staff_type ORDER BY id DESC ";
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
@@ -118,9 +115,6 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['staff_type'])){
 			$where.=' AND staff_type='.$search['staff_type'];
-		}
-		if($search['status']>-1){
-			$where.=' AND status='.$search['status'];
 		}
 		$order_by=" ORDER BY id DESC";
 		

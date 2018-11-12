@@ -240,7 +240,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	stu_code,
     	home_num,
     	street_num,
-    	 
     	is_subspend,
     	dob,
     	degree as dept,
@@ -249,10 +248,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	(SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_year,
     	(SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_date,
     	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) AS session,
-    
     	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
     	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
-    
     	(SELECT name_en from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
     	(SELECT v.village_namekh FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_name,
     	(SELECT c.commune_namekh FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,

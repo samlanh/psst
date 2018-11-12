@@ -17,6 +17,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 						'degree' => $_data['degree'],
 						'nationality' => $_data['nationality'],
 						'staff_type' => $_data['staff_type'],
+						'teacher_type' => $_data['teacher_type'],
 						'branch_id' => $_data['branch_id'],
 						'status' => $_data['status_search']);
 			}else{
@@ -25,6 +26,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 						'degree' => '',
 						'staff_type' => '',
 						'nationality' => '',
+						'teacher_type' => -1,
 						'branch_id' => '',
 						'status' => -1);
 			}

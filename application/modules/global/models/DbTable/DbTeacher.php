@@ -249,6 +249,9 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if(!empty($search['degree'])){
 			$where.=' AND degree='.$search['degree'];
 		}
+		if($search['teacher_type']>-1){
+			$where.=' AND teacher_type='.$search['teacher_type'];
+		}
 		if(!empty($search['nationality'])){
 			$where.=' AND nationality='.$search['nationality'];
 		}

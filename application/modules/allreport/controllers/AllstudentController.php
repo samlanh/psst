@@ -9,6 +9,25 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	public function indexAction()
 	{
 	}
+	function idselectformAction(){
+		$id=$this->getRequest()->getParam('id');
+		$k = 0;
+		$condition = '';
+		$ids = explode(',', $id);
+		foreach ($ids as $id_stu){
+			if($k==0){
+				$condition .= $id_stu;
+				$k=1;
+			}else{
+				$condition .= ' or id = '.$id_stu;
+			}
+		}
+		$db = new Allreport_Model_DbTable_DbTeacher();
+		$this->view->rs = $rs_rows = $db->getAllTeacher($condition);
+	
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+	}
 	public function idselectedAction(){
 		$id=$this->getRequest()->getParam('id');
 		$k = 0;
@@ -230,7 +249,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			);
 		}
 		$form=new Registrar_Form_FrmSearchInfor();
-		Application_Model_Decorator::removeAllDecorator($form);
+		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();

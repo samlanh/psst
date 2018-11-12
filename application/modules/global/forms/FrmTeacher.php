@@ -151,19 +151,17 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$street_num = new Zend_Dojo_Form_Element_TextBox('street_num');
 		$street_num->setAttribs(array('dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside'));
-				
-		$_arr_opt_degree = array(""=>$this->tr->translate("PLEASE_SELECT_DEGREE"));
-		$optionDegree = $_db->getAllDegreeMent(21);//Nation
-		if(!empty($optionDegree))foreach($optionDegree AS $row) $_arr_opt_degree[$row['id']]=$row['name'];
-		$_degree = new Zend_Dojo_Form_Element_FilteringSelect("degree");
-		$_degree->setMultiOptions($_arr_opt_degree);
-		$_degree->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
-				'onChange'=>'popupNation(1);',
-				'missingMessage'=>'Invalid Module!',
-				'class'=>'fullside height-text',));
-		$_photo = new Zend_Form_Element_File('photo');
+		
+		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
+		$_degree->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SERVIC"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>true
+		));
+		$degree_opt = $db->getAllDegree();
+		$_degree->setMultiOptions($degree_opt);
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
@@ -218,7 +216,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$end_date->setValue($_data['end_date']);
 			$_agreement->setValue($_data['agreement']);
 		}
-		$this->addElements(array($id,$_enname,$home_num,$_staff,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_photo,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_email,$start_date,$_degree,$_status,$_submit));
+		$this->addElements(array($id,$_enname,$home_num,$_staff,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_email,$start_date,$_degree,$_status,$_submit));
 		
 		return $this;
 	}

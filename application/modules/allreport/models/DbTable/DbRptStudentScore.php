@@ -227,6 +227,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    				$s_where=array();
    				$s_search=addslashes(trim($search['title']));
    				$s_where[]= " s.title_score LIKE '%{$s_search}%'";
+   				$s_where[]=" g.group_code LIKE '%{$s_search}%'";
    				$s_where[]=" s.note LIKE '%{$s_search}%'";
    				$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
    				$where.=' AND ('.implode(' OR ', $s_where).')';
@@ -234,17 +235,17 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	if(!empty($search['branch_id'])){
    		$where.= " AND s.branch_id =".$search['branch_id'];
    	}
-   	if(!empty($search['group_name'])){
-   		$where.= " AND g.id =".$search['group_name'];
+   	if(!empty($search['group'])){
+   		$where.= " AND g.id =".$search['group'];
+   	}
+   	if(!empty($search['study_year'])){
+   		$where.=" AND s.for_academic_year =".$search['study_year'];
    	}
    	if($search['degree']>0){
    		$where.=" AND `g`.`degree` =".$search['degree'];
    	}
    	if($search['for_month']>0){
    		$where.=" AND s.for_month =".$search['for_month'];
-   	}
-   	if($search['study_year']>0){
-   		$where.=" AND s.for_academic_year =".$search['study_year'];
    	}
    	if($search['grade']>0){
    		$where.=" AND `g`.`grade` =".$search['grade'];

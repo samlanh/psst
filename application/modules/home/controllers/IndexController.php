@@ -12,17 +12,20 @@ class Home_IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-//     	if($this->getRequest()->isPost()){
-//     		$post = $this->getRequest()->getPost();
-//     		print_r($post);exit();
-//     	}
-//       $db = new Allreport_Model_DbTable_DbRptAllStudent();
-//       $this->view->rsamountstudent = $db->getAmountStudent();
-//       $this->view->rsnewstudent = $db->getAmountNewStudent();
-//       $this->view->rsdropstudent = $db->getAmountDropStudent();
-//       $this->view->rsteststudent = $db->getAmountStudentTest();
-//       $this->view->rsteststuregistered = $db->getAmountStudentTestRegistered();
-//       $this->view->rsupdateresult = $db->getAmountStudentUpdateresult();
+    	if($this->getRequest()->isPost()){
+    		$post = $this->getRequest()->getPost();
+    		print_r($post);exit();
+    	}
+      $db = new Allreport_Model_DbTable_DbRptAllStudent();
+      $this->view->rsamountstudent = $db->getAmountStudent();
+      $this->view->rsnewstudent = $db->getAmountNewStudent();
+      $this->view->rsdropstudent = $db->getAmountDropStudent();
+      $this->view->rsteststudent = $db->getAmountStudentTest();
+      $this->view->rsteststuregistered = $db->getAmountStudentTestRegistered();
+      $this->view->rsupdateresult = $db->getAmountStudentUpdateresult();
+      
+      $_db = new Allreport_Model_DbTable_DbRptIncomeExpense();
+      $this->view->totalExpense = $_db->getAmountExpest();
     }
 
     public function viewAction()

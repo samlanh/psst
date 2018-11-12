@@ -46,7 +46,6 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
 				u.user_name ,u.first_name,e.receiver,
 				(select name_en from rms_view where rms_view.type=8 and key_code=payment_type) as payment_type,
 				(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type LIMIT 1) AS pay
-				
 			FROM ln_expense AS e ,
 				rms_branch AS b ,
 				 rms_users AS u 
@@ -73,6 +72,15 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
 	   }
 	   return $db->fetchAll($sql.$where);
 	}
+	
+	public function getAmountExpest(){//count to dashboard
+    	$db = $this->getAdapter();
+    	$sql =' SELECT SUM(total_amount) FROM ln_expense ';
+    	$where=' WHERE status=1 ';
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	return $db->fetchOne($sql.$where);
+    }
 	public function getAllexspanByid($id){
 	    $db=$this->getAdapter();
 	    $sql="SELECT 

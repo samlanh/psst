@@ -182,7 +182,47 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	";
     	return $db->fetchAll($sql);
     }
+    function getTeachDocumentAlert($search){
+    	$db = $this->getAdapter();
+    	$sql =" SELECT s.branch_id,
+    	(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
+    	(SELECT name_kh FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=s.sex) AS sex,
+    	(SELECT name_kh FROM rms_view WHERE rms_view.type=24 AND rms_view.key_code=s.teacher_type) AS teacher_type,
+    	(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.nationality) AS nationality,
+    	(SELECT name_kh FROM rms_view WHERE rms_view.type=3 AND rms_view.key_code=s.degree) AS degree,
+    	s.teacher_code,s.teacher_name_kh,s.tel,
+    	s.email,
+    	sd.*
+    	FROM `rms_teacher_document` AS sd, `rms_teacher` AS s
+    	WHERE s.id = sd.stu_id
+    	AND sd.is_receive=0
+    	";
+    	$where ='';
+    	$to_date = (empty($search['end_date']))? '1': " sd.date_end <= '".$search['end_date']." 23:59:59'";
+    	$where.= " AND ".$to_date;
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("s.branch_id");
     
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " teacher_code LIKE '%{$s_search}%'";
+    		$s_where[] = " teacher_name_en LIKE '%{$s_search}%'";
+    		$s_where[] = " teacher_name_kh LIKE '%{$s_search}%'";
+    		$where .=' AND ('.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['degree'])){
+    		$where.=' AND degree='.$search['degree'];
+    	}
+    	if(!empty($search['nationality'])){
+    		$where.=' AND nationality='.$search['nationality'];
+    	}
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND branch_id='.$search['branch_id'];
+    	}
+    	$order=" ORDER BY sd.date_end DESC, sd.stu_id ASC";
+    	return $db->fetchAll($sql.$where.$order);
+    }
 }
 
 

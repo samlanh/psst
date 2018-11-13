@@ -60,7 +60,29 @@ public function init()
 		$this->view->frm_search = $frm->frmSearchTeacher();
 		Application_Model_Decorator::removeAllDecorator($frm);
 	}
-	
+	public function rptTeacheralertAction(){
+		$db = new Allreport_Model_DbTable_DbRptAllStaff();
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search = array(
+					'title' => '',
+					'degree' => '',
+					'nationality' => '',
+					'branch_id' => '',
+					'end_date'=>date('Y-m-d',strtotime("+5 day")),
+			);
+		}
+		$this->view->rs= $db->getTeachDocumentAlert($search);
+		$frm = new Application_Form_FrmOther();
+		$this->view->add_major = $frm->FrmAddMajor(null);
+		$frm = new Global_Form_FrmSearchMajor();
+		$this->view->frm_search = $frm->frmSearchTeacher();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		
+		$this->view->search =$search;
+	}
 	
 }
 

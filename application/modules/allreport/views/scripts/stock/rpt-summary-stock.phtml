@@ -84,7 +84,7 @@
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 								<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 								<td colspan="2">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-								<td colspan="6">&nbsp;<?php echo $tr->translate("IN_OUT_STOCK_PROCESS");?>&nbsp;</td>
+								<td colspan="7">&nbsp;<?php echo $tr->translate("IN_OUT_STOCK_PROCESS");?>&nbsp;</td>
 							</tr>
 							<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
 								
@@ -93,7 +93,8 @@
 								<td><?php echo $tr->translate("PURCHASE_IN");?></td>
 								<td ><?php echo $tr->translate("SELL_OUT");?></td>
 								<td ><?php echo $tr->translate("REQUEST_QTY");?></td>
-								<td ><?php echo $tr->translate("TRANSFER_IN_OUT");?></td>
+								<td ><?php echo $tr->translate("TRANSFER_IN");?></td>
+								<td ><?php echo $tr->translate("TRANSFER_OUT");?></td>
 								<td ><?php echo $tr->translate("ADJUST_STOCK");?></td>
 								<td><?php echo $tr->translate("CURR_QTY");?></td>
 							</tr>
@@ -103,7 +104,7 @@
 						$gender=array(1=>"Male",2=>"Female");
 						$i=0;
 						if(!empty($this->rows)) foreach($this->rows As $key=> $rs_row){	$i++;
-							
+						$transfer = $rs_row['tran_in'] - $rs_row['tran_out'];
 						?>
 							<tr class="hover" style="font-size:11px; line-height:16px; "​ align="center">
 								<td>&nbsp;<?php echo $i; ?>&nbsp;</td>
@@ -113,7 +114,8 @@
 								<td>&nbsp;<?php if($rs_row['purchaseQty']>0){echo number_format($rs_row['purchaseQty']);}else{ echo "-";} ?>&nbsp;</td>
 								<td>&nbsp;<?php if($rs_row['saleqty']>0){echo number_format($rs_row['saleqty']);}else{ echo "-";} ?>&nbsp;</td>
 								<td>&nbsp;<?php if($rs_row['request']>0){echo number_format($rs_row['request']);}else{ echo "-";} ?>&nbsp;</td>
-								<td>&nbsp;<?php if(!empty($rs_row['tran_in'])){echo number_format($rs_row['tran_in']);}else if($rs_row['tran_out']){ echo number_format(-1*$rs_row['tran_out']);}else{ echo "-";} ?>&nbsp;</td>
+								<td>&nbsp;<?php if(!empty($rs_row['tran_in'])){echo number_format($rs_row['tran_in']);}else{ echo "-";} ?>&nbsp;</td>
+								<td>&nbsp;<?php if(!empty($rs_row['tran_out'])){echo number_format(-1*$rs_row['tran_out']);}else{ echo "-";} ?>&nbsp;</td>
 								<td>&nbsp;<?php if(!empty($rs_row['adjustQty'])){echo number_format(-1*$rs_row['adjustQty']);}else{ echo "-";} ?>&nbsp;</td>
 								<td>&nbsp;<?php if($rs_row['pro_qty']>0){echo number_format($rs_row['pro_qty']);}else{ echo "-";} ?>&nbsp;</td>
 								

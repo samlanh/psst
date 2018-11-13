@@ -218,6 +218,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 					$this->_name="rms_student_paymentdetail";
 					$ids = explode(',', $data['identity']);
+					$dbitem = new Global_Model_DbTable_DbItemsDetail();
 					if(!empty($ids))foreach ($ids as $i){
 						$spd_id = $this->getStudentPaymentStart($data['old_stu'], $data['item_id'.$i],1);
 		             	$this->_name="rms_student_paymentdetail";
@@ -228,10 +229,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		             		$where=" id = ".$spd_id;
 		             		$this->update($arr,$where);
 		             	}
-						
+		             	
+		             	$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i]);
 							$_arr = array(
 								'payment_id'	=>$paymentid,
-								'service_type'	=>$data['item_id'.$i],
+								'service_type'	=>$rs_item['items_type'],
 								'itemdetail_id'	=>$data['item_id'.$i],
 								'payment_term'	=>$data['term_'.$i],
 								'fee'			=>$data['price_'.$i],
@@ -259,7 +261,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			}catch (Exception $e){
 				$db->rollBack();//អោយវាវិលត្រលប់ទៅដើមវីញពេលណាវាជួបErrore
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				echo $e->getMessage();exit();
 			}
 	}
 	
@@ -538,6 +539,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 					$this->_name="rms_student_paymentdetail";
 					$ids = explode(',', $data['identity']);
+					$dbitem = new Global_Model_DbTable_DbItemsDetail();
 					if(!empty($ids))foreach ($ids as $i){
 						$spd_id = $this->getStudentPaymentStart($data['old_stu'], $data['item_id'.$i],1);
 						$this->_name="rms_student_paymentdetail";
@@ -548,9 +550,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								$where=" id = ".$spd_id;
 								$this->update($arr,$where);
 						}
+						
+						$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i]);
 						   $_arr = array(
 								'payment_id'	=>$payment_id,
-								'service_type'	=>$data['item_id'.$i],
+								'service_type'	=>$rs_item['items_type'],
 								'itemdetail_id'	=>$data['item_id'.$i],
 								'payment_term'	=>$data['term_'.$i],
 								'fee'			=>$data['price_'.$i],

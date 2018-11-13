@@ -253,7 +253,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		   				rms_student_payment as sp,
     						rms_student as s
     		   			WHERE
-    		   				sp.student_id=s.stu_id AND is_void=0 AND status=1 ";
+    		   				sp.student_id=s.stu_id AND is_void=0 AND sp.status=1 ";
     	    	$order=" ORDER BY id DESC";
     	 
     if(!empty($search['title'])){

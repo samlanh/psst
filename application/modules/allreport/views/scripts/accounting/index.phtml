@@ -33,7 +33,7 @@
 						   $report_url=$db->getArrAclReport(1,'accounting');
 						   if(!empty($report_url)){
 							   foreach($report_url as $url){
-							   if($url['controller']=='accounting' AND $url['action']!='index' AND $url['action']!='rpt-paymentrecieptdetail' AND $url['action']!='rpt-income-expense-detail' ){
+							   if($url['controller']=='accounting' AND $url['action']!='index' AND $url['action']!='rpt-paymentrecieptdetail' AND $url['action']!='rpt-income-expense-detail' AND $url['action']!='rptreceiptdetail' ){
 					   ?>
 						   <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
 								<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">

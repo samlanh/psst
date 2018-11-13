@@ -506,7 +506,8 @@ function getgradebyDegree(dept_id,a,type=1){
 	dojo.xhrPost({
 			url:url_dept,
 			content:{
-				'dept_id':dept_id
+				'dept_id':dept_id,
+				
 				},
 			handleAs:"json",
 			load: function(data) {

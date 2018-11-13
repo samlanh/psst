@@ -154,11 +154,11 @@
 									   }
 							    	?>
 							    </td>
-							    <td<?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['paidamount'];?></td>
+							    <td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['paidamount'];?></td>
 							    <td><?php if($rs['is_onepayment']==0){
 							    		echo date('d/m/Y', strtotime($rs['start_date']));
 							    		echo "-".date('d/m/Y', strtotime($rs['validate']));
-							    	}?>
+							    	}?>44
 							    </td>
 							    <td style="font-size: 9px;"><?php echo $rs['note'];?></td>
 							   	<td <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['void_status'];?></td>

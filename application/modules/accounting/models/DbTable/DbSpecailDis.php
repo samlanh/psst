@@ -8,6 +8,9 @@
 	
 	function getAllSpecailDis($search = '',$type=null){
 		$db = $this->getAdapter();
+		$from_date =(empty($search['start_date']))? '1': "d.create_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': "d.create_date <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
 		$sql = " SELECT d.id,
 		d.stu_name,
 		d.request_name,
@@ -18,7 +21,6 @@
 		(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name
 		FROM `rms_specail_discount` AS d WHERE 1 ";
 		$orderby = " ORDER BY d.dis_type ASC, d.id DESC ";
-		$where = ' ';
 		if(!empty($search['advance_search'])){
 			$s_where = array();
 	    		$s_search = addslashes(trim($search['advance_search']));

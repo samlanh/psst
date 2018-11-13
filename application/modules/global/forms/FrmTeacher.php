@@ -163,6 +163,18 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$degree_opt = $db->getAllDegree();
 		$_degree->setMultiOptions($degree_opt);
 		
+		$_dbd = new Global_Model_DbTable_DbTeacher();
+		$_arr_opt_degree = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$optionDegree = $_dbd->getAllDegree();
+		if(!empty($optionDegree))foreach($optionDegree AS $row) $_arr_opt_degree[$row['id']]=$row['name'];
+		$_degree = new Zend_Dojo_Form_Element_FilteringSelect("degree");
+		$_degree->setMultiOptions($_arr_opt_degree);
+		$_degree->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'class'=>'fullside height-text',));
+		
+		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
 		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$_status_opt = array(

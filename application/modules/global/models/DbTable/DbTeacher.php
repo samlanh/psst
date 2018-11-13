@@ -198,7 +198,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	}
 	function getAllDegree(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,name_kh AS name FROM rms_view WHERE rms_view.type=3 AND name_kh!='' and status=1";
+		$sql="SELECT key_code AS id,name_kh AS name FROM rms_view WHERE rms_view.type=3 AND name_kh!='' AND STATUS=1";
 		return $db->fetchAll($sql);
 	}
 	public function getallSubjectTeacherById($teacher_id){

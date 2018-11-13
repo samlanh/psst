@@ -35,6 +35,31 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			
     	));
     	
+    	$start_date= new Zend_Dojo_Form_Element_DateTextBox('start_date');
+    	$start_date->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    	));
+    	$_date = $request->getParam("start_date");
+    	
+    	if(!empty($_date)){
+    		$start_date->setValue($_date);
+    	}
+    	
+    	$end_date= new Zend_Dojo_Form_Element_DateTextBox('end_date');
+    	$date = date("Y-m-d");
+    	$end_date->setAttribs(array(
+    			'dojoType'=>"dijit.form.DateTextBox",
+    			'class'=>'fullside',
+    			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+    	));
+    	$_date = $request->getParam("end_date");
+    	if(empty($_date)){
+    		$_date = date("Y-m-d");
+    	}
+    	$end_date->setValue($_date);
+    	
     	$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
     	$Option = $_dbgb->getAllSchoolOption($userinfo['branch_list']);
     	if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
@@ -172,6 +197,8 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			$_dis_type,
     			$_status_type,
     			$_save,
+    			$start_date,
+    			$end_date,
     			$_status,
     			$id,
     			$advance_search,

@@ -20,6 +20,8 @@ class Accounting_SpecaildiscountController extends Zend_Controller_Action {
     		$search = array(
     				'advance_search' => "",
     				'dis_type'=>"",
+    				'start_date'=> date('Y-m-d'),
+    				'end_date'=>date('Y-m-d'),
     				'status_type' => "",
     		);
     	}

@@ -430,6 +430,8 @@ function printSave(new_receipt){
 				  temp+='<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</div></strong></td>';
 				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ប្រភេទចំណាយ/Expense Type</div></strong></td>';
 				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ពណ៌នា/Description</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">តម្លៃ/Price</div></strong></td>';
+				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួន/QTY</div></strong></td>';
 				  temp+='<td style="border:1px solid #000;><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14px;">ចំនួនប្រាក់/Amount</div></strong></td>';
 				  temp+='</tr>';
 				  n=0;
@@ -437,13 +439,17 @@ function printSave(new_receipt){
 				  temp+='<tr style=" font-size:12px;height: 23px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 				  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;'+dijit.byId("expense_id_"+rowIDArray[n]).attr('displayedValue')+'</td>'; 
 				  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark_"+rowIDArray[n]).get('value')+'</td>';
+				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+"$ "+dijit.byId("price_"+rowIDArray[n]).attr('displayedValue')+'</td>';
+				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+dijit.byId("qty_"+rowIDArray[n]).attr('displayedValue')+'</td>';
 				  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;">'+"$ "+dijit.byId("total_"+rowIDArray[n]).attr('displayedValue')+'</td>';
 				  i++;
 				  temp+='</tr>';
 				}
 				for(row = n+1;row<4;row++){
-					 temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
+					  temp+='<tr style=" font-size:12px;height: 25px;"​ align="center"><td align="center" style="border:1px solid #000;">'+row+'</td>';
 					  temp+='<td align="left" style="border:1px solid #000;max-width:200px !important;line-height:18px;">&nbsp;&nbsp;</td>'; 
+					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
+					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
 					  temp+='<td align="center" style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 12px;"></td>';
 					  temp+='<td style="border:1px solid #000;"></td>';
 					  temp+='</tr>';

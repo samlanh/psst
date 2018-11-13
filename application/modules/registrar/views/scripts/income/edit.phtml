@@ -125,7 +125,7 @@ $frm = $this->frm_expense;
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect" >
 								<option value="1" <?php if($this->rs['status']==1){echo 'selected="selected"';}?>><?php echo $tr->translate("ACTIVE")?></option>
-								<option value="0" <?php if($this->rs['status']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("DEACTIVE")?></option>
+								<option value="0" <?php if($this->rs['status']==0){echo 'selected="selected"';}?>><?php echo $tr->translate("VOID")?></option>
 							</select>
 	                   </div>
 	                </div>
@@ -215,6 +215,11 @@ dojo.require("dojo.store.Memory");
 				return false;
 			}
 			
+			if(dijit.byId("status").get("value")==1){
+				dojo.byId("lb_receiptvoid").innerHTML = '';
+			}else{
+				dojo.byId("lb_receiptvoid").innerHTML = '(Void)';
+			}
 			
 			dojo.byId("lb_receipt_no").innerHTML = dijit.byId('invoice').get('value');
 			
@@ -234,8 +239,9 @@ dojo.require("dojo.store.Memory");
 			}
 
 			dojo.byId("lb_total_income").innerHTML = "$ "+dijit.byId("total_income").get('value').toFixed(2);
-
+			
 			var d = dijit.byId("date").get('value');
+			
 			 if(d!=null){
 				 var day = d.getDate();
 				 var mon = d.toDateString().substr(4,3);
@@ -342,7 +348,7 @@ function getbranchinfo(){
 							</style>
 							<tr style="height: 30px;">
 								<td class="one ">&nbsp;<?php echo $tr->translate("RECEIPT_NO");?>&nbsp;</td>
-								<td class="border"><label id="lb_receipt_no" class=" values one "></label> </td>
+								<td class="border"><label id="lb_receipt_no"></label>&nbsp;<span style="color:red;" id="lb_receiptvoid"></span></td>
 								<td class="one " align="left">&nbsp;<?php echo $tr->translate("FOR_DATE");?>&nbsp;</td>
 								<td class="border"><label id="lb_date" class="values one"> </label></td>
 							</tr>

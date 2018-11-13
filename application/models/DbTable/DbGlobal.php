@@ -268,7 +268,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getAllDocteacherType(){
    	$db = $this->getAdapter();
-   	$sql = "SELECT name as id, name FROM rms_document_type WHERE types=2 AND status=1 AND name!='' ORDER BY rms_document_type.id ASC ";
+   	$sql = " SELECT name as id, name FROM rms_document_type WHERE types=2 AND status=1 AND name!='' ORDER BY rms_document_type.id ASC ";
    	return $db->fetchAll($sql);
    }
    

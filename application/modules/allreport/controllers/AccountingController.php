@@ -50,6 +50,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$search = array(
 					'title' => "",
     				'dis_type'=>"",
+					'start_date'=> date('Y-m-d'),
+					'end_date'=>date('Y-m-d'),
     				'status_type' => "",
 				);
 			}

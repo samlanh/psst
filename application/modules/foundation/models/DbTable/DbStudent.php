@@ -9,6 +9,27 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $session_user->user_id;
 	
 	}
+	function uploadFile($data){
+		$part= PUBLIC_PATH.'/images/photo/';
+		if (!file_exists($part)) {
+			mkdir($part, 0777, true);
+		}
+	
+		$photo = "";
+		$name = $_FILES['webcam']['name'];
+		if (!empty($name)){
+			$ss = 	explode(".", $name);
+			$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+			$tmp = $_FILES['webcam']['tmp_name'];
+			if(move_uploaded_file($tmp, $part.$image_name)){
+				$photo = $image_name;
+				return $photo;
+			}
+			else
+				$string = "Image Upload failed";
+		}
+		return null;
+	}
 	function updategroupstudent(){
 		$db=$this->getAdapter();
 		$sql="SELECT 
@@ -172,7 +193,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}	
 			$photo = "";
 			$name = $_FILES['photo']['name'];
-			if (!empty($name)){
+			if (!empty($_data['uploaded'])){
+				$photo=$_data['uploaded'];
+			}else if (!empty($name)){
 				$ss = 	explode(".", $name);
 				$image_name = "profile_student_".date("Y").date("m").date("d").time().".".end($ss);
 				$tmp = $_FILES['photo']['tmp_name'];

@@ -467,7 +467,15 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
+	function webcamAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$_dbgb = new Foundation_Model_DbTable_DbStudent();
+			$serial = $_dbgb->uploadFile($data);
+			print_r($serial);
+			exit();
+		}
+	}
 	
 	
 }

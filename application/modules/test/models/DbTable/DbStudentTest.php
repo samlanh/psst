@@ -39,7 +39,9 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			}
 			$photo = "";
 			$name = $_FILES['photo']['name'];
-			if (!empty($name)){
+			if (!empty($data['uploaded'])){
+				$photo=$data['uploaded'];
+			}else if (!empty($name)){
 				$ss = 	explode(".", $name);
 				$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
 				$tmp = $_FILES['photo']['tmp_name'];

@@ -12,8 +12,8 @@
     text-align: center;
 }
 .image-box img {
-    width: 120px;
-    height: 130px;
+    width: 165px;
+    height: 185px;
 }
 .button_browse {
     position: relative;
@@ -41,7 +41,7 @@ input.btn_borwse_image {
 }
 .account-image {
     border: solid 1px #eee;
-    width: 120px;
+    width: 165px;
     margin: 0 auto;
 }
 </style>
@@ -239,7 +239,7 @@ input.btn_borwse_image {
 					                <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name" style="line-height: 7.75;"><?php echo $tr->translate("IMAGE");?>
 				                   </label>
 				                  <div class="col-md-7 col-sm-7 col-xs-12">
-				                    	<div class="account-image">
+				                    	<div class="account-image text-center">
 											<div class="image-box">
 												<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
 											</div>
@@ -249,8 +249,9 @@ input.btn_borwse_image {
 													<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
 													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
+											<button type="button" style="padding-left: 20px;" onClick="setup()" class="btn btn-success btn-sm">បើក Camera</button>
 										</div>
-										<button type="button" style="padding-left: 20px;" onClick="setup()" class="btn btn-success btn-sm">បើក Camera</button>
+										
 				                   </div>
 				                </div>
 				            </div>
@@ -1497,14 +1498,14 @@ function take_snapshot() {
 	} );
 }
 function SaveSnap(){
-    var file =  document.getElementById("profile_wiew").src;
-    var formdata = new FormData();
-    formdata.append("profile_wiew", file);
-    var ajax = new XMLHttpRequest();
-    ajax.addEventListener("load", function(event) { uploadcomplete(event);}, false);
-    var url_upload = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'webcam')); ?>';	
-    ajax.open("POST", url_upload);
-    ajax.send(formdata);
+    var url_upload = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'webcam')); ?>';	
+
+    var base64image = document.getElementById("profile_wiew").src;
+    Webcam.upload( base64image, url_upload, function(code, text) {
+    	  console.log('Save successfully');
+    	  //console.log(text);
+    	  uploadcomplete(event);
+    	 });
 }
 function uploadcomplete(event){
     var image_return=event.target.responseText;

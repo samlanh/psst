@@ -10,8 +10,8 @@
     text-align: center;
 }
 .image-box img {
-    width: 120px;
-    height: 130px;
+    width: 165px;
+    height: 185px;
 }
 .button_browse {
     position: relative;
@@ -39,7 +39,7 @@ input.btn_borwse_image {
 }
 .account-image {
     border: solid 1px #eee;
-    width: 120px;
+    width: 165px;
     margin: 0 auto;
 }
 tr#head-title {
@@ -308,8 +308,8 @@ tr#head-title {
 				                   </label>
 				                </div>
 				                <div class="form-group">
-				                   <div class="col-md-12 col-sm-12 col-xs-12">
-				                   		<div class="account-image">
+				                   <div class="col-md-12 col-sm-12 col-xs-12 " >
+				                   		<div class="account-image text-center">
 											<div class="image-box">
 												<img id="profile_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
 											</div>
@@ -319,7 +319,9 @@ tr#head-title {
 													<input class="btn_borwse_image" type="file" id="photo" name="photo"  />
 													<input type="hidden" name="uploaded" id="uploaded" />
 											</div>
+											<button type="button" style="padding-left: 20px;" onClick="setup()" class="btn btn-success btn-sm">បើក Camera</button>
 										</div>
+										
 				                   </div>
 				                </div>
 				                
@@ -513,7 +515,13 @@ tr#head-title {
 			</table>
 		</form>
 	</div>
-</div>		
+</div>	
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:415px;" align="center" data-dojo-props="title:'Camera'" id="showcamera" >
+		<div id="my_camera"></div>
+		<button type="button" onClick="take_snapshot()" class="btn btn-success btn-sm">ចុចថត</button>
+	</div>
+</div>	
 <script type="text/javascript">
 var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -919,5 +927,43 @@ var url_add_nation = '<?php echo $this->url(array("module"=>"foundation","contro
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
+	}
+	
+	Webcam.set({
+		width: 320,
+		height: 240,
+		image_format: 'jpeg',
+		jpeg_quality: 90
+	});
+	function setup() {
+		dijit.byId("showcamera").show();	
+		Webcam.reset();
+		Webcam.attach('#my_camera' );
+	}
+	var shutter = new Audio();
+	shutter.autoplay = false;
+	shutter.src = navigator.userAgent.match(/Firefox/) ? '<?php echo $this->baseUrl();?>/webcam/shutter.ogg' : '<?php echo $this->baseUrl();?>/webcam/shutter.mp3';
+	function take_snapshot() {
+		// play sound effect
+		shutter.play();
+		// take snapshot and get image data
+		Webcam.snap( function(data_uri) {
+			  $('#profile_wiew').attr('src',data_uri);
+			  SaveSnap();
+		} );
+	}
+	function SaveSnap(){
+	    var url_upload = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'webcam')); ?>';	
+
+	    var base64image = document.getElementById("profile_wiew").src;
+	    Webcam.upload( base64image, url_upload, function(code, text) {
+	    	  console.log('Save successfully');
+	    	  //console.log(text);
+	    	  uploadcomplete(event);
+	    	 });
+	}
+	function uploadcomplete(event){
+	    var image_return=event.target.responseText;
+	    $("#uploaded").val(image_return);
 	}
 </script>

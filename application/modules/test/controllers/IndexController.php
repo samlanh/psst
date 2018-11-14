@@ -340,4 +340,13 @@ class Test_IndexController extends Zend_Controller_Action
     		exit();
     	}
     }
+    function webcamAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$_dbgb = new Test_Model_DbTable_DbStudentTest();
+    		$serial = $_dbgb->uploadFile($data);
+    		print_r($serial);
+    		exit();
+    	}
+    }
 }

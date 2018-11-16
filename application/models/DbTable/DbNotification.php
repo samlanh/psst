@@ -22,6 +22,7 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 			s.stu_code,s.stu_khname,s.stu_enname,s.last_name,
 			s.photo,
 			s.sex,
+			s.tel,
 			sd.*
 			FROM `rms_student_document` AS sd,`rms_student` AS s
 			WHERE s.stu_id = sd.stu_id
@@ -81,6 +82,7 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 			(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS last_name,
 			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
 			(SELECT s.photo FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS photo,
+			(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS tel,
 			(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
 			(SELECT ie.images FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS pro_images,
 			(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type,

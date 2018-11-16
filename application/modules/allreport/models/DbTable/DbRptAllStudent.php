@@ -164,7 +164,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     public function getAmountStudent(){//count to dashboard
     	$db = $this->getAdapter();
     	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
-    	$where=' WHERE status=1 ';
+    	$where=' WHERE status=1 AND customer_type=1';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
@@ -172,7 +172,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     public function getAmountNewStudent(){//count to dashboard
     	$db = $this->getAdapter();
     	$sql ='SELECT COUNT(stu_id) FROM rms_student';
-    	$where=' WHERE status=1 AND is_stu_new=1 ';
+    	$where=' WHERE status=1 AND is_stu_new=1 AND customer_type=1';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
@@ -180,31 +180,47 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     public function getAmountDropStudent(){//count to dashboard
     	$db = $this->getAdapter();
     	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
-    	$where=' WHERE status=1 AND is_subspend!=0 ';
+    	$where=' WHERE status=1 AND is_subspend!=0 AND customer_type=1';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
     }
     public function getAmountStudentTest(){//count to dashboard
     	$db = $this->getAdapter();
-    	$sql ='SELECT COUNT(id) FROM `rms_student_test` ';
-    	$where=" WHERE status=1 AND (kh_name!='' OR en_name!='')";
+    	$sql ='SELECT COUNT(stu_id) FROM `rms_student` ';
+    	$where=" WHERE status=1 AND (stu_khname!='' OR stu_enname!='') AND customer_type=4 ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
     }
     public function getAmountStudentTestRegistered(){//count to dashboard
     	$db = $this->getAdapter();
-    	$sql ='SELECT COUNT(id) FROM `rms_student_test` ';
-    	$where=" WHERE is_paid=1 AND status=1 AND (kh_name!='' OR en_name!='')";
+    	$sql ="SELECT COUNT(str.id)
+			FROM `rms_student` AS st,
+			`rms_student_test_result` AS str
+			WHERE str.is_registered=1
+			AND st.is_studenttest =1
+			AND str.stu_test_id = st.stu_id
+			AND
+			st.status=1
+		";
+    	$where=" AND (st.stu_khname!='' OR st.stu_enname!='')";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
     } 
     public function getAmountStudentUpdateresult(){//count to dashboard
     	$db = $this->getAdapter();
-    	$sql ='SELECT COUNT(id) FROM `rms_student_test` ';
-    	$where=" WHERE updated_result=1 AND status=1 AND (kh_name!='' OR en_name!='')";
+    	$sql ="SELECT COUNT(str.id)
+			FROM `rms_student` AS st,
+			`rms_student_test_result` AS str
+			WHERE str.updated_result=1
+			AND st.is_studenttest =1
+			AND str.stu_test_id = st.stu_id
+			AND
+			st.status=1
+		";
+    	$where=" AND (st.stu_khname!='' OR st.stu_enname!='')";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);

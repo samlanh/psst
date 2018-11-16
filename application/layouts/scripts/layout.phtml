@@ -252,6 +252,7 @@ $teacher_id = $session_t->teacher_id;
 					                            </div>
 					                            <div class="media-body">
 					                              <span class="title stu bold" ><?php echo $rspro['stu_code'];?>  <?php echo $rspro['stu_enname']." ".$rspro['last_name'];?></span>
+					                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rspro['tel'];?></span><br />
 					                              <span class="title" ><?php echo $tr->translate("RECEIPT")." : ".$rspro['receipt_number'];?></span><br />
 					                              <span class="title" ><?php echo $rspro['items_name'];?></span><br />
 					                              <span ><?php echo $tr->translate("AMOUNT")." <strong>".$rspro['qty_balance']."</strong>";?></span>
@@ -290,6 +291,7 @@ $teacher_id = $session_t->teacher_id;
 					                            </div>
 					                            <div class="media-body">
 					                              <span class="title stu bold" ><?php echo $rspro['stu_code'];?>  <?php echo $rspro['stu_enname']." ".$rspro['last_name'];?></span>
+					                               <span class="title" ><?php echo $tr->translate("TEL")." : ".$rspro['tel'];?></span><br />
 					                              <span class="title" ><?php echo $tr->translate("RECEIPT")." : ".$rspro['receipt_number'];?></span><br />
 					                              <span class="title" ><?php echo $rspro['items_name'];?></span><br />
 					                              <span  ><?php echo $tr->translate("AMOUNT")." <strong>".$rspro['qty_balance']."</strong>";?></span>
@@ -354,6 +356,7 @@ $teacher_id = $session_t->teacher_id;
 					                              <span ><?php echo $rsdoc['stu_code'];?>  
 					                              </span><br />
 					                              <span class="title bold" ><?php echo $rsdoc['stu_enname']." ".$rsdoc['last_name'];?></span><br />
+					                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rsdoc['tel'];?></span><br />
 					                              <span class="title" ><?php echo $rsdoc['document_type'];?></span>
 					                              <p> 
 					                               <?php if ($total_late_day>0){?>
@@ -416,6 +419,7 @@ $teacher_id = $session_t->teacher_id;
 					                              <span ><?php echo $rsdoc['teacher_code'];?>  
 					                              </span><br />
 					                              <span class="title bold" ><?php echo $rsdoc['teacher_name_kh'];?></span><br />
+					                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rsdoc['tel'];?></span><br />
 					                              <span class="title" ><?php echo $rsdoc['document_type'];?></span>
 					                              <p> 
 					                               <?php if ($total_late_day>0){?>

@@ -54,7 +54,6 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			
 			if($dbset['scoreresulttye']==1){
 				$db = new Foundation_Model_DbTable_DbScore();//by subject
 			}else{
@@ -110,12 +109,16 @@ class Foundation_ScoreController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
+		
 		$this->view->score_id = $id;
-		$this->view->score = $_model->getScoreById($id);
+		$row = $_model->getScoreById($id);
+		$this->view->score = $row;
 		$this->view->student= $_model->getStudentSccoreforEdit($id);
 		$this->view->rows_scor=$_model->getScoreStudents($id);
 		$data=$this->view->rows_detail=$_model->getSubjectById($id);
 		$this->view->row_g=$_model->getGroupStudent($id);
+		
+		$this->view->subjectGroup = $_model->getSubjectByGroup($row['group_id'],null,$row['exam_type']);
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_branch=$db_global->getAllBranch();

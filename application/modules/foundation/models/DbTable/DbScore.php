@@ -43,18 +43,36 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 // 			$dbpush->getTokenUser($_data['group'],null, 4);
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
-				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
+// 				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
+// 				if(!empty($ids))foreach ($ids as $i){
+// 					foreach ($rssubject as $index => $rs_parent){
+// 						$arr=array(
+// 								'score_id'=>$id,
+// 								'group_id'=>$_data['group'],
+// 								'student_id'=>$_data['student_id'.$i],
+// 								'subject_id'=> $rs_parent['subject_id'],
+// 								'score'=> $_data["score_".$i."_".$index],
+// 								'status'=>1,
+// 								'user_id'=>$this->getUserId(),
+// 								'is_parent'=> $rs_parent["is_parent"]
+// 						);
+// 						$this->_name='rms_score_detail';
+// 						$this->insert($arr);
+// 					}
+// 				}
+				$rssubject = $_data['selector'];
 				if(!empty($ids))foreach ($ids as $i){
-					foreach ($rssubject as $index => $rs_parent){
+					foreach ($rssubject as $subject){
 						$arr=array(
 								'score_id'=>$id,
 								'group_id'=>$_data['group'],
 								'student_id'=>$_data['student_id'.$i],
-								'subject_id'=> $rs_parent['subject_id'],
-								'score'=> $_data["score_".$i."_".$index],
+								'amount_subject'=>$_data['amount_subject'.$i],
+								'subject_id'=> $subject,
+								'score'=> $_data["score_".$i."_".$subject],
 								'status'=>1,
 								'user_id'=>$this->getUserId(),
-								'is_parent'=> $rs_parent["is_parent"]
+								'is_parent'=> 1
 						);
 						$this->_name='rms_score_detail';
 						$this->insert($arr);
@@ -94,18 +112,36 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		
 		if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
-				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
+// 				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
+// 				if(!empty($ids))foreach ($ids as $i){
+// 					foreach ($rssubject as $index => $rs_parent){
+// 						$arr=array(
+// 								'score_id'=>$id,
+// 								'group_id'=>$_data['group'],
+// 								'student_id'=>$_data['student_id'.$i],
+// 								'subject_id'=> $rs_parent['subject_id'],
+// 								'score'=> $_data["score_".$i."_".$index],
+// 								'status'=>1,
+// 								'user_id'=>$this->getUserId(),
+// 								'is_parent'=> $rs_parent["is_parent"]
+// 						);
+// 						$this->_name='rms_score_detail';
+// 						$this->insert($arr);
+// 					}
+// 				}
+				$rssubject = $_data['selector'];
 				if(!empty($ids))foreach ($ids as $i){
-					foreach ($rssubject as $index => $rs_parent){
+					foreach ($rssubject as $subject){
 						$arr=array(
 								'score_id'=>$id,
 								'group_id'=>$_data['group'],
 								'student_id'=>$_data['student_id'.$i],
-								'subject_id'=> $rs_parent['subject_id'],
-								'score'=> $_data["score_".$i."_".$index],
+								'amount_subject'=>$_data['amount_subject'.$i],
+								'subject_id'=> $subject,
+								'score'=> $_data["score_".$i."_".$subject],
 								'status'=>1,
 								'user_id'=>$this->getUserId(),
-								'is_parent'=> $rs_parent["is_parent"]
+								'is_parent'=> 1
 						);
 						$this->_name='rms_score_detail';
 						$this->insert($arr);
@@ -312,7 +348,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		  (SELECT (CASE WHEN s.stu_khname IS NULL THEN s.stu_enname ELSE s.stu_khname END) FROM `rms_student` s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
 		  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
 		  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-		  total_score,score,note				
+		  total_score,score,note,sd.amount_subject				
 		FROM
 	 	 rms_score_detail AS sd 
 		WHERE sd.score_id =$score_id 
@@ -380,9 +416,47 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}	
 	
+	function checkSubjectScore($score_id,$subject){
+		$db = $this->getAdapter();
+		$sql=" SELECT
+			sd.student_id,	
+			sd.subject_id,
+			(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
+			(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
+			sd.score ,
+			sd.`is_parent`
+			FROM
+			rms_score_detail AS sd
+			WHERE sd.score_id =$score_id	
+			AND sd.`subject_id` =$subject	
+			GROUP BY sd.`subject_id` LIMIT 1";
+		return $db->fetchRow($sql);
+	}
 	
-	
-	
+	function getStudentScoreBySubjectID($score_id,$student_id,$suj_id){
+		if($student_id==null){
+			return false;
+		}
+		$db = $this->getAdapter();
+		$sql="SELECT
+		sd.student_id,
+		(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
+		(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
+		(SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
+		sd.subject_id,
+		(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id=sd.`subject_id` LIMIT 1) AS parent,
+		(SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
+		(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
+		(SELECT `subject_titlekh` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titlekh,
+		sd.score ,
+		sd.`is_parent`
+		FROM
+		rms_score_detail AS sd
+		WHERE sd.score_id = $score_id
+		AND sd.`subject_id` = $suj_id
+		AND sd.`student_id`= $student_id ORDER BY sd.subject_id ASC LIMIT 1";
+		return $db->fetchRow($sql);
+	}
 	
 }
 

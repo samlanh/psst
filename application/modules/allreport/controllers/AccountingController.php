@@ -1205,4 +1205,30 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$_db = new Application_Form_FrmGlobal();
 		$this->view->header = $_db->getHeaderReceipt($branch_id);
 	}
+	public function rptIncomediscountAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'adv_search' =>'',
+						'branch_id' =>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+				);
+			}
+			$db = new Registrar_Model_DbTable_DbRptByType();
+			$this->view->row = $db->getIncomeDiscount($search,1);
+				
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
+	}
 }

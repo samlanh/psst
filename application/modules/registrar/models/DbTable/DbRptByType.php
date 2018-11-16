@@ -62,6 +62,7 @@ class Registrar_Model_DbTable_DbRptByType extends Zend_Db_Table_Abstract
 				(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=itemdetail_id LIMIT 1) AS item_name,
 				SUM(sp.subtotal) subtotal,
 				SUM(sp.extra_fee) extra_fee,
+				SUM(sp.paidamount) paidamount,
 				SUM(sp.discount_amount) discount_amount,
 				SUM(sp.discount_percent) discount_percent
 				

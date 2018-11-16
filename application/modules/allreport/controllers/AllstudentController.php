@@ -398,65 +398,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 	}
-	
-	public function rptTeacherAction(){
-			$db = new Allreport_Model_DbTable_DbTeacher();
-			if($this->getRequest()->isPost()){
-				$_data=$this->getRequest()->getPost();
-				$search = array(
-						'title'  => $_data['title'],
-						'degree' => $_data['degree'],
-						'nationality' => $_data['nationality'],
-						'staff_type' => $_data['staff_type'],
-						'teacher_type' => $_data['teacher_type'],
-						'branch_id' => $_data['branch_id'],
-						'status' => $_data['status_search']
-				);
-			}
-			else{
-				$search = array(
-						'title' => '',
-						'degree' => '',
-						'staff_type' => '',
-						'nationality' => '',
-						'branch_id' => '',
-						'teacher_type' => -1,
-						'status' => -1);
-			}
-		
-		$this->view->rs= $db->getAllTeacher($search);
- 
-		$key = new Application_Model_DbTable_DbKeycode();
-		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-		
-		$frm = new Application_Form_FrmOther();
-		$this->view->add_major = $frm->FrmAddMajor(null);
-		$frm = new Global_Form_FrmSearchMajor();
-		$this->view->frm_search = $frm->frmSearchTeacher($search);
-		Application_Model_Decorator::removeAllDecorator($frm);
-	}
-	
-	public function rptTeacheralertAction(){
-		$db = new Global_Model_DbTable_DbTeacher();
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search = array(
-					'title' => '',
-					'degree' => '',
-					'nationality' => '',
-					'branch_id' => '',
-					'end_date'=>date('Y-m-d'),
-					);
-		}
-		$this->view->rs= $db->getTeachDocumentAlert($search);
-		$frm = new Application_Form_FrmOther();
-		$this->view->add_major = $frm->FrmAddMajor(null);
-		$frm = new Global_Form_FrmSearchMajor();
-		$this->view->frm_search = $frm->frmSearchTeacher();
-		Application_Model_Decorator::removeAllDecorator($frm);
-	}
 // 	public function rptAttendenceHighschoolAction(){
 // 		if($this->getRequest()->isPost()){
 // 			$search=$this->getRequest()->getPost();
@@ -859,6 +800,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$pre = explode(",", $row['prev_concern']);
 		$prevCon="";
 		if (!empty($pre)) foreach ($pre as $a){
+			if(empty($a)){continue;}
 			$title = $db->getPrevTilteByKeyCode($a);
 			if (empty($prevCon)){
 				$prevCon = $title;

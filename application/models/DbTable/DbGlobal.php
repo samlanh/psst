@@ -1025,7 +1025,7 @@ function getAllgroupStudyNotPass($action=null){
    	FROM rms_student
    	WHERE (stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=3 $branch_id  ";
    	if (!empty($branch)){
-   		$sql.=" AND branch_id = $branch";
+   		$sql.=" AND branch_id = $branch ";
    	}
    	$sql.=" ORDER BY stu_id DESC";
    	return $db->fetchAll($sql);

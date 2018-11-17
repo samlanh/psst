@@ -102,6 +102,12 @@ dojo.ready(function(){
 				text-overflow: ellipsis;
 				display: inline-block;
 			}
+			td.bg_1 {
+			    background: #fffbcb73;
+			}
+			td.bg_2 {
+			    background: #fbbdbd73;
+			}
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr style="border-bottom: 1px solid #000;">
@@ -149,9 +155,9 @@ dojo.ready(function(){
 								<td><?php echo $tr->translate("SEX");?></td>
 								<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<td><?php echo $tr->translate("AVERAGE");?></td>
-								<td style="width:100px;"><?php echo $tr->translate("MENTION");?></td>
-								<td style="width:100px;"><?php echo $tr->translate("RANK");?></td>
-								<td><?php echo $tr->translate("RESULT");?></td>
+								<td  style="width:100px;"><?php echo $tr->translate("MENTION");?></td>
+								<td class="red bold" style="width:100px;"><?php echo $tr->translate("RANK");?></td>
+								<td>និទ្ទេស និង​ មូលវិចារ<?php //echo $tr->translate("RESULT");?></td>
 							</tr>
 							
 							<?php } $i++;?>
@@ -159,7 +165,7 @@ dojo.ready(function(){
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 							    <td align="center" style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_code'];?>&nbsp;</td>
 								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?$rs['stu_khname']:$rs['stu_enname'];?>&nbsp;</td>
-								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
+								<td align="center" class="bg_<?php echo $rs['sex'];?>">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
 									$amount_subject=0;
 									if($this->data['scoreresulttye']==1){
@@ -190,7 +196,7 @@ dojo.ready(function(){
 								</td>
 								<td align="center"><?php echo number_format($average,2);?></td>
 								<td align="center"><?php echo calCulateGrade($average,$rs['max_score']);?></td>
-								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
+								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<td align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
 									<?php if($average>=($rs['max_score']/2)){
 										echo $tr->translate("STUDENT_PASS");
@@ -212,25 +218,28 @@ dojo.ready(function(){
 								$old_groupid=$rs['group_id']; ?>
 							<?php }}?>
 							</table>
+							<br />
 							<?php if (!empty($this->studentgroup)){?>
 									<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Fasthand';font-size: 14px;color:#4839bd;">
 										<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;"><?php echo $tr->translate("TOTAL_STUDENT");?>  : <?php echo $i." ".$tr->translate("STUDENT_UNIT");?></td>
-											<td width="33%" valign="top" style="font-family:'Khmer os battambang';color:red;"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php echo $f." ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
-											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
+											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;"><span style="display: inline-block; width: 70%;"><?php echo $tr->translate("TOTAL_STUDENT");?> : </span><span style="color:red; display: inline-block; text-align: right; width: 28%;"><?php echo $i." ".$tr->translate("STUDENT_UNIT");?></span></td>
+											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+											<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top"><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE");?> :</span> <span style="color:red; display: inline-block; width: 10%; text-align: right;"><?php echo $i-$f." ".$tr->translate("STUDENT_UNIT");?></span><span style="display: inline-block; width: 15%;"></span><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE");?> :</span> <span style="color:red; display: inline-block; width: 10%; text-align: right;"><?php echo $f." ".$tr->translate("STUDENT_UNIT");?></span> &nbsp;</td>
 										</tr>
 										<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;">សិស្សជាប់មធ្យមភាគ  : <?php echo $count_pass." ".$tr->translate("STUDENT_UNIT");?></td>
-											<td width="33%" valign="top" style="font-family:'Khmer os battambang';color:red;"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php echo $pass_female." ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
-											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
+											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;"><span style="display: inline-block; width: 70%;">សិស្សជាប់មធ្យមភាគ  : </span><span style="color:red; display: inline-block; text-align: right; width: 28%;"><?php echo $count_pass." ".$tr->translate("STUDENT_UNIT");?></span></td>
+											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+											<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top"><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE");?> :</span> <span style="color:red; display: inline-block; width: 10%; text-align: right;"><?php echo $count_pass-$pass_female." ".$tr->translate("STUDENT_UNIT");?></span><span style="display: inline-block; width: 15%;"></span><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE");?> :</span> <span style="color:red; display: inline-block; width: 10%; text-align: right;"><?php echo $pass_female." ".$tr->translate("STUDENT_UNIT");?></span>&nbsp;</td>
 										</tr>
 										<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;">សិស្សក្រោមមធ្យមភាគ : <?php echo $count_fail." ".$tr->translate("STUDENT_UNIT");?></td>
-											<td width="33%" valign="top" style="font-family:'Khmer os battambang';color:red;"><?php echo $tr->translate("FEMALE");?> : <?php echo $fail_female." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</td>
-											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
+											<td valign="top" width="33%" style="font-family:'Khmer os battambang';font-size:14px;text-align: left; padding-left: 3%;"><span style="display: inline-block; width: 70%;">សិស្សក្រោមមធ្យមភាគ  : </span><span style="color:red; display: inline-block; text-align: right; width: 28%;"><?php echo $count_fail." ".$tr->translate("STUDENT_UNIT");?></span></td>
+											<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+											<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap;" valign="top"><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE");?> :</span> <span style="color:red; display: inline-block; width: 10%; text-align: right;"><?php echo $count_fail-$fail_female." ".$tr->translate("STUDENT_UNIT");?></span><span style="display: inline-block; width: 15%;"></span><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE");?> :</span> <span style="color:red; display: inline-block; width: 10%; text-align: right;"><?php echo $fail_female." ".$tr->translate("STUDENT_UNIT");?></span>&nbsp;</td>
 										</tr>
 										<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer MEF2';font-size:16px;text-align: center;">បានឃើញ និងឯកភាព</td>
+											<td valign="top" width="33%" style="font-family:'Khmer MEF2';font-size:16px;text-align: center;">
+												<br />
+												បានឃើញ និងឯកភាព</td>
 											<td width="33%" valign="top">&nbsp;</td>
 											<td width="33%" style="color:#1949d6;white-space: nowrap;font-family:'Khmer os battambang'" valign="top">ភ្នំពេញថ្ងៃទី.............ខែ...............ឆ្នាំ.............។</td>
 										</tr>

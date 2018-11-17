@@ -6,6 +6,10 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	
+	$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
+	$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
+	$urlScoreDetail = $this->baseUrl()."/allreport/score/rpt-score-detail/id/";
 	$day = array(
 		"Mon" =>'ច័ន្ទ',
 		"Tue" =>'អង្គារ',
@@ -29,7 +33,7 @@
 				"11"=>"វិច្ឆិកា",
 				"12"=>"ធ្នូ"
 			);
-?>	
+?>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
@@ -41,7 +45,7 @@ dojo.ready(function(){
 		    id: "group_name",
 		    name: "group_name",
 		    class:'fullside',  
-		    value:'<?php echo $this->search['group_name'];?>',         
+		    value:'<?php if (!empty($this->search['group_name'])){ echo $this->search['group_name'];}?>',         
 		    required:'true',
 		    placeHolder:"Selected Group Name",          
 		    onChange: function() {  
@@ -49,6 +53,7 @@ dojo.ready(function(){
 		}, "group_name");
 });
 </script>
+
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 <form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-bac-monthly')); ?>" dojoType="dijit.form.Form" method="post">
 	<table style="width:100%;margin: 0 auto;">
@@ -190,4 +195,38 @@ dojo.ready(function(){
 			</table>
 		</div>
 	</div>
+	
+<script type="text/javascript">
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+		
+			var m = "clicked: " + key;
+			if(key=="outstanding"){
+				url='<?php echo $urlOutStanding;?>';
+			}else if(key=="scoreresult"){
+				url='<?php echo $urlScoreResult;?>';
+			}else if(key=="scoredetail"){
+				url='<?php echo $urlScoreDetail;?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
+			"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
+			"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+
+var recordid ='';
+function gotoAction(){
+	window.open(url+row);
+}
 </script> 

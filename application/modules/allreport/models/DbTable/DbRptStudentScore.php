@@ -332,13 +332,13 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	if(!empty($search['session'])){
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
-   	$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` ORDER BY average DESC ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC 	";
+   	$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` 
+   		ORDER BY average DESC ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC	";
    	if($limit==2){
    		$limit = " limit 5";
    	}else{
    		$limit = " ";
    	}
-//    	echo $sql.$where.$order.$limit."testing 1<br/ ><br/ ><br/ >";
    	return $db->fetchAll($sql.$where.$order.$limit);
    }
    public function getStundetScorebySemester($group_id,$semester){ // fro rpt-score by semester I+II

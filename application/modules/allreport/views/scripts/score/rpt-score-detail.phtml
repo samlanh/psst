@@ -195,17 +195,18 @@ dojo.ready(function(){
 								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?$rs['stu_khname']:$rs['stu_enname'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
+								$total_score=0;
 									if($this->data['scoreresulttye']==1){
 									$total_score = 0; 
-// 									$subj = $db->getSubjectScoreGroup($rs['group_id'],null,$rs['exam_type']); 
 									if (!empty($subj)) foreach ($subj as $subject){
 								?>
 								<td align="center">
 									<?php 
 										$score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); 
 										$tscore_subject = number_format($score['score'],2);
-										echo $tscore_subject;//str_replace(".00", "", $tscore_subject);
+										echo $tscore_subject;
 										$total_score = $total_score + $tscore_subject;
+										$amount_subject = $score['amount_subject'];
 									?>
 								</td>
 								<?php }
@@ -217,15 +218,13 @@ dojo.ready(function(){
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
 									}//
-									//echo $rs['total_score'];exit();
 									$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
 								?>
 								<td align="center"><?php
 								$total_score = number_format($total_score,2);
-								echo $total_score;//str_replace(".00", "", $total_score);?></td>
+								echo $total_score;?></td>
 								<?php 
-									$total_subject =($rs['exam_type']==2)?$rs['amount_subjectsem']:$rs['amount_subject'];//$rs['exam_type']==2 for subject semester else for month
-									$average = number_format($rs['total_score']/$total_subject,2);//amount_subjectsem
+									$average = number_format($rs['total_score']/$amount_subject,2);//amount_subjectsem
 								?>
 								<td align="center"><?php echo number_format($average,2);?></td>
 								<td align="center"><?php echo calCulateGrade($average,$rs['max_score']);?></td>
@@ -238,7 +237,9 @@ dojo.ready(function(){
 									}else{
 										$count_fail++;
 										echo $tr->translate("STUDENT_FAIL");
-										$fail_female = $fail_female+1;
+										if($rs['sex']==2){
+											$fail_female = $fail_female+1;
+										}
 									}?>
 								</td>
 							</tr>

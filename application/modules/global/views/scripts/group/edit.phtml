@@ -691,7 +691,8 @@ function addRow() {
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
-		temp+='<th><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
+		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
+		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
 		temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 		temp+='<th><?php echo $tr->translate("TEACHER");?></th>';
@@ -764,6 +765,8 @@ function getSubjectByDegree(){
 							temp+='<th><?php echo $tr->translate("DEL");?></th>';
 							temp+='<th><?php echo $tr->translate("N_O");?></th>';
 							temp+='<th><?php echo $tr->translate("SUBJECT_STUDY");?></th>';
+							temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>';
+							temp+='<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>';
 							temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 							temp+='<th><?php echo $tr->translate("STATUS");?></th>';
 							dojo.query("#head-title").append(temp);

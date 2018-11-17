@@ -1,0 +1,42 @@
+<?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  echo $this->headTitle($tr->translate("RPT_FOUNDATION"));
+?>
+  <style>
+  ul.link-rpt li a {
+	color: #3A3939;
+    height: 50px;
+  	width:180px;
+    display: block;
+    padding: 10px;
+    background: #D6D6D6;
+  	font-family: 'Kh Battambang','Khmer Battambang' !important;
+  	text-align: center;
+  	word-wrap: break-word;
+  } 
+    ul.link-rpt li {
+	float:left; margin:10px;
+    list-style: none;
+    border:1px solid #B1B0AF;
+    word-wrap: break-word;
+  } 
+  .dijitReset, .dijitInline  ,.dijitButton {
+	width: 200px !important;
+  }
+  </style>
+  <div style="background:#ccc; width: 100%;">
+  <ul class="link-rpt">
+       <?php	       
+       	   $db_user=new Application_Model_DbTable_DbUsers();
+	       $report_url=$db_user->getArrAclReport(1,'allform');
+	       if(!empty($report_url)){
+		       foreach($report_url as $url){
+		       if($url['controller']=='allform' AND $url['action']!='index'){
+	   ?>
+		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+		        <?php echo $tr->translate($url['label']);?></a></li>
+		        <?php }?>
+	       <?php }
+       	  }?>
+    </ul>
+  </div>
+  <div style="clear: both;"></div>  

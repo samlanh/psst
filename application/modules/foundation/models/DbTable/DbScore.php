@@ -299,7 +299,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				WHERE 
 					sgh.type = 1
 					and sgh.`group_id` = ".$group_id;
-		$order=" ORDER BY (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+		$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC, (SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
 		return $db->fetchAll($sql.$order);
 	}
 	function getSubjectByGroup($group_id,$teacher_id=null,$exam_type=1){
@@ -354,7 +354,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		WHERE sd.score_id =$score_id 
 		GROUP BY sd.`student_id` order by 
 		(SELECT s.`stu_code` FROM `rms_student`AS s 
-		WHERE s.`stu_id`=sd.`student_id`) DESC ";
+		WHERE s.`stu_id`=sd.`student_id`) ASC ";
 		return $db->fetchAll($sql);
 	}
 	function getSubjectById($id){

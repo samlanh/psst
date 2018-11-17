@@ -271,6 +271,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	$db = $this->getAdapter();
    	$sql="SELECT
 		   	s.`id`,
+		   	g.`branch_id`,
 		   	sd.`group_id`,
 		   	g.`group_code`,
 		   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year,
@@ -697,9 +698,9 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	$db = $this->getAdapter();
    	$sql="SELECT
      sd.`score`,sd.`subject_id`
+     ,sd.amount_subject
 	 FROM  `rms_score_detail` AS sd
-	 WHERE sd.`score_id`=$score_id AND sd.`student_id`=$student_id  AND sd.`subject_id`=$subject_id
-   	";
+	 WHERE sd.`score_id`=$score_id AND sd.`student_id`=$student_id  AND sd.`subject_id`=$subject_id ";
    	return $db->fetchRow($sql);
    }
    function getAllgroupStudyNotPass(){

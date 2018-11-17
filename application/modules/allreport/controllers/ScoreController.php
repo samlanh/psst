@@ -98,6 +98,11 @@ public function init()
     	$this->view->form_search=$form;
     	$key = new Application_Model_DbTable_DbKeycode();
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+    	
+    	$frm = new Application_Form_FrmGlobal();
+    	$rs = $db->getStundetScoreDetailGroup($search,$id,1);
+    	$branch_id = $rs[0]['branch_id'];
+    	$this->view->header = $frm->getHeaderReceipt($branch_id);
     }
     function monthlyOutstandingStudentAction(){
     	$id=$this->getRequest()->getParam("id");

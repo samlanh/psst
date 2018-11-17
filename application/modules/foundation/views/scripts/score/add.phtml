@@ -139,7 +139,7 @@ function filterStudent(){
 				  for(j=0;j<subject.length;j++){
 	      			  no++;
 	      			  stringsname = subject[j].subject_titleen.replace(' ','');
-		      	      temp+='<td class="rotate" title="'+stringsname+'"><div><span>&nbsp;<input checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+j+');"  class="checkbox" id="subject'+j+'" value="'+subject[j].subject_id+'"  name="selector[]"/>&nbsp;'+no+'-'+stringsname+'&nbsp;</span></div></td>';
+		      	      temp+='<td class="rotate" title="'+stringsname+'"><div><span>&nbsp;<input checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].subject_id+');"  class="checkbox" id="subject'+subject[j].subject_id+'" value="'+subject[j].subject_id+'"  name="selector[]"/>&nbsp;'+no+'-'+stringsname+'&nbsp;</span></div></td>';
 	              }
 				  temp+='<td class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
 				  temp+='<td class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</thead></tr>';
@@ -154,7 +154,7 @@ function filterStudent(){
 					temp += '<td style="min-width:100px;">&nbsp;'+data[i].stu_name+'&nbsp;</td>';
 					temp += '<td>&nbsp;'+gender(data[i].sex)+'&nbsp;</td>';
 					for(j=0;j<subject.length;j++){
-						temp += '<td id="score_'+j+'"><input required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+j+'"  name="score_'+inx+'_'+j+'" /></td>';
+						temp += '<td id="score_'+j+'"><input required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /></td>';
 					}
 					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+subject.length+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
@@ -191,10 +191,11 @@ function CheckSubjectExam(subject_id){
 		if(rowId!=''){ 
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
-				dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',true); 
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',false);
+				dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
+				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
+				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',true); 
+				
 			}
 		}
 	}else{
@@ -202,10 +203,11 @@ function CheckSubjectExam(subject_id){
 		if(rowId!=''){ 
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
+				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',true);
 				dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',false); 
-				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',true);
+				
 			}
 		}
 	}

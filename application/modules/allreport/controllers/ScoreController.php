@@ -1,15 +1,12 @@
 <?php
 class Allreport_ScoreController extends Zend_Controller_Action {
-	
-	
-public function init()
+	public function init()
     {    	
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function indexAction(){	
-		
 	}
     function rptScoreBacMonthlyAction(){
     	if($this->getRequest()->isPost()){
@@ -89,9 +86,11 @@ public function init()
     	}
     	$this->view->search=$search;
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id,1);
+    	$this->view->studentgroup = $db->getStundetScoreResult($search,$id,1);
+    	
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
     	$this->view->month = $db->getAllMonth();
+    	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
@@ -121,16 +120,17 @@ public function init()
     	}
     	$this->view->search=$search;
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id,2);
+    	$this->view->studentgroup = $db->getStundetScoreResult($search,$id,2);
+    	
     	$this->view->all_student = $db->getStundetScoreDetailGroup($search,$id,1);
+    	
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
     	$this->view->month = $db->getAllMonth();
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    }
-    
+    }   
     public function studentGroupAction()
     {
     	if($this->getRequest()->isPost()){
@@ -157,12 +157,11 @@ public function init()
     	$forms=$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($forms);
     	$this->view->form_search=$form;
-    
+    	    
     	$_db = new Global_Model_DbTable_DbGroup();
     	$teacher = $_db->getAllTeacher();
     	$this->view->teacher = $teacher;
     }
-    
     function rptResultbysemesterAction(){
     	$group_id=$this->getRequest()->getParam("id");
     	$type=$this->getRequest()->getParam("type");
@@ -170,16 +169,14 @@ public function init()
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	$result_semester = $db->getStundetScorebySemester($group_id,$type);//ប្រើតែក្នុងលទ្ធផលប្រចាំខែ និង តារាងកិត្តិយស
     	$array_score = array();
-    	if(!empty($result_semester)){
-    		foreach ($result_semester as $key => $row){
-    			$array_score[$key]['score_average'] = (($row['total_score']/$row['amount_subject'])+($row['total_exam']/$row['amount_subject']))/2;
-    		}
-    	}
     	if(empty($result_semester)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
     	}
-    	array_multisort($array_score, SORT_DESC, $result_semester);
     	$this->view->studentgroup = $result_semester;
+    	
+    	$frm = new Application_Form_FrmGlobal();
+    	$branch_id = $result_semester[0]['branch_id'];
+    	$this->view->header = $frm->getHeaderReceipt($branch_id);
     }
     
     function semesterOutstandingStudentAction(){
@@ -187,18 +184,10 @@ public function init()
     	$semester=$this->getRequest()->getParam("type");
     	$search= array();
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$result_semester = $db->getStundetScorebySemester($group_id,$semester);
-    	$array_score = array();
-    	if(!empty($result_semester)){
-    		foreach ($result_semester as $key => $row){
-    			$array_score[$key]['score_average'] = (($row['total_score']/$row['amount_subject'])+($row['total_exam']/$row['amount_subject']))/2;
-    		}
-    	}
+    	$result_semester = $db->getStundetScorebySemester($group_id,$semester);    	
     	if(empty($result_semester)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
     	}
-    	
-    	array_multisort($array_score, SORT_DESC, $result_semester);
     	$this->view->studentgroup = $result_semester;
     }
     

@@ -147,7 +147,7 @@ dojo.ready(function(){
 					$colspan=2;
 				}?>
 					<td colspan="3" id="exportExcel" valign="top">
-						<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:4px double #5a71b5;"  border="1" >
+						<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:4px double #5a71b5;" border="1" >
 							<tr class="cheader" align="center" >
 								<td><?php echo $tr->translate("NUM");?></td>
 								<td style="width:100px;"><?php echo $tr->translate("ID_NUMBER");?></td>
@@ -159,7 +159,6 @@ dojo.ready(function(){
 								<td class="red bold" style="width:100px;"><?php echo $tr->translate("RANK");?></td>
 								<td>និទ្ទេស និង​ មូលវិចារ<?php //echo $tr->translate("RESULT");?></td>
 							</tr>
-							
 							<?php } $i++;?>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
@@ -171,14 +170,15 @@ dojo.ready(function(){
 									if($this->data['scoreresulttye']==1){
 									$total_score = 0; 
 									if (!empty($subj)) foreach ($subj as $subject){
+										
 										$score = $db->getScoreBySubject($rs['id'],$rs['student_id'],$subject['subject_id']); 
 										$tscore_subject = number_format($score['score'],2);
 										$total_score = $total_score + $tscore_subject;
-										$amount_subject = $score['amount_subject'];
+// 										$amount_subject = $score['amount_subject'];
 									 }
 								?>
 								<?php }
-									if($rs['average']==$old_totalscore){
+									if($rs['total_avg']==$old_totalscore){
 										$duplicate=$duplicate+1;
 									}else{
 										$old_rank=$old_rank+1+$duplicate;
@@ -191,11 +191,11 @@ dojo.ready(function(){
 										$total_score = number_format($total_score,2);
 										echo $total_score;
 // 										$total_subject =($rs['exam_type']==2)?$rs['amount_subjectsem']:$rs['amount_subject'];
-										$average = number_format($rs['total_score']/$amount_subject,2);
+										$average = number_format($rs['total_avg'],2);
 									?>
 								</td>
-								<td align="center"><?php echo number_format($average,2);?></td>
-								<td align="center"><?php echo calCulateGrade($average,$rs['max_score']);?></td>
+								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
+								<td align="center"><?php echo calCulateGrade($rs['total_avg'],$rs['max_score']);?></td>
 								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<td align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
 									<?php if($average>=($rs['max_score']/2)){
@@ -214,7 +214,7 @@ dojo.ready(function(){
 								</td>
 							</tr>
 							<?php 
-								$old_totalscore = $rs['average'];
+								$old_totalscore = $rs['total_avg'];
 								$old_groupid=$rs['group_id']; ?>
 							<?php }}?>
 							</table>

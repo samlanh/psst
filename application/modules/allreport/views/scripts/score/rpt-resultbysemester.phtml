@@ -33,10 +33,9 @@
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.data.ObjectStore");
 	dojo.ready(function(){
-		
 	});
 </script>
-<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-detail')); ?>" dojoType="dijit.form.Form" method="post">
+<form  action="" dojoType="dijit.form.Form" method="post">
 </form>
 	<div style="background: #fff;width:28cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 		<div id="divPrint">
@@ -45,6 +44,7 @@
 				line-height: 21px; font-size: 15px !important;
 				font-family: 'Times New Roman','Khmer OS Battambang';
 				white-space: nowrap;
+				color:#1949d6;
 			}
 			.padding{ padding: 0 1px !important;}
 			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
@@ -57,20 +57,24 @@
 		</style>
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
-				$semester_str = array(1=>"I",2=>"II");
+							$semester_str = array(1=>"I",2=>"II");
 							 $old_groupid=0; $i=0; $count_fail=0;  $old_totalscore = 0; $old_rank=0;
 							 $duplicate=0;$count_pass=0;
 							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
 								if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");}
-// 								$subj = $db->getSubjectScoreGroup($rs['group_id']);
 							?>
 							<?php if ($old_groupid!=$rs['group_id']){  ?>
 						    <?php $i=0; $count_fail=0;?>
 				<tr>
-					<td width="20%"><img style="height: 90px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"></td>
+					<td colspan="3">
+						<?php echo $this->header;?>
+					</td>
+				</tr>
+				<tr>
+					<td width="20%"></td>
 					<td colspan="1" align="center" style="border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 						<strong​​ style="font-weight:bold;color:red; font-size: 18px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("STUDENT_SCORE_SEMESTER_REPORT");?>: <?php echo $semester_str[$rs['for_semester']];?></strong><br />
-						<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
+						<strong​​ style="font-weight:bold;color:#4839bd; font-size: 13px;font-family:'Times New Roman','Khmer OS Bokor';">
 							<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
 							<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> ,
 							<br />
@@ -85,8 +89,8 @@
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:1px solid #000;"  border="1" >
-							<tr class="cheader" align="center"  style="background: #ccd9ff; font-size:14px;font-family: 'Times New Roman','Khmer OS Bokor','Khmer OS Battambang';">
+						<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:4px double #5a71b5;"  >
+							<tr class="cheader" align="center"  style="background: #fffbcb; font-size:14px;font-family: 'Times New Roman','Khmer OS Bokor','Khmer OS Battambang';">
 								<td><?php echo $tr->translate("NUM");?></td>
 								<td style="width:90px;"><?php echo $tr->translate("ID_NUMBER");?></td>
 								<td><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?></td>
@@ -108,28 +112,25 @@
 								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
 									$total_score = 0; 
+									$avg_semester = $rs['avg_forsemester'];
+									$avg_allmonth = $rs['avg_formonth'];
+									$score_average = ($avg_semester+$avg_allmonth)/2;
+									if($score_average==$old_totalscore){
+										$duplicate=$duplicate+1;
+									}else{
+										$old_rank=$old_rank+1+$duplicate;
+										$duplicate=0;
+									}
 								?>
-								<?php 
-								$score_average = (($rs['total_exam']/$rs['amount_subject'])+($rs['total_score']/$rs['amount_subject']))/2;
-								if($score_average==$old_totalscore){
-									$duplicate=$duplicate+1;
-								}else{
-									$old_rank=$old_rank+1+$duplicate;
-									$duplicate=0;
-								}
-								$avg_semester = $rs['total_exam']/$rs['amount_subject_sem'];
-								?>
-								<td align="center"><strong><?php echo number_format($avg_semester,2);?></strong></td>
-								<?php 
-									$avg_allmonth = ($rs['total_score']/$rs['amount_subject'])/$rs['amount_month'];
-								?>
+								<td align="center"><strong><?php echo number_format($avg_semester,2);;?></strong></td>
 								<td align="center"><strong><?php echo number_format($avg_allmonth,2); ?></strong></td>
 								<td align="center"><strong><?php echo number_format(($avg_semester+$avg_allmonth)/2,2);?></strong></td>
 								<td align="center" style="color:red;"><label id="record<?php echo $i;?>"></label><strong><?php echo $old_rank;?></strong></td>
 								<td align="center"></td>
 							</tr>
-							<?php $old_groupid=$rs['group_id'];
-							$old_totalscore = $score_average;
+							<?php 
+								$old_groupid=$rs['group_id'];
+								$old_totalscore = $score_average;
 							?>
 							<?php }}?>
 							<?php if (!empty($this->studentgroup)){
@@ -148,8 +149,7 @@
 								</tr>
 								<?php }?>
 								<tr>
-									<td align="right" colspan="9" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									</td>
+									<td align="right" colspan="9" style="  border-left: 1px solid #fff; border-right: 1px solid #fff;"></td>
 								</tr>
 								<tr>
 									<td align="right" colspan="9" style="  border: 1px solid #fff; border-right: 1px solid #fff;">
@@ -176,12 +176,8 @@
 						</table>
 					</td>
 				</tr>
-				
-				
-				
 			</table>
 		</div>
-		
 		<table>
 			<tr>
 				<td colspan="3"><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="button" onclick="printSelected();"><?php echo $tr->translate("OUTSTANDING_STUDENT");?></button></td>
@@ -189,29 +185,19 @@
 		</table>
 		
 	</div>
-	
-	
 <script>
 	function printSelected(){
-
 		group = dijit.byId('group_id').get('value');
 		semester = dijit.byId('semester').get('value');
-		
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 			$url_copy =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'semester-outstanding-student'));
 		?>
-	
 		 if(group!='' && semester!=''){
 			window.location.href = '<?php echo $url_copy;?>';
 		 }else{
 			alert('Please select record you want to print');
 			return false;
 		 }
-		
 	}
 </script>	
-	
-	
-	
-	

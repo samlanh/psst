@@ -341,65 +341,139 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	}
    	return $db->fetchAll($sql.$where.$order.$limit);
    }
-   public function getStundetScorebySemester($group_id,$semester){ // fro rpt-score by semester I+II
+   public function getStundetScoreResult($search,$id,$limit){ // fro rpt-score-result
+   
    	$db = $this->getAdapter();
-   	$sql=" SELECT
-			   	s.`id`,
-			   	sd.`group_id`,
+   	$sql="SELECT
+   	s.`id`,
+   	g.`branch_id`,
+   	s.`group_id`,
+   	g.`group_code`,
+   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year,
+   	(SELECT from_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS start_year,
+   	(SELECT to_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS end_year,
+   	(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+   
+   	`g`.`semester` AS `semester`,
+   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+   	(select teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
+   	sm.`student_id`,
+   	st.`stu_code`,
+   	st.stu_khname,
+   	st.stu_enname,
+   	st.`sex`,
+   	st.photo,
+   	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+   	s.exam_type,
+   	s.for_semester,
+   	s.reportdate,
+   	s.title_score,
+   	s.max_score,
+   	
+   	sm.total_score,
+    sm.total_avg,
+   	
+   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
+   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem ,
+   	(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as average_pass
+   
+   	FROM
+   	`rms_score` AS s,
+   	`rms_score_monthly` AS sm,
+   	`rms_student` AS st,
+   	`rms_group` AS g
+   	WHERE
+   	st.`stu_id`=sm.`student_id`
+   	AND g.`id` = s.`group_id`
+
+   	AND s.`id`=sm.`score_id`
+   	AND s.status = 1
+   	AND s.type_score=1 AND s.id = $id ";
+   	$where='';
+   	 
+   	if(!empty($search['group_name'])){
+   		$where.= " AND s.group_id =".$search['group_name'];
+   	}
+   	if(!empty($search['degree'])){
+   		$where.=" AND `g`.`degree` =".$search['degree'];
+   	}
+   	if(!empty($search['study_year'])){
+   		$where.=" AND s.for_academic_year =".$search['study_year'];
+   	}
+   	if(!empty($search['grade'])){
+   		$where.=" AND `g`.`grade` =".$search['grade'];
+   	}
+   	if(!empty($search['session'])){
+   		$where.=" AND `g`.`session` =".$search['session'];
+   	}
+   	$order = "  GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
+   	ORDER BY sm.total_avg DESC ,s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
+   	if($limit==2){
+   		$limit = " limit 5";
+   	}else{
+   		$limit = " ";
+   	}
+   	return $db->fetchAll($sql.$where.$order.$limit);
+   }
+   public function getStundetScorebySemester($group_id,$semester){ // fro rpt-score by semester I+II
+   			$db = $this->getAdapter();
+			   	$sql=" SELECT
+			   	st.`stu_code`,
+			   	st.`stu_enname`,
+			   	st.`last_name`,
+			   	st.`stu_khname`,
+			   	st.`sex`,
+			   	st.photo,			   	 
+			   	g.id AS `group_id`,
 			   	g.`group_code`,
+			   	g.`semester` AS `semester`,
+			   	g.branch_id,
+			    $semester as for_semester,
 			   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
 			   	(SELECT CONCAT(from_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS start_year,
 			   	(SELECT CONCAT(to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS end_year,
-			   	(SELECT rms_items.pass_average FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS pass_score,
-			   	(SELECT rms_items.max_average FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) AS maxi_score,
-			   	
 			   	(SELECT rms_items.title  FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 			   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-			   	
-			   	`g`.`semester` AS `semester`,
 			   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 			   	(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id=g.teacher_id LIMIT 1) AS teacher_name,
-			   	sd.`student_id`,
-			   	st.`stu_code`,
-			   	st.`stu_enname`,
-			   	st.`stu_khname`,
-			   	st.`sex`,
-			   	st.photo,
-			   	s.for_semester,
-			   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject,
-			   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject_sem,
-			   	(SELECT COUNT(ss.id) FROM `rms_score` AS ss WHERE ss.group_id=g.`id` AND ss.exam_type=1 AND ss.for_semester=$semester LIMIT 1) AS amount_month,
-			   	(SELECT SUM(sdd.score) FROM rms_score_detail AS sdd,rms_score as sc 
-			   		WHERE 
-			   		sc.id=sdd.score_id
-			   		AND sc.group_id=$group_id
-			   		AND sc.for_semester =$semester
-			   		AND sc.exam_type=2
-			   		AND sdd.`is_parent`=1 
-			   		AND sdd.student_id = sd.student_id
-			   		GROUP BY sdd.student_id LIMIT 1) AS total_exam,
-			   		SUM(sd.`score`) AS total_score,
-			   		AVG(sd.`score`) as average,
-			   	(SELECT COUNT(ss.id) FROM `rms_score` AS ss WHERE ss.group_id=$group_id AND ss.exam_type=1 AND for_semester = $semester) AS amount_month
-		    FROM 
-		    	`rms_score` AS s,
-			   	`rms_score_detail` AS sd,
-			   	`rms_student` AS st,
-			   	`rms_group` AS g
-		   	WHERE
-		   		s.`id`=sd.`score_id`
-			   	AND st.`stu_id`=sd.`student_id`
-			   	AND g.`id`=s.`group_id`
-			   	AND sd.`is_parent`=1
-			   	AND s.status = 1
-			   	AND s.type_score=1
-		   		AND g.id = $group_id
-		   		AND s.for_semester=$semester
-		   		AND s.exam_type=1 ";
+			   	
+			   	(SELECT sm.total_avg 
+			   		FROM `rms_score_monthly` AS sm,
+			   			  rms_score s
+			   			WHERE 
+			   					s.id = sm.score_id 
+			   					AND s.for_semester=$semester
+			   					AND s.`group_id`=$group_id
+			   					AND s.exam_type=2
+			   					AND sm.student_id=gs.stu_id 
+			   			LIMIT 1) AS avg_forsemester,
+			   			
+			   	(SELECT AVG(sm.total_avg) 
+			   		FROM `rms_score_monthly` AS sm,
+			   			  rms_score s
+			   			WHERE 
+			   					s.id = sm.score_id 
+			   					AND s.for_semester=$semester
+			   					AND s.`group_id`=$group_id
+			   					AND s.exam_type=1
+			   					AND sm.student_id=gs.stu_id 
+			   			LIMIT 1) AS avg_formonth
+			   			
+			   	FROM
+				   	`rms_student` AS st,
+				   	`rms_group` AS g,
+				   	`rms_group_detail_student` AS gs
+			   	WHERE
+				   	st.`stu_id` = gs.`stu_id`
+				   	AND g.`id`= gs.`group_id`
+				   	AND g.id = $group_id ";//only month
    	
    	$where='';
-   	$order = "GROUP BY sd.`student_id` ORDER BY (total_score+total_exam) DESC,s.for_academic_year,s.for_semester ASC ";
+   	$order = "GROUP BY gs.`stu_id` ORDER BY ((avg_forsemester+avg_formonth)/2) DESC,g.academic_year,g.semester ASC ";
+//    	echo $sql.$where.$order;exit();
    	return $db->fetchAll($sql.$where.$order);
    }
    public function getStundetScorebyYear($group_id,$semester){ // score result for yearly
@@ -419,7 +493,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 		   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 		   	(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id=g.teacher_id LIMIT 1) AS teacher_name,
-		   	sd.`student_id`,
 		   	st.`stu_code`,
 		   	st.`stu_enname`,
 		   	st.`stu_khname`,

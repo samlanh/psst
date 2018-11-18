@@ -41,28 +41,32 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$id=$this->insert($_arr);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
 // 			$dbpush->getTokenUser($_data['group'],null, 4);
+			$old_studentid = 0;
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
-// 				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
-// 				if(!empty($ids))foreach ($ids as $i){
-// 					foreach ($rssubject as $index => $rs_parent){
-// 						$arr=array(
-// 								'score_id'=>$id,
-// 								'group_id'=>$_data['group'],
-// 								'student_id'=>$_data['student_id'.$i],
-// 								'subject_id'=> $rs_parent['subject_id'],
-// 								'score'=> $_data["score_".$i."_".$index],
-// 								'status'=>1,
-// 								'user_id'=>$this->getUserId(),
-// 								'is_parent'=> $rs_parent["is_parent"]
-// 						);
-// 						$this->_name='rms_score_detail';
-// 						$this->insert($arr);
-// 					}
-// 				}
+				$total_score = 0;
 				$rssubject = $_data['selector'];
+				$subject_amt = 1 ;
 				if(!empty($ids))foreach ($ids as $i){
+					
 					foreach ($rssubject as $subject){
+						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
+							$arr = array(
+									'score_id'=>$id,
+									'student_id'=>$old_studentid,
+									'total_score'=>$total_score,
+									'amount_subject'=>$subject_amt,
+									'total_avg' =>number_format($total_score/$subject_amt,2)
+							);
+							$this->_name='rms_score_monthly';
+							$this->insert($arr);
+							$total_score = 0;
+						}
+						
+						$old_studentid=$_data['student_id'.$i];
+						$subject_amt = $_data['amount_subject'.$i];
+						$total_score = $total_score+$_data["score_".$i."_".$subject];
+						
 						$arr=array(
 								'score_id'=>$id,
 								'group_id'=>$_data['group'],
@@ -75,6 +79,19 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'is_parent'=> 1
 						);
 						$this->_name='rms_score_detail';
+						$this->insert($arr);
+					}
+				}
+				
+				if(!empty($ids)){if($total_score>0){
+						$arr = array(
+								'score_id'=>$id,
+								'student_id'=>$old_studentid,
+								'total_score'=>$total_score,
+								'amount_subject'=>$subject_amt,
+								'total_avg' =>number_format($total_score/$subject_amt,2)
+						);
+						$this->_name='rms_score_monthly';
 						$this->insert($arr);
 					}
 				}
@@ -110,28 +127,36 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$this->_name='rms_score_detail';
 		$this->delete("score_id=".$_data['score_id']);
 		
+		$this->_name='rms_score_monthly';
+		$this->delete("score_id=".$_data['score_id']);
+		$old_studentid = 0;
+		
 		if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
-// 				$rssubject = $this->getSubjectByGroup($_data['group'],null,$_data['exam_type']);
-// 				if(!empty($ids))foreach ($ids as $i){
-// 					foreach ($rssubject as $index => $rs_parent){
-// 						$arr=array(
-// 								'score_id'=>$id,
-// 								'group_id'=>$_data['group'],
-// 								'student_id'=>$_data['student_id'.$i],
-// 								'subject_id'=> $rs_parent['subject_id'],
-// 								'score'=> $_data["score_".$i."_".$index],
-// 								'status'=>1,
-// 								'user_id'=>$this->getUserId(),
-// 								'is_parent'=> $rs_parent["is_parent"]
-// 						);
-// 						$this->_name='rms_score_detail';
-// 						$this->insert($arr);
-// 					}
-// 				}
+				$total_score = 0;
 				$rssubject = $_data['selector'];
+				$subject_amt = 1 ;
+				
 				if(!empty($ids))foreach ($ids as $i){
+					
 					foreach ($rssubject as $subject){
+						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
+							$arr = array(
+									'score_id'=>$id,
+									'student_id'=>$old_studentid,
+									'total_score'=>$total_score,
+									'amount_subject'=>$subject_amt,
+									'total_avg' =>number_format($total_score/$subject_amt,2)
+							);
+							$this->_name='rms_score_monthly';
+							$this->insert($arr);
+							$total_score = 0;
+						}
+							
+						$old_studentid=$_data['student_id'.$i];
+						$subject_amt = $_data['amount_subject'.$i];
+						$total_score = $total_score+$_data["score_".$i."_".$subject];
+						
 						$arr=array(
 								'score_id'=>$id,
 								'group_id'=>$_data['group'],
@@ -146,6 +171,19 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						$this->_name='rms_score_detail';
 						$this->insert($arr);
 					}
+				}
+			}
+			if(!empty($ids)){
+				if($total_score>0){
+					$arr = array(
+						'score_id'=>$id,
+						'student_id'=>$old_studentid,
+						'total_score'=>$total_score,
+						'amount_subject'=>$subject_amt,
+						'total_avg' =>number_format($total_score/$subject_amt,2)
+					);
+					$this->_name='rms_score_monthly';
+					$this->insert($arr);
 				}
 			}
 		  $db->commit();

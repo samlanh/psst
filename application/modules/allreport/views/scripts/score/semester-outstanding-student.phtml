@@ -63,7 +63,7 @@ dojo.ready(function(){
 					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ $i++;
 						if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");$female++;}
 						
-						$score_average = (($rs['total_score']/$rs['amount_subject'])+($rs['total_exam']/$rs['amount_subject']))/2;
+						$score_average = ($rs['avg_forsemester']/$rs['avg_formonth'])/2;
 						if($score_average == $old_totalscore){
 							if($key==1){
 								$rank2=$old_rank;
@@ -116,38 +116,23 @@ dojo.ready(function(){
 									ជាតិ សាសនា ព្រះមហាក្សត្រ <br />
 									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/style.png'?>">
 								</td>
-							</tr>
-						
+							</tr>						
 							<tr>
 								<td width="33%">&nbsp;</td>
 								<td width="34%">&nbsp;</td>	
 								<td width="33%">&nbsp;</td>
 							</tr>
-							
 							<tr>
-								<td>
-									<table width="70%">
-										<tr>
-											<td width="100%" align="center">
-												<img style="width: 50%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-												<div style="font-size:10px;">សាលាសម្រាប់វរសិស្ស</div>
-												<div style="font-size:15px;font-family:Mistral;">School for the Elite</div>
-											</td>
-										</tr>
-									</table>
-									
-								</td>
+								<td></td>
 								<td align="center" style="font-family: Khmer MEF2;font-size: 18px;">
 									<span style="font-size: 20px;">តារាងកិត្តិយស </span><br />
 									ប្រចាំឆមាស <?php // echo $semester[$this->studentgroup[0]['for_semester']];?> ឆ្នាំសិក្សា  <label id="academic_year"></label><br />
 									ថ្នាក់ <?php echo $this->studentgroup[0]['group_code'];?>
 								</td>
-								
 								<script type="text/javascript">
 									year = convertEnglishToKhmerNumber(' <?php echo $this->studentgroup[0]['start_year'];?>')+' - '+convertEnglishToKhmerNumber('<?php echo $this->studentgroup[0]['end_year'];?>');
 									dojo.byId('academic_year').innerHTML=year;
 								</script>
-								
 								<td></td>
 							</tr>
 							<style>
@@ -233,14 +218,12 @@ dojo.ready(function(){
 									</table>
 								</td>
 							</tr>
-							
 							<tr>
 								<td colspan="3">&nbsp;</td>
 							</tr>
 							<tr>
 								<td colspan="3">&nbsp;</td>
-							</tr>
-							
+							</tr>							
 							<tr>
 								<td>
 									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 17px;">

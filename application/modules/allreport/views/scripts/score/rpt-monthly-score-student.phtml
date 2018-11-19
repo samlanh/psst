@@ -1,0 +1,387 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate("TRANSCRIPT")); 
+	$show_subject=1;//1=subject name,0 shortcut
+	
+	$session_lang=new Zend_Session_Namespace('lang');
+	$lang_id=$session_lang->lang_id;
+	
+	echo $this->headTitle();
+	$frm =  $this->form_search;
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$dbgb = new Application_Model_DbTable_DbGlobal();
+	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	
+	$month = array(
+				"01"=>"មករា",
+				"02"=>"កុម្ភៈ",
+				"03"=>"មីនា",
+				"04"=>"មេសា",
+				"05"=>"ឧសភា",
+				"06"=>"មិថុនា",
+				"07"=>"កក្កដា",
+				"08"=>"សីហា",
+				"09"=>"កញ្ញា",
+				"10"=>"តុលា",
+				"11"=>"វិច្ឆិកា",
+				"12"=>"ធ្នូ"
+			);
+?>	
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.data.ObjectStore");
+dojo.ready(function(){
+		var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->g_all_name));?> );
+		new dijit.form.FilteringSelect({
+		    store:group_store,
+		    autoComplete: true,                        
+		    required:false,
+		    id: "group_name",
+		    name: "group_name",
+		    class:'fullside',  
+		    value:'<?php echo $this->search['group_name'];?>',         
+		    required:'true',
+		    placeHolder:"Selected Group Name",          
+		    onChange: function() {  
+		    }
+		}, "group_name");
+});
+</script>
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
+	<div id="divPrint">
+		<style type="text/css">
+			.style{
+				line-height: 20px; font-size: 12px !important;
+				color:#4839bd;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+				
+			}
+			.padding{ padding: 0 1px !important;}
+			table .header{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+			.header tr{ page-break-inside:avoid; page-break-after:auto }
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+			.cheader{height: 30px;background: #ffdbdb; white-space: nowrap;
+			height:50px;
+						color:#5a71b5;font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"
+}
+			.hover:hover{background: #ccc;}
+			 td.rotate {
+				height: 130px;
+	    		vertical-align: bottom;
+			}				
+			td.rotate > div {
+				transform: rotate(270deg);
+				width: 30px;
+			}
+			td.rotate span{
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: inline-block;
+			}
+			td.bg_1 {
+			    background: #fffbcb73;
+			}
+			td.bg_2 {
+			    background: #fbbdbd73;
+			}
+			h3.green {
+			    color: #1ABB9C;
+			}
+			.red {
+			    color: #ff1a02;
+			}
+			.score {
+				 color: #000;
+			}
+		</style>
+		<?php if ($this->rs['exam_type']==1){?>
+		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+				<tr >
+					<td width="20%" align="center" >
+						<br />
+						<?php $image = $this->baseUrl()."/images/logo.png";
+							if (!empty($this->rs['photo_branch'])){
+								$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
+							}
+							
+						?>
+						<img style="max-width: 98%;max-height:90px;" src="<?php echo $image;?>">
+					</td>
+					<td width="60%" align="center" >
+						<h3 style="color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer MEF2';">លទ្ធផលនៃការសិក្សាប្រចាំ ខែ<?php echo $this->rs['for_month']?></h3>
+						<h3 class="green" style="font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Monthly Result  For <?php echo $this->rs['for_monthen']?></h3>
+						<h3 style="color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
+						<h3 class="green" style="font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
+					</td>
+					<td width="20%" align="center" >
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer MEF2';">
+						<table  style="width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer MEF2'; ">
+							<tr>
+								<td align="left" style="width: 55%;" >ឈ្មោះសិស្សៈ <?php echo $this->rs['stu_khname']?></td>
+								<td align="right" style="width: 30px;">ភេទៈ</td>
+								<td align="center" style="width: 40px;">ប</td>
+								<td align="right" style="width: 60px;">អត្តលេខៈ</td>
+								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
+								<td style="width: 40px;">ថ្នាក់ទីៈ</td>
+								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
+							</tr>
+							<tr>
+								<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name'])?></td>
+								<td align="right" style="width: 30px;">Gender:</td>
+								<td align="center" style="width: 40px;">M</td>
+								<td align="right" style="width: 60px;">ID:</td>
+								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
+								<td style="width: 40px;">Grade:</td>
+								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
+							</tr>
+						</table>
+					</td>
+					
+				</tr>
+				<tr>
+					<td colspan="3" id="exportExcel" valign="top">
+						<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 3px #4839bd;" border="1" >
+							<tr class="cheader" align="center"  >
+								<td>ល.រ<br />No</td>
+								<td style="min-width:250px;">មុខវិជ្ជា<br />Subjects</td>
+								<td>ពិន្ទុ<br />Scores</td>
+								<td>មធ្យមភាគ<br />Average</td>
+								<td class="red bold">ចំ.ថ្នាក់<br />Rank</td>
+								<td>និទ្ទេស <br />Grade</td>
+								<td>មូលវិចារ<br />Comments</td>
+							</tr>
+							<?php $totalscore=0; $i=0; if (!empty($this->subject)){ ?>
+							<?php foreach ($this->subject as $rs){ $i++;
+								$score = $db->getScoreBySubject($this->rs['id'],$this->rs['student_id'],$rs['subject_id']);
+								$rangsubje = $db->getRankSubjectMonthlyExam($this->rs['group_id'], $this->rs['student_id'], $rs['subject_id'], $this->rs['for_month_id']);
+								$totalscore = $totalscore+$score['score'];
+							?>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
+							    <td align="left" style="white-space:nowrap;">&nbsp;<?php echo $rs['sub_name'];?>&nbsp;</td>
+								<td align="center" style="white-space:nowrap;">&nbsp;<?php //echo $score['score'];?>&nbsp;</td>
+								<td align="center" class="score">&nbsp;<?php echo $score['score'];?>&nbsp;</td>
+								<td class="red bold"  align="center"><?php echo $rangsubje['rank']?></td>
+								<td align="center"><?php //echo $dbgb->calCulateGrade($average,$rs['max_score']);?></td>
+								<td align="center">&nbsp;</td>
+								
+							</tr>
+							<?php }?>
+							<?php }?>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td colspan="2" align="right" rowspan="2">&nbsp;ពិន្ទុសរុប / Overal Grade:&nbsp;<br />
+								&nbsp;<small>មធ្យមភាគ ចំណាត់ថ្នាក់ និទ្ទេស មូលវិចារ/ Average Rank Grade and Comment:</small>&nbsp;
+								</td>
+								<td>&nbsp;</td>
+								<td class="bold score" align="center">&nbsp;<strong><?php echo number_format($totalscore,2)?></strong>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td>&nbsp;</td>
+								<td align="center" class="bold score">&nbsp;<strong><?php echo $this->rs['total_avg']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $this->rs['rank']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="7" style="border: solid 3px #4839bd;">&nbsp;</td>
+							</tr>
+							<tr class="cheader">
+								<td class="red" colspan="7" style=" font-family:'Times New Roman','Khmer os battambang'; text-align:center; border: solid 3px #4839bd;">&nbsp;
+									អវត្តមាន<br />Absenteeism
+								</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td align="center">&nbsp;<?php echo $i+1;?>&nbsp;</td>
+							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃឈប់ មានច្បាប់ /Days of Excused Absences:&nbsp;</td>
+								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,$this->rs['for_month_id']);?>&nbsp;</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td align="center">&nbsp;<?php echo $i+2;?>&nbsp;</td>
+							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃឈប់ អត់ច្បាប់/Days of Unexcused Absences:&nbsp;</td>
+								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 2,$this->rs['for_month_id']);?>&nbsp;</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td align="center">&nbsp;<?php echo $i+3;?>&nbsp;</td>
+							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃមកយឺត/Tardiness&nbsp;</td>
+								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,$this->rs['for_month_id']);?>&nbsp;</td>
+							</tr>
+							</table>
+								
+					</td>
+				</tr>
+			</table>
+			<?php }else if ($this->rs['exam_type']==2){?>
+			<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+				<tr >
+					<td width="20%" align="center" >
+						<br />
+						<?php $image = $this->baseUrl()."/images/logo.png";
+							if (!empty($this->rs['photo_branch'])){
+								$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
+							}
+							
+						?>
+						<img style="max-width: 98%;max-height:90px;" src="<?php echo $image;?>">
+					</td>
+					<td width="60%" align="center" >
+						<?php $semster = "ចំណាត់ថ្នាក់ប្រចាំឆមាសទី១";
+							  $semsteren="Semester One Evaluation";
+							  if ($this->rs['for_semester']==2){
+							  	$semster = "ចំណាត់ថ្នាក់ប្រចាំឆមាសទី២";
+							  	$semsteren="Semester Two Evaluation";
+							  }
+						?>
+						<h3 style="color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer MEF2';"><?php echo $semster;?></h3>
+						<h3 class="red bold" style="font-size: 18px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $semsteren;?></h3>
+						<h3 style="color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
+						<h3 class="green" style="font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
+					</td>
+					<td width="20%" align="center" >
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer MEF2';">
+						<table  style="width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer MEF2'; ">
+							<tr>
+								<td align="left" style="width: 55%;" >ឈ្មោះសិស្សៈ <?php echo $this->rs['stu_khname']?></td>
+								<td align="right" style="width: 30px;">ភេទៈ</td>
+								<td align="center" style="width: 40px;">ប</td>
+								<td align="right" style="width: 60px;">អត្តលេខៈ</td>
+								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
+								<td style="width: 40px;">ថ្នាក់ទីៈ</td>
+								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
+							</tr>
+							<tr>
+								<td align="left" style="width: 55%;" > Name : <?php echo strtoupper($this->rs['stu_enname']." ".$this->rs['last_name'])?></td>
+								<td align="right" style="width: 30px;">Gender:</td>
+								<td align="center" style="width: 40px;">M</td>
+								<td align="right" style="width: 60px;">ID:</td>
+								<td align="center" style="width: 70px;"> <?php echo $this->rs['stu_code']?></td>
+								<td style="width: 40px;">Grade:</td>
+								<td align="center" style="width: 60px;"><?php echo $this->rs['group_code']?></td>
+							</tr>
+						</table>
+					</td>
+					
+				</tr>
+				<tr>
+					<td colspan="3" id="exportExcel" valign="top">
+						<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 3px #4839bd;" border="1" >
+							<tr class="cheader" align="center"  >
+								<td>ល.រ<br />No</td>
+								<td style="min-width:250px;">មុខវិជ្ជា<br />Subjects</td>
+								<td>ពិន្ទុ<br />Scores</td>
+								<td>មធ្យមភាគ<br />Average</td>
+								<td class="red bold">ចំ.ថ្នាក់<br />Rank</td>
+								<td>និទ្ទេស <br />Grade</td>
+								<td>មូលវិចារ<br />Comments</td>
+							</tr>
+							<?php $totalscore=0; $i=0; if (!empty($this->subject)){ ?>
+							<?php foreach ($this->subject as $rs){ $i++;
+								$score = $db->getScoreBySubject($this->rs['id'],$this->rs['student_id'],$rs['subject_id']);
+								$rangsubje = $db->getRankSubjectMonthlyExam($this->rs['group_id'], $this->rs['student_id'], $rs['subject_id'], $this->rs['for_month_id']);
+								$totalscore = $totalscore+$score['score'];
+							?>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
+							    <td align="left" style="white-space:nowrap;">&nbsp;<?php echo $rs['sub_name'];?>&nbsp;</td>
+								<td align="center" style="white-space:nowrap;">&nbsp;<?php //echo $score['score'];?>&nbsp;</td>
+								<td align="center" class="score">&nbsp;<?php echo $score['score'];?>&nbsp;</td>
+								<td class="red bold"  align="center"><?php echo $rangsubje['rank']?></td>
+								<td align="center"><?php //echo $dbgb->calCulateGrade($average,$rs['max_score']);?></td>
+								<td align="center">&nbsp;</td>
+								
+							</tr>
+							<?php }?>
+							<?php }?>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td colspan="2" align="right">&nbsp;ពិន្ទុសរុបប្រឡងឆមាស &nbsp;<br />
+								&nbsp;<small>Total Scores for Semester Exams</small>&nbsp;
+								</td>
+								<td>&nbsp;</td>
+								<td class="bold score" align="center">&nbsp;<strong><?php echo number_format($totalscore,2)?></strong>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td colspan="2" align="right">&nbsp;មធ្យមភាគប្រឡងឆមាស &nbsp;<br />
+								&nbsp;<small>Average Scores for Semester Exams</small>&nbsp;
+								</td>
+								<td>&nbsp;</td>
+								<td align="center" class="bold score">&nbsp;<strong><?php echo $this->rs['total_avg']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $this->rs['rank']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td colspan="2" align="right">&nbsp;មធ្យមភាគខែប្រចាំឆមាស &nbsp;<br />
+								&nbsp;<small>Monthly Average  Scores in Semester</small>&nbsp;
+								</td>
+								<td>&nbsp;</td>
+								<td align="center" class="bold score">&nbsp;<strong><?php echo $this->rs['total_avg']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $this->rs['rank']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td colspan="2" align="right">&nbsp;ពិន្ទុសរុបប្រចាំឆមាស&nbsp;<br />
+								&nbsp;<small> Total Scores for Semester</small>&nbsp;
+								</td>
+								<td>&nbsp;</td>
+								<td align="center" class="bold score">&nbsp;<strong><?php echo $this->rs['total_avg']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $this->rs['rank']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td colspan="2" align="right">&nbsp;<span class="red">មធ្យមភាគប្រចាំឆមាស ចំណាត់ថ្នាក់ និទ្ទេស មូលវិចារ</span>&nbsp;<br />
+								&nbsp;<small>Average Scores for Semester, Ranking Classification, Comments</small>&nbsp;
+								</td>
+								<td>&nbsp;</td>
+								<td align="center" class="bold score">&nbsp;<strong><?php echo $this->rs['total_avg']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $this->rs['rank']?></strong>&nbsp;</td>
+								<td align="center" class="red">&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="7" style="border: solid 3px #4839bd;">&nbsp;</td>
+							</tr>
+							<tr class="cheader">
+								<td class="red" colspan="7" style=" font-family:'Times New Roman','Khmer os battambang'; text-align:center; border: solid 3px #4839bd;">&nbsp;
+									អវត្តមាន<br />Absenteeism
+								</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td align="center">&nbsp;<?php echo $i+1;?>&nbsp;</td>
+							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃឈប់ មានច្បាប់ /Days of Excused Absences:&nbsp;</td>
+								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,$this->rs['for_month_id']);?>&nbsp;</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td align="center">&nbsp;<?php echo $i+2;?>&nbsp;</td>
+							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃឈប់ អត់ច្បាប់/Days of Unexcused Absences:&nbsp;</td>
+								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 2,$this->rs['for_month_id']);?>&nbsp;</td>
+							</tr>
+							<tr class="style hover" style=" line-height: 20px;">
+								<td align="center">&nbsp;<?php echo $i+3;?>&nbsp;</td>
+							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃមកយឺត/Tardiness&nbsp;</td>
+								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,$this->rs['for_month_id']);?>&nbsp;</td>
+							</tr>
+							</table>
+								
+					</td>
+				</tr>
+			</table>
+			<?php }?>
+		</div>
+</div>

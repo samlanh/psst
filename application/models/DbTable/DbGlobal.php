@@ -1849,5 +1849,35 @@ function getAllgroupStudyNotPass($action=null){
   	$sql.=" ORDER BY `g`.`id` DESC ";
   	return $db->fetchAll($sql);
   }
+  function getNumberInkhmer($number){
+  	$khmernumber = array("០","១","២","៣","៤","៥","៦","៧","៨","៩");
+  	$spp = str_split($number);
+  	$num="";
+  	foreach ($spp as $ss){
+  		 
+  		if (!empty($khmernumber[$ss])){
+  			$num.=$khmernumber[$ss];
+  		}else{
+  			$num.=$ss;
+  		}
+  	}
+  	return $num;
+  }
+  function calCulateGrade($score,$max_score){
+  	$score_avg = ($score / $max_score)*100;
+  	if($score_avg < 50){//0.67
+  		return 'F';
+  	}else if($score_avg < 60){
+  		return 'E';
+  	}else if($score_avg < 70){
+  		return 'D';
+  	}else if($score_avg < 80){
+  		return 'C';
+  	}else if($score_avg < 90){
+  		return 'B';
+  	}else{
+  		return 'A';
+  	}
+  }
 }
 ?>

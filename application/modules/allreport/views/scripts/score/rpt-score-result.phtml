@@ -162,7 +162,11 @@ dojo.ready(function(){
 							<?php } $i++;?>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
-							    <td align="center" style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_code'];?>&nbsp;</td>
+							    <td align="center" style="white-space:nowrap;">
+							    	&nbsp;
+							    	<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['student_id']."&score_id=".$rs['id'];?>"><?php echo $rs['stu_code'];?></a>
+							    	&nbsp;
+							    </td>
 								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?$rs['stu_khname']:$rs['stu_enname'];?>&nbsp;</td>
 								<td align="center" class="bg_<?php echo $rs['sex'];?>">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 

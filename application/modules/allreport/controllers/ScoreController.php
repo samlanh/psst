@@ -332,7 +332,31 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	
     }
     
-    
+    function rptMonthlyScoreStudentAction(){
+    	$stu_id =$this->getRequest()->getParam("stu_id");
+    	$score_id =$this->getRequest()->getParam("score_id");
+    	if (empty($stu_id)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
+    		exit();
+    	}elseif (empty($score_id)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
+    		exit();
+    	}
+    	$data = array(
+    			'stu_id'=>$stu_id,
+    			'score_id'=>$score_id,
+    			);
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$rs = $db->getExamByExamIdAndStudent($data);
+    	$this->view->rs = $rs;
+    	if (empty($rs)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
+    		exit();
+    	}
+    	$db = new Foundation_Model_DbTable_DbScore();
+    	$subject =$db->getSubjectByGroup($rs['group_id'],null,$rs['exam_type']);
+    	$this->view->subject = $subject;
+    }
 }
 
 

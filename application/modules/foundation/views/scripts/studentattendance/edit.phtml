@@ -235,7 +235,7 @@ table#table_row {
 		</form>
     </div>
  </div>
- <form id='office_receipt' action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+ <form action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentattendance','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">   
    if(this.validate()) {
 	dijit.byId('save_close').set('disabled',true);
@@ -719,7 +719,7 @@ function initailize(){
 					str+='<input type="radio" <?php if ($student_att['attendence_status']==4){echo 'checked="checked"';}?> name="attedence'+inx+'" id="attedence'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("LATE");?></label>';
 					str+='<input type="radio" <?php if ($student_att['attendence_status']==5){echo 'checked="checked"';}?> name="attedence'+inx+'" id="attedence'+inx+'" value="5" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("EARLY_LEAVE");?></label>';
 				str+='</td>';
-				str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="<?php echo $student_att['description']; ?>" style="'+textareastyle+'"></td>';
+				str+='<td><input dojoType="dijit.form.Textarea"  class="fullside" id="comment'+inx+'" name="comment'+inx+'" type="text" value="<?php echo str_replace("'", '', $student_att['description']); ?>" style="'+textareastyle+'"></td>';
 			str+='</tr>';
 		    if(inx!=1) {//identity set value 1,2,3,4,5
 				var identity = $('#identity').val();

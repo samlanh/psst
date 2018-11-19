@@ -7,102 +7,16 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
-    	 
     }
-    public function getAllCar($search){
-    	$db = $this->getAdapter();
-    	$sql = "SELECT carid,carname,drivername,tel,zone,note,status FROM rms_car ";
-    	$where=' where 1';
-    	$order=" order by id DESC";
-    	
-//     	if(empty($search)){
-//     		return $db->fetchAll($sql.$order);
-//     	}
-//     	if(!empty($search['txtsearch'])){
-//     		$s_where = array();
-//     		$s_search = trim($search['txtsearch']);
-//     		$s_where[] = " carid LIKE '%{$s_search}%'";
-//     		$s_where[] = " carname LIKE '%{$s_search}%'";
-//     		$s_where[] = " drivername LIKE '%{$s_search}%'";
-//     		$where .=' AND ( '.implode(' OR ',$s_where).')';
-//     	}
-    	
-//     	if(empty($search)){
-//     		return $db->fetchAll($sql);
-//     	}
-// //     	if(!empty($search['txtsearch'])){
-// //     		$where.=" AND rms_car.carid LIKE '%".$search['txtsearch']."%'";
-// //     	}
-		
-//     	$searchs = $search['txtsearch'];
-//     	if($search['searchby'] == 0){
-//     		$where.= '';
-//     	}
-//     	if($search['searchby'] == 1){
-//     		$where.= " AND carid = ".$search['txtsearch'];
-//     	}
-//     	if($search['searchby'] == 2){
-//     		$where.= " AND carname LIKE '%".$searchs."%'";
-//     	}
-//     	if($search['searchby'] == 3){
-//     		$where.= " AND drivername LIKE '%".$searchs."%'";
-//     	}
-    	return $db->fetchAll($sql.$where.$order);
-    	 
-    }
-    
-    
     function getAllMonth(){
 		$db = $this->getAdapter();
 		$sql="select id , month_kh from rms_month where status=1 ";
 		return $db->fetchAll($sql);
 	}	
-    
-   
-    function getAllTitle(){
-    	$db=$this->getAdapter();
-    	$sql="select major_id,major_enname from rms_major";
-    	return $db->fetchAll($sql);
-    }
-    
     function getAllSession(){
     	$db=$this->getAdapter();
     	$sql="select key_code,name_en from rms_view where type=4";
     	return $db->fetchAll($sql);
-    }
-    
-    function getAllStu($search){
-    	$db= $this->getAdapter();
-    	$sql="SELECT COUNT(gds.`stu_id`) AS amount,gds.stu_id,g.`academic_year`,
-    		  (select from_academic from rms_tuitionfee where rms_tuitionfee.id=g.academic_year limit 1) as from_academic,
-    		  (select to_academic from rms_tuitionfee where rms_tuitionfee.id=g.academic_year limit 1) as to_academic,
-    		  (select generation from rms_tuitionfee where rms_tuitionfee.id=g.academic_year limit 1) as generation,
-			  (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) as session,
-			  (select major_enname from rms_major where rms_major.major_id=g.`grade`) as grade
-			 FROM
-			  `rms_group_detail_student` AS gds,
-			  `rms_group` AS g 
-			 WHERE g.id = gds.`group_id` 
-			  ";
-    	$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
-    	$where  = '';
-    	
-   		 if(empty($search)){
-    		return $db->fetchAll($sql.$groupby);
-    	}
-    	if(!empty($search['txtsearch'])){
-    		$s_where = array();
-    		$s_search = trim($search['txtsearch']);
-    		$s_where[] = " (select CONCAT(from_academic,'-',to_academic,' ',generation) from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select major_enname from rms_major where rms_major.major_id=g.grade) LIKE '%{$s_search}%'";
-    		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
-    	}
-    	
-    	$row = $db->fetchAll($sql.$where.$groupby);
-    	if($row){
-    		return $row;
-    	}
     }
     function getAllYearGeneration(){
     	$db= $this->getAdapter();
@@ -138,7 +52,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    } 
    function getSubjectdByParent(){
    	$db=$this->getAdapter();
-   	$sql="SELECT subject_id,parent_id,(SELECT subject_titleen FROM rms_subject WHERE rms_subject.id=rms_score.subject_id) AS subject_name 
+   		$sql="SELECT subject_id,parent_id,(SELECT subject_titleen FROM rms_subject WHERE rms_subject.id=rms_score.subject_id) AS subject_name 
           FROM rms_score WHERE `status`=1 GROUP BY academic_id,session_id,group_id,parent_id,subject_id ,term_id";
     return $db->fetchAll($sql);
    }   
@@ -185,7 +99,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    function getScoreByGroupId($student_id,$subject_id,$group_id){
    	$db = $this->getAdapter();
-   	$sql = "select (select subject_titleen from rms_subject where rms_subject.id=s.subject_id) as subject_name,
+   			$sql = "select (select subject_titleen from rms_subject where rms_subject.id=s.subject_id) as subject_name,
             SUM(sd.score) As total_score from rms_score as s,rms_score_detail as sd,rms_student as st
            where  s.id=sd.score_id and sd.student_id=st.stu_id and s.group_id=$group_id and s.parent_id=$subject_id GROUP BY s.subject_id ";
    	return $db->fetchAll($sql);
@@ -194,8 +108,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    function getSubjectItem($subject_id,$group_id){
    	$db = $this->getAdapter();
    	$sql = " select (select subject_titleen from rms_subject where rms_subject.id=s.subject_id) as subject_name
-    from rms_score as s,rms_score_detail as sd
-   	where s.id=sd.score_id and s.group_id=$group_id and s.parent_id=$subject_id GROUP BY s.subject_id ";
+    		from rms_score as s,rms_score_detail as sd
+   			where s.id=sd.score_id and s.group_id=$group_id and s.parent_id=$subject_id GROUP BY s.subject_id ";
    	return $db->fetchAll($sql);
    
    }
@@ -207,17 +121,17 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') 
 		FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year
  		,(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree, 
- 	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
- 	`g`.`semester` AS `semester`,
- 	(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
- 	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name, 
- 	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
- 	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
- 	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month,
- 	s.exam_type,
- 	s.for_semester,
-  	s.reportdate
-   		FROM `rms_score` AS s, `rms_group` AS g 
+	 	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+	 	`g`.`semester` AS `semester`,
+	 	(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
+	 	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name, 
+	 	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
+	 	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
+	 	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month,
+	 	s.exam_type,
+	 	s.for_semester,
+	  	s.reportdate
+   			FROM `rms_score` AS s, `rms_group` AS g 
    		WHERE  g.`id`=s.`group_id` AND s.status = 1 AND s.type_score=1 ";
    			$where='';
 //    	$from_date =(empty($search['for_month']))? '1': " s.formonth >= '".$search['for_month']." 00:00:00'";
@@ -232,44 +146,42 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    				$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
    				$where.=' AND ('.implode(' OR ', $s_where).')';
    	}
-   	if(!empty($search['branch_id'])){
-   		$where.= " AND s.branch_id =".$search['branch_id'];
-   	}
-   	if(!empty($search['group'])){
-   		$where.= " AND g.id =".$search['group'];
-   	}
-   	if(!empty($search['study_year'])){
-   		$where.=" AND s.for_academic_year =".$search['study_year'];
-   	}
-   	if($search['degree']>0){
-   		$where.=" AND `g`.`degree` =".$search['degree'];
-   	}
-   	if($search['for_month']>0){
-   		$where.=" AND s.for_month =".$search['for_month'];
-   	}
-   	if($search['grade']>0){
-   		$where.=" AND `g`.`grade` =".$search['grade'];
-   	}
-   	if($search['session']>0){
-   		$where.=" AND `g`.`session` =".$search['session'];
-   	}
-   	if($search['room']>0){
-   		$where.=" AND `g`.`room_id` =".$search['room'];
-   	}
-   	if($search['for_month']>0){
-   		$where.= " AND s.for_month =".$search['for_month'];
-   	}
-   	if($search['exam_type']>0){
-   		$where.= " AND s.exam_type =".$search['exam_type'];
-   	}
-   	$order = "  ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
-   	return $db->fetchAll($sql.$where.$order);
+	   	if(!empty($search['branch_id'])){
+	   		$where.= " AND s.branch_id =".$search['branch_id'];
+	   	}
+	   	if(!empty($search['group'])){
+	   		$where.= " AND g.id =".$search['group'];
+	   	}
+	   	if(!empty($search['study_year'])){
+	   		$where.=" AND s.for_academic_year =".$search['study_year'];
+	   	}
+	   	if($search['degree']>0){
+	   		$where.=" AND `g`.`degree` =".$search['degree'];
+	   	}
+	   	if($search['for_month']>0){
+	   		$where.=" AND s.for_month =".$search['for_month'];
+	   	}
+	   	if($search['grade']>0){
+	   		$where.=" AND `g`.`grade` =".$search['grade'];
+	   	}
+	   	if($search['session']>0){
+	   		$where.=" AND `g`.`session` =".$search['session'];
+	   	}
+	   	if($search['room']>0){
+	   		$where.=" AND `g`.`room_id` =".$search['room'];
+	   	}
+	   	if($search['for_month']>0){
+	   		$where.= " AND s.for_month =".$search['for_month'];
+	   	}
+	   	if($search['exam_type']>0){
+	   		$where.= " AND s.exam_type =".$search['exam_type'];
+	   	}
+   		$order = "  ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
+   		return $db->fetchAll($sql.$where.$order);
    }
-   
    public function getStundetScoreDetailGroup($search,$id,$limit){ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា
-   	
    	$db = $this->getAdapter();
-   	$sql="SELECT
+   		$sql="SELECT
 		   	s.`id`,
 		   	g.`branch_id`,
 		   	sd.`group_id`,
@@ -342,7 +254,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	return $db->fetchAll($sql.$where.$order.$limit);
    }
    public function getStundetScoreResult($search,$id,$limit){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត
-   
    	$db = $this->getAdapter();
    	$sql="SELECT
    	s.`id`,
@@ -556,77 +467,77 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    public function getAcadimicByStudentHeader($group_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា ក្បាល I+II
    	$db = $this->getAdapter();
    	$sql="
-   	SELECT
-   	s.`id`,
-   	sd.`group_id`,
-   	g.`group_code`,
-   	st.`stu_code`,
-   	st.`stu_enname`,
-   	st.`stu_khname`,
-   	st.`sex`,
-   	st.dob,
-	(SELECT COUNT(stu_id) FROM `rms_group_detail_student` WHERE group_id=s.group_id LIMIT 1) AS amount_student,
-   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-   	(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-   	
-   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-	`g`.`semester` AS `semester`,
-   	sd.`student_id`,
-   	sd.subject_id,
-   	(SELECT sj.subject_titleen  AS sj FROM `rms_subject` AS sj WHERE sj.id=sd.subject_id) as subject_name
-   	FROM 
-   	`rms_score` AS s,
-   	`rms_score_detail` AS sd,
-   	`rms_student` AS st,
-   	`rms_group` AS g   	
-   	WHERE
-   	s.`id`=sd.`score_id`
-   	AND st.`stu_id`=sd.`student_id`
-   	AND g.`id`=s.`group_id`
-   	AND sd.`is_parent`=1
-   	AND s.status = 1
-   	AND s.type_score=1
-   	AND g.id= $group_id
-   	AND sd.student_id=$student_id
-   	AND s.exam_type=2 ";
+	   	SELECT
+	   	s.`id`,
+	   	sd.`group_id`,
+	   	g.`group_code`,
+	   	st.`stu_code`,
+	   	st.`stu_enname`,
+	   	st.`stu_khname`,
+	   	st.`sex`,
+	   	st.dob,
+		(SELECT COUNT(stu_id) FROM `rms_group_detail_student` WHERE group_id=s.group_id LIMIT 1) AS amount_student,
+	   	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+	   	(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+	   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+	   	
+	   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+		`g`.`semester` AS `semester`,
+	   	sd.`student_id`,
+	   	sd.subject_id,
+	   	(SELECT sj.subject_titleen  AS sj FROM `rms_subject` AS sj WHERE sj.id=sd.subject_id) as subject_name
+	   	FROM 
+	   	`rms_score` AS s,
+	   	`rms_score_detail` AS sd,
+	   	`rms_student` AS st,
+	   	`rms_group` AS g   	
+	   	WHERE
+	   	s.`id`=sd.`score_id`
+	   	AND st.`stu_id`=sd.`student_id`
+	   	AND g.`id`=s.`group_id`
+	   	AND sd.`is_parent`=1
+	   	AND s.status = 1
+	   	AND s.type_score=1
+	   	AND g.id= $group_id
+	   	AND sd.student_id=$student_id
+	   	AND s.exam_type=2 ";
    	$where='';
    	$order = " GROUP BY sd.subject_id ORDER BY s.for_semester ASC,sd.subject_id,s.for_academic_year,s.for_semester ASC ";
    	return $db->fetchAll($sql.$where.$order);
    }
    public function getAcadimicByStudentSubject($group_id,$semester_id,$subject_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា I+II លម្អិត
    	$db = $this->getAdapter();
-   	$sql="SELECT 
-   			score,
-			sum(score) as total_score,
-   			 FIND_IN_SET( score, (    
-			SELECT GROUP_CONCAT( score
-			ORDER BY score DESC ) 
-			FROM rms_score_detail AS dd ,rms_score AS ss WHERE  
-				ss.`id`=dd.`score_id` 
-				AND ss.exam_type=2
-				AND ss.for_semester= $semester_id
-				AND ss.group_id= $group_id
-				AND dd.subject_id=$subject_id 
-				AND dd.`is_parent`=1
-			 	)
-			) AS rank
-			FROM 
-				`rms_score` AS s,
-			   	`rms_score_detail` AS sd,
-			   	`rms_group` AS g
-			WHERE s.`id`=sd.`score_id` 
-				AND g.`id`=s.`group_id`
-			   	AND sd.`is_parent`=1
-			   	AND s.status = 1
-			   	AND s.type_score=1
-			   	AND g.id= $group_id
-			   	AND s.for_semester= $semester_id
-			   	AND sd.subject_id= $subject_id
-			   	AND sd.student_id= $student_id
-			   	AND s.exam_type=2
-				GROUP BY sd.subject_id ";
-   	$where=' ';
+	   		$sql="SELECT 
+	   			score,
+				sum(score) as total_score,
+	   			 FIND_IN_SET( score, (    
+				SELECT GROUP_CONCAT( score
+				ORDER BY score DESC ) 
+				FROM rms_score_detail AS dd ,rms_score AS ss WHERE  
+					ss.`id`=dd.`score_id` 
+					AND ss.exam_type=2
+					AND ss.for_semester= $semester_id
+					AND ss.group_id= $group_id
+					AND dd.subject_id=$subject_id 
+					AND dd.`is_parent`=1
+				 	)
+				) AS rank
+				FROM 
+					`rms_score` AS s,
+				   	`rms_score_detail` AS sd,
+				   	`rms_group` AS g
+				WHERE s.`id`=sd.`score_id` 
+					AND g.`id`=s.`group_id`
+				   	AND sd.`is_parent`=1
+				   	AND s.status = 1
+				   	AND s.type_score=1
+				   	AND g.id= $group_id
+				   	AND s.for_semester= $semester_id
+				   	AND sd.subject_id= $subject_id
+				   	AND sd.student_id= $student_id
+				   	AND s.exam_type=2
+					GROUP BY sd.subject_id ";
+	   	$where=' ';
    	return $db->fetchRow($sql.$where);
 }
 function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំណាត់ថ្នាក់ប្រឡង ឆមាសទី១/២ តាមសិស្ស(transcript)
@@ -656,23 +567,23 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 			   	AND s.for_semester=$semester
 			   	AND sd.student_id= $student_id
 			   	AND s.exam_type=2";
-	// 	$sql='SET @rnk=0; SET @rank=0; SET @curscore=0;
-//  		SELECT score,student_id,rank FROM
-//     	(
-//         SELECT AA.*,BB.student_id,
-//         (@rnk:=@rnk+1) rnk,
-//         (@rank:=IF(@curscore=score,@rank,@rnk)) rank,
-//         (@curscore:=score) newscore
-//         FROM
-//         (
-//            SELECT * FROM
-//            (SELECT COUNT(1) scorecount,score
-//            FROM (SELECT SUM(score) AS score,score_id,group_id,student_id FROM `rms_score_detail` WHERE 
-//            score_id=2 GROUP BY student_id) AS ST WHERE score_id=2  GROUP BY score
-//         ) AAA
-//          ORDER BY score DESC
-//          ) AA LEFT JOIN (SELECT SUM(score) AS score,score_id,group_id,student_id FROM `rms_score_detail` WHERE score_id=2 GROUP BY student_id) BB USING (score) WHERE score_id=2 
-//          ) A WHERE student_id=3';//return 
+		// 	$sql='SET @rnk=0; SET @rank=0; SET @curscore=0;
+		//  		SELECT score,student_id,rank FROM
+		//     	(
+		//         SELECT AA.*,BB.student_id,
+		//         (@rnk:=@rnk+1) rnk,
+		//         (@rank:=IF(@curscore=score,@rank,@rnk)) rank,
+		//         (@curscore:=score) newscore
+		//         FROM
+		//         (
+		//            SELECT * FROM
+		//            (SELECT COUNT(1) scorecount,score
+		//            FROM (SELECT SUM(score) AS score,score_id,group_id,student_id FROM `rms_score_detail` WHERE 
+		//            score_id=2 GROUP BY student_id) AS ST WHERE score_id=2  GROUP BY score
+		//         ) AAA
+		//          ORDER BY score DESC
+		//          ) AA LEFT JOIN (SELECT SUM(score) AS score,score_id,group_id,student_id FROM `rms_score_detail` WHERE score_id=2 GROUP BY student_id) BB USING (score) WHERE score_id=2 
+		//          ) A WHERE student_id=3';//return 
 	$db = $this->getAdapter();
 	return $db->fetchRow($sql);
 }
@@ -714,6 +625,7 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 		   	AND s.exam_type=1 ";
 	   	$where='';
 	   		$order = " GROUP BY sd.`student_id`,s.for_semester ORDER BY sd.`student_id`";
+// 	   		echo $sql.$where.$order;exit();
    		return $db->fetchRow($sql.$where.$order);
    }
    function getRankingSemesterByStudent($group_id,$semester_id,$student_id){//ចំណាត់ថ្នាក់សំរាប់ឆមាសនីមួយៗ

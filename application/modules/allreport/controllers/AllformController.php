@@ -23,6 +23,12 @@ public function init()
 		// 		$this->view->rs = $db->getViewById($id);
 	}
 	
+	function rptListofscoreAction(){
+		// 		$id=$this->getRequest()->getParam("id");
+		// 		$db= new Global_Model_DbTable_DbTeacher();
+		// 		$this->view->rs = $db->getViewById($id);
+	}
+	
     function monthlyOutstandingStudentAction(){
     	$id=$this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){

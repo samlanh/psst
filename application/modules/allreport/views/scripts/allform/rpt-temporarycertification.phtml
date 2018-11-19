@@ -1,0 +1,199 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
+	echo $this->headTitle(''); 
+
+	//print_r($photo); exit();
+?>	
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="dojo/method" event="onSubmit">			
+	if(this.validate()) {
+				return true;
+			} else {
+				return false;
+			}
+</script>
+<style>
+tr.head td h2 {
+    font-size: 16px !important;
+    line-height: 27px !important;
+}
+.b{ font-weight: bold; }
+
+p.padding-left {
+    line-height: 24px !important;
+}
+
+table#exportExcel tr td {
+    font-size: 14px !important;
+}
+label.title {
+    font-size: 14px !important;
+    min-width: 100px !important;
+}
+label.value {
+    font-size: 14px !important;
+    min-width: 100px !important;
+}
+</style>
+<script type="text/javascript">
+dojo.require("dijit.form.NumberTextBox");
+dojo.ready(function(){
+	 
+}); 
+ 
+</script>
+<table width="100%">
+<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
+		<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
+			<i class="fa fa-print"></i>
+		</div>
+      <div class="ptss__header"><?php echo $tr->translate("PRINT");?></div>
+		<div class="ptss__settings">
+			<div class="ptss__single-setting" id="ptss__layout">
+				<div class="ptss__setting-control">
+					<div class="ptss__layout-wrapper">
+						<a class="qButton" title="<?php echo $tr->translate("Preview");?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
+						<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
+						<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+</div>
+</table>
+<div style="background: #fff;width: 25cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+<div id="divPrint">
+			<style>
+	   			label.value{
+	   				font-weight: initial;
+	   				min-width: 90px;
+	   				font-size: 14px;
+	   				display: inline-block;
+				}
+				p.padding-left {
+				    padding-left: 10px;
+					    line-height: 20px;
+				}
+				label.title {
+				    font-size: 14px;
+				    min-width: 80px;
+				    display: inline-block;
+				}
+				.border {
+				    
+				    display: block;
+				    width: 100%;
+				    height: 1px;
+				    margin-bottom: 10px;
+				}
+	  		 </style>
+				<table id="exportExcel" width="100%" style="font-size:12px; font-family:Tahoma,'Khmer OS Battambang';"> 
+					<tr colspan="5" class="head">
+						<td with="11%">
+							<img alt="" src="<?php echo $this->baseUrl()."/images/logo.png"?>" style="width: 112px; display: inline-block;">
+						</td>
+						<td style="text-align: left; list-style:22px; line-height:24px; font-size:30px;font-weight: bold; list-style:none;​">
+					   		<li style="font-size:16px;  font-weight: initial; font-family:'Khmer OS Muol Light';">ក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</li>
+					   		<li style="font-size:16px;  font-weight: initial; font-family:'Khmer OS Muol Light';" >MINISTRY OF LABOUR AND VOCATIONAL TRAINING</li>
+					   		<li style="font-size:16px;  font-weight: initial; font-family:'Khmer OS Muol Light';" >វិទ្យាស្ថានបច្ចេកទេសឧស្សាហកម្ម</li>
+					   		<li style="font-size:16px;  font-weight: initial; font-family:'Khmer OS Muol Light';" >INDUSTRIAL TECHNICAL INSTITUTE</li>
+					   		<li style="font-size:16px;  font-weight: initial; font-family:'Khmer OS Muol Light';" >លេខ :  ................................</li>
+					   </td>
+					   <td width="14%" valign="middle">
+						</td>
+					   <td style="list-style:25px; line-height:25px; font-size:30px;font-weight: bold; list-style:none;">
+					   		<li style="font-size:18px; text-align: center;    font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</li>
+					   		<li style="font-size:18px; text-align: center;     font-weight: initial; font-family:'Khmer OS Muol Light';" >KINGDOM OF CAMBODIA</li>
+					   		<li style="font-size:18px; text-align: center;     font-weight: initial; font-family:'Khmer OS Muol Light';">ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
+					   		<li style="font-size:18px; text-align: center;     font-weight: initial; font-family:'Khmer OS Muol Light';" >NATION RELIGION KING</li>
+					   </td>
+					</tr>
+					
+					<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
+					   <td width="30%">
+					   		&nbsp;&nbsp; 
+					   </td>
+					</tr>
+					
+					<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
+					   <td colspan="5" align="center">
+					   		<label style="font-size:28px;font-weight: initial;font-family:'Khmer OS Muol Light';">វិញ្ញាបនបត្របណ្តោះអាសន្ន</label><br>
+					   		<label style="font-size:28px;font-weight: initial;font-family:'Khmer OS Muol Light';">CERTIFICATION</label><br>
+					   		<label style="font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';">នាយក វិទ្យាស្ថានបច្ចេកទេសឧស្សាហកម្ម បញ្ជាក់ថា </label><br>
+					   		<label style="font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';">The Director of the Industrial Technical Institute certifies that:</label>
+					   </td>
+					</tr>
+					<tr>
+					<td colspan="5">
+					<table  style="font-family:'Khmer OS Battambang'; border-collapse:collapse;  white-space: nowrap;" width="100%" cellspacing="0">
+					<tr style="list-style:25px; font-family:  Khmer OS Muol;line-height:45px; font-size:13px; font-weight: bold; list-style:none; white-space: nowrap;">
+	  					<td>
+	  						<li>និស្សិតឈ្មោះ&nbsp;</li>
+	  						<li>ភេទ&nbsp;</li>
+	  						<li>ថ្ងៃខែឆ្នាំកំណើត&nbsp;</li>
+	  						<li>ទីកន្លែងកំណើត&nbsp;</li>
+	  						<li>បានបញ្ចប់ការសិក្សាដោយជោគជ័យថ្នាក់&nbsp; </li>
+	  						<li>មុខជំនាញ&nbsp;</li>
+	  						<li>សម័យប្រឡង&nbsp;</li>
+	  						<li>មណ្ឌលប្រឡង&nbsp;</li>
+	  					</td>
+	  					<td>
+	  						<li>Name&nbsp;</li>
+	  						<li>Sex&nbsp;</li>
+	  						<li>Date of Birth&nbsp;</li>
+	  						<li>Place of Birth&nbsp;</li>
+	  						<li>Fulfilled all the requirements for the&nbsp;</li>
+	  						<li>Degree of &nbsp;</li>
+	  						<li>Technology in the academic &nbsp;</li>
+	  						<li>year 2015 - 2016&nbsp;</li>
+	  					</td>
+	  				</tr>
+	  				<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
+					   <td colspan="5" align="center">
+					   		<label style="font-size:13px;font-weight:bold; font-family:'Khmer OS Muol Light';">វិញ្ញាបនបត្រនេះចេញឲ្យសាមីខ្លួន ដើម្បីប្រើប្រាស់តាមផ្លូវការដែលអាចប្រើបាន  </label><br>
+					   		<label style="font-size:13px;font-weight:initial;font-family:'Khmer OS Muol Light';">This certification is presented to the bearer for official purposes it may serve</label>
+					   </td>
+					</tr>
+					<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
+					   <td colspan="2" align="center" >
+					   		<label style=" margin-left: 55%; font-size:13px;font-weight: initial;font-family:'Khmer OS Muol Light';">រាជធានីភ្នំពេញ ថ្ងៃទី០៩ ខែ កុម្ភៈ ឆ្នាំ ២០១៧ </label><br>
+					   		<label style=" margin-left: 55%; font-size:13px;font-weight: initial;font-family:'Khmer OS Muol Light';">Phnom Penh, Feburary 09, 2017</label><br>
+					  		<label style=" margin-left: 55%; font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';">នាយក</label><br>
+					  		<label style=" margin-left: 55%; font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';">Director</label>
+					   </td>
+					</tr>
+				    </table>
+				   </td>
+				</tr>
+  		 	</table>
+	   		</div>
+		 </div>
+<script type="text/javascript">
+function doPrint() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+function preview()
+{ 
+  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+      disp_setting+="scrollbars=no,width=1200, height=700, left=100, top=25"; 
+  var content_vlue = document.getElementById("divPrint").innerHTML; 
+  
+  var docprint=window.open("","",disp_setting); 
+   docprint.document.open(); 
+   docprint.document.write('<html><head>'); 
+   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+   docprint.document.write(content_vlue);          
+   docprint.document.write('</center></div></html>'); 
+   docprint.document.close(); 
+   docprint.focus(); 
+}
+function exportExcel(){
+	$('#exportExcel').tableExport({type:'excel',escape:'false'});
+}
+</script>
+

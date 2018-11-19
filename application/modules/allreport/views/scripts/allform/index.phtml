@@ -32,10 +32,17 @@
 		       foreach($report_url as $url){
 		       if($url['controller']=='allform' AND $url['action']!='index'){
 	   ?>
-		        <li><a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
-		        <?php echo $tr->translate($url['label']);?></a></li>
-		        <?php }?>
-	       <?php }
+	        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+				<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+				<div title="<?php echo $tr->translate($url['label']);?>" class="tile-stats report-list">
+					<div class="icon"><i class="fa fa-book"></i></div>
+					<div class="count">&nbsp;</div>
+	                 	<h3><?php echo $tr->translate($url['label']);?></h3>
+				</div>
+				</a>
+		    </div>
+	        <?php }?>
+       <?php }
        	  }?>
     </ul>
   </div>

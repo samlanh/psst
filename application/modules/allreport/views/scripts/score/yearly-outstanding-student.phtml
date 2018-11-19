@@ -57,17 +57,32 @@ dojo.ready(function(){
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
+			td{line-height: 27px;}
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
-					$semester_str = array(1=>"I",2=>"II");
 					 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
 					 $duplicate=0;$count_pass=0;$female=0;
 					 $rank1="";$rank2="";$rank3="";$rank4="";$rank5="";
-					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ $i++;
-						if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");$female++;}
+					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
+					 	$i++;
+						if($rs['sex']==1){ 
+								$sex = $tr->translate("MALE");
+						}else{
+								$sex = $tr->translate("FEMALE");$female++;
+						}
 						
-						$score_average = ($rs['avg_exam']+$rs['average'])/2;
+						$average_semester1 = ($rs['avg_forsemester1']+$rs['avg_formonthsemester1'])/2;
+						$average_semester2 = ($rs['avg_forsemester2']+$rs['avg_formonthsemester2'])/2;
+						$score_average = ($average_semester1+$average_semester2)/2;
+							
+						if($score_average==$old_totalscore){
+							$duplicate=$duplicate+1;
+						}else{
+							$old_rank=$old_rank+1+$duplicate;
+							$duplicate=0;
+						}
+						
 						if($score_average == $old_totalscore){
 							if($key==1){
 								$rank2=$old_rank;
@@ -104,49 +119,27 @@ dojo.ready(function(){
 							}
 						}
 					?>
-								
 					<?php 
 						$old_totalscore = $score_average;
 					?>
-					
 				<?php }}?>
-				
 				<tr>
 					<td>
-						<table width="100%" border="0" style="background-image: url('logo.png');">
+						<table cellpadding="0" cellspacing="0" width="100%" border="0" style="background-image: url('logo.png');">
 							<tr>
-								<td colspan="3" align="center" style="font-family: Khmer MEF2;font-size: 22px;">
+								<td colspan="3" align="center" style="font-family: Khmer OS Bokor;font-size: 20px;">
 									ព្រះរាជាណាចក្រកម្ពុជា <br />
 									ជាតិ សាសនា ព្រះមហាក្សត្រ <br />
 									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/style.png'?>">
 								</td>
 							</tr>
-						
 							<tr>
-								<td width="33%">&nbsp;</td>
-								<td width="34%">&nbsp;</td>	
-								<td width="33%">&nbsp;</td>
-							</tr>
-							
-							<tr>
-								<td>
-									<table width="70%">
-										<tr>
-											<td width="100%" align="center">
-												<img style="width: 50%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-												<div style="font-size:10px;">សាលាសម្រាប់វរសិស្ស</div>
-												<div style="font-size:15px;font-family:Mistral;">School for the Elite</div>
-											</td>
-										</tr>
-									</table>
-									
+								<td></td>
+								<td align="center" style="font-family: Khmer OS Bokor;font-size: 18px;color:#1318b9;">
+									<div style="font-size: 20px;margin-top:20px;">តារាងកិត្តិយស </div>
+									<span style="white-space: nowrap;">ប្រចាំឆ្នាំសិក្សា  <label id="academic_year"></label></span><br />
+									 <?php echo $this->studentgroup[0]['group_code'];?>
 								</td>
-								<td align="center" style="font-family: Khmer MEF2;font-size: 18px;">
-									<span style="font-size: 20px;">តារាងកិត្តិយស </span><br />
-									ប្រចាំឆ្នាំសិក្សា  <label id="academic_year"></label><br />
-									ថ្នាក់ <?php echo $this->studentgroup[0]['grade'];?>
-								</td>
-								
 								<script type="text/javascript">
 									year = convertEnglishToKhmerNumber(' <?php echo $this->studentgroup[0]['start_year'];?>')+' - '+convertEnglishToKhmerNumber('<?php echo $this->studentgroup[0]['end_year'];?>');
 									dojo.byId('academic_year').innerHTML=year;
@@ -156,12 +149,12 @@ dojo.ready(function(){
 							</tr>
 							<style>
 								.number{color: red;}
-								.studentname{color:#1318b9;font-size: 19px;}
+								.studentname{color:#1318b9;font-size: 17px;line-height: 12px;}
 							</style>
 							<tr>
 								<td>&nbsp;</td>
 								<td>
-									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 17px;">
+									<table width="100%" style="margin: 0 auto; font-family: Khmer OS Bokor;font-size: 16px;">
 										<tr>
 											<td align="center">
 												<table width="125px" height="150px">
@@ -185,10 +178,9 @@ dojo.ready(function(){
 								</td>
 								<td>&nbsp;</td>
 							</tr>	
-							
 							<tr>
 								<td>
-									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 17px;">
+									<table width="50%" style="margin: 0 auto;font-family: Khmer OS Bokor;font-size: 16px;">
 										<tr>
 											<td align="center">
 												<table width="125px" height="150px">
@@ -214,7 +206,7 @@ dojo.ready(function(){
 									&nbsp;
 								</td>
 								<td>
-									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 17px;">
+									<table width="50%" style="margin: 0 auto;font-family: Khmer OS Bokor;font-size: 16px;">
 										<tr>
 											<td align="center">
 												<table width="125px" height="150px">
@@ -237,17 +229,12 @@ dojo.ready(function(){
 									</table>
 								</td>
 							</tr>
-							
 							<tr>
 								<td colspan="3">&nbsp;</td>
 							</tr>
-							<tr>
-								<td colspan="3">&nbsp;</td>
-							</tr>
-							
 							<tr>
 								<td>
-									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 17px;">
+									<table width="50%" style="margin: 0 auto;font-family: Khmer OS Bokor;font-size: 16px;">
 										<tr>
 											<td align="center">
 												<table width="125px" height="150px">
@@ -269,11 +256,9 @@ dojo.ready(function(){
 										</tr>
 									</table>
 								</td>
+								<td>&nbsp;</td>
 								<td>
-									&nbsp;
-								</td>
-								<td>
-									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 17px;">
+									<table width="50%" style="margin: 0 auto;font-family: Khmer OS Bokor;font-size: 16px;">
 										<tr>
 											<td align="center">
 												<table width="125px" height="150px">
@@ -298,64 +283,35 @@ dojo.ready(function(){
 							</tr>	
 							<tr>
 								<td colspan="3">
-									&nbsp;
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3">
 									&nbsp;&nbsp;&nbsp; បញ្ឈប់បញ្ជីត្រឹមចំនួនសិស្ស <?php echo count($this->studentgroup)?> នាក់ ស្រី <?php echo $female;?> នាក់ ។
 								</td>
 							</tr>	
 							<tr>
 								<td colspan="1">
-									&nbsp;&nbsp;&nbsp; ភ្នំពេញ ថ្ងៃទី &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ខែ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ឆ្នាំ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									&nbsp;&nbsp;&nbsp; ភ្នំពេញ ថ្ងៃទី&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ខែ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ឆ្នាំ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								</td>
 								<td colspan="1">
 									&nbsp;
 								</td>
 								<td colspan="1">
-									&nbsp;&nbsp;&nbsp; ភ្នំពេញ ថ្ងៃទី &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ខែ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ឆ្នាំ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									&nbsp;&nbsp;&nbsp; ភ្នំពេញ ថ្ងៃទី &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ខែ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ឆ្នាំ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								</td>
 							</tr>	
-							<tr>	
-								<td colspan="3">
-									&nbsp;
-								</td>
-							</tr>
 							<tr>
-								<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 15px;">
+								<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 16px;">
 									បានឃើញ និង ឯកភាព <br />
 									នាយកសាលា
 								</td>
 								<td colspan="1">
 									&nbsp;
 								</td>
-								<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 15px;">
+								<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 16px;">
 									គ្រូបន្ទុកថ្នាក់
 								</td>
 							</tr>	
-							<tr>	
-								<td colspan="3">
-									&nbsp;
-								</td>
-							</tr>
-							<tr>	
-								<td colspan="3">
-									&nbsp;
-								</td>
-							</tr>
-							<tr>	
-								<td colspan="2">
-									&nbsp;
-								</td>
-								<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 15px;">
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $this->studentgroup[0]['teacher_name'];?>
-								</td>
-							</tr>
 						</table>
 					</td>
 				</tr>
-				
 		</table>
 	</div>
 </div>

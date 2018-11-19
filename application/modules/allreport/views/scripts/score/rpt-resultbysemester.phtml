@@ -73,7 +73,7 @@
 				<tr>
 					<td width="20%"></td>
 					<td colspan="1" align="center" style="border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-						<strong​​ style="font-weight:bold;color:red; font-size: 18px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("STUDENT_SCORE_SEMESTER_REPORT");?>: <?php echo $semester_str[$rs['for_semester']];?></strong><br />
+						<strong​​ style="font-weight:bold;color:red; font-size: 18px;font-family: 'Times New Roman','Khmer OS Bokor';"><?php echo $tr->translate("STUDENT_SCORE_SEMESTER_REPORT");?>: <?php echo $semester_str[$rs['for_semester']];?></strong><br />
 						<strong​​ style="font-weight:bold;color:#4839bd; font-size: 13px;font-family:'Times New Roman','Khmer OS Bokor';">
 							<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
 							<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> ,
@@ -105,7 +105,7 @@
 								</td>
 							</tr>
 							<?php }$i++;?>
-							<tr class="style" style="">
+							<tr class="style">
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 								<td align="center" style="white-space:nowrap;">&nbsp;<?php echo $rs['stu_code'];?>&nbsp;</td>
 								<td style="white-space:nowrap;">&nbsp;<?php if(!empty($rs['stu_khname'])){echo $rs['stu_khname'];}else{echo $rs['stu_enname'];}?>&nbsp;</td>

@@ -27,6 +27,7 @@
     	<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'transfercredit','action'=>'transfer')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				dijit.byId("saveclose").set("disabled",true);
 				stu_name = dijit.byId('stu_name').get('value');
 				stu_idfrom = dijit.byId('student_name').get('value');
 				if(stu_idfrom == stu_name){
@@ -38,7 +39,6 @@
 				stu_idto = dijit.byId('stu_idto').get('value');s	
        			 if(stu_idto==0){
 					alert("សូមជ្រើសរើសអត្តលេខសិស្ស");dijit.byId('stu_idto').focus();return false;}
-        			dijit.byId("saveclose").set("disabled",true);
 					return true;
 			}else {
 				return false;
@@ -105,16 +105,10 @@
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("INFORMATION_RECEIVE");?> 
 	                   </label>
 	                </div>
-	                 <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_CODE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement('stu_idto');?>
-		                </div>
-		             </div>
 		             <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                <?php echo $frm->getElement('stu_name');?>
+		                	<input id="stu_name" />
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -155,7 +149,7 @@
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 				 	<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
 						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'accounting','controller'=>"transfercredit",'action'=>'index'),null,true); ?>';" />
-					<input type="submit" label="<?php echo $tr->translate("SAVECLOSE");?>" name='saveclose' value='saveclose' dojoType="dijit.form.Button"
+					<input type="submit" label="<?php echo $tr->translate("SAVECLOSE");?>" name='saveclose' id="saveclose" value='saveclose' dojoType="dijit.form.Button"
 					 iconClass="dijitIconDelete"/>
                	</div>
              </div>
@@ -164,6 +158,50 @@
 </div>
 
 <script type="text/javascript">
+dojo.require("dijit.form.Textarea");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.store.Memory");
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "stu_name",
+		name: "stu_name",   
+		required:true,        
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function() {  
+		}
+	}, "stu_name");
+	getallstudentname();
+	 var branch_id = dijit.byId('branch_id');
+	 	branch_id.on('change', function(evt) {
+	 		getallstudentname();
+	    });
+});
+var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+function getallstudentname(){//
+	branch_id = dijit.byId("branch_id").attr("value");
+	if(branch_id==''){  
+		dijit.byId("branch_id").focus();
+		return false;}
+	dojo.xhrPost({
+		url:url_data,
+		content:{
+			'branch_id':branch_id
+		},
+		handleAs:"json",
+		load: function(data) {
+			student_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('stu_name').set('store',student_store);  
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
 	dojo.require("dijit.form.Textarea");
 	dojo.ready(function(){
 		setSelected(1);

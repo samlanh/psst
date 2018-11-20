@@ -14,7 +14,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,				
 				(SELECT stu_code FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) AS stu_id, 
 				(SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) AS stu_idname,
-				(SELECT s.stu_code FROM `rms_student` WHERE rms_student.stu_id = c.stu_idto LIMIT 1) AS stu_idto,
+				(SELECT CONCAT(stu_code) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.stu_name LIMIT 1) AS stu_idto,
 				(SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.stu_name LIMIT 1) AS stu_name,
 				 total_amount,
 				 prob,
@@ -25,7 +25,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				rms_transfer_credit c,
 				rms_student AS s
 			  WHERE
-				  s.stu_id = c.stu_idto
+				  s.stu_id = c.stu_name
 			";
  		$where="";
 		if (!empty($search['adv_search'])){
@@ -69,7 +69,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'date'			=>$data['Date'],
 				'end_date'		=>$data['end_date'],
 				
-				'stu_idto'		=>$data['stu_idto'],
+				//'stu_idto'		=>$data['stu_idto'],
 				'stu_name'		=>$data['stu_name'],
 				'start_date'	=>$data['start_date'],
 				'end_dates'		=>$data['end_dates'],
@@ -82,7 +82,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 		
 		$arr = array(
 				'branch_id'		=>$data['branch_id'],
-				'student_id'	=>$data['stu_idto'],
+				//'student_id'	=>$data['stu_idto'],
 				'total_amount'	=>0,
 				'total_amountafter'=>0,
 				'note'			=>$data['Description'],

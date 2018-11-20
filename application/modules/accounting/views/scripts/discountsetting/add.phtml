@@ -63,7 +63,23 @@ dojo.ready(function(){
     		</div>
     	</div>
 		<form id='add_discount' action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded">
-			<script type="dojo/method" event="onSubmit">   
+			<script type="dojo/method" event="onSubmit"> 
+				dranch=dijit.byId('branch_id').get('value');
+					if(dranch==''){
+						alert('Please Select Branch!');
+						return false;
+					}
+				dis_max=dijit.byId('dis_max').get('value');
+					if(dis_max>100){
+					alert('អាចបញ្ជូលពី 1 ដល់ 99!');
+					return false;
+					}  
+				 end_date=dijit.byId('end_date').get('value');
+				 start_date=dijit.byId('start_date').get('value');
+					if(end_date<start_date){
+						alert('ថ្ងៃចាប់ផ្តើម មិនអោយតូចធំជាងថ្ងៃបញ្ចប់!');
+						return false;
+					}
   				 if(this.validate()) {
     				dijit.byId("save_close").attr("disabled",true);
 					dijit.byId("save_new").attr("disabled",true);
@@ -177,12 +193,23 @@ dojo.ready(function(){
 </div>
 <script>
 function submitDataClose(){
+	dranch=dijit.byId('branch_id').get('value');
+	if(dranch==''){
+		alert('Please Select Branch!');
+		return false;
+	}
+	dis_max=dijit.byId('dis_max').get('value');
+	if(dis_max>100){
+		alert('អាចបញ្ជូលពី 1 ដល់ 99!');
+		return false;
+	}
+	end_date=dijit.byId('end_date').get('value');
+	start_date=dijit.byId('start_date').get('value');
+	if(end_date<start_date){
+		alert('ថ្ងៃចាប់ផ្តើម មិនអោយតូចធំជាងថ្ងៃបញ្ចប់!');
+		return false;
+	} 
 	if(dijit.byId('add_discount').validate()) {
-		disname=dijit.byId('disname_id').get('value');
-		if(disname==''){
-			alert('Please Select Name Discount!');
-			return false;
-		}
 		dijit.byId('save_close').set('disabled',true);
 		dijit.byId('save_new').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'discountsetting','action'=>'add')); ?>';
@@ -198,6 +225,7 @@ function submitDataClose(){
 		});
 	}
 }
+
 var url_adddiscount = '<?php echo $this->url(array('module'=>'accounting','controller'=>'discountsetting','action'=>'adddiscount')); ?>';
 	function addDiscount(){
 		if(dijit.byId('frm_adddiscount').validate()){

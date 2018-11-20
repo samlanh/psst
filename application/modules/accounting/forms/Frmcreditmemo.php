@@ -357,7 +357,7 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 		$stu_name->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
-				'autoComplete'=>"true",
+				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
 				'onchange'=>'setSelected(2)'
 		));

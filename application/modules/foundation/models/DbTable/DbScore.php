@@ -358,7 +358,7 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		}else{
 			$sql.=" AND amount_subject_sem >0 ";
 		}
-		$sql.=' ORDER BY gsjd.subject_id ASC ';
+		$sql.=' ORDER BY gsjd.id ASC ';
 // 		echo $sql;
 		return $db->fetchAll($sql);
 		

@@ -353,9 +353,18 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/score/rpt-score-bac-monthly");
     		exit();
     	}
+    	if ($rs['exam_type']==2){
+    		$monthlysemesterAverage = $db->getAverageMonthlyForSemester($rs['group_id'], $rs['for_semester'], $rs['student_id']);
+    		$this->view->monthlySemester = $monthlysemesterAverage;
+    		
+    		$semesterAverage = $db->getAverageSemesterFull($rs['group_id'], $rs['for_semester'], $rs['student_id']);
+    		$this->view->Semester = $semesterAverage;
+    	}
     	$db = new Foundation_Model_DbTable_DbScore();
     	$subject =$db->getSubjectByGroup($rs['group_id'],null,$rs['exam_type']);
     	$this->view->subject = $subject;
+    	
+    	
     }
 }
 

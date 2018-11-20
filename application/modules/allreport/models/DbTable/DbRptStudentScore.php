@@ -1097,7 +1097,6 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 		ORDER BY total_avg DESC ) 
 		FROM rms_score_monthly AS dd ,rms_score AS ss WHERE  
 			ss.`id`=dd.`score_id` 
-			AND ss.exam_type=1
 			AND ss.group_id= g.`id`
 			AND ss.id=s.`id`
 			)
@@ -1169,7 +1168,46 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    		";
    		return $db->fetchRow($sql);
    }
-   function countStudentAttendenceBYtype($group_id,$student,$attendence_status,$monthly=null){
+   function getAverageMonthlyForSemester($group_id,$semester,$stu_id){
+   		$db = $this->getAdapter();
+   		$sql="
+	   		SELECT 
+				v.*,
+				FIND_IN_SET( total_avg, (    
+				SELECT GROUP_CONCAT( total_avg
+				ORDER BY total_avg DESC ) 
+				FROM v_average_semster_monthly_exam AS dd WHERE  
+					
+					 dd.group_id=v.group_id
+					AND dd.for_semester = v.for_semester
+					)
+				) AS rank
+				 FROM `v_average_semster_monthly_exam` AS v
+				WHERE v.group_id=$group_id
+				AND v.stu_id=$stu_id
+				AND v.for_semester =$semester
+   		";
+   		return $db->fetchRow($sql);
+   }
+   function getAverageSemesterFull($group_id,$semester,$stu_id){
+   		$db = $this->getAdapter();
+   		$sql="SELECT v.*,
+			FIND_IN_SET( average_semester_score, (    
+			SELECT GROUP_CONCAT( average_semester_score
+			ORDER BY average_semester_score DESC ) 
+			FROM v_average_semester_full AS dd WHERE  	
+				 dd.group_id=v.group_id
+				AND dd.for_semester =v.for_semester
+				)
+			) AS rank 
+			FROM `v_average_semester_full` AS v
+			WHERE v.for_semester = $semester
+			AND v.group_id =$group_id
+			AND v.stu_id = $stu_id
+			LIMIT 1";
+   		return $db->fetchRow($sql);
+   }
+   function countStudentAttendenceBYtype($group_id,$student,$attendence_status,$monthly=null,$for_semester=null){
    		$db = $this->getAdapter();
    		$sql="SELECT 
 			COUNT(satd.id) AS attendence
@@ -1182,10 +1220,15 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 			AND sat.group_id =$group_id
 			AND satd.attendence_status=$attendence_status
 			   		";
+   		if (!empty($for_semester)){
+   			$sql.= " AND sat.for_semester=".$for_semester;
+   		}
    		if (!empty($monthly)){
    			$sql.= " AND EXTRACT(MONTH FROM sat.date_attendence)=".$monthly;
    		}
    		$sql.=" LIMIT 1";
    		return $db->fetchOne($sql);
    }
+   
+   
 }

@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
+	$this->headTitle($tr->translate('RPT_STUDY_CERTIFICATION')); 
 	echo $this->headTitle(''); 
 
 	//print_r($photo); exit();
@@ -25,7 +25,7 @@ p.padding-left {
 }
 
 table#exportExcel tr td {
-    font-size: 14px !important;
+    font-size: 15px !important;
 }
 label.title {
     font-size: 14px !important;
@@ -94,16 +94,16 @@ dojo.ready(function(){
 						<td style="text-align: left; list-style:22px; line-height:24px; font-size:30px;font-weight: bold; list-style:none;​">
 							<li align="center" style="margin-right: 45%;"><img alt="" src="<?php echo $this->baseUrl()."/images/logo.png"?>" style="width: 112px;   display: inline-block;"></li>
 					   		<li style="font-size:16px;  font-weight: initial; font-family:'Khmer OS Muol Light';">វិទ្យាស្ថានបច្ចេកទេសឧស្សាហកម្ម</li>
-					   		<li style="font-size:16px;  font-weight: initial; font-family:'Times New Roman';" >INDUSTRIAL TECHNICAL INSTITUTE</li>
+					   		<li style="font-size:16px;  font-weight: bold; font-family:'Times New Roman';" >INDUSTRIAL TECHNICAL INSTITUTE</li>
 					   		<li style="font-size:16px;  font-weight: initial; font-family:'Khmer OS Muol Light';" >លេខ :  ................................</li>
 					   </td>
 					   <td width="40%" valign="middle">
 						</td>
 					   <td style="list-style:25px; line-height:25px; font-size:30px;font-weight: bold; list-style:none;">
-					   		<li style="font-size:18px; text-align: center;    font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</li>
-					   		<li style="font-size:18px; text-align: center;     font-weight: initial; font-family:'Times New Roman';" >KINGDOM OF CAMBODIA</li>
+					   		<li style="font-size:18px; text-align: center;     font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</li>
+					   		<li style="font-size:18px; text-align: center;     font-weight: bold; font-family:'Times New Roman';" >KINGDOM OF CAMBODIA</li>
 					   		<li style="font-size:18px; text-align: center;     font-weight: initial; font-family:'Khmer OS Muol Light';">ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
-					   		<li style="font-size:18px; text-align: center;     font-weight: initial; font-family:'Times New Roman';" >NATION RELIGION KING</li>
+					   		<li style="font-size:18px; text-align: center;     font-weight: bold; font-family:'Times New Roman';" >NATION RELIGION KING</li>
 					   		<li align="center" ><img alt="" src="<?php echo $this->baseUrl()."/images/ifrma.png"?>" style="width: 170px; height: 18px;  display: inline-block;"></li>
 					   </td>
 					</tr>
@@ -117,9 +117,9 @@ dojo.ready(function(){
 					<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
 					   <td colspan="5" align="center">
 					   		<label style="font-size:28px;font-weight: initial;font-family:'Khmer OS Muol Light';">វិញ្ញាបនបត្របញ្ជាក់ការសិក្សា</label><br>
-					   		<label style="font-size:28px;font-weight: initial;font-family:'Times New Roman';">CERTIFICATION</label><br>
+					   		<label style="font-size:28px;font-weight: bold;font-family:'Times New Roman';">CERTIFICATION</label><br>
 					   		<label style="font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';">នាយក វិទ្យាស្ថានបច្ចេកទេសឧស្សាហកម្ម បញ្ជាក់ថា </label><br>
-					   		<label style="font-size:18px;font-weight: initial;font-family:'Times New Roman';">The Director of the Industrial Technical Institute certifies that:</label>
+					   		<label style="font-size:18px;font-weight: bold;font-family:'Times New Roman';">The Director of the Industrial Technical Institute certifies that:</label>
 					   </td>
 					</tr>
 					<tr>
@@ -184,7 +184,12 @@ dojo.ready(function(){
 	  				<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
 					   <td colspan="5" align="center">
 					   		<label style="font-size:13px;font-weight:bold; font-family:'Khmer OS Muol Light';">លិខិតបញ្ជាក់នេះបានចេញអោយសាមីជន ដើមយកទៅប្រើប្រាស់តាមការដែលអាចប្រើបាន </label><br>
-					   		<label style="font-size:13px;font-weight:initial;font-family:'Khmer OS Muol Light';">This certification is presented to the bearer for official purposes it may serve</label>
+					   		<label style="font-size:13px;font-weight:bold;font-family:'Khmer OS Muol Light';">This certification is presented to the bearer for official purposes it may serve</label>
+					   </td>
+					</tr>
+					<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
+					   <td colspan="2" align="center" >
+					   		&nbsp;
 					   </td>
 					</tr>
 					<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >

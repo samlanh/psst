@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
+	$this->headTitle($tr->translate('RPT_LIST_OF_SCORE')); 
 	echo $this->headTitle(''); 
 
 	//print_r($photo); exit();
@@ -25,7 +25,7 @@ p.padding-left {
 }
 
 table#exportExcel tr td {
-    font-size: 14px !important;
+    font-size: 15px !important;
 }
 label.title {
     font-size: 14px !important;
@@ -63,7 +63,7 @@ dojo.ready(function(){
 		</div>
 </div>
 </table>
-<div style="background: #fff;width: 25cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;"  border="1">
+<div style="background: #fff;width: 28cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 <div id="divPrint">
 			<style>
 	   			label.value{
@@ -90,18 +90,21 @@ dojo.ready(function(){
 				}
 	  		 </style>
 				<table id="exportExcel" width="100%" style="font-size:12px; font-family:Tahoma,'Khmer OS Battambang';" > 
-					<tr colspan="5" class="head">
-						<td width="80%" style="text-align: left; list-style:22px; line-height:24px; font-size:30px;font-weight: bold; list-style:none;​">
-							<li align="center" style="margin-right: 46%;"><img alt="" src="<?php echo $this->baseUrl()."/images/logo.png"?>" style="width: 112px;   display: inline-block;"></li>
-					   		<li style="font-size:16px;  font-weight: initial; font-family:'Khmer OS Muol Light';">វិទ្យាស្ថានបច្ចេកទេសឧស្សាហកម្ម</li>
-					   		<li style="font-size:16px;  font-weight: initial; font-family:'Times New Roman';" >INDUSTRIAL TECHNICAL INSTITUTE</li>
+					<tr colspan="3" class="head">
+						<td width="10%" style="text-align: center; list-style:22px; line-height:24px; font-size:30px;font-weight: bold; list-style:none;​">
+							<li align="center" ><img alt="" src="<?php echo $this->baseUrl()."/images/logo.png"?>" style="width: 112px;   display: inline-block;"></li>
+					   		<li style="font-size:16px;  font-weight: initial; letter-spacing: 0.05em; font-family:'Khmer OS Muol Light';">វិទ្យាស្ថានបច្ចេកទេសឧស្សាហកម្ម</li>
+					   		<li style="font-size:16px;  font-weight: bold; font-family:'Times New Roman';" >INDUSTRIAL TECHNICAL INSTITUTE</li>
 					   		<li style="font-size:16px;  font-weight: initial; font-family:'Khmer OS Muol Light';" >លេខ :  ................................</li>
 					   </td>
-					   <td width="80%" style="text-align: left; list-style:22px; line-height:27px; font-size:30px;font-weight: bold; list-style:none;​">
-					   		<li style="font-size:20px; text-align: center;    font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</li>
-					   		<li style="font-size:20px; text-align: center;     font-weight: initial; font-family:'Times New Roman';" >KINGDOM OF CAMBODIA</li>
-					   		<li style="font-size:20px; text-align: center;     font-weight: initial; font-family:'Khmer OS Muol Light';">ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
-					   		<li style="font-size:20px; text-align: center;    font-weight: initial; font-family:'Times New Roman';" >NATION RELIGION KING</li>
+					   <td width="42%"> 
+					   		<label>&nbsp;&nbsp;</label>
+					   </td>
+					   <td width="10%" style="text-align: center; list-style:22px; line-height:27px; font-size:30px;font-weight: bold; list-style:none;​">
+					   		<li style="font-size:20px; text-align: center;letter-spacing: 0.05em; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</li>
+					   		<li style="font-size:20px; text-align: center;     font-weight: bold; font-family:'Times New Roman';" >KINGDOM OF CAMBODIA</li>
+					   		<li style="font-size:20px; text-align: center;letter-spacing: 0.05em; font-weight: initial; font-family:'Khmer OS Muol Light';">ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
+					   		<li style="font-size:20px; text-align: center;    font-weight: bold; font-family:'Times New Roman';" >NATION RELIGION KING</li>
 					   		<li align="center" ><img alt="" src="<?php echo $this->baseUrl()."/images/ifrma.png"?>" style="width: 170px; height: 18px;  display: inline-block;"></li>
 					   </td>
 					</tr>
@@ -114,41 +117,41 @@ dojo.ready(function(){
 					
 					<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
 					   <td colspan="5" align="center">
-					   		<label style="font-size:25px;font-weight: initial; line-height:47px; font-family:'Khmer OS Muol Light';">តារាងពិន្ទុ</label><br>
-					   		<label style="font-size:25px;font-weight: initial; line-height:17px; font-family:'Times New Roman';">LIST OF SCORE</label><br>
+					   		<label style="font-size:22px;font-weight: initial; line-height:37px; font-family:'Khmer OS Muol Light';">តារាងពិន្ទុ</label><br>
+					   		<label style="font-size:22px;font-weight: bold; line-height:15px; font-family:'Times New Roman';">LIST OF SCORE</label><br>
 					   </td>
 					</tr>
 					<tr>
 					<td colspan="5">
 					<table  style="font-family:'Khmer OS Battambang'; border-collapse:collapse;  white-space: nowrap;" width="100%" cellspacing="0">
 	  					<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-							<td>ឈ្មោះនិស្សិត</td>
+							<td style="font-weight: bold;">ឈ្មោះនិស្សិត</td>
 							<td> : &nbsp;&nbsp;សន វុទ្ធា</td>
-							<td >Name</td>
+							<td style="font-weight: bold;">Name</td>
 							<td> : &nbsp;Sorn Sokun</td>
 						</tr>
 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-							<td>ភេទ</td>
+							<td style="font-weight: bold;">ភេទ</td>
 							<td> : &nbsp;&nbsp;ប្រុស </td>
-							<td>Sex </td>
+							<td style="font-weight: bold;">Sex </td>
 							<td>  : &nbsp; Male</td>
 						</tr>
 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-							<td>ថ្ងៃខែឆ្នាំកំណើត</td>
+							<td style="font-weight: bold;">ថ្ងៃខែឆ្នាំកំណើត</td>
 							<td> : &nbsp;&nbsp; ១៩៩៧ / ០៥ / ០៨</td>
-							<td>Date of Birth</td>
+							<td style="font-weight: bold;">Date of Birth</td>
 							<td> : &nbsp; 1997 / 05 / 08</td>
 						</tr>
 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-							<td>មុខជំនាញ</td>
+							<td style="font-weight: bold;">មុខជំនាញ</td>
 							<td> : &nbsp;&nbsp;	វិទ្យាស្ថានបច្ចេកទេសឧស្សាហកម្ម</td>
-							<td>Specialization</td>
+							<td style="font-weight: bold;">Specialization</td>
 							<td> : &nbsp;Diploma level of Metal Engineering</td>
 						</tr>
 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-							<td>សម័យប្រឡងបញ្ចប់ការសិក្សា</td>
+							<td style="font-weight: bold;">សម័យប្រឡងបញ្ចប់ការសិក្សា</td>
 							<td> : &nbsp;&nbsp;	ថ្ងៃទី ១៧ ខែ កញ្ញា ឆ្នាំ ២០១៥</td>
-							<td>Final Examination Session</td>
+							<td style="font-weight: bold;">Final Examination Session</td>
 							<td> : &nbsp;17 September 2015</td>
  						</tr>
  						
@@ -218,21 +221,25 @@ dojo.ready(function(){
 								<td >335.00</td>
 								<td >Weak Pass</td>	
 							</tr>
-					</table>
-					</td> 
-					</tr>
-					<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
-						<td colspan="2" align="center" >
-					   		<label style=" margin-right: 10px; margin-bottom: 100px; font-size:13px;font-weight: initial;font-family:'Khmer OS Muol Light';">Notes: All grade point averages computed are based on scale 100.00 </label><br>
-					   </td>
-					   <td colspan="2" align="center" >
-					   		<label style=" margin-left: 10px; font-size:13px;font-weight: initial;font-family:'Khmer OS Muol Light';">រាជធានីភ្នំពេញ ថ្ងៃទី០៩ ខែ កុម្ភៈ ឆ្នាំ ២០១៧ </label><br>
-					   		<label style=" margin-left: 10px; font-size:13px;font-weight: initial;font-family:'Times New Roman';">Phnom Penh, Feburary 09, 2017</label><br>
-					  		<label style=" margin-left: 10px; font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';">នាយក</label><br>
-					  		<label style=" margin-left: 10px; font-size:18px;font-weight: initial;font-family:'Times New Roman';">Director</label>
-					   </td>
-					</tr>
-				    </table>
+						</table>
+						</td> 
+						</tr>
+							<tr class="head" style="font-weight: initial;font-family:'Khmer OS Muol Light';" >
+							   <td colspan="2" align="center" >
+							   		<label style=" margin-left: 10px; font-size:13px;font-weight: bold;font-family:'Khmer OS Muol Light';">Notes: All grade point averages computed are based on scale 100.00 </label><br>
+							  		<label style=" margin-left: 10px; font-size:13px;font-weight: initial;font-family:'Times New Roman';">&nbsp;</label><br>
+							  		<label style=" margin-left: 10px; font-size:13px;font-weight: initial;font-family:'Times New Roman';">&nbsp;</label><br>
+							  		<label style=" margin-left: 10px; font-size:13px;font-weight: initial;font-family:'Times New Roman';">&nbsp;</label><br>
+							  		<label style=" margin-left: 10px; font-size:13px;font-weight: initial;font-family:'Times New Roman';">&nbsp;</label>
+							   </td>
+							   <td colspan="2" align="center" >
+							   		<label style=" margin-left: 10px; font-size:13px;font-weight: initial;font-family:'Khmer OS Muol Light';">រាជធានីភ្នំពេញ ថ្ងៃទី០៩ ខែ កុម្ភៈ ឆ្នាំ ២០១៧ </label><br>
+							   		<label style=" margin-left: 10px; font-size:13px;font-weight: initial;font-family:'Times New Roman';">Phnom Penh, Feburary 09, 2017</label><br>
+							  		<label style=" margin-left: 10px; font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';">នាយក</label><br>
+							  		<label style=" margin-left: 10px; font-size:18px;font-weight: initial;font-family:'Times New Roman';">Director</label>
+							   </td>
+							</tr>
+					   </table>
 				   </td>
 				</tr>
   		 	</table>

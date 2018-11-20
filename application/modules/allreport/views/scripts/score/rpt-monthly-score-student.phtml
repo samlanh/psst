@@ -48,6 +48,50 @@ dojo.ready(function(){
 });
 </script>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('TRANSCRIPT');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
+    <form action="" dojoType="dijit.form.Form" method="post">
+		<div class="form-group">
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<select id="group_id" name="group_id" class="fullside"   dojoType="dijit.form.FilteringSelect" >
+        			<?php if (!empty($this->group)) foreach ($this->group as $rs){?>
+			   		<option value="<?php echo $rs['id']?>" <?php if($rs['id']==$this->search['group_id']){echo "selected='selected'";}?>><?php echo $rs['name']?></option>
+			   		<?php }?>
+			   	</select>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<select id="exam_type" name="exam_type" class="fullside"   dojoType="dijit.form.FilteringSelect" >
+			   		<option value="1" <?php if ($this->search['exam_type']==1){ echo 'selected="selected"';}?>>ប្រចាំខែ</option>
+			   		<option value="2" <?php if ($this->search['exam_type']==2){ echo 'selected="selected"';}?>>ប្រលងឆមាស</option>
+			   	</select>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+						<option value="1" <?php if ($this->search['for_semester']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 1 </option>
+						<option value="2" <?php if ($this->search['for_semester']==2){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 2</option>
+				</select>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+        		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+						<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+					<?php }}?>
+				</select>
+        	</div>
+        	<div class="col-md-2 col-sm-2 col-xs-12">
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+				<input type="hidden" id="stu_id" name="stu_id" value="<?php echo $this->search['stu_id']?>" />
+        	</div>
+        </div>
+	</form>
 	<div id="divPrint">
 		<style type="text/css">
 			.style{

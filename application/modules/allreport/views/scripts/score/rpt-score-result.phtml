@@ -164,7 +164,7 @@ dojo.ready(function(){
 								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 							    <td align="center" style="white-space:nowrap;">
 							    	&nbsp;
-							    	<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['student_id']."&score_id=".$rs['id'];?>"><?php echo $rs['stu_code'];?></a>
+							    	<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['student_id']."&group_id=".$rs['group_id']."&exam_type=".$rs['exam_type']."&for_semester=".$rs['for_semester']."&for_month=".$rs['for_month_id'];?>"><?php echo $rs['stu_code'];?></a>
 							    	&nbsp;
 							    </td>
 								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?$rs['stu_khname']:$rs['stu_enname'];?>&nbsp;</td>

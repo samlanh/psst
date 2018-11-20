@@ -1123,13 +1123,28 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 			AND s.status = 1
 			AND s.type_score=1 
 			";
+   		if (!empty($data['group_id'])){
+   			$sql.=" AND g.`id`=".$data['group_id'];
+   		}
    		if (!empty($data['stu_id'])){
    			$sql.=" AND st.`stu_id`=".$data['stu_id'];
    		}
-   		if (!empty($data['score_id'])){
-   			$sql.=" AND s.`id`=".$data['score_id'];
+   		if (!empty($data['exam_type'])){
+   			$sql.=" AND s.exam_type=".$data['exam_type'];
+   			
+   			if ($data['exam_type']==1){
+   				if (!empty($data['for_month'])){
+   					$sql.=" AND s.`for_month`=".$data['for_month'];
+   				}
+   			}else if ($data['exam_type']==2){
+   				if (!empty($data['for_semester'])){
+   					$sql.=" AND s.`for_semester`=".$data['for_semester'];
+   				}
+   			}
    		}
-   		$sql.=" LIMIT 1";
+   		
+   		
+   		$sql.=" ORDER BY s.id DESC LIMIT 1";
    		return $db->fetchRow($sql);
    }
    function getRankSubjectMonthlyExam($group_id,$stu_id,$subject_id,$formonth){
@@ -1230,5 +1245,20 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    		return $db->fetchOne($sql);
    }
    
-   
+   function getAllGroupOfStudent($stu_id){
+   		$db = $this->getAdapter();
+   		$sql="
+   			SELECT 
+				g.id,
+				CONCAT(g.group_code,' (',(SELECT CONCAT(t.from_academic,' - ',t.to_academic,' ',t.generation) FROM `rms_tuitionfee` AS t WHERE t.id = g.academic_year LIMIT 1),')' ) AS `name`
+				FROM 
+				`rms_group_detail_student`  AS gds,
+				`rms_group` AS g
+				WHERE 
+				g.id = gds.group_id
+				AND g.status=1
+				AND gds.stu_id =$stu_id
+   		";
+   		return $db->fetchAll($sql);
+   }
 }

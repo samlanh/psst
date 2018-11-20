@@ -24,73 +24,60 @@
     width: 120px;
     margin: 0 auto;
 } 
-</style>	
-	<span style="padding-left: 3px;padding-right: 40px;float: right;font-weight:600;position: absolute;right: 0px;z-index: 9999999;"><a class="add-link addsign" href="<?php echo $this->baseUrl()?>/home/searchstudentinfo"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>ត្រលប់ក្រោយ</a></span>
+.add-link {
+    padding: 10px 15px;
+    display: block;
+}
 
+label.value{
+   				font-weight: initial;
+   				min-width: 90px;
+   				font-size: 14px;
+   				display: inline-block;
+			}
+			p.padding-left {
+			    padding-left: 10px;
+				    line-height: 20px;
+			}
+			label.title {
+			    font-size: 14px;
+			    min-width: 80px;
+			    display: inline-block;
+			}
+			.border {
+			    display: block;
+    width: 100%;
+    height: 2px;
+    margin-bottom: 10px;
+    background: #4839bd;
+			}
+			.green {
+    color: #1ABB9C;
+}
+</style>	
+	
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_INFO');?> <strong><?php echo $this->rs['stu_khname']." (".$this->rs['stu_code'].")";?></strong></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_INFO');?> <strong><?php echo $this->rs['stu_khname']." (".$this->rs['stu_code'].")";?></strong></h4>
 	    			</div>
-	    			<div class="col-sm-4 text-right">
+	    			<div class="col-sm-4 text-right pd-0">
+	    				<span style="display: inline-block;">
+	    					<a class="add-link addsign" href="<?php echo $this->baseUrl()?>/home/searchstudentinfo">
+	    					<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;<?php echo $tr->translate("GO_BACK")?></a>
+	    				</span>
+	    				
 	    			</div>
 	    		</div>
 	    	</div>
 		<div class="card-box">
-			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-				<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
-		 		  if(this.validate()) {	
-
-					return true;
-				} else {
-					return false;
-				}
-			</script>
-			<!-- 
-			<table style="width:100%">
-			  <tr> 
-					<td><input dojoType="dijit.form.TextBox"   id="adv_search" name="adv_search" placeholder="Search....." value="<?php echo $this->adv_search['adv_search']; ?>" class="fullside" type="text"></td>
-					<td><?php //echo $frm->getElement("branch_id");?></td>
-					<td> <?php //echo $frm->getElement("study_year");?></td>
-					<td> <?php //echo $frm->getElement("degree");?></td>
-					<td> <?php //echo $frm->getElement("grade_all");?></td>
-					<td> <?php //echo $frm->getElement("session");?></td>
-			  </tr>
-			  <tr>
-			        <td><?php //echo $frm->getElement("stu_name");?></td> 
-			        <td><?php //echo $frm->getElement("payment_by");?></td>
-			  		<td><?php //echo $frm->getElement("start_date");?></td>
-			 		<td><?php //echo $frm->getElement("end_date");?></td>
-					<td> <?php //echo $frm->getElement("user");?></td>
-					<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-			  </tr>
-			  <input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
-			 </table>
-			  -->
-			</form>
-		</div>
-		<div class="card-box">
-			<form id="add_student" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-				<script type="dojo/method" event="onSubmit">			
-					if(this.validate()) {
-						dijit.byId('save_close').set('disabled',true);	
-						return true;
-					}else {
-						return false;
-					}
-				</script>
 				<!-- Tab Menu -->
 		    	<div class="card-box">
 		    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
 			            <li class="nav-item active">
 			                <a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i> <?php echo $tr->translate("STUDENT_INFO");?></a>
-			            </li>
-			            <li class="nav-item">
-			                <a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
-			                <i class="fa fa-users ml-2"></i> <?php echo $tr->translate("PARENT_INFO");?>
-			                </a>
 			            </li>
 			            <li class="nav-item">
 			                <a class="nav-link" data-toggle="tab" href="#panel23" role="tab">
@@ -126,438 +113,218 @@
 				        <!--Panel 1-->
 				        <div class="tab-pane fade in active" id="panel21" role="tabpanel">
 				        	<div class="card-box">
-					        	<div class="col-md-4 col-sm-4 col-xs-12">
-									<div class="form-group">
-					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_INFO");?> 
-					                   </label>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STUDENT_ID");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['stu_code'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_KH");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['stu_khname'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME_EN");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['stu_enname'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SEX");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php if($this->rs['sex']==1){
-											  	echo $tr->translate("MALE");
-											  }else{
-											  	echo $tr->translate("FEMALE");
-											  }
-										  	?>
-					                   </div>
-					                </div>
-					               	<div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['nationality'];?>
-					                   </div>
-					                </div>
-									<div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATION");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['nation'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("POB");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['pob'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['tel'];?>
-					                   </div>
-					                </div>
-					             </div>
-					             <div class="col-md-4 col-sm-4 col-xs-12">
-									<div class="form-group">
-					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDY_INFO");?> 
-					                   </label>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GROUP");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['group_name'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ACADEMIC_YEAR");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['year_name'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DEGREE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['degree_name'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("GRADE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['grade_name'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SESSION");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php if($this->rs['session']==1){
-							    					echo $tr->translate("MORNING");
-										   		  }elseif ($this->rs['session']==2){
-										   		  		echo $tr->translate("AFTERNOON");
-										   		  } elseif ($this->rs['session']==3){
-										   		  		echo $tr->translate("EVERNING");
-										   		  } else{
-										   		  		echo $tr->translate("WEEKEND");
-										   		  }
-										   	 ?>  
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ROOM_NAME");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['room_name'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("REMARK");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['remark'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php if($this->rs['status']==1){ 
-											 	echo $tr->translate("ACTIVE");
-											  }else{
-											  	echo $tr->translate("DEACTIVE");
-											  }
-											 ?>
-					                   </div>
-					                </div>
-					             </div>
-					             <div class="col-md-4 col-sm-4 col-xs-12">
-									<div class="form-group">
-					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OTHER_INFOMATION");?> 
-					                   </label>
-					                </div>
-					                <div class="form-group">
-					                	<div class="account-image">
-					                		<?php 
-					                		$photo = $this->baseUrl().'/images/no-profile.png';
-					                		if (!empty($this->rs['photo'])){
-					                			if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
-					                				$photo = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
-					                			}
-					                		}
-					                		?>
-											<div class="image-box">
-												<img id="profile_wiew" src="<?php echo $photo;?>" alt=""  />
-											</div>
-										</div>
-					                </div>
-					                 
-					             </div>
-					         </div>
-					         <div class="card-box">
-					        	<div class="col-md-3 col-sm-3 col-xs-12">
-									<div class="form-group">
-					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("CURRENT_ADDRESS");?> 
-					                   </label>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NUMBER_HOME");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['home_num'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STREET");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['street_num'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['village_name'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("COMMUNE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['commune_name'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['district_name'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PROVINCE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['province_name'];?>
-					                   </div>
-					                </div>
-					            </div>
-								
-								<div class="col-md-3 col-sm-3 col-xs-12">
-									<div class="form-group">
-					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OTHER_INFOMATION");?> 
-					                   </label>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("ENGLISH_LANGUAGE_LEVEL");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['lang_level'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("FROM_SCHOOL");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['from_school'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("KNOW_BY");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['know_by'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("SPONSER");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['sponser'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['sponser_phone'];?>
-					                   </div>
-					                </div>
-					            </div>
-								
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<div class="form-group">
-					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("DOCUMENT_INFO");?> 
-					                   </label>
-					                </div>
-					                <div class="form-group">
-					                   <div class="control-label col-md-12 col-sm-12 col-xs-12" >
-											<table width="100%" border="1" style="border:1px solid #000;border-collapse:collapse;line-height: 24px;white-space:nowrap;">
-												<tr align="center" style="font-size:14px;height:27px;font-weight:bold;background-color: #e8e6e6;">
-													<td><?php echo $tr->translate("N_O");?></td>
-													<td><?php echo $tr->translate("DOCUMENT_TYPE");?></td>
-													<td><?php echo $tr->translate("DATE_GIVE");?></td>
-													<td><?php echo $tr->translate("RECEIVED");?></td>
-													<td><?php echo $tr->translate("DATE_BACK");?></td>
-													<td><?php echo $tr->translate("NOTE");?></td>
-												</tr>
-												<?php $i=0;if(!empty($this->document)){foreach($this->document as $rs){$i++;?>
-												<tr style="font-size:13px;height:23px;">
-													<td align="center"><?php echo $i;?></td>
-													<td><?php echo $rs['document_type'];?></td>
-													<td align="center"><?php echo date("d/m/Y",strtotime($rs['date_give']));?></td>
-													<td><?php if($rs['is_receive']==1){echo $tr->translate("RECEIVED");}else{echo $tr->translate("NOT_RECEIVED");}?></td>
-													<td align="center"><?php echo date("d/m/Y",strtotime($rs['date_end']));?></td>
-													<td><?php echo $rs['note'];?></td>
-												</tr>
-												<?php }}?>
+				        		<div style="background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
+								<table width="100%" style="font-size:12px; font-family:Tahoma,'Khmer OS Battambang';"> 
+									<tr class="head">
+										<td colspan="3" align="center" style="border-bottom: 1px solid #4839bd;">
+											<table width="100%" style="white-space:nowrap;">
+												<tbody>
+													<tr>
+														<td width="17%" valign="top">
+															<?php $image = $this->baseUrl()."/images/logo.png";
+																if (!empty($this->rs['photo_branch'])){
+																	$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
+																}
+																
+															?>
+															<img style="max-width: 98%;max-height:90px;" src="<?php echo $image;?>">
+														</td>
+														<td width="83%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
+															<div style="font-size:18px;margin-top: 10px;"><?php echo $this->rs['branch_name']?></div>
+															<div style="line-height: 16px;"><?php echo $this->rs['br_address']?></div>
+															<div style="line-height: 16px;"><?php echo $this->rs['branch_tel']?></div>
+															<div style="line-height: 16px;"><?php echo $this->rs['email_branch']?> / <?php echo $this->rs['website']?></div>
+														</td>
+													</tr>
+												</tbody>
 											</table>
-					                   </div>
-					                </div>
-					            </div>
-								
+									   </td>
+									</tr>
+									<tr class="head">
+									   <td colspan="3" align="center">
+									   		<h2 style="color: #4839bd; font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';" >ប្រវត្តិរូបសង្ខេប</h2>
+									   		<h2 class="green" style="font-size:18px;font-weight: bold;font-family:'Times New Roman','Khmer OS Muol Light';" >Student Profile</h2>
+									   </td>
+									</tr>
+									<tr>
+									   <td colspan="3">
+									   		<table id="exportExcel" style="color: #4839bd; font-family:'Khmer OS Battambang'; border-collapse:collapse;  font-size:14px; white-space: nowrap;" width="100%" cellspacing="0">
+										    	<tr>
+										    		<td align="center" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
+										    			<?php 
+									                		$photo = $this->baseUrl().'/images/no-profile.png';
+									                		if (!empty($this->rs['photo'])){
+									                			if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
+									                				$photo = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
+									                			}
+									                		}
+									                		?>
+										    			<img id="profile_wiew" src="<?php echo $photo;?>" alt="" style="width:100px;max-height: 120px;border: solid 1px #a29f9f;"/>
+										    		</td>
+										    	</tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight: initial; font-family:'Times New Roman','Khmer OS Muol Light';">
+										    			I. ព័ត៌មានសិស្ស / <strong>Student Information</strong>
+										    			<div class="border"></div>
+										    		</td>
+										    	</tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight:600;  font-family:'Times New Roman','Khmer OS Battambang';">
+										    			<p class="padding-left">
+										    			<label class="title">នាមត្រកូល-ខ្លួន</label> : <label class="value"><?php echo $this->rs['stu_khname'];?></label> <label class="title">ជាអក្សរឡាតាំង</label> : <label class="value"><?php echo $this->rs['stu_enname']." ".$this->rs['last_name'];?></label> <label class="title">អត្តលេខ</label> : <label class="value"><?php echo $this->rs['stu_code'];?></label>
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['nationality'];?></label> <label class="title">ភេទ</label> : <label class="value">
+										    			<?php if($this->rs['sex']==1){
+															  	echo $tr->translate("MALE");
+															  }else{
+															  	echo $tr->translate("FEMALE");
+															  }
+														  	?>
+										  				</label> 
+										  				<label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></label>
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">ទីកន្លែងកំណើត</label> : <label class="value"><?php echo $this->rs['pob'];?></label> 
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">អាស័យដ្ឋានបច្ចុប្បន្ន</label> : <label class="value">ផ្ទះលេខ <?php echo $this->rs['home_num'];?> ផ្លូវលេខ  <?php echo $this->rs['street_num'];?> ភូមិ <?php echo $this->rs['village_name'];?> ឃុំ/សង្កាត់ <?php echo $this->rs['commune_name'];?> ស្រុក/ខណ្ឌ <?php echo $this->rs['district_name'];?> រាជធានី/ខេត្ត <?php echo $this->rs['province_name'];?></label> 
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">លេខទូរសព្ទ</label> : <label class="value"><?php echo $this->rs['tel'];?></label> 
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">អ៊ីម៉ែល</label> : <label class="value"><?php echo $this->rs['email'];?></label> 
+										    			</p>
+										    		</td>
+										    	</tr>
+										    	<tr><td>&nbsp;</td></tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight: initial; font-family:'Times New Roman','Khmer OS Muol Light';">
+										    			II. ព័ត៌មានការសិក្សា / <strong>Study Information</strong>
+										    			<div class="border"></div>
+										    		</td>
+										    	</tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+										    			<p class="padding-left">
+										    			<label class="title">ឆ្នាំសិក្សា </label> : <label class="value"><?php echo $this->rs['year_name'];?></label> <label class="title">កម្រិតសិក្សា</label> : <label class="value"><?php echo $this->rs['degree_name'];?></label> <label class="title">ថ្នាក់សិក្សា</label> : <label class="value"><?php echo $this->rs['grade_name'];?></label>
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">វេនសិក្សា </label> : <label class="value"><?php if($this->rs['session']==1){
+												    					echo $tr->translate("MORNING");
+															   		  }elseif ($this->rs['session']==2){
+															   		  		echo $tr->translate("AFTERNOON");
+															   		  } elseif ($this->rs['session']==3){
+															   		  		echo $tr->translate("EVERNING");
+															   		  } else{
+															   		  		echo $tr->translate("WEEKEND");
+															   		  }
+															   	 ?>   	 </label> <label class="title">បន្ទប់សិក្សា</label> : <label class="value"><?php echo $this->rs['room_name'];?></label> 
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">ផ្សេងៗ  </label> : <label class="value"><?php echo $this->rs['remark'];?></label>
+										    			</p>
+										    		</td>
+										    	</tr>
+										    	<tr><td>&nbsp;</td></tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight: initial; font-family:'Times New Roman','Khmer OS Muol Light';">
+										    			III. ព័ត៌មានមាតាបិតា / <strong>Parent Information</strong>
+										    			<div class="border"></div>
+										    		</td>
+										    	</tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+										    			<p class="padding-left">
+										    			<label class="title">ឈ្មោះឪពុក </label> : <label class="value"><?php echo $this->rs['father_enname'];?></label> <label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['father_nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['father_dob'])?"":date("d/m/Y",strtotime($this->rs['father_dob']));?></label>
+										    			</p>
+										    			<p class="padding-left">
+										    			 <label class="title">មុខរបរ</label> : <label class="value"><?php echo $this->rs['fath_job'];?></label> <label class="title">លេខទូរសព្ទ</label> : <label class="value"><?php echo $this->rs['father_phone'];?></label>
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">ឈ្មោះម្ដាយ </label> : <label class="value"><?php echo $this->rs['mother_enname'];?></label> <label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['mother_nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['mother_dob'])?"":date("d/m/Y",strtotime($this->rs['mother_dob']));?></label> 
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">មុខរបរ</label> : <label class="value"><?php echo $this->rs['moth_job'];?></label> <label class="title">លេខទូរសព្ទ</label> : <label class="value"><?php echo $this->rs['mother_phone'];?></label>
+										    			</p>
+										    		</td>
+										    	</tr>
+										    	<tr><td>&nbsp;</td></tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight: initial; font-family:'Times New Roman','Khmer OS Muol Light';">
+										    			IV. ព័ត៌មានអាណាព្យាបាល / <strong>Guardian Information</strong>
+										    			<div class="border"></div>
+										    		</td>
+										    	</tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+										    			<p class="padding-left">
+										    			<label class="title">ឈ្មោះអាណាព្យាបាល  </label> : <label class="value"><?php echo $this->rs['guardian_enname'];?></label> <label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['guardian_nation'];?></label> <label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['guardian_dob'])?"":date("d/m/Y",strtotime($this->rs['guardian_dob']));?></label>
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">មុខរបរ</label> : <label class="value"><?php echo $this->rs['guard_job'];?></label> <label class="title">លេខអត្ត./លិខិតឆ្លងដែន</label> : <label class="value"><?php echo $this->rs['guardian_document'];?></label> <label class="title">លេខទូរសព្ទ  </label> : <label class="value"><?php echo $this->rs['guardian_tel'];?></label>
+										    			</p>
+										    		</td>
+										    	</tr>
+										    	<tr><td>&nbsp;</td></tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight: initial; font-family:'Times New Roman','Khmer OS Muol Light';">
+										    			V. ព័ត៌មានផ្សេងៗ / <strong>Other Information</strong>
+										    			<div class="border"></div>
+										    		</td>
+										    	</tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+										    			<p class="padding-left">
+										    			<label class="title">កម្រិតភាសាបរទេស  </label> : <label class="value"><?php echo $this->rs['lang_level'];?></label> <label class="title">មកពីសាលា</label> : <label class="value"><?php echo $this->rs['from_school'];?></label> <label class="title">ស្គាល់តាមរយះ</label> : <label class="value"><?php echo $this->rs['know_by'];?></label>
+										    			</p>
+										    			<p class="padding-left">
+										    			<label class="title">អ្នកឧបត្ថម</label> : <label class="value"><?php echo $this->rs['sponser'];?></label> <label class="title">លេខទូរស័ព្ទ</label> : <label class="value"><?php echo $this->rs['sponser_phone'];?></label> 
+										    			</p>
+										    		</td>
+										    	</tr>
+										    	<tr><td>&nbsp;</td></tr>
+										    	<tr>
+										    		<td style="font-size:14px; font-weight: initial; font-family:'Times New Roman','Khmer OS Muol Light';">
+										    			VI. ព័ត៌មានឯកសារ / <strong>Document Information</strong>
+										    			<div class="border"></div>
+										    		</td>
+										    	</tr>
+										    	<tr>
+										    		<td style="font-size:14px;font-family:'Times New Roman','Khmer OS Battambang';">
+										    			<table width="100%" border="1" style="border: 1px solid #4839bd;border-collapse:collapse;line-height: 24px;white-space:nowrap;">
+															<tbody>
+															<tr align="center" style="font-size:14px;height:27px;font-weight: bold;background-color: #ffdbdb;">
+																<td><?php echo $tr->translate("N_O");?></td>
+																<td><?php echo $tr->translate("DOCUMENT_TYPE");?></td>
+																<td><?php echo $tr->translate("DATE_GIVE");?></td>
+																<td><?php echo $tr->translate("RECEIVED");?></td>
+																<td><?php echo $tr->translate("DATE_BACK");?></td>
+																<td><?php echo $tr->translate("NOTE");?></td>
+															</tr>
+															<?php $i=0;if(!empty($this->document)){foreach($this->document as $rs){$i++;?>
+															<tr style="font-size:13px;height:23px;">
+																<td align="center"><?php echo $i;?></td>
+																<td><?php echo $rs['document_type'];?></td>
+																<td align="center"><?php echo date("d/m/Y",strtotime($rs['date_give']));?></td>
+																<td align="center"><?php if($rs['is_receive']==1){echo $tr->translate("RECEIVED");}else{echo $tr->translate("NOT_RECEIVED");}?></td>
+																<td align="center"><?php if($rs['is_receive']==1){ echo "-"; }else{echo date("d/m/Y",strtotime($rs['date_end']));}?></td>
+																<td><?php echo $rs['note'];?></td>
+															</tr>
+															<?php }}?>
+															</tbody>
+														</table>
+										    		</td>
+										    	</tr>
+										    </table>
+									   </td>
+									</tr>
+					  		 	</table>	
+					  		 	</div>							
 					        </div>
 				        </div>
 				        <!--/. Panel 1-->
-				       
-				        <!--Panel 2-->
-				        <div class="tab-pane fade in " id="panel22" role="tabpanel">
-				        	<div class="card-box">
-					        	<div class="col-md-4 col-sm-4 col-xs-12">
-									<div class="form-group">
-					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("FATHER_INFO");?> 
-					                   </label>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['father_enname'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo date("d",strtotime($this->rs['father_dob'])>0)?date("d/m/Y",strtotime($this->rs['father_dob'])):"";?>
-											
-											<?php //echo date("d",strtotime($this->rs['father_dob']));?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['father_nation'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OCCUPATION");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['fath_job'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['father_phone'];?>
-					                   </div>
-					                </div>
-					            </div>
-					            <div class="col-md-4 col-sm-4 col-xs-12">
-									<div class="form-group">
-					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("MOTHER_INFO");?> 
-					                   </label>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['mother_enname'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo date("d",strtotime($this->rs['mother_dob'])>0)?date("d/m/Y",strtotime($this->rs['mother_dob'])):"";?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['mother_nation'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OCCUPATION");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['moth_job'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['mother_phone'];?>
-					                   </div>
-					                </div>
-					                
-					            </div>
-					            <div class="col-md-4 col-sm-4 col-xs-12">
-									<div class="form-group">
-					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("GUARDIAN_INFO");?> 
-					                   </label>
-					                </div>
-					                 <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NAME");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['guardian_enname'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DOB");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo date("d",strtotime($this->rs['guardian_dob'])>0)?date("d/m/Y",strtotime($this->rs['guardian_dob'])):"";?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NATIONALITY");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['guardian_nation'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("OCCUPATION");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['guard_job'];?>
-					                   </div>
-					                </div>
-					                <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> 
-					                   </label>
-					                   <div class=" bold col-md-7 col-sm-7 col-xs-12">
-					                   		<?php echo $this->rs['guardian_tel'];?>
-					                   </div>
-					                </div>
-					            </div>
-					        </div>
-				        </div>
-				        <!--/. Panel 2-->
 				        
 				         <!--Panel 3-->
 				        <div class="tab-pane fade in " id="panel23" role="tabpanel">
@@ -1180,8 +947,6 @@
 			   		 </div>
 			   		   <!--/. Tab panels -->
 			   	</div>
-			    
-			</form>
 		</div>
 	</div>
 </div>

@@ -9,6 +9,7 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     	$sql ="select
     				s.stu_code,
     				s.stu_khname,
+    				s.last_name,
     				s.stu_enname,
     				(select name_en from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				s.age,

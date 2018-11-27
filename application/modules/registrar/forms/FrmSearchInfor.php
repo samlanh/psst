@@ -237,6 +237,9 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		));
 		$_degree_bac->setValue($request->getParam('degree_bac'));
 		$opt_deg = array(''=>$this->tr->translate("DEGREE"));
+		if($type==2){
+			$opt_deg = array(''=>$this->tr->translate("CATE_TYPE"));
+		}
 		$opt_degree=$db_years->getAllDegreeBac($type);
 		if(!empty($opt_degree))foreach ($opt_degree As $rows)$opt_deg[$rows['id']]=$rows['name'];
 		$_degree_bac->setMultiOptions($opt_deg);
@@ -265,6 +268,9 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
 		));
 		$_grade_all->setValue($request->getParam('grade_all'));
 		$opt_g_all = array(''=>$this->tr->translate("GRADE"));
+		if($type==2){
+			$opt_g_all = array(''=>$this->tr->translate("SELECT_SERVICE"));
+		}
 		$opt_grade_all=$db_years->getGradeAllDept($type);
 		if(!empty($opt_grade_all))foreach ($opt_grade_all As $rows)$opt_g_all[$rows['id']]=$rows['name'];
 		$_grade_all->setMultiOptions($opt_g_all);

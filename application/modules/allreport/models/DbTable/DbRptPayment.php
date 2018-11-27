@@ -172,7 +172,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     		$where .= " and d.items_type = ".$search['payment_by'];
     	}
     	if(!empty($search['group'])){
-    		$where .= " AND spd.group_id = ".$search['group'];
+    		$where .= " AND sp.group_id = ".$search['group'];
     	}
     	if(!empty($search['item'])){
     		$where .= " AND d.items_id = ".$search['item'];

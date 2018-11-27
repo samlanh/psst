@@ -14,6 +14,7 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	function addIncome($data){
 		$db = new Registrar_Model_DbTable_DbRegister();
 	    $receipt_no = $db->getRecieptNo();
+	    
 		$array = array(
 
 					'branch_id'		=>$data['branch_id'],
@@ -32,7 +33,6 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 					'title'			=>$data['title'],
 					'cate_income'	=>$data['cate_income'],
 					'total_amount'	=>$data['total_income'],
-					'invoice'		=>$receipt_no,
 					'payment_method'=>$data['payment_method'],
 					'cheqe_no'		=>$data['cheqe_no'],
 					'description'	=>$data['note'],

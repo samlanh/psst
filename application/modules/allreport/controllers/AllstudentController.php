@@ -575,7 +575,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	public function rptStudentListAction()
 	{
-// 		rpt-student-list
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$id=$this->getRequest()->getParam("id");
 		if(empty($id)){
@@ -600,7 +599,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	function certifyAction(){
 		$id=$this->getRequest()->getParam("id");
-		//echo $id;exit();
 		$db = new Allreport_Model_DbTable_DbCertify();
 		$result = $db->getStudentCertify($id);
 		$this->view->rs = $result;

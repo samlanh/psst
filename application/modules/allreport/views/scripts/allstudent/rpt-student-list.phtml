@@ -91,7 +91,7 @@
 								<td width="10px"><?php echo $i;?></td>
 								<td><input type="hidden" name="student_<?php echo $i?>" id="student_<?php echo $i?>" dojoType="dijit.form.TextBox" value="<?php echo $row['stu_code']?>" /><?php echo $row['stu_code']?></td>
 								<td align="left"><?php echo $row['kh_name'];?></td>
-								<td align="left"><?php echo $row['en_name'];?></td>
+								<td align="left"><?php echo $row['last_name'].' '.$row['en_name'];?></td>
 								<td><?php echo $row['sex'];
 									if($row['gender']==1){
 										$male=$male+1;

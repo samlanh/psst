@@ -50,7 +50,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}
 	}
 	public function getAllStudent($search){
-		///(CASE WHEN stu_khname IS NULL THEN stu_enname ELSE stu_khname END) AS name,
 		$_db = $this->getAdapter();
 		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
@@ -71,32 +70,29 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status
 				FROM rms_student AS s  WHERE  s.is_subspend=0 AND s.customer_type=1";
 		$orderby = " ORDER BY stu_id DESC ";
-// 		if(empty($search)){
-// 			return $_db->fetchAll($sql.$orderby);
-// 		}
+
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
-			$s_where[]=" stu_code LIKE '%{$s_search}%'";
-			$s_where[]=" stu_khname LIKE '%{$s_search}%'";
-			$s_where[]=" stu_enname LIKE '%{$s_search}%'";
-			$s_where[]=" tel LIKE '%{$s_search}%'";
-			$s_where[]=" father_phone LIKE '%{$s_search}%'";
-			$s_where[]=" mother_phone LIKE '%{$s_search}%'";
-			$s_where[]=" guardian_tel LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(stu_code,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(stu_khname,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(stu_enname,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(tel,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(father_phone,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(mother_phone,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(guardian_tel,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(father_enname,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(mother_enname,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(guardian_enname,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(remark,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(home_num,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(street_num,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(village_name,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(commune_name,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(district_name,' ','') LIKE '%{$s_search}%'";
 			
-			$s_where[]=" father_enname LIKE '%{$s_search}%'";
-			$s_where[]=" mother_enname LIKE '%{$s_search}%'";
-			$s_where[]=" guardian_enname LIKE '%{$s_search}%'";
-			$s_where[]=" remark LIKE '%{$s_search}%'";
-			$s_where[]=" home_num LIKE '%{$s_search}%'";
-			$s_where[]=" street_num LIKE '%{$s_search}%'";
-			$s_where[]=" village_name LIKE '%{$s_search}%'";
-			$s_where[]=" commune_name LIKE '%{$s_search}%'";
-			$s_where[]=" district_name LIKE '%{$s_search}%'";
-			
-			$s_where[]=" (SELECT rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session) LIKE '%{$s_search}%'";
-			$s_where[]=" (SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) LIKE '%{$s_search}%'";
+			$s_where[]=" (SELECT rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[]=" (SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex  LIMIT 1) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['study_year'])){

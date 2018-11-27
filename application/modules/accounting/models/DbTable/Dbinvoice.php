@@ -8,6 +8,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	public function getinvoice($search){
 		$db= $this->getAdapter();
 		$sql="SELECT v.id ,
+					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=v.branch_id)AS branch,
+					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) AS group_name,
 					s.stu_code ,
 					s.stu_khname ,
 					s.stu_enname ,
@@ -24,7 +26,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					rms_student AS s ,
 					rms_users AS u 
 				WHERE 
-				    stu_id = student_id 
+				    stu_id = student_name 
 					AND v.user_id=u.id
 					AND s.status=1 
 					AND s.customer_type=1 ";
@@ -36,7 +38,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     	if(!empty($search['search'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['search']));
-    		$s_where[]= " v.student_id LIKE '%{$s_search}%'";
+    		$s_where[]= " v.branch_id LIKE '%{$s_search}%'";
     		$s_where[]="  v.student_name LIKE '%{$s_search}%'";
     		$s_where[]= " v.invoice_num LIKE '%{$s_search}%'";
 			$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
@@ -47,13 +49,12 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 //     	if($search['stu_code']!=""){
 //     		$where.=" AND v.student_id=".$search['stu_code'];
 //     	}
-    	if($search['stu_name'] !=""){
-    		$where.=" AND v.student_id=".$search['stu_name'];
+    	if(!empty($search['branch_id'])){
+    		$where.=" AND v.branch_id=".$search['branch_id'];
     	}
-    	if($search['group']!=""){
-    		$where.=" AND s.group_id=".$search['group'];
+		if(!empty($search['group'])){
+    		$where.= " AND s.group_id =".$search['group'];
     	}
-    	
     	if($search['degree']!=""){
     		$where.=" AND s.degree=".$search['degree'];
     	}
@@ -68,7 +69,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		$sql="SELECT v.* ,
 			s.stu_khname ,s.stu_enname,s.last_name,s.stu_code,s.sex
 			FROM rms_invoice_account  AS v ,
-			rms_student AS s WHERE stu_id = student_id and id=".$id." LIMIT 1";
+			rms_student AS s WHERE stu_id = student_name and id=".$id." LIMIT 1";
 		return $db->fetchrow($sql);
 	}
 	public function getinvoiceservice($id){
@@ -96,7 +97,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     			}
 
 		    	$arr = array(
-		    			'student_id'=>$data['student_id'],
+		    			'branch_id'=>$data['branch_id'],
 		    			'student_name'=>$data['student_name'],
 						'invoice_date'=>$data['invoice_date'],
 		    			'invoice_num'=>$data['invoice_num'],
@@ -133,7 +134,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	public function editinvice($data,$id){
 		try{$db= $this->getAdapter();
 		    	$arr = array(
-		    			'student_id'=>$data['student_id'],
+		    			'branch_id'=>$data['branch_id'],
 		    			'student_name'=>$data['student_name'],
 						'invoice_date'=>$data['invoice_date'],
 		    			'invoice_num'=>$data['invoice_num'],

@@ -14,7 +14,6 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     		else{
     			$search=array(
 						'search'=>'',
-						'stu_code' => '',
 						'stu_name' => '',
 						'group'=>'',
 						'degree'=>'',
@@ -27,11 +26,11 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 			$rs_rows = $db->getinvoice($search);
 			
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("STUDENT_ID","STUDENT_NAME","LAST_NAME","FIRST_NAME","SEX","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
+    		$collumns = array("BRANCH","GROUP","STUDENT_ID","STUDENT_NAME","LAST_NAME","FIRST_NAME","SEX","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'invoice','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('stu_code'=>$link,'stu_khname'=>$link,'invoice_date'=>$link, ));
+    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('group_name'=>$link,'stu_code'=>$link,'stu_khname'=>$link,'invoice_date'=>$link, ));
 			
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$this->view->all_student_name = $db->getAllGerneralOldStudentName();
@@ -42,7 +41,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->frm = $form;
+		$this->view->frm=$form;
 	}
     public function addAction()
     {	
@@ -69,6 +68,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
+		$this->view->branch = $model->getAllBranch();
     }
 	public function editAction(){
 		$db = new Accounting_Model_DbTable_Dbinvoice();
@@ -95,6 +95,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
+		$this->view->branch = $model->getAllBranch();
 	}
 	function getitemsdetailAction(){
 		if($this->getRequest()->isPost()){

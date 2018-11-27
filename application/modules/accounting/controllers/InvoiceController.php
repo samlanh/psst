@@ -14,7 +14,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     		else{
     			$search=array(
 						'search'=>'',
-						'stu_name' => '',
+						'student_name' => '',
 						'group'=>'',
 						'degree'=>'',
 						'grade'=>'',

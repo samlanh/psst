@@ -27,7 +27,7 @@ $formList = new Application_Form_Frmtable();
 					  <?php echo $frm->getElement("branch_id");?>
 					 </div>
 					  <div class="col-md-2 col-sm-2 col-xs-12">
-					  <?php echo $frm->getElement("stu_name");?>
+					   <input id="student_name" />
 					 </div>
 					  <div class="col-md-2 col-sm-2 col-xs-12">
 						 <input id="group" />
@@ -71,6 +71,7 @@ dojo.require("dijit.form.FilteringSelect");
 dojo.require("dojo.html");
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: academic_store,
@@ -85,7 +86,19 @@ dojo.ready(function(){
 			academic_year = dijit.byId('study_year').get('value');
 		}
 	}, "study_year");
-	
+	new dijit.form.FilteringSelect({
+		store: student_store,
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "student_name",
+		name: "student_name",   
+		required:true,        
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function() { 
+			getStudentInfo();
+		}
+	}, "student_name");
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
@@ -106,9 +119,11 @@ dojo.ready(function(){
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
 		 getAllGroupByBranch();
+		 getallstudentname();
     });
 	 getAllAcademicByBranch();
 	 getAllGroupByBranch();
+	 getallstudentname();
 });
 url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
 var oldBranch = "<?php echo $this->adv_search['branch_id']?>";
@@ -161,6 +176,28 @@ function getAllGroupByBranch(){
 		    if(oldBranch==branch_id){
 		    	dijit.byId('group').set('value','<?php echo $this->adv_search['group']?>');  
 		    }
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+function getallstudentname(){//
+	branch_id = dijit.byId("branch_id").attr("value");
+	if(branch_id==''){  
+		dijit.byId("branch_id").focus();
+		return false;}
+	dojo.xhrPost({
+		url:url_data,
+		content:{
+			'branch_id':branch_id
+		},
+		handleAs:"json",
+		load: function(data) {
+			student_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('student_name').set('store',student_store);  
 		},
 		error: function(err) {
 			alert(err);

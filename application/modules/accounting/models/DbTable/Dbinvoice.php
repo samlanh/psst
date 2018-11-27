@@ -46,9 +46,9 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$s_where[]= " v.totale_amount LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
-//     	if($search['stu_code']!=""){
-//     		$where.=" AND v.student_id=".$search['stu_code'];
-//     	}
+    	if($search['student_name']){
+    		$where.=" AND v.student_name=".$search['student_name'];
+    	}
     	if(!empty($search['branch_id'])){
     		$where.=" AND v.branch_id=".$search['branch_id'];
     	}

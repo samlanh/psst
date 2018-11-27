@@ -638,7 +638,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$where.=" AND sp.degree=".$search['degree'];
     	}
     	if(!empty($search['study_year'])){
-    		$where.=" AND sp.year=".$search['study_year'];
+    		$where.=" AND sp.academic_year=".$search['study_year'];
     	}
     	if(!empty($search['session'])){
     		$where.=" AND sp.session=".$search['session'];

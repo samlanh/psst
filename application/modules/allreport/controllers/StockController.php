@@ -327,7 +327,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 	
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			echo $e->getMessage();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	
 		$_pur =  new Accounting_Model_DbTable_DbRequestProduct();

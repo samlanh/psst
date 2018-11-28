@@ -1597,14 +1597,17 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
   
-  function getAllGradeStudyByDegree($items_id=null){
+  function getAllGradeStudyByDegree($category_id=null,$student_id=null){
   	$db = $this->getAdapter();
   	$sql="SELECT i.id,
   	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
   	FROM `rms_itemsdetail` AS i
   	WHERE i.status =1 ";
-  	if($items_id!=null AND $items_id>0){
-  		$sql.=" AND i.items_id=".$items_id;
+  	if($category_id!=null AND $category_id>0 AND $category_id!=''){
+  		$sql.=" AND i.items_id=".$category_id;
+  	}
+  	if($student_id!=null){
+  		$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
   	}
   	 
   	$branchlist = $this->getAllSchoolOption();
@@ -1620,6 +1623,7 @@ function getAllgroupStudyNotPass($action=null){
   		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
   	}
   	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+  	//return $sql;
   	return $db->fetchAll($sql);
   }
   

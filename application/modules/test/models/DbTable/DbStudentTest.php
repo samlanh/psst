@@ -315,7 +315,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}    
 		if(!empty($search['branch_search'])){
-		$where .= " AND s.branch_id = ".$search['branch_search'];
+			$where .= " AND s.branch_id = ".$search['branch_search'];
 		}
 // 		if(!empty($search['degree'])){
 // 			$where .= " and degree = ".$search['degree'];

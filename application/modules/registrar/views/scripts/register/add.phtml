@@ -473,7 +473,6 @@ require(["dojo/ready"], function(ready){
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function() {  
-				
 				getOldStudentInfo();
 				getCreditMemo();
 				stu_id = dijit.byId('old_stu').get('value');
@@ -499,25 +498,29 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 function getgradebyDegree(dept_id,a,type=1){
 	if(type==1){
-		if(dept_id==''){return false;}
+		//if(dept_id==''){return false;}
 	}else if(type==2){
 		dept_id = dijit.byId("category").get("value");
 	}
+	student_id = dijit.byId("old_stu").get("value");
 	dojo.xhrPost({
 			url:url_dept,
 			content:{
 				'dept_id':dept_id,
-				
+				'student_id':student_id
 				},
 			handleAs:"json",
 			load: function(data) {
+				//alert(data);exit();
 				if(type==1){
+					
 				}else{
 					item_store  = getDataStorefromJSON('id','name', data);
 				    dijit.byId('item').set('store',item_store);  	
 				}
 		},
 		error: function(err) {
+			alert('err'+err);
 		}
 	});
 }
@@ -917,8 +920,8 @@ function getOldStudentInfo(){
 		load: function(data) {
 			   if(data){
 				   dojo.byId("lbl_blog").innerHTML = data;
-				   return true;
-			 }
+			   }
+			   getgradebyDegree(-1,1,2);
 		},
 		error: function(err) {
 		}

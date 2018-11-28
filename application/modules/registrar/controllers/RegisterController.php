@@ -347,7 +347,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbRegister();
-    		$grade = $db->getAllGrade($data['dept_id']);
+    		$student_id = empty($data['student_id'])?null:$data['student_id'];
+    		$grade = $db->getAllGrade($data['dept_id'],$student_id);
     		print_r(Zend_Json::encode($grade));
     		exit();
     	}

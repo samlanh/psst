@@ -202,7 +202,6 @@ class Test_IndexController extends Zend_Controller_Action
     		$data=$this->getRequest()->getPost();
     		$db = new Test_Model_DbTable_DbStudentTest();
     		try {
-    			 
     			$db->insertTestExam($data,$type);
     			if(!empty($data['saveclose'])){
     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);

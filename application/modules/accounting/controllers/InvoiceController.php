@@ -14,6 +14,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     		else{
     			$search=array(
 						'search'=>'',
+    					'branch_id'=>'',
 						'student_name' => '',
 						'group'=>'',
 						'degree'=>'',
@@ -24,21 +25,20 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     		}
 			$db = new Accounting_Model_DbTable_Dbinvoice();
 			$rs_rows = $db->getinvoice($search);
-			
 			$list = new Application_Form_Frmtable();
     		$collumns = array("BRANCH","GROUP","STUDENT_ID","STUDENT_NAME","LAST_NAME","FIRST_NAME","SEX","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'invoice','action'=>'edit',
     		);
     		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('group_name'=>$link,'stu_code'=>$link,'stu_khname'=>$link,'invoice_date'=>$link, ));
-			
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 			$this->view->all_student_code = $db->getAllGerneralOldStudent();
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
+		$this->view->search=$search;
+		$form= new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->frm=$form;

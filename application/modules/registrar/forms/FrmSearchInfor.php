@@ -1,6 +1,5 @@
 <?php 
-class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form
-{
+class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 	protected $tr = null;
 	protected $btn =null;//text validate
 	protected $filter = null;

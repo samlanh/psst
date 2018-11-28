@@ -14,8 +14,9 @@
 			<tr>
 				<td><input dojoType="dijit.form.TextBox" class="fullside" id="search" name="search" value="<?php echo $this->rssearch['search'];?>" type="text" ></td>
 				<!-- <td><?php //echo $frm->getElement("stu_code");?></td> -->
-				<td><?php echo $frm->getElement("stu_name");?></td>
-				<td><?php echo $frm->getElement("group");?></td>
+				<td><?php echo $frm->getElement("branch_id");?></td>
+				<td><input id="student_name" /></td>
+				<td><input id="group" /></td>
 				<td><?php echo $frm->getElement("degree");?></td>
 			</tr>
 			<tr>	
@@ -62,6 +63,8 @@
 						<thead>
 						<tr style="background: #ccd9ff;font-size: 13px;font-weight: bold;">
 							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></th>
+							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH_NAME");?></th>
+							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("GROUP");?></th>
 							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_ID");?></th>
 							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></th>
 							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("SEX");?></th>
@@ -78,6 +81,8 @@
 						if(!empty($this->all_invoice)){ foreach($this->all_invoice as $key=>$rs){ $key=$key+1; ?>
 						<tr style="font-size: 14px;">
 							<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['branch']; ?></td>
+							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['group_name']; ?></td>
 							<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
 							<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['stu_enname']." ".$rs['last_name']; ?></a></td>
 							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['sex']; ?></td>
@@ -117,3 +122,126 @@
 		</table>
 	</div>	
 </div>
+<script type="text/javascript">
+dojo.require("dijit.form.CheckBox"); 
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.require("dijit.form.FilteringSelect"); 
+dojo.require("dojo.html");
+
+var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: academic_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                     
+		id: "study_year",
+		name: "study_year",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+		onChange: function() {  
+			academic_year = dijit.byId('study_year').get('value');
+		}
+	}, "study_year");
+	new dijit.form.FilteringSelect({
+		store: student_store,
+		autoComplete: false,
+		queryExpr: "*${0}*",                     
+		id: "student_name",
+		name: "student_name",   
+		required: false,        
+		class: 'fullside', 
+		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
+		onChange: function() { 
+			getStudentInfo();
+		}
+	}, "student_name");
+	new dijit.form.FilteringSelect({
+		store: group_store,
+	    queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: true,                      
+	    id: "group",
+	    name: "group",  
+	    class: 'fullside', 
+	    readonly:false,
+	    required:false,
+	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+	    onChange: function() {  
+		    
+	    }
+	}, "group");
+	
+	 var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
+		 getAllGroupByBranch();
+		 getallstudentname();
+    });
+	 getAllGroupByBranch();
+	 getallstudentname();
+});
+var oldBranch = "<?php echo $this->search['branch_id']?>";
+url_getgroup = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getgroupbybranch'));?>';
+function getAllGroupByBranch(){
+	dijit.byId('group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getgroup,
+		content:{
+			'branch_id':branch_id,'noaddnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+		    group_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('group').set('store',group_store);   
+		    if(oldBranch==branch_id){
+		    	dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
+		    }
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
+function getallstudentname(){//
+	dijit.byId('student_name').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('student_name').set('store',student_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_data,
+		content:{
+			'branch_id':branch_id
+		},
+		handleAs:"json",
+		load: function(data) {
+			student_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('student_name').set('store',student_store);  
+		    if(oldBranch==branch_id){
+		    	dijit.byId('student_name').set('value','<?php echo $this->search['student_name']?>');  
+		    }
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+</script>

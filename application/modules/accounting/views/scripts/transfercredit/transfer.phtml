@@ -27,7 +27,6 @@
     	<form id='office_receipt' action="<?php echo $this->url(array('module'=>'accounting','controller'=>'transfercredit','action'=>'transfer')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
-				dijit.byId("saveclose").set("disabled",true);
 				stu_name = dijit.byId('stu_name').get('value');
 				stu_idfrom = dijit.byId('student_name').get('value');
 				if(stu_idfrom == stu_name){
@@ -38,7 +37,10 @@
 
 				stu_idto = dijit.byId('stu_idto').get('value');s	
        			 if(stu_idto==0){
-					alert("សូមជ្រើសរើសអត្តលេខសិស្ស");dijit.byId('stu_idto').focus();return false;}
+					alert("សូមជ្រើសរើសអត្តលេខសិស្ស");dijit.byId('stu_idto').focus();
+					return false;
+				}
+				dijit.byId("saveclose").set("disabled",true);
 					return true;
 			}else {
 				return false;
@@ -202,7 +204,6 @@ function getallstudentname(){//
 		}
 	});
 }
-	dojo.require("dijit.form.Textarea");
 	dojo.ready(function(){
 		setSelected(1);
 	});

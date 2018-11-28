@@ -51,7 +51,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	function transfercreditMemo($data){
 		$db = $this->getAdapter();
 		//print_r($data); exit();
- 		try{
+ 	try{
 			$sql="SELECT id FROM rms_transfer_credit WHERE student_id =".$data['student_id'];
  			$sql.=" AND stu_name='".$data['stu_name']."'";
 			$rs = $db->fetchOne($sql);
@@ -82,7 +82,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 		
 		$arr = array(
 				'branch_id'		=>$data['branch_id'],
-				//'student_id'	=>$data['stu_idto'],
+				'student_id'	=>$data['stu_name'],
 				'total_amount'	=>0,
 				'total_amountafter'=>0,
 				'note'			=>$data['Description'],
@@ -98,6 +98,30 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 			$db->rollBack();
 			echo $e->getMessage();exit();
 		}
+	}
+	function updatefercreditMemo($data){
+			$arr = array(
+					'branch_id'		=>$data['branch_id'],
+					'student_id'	=>$data['student_id'],
+					'total_amount'	=>$data['total_amount'],
+					'total_amountafter'=>$data['total_amount'],
+					'note'			=>$data['Description'],
+					'prob'			=>$data['prob'],
+					'type'			=>0,
+					'date'			=>$data['Date'],
+					'end_date'		=>$data['end_date'],
+	
+					//'stu_idto'		=>$data['stu_idto'],
+					'stu_name'		=>$data['stu_name'],
+					'start_date'	=>$data['start_date'],
+					'end_dates'		=>$data['end_dates'],
+					'problem'		=>$data['problem'],
+					'Descriptions'	=>$data['Descriptions'],
+					'status'		=>$data['status'],
+					'user_id'		=>$this->getUserId(),);
+			$this->_name='rms_transfer_credit';
+			$where=" id = ".$data['id'];
+			$this->update($arr,$where);
 	}
 	function getTransferbyid($id){
 		$db = $this->getAdapter();

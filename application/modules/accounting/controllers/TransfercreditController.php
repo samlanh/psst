@@ -75,13 +75,9 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$data['id'] = $id;
     		try {
-    			$sms="INSERT_SUCCESS";
     			$db = new Accounting_Model_DbTable_DbTransfercredit();
-    			$_transfer = $db->transfercreditMemo($data);
-    		//	if($_transfer==-1){
-    		//		$sms = "RECORD_EXIST";
-    		//	}
-    			Application_Form_FrmMessage::Sucessfull($sms, "/accounting/transfercredit");
+    			$_transfer = $db->updatefercreditMemo($data);
+    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/accounting/transfercredit");
     		} catch (Exception $e) {
     			$this->view->msg = 'ការ​បញ្ចូល​មិន​ជោគ​ជ័យ';
     		}
@@ -90,7 +86,10 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     	$db = new Accounting_Model_DbTable_DbTransfercredit();
     	$row  = $db->getTransferbyid($id);
     	$this->view->row = $row;
-    
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->all_student_name = $db->getAllStudent();
+    	
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemo($row);
     	Application_Model_Decorator::removeAllDecorator($frm);

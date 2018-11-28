@@ -218,7 +218,7 @@ dojo.require("dojo.store.Memory");
 			if(dijit.byId("status").get("value")==1){
 				dojo.byId("lb_receiptvoid").innerHTML = '';
 			}else{
-				dojo.byId("lb_receiptvoid").innerHTML = 'Void';
+				dojo.byId("lb_receiptvoid").innerHTML = '(Void)';
 			}
 			
 			dojo.byId("lb_receipt_no").innerHTML = dijit.byId('invoice').get('value');
@@ -348,7 +348,7 @@ function getbranchinfo(){
 							</style>
 							<tr style="height: 30px;">
 								<td class="one ">&nbsp;<?php echo $tr->translate("RECEIPT_NO");?>&nbsp;</td>
-								<td class="border"><label id="lb_receipt_no"></label>&nbsp;(<span style="color:red;" id="lb_receiptvoid"></span>)</td>
+								<td class="border"><label id="lb_receipt_no"></label>&nbsp;<span style="color:red;" id="lb_receiptvoid"></span></td>
 								<td class="one " align="left">&nbsp;<?php echo $tr->translate("FOR_DATE");?>&nbsp;</td>
 								<td class="border"><label id="lb_date" class="values one"> </label></td>
 							</tr>
@@ -408,11 +408,11 @@ function getbranchinfo(){
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_cate" >
 		<form style="background-color: buttonface;" id='frm_add_cate_income' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+			<table cellspacing="10" width="100%" style="margin: 0 auto; line-height: 24px;">
 			<tr>
 				<td>
 					<fieldset style="background-color: buttonface;">
-					<table style="margin: 0 auto; width: 95%;" cellspacing="5">
+					<table style="margin: 0 auto; line-height: 35px; width: 95%;" cellspacing="5">
 						<tr>
 							<td style="width:100px"><?php echo $tr->translate("TITLE")?></td>
 							<td><input class="fullside" tabindex="1" value="" dojoType="dijit.form.ValidationTextBox" name="cate_title" id="cate_title" type="text" required="true" /></td>

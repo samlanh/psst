@@ -185,7 +185,7 @@ class Application_Form_Frmtable
     	
     	$head='<form name="list">
     				<div class="dataTables_scrollBody" style="position: relative; width: 100%; background:#fff;   ">
-    					<table border="1" id="datatable-responsive" style="  border-collapse: collapse; text-align:center; border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >';
+    					<table border="1" id="datatable-responsive" style="  border-collapse: collapse; border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >';
     	$col_str='';
     	$col_str .='<thead><tr>';
     	if($delete== 1 || $delete== 2 ) {

@@ -71,13 +71,13 @@ dojo.ready(function(){
 					}
 				dis_max=dijit.byId('dis_max').get('value');
 					if(dis_max>100){
-					alert('អាចបញ្ជូលពី 1 ដល់ 99!');
+					alert('អាចបញ្ចុះតម្លៃពី 1 ដល់ 99!');
 					return false;
 					}  
 				 end_date=dijit.byId('end_date').get('value');
 				 start_date=dijit.byId('start_date').get('value');
 					if(end_date<start_date){
-						alert('ថ្ងៃចាប់ផ្តើម មិនអោយតូចធំជាងថ្ងៃបញ្ចប់!');
+						alert('ថ្ងៃចាប់ផ្តើម មិនមុនថ្ងៃបញ្ចប់ទេ!');
 						return false;
 					}
   				 if(this.validate()) {
@@ -200,13 +200,13 @@ function submitDataClose(){
 	}
 	dis_max=dijit.byId('dis_max').get('value');
 	if(dis_max>100){
-		alert('អាចបញ្ជូលពី 1 ដល់ 99!');
+		alert('អាចបញ្ចុះតម្លៃពី 1 ដល់ 99!');
 		return false;
 	}
 	end_date=dijit.byId('end_date').get('value');
 	start_date=dijit.byId('start_date').get('value');
 	if(end_date<start_date){
-		alert('ថ្ងៃចាប់ផ្តើម មិនអោយតូចធំជាងថ្ងៃបញ្ចប់!');
+		alert('ថ្ងៃចាប់ផ្តើម មិនមុនថ្ងៃបញ្ចប់ទេ!');
 		return false;
 	} 
 	if(dijit.byId('add_discount').validate()) {

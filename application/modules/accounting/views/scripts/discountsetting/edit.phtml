@@ -53,17 +53,26 @@ function setReadonlyCheqe(){
     	</div>
 		<form id='add_discount' action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
+  				 dranch=dijit.byId('branch_id').get('value');
+					if(dranch==''){
+						alert('Please Select Branch!');
+						return false;
+					}
+				dis_max=dijit.byId('dis_max').get('value');
+					if(dis_max>100){
+					alert('អាចបញ្ចុះតម្លៃពី 1 ដល់ 99!');
+					return false;
+					}  
+				 end_date=dijit.byId('end_date').get('value');
+				 start_date=dijit.byId('start_date').get('value');
+					if(end_date<start_date){
+						alert('ថ្ងៃចាប់ផ្តើម មិនមុនថ្ងៃបញ្ចប់ទេ!');
+						return false;
+					}
   				 if(this.validate()) {
     				dijit.byId("save_close").attr("disabled",true);
 					dijit.byId("save_new").attr("disabled",true);
    					 return true;
-
-					disname_id=dijit.byId('disname_id').get('value');
-				if(disname_id==-1){
-					alert('Please select payment method !!! ');
-					dijit.byId('disname_id').focus();
-					return false;
-				}
    				}else {
     				return false;
    				}

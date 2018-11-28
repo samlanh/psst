@@ -184,8 +184,8 @@ class Application_Form_Frmtable
     	/* end define string*/
     	
     	$head='<form name="list">
-    				<div class="dataTables_scrollBody" style="position: relative;  width: 100%; background:#fff;   ">
-    					<table border="1" id="datatable-responsive" style="  border-collapse: collapse;   border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >';
+    				<div class="dataTables_scrollBody" style="position: relative; width: 100%; background:#fff;   ">
+    					<table border="1" id="datatable-responsive" style="  border-collapse: collapse; text-align:center; border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >';
     	$col_str='';
     	$col_str .='<thead><tr>';
     	if($delete== 1 || $delete== 2 ) {
@@ -194,7 +194,7 @@ class Application_Form_Frmtable
     	$col_str .= '<th class="tdheader">'.$tr->translate("NUM").'</th>';
     	//add columns
     	foreach($columns as $column){
-    		$col_str=$col_str.'<th class="tdheader">'.$tr->translate($column).'</th>';
+    		$col_str=$col_str.'<th class="tdheader"  style="text-align: center;">'.$tr->translate($column).'</th>';
     	}
     	if($editLink != "") {
     		$col_str .='<th class="tdheader tdedit">'.$tr->translate('EDIT_CAP').'</th>';

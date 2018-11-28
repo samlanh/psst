@@ -218,7 +218,7 @@ dojo.require("dojo.store.Memory");
 			if(dijit.byId("status").get("value")==1){
 				dojo.byId("lb_receiptvoid").innerHTML = '';
 			}else{
-				dojo.byId("lb_receiptvoid").innerHTML = '(Void)';
+				dojo.byId("lb_receiptvoid").innerHTML = 'Void';
 			}
 			
 			dojo.byId("lb_receipt_no").innerHTML = dijit.byId('invoice').get('value');
@@ -348,7 +348,7 @@ function getbranchinfo(){
 							</style>
 							<tr style="height: 30px;">
 								<td class="one ">&nbsp;<?php echo $tr->translate("RECEIPT_NO");?>&nbsp;</td>
-								<td class="border"><label id="lb_receipt_no"></label>&nbsp;<span style="color:red;" id="lb_receiptvoid"></span></td>
+								<td class="border"><label id="lb_receipt_no"></label>&nbsp;(<span style="color:red;" id="lb_receiptvoid"></span>)</td>
 								<td class="one " align="left">&nbsp;<?php echo $tr->translate("FOR_DATE");?>&nbsp;</td>
 								<td class="border"><label id="lb_date" class="values one"> </label></td>
 							</tr>

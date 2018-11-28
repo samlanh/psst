@@ -203,6 +203,36 @@ table#table_row tr td {
     background: #f7f7f7;
 }
 </style>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_know_by" >
+		<form style="background-color: buttonface;" id='frm_know_by' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+			<tr>
+				<td>
+					<fieldset style="background-color: buttonface;">
+					<legend align="center" ><?php echo $tr->translate('KNOW_BY');?></legend>
+						<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
+							<tr>
+								<td><?php echo $tr->translate('TITLE');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_know_by" name="title_know_by" value="" type="text"></td>
+							</tr>
+							
+							<tr>
+								<td colspan="4" align="center">
+									<input type="button" value="ចាកចេញ" label="Close" id="hide_know_by" name="hide_know_by" dojoType="dijit.form.Button" 
+									​ ​​iconClass="dijitIconUndo" onclick="hideDialog2();"/>
+									<input type="button" value="save" label="SAVE" id="save_know_by" name="save_know_by" dojoType="dijit.form.Button" 
+									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addKnowBy();"/>
+								</td>
+							</tr>
+						</table>
+				</fieldset>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</div>
  <link href="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.css" /> 
  <script src="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.js"></script>
   <?php 
@@ -218,15 +248,32 @@ table#table_row tr td {
  }
 ?>
 <script>
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.store.Memory");
+dojo.require("dojo.NodeList-manipulate");
+var knowby_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->know_by));?> );
 require(["dojo/ready"], function(ready){
 	ready(function(){
 		 $("#e15").select2({tags:[<?php echo $tags;?>],placeholder: "<?php echo $tr->translate("Previous Concern");?>",allowClear: true});
 	});
+	new dijit.form.FilteringSelect({
+		store: knowby_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                        
+	    id: "know_by",
+	    name: "know_by",  
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT");?>", 
+	    onChange: function() {          
+	    	know_by = dijit.byId('know_by').get('value');
+		    if(know_by==-1){
+				dijit.byId("popup_know_by").show();
+		    }
+	   } 
+	}, "know_by");
 });
-
-dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dojo.store.Memory");
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -271,6 +318,32 @@ function getAllGrade(){
 			alert(err);
 		}
 	});
+}
+
+var url_add_know_by = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-knowby")); ?>';
+function addKnowBy(){
+	if(dijit.byId('frm_know_by').validate()){
+		dojo.xhrPost({
+			url:url_add_know_by,
+			form: dojo.byId("frm_know_by"),
+			handleAs:"json",
+			load: function(data) {
+			var Itemmake = { 
+					 id: dijit.byId('title_know_by').get('value'),
+					 name: dijit.byId('title_know_by').get('value')
+				   };
+		   addDataToSelectbox(dijit.byId('know_by'), knowby_store, Itemmake, dijit.byId('title_know_by').get('value'));
+		   dijit.byId('frm_know_by').reset();
+		   dijit.byId("popup_know_by").hide();
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}	
+}
+function hideDialog2() {		
+	dijit.byId("popup_know_by").hide();
 }
 function copyfromcustomer(){
 	dijit.byId('kh_name_stu').attr("value",dijit.byId('kh_name').get('value'));

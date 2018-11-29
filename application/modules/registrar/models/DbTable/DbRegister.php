@@ -147,7 +147,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$rs_stu = $gdb->getStudentinfoById($stu_code);
 						$arr = array(
 								'customer_type' =>4,
-								'is_studenttest'=>1
+								'is_studenttest'=>1,
+								'create_date_stu_test'=>date("Y-m-d")
 						);
 						$this->_name='rms_student';
 						$where="stu_id = ".$stu_code;
@@ -703,13 +704,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql.=$dbl->getAccessPermission(" sp.branch_id ");
     	return $db->fetchRow($sql);
     }
-    function getAllGrade($grade_id){
+    function getAllGrade($grade_id,$student_id){
     	$db = new Application_Model_DbTable_DbGlobal();
-    	return $db->getAllGradeStudyByDegree($grade_id);
-//     	$db = $this->getAdapter();
-//     	$sql = "SELECT major_id As id,CONCAT(major_enname) As name FROM rms_major WHERE is_active=1 and major_enname!='' and dept_id=".$grade_id;
-//     	$order=' ORDER BY id DESC';
-//     	return $db->fetchAll($sql.$order);
+    	return $db->getAllGradeStudyByDegree($grade_id,$student_id);
     }
     function getPaymentTerm($generat,$payment_term,$grade){
 //     	$db = $this->getAdapter();

@@ -113,6 +113,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$sql = "select stu_enname from rms_student where stu_enname = '$name' and academic_year = $year and grade = $grade and session = $session and room = $room ";
     	return $db->fetchOne($sql);
     }
+    
 	function addRegister($data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
@@ -145,10 +146,14 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						
 					}elseif($data['student_type']==3){//from crm
 						$rs_stu = $gdb->getStudentinfoById($stu_code);
+						$_dbgb = new Application_Model_DbTable_DbGlobal();
+						$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
 						$arr = array(
 								'customer_type' =>4,
-								'is_studenttest'=>1,
-								'create_date_stu_test'=>date("Y-m-d")
+								'is_studenttest' =>1,
+								'serial' => $newSerial,
+								'create_date'=>date("Y-m-d"),
+								'create_date_stu_test'=>date("Y-m-d"),
 						);
 						$this->_name='rms_student';
 						$where="stu_id = ".$stu_code;

@@ -363,7 +363,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function createStudentTestFromCrm($data){
 		$db=$this->getAdapter();
 		try{
-			
 			$part= PUBLIC_PATH.'/images/photo/';
 			if (!file_exists($part)) {
 				mkdir($part, 0777, true);
@@ -417,7 +416,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'modify_datetest' => date("Y-m-d H:i:s")
 						
 			);
-			
 			$id = $data['id'];
 			$where="id = $id";
 			$this->update($array, $where);
@@ -484,6 +482,18 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$array['is_current']=1;
 				$array['result_by']=$this->getUserId();
 			}
+			
+			if(!empty($data['stu_test_id'])){
+				$array1 = array(
+						'degree'	=>$data['degree_result'],
+						'grade'		=>$data['grade_result'],
+				);
+				$stu_code = $data['stu_test_id'];
+				$where = "stu_id = ".$stu_code;
+				$this->_name='rms_student';
+				$this->update($array1,$where);
+			}
+			
 			if (!empty($data['id'])){
 				$id = $data['id'];
 				$where = " id = $id ";
@@ -494,6 +504,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$this->_name="rms_student_test_result";
 				$id = $this->insert($array);
 			}
+			 
 			if ($type==1){
 				if (!empty($data['score']) AND !empty($data['degree_result']) AND !empty($data['grade_result'])){
 					
@@ -548,7 +559,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					}
 				}
 			}
-			
 			return $id;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

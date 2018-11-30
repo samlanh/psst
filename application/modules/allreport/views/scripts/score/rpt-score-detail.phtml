@@ -10,7 +10,7 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-	
+	$dbgb = new Application_Model_DbTable_DbGlobal();
 	$month = array(
 				"01"=>"មករា",
 				"02"=>"កុម្ភៈ",
@@ -82,7 +82,7 @@ dojo.ready(function(){
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
-			.cheader{height: 30px;font-weight: bold; background: #8ba7fb; white-space: nowrap;}
+			.cheader{height: 30px;font-weight: bold; background: #fffbcb; white-space: nowrap;}
 			.hover:hover{background: #ccc;}
 			 td.rotate {
 				height: 130px;
@@ -98,8 +98,17 @@ dojo.ready(function(){
 				text-overflow: ellipsis;
 				display: inline-block;
 			}
+			.red {
+			    color: #ff1a02;
+			}
+			.border-right-none{
+    			border-right: #fff solid 1px;
+			}
+			.border-bottom-none{
+    			border-bottom: #fff solid 1px;
+			}
 		</style>
-		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+		<table style="width:100%;background:#fff; margin: 0 auto; color: #4839bd;font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
 				 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
 				 $duplicate=0;$count_pass=0;
@@ -116,17 +125,17 @@ dojo.ready(function(){
 				<?php $i=0; $count_fail=0;?>
 					<tr>
 						<td align="center" width="32%" rowspan="2">
-							<strong​​ style="color:#000; font-size: 15px;font-family: 'Times New Roman','Khmer MEF2';">
+							<strong​​ style="color:#4839bd; font-size: 15px;font-family: 'Times New Roman','Khmer MEF2';">
 								<?php echo $tr->translate("MINISTRY_INPHNOMPENH");?><br />
 								<?php echo $tr->translate("OFFICE_MINISTRY");?><br />
 								<?php echo $tr->translate("CUSTOMER_BRANCH");?>
 							</strong>
 						</td>
 						<td align="center" width="36%">
-							<strong​​ style="color:#000; font-size: 14px;font-family: 'Times New Roman','Khmer MEF2';"></strong>
+							<strong​​ style="color:#4839bd; font-size: 14px;font-family: 'Times New Roman','Khmer MEF2';"></strong>
 						</td>
 						<td align="center" width="32%" valign="top">
-							<strong​​ style="color:#000; font-size: 15px;font-family: 'Times New Roman','Khmer MEF2';">
+							<strong​​ style="color:#4839bd; font-size: 15px;font-family: 'Times New Roman','Khmer MEF2';">
 								<?php echo $tr->translate("NATIONALITY_OFKINGDOM");?><br />
 								<?php echo $tr->translate("NATION_RELIGION_KING");?>
 							</strong>
@@ -134,10 +143,10 @@ dojo.ready(function(){
 					</tr>
 					<tr>
 						<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-							<strong​​ style="color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';">
+							<strong​​ style="color:#4839bd; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';">
 								<?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?>
 							</strong><br />
-							<strong​​ style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
+							<strong​​ style="color:#4839bd; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
 								<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
 								<!--<?php //echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php //echo $rs['degree'];?></span> ,-->
 								<?php if($rs['exam_type']!=2){echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['for_month'];?></span><?php }?>
@@ -158,7 +167,7 @@ dojo.ready(function(){
 					$colspan=2;
 				}?>
 					<td colspan="3" id="exportExcel" valign="top">
-						<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border:1px solid #000;"  border="1" >
+						<table class="header"  cellpadding="5"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: 2px solid #5a71b5;"  border="1" >
 							<tr class="cheader" align="center" >
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("NUM");?></td>
 								<!--<td style="width:100px;" rowspan="<?php //echo $colspan;?>"><?php //echo $tr->translate("ID_NUMBER");?></td> -->
@@ -169,7 +178,7 @@ dojo.ready(function(){
 								<?php }?>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("AVERAGE");?></td>
-								<td style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("MENTION");?></td>
+								<td colspan="3" style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("MENTION");?></td>
 								<td style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RANK");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RESULT");?></td>
 							</tr>
@@ -227,7 +236,9 @@ dojo.ready(function(){
 									$average = number_format($rs['total_score']/$amount_subject,2);//amount_subjectsem
 								?>
 								<td align="center"><?php echo number_format($average,2);?></td>
-								<td align="center"><?php echo calCulateGrade($average,$rs['max_score']);?></td>
+								<td class="border-right-none red" align="center">&nbsp;<?php echo $dbgb->calCulateGrade($average,$rs['max_score']);?>&nbsp;</td>
+								<td class="border-right-none red" align="center">&nbsp;<?php echo $dbgb->calCulateGradeKhmerMention($average,$rs['max_score']);?>&nbsp;</td>
+								<td class="red" align="center">&nbsp;<?php echo $dbgb->calCulateGradeEnglishMention($average,$rs['max_score']);?>&nbsp;</td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<td align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
 									<?php if($average>=($rs['max_score']/2)){

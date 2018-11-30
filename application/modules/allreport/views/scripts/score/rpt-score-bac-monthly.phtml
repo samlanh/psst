@@ -169,7 +169,7 @@
 			</table>
 		</div>
 	</div>
-	
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>	
 <script type="text/javascript">
 var row=0;
 var url="";
@@ -203,8 +203,7 @@ var recordid ='';
 function gotoAction(){
 	window.open(url+row);
 }
-<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
-<script type="text/javascript">
+
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.require("dijit.form.FilteringSelect"); 
@@ -299,7 +298,9 @@ function getAllGroupByBranch(){
 		    group_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('group_name').set('store',group_store);   
 		    if(oldBranch==branch_id){
-		    	dijit.byId('group_name').set('value','<?php echo $this->search['group']?>');  
+			    <?php if (!empty($this->search['group_name'])){?>
+		    	dijit.byId('group_name').set('value','<?php echo $this->search['group_name']?>');  
+		    	<?php }?>
 		    }
 		},
 		error: function(err) {

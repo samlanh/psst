@@ -1883,5 +1883,37 @@ function getAllgroupStudyNotPass($action=null){
   		return 'A';
   	}
   }
+  function calCulateGradeKhmerMention($score,$max_score){
+  	$score_avg = ($score / $max_score)*100;
+  	if($score_avg < 50){//0.67
+  		return 'ខ្សោយ';
+  	}else if($score_avg < 60){
+  		return 'មធ្យម';
+  	}else if($score_avg < 70){
+  		return 'ល្អបង្គួរ';
+  	}else if($score_avg < 80){
+  		return 'ល្អ';
+  	}else if($score_avg < 90){
+  		return 'ល្អណាស់';
+  	}else{
+  		return 'ល្អប្រសើរ';
+  	}
+  }
+  function calCulateGradeEnglishMention($score,$max_score){
+  	$score_avg = ($score / $max_score)*100;
+  	if($score_avg < 50){//0.67
+  		return 'Fail';
+  	}else if($score_avg < 60){
+  		return 'Average';
+  	}else if($score_avg < 70){
+  		return 'Above Average';
+  	}else if($score_avg < 80){
+  		return 'Good';
+  	}else if($score_avg < 90){
+  		return 'Very  Good';
+  	}else{
+  		return 'Excellent';
+  	}
+  }
 }
 ?>

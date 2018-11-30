@@ -10,6 +10,7 @@
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+	$dbgb = new Application_Model_DbTable_DbGlobal();
 	
 	$month = array(
 				"01"=>"មករា",
@@ -108,6 +109,15 @@ dojo.ready(function(){
 			td.bg_2 {
 			    background: #fbbdbd73;
 			}
+			.red {
+			    color: #ff1a02;
+			}
+			.border-right-none{
+    			border-right: #fff solid 1px;
+			}
+			.border-bottom-none{
+    			border-bottom: #fff solid 1px;
+			}
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr style="border-bottom: 1px solid #000;">
@@ -155,9 +165,8 @@ dojo.ready(function(){
 								<td><?php echo $tr->translate("SEX");?></td>
 								<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<td><?php echo $tr->translate("AVERAGE");?></td>
-								<td  style="width:100px;"><?php echo $tr->translate("MENTION");?></td>
 								<td class="red bold" style="width:100px;"><?php echo $tr->translate("RANK");?></td>
-								<td>និទ្ទេស និង​ មូលវិចារ<?php //echo $tr->translate("RESULT");?></td>
+								<td colspan="3">និទ្ទេស និង​ មូលវិចារ<?php //echo $tr->translate("RESULT");?></td>
 							</tr>
 							<?php } $i++;?>
 							<tr class="style hover" style=" line-height: 20px;">
@@ -199,22 +208,28 @@ dojo.ready(function(){
 									?>
 								</td>
 								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
-								<td align="center"><?php echo calCulateGrade($rs['total_avg'],$rs['max_score']);?></td>
 								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
-								<td align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
-									<?php if($average>=($rs['max_score']/2)){
-										echo $tr->translate("STUDENT_PASS");
-										$count_pass++;
-										if($rs['sex']==2){
-											$pass_female=$pass_female+1;
-										}//femail
-									}else{
-										$count_fail++;
-										echo $tr->translate("STUDENT_FAIL");
-										if($rs['sex']==2){
-											$fail_female = $fail_female+1;
-										}
-									}?>
+								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>><?php echo calCulateGrade($rs['total_avg'],$rs['max_score']);?></td>
+								<td class="border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
+									<?php echo $dbgb->calCulateGradeKhmerMention($rs['total_avg'],$rs['max_score']);?>
+									<?php 
+// 									if($average>=($rs['max_score']/2)){
+// 										echo $tr->translate("STUDENT_PASS");
+// 										$count_pass++;
+// 										if($rs['sex']==2){
+// 											$pass_female=$pass_female+1;
+// 										}//femail
+// 									}else{
+// 										$count_fail++;
+// 										echo $tr->translate("STUDENT_FAIL");
+// 										if($rs['sex']==2){
+// 											$fail_female = $fail_female+1;
+// 										}
+// 									}
+									?>
+								</td>
+								<td class="border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
+									<?php echo $dbgb->calCulateGradeEnglishMention($rs['total_avg'],$rs['max_score']);?>
 								</td>
 							</tr>
 							<?php 

@@ -203,7 +203,7 @@ dojo.ready(function(){
 								<td>មធ្យមភាគ<br />Average</td>
 								<td class="red bold">ចំ.ថ្នាក់<br />Rank</td>
 								<td>និទ្ទេស <br />Grade</td>
-								<td>មូលវិចារ<br />Comments</td>
+								<td colspan="2">មូលវិចារ<br />Comments</td>
 							</tr>
 							<?php $totalscore=0; $i=0; if (!empty($this->subject)){ ?>
 							<?php foreach ($this->subject as $rs){ $i++;
@@ -218,7 +218,7 @@ dojo.ready(function(){
 								<td class="border-bottom-none border-right-none" align="center" >&nbsp;<?php echo $score['score'];?>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red bold"  align="center"><strong><?php echo $rangsubje['rank']?></strong></td>
 								<td class="border-bottom-none border-right-none" align="center"><?php //echo $dbgb->calCulateGrade($average,$rs['max_score']);?></td>
-								<td class="border-bottom-none" align="center">&nbsp;</td>
+								<td colspan="2" class="border-bottom-none" align="center">&nbsp;</td>
 							</tr>
 							<?php }?>
 							<?php }?>
@@ -230,37 +230,38 @@ dojo.ready(function(){
 								<td class="border-bottom-none border-right-none bold" align="center">&nbsp;<strong><?php echo number_format($totalscore,2)?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none ">&nbsp;</td>
 								<td class="border-bottom-none border-right-none">&nbsp;</td>
-								<td class="border-bottom-none">&nbsp;</td>
+								<td colspan="2" class="border-bottom-none">&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td class="border-right-none">&nbsp;</td>
 								<td align="center" class="border-right-none bold">&nbsp;<strong><?php echo $this->rs['total_avg']?></strong>&nbsp;</td>
 								<td align="center" class="border-right-none red">&nbsp;<strong><?php echo $this->rs['rank']?></strong>&nbsp;</td>
 								<td align="center" class="border-right-none red">&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
-								<td>&nbsp;</td>
+								<td style="white-space: nowrap;" class="border-right-none red bold">&nbsp;<strong><?php echo $dbgb->calCulateGradeKhmerMention($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
+								<td style="white-space: nowrap;" class="red bold">&nbsp;<strong><?php echo $dbgb->calCulateGradeEnglishMention($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
 							</tr>
 							<tr>
-								<td colspan="7" style="border: solid 3px #4839bd;">&nbsp;</td>
+								<td colspan="8" style="border: solid 3px #4839bd;">&nbsp;</td>
 							</tr>
 							<tr class="cheader">
-								<td class="red" colspan="7" style=" font-family:'Times New Roman','Khmer os battambang'; text-align:center; border: solid 3px #4839bd;">&nbsp;
+								<td class="red" colspan="8" style=" font-family:'Times New Roman','Khmer os battambang'; text-align:center; border: solid 3px #4839bd;">&nbsp;
 									អវត្តមាន<br />Absenteeism
 								</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i+1;?>&nbsp;</td>
 							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃឈប់ មានច្បាប់ /Days of Excused Absences:&nbsp;</td>
-								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,$this->rs['for_month_id']);?>&nbsp;</td>
+								<td colspan="6" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,$this->rs['for_month_id']);?>&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i+2;?>&nbsp;</td>
 							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃឈប់ អត់ច្បាប់/Days of Unexcused Absences:&nbsp;</td>
-								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 2,$this->rs['for_month_id']);?>&nbsp;</td>
+								<td colspan="6" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 2,$this->rs['for_month_id']);?>&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i+3;?>&nbsp;</td>
 							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃមកយឺត/Tardiness&nbsp;</td>
-								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,$this->rs['for_month_id']);?>&nbsp;</td>
+								<td colspan="6" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,$this->rs['for_month_id']);?>&nbsp;</td>
 							</tr>
 							</table>
 								
@@ -331,7 +332,7 @@ dojo.ready(function(){
 								<td>មធ្យមភាគ<br />Average</td>
 								<td class="red bold">ចំ.ថ្នាក់<br />Rank</td>
 								<td>និទ្ទេស <br />Grade</td>
-								<td>មូលវិចារ<br />Comments</td>
+								<td colspan="2">មូលវិចារ<br />Comments</td>
 							</tr>
 							<?php $totalscore=0; $i=0; if (!empty($this->subject)){ ?>
 							<?php foreach ($this->subject as $rs){ $i++;
@@ -346,7 +347,7 @@ dojo.ready(function(){
 								<td class="border-bottom-none border-right-none" align="center">&nbsp;<?php echo $score['score'];?>&nbsp;</td>
 								<td class="border-bottom-none border-right-none" class="red bold"  align="center"><?php echo $rangsubje['rank']?></td>
 								<td class="border-bottom-none border-right-none" align="center"><?php //echo $dbgb->calCulateGrade($average,$rs['max_score']);?></td>
-								<td class="border-bottom-none" align="center">&nbsp;</td>
+								<td colspan="2" class="border-bottom-none" align="center">&nbsp;</td>
 								
 							</tr>
 							<?php }?>
@@ -359,7 +360,7 @@ dojo.ready(function(){
 								<td class="bold border-bottom-none border-right-none" align="center">&nbsp;<strong><?php echo number_format($totalscore,2)?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none">&nbsp;</td>
 								<td class="border-bottom-none border-right-none">&nbsp;</td>
-								<td class="border-bottom-none">&nbsp;</td>
+								<td colspan="2" class="border-bottom-none">&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td colspan="2" align="right">&nbsp;មធ្យមភាគប្រឡងឆមាស &nbsp;<br />
@@ -369,7 +370,7 @@ dojo.ready(function(){
 								<td class="border-bottom-none border-right-none bold " align="center" >&nbsp;<strong><?php echo $this->rs['total_avg']?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php echo $this->rs['rank']?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php //echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
-								<td class="border-bottom-none">&nbsp;</td>
+								<td colspan="2" class="border-bottom-none">&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td colspan="2" align="right">&nbsp;មធ្យមភាគខែប្រចាំឆមាស &nbsp;<br />
@@ -379,7 +380,8 @@ dojo.ready(function(){
 								<td class="border-bottom-none border-right-none bold " align="center" >&nbsp;<strong><?php echo number_format($this->monthlySemester['total_avg'],2);?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php echo $this->monthlySemester['rank']?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?></strong>&nbsp;</td>
-								<td class="border-bottom-none">&nbsp;</td>
+								<td style="white-space: nowrap;" class="border-bottom-none border-right-none red">&nbsp;<strong><?php echo $dbgb->calCulateGradeKhmerMention($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?></strong>&nbsp;</td>
+								<td style="white-space: nowrap;" class="border-bottom-none red">&nbsp;<strong><?php echo $dbgb->calCulateGradeEnglishMention($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?></strong>&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td colspan="2" align="right">&nbsp;ពិន្ទុសរុបប្រចាំឆមាស&nbsp;<br />
@@ -389,7 +391,7 @@ dojo.ready(function(){
 								<td class="border-bottom-none border-right-none bold " align="center" >&nbsp;<strong><?php echo $this->Semester['total_score_semester'];?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php //echo $this->rs['rank']?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php //echo $dbgb->calCulateGrade($semesterScore,$this->monthlySemester['max_score'])?></strong>&nbsp;</td>
-								<td class="border-bottom-none">&nbsp;</td>
+								<td colspan="2" class="border-bottom-none">&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td colspan="2" align="right">&nbsp;<span class="red">មធ្យមភាគប្រចាំឆមាស ចំណាត់ថ្នាក់ និទ្ទេស មូលវិចារ</span>&nbsp;<br />
@@ -399,30 +401,31 @@ dojo.ready(function(){
 								<td class="border-right-none bold" align="center" >&nbsp;<strong><?php echo $this->Semester['average_semester_score'];?></strong>&nbsp;</td>
 								<td class="border-right-none red" align="center" >&nbsp;<strong><?php echo $this->Semester['rank']?></strong>&nbsp;</td>
 								<td class="border-right-none red" align="center" >&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->Semester['average_semester_score'],$this->Semester['max_score'])?></strong>&nbsp;</td>
-								<td>&nbsp;</td>
+								<td style="white-space: nowrap;" class="border-right-none red">&nbsp;<strong><?php echo $dbgb->calCulateGradeKhmerMention($this->Semester['average_semester_score'],$this->Semester['max_score'])?></strong>&nbsp;</td>
+								<td style="white-space: nowrap;" class="red" >&nbsp;<strong><?php echo $dbgb->calCulateGradeEnglishMention($this->Semester['average_semester_score'],$this->Semester['max_score'])?></strong>&nbsp;</td>
 							</tr>
 							<tr>
-								<td colspan="7" style="border: solid 3px #4839bd;">&nbsp;</td>
+								<td colspan="8" style="border: solid 3px #4839bd;">&nbsp;</td>
 							</tr>
 							<tr class="cheader">
-								<td class="red" colspan="7" style=" font-family:'Times New Roman','Khmer os battambang'; text-align:center; border: solid 3px #4839bd;">&nbsp;
+								<td class="red" colspan="8" style=" font-family:'Times New Roman','Khmer os battambang'; text-align:center; border: solid 3px #4839bd;">&nbsp;
 									អវត្តមាន<br />Absenteeism
 								</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i+1;?>&nbsp;</td>
 							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃឈប់ មានច្បាប់ /Days of Excused Absences:&nbsp;</td>
-								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,null,$this->rs['for_semester']);?>&nbsp;</td>
+								<td colspan="6" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 3,null,$this->rs['for_semester']);?>&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i+2;?>&nbsp;</td>
 							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃឈប់ អត់ច្បាប់/Days of Unexcused Absences:&nbsp;</td>
-								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 2,null,$this->rs['for_semester']);?>&nbsp;</td>
+								<td colspan="6" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 2,null,$this->rs['for_semester']);?>&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td align="center">&nbsp;<?php echo $i+3;?>&nbsp;</td>
 							    <td align="left" style="white-space:nowrap;">&nbsp;ចំនួនថ្ងៃមកយឺត/Tardiness&nbsp;</td>
-								<td colspan="5" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,null,$this->rs['for_semester']);?>&nbsp;</td>
+								<td colspan="6" align="right" class="red bold">&nbsp;<?php echo $db->countStudentAttendenceBYtype($this->rs['group_id'], $this->rs['student_id'], 4,null,$this->rs['for_semester']);?>&nbsp;</td>
 							</tr>
 							</table>
 								

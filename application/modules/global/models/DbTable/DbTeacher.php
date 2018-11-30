@@ -159,6 +159,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						}
 					}
 					$where=" id = ".$_data['id'];
+					
 					$id = $this->update($_arr,$where);
 					
 					$this->_name = 'rms_teacher_document';

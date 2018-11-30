@@ -60,8 +60,9 @@ table#table_row tr th {
 							}
 						}
 					}
-					dijit.byId('save_new').set('disabled',true);
-					dijit.byId('save_close').set('disabled',true);
+					dijit.byId("save_new").attr("disabled",true);	
+					dijit.byId("save_close").attr("disabled",true);
+					loadingBlock();
 					return true;
 	   			}else {
 				return false;

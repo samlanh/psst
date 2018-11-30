@@ -33,11 +33,11 @@ table#table_row tr th {
     		</div>
     	</div>
     	<form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-			<script type="dojo/method" event="onSubmit">   
+			<script type="dojo/method" event="onSubmit">  
 	  			 if(this.validate()) {
-           			 student_id=dijit.byId("student_id").get("value");
-            		if(student_id=="" || student_id==-1){
-               			alert("Please Select Student Name or Student Id");
+           			 branch_id=dijit.byId("branch_id").get("value");
+            		if(branch_id=="" || branch_id==0){
+               			alert("Please Select Branch");
 			  			 return false;
 					}
 					identity = dijit.byId('identity').get('value');
@@ -58,9 +58,9 @@ table#table_row tr th {
 							}
 						}
 					}
-
-					dijit.byId('save_new').set('disabled',true);
-					dijit.byId('save_close').set('disabled',true);
+					dijit.byId("save_new").attr("disabled",true);	
+					dijit.byId("save_close").attr("disabled",true);
+					loadingBlock();
 					return true;
 	   			}else {
 					return false;
@@ -212,7 +212,7 @@ table#table_row tr th {
 			queryExpr: "*${0}*",                     
 			id: "student_name",
 			name: "student_name",   
-			required:true,        
+			required: false,        
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function() { 
@@ -246,7 +246,7 @@ table#table_row tr th {
 			}
 		});
 	}
-
+	
 	var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudent')); ?>';
 	function getallstudentname(){//
 		branch_id = dijit.byId("branch_id").attr("value");

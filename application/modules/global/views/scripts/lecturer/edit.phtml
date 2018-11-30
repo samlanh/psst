@@ -72,6 +72,7 @@ input.btn_borwse_image {
 					dijit.byId('password').focus();
 					return false;
 				}
+				loadingBlock();
                 dijit.byId("save_new").attr("disabled",true);	
 				dijit.byId("save_close").attr("disabled",true);		
 				return true;
@@ -543,7 +544,7 @@ input.btn_borwse_image {
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
 						iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'global','controller'=>"lecturer",'action'=>'index'),null,true); ?>';" />
-					<input type="submit" onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+					<input type="button" onclick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 					 
                	</div>
@@ -861,29 +862,34 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		});
 	}
 	function submitDataClose(){
-		degree=dijit.byId('degree').get('value');
-		nationality=dijit.byId('nationality').get('value');
-		nation=dijit.byId('nation').get('value');
-		if(nationality==0){
-			alert('សូមជ្រើសរើសសញ្ជាតិ!');dijit.byId('nationality').focus();return false;
-			return false;
-		}
-		if(nation==0){
-			alert('សូមជ្រើសរើសជនជាតិ!');dijit.byId('nation').focus();return false;
-			return false;
-		}
-		if(degree==0){
-			alert('សូមជ្រើសរើសកម្រិតសិក្សា!');dijit.byId('degree').focus();return false;
-			return false;
-		}
-		if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
-			alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
-			dojo.byId('password').value = '';
-			dojo.byId('confirm_password').value = '';
-			dijit.byId('password').focus();
-			return false;
-		}	
 		if(dijit.byId('frm_add_tran').validate()) {
+			branch=dijit.byId('branch_id').get('value');
+			if(branch=='' || branch==0){
+				alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');dijit.byId('branch_id').focus(); 
+				return false;
+			}
+			nationality=dijit.byId('nationality').get('value');
+			if(nationality==0){
+				alert('សូមជ្រើសរើសសញ្ជាតិ!');dijit.byId('nationality').focus();
+				return false;
+			}
+			nation=dijit.byId('nation').get('value');
+			if(nation==0){
+				alert('សូមជ្រើសរើសសញ្ជាតិ!');dijit.byId('nation').focus();
+				return false;
+			}
+			degree=dijit.byId('degree').get('value');
+			if(degree==0){
+				alert('សូមជ្រើសរើសកម្រិតសិក្សា!');dijit.byId('degree').focus();
+				return false;
+			}
+			if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
+				alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
+				dojo.byId('password').value = '';
+				dojo.byId('confirm_password').value = '';
+				dijit.byId('password').focus();
+				return false;
+			}	
 			dijit.byId("save_new").attr("disabled",true);	
 			dijit.byId("save_close").attr("disabled",true);		
 			var url_submit = '<?php echo $this->url(array('module'=>'global','controller'=>'lecturer','action'=>'add')); ?>';

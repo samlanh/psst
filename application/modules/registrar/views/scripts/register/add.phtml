@@ -812,7 +812,6 @@ function getallstudentname(){//
 		var url_data = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getallstudentcrm')); ?>';
 	}
 	branch_id = dijit.byId("branch_id").attr("value");
-	
 	dojo.xhrPost({
 		url:url_data,
 		content:{

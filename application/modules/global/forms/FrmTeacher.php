@@ -118,7 +118,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
     	$_nation->setMultiOptions($_arr_opt_nation);
     	$_nation->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-    			'required'=>'true',
+    			'required'=>'false',
     			'onChange'=>'popupNation(2);',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
@@ -133,7 +133,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_passport->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 		
 		$_card = new Zend_Dojo_Form_Element_NumberTextBox('card_no');
-		$_card->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside','required'=>'true','placeholder'=>$this->tr->translate("PLEASE_SELECT_CARD_NO")));
+		$_card->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside','placeholder'=>$this->tr->translate("PLEASE_SELECT_CARD_NO")));
 		
 		$_experiences = new Zend_Dojo_Form_Element_Textarea('experiences');
 		$_experiences->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));

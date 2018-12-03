@@ -1915,5 +1915,20 @@ function getAllgroupStudyNotPass($action=null){
   		return 'Excellent';
   	}
   }
+  
+  function updateReadNotif($type,$notif_id){
+  	$db = $this->getAdapter();
+  		$_arr= array(
+			'notif_type'		=>$type,
+			'notification_id'	=>$notif_id,
+			'user_id'	=>$this->getUserId(),
+			'is_read'	=>1,
+			'is_click'		=>1,
+  			'date'		=>date("Y-m-d H:i:s"),
+		);
+  		$this->_name ='rms_read_unread_notif';
+		$id = $this->insert($_arr);
+	return $id;
+  }
 }
 ?>

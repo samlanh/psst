@@ -33,7 +33,10 @@ class Home_IndexController extends Zend_Controller_Action
       $this->view->totalExpense = $_db->getAmountExpest();
       
       $_db = new Home_Model_DbTable_DbDashboard();
-      $this->view->sepcialdiscount = $_db->getSpecailDiscount();
+      $this->view->studropnew = $_db->getStudentDropNew();
+      $this->view->alltypedrop = $_db->countStudentDrop();
+      $this->view->stu_suppend = $_db->countStudentDrop(1);
+      $this->view->stu_stopped = $_db->countStudentDrop(2);
     }
 
     public function dashboardAction()
@@ -44,12 +47,11 @@ class Home_IndexController extends Zend_Controller_Action
     	}
     	
     	$param = $this->getRequest()->getParams();
+    	$_db = new Home_Model_DbTable_DbDashboard();
     	if(isset($param['search'])){
     		$search=$param;
     		
-    		$_db = new Home_Model_DbTable_DbDashboard();
     		$rs_rows = $_db->getSpecailDiscount($search);
-    		 
     		$paginator = Zend_Paginator::factory($rs_rows);
     		$paginator->setDefaultItemCountPerPage(1);
     		$allItems = $paginator->getTotalItemCount();
@@ -91,6 +93,16 @@ class Home_IndexController extends Zend_Controller_Action
     				);
     	}
     	$this->view->search=$search;
+    	
+    	$this->view->studropnew = $_db->getStudentDropNew();
+    	$this->view->alltypedrop = $_db->countStudentDrop();
+    	$this->view->stu_suppend = $_db->countStudentDrop(1);
+    	$this->view->stu_stopped = $_db->countStudentDrop(2);
+    	
+    	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    	$this->view->rsamountstudent = $db->getAmountStudent();
+    	$this->view->rsnewstudent = $db->getAmountNewStudent();
+    	$this->view->rsdropstudent = $db->getAmountDropStudent();
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);

@@ -107,8 +107,6 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	}
 	public function addStudentDrop($_data){
 		$_db= $this->getAdapter();
-		//$_db->beginTransaction();
-		//print_r($_data); exit();
 			try{	
 				$_arr= array(
 						'branch_id'	=>$_data['branch_id'],
@@ -131,6 +129,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 						'user_id'	=>$this->getUserId(),
 						);
 				$id = $this->insert($_arr);
+				
 				$this->_name='rms_student';
 				$where=" stu_id=".$_data['studentid'];
 				if($_data['status']==1){

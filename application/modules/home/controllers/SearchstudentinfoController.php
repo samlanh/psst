@@ -84,6 +84,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 	
 	public function studentDetailAction(){
 		$db= new Home_Model_DbTable_DbStudent();
+		$dbgb= new Application_Model_DbTable_DbGlobal();
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
@@ -112,10 +113,18 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			$this->view->service=$db->getStudentServiceUsing($id,$search, 1);
 			
 			$re=$this->view->re_row=$db->getRescheduleByGroupId($id);
-			
 			$this->view->student_mistake = $db->getStudentMistake($id);
-			
 			$this->view->student_attendance = $db->getStudentAttendence($id);
+			
+			$droplink= $this->getRequest()->getParam('droplink');
+			$drid= $this->getRequest()->getParam('drid');
+			if (!empty($droplink)){
+				if ($droplink=="true" AND !empty($drid)){
+					//read notification student drop
+					$dbgb->updateReadNotif(1, $drid);
+				}
+			}
+			
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

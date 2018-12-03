@@ -2,12 +2,46 @@
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate("Dashboard Student Registration Management System"));
 	echo $this->headTitle();
+	$db = new Allreport_Model_DbTable_DbRptAllStudent();
 ?>
 <link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
 <!-- Icons CSS -->
 <link href="<?php echo $this->baseUrl()."/"?>dashboard/css/icons.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="<?php echo $this->baseUrl()."/"?>dashboard/css/style.css" rel="stylesheet">
+<style>
+span.title-suppend {
+    display: block;
+    margin: 10px 0;
+    border-bottom: solid 2px #0f2a5b;
+    font-weight: bold;
+    color: #0f2a5b;
+}
+.profile_details .profile_view img.img-circle.img-responsive {
+    height: 125px;
+    width: 125px;
+}
+.blog-stu-droplist {
+    height: 320px;
+    overflow-y: auto;
+    width: 100%;
+    padding: 10px;
+}
+.well.profile_view {
+    margin-bottom: 10px;
+}
+.col-lg-6.capital-box {
+    min-height: 115px;
+}
+.bg-style-drop {
+    height: 80%;
+    width: 35%;
+    position: absolute;
+    left: 30%;
+    opacity: 0.1;
+    top: 30px;
+}
+ </style>
 <div id="page-wrapper">
 	<!-- Page content start -->
 	<div class="page-contentbar">
@@ -20,9 +54,9 @@
 							<div class="col-lg-12">
 								<div class="accounting-management text-center">
 									<div class="col-lg-6 capital-box" style="background:#17418e;; color: #fff">
-										<a href="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index'), null, true);?>">
+										<a title="<?php echo $tr->translate("FINDING_ALL_STUDENT_INFORMATION")?>" href="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index'), null, true);?>">
 											<span data-bind="text: txnRecorded"><h3><?php echo $tr->translate("FINDING_ALL_STUDENT_INFORMATION")?></h3></span>
-											<p class="month" style="text-align: center; margin: 0 auto;" data-bind="text: lang.lang.transactions_recorded">&nbsp;<?php //echo $tr->translate("STUDENT_BACKGROUND")?></p>
+											<p class="month" style="text-align: center; margin: 0 auto;" data-bind="text: lang.lang.transactions_recorded">&nbsp;<?php echo $tr->translate("STUDENT_TOTAL")." : ".$this->rsamountstudent." ".$tr->translate("STUDENT_UNIT");?> &nbsp;<?php echo $tr->translate("NEW_STUDENT")." : ".$this->rsnewstudent." ".$tr->translate("STUDENT_UNIT");?></p>
 										</a>
 									</div>
 									<div class="col-lg-6 capital-box" style="background: #203864; color: #fff">
@@ -70,129 +104,128 @@
 					 <div class="col-lg-6">
 					 	
 						<div class="card-box">
+							<!-- 
 							<div class="col-lg-12">
 								<div class="col-lg-6">
-									<p><span data-bind="text: lang.lang.performance"><?php echo $tr->translate("Monthly Student Information")?></span></p>
+									<p><span data-bind="text: lang.lang.performance"><?php //echo $tr->translate("Monthly Student Information")?></span></p>
 									<table class="performance">
 										<tbody>
 											<tr>
-												<td><a target="_blank" href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-all-student";?>"><span data-bind="text: lang.lang.income"><?php echo $tr->translate("STUDENT_TOTAL")?></span></a></td>
+												<td><a target="_blank" href="<?php //echo $this->baseUrl()."/allreport/allstudent/rpt-all-student";?>"><span data-bind="text: lang.lang.income"><?php echo $tr->translate("STUDENT_TOTAL")?></span></a></td>
 												<td></td>
-												<td align="right"><span data-bind="text: obj.income"><?php echo $this->rsamountstudent; echo $tr->translate("STUDENT_UNIT");?></span></td>
+												<td align="right"><span data-bind="text: obj.income"><?php //echo $this->rsamountstudent; echo $tr->translate("STUDENT_UNIT");?></span></td>
 											</tr>
 											<tr>
-												<td><span data-bind="text: lang.lang.expense"><?php echo $tr->translate("NEW_STUDENT")?></span></td>
+												<td><span data-bind="text: lang.lang.expense"><?php //echo $tr->translate("NEW_STUDENT")?></span></td>
 												<td></td>
-												<td align="right"><span data-bind="text: obj.expense"><?php echo $this->rsnewstudent; echo $tr->translate("STUDENT_UNIT");?></span></td>
+												<td align="right"><span data-bind="text: obj.expense"><?php //echo $this->rsnewstudent; echo $tr->translate("STUDENT_UNIT");?></span></td>
 											</tr>
 											<tr>
-												<td><b><span data-bind="text: lang.lang.net_income"><?php echo $tr->translate("STUDENT_DROP")?></span></b></td>
+												<td><b><span data-bind="text: lang.lang.net_income"><?php //echo $tr->translate("STUDENT_DROP")?></span></b></td>
 												<td></td>
-												<td align="right"><b data-bind="text: obj.net_income"><?php echo $this->rsdropstudent; echo $tr->translate("STUDENT_UNIT");?></b></td>
+												<td align="right"><b data-bind="text: obj.net_income"><?php //echo $this->rsdropstudent; echo $tr->translate("STUDENT_UNIT");?></b></td>
 											</tr>
 										</tbody>
 									</table>
 								</div>
 								<div class="col-lg-6">
-									<p><span data-bind="text: lang.lang.performance"><?php echo $tr->translate("Monthly Student Test Info")?></span></p>
+									<p><span data-bind="text: lang.lang.performance"><?php //echo $tr->translate("Monthly Student Test Info")?></span></p>
 									<table class="performance">
 										<tbody>
 											<tr>
-												<td><a href="<?php echo $this->baseUrl()."/registrar/rptstudenttest/index";?>"><span data-bind="text: lang.lang.income"><?php echo $tr->translate("Student Test")?></span></a></td>
+												<td><a href="<?php //echo $this->baseUrl()."/registrar/rptstudenttest/index";?>"><span data-bind="text: lang.lang.income"><?php //echo $tr->translate("Student Test")?></span></a></td>
 												<td></td>
-												<td align="right"><span data-bind="text: obj.income"><?php echo $this->rsteststudent; echo $tr->translate("STUDENT_UNIT");?></span></td>
+												<td align="right"><span data-bind="text: obj.income"><?php //echo $this->rsteststudent; echo $tr->translate("STUDENT_UNIT");?></span></td>
 											</tr>
 											<tr>
-												<td><a href="<?php echo $this->baseUrl()."/registrar/rptstudenttest/index";?>"><span data-bind="text: lang.lang.income"><?php echo $tr->translate("Completed Result")?></span></a></td>
+												<td><a href="<?php //echo $this->baseUrl()."/registrar/rptstudenttest/index";?>"><span data-bind="text: lang.lang.income"><?php //echo $tr->translate("Completed Result")?></span></a></td>
 												<td></td>
-												<td align="right"><span data-bind="text: obj.income"><?php echo $this->rsupdateresult; echo $tr->translate("STUDENT_UNIT");?></span></td>
+												<td align="right"><span data-bind="text: obj.income"><?php //echo $this->rsupdateresult; echo $tr->translate("STUDENT_UNIT");?></span></td>
 											</tr>
 											<tr>
-												<td><a href="<?php echo $this->baseUrl()."/registrar/rptstudenttest/index";?>"><span data-bind="text: lang.lang.expense"><?php echo $tr->translate("Completed Register")?></span></a></td>
+												<td><a href="<?php //echo $this->baseUrl()."/registrar/rptstudenttest/index";?>"><span data-bind="text: lang.lang.expense"><?php //echo $tr->translate("Completed Register")?></span></a></td>
 												<td></td>
-												<td align="right"><span data-bind="text: obj.expense"><?php echo $this->rsteststuregistered; echo $tr->translate("STUDENT_UNIT");?></span></td>
+												<td align="right"><span data-bind="text: obj.expense"><?php //echo $this->rsteststuregistered; echo $tr->translate("STUDENT_UNIT");?></span></td>
 											</tr>
 										</tbody>
 									</table>
 								</div>
 							</div>
+							 -->
 							<div class="col-lg-12">
 								<div class="col-lg-12">
-									<p><span data-bind="text: lang.lang.performance"><?php echo $tr->translate("Study Information")?></span></p>
-									<div class="widget-body alert-info welcome-nopadding">
-											<table width="100%" class="saleInfo">
-												<thead>
-													<tr align="center">
-														<td>										
-															&nbsp;
-														</td>
-														<td>
-															<span data-bind="text: obj.ar_customer"><?php echo $tr->translate("Number Of Student")?></span>
-														</td>
-														<td>
-															<span data-bind="text: obj.ar_overdue"><?php echo $tr->translate("Income")?></span>
-														</td>
-													</tr>
-												</thead>
-												<tbody>
-													<tr align="left">
-														<td class="border-rig">										
-															<span data-bind="text: obj.ar_open"><?php echo $tr->translate("Kindergarten")?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_customer">0<?php //echo $this->CountAllSale['total'];?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_overdue"><?php echo "$ ".number_format($this->CountAllSale['totalAmount'],2);?></span>
-														</td>
-													</tr>
-													<tr align="left">
-														<td class="border-rig">										
-															<span data-bind="text: obj.ar_open"><?php echo $tr->translate("GEP")?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_customer">0<?php //echo $this->CountCompletedSale['total'];?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_overdue"><?php echo "$ ".number_format($this->CountCompletedSale['totalAmount'],2);?></span>
-														</td>
-													</tr>
-													<tr align="left">
-														<td class="border-rig">										
-															<span data-bind="text: obj.ar_open"><?php echo $tr->translate("Primary School")?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_customer">0<?php //echo $this->CountCanceledSale;?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_overdue"><?php echo "$ ".number_format($this->CancelPropertyAmount,2);?></span>
-														</td>
-													</tr>
-													<tr align="left">
-														<td class="border-rig">										
-															<span data-bind="text: obj.ar_open"><?php echo $tr->translate("Secondary School")?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_customer">0<?php //echo $this->CountCanceledSale;?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_overdue"><?php echo "$ ".number_format($this->CancelPropertyAmount,2);?></span>
-														</td>
-													</tr>
-													<tr align="left">
-														<td class="border-rig">										
-															<span data-bind="text: obj.ar_open"><?php echo $tr->translate("High School")?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_customer">0<?php //echo $this->CountCanceledSale;?></span>
-														</td>
-														<td align="center">
-															<span data-bind="text: obj.ar_overdue"><?php echo "$ ".number_format($this->CancelPropertyAmount,2);?></span>
-														</td>
-													</tr>
-												</tbody>
-										</table>
+									<span data-bind="text: lang.lang.performance"><?php echo $tr->translate("STUDENT_DROP");?></span>
+									<div class="accounting-management text-center">
+										<div class="col-lg-12 capital-box" style="background:#0077c5;; color: #fff">
+											<a title="<?php echo $tr->translate("RPT_STUDENT_DROPS");?>" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-drop'), null, true);?>">
+												<span data-bind="text: txnRecorded"><h3><?php echo $tr->translate("TOTAL")." : ".$this->alltypedrop." ".$tr->translate("STUDENT_UNIT");?></h3></span>
+												<p class="month" style="text-align: center; margin: 0 auto;" data-bind="text: lang.lang.transactions_recorded">&nbsp;<?php echo $tr->translate("SUSPEND")." : ".$this->stu_suppend." ".$tr->translate("STUDENT_UNIT");?> &nbsp;<?php echo $tr->translate("DROPPED")." : ".$this->stu_stopped." ".$tr->translate("STUDENT_UNIT");?></p>
+											</a>
+											<br />
+										</div>
+										<div class="clearfix"></div>
 									</div>
+									<?php if (!empty($this->studropnew)){?>
+									<span class="title-suppend" data-bind="text: lang.lang.performance"><i class="fa fa-user-times" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_DROP_NEW");?>&nbsp;<?php echo count($this->studropnew)." ".$tr->translate("STUDENT_UNIT");?></span>
+									<div class="blog-stu-droplist">
+										<?php if (!empty($this->studropnew)) foreach ($this->studropnew as $drop){?>
+										<div class="profile_details" title="<?php echo $drop['stu_khname'];?> <?php echo $drop['stu_enname']." ".$drop['last_name'];?>">
+					                        <div class="well profile_view">
+					                          <div class="col-sm-12">
+					                          <?php 
+					                          if (!empty($drop['branch_photo'])){
+					                          	if (file_exists(PUBLIC_PATH.'/images/'.$drop['branch_photo'])) {
+					                          		$style="background: url(/elt/trunk/public/images/".$drop['branch_photo'].");  background-repeat: no-repeat; background-size: 100%;";
+					                          	}
+					                          }
+					                          ?>
+					                          	<div class="bg-style-drop" style="<?php echo $style;?>"></div>
+					                            <h4 class="brief"><i><?php echo $drop['type_drop'];?><br /><small><?php echo $drop['branch_name'];?></small></i></h4>
+					                            <div class="left col-xs-7">
+					                              <h2><?php echo $drop['stu_khname'];?></h2>
+					                              <h2><?php echo $drop['stu_enname']." ".$drop['last_name'];?></h2>
+					                              <p><strong><?php echo $tr->translate("STUDENT_CODE")?>: </strong> <?php echo $drop['stu_code'];?> </p>
+					                              <ul class="list-unstyled">
+					                             	<li><i class="fa fa-graduation-cap"></i> <?php echo $tr->translate("ACADEMIC_YEAR")?>: <?php echo $drop['academic'];?></li>
+					                                <li><i class="fa fa-magic"></i> <?php echo $tr->translate("DEGREE")?>: <?php echo $drop['degree'];?></li>
+					                                <li><i class="fa fa-building"></i> <?php echo $tr->translate("GRADE")?>: <?php echo $drop['group_name'];?></li>
+					                                <li><i class="fa fa-phone"></i> <?php echo $tr->translate("PHONE")?>: <?php echo $drop['tel'];?></li>
+					                              </ul>
+					                            </div>
+					                            <div class="right col-xs-5 text-center">
+					                            	<?php $photo = $this->baseUrl()."/images/no-profile.png";
+						                       			if (!empty($drop['photo'])){
+						                       				if (file_exists(PUBLIC_PATH."/images/photo/".$drop['photo'])){
+						                       					$photo = $this->baseUrl().'/images/photo/'.$drop['photo'];
+						                       				}
+						                       			}
+						                       		?>
+					                              <img src="<?php echo $photo;?>" alt="" class="img-circle img-responsive">
+					                            </div>
+					                          </div>
+					                          <div class="col-xs-12 bottom text-center">
+					                            <div class="col-xs-12 col-sm-6 emphasis">
+					                              <?php echo $tr->translate("STOP_DATE");?> <?php echo date("d/M/Y",strtotime($drop['date_stop']));?>
+					                            </div>
+					                            <div class="col-xs-12 col-sm-6 emphasis">
+					                            	<?php 
+					                            	$sex="btn-primary";
+					                            	$sexTitle=$tr->translate("MALE");
+					                            	if ($drop['sex']==2){
+					                            		$sex="btn-danger";
+					                            		$sexTitle=$tr->translate("FEMALE");
+					                            	}?>
+					                              <button type="button" title="<?php echo $sexTitle;?>" class="btn <?php echo $sex;?> btn-xs"> <i class="fa fa-user">
+					                                </i>
+					                              </button>
+					                              <a class="btn btn-info btn-xs" href="<?php echo $this->baseUrl()."/home/searchstudentinfo/student-detail/id/".$drop['stu_id']."?droplink=true&drid=".$drop['id'];?>"><i class="fa fa-user"> </i> <?php echo $tr->translate("View Profile")?></a>
+					                            </div>
+					                          </div>
+					                        </div>
+				                      </div>
+				                      <?php }?>
+									</div>
+									<?php }?>
 								</div>
 							</div>
 						</div>
@@ -241,20 +274,19 @@
  <!-- Dashboard init 
 <script src="<?php echo $this->baseUrl()."/"?>dashboard/pages/jquery.dashboard.js"></script>-->
 <?php 
-   $start_year = date("Y-m-d",strtotime(" -6 month"));
+   $start_year = date("Y-m-d",strtotime(" -6 year"));
 ?>
 <script>
 var $stckedData  = [];
 //creating Stacked chart
 var $stckedData  = [
-        { y: '2012', a: 0},
-        { y: '2013', a: 0},
-        { y: '2014', a: 0},
-        { y: '2015', a: 0},
-        { y: '2016', a: 0},
-        { y: '2017', a: 0},
-        { y: '2018', a: 2},
-    ];
+                    <?php for ($i=0; $i<=6; $i++ ){ 
+                    	$year = date("Y",strtotime("$start_year+$i year"));
+                    	$stu = $db->getAmountStudent($year);
+                    ?>
+                    { y: '<?php echo $year;?>', a: <?php echo $stu;?>},
+                    <?php }?>
+                ];
 var $stckedDataIncmoe  = [];
 var $stckedDataIncmoe  = [
        { y: '2017-09', a: 0},

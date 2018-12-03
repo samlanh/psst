@@ -16,6 +16,11 @@
 <link href="<?php echo $this->baseUrl()."/"?>dashboard/css/icons.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="<?php echo $this->baseUrl()."/"?>dashboard/css/style.css" rel="stylesheet">
+<style>
+.col-lg-6.capital-box {
+    min-height: 115px;
+}
+ </style>
 <div id="page-wrapper">
 	<!-- Page content start -->
 	<div class="page-contentbar">
@@ -28,10 +33,19 @@
 							<div class="col-lg-12">
 								<div class="accounting-management text-center">
 									<div class="col-lg-6 capital-box" style="background:#17418e;; color: #fff">
-										<a href="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index'), null, true);?>">
+										<a title="<?php echo $tr->translate("FINDING_ALL_STUDENT_INFORMATION")?>" href="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index'), null, true);?>">
 											<span data-bind="text: txnRecorded"><h3><?php echo $tr->translate("FINDING_ALL_STUDENT_INFORMATION")?></h3></span>
+											<p class="month" style="text-align: center; margin: 0 auto;" data-bind="text: lang.lang.transactions_recorded">&nbsp;<?php echo $tr->translate("STUDENT_TOTAL")." : ".$this->rsamountstudent." ".$tr->translate("STUDENT_UNIT");?> &nbsp;<?php echo $tr->translate("NEW_STUDENT")." : ".$this->rsnewstudent." ".$tr->translate("STUDENT_UNIT");?></p>
 										</a>
 									</div>
+									<div class="col-lg-6 capital-box" style="background:#0077c5;; color: #fff">
+									<a title="<?php echo $tr->translate("RPT_STUDENT_DROPS");?>" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-drop'), null, true);?>">
+										<span data-bind="text: txnRecorded"><h3><?php echo $tr->translate("STUDENT_DROP")." : ".$this->alltypedrop." ".$tr->translate("STUDENT_UNIT");?></h3></span>
+										<p class="month" style="text-align: center; margin: 0 auto;" data-bind="text: lang.lang.transactions_recorded">&nbsp;<?php echo $tr->translate("SUSPEND")." : ".$this->stu_suppend." ".$tr->translate("STUDENT_UNIT");?> &nbsp;<?php echo $tr->translate("DROPPED")." : ".$this->stu_stopped." ".$tr->translate("STUDENT_UNIT");?></p>
+									</a>
+									<br />
+								</div>
+								<div class="clearfix"></div>
 								</div>
 							</div>
 						</div>

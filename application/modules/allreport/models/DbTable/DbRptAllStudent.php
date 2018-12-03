@@ -161,10 +161,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
     }
-    public function getAmountStudent(){//count to dashboard
+    public function getAmountStudent($year=null){//count to dashboard
     	$db = $this->getAdapter();
     	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
-    	$where=' WHERE status=1 AND customer_type=1';
+    	$where=' WHERE status=1 AND customer_type=1 AND is_subspend=0';
+    	if (!empty($year)){
+    		$where.=" AND DATE_FORMAT(create_date, '%Y') <='$year'";
+    	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);
@@ -172,7 +175,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     public function getAmountNewStudent(){//count to dashboard
     	$db = $this->getAdapter();
     	$sql ='SELECT COUNT(stu_id) FROM rms_student';
-    	$where=' WHERE status=1 AND is_stu_new=1 AND customer_type=1';
+    	$where=' WHERE status=1 AND is_stu_new=1 AND customer_type=1 AND is_subspend=0';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchOne($sql.$where);

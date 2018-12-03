@@ -35,15 +35,19 @@ table#table_row tr th {
     	<form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">  
 	  			 if(this.validate()) {
+           			 	student_id=dijit.byId("student_name").get("value");
+            		if(student_id=="" || student_id==-1){
+               			alert("Please Select Student Name or Student Id");
+					}
            			 branch_id=dijit.byId("branch_id").get("value");
             		if(branch_id=="" || branch_id==0){
                			alert("Please Select Branch");
-			  			 return false;
+			  			return false;
 					}
 					identity = dijit.byId('identity').get('value');
 					if(identity==''){
 						alert('Please Select service !!! ');
-						addRow();
+						dijit.byId('item').focus();
 						return false;
 					}
 					var rowId = $('#identity').val();
@@ -178,7 +182,7 @@ table#table_row tr th {
 			<div class="clearfix"></div>
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               <input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
+                <input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
 				<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
 					iconClass="dijitEditorIcon dijitEditorIconSave" />
 			    <input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
@@ -347,12 +351,4 @@ function calulator(index){
 	}
 	dijit.byId("totle_amount").attr('value',amount);
 }
-/*function setID(){
-	stu_id = dijit.byId('student_name').get('value');
-	dijit.byId('student_id').attr('value',stu_id);
-}
-function setname(){
-	stu_id = dijit.byId('student_id').get('value');
-	dijit.byId('student_name').attr('value',stu_id);
-}*/
 </script>

@@ -36,7 +36,7 @@ table#table_row tr th {
 		<form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">   
 	  			 if(this.validate()) {
-            		student_id=dijit.byId("student_id").get("value");
+            		student_id=dijit.byId("student_name").get("value");
             		if(student_id=="" || student_id==-1){
               			 alert("Please Select Student Name or Student Id");
 			   			return false;
@@ -44,7 +44,7 @@ table#table_row tr th {
 					identity = dijit.byId('identity').get('value');
 					if(identity==''){
 						alert('Please Select service !!! ');
-						addRow();
+						dijit.byId('item').focus();
 						return false;
 					}
 

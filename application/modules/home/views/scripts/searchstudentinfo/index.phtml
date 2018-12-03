@@ -106,6 +106,13 @@ a.btn.btn-default.btn-detail:hover {
 }
 </style>
 <div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="col-sm-12 border-botom m-0">
+	    <div class="col-sm-8 pd-0">
+    		<h4 class="m-b-0"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('FINDING_ALL_STUDENT_INFORMATION');?></h4>
+    	</div>
+    	<div class="col-sm-4 text-right">
+    	</div>
+    </div>
 	<div class="card-content collapse show">
 		<div class="card-box border-botom mb-10">
 			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index')); ?>" dojoType="dijit.form.Form" method="get" enctype="application/x-www-form-urlencoded">

@@ -12,6 +12,11 @@ class Home_IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
+    	$dbgb = new Application_Model_DbTable_DbGlobal();
+    	$user = $dbgb->getUserInfo();
+    	if ($user['level']!=1){
+    		$this->_redirect("/home/index/dashboard");
+    	}
     	if($this->getRequest()->isPost()){
     		$post = $this->getRequest()->getPost();
     		print_r($post);exit();
@@ -26,8 +31,75 @@ class Home_IndexController extends Zend_Controller_Action
       
       $_db = new Allreport_Model_DbTable_DbRptIncomeExpense();
       $this->view->totalExpense = $_db->getAmountExpest();
+      
+      $_db = new Home_Model_DbTable_DbDashboard();
+      $this->view->sepcialdiscount = $_db->getSpecailDiscount();
     }
 
+    public function dashboardAction()
+    {
+    	if($this->getRequest()->isPost()){
+    		$post = $this->getRequest()->getPost();
+    		print_r($post);exit();
+    	}
+    	
+    	$param = $this->getRequest()->getParams();
+    	if(isset($param['search'])){
+    		$search=$param;
+    		
+    		$_db = new Home_Model_DbTable_DbDashboard();
+    		$rs_rows = $_db->getSpecailDiscount($search);
+    		 
+    		$paginator = Zend_Paginator::factory($rs_rows);
+    		$paginator->setDefaultItemCountPerPage(1);
+    		$allItems = $paginator->getTotalItemCount();
+    		$countPages= $paginator->count();
+    		$p = Zend_Controller_Front::getInstance()->getRequest()->getParam('pages');
+    		 
+    		if(isset($p))
+    		{
+    			$paginator->setCurrentPageNumber($p);
+    		} else $paginator->setCurrentPageNumber(1);
+    		
+    		$currentPage = $paginator->getCurrentPageNumber();
+    		 
+    		$this->view->sepcialdiscount  = $paginator;
+    		$this->view->countItems = $allItems;
+    		$this->view->countPages = $countPages;
+    		$this->view->currentPage = $currentPage;
+    		
+    		if($currentPage == $countPages)
+    		{
+    			$this->view->nextPage = $countPages;
+    			$this->view->previousPage = $currentPage-1;
+    		}
+    		else if($currentPage == 1)
+    		{
+    			$this->view->nextPage = $currentPage+1;
+    			$this->view->previousPage = 1;
+    		}
+    		else {
+    			$this->view->nextPage = $currentPage+1;
+    			$this->view->previousPage = $currentPage-1;
+    		}
+    	}
+    	else{
+    		$search = array(
+    				'advance_search'=> '',
+    				'dis_type'=> '',
+    				'status_type' => '',
+    				);
+    	}
+    	$this->view->search=$search;
+    	
+    	$frm = new Global_Form_FrmItems();
+    	$frm->FrmAddDegree(null);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_degree = $frm;
+    
+    	
+    }
+    
     public function viewAction()
     {
        

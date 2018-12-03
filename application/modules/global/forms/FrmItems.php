@@ -82,6 +82,7 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			'required'=>'true',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
+    	$_dis_type->setValue($request->getParam("dis_type"));
     	
     	$_typopt = array(""=>$this->tr->translate("PLEASE_SELECT"));
     	$OptionType = $_dbgb->getAllDegreetype();
@@ -110,6 +111,7 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$status_opt = $db->AllStatusRe();
     	$_status_type->setMultiOptions($status_opt);
+    	$_status_type->setValue($request->getParam("status_type"));
     	
     	$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DEACTIVE"));
     	$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");

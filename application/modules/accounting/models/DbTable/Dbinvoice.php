@@ -29,7 +29,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 				    stu_id = student_name 
 					AND v.user_id=u.id
 					AND s.status=1 
-					AND s.customer_type=1 ";
+					AND s.customer_type=1";
 		
     	$from_date =(empty($search['start_date']))? '1': " v.input_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " v.input_date <= '".$search['end_date']." 23:59:59'";
@@ -43,7 +43,6 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$s_where[]= " v.invoice_num LIKE '%{$s_search}%'";
 			$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
 			$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
-    		$s_where[]= " v.totale_amount LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if(!empty($search['branch_id'])){

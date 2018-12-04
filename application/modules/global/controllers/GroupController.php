@@ -116,8 +116,8 @@ class Global_GroupController extends Zend_Controller_Action {
 				$db->updateGroup($data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
 			} catch (Exception $e) {
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("EDIT_FAIL");
-				echo $e->getMessage();
 			}
 		}
 		

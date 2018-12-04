@@ -20,11 +20,10 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
     }
 	public function AddNewGroup($_data){
 		$db = $this->getAdapter();
-		//$db->beginTransaction();
+		$db->beginTransaction();
 		try{
 			$sql="SELECT id FROM rms_group WHERE branch_id =".$_data['branch_id'];
 			$sql.=" AND group_code='".$_data['group_code']."'";
-			//echo $sql; exit();
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;

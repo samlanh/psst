@@ -26,7 +26,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 						'status'=> -1,
 						'branch_id'=>''
 					);
-				
 			}
 			$this->view->adv_search=$search;
 			$db_student= new Foundation_Model_DbTable_DbStudent();

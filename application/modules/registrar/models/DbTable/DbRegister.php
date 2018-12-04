@@ -137,8 +137,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$where="id = ".$rs_stu['id'];
 						$this->update($arr, $where);
 						
+						$dbg = new Application_Model_DbTable_DbGlobal();
+						$stu_code = $dbg->getnewStudentId($data['branch_id'],$rs_stu['degree']);
+						
 						$arr = array(
 							'customer_type' =>1,
+							'stu_code'=>$stu_code
 						);
 						$this->_name='rms_student';
 						$where="stu_id = ".$stu_code;

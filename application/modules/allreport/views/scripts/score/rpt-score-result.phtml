@@ -213,19 +213,19 @@ dojo.ready(function(){
 								<td class="border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
 									<?php echo $dbgb->calCulateGradeKhmerMention($rs['total_avg'],$rs['max_score']);?>
 									<?php 
-// 									if($average>=($rs['max_score']/2)){
+									if($average>=($rs['max_score']/2)){
 // 										echo $tr->translate("STUDENT_PASS");
-// 										$count_pass++;
-// 										if($rs['sex']==2){
-// 											$pass_female=$pass_female+1;
-// 										}//femail
-// 									}else{
-// 										$count_fail++;
+										$count_pass++;
+										if($rs['sex']==2){
+											$pass_female=$pass_female+1;
+										}//femail
+									}else{
+										$count_fail++;
 // 										echo $tr->translate("STUDENT_FAIL");
-// 										if($rs['sex']==2){
-// 											$fail_female = $fail_female+1;
-// 										}
-// 									}
+										if($rs['sex']==2){
+											$fail_female = $fail_female+1;
+										}
+									}
 									?>
 								</td>
 								<td class="border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>

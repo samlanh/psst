@@ -65,7 +65,6 @@ class Accounting_Model_DbTable_DbServiceType extends Zend_Db_Table_Abstract
     	return $sql.$where.$order;
     }
     function getAllServiceType($search, $start, $limit){
-    
     	$sql_rs = $this->sqlServiceType($search)." LIMIT ".$start.", ".$limit;
     	if ($limit == 'All') {
     		$sql_rs = $this->sqlServiceType($search);

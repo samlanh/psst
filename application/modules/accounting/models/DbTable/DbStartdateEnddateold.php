@@ -10,7 +10,7 @@ class Accounting_Model_DbTable_DbStartdateEnddate extends Zend_Db_Table_Abstract
     
 	public function getStartDateEndDate($search){
 		$db= $this->getAdapter();
-		$sql="SELECT 
+		$sql=" SELECT 
 					id,
 					start_date,
 					end_date,
@@ -32,27 +32,27 @@ class Accounting_Model_DbTable_DbStartdateEnddate extends Zend_Db_Table_Abstract
 		$order=" ORDER BY id DESC";
 		return $db->fetchAll($sql.$where.$order);
 	}
-public function addStartdateEnddate($data){
-    	$db= $this->getAdapter();
-    	try{
-    		if(!empty($data['identity'])){
-				$ids = explode(',', $data['identity']);
-				foreach ($ids as $i){
-					$arr = array(
-							'start_date'=>$data['startdate_'.$i],
-							'end_date'=>$data['enddate_'.$i],
-							'note'=>$data['remark_'.$i],
-							'create_date'=>date("Y-m-d"),
-							'user_id'=>$this->getUserId(),
-						);
-					$this->_name='rms_startdate_enddate';	
-					$this->insert($arr);
-				}
-    		}
-    	}catch(Exception $e){
-    		echo $e->getMessage();
-    	}
-}
+	public function addStartdateEnddate($data){
+	    	$db= $this->getAdapter();
+	    	try{
+	    		if(!empty($data['identity'])){
+					$ids = explode(',', $data['identity']);
+					foreach ($ids as $i){
+						$arr = array(
+								'start_date'=>$data['startdate_'.$i],
+								'end_date'=>$data['enddate_'.$i],
+								'note'=>$data['remark_'.$i],
+								'create_date'=>date("Y-m-d"),
+								'user_id'=>$this->getUserId(),
+							);
+						$this->_name='rms_startdate_enddate';	
+						$this->insert($arr);
+					}
+	    		}
+	    	}catch(Exception $e){
+	    		echo $e->getMessage();
+	    	}
+	}
 	public function editStartdateEnddate($data,$id){
 		$db= $this->getAdapter();
 		try{

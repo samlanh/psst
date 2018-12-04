@@ -17,20 +17,20 @@ class Registrar_TermController extends Zend_Controller_Action {
     		}
     		
     		$this->view->search = $search;
-    		
 			$db = new Accounting_Model_DbTable_DbStartdateEnddate();
 			$rs_rows = $db->getAlltestTerm($search);
+//     		$db = new Test_Model_DbTable_DbStudentTest();
+//     		$rs_rows= $db->getAllStudentTest($search);
 			
 			$list = new Application_Form_Frmtable();
     		$collumns = array("START_DATE","END_DATE","NOTE","CREATE_DATE","USER");
     		$link=array(
     				'module'=>'registrar','controller'=>'term','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('start_date'=>$link,'end_date'=>$link ));
-			
-		}catch (Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
+    		$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('start_date'=>$link,'end_date'=>$link ));
+			}catch (Exception $e){
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
 	}
     public function addAction()
     {	

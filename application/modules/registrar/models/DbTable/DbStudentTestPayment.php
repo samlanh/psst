@@ -33,7 +33,6 @@ class Registrar_Model_DbTable_DbStudentTestPayment extends Zend_Db_Table_Abstrac
 				'note'		 	=>$data['note'],
 				'account_userid'=>$this->getUserId()
 			);
-			
 			$where = ' id = '.$data['stu_test'];
 			$this->update($arr, $where);
 		}else{

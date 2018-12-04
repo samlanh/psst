@@ -183,7 +183,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$dbg = new Application_Model_DbTable_DbGlobal();
 				$stu_code = $dbg->getnewStudentId($_data['branch_id'],$_data['degree']);
 			}
-					
 			$part= PUBLIC_PATH.'/images/photo/';
 			if (!file_exists($part)) {
 				mkdir($part, 0777, true);

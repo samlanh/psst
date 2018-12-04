@@ -55,7 +55,7 @@ class Home_IndexController extends Zend_Controller_Action
     		
     		$rs_rows = $_db->getSpecailDiscount($search);
     		$paginator = Zend_Paginator::factory($rs_rows);
-    		$paginator->setDefaultItemCountPerPage(1);
+    		$paginator->setDefaultItemCountPerPage(15);
     		$allItems = $paginator->getTotalItemCount();
     		$countPages= $paginator->count();
     		$p = Zend_Controller_Front::getInstance()->getRequest()->getParam('pages');

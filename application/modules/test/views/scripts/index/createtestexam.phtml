@@ -343,6 +343,8 @@ function getAllGrade(){
 			dijit.byId('grade').set('store',grade_store);  
 			<?php if (!empty($this->detailscore['grade'])){?>
 				dijit.byId('grade').set('value',<?php echo $this->detailscore['grade'];?>);
+			<?php }else if (!empty($this->rs['grade'])){?>
+				dijit.byId('grade').set('value',<?php echo $this->rs['grade'];?>);
 			<?php }?>
 		},
 		error: function(err) {

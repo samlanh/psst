@@ -1140,7 +1140,7 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	if (!empty($data)){
     		$_branch_id->setValue($data['branch_id']);
     		$_stu_test_id->setValue($data['stu_id']);
-    		
+    		$_degree->setValue($data['degree']);
     		$_branch_id->setAttribs(array(
     				'readonly'=>'readonly',
     		));

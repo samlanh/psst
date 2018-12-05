@@ -531,6 +531,7 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 	public function addTeacherStudentScore($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
+		//print_r($_data); exit();
 		try{
 			$session_t=new Zend_Session_Namespace('authteacher');
 			$teacher_id = $session_t->teacher_id;
@@ -554,7 +555,6 @@ class Foundation_Model_DbTable_DbTeacherScore extends Zend_Db_Table_Abstract
 			}else{
 				return 1;
 			}
-			
 				
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);

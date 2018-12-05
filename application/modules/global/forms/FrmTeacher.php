@@ -218,6 +218,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$_status->setValue($_data['status']);
 			$street_num->setValue($_data['street_num']);
 			$home_num->setValue($_data['home_num']);
+			$_user->setValue($_data['user_name']);
 			
 			$_province_id->setValue($_data['province_id']);
 			$_position->setValue($_data['position_add']);

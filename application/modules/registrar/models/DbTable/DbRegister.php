@@ -120,16 +120,16 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		//$paid_date = $data['paid_date'];
 		$paid_date = date("Y-m-d H:i:s");
 				
-		$stu_code = $data['old_stu'];//$this->getNewAccountNumber($data['dept']);
+		$stu_id = $data['old_stu'];//$this->getNewAccountNumber($data['dept']);
 		$receipt_number =$this->getRecieptNo();
 			try{
 				$gdb = new  Application_Model_DbTable_DbGlobal();
 				//$this->_name='rms_student';
 					$customer_type=1;
 					if($data['student_type']==1){//existing student
-						$rs_stu = $gdb->getStudentinfoById($stu_code);
+						$rs_stu = $gdb->getStudentinfoById($stu_id);
 					}elseif($data['student_type']==2){//testing student
-						$rs_stu = $gdb->getStudentTestinfoById($stu_code);
+						$rs_stu = $gdb->getStudentTestinfoById($stu_id);
 						$arr = array(
 								'is_registered'=>1,
 								);
@@ -142,14 +142,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						
 						$arr = array(
 							'customer_type' =>1,
-							'stu_code'=>$stu_code
+							'stu_code'=>$stu_code,
+							'create_date'=>date("Y-m-d H:i:s")
 						);
 						$this->_name='rms_student';
-						$where="stu_id = ".$stu_code;
+						$where="stu_id = ".$data['old_stu'];
 						$this->update($arr, $where);
 						
 					}elseif($data['student_type']==3){//from crm
-						$rs_stu = $gdb->getStudentinfoById($stu_code);
+						$rs_stu = $gdb->getStudentinfoById($stu_id);
 						$_dbgb = new Application_Model_DbTable_DbGlobal();
 						$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
 						$arr = array(
@@ -160,7 +161,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'create_date_stu_test'=>date("Y-m-d"),
 						);
 						$this->_name='rms_student';
-						$where="stu_id = ".$stu_code;
+						$where="stu_id = ".$stu_id;
 						$this->update($arr, $where);
 					}
 				
@@ -177,7 +178,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						'balance_due'=>0
 						);
 					$this->_name='rms_student_payment';
-					$where="student_id = ".$stu_code;
+					$where="student_id = ".$stu_id;
 					$this->update($arr, $where);//clear old balance
 					
 					$arr=array(

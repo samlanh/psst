@@ -994,7 +994,8 @@ function getAllgroupStudyNotPass($action=null){
 	   	$db=$this->getAdapter();
 	   	$branch_id = $this->getAccessPermission();
 	   	if($result==0){//មិនទាន់គិតធ្វើតេស និងចេញលទ្ធផល
-	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-')COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
+// 	   		echo 2;exit();
+	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
 	   		FROM rms_student
 	   		WHERE
 	   		(stu_khname!='' OR stu_enname!='') AND status=1 AND customer_type=4 $branch_id  ";
@@ -1003,7 +1004,7 @@ function getAllgroupStudyNotPass($action=null){
 	   		}
 	   		$sql.=" ORDER BY stu_id DESC";
 	   	}else{//ban ធ្វើតេស
-	   		
+// 	   		echo 1;exit();
 	   		$sql="SELECT stu_id as id,CONCAT(COALESCE(serial,'-'),COALESCE(stu_khname,''),' [',stu_enname,' ',last_name,']') AS name
 	   		FROM rms_student,rms_student_test_result AS result
 	   		WHERE

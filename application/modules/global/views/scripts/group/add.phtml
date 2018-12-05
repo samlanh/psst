@@ -385,6 +385,9 @@ function getAllDegreeByAcademicSchoolOption(){
 		dijit.byId('academic_year').focus();
 		return false;
 	}
+	if(academic_year=='' || academic_year == -1){
+		return false;
+	}
 	dojo.xhrPost({
 		url: url_getdegree,
 		content:{
@@ -399,6 +402,7 @@ function getAllDegreeByAcademicSchoolOption(){
 			alert(err);
 		}
 	});
+	
 }
 function AllRefresh(){
 	loadingBlock();

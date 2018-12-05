@@ -217,7 +217,7 @@ function addRow(){
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="popupsubject('+col+');" >'+subject+'</select></td>';
+		template+='<td><select style="width:100%;" dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="checkSubject('+col+');popupsubject('+col+');" >'+subject+'</select></td>';
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" onkeyup="calculateTotalScore();" value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';
 		template+='<td><input style="width:100%;" required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text"></td>';
@@ -289,11 +289,32 @@ function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
 	for(var i=0;i<arrays.length;i++) {
-	if(arrays[i] == index) arrays.splice(i,1);
+		if(arrays[i] == index) arrays.splice(i,1);
 	}
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
+}
+
+function checkSubject(index){
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	
+	current_subject = dijit.byId('subject_study_'+index).get('value');
+	
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index){
+			
+		}else{
+			old_subject = dijit.byId('subject_study_'+arrays[i]).get('value');
+			
+			if(current_subject == old_subject){
+				alert("Can not add the same subject !!! ");
+				deleteRecord(index);
+			}
+			
+		}
+	}
 }
 
 function calculateTotalScore() {

@@ -419,6 +419,9 @@ function getAllDegreeByAcademicSchoolOption(){
 		dijit.byId('academic_year').focus();
 		return false;
 	}
+	if(academic_year=='' || academic_year == -1){
+		return false;
+	}
 	dojo.xhrPost({
 		url: url_getdegree,
 		content:{
@@ -579,7 +582,7 @@ function Initailize() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="checkSubject('+col+')" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
 		template+='<td width="40px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';	
 		template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
@@ -622,7 +625,7 @@ function addRow() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect"  class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect"  class="fullside" onchange="checkSubject('+col+')" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
 		template+='<td width="50px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
 		template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 		template+='<td width="23%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
@@ -652,6 +655,28 @@ function deleteRecord(index) {
 	$('#identity1').val(strings);
 	dojo.query("#row"+index).remove();
 }
+
+function checkSubject(index){
+	var identity = $('#identity1').val();
+	var arrays = identity.split(',');
+	
+	current_subject = dijit.byId('group_subject_study_'+index).get('value');
+	
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index){
+			
+		}else{
+			old_subject = dijit.byId('group_subject_study_'+arrays[i]).get('value');
+			
+			if(current_subject == old_subject){
+				alert("Can not add the same subject !!! ");
+				deleteRecord(index);
+			}
+			
+		}
+	}
+}
+
 
 function hideDialog(){
 	dijit.byId("popup_room").hide();
@@ -697,7 +722,7 @@ function getSubjectByDegree(){
 						}
 							template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 							template+='<td width="4%" align="center">'+no+'</td>';
-							template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+							template+='<td width="40%"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="checkSubject('+col+')" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
 							template+='<td width="50px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="1" type="text"></td>';
 							template+='<td width="60px"><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
 							template+='<td width="35%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		

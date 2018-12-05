@@ -270,7 +270,6 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		}
 		
 		$sql.=" ORDER BY stu_enname ASC ";
-		//echo $sql;
 		
 		return $db->fetchAll($sql);
 	}

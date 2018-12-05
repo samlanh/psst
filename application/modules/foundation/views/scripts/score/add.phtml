@@ -41,6 +41,7 @@ dojo.require("dojo.NodeList-manipulate");
 
 dojo.ready(function(){
 	var subject = [];
+	
 		var years_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->row_year));?> );
 		new dijit.form.FilteringSelect({
 		    store:years_store,		                    
@@ -100,10 +101,13 @@ function filterGrade(){
 			}
 		});
 }
-
+var inx=0;
 var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
 function filterStudent(){
+
 	$('#identity').val('');
+	dojo.query("#table_row").append("");
+	
 	loadingBlock();
 	year = dijit.byId('year_study').get('value');
 	grade = dijit.byId('grade').get('value');
@@ -127,7 +131,7 @@ function filterStudent(){
 				title=0;
 				temp='';
 				str='';
-				inx='';
+				
 				column = 0;
 				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;" id="table" width="100%">'
 					+'<thead><tr style="border:1px solid #000;"><th class="tdheader" ><?php echo $tr->translate('DEL');?></th>'
@@ -146,7 +150,8 @@ function filterStudent(){
 				  
 				for(i=0;i<data.length;i++){
 					num++;
-					inx = i+1;
+					inx = inx+1;
+					//alert(inx);
 					temp += '<tr class="hover normal" id="row'+inx+'">';
 					temp +='<td width="4%" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 					temp += '<td align="center">&nbsp;'+inx+'</td>';
@@ -195,7 +200,6 @@ function CheckSubjectExam(subject_id){
 				dijit.byId('amount_subject'+rowIDArray[b]).attr('value',amountsub);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',true); 
-				
 			}
 		}
 	}else{

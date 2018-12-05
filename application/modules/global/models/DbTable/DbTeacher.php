@@ -58,7 +58,8 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'home_num'  		 => $_data['home_num'],
 							'street_num'  		 => $_data['street_num'],
 							
-		 					'position_add' 		 => $_data['position_add'],
+		 					'schoolOption' 		 => $_data['schoolOption'],
+							'position_add' 		 => $_data['position_add'],
 		 					'passport_no' 		 => $_data['passport_no'],
 		 					'email' 			 => $_data['email'],
 		  					'degree' 			 => $_data['degree'],
@@ -131,6 +132,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						'home_num'  		 => $_data['home_num'],
 						'street_num'  		 => $_data['street_num'],
 						
+						'schoolOption' 		 => $_data['schoolOption'],
 	 					'position_add' 		 => $_data['position_add'],
 	 					'passport_no' 		 => $_data['passport_no'],
 	 					'email' 			 => $_data['email'],
@@ -234,6 +236,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				g.tel,
 				g.email,
 				g.note,
+				(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = g.schoolOption LIMIT 1) AS schoolOption,
 				(SELECT name_kh FROM rms_view WHERE key_code=g.status AND TYPE=1 LIMIT 1) AS `status`
 				FROM rms_teacher AS g WHERE 1';
 		

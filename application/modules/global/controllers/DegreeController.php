@@ -68,8 +68,8 @@ class Global_DegreeController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     	
-    	$_model = new Global_Model_DbTable_DbGroup();
-    	$this->view->subject = $_model->getAllSubjectStudy();
+//     	$_model = new Global_Model_DbTable_DbGroup();
+//     	$this->view->subject = $_model->getAllSubjectStudy();
     	 
     	$parent = new Global_Model_DbTable_DbSubjectExam();
     	$is_parent = $parent->getAllSubjectParent();
@@ -111,7 +111,7 @@ class Global_DegreeController extends Zend_Controller_Action {
     	$this->view->frm_subject_exam = $frm_subject_exam;
     	
     	$_model = new Global_Model_DbTable_DbGroup();
-    	$this->view->subject = $_model->getAllSubjectStudy();
+    	$this->view->subject = $_model->getAllSubjectStudy(null,$row['schoolOption']);
     	 
     	$parent = new Global_Model_DbTable_DbSubjectExam();
     	$is_parent = $parent->getAllSubjectParent();

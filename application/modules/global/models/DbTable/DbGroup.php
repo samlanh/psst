@@ -317,10 +317,10 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 	}
 	
 	
-	public function getAllSubjectStudy($opt=null){
+	public function getAllSubjectStudy($opt=null,$schoolOption=null){
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$rows = $_db->getAllSubjectStudy();
+		$rows = $_db->getAllSubjectStudy($schoolOption);
 		array_unshift($rows,array('id' => -1,"name"=>$tr->translate("ADD_NEW_SUBJECT"),"shortcut"=>""));
 		if($opt!=null){return $rows;}
 		$options = '<option value="">'.$tr->translate("CHOOSE_SUJECT").'</option>';
@@ -330,10 +330,10 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		return $options;
 	}
 	
-	public function getAllTeacherOption(){
+	public function getAllTeacherOption($schoolOption=null){
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$teacher = $this->getAllTeacher();
+		$teacher = $this->getAllTeacher($schoolOption);
 		array_unshift($teacher,array('id' => -1,"name"=>$tr->translate("ADD_NEW")));
 		$teacher_options = '<option value="">'.$tr->translate("SELECT_TEACHER").'</option>';
 		if(!empty($teacher))foreach($teacher as $value){
@@ -398,9 +398,15 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	function getAllTeacher(){
+	function getAllTeacher($schoolOptin=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT id,teacher_name_kh  as name FROM rms_teacher WHERE status=1 and staff_type=1 and teacher_name_kh!='' ";
+		$sql = " SELECT id,
+				teacher_name_kh  as name 
+			FROM rms_teacher 
+			WHERE status=1 and staff_type=1 and teacher_name_kh!='' ";
+		if (!empty($schoolOptin)){
+			$sql.=" AND schoolOption =$schoolOptin";
+		}
 		return $db->fetchAll($sql);
 	}
 	function getTeacherByID($teacher_id){

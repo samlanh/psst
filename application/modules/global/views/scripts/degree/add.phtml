@@ -51,8 +51,6 @@
 						}
 					}
 					loadingBlock();
-                	//dijit.byId("save_new").set("disabled",true);
-					//dijit.byId("save_close").set("disabled",true);
 					return true;
 				}else {
 					return false;
@@ -106,8 +104,22 @@
 		         </div>
 		         <div class="col-md-8 col-sm-8 col-xs-12">
 		         	 <div class="form-group">
-		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
-								<tr id="head-title" class="head-td" align="right"></tr>
+		         	 	<table  style="border-collapse: collapse; width:100%; border:1px solid #ccc;">
+							<thead>
+								<tr id="head-title" class="head-td" align="right">
+									<th><?php echo $tr->translate("DEL");?></th>
+									<th><?php echo $tr->translate("N_O");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_IN_CLASS");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_SHORT");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("NOTE");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("STATUS");?></th>
+								</tr>
+							</thead>
+							<tbody id="table_row">
+							
+							</tbody>
 						</table>
 						<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 											iconClass="dijitIconEditProperty" onclick="addRow();" />
@@ -193,11 +205,51 @@ dojo.require("dojo.store.Memory");
 dojo.ready(function(){
 	getValue();
 	addRow();
+
+	 var schoolOption = dijit.byId('schoolOption');
+	 schoolOption.on('change', function(evt) {
+		 getSubject();
+    });
 });
-var subject = '<?php echo $this->subject;?>';
+var subject = '';
+var url_getsubject = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"getsubject"));?>';										
+function getSubject(){
+	subject='';
+	schoolOption = dijit.byId('schoolOption').get('value');
+	if(schoolOption=='' || schoolOption==-1){
+		dijit.byId('schoolOption').focus();
+		subject="";
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_getsubject,
+		content:{
+			'schoolOption':schoolOption
+			},
+		handleAs:"json",
+		load: function(data) {
+		    for(var i = 0; i < data.length; i++) {
+			    if(data[i].id==-1){
+			    }else{
+			    	subject+='<option value='+data[i].id+'>'+data[i].name+'</option>';
+			    }
+		    }
+		    dojo.query("#table_row").append("");
+		    $("#identity").val("");
+		    addRow();
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			alert(err);
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+
+
 var col = 0;
 var no = 0;
-var title = 0;
+var title = 1;
 tmp = '';
 temp='';
 function addRow(){

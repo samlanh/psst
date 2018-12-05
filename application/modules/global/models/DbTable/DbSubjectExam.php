@@ -44,6 +44,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'subject_titleen' 	=> $_data['subject_en'],
 				'date' 				=> date("Y-m-d"),
 				'status'   			=> $_data['status'],
+				'schoolOption'   			=> $_data['schoolOption'],
 				'is_parent'   		=> $_data['par'],
 				//'score_percent'   	=> $_data['score_percent'],
 				//'access_type'   	=> $_data['access_type'],
@@ -65,6 +66,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 				'status'   			=> $_data['status'],
 				//'score_percent'   	=> $_data['score_percent'],
 				'is_parent'   		=> $_data['par'],
+				'schoolOption'   			=> $_data['schoolOption'],
 				//'access_type'   	=> $_data['access_type'],
 				'shortcut'			=> $_data['score_percent'],
 				'user_id'	  		=> $this->getUserId()
@@ -81,7 +83,9 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 	}
 	function getAllSujectName($search=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT id,subject_titlekh,subject_titleen,shortcut,date,
+		$sql = " SELECT id,
+		(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,
+		subject_titlekh,subject_titleen,shortcut,date,
 		(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id) as user_name
 		,status
 		FROM rms_subject   

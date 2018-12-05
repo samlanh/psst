@@ -47,8 +47,6 @@
 					}
 				}
 				loadingBlock();
-				//dijit.byId('save_new').set('disabled',true);
-				//dijit.byId('save_close').set('disabled',true);
 				return true;
 			}else {
 				return false;
@@ -173,8 +171,20 @@
     	</div>
     	<div class="card-box">
                	<div class="col-sm-12">
-               		<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
-						<tr id="head-title" class="head-td" align="right"></tr>
+               		<table  style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
+               			<thead  id="head-title">
+               				<tr class="head-td">
+               					<th><?php echo $tr->translate("DEL");?></th>
+								<th><?php echo $tr->translate("N_O");?></th>
+								<th style="white-space:nowrap"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+								<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT");?></th>
+								<th style="white-space:nowrap"><?php echo $tr->translate("AMOUNT_SUBJECT_FORSEMESTER");?></th>
+								<th><?php echo $tr->translate("NOTE");?></th>
+								<th><?php echo $tr->translate("TEACHER");?></th>
+               				
+               				</tr>
+               			</thead>
+						<tbody id="table_row"></tbody>
 					</table>
     			</div>
     			<div class="clearfix"></div>
@@ -210,8 +220,8 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::en
 var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
 var subject_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->subjectlist));?> );
-var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
-var teacher_storeass= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->teacher));?> );
+var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var teacher_storeass= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
@@ -338,6 +348,7 @@ dojo.ready(function(){
 		onChange: function() {  
 			academic_year = dijit.byId('academic_year').get('value');
 			getAllDegreeByAcademicSchoolOption();
+			getSubject();
 		}
 	}, "academic_year");
 	
@@ -449,17 +460,47 @@ function setEndDate(){
 		dijit.byId('end_date').attr('value',epx_date);	
     }
 }
-
+var teacher_option = '';
 var url_gettecher = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getteacher"));?>';										
 function getRefreshTeacher(){
+	dijit.byId('teacher_id').reset();
+	dijit.byId('teacher_ass').reset();
+	teacher_option = '';
+	academic_year = dijit.byId('academic_year').get('value');
+	if(academic_year=='' || academic_year==-1){
+		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('teacher_ass').set('store',teacher_store);  
+		dijit.byId('teacher_id').set('store',teacher_store);  
+		dijit.byId('academic_year').focus();
+		teacher_option="";
+		return false;
+	}
+	if(academic_year=='' || academic_year == -1){
+		return false;
+	}
 	dojo.xhrPost({
 		url:url_gettecher,
+		content:{
+			'academic_year':academic_year
+			},
 		handleAs:"json",
 		load: function(data) {
+			
 			teacher_storeass  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('teacher_ass').set('store',teacher_storeass);  
+		    dijit.byId('teacher_ass').set('store',teacher_storeass);
+		     
 		    teacher_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('teacher_id').set('store',teacher_store);  
+
+		    for(var i = 0; i < data.length; i++) {
+			    if(data[i].id==-1){
+			    }else{
+		    		teacher_option+='<option value='+data[i].id+'>'+data[i].name+'</option>';
+			    }
+		    }
+		    dojo.query("#table_row").append("");
+		    $("#identity1").val("");
+		    addRow();
 		    
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
@@ -469,6 +510,8 @@ function getRefreshTeacher(){
 		}
 	});
 }
+
+
 var url_getRoom = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getroom"));?>';										
 function getRefreshRoom(){
 	dojo.xhrPost({
@@ -490,14 +533,46 @@ function loading(){
     document.getElementsByClassName("overlay")[0].style.display="block";
 }
 
-var subject = '<?php echo $this->subject;?>';
-var teacher_option = '<?php echo $this->teacher_option;?>';
+var subject = '';
+var url_getsubject = '<?php echo $this->url(array("module"=>"global","controller"=>"group","action"=>"getsubject"));?>';										
+function getSubject(){
+	subject = '';
+	academic_year = dijit.byId('academic_year').get('value');
+	if(academic_year=='' || academic_year==-1){
+		subject="";
+		return false;
+	}
+	if(academic_year=='' || academic_year == -1){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_getsubject,
+		content:{
+			'academic_year':academic_year
+			},
+		handleAs:"json",
+		load: function(data) {
+		    for(var i = 0; i < data.length; i++) {
+			    if(data[i].id==-1){
+			    }else{
+			    	subject+='<option value='+data[i].id+'>'+data[i].name+'</option>';
+			    }
+		    }
+		    getRefreshTeacher();
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			alert(err);
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+
 var col = 0;
 var no = 0;
-var title = 0;
+var title = 1;
 tmp = '';
 temp='';
-
 function refreshSubject(){
 }
 

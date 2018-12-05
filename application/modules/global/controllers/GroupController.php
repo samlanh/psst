@@ -75,18 +75,11 @@ class Global_GroupController extends Zend_Controller_Action {
 			}
 		}
 		$_db = new Global_Model_DbTable_DbGroup();
-// 		$this->view->degree = $rows = $_db->getAllFecultyName();
 		$this->view->row_year=$_db->getAllYears();
 		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
 		
 		$this->view->parent_subject = $_db->getParentSubject();
 		$this->view->subject = $_db->getAllSubjectStudy();
-		
-		$teacher = $_db->getAllTeacher();
-		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
-		$this->view->teacher = $teacher;
-		
-		$this->view->teacher_option = $_db->getAllTeacherOption();
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();
@@ -95,9 +88,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		$this->view->room = $room;
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-// 		$dept = $_dbgb->getAllItems(1);//degree
-// 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->dept = $dept;
 		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->grade_name=$d_row;
@@ -123,7 +113,6 @@ class Global_GroupController extends Zend_Controller_Action {
 		
 		$id=$this->getRequest()->getParam("id");
 		
-		//$this->view->rs = $group_info = $db->getGroupById($id);
 		$row = $group_info = $db->getGroupById($id);
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
@@ -135,35 +124,30 @@ class Global_GroupController extends Zend_Controller_Action {
 		}
 		
 		$this->view->row = $db->getGroupSubjectById($id);
-		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$room = $model->getAllRoom();
 		array_unshift($room, Array('id'=> -1 ,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->room =$room;
 	
 		
-		$_db = new Global_Model_DbTable_DbGroup();
-		$this->view->subject = $_db->getAllSubjectStudy();
-		$this->view->teacher_option = $_db->getAllTeacherOption();
-		$teacher = $_db->getAllTeacher();
-		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
-		$this->view->teacher = $teacher;
-// 		$this->view->degree = $rows = $_db->getAllFecultyName();
+		$_db = new Accounting_Model_DbTable_DbFee();
+		$tution = $_db->getFeeById($row['academic_year']);
+		$schoolOption = $tution['school_option'];
 		
-// 		$db=new Global_Model_DbTable_DbGrade();
-// 		$grade=$db->getNameGradeAll();
-// 		array_unshift($grade, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->grade_name=$grade;
-		
-// 		$dept = $db->getAllDept();
-// 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->dept = $dept;
+		$_dggroup = new Global_Model_DbTable_DbGroup();
+		if (!empty($schoolOption)){
+			$db = new Global_Model_DbTable_DbGroup();
+			$teacher = $_dggroup->getAllTeacher($schoolOption);
+			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+			$this->view->teacher =$teacher;
+			
+			$this->view->teacher_option = $_dggroup->getAllTeacherOption($schoolOption);
+			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
+			
+		}
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-// 		$dept = $_dbgb->getAllItems(1);//degree
-// 		$this->view->degree = $dept;
-// 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->dept = $dept;
 		
 		$d_row= $_dbgb->getAllGradeStudy();
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
@@ -203,25 +187,27 @@ class Global_GroupController extends Zend_Controller_Action {
 		array_unshift($room, Array('id'=> -1 ,'name' =>$this->tr->translate("ADD_NEW")));
 		$this->view->room =$room;
 
+		$_db = new Accounting_Model_DbTable_DbFee();
+		$tution = $_db->getFeeById($row['academic_year']);
+		$schoolOption = $tution['school_option'];
+		
+		$_dggroup = new Global_Model_DbTable_DbGroup();
+		if (!empty($schoolOption)){
+			$db = new Global_Model_DbTable_DbGroup();
+			$teacher = $_dggroup->getAllTeacher($schoolOption);
+			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+			$this->view->teacher =$teacher;
+				
+			$this->view->teacher_option = $_dggroup->getAllTeacherOption($schoolOption);
+			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
+		}
+		
 		$_db = new Global_Model_DbTable_DbGroup();
 		$this->view->subjectlist = $_db->getAllSubjectStudy(1);
-		$this->view->subject = $_db->getAllSubjectStudy();
+// 		$this->view->subject = $_db->getAllSubjectStudy();
 		$this->view->row_year=$_db->getAllYears();
 		$this->view->parent_subject = $_db->getParentSubject();
-		
-// 		$db = new Global_Model_DbTable_DbGrade();
-// 		$dept = $db->getAllDept();
-// 		array_unshift($dept, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->degree = $dept;
-		
-// 		$grade=$db->getNameGradeAll();
-// 		array_unshift($grade, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		$this->view->grade_name=$grade;
-		
-		$this->view->teacher_option = $_db->getAllTeacherOption();
-		$teacher = $_db->getAllTeacher();
-		array_unshift($teacher, array('id'=>-1,'name'=>$this->tr->translate("ADD_NEW")));
-		$this->view->teacher = $teacher;
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		$dept = $_dbgb->getAllItems(1);//degree
@@ -313,11 +299,38 @@ class Global_GroupController extends Zend_Controller_Action {
     function getteacherAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$db = new Global_Model_DbTable_DbGroup();
-    		$teacher = $db->getAllTeacher();
-    		array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
-    		print_r(Zend_Json::encode($teacher));
-    		exit();
+    		
+    		$_db = new Accounting_Model_DbTable_DbFee();
+    		$row = $_db->getFeeById($data['academic_year']);
+    		$schoolOption = $row['school_option'];
+    		
+    		if (!empty($schoolOption)){
+	    		$db = new Global_Model_DbTable_DbGroup();
+	    		$teacher = $db->getAllTeacher($schoolOption);
+	    		
+	    		array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+	    		array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+	    		print_r(Zend_Json::encode($teacher));
+	    		exit();
+    		}
+    	}
+    }
+    
+    function getsubjectAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    
+    		$_db = new Accounting_Model_DbTable_DbFee();
+    		$row = $_db->getFeeById($data['academic_year']);
+    		$schoolOption = $row['school_option'];
+    
+    		if (!empty($schoolOption)){
+    			$db = new Application_Model_DbTable_DbGlobal();
+				$subject = $db->getAllSubjectStudy($schoolOption);
+				array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+				print_r(Zend_Json::encode($subject));
+    			exit();
+    		}
     	}
     }
     function getroomAction(){
@@ -369,5 +382,4 @@ class Global_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
-    
 }

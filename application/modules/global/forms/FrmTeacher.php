@@ -22,6 +22,9 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 	public function FrmTecher($_data=null){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$_db = new Application_Model_DbTable_DbGlobal();
+		$_dbuser = new Application_Model_DbTable_DbUsers();
+		$userid = $_db->getUserId();
+		$userinfo = $_dbuser->getUserInfo($userid);
 		
 		$_enname = new Zend_Dojo_Form_Element_TextBox('en_name');
 		$_enname->setAttribs(array('dojoType'=>$this->tvalidate, 'class'=>'fullside','required'=>'true'));
@@ -196,6 +199,17 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				2=>$this->tr->translate("STAFF"));
 		$_staff->setMultiOptions($_staff_opt);
 		
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$Option = $_dbgb->getAllSchoolOption($userinfo['branch_list']);
+		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+		$_schoolOption = new Zend_Dojo_Form_Element_FilteringSelect("schoolOption");
+		$_schoolOption->setMultiOptions($_arr_opt);
+		$_schoolOption->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$_submit->setLabel("save"); 
 		
@@ -228,8 +242,11 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$start_date->setValue($_data['start_date']);
 			$end_date->setValue($_data['end_date']);
 			$_agreement->setValue($_data['agreement']);
+			$_schoolOption->setValue($_data['schoolOption']);
+			$_user->setValue($_data['user_name']);
 		}
-		$this->addElements(array($id,$_enname,$home_num,$_staff,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,$_email,$start_date,$_degree,$_status,$_submit));
+		$this->addElements(array($id,$_enname,$home_num,$_staff,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,
+				$_email,$start_date,$_degree,$_status,$_submit,$_schoolOption));
 		
 		return $this;
 	}

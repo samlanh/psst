@@ -325,17 +325,20 @@ function getAllgroupStudyNotPass($action=null){
    		$db = $this->getAdapter();
    		return $this->getAllItems(null);
    }   
-   public function getAllSubjectStudy(){
+   public function getAllSubjectStudy($schoolOption=null){
    	$db = $this->getAdapter();
 
-   	$lang = $this->currentlang();
-   	$field = 'subject_titleen';
-   	if ($lang==1){
-   		$field = 'subject_titlekh';
-   	}
+	   	$lang = $this->currentlang();
+	   	$field = 'subject_titleen';
+	   	if ($lang==1){
+	   		$field = 'subject_titlekh';
+	   	}
    		$sql = " SELECT id,$field as name,shortcut FROM `rms_subject` WHERE
    		is_parent=1 AND status = 1 and subject_titlekh!='' ";
-   	return $db->fetchAll($sql);
+   		if (!empty($schoolOption)){
+   			$sql.=" AND schoolOption = $schoolOption";
+   		}
+   		return $db->fetchAll($sql);
    }
    
    

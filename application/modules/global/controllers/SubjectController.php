@@ -31,7 +31,7 @@ class Global_SubjectController extends Zend_Controller_Action {
 			 
 			 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("SUBJECT_IN_KH","SUBJECT_IN_EN","SHORTCUT","MODIFY_DATE","USER","STATUS");
+			$collumns = array("SCHOOL_OPTION","SUBJECT_IN_KH","SUBJECT_IN_EN","SHORTCUT","MODIFY_DATE","USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'subject','action'=>'edit',
 			);
@@ -133,6 +133,19 @@ class Global_SubjectController extends Zend_Controller_Action {
 			$option=$_dbmodel->addSubjectajax($data);
 			print_r(Zend_Json::encode($option));
 			exit();
+		}
+	}
+	
+	function getsubjectAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			if (!empty($data['schoolOption'])){
+				$db = new Application_Model_DbTable_DbGlobal();
+				$subject = $db->getAllSubjectStudy($data['schoolOption']);
+				array_unshift($subject, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+				print_r(Zend_Json::encode($subject));
+				exit();
+			}
 		}
 	}
 }

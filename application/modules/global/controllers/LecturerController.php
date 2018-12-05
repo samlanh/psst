@@ -32,7 +32,8 @@ class Global_LecturerController extends Zend_Controller_Action {
 			}
 			$rs_rows= $db->getAllTeacher($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","ID_NUMBER","TEACHER_NAME","SEX","TYPE","NATIONALITY","DEGREE","TEACHER_TYPE","POSITION","PHONE","EMAIL","NOTE","STATUS");
+			$collumns = array("BRANCH_NAME","ID_NUMBER","TEACHER_NAME","SEX","TYPE",
+					"NATIONALITY","DEGREE","TEACHER_TYPE","POSITION","PHONE","EMAIL","NOTE","SCHOOL_OPTION","STATUS");
 			$link=array('module'=>'global','controller'=>'lecturer','action'=>'edit',);
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('teacher_code'=>$link,'teacher_name_kh'=>$link,'teacher_name_en'=>$link,'branch_name'=>$link));
 		}catch (Exception $e){

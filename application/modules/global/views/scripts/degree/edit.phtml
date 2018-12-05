@@ -98,8 +98,22 @@
 		         </div>
 		         <div class="col-md-8 col-sm-8 col-xs-12">
 		         	 <div class="form-group">
-		         	 	<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
-								<tr id="head-title" class="head-td" align="right"></tr>
+		         	 	<table  border="1" style="width:100%; border-collapse: collapse; border:1px solid #ccc;">
+							<thead>
+								<tr id="head-title" class="head-td" align="right">
+									<th><?php echo $tr->translate("DEL");?></th>
+									<th><?php echo $tr->translate("N_O");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_IN_CLASS");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_OUT_CLASS");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("SCORE_SHORT");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("NOTE");?></th>
+									<th id="lbl_titlemetion"><?php echo $tr->translate("STATUS");?></th>
+								</tr>
+							</thead>
+							<tbody id="table_row">
+							
+							</tbody>
 						</table>
 						<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 									 		iconClass="dijitIconEditProperty" onclick="addRow();" />
@@ -180,12 +194,59 @@ dojo.require("dojo.html");
 dojo.ready(function(){
 	getValue();
 	Initailize();
-});
 
-var subject = '<?php echo $this->subject;?>';
+	 var schoolOption = dijit.byId('schoolOption');
+	 schoolOption.on('change', function(evt) {
+		 getSubject();
+    });
+});
+var oldSchoolOption='<?php echo $this->row['schoolOption'];?>';
+var subject = '';
+var url_getsubject = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"getsubject"));?>';										
+function getSubject(){
+	subject='';
+	schoolOption = dijit.byId('schoolOption').get('value');
+	if(schoolOption=='' || schoolOption==-1){
+		dijit.byId('schoolOption').focus();
+		subject="";
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_getsubject,
+		content:{
+			'schoolOption':schoolOption
+			},
+		handleAs:"json",
+		load: function(data) {
+			for(var i = 0; i < data.length; i++) {
+			    if(data[i].id==-1){
+			    }else{
+			    	subject+='<option value='+data[i].id+'>'+data[i].name+'</option>';
+			    }
+		    }
+			if(oldSchoolOption==schoolOption){
+				 dojo.query("#table_row").append("");
+				    $("#identity").val("");
+				Initailize();
+			}else{
+			    
+			    dojo.query("#table_row").append("");
+			    $("#identity").val("");
+			    addRow();
+			}
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			alert(err);
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
+}
+
+
 var col = 0;
 var no = 0;
-var title = 0;
+var title = 1;
 tmp = '';
 temp='';
 function addRow() {
@@ -327,7 +388,7 @@ function calculateTotalAverage() {
 	
 	//alert("total score = "+total_score+",amt_sub = "+amount_subject+", max avg = "+max_average+", pass avg = "+pass_average);
 }
-
+var subjectold = '<?php echo $this->subject;?>';
 function Initailize() {
 
 	<?php if(!empty($this->rowdetail)){ 
@@ -349,7 +410,7 @@ function Initailize() {
 	}
 		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+');calculateTotalAverage();" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="checkSubject('+col+');popupsubject('+col+');" >'+subject+'</select></td>';
+		template+='<td><select style="width:100%;"  dojoType="dijit.form.FilteringSelect" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'" onchange="checkSubject('+col+');popupsubject('+col+');" >'+subjectold+'</select></td>';
 		
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreinclass_'+col+'" id="scoreinclass_'+col+'" onkeyup="calculateTotalAverage();" value="" type="text"></td>';	
 		template+='<td><input style="width:100%;" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreoutclass_'+col+'" id="scoreoutclass_'+col+'" value="" type="text"></td>';

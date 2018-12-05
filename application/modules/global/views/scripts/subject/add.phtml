@@ -18,8 +18,13 @@
     	<form  id='add_subject_exam' action="<?php echo $this->url(array('module'=>'global','controller'=>'subject','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
-               		dijit.byId("save_close").attr("disabled",true);
-               		dijit.byId("save_new").attr("disabled",true);
+					schoolOption=dijit.byId("schoolOption").get("value");
+               		 if(schoolOption==-1 || schoolOption==''){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_SCHOOL_OPTION");?>");
+						dijit.byId('schoolOption').focus();
+                    	return false;
+					}
+					loadingBlock();
 					return true;
 				}else {
 					return false;
@@ -70,6 +75,12 @@
 		                </div>
 		             </div>
 		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SCHOOL_OPTION");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $subject_exam->getElement('schoolOption');?>
+		                </div>
+		             </div>
+		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                <?php  echo $subject_exam->getElement('status');?>
@@ -79,7 +90,7 @@
 				         <div class="card-box mt-20">
 			               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 			               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="button" onclick="submitDataClose();" id="save_close"  name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+								<input type="submit"  id="save_close"  name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" />
 								<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" />

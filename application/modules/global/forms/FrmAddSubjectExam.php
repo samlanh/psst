@@ -19,6 +19,22 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 	}
 	public function FrmAddSubjectExam($data=null){
 		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$_dbuser = new Application_Model_DbTable_DbUsers();
+		$userid = $_dbgb->getUserId();
+		$userinfo = $_dbuser->getUserInfo($userid);
+		
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$Option = $_dbgb->getAllSchoolOption($userinfo['branch_list']);
+		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+		$_schoolOption = new Zend_Dojo_Form_Element_FilteringSelect("schoolOption");
+		$_schoolOption->setMultiOptions($_arr_opt);
+		$_schoolOption->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		
 		$_subject_exam = new Zend_Dojo_Form_Element_TextBox('subject_kh');
 		$_subject_exam->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
@@ -49,9 +65,10 @@ Class Global_Form_FrmAddSubjectExam extends Zend_Dojo_Form {
 			$_subject_exam->setValue($data['subject_titlekh']);
 			$_subject_kh->setValue($data['subject_titleen']);
 			$_status->setValue($data['status']);
+			$_schoolOption->setValue($data['schoolOption']);
 			//$_parent->setValue($data['parent']);
 		}
-		$this->addElements(array($_subject_exam,$_status,$_submit,$_subject_kh,$_score_percent));
+		$this->addElements(array($_subject_exam,$_status,$_submit,$_subject_kh,$_score_percent,$_schoolOption));
 		
 		return $this;
 		

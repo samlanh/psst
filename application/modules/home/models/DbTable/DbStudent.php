@@ -8,12 +8,17 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$session_user=new Zend_Session_Namespace('authstu');
 		return $session_user->user_id;
 	}
-	
 	public function getAllStudent($search){
+		$curr = new Application_Model_DbTable_DbGlobal();
+		$lang= $curr->currentlang();
 		$_db = $this->getAdapter();
 		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
+				$field = 'name_en';
+				if ($lang==1){
+					$field = 'name_kh';
+				}
 				$sql = "SELECT  s.stu_id,
 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,s.stu_khname,s.stu_enname,
@@ -21,7 +26,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT name_en FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
     			(SELECT name_en FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
     			
-				(SELECT name_kh from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
+				(SELECT $field from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status_student,
 				CONCAT(s.stu_khname,'-',s.stu_enname) AS name,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.sex LIMIT 1) AS sex,
 				tel ,

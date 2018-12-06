@@ -97,6 +97,97 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
     }
+    public function getAllStudentpro($search){
+    	$db = $this->getAdapter();
+    	$sql ='SELECT *,branch_id,stu_id,
+    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
+    	CONCAT(stu_khname) as name_kh,
+    	CONCAT(stu_enname," ",last_name) as name_en,
+    	stu_enname,stu_khname,last_name,
+    	(SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
+    	(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
+    	 
+    	tel,email,stu_code,home_num,street_num,tel,
+    	(SELECT occu_name FROM rms_occupation WHERE occupation_id=father_job LIMIT 1) AS fa_job,
+		(SELECT occu_name FROM rms_occupation WHERE occupation_id=mother_job LIMIT 1) AS mo_job,
+		(SELECT occu_name FROM rms_occupation WHERE occupation_id=guardian_job LIMIT 1) AS gu_job,
+    	is_subspend,dob,degree as dept,
+    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
+    	(SELECT CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
+    	(SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as start_year,
+    	(SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as end_year,
+    	(SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as end_date,
+    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session LIMIT 1)AS session,
+    		
+    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
+    	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
+    	(SELECT room_name FROM `rms_room` AS r WHERE r.room_id = room LIMIT 1) AS room,
+    	(SELECT name_kh from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
+    	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_name,
+    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
+    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
+    	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id LIMIT 1)AS province,
+    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex LIMIT 1) AS sex,photo
+    	FROM rms_student ';
+    	$where=' WHERE status=1 AND customer_type=1 ';
+    
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
+    	$where .= " AND ".$from_date." AND ".$to_date;
+    	$order=" ORDER BY stu_id,degree,grade,academic_year DESC";
+    	//     	if(empty($search)){
+    	//     		return $db->fetchAll($sql.$order);
+    	//     	}
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " stu_code LIKE '%{$s_search}%'";
+    		$s_where[]=" stu_code LIKE '%{$s_search}%'";
+    		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
+    		$s_where[]=" stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" tel LIKE '%{$s_search}%'";
+    		$s_where[]=" father_phone LIKE '%{$s_search}%'";
+    		$s_where[]=" mother_phone LIKE '%{$s_search}%'";
+    		$s_where[]=" guardian_tel LIKE '%{$s_search}%'";
+    		$s_where[]=" father_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" mother_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" guardian_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" remark LIKE '%{$s_search}%'";
+    		$s_where[]=" home_num LIKE '%{$s_search}%'";
+    		$s_where[]=" street_num LIKE '%{$s_search}%'";
+    		$s_where[]=" village_name LIKE '%{$s_search}%'";
+    		$s_where[]=" commune_name LIKE '%{$s_search}%'";
+    		$s_where[]=" district_name LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['study_year'])){
+    		$where.=' AND academic_year='.$search['study_year'];
+    	}
+    	if(!empty($search['group'])){
+    		$where.=' AND group_id='.$search['group'];
+    	}
+    	if(!empty($search['degree'])){
+    		$where.=' AND degree='.$search['degree'];
+    	}
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND branch_id='.$search['branch_id'];
+    	}
+    	if(!empty($search['grade_all'])){
+    		$where.=' AND grade='.$search['grade_all'];
+    	}
+    	if(!empty($search['session'])){
+    		$where.=' AND session='.$search['session'];
+    	}
+    	if(!empty($search['stu_type'])){
+    		$where.=' AND is_stu_new = '.$search['stu_type'];
+    	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	return $db->fetchAll($sql.$where.$order);
+    }
 	public function getAllStudentGroupbyBranchAndSchoolOption($search){
     	$db = $this->getAdapter();
     	$sql ='SELECT branch_id,    		   

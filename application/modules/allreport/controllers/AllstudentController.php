@@ -81,6 +81,39 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
+	
+	public function rptAllStudentprofileAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'branch_id'		=>0,
+					'degree'		=>0,
+					'study_year' 	=>'',
+					'grade_all' 	=>'',
+					'session' 		=>'',
+					'group'			=>'',
+					'stu_type'=>'',
+					'start_date'	=> date('Y-m-d'),
+					'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$rs_rows = $group->getAllStudentpro($search);
+		$this->view->rs = $rs_rows;
+		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
+	
+		$this->view->search=$search;
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+	}
 	public function rptAllStudentOldAction(){
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();

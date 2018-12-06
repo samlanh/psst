@@ -8,13 +8,13 @@
 	}else{
 		$sex=$tr->translate("FEMALE");
 	}
-$image = $this->baseUrl().'/images/no-profile.png';
-												if(!empty($this->rs['photo'])){
-													if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
-													$image = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
-													}
-										}
-	//print_r($photo); exit();
+	$image = $this->baseUrl().'/images/no-profile.png';
+			if(!empty($this->rs['photo'])){
+				if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
+				$image = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
+				}
+	}
+	//print_r($image); exit();
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="dojo/method" event="onSubmit">			

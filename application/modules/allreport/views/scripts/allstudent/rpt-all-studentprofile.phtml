@@ -4,6 +4,14 @@
 	$this->headTitle($tr->translate('ALL_STUDENT_REPORT')); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
+	
+	$photo = $this->baseUrl().'/images/no-profile.png';
+			if(!empty($this->rs['photo'])){
+				if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
+				$photo = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
+				}
+	}
+	//print_r($photo); exit();
 ?>	
 <style>
 .hover:hover{ background:#ccc;}
@@ -15,13 +23,13 @@ display: table-cell !important;
 	<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ALL_STUDENT_REPORT');?></h4>
+	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ALL_STUDENT_REPORT_PROFILE');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
     		</div>
     	</div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-studentprofile')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("title");?>
@@ -75,7 +83,7 @@ display: table-cell !important;
 					</td>
 					<td width="70%"  align="center">
 					    <strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
-						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDNET_CARD");?></strong><br />
+						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDNET_CARD_PROFILE");?></strong><br />
 						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
 					<td width="15%" align="center">
@@ -93,52 +101,67 @@ display: table-cell !important;
 					  page-break-inside:avoid; page-break-after:auto;
 					}
 					.hidden{visibility: hidden; display: none;}
-					
+					.verites{
+						transform: rotate(270deg);
+					}
+					.image-box {
+					    text-align: center;
+					}
+					.image-box img {
+					    width: 120px;
+					    height: 130px;
+					}
 				</style>
 				<tr>
 					<td colspan="3">
 					<div id="exportExcel">
 						<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>
-								<tr style="font-size:14px; height: 20px;background: #ccd9ff; font-weight: bold" align="center" >
-									<th rowspan="2" class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></th>
-									<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
-									<th rowspan="2"><?php echo $tr->translate("BRANCH_NAME");?></th>
-									<th rowspan="2"><?php echo $tr->translate("STUDENT_CODE");?></th>
-									<th rowspan="3"><?php echo $tr->translate("STUDENT_NAME");?></th>
+								<tr style="font-size:14px; height: 20px;background: #F9E79F; line-height: 100px; font-weight: bold" align="center" >
+									<th class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></th>
+									<th ><?php echo $tr->translate("NUM");?></th>
+									<th class="verites"><?php echo $tr->translate("STUDENT_ID");?></th>
+									<th colspan="2" class="verites"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></th>
+									<th rowspan="2"><?php echo $tr->translate("PHOTO");?></th>
 									<th rowspan="2"><?php echo $tr->translate("SEX");?></th>
-									<th rowspan="2"><?php echo $tr->translate("NATIONALITY");?></th>
-									<th rowspan="2"><?php echo $tr->translate("PHONE");?></th>
-									<th rowspan="2"><?php echo $tr->translate("EMAIL");?></th>
-									<th colspan="5"><?php echo $tr->translate("STUDY_INFO");?></th>
+									<th><?php echo $tr->translate("CLASS");?></th>
+									<th class="verites"><?php echo $tr->translate("DATE_OF_BIRTH");?></th>
+									<th><?php echo $tr->translate("PLACE_ADDRESS");?></th>
+									<th><?php echo $tr->translate("PHONE");?></th>
+									<th class="verites"><?php echo $tr->translate("FATHER_NAME");?></th>
+									<th class="verites"><?php echo $tr->translate("OCCUPATION");?></th>
+									<th class="verites"><?php echo $tr->translate("MOTHER_NAME");?></th>
+									<th class="verites"><?php echo $tr->translate("OCCUPATION");?></th>
+									<th><?php echo $tr->translate("CURRENT_ADD");?></th>
+									<th><?php echo $tr->translate("FROM_SCHOOL");?></th>
+									<th><?php echo $tr->translate("STUDENT_IN");?></th>
+									<th><?php echo $tr->translate("STUDENT_OUT");?></th>
 								</tr>
 								<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
-								<tr style="font-size:12px; height: 20px;background: #ccd9ff; font-weight: bold;" align="center" >
-									<th><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
-									<th><?php echo $tr->translate("DEGREE");?></th>
-									<th><?php echo $tr->translate("GRADE");?></th>
-									<th><?php echo $tr->translate("SESSION");?></th>
-									<th><?php echo $tr->translate("STATUS");?></th>
-								</tr>
 							</thead>
 						<?php $i=0;$degree=0;foreach ($this->rs AS $row) { $i++;$degree=$row['degree'];?>
-							<tr style="font-size:13px;line-height:18px;" align="center" class="hover" >
+							<tr style="font-size:13px;line-height:150px;" align="center" class="hover" >
 								<td class="hidden">
 									<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
 									<input type="hidden" name="stu_id<?php echo $i;?>" id="stu_id<?php echo $i;?>" value="<?php echo $row['stu_id'];?>" dojoType="dijit.form.TextBox" />
 								</td>
 								<td ><?php echo $i;?></td>
-								<td ><?php echo $row['branch_name'];?></td>
-								<td ><?php echo $row['stu_code'];?></td>
-								<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['name'];?>&nbsp;</td>
+								<td class="verites"><?php //echo $row['branch_name'];?>fghg</td>
+								<td class="verites"><?php echo $row['name_kh'];?></td>
+								<td class="verites"><?php echo $row['name_en'];?></td>
+								<td class="image-box"><img id="profile_wiew" src="<?php echo $photo;?>" alt=""  /></td>	
 								<td ><?php echo $row['sex'];?></td>	
-								<td ><?php echo $row['nationality'];?></td>
+								<td ><?php echo $row['room'];?></td>
+								<td class="verites"><?php echo $row['dob'];?></td>
+								<td ><?php echo $row['province'];?></td>
 								<td ><?php echo $row['tel'];?></td>
-								<td align="left">&nbsp;<?php echo $row['email'];?></td>
-								<td ><?php echo $row['academic_year'];?></td>
-								<td ><?php echo $row['degree'];?></td>
-								<td align="left">&nbsp;<?php echo $row['grade'];?></td>
-								<td ><?php echo $row['session'];?></td>	
+								<td class="verites"><?php echo $row['father_enname'];?></td>
+								<td class="verites"><?php echo $row['fa_job'];?></td>
+								<td class="verites"><?php echo $row['mother_enname'];?></td>
+								<td class="verites"><?php echo $row['mo_job'];?></td>
+								<td ><?php echo $row['province'];?></td>
+								<td ><?php echo $row['from_school'];?></td>	
+								<td ><?php echo $row['status'];?></td>	
 								<td <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>><?php echo $row['status'];?></td>	
 							</tr>
 						<?php }?>	

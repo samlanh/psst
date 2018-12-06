@@ -223,6 +223,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$_branch_id->setValue($_data['branch_id']);
 			$_staff->setValue($_data['staff_type']);
 			$sex->setValue($_data['sex']);
+			$_teacher->setValue($_data['teacher_type']);
 			$phone->setValue($_data['tel']);
 			$_nationality->setValue($_data['nationality']);
 			$dob->setValue($_data['dob']);

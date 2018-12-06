@@ -547,7 +547,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				WHERE 
 				 	s.status=1 AND s.customer_type=1 ";
     	$group_by = " ";
-		$order_by = " ORDER BY s.`academic_year` ASC,s.`degree` ASC,s.`grade` ASC,s.`session` ASC";	
+		$order_by = " ORDER BY s.branch_id DESC,s.`academic_year` ASC,s.`degree` ASC,s.`grade` ASC,s.`session` ASC";	
     	$where=' ';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();

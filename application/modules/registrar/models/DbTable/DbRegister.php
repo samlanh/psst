@@ -143,6 +143,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$arr = array(
 							'customer_type' =>1,
 							'stu_code'=>$stu_code,
+							'academic_year'=>$data['study_year'],
 							'create_date'=>date("Y-m-d H:i:s")
 						);
 						$this->_name='rms_student';

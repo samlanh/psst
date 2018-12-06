@@ -342,21 +342,28 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	}
 	function getSubjectByGroup($group_id,$teacher_id=null,$exam_type=1){
 		$db=$this->getAdapter();
-		$sql="SELECT *,
-			(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
-			(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
-			(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
-			(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
-			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen
-			 FROM rms_group_subject_detail AS gsjd 
-				WHERE gsjd.group_id = ".$group_id;
+		$sql="SELECT 
+					gsjd.*,
+					(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
+					(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
+					(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
+					(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
+					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
+					(select dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id) as max_score
+				FROM 
+			 		rms_group_subject_detail AS gsjd ,
+			 		rms_group as g
+				WHERE 
+					g.id = gsjd.group_id
+					and gsjd.group_id = ".$group_id;
+		
 		if($teacher_id!=null){
-			$sql.=" AND teacher = ".$teacher_id;
+			$sql.=" AND gsjd.teacher = ".$teacher_id;
 		}
 		if($exam_type==1){
-			$sql.=" AND amount_subject >0 ";
+			$sql.=" AND gsjd.amount_subject >0 ";
 		}else{
-			$sql.=" AND amount_subject_sem >0 ";
+			$sql.=" AND gsjd.amount_subject_sem >0 ";
 		}
 		$sql.=' ORDER BY gsjd.id ASC ';
 // 		echo $sql;

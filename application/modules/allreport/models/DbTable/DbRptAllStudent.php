@@ -128,8 +128,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
     	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
     	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id LIMIT 1)AS province,
-    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex LIMIT 1) AS sex,photo
-    	FROM rms_student ';
+    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex LIMIT 1) AS sex
+    	FROM rms_student';
     	$where=' WHERE status=1 AND customer_type=1 ';
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
@@ -145,7 +145,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " stu_code LIKE '%{$s_search}%'";
-    		$s_where[]=" stu_code LIKE '%{$s_search}%'";
     		$s_where[]=" stu_khname LIKE '%{$s_search}%'";
     		$s_where[]=" stu_enname LIKE '%{$s_search}%'";
     		$s_where[]=" tel LIKE '%{$s_search}%'";
@@ -157,10 +156,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$s_where[]=" guardian_enname LIKE '%{$s_search}%'";
     		$s_where[]=" remark LIKE '%{$s_search}%'";
     		$s_where[]=" home_num LIKE '%{$s_search}%'";
-    		$s_where[]=" street_num LIKE '%{$s_search}%'";
-    		$s_where[]=" village_name LIKE '%{$s_search}%'";
-    		$s_where[]=" commune_name LIKE '%{$s_search}%'";
-    		$s_where[]=" district_name LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['study_year'])){
@@ -180,9 +175,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	if(!empty($search['session'])){
     		$where.=' AND session='.$search['session'];
-    	}
-    	if(!empty($search['stu_type'])){
-    		$where.=' AND is_stu_new = '.$search['stu_type'];
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();

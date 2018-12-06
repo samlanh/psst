@@ -89,7 +89,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		else{
 			$search=array(
 					'title' 		=>'',
-					'branch_id'		=>0,
 					'degree'		=>0,
 					'study_year' 	=>'',
 					'grade_all' 	=>'',

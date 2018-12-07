@@ -89,6 +89,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		else{
 			$search=array(
 					'title' 		=>'',
+					'branch_id'		=>0,
 					'degree'		=>0,
 					'study_year' 	=>'',
 					'grade_all' 	=>'',
@@ -107,7 +108,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$rs_rows = $group->getAllStudentpro($search);
 		$this->view->rs = $rs_rows;
-		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
 	
 		$this->view->search=$search;
 		$key = new Application_Model_DbTable_DbKeycode();

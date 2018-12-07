@@ -99,11 +99,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     public function getAllStudentpro($search){
     	$db = $this->getAdapter();
-    	$sql ='SELECT *,branch_id,stu_id,
+    	$sql ='SELECT *,
     	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
     	CONCAT(stu_khname) as name_kh,
     	CONCAT(stu_enname," ",last_name) as name_en,
-    	stu_enname,stu_khname,last_name,
     	(SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
     	(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
     	 
@@ -111,7 +110,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	(SELECT occu_name FROM rms_occupation WHERE occupation_id=father_job LIMIT 1) AS fa_job,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=mother_job LIMIT 1) AS mo_job,
 		(SELECT occu_name FROM rms_occupation WHERE occupation_id=guardian_job LIMIT 1) AS gu_job,
-    	is_subspend,dob,degree as dept,
+    	is_subspend,
+    	degree as dept,
     	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
     	(SELECT CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
     	(SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as start_year,
@@ -128,9 +128,12 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
     	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
     	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id LIMIT 1)AS province,
-    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex LIMIT 1) AS sex
+    	(SELECT v.village_namekh FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_namekh,
+    	(SELECT c.commune_namekh FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_namekh,
+    	(SELECT d.district_namekh FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_namekh,
+    	(SELECT rms_province.province_kh_name from rms_province where rms_province.province_id = rms_student.province_id LIMIT 1)AS province_kh_name
     	FROM rms_student';
-    	$where=' WHERE status=1 AND customer_type=1 ';
+    	$where=' WHERE status=1 AND customer_type=1 AND is_subspend=0';
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();

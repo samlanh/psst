@@ -1,16 +1,12 @@
 <?php
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('ALL_STUDENT_REPORT')); 
+	$this->headTitle($tr->translate('ALL_STUDENT_REPORT_PROFILE')); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
+	
+	
 ?>	
-<style>
-.hover:hover{ background:#ccc;}
-.hidden{visibility: visible !important;
-display: table-cell !important;
-}
-</style>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
        		<div class="col-sm-12 border-botom">
@@ -68,31 +64,35 @@ display: table-cell !important;
              </div>
 	</form>
 	<div id="divPrint">
-			<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
-				<tr>
-					<td width="15%" align="center">
-						<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> 
-					</td>
-					<td width="70%"  align="center">
-					    <strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
-						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDNET_CARD_PROFILE");?></strong><br />
-						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
-					</td>
-					<td width="15%" align="center">
-					</td>
-				</tr>
-				<style>
-					table tr th{
-						border: 1px solid #000;	
-						text-align: center;
+			<style>
+					*, :after, :before {
+					    box-sizing: border-box;
 					}
-					table {page-break-inside:auto }
+					table {
+						border-spacing: 0;
+   						 border-collapse: collapse;
+						page-break-inside:auto;
+					}
+					thead {
+					    display: table-header-group;
+					    vertical-align: middle;
+					    border-color: inherit;
+					}
+					tr {
+					    display: table-row;
+					    vertical-align: inherit;
+					    border-color: inherit;
+					}
+					td, th {
+					    padding: 0;
+						display: table-cell;
+    					vertical-align: inherit;
+					}
 					tr{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;
 					}
-					.hidden{visibility: hidden; display: none;}
 					tr.hover td {
 						white-space: normal;
 					}
@@ -101,11 +101,11 @@ display: table-cell !important;
 					    text-align: center;
 					    white-space: nowrap;
 					    g-origin: 50% 50%;
-					    -webkit-transform: rotate(90deg);
-					    -moz-transform: rotate(90deg);
-					    -ms-transform: rotate(90deg);
-					    -o-transform: rotate(90deg);
-					    transform: rotate(90deg);
+					    -webkit-transform: rotate(270deg);
+					    -moz-transform: rotate(270deg);
+					    -ms-transform: rotate(270deg);
+					    -o-transform: rotate(270deg);
+					    transform: rotate(270deg);
 					}
 					tr.hover td.verites-col span.verites,
 					td.verites-col span.verites {
@@ -116,35 +116,62 @@ display: table-cell !important;
 					td.verites-col span.verites:before {
 					    content: '';
 					    width: 0;
-					    padding-top: 100%;
+					    padding-top: 110%;
 					    display: inline-block;
 					    vertical-align: middle;
 					}
 					.image-box {
 					    text-align: center;
 					 	width: 100px;
+						padding:  0;
 					}
 					.image-box img {
-					    width: 100px;
-					    height: 100px;
+					    width: 100%;
+					    height: 120px;
+					padding: 1px;
 					}
-					thead tr td {
-						line-height: 26px;
-					}
+					
 				</style>
+			<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
+				<tr>
+					<td width="15%" align="center">
+						<!-- <img style="width: 60%;" alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>">  -->
+					</td>
+					<td width="70%"  align="center">
+						<?php 
+							$dbbranch = new RsvAcl_Model_DbTable_DbBranch();
+							$dbdegree = new Global_Model_DbTable_DbItems();
+							$branc_name="";
+							if (!empty($this->search['branch_id'])){
+								$rowbranch=$dbbranch->getBranchById($this->search['branch_id']);
+								$branc_name=$rowbranch["branch_namekh"];
+							}
+							$degreename="";
+							if (!empty($this->search['degree'])){
+								$rowdegree=$dbdegree->getDegreeById($this->search['degree'],1);
+								$degreename=$rowdegree["title"];
+							}
+						?>
+					    <strong​​ style=" font-weight:bold;font-family: Arial Black;color:#f00; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("អត្តលេខសិស្ស").$branc_name;?></strong><br />
+						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#0400ff; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $degreename;?></strong><br />
+						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+					</td>
+					<td width="15%" align="center">
+					</td>
+				</tr>
 				<tr>
 					<td colspan="3">
 					<div id="exportExcel">
-						<table cellpadding="4"​ style="font-family:'Khmer OS Battambang';margin:0 auto;width:100%;border:1px solid #000;border-collapse: collapse;white-space: nowrap;position: relative;text-align: center;table-layout : fixed;" border="1" >
+						<table cellpadding="4"​ style="font-size:11px; display: table; font-family:'Khmer OS Battambang';width:100%;color: #4839bd; border: 1px solid #4839bd;border-collapse: collapse;white-space: nowrap; text-align: center;table-layout : fixed;" border="1" >
 							<thead>
-								<tr style="font-size:14px; height: 20px;background: #f9d4ae; line-height: 110px; font-weight: bold" align="center" >
-									<td class="normal-col">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+								<tr style=" background: #f9d4ae; font-family:'Khmer OS Muol Light';" >
+									<td style="white-space: normal; width: 40px;">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td class="verites-col"><span class="verites">អត្តលេខ</span></td>
 									<td class="verites-col" colspan="2"><span class="verites">គោត្តនាម និងនាម</span></td>
 									<td style="white-space: normal; width: 120px;">&nbsp;រូបថត</td>
 									<td style="white-space: normal; width: 40px;">&nbsp;ភេទ&nbsp;</td>
 									<td style="white-space: normal; width: 60px;">&nbsp;ថ្នាក់&nbsp;</td>
-									<td class="verites-col"><span class="verites">ថ្ងៃខែឆ្នាំកំណើត&nbsp;&nbsp;&nbsp;</span></td>
+									<td class="verites-col"><span class="verites">ថ្ងៃខែឆ្នាំកំណើត</span></td>
 									<td style="white-space: normal; width: 130px;">&nbsp;ទីកន្លែងកំណើត&nbsp;</td>
 									<td class="verites-col"><span class="verites">ឈ្មោះឳពុក </span></td>
 									<td class="verites-col"><span class="verites">មុខរបរ</span></td>
@@ -163,24 +190,31 @@ display: table-cell !important;
 									$image = $this->baseUrl().'/images/photo/'.$row['photo'];
 									}
 								}?>
-							<tr style="font-size:13px;line-height:150px;" align="center" class="hover" >
+							<tr align="center" class="hover" >
 								<td >&nbsp;<?php echo $i;?>&nbsp;</td>
 								<td class="verites-col" style="color: #D35400;"><span class="verites"><?php echo $row['stu_code'];?></span></td>
-								<td class="verites-col" style="color: red;"><span class="verites"><?php echo $row['name_kh'];?></span></td>
-								<td class="verites-col"><span class="verites"><?php echo $row['name_en'];?></span></td>
+								<td class="verites-col" style="font-family:'Khmer OS Muol Light'; color: red;"><span class="verites"><?php echo $row['name_kh'];?></span></td>
+								<td class="verites-col"><span class="verites"><?php echo $row['stu_enname']." ".$row['last_name'];?></span></td>
 								<td class="image-box">
 									<img id="profile_wiew" src="<?php echo $image;?>" alt=""  />
 								</td>	
-								<td style="white-space: normal;">&nbsp;<?php //echo $row['sex'];?>&nbsp;</td>	
-								<td style="white-space: normal;">&nbsp;<?php echo $row['room'];?>&nbsp;</td>
+								<td style="white-space: normal; color: red;">&nbsp;<?php if ($row['sex']==1){ echo "ប";}else{ echo "ស";}?>&nbsp;</td>	
+								<td style="white-space: normal;">&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
 								<td class="verites-col">&nbsp;<span class="verites"><?php echo $row['dob'];?></span></td>
-								<td style="white-space: normal;">&nbsp;<?php echo $row['province'];?>&nbsp;</td>
+								<td style="white-space: normal;">&nbsp;<?php echo $row['pob'];?>&nbsp;</td>
 								<td class="verites-col"><span class="verites"><?php echo $row['father_enname'];?></span></td>
 								<td class="verites-col"><span class="verites"><?php echo $row['fa_job'];?></span></td>
 								<td class="verites-col"><span class="verites"><?php echo $row['mother_enname'];?></span></td>
 								<td class="verites-col"><span class="verites"><?php echo $row['mo_job'];?></span></td>
-								<td style="white-space: normal;">&nbsp;<?php echo $row['province'];?>&nbsp;</td>
-								<td style="white-space: normal;">&nbsp;<?php echo $row['from_school'];?>&nbsp;</td>	
+								<td style="white-space: normal;">&nbsp;
+								<?php if (!empty($row['home_num'])){ echo "ផ្ទះលេខ ".$row['home_num']." ";}?>
+								<?php if (!empty($row['street_num'])){ echo "ផ្លូវលេខ ".$row['street_num']." ";}?>
+								<?php if (!empty($row['village_namekh'])){ echo "ភូមិ ".$row['village_namekh']." ";}?>
+								<?php if (!empty($row['commune_namekh'])){ echo "ឃុំ/សង្កាត់  ".$row['commune_namekh']." ";}?>
+								<?php if (!empty($row['district_namekh'])){ echo "ស្រុក/ខណ្ឌ ".$row['district_namekh']." ";}?>
+								<?php if (!empty($row['province_kh_name'])){ echo "រាជធានី/ខេត្ត ".$row['province_kh_name']." ";}?>
+								&nbsp;</td>
+								<td style="white-space: normal;">&nbsp;<?php if ($row['is_stu_new']==1){ if (!empty($row['from_school'])){ echo $row['from_school'];}else{ echo "ថ្មី";} }else{echo "អ៊ិ.អិល.ធី";}?>&nbsp;</td>	
 								<td>&nbsp;<?php //echo $row['status'];?>&nbsp;</td>	
 								<td>&nbsp;<?php //echo $row['status'];?>&nbsp;</td>	
 							</tr>
@@ -211,310 +245,6 @@ display: table-cell !important;
 			</table>
 		</div>
 		
-</div>
-	
-	<table width="100%">
-		<tr>
-			<td align="center">
-				<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
-					type="button" onclick="printSelected();"><?php echo $tr->translate("SINGLE_IDPRINT");?></button>
-				<input type="button" onclick="printIDCard();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_ID");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
-				
-				<button dojoType="dijit.form.Button" id="printpickupselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
-					type="button" onclick="printPickupCardSelected();"><?php echo $tr->translate("SINGLE_PICKUP_PRINT");?></button>
-				<input type="button" onclick="printPickup();" dojoType="dijit.form.Button" label="<?php echo $tr->translate("PRINTED_PICKUP");?>" iconClass="dijitEditorIcon dijitEditorIconPrint" />
-			</td>
-		</tr>
-	</table>
-			
-<div class="dijitHidden" style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog"  align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
-		
-		<div id="print_student_card" >
-			<style>
-					.card-content-student-print{
-						background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
-						 background-size: 100%;background-repeat: no-repea
-						 page-break-after:always;					
-					}
-					<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
-						$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
-						$color = "000000";
-						$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
-						if(!empty($bg['background'])){
-							if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
-							$image = $this->baseUrl().'/images/card/'.$bg['background'];
-							}
-							if (!empty($bg['colorcode'])){
-								$color = str_replace("#", "", $bg['colorcode']);
-							}
-						}
-						?>
-						
-					.card-content-student-print<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
-						background-image: url('<?php echo $image;?>');
-						 background-size: 100%;background-repeat: no-repeat;	
-						 page-break-after:always;					
-					}
-					
-					.name-card-block ul.list-data li.sdudent-id.color-<?php echo "card".$bck['branch_id']."card".$bck['schoolOption'];?>{
-					color:#<?php echo $color;?>;
-				}
-					<?php }?>
-					
-					.profile-card-block {
-					    position: relative;
-					}
-					.profile-card-block .photo {
-					    text-align: center;
-					    width: 100%;
-					    position: absolute;
-					    top: 96px;
-						left: -0.58px;
-					}
-					.photo img {
-					    width: 70.7px;
-					    height: 92px;
-					}
-					.name-card-block {
-					    position: relative;
-					}
-			
-					.name-card-block ul.list-data {
-					    list-style-type: none;
-					    padding: 0;
-					    width: 100%;
-					    position: absolute;
-					    text-align: center;
-					    top: 182.5px;
-					    color: #01049f;
-					    font-weight: bold;
-					    font-size: 12px;
-					}	
-				.name-card-block ul.list-data li{
-					line-height: 16px;	    
-				}
-				.name-card-block ul.list-data li.sdudent-id{
-						margin-top:10px;
-						color: #01731b;
-					}
-				.foot-left-block {
-				    position: relative;
-				}
-				.qrimages {
-				    position: absolute;
-				    top: 262px;
-				    width: 100%;
-				    text-align: center;
-				}
-				.qrimages img {
-				    width: 80%;
-				    text-align: center;
-					height: 17px;}
-				
-				.validdate {
-				    position: relative;
-				}
-				.validdate .exp_date {
-					color: #01049f;
-				    position: absolute;
-				    top: 250px;
-				    right: 5px;
-				    font-size: 5px;
-				    font-weight: 700 !important;
-				}
-	</style>
-		<?php $con=4;$i=0; $student= count($this->rs);
-			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
-					<?php 
-					$prefix="";
-					$validDate="";
-						$stu_name = $row['stu_enname']." ".$row['last_name'];
-						$image = $this->baseUrl().'/images/no-profile.png';
-						if(!empty($row['photo'])){
-							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
-							}
-						}
-						$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
-						if (!empty($bg)){
-							if ($bg['display_by']==2){
-								$stu_name = $row['stu_khname'];
-							}
-							$prefix = $bg['card_prefix'];
-							$validDate = $bg['valid'];
-						}
-						?>
-						<?php if ($key==0){?>
-                    	<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
-                    	<?php }?>
-						<?php if ($i==1){?>
-                    	<div style="display:inline-block; margin-right:10px; height:8.3cm; width: 1px; background: #000"></div>
-                    	<?php }?>
-						<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8.3cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-                    		<div class="profile-card-block">
-                    			<div class="photo">
-                    				<img  src="<?php echo $image;?>" alt="profile-image" >
-                    			</div>
-                    		</div>
-                    		<div class="name-card-block">
-	                    		<ul class="list-data">
-	                    			<li><span class="title_value">&nbsp;<?php echo $stu_name;?></span></li>
-                    				<li><span class="title_value">&nbsp;Grade: <?php echo str_replace("Grade","",$row['group_name']);?></span></li>
-									<li class="sdudent-id color-<?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>"><span class="title_value">&nbsp;ID: <?php echo $row['stu_code'];?></span></li>
-                    			</ul>
-                    		</div>
-                    		<div class="validdate">
-	                    		<span class="exp_date"><?php echo date("F j , Y",strtotime($validDate))?></span>
-	                    	</div>
-                    	<?php  
-//                     	$prefix = $this->data["prefix_barcode_grade_school"];
-//                     	$barcode = $prefix."-".$row['stu_code']."-".date("y");
-                    	$barcode = $prefix."-".$row['stu_code']."-".date("y",strtotime($validDate));
-                    	$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
-	                    	<div class="foot-left-block">
-                    			<div class="qrimages">
-                    				<img  src="<?php echo $url;?>" alt="profile-image" >
-                    			</div>
-                    		</div>
-                    		<div class="foot-right-block">
-                    		</div>
-                    	</div>	
-                    	<?php if ($student>1){?>
-                    	<div style="display:inline-block; margin:0 10px; height:8.3cm; width: 1px; background: #000"></div>
-                    	<?php }?>
-                    	<?php if ($i==4){ $i=0;?>
-                    	<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
-                    	<?php }?>
-		<?php }
-			}?>
-		</div>		
-	</div>
-</div>
-
-<?php /////////////////////////////////////////////////// pick up card //////////////////////////////////////////////////////////?>
-
-
-<div class="dijitHidden" style="width: 120mm !important; height: 80mm ; padding: 0px; margin: 0px;">
-	<div data-dojo-type="dijit.Dialog" style="width:22cm;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
-		<div id="PickupCard" style="width: 120mm !important; height: 80mm ; padding: 0px; margin: 0px;">
-		<?php $i=0;$margin_work =2;if(!empty($this->rs)){foreach ($this->rs as $row){$i++;?>	
-			<table  width="100%" style="white-space: nowrap;font-size:10px;font-family: 'Khmer OS Battambang';margin-bottom:80px;<?php if($i==0){echo "margin-top:25px;";}?>" <?php if($margin_work == 2){echo "margin-top:25px;";}?>class="print" cellspacing="1"  cellpadding="0">
-				<tr>
-					<td width="100%" align="center">
-						<table style="border: 3px solid blue;height: 80mm;width: 100%;font-size:11px;font-family: 'Khmer OS Battambang',Arial,sans-serif;padding:10px;" cellspacing="0" cellpadding="0">
-							<tr>
-								<td colspan="4" align="left">
-									<img style="width:53%;height: 90px;" src="<?php echo $this->baseUrl().'/images/psis_full_logo.png';?>">
-								</td>
-							</tr>
-							<tr style="height: 0;">
-								<td colspan="4" align="center" valign="top">
-									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
-										<tr>
-											<td width="25%" valign="top">
-												<div style="font-size:20px;font-family: 'Times New Roman';margin-top: 5px;padding-left: 15px;font-weight:bold;"></div>
-											</td>
-											<td width="50%" align="center" valign="top">
-												<div style="font-size:22px;font-family: 'Khmer OS Muol Light';margin-top: 5px;color: red;">ប័ណ្ណទទួលសិស្ស</div>
-											</td>
-											<td width="25%" align="center" valign="top">
-												<img style="width:60%;height: 110px;border: 1px solid rgba(0, 0, 0, 0.1);margin-top: -60px;" src="<?php echo $this->baseUrl().'/images/'.$row['photo'];?>">
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr style="height: 0;line-height: 18px" >
-								<td colspan="4" align="center" valign="top">
-									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
-										<tr>
-											<td width="75%">
-												<div style="font-size:20px;font-family: Khmer OS Muol Light, Times New Roman;padding-left: 15px;">Name : <?php if($row['stu_khname']!=''){echo $row['stu_khname'];}else{echo $row['stu_enname'];}?></div>
-											</td>
-											<td width="25%" align="center" valign="top">
-												<div style="font-size:18px;font-family: 'Times New Roman';color: red;"><?php echo $row['stu_code'];?></div>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="4">
-									&nbsp;
-								</td>
-							</tr>	
-							<tr>
-								<td width="30%">
-									&nbsp;
-								</td>
-								<td width="20%" align="center">
-									<img style="width:70%;height: 110px;border: 1px solid #333232;" src="<?php //echo $this->baseUrl().'/images/'.$row['fa_photo'];?>">
-								</td>
-								<td width="20%" align="center">
-									<img style="width:70%;height: 110px;border: 1px solid #333232;" src="<?php //echo $this->baseUrl().'/images/'.$row['mo_photo'];?>">
-								</td>
-								<td width="30%" >
-									&nbsp;
-								</td>
-							</tr>
-							<tr>
-								<td colspan="4">
-									&nbsp;
-								</td>
-							</tr>
-							
-							<tr style="height: 0;line-height: 18px" >
-								<td colspan="4" align="center" valign="top">
-									<table width="100%" style="font-family:Khmer OS Battambang,Times New Roman;">
-										<tr>
-											<td width="10%" align="center" valign="top">
-												<div style="font-size:15px;font-family: 'Khmer OS Muol Light';color:#000;">បញ្ជាក់ៈ</div>
-											</td>
-											<td width="70%"  valign="top" style="font-size:13px;font-family: 'Khmer OS Battambang';color:#000;">
-												<div>
-													- ក្នុងករណីបាត់បង់ អាណាព្យាបាលត្រូវជូនដំណឹងមកកាន់ការិយាល័យសិក្សាជាបន្ទាន់
-												</div>
-												<div>
-													- អាណាព្យាបាលត្រូវបង្ហាញប័ណ្ណនេះទៅបុគ្គលិកសាលា ពេលមកទទួលយកសិស្ស
-												</div>
-												<div>
-													- អ្នកដែលមកទទួលយកសិស្សត្រូវជាបុគ្គលដែលមានបិទរូបថតនៅខាងលើ
-												</div>
-												<div>
-													- រាល់ការបាត់បង់ ឫ ផ្លាស់ប្តូរប័ណ្ណថ្មីត្រូវបង់ប្រាក់ ៣ដុល្លារ
-												</div>
-											</td>
-											<td width="20%" align="center" style="border:1px solid blue;color:blue;">
-												<div style="font-size:15px;font-family: 'Khmer OS Muol Light';">
-													ព័ត៌មានលម្អិត
-												</div>
-												<div style="font-size:13px;font-family: 'Times New Roman';">
-													<?php echo $tr->translate("CUSTOMER_TEL");?>
-												</div>
-												
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		<?php }}?>
-		</div>
-		<table width="100%">
-			<tr>
-				<td align="center">
-					<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
-					
-					<button dojoType="dijit.form.Button" id="print_pickup" iconClass="dijitEditorIcon dijitEditorIconPrint"
-						type="button" onclick="printPickupCard();">Print Pickup Card</button>
-				</td>
-			</tr>
-		</table>
-	</div>
 </div>
 
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
@@ -638,106 +368,7 @@ function getAllGroupByBranch(){
 			];
 			return (monthName[m-1]);
 	}	
-	function printIDCard(){
-		loadingBlock();
-	  	 var contents = document.getElementById("print_student_card").innerHTML;
-	 	  var frame1 = document.createElement('iframe');
-	    frame1.name = "frame1";
-	    frame1.style.position = "absolute";
-	    frame1.style.top = "-1000000px";
-	    document.body.appendChild(frame1);
-	    var frameDoc = (frame1.contentWindow) ? frame1.contentWindow : (frame1.contentDocument.document) ? frame1.contentDocument.document : frame1.contentDocument; frameDoc.document.open();
-	    frameDoc.document.write('<html><head><title>Employee ID</title>');
-	    frameDoc.document.write('</head><body>');
-	    frameDoc.document.write(contents);
-	    frameDoc.document.write('</body></html>');
-	    frameDoc.document.close();
-	    setTimeout(function () {
-	        window.frames["frame1"].focus();
-	        window.frames["frame1"].print();
-	        document.body.removeChild(frame1);
-	        HideloadingBlock();
-	    }, 10000);
-	   return false;
-	}
-	function printSelected(){
-		<?php 
-			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'idselected'));
-    	?>
 
-    	 id_selected = dijit.byId('id_selected').get('value');
-		 if(id_selected!=''){
-			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
-		 }else{
-			alert('Please select record you want to print');
-			return false;
-		 }
-	}
+
 	
-	function print(){
-		window.frames["print_frame"].document.body.innerHTML=dojo.byId('print_student_card').innerHTML;
-	    window.frames["print_frame"].window.focus();
-	    window.frames["print_frame"].window.print();
-	}
-
-
-	function printPickupCardSelected(){
-		<?php 
-			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'pickupselected'));
-    	?>
-
-    	 id_selected = dijit.byId('id_selected').get('value');
-    	 //alert(id_selected);
-		 if(id_selected!=''){
-			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
-		 }else{
-			alert('Please select record you want to print');
-			return false;
-		 }
-	}
-	
-	function printPickup(){
-		window.frames["print_frame"].document.body.innerHTML=dojo.byId('PickupCard').innerHTML;
-	    window.frames["print_frame"].window.focus();
-	    window.frames["print_frame"].window.print();
-	}
-	
-	function checkAllStudent(array_length){
-		dijit.byId('id_selected').attr('value','');
-		if(dojo.byId('checkall').checked){
-			for(var j=1;j<=array_length;j++){
-				$("#check_box"+j).attr('checked', 'checked');
-				checked_id(j);
-			}
-		}else{
-			for(var j=1;j<=array_length;j++){
-				$("#check_box"+j).removeAttr("checked");
-				checked_id(j);
-			}
-		}
-	}
-	function checked_id(index){
-		stu_id = dijit.byId('stu_id'+index).get('value');
-		if(dojo.byId('check_box'+index).checked){
-			
-			if($("#id_selected").val()!="") {
-				var identity = $("#id_selected").val();
-				$("#id_selected").val(identity+','+stu_id);
-			}else{
-				$("#id_selected").val(stu_id);
-			}
-		}else{
-			var identity = $('#id_selected').val();
-			var arrays = identity.split(',');
-			for(var i=0;i<arrays.length;i++) {
-			if(arrays[i] == stu_id) arrays.splice(i,1);
-			}
-			var strings = arrays.join(',');
-			$('#id_selected').val(strings);
-		}
-	}
 </script>

@@ -243,7 +243,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$start_date->setValue($_data['start_date']);
 			$end_date->setValue($_data['end_date']);
 			$_agreement->setValue($_data['agreement']);
-			$_schoolOption->setValue($_data['schoolOption']);
+			$_schoolOption->setValue($_data['schooloption']);
 			$_user->setValue($_data['user_name']);
 		}
 		$this->addElements(array($id,$_enname,$home_num,$_staff,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,

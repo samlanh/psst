@@ -727,9 +727,9 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 								</tr>
 								<tr>
 									<td colspan="4" align="center">
-										<input type="button" value="ចាកចេញ" label="Close" id="hide_doc_type" name="hide_doc_type" dojoType="dijit.form.Button" 
+										<input type="button" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hide_doc_type" name="hide_doc_type" dojoType="dijit.form.Button" 
 										​ ​​iconClass="dijitIconUndo" onclick="hideDialog3();"/>
-										<input type="button" value="save" label="SAVE" id="save_doc_type" name="save_doc_type" dojoType="dijit.form.Button" 
+										<input type="button" value="save" label="<?php echo $tr->translate('SAVE');?>" id="save_doc_type" name="save_doc_type" dojoType="dijit.form.Button" 
 										 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDocType();"/>
 									</td>
 								</tr>

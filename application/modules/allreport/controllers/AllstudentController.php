@@ -629,7 +629,13 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$rs= $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
 	}
-	function certifyAction(){
+	function certifyEnglishAction(){
+		$id=$this->getRequest()->getParam("id");
+		$db = new Allreport_Model_DbTable_DbCertify();
+		$result = $db->getStudentCertify($id);
+		$this->view->rs = $result;
+	}
+	function certifyKhmerAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbCertify();
 		$result = $db->getStudentCertify($id);

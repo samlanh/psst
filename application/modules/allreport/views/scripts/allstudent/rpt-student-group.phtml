@@ -81,8 +81,8 @@
 							<tr style="font-size:12px;height: 23px;"​ align="center" class="hover">
 								<td><?php echo $i;?></td>
 								<td><?php echo $row['stu_code'];?></td>
-								<td align="left"><?php echo $row['kh_name'];?></td>
-								<td align="left"><?php echo $row['last_name'].' '.$row['en_name'];?></td>
+								<td align="left"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'certify-khmer','id'=>$row['gd_id'])); ?>"><?php echo $row['kh_name'];?></a></td>
+								<td align="left"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'certify-english','id'=>$row['gd_id'])); ?>"><?php echo $row['last_name'].' '.$row['en_name'];?></a></td>
 								<td><?php echo $row['sex'];
 									if($row['gender']==1){
 										$male=$male+1;

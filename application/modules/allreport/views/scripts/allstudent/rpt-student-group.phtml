@@ -3,6 +3,9 @@
 	$this->headTitle('RPT_STUDENT_GROUP'); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
+	
+	$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
+	$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
 ?>	
 	<style>
 	.hide{visibility:visible !important;
@@ -78,7 +81,7 @@
 							<?php  $i=0;
 								$male=0;$femle=0;
 							foreach ($this->rs as $row){ $i++;?>
-							<tr style="font-size:12px;height: 23px;"​ align="center" class="hover">
+							<tr style="font-size:12px; height: 18px;white-space: nowrap;"​ align="center" class='padding hover context-menu-one'>
 								<td><?php echo $i;?></td>
 								<td><?php echo $row['stu_code'];?></td>
 								<td align="left"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'certify-khmer','id'=>$row['gd_id'])); ?>"><?php echo $row['kh_name'];?></a></td>
@@ -111,3 +114,30 @@
 		</table>
 	</div>
 </div>
+<script type="text/javascript">
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+		
+			var m = "clicked: " + key;
+			if(key=="outstanding"){
+				url='<?php echo $urlOutStanding;?>';
+			}else if(key=="scoreresult"){
+				url='<?php echo $urlScoreResult;?>';
+			} 
+			gotoAction();
+		},
+		items: {
+			"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
+			"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
+			"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+</script>

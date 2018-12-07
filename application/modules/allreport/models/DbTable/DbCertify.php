@@ -16,7 +16,7 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				s.nationality,
     				s.dob,
     				s.pob,
-    				
+    				s.photo,
     				(SELECT rms_items.title FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degree,
     				(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
 					

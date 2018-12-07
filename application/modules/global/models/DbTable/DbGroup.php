@@ -51,7 +51,6 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			);
 			$id = $this->insert($_arr);			
 			$this->_name='rms_group_subject_detail';
-			
 			if(!empty($_data['identity1'])){
 				$ids = explode(',', $_data['identity1']);
 				foreach ($ids as $i){
@@ -68,14 +67,12 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					$this->insert($arr);
 				}
 			}
-			
 			$db->commit();
-			return true;
+			//return true;
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		
 	}
 	
 	public function updateGroup($_data){

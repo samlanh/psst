@@ -31,7 +31,7 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 	    	$glClass = new Application_Model_GlobalClass();
 	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("PROGRAM_TITLE","SHORTCUT","ORDERING","SERVICE_TYPE","MODIFY_DATE","BY_USER","STATUS");
+	    	$collumns = array("SERVICE_NAME","SHORTCUT","ORDERING","SERVICE_TYPE","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(
 	    			'module'=>'accounting','controller'=>'service','action'=>'edit',
 	    	);

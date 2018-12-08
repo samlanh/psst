@@ -7,6 +7,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function indexAction(){	
+		
 	}
     function rptScoreBacMonthlyAction(){
     	if($this->getRequest()->isPost()){
@@ -30,13 +31,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->search=$search;
     	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	$this->view->studentgroup = $db->getStundetScoreGroup($search);
-    	
     	$group = $db->getAllgroupStudyNotPass();
     	array_unshift($group, array ( 'id' => 0,'name' => 'ជ្រើសរើស'));
-    	
     	$this->view->g_all_name=$group;
     	$this->view->month = $db->getAllMonth();
-    	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);

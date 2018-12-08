@@ -4,8 +4,8 @@
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
-	$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
-	$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
+	$urlCertifyKhmer = $this->baseUrl()."/allreport/allstudent/certify-khmer/id/";
+	$urlCertifyEnglish = $this->baseUrl()."/allreport/allstudent/certify-english/id/";
 ?>	
 	<style>
 	.hide{visibility:visible !important;
@@ -79,9 +79,9 @@
 							</tr>
 							</thead>
 							<?php  $i=0;
-								$male=0;$femle=0;
-							foreach ($this->rs as $row){ $i++;?>
-							<tr style="font-size:12px; height: 18px;white-space: nowrap;"​ align="center" class='padding hover context-menu-one'>
+							$male=0;$femle=0; 
+							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ $i++;?>
+							<tr oncontextmenu="setrowdata(<?php echo $row['gd_id'];?>);return false;" style="font-size:12px; height: 18px;white-space: nowrap;"​ align="center" class='padding hover context-menu-one'>
 								<td><?php echo $i;?></td>
 								<td><?php echo $row['stu_code'];?></td>
 								<td align="left"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'certify-khmer','id'=>$row['gd_id'])); ?>"><?php echo $row['kh_name'];?></a></td>
@@ -92,7 +92,8 @@
 									}else{
 										$femle=$femle+1;
 									}
-								?></td>
+								?>
+								</td>
 								<td><?php echo $row['nationality'];?></td>
 								<td><?php echo $row['nation'];?></td>
 								<td><?php echo date("d-m-Y",strtotime($row['dob']));?></td>
@@ -103,7 +104,7 @@
 								<td class="hide"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-transcript','id'=>$row['stu_id'],'group_id'=>$row['group_id'])); ?>"><?php echo $tr->translate("ព្រឹត្តប័ត្រពិន្ទុ");?></a></td>
 								<td class="hide"><a target="_blank"​ style="color: #000; text-decoration: none;" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-certificate','id'=>$row['stu_id'],'group_id'=>$row['group_id'])); ?>"><?php echo $tr->translate("វិញ្ញាបនបត្រឆ្នាំសិក្សាមូលដ្ឋាន");?></a></td>
 							</tr>
-							<?php }?>	
+							<?php }}?>	
 							<tr>
 								<td colspan="2" style="border:1px solid #fff;border-top:1px solid #000;"><strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?></strong></td>
 								<td colspan="8" style="border:1px solid #fff;border-top:1px solid #000;"><strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT")."  <br />";?><?php echo $tr->translate("MALE")." ".$male;?><?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
@@ -114,6 +115,7 @@
 		</table>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>	
 <script type="text/javascript">
 var row=0;
 var url="";
@@ -123,21 +125,24 @@ $(function(){
 		callback: function(key, options) {
 		
 			var m = "clicked: " + key;
-			if(key=="outstanding"){
-				url='<?php echo $urlOutStanding;?>';
-			}else if(key=="scoreresult"){
-				url='<?php echo $urlScoreResult;?>';
+			if(key=="certifykhmer"){
+				url='<?php echo $urlCertifyKhmer;?>';
+			}else if(key=="certifyenglish"){
+				url='<?php echo $urlCertifyEnglish;?>';
 			} 
 			gotoAction();
 		},
 		items: {
-			"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
-			"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
-			"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
+			"certifykhmer": {name: "<?php echo $tr->translate("CERTIFY_KHMER");?>", icon: "fa-file-text-o",},
+			"certifyenglish": {name: "<?php echo $tr->translate("CERTIFY_ENGLIISH");?>", icon: "fa-file-text-o"},
 		}
 	});
 });
 function setrowdata(index){
 	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	window.open(url+row);
 }
 </script>

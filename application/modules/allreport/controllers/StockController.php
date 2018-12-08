@@ -214,7 +214,6 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$d_row= $db->getAllProductsNormal();
 			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 			$this->view->product= $d_row;
-				
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

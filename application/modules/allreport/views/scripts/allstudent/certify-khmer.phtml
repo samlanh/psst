@@ -1,0 +1,259 @@
+<?php 
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$image = $this->baseUrl().'/images/no-profile.png';
+if(!empty($this->rs['photo'])){
+	if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
+		$image = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
+	}
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link href="https://fonts.googleapis.com/css?family=Moul|Roboto|Sumana|Leckerli One" rel="stylesheet">
+    <meta charset="utf-8">
+</head>
+<body>
+	<div class="wrapper" style="border: 1px dotted #000;background: #fff;width:25cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+		<div id="divPrint">
+			 <style>
+		    	.wrapper{
+		    		width: 100%;
+		    		margin: 0px;
+		    		padding: 0px;
+		    	}
+		    	.contain{
+		    		width: 1024px;
+		    		margin: 0 auto;
+		    	}
+				table {
+		    		border-collapse: collapse;
+		    		width: 100%;
+				}
+				th, td {
+		    		padding: 4px;
+				}
+				.border-td td{
+					border:solid 1px #ddd;
+				}
+				.img-logo img{
+					width: 130px;
+				}
+				.ul-li li{
+					
+				}
+				.image-box {
+				    text-align: left;
+				}
+				.image-box img {
+				    width: 140px;
+				    height: 157px;
+				border:solid 1px #ddd;
+				}
+				.account-image {
+				    width: 120px;
+				    margin: 0 auto;
+				}
+				.center-no-next{text-align: center;}
+				.back-color,.back-footer{background-color: #eee;}
+				.back-color td{padding: 20px;}
+				.text-left td{text-align: right;}
+				.img-size img{height: 15px;}
+				tr.line td{ border-bottom: 2px solid #000; }
+		    </style>
+			<table cellpadding="0" cellspacing="0" width="100%">
+				<tr class="no-boder">
+					<td>
+						<table width="100%" >
+							<tr>
+								<td width="20%" align="center">
+									<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br>
+									<span style="font-family: Freestyle Script;font-size: 20px;">School for the Elite</span>
+									
+								</td>
+								<td width="60%">
+									<table   style="text-align:center;border:solid 1px #FFF;">
+										<tr style="list-style:12px;font-size:20px;font-weight: bold;">
+											<td>KINGDOM OF CAMBODIA</td>
+										</tr>
+										<tr style="list-style:12px;font-weight: bold;font-size:13px;" class="img-size">
+											<td>NATION RELIGION KING<br>
+												<img style="height: 10px;" src="<?php echo $this->baseUrl().'/images/style.png'?>"><br>
+											</td>
+										</tr>
+										<tr style="list-style:15px;font-family: Times New Roman, cursive;font-size:20px;font-weight: bold;">
+											<td><?php echo $tr->translate("CUSTOMER_BRANCH");?></td>
+										</tr>
+										<tr style="list-style:15px;font-family: Times New Roman, cursive;font-size:15px;">
+											<td class="pan-input">
+												<input  type="radio" name="2" value="female" checked > Disciplina &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  											<input type="radio" name="1" value="other" checked> Virtus &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  											<input type="radio" name="3" value="other" checked> Successus
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td width="20%" >&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr class="line"><td></td></tr>
+			  	<tr>
+			  		<td>
+			  			<table style="font-family: Khmer OS Battambang, Times New Roman;">
+			  				<tr>
+			  					<td>&nbsp;</td>
+			  				</tr>
+			  				<tr>
+			  					<td><div style="margin-left: 25px;">លេខៈ ២៥៥/០១៧   អអធ.កណ </div></td>
+			  				</tr>
+			  				<tr>
+			  					<td>
+			  						<table width="100%" style="line-height: 15px;white-space: nowrap;">
+			  							<tr class="account-image">
+			  								<td width="20%" >&nbsp;</td>
+											<td width="60%" align="center" style="font-family: Times New Roman, cursive;font-size:20px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
+												លិខិតបញ្ជាក់ការសិក្សា<br>STUDENT RECOMMENDATION
+											</td>
+											<td width="25%" align="left" class="image-box" style="padding-left: 0px;">
+												<img id="profile_wiew" src="<?php echo $image;?>" alt=""  />
+											</td>
+										</tr>
+			  						</table>
+			  					</td>
+			  				</tr>
+			  				<tr>
+			  					<td><div style="margin-left: 25px;font-family: Khmer OS Muol Light;font-size:16px;">នាយិកាសាលាបឋមសិក្សា និង មធ្យមសិក្សា អ៊ី.អិល.ធី </div></td>
+			  				</tr>	
+			  				<tr>
+			  					<td>
+			  						<table width="100%" style="line-height: 15px;white-space: nowrap;">
+			  							<tr>
+											<td width="60%" align="center" style="font-family: Times New Roman, cursive;font-size:14px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
+												&nbsp;
+											</td>
+											<td width="50%" align="left" class="image-box" style="padding-left: 0px;">
+												This is to certify that	
+											</td>
+										</tr>	
+										<tr>
+											<td width="60%" align="center" style="font-family: Times New Roman, cursive;font-size:14px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
+												បញ្ជាក់ថាៈ
+											</td>
+											<td width="50%" align="left" class="image-box" style="padding-left: 0px; font-family: Times New Roman, cursive;font-size:25px;font-weight: bold; padding-rgiht: 34px;">
+												<?php echo $this->rs['name_englsih'];?>
+											</td>
+										</tr>	
+			  						</table>
+			  					</td>
+			  				</tr>
+			  				<tr>
+			  					<td>
+  									<table width="100%" border="0" style="line-height: 20px;margin-top: -10px;">
+  										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td style="font-weight: bold;">ឈ្មោះនិស្សិត</td>
+											<td> : &nbsp;<?php echo $this->rs['stu_khname'];?></td>
+											<td style="font-weight: bold;">&nbsp;</td>
+											<td> &nbsp;</td>
+										</tr>
+										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td style="font-weight: bold;">ភេទ </td>
+											<td> : &nbsp;<?php echo $this->rs['sexkh'];?> </td>
+											<td style="font-weight: bold;">Gender</td>
+											<td>  : &nbsp;<?php echo $this->rs['sex'];?></td>
+										</tr>
+										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td style="font-weight: bold;">ថ្ងៃខែឆ្នាំកំណើត</td>
+											<td> : &nbsp;<?php echo $this->rs['dob'];?> </td>
+											<td style="font-weight: bold;">Date Of Brith</td>
+											<td>  : &nbsp;<?php echo $this->rs['dob'];?></td>
+										</tr>
+										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td style="font-weight: bold;">ទីកន្លែងកំណើត</td>
+											<td> : &nbsp;<?php echo $this->rs['province_khname'];?></td>
+											<td style="font-weight: bold;">Place Of Brith</td>
+											<td> : &nbsp;<?php echo $this->rs['province_enname'];?></td>
+										</tr>
+										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td style="font-weight: bold;">ឪពុកឈ្មោះ</td>
+											<td> : &nbsp;<?php echo $this->rs['father_enname'];?></td>
+											<td style="font-weight: bold;">Father Name</td>
+											<td> : &nbsp;<?php echo $this->rs['father_enname'];?></td>
+										</tr>
+										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td style="font-weight: bold;">មុខរបរ </td>
+											<td> : &nbsp<?php echo $this->rs['fa_job'];?></td>
+											<td style="font-weight: bold;">Occupation</td>
+											<td> : &nbsp;<?php echo $this->rs['fa_job'];?></td>
+										</tr>
+										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td style="font-weight: bold;">ម្តាយឈ្មោះ</td>
+											<td> : &nbsp;<?php echo $this->rs['mother_enname'];?></td>
+											<td style="font-weight: bold;">Mother Name</td>
+											<td> : &nbsp;<?php echo $this->rs['mother_enname'];?></td>
+				 						</tr>
+				 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td style="font-weight: bold;">មុខរបរ</td>
+											<td> : &nbsp;<?php echo $this->rs['mo_job'];?></td>
+											<td style="font-weight: bold;">Occupation</td>
+											<td> : &nbsp;<?php echo $this->rs['mo_job'];?></td>
+										</tr>
+				 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td style="font-weight: bold;">អាសយដ្ឋានអចិន្រ្តៃយ៍</td>
+											<td> : &nbsp;<strong>ផ្ទះលេខ</strong>&nbsp;<?php echo $this->rs['home_num'];?>&nbsp;<strong>ផ្លូវលេខ</strong>&nbsp;<?php echo $this->rs['street_num'];?></td>
+											<td style="font-weight: bold;">Permanent Address</td>
+											<td> : &nbsp;dfgfdgdfsggfsgsgrf</td>
+				 						</tr>
+  									</table>
+			  					</td>
+			  				</tr>
+			  				<tr>
+			  					<td>
+			  						<table>
+			  							<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td width="60%" align="center" style="font-family: Times New Roman, cursive;font-size:14px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
+												លិខិតនេះចេញជូនសាមីខ្លួនប្រើប្រាស់តាមផ្លូវការ។
+											</td>
+											<td width="50%" align="left" class="image-box" style="padding-left: 0px;">
+												This letter is issued to the bearer for official purposes is may thereto serve.
+											</td>
+				 						</tr>
+			  						</table>
+								</td>
+			  				</tr>
+			  				<tr>
+			  					<td>
+			  						<table width="100%" style="line-height: 15px;white-space: nowrap;">
+			  							<tr>
+			  								<td>&nbsp;</td>
+			  								<td >&nbsp;</td>
+			  								<td align="center"><div><?php echo date('l, F j , Y');?></div></td>
+			  							</tr>
+			  							<tr>
+			  								<td>&nbsp;</td>
+			  								<td align="center"><div>&nbsp;</div></td>
+			  							</tr>
+			  							<tr>
+			  								<td>&nbsp;</td>
+			  								<td align="center"><div>&nbsp;</div></td>
+			  							</tr>
+			  							<tr>
+			  								<td>&nbsp;</td>
+			  								<td >&nbsp;</td>
+			  								<td width="40%" align="center"><strong style="font-weight: bold;font-size: 16px; margin-buttom: 78px;">Principal</strong></td>
+			  							</tr>
+			  						</table>
+			  						
+			  					</td>
+			  				</tr>
+			  			</table>
+			  		</td>
+			  	</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
+

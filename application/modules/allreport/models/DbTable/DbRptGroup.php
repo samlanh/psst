@@ -111,7 +111,6 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			if($type == 0){
 				$sql.=' and g.type=1 ';
 			}  
-			
 			$order= ' ORDER BY s.stu_khname ASC,s.stu_enname ASC ';
 		   	if(empty($search)){
 		   		return $db->fetchAll($sql.$order);
@@ -129,7 +128,6 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		   	}
 		 return $db->fetchAll($sql.$order);
 	}
-	 
 	public function getGroupDetail($search){
 	   	$db = $this->getAdapter();
 	   	$sql = 'SELECT

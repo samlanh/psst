@@ -194,8 +194,8 @@ function checkScore(index,subject_id){
 	score_input = dijit.byId('score_'+index+'_'+subject_id).get('value');
 	max_score = dijit.byId('max_score_'+index+'_'+subject_id).get('value');
 	if(score_input>max_score){
-		alert("Can not input bigger than max score = "+max_score);
-		dijit.byId('score_'+index+'_'+subject_id).attr('value',max_score);
+		//alert("Can not input bigger than max score = "+max_score);
+		//dijit.byId('score_'+index+'_'+subject_id).attr('value',max_score);
 	}
 }
 

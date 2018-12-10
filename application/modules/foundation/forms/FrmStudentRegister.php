@@ -62,38 +62,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				$_branch_id->setValue($row['id']);
 			}
 		}
-// 		$studen_national =  new Zend_Dojo_Form_Element_FilteringSelect('studen_national');
-// 		$studen_national->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'class'=>'fullside',
-// 				'onChange'=>'getallGrade();getStudentNo()',
-		
-// 		));
-// 		$rs_nation = $_db->getAllNation();
-// 		$arr_opt = array();
-// 		if(!empty($rs_nation))foreach($rs_nation AS $row) $arr_opt[$row['id']]=$row['name'];
-// 		$studen_national->setMultiOptions($arr_opt);
-		
-// 		$_arr_opt_nation = array(""=>$tr->translate("PLEASE_SELECT"),"-1"=>$tr->translate("ADD_NEW"));
-// 		$optionNation = $_db->getViewByType(21);//Nation
-// 		if(!empty($optionNation))foreach($optionNation AS $row) $_arr_opt_nation[$row['id']]=$row['name'];
-// 		$studen_national = new Zend_Dojo_Form_Element_FilteringSelect("studen_national");
-// 		$studen_national->setMultiOptions($_arr_opt_nation);
-// 		$studen_national->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'required'=>'true',
-// 				'onChange'=>'popupNation(1);',
-// 				'missingMessage'=>'Invalid Module!',
-// 				'class'=>'fullside height-text',));
-		
-// 		$_nation = new Zend_Dojo_Form_Element_FilteringSelect("nation");
-// 		$_nation->setMultiOptions($_arr_opt_nation);
-// 		$_nation->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'required'=>'true',
-// 				'onChange'=>'popupNation(2);',
-// 				'missingMessage'=>'Invalid Module!',
-// 				'class'=>'fullside height-text',));
 	
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
@@ -114,11 +82,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$pob = new Zend_Dojo_Form_Element_Textarea('pob');
 		$pob->setAttribs(array('dojoType'=>$this->textarea,
 				'class'=>'fullside',
-				//'value'=>'ភ្នំពេញ',
-				//'placeholder'=>$tr->translate("SELECT_YEAR"),
 				'style'=>'min-height:55px;',
 				));
-		
 		
 		$phone = new Zend_Dojo_Form_Element_TextBox('phone');
 		$phone->setAttribs(array(
@@ -147,13 +112,12 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$distric_note->setAttribs(array('dojoType'=>$this->text,
 				'class'=>'fullside'));
 		
-		
 		$rs_province = $_db->getAllProvince();
-		$opt = '' ;//array(-1=>$this->tr->translate("SELECT_DEPT"));
-		if(!empty($rs_province))foreach($rs_province AS $row) $opt[$row['id']]=$row['name'];
+		$province_opt = '' ;
+		if(!empty($rs_province))foreach($rs_province AS $row) $province_opt[$row['id']]=$row['name'];
 			
 		$_student_province = new Zend_Dojo_Form_Element_FilteringSelect("student_province");
-		$_student_province->setMultiOptions($opt);
+		$_student_province->setMultiOptions($province_opt);
 		$_student_province->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'required'=>'true',
@@ -171,7 +135,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		
 		$db = new Global_Model_DbTable_DbGroup();
 		$rs_year = $db->getAllYears();
-		$opt_year = array() ;//array(-1=>$this->tr->translate("SELECT_DEPT"));
+		$opt_year = array() ;
 		if(!empty($rs_year))foreach($rs_year AS $row) $opt_year[$row['id']]=$row['years'];			
 		$_academic_year = new Zend_Dojo_Form_Element_FilteringSelect("academic_year");
 		$_academic_year->setMultiOptions($opt_year);
@@ -281,8 +245,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside',
 		));
-		// 		$fa_dob->setValue();
-		
 		
 		$mon_phone = new Zend_Dojo_Form_Element_ValidationTextBox('mon_phone');
 		$mon_phone->setAttribs(array('dojoType'=>$this->tvalidate,
@@ -298,11 +260,20 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside',
 		));
-		// 		$fa_dob->setValue();
 		
 		$from_school = new Zend_Dojo_Form_Element_TextBox('from_school');
 		$from_school->setAttribs(array('dojoType'=>$this->text,
 				'class'=>'fullside'));
+		
+		$school_province = new Zend_Dojo_Form_Element_FilteringSelect("school_province");
+		$school_province->setMultiOptions($province_opt);
+		$school_province->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'required'=>'true',
+				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+		));
 		
 		$sponser = new Zend_Dojo_Form_Element_TextBox('sponser');
 		$sponser->setAttribs(array('dojoType'=>$this->text,
@@ -315,9 +286,48 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$guardian_phone = new Zend_Dojo_Form_Element_ValidationTextBox('guardian_phone');
 		$guardian_phone->setAttribs(array('dojoType'=>$this->tvalidate,
 				'class'=>'fullside'));
+		
+		$date_baccexam = new Zend_Dojo_Form_Element_DateTextBox('date_baccexam');
+		$date_baccexam->setAttribs(array('dojoType'=>"dijit.form.DateTextBox",
+				'class'=>'fullside'));
+		
+		$center_baccexam = new Zend_Dojo_Form_Element_TextBox('center_baccexam');
+		$center_baccexam->setAttribs(array('dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'));
+		
+		$room_baccexam = new Zend_Dojo_Form_Element_TextBox('room_baccexam');
+		$room_baccexam->setAttribs(array('dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'));
+		
+		$table_baccexam = new Zend_Dojo_Form_Element_TextBox('table_baccexam');
+		$table_baccexam->setAttribs(array('dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'));
+		
+		$grade_baccexam = new Zend_Dojo_Form_Element_TextBox('grade_baccexam');
+		$grade_baccexam->setAttribs(array('dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'));
+		
+		$score_baccexam = new Zend_Dojo_Form_Element_NumberTextBox('score_baccexam');
+		$score_baccexam->setAttribs(array('dojoType'=>"dijit.form.NumberTextBox",
+				'class'=>'fullside'));
+		
+		$certificate_baccexam = new Zend_Dojo_Form_Element_TextBox('certificate_baccexam');
+		$certificate_baccexam->setAttribs(array('dojoType'=>"dijit.form.TextBox",
+				'class'=>'fullside'));
+		
+		
 		$id = new Zend_Form_Element_hidden('id');
 		
 		if($data!=null){
+			$school_province->setValue($data['province_bacc']);
+			$certificate_baccexam->setValue($data['certificate_bacc']);
+			$score_baccexam->setValue($data['score_bacc']);
+			$grade_baccexam->setValue($data['grade_bacc']);
+			$table_baccexam->setValue($data['table_bacc']);
+			$room_baccexam->setValue($data['room_bacc']);
+			$center_baccexam->setValue($data['center_bacc']);
+			$date_baccexam->setValue($data['date_bacc']);
+			
 			$id->setValue($data['stu_id']);
 			$name_kh->setValue($data['stu_khname']);
 			$name_en->setValue($data['stu_enname']);
@@ -367,7 +377,14 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		}
 	
 		$this->addElements(
-				array(
+				array(	$school_province,
+						$certificate_baccexam,
+						$score_baccexam,
+						$grade_baccexam,
+						$table_baccexam,
+						$room_baccexam,
+						$center_baccexam,
+						$date_baccexam,
 						$id,
 						$name_kh,
 						$name_en,

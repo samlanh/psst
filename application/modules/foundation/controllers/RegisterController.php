@@ -77,10 +77,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-// 		$group = $db->getAllgroup();
-// 		array_unshift($group,array('id' => -1,'name' => $this->tr->translate("ADD_NEW")));
-// 		array_unshift($group,array ( 'id' =>'','name' => $this->tr->translate("SELECT_GROUP")));
-// 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row = $_db->getOccupation();
@@ -109,19 +105,18 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
-		$this->view->year = $db->getAllYear();
+// 		$this->view->year = $db->getAllYear();
 		$this->view->degree = $rows = $db->getAllFecultyName();
-		$this->view->room = $row =$db->getAllRoom();
+// 		$this->view->room = $row =$db->getAllRoom();
 		$this->view->province = $row =$db->getProvince();
 		
-		$_db = new Global_Model_DbTable_DbTeacher();
-		$this->view->branch_id = $_db->getAllBranch();
+// 		$_db = new Global_Model_DbTable_DbTeacher();
+// 		$this->view->branch_id = $_db->getAllBranch();
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister();
 		Application_Model_Decorator::removeAllDecorator($frm_register);
 		$this->view->frm = $frm_register;
-		
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
@@ -146,10 +141,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-// 		$group = $db->getAllgroup();
-// 		array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
-// 		$this->view->group = $group;
 
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
@@ -185,8 +176,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->rs = $student_rs;
 		$this->view->row = $db->getStudentDocumentById($id);
 		
-		$this->view->year = $db->getAllYear();
-		$this->view->room = $row =$db->getAllRoom();
+// 		$this->view->year = $db->getAllYear();
+// 		$this->view->room = $row =$db->getAllRoom();
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister($student_rs);
@@ -287,10 +278,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-// 		$group = $db->getAllgroup();
-// 		array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-// 		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
-// 		$this->view->group = $group;
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
@@ -326,7 +313,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$test =  $db->getStudentById($id);
 		$this->view->rs = $test;
 		$this->view->row = $db->getStudentDocumentById($id);
-		//echo $test['group_id'];exit();
 		
 		$this->view->year = $db->getAllYear();
 		$this->view->room = $row =$db->getAllRoom();

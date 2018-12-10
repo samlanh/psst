@@ -269,6 +269,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'create_date'	=>date("Y-m-d H:i:s"),
 						'photo'  			 => $photo,
 						'customer_type'			=>1,//Student
+						
+						'date_bacc'	=>$_data['date_baccexam'],
+						'province_bacc'	=>$_data['school_province'],
+						'center_bacc'	=>$_data['center_baccexam'],
+						'room_bacc'	=>$_data['room_baccexam'],
+						'table_bacc'	=>$_data['table_baccexam'],
+						'grade_bacc'	=>$_data['grade_baccexam'],
+						'score_bacc'	=>$_data['score_baccexam'],
+						'certificate_bacc'	=>$_data['certificate_baccexam'],
 						);
 				$id = $this->insert($_arr);
 				
@@ -403,6 +412,15 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'is_setgroup'	=> $is_setgroup,
 					'status'		=>$_data['status'],
 					'remark'		=>$_data['remark'],
+					
+					'date_bacc'	=>$_data['date_baccexam'],
+					'province_bacc'	=>$_data['school_province'],
+					'center_bacc'	=>$_data['center_baccexam'],
+					'room_bacc'	=>$_data['room_baccexam'],
+					'table_bacc'	=>$_data['table_baccexam'],
+					'grade_bacc'	=>$_data['grade_baccexam'],
+					'score_bacc'	=>$_data['score_baccexam'],
+					'certificate_bacc'	=>$_data['certificate_baccexam'],
 					);
 			
 			$photo = "";

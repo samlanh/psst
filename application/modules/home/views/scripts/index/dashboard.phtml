@@ -20,6 +20,35 @@
 .col-lg-6.capital-box {
     min-height: 115px;
 }
+span.title-suppend {
+    display: block;
+    margin: 10px 0;
+    border-bottom: solid 2px #0f2a5b;
+    font-weight: bold;
+    color: #0f2a5b;
+}
+.profile_details .profile_view img.img-circle.img-responsive {
+    height: 125px;
+    width: 125px;
+}
+.blog-stu-droplist {
+    height: 290px;
+    overflow-y: auto;
+    width: 100%;
+    padding: 10px;
+}
+h4.brief {
+    font-size: 14px;
+}
+.profile_details .profile_view h2 {
+    font-size: 15px;
+}
+.profile_details .profile_view .left {
+    margin-top: 5px;
+}
+.media .profile_thumb {
+    padding: 9px 15px;
+}
  </style>
 <div id="page-wrapper">
 	<!-- Page content start -->
@@ -149,6 +178,69 @@
 						</div>
 					</div> <!-- end col -->	  
 					<div class="col-lg-6">
+						<div class="card-box">
+								<?php if (!empty($this->studropnew)){?>
+									<span class="title-suppend" data-bind="text: lang.lang.performance"><i class="fa fa-user-times" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_DROP_NEW");?>&nbsp;<?php echo count($this->studropnew)." ".$tr->translate("STUDENT_UNIT");?></span>
+									<div class="blog-stu-droplist">
+										<?php if (!empty($this->studropnew)) foreach ($this->studropnew as $drop){?>
+										<div class="profile_details" title="<?php echo $drop['stu_khname'];?> <?php echo $drop['stu_enname']." ".$drop['last_name'];?>">
+					                        <div class="well profile_view">
+					                          <div class="col-sm-12">
+					                          <?php 
+					                          if (!empty($drop['branch_photo'])){
+					                          	if (file_exists(PUBLIC_PATH.'/images/'.$drop['branch_photo'])) {
+					                          		$style="background: url(/elt/trunk/public/images/".$drop['branch_photo'].");  background-repeat: no-repeat; background-size: 100%;";
+					                          	}
+					                          }
+					                          ?>
+					                          	<div class="bg-style-drop" style="<?php echo $style;?>"></div>
+					                            <h4 class="brief"><i><?php echo $drop['type_drop'];?><br /><small><?php echo $drop['branch_name'];?></small></i></h4>
+					                            <div class="left col-xs-7">
+					                              <h2><?php echo $drop['stu_khname'];?></h2>
+					                              <h2><?php echo $drop['stu_enname']." ".$drop['last_name'];?></h2>
+					                              <p><strong><?php echo $tr->translate("STUDENT_CODE")?>: </strong> <?php echo $drop['stu_code'];?> </p>
+					                              <ul class="list-unstyled">
+					                             	<li><i class="fa fa-graduation-cap"></i> <?php echo $tr->translate("ACADEMIC_YEAR")?>: <?php echo $drop['academic'];?></li>
+					                                <li><i class="fa fa-magic"></i> <?php echo $tr->translate("DEGREE")?>: <?php echo $drop['degree'];?></li>
+					                                <li><i class="fa fa-building"></i> <?php echo $tr->translate("GRADE")?>: <?php echo $drop['group_name'];?></li>
+					                                <li><i class="fa fa-phone"></i> <?php echo $tr->translate("PHONE")?>: <?php echo $drop['tel'];?></li>
+					                              </ul>
+					                            </div>
+					                            <div class="right col-xs-5 text-center">
+					                            	<?php $photo = $this->baseUrl()."/images/no-profile.png";
+						                       			if (!empty($drop['photo'])){
+						                       				if (file_exists(PUBLIC_PATH."/images/photo/".$drop['photo'])){
+						                       					$photo = $this->baseUrl().'/images/photo/'.$drop['photo'];
+						                       				}
+						                       			}
+						                       		?>
+					                              <img src="<?php echo $photo;?>" alt="" class="img-circle img-responsive">
+					                            </div>
+					                          </div>
+					                          <div class="col-xs-12 bottom text-center">
+					                            <div class="col-xs-12 col-sm-6 emphasis">
+					                              <?php echo $tr->translate("STOP_DATE");?> <?php echo date("d/M/Y",strtotime($drop['date_stop']));?>
+					                            </div>
+					                            <div class="col-xs-12 col-sm-6 emphasis">
+					                            	<?php 
+					                            	$sex="btn-primary";
+					                            	$sexTitle=$tr->translate("MALE");
+					                            	if ($drop['sex']==2){
+					                            		$sex="btn-danger";
+					                            		$sexTitle=$tr->translate("FEMALE");
+					                            	}?>
+					                              <button type="button" title="<?php echo $sexTitle;?>" class="btn <?php echo $sex;?> btn-xs"> <i class="fa fa-user">
+					                                </i>
+					                              </button>
+					                              <a class="btn btn-info btn-xs" href="<?php echo $this->baseUrl()."/home/searchstudentinfo/student-detail/id/".$drop['stu_id']."?droplink=true&drid=".$drop['id'];?>"><i class="fa fa-user"> </i> <?php echo $tr->translate("View Profile")?></a>
+					                            </div>
+					                          </div>
+					                        </div>
+				                      </div>
+				                      <?php }?>
+									</div>
+									<?php }?>
+								</div>
 					</div> <!-- end col -->	  
 				</div> <!-- end row -->
                  <div class="row-fluid">

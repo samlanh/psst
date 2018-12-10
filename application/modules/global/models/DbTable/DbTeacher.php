@@ -423,7 +423,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 	public function getTeacherInfo($user_id)
 	{
 		$select=$this->select();
-		$select->from($this,array('teacher_name_en', 'id','branch_id'))
+		$select->from($this,array('teacher_name_en','schoolOption','id','branch_id'))
 		->where('id=?',$user_id);
 		$row=$this->fetchRow($select);
 		if(!$row) return NULL;

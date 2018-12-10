@@ -146,6 +146,8 @@ class IndexController extends Zend_Controller_Action
     				$session_user->teacher_id=$user_id;
     				$session_user->teacher_name=$user_info['teacher_name_en'];
     				$session_user->branch_id= $user_info['branch_id'];
+    				$session_user->branch_list= $user_info['branch_id'];
+    				$session_user->schoolOption= $user_info['schoolOption'];
     				$session_user->lock();
 //     				$session_user->pwd=$password;
 //     				$session_user->level= $user_info['user_type'];

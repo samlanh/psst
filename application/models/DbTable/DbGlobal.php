@@ -191,14 +191,25 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getUserInfo(){
 	   	$session_user=new Zend_Session_Namespace('authstu');
-	   	$userName=$session_user->user_name;
-	   	$GetUserId= $session_user->user_id;
-	   	$level = $session_user->level;
-	   	$location_id = $session_user->branch_id;
-	   	$branch_list = $session_user->branch_list;
-	   	$schoolOption = $session_user->schoolOption;
-	   	$info = array("user_name"=>$userName,"user_id"=>$GetUserId,"level"=>$level,"branch_id"=>$location_id,"branch_list"=>$branch_list,"schoolOption"=>$schoolOption);
-	   	return $info;
+	   	$session_user=new Zend_Session_Namespace('authteacher');
+	   	if (!empty($session_user->user_id)){
+		   	$userName=$session_user->user_name;
+		   	$GetUserId= $session_user->user_id;
+		   	$level = $session_user->level;
+		   	$location_id = $session_user->branch_id;
+		   	$branch_list = $session_user->branch_list;
+		   	$schoolOption = $session_user->schoolOption;
+		   	$info = array("user_name"=>$userName,"user_id"=>$GetUserId,"level"=>$level,"branch_id"=>$location_id,"branch_list"=>$branch_list,"schoolOption"=>$schoolOption);
+		   	return $info;
+	   	}elseif (!empty($session_user->teacher_id)){
+	   		$userName=$session_user->teacher_name;
+	   		$teacherId = $session_user->teacher_id;
+	   		$location_id = $session_user->branch_id;
+	   		$branch_list = $session_user->branch_list;
+	   		$schoolOption = $session_user->schoolOption;
+	   		$info = array("user_name"=>$userName,"teacher_id"=>$teacherId,"level"=>null,"branch_list"=>$branch_list,"schoolOption"=>$schoolOption);
+	   		return $info;
+	   	}
    }
    
    public function getAllSession(){
@@ -1483,7 +1494,7 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT s.id, s.title AS name FROM $this->_name AS s WHERE s.status = 1";
   	$session_user=new Zend_Session_Namespace('authstu');
   	$branchlist = empty($branchlist)?$session_user->branch_list:$branchlist;
-  	if($branchlist!==1 AND $branchlist !=null){
+  	if($branchlist!=1 AND $branchlist !=null){
   		$bran = explode(",", $branchlist);
   		$s_where = array();
   		foreach ($bran as $branch){

@@ -40,7 +40,7 @@
 	
 	public function getItemsDetailById($degreeId,$type=null){
 		$db = $this->getAdapter();
-		$sql=" SELECT ide.* FROM $this->_name AS ide WHERE ide.`id` = $degreeId ";
+		$sql=" SELECT ide.* FROM $this->_name AS ide WHERE ide.`id` = $degreeId AND ide.is_productseat=0";
 		if (!empty($type)){
 			$sql.=" AND ide.items_type=$type";
 		}
@@ -205,7 +205,8 @@
 		$branch_id = $result["branch_id"];
 		$string="";
 		$location="";
-		if ($level!==1 AND $branch_id !==1){
+// 		if ($level!==1 AND $branch_id !==1){
+		if ($level!=1){
 // 			$string = " AND $branch_id IN (pl.brand_id)";
 			$string = $dbgb->getAccessPermission('pl.brand_id');
 // 			$location = " AND $branch_id IN ((SELECT pl.brand_id FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id )) ";

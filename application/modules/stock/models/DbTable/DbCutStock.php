@@ -25,6 +25,43 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	}
     	return $pre.$new_acc_no;
     }
+    function getAllProducts($product_type=null,$option=null){
+    	$db = $this->getAdapter();
+    	$sql="SELECT i.id,
+    	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+    	FROM `rms_itemsdetail` AS i
+    	WHERE i.status =1 AND i.items_type=3   ";
+    
+    	if(!empty($product_type)){//check type product sale or office
+    		$sql.= " AND i.product_type = ".$db->quote($product_type);
+    	}
+    	$dbgb = new Application_Model_DbTable_DbGlobal();
+    	$branchlist = $dbgb->getAllSchoolOption();
+    	if (!empty($branchlist)){
+    		foreach ($branchlist as $i){
+    			$s_where[] = $i['id']." IN (i.schoolOption)";
+    		}
+    		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	$user = $dbgb->getUserInfo();
+    	$level = $user['level'];
+    	if ($level!=1){
+    		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+    	}
+    	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+    	$rows = $db->fetchAll($sql);
+    	
+    	if (!empty($option)){
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		array_unshift($rows, array('id'=>-1,'name'=>$tr->translate("PLEASE_SELECT")));
+    		$options = '';
+    		if(!empty($rows))foreach($rows as $value){
+    			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
+    		}
+    		return $options;
+    	}
+    	return $rows;
+    }
     public function getStudentProductPaymentDetail($data){
     	$db = $this->getAdapter();
     	$student_id = $data['student_id'];
@@ -60,6 +97,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$no = $data['keyindex'];
     	$identity='';
     	$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
+    	
+    	$allproduct = $this->getAllProducts(1);
     	if(!empty($rs)){
     		foreach ($rs as $key => $row){
     			if (empty($identity)){
@@ -76,12 +115,21 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 	    			<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
-	    			<input type="hidden" dojoType="dijit.form.TextBox" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" value="'.$row['itemdetail_id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
     			</td>
-    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
-    			<label title="'.$row['items_name'].' ('.$row['receipt_number'].')" class="invoicelabel" id="invoicelabel'.$no.'">'.$row['items_name'].' ('.$row['receipt_number'].')</label>
+    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel" >'.$row['receipt_number'].'</label>
     			<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+    			&nbsp;</td>
+    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+    				<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
+		    			if (!empty($allproduct)) foreach ($allproduct as $pro){ 
+		    				$selected="";
+		    				if ($row['itemdetail_id']==$pro['id']){
+		    					$selected='Selected="Selected"';
+		    				}
+		    				$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
+		    			}
+    	$string.='</select>
     			</td>
     			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
     			<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
@@ -279,6 +327,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     function getCutstockDetailByCutstockIdAndStuDetailId($cutstockid,$stu_paymetdetail_id){
     	$db = $this->getAdapter();
     	$sql="SELECT ct.*,
+    	(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = ct.product_id LIMIT 1) AS items_name,
 (SELECT p.qty FROM `rms_student_paymentdetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty,
 (SELECT p.qty_balance FROM `rms_student_paymentdetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty_balance
     	 FROM `rms_cutstock_detail` AS ct
@@ -343,6 +392,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$stuName="";
     	$stuCode="";
     	$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
+    	
+    	$allproduct = $this->getAllProducts(1);
     	if(!empty($rs)){
 	    	foreach ($rs as $key => $row){
 		    	if (empty($identity)){
@@ -371,14 +422,23 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				    		<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
 				    	<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" value="'.$row['itemdetail_id'].'" >
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
+				    		<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$rowpaymentdetail['items_name'].'" >
 				    		
 				    	</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
-				    	<label title="'.$row['items_name'].' ('.$row['receipt_number'].')" class="invoicelabel" id="invoicelabel'.$no.'">'.$row['items_name'].' ('.$row['receipt_number'].')</label>
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+				    	&nbsp;<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel"">'.$row['receipt_number'].'</label>&nbsp;
+				    	<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
 				    	</td>
+				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+				    		<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
+						    	if (!empty($allproduct)) foreach ($allproduct as $pro){
+						    		$selected="";
+						    		if ($rowpaymentdetail['product_id']==$pro['id']){
+						    			$selected='Selected="Selected"';
+						    		}
+						    		$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
+						    	}
+				   $string.='</select></td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
 				    		<label id="origtotallabel'.$no.'">'.number_format($rowpaymentdetail['qty'],2).'</label>
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$rowpaymentdetail['qty'].'" >
@@ -404,12 +464,22 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				    		<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" value="'.$row['itemdetail_id'].'" >
 				    	<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
-				    		<label title="'.$row['items_name'].' ('.$row['receipt_number'].')" class="invoicelabel" id="invoicelabel'.$no.'">'.$row['items_name'].' ('.$row['receipt_number'].')</label>
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+				    	<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel">'.$row['receipt_number'].'</label>&nbsp;
+				    	<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+				    	</td>
+				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+				    	<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
+						    	if (!empty($allproduct)) foreach ($allproduct as $pro){
+						    		$selected="";
+						    		if ($row['itemdetail_id']==$pro['id']){
+						    			$selected='Selected="Selected"';
+						    		}
+						    		$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
+						    	}
+				   $string.='</select>	
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
 				    		<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>

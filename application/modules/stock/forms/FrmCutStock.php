@@ -157,7 +157,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 		$_bypuchase_no->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside height-text',
-				'placeholder'=>$this->tr->translate("FILTER_BY_PURCHASE_NO"),
+				'placeholder'=>$this->tr->translate("FILTER_BY_RECIEPT_NO"),
 				'missingMessage'=>$this->tr->translate("Forget Enter Receipt No")
 		));
 		

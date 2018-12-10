@@ -159,6 +159,7 @@ tr.head-td th {
 										<th><?php echo $tr->translate("NUM");?></th>
 										<th style=" min-width: 105px;"><?php echo $tr->translate("DATE");?></th>
 										<th ><?php echo $tr->translate("RECEIPT_NO");?></th>
+										<th><?php echo $tr->translate("PRODUCT");?></th>
 										<th ><?php echo $tr->translate("ORIG");?></th>
 										<th ><?php echo $tr->translate("DUE");?></th>
 										<th ><?php echo $tr->translate("RECEIVE_QTY");?></th>
@@ -221,8 +222,6 @@ tr.head-td th {
                		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 					<input type="submit" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 					 iconClass="dijitEditorIcon dijitEditorIconSave" />
-					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
-							 iconClass="dijitEditorIcon dijitEditorIconSave" />
 					<input type="button" id="popup" value="<?php echo $tr->translate('SAVE_PRINT');?>" label="<?php echo $tr->translate('SAVE_PRINT');?>" onclick="printSave();" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconTask" />
                	</div>

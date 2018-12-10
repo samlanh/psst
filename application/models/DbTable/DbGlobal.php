@@ -191,7 +191,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    
    public function getUserInfo(){
 	   	$session_user=new Zend_Session_Namespace('authstu');
-	   	$session_user=new Zend_Session_Namespace('authteacher');
+	   	$session_teacher=new Zend_Session_Namespace('authteacher');
 	   	if (!empty($session_user->user_id)){
 		   	$userName=$session_user->user_name;
 		   	$GetUserId= $session_user->user_id;
@@ -201,12 +201,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		   	$schoolOption = $session_user->schoolOption;
 		   	$info = array("user_name"=>$userName,"user_id"=>$GetUserId,"level"=>$level,"branch_id"=>$location_id,"branch_list"=>$branch_list,"schoolOption"=>$schoolOption);
 		   	return $info;
-	   	}elseif (!empty($session_user->teacher_id)){
-	   		$userName=$session_user->teacher_name;
-	   		$teacherId = $session_user->teacher_id;
-	   		$location_id = $session_user->branch_id;
-	   		$branch_list = $session_user->branch_list;
-	   		$schoolOption = $session_user->schoolOption;
+	   	}elseif (!empty($session_teacher->teacher_id)){
+	   		$userName	=$session_teacher->teacher_name;
+	   		$teacherId 	= $session_teacher->teacher_id;
+	   		$location_id = $session_teacher->branch_id;
+	   		$branch_list = $session_teacher->branch_list;
+	   		$schoolOption = $session_teacher->schoolOption;
 	   		$info = array("user_name"=>$userName,"teacher_id"=>$teacherId,"level"=>null,"branch_list"=>$branch_list,"schoolOption"=>$schoolOption);
 	   		return $info;
 	   	}

@@ -44,6 +44,7 @@ class IndexController extends Zend_Controller_Action
 					$session_user=new Zend_Session_Namespace('authstu');
 					$user_id=$db_user->getUserID($user_name);
 					$user_info = $db_user->getUserInfo($user_id);
+					
 					$arr_acl=$db_user->getArrAcl($user_info['user_type']);
 					$a_i = 0;
 					$arr_actin = array();

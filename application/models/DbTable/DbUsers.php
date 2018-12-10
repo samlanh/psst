@@ -9,12 +9,12 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	public function getUserInfo($user_id)
 	{		
 		if (!empty($user_id)){	
-		$select=$this->select();
-			$select->from($this,array('user_type', 'last_name' ,'first_name','branch_id','branch_list','schoolOption'))
-			->where('id=?',$user_id);			
-		$row=$this->fetchRow($select);		
-		if(!$row) return NULL;
-		return $row;
+			$select=$this->select();
+				$select->from($this,array('user_type', 'last_name' ,'first_name','branch_id','branch_list','schoolOption'))
+				->where('id=?',$user_id);			
+			$row=$this->fetchRow($select);		
+			if(!$row) return NULL;
+			return $row;
 		}else {
 			return null;
 		}

@@ -106,6 +106,11 @@ class Home_IndexController extends Zend_Controller_Action
     	$this->view->rsnewstudent = $db->getAmountNewStudent();
     	$this->view->rsdropstudent = $db->getAmountDropStudent();
     	
+    	$ddgb = new Application_Model_DbTable_DbGlobal();
+    	$this->view->news = $ddgb->getAllNew(10);
+    	$notread = $ddgb->getNewNotreadByUser();
+    	$this->view->notread = empty($notread)?0:$notread;
+    	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
     	Application_Model_Decorator::removeAllDecorator($frm);

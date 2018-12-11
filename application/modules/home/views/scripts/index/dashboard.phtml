@@ -10,6 +10,9 @@
 	if (!empty($urlsting)){
 		$sign="&";
 	}
+	
+	$news = $this->news;
+	$notread = $this->notread;
 ?>
 <link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
 <!-- Icons CSS -->
@@ -49,6 +52,34 @@ h4.brief {
 .media .profile_thumb {
     padding: 9px 15px;
 }
+small.dashbd.badge.bg-green {
+    font-size: 10px;
+    line-height: 13px;
+    padding: 2px 6px;
+    position: absolute;
+    left: 12px;
+    top: 3px;
+    font-weight: 600;
+    z-index: 1;
+}
+article.media.event.unread {
+    background: #f2f1ff;
+    
+}
+article.announce {
+    margin-top: 3px;
+	padding: 10px;
+}
+a.pull-left.newsimage {
+    width: 100px;
+    height: 64px;
+}
+small.pull-right.showall-ann {
+    display: block;
+    padding: 5px 0;
+    margin: 0;
+    line-height: 24px;
+}
  </style>
 <div id="page-wrapper">
 	<!-- Page content start -->
@@ -58,7 +89,8 @@ h4.brief {
 			<div class="container">
 				 <div class="row">
 					<div class="col-lg-6">
-						<div class="card-box">
+						<div class="x_panel">
+						<div class="card-box" style="    padding: 0;">
 							<div class="col-lg-12">
 								<div class="accounting-management text-center">
 									<div class="col-lg-6 capital-box" style="background:#17418e;; color: #fff">
@@ -176,10 +208,13 @@ h4.brief {
 				          		</div>
 			          		</form>
 						</div>
+						</div>
 					</div> <!-- end col -->	  
 					<div class="col-lg-6">
-						<div class="card-box">
-								<?php if (!empty($this->studropnew)){?>
+						<?php if (!empty($this->studropnew)){?>
+						<div class="x_panel">
+							<div class="card-box" style=" margin: 0;    padding: 0;">
+								
 									<span class="title-suppend" data-bind="text: lang.lang.performance"><i class="fa fa-user-times" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_DROP_NEW");?>&nbsp;<?php echo count($this->studropnew)." ".$tr->translate("STUDENT_UNIT");?></span>
 									<div class="blog-stu-droplist">
 										<?php if (!empty($this->studropnew)) foreach ($this->studropnew as $drop){?>
@@ -239,8 +274,47 @@ h4.brief {
 				                      </div>
 				                      <?php }?>
 									</div>
-									<?php }?>
+									
 								</div>
+							</div>
+							<?php }?>
+								
+								<div class="x_panel">
+				                  <div class="x_title">
+				                    <h2><i class="fa fa-bullhorn" aria-hidden="true"></i><small class="dashbd badge bg-green"><?php if ($notread>0){ echo $notread;}?></small> &nbsp;&nbsp;<?php echo $tr->translate("NEWS");?> 
+				                    </h2>
+				                    <small class="pull-right showall-ann"> <a href="<?php echo $this->baseUrl()."/home/index/allnews"?>">
+						                         <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
+						                        </a>
+						             </small>
+				                    <div class="clearfix"></div>
+				                  </div>
+				                  <div class="x_content">
+				                  	 <?php if(!empty($news)){?>
+					                  		<?php foreach($news as $key=> $announ){
+				                          	$url = $this->url(array('module'=>'home','controller'=>'index','action'=>'news'), null, true)."/id/".$announ['id'];
+					                          	$images = $this->baseUrl().'/images/no-photo.png';
+					                          	if (!empty($announ['image_feature'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/news/'.$announ['image_feature'])) {
+					                          			$images = $this->baseUrl().'/images/news/'.$announ['image_feature'];
+					                          		}
+					                          	}
+				                          	?>
+				                    <article title="<?php echo $announ['title'];?>" class=" announce media event <?php if ($announ['is_read']!=1){ echo 'unread';}?>">
+				                      <a class="pull-left newsimage" href="<?php echo $url;?>">
+				                      	<img src="<?php echo $images;?>" />
+				                      </a>
+				                      <div class="media-body">
+				                        <a class="title" href="<?php echo $url;?>"><?php echo $announ['title'];?></a><br />
+				                        <small class="red"><?php echo date("d/M/Y",strtotime($announ['publish_date']));?></small>
+				                        <p><?php echo  mb_substr(strip_tags($announ['description']),0,70, "utf-8")."...";?></p>
+				                      </div>
+				                    </article>
+				                    	<?php }?>
+				                    <?php }?>
+				                  </div>
+				                </div>
 					</div> <!-- end col -->	  
 				</div> <!-- end row -->
                  <div class="row-fluid">

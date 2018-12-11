@@ -1,5 +1,6 @@
 <?php 
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$db_global = new Application_Model_DbTable_DbGlobal();
 $image = $this->baseUrl().'/images/no-profile.png';
 if(!empty($this->rs['photo'])){
 	if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
@@ -15,7 +16,7 @@ if(!empty($this->rs['photo'])){
     <meta charset="utf-8">
 </head>
 <body>
-	<div class="wrapper" style="border: 1px dotted #000;background: #fff;width:25cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
+	<div class="wrapper" style="border: 1px dotted #000;background: #fff;width:26cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
 		<div id="divPrint">
 			 <style>
 		    	.wrapper{
@@ -139,7 +140,7 @@ if(!empty($this->rs['photo'])){
 											</td>
 										</tr>	
 										<tr>
-											<td width="60%" align="center" style="font-family: Times New Roman, cursive;font-size:14px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
+											<td width="60%" align="center" style="font-family: Times New Roman, cursive;font-size:18px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
 												បញ្ជាក់ថាៈ
 											</td>
 											<td width="50%" align="left" class="image-box" style="padding-left: 0px; font-family: Times New Roman, cursive;font-size:25px;font-weight: bold; padding-rgiht: 34px;">
@@ -166,15 +167,15 @@ if(!empty($this->rs['photo'])){
 										</tr>
 										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
 											<td style="font-weight: bold;">ថ្ងៃខែឆ្នាំកំណើត</td>
-											<td> : &nbsp;<?php echo $this->rs['dob'];?> </td>
+											<td> : &nbsp;<?php echo $db_global->getNumberInkhmer($this->rs['dob']);?> </td>
 											<td style="font-weight: bold;">Date Of Brith</td>
 											<td>  : &nbsp;<?php echo $this->rs['dob'];?></td>
 										</tr>
 										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
 											<td style="font-weight: bold;">ទីកន្លែងកំណើត</td>
-											<td> : &nbsp;<?php echo $this->rs['province_khname'];?></td>
+											<td> : &nbsp;<?php echo $this->rs['pob'];?></td>
 											<td style="font-weight: bold;">Place Of Brith</td>
-											<td> : &nbsp;<?php echo $this->rs['province_enname'];?></td>
+											<td> : &nbsp;<?php echo $this->rs['pob'];?></td>
 										</tr>
 										<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
 											<td style="font-weight: bold;">ឪពុកឈ្មោះ</td>
@@ -202,9 +203,35 @@ if(!empty($this->rs['photo'])){
 										</tr>
 				 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
 											<td style="font-weight: bold;">អាសយដ្ឋានអចិន្រ្តៃយ៍</td>
-											<td> : &nbsp;<strong>ផ្ទះលេខ</strong>&nbsp;<?php echo $this->rs['home_num'];?>&nbsp;<strong>ផ្លូវលេខ</strong>&nbsp;<?php echo $this->rs['street_num'];?></td>
+											<td> : &nbsp;<strong>ផ្ទះលេខ:</strong>&nbsp;<?php echo $db_global->getNumberInkhmer($this->rs['home_num']);?>&nbsp;<strong>ផ្លូវលេខ:</strong>&nbsp;<?php echo $db_global->getNumberInkhmer($this->rs['street_num']);?></td>
 											<td style="font-weight: bold;">Permanent Address</td>
-											<td> : &nbsp;dfgfdgdfsggfsgsgrf</td>
+											<td> : &nbsp;<strong>N<sup>o</sup>:</strong>&nbsp;<?php echo $this->rs['home_num'];?>&nbsp;<strong>Street:</strong>&nbsp;<?php echo $this->rs['street_num'];?></td>
+				 						</tr>
+				 						
+				 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td><strong>សង្កាត់ :</strong><?php echo $this->rs['commune_name'];?></td>
+											<td><strong>ខណ្ឌ :</strong>&nbsp;<?php echo $this->rs['district_khmer'];?>&nbsp;<strong>ក្រុង :</strong><?php echo $this->rs['province_khname'];?></td>
+											<td><strong>Sangkat:</strong>&nbsp;<?php echo $this->rs['commune_nameeg'];?></td>
+											<td><strong>Khan :</strong>&nbsp;<?php echo $this->rs['district_en'];?>&nbsp;<strong>,</strong>&nbsp;<?php echo $this->rs['province_enname'];?></td>
+				 						</tr>
+				 						
+				 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td><strong>ពិតជាសិស្សកំពុងសិក្សានៅ  </strong></td>
+											<td>:&nbsp;<?php echo $this->rs['grade'];?></td>
+											<td><strong>Is currently a Student  of</strong></td>
+				 							<td>:&nbsp;<?php echo $this->rs['grade'];?></td>
+				 						</tr>
+				 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td><strong>នៅសាលាបឋមសិក្សា </strong>&nbsp;<?php //echo $this->rs['street_num'];?></td>
+											<td><strong>និង មធ្យមសិក្សា អ៊ី.អិល.ធី</strong>&nbsp;<?php //echo $this->rs['grade'];?></td>
+											<td><strong>At ELT Elementary</strong>&nbsp;<?php //echo $this->rs['street_num'];?></td>
+				 							<td><strong>and Secondary School  in the</strong>&nbsp;<?php //echo $this->rs['grade'];?></td>
+				 						</tr>
+				 						<tr style="list-style:25px; font-family:  Times New Roman;line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
+											<td><strong>ក្នុងឆ្នាំសិក្សា </strong></td>
+											<td><?php echo $db_global->getNumberInkhmer($this->rs['academic_year']);?>&nbsp;<strong>ពិតប្រាកដមែន។</strong>&nbsp;<?php //echo $this->rs['grade'];?></td>
+											<td><strong>school year </strong>&nbsp;<?php //echo $this->rs['academic_year'];?></td>
+				 							<td><?php echo $this->rs['academic_year'];?>&nbsp;<?php //echo $this->rs['grade'];?></td>
 				 						</tr>
   									</table>
 			  					</td>
@@ -216,7 +243,7 @@ if(!empty($this->rs['photo'])){
 											<td width="60%" align="center" style="font-family: Times New Roman, cursive;font-size:14px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
 												លិខិតនេះចេញជូនសាមីខ្លួនប្រើប្រាស់តាមផ្លូវការ។
 											</td>
-											<td width="50%" align="left" class="image-box" style="padding-left: 0px;">
+											<td width="50%" align="left" class="image-box" style="padding-left: 0px; font-weight: bold;">
 												This letter is issued to the bearer for official purposes is may thereto serve.
 											</td>
 				 						</tr>

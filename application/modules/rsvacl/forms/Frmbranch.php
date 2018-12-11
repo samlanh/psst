@@ -164,16 +164,33 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 		));
+		
+		$school_namekh = new Zend_Dojo_Form_Element_ValidationTextBox('school_namekh');
+		$school_namekh->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		
+		$school_nameen = new Zend_Dojo_Form_Element_ValidationTextBox('school_nameen');
+		$school_nameen->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
 	
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($data)){
+			$school_namekh->setValue($data['school_namekh']);
+			$school_nameen->setValue($data['school_nameen']);
+			
 			$branch_id->setValue($data['parent']);
 			$br_id->setValue($data['br_id']);
 			$prefix_code->setValue($data['prefix']);
 			$branch_namekh->setValue($data['branch_namekh']);
 			$branch_nameen->setValue($data['branch_nameen']);
-			//$select_branch_nameen->setValue($data['branch_nameen']);
+			
 			$br_address->setValue($data['br_address']);
 			$branch_tel->setValue($data['branch_tel']);
 			$branch_code->setValue($data['branch_code']);
@@ -185,7 +202,7 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 			$branch_display->setValue($data['displayby']);
 		}
 		
-		$this->addElements(array($branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
+		$this->addElements(array($school_nameen,$school_namekh,$branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
 				$branch_status,$branch_display));
 		
 		return $this;

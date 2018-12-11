@@ -11,7 +11,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     function addbranch($_data){
     	$_db= $this->getAdapter();
     	$_db->beginTransaction();
-    	//print_r($_FILES['photo']); exit();
     	try{
     		$part= PUBLIC_PATH.'/images/';
     		$name = $_FILES['photo']['name'];
@@ -33,7 +32,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		}
     		$sql="SELECT br_id FROM rms_branch WHERE 1";
     		$sql.=" AND branch_nameen='".$_data['branch_nameen']."'";
-//     		$sql.=" AND prefix='".$_data['prefix_code']."'";
     		if (!empty($_data['main_branch_id'])){
     			$sql." AND parent =".$_data['main_branch_id'];
     		}
@@ -41,7 +39,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		if(!empty($rs)){
     			return -1;
     		}
-    		
     		
     		$schooloption="";
     		if (!empty($_data['selector'])){
@@ -54,6 +51,9 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		}
 	    	$_arr = array(
 	    			'parent'	    =>$_data['main_branch_id'],
+	    			'school_namekh' =>$_data['school_namekh'],
+	    			'school_nameen' =>$_data['school_nameen'],
+	    			
 	    			'branch_nameen' =>$_data['branch_nameen'],
 	    			'branch_namekh' =>$_data['branch_nameen'],
 	    			'prefix'		=>$_data['prefix_code'],
@@ -121,6 +121,8 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		
     	$_arr = array(
     			'parent'		=>$_data['main_branch_id'],
+    			'school_namekh' =>$_data['school_namekh'],
+    			'school_nameen' =>$_data['school_nameen'],
     			'branch_nameen'	=>$_data['branch_nameen'],
     			'branch_namekh'	=>$_data['branch_nameen'],
     			'prefix'      	=>$_data['prefix_code'],
@@ -157,7 +159,10 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
    	
     function getAllBranch($search){
     	$db = $this->getAdapter();
-    	$sql = "SELECT b.br_id,b.branch_nameen,
+    	$sql = "SELECT b.br_id,
+    			b.school_namekh,
+    			b.school_nameen,
+    			b.branch_nameen,
 		    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.parent LIMIT 1) as parent_name,
 		    	b.prefix,b.branch_code,b.br_address,b.branch_tel,b.fax,
     			b.other,b.status FROM rms_branch AS b  ";

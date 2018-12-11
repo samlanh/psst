@@ -27,11 +27,13 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
            $glClass = new Application_Model_GlobalClass();
 			$rs_rowshow = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","PARENT_BRANCH","PREFIX_CODE","CODE","ADDRESS","PHONE","BRANCH_FAX","NOTE","STATUS");
+			$collumns = array("SCHOOL_NAMEKH","SCHOOL_NAMEEN","BRANCH_NAME","PARENT_BRANCH","PREFIX_CODE","CODE","ADDRESS","PHONE","BRANCH_FAX","NOTE","STATUS");
 			$link=array(
 					      'module'=>'rsvacl','controller'=>'branch','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rowshow,array('parent_name'=>$link,'branch_nameen'=>$link,'prefix'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns,
+					$rs_rowshow,array('school_namekh'=>$link,'school_nameen'=>$link,
+							'parent_name'=>$link,'branch_nameen'=>$link,'prefix'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message($this->tr->translate("APPLICATION_ERROR"));
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

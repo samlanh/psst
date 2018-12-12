@@ -105,6 +105,7 @@ class RsvAcl_Model_DbTable_DbUserType extends Zend_Db_Table_Abstract
 		//Sophen add here
 		$data['user_type']=$arr['user_type'];   
 		$data['parent_id']=$arr['parent_id']; 	
+		$data['status']=$arr['status'];
     	$where=$this->getAdapter()->quoteInto('user_type_id=?',$user_type_id);
 		$this->update($data,$where); 
 	}

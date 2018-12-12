@@ -106,7 +106,6 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
 			$post=$this->getRequest()->getPost();
 			//print_r($rs); exit;
 			if($rs['user_type']==$post['user_type']){
-																						
 					$db->updateUserType($post,$rs['user_type_id']);
 					
 					  //write log file 

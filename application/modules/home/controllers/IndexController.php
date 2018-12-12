@@ -39,6 +39,11 @@ class Home_IndexController extends Zend_Controller_Action
       $this->view->stu_stopped = $_db->countStudentDrop(2);
       
       $this->view->dissetting = $_db->getSettingDiscountNearlyExpire();
+      
+      $ddgb = new Application_Model_DbTable_DbGlobal();
+      $this->view->news = $ddgb->getAllNew(10);
+      $notread = $ddgb->getNewNotreadByUser();
+      $this->view->notread = empty($notread)?0:$notread;
     }
 
     public function dashboardAction()

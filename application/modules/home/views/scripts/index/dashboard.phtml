@@ -80,6 +80,11 @@ small.pull-right.showall-ann {
     margin: 0;
     line-height: 24px;
 }
+.x_content.news-content {
+    height: 345px;
+    display: block;
+    overflow-y: auto;
+}
  </style>
 <div id="page-wrapper">
 	<!-- Page content start -->
@@ -290,7 +295,7 @@ small.pull-right.showall-ann {
 						             </small>
 				                    <div class="clearfix"></div>
 				                  </div>
-				                  <div class="x_content">
+				                  <div class="x_content news-content">
 				                  	 <?php if(!empty($news)){?>
 					                  		<?php foreach($news as $key=> $announ){
 				                          	$url = $this->url(array('module'=>'home','controller'=>'index','action'=>'news'), null, true)."/id/".$announ['id'];
@@ -312,6 +317,7 @@ small.pull-right.showall-ann {
 				                      </div>
 				                    </article>
 				                    	<?php }?>
+				                    	<div class="clearfix"></div>
 				                    <?php }?>
 				                  </div>
 				                </div>

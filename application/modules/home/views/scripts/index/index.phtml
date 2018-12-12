@@ -3,6 +3,8 @@
 	$this->headTitle($tr->translate("Dashboard Student Registration Management System"));
 	echo $this->headTitle();
 	$db = new Allreport_Model_DbTable_DbRptAllStudent();
+	$news = $this->news;
+	$notread = $this->notread;
 ?>
 <link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
 <!-- Icons CSS -->
@@ -56,6 +58,40 @@ h4.brief {
 }
 .media .profile_thumb {
     padding: 9px 15px;
+}
+
+small.dashbd.badge.bg-green {
+    font-size: 10px;
+    line-height: 13px;
+    padding: 2px 6px;
+    position: absolute;
+    left: 12px;
+    top: 3px;
+    font-weight: 600;
+    z-index: 1;
+}
+article.media.event.unread {
+    background: #f2f1ff;
+    
+}
+article.announce {
+    margin-top: 3px;
+	padding: 10px;
+}
+a.pull-left.newsimage {
+    width: 100px;
+    height: 64px;
+}
+small.pull-right.showall-ann {
+    display: block;
+    padding: 5px 0;
+    margin: 0;
+    line-height: 24px;
+}
+.x_content.news-content {
+    height: 345px;
+    display: block;
+    overflow-y: auto;
 }
  </style>
 <div id="page-wrapper">
@@ -115,10 +151,55 @@ h4.brief {
 								</div>
 								<div id="dashboard-bar-income" style="height: 200px;"></div>
 							</div>
-						</div> 
+						</div>
+						
+						<div class="card-box">
+							<div class="col-lg-12">
+								<div >
+									<div class="col-lg-12" style="padding: 0;">
+										<div class="discount-exp">
+					                        <div class="x_title">
+					                          <h2><i class="fa fa-hourglass-half" aria-hidden="true"></i> <?php echo $tr->translate("Discount Setting");?> (<?php echo count($this->dissetting);?>)</h2>
+					                          <div class="clearfix"></div>
+					                        </div>
+					                        <ul class="list-unstyled top_profiles scroll-view">
+					                          <?php foreach ($this->dissetting as $dis){?>
+					                          <li class="media event">
+					                            <a class="pull-left border-aero profile_thumb">
+					                              <i class="fa fa-usd aero"></i>
+					                            </a>
+					                            <div class="media-body">
+					                              <a class="title" href="#"><?php echo $dis['branch'];?></a>
+					                              <p> <?php echo $dis['disc_name'];?> <strong><?php echo $dis['dis_max'];?>%. </strong> </p>
+					                              <p><?php echo $tr->translate("EXPIRE_DATE");?> <small class="red"><?php echo date("d/M/Y",strtotime($dis['end_date']));?></small>
+					                              </p>
+					                            </div>
+					                          </li>
+					                          <?php }?>
+					                        </ul>
+					                      </div>
+										<!-- 
+										<a title="<?php //echo $tr->translate("CUSTOMER_PAYMENTLIST")?>" target="_blank" href="<?php //echo $this->baseUrl()."/allreport/accounting/rptstudentnearlyendservice";?>">
+											<div class="col-lg-6 capital-box" style="background: #0f575b;">
+												<span data-bind="text: currentRatio"><?php //echo count($this->customerNearlyPayment);?></span> 
+												<p class="month" data-bind="text: lang.lang.current_ratio"><?php //echo $tr->translate("Student Nearly Payment")?></p>
+											</div>
+										</a>
+										<a  title="<?php //echo $tr->translate("CUSTOMER_PAYMENTLIST")?>" target="_blank" href="<?php //echo $this->baseUrl()."/allreport/accounting/rptstudentpaymentlate";?>">
+											<div class="col-lg-6 capital-box" style="background: #203864; color: #fff;">
+												<span data-bind="text: quickRatio"><?php //echo count($this->customerNearlyAgreement);?></span> 
+												<p class="month" style="color: #fff;" data-bind="text: lang.lang.quick_ratio"><?php //echo $tr->translate("Student Late Payment")?></p>
+											</div>
+										</a>
+										 -->
+									</div>
+								</div>
+							</div>
+						</div>
+						 
 					</div> <!-- end col -->	  
 					 <div class="col-lg-6">
-					 	
+					 	<div class="x_panel">
 						<div class="card-box">
 							<!-- 
 							<div class="col-lg-12">
@@ -245,50 +326,45 @@ h4.brief {
 								</div>
 							</div>
 						</div>
-						
-						<div class="card-box">
-							<div class="col-lg-12">
-								<div >
-									<div class="col-lg-12" style="padding: 0;">
-										<div class="discount-exp">
-					                        <div class="x_title">
-					                          <h2><i class="fa fa-hourglass-half" aria-hidden="true"></i> <?php echo $tr->translate("Discount Setting");?> (<?php echo count($this->dissetting);?>)</h2>
-					                          <div class="clearfix"></div>
-					                        </div>
-					                        <ul class="list-unstyled top_profiles scroll-view">
-					                          <?php foreach ($this->dissetting as $dis){?>
-					                          <li class="media event">
-					                            <a class="pull-left border-aero profile_thumb">
-					                              <i class="fa fa-usd aero"></i>
-					                            </a>
-					                            <div class="media-body">
-					                              <a class="title" href="#"><?php echo $dis['branch'];?></a>
-					                              <p> <?php echo $dis['disc_name'];?> <strong><?php echo $dis['dis_max'];?>%. </strong> </p>
-					                              <p><?php echo $tr->translate("EXPIRE_DATE");?> <small class="red"><?php echo date("d/M/Y",strtotime($dis['end_date']));?></small>
-					                              </p>
-					                            </div>
-					                          </li>
-					                          <?php }?>
-					                        </ul>
-					                      </div>
-										<!-- 
-										<a title="<?php //echo $tr->translate("CUSTOMER_PAYMENTLIST")?>" target="_blank" href="<?php //echo $this->baseUrl()."/allreport/accounting/rptstudentnearlyendservice";?>">
-											<div class="col-lg-6 capital-box" style="background: #0f575b;">
-												<span data-bind="text: currentRatio"><?php //echo count($this->customerNearlyPayment);?></span> 
-												<p class="month" data-bind="text: lang.lang.current_ratio"><?php //echo $tr->translate("Student Nearly Payment")?></p>
-											</div>
-										</a>
-										<a  title="<?php //echo $tr->translate("CUSTOMER_PAYMENTLIST")?>" target="_blank" href="<?php //echo $this->baseUrl()."/allreport/accounting/rptstudentpaymentlate";?>">
-											<div class="col-lg-6 capital-box" style="background: #203864; color: #fff;">
-												<span data-bind="text: quickRatio"><?php //echo count($this->customerNearlyAgreement);?></span> 
-												<p class="month" style="color: #fff;" data-bind="text: lang.lang.quick_ratio"><?php //echo $tr->translate("Student Late Payment")?></p>
-											</div>
-										</a>
-										 -->
-									</div>
-								</div>
-							</div>
-						</div>  
+						</div>
+						<div class="clearfix"></div>
+						<div class="x_panel">
+			                  <div class="x_title">
+			                    <h2><i class="fa fa-bullhorn" aria-hidden="true"></i><small class="dashbd badge bg-green"><?php if ($notread>0){ echo $notread;}?></small> &nbsp;&nbsp;<?php echo $tr->translate("NEWS");?> 
+			                    </h2>
+			                    <small class="pull-right showall-ann"> <a href="<?php echo $this->baseUrl()."/home/index/allnews"?>">
+					                         <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+					                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
+					                        </a>
+					             </small>
+			                    <div class="clearfix"></div>
+			                  </div>
+			                  <div class="x_content news-content">
+			                  	 <?php if(!empty($news)){?>
+				                  		<?php foreach($news as $key=> $announ){
+			                          	$url = $this->url(array('module'=>'home','controller'=>'index','action'=>'news'), null, true)."/id/".$announ['id'];
+				                          	$images = $this->baseUrl().'/images/no-photo.png';
+				                          	if (!empty($announ['image_feature'])){
+				                          		if (file_exists(PUBLIC_PATH.'/images/news/'.$announ['image_feature'])) {
+				                          			$images = $this->baseUrl().'/images/news/'.$announ['image_feature'];
+				                          		}
+				                          	}
+			                          	?>
+			                    <article title="<?php echo $announ['title'];?>" class=" announce media event <?php if ($announ['is_read']!=1){ echo 'unread';}?>">
+			                      <a class="pull-left newsimage" href="<?php echo $url;?>">
+			                      	<img src="<?php echo $images;?>" />
+			                      </a>
+			                      <div class="media-body">
+			                        <a class="title" href="<?php echo $url;?>"><?php echo $announ['title'];?></a><br />
+			                        <small class="red"><?php echo date("d/M/Y",strtotime($announ['publish_date']));?></small>
+			                        <p><?php echo  mb_substr(strip_tags($announ['description']),0,70, "utf-8")."...";?></p>
+			                      </div>
+			                    </article>
+			                    	<?php }?>
+			                    	<div class="clearfix"></div>
+			                    <?php }?>
+			                  </div>
+			                </div>
 					</div> <!-- end col -->	  
 				</div> <!-- end row -->
 				

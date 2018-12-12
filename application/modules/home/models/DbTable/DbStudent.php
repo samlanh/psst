@@ -21,7 +21,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				}
 				$sql = "SELECT  s.stu_id,
 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-				s.stu_code,s.stu_khname,s.stu_enname,
+				s.stu_code,s.stu_khname,s.stu_enname,s.last_name,s.group_id,
 				s.is_subspend,
 				(SELECT name_en FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
     			(SELECT name_en FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
@@ -449,6 +449,19 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+	}
+	
+	function getLastExamByStudent($stu_id){
+		$db = $this->getAdapter();
+		$sql="SELECT 
+			s.*,sd.student_id FROM 
+			`rms_score_detail` AS sd,
+			`rms_score` AS s
+			WHERE s.id = score_id
+			AND sd.student_id = $stu_id
+			GROUP BY s.id
+			ORDER BY s.id DESC LIMIT 1";
+		return $db->fetchRow($sql);
 	}
 }
 

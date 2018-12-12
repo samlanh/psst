@@ -42,22 +42,29 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     }
     function rptScoreDetailAction(){//តាមមុខវិជ្ជាលម្អិត
     	$id=$this->getRequest()->getParam("id");
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
+    		$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,null,1);
     	}
     	else{
+    		$row = $db->getScoreExamByID($id);
     		$search = array(
-    				'group_name' => '',
-    				'study_year'=> '',
+    				'group' => $row['group_id'],
+    				'study_year'=> $row['for_academic_year'],
+    				'exam_type'=> $row['exam_type'],
+    				'branch_id'=>$row['branch_id'],
+    				'for_month'=>$row['for_month'],
+    				'for_semester'=>$row['for_semester'],
     				'grade'=> '',
     				'degree'=>'',
     				'session'=> '',
-    				'for_month'=>'',
     		);
+    		$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id,1);
     	}
     	$this->view->search=$search;
-    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundetScoreDetailGroup($search,$id,1);
+    	
+    	
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
     	$this->view->month = $db->getAllMonth();
     	$form=new Registrar_Form_FrmSearchInfor();
@@ -69,22 +76,32 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     }
     function rptScoreResultAction(){ //ពិន្ទុសរុបតាមមុខ
     	$id=$this->getRequest()->getParam("id");
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
+    		$result = $db->getStundetScoreResult($search,null,1);
+    		$this->view->studentgroup = $result;
     	}
     	else{
+    		$row = $db->getScoreExamByID($id);
     		$search = array(
-    				'group_name' => '',
-    				'study_year'=> '',
+    				'group' => $row['group_id'],
+    				'study_year'=> $row['for_academic_year'],
+    				'exam_type'=> $row['exam_type'],
+    				'branch_id'=>$row['branch_id'],
+    				'for_month'=>$row['for_month'],
+    				'for_semester'=>$row['for_semester'],
     				'grade'=> '',
     				'degree'=>'',
     				'session'=> '',
-    				'for_month'=>'',
     		);
+    		$result = $db->getStundetScoreResult($search,$id,1);
+    		$this->view->studentgroup = $result;
+    		
     	}
     	$this->view->search=$search;
-    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-    	$this->view->studentgroup = $db->getStundetScoreResult($search,$id,1);
+    	
+    	
     	
     	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
     	$this->view->month = $db->getAllMonth();
@@ -97,8 +114,8 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     	
     	$frm = new Application_Form_FrmGlobal();
-    	$rs = $db->getStundetScoreDetailGroup($search,$id,1);
-    	$branch_id = $rs[0]['branch_id'];
+//     	$rs = $db->getStundetScoreDetailGroup($search,$id,1);
+    	$branch_id = $result[0]['branch_id'];
     	$this->view->header = $frm->getHeaderReceipt($branch_id);
     }
     function monthlyOutstandingStudentAction(){

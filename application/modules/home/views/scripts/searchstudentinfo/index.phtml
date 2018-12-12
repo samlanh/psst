@@ -12,6 +12,7 @@
 	if (!empty($urlsting)){
 		$sign="&";
 	}
+	$db_student= new Home_Model_DbTable_DbStudent();
 	//print_r($this->row); exit();
 ?>
 <style>
@@ -105,6 +106,13 @@ a.btn.btn-default.btn-detail:hover {
 .blue{
 	color: #08086b;
 }
+
+ul.nav.navbar-right.panel_toolbox.stusearch {
+    min-width: 0;
+}
+ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
+    padding: 10px;
+}
 </style>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="col-sm-12 border-botom m-0">
@@ -168,6 +176,26 @@ a.btn.btn-default.btn-detail:hover {
                 <div class="text-center card-box-border">
                    <div class="member-card">
                       	<span class="user-badge bg-warning" <?php if($rs['is_subspend']!=0){echo 'style="background: red !important;"';}?>><?php echo ($key+1).".) ";echo $rs['status_student'];?></span>
+                       	<ul class="nav navbar-right panel_toolbox stusearch">
+	                      <li class="dropdown">
+	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+	                        <ul class="dropdown-menu" role="menu">
+	                        <?php $lastExam = $db_student->getLastExamByStudent($rs['stu_id']);?>
+	                        	<?php if (!empty($lastExam)){?>
+		                          <li>
+		                          	<a href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['stu_id']."&group_id=".$lastExam['group_id']."&exam_type=".$lastExam['exam_type']."&for_semester=".$lastExam['for_semester']."&for_month=".$lastExam['for_month'];?>"><?php echo $tr->translate('TRANSCRIPT');?></a>
+		                          </li>
+		                           <li>
+	                           			<a href="<?php echo $this->baseUrl()."/allreport/score/rpt-score-result/id/".$lastExam['id'];?>"><?php echo $tr->translate('SCORE_RESULT');?></a>
+                          		   </li>
+                          		    <li>
+	                           			<a href="<?php echo $this->baseUrl()."/allreport/score/rpt-score-detail/id/".$lastExam['id'];?>"><?php echo $tr->translate('SCORE_DETAIL');?></a>
+                          		   </li>
+	                          <?php }?>
+	                         
+	                        </ul>
+	                      </li>
+	                    </ul>
                        	<div class="thumb-xl member-thumb m-b-10 center-block">
                        		<?php $photo = $this->baseUrl()."/images/no-profile.png";
                        			if (!empty($rs['photo'])){
@@ -187,7 +215,7 @@ a.btn.btn-default.btn-detail:hover {
                        <div class="">
                        		<h4 class="blue m-b-5"><?php echo $rs['stu_code'];?>&nbsp;</h4>
                        		<h4 class="m-b-5"><?php echo $rs['stu_khname'];?>&nbsp;</h4>
-                       		<h4 class="m-b-5"><?php echo $rs['stu_enname'];?>&nbsp;</h4>
+                       		<h4 class="m-b-5"><?php echo $rs['stu_enname']." ".$rs['last_name'];?>&nbsp;</h4>
                             <p class="text-muted"><span><?php echo $rs['academic'];?>&nbsp;</span></p>
                        </div>
                        <p class="text-muted info-list font-13">

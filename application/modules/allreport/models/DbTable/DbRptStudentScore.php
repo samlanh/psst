@@ -179,7 +179,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		$order = "  ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
    		return $db->fetchAll($sql.$where.$order);
    }
-   public function getStundetScoreDetailGroup($search,$id,$limit){ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា
+   public function getStundetScoreDetailGroup($search,$id=null,$limit){ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា
    	$db = $this->getAdapter();
    		$sql="SELECT
 		   	s.`id`,
@@ -226,17 +226,35 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND sd.`is_parent`=1
 		   	AND s.`id`=sd.`score_id`
 		   	AND s.status = 1
-		   	AND s.type_score=1 AND s.id = $id ";
+		   	AND s.type_score=1  ";
+   		if (!empty($id)){
+   			$sql.=" AND s.id = $id ";
+   		}
    	$where='';
    
-   	if(!empty($search['group_name'])){
-   		$where.= " AND sd.group_id =".$search['group_name'];
+   	if (!empty($search['branch_id'])){
+   		$where.= " AND g.`branch_id` =".$search['branch_id'];
+   	} 
+   	if(!empty($search['study_year'])){
+   		$where.=" AND s.for_academic_year =".$search['study_year'];
+   	}
+   	if(!empty($search['group'])){
+   		$where.= " AND s.group_id =".$search['group'];
+   	}
+   	if(!empty($search['exam_type'])){
+   		$where.= " AND s.exam_type =".$search['exam_type'];
+   		if ($search['exam_type']==1){
+   			if(!empty($search['for_month'])){
+   				$where.= " AND s.for_month =".$search['for_month'];
+   			}
+   		}else if ($search['exam_type']==2){
+   			if(!empty($search['for_semester'])){
+   				$where.= " AND s.for_semester =".$search['for_semester'];
+   			}
+   		}
    	}
    	if(!empty($search['degree'])){
    		$where.=" AND `g`.`degree` =".$search['degree'];
-   	}
-   	if(!empty($search['study_year'])){
-   		$where.=" AND s.for_academic_year =".$search['study_year'];
    	}
    	if(!empty($search['grade'])){
    		$where.=" AND `g`.`grade` =".$search['grade'];
@@ -253,13 +271,14 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	}
    	return $db->fetchAll($sql.$where.$order.$limit);
    }
-   public function getStundetScoreResult($search,$id,$limit){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត
+   public function getStundetScoreResult($search,$id=null,$limit){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត
    	$db = $this->getAdapter();
    	$sql="SELECT
    	s.`id`,
    	g.`branch_id`,
    	s.`group_id`,
    	g.`group_code`,
+   	s.for_academic_year,
    	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year,
    	(SELECT from_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS start_year,
    	(SELECT to_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS end_year,
@@ -302,17 +321,34 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 
    	AND s.`id`=sm.`score_id`
    	AND s.status = 1
-   	AND s.type_score=1 AND s.id = $id ";
+   	AND s.type_score=1  ";
+   	if (!empty($id)){
+   		$sql.=" AND s.id = $id ";
+   	}
    	$where='';
-   	 
-   	if(!empty($search['group_name'])){
-   		$where.= " AND s.group_id =".$search['group_name'];
+   	if (!empty($search['branch_id'])){
+   		$where.= " AND g.`branch_id` =".$search['branch_id'];
+   	} 
+   	if(!empty($search['study_year'])){
+   		$where.=" AND s.for_academic_year =".$search['study_year'];
+   	}
+   	if(!empty($search['group'])){
+   		$where.= " AND s.group_id =".$search['group'];
+   	}
+   	if(!empty($search['exam_type'])){
+   		$where.= " AND s.exam_type =".$search['exam_type'];
+   		if ($search['exam_type']==1){
+   			if(!empty($search['for_month'])){
+   				$where.= " AND s.for_month =".$search['for_month'];
+   			}
+   		}else if ($search['exam_type']==2){
+   			if(!empty($search['for_semester'])){
+   				$where.= " AND s.for_semester =".$search['for_semester'];
+   			}
+   		}
    	}
    	if(!empty($search['degree'])){
    		$where.=" AND `g`.`degree` =".$search['degree'];
-   	}
-   	if(!empty($search['study_year'])){
-   		$where.=" AND s.for_academic_year =".$search['study_year'];
    	}
    	if(!empty($search['grade'])){
    		$where.=" AND `g`.`grade` =".$search['grade'];
@@ -1260,5 +1296,16 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 				AND gds.stu_id =$stu_id
    		";
    		return $db->fetchAll($sql);
+   }
+   
+   //for get score by id
+   function getScoreExamByID($score_id){
+   	$db = $this->getAdapter();
+   	$sql="SELECT
+   	s.* FROM
+   	`rms_score` AS s
+   	WHERE s.id = $score_id
+    LIMIT 1";
+   	return $db->fetchRow($sql);
    }
 }

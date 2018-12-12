@@ -67,18 +67,18 @@ dojo.ready(function(){
 			   	</select>
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<select id="exam_type" name="exam_type" class="fullside"   dojoType="dijit.form.FilteringSelect" >
+        		<select id="exam_type" name="exam_type" class="fullside" onChange="displaymonth();"  dojoType="dijit.form.FilteringSelect" >
 			   		<option value="1" <?php if ($this->search['exam_type']==1){ echo 'selected="selected"';}?>>ប្រចាំខែ</option>
 			   		<option value="2" <?php if ($this->search['exam_type']==2){ echo 'selected="selected"';}?>>ប្រលងឆមាស</option>
 			   	</select>
         	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
+        	<div id="semester" class="col-md-2 col-sm-2 col-xs-12">
         		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
 						<option value="1" <?php if ($this->search['for_semester']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 1 </option>
 						<option value="2" <?php if ($this->search['for_semester']==2){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 2</option>
 				</select>
         	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
+        	<div id="month" class="col-md-2 col-sm-2 col-xs-12">
         		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
 					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 						<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
@@ -435,3 +435,18 @@ dojo.ready(function(){
 			<?php }?>
 		</div>
 </div>
+<script>
+dojo.ready(function(){
+	 displaymonth();
+});
+function displaymonth(){
+	exam_type = dijit.byId('exam_type').get('value');
+	if(exam_type==1){
+		$("#semester").css("display", "none");
+		$("#month").css("display", "block");
+	}else{
+		$("#semester").css("display", "block");
+		$("#month").css("display", "none");
+	}
+}
+</script>

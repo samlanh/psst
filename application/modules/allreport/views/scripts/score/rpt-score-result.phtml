@@ -252,9 +252,13 @@
 								</td>
 								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
 								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
-								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>><?php echo calCulateGrade($rs['total_avg'],$rs['max_score']);?></td>
+								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
+								<?php //echo calCulateGrade($rs['total_avg'],$rs['max_score']);?>
+								<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],1);?>
+								</td>
 								<td class="border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
-									<?php echo $dbgb->calCulateGradeKhmerMention($rs['total_avg'],$rs['max_score']);?>
+									<?php //echo $dbgb->calCulateGradeKhmerMention($rs['total_avg'],$rs['max_score']);?>
+									<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],2);?>
 									<?php 
 									if($average>=($rs['max_score']/2)){
 // 										echo $tr->translate("STUDENT_PASS");
@@ -272,7 +276,8 @@
 									?>
 								</td>
 								<td class="border-bottom-none border-right-none" align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
-									<?php echo $dbgb->calCulateGradeEnglishMention($rs['total_avg'],$rs['max_score']);?>
+									<?php  echo $dbgb->getMentionScore($rs['total_avg'], $rs['for_academic_year'],$rs['degree_id'],3);?>
+									<?php //echo $dbgb->calCulateGradeEnglishMention($rs['total_avg'],$rs['max_score']);?>
 								</td>
 							</tr>
 							<?php 

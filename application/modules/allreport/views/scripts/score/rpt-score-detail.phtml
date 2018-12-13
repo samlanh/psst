@@ -278,9 +278,19 @@
 									$average = number_format($rs['total_score']/$amount_subject,2);//amount_subjectsem
 								?>
 								<td align="center"><?php echo number_format($average,2);?></td>
-								<td class="border-right-none red" align="center">&nbsp;<?php echo $dbgb->calCulateGrade($average,$rs['max_score']);?>&nbsp;</td>
-								<td class="border-right-none red" align="center">&nbsp;<?php echo $dbgb->calCulateGradeKhmerMention($average,$rs['max_score']);?>&nbsp;</td>
-								<td class="red" align="center">&nbsp;<?php echo $dbgb->calCulateGradeEnglishMention($average,$rs['max_score']);?>&nbsp;</td>
+								<td class="border-right-none red" align="center">&nbsp;
+								<?php //echo $dbgb->calCulateGrade($average,$rs['max_score']);?>
+								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],1);?>
+								&nbsp;</td>
+								<td class="border-right-none red" align="center">&nbsp;
+								<?php //echo $dbgb->calCulateGradeKhmerMention($average,$rs['max_score']);?>
+								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],2);?>
+								&nbsp;</td>
+								<td class="red" align="center">&nbsp;
+								<?php //echo $dbgb->calCulateGradeEnglishMention($average,$rs['max_score']);?>
+								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],3);?>
+								&nbsp;
+								</td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<td align="center" <?php if($average<($rs['max_score']/2)){echo 'style=" background: #fdbdbd;"';}?>>
 									<?php if($average>=($rs['max_score']/2)){

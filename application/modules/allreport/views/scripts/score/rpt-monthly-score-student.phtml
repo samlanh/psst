@@ -236,9 +236,18 @@ dojo.ready(function(){
 								<td class="border-right-none">&nbsp;</td>
 								<td align="center" class="border-right-none bold">&nbsp;<strong><?php echo $this->rs['total_avg']?></strong>&nbsp;</td>
 								<td align="center" class="border-right-none red">&nbsp;<strong><?php echo $this->rs['rank']?></strong>&nbsp;</td>
-								<td align="center" class="border-right-none red">&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
-								<td style="white-space: nowrap;" class="border-right-none red bold">&nbsp;<strong><?php echo $dbgb->calCulateGradeKhmerMention($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
-								<td style="white-space: nowrap;" class="red bold">&nbsp;<strong><?php echo $dbgb->calCulateGradeEnglishMention($this->rs['total_avg'],$this->rs['max_score'])?></strong>&nbsp;</td>
+								<td align="center" class="border-right-none red">&nbsp;<strong>
+									<?php //echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?>
+									<?php  echo $dbgb->getMentionScore($this->rs['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],1);?>
+									</strong>&nbsp;</td>
+								<td style="white-space: nowrap;" class="border-right-none red bold">&nbsp;<strong>
+								<?php //echo $dbgb->calCulateGradeKhmerMention($this->rs['total_avg'],$this->rs['max_score'])?>
+								<?php  echo $dbgb->getMentionScore($this->rs['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],2);?>
+								</strong>&nbsp;</td>
+								<td style="white-space: nowrap;" class="red bold">&nbsp;<strong>
+								<?php //echo $dbgb->calCulateGradeEnglishMention($this->rs['total_avg'],$this->rs['max_score'])?>
+								<?php  echo $dbgb->getMentionScore($this->rs['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],3);?>
+								</strong>&nbsp;</td>
 							</tr>
 							<tr>
 								<td colspan="8" style="border: solid 3px #4839bd;">&nbsp;</td>
@@ -379,9 +388,24 @@ dojo.ready(function(){
 								<td class="border-bottom-none border-right-none">&nbsp;</td>
 								<td class="border-bottom-none border-right-none bold " align="center" >&nbsp;<strong><?php echo number_format($this->monthlySemester['total_avg'],2);?></strong>&nbsp;</td>
 								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php echo $this->monthlySemester['rank']?></strong>&nbsp;</td>
-								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?></strong>&nbsp;</td>
-								<td style="white-space: nowrap;" class="border-bottom-none border-right-none red">&nbsp;<strong><?php echo $dbgb->calCulateGradeKhmerMention($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?></strong>&nbsp;</td>
-								<td style="white-space: nowrap;" class="border-bottom-none red">&nbsp;<strong><?php echo $dbgb->calCulateGradeEnglishMention($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?></strong>&nbsp;</td>
+								<td class="border-bottom-none border-right-none red" align="center" >&nbsp;
+								<strong>
+										<?php //echo $dbgb->calCulateGrade($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?>
+										<?php  echo $dbgb->getMentionScore($this->monthlySemester['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],1);?>
+								</strong>
+								&nbsp;</td>
+								<td style="white-space: nowrap;" class="border-bottom-none border-right-none red">&nbsp;
+									<strong>
+										<?php //echo $dbgb->calCulateGradeKhmerMention($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?>
+										<?php  echo $dbgb->getMentionScore($this->monthlySemester['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],2);?>
+										</strong>
+									&nbsp;</td>
+								<td style="white-space: nowrap;" class="border-bottom-none red">&nbsp;
+									<strong>
+										<?php //echo $dbgb->calCulateGradeEnglishMention($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?>
+										<?php  echo $dbgb->getMentionScore($this->monthlySemester['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],3);?>
+										</strong>
+									&nbsp;</td>
 							</tr>
 							<tr class="style hover" style=" line-height: 20px;">
 								<td colspan="2" align="right">&nbsp;ពិន្ទុសរុបប្រចាំឆមាស&nbsp;<br />
@@ -400,9 +424,18 @@ dojo.ready(function(){
 								<td class="border-right-none">&nbsp;</td>
 								<td class="border-right-none bold" align="center" >&nbsp;<strong><?php echo $this->Semester['average_semester_score'];?></strong>&nbsp;</td>
 								<td class="border-right-none red" align="center" >&nbsp;<strong><?php echo $this->Semester['rank']?></strong>&nbsp;</td>
-								<td class="border-right-none red" align="center" >&nbsp;<strong><?php echo $dbgb->calCulateGrade($this->Semester['average_semester_score'],$this->Semester['max_score'])?></strong>&nbsp;</td>
-								<td style="white-space: nowrap;" class="border-right-none red">&nbsp;<strong><?php echo $dbgb->calCulateGradeKhmerMention($this->Semester['average_semester_score'],$this->Semester['max_score'])?></strong>&nbsp;</td>
-								<td style="white-space: nowrap;" class="red" >&nbsp;<strong><?php echo $dbgb->calCulateGradeEnglishMention($this->Semester['average_semester_score'],$this->Semester['max_score'])?></strong>&nbsp;</td>
+								<td class="border-right-none red" align="center" >&nbsp;<strong>
+									<?php //echo $dbgb->calCulateGrade($this->Semester['average_semester_score'],$this->Semester['max_score'])?>
+									<?php  echo $dbgb->getMentionScore($this->Semester['average_semester_score'], $this->rs['for_academic_year'],$this->rs['degree_id'],1);?>
+									</strong>&nbsp;</td>
+								<td style="white-space: nowrap;" class="border-right-none red">&nbsp;<strong>
+									<?php //echo $dbgb->calCulateGradeKhmerMention($this->Semester['average_semester_score'],$this->Semester['max_score'])?>
+									<?php  echo $dbgb->getMentionScore($this->Semester['average_semester_score'], $this->rs['for_academic_year'],$this->rs['degree_id'],2);?>
+									</strong>&nbsp;</td>
+								<td style="white-space: nowrap;" class="red" >&nbsp;<strong>
+									<?php //echo $dbgb->calCulateGradeEnglishMention($this->Semester['average_semester_score'],$this->Semester['max_score'])?>
+									<?php  echo $dbgb->getMentionScore($this->Semester['average_semester_score'], $this->rs['for_academic_year'],$this->rs['degree_id'],3);?>
+									</strong>&nbsp;</td>
 							</tr>
 							<tr>
 								<td colspan="8" style="border: solid 3px #4839bd;">&nbsp;</td>

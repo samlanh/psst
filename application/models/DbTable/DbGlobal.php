@@ -1930,7 +1930,27 @@ function getAllgroupStudyNotPass($action=null){
   		return 'Excellent';
   	}
   }
-  
+  function getMentionScore($score,$academic,$degree,$mentiontype=1){
+  	$db = $this->getAdapter();
+  	$column="sd.metion_grade";
+  	if ($mentiontype==1){//grade A/B/C
+  		$column="sd.metion_grade";
+  	}else if ($mentiontype==2){// ល្អប្រសើរ/ល្អណាស់/ល្អ
+  		$column="sd.metion_in_khmer";
+  	}else if ($mentiontype==3){// Excellent/Very  Good/Good
+  		$column="sd.mention_in_english";
+  	}//,sd.max_score
+  	$sql="SELECT $column AS mention
+			FROM `rms_metionscore_setting_detail` AS sd,
+			`rms_metionscore_setting` AS s
+			WHERE s.id = sd.metion_score_id
+			AND s.academic_year=$academic
+			AND degree = $degree
+			AND $score < sd.max_score
+			ORDER BY sd.max_score ASC
+			LIMIT 1";
+  	return $db->fetchOne($sql);
+  }
   function updateReadNotif($type,$notif_id){
   	$db = $this->getAdapter();
   		$_arr= array(

@@ -181,6 +181,11 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 	                        <ul class="dropdown-menu" role="menu">
 	                        <?php $lastExam = $db_student->getLastExamByStudent($rs['stu_id']);?>
+	                        	<?php if (!empty($rs['group_id'])){?>
+	                        	 <li>
+		                          	<a href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/".$rs['group_id'];?>"><?php echo $tr->translate('STUDENT_LIST_REPORT');?></a>
+		                          </li>
+		                          <?php }?>
 	                        	<?php if (!empty($lastExam)){?>
 		                          <li>
 		                          	<a href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['stu_id']."&group_id=".$lastExam['group_id']."&exam_type=".$lastExam['exam_type']."&for_semester=".$lastExam['for_semester']."&for_month=".$lastExam['for_month'];?>"><?php echo $tr->translate('TRANSCRIPT');?></a>

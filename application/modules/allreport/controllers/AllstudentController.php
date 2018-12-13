@@ -615,19 +615,33 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 			$db->submitDateList($search);
+			$row = $db->getStudentGroup(null,$search,1);
+			$rs=null;
+			if (!empty($row[0]['group_id'])){
+			$rs = $db->getGroupDetailByID($row[0]['group_id']);
+			}
 		}
 		else{
 			$search = array(
 					'txtsearch' => "",
+					'group' 		=> "",
+					'branch_id' 	=> "",
+					'study_year'	=> "",
 					'study_type'=>1
 					);
+			$row = $db->getStudentGroup($id,$search,1);
+			$rs= $db->getGroupDetailByID($id);
 		}
 		$this->view->search = $search;
 		
-		$row = $db->getStudentGroup($id,$search,1);
+		
 		$this->view->rs = $row;
-		$rs= $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	function certifyEnglishAction(){
 		$id=$this->getRequest()->getParam("id");

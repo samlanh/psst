@@ -100,14 +100,29 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				      FROM `rms_view`
 				      WHERE ((`rms_view`.`type` = 2)
 				             AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`,
-				  `g`.`status`   AS `status`
+				  `g`.`status`   AS `status`,
+				  s.home_num,
+				  s.street_num,
+				  (SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+    	(SELECT province_en_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province,
+    	(SELECT v.village_namekh FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_namekh,
+    	(SELECT c.commune_namekh FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_namekh,
+    	(SELECT d.district_namekh FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_namekh,
+    	(SELECT rms_province.province_kh_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province_kh_name
 				FROM 
 					`rms_group_detail_student` AS g,
-					rms_student as s
+					rms_student as s,
+					`rms_group` AS gr
 				WHERE 
+				gr.id = g.group_id
+					AND
 					g.stu_id = s.stu_id
 		   			and `g`.`status` = 1 ";
+		if (!empty($id)){
 			$sql.=' AND g.group_id='.$id;
+		}
 			if($type == 0){
 				$sql.=' and g.type=1 ';
 			}  
@@ -122,6 +137,15 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			   		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
 		   			$s_where[] = " stu_code LIKE '%{$s_search}%'";
 		   		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+		   	}
+		   	if(!empty($search['branch_id'])){
+		   		$sql.=' and gr.branch_id = '.$search['branch_id'];
+		   	}
+		   	if(!empty($search['study_year'])){
+		   		$sql.=' and gr.academic_year = '.$search['study_year'];
+		   	}
+		   	if(!empty($search['group'])){
+		   		$sql.=' and gr.id = '.$search['group'];
 		   	}
 		   	if(!empty($search['study_type'])){
 		   		$sql.=' and g.type = '.$search['study_type'];

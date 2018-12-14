@@ -95,17 +95,42 @@
 				<td colspan="3">
 				<div id="exportExcel">
 					<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
-					<?php $i=0;$degree=0;$count=0; 
-						$all_total = 0;$all_drop = 0;
+					<?php $i=0;$degree="";$count=0; 
+						$all_total = 0;$all_drop = 0; $all_female=0; $all_femaledrop=0;
+						$female=0;$male=0;
 						if(!empty($this->rs))foreach ($this->rs AS $key=>$row) { 
 						if($row['is_subspend']!=0){
 							$all_drop = $all_drop+1;
+							if ($row['sex_key']==2){
+								$all_femaledrop++;
+							}
 						}else{
 							$all_total = $all_total+1;
+							if ($row['sex_key']==2){ $all_female++;}
 						}
 					?>
 						
 						<?php if($degree!=$row['degree']){?>
+							<?php if ($key>0){?>
+							<tr>
+								<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<table cellpadding="0" cellspacing="0" width="33%" style="color:#000; font-family:'Khmer OS Battambang';font-size: 14px">
+									<tr>
+										<td valign="top" style="width:33%; font-size:14px;text-align: left;">
+										<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_TOTAL");?></span> : 
+										<?php echo str_pad($count, 2, '0', STR_PAD_LEFT); $male=$count-$female; $count=0;$i=0;?>&nbsp;<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_UNIT");?></span>
+										</td>
+										<td  valign="top" style="width:25%; text-align: left;">
+											<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("FEMALE");?></span> &nbsp;: <span style=" font-family:'Khmer MEF2';"><?php echo str_pad($female, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); $female=0;?></span>&nbsp;</td>
+										<td  style="width:33%;white-space: nowrap;" valign="top">
+										<span style=" font-family:'Khmer MEF2';text-align: left;"><?php echo $tr->translate("MALE");?></span> &nbsp;: <?php echo str_pad($male, 2, '0', STR_PAD_LEFT);?> <span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_UNIT");?></span>
+										</td>
+									</tr>
+								</table>
+								</td>
+							</tr>
+							<tr><td colspan="14" style="border:1px solid #fff;border-bottom: 1px solid #000;">&nbsp;</td></tr>
+							<?php }?>
 							<thead>
 								<tr style="font-size:12px; height: 20px;background: #ccd9ff;" align="center" >
 									<th rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</th>
@@ -127,14 +152,8 @@
 									<th>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</th>
 								</tr>
 							</thead>
-							<tr>
-								<td colspan="11" style="border-left: 1px solid #fff;"></td>
-								<td align="center" style="font-size: 15px;border-left: 1px solid #fff;"><?php echo $tr->translate("TOTAL");?></td>
-								<td colspan="2" align="center" style="border-right:1px solid #fff;background:#ccd9ff;font-size: 15px;border-left: 1px solid #fff;"><?php echo $count;$count=0;$i=0;  echo $tr->translate("STUDENT_UNIT");?></td>
-							</tr>
-							<tr><td colspan="14" style="border:1px solid #fff;border-bottom: 1px solid #000;">&nbsp;</td></tr>
 						<?php }?>
-						<?php $i++;$count++; ?>
+						<?php $i++;$count++; if ($row['sex_key']==2){ $female++;}?>
 						<tr style="font-size:14px; height: 23px;" align="center" class="hover" >
 							<td >&nbsp;<?php echo $i;?>&nbsp;</td>
 							<td >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
@@ -154,19 +173,47 @@
 						<?php $degree=$row['degree'];?>
 					<?php }?>	
 						<tr>
-							<td colspan="12"></td>
-							<td align="center" style="font-size: 15px;">Total</td>
-							<td align="center" style="font-size: 15px;"><?php echo $count;$count=0;?></td>
+							<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+								<table cellpadding="0" cellspacing="0" width="33%" style="color:#000; font-family:'Khmer OS Battambang';font-size: 14px">
+									<tr>
+										<td valign="top" style="width:33%; font-size:14px;text-align: left;">
+										<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_TOTAL");?></span> : 
+										<?php echo str_pad($count, 2, '0', STR_PAD_LEFT); $male=$count-$female; $count=0;$i=0;?>&nbsp;<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_UNIT");?></span>
+										</td>
+										<td  valign="top" style="width:25%; text-align: left;">
+											<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("FEMALE");?></span> &nbsp;: <span style=" font-family:'Khmer MEF2';"><?php echo str_pad($female, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); $female=0;?></span>&nbsp;</td>
+										<td  style="width:33%;white-space: nowrap;" valign="top">
+										<span style=" font-family:'Khmer MEF2';text-align: left;"><?php echo $tr->translate("MALE");?></span> &nbsp;: <?php echo str_pad($male, 2, '0', STR_PAD_LEFT);?> <span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_UNIT");?></span>
+										</td>
+									</tr>
+								</table>
+							</td>
 						</tr>
+						<tr><td colspan="14" style="border:1px solid #fff;">&nbsp;</td></tr>
 					</table>	
-					<table style="float: right;font-weight: bolder;">
+					<table style="width:30%; font-family:'Khmer OS Battambang'; margin:0 auto; font-weight: bolder;">
 						<tr>
-							<td>សិស្សកំពុងសិក្សាសរុប : </td>
-							<td><?php echo number_format($all_total);?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
+							<td valign="top" style="white-space:nowrap; font-size:14px;text-align: left;">
+								<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("សិស្សកំពុងសិក្សាសរុប");?></span>
+								
+							</td>
+							<td> : <?php echo str_pad($all_total, 2, '0', STR_PAD_LEFT);?>&nbsp;<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_UNIT");?></span> </td>
+							<td  valign="top" style="width:25%; text-align: left;">
+								<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("FEMALE");?></span> &nbsp;: <span style=" font-family:'Khmer MEF2';"><?php echo str_pad($all_female, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); $female=0;?></span>&nbsp;</td>
+							<td  style="width:25%;white-space: nowrap;" valign="top">
+							<span style=" font-family:'Khmer MEF2';text-align: left;"><?php echo $tr->translate("MALE");?></span> &nbsp;: <?php echo str_pad(($all_total-$all_female), 2, '0', STR_PAD_LEFT);?> <span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_UNIT");?></span>
+							</td>
 						</tr>
 						<tr>
-							<td>សិស្សឈប់សរុប : </td>
-							<td><?php echo number_format($all_drop);?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
+							<td valign="top" style="white-space:nowrap; font-size:14px;text-align: left;">
+							<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("សិស្សឈប់សរុប");?></span>
+							</td>
+							<td> : <?php echo str_pad($all_drop, 2, '0', STR_PAD_LEFT);?>&nbsp;<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_UNIT");?></span> </td>
+							<td  valign="top" style="width:25%; text-align: left;">
+								<span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("FEMALE");?></span> &nbsp;: <span style=" font-family:'Khmer MEF2';"><?php echo str_pad($all_femaledrop, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); $female=0;?></span>&nbsp;</td>
+							<td  style="width:25%;white-space: nowrap;" valign="top">
+							<span style=" font-family:'Khmer MEF2';text-align: left;"><?php echo $tr->translate("MALE");?></span> &nbsp;: <?php echo str_pad(($all_drop-$all_femaledrop), 2, '0', STR_PAD_LEFT);?> <span style=" font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_UNIT");?></span>
+							</td>
 						</tr>
 					</table>
 				</div>	

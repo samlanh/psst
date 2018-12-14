@@ -376,6 +376,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    	CONCAT(stu_enname," ",last_name) AS name,
 		    	stu_khname,
 		    	is_stu_new,
+		    	rms_student.sex as sex_key,
 		    	(SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
        			(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
 		    	tel,email,stu_code,home_num,street_num,

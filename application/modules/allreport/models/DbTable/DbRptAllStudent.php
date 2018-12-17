@@ -1041,7 +1041,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	";
 		return $db->fetchAll($sql);
     }
-    function getAttendenceFoul($group_id,$stu_id){//áž€áŸ†áž áž»ážŸ áž˜áž€áž™ážºáž� áž“áž·áž„áž…áŸ�áž‰áž˜áž»áž“
+    function getAttendenceFoul($group_id,$stu_id){//Ã¡Å¾â‚¬Ã¡Å¸â€ Ã¡Å¾Â Ã¡Å¾Â»Ã¡Å¾Å¸ Ã¡Å¾ËœÃ¡Å¾â‚¬Ã¡Å¾â„¢Ã¡Å¾ÂºÃ¡Å¾ï¿½ Ã¡Å¾â€œÃ¡Å¾Â·Ã¡Å¾â€žÃ¡Å¾â€¦Ã¡Å¸ï¿½Ã¡Å¾â€°Ã¡Å¾ËœÃ¡Å¾Â»Ã¡Å¾â€œ
     	$db = $this->getAdapter();
     	$sql="SELECT sade.*,sta.`date_attendence`,sta.`group_id`,COUNT(sade.`attendence_status`) AS count_foul_att
     	FROM rms_student_attendence_detail AS sade,
@@ -1182,5 +1182,41 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where.=$dbp->getAccessPermission("s.branch_id");
     	$order=" ORDER BY sd.date_end DESC, sd.stu_id ASC";
     	return $db->fetchAll($sql.$where.$order);
+    }
+    
+    function getStudentDropInfo($drop_id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT 
+			(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = sd.branch_id LIMIT 1) AS branch_name,
+			(SELECT school_namekh FROM `rms_branch` WHERE rms_branch.br_id = sd.branch_id LIMIT 1) AS school_namekh,
+			(SELECT school_nameen FROM `rms_branch` WHERE rms_branch.br_id = sd.branch_id LIMIT 1) AS school_nameen,
+			(SELECT photo FROM `rms_branch` WHERE rms_branch.br_id = sd.branch_id LIMIT 1) AS branch_photo,
+			sd.*,
+			s.stu_khname,
+			s.stu_enname,
+			s.last_name,
+			s.sex,
+			s.tel,
+			s.home_num,
+			s.street_num,
+			(SELECT v.village_namekh FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_namekh,
+			(SELECT c.commune_namekh FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_namekh,
+			(SELECT d.district_namekh FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_namekh,
+			(SELECT province_kh_name FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_kh_name,
+			
+			(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+		(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) lIMIT 1) AS grade,
+		`g`.`amount_month`,
+		(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
+		AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`)) AS `room_name`
+		
+			FROM `rms_student_drop` AS sd,
+			`rms_student` AS s,
+			`rms_group` AS g
+			WHERE 
+    	g.id = sd.group AND
+    	s.stu_id = sd.stu_id AND sd.id = $drop_id LIMIT 1";
+    	return $db->fetchRow($sql);
     }
 }

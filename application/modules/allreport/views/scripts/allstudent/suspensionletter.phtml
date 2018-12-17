@@ -1,0 +1,297 @@
+<meta charset="utf-8">
+<script>
+dojo.require("dijit.form.DateTextBox");
+</script>
+<style>
+.hover:hover{background: #ccc;}
+img.view{height: 70px !important;}
+</style>
+<?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();?>
+<title><?php echo $tr->translate("Suspension Letter");?></title>
+ <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div id="divPrint" style="width: 100%;">
+			<style>
+				.print tr td{
+					padding:0px 2px 0px 2px; 
+				}
+				tr.hearder_table td {
+				    padding: 5px;
+				}
+				
+				ul {
+				    list-style: none;
+				    padding: 0;
+				}
+				span.inline-block {
+				    display: inline-block;
+				}
+				span.border-bt {
+				    border-bottom: 1px dashed #000;
+				    line-height: 14px;
+				    text-align: center;
+					width: 100%;
+				}
+				table.valuetb{
+					line-height: 18px; margin: 0 auto;
+					font-size:13px;
+				}
+			</style>
+			
+			<?php for($i=0; $i<2; $i++){ ?>		
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Times New Roman','Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
+					<tr>
+						<td width="25%">
+							<?php 
+							$imagesbranch=$this->baseUrl()."/images/logo.jpg";
+							if (!empty($this->rs['branch_photo'])){
+							$imagesbranch=$this->baseUrl()."/images/".$this->rs['branch_photo'];
+}?>
+							<img style="max-width: 98%;max-height:90px;" src="<?php echo $imagesbranch;?>">
+						</td>
+						<td align="center">
+							<strong style="font-family:'Khmer OS Muol';"><?php echo $this->rs['school_namekh'];?></strong>
+							<br/>
+							<strong style="font-family:'Khmer OS Muol';"><?php echo $this->rs['school_nameen'];?></strong>
+							<br/>
+							<strong style="font-family:'Khmer OS Muol';">ពាក្យសុំព្យួរការសិក្សា </strong>
+							<br/>
+							<strong style="font-family:'Khmer OS Muol';">Suspension of Studies Form</strong>
+						</td>
+						<td width="25%">
+						</td>
+					</tr>
+					<tr>
+						<td  colspan="3">
+							<table cellpadding="5" width="100%" style=" font-size:13px; line-height: 18px; margin: 0 auto;">
+								<tr>
+									<td width="3%"><span class="inline-block number-range">1</span></td>
+									<td width="16%"><span class="inline-block" >ឈ្មោះសិស្ស:</span></td>
+									<td width="28%"><span class="inline-block border-bt">&nbsp;<?php echo $this->rs['stu_khname']?>&nbsp;</span></td>
+									<td width="18%"><span class="inline-block" >Student's name:</span></td>
+									<td width="28%"><span class="inline-block border-bt">&nbsp;<?php echo $this->rs['stu_enname']." ".$this->rs['last_name'];?>&nbsp;</span></td>
+									<td width="5%"><span class="inline-block" >ភេទ/sex:</span></td>
+									<td width="6%"><span class="inline-block border-bt">&nbsp;<?php if ($this->rs['sex']==1){ echo $tr->translate("MALE");}else{ echo $tr->translate("FEMALE");}?>&nbsp;</span></td>
+								</tr>
+								<tr>
+									<td width="3%"><span class="inline-block number-range">2</span></td>
+									<td colspan="6">
+										<table class="valuetb" width="100%" >
+											<tr>
+												<td width="20%" style="white-space: nowrap;">អាស័យដ្ខានបច្ចុប្បន្ន(Permanent Adress):</td>
+												<td width="80%"><span class="inline-block border-bt">&nbsp;
+												<?php if (!empty($this->rs['home_num'])){ echo "ផ្ទះលេខ".$this->rs['home_num']." ";}?>
+												<?php if (!empty($this->rs['street_num'])){ echo "ផ្លូវលេខ".$this->rs['street_num']." ";}?>
+												<?php if (!empty($this->rs['village_namekh'])){ echo "ភូមិ".$this->rs['village_namekh']." ";}?>
+												<?php if (!empty($this->rs['commune_namekh'])){ echo "ឃុំ/សង្កាត់".$this->rs['commune_namekh']." ";}?>
+												<?php if (!empty($this->rs['district_namekh'])){ echo "ស្រុក/ខណ្ឌ".$this->rs['district_namekh']." ";}?>
+												<?php if (!empty($this->rs['province_kh_name'])){ echo "រាជធានី/ខេត្ត ".$this->rs['province_kh_name']." ";}?>&nbsp;
+												</span></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td width="3%"><span class="inline-block number-range">3</span></td>
+									<td colspan="6">
+										<table width="100%" class="valuetb">
+											<tr>
+												<td width="10%" style="white-space: nowrap;">ទូរស័ព្ទ្ធ(Phone):</td>
+												<td width="90%"><span class="inline-block border-bt">&nbsp;<?php echo $this->rs['tel']?>&nbsp;</span></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td width="3%"><span class="inline-block number-range">4</span></td>
+									<td colspan="6">
+										<table width="100%" class="valuetb">
+											<tr>
+												<td width="15%" style="white-space: nowrap;">ថ្នាក់កំពុងសិក្សា(Course Attended):</td>
+												<td width="25%"><span class="inline-block border-bt">&nbsp;<?php echo $this->rs['grade']?>&nbsp;</span></td>
+												<td align="center" width="10%" style="white-space: nowrap;">វគ្គ(Term):</td>
+												<td width="20%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+												<td align="center" width="10%" style="white-space: nowrap;">ម៉ោង(Time):</td>
+												<td width="20%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td width="3%"><span class="inline-block number-range">5</span></td>
+									<td colspan="6">
+										<table width="100%" class="valuetb">
+											<tr>
+												<td width="25%" style="white-space: nowrap;">ថ្ងៃខែឆ្នាំ ចូលរៀន(Date of Entry):</td>
+												<td width="25%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+												<td width="25%" style="white-space: nowrap;">ថ្លៃសិក្សាបង់ហើយ(Paid Tuition):</td>
+												<td width="25%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td width="3%"><span class="inline-block number-range">6</span></td>
+									<td colspan="6">
+										<table width="100%" class="valuetb">
+											<tr>
+												<td width="25%" style="white-space: nowrap;">ព្យួរទៅវគ្គ(Suspend to Term):</td>
+												<td width="25%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+												<td width="25%" style="white-space: nowrap;">ថ្លៃសិក្សានៅសល់(Due Balance):</td>
+												<td width="25%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td width="3%"><span class="inline-block number-range">7</span></td>
+									<td colspan="6">
+										<table width="100%" class="valuetb">
+											<tr>
+												<td width="30%" style="white-space: nowrap;">មូលហេតុ(Reason for Supension of Studies):</td>
+												<td width="70%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td width="3%"><span class="inline-block number-range">8</span></td>
+									<td colspan="6">
+										<table width="100%" class="valuetb">
+											<tr>
+												<td width="25%" style="white-space: nowrap;">ថ្ងៃខែឆ្នាំដាក់ពាក្យ(Date of Application):</td>
+												<td width="75%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style="height: 50px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<table width="100%" style="font-size:12px; line-height: 18px; margin: 0 auto;">
+								<tr>
+									<td width="20%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+									<td></td>
+									<td width="22%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+									<td></td>
+									<td width="20%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+									<td></td>
+									<td width="20%"><span class="inline-block border-bt">&nbsp;&nbsp;</span></td>
+								</tr>
+								<tr>
+									<td width="20%">
+										<div style="padding-left: 10px;">ហត្ថលេខាសិស្ស</div>
+										<div style="padding-left: 10px;">Student's signature</div>
+										<div style="padding-left: 10px;">Date:</div>
+									</td>
+									<td></td>
+									<td width="22%">
+										<div style="padding-left: 10px;">ហត្ថលេខាអាណាព្យាបាល</div>
+										<div style="padding-left: 10px;">Guardian's signature</div>
+										<div style="padding-left: 10px;">Date:</div>
+									</td>
+									<td></td>
+									<td width="20%">
+										<div style="padding-left: 10px;">ការិយាល័យសិក្សា</div>
+										<div style="padding-left: 10px;">Acadmic Department</div>
+										<div style="padding-left: 10px;">Date:</div>
+									</td>
+									<td></td>
+									<td width="20%">
+										<div style="padding-left: 10px; white-space: nowrap;">ហត្ថលេខាអ្នកទទួលពាក្យ</div>
+										<div style="padding-left: 10px;">Receiver's signature</div>
+										<div style="padding-left: 10px;">Date:</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4" align="right">
+							<div style="font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
+						</td>
+					</tr>
+				</table>	
+			<?php if($i==0){?>
+					<div style="height: 30px; margin-top: 40px;">
+						<div style="width: 100%;border-bottom:2px dashed #000; "></div>
+					</div>
+				<?php }?>
+			<?php } ?>
+	</div>
+</div>
+<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
+	<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
+		<i class="fa fa-print"></i>
+	</div>
+	<div class="ptss__header"><?php echo $tr->translate("PRINT");?></div>
+	<div class="ptss__settings">
+		<div class="ptss__single-setting" id="ptss__layout">
+			<div class="ptss__setting-control">
+				<div class="ptss__layout-wrapper">
+					<a class="qButton" title="<?php echo $tr->translate("Preview");?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
+					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrint();" ><i class="fa fa-print" aria-hidden="true"></i></a>
+					<a class="qButton excel" href="#"  title="<?php echo $tr->translate("Export");?>"  onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+dojo.ready(function(){
+	getbranchinfo();
+});
+var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
+function getbranchinfo(){
+		branch_id = '<?php echo $this->row['branch_id'];?>';
+		
+		if(branch_id != ""){
+			loadingBlock();
+			dojo.xhrPost({
+				url:url_getbranch,
+				content:{
+					'branch_id':branch_id,
+					},
+				handleAs:"json",
+				load: function(data){
+					$(".lbl_header").html(data);
+					HideloadingBlock();
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});	
+		} 
+	}
+
+function doPrint() {
+	window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint').innerHTML;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+    hideDialog();
+}
+function hideleft(){
+	(dojo.style("leftmenu","display") == "none") ? 'show':'hide'();
+}
+function preview()
+{ 
+  var disp_setting="toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,"; 
+      disp_setting+="scrollbars=no,fullscreen=yes, height=700, left=100, top=25"; 
+  var content_vlue = document.getElementById("divPrint").innerHTML; 
+  var docprint=window.open("","",disp_setting); 
+   docprint.document.open(); 
+   docprint.document.write('<html><head>'); 
+   docprint.document.write('</head><div style=" font-size:16px !important; margin:0px; font-family:Verdana;"><style>table th {font-size:14px !important;} table td{font-size:12px !important;}</style><center>');          
+   docprint.document.write(content_vlue);          
+   docprint.document.write('</center></div></html>'); 
+   docprint.document.close(); 
+   docprint.focus(); 
+}
+function exportExcel(){
+	$('#exportExcel').tableExport({type:'excel',escape:'false'});
+}
+</script>

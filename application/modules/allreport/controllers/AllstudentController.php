@@ -952,4 +952,14 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	
 		$this->view->search=$search;
 	}
+	public function suspensionletterAction(){
+		$id=$this->getRequest()->getParam("id");
+		if (empty($id)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/studentdrop/index");exit();
+		}
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		
+		$rs_rows = $group->getStudentDropInfo($id);
+		$this->view->rs = $rs_rows;
+	}
 }

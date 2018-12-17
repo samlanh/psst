@@ -3,6 +3,8 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('STUDENT_DROP')); 
 	$frm =  $this->form_search;
+	$urlLetter = $this->baseUrl()."/allreport/allstudent/suspensionletter/id/";
+	$urlEdit = $this->baseUrl()."/foundation/studentdrop/edit/id/";
 ?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -113,5 +115,35 @@ function getAllAcademicByBranch(){
 			alert(err);
 		}
 	});
+}
+
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+		
+			var m = "clicked: " + key;
+			if(key=="edit"){
+				url='<?php echo $urlEdit;?>';
+			}else if(key=="letter"){
+				url='<?php echo $urlLetter;?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+			"letter": {name: "<?php echo $tr->translate("Suspension Letter");?>", icon: "fa-file-text-o"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+
+var recordid ='';
+function gotoAction(){
+	window.location.href =url+row;
 }
 </script>

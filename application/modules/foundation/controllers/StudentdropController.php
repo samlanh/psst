@@ -41,7 +41,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 				$link=array(
 						'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 				);
-				$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'academic'=>$link,'stu_id'=>$link,'student_name'=>$link,'sex'=>$link));
+				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'academic'=>$link,'stu_id'=>$link,'student_name'=>$link,'sex'=>$link));
 	
 			$this->view->search = $search;
 		}catch(Exception $e){

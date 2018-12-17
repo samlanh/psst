@@ -46,7 +46,8 @@ class Application_Form_FrmGlobal{
 			$rs = $db->getBranchInfo($branch_id);
 			if(!empty($rs)){
 				$img = $rs['photo'];
-				$school_name = $rs['branch_namekh'];
+// 				$school_name = $rs['branch_namekh'];
+				$school_name = $rs['school_nameen'];
 				$address = $rs['br_address'];
 				$tel = $rs['branch_tel'];
 				$email = $rs['email'];

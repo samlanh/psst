@@ -107,6 +107,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 
  		$sql = "SELECT s.*,
  				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_name,
+ 				(SELECT school_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_namekh,
+ 				(SELECT school_nameen FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_nameen,
 				(SELECT photo FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS photo_branch,
 				(SELECT br_address FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS br_address,
 				(SELECT branch_tel FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_tel,

@@ -116,5 +116,24 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		$limit=" LIMIT 10";
 		return $db->fetchAll($sql.$where.$order.$limit);
 	}
+	
+	function getStudentNotYetGroup(){
+		$db = $this->getAdapter();
+		$sql="SELECT
+			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
+			(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
+			(SELECT b.school_namekh FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS school_namekh,
+			(SELECT b.school_nameen FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS school_nameen,
+			(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_title,
+			   (SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_title,	 
+			s.* FROM 
+			`rms_student` AS s
+			WHERE s.customer_type =1
+			AND s.status=1
+			AND s.is_subspend=0
+			AND s.is_setgroup =0 ";//(s.group_id=0 OR s.group_id='')
+		$limit=" LIMIT 10";
+		return $db->fetchAll($sql.$limit);
+	}
 }
 ?>

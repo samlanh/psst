@@ -48,6 +48,8 @@ $teacher_id = $session_t->teacher_id;
 	$teacher_doc = $dbNotification->getTeachDocumentAlert();
 	$stuproduct = $dbNotification->getStuProductAlert();
 	$stuproductNew = $dbNotification->getStuProductAlert(1);
+	
+	$stu_nogroup = $dbNotification->getStudentNotYetGroup();
     ?>
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -221,6 +223,63 @@ $teacher_id = $session_t->teacher_id;
 					                    </li>
 				                  </ul>
 				                </li>
+				                <li role="presentation" class="dropdown">
+					                  <a title="<?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+					                    <i class="fa fa-file-text-o "></i>
+					                    <span id="countNews" class="badge bg-green"><?php if (count($stu_nogroup)>0){ echo count($stu_nogroup);}?></span>
+					                  </a>
+					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+						                 <li class=" event title">
+						                  	<h4><i class="fa fa-file-text-o "></i> <?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?></h4>
+						                  </li>
+						                  <?php if(!empty($stu_nogroup)){?>
+						                  	<?php foreach($stu_nogroup as $key=> $stunogro){
+				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$stunogro['stu_id'];
+					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
+					                          	if (!empty($rsdoc['photo'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$stunogro['photo'])) {
+					                          			$profileimg = $this->baseUrl().'/images/photo/'.$stunogro['photo'];
+					                          		}
+					                          	}
+					                          	$style="";
+					                          	if (!empty($stunogro['branch_logo'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/'.$stunogro['branch_logo'])) {
+					                          			$style="background: url(/elt/trunk/public/images/".$stunogro['branch_logo'].");  background-repeat: no-repeat; background-size: 100%;";
+					                          		}
+					                          	}
+				                          	?>
+				                          	<li class="event " title="<?php echo $stunogro['stu_khname']." ".$stunogro['stu_code'];?>">
+				                         	 <a href="<?php echo $url;?>">
+				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
+					                            <div class="pull-left profile-list ">
+					                              <img src="<?php echo $profileimg;?>" />
+					                            </div>
+					                            <div class="media-body">
+					                              <?php if (!empty($stunogro['stu_code'])){?>
+					                              <span ><?php echo $stunogro['stu_code'];?>  
+					                              </span><br />
+					                              <?php }?>
+					                              <span class="title bold" ><?php echo $stunogro['stu_khname'];?></span><br />
+					                              <span class="title bold" ><?php echo $stunogro['stu_enname']." ".$stunogro['last_name'];?></span><br />
+					                              <span class="title" ><?php echo $tr->translate("DEGREE")." : ".$stunogro['degree_title'];?></span><br />
+					                              <span class="title" ><?php echo $tr->translate("GRADE")." : ".$stunogro['grade_title'];?></span>
+					                            </div>
+				                            </a>
+				                          </li>
+				                          	<?php }?>
+						                  <?php }?>
+						                  <?php if (count($stu_nogroup)>9){?>
+						                  <li>
+						                      <div class="text-center">
+						                        <a href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-document"?>">
+						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
+						                          <i class="fa fa-angle-right"></i>
+						                        </a>
+						                      </div>
+						                    </li>
+						                   <?php }?>
+						               </ul>
+					            </li>
 				                <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("STUDENT_PRODUCT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-cubes "></i>

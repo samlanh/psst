@@ -47,9 +47,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;    	
     	$order=" ORDER BY stu_id,degree,grade,academic_year DESC";
-//     	if(empty($search)){
-//     		return $db->fetchAll($sql.$order);
-//     	}
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
@@ -1218,5 +1215,81 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	g.id = sd.group AND
     	s.stu_id = sd.stu_id AND sd.id = $drop_id LIMIT 1";
     	return $db->fetchRow($sql);
+    }
+    
+    public function getAllStudentNotYetGroup($search){
+    	$db = $this->getAdapter();
+    	$sql ='SELECT 
+    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+    	CONCAT(stu_khname," - ",stu_enname," ",last_name) as name,
+    	s.*,
+    	(SELECT name_en FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+    	(SELECT name_en FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
+    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
+    	(SELECT CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
+    	(SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=s.academic_year LIMIT 1) as start_year,
+    	(SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=s.academic_year LIMIT 1) as end_year,
+    	(SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=s.academic_year LIMIT 1) as end_date,
+    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=s.session LIMIT 1)AS session,
+    		
+    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
+    
+    	(SELECT name_kh from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status,
+    	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+    	(SELECT province_en_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province,
+    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS sextitle
+    	
+    	FROM rms_student as s ';
+    	$where=' WHERE s.status=1 AND s.customer_type=1 AND s.is_setgroup =0';
+    
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+//     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
+//     	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
+//     	$where .= " AND ".$from_date." AND ".$to_date;
+    	$order=" ORDER BY stu_id,degree,grade,academic_year DESC";
+    	if(!empty($search['title'])){
+    		$s_where = array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
+    		$s_where[]=" s.stu_khname LIKE '%{$s_search}%'";
+    		$s_where[]=" s.stu_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" s.last_name LIKE '%{$s_search}%'";
+    		$s_where[]=" s.tel LIKE '%{$s_search}%'";
+    		$s_where[]=" s.father_phone LIKE '%{$s_search}%'";
+    		$s_where[]=" s.mother_phone LIKE '%{$s_search}%'";
+    		$s_where[]=" s.guardian_tel LIKE '%{$s_search}%'";
+    		$s_where[]=" s.father_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" s.mother_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" s.guardian_enname LIKE '%{$s_search}%'";
+    		$s_where[]=" s.remark LIKE '%{$s_search}%'";
+    		$s_where[]=" s.home_num LIKE '%{$s_search}%'";
+    		$s_where[]=" s.street_num LIKE '%{$s_search}%'";
+    		$s_where[]=" s.village_name LIKE '%{$s_search}%'";
+    		$s_where[]=" s.commune_name LIKE '%{$s_search}%'";
+    		$s_where[]=" s.district_name LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['study_year'])){
+    		$where.=' AND s.academic_year='.$search['study_year'];
+    	}
+    	if(!empty($search['degree'])){
+    		$where.=' AND s.degree='.$search['degree'];
+    	}
+    	if(!empty($search['branch_id'])){
+    		$where.=' AND s.branch_id='.$search['branch_id'];
+    	}
+    	if(!empty($search['grade'])){
+    		$where.=' AND s.grade='.$search['grade'];
+    	}
+//     	if(!empty($search['session'])){
+//     		$where.=' AND s.session='.$search['session'];
+//     	}
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission();
+    	return $db->fetchAll($sql.$where.$order);
     }
 }

@@ -261,9 +261,12 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'end_date'	=> date('Y-m-d'),
 			);
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
+		
+		$form = new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+		
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $group->getAllStudentDetail($search);
@@ -961,5 +964,36 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		
 		$rs_rows = $group->getStudentDropInfo($id);
 		$this->view->rs = $rs_rows;
+	}
+	public function rptStudentNotyetgrAction(){
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search=array(
+					'title' 		=>'',
+					'branch_id'		=>0,
+					'degree'		=>0,
+					'study_year' 	=>'',
+					'grade' 	=>'',
+					//'session' 		=>'',
+					'group'			=>'',
+					'stu_type'=>'',
+					//'start_date'	=> date('Y-m-d'),
+					//'end_date'		=> date('Y-m-d'),
+			);
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$rs_rows = $group->getAllStudentNotYetGroup($search);
+		$this->view->rs = $rs_rows;
+	
+		$this->view->search=$search;
+		$key = new Application_Model_DbTable_DbKeycode();
+		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	}
 }

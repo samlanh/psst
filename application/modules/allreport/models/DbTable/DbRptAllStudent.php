@@ -11,16 +11,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 //     }
     public function getAllStudent($search){
     	$db = $this->getAdapter();
-    	$sql ='SELECT branch_id,stu_id,
+    	$sql ='SELECT 
+    	*,
     	      (SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
     	       CONCAT(stu_khname," - ",stu_enname," ",last_name) as name,
-    	       stu_enname,stu_khname,last_name,
     	       (SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
     			(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
-    	
-    	       tel,email,stu_code,home_num,street_num,
-    	
-    		   is_subspend,dob,degree as dept,
+    		   degree as dept,
     		   (SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
     		   (SELECT CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
     		   (SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as start_year,
@@ -329,7 +326,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql ='SELECT
     	*,
-    	stu_id,
     	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
     	CONCAT(stu_khname," - ",stu_enname," ",last_name) as name,
     	stu_khname,last_name,stu_enname as en_name,
@@ -337,13 +333,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	(SELECT name_kh FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
     	(SELECT name_kh FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
     	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
-    	tel,
-    	email,
-    	stu_code,
-    	home_num,
-    	street_num,
-    	is_subspend,
-    	dob,
     	degree as dept,
     	(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as academic_year,
     	(SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as start_year,

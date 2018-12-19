@@ -279,6 +279,37 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'score_bacc'	=>$_data['score_baccexam'],
 						'certificate_bacc'	=>$_data['certificate_baccexam'],
 						);
+				
+				$part= PUBLIC_PATH.'/images/photo/';
+				if (!file_exists($part)) {
+					mkdir($part, 0777, true);
+				}
+				$dbg = new Application_Model_DbTable_DbGlobal();
+				$name = $_FILES['father_photo']['name'];
+				$size = $_FILES['father_photo']['size'];
+				if (!empty($name)){
+					$tem =explode(".", $name);
+					$new_image_name = "fatherprofile".date("Y").date("m").date("d").time().".".end($tem);
+					$photopj = $dbg->resizeImase($_FILES['father_photo'], $part,$new_image_name);
+					$_arr['father_photo']=$photopj;
+				}
+				$name = $_FILES['mother_photo']['name'];
+				$size = $_FILES['mother_photo']['size'];
+				if (!empty($name)){
+					$tem =explode(".", $name);
+					$new_image_name = "motherprofile".date("Y").date("m").date("d").time().".".end($tem);
+					$photopj = $dbg->resizeImase($_FILES['mother_photo'], $part,$new_image_name);
+					$_arr['mother_photo']=$photopj;
+				}
+				$name = $_FILES['guardian_photo']['name'];
+				$size = $_FILES['guardian_photo']['size'];
+				if (!empty($name)){
+					$tem =explode(".", $name);
+					$new_image_name = "guardianprofile".date("Y").date("m").date("d").time().".".end($tem);
+					$photopj = $dbg->resizeImase($_FILES['guardian_photo'], $part,$new_image_name);
+					$_arr['guardian_photo']=$photopj;
+				}
+				
 				$id = $this->insert($_arr);
 				
 				if($_data['group']!=-1 AND $_data['group']!='' AND $_data['group']!=0){
@@ -432,6 +463,36 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				if(move_uploaded_file($tmp, $part.$image_name)){
 					$_arr['photo']=$image_name;
 				}
+			}
+			
+			$part= PUBLIC_PATH.'/images/photo/';
+			if (!file_exists($part)) {
+				mkdir($part, 0777, true);
+			}
+			$dbg = new Application_Model_DbTable_DbGlobal();
+			$name = $_FILES['father_photo']['name'];
+			$size = $_FILES['father_photo']['size'];
+			if (!empty($name)){
+				$tem =explode(".", $name);
+				$new_image_name = "fatherprofile".date("Y").date("m").date("d").time().".".end($tem);
+				$photopj = $dbg->resizeImase($_FILES['father_photo'], $part,$new_image_name);
+				$_arr['father_photo']=$photopj;
+			}
+			$name = $_FILES['mother_photo']['name'];
+			$size = $_FILES['mother_photo']['size'];
+			if (!empty($name)){
+				$tem =explode(".", $name);
+				$new_image_name = "motherprofile".date("Y").date("m").date("d").time().".".end($tem);
+				$photopj = $dbg->resizeImase($_FILES['mother_photo'], $part,$new_image_name);
+				$_arr['mother_photo']=$photopj;
+			}
+			$name = $_FILES['guardian_photo']['name'];
+			$size = $_FILES['guardian_photo']['size'];
+			if (!empty($name)){
+				$tem =explode(".", $name);
+				$new_image_name = "guardianprofile".date("Y").date("m").date("d").time().".".end($tem);
+				$photopj = $dbg->resizeImase($_FILES['guardian_photo'], $part,$new_image_name);
+				$_arr['guardian_photo']=$photopj;
 			}
 			
 			$where=$this->getAdapter()->quoteInto("stu_id=?", $_data["id"]);

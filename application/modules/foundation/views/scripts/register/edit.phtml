@@ -67,7 +67,8 @@ input.btn_borwse_image {
 		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_REGISTER');?></h4>
 	    			</div>
 	    			<div class="col-sm-4 pd-0 text-right">
-	    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="PrintDiv()"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("Print Card");?></a>
+	    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="PrintDiv('divPrint')"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("Print Card");?></a>
+	    				<a href="javascript:void(0);" class="print-card btn btn-primary btn-xs" onclick="PrintDiv('divPrintPickup')"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $tr->translate("Print Pick up Card");?></a>
 	    			</div>
 	    			<div class="clearfix"></div>
 	    		</div>
@@ -399,7 +400,31 @@ input.btn_borwse_image {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                  		 <?php echo $frm->getElement("fa_phone");?>
 				                   </div>
-				                </div> 
+				                </div>
+								<div class="form-group">
+									<label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHOTO");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                    	<div class="account-image" style="margin:0;">
+											<div class="image-box">
+												<?php
+													$father_photo = $this->baseUrl().'/images/no-profile.png';
+													 if (!empty($this->rs['father_photo'])){
+														if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['father_photo'])){
+															$father_photo = $this->baseUrl().'/images/photo/'.$this->rs['father_photo'];
+														}
+													 }
+												?>
+												<img id="father_wiew" src="<?php echo $father_photo;?>" alt=""  />
+											</div>
+											<div class="button_browse">
+											<div id='preview'></div>	
+													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<input class="btn_borwse_image" type="file" id="father_photo" name="father_photo"  />
+											</div>
+										</div>
+				                   </div>
+				                </div>
 				             </div>
 				             <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
@@ -440,7 +465,31 @@ input.btn_borwse_image {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("mon_phone");?>
 				                   </div>
-				                </div> 
+				                </div>
+								<div class="form-group">
+									<label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHOTO");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                    	<div class="account-image" style="margin:0;">
+											<div class="image-box">
+												<?php
+													$mother_photo = $this->baseUrl().'/images/no-profile.png';
+													 if (!empty($this->rs['mother_photo'])){
+														if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['mother_photo'])){
+															$mother_photo = $this->baseUrl().'/images/photo/'.$this->rs['mother_photo'];
+														}
+													 }
+												?>
+												<img id="mother_wiew" src="<?php echo $mother_photo;?>" alt=""  />
+											</div>
+											<div class="button_browse">
+											<div id='preview'></div>	
+													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<input class="btn_borwse_image" type="file" id="mother_photo" name="mother_photo"  />
+											</div>
+										</div>
+				                   </div>
+				                </div>
 				             </div>
 				             <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
@@ -481,7 +530,31 @@ input.btn_borwse_image {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("guardian_phone");?>
 				                   </div>
-				                </div> 
+				                </div>
+								<div class="form-group">
+									<label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHOTO");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                    	<div class="account-image" style="margin:0;">
+											<div class="image-box">
+												<?php
+													$guardian_photo = $this->baseUrl().'/images/no-profile.png';
+													 if (!empty($this->rs['guardian_photo'])){
+														if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['guardian_photo'])){
+															$guardian_photo = $this->baseUrl().'/images/photo/'.$this->rs['guardian_photo'];
+														}
+													 }
+												?>
+												<img id="guardian_wiew" src="<?php echo $guardian_photo;?>" alt=""  />
+											</div>
+											<div class="button_browse">
+											<div id='preview'></div>	
+													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<input class="btn_borwse_image" type="file" id="guardian_photo" name="guardian_photo"  />
+											</div>
+										</div>
+				                   </div>
+				                </div>
 				             </div>
 				         </div>
 			        </div>
@@ -727,7 +800,89 @@ input.btn_borwse_image {
 				                    		</div>
 				                    	</div>
 				                    </div>
-								 </div>			
+								 </div>
+								<div class="form-group">
+									<div id="divPrintPickup" style="margin: 0; padding: 0; display:none;" >
+										<style>
+											.card-content-student-printpickup{
+												background-image: url('<?php echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
+											 	background-size: 100%;background-repeat: no-repeat;	
+												position: relative;		
+												border:solid 1px #eee;
+												width: 14.5cm; 
+												height:10.3cm; 													
+											}
+											.guardian-name {
+												font-family: 'Khmer OS Muol Light';
+												position: absolute;
+												top: 33%;
+												left: 60px;
+												color: #000;
+											}
+											.profile-card-block {
+												position: relative;
+											}
+											.profile-card-block .photo {
+												 width: initial;
+												position: absolute;
+												top: 120px;
+												left: 80.2% !important;
+												border: solid 1px #4a4a4a;
+											}
+											.photo img {
+												width: 70.7px;
+												height: 92px;
+											}
+											.profile-card-block .stu_code {
+												text-align:center;
+												min-width: 70.7px;
+												position: absolute;
+												top: 213px;
+												left: 80.2% !important;
+												font-weight:bold;
+												font-size:12px;
+												color:#000;
+											}
+											.guardian-card-block .photo {
+												width: initial;
+												position: absolute;
+												top: 150px;
+												left: 35.2% !important;
+												border: solid 1px #4a4a4a;
+											}
+											.guardian-card-block .photo.pho1 {
+												left: 50.2% !important;
+											}
+										</style>
+										<div class="card-content-student-printpickup" style=" line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+											<div class="guardian-name">
+												<?php echo $this->rs['guardian_enname'];?>
+											</div>
+											<div class="profile-card-block">
+				                    			<div class="photo">
+				                    				<img  src="<?php echo $image;?>" alt="profile-image" >
+				                    			</div>
+												<div class="stu_code" style="text-align:center;">
+													<?php echo $this->rs['stu_code']; ?>
+												</div>
+				                    		</div>
+											<div class="guardian-card-block">
+												<?php if(!empty($this->rs['guardian_photo'])){ ?>
+				                    			<div class="photo">
+				                    				<img  src="<?php echo $guardian_photo;?>" alt="profile-image" >
+				                    			</div>
+												<?php }else{?>
+												<div class="photo">
+				                    				<img  src="<?php echo $father_photo;?>" alt="profile-image" >
+				                    			</div>
+												<?php }?>
+												<div class="photo pho1">
+				                    				<img  src="<?php echo $mother_photo;?>" alt="profile-image" >
+				                    			</div>
+				                    		</div>
+										</div>
+									</div>
+								 </div>
 							 </div>
 				         </div>
 			        </div>
@@ -1872,9 +2027,9 @@ date_format = '"dd/MM/yyyy"';
 		
 	}	
 		
-	function PrintDiv() {
+	function PrintDiv(keydiv) {
 		loadingBlock();
-	  	 var contents = document.getElementById("divPrint").innerHTML;
+	  	 var contents = document.getElementById(keydiv).innerHTML;
 	 	  var frame1 = document.createElement('iframe');
 	    frame1.name = "frame1";
 	    frame1.style.position = "absolute";
@@ -1922,6 +2077,51 @@ date_format = '"dd/MM/yyyy"';
 			}
 		});
 	}
+	function readURLguardian(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#guardian_wiew').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    var maxSize = 0;
+    $("#guardian_photo").change(function(){
+        readURLguardian(this);
+    });
+	
+	
+	function readURLmother(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#mother_wiew').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    var maxSize = 0;
+    $("#mother_photo").change(function(){
+        readURLmother(this);
+    });
+	
+	function readURLfather(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#father_wiew').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    var maxSize = 0;
+    $("#father_photo").change(function(){
+        readURLfather(this);
+    });
 </script>
 <div class="overlay">
 	<div class="overlay-load">

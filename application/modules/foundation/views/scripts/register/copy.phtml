@@ -396,7 +396,24 @@ input.btn_borwse_image {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                  		 <?php echo $frm->getElement("fa_phone");?>
 				                   </div>
-				                </div> 
+				                </div>
+								<div class="form-group">
+									<label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHOTO");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                    	<div class="account-image" style="margin:0;">
+											<div class="image-box">
+												<img id="father_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+											</div>
+											<div class="button_browse">
+											<div id='preview'></div>	
+													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<input class="btn_borwse_image" type="file" id="father_photo" name="father_photo"  />
+													<input type="hidden" name="uploaded" id="uploaded" />
+											</div>
+										</div>
+				                   </div>
+				                </div>								
 				             </div>
 				             <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
@@ -437,7 +454,24 @@ input.btn_borwse_image {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("mon_phone");?>
 				                   </div>
-				                </div> 
+				                </div>
+								<div class="form-group">
+									<label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHOTO");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                    	<div class="account-image" style="margin:0;">
+											<div class="image-box">
+												<img id="mother_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+											</div>
+											<div class="button_browse">
+											<div id='preview'></div>	
+													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<input class="btn_borwse_image" type="file" id="mother_photo" name="mother_photo"  />
+													<input type="hidden" name="uploaded" id="uploaded" />
+											</div>
+										</div>
+				                   </div>
+				                </div>
 				             </div>
 				             <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
@@ -478,7 +512,24 @@ input.btn_borwse_image {
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("guardian_phone");?>
 				                   </div>
-				                </div> 
+				                </div>
+								<div class="form-group">
+									<label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHOTO");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                    	<div class="account-image" style="margin:0;">
+											<div class="image-box">
+												<img id="guardian_wiew" src="<?php echo $this->baseUrl().'/images/no-profile.png';?>" alt=""  />
+											</div>
+											<div class="button_browse">
+											<div id='preview'></div>	
+													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<input class="btn_borwse_image" type="file" id="guardian_photo" name="guardian_photo"  />
+													<input type="hidden" name="uploaded" id="uploaded" />
+											</div>
+										</div>
+				                   </div>
+				                </div>
 				             </div>
 				         </div>
 			        </div>
@@ -1805,7 +1856,52 @@ date_format = '"dd/MM/yyyy"';
 				alert(err);
 			}
 		});
-	}	
+	}
+function readURLguardian(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#guardian_wiew').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    var maxSize = 0;
+    $("#guardian_photo").change(function(){
+        readURLguardian(this);
+    });
+	
+	
+	function readURLmother(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#mother_wiew').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    var maxSize = 0;
+    $("#mother_photo").change(function(){
+        readURLmother(this);
+    });
+	
+	function readURLfather(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#father_wiew').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    var maxSize = 0;
+    $("#father_photo").change(function(){
+        readURLfather(this);
+    });	
 </script>
 <div class="overlay">
 	<div class="overlay-load">

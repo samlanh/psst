@@ -1819,6 +1819,17 @@ function getAllgroupStudyNotPass($action=null){
 	  $sql.=" ORDER BY c.id DESC LIMIT 1";
 	  return $db->fetchRow($sql);
   }
+  function getPickupCardBackground($branch,$schoolOption=null){
+  	$db = $this->getAdapter();
+  	$sql="SELECT c.* FROM `rms_pickupcard` AS c WHERE c.branch_id=$branch
+  	AND c.default=1
+  	";
+  	if (!empty($schoolOption)){
+  	$sql.=" AND c.schoolOption=$schoolOption ";
+  	}
+  	$sql.=" ORDER BY c.id DESC LIMIT 1";
+  	return $db->fetchRow($sql);
+  }
   function getStudentGroupInfoById($id){
   	$db = $this->getAdapter();
   	$sql = "SELECT start_date,expired_date,

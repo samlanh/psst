@@ -804,8 +804,22 @@ input.btn_borwse_image {
 								<div class="form-group">
 									<div id="divPrintPickup" style="margin: 0; padding: 0; display:none;" >
 										<style>
+					                    	<?php 
+					                    	$stuname = $this->rs['stu_enname']." ".$this->rs['last_name'];
+					                    	$pickupimagebg = $this->baseUrl().'/images/card/pickup-student-card.png';
+					                    	$bgpick = $_dbgb->getPickupCardBackground($this->rs['branch_id'],$this->rs['schoolOption']);
+					                    	if(!empty($bgpick['background'])){
+					                    		if (file_exists(PUBLIC_PATH."/images/card/".$bgpick['background'])){
+					                    			$pickupimagebg = $this->baseUrl().'/images/card/'.$bgpick['background'];
+					                    		}
+					                    		if ($bgpick['display_by']==2){
+					                    			$stuname = $this->rs['stu_khname'];
+					                    		}
+					                    	}
+					                    	
+					                    	?>
 											.card-content-student-printpickup{
-												background-image: url('<?php echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
+												background-image: url('<?php echo $pickupimagebg;?>');
 											 	background-size: 100%;background-repeat: no-repeat;	
 												position: relative;		
 												border:solid 1px #eee;
@@ -856,7 +870,7 @@ input.btn_borwse_image {
 										</style>
 										<div class="card-content-student-printpickup" style=" line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
 											<div class="guardian-name">
-												<?php echo $this->rs['guardian_enname'];?>
+												<?php echo $stuname;?>
 											</div>
 											<div class="profile-card-block">
 				                    			<div class="photo">

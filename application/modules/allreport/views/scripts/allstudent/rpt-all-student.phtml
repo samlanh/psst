@@ -367,6 +367,22 @@ display: table-cell !important;
 				width: 14.5cm; 
 				height:10.3cm; 	
 			}
+			
+			<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+						$imagepick = $this->baseUrl().'/images/card/default_card_bg.jpg';
+						$bgpick = $_dbgb->getPickupCardBackground($bck['branch_id'],$bck['schoolOption']);
+						if(!empty($bgpick['background'])){
+							if (file_exists(PUBLIC_PATH."/images/card/".$bgpick['background'])){
+							$imagepick = $this->baseUrl().'/images/card/'.$bgpick['background'];
+							}
+						}
+						?>
+					.card-content-student-printpickup<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
+						background-image: url('<?php echo $imagepick;?>');
+						background-size: 100%;background-repeat: no-repeat;					
+					}
+					<?php }?>
+					
 			.guardian-name {
 				font-family: 'Khmer OS Muol Light';
 				position: absolute;
@@ -410,13 +426,8 @@ display: table-cell !important;
 			}
 		</style>
 		<?php $i=0;$margin_work =2;if(!empty($this->rs)){foreach ($this->rs as $key => $row){$i++;?>	
-		<div class="card-content-student-printpickup" style=" <?php if($key==0 || $key==1){ echo "margin-top:-5px;";}else{ echo "margin-top:4px;";} ?> line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-				<div class="guardian-name">
-					<?php echo $row['guardian_enname'];?>
-				</div>
-				<div class="profile-card-block">
-					<div class="photo">
-						<?php 
+		<div class="card-content-student-printpickup <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" <?php if($key==0 || $key==1){ echo "margin-top:-5px;";}else{ echo "margin-top:4px;";} ?> line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+				<?php 
 						$image = $this->baseUrl().'/images/no-profile.png';
 						if(!empty($row['photo'])){
 							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
@@ -424,7 +435,20 @@ display: table-cell !important;
 							}
 							
 						}
+						
+						$stuname = $row['stu_enname']." ".$row['last_name'];
+						$bgge = $_dbgb->getPickupCardBackground($row['branch_id'],$row['schoolOption']);
+						if (!empty($bgge)){
+							if ($bgge['display_by']==2){
+								$stuname = $row['stu_khname'];
+							}
+						}
 						?>
+				<div class="guardian-name">
+					<?php echo $stuname;?>
+				</div>
+				<div class="profile-card-block">
+					<div class="photo">
 						<img  src="<?php echo $image;?>" alt="profile-image" >
 					</div>
 					<div class="stu_code" style="text-align:center;">

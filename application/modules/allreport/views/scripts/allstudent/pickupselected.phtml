@@ -1,6 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$_dbgb = new Application_Model_DbTable_DbGlobal();
 ?>	
+<title><?php echo $tr->translate("Pickup Card Selected")?></title>
 <script type="text/javascript">
 function getKHMonthByNumber(m){
 	var monthName=[
@@ -34,6 +36,20 @@ function getKHMonthByNumber(m){
 				width: 14.5cm; 
 				height:10.3cm; 	
 			}
+			<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+				$imagepick = $this->baseUrl().'/images/card/default_card_bg.jpg';
+				$bgpick = $_dbgb->getPickupCardBackground($bck['branch_id'],$bck['schoolOption']);
+				if(!empty($bgpick['background'])){
+					if (file_exists(PUBLIC_PATH."/images/card/".$bgpick['background'])){
+					$imagepick = $this->baseUrl().'/images/card/'.$bgpick['background'];
+					}
+				}
+				?>
+			.card-content-student-printpickup<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
+				background-image: url('<?php echo $imagepick;?>');
+				background-size: 100%;background-repeat: no-repeat;					
+			}
+			<?php }?>
 			.guardian-name {
 				font-family: 'Khmer OS Muol Light';
 				position: absolute;
@@ -79,21 +95,28 @@ function getKHMonthByNumber(m){
 		<?php 			
 			$i=0;$margin_work = 2;
 			if(!empty($this->rs)){foreach ($this->rs as $key => $row){?>
-			<div class="card-content-student-printpickup" style=" <?php if($key==0 || $key==1){ echo "margin-top:-5px;";}else{ echo "margin-top:4px;";} ?> line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+			<div class="card-content-student-printpickup <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" <?php if($key==0 || $key==1){ echo "margin-top:-5px;";}else{ echo "margin-top:4px;";} ?> line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+				<?php 
+					$image = $this->baseUrl().'/images/no-profile.png';
+					if(!empty($row['photo'])){
+						if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+						$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+						}
+						
+					}
+					$stuname = $row['stu_enname']." ".$row['last_name'];
+					$bgge = $_dbgb->getPickupCardBackground($row['branch_id'],$row['schoolOption']);
+					if (!empty($bgge)){
+						if ($bgge['display_by']==2){
+							$stuname = $row['stu_khname'];
+						}
+					}
+					?>
 				<div class="guardian-name">
-					<?php echo $row['guardian_enname'];?>
+					<?php echo $stuname;?>
 				</div>
 				<div class="profile-card-block">
 					<div class="photo">
-						<?php 
-						$image = $this->baseUrl().'/images/no-profile.png';
-						if(!empty($row['photo'])){
-							if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
-							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
-							}
-							
-						}
-						?>
 						<img  src="<?php echo $image;?>" alt="profile-image" >
 					</div>
 					<div class="stu_code" style="text-align:center;">
@@ -153,14 +176,32 @@ function getKHMonthByNumber(m){
 		print();
 	});
 	function print(){
-		window.frames["print_frame"].document.body.innerHTML=dojo.byId('PickupCard').innerHTML;
-	    window.frames["print_frame"].window.focus();
-	    window.frames["print_frame"].window.print();
-	    <?php 
-			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student'),null,true);
-    	?>
-    	window.location.href = '<?php echo $url_copy;?>';
+
+		loadingBlock();
+	  	 var contents = document.getElementById("PickupCard").innerHTML;
+	 	  var frame1 = document.createElement('iframe');
+	    frame1.name = "frame1";
+	    frame1.style.position = "absolute";
+	    frame1.style.top = "-1000000px";
+	    document.body.appendChild(frame1);
+	    var frameDoc = (frame1.contentWindow) ? frame1.contentWindow : (frame1.contentDocument.document) ? frame1.contentDocument.document : frame1.contentDocument; frameDoc.document.open();
+	    frameDoc.document.write('<html><head><title>Employee ID</title>');
+	    frameDoc.document.write('</head><body>');
+	    frameDoc.document.write(contents);
+	    frameDoc.document.write('</body></html>');
+	    frameDoc.document.close();
+	    setTimeout(function () {
+	        window.frames["frame1"].focus();
+	        window.frames["frame1"].print();
+	        document.body.removeChild(frame1);
+	        HideloadingBlock();
+			<?php 
+				defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-student'),null,true);
+			?>
+			window.location.href = '<?php echo $url_copy;?>';
+	    }, 10000);
+	   return false;
 	}
 </script>

@@ -170,16 +170,16 @@ class RsvAcl_UserController extends Zend_Controller_Action
 		}
 		
 	}
-// 	function getschooloptionAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data=$this->getRequest()->getPost();
+	function getschooloptionAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
 		
-// 			$db = new Application_Model_DbTable_DbGlobal();
-// 			$gty= $db->getAllSchoolOption($data['branch_id']);
-// 			print_r(Zend_Json::encode($gty));
-// 			exit();
-// 		}
-// 	}
+			$db = new Application_Model_DbTable_DbGlobal();
+			$gty= $db->getAllSchoolOption($data['branch_id']);
+			print_r(Zend_Json::encode($gty));
+			exit();
+		}
+	}
 	function getschooloptionbybranchlistAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();

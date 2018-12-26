@@ -166,14 +166,14 @@
 								<td>&nbsp;<?php echo $row['nation'];?>&nbsp;</td>
 								<td>&nbsp;<?php echo date("d-m-Y",strtotime($row['dob']));?>&nbsp;</td>
 								<td style="text-align: center;width: 200px;min-width: 200px;white-space: normal;"  >
-									<span style="padding: 0 2px; display: block;"><?php echo $row['pob'];?></span>
+									<span style="padding: 0 2px; line-height:16px; display: block;"><?php echo $row['pob'];?></span>
 								</td>
 								<td><?php echo $row['father_name'];?></td>
 								<td><?php echo $row['father_job'];?></td>
 								<td><?php echo $row['mother_name'];?></td>
 								<td><?php echo $row['mother_job'];?></td>
 								<td style="text-align: center;width: 200px;min-width: 200px;white-space: normal;">
-									<span style="padding: 0 2px; display: block;">
+									<span style="padding: 0 2px; line-height:16px; display: block;">
 										<?php if (!empty($row['home_num'])){ echo "ផ្ទះលេខ ".$row['home_num']." ";}?>
 										<?php if (!empty($row['street_num'])){ echo "ផ្លូវលេខ ".$row['street_num']." ";}?>
 										<?php if (!empty($row['village_namekh'])){ echo "ភូមិ ".$row['village_namekh']." ";}?>

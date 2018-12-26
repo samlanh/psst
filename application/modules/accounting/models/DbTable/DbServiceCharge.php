@@ -89,7 +89,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     
     function getCondition($_data){
     	$db = $this->getAdapter();
-    	$find="select id from rms_tuitionfee where type=2 AND from_academic ='".$_data['from_academic']."' AND to_academic='".$_data['to_academic']."'";
+    	$find="select id from rms_tuitionfee where type=2 AND branch_id='".$_data['branch_id']."' AND from_academic ='".$_data['from_academic']."' AND to_academic='".$_data['to_academic']."'";
     	return $db->fetchOne($find);
     }
     
@@ -112,7 +112,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    				'user_id'=>$this->getUserId()
 	    				);
 	    		$service_id = $this->insert($_arr);
-    		}
+	    		
 	    		$this->_name='rms_tuitionfee_detail';
 	    		$ids = explode(',', $_data['identity']);
 	    		$id_term =explode(',', $_data['iden_term']);
@@ -128,6 +128,8 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    				$this->insert($_arr);
 	    			}
 	    		}
+    		}
+	    		
     		
     	    $db->commit();
     	    return true;

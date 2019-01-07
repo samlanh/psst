@@ -30,6 +30,30 @@
 	    vertical-align: -webkit-baseline-middle;
 	}
 	
+	tr.hover td.verites-col,
+		td.verites-col {
+		    text-align: left;
+		    white-space: nowrap;
+		    g-origin: 50% 50%;
+		    -webkit-transform: rotate(270deg);
+		    -moz-transform: rotate(270deg);
+		    -ms-transform: rotate(270deg);
+		    -o-transform: rotate(270deg);
+		    transform: rotate(270deg);
+		}
+		tr.hover td.verites-col span.verites,
+		td.verites-col span.verites {
+		    margin: 0 -100%;
+		    display: inline-block;
+		}
+		tr.hover td.verites-col span.verites:before,
+		td.verites-col span.verites:before {
+		    content: '';
+		    width: 0;
+		    padding-top: 110%;
+		    display: inline-block;
+		    vertical-align: middle;
+		}
 </style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
@@ -132,7 +156,7 @@ function filterStudent(){
 				
 				column = 0;
 				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
-					+'<thead><tr style="border:1px solid #000;"><th class="tdheader" ><?php echo $tr->translate('DEL');?></th>'
+					+'<thead><tr style="border:1px solid #000;"><td class="tdheader" ><?php echo $tr->translate('DEL');?></th>'
 					+'<td class="tdheader" ><?php echo $tr->translate('NO');?></td>'
 					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
 					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
@@ -141,7 +165,7 @@ function filterStudent(){
 				  for(j=0;j<subject.length;j++){
 	      			  no++;
 	      			  stringsname = subject[j].subject_titleen.replace(' ','');
-		      	      temp+='<td class="rotate" title="'+stringsname+'"><div><span>&nbsp;<input checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].subject_id+');"  class="checkbox" id="subject'+subject[j].subject_id+'" value="'+subject[j].subject_id+'"  name="selector[]"/>&nbsp;'+no+'-'+stringsname+'&nbsp;</span></div></td>';
+		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;<input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].subject_id+');"  class="checkbox" id="subject'+subject[j].subject_id+'" value="'+subject[j].subject_id+'"  name="selector[]"/>&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	              }
 				  temp+='<td class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
 				  temp+='<td class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</thead></tr>';

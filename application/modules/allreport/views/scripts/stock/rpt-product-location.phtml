@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('RPT_PRODUCT_LOCATION')); 
-	echo $this->headTitle(''); 
+	echo $this->headTitle($tr->translate('RPT_PRODUCT_LOCATION')); 
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	?>	

@@ -245,7 +245,6 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		   			`rms_group` `g` 
 		   		WHERE 
 		   			`g`.`id`='.$id;
-	   	
 	   	return $db->fetchRow($sql);
 	}
 	

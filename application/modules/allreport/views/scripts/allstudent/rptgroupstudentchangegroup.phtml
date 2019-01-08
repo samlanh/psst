@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('STUDNET_TRANDSFORMATION')); 
-	echo $this->headTitle();
+	echo $this->headTitle($tr->translate('STUDNET_TRANDSFORMATION')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$ac = null;
 	$ad = null;

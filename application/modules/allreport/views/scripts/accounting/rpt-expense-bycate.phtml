@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Other Expense'); 
-	echo $this->headTitle(''); 
+	echo $this->headTitle($tr->translate('RPT_CATE_EXPENSE')); 
 	$frm=$this->form_search;
 ?>	
 <div style="background: #fff;width: 100%;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">

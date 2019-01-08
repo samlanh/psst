@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Other Income and Expense'); 
-	echo $this->headTitle(''); 
+	echo $this->headTitle($tr->translate('RPT_OTHER_INCOME_EXPENSE')); 
 	$frm=$this->form_search;
 ?>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	

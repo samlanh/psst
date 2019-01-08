@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Payment Detail'); 
-	echo $this->headTitle();
+	echo $this->headTitle($tr->translate("INVOICE"));
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->form_search;
 	$gender=array(1=>"Male",2=>"Female");

@@ -1,8 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate("STUDENT_RESULT_SCORE_LIST")); 
-	$this->headTitle($tr->translate("STUDENT_RESULT_SCORE_LIST")); 
-	echo $this->headTitle();
+	echo $this->headTitle($tr->translate("STUDENT_RESULT_SCORE_LIST")); 
 	$frm =  $this->form_search;
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Allreport_Model_DbTable_DbRptStudentScore();

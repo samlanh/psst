@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Request Product'); 
-	echo $this->headTitle();
+	echo $this->headTitle($tr->translate('RPT_REQUEST_PRODUCT_DETAIL'));
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
 	$rows=$this->rows;

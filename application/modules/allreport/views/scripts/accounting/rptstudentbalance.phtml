@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Balance'); 
+	$this->headTitle($tr->translate('Report Student Balance Service')); 
 	echo $this->headTitle(''); 
 	$frm=$this->form_search;
 ?>	
@@ -39,7 +39,7 @@
 												<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 											</td>
 											<td  align="center" width="70%">
-												<strong style="padding-left: 15px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';">របាយការណ៏​​ សិស្សជំពាក់ថ្លៃសេវាកម្ម</strong><br />
+												<strong style="padding-left: 15px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('Report Student Balance Service')?><!-- របាយការណ៏​​ សិស្សជំពាក់ថ្លៃសេវាកម្ម --></strong><br />
 												<span style="font-weight: bold;font-size: 11px; ">From &nbsp;<?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;To&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));?></span><br />
 											</td>
 											<td width="15%" align="center">

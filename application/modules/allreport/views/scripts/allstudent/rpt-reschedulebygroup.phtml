@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('RPT_RESCHEDULE_BYGROUP')); 
-	echo $this->headTitle(''); 
+	echo $this->headTitle($tr->translate('RPT_RESCHEDULE_BYGROUP')); 
 	$frm =  $this->form_search;
 	$db_sub=new Allreport_Model_DbTable_DbRptStudentDrop();
 	$day = array(

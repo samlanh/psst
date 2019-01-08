@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle("EPO Students' Profile"); 
-	echo $this->headTitle(''); 
+	echo $this->headTitle($tr->translate("EPO Students' Profile")); 
 	$frm =  $this->form_search;
 ?>	
 <style>

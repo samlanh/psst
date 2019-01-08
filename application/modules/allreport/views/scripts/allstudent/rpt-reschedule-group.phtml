@@ -1,7 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('Report Student Drop'); 
-	echo $this->headTitle(''); 
+	echo $this->headTitle($tr->translate("RPT_RESCHEDULE_GROUP")); 
 	$frm =  $this->form_search;
 	$session = array(
 			"<=12" =>'Morning',

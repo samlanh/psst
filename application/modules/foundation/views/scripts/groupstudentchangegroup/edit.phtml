@@ -74,6 +74,27 @@
 		                   		<label id="lblfromgroup" readonly="readonly" name="detail_from_group" style="background:#fff;height:70px;display:block; font-size: 14px; padding: 10px; border: solid 1px #ccc;"></label>
 		                   </div>
 		                </div>
+						
+						<div class="form-group">
+							<div class="col-md-9 col-sm-6 col-xs-6">
+		                   </div>
+						   <div class="col-md-1 col-sm-2 col-xs-2">
+								<strong><?php echo $tr->translate("NOTE")?> :</strong>
+		                   </div>
+		                   <div class="col-md-2 col-sm-10 col-xs-10 right">
+		                   		<input type="checkbox" onclick="return false;" checked > <?php echo $tr->translate("PASS")?> / <?php echo $tr->translate("CHANGE")?>
+		                   </div>
+		                </div>
+						<div class="form-group">
+							<div class="col-md-6 col-sm-6 col-xs-6">
+		                   </div>
+		                   <div class="col-md-4 col-sm-10 col-xs-10 right">
+		                   </div>
+						   <div class="col-md-2 col-sm-2 col-xs-2" style="white-space:nowrap;">
+		                   		<input type="checkbox"  onclick="return false;"> <?php echo $tr->translate("FAIL")?> / <?php echo $tr->translate("NOT_CHANGE")?>
+		                   </div>
+		                </div>
+						
 		                <div class="form-group">
 		                   <div id="data_table" style="min-height: 300px !important;overflow-y: auto;border: solid 1px #d0d0d0ee; padding: 5px 10px;" class="col-md-12 col-sm-12 col-xs-12">
 		                   </div>
@@ -122,7 +143,7 @@
 		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("MOVING_DATE");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
-		                   		<input  dojoType="dijit.form.DateTextBox"   class="fullside" id="moving_date" name="moving_date" value="<?php echo $this->rs['moving_date'];?>" type="text">
+		                   		<input  dojoType="dijit.form.DateTextBox" constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside" id="moving_date" name="moving_date" value="<?php echo $this->rs['moving_date'];?>" type="text">
 		                   </div>
 		                </div>
 		                 <div class="form-group">
@@ -342,13 +363,13 @@ function getStudentFromGroup(){
 			handleAs:"json",
 			load: function(respone) {
 				tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table">'
-					+'<thead><tr style="background: #bcd5f0;min-height: 30px;font-size:13px;"><th><?php echo $tr->translate('NUM');?></th>'
-						+'<th><?php echo $tr->translate('CODE');?></th>'
-						+'<th><?php echo $tr->translate('NAME_KH');?></th>'
-						+'<th><?php echo $tr->translate('NAME_EN');?></th>'
-						+'<th colspan="2"><?php echo $tr->translate('SEX');?></th>'
-						+'<th style="white-space:nowrap; border-right: 0px none;" colspan="1"><input style="height: 13px;" type="checkBox" value="0"   name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></th>'
-						+'<th style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></th></tr>'
+					+'<thead><tr align="center" style="background: #bcd5f0;min-height: 30px;font-size:13px;font-weight: bold"><td><?php echo $tr->translate('NUM');?></td>'
+						+'<td><?php echo $tr->translate('CODE');?></td>'
+						+'<td><?php echo $tr->translate('NAME_KH');?></td>'
+						+'<td><?php echo $tr->translate('NAME_EN');?></td>'
+						+'<td colspan="2"><?php echo $tr->translate('SEX');?></td>'
+						+'<td style="white-space:nowrap; border-right: 0px none;" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
+						+'<td align="left" style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></td></tr>'
 					+'</thead>';
 				if(respone!=""){
 					num=0;
@@ -358,7 +379,7 @@ function getStudentFromGroup(){
 						    tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden" name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
 							tem += '<td>&nbsp;<label >'+respone[i].stu_code+'</label></td>';
 							tem += '<td>&nbsp;<label >'+respone[i].stu_khname+'</label></td>';
-							tem += '<td>&nbsp;<label >'+respone[i].stu_enname+'</label></td>';
+							tem += '<td>&nbsp;<label >'+respone[i].last_name+" "+respone[i].stu_enname+'</label></td>';
 							tem += '<td colspan="2" align="center">&nbsp;<label >'+respone[i].sex+'</label></td>';
 							tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
 							

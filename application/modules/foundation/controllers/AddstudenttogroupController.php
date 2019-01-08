@@ -61,7 +61,8 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 						'degree' => '',
 						'grade' => '',
 						'session' => '',
-						'academy'=> '');
+						'academy'=> ''
+					);
 			}
 			$this->view->value=$search;
 		}catch(Exception $e){

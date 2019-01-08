@@ -1,14 +1,10 @@
 <?php
 class Accounting_DiscountController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
     public function init()
     {    	
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
 	}
 	public function indexAction(){
 		try{
@@ -29,7 +25,7 @@ class Accounting_DiscountController extends Zend_Controller_Action {
  			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("DISCOUNT_NAME","CREATED_DATE","BY_USER","STATUS");
+			$collumns = array("DISCOUNT_TYPR","CREATED_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'discount','action'=>'edit',
 			);
@@ -83,15 +79,13 @@ class Accounting_DiscountController extends Zend_Controller_Action {
 		$db = new Accounting_Model_DbTable_DbDiscount();
 		$this->view->rs=$db->getDiscountById($id);
 	}
-	function addcompositionAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Accounting_Model_DbTable_DbDiscount();
-			$id = $db->addDiscounttion($data);
-			print_r(Zend_Json::encode($id));
-			exit();
-		}
-	}
-	
+// 	function addcompositionAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data = $this->getRequest()->getPost();
+// 			$db = new Accounting_Model_DbTable_DbDiscount();
+// 			$id = $db->addDiscounttion($data);
+// 			print_r(Zend_Json::encode($id));
+// 			exit();
+// 		}
+// 	}
 }
-

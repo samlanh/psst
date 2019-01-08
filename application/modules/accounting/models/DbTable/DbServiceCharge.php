@@ -7,9 +7,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('authstu');
     	return $session_user->user_id;
-    	 
     }
-    
     function getAceYear(){
     	$db=$this->getAdapter();
     	$sql="SELECT id,CONCAT(from_academic,'-',to_academic,'(',generation,')') AS `name`
@@ -17,40 +15,19 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	$oder=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$oder);
     }
-    
-    
-	public function sqltuitionfee($search=''){
-    	$sql = "SELECT p.service_id as id,p.`title` AS service_name,p.status,t.title as cate_name FROM `rms_program_name` AS p,`rms_program_type` AS t
-					WHERE t.id=p.ser_cate_id ";
-    	$order=" ORDER BY p.title";
-    	$where = '';
-    	if(empty($search)){
-    		return $sql.$order;
-    	}
-    	if(!empty($search['txtsearch'])){
-    		$where.=" AND title LIKE '%".$search['txtsearch']."%'";
-    	}
-    	if($search['type']>-1){
-    		$where.= " AND type = ".$search['type'];
-    	}
-    	if($search['status']>-1){
-    		$where.= " AND status = '".$search['status']."'";
-    	}
-    	return $sql.$where.$order;
-    }
-    
     function getAllServiceFee($search){
 	    try{		
 	    $db=$this->getAdapter();
     	$sql = "SELECT t.id,
-    	(select CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
-    	CONCAT(t.from_academic,' - ',t.to_academic) AS academic,
-    	t.create_date,
-    	(select name_en from rms_view where type=12 and key_code=t.is_finished) as is_finished,
-    	t.status,
-    	(select CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user
+	    	(SELECT CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
+	    	CONCAT(t.from_academic,' - ',t.to_academic) AS academic,
+	    	t.create_date,
+	    	(select name_en from rms_view where type=12 and key_code=t.is_finished LIMIT 1) as is_finished,
+	    	t.status,
+	    	(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id LIMIT 1) as user
+	    	
     	FROM `rms_tuitionfee` AS t
-    	WHERE t.type=2 ";
+    		WHERE t.type=2 ";
     	$where =" ";
     	 
     	if(!empty($search['title'])){
@@ -63,30 +40,25 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	if(!empty($search['year'])){
     		$where.=" AND t.id=".$search['year'];
     	}
-    	 
     	if(!empty($search['branch_id'])){
     		$where.=" AND t.branch_id=".$search['branch_id'];
-    	}
-    	 
+    	}    	 
     	if($search['is_finished_search']!=""){
     		$where.=" AND t.is_finished=".$search['is_finished_search'];
     	}
-    	 
     	if($search['status']>-1){
     		$where.=" AND t.status=".$search['status'];
     	}
-    	 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	 
     	$order=" GROUP BY t.branch_id,t.from_academic,t.to_academic,t.generation,t.time ORDER BY t.id DESC  ";
     	return $db->fetchAll($sql.$where.$order);
 	    }catch(Exception $e){
-	    	echo $e->getMessage();
+	    	Application_Form_FrmMessage::message("APPLICATION_ERROR");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    }
-    }
-    
-    
+    }    
     function getCondition($_data){
     	$db = $this->getAdapter();
     	$find="select id from rms_tuitionfee where type=2 AND branch_id='".$_data['branch_id']."' AND from_academic ='".$_data['from_academic']."' AND to_academic='".$_data['to_academic']."'";
@@ -130,12 +102,12 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    		}
     		}
 	    		
-    		
     	    $db->commit();
     	    return true;
     	}catch (Exception $e){
     		$db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		Application_Form_FrmMessage::message("INSERT_FAIL");
     		return false;
     	}
     }
@@ -193,23 +165,16 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
     function getServiceFeebyId($service_id){    	
-    	$db = $this->getAdapter();
-//     	$sql = "SELECT id,service_id,price_fee,payment_term,remark,
-//     	(select title from rms_program_name where rms_program_name.service_id=rms_servicefee_detail.service_id limit 1)AS service_name FROM `rms_servicefee_detail` 
-//     	WHERE service_feeid=".$service_id." ORDER BY service_id,payment_term ASC ";  	
-    	$db = $this->getAdapter();
+    	$db = $this->getAdapter();	
     	$sql = "SELECT *
     		FROM rms_tuitionfee_detail WHERE fee_id = ".$service_id." ORDER BY id ";
     	return $db->fetchAll($sql);    	 
-    }
-    
+    }    
     public function setServiceChargeExist($service_id,$pay_type){
     	$db = $this->getAdapter();
     	$sql = "SELECT servicefee_id,price FROM `rms_servicefee_detail` WHERE service_id=$service_id AND pay_type=$pay_type ";
     	return $db->fetchRow($sql);
-    }
-    
-    
+    }    
     function getAllBranch(){
     	$db = $this->getAdapter();
     	
@@ -228,9 +193,4 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	$sql="select id, CONCAT(from_academic,'-',to_academic,'(',generation,')') as year from rms_tuitionfee where status=1  $branch_id  ";
     	return $db->fetchAll($sql);
     }
-    
-    
 }
-
-
-

@@ -173,9 +173,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->rs = $student_rs;
 		$this->view->row = $db->getStudentDocumentById($id);
 		
-// 		$this->view->year = $db->getAllYear();
-// 		$this->view->room = $row =$db->getAllRoom();
-		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister($student_rs);
 		Application_Model_Decorator::removeAllDecorator($frm_register);

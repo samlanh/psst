@@ -1,11 +1,8 @@
 <?php
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
-	
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
-	echo $this->headTitle(''); 
+	echo $this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
 	$frm = $this->frm;
-	
 ?>
 <style>
 .image-box {
@@ -212,7 +209,6 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("DISTRICT");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("distric_note");?>
 				                   		<input id="distric_note"  />
 				                   </div>
 				                </div>
@@ -220,7 +216,6 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("COMMUNE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("commun_note");?>
 				                   		<input id="commun_note"  />
 				                   </div>
 				                </div>
@@ -228,7 +223,6 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("village_note");?>
 				                   		<input id="village_note"  />
 				                   </div>
 				                </div>
@@ -354,6 +348,40 @@ input.btn_borwse_image {
 				                   <?php echo $frm->getElement("remark");?>
 				                   </div>
 				                </div>  
+				            </div>
+							<div class="col-md-4 col-sm-4 col-xs-12">
+				            	<div class="form-group">
+				                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-graduation-cap" aria-hidden="true"></i> <?php echo $tr->translate("SCHOLARSHIP");?></label>
+				                </div>
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISCOUNT_TYPE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   <?php echo $frm->getElement("discount_type");?>
+				                   </div>
+				                </div> 
+				                
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SCHOLASHIP");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   <?php echo $frm->getElement("scholarship_amount");?>
+				                   </div>
+				                </div> 
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FROM_DATE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   <?php echo $frm->getElement("scholarship_fromdate");?>
+				                   </div>
+				                </div> 
+				                <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TO_DATE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   <?php echo $frm->getElement("scholarship_todate");?>
+				                   </div>
+				                </div> 
 				            </div>
 						</div>
 			        </div>

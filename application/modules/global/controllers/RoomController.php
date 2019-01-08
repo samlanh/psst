@@ -44,26 +44,26 @@ class Global_RoomController extends Zend_Controller_Action {
 		$this->view->frm_search = $frm;
 	}
    function addAction(){
-   	if($this->getRequest()->isPost()){
-   		$_data = $this->getRequest()->getPost();
-   		try {
-   			$sms = "INSERT_SUCCESS";
-   			$_dbmodel = new Global_Model_DbTable_DbRoom();
-   			$_major_id = $_dbmodel->addNewRoom($_data);
-   			if($_major_id==-1){
-   				$sms = "RECORD_EXIST";
-   			}
-   			if(isset($_data['save_close'])){
-   				Application_Form_FrmMessage::Sucessfull($sms,"/global/room/index");
-   			}else{
-   				Application_Form_FrmMessage::Sucessfull($sms,"/global/room/add");
-   			}
-   
-   		}catch (Exception $e) {
-   			Application_Form_FrmMessage::message("INSERT_FAIL");
-   			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-   		}   
-   	}
+	   	if($this->getRequest()->isPost()){
+	   		$_data = $this->getRequest()->getPost();
+	   		try {
+	   			$sms = "INSERT_SUCCESS";
+	   			$_dbmodel = new Global_Model_DbTable_DbRoom();
+	   			$_major_id = $_dbmodel->addNewRoom($_data);
+	   			if($_major_id==-1){
+	   				$sms = "RECORD_EXIST";
+	   			}
+	   			if(isset($_data['save_close'])){
+	   				Application_Form_FrmMessage::Sucessfull($sms,"/global/room/index");
+	   			}else{
+	   				Application_Form_FrmMessage::Sucessfull($sms,"/global/room/add");
+	   			}
+	   
+	   		}catch (Exception $e) {
+	   			Application_Form_FrmMessage::message("INSERT_FAIL");
+	   			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	   		}   
+	   	}
 	   	$classname=new Global_Form_FrmAddClass();
 	   	$frm_classname=$classname->FrmAddClass();
 	   	Application_Model_Decorator::removeAllDecorator($frm_classname);
@@ -96,15 +96,13 @@ class Global_RoomController extends Zend_Controller_Action {
 	   	$this->view->update_room=$frm_room;
 	   	Application_Model_Decorator::removeAllDecorator($frm_room);
    }
-   function addroomAction()//ajax
-   {
-   	if($this->getRequest()->isPost()){
+   function addroomAction(){//ajax
+	   	if($this->getRequest()->isPost()){
    			$_data = $this->getRequest()->getPost();
    			$_dbmodel = new Global_Model_DbTable_DbRoom();
    			$roomid = $_dbmodel->addAjaxRoom($_data);
    			print_r(Zend_Json::encode($roomid));
    			exit();
-   	}
+	   	}
    }
 }
-

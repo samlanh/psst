@@ -123,13 +123,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	public function getStudentById($id){
 		$db = $this->getAdapter();
-	//	$sql = "SELECT *,
-	//			(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
-	//			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name 
-	//			FROM rms_student as s, 
-	//			rms_view AS vs 
-	//			WHERE s.stu_id =".$id." 
-	//			AND s.customer_type=1  AND vs.id = ".$id." ";
 	$sql = "SELECT *,
 				(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
@@ -162,7 +155,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	function getStudentExist($name_en,$sex,$grade,$dob,$session){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_student WHERE customer_type=1 AND stu_enname="."'$name_en'"." AND sex=".$sex." 
+		$sql = "SELECT * FROM rms_student WHERE customer_type=1 AND stu_khname="."'$name_en'"." AND sex=".$sex." 
 			AND grade=".$grade." AND dob="."'$dob'"." AND session=".$session;                          
 		return $db->fetchRow($sql);
 	}
@@ -175,7 +168,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$_db = $this->getAdapter();
 			$_db->beginTransaction();
 		
-			$id = $this->getStudentExist($_data['name_en'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session']);	
+			$id = $this->getStudentExist($_data['name_kh'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session']);	
 			if(!empty($id)){
 				Application_Form_FrmMessage::Sucessfull("STUDENT_EXISTRING","/foundation/register/add");
 				return -1;
@@ -204,7 +197,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				else
 					$string = "Image Upload failed";
 			}
-			
 			try{	
 				$is_setgroup=0;
 				if(!empty($_data['group']) AND $_data['group']!=-1){
@@ -459,6 +451,11 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					'grade_bacc'	=>$_data['grade_baccexam'],
 					'score_bacc'	=>$_data['score_baccexam'],
 					'certificate_bacc'	=>$_data['certificate_baccexam'],
+					
+					'scholarship_id'	=>$_data['discount_type'],
+					'scholarship_amt'	=>$_data['scholarship_amount'],
+					'scholar_fromdate'	=>$_data['scholarship_fromdate'],
+					'scholar_todate'	=>$_data['scholarship_todate'],
 					);
 			
 			$photo = "";

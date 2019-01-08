@@ -26,11 +26,9 @@ class Accounting_SpecaildiscountController extends Zend_Controller_Action {
     		);
     	}
         $rs_rows = $db_dept->getAllSpecailDis($search);
-//         $glClass = new Application_Model_GlobalClass();
-//         $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("STUDENT_NAME","REQUEST_NAME","PHONE","DISCOUNT_TYPE","EXPIRE_DATE","STATUS","NOTE","USER");
+    	$collumns = array("REQUEST_NAME","PHONE","STUDENT_NAME","DISCOUNT_TYPE","EXPIRE_DATE","STATUS","NOTE","USER");
     	$link=array(
     			'module'=>'accounting','controller'=>'specaildiscount','action'=>'edit',
     	);

@@ -1,5 +1,4 @@
 <?php
-
 class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_room';
@@ -31,10 +30,8 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message('INSERT_FAIL');
-			echo $e->getMessage();exit();
 		}
 	}
-	
 	public function addAjaxRoom($_data){
 		$_arr=array(
 				'branch_id'	  => $_data['branch_id'],
@@ -47,7 +44,6 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		);
 		return  $this->insert($_arr);
 	}
-	
 	public function getRoomById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_room WHERE room_id = ".$db->quote($id);
@@ -57,13 +53,6 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		$row=$db->fetchRow($sql);
 		return $row;
 	}
-		
-// 	public function getRoomsById($id){
-// 		$db = $this->getAdapter();
-// 		$sql = "SELECT * FROM rms_room WHERE room_name!='' and room_name=$id LIMIT 0";
-// 		$row=$db->fetchAll($sql);
-// 	}
-	
 	public function updateRoom($data){		
 		$_arr=array(
 				'branch_id'	  => $data['branch_id'],
@@ -94,7 +83,6 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 					room_name != ''";
 		$order=" order by id DESC ";
 		$where = '';
-		//PRINT_R($search);
 		if(!empty($search['title'])){
 			$search['title']=addslashes(trim($search['title']));
 			$where.=" AND ( room_name LIKE '%".$search['title']."%'";
@@ -109,8 +97,6 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.= $dbp->getAccessPermission('branch_id');
-		
 		return $db->fetchAll($sql.$where.$order);	
 	}	
 }
-

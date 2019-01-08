@@ -721,12 +721,22 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
    
-   function getAllDiscount(){
-   	$db = $this->getAdapter();
-   	$sql="  SELECT disco_id AS id,dis_name AS name FROM `rms_discount` WHERE STATUS=1 AND dis_name!='' ";
-   	return $db->fetchAll($sql);
+   function getAllDiscount($option=null){
+	   	$db = $this->getAdapter();
+	   	$sql="  SELECT disco_id AS id,dis_name AS name FROM `rms_discount` 
+	   		WHERE status=1 AND dis_name!='' ";
+	   	$rows = $db->fetchAll($sql);
+	   	if($option!=null){
+	   		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	   		$options=array(0=>$tr->translate("CHOOSE"));
+	   		if(!empty($rows))foreach($rows AS $row){
+	   			$options[$row['id']]=$row['name'];
+	   		}
+	   		return $options;
+	   	}else{
+	   		return $rows;
+	   	}
    }
-   
    function getAllDepartment(){
    	$db = $this->getAdapter();
    	$sql="  SELECT depart_id AS id,depart_namekh AS name FROM `rms_department` WHERE STATUS=1 AND depart_namekh!=''  ";
@@ -1614,8 +1624,12 @@ function getAllgroupStudyNotPass($action=null){
   
   function getAllGradeStudyByDegree($category_id=null,$student_id=null){
   	$db = $this->getAdapter();
+//   	$sql="SELECT i.id,
+//   	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+//   	FROM `rms_itemsdetail` AS i
+//   	WHERE i.status =1 ";
   	$sql="SELECT i.id,
-  	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+  		i.title AS name
   	FROM `rms_itemsdetail` AS i
   	WHERE i.status =1 ";
   	if($category_id!=null AND $category_id>0 AND $category_id!=''){

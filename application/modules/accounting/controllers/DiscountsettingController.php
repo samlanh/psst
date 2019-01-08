@@ -1,6 +1,5 @@
 <?php
 class Accounting_DiscountSettingController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
     public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -8,9 +7,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
-	}
+	
 	public function indexAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -30,7 +27,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
   			$rs_rows= $db->getAllDiscountset($search);
         	
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","DISCOUNT_NAME","DIS_MAX","START_DATE","END_DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","DISCOUNT_TYPR","DIS_MAX","START_DATE","END_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'accounting','controller'=>'discountsetting','action'=>'edit',
 			);

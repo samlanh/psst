@@ -8,7 +8,6 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
     }
 	public function addNewDiscountset($_data){
 		$db = $this->getAdapter();
-		//print_r($_data); exit();
   		try{
 			$sql="SELECT discount_id FROM rms_dis_setting WHERE disname_id =".$_data['disname_id'];
 			$sql.=" AND dis_max='".$_data['dis_max']."'";
@@ -31,8 +30,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			$db->rollBack();
 			echo $e->getMessage();exit();
 		}
-	}
-	
+	}	
 	public function addNewDiscountPopup($_data){
 		$_arr=array(
 				'dis_name' => $_data['dis_name'],
@@ -63,22 +61,20 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		);
 		$where=$this->getAdapter()->quoteInto("discount_id=?", $_data["id"]);
 		$this->update($_arr, $where);
-		//print_r($_data); exit();
 	}
 	function getAllDiscountset($search){
 	$db = $this->getAdapter();
 		$sql = " SELECT 
 					g.discount_id AS id,
-					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id)AS branch,
-					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.disname_id )AS disc_name,
+					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1)AS branch,
+					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.disname_id LIMIT 1) AS disc_name,
 					g.dis_max,
 					g.start_date,
 					g.end_date,
-					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=g.user_id )AS user_name,
-					(SELECT name_kh FROM rms_view WHERE TYPE=1 AND key_code =g.status) AS STATUS
+					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=g.user_id LIMIT 1 )AS user_name,
+					(SELECT name_kh FROM rms_view WHERE TYPE=1 AND key_code =g.status LIMIT 1) AS status
 					FROM 
 					rms_dis_setting AS g ";
-		
 		$order = ' ORDER BY id DESC '; 
 		$where = ' WHERE disname_id!="" ';
 		if(empty($search)){
@@ -109,4 +105,3 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		return  $this->insert($_arr);
 	}
 }
-

@@ -65,9 +65,7 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     		}catch (Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
-    		}
-    			
+    		}    			
     	}
     	$type=2; //Service
     	$frm = new Global_Form_FrmItemsDetail();

@@ -6,15 +6,13 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
-	}
+	
     public function indexAction()
     {
     	try{
     		if($this->getRequest()->isPost()){
     			$search = $this->getRequest()->getPost();
- 		}
+ 			}
     		else{
     			$search=array(
 	    				'title' => '',
@@ -34,15 +32,12 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     		);
     		
     		$list = new Application_Form_Frmtable();
-    		$this->view->list=$list->getCheckList(10, $collumns, $service, array('academic'=>$link));
+    		$this->view->list = $list->getCheckList(10, $collumns, $service, array('branch'=>$link,'academic'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		echo $e->getMessage();
     	}
-    	
-    	$this->view->adv_search = $search;
-    	
+    	$this->view->adv_search = $search;    	
     	$frm = new Accounting_Form_FrmFee();
     	$frm->FrmTutionfee();
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -52,14 +47,6 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    }
-    public function headAddRecordTuitionFee($rs,$key){
-    	$result[$key] = array(
-    						'id' 	  => $rs['id'],
-    						'date'=>$rs['create_date'],
-    						'status'=> $rs['status']
-    				);
-    	return $result[$key];
     }
 	public function addAction(){
 		if($this->getRequest()->isPost()){
@@ -94,8 +81,6 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		$this->view->service_name=$d_row;
 	}
 	public function editAction(){
-
-
 		$_db = new Accounting_Model_DbTable_DbServiceCharge();
 		if($this->getRequest()->isPost()){
 			try {
@@ -155,10 +140,8 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 				$rs_rows[$key_old]['semester'] = $payment_tran['tuition_fee'];
 			}
 		}
-		$this->view->rows =$rs_rows;
-	
+		$this->view->rows =$rs_rows;	
 	}
-	
 	public function copyAction(){
 		$_db = new Accounting_Model_DbTable_DbServiceCharge();
 		if($this->getRequest()->isPost()){
@@ -178,8 +161,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		$this->view->rs = $row;
 		if(empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_DATA","/accounting/servicecharge");
-		}
-		
+		}	
 		$frm = new Accounting_Form_FrmFee();
 		$frm->FrmTutionfee($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
@@ -222,13 +204,6 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 		}
 		$this->view->rows =$rs_rows;
 	}	
-	public function headAddRecordService($rs,$key){
-		$result[$key] = array(
-				'id' 	  	  	=> $rs['service_id'],
-		);
-		return $result[$key];
-	}
-	
 	public function addServiceAction(){
 		if($this->getRequest()->isPost()){
 			try{

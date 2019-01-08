@@ -18,7 +18,6 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	else{
     		$search = array(
     				'advance_search' => "",
-//     				'type_search'=>"",
     				'schoolOption_search'=>"",
     				'status_search' => -1
     		);
@@ -29,7 +28,7 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
         $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("TITLE","BY_USER","STATUS");
+    	$collumns = array("SELECT_SERVICE_TYPE","BY_USER","STATUS");
     	$link=array(
     			'module'=>'accounting','controller'=>'servicecate','action'=>'edit',
     	);
@@ -58,7 +57,6 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     		} catch (Exception $e) {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			Application_Form_FrmMessage::message("Application Error!");
-    			echo $e->getMessage();
     		}
     	}
     	$_dbgb  = new Application_Model_DbTable_DbGlobal();
@@ -83,8 +81,8 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
     			exit();
     		} catch (Exception $e) {
-    			Application_Form_FrmMessage::message("Application Error!");
-    			echo $e->getMessage();
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    			Application_Form_FrmMessage::message("EDIT_FAIL");
     		}
     	}
     	$type =2; //service category

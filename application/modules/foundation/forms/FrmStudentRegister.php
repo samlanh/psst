@@ -344,6 +344,11 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$id = new Zend_Form_Element_hidden('id');
 		
 		if($data!=null){
+			$discount_type->setValue($data['scholarship_id']);
+			$scholarship_amount->setValue($data['scholarship_amt']);
+			$scholarship_fromdate->setValue($data['scholar_fromdate']);
+			$scholarship_todate->setValue($data['scholar_todate']);
+			
 			$school_province->setValue($data['province_bacc']);
 			$certificate_baccexam->setValue($data['certificate_bacc']);
 			$score_baccexam->setValue($data['score_bacc']);

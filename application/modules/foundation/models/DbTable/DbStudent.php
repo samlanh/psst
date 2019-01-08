@@ -172,6 +172,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		return $db->fetchOne($sql);
 	}
 	public function addStudent($_data){
+			$_db = $this->getAdapter();
+			$_db->beginTransaction();
+		
 			$id = $this->getStudentExist($_data['name_en'],$_data['sex'],$_data['grade'],$_data['date_of_birth'],$_data['session']);	
 			if(!empty($id)){
 				Application_Form_FrmMessage::Sucessfull("STUDENT_EXISTRING","/foundation/register/add");
@@ -201,8 +204,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				else
 					$string = "Image Upload failed";
 			}
-			$_db= $this->getAdapter();
-			$_db->beginTransaction();
+			
 			try{	
 				$is_setgroup=0;
 				if(!empty($_data['group']) AND $_data['group']!=-1){
@@ -278,6 +280,11 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						'grade_bacc'	=>$_data['grade_baccexam'],
 						'score_bacc'	=>$_data['score_baccexam'],
 						'certificate_bacc'	=>$_data['certificate_baccexam'],
+						
+						'scholarship_id'	=>$_data['discount_type'],
+						'scholarship_amt'	=>$_data['scholarship_amount'],
+						'scholar_fromdate'	=>$_data['scholarship_fromdate'],
+						'scholar_todate'	=>$_data['scholarship_todate'],
 						);
 				
 				$part= PUBLIC_PATH.'/images/photo/';
@@ -309,24 +316,23 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$photopj = $dbg->resizeImase($_FILES['guardian_photo'], $part,$new_image_name);
 					$_arr['guardian_photo']=$photopj;
 				}
-				
 				$id = $this->insert($_arr);
 				
 				if($_data['group']!=-1 AND $_data['group']!='' AND $_data['group']!=0){
 					$this->_name='rms_group_detail_student';
-					$arr_group_history= array(
-							'stu_id'	=>$id,
-							'group_id'	=>$_data['group'],
-							'date'		=>date("Y-m-d H:i:s"),
-							'status'	=>$_data['status'],
-							'user_id'	=>$this->getUserId(),
+					$arr_group_history = array(
+							'stu_id'	=> $id,
+							'group_id'	=> $_data['group'],
+							'date'		=> date("Y-m-d H:i:s"),
+							'status'	=> $_data['status'],
+							'user_id'	=> $this->getUserId(),
 							);
 					$this->insert($arr_group_history);
 					
 					$this->_name = 'rms_group';
 					$group=array(
-							'is_use'	=>1,
-							'is_pass'	=>2,
+							'is_use'	=> 1,
+							'is_pass'	=> 2,
 					);
 					$where=" id=".$_data['group'];
 					$this->update($group, $where);
@@ -348,19 +354,20 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					}
 				}
 				//for update depart m
-					$sql="SELECT id_start FROM `rms_items` WHERE id=".$_data['degree']." LIMIT 1";
-					$id_start = $_db->fetchOne($sql);
-						
-					$this->_name="rms_items";
-					$arr=array(
-							'id_start'=>$id_start+1
-					);
-					$where="id = ".$_data['degree'];
-					$this->update($arr, $where);
+				$sql="SELECT id_start FROM `rms_items` WHERE id=".$_data['degree']." LIMIT 1";
+				$id_start = $_db->fetchOne($sql);
+					
+				$this->_name="rms_items";
+				$arr=array(
+						'id_start'=>$id_start+1
+				);
+				$where="id = ".$_data['degree'];
+				$this->update($arr, $where);
 				$_db->commit();
 		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$_db->rollBack();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("INSERT_FAILE");
 		}
 	}
 	public function updateStudent($_data){

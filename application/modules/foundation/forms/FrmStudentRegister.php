@@ -315,6 +315,31 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$certificate_baccexam->setAttribs(array('dojoType'=>"dijit.form.TextBox",
 				'class'=>'fullside'));
 		
+		$discount_type = new Zend_Dojo_Form_Element_FilteringSelect("discount_type");
+		$discount_type->setMultiOptions($province_opt);
+		$discount_type->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'required'=>'true',
+				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+		));
+		$discount_type->setMultiOptions($_db->getAllDiscount(1));
+		
+		$scholarship_amount = new Zend_Dojo_Form_Element_NumberTextBox('scholarship_amount');
+		$scholarship_amount->setAttribs(array('dojoType'=>"dijit.form.NumberTextBox",
+				'class'=>'fullside'));
+		
+		$scholarship_fromdate = new Zend_Dojo_Form_Element_DateTextBox('scholarship_fromdate');
+		$scholarship_fromdate->setAttribs(array('dojoType'=>"dijit.form.DateTextBox",
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'class'=>'fullside'));
+		
+		$scholarship_todate = new Zend_Dojo_Form_Element_DateTextBox('scholarship_todate');
+		$scholarship_todate->setAttribs(array('dojoType'=>"dijit.form.DateTextBox",
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'class'=>'fullside'));
+		
 		
 		$id = new Zend_Form_Element_hidden('id');
 		
@@ -377,7 +402,12 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		}
 	
 		$this->addElements(
-				array(	$school_province,
+				array(	
+						$scholarship_amount,
+						$scholarship_fromdate,
+						$scholarship_todate,
+						$discount_type,
+						$school_province,
 						$certificate_baccexam,
 						$score_baccexam,
 						$grade_baccexam,

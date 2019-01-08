@@ -5,6 +5,7 @@
 	$this->headTitle($tr->translate('EDIT_STUDENT_REGISTER')); 
 	echo $this->headTitle(''); 
 	$frm = $this->frm;
+	
 ?>
 <style>
 .image-box {
@@ -1971,7 +1972,7 @@ date_format = '"dd/MM/yyyy"';
 		});
 	}
 	
-	function initialize() {  
+function initialize() {  
 		<?php if(!empty($this->row)){ //echo '111111';exit();
 			foreach($this->row as $row){ 
 		?>

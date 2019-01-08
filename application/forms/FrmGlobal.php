@@ -36,7 +36,8 @@ class Application_Form_FrmGlobal{
 		$str="";
 		if($branch_id==null){
 			$img = 'logo.png';
-			$school_name = $tr->translate('SCHOOL_NAME');
+			$school_khname = $tr->translate('SCHOOL_NAME');
+			$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
 			$address = $tr->translate('CUSTOMER_ADDRESS');
 			$tel = $tr->translate('CUSTOMER_TEL');
 			$email =  $tr->translate('CUSTOMER_EMAIL');
@@ -46,8 +47,9 @@ class Application_Form_FrmGlobal{
 			$rs = $db->getBranchInfo($branch_id);
 			if(!empty($rs)){
 				$img = $rs['photo'];
-// 				$school_name = $rs['branch_namekh'];
+				$school_khname = $rs['school_namekh'];
 				$school_name = $rs['school_nameen'];
+				
 				$address = $rs['br_address'];
 				$tel = $rs['branch_tel'];
 				$email = $rs['email'];
@@ -60,11 +62,16 @@ class Application_Form_FrmGlobal{
 					<td width='17%' valign='top'>
 						<img style='max-width: 98%;max-height:90px;' src=".Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$img.">
 					</td>
-					<td width='83%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
-						<div style='font-size:18px;margin-top: 10px;'>".$school_name."</div>
-						<div style='line-height: 16px;'>".$address."</div>
+					<td width='43%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
+						<div style='font-size:18px;margin-top: 10px;font-family:Khmer OS Muol Light'>".$school_khname."</div>
+						<div style='font-size:18px;font-family:Times New Roman'>".$school_name."</div>
+						<div style='line-height: 16px;margin-top: 2px;'>".$address."</div>
+					</td>
+					<td width='40%' valign='top' style='font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
+						<div style='line-height: 16px;'>&nbsp;</div>
 						<div style='line-height: 16px;'>".$tel."</div>
-						<div style='line-height: 16px;'>".$email.' / '.$website."</div>
+						<div style='line-height: 16px;'>".$email."</div>
+						<div style='line-height: 16px;'>".$website."</div>
 					</td>
 				</tr>
 			</table>";

@@ -45,7 +45,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 // 		$db_student->updategroupstudent();
-		
 	}
 	function addAction(){
 		$db = new Foundation_Model_DbTable_DbStudent();
@@ -106,9 +105,9 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->doc_type = $row;
 		
 // 		$this->view->year = $db->getAllYear();
-		$this->view->degree = $rows = $db->getAllFecultyName();
+		$this->view->degree = $db->getAllFecultyName();
 // 		$this->view->room = $row =$db->getAllRoom();
-		$this->view->province = $row =$db->getProvince();
+		$this->view->province = $db->getProvince();
 		
 // 		$_db = new Global_Model_DbTable_DbTeacher();
 // 		$this->view->branch_id = $_db->getAllBranch();
@@ -141,7 +140,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$row =$_db->getOccupation();
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
@@ -169,7 +167,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->doc_type = $row;
 		
 		$this->view->degree = $db->getAllFecultyName();
-		
 		$this->view->province = $db->getProvince();
 		
 		$student_rs =  $db->getStudentById($id);

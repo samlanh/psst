@@ -75,8 +75,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $this->view->rsdiscount = $_db->getAllDiscountName();
        $this->view->rs_paymenttype = $_db->getViewById(8,null);
        
-       $db = new Registrar_Model_DbTable_DbRegister();
-       $this->view->all_year = $db->getAllYears();
+//        $db = new Registrar_Model_DbTable_DbRegister();
+//        $this->view->all_year = $db->getAllYears();
 	   
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);

@@ -85,8 +85,8 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = " SELECT id,
 		(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,
-		subject_titlekh,subject_titleen,shortcut,date,
-		(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id) as user_name
+		 subject_titlekh,subject_titleen,shortcut,date,
+		(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id LIMIT 1) as user_name
 		,status
 		FROM rms_subject   
 		WHERE 1";
@@ -123,7 +123,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		$_model = new Global_Model_DbTable_DbGroup();
 		$option = $_model->getAllSubjectStudy();
 		$return = array('data'=>$subject_id,'option'=>$option);
-		return   $return;//$_model->getAllSubjectStudy();//option
+		return   $return;
 	}
 	
 	public function addSubjectajax($_data){
@@ -141,6 +141,4 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		);
 		return $this->insert($_arr);
 	}
-	
 }
-

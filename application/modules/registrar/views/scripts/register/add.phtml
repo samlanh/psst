@@ -107,6 +107,9 @@ a.btn.btn-default.btn-detail:hover {
 .blue{
 	color: #08086b;
 }
+label {
+    font-weight: 500;
+}
 table.collape tbody td{padding: 0px !important;}
 .hover:hover{background: #ddd;}
 #lbl_header {display: initial !important;}
@@ -150,10 +153,9 @@ table.collape tbody td{padding: 0px !important;}
 	                   </label>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH_NAME");?> <span class="required">*</span> :
-	                   </label>
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH_NAME");?> <span class="required">*</span> :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();">
+	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();getAllAcademicByBranch();">
 				    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
 				    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
 				    			<?php }?>
@@ -161,7 +163,7 @@ table.collape tbody td{padding: 0px !important;}
 	                   </div>
 	                </div>
 	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CUSTOMER_TYPE");?> <span class="required">*</span> :
+	                   <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CUSTOMER_TYPE");?> <span class="required">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect" onchange="">
@@ -193,12 +195,15 @@ table.collape tbody td{padding: 0px !important;}
 							<input type="hidden" name="group_name" id="group_name" class="fullside" dojoType="dijit.form.TextBox"/>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="study_year" id="study_year" autoComplete="false" queryExpr="*${0}*"  >
-								<option value=""><?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?></option>
-								<?php if(!empty($this->all_year)){foreach ($this->all_year as $year){?>
-								<option value="<?php echo $year['id']?>"><?php echo $year['years']?></option>
-								<?php }}?>
-							</select>
+							<input id="study_year" />
+							<!-- 	                   		
+								<select type="text" dojoType="dijit.form.FilteringSelect" class="fullside" name="study_year" id="study_year" autoComplete="false" queryExpr="*${0}*"  > 
+									<option value=""><?php //echo $tr->translate("SELECT_ACADEMIC_YEAR");?></option>
+									<?php //if(!empty($this->all_year)){foreach ($this->all_year as $year){?>
+									<option value="<?php //echo $year['id']?>"><?php //echo $year['years']?></option>
+									<?php //}}?>
+								</select>
+							-->
 	                   </div>
 		             </div>
 		             <div class="form-group">
@@ -460,9 +465,9 @@ require(["dojo/ready"], function(ready){
 			getbranchinfo();
 			getallstudentname();
 			getgradebyDegree(-1,1,2);
+			getAllAcademicByBranch();
 			getReceiptNo('','');
 		});
-		
 
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
@@ -492,8 +497,47 @@ require(["dojo/ready"], function(ready){
 				addRow();
 			}
 		}, "item");
+
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                     
+			id: "study_year",
+			name: "study_year",
+			class: "fullside", 		
+			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+			onChange: function() {  
+				academic_year = dijit.byId('study_year').get('value');
+			}
+		}, "study_year");
 });	
-	
+
+url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+function getAllAcademicByBranch(){
+	dijit.byId('study_year').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('study_year').set('store',academic_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_getacademic,
+		content:{
+			'branch_id':branch_id
+			},
+		handleAs:"json",
+		load: function(data){
+			academic_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('study_year').set('store',academic_store);  
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-grade')); ?>';
 function getgradebyDegree(dept_id,a,type=1){
@@ -511,7 +555,6 @@ function getgradebyDegree(dept_id,a,type=1){
 				},
 			handleAs:"json",
 			load: function(data) {
-				//alert(data);exit();
 				if(type==1){
 					
 				}else{

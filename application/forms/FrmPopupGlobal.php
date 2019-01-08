@@ -2,8 +2,7 @@
 
 class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 {
-
-protected $tr;
+	protected $tr;
 	protected $tvalidate ;//text validate
 	protected $filter;
 	protected $t_num;
@@ -92,8 +91,6 @@ protected $tr;
 		return $this;
 	
 	}
-	
-	
 	public function frmPopupDistrict(){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$frm = new Global_Form_FrmDistrict();
@@ -195,17 +192,5 @@ protected $tr;
 		$str.='</form></div>
 		</div>';
 		return $str;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
 }
-

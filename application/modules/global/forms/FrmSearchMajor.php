@@ -246,7 +246,24 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
-		$this->addElements(array($_title,$_status));
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$_dbuser = new Application_Model_DbTable_DbUsers();
+		$userid = $_dbgb->getUserId();
+		$userinfo = $_dbuser->getUserInfo($userid);
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$Option = $_dbgb->getAllSchoolOption($userinfo['branch_list']);
+		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+		$_schoolOption_search = new Zend_Dojo_Form_Element_FilteringSelect("schoolOption_search");
+		$_schoolOption_search->setMultiOptions($_arr_opt);
+		$_schoolOption_search->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$_schoolOption_search->setValue($request->getParam("schoolOption_search"));
+		
+		$this->addElements(array($_title,$_status,$_schoolOption_search));
 	
 		return $this;
 	}

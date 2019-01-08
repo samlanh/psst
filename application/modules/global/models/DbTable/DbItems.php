@@ -8,10 +8,20 @@
 	
 	function getAllItems($search = '',$type=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT d.id,d.title,
-		(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = d.schoolOption LIMIT 1) AS schoolOption,
-		(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
-		d.status FROM `rms_items` AS d WHERE 1 ";
+		$sql = " SELECT 
+					d.id,
+					d.title,
+					d.title_en,
+					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = d.schoolOption LIMIT 1) AS schoolOption,
+					(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
+					d.create_date,
+					d.modify_date,
+					d.status 
+				FROM 
+					`rms_items` AS d 
+				WHERE 
+					1 
+			";
 		$orderby = " ORDER BY d.type ASC, d.id DESC ";
 // 		(SELECT dt.title FROM `rms_itemstype` AS dt WHERE dt.id = d.type LIMIT 1) AS degreetype,
 		$where = ' ';
@@ -22,6 +32,7 @@
 			$s_where = array();
 	    		$s_search = addslashes(trim($search['advance_search']));
 		 		$s_where[] = " d.title LIKE '%{$s_search}%'";
+		 		$s_where[] = " d.title_en LIKE '%{$s_search}%'";
 	    		$s_where[] = " d.shortcut LIKE '%{$s_search}%'";
 	    		$sql .=' AND ( '.implode(' OR ',$s_where).')';	
 		}
@@ -86,19 +97,18 @@
 		try{
 			
 			$_arr=array(
-					'title'	  => $_data['title'],
-					'shortcut' => $_data['shortcut'],
-					'type'=> $_data['type'],
-// 					'schoolOption'    => $_data['schoolOption'],
-					'create_date' => date("Y-m-d H:i:s"),
-					'modify_date' => date("Y-m-d H:i:s"),
-					'status'=> $_data['status'],
-					'user_id'	  => $this->getUserId()
+					'title'	  		=> $_data['title'],
+					'title_en'	  	=> $_data['title_en'],
+					'shortcut' 		=> $_data['shortcut'],
+					'type'			=> $_data['type'],
+// 					'schoolOption'  => $_data['schoolOption'],
+					'create_date' 	=> date("Y-m-d H:i:s"),
+					'modify_date' 	=> date("Y-m-d H:i:s"),
+					'status'		=> $_data['status'],
+					'user_id'	 	=> $this->getUserId()
 			);
 			if ($_data['type']==1){
 				$_arr['schoolOption'] = $_data['schoolOption'];
-				$_arr['max_average'] = $_data['max_average'];
-				$_arr['pass_average'] = $_data['pass_average'];
 				$this->_name = "rms_items";
 				$id =  $this->insert($_arr);
 				
@@ -149,20 +159,18 @@
 		try{
 				
 			$_arr=array(
-					'title'	  => $_data['title'],
-					'shortcut' => $_data['shortcut'],
-					'type'=> $_data['type'],
-// 					'schoolOption'    => $_data['schoolOption'],
-// 					'create_date' => date("Y-m-d H:i:s"),
-					'modify_date' => date("Y-m-d H:i:s"),
-					'status'=> $_data['status'],
-					'user_id'	  => $this->getUserId()
+					'title'	  		=> $_data['title'],
+					'title_en'	  	=> $_data['title_en'],
+					'shortcut' 		=> $_data['shortcut'],
+					'type'			=> $_data['type'],
+// 					'schoolOption'  => $_data['schoolOption'],
+// 					'create_date' 	=> date("Y-m-d H:i:s"),
+					'modify_date' 	=> date("Y-m-d H:i:s"),
+					'status'		=> $_data['status'],
+					'user_id'	  	=> $this->getUserId()
 			);
 			if ($_data['type']==1){
 				$_arr['schoolOption'] = $_data['schoolOption'];
-				$_arr['pass_average'] = $_data['pass_average'];
-				$_arr['max_average'] = $_data['max_average'];
-				
 				$this->_name = "rms_items";
 				$id = $_data["id"];
 				$where = $this->getAdapter()->quoteInto("id=?",$id);

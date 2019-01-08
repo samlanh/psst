@@ -22,7 +22,15 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.ValidationTextBox',
     			'required'=>'true',
     			'class'=>'fullside height-text',
-    			'placeholder'=>$this->tr->translate("SEARCH"),
+    			'placeholder'=>$this->tr->translate("TITLE"),
+    			'missingMessage'=>$this->tr->translate("Forget Enter Title")
+    	));
+    	
+    	$title_en = new Zend_Dojo_Form_Element_TextBox('title_en');
+    	$title_en->setAttribs(array(
+    			'dojoType'=>'dijit.form.ValidationTextBox',
+    			'class'=>'fullside height-text',
+    			'placeholder'=>$this->tr->translate("TITLE"),
     			'missingMessage'=>$this->tr->translate("Forget Enter Title")
     	));
     	
@@ -179,6 +187,7 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			
     	if(!empty($data)){
     		$title->setValue($data["title"]);
+    		$title_en->setValue($data["title_en"]);
     		$_shortcut->setValue($data["shortcut"]);
     		if ($data["type"]==1){
     			$_schoolOption->setValue($data["schoolOption"]);
@@ -192,6 +201,7 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     	
     	$this->addElements(array(
     			$title,
+    			$title_en,
     			$_shortcut,
     			$_schoolOption,
     			$_type,

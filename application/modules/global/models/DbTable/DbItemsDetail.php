@@ -7,11 +7,22 @@
 	
 	function getAllItemsDetail($search = '',$items_type=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT ide.id,ide.title,ide.shortcut,ide.ordering,
-				(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
-				ide.modify_date,
-				(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name,
-				ide.status FROM `rms_itemsdetail` AS ide WHERE 1";
+		$sql = " SELECT 
+						ide.id,
+						ide.title,
+						ide.title_en,
+						ide.shortcut,
+						ide.ordering,
+						(SELECT it.title FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
+						ide.create_date,
+						ide.modify_date,
+						(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name,
+						ide.status 
+					FROM 
+						`rms_itemsdetail` AS ide 
+					WHERE 
+						1
+				";
 		$orderby = " ORDER BY ide.items_id ASC,ide.ordering ASC, ide.id DESC ";
 		$where = ' ';
 		if(!empty($items_type)){
@@ -21,6 +32,7 @@
 			$s_where = array();
 	    		$s_search = addslashes(trim($search['advance_search']));
 		 		$s_where[] = " ide.title LIKE '%{$s_search}%'";
+		 		$s_where[] = " ide.title_en LIKE '%{$s_search}%'";
 	    		$s_where[] = " ide.shortcut LIKE '%{$s_search}%'";
 	    		$s_where[] = " ide.ordering LIKE '%{$s_search}%'";
 	    		$sql .=' AND ( '.implode(' OR ',$s_where).')';	
@@ -69,6 +81,7 @@
 					'items_id'		=> $_data['items_id'],
 					'items_type'	=> $_data['items_type'],
 					'title'	 		=> $_data['title'],
+					'title_en'	 	=> $_data['title_en'],
 					'shortcut' 		=> $_data['shortcut'],
 					'is_onepayment' => $_data['is_onepayment'],
 					'note'   		=> $_data['note'],
@@ -103,6 +116,7 @@
 					'items_id'		=> $_data['items_id'],
 					'items_type'	=> $_data['items_type'],
 					'title'	  		=> $_data['title'],
+					'title_en'	 	=> $_data['title_en'],
 					'shortcut' 		=> $_data['shortcut'],
 					'note'    		=> $_data['note'],
 					'ordering'    	=> $_data['ordering'],

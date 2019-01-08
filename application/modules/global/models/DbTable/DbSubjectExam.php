@@ -83,13 +83,19 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 	}
 	function getAllSujectName($search=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT id,
-		(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,
-		 subject_titlekh,subject_titleen,shortcut,date,
-		(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id LIMIT 1) as user_name
-		,status
-		FROM rms_subject   
-		WHERE 1";
+		$sql = " SELECT 
+					id,
+					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,
+					subject_titlekh,
+					subject_titleen,
+					shortcut,
+					date,
+					(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id LIMIT 1) as user_name,
+					status
+				FROM 
+					rms_subject   
+				WHERE 1
+			";
 		$order=" order by id DESC";
 		$where = '';
 		if(empty($search)){
@@ -100,10 +106,14 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 			$s_search = addslashes(trim($search['title']));
 				$s_where[]= " subject_titlekh LIKE '%{$s_search}%'";
 				$s_where[]= " subject_titleen LIKE '%{$s_search}%'";
+				$s_where[]= " shortcut LIKE '%{$s_search}%'";
 			$where .= ' AND ( '.implode(' OR ',$s_where).')';
 		}
-		if($search['status']>-1){
-			$where.= " AND status = ".$search['status'];
+		if($search['status_search']>-1){
+			$where.= " AND status = ".$search['status_search'];
+		}
+		if(!empty($search['schoolOption_search'])){
+			$where.= " AND schoolOption  = ".$search['schoolOption_search'];
 		}
 		
 		return $db->fetchAll($sql.$where.$order);

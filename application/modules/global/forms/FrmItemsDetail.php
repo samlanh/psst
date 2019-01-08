@@ -35,6 +35,13 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'class'=>'fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter Title")
     	));
+		
+		$title_en = new Zend_Dojo_Form_Element_TextBox('title_en');
+    	$title_en->setAttribs(array(
+    			'dojoType'=>'dijit.form.ValidationTextBox',
+    			'class'=>'fullside height-text',
+    			'missingMessage'=>$this->tr->translate("Forget Enter Title")
+    	));
     	
     	$_shortcut = new Zend_Dojo_Form_Element_TextBox('shortcut');
     	$_shortcut->setAttribs(array(
@@ -195,6 +202,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_branch_search->setValue($request->getParam("branch_search"));
     	if(!empty($data)){
     		$title->setValue($data["title"]);
+			$title_en->setValue($data["title_en"]);
     		$_shortcut->setValue($data["shortcut"]);
     		$_items_id->setValue($data["items_id"]);
     		$_ordering->setValue($data["ordering"]);
@@ -211,6 +219,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	}
     	$this->addElements(array(
     			$title,
+				$title_en,
 				$_shortcut,
 				$_items_id,
 				$_ordering,

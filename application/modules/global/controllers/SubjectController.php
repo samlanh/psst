@@ -15,15 +15,14 @@ class Global_SubjectController extends Zend_Controller_Action {
 		try{
 			$db = new Global_Model_DbTable_DbSubjectExam();
 			if($this->getRequest()->isPost()){
-				$_data=$this->getRequest()->getPost();
-				$search = array(
-						'title' => $_data['title'],
-						'status' => $_data['status_search']);
+				$search=$this->getRequest()->getPost();
 			}
 			else{
 				$search = array(
 						'title' => '',
-						'status' => -1);
+						'status_search' => -1,
+						'schoolOption_search' => ''
+					);
 			}
 			$rs_rows = $db->getAllSujectName($search);
 			$glClass = new Application_Model_GlobalClass();
@@ -41,8 +40,8 @@ class Global_SubjectController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$frm = new Global_Form_FrmSearchMajor();
-		$frm =$frm->SubjectExam();
+		$frm1 = new Global_Form_FrmSearchMajor();
+		$frm =$frm1->SubjectExam();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_search = $frm;
 		

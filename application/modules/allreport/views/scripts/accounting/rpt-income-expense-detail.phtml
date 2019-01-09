@@ -79,10 +79,10 @@ table tr td strong{
 												<td><?php echo $i;?></td>
 												<td align="left">&nbsp;&nbsp;<?php echo $row['service']?></td>
 												<td align="left">&nbsp;&nbsp;<?php echo $row['description']?></td>
-												<td><?php echo "$ ".number_format($row['total_amount'],2)?></td>
+												<td><?php echo "$ ".number_format($row['total'],2)?></td>
 											</tr>	
 										<?php 
-											$total = $total + $row['total_amount'];
+											$total = $total + $row['total'];
 										}?>
 										<?php for($i++;$i<=5;$i++){?>
 											<tr style="height: 20px;font-size: 12px;">

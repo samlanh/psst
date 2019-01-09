@@ -8,26 +8,48 @@
 	$frm=$form;
 ?>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_INVOICE');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<form action="" dojoType="dijit.form.Form" method="post">
-		<table style="width: 100%">
-			<tr>
-				<td><input dojoType="dijit.form.TextBox" class="fullside" id="search" name="search" value="<?php echo $this->rssearch['search'];?>" type="text" ></td>
-				<!-- <td><?php //echo $frm->getElement("stu_code");?></td> -->
-				<td><?php echo $frm->getElement("branch_id");?></td>
-				<td><input id="student_name" /></td>
-				<td><input id="group" /></td>
-				<td><?php echo $frm->getElement("degree");?></td>
-			</tr>
-			<tr>	
-				<td><?php echo $frm->getElement("grade");?></td>	
-				<td><?php echo $frm->getElement("start_date");?></td>
-				<td><?php echo $frm->getElement("end_date");?></td>		
-				<td>
-					<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
+		<div class="form-group">
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<input dojoType="dijit.form.TextBox" class="fullside" id="search" name="search" value="<?php echo $this->rssearch['search'];?>" type="text" >
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("branch_id");?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<input id="student_name" />
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<input id="group" />
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("degree");?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"
 						showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-				</td>
-			</tr>
-		</table>
+       		</div>
+       	</div>
+       	<div class="form-group">
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("grade");?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("start_date");?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("end_date");?>
+       		</div>
+       	</div>
 	</form>
 <style>
 #footer{display: none;}
@@ -42,6 +64,9 @@
 			  page-break-inside:avoid; page-break-after:auto;
 			}
 			td{line-height: 30px; padding:2px 0px !important;}	
+			.padd tr td {
+			    text-align: center;
+			}
 		</style>
 		<table width="100%">
 			<tr>
@@ -58,49 +83,61 @@
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
-					<table class="table" style="width:100%; border:1px solid #ddd; border-collapse: collapse;font-family:'Khmer OS Battambang';" >
+					<?php if(!empty($this->all_invoice)){ ?>
+					<table class="padd" width="100%" align="center" style="font-family: 'Khmer OS Battambang','Times New Roman';">
 						<thead>
-						<tr style="background: #ccd9ff;font-size: 13px;font-weight: bold;">
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("N_O");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BRANCH_NAME");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("GROUP");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_ID");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("STUDENT_NAME");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("SEX");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_NUM");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INVOICE_DATE");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("INPUT_DATE");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("REMARK");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("TOTLE_AMOUNT");?></th>
-							<th style="border:1px solid #000;text-align: center;"><?php echo $tr->translate("BY_USER");?></th>
+						<tr style="background: #ccd9ff;font-size:12px; height: 20px; font-weight: bold;">
+							<td ><?php echo $tr->translate("N_O");?></td>
+							<td ><?php echo $tr->translate("BRANCH_NAME");?></td>
+							<td ><?php echo $tr->translate("GROUP");?></td>
+							<td ><?php echo $tr->translate("STUDENT_ID");?></td>
+							<td ><?php echo $tr->translate("STUDENT_NAME");?></td>
+							<td ><?php echo $tr->translate("SEX");?></td>
+							<td ><?php echo $tr->translate("INVOICE_NUM");?></td>
+							<td ><?php echo $tr->translate("INVOICE_DATE");?></td>
+							<td ><?php echo $tr->translate("INPUT_DATE");?></td>
+							<td ><?php echo $tr->translate("REMARK");?></td>
+							<td ><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
+							<td ><?php echo $tr->translate("BY_USER");?></td>
 						</tr>
 						</thead>
 						<?php 
+						$total=0;
 						$gender=array(1=>"Male",2=>"Female");
-						if(!empty($this->all_invoice)){ foreach($this->all_invoice as $key=>$rs){ $key=$key+1; ?>
-						<tr style="font-size: 14px;">
-							<td style="border:1px solid #000;text-align: center;"><?php echo $key; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['branch']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['group_name']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
-							<td style="border:1px solid #000;text-align: center;"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['stu_enname']." ".$rs['last_name']; ?></a></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['sex']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['invoice_num']; ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo date("d/m/Y",strtotime($rs['input_date'])); ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['remark']; ?></td>
-							<td style="border:1px solid #000;text-align: center;">$ <?php echo number_format($rs['totale_amount'],2); ?></td>
-							<td style="border:1px solid #000;text-align: center;"><?php echo $rs['first_name'] ?></td>
+						foreach($this->all_invoice as $key=>$rs){ $key=$key+1; 
+						
+						$total = $total +$rs['totale_amount'];
+						?>
+						 <tr style="font-size:11px; height: 20px;border-bottom: 1px solid #000;"​ class="hover">
+							<td ><?php echo $key; ?></td>
+							<td ><?php echo $rs['branch']; ?></td>
+							<td ><?php echo $rs['group_name']; ?></td>
+							<td ><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
+							<td ><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['stu_enname']." ".$rs['last_name']; ?></a></td>
+							<td ><?php echo $rs['sex']; ?></td>
+							<td ><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
+							<td ><?php echo $rs['invoice_num']; ?></td>
+							<td ><?php echo date("d/m/Y",strtotime($rs['input_date'])); ?></td>
+							<td ><?php echo $rs['remark']; ?></td>
+							<td ><strong>$ <?php echo number_format($rs['totale_amount'],2); ?></strong></td>
+							<td ><?php echo $rs['first_name'] ?></td>
 						</tr>
 						<?php
-						}}
+						}
 						?>
 					</table>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3">&nbsp;</td>
-					</tr>
+					<table align="right" style="font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang'">
+						  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+							<td style="width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+							<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($total,2);?></td>
+						  </tr>
+					 </table>
+					 <?php }?>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">&nbsp;</td>
+			</tr>
 			<tr >
 				<td colspan="3" width="100%">
 					<table width="100%" style="font-family:'Khmer OS Battambang';">

@@ -100,8 +100,9 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 	function getitemsdetailAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$grade = $db->getAllGradeStudy($data['items_type']);
+			$db = new Accounting_Model_DbTable_Dbinvoice();
+			$student_id = empty($data['student_id'])?null:$data['student_id'];
+			$grade = $db->getAllGradeStudy($data['items_type'],$student_id);
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

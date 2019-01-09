@@ -61,6 +61,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$where.=" AND s.grade=".$search['grade'];
     	}
 		$order=" ORDER BY v.id DESC";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('v.branch_id');
 		return $db->fetchAll($sql.$where.$order);
 	}
 	public function getinvoiceByid($id){
@@ -98,6 +100,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		    	$arr = array(
 		    			'branch_id'=>$data['branch_id'],
 		    			'student_name'=>$data['student_name'],
+		    			'student_id'=>$data['student_name'],
 						'invoice_date'=>$data['invoice_date'],
 		    			'invoice_num'=>$data['invoice_num'],
 						'input_date'=>$data['input_date'],
@@ -135,6 +138,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		    	$arr = array(
 		    			'branch_id'=>$data['branch_id'],
 		    			'student_name'=>$data['student_name'],
+		    			'student_id'=>$data['student_name'],
 						'invoice_date'=>$data['invoice_date'],
 		    			'invoice_num'=>$data['invoice_num'],
 						'input_date'=>$data['input_date'],
@@ -183,6 +187,35 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		   $pre.="0";
 		  }
 		  return $pre.$num;
+		 }
+		 
+		 function getAllGradeStudy($option=1,$student_id=null){
+		 	$db = $this->getAdapter();
+		 	$sql="SELECT i.id,
+		 	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+		 	FROM `rms_itemsdetail` AS i
+		 	WHERE i.status =1 ";
+		 	if($option!=null){
+		 		$sql.=" AND i.items_type=".$option;
+		 	}
+		 	if($student_id!=null){//new parameter for invoice09-1-019
+		 		$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
+		 	}
+		 	$dbbg = new Application_Model_DbTable_DbGlobal();
+		 	$branchlist = $dbbg->getAllSchoolOption();
+		 	if (!empty($branchlist)){
+		 		foreach ($branchlist as $i){
+		 			$s_where[] = $i['id']." IN (i.schoolOption)";
+		 		}
+		 		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+		 	}
+		 	$user = $dbbg->getUserInfo();
+		 	$level = $user['level'];
+		 	if ($level!=1){
+		 		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+		 	}
+		 	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+		 	return $db->fetchAll($sql);
 		 }
 }
 

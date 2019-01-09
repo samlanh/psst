@@ -415,7 +415,7 @@ var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json:
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
-		//getTeacherID();
+		
 		new dijit.form.FilteringSelect({
 			store: position_store,
 			autoComplete: true,                        
@@ -512,6 +512,8 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			}, "village_name");
 			filterDistrict();
 			initialize();
+			getTeacherID();
+			checkStaffType();
 	});
 </script>
 <div class="dijitHidden">
@@ -584,16 +586,23 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 <script type="text/javascript">
 	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
 	function getTeacherID(){
-		dojo.xhrPost({
-			url:url_get_teacher_id,
-			handleAs:"json",
-			load: function(data) {
-				dijit.byId('code').attr('value',data);
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id!=""){
+			dojo.xhrPost({
+				url:url_get_teacher_id,
+				content:{ 
+					'branch_id': branch_id
+				},
+				handleAs:"json",
+				load: function(data) {
+					//alert(1);
+					dijit.byId('code').attr('value',data);
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
 	}
 
 	function AllRefreshDepart(){
@@ -882,7 +891,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		if(title!=1){
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
+			temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT/MATERIAL");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 			temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
@@ -936,7 +945,7 @@ function addRow(){
 	if(title!=1){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
+		temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT/MATERIAL");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
@@ -985,8 +994,16 @@ function popupDocType(index){
 		$('#popup_index').val(index);
 		dijit.byId("popup_doc_type").show();
 	}
-	
 }
+function checkStaffType(){
+	staff_type = dijit.byId('staff_type').get('value');
+	if(staff_type==1){
+		dijit.byId("teacher_type").set('readOnly',false);
+	}else{
+		dijit.byId("teacher_type").set('readOnly',true);
+	}
+}
+
 </script>
 <div class="overlay">
 	<div class="overlay-load">

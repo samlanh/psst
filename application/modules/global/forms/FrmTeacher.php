@@ -33,9 +33,9 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_khname->setAttribs(array('dojoType'=>$this->tvalidate, 'class'=>'fullside','required'=>'true'));
 		
 		$code = new Zend_Dojo_Form_Element_TextBox('code');
-		$code->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside','style'=>'color:red;'));
+		$code->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside','style'=>'color:red;','readOnly'=>'true'));
 		$db = new Application_Model_DbTable_DbGlobal();
-		$code_num = $db->getTeacherCode();
+		$code_num = $db->getTeacherCode(0);
 		$code->setValue($code_num);
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -47,6 +47,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
+				'onChange'=>'getTeacherID();',
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		
@@ -193,7 +194,7 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 		$_teacher->setMultiOptions($_teacher_opt);
 		
 		$_staff=  new Zend_Dojo_Form_Element_FilteringSelect('staff_type');
-		$_staff->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_staff->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','onChange'=>'checkStaffType();'));
 		$_staff_opt = array(
 				1=>$this->tr->translate("TEACHER"),
 				2=>$this->tr->translate("STAFF"));

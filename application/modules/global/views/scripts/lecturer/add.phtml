@@ -73,6 +73,14 @@ input.btn_borwse_image {
 					dijit.byId('password').focus();
 					return false;
 				}
+					
+				branch=dijit.byId('branch_id').get('value');
+				if(branch=='' || branch==0){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');
+					dijit.byId('branch_id').focus(); 
+					return false;
+				}
+				
 				schoolOption=dijit.byId("schoolOption").get("value");
                 if(schoolOption==-1 || schoolOption==''){
 					alert("<?php echo $tr->translate("PLEASE_SELECT_SCHOOL_OPTION");?>");
@@ -94,7 +102,7 @@ input.btn_borwse_image {
 		            </li>
 					<li class="nav-item">
 		                <a class="nav-link" data-toggle="tab" href="#panel23" role="tab">
-		                <i class="fa fa-users ml-2"></i> <?php echo $tr->translate("STUDY_MATERIAL");?>
+		                <i class="fa fa-users ml-2"></i> <?php echo $tr->translate("DOCUMENT/MATERIAL");?>
 		                </a>
 		            </li>
 		        </ul>
@@ -591,16 +599,22 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 <script type="text/javascript">
 	var url_get_teacher_id = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"get-teacher-id")); ?>';
 	function getTeacherID(){
-		dojo.xhrPost({
-			url:url_get_teacher_id,
-			handleAs:"json",
-			load: function(data) {
-				dijit.byId('code').attr('value',data);
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id!=""){
+			dojo.xhrPost({
+				url:url_get_teacher_id,
+				content:{ 
+					'branch_id': branch_id
+				},
+				handleAs:"json",
+				load: function(data) {
+					dijit.byId('code').attr('value',data);
+				},
+				error: function(err) {
+					alert(err);
+				}
+			});
+		}
 	}
 	function AllRefreshDepart(){
 		loadingBlock();
@@ -854,27 +868,7 @@ var department_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json
 				});
 			}
 		}
-		function getNationli(){
-			var donor_id  = $("#donor_id").val();	
-			if(donor_id!=-1){				
-				$.ajax({
-					url:  "<?php echo $this->baseUrl()?>/donors/donate/get-donate-detail",
-					type: "post",
-					data: {donor_id:donor_id},
-					success: function(data){
-					//	alert(1);		
-						rs = $.parseJSON(data);
-						if(rs){
-							$('#donor_address').val(rs.address);
-							$('#note').val(rs.detail_kh);
-						}
-					},
-					error:function(err){
-						alert("failed");
-					}
-				});
-			}
-		}
+		
 	var url_add_doc_type = '<?php echo $this->url(array("module"=>"global","controller"=>"lecturer","action"=>"add-doctype")); ?>';
 	function addDocType(){
 		if(dijit.byId('frm_doc_type').validate()){
@@ -917,7 +911,7 @@ function addRow(){
 	if(title!=1){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
+		temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT/MATERIAL");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
@@ -957,7 +951,7 @@ function oldRow(){
 	if(title!=1){
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT_TYPE");?></th>';
+		temp+='<th width="100px"><?php echo $tr->translate("DOCUMENT/MATERIAL");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("RECEIVED");?></th>';
 		temp+='<th width="100px"><?php echo $tr->translate("DATE_GIVE_BACK");?></th>';
@@ -1004,6 +998,15 @@ function popupDocType(index){
 		$('#popup_index').val(index);
 		dijit.byId("popup_doc_type").show();
 	}
-	
 }
+
+function checkStaffType(){
+	staff_type = dijit.byId('staff_type').get('value');
+	if(staff_type==1){
+		dijit.byId("teacher_type").set('readOnly',false);
+	}else{
+		dijit.byId("teacher_type").set('readOnly',true);
+	}
+}
+
 </script>

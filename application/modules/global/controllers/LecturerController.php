@@ -86,6 +86,7 @@ class Global_LecturerController extends Zend_Controller_Action {
 		
 		$_db = new Global_Model_DbTable_DbTeacher();
 		$this->view->branch_id = $_db->getAllBranch();
+		
 		$tsub=new Global_Form_FrmTeacher();
 		$frm_techer=$tsub->FrmTecher();
 		Application_Model_Decorator::removeAllDecorator($frm_techer);
@@ -237,10 +238,13 @@ class Global_LecturerController extends Zend_Controller_Action {
 		$this->view->rs = $db->getViewById($id);
 	}
 	function getTeacherIdAction(){
-		$db = new Global_Model_DbTable_DbTeacher();
-		$code = $db->getTeacherCode();
-		print_r(Zend_Json::encode($code));
-		exit();
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$code = $db->getTeacherCode($data['branch_id']);
+			print_r(Zend_Json::encode($code));
+			exit();
+		}
 	}
 	
 }

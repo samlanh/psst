@@ -176,6 +176,7 @@ dojo.require("dojo.store.Memory");
 	var url_add_cate_income = '<?php echo $this->url(array("module"=>"registrar","controller"=>"income","action"=>"add-cate-income")); ?>';
 	function addCateIncome(){
 		if(dijit.byId('frm_add_cate_income').validate()){
+			dijit.byId('save_ajax').set('disabled',true);
 			dojo.xhrPost({
 				url:url_add_cate_income,
 				form: dojo.byId("frm_add_cate_income"),
@@ -197,6 +198,7 @@ dojo.require("dojo.store.Memory");
 	}
 	function hideDialog() {		
 		dijit.byId("popup_cate").hide();
+		dijit.byId('save_ajax').set('disabled',false);
 	}
 	function printReceipt(new_receipt){
 		if(dijit.byId('frm_add_tran').validate()) {
@@ -345,6 +347,16 @@ function getbranchinfo(){
 								.fonteng{font-size:16px;}
 								.one{white-space:nowrap;font-size:16px;}
 								.border{border:1px solid #000; min-width:220px}
+								.noted {
+									white-space: pre-wrap;
+									word-wrap: break-word;
+									word-break: break-all;
+									white-space: pre;
+									font: 12px 'Khmer OS Battambang';
+									border: 1px solid #000;
+									line-height: 20px;
+									font-weight: normal !important;
+								}
 							</style>
 							<tr style="height: 30px;">
 								<td class="one ">&nbsp;<?php echo $tr->translate("RECEIPT_NO");?>&nbsp;</td>
@@ -365,10 +377,10 @@ function getbranchinfo(){
 								<td class="border"><label id="lb_total_income" class="values one"> </label></td>
 							</tr>
 							<tr style="height: 30px;">
-								<td class="one " align="left">&nbsp;<?php echo $tr->translate("CHEQE_NO");?>&nbsp;</td>
-								<td class="border"><label id="lb_cheqe_no" class="values one"> </label></td>
-								<td class="one " align="left">&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
-								<td class="border" style="white-space: normal !important;"><label style="white-space: normal !important;" id="lb_note" class="values one"> </label></td>
+								<td class="one " align="left" valign="top">&nbsp;<?php echo $tr->translate("CHEQE_NO");?>&nbsp;</td>
+								<td class="border" valign="top"><label id="lb_cheqe_no" class="values one"> </label></td>
+								<td class="one " align="left" valign="top">&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
+								<td class="border noted" ><label id="lb_note" class="values"> </label></td>
 							</tr>
 							<tr style="font-size: 15px; font-weight:bold;font-family:'Khmer MEF2'">
 								<td colspan="2" align="center" >អ្នកប្រគល់</td>
@@ -428,7 +440,7 @@ function getbranchinfo(){
 						<tr>
 							<td colspan="2" align="center">
 								<input iconClass="dijitIconUndo" type="button" value="close" label="<?php echo $tr->translate("GO_BACK")?>" dojoType="dijit.form.Button" onclick="hideDialog();"/>
-								<input type="button" value="save" name="save" label="<?php echo $tr->translate("SAVECLOSE")?>" dojoType="dijit.form.Button" 
+								<input type="button" value="save_ajax" name="save_ajax" id="save_ajax" label="<?php echo $tr->translate("SAVECLOSE")?>" dojoType="dijit.form.Button" 
 									iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addCateIncome();"/>
 							</td>
 						</tr>

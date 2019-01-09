@@ -20,6 +20,32 @@ Class Global_Form_FrmNews extends Zend_Dojo_Form {
 				'class'=>'fullside'));
 		$_status->setValue($request->getParam('status'));
 		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$_arr_opt_branch = array("0"=>$this->tr->translate("ALL_BRANCH"));
+		$optionBranch = $_dbgb->getAllBranch();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+		$_branch_id->setMultiOptions($_arr_opt_branch);
+		$_branch_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$_branch_id->setValue($request->getParam("branch_id"));
+		
+		$_arr_opt_branch = array("-1"=>$this->tr->translate("SELECT_BRANCH"),"0"=>$this->tr->translate("ALL_BRANCH"));
+		$optionBranch = $_dbgb->getAllBranch();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$_branch_id_search = new Zend_Dojo_Form_Element_FilteringSelect("branch_id_search");
+		$_branch_id_search->setMultiOptions($_arr_opt_branch);
+		$_branch_id_search->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$_branch_id_search->setValue($request->getParam("branch_id_search"));
+			
+		
 		$public_date = new Zend_Dojo_Form_Element_DateTextBox('public_date');
 		$public_date->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
@@ -90,11 +116,13 @@ Class Global_Form_FrmNews extends Zend_Dojo_Form {
 		
 		if($data!=null){
 			$_status->setValue($data['status']);
+			$_branch_id->setValue($data['branch_id']);
+			//$_branch_id_search->setValue($data['branch_id_search']);
 			$id->setValue($data['id']);
 			$public_date->setValue($data['publish_date']);
 		}
 		
-		$this->addElements(array($id,$public_date,$_btn_search,$_status,$note,$_adv_search,$_status_search,$from_date,$to_date));
+		$this->addElements(array($id,$_branch_id,$_branch_id_search,$public_date,$_btn_search,$_status,$note,$_adv_search,$_status_search,$from_date,$to_date));
 		return $this;
 	}	
 	

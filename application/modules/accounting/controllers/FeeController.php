@@ -15,12 +15,12 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		}
     		else{
     			$search=array(
-	    					'title' => '',
-	    					'year' => '',
-	    					'branch_id'=>'',
-    						'school_option'=>-1,
+	    					'title' 			=> '',
+	    					'academic_year' 	=> '',
+	    					'branch_id'			=>'',
+    						'school_option'		=>-1,
     						'is_finished_search' => '',
-    						'status' =>-1,
+    						'status' 			=>-1,
     					);
     		}
     		$db = new Accounting_Model_DbTable_DbFee();
@@ -38,6 +38,9 @@ class Accounting_FeeController extends Zend_Controller_Action {
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}    	
     	$this->view->adv_search = $search;
+    	
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->branch = $_db->getAllBranch();
     	
     	$frm = new Accounting_Form_FrmFee();
     	$frm->FrmTutionfee();

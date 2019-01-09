@@ -60,7 +60,7 @@
 					<div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select dojoType="dijit.form.FilteringSelect" class="fullside" id="branch_id" name="branch_id" type="text">
+		                	<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="getAllAcademicByBranch();" id="branch_id" name="branch_id" type="text">
 								<?php if(!empty($this->rsbranch)){ foreach ($this->rsbranch as $rs){?>	
 									<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
 								<?php }}?>
@@ -70,12 +70,7 @@
 					<div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select dojoType="dijit.form.FilteringSelect" class="fullside" id="academic_year" name="academic_year" type="text">
-								<option value=""><?php echo $tr->translate("SELECT_YEAR");?></option>
-								<?php if(!empty($this->year)){ foreach ($this->year as $year){?>	
-									<option value="<?php echo $year['id'];?>"><?php echo $year['name'];?></option>
-								<?php }}?>
-							</select>	
+		                	<input id="academic_year" />
 		                </div>
 		             </div>
 				</div>
@@ -106,9 +101,50 @@
     dojo.require("dojo.parser");
     dojo.require("dijit.form.FilteringSelect");
 	dojo.ready(function(){ 
+	
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                     
+			id: "academic_year",
+			name: "academic_year",
+			class: "fullside", 		
+			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+			onChange: function() {  
+				academic_year = dijit.byId('academic_year').get('value');
+			}
+		}, "academic_year");
+		
+		getAllAcademicByBranch();
 		addRow();
 	});
 
+	url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+	function getAllAcademicByBranch(){
+		dijit.byId('academic_year').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('academic_year').set('store',academic_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getacademic,
+			content:{
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data){
+				academic_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('academic_year').set('store',academic_store);  
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+	
 	var col= 0; var no=0;
 	var title = 0;
 	function addRow() {

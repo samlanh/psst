@@ -15,9 +15,14 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     }
     public function getAllArticle($search){
     	$db=$this->getAdapter();
+    	
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	$label = $this->tr->translate("ALL_BRANCH");
+    	
     	$lang = $this->getCurrentLang();
     	$sql="SELECT
 		    	act.`id`,
+		    	(CASE WHEN branch_id=0 THEN '$label' ELSE (SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = act.branch_id LIMIT 1) END) AS branch_name,
 		    	(SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS title,
 		    	act.`publish_date`,
 		    	act.`status`,
@@ -28,15 +33,20 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     	$from_date =(empty($search['start_date']))? '1': " act.publish_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " act.publish_date <= '".$search['end_date']." 23:59:59'";
     	$where.= " AND ".$from_date." AND ".$to_date;
+    	
     	if(!empty($search['adv_search'])){
-    	$s_where = array();
-    	$s_search = addslashes(trim($search['adv_search']));
-    	$s_where[] = " (SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) LIKE '%{$s_search}%'";
-    	$where .=' AND ('.implode(' OR ',$s_where).')';
+	    	$s_where = array();
+	    	$s_search = addslashes(trim($search['adv_search']));
+	    	$s_where[] = " (SELECT ad.title FROM `ln_news_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) LIKE '%{$s_search}%'";
+	    	$where .=' AND ('.implode(' OR ',$s_where).')';
+    	}
+    	if($search['branch_id_search']>-1){
+    		$where.=' AND act.branch_id='.$search['branch_id_search'];
     	}
     	$order = "  ORDER BY act.`id` DESC";
     	return $db->fetchAll($sql.$where.$order);
     }
+    
     function addArticle($data){
     	$db = $this->getAdapter();
     	$db->beginTransaction();
@@ -63,10 +73,11 @@ class Global_Model_DbTable_DbNews extends Zend_Db_Table_Abstract
     		$dbglobal = new Application_Model_DbTable_DbGlobal();
     		$lang = $dbglobal->getLaguage();
     		$arr = array(
-    				'status'=>$data['status'],
-    				'publish_date'=>$data['public_date'],
-    				'modify_date'=>date("Y-m-d H:i:s"),
-    				'user_id'=>$this->getUserId(),
+    				'branch_id'		=>$data['branch_id'],
+    				'status'		=>$data['status'],
+    				'publish_date'	=>$data['public_date'],
+    				'modify_date'	=>date("Y-m-d H:i:s"),
+    				'user_id'		=>$this->getUserId(),
     		);
     		
     		if (!empty($data['id'])){

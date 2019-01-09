@@ -28,8 +28,8 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     		$s_where[] = " t.generation LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    	if(!empty($search['year'])){
-    		$where.=" AND t.id=".$search['year'];
+    	if(!empty($search['academic_year'])){
+    		$where.=" AND t.id=".$search['academic_year'];
     	}
     	 
     	if(!empty($search['branch_id'])){

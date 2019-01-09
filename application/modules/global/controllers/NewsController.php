@@ -18,26 +18,27 @@ class Global_NewsController extends Zend_Controller_Action {
 			}
 			else{
 				$search = array(
-						'adv_search' => '',
-						'status_search' => '',
-						'start_date' => '',
-						'end_date' => date("Y-m-d"));
+						'adv_search' 		=> '',
+						'status_search' 	=> '',
+						'branch_id_search' 	=> -1,
+						'start_date' 		=> '',
+						'end_date' 			=> date("Y-m-d"));
 			}
 			$rs_rows= $db->getAllArticle($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","PUBLISH_DATE","STATUS","BY_USER");
+			$collumns = array("BRANCH","TITLE","PUBLISH_DATE","STATUS","BY_USER");
 			$link=array(
 					'module'=>'global','controller'=>'news','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'zone_num'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'branch_name'=>$link,'zone_num'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$frm = new Global_Form_FrmNews();
-	   	$frm=$frm->FrmAddNews();
+		$frm1 = new Global_Form_FrmNews();
+	   	$frm=$frm1->FrmAddNews();
 	   	Application_Model_Decorator::removeAllDecorator($frm);
 	   	$this->view->frm_new = $frm;
 	}
@@ -58,8 +59,8 @@ class Global_NewsController extends Zend_Controller_Action {
 	   			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 	   		}
 	   	}
-    	$frm = new Global_Form_FrmNews();
-	   	$frm=$frm->FrmAddNews();
+    	$frm1 = new Global_Form_FrmNews();
+	   	$frm=$frm1->FrmAddNews();
 	   	Application_Model_Decorator::removeAllDecorator($frm);
 	   	$this->view->frm_new = $frm;
    	

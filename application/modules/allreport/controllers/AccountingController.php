@@ -328,44 +328,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 	}
-	public function rptstudentpaymentlateAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}else{
-				$search=array(
-						'txtsearch' =>'',
-						'grade_all' =>'',
-						'session' 	=>'',
-						'stu_code' 	=>'',
-						'stu_name' 	=>'',
-						'group'=>-1,
-						'service_type'=>-1,
-						'end_date'	=>date('Y-m-d'),
-						'service'	=>'',
-				);;
-			}
-			$db = new Allreport_Model_DbTable_DbRptStudentPaymentLate();
-			$abc = $this->view->row = $db->getAllStudentPaymentLate($search);
-			$form=new Registrar_Form_FrmSearchInfor();
-			$form->FrmSearchRegister();
-			Application_Model_Decorator::removeAllDecorator($form);
-			$this->view->form_search=$form;
-			$this->view->search = $search;
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
-		}
-	}
-	public function submitlateAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Allreport_Model_DbTable_DbRptStudentPaymentLate();
-			$db->submitlatePayment($data);
-			$this->_redirect("/allreport/accounting/rptstudentpaymentlate");
-		}
-	}
+// 	public function submitlateAction(){
+// 		if($this->getRequest()->isPost()){
+// 			$data=$this->getRequest()->getPost();
+// 			$db = new Allreport_Model_DbTable_DbRptStudentPaymentLate();
+// 			$db->submitlatePayment($data);
+// 			$this->_redirect("/allreport/accounting/rptstudentpaymentlate");
+// 		}
+// 	}
 	
 	public function rptIncomeExpenseAction(){
 		try{
@@ -704,37 +674,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 // 		);
 // 		return $result[$key];
 // 	}
-	public function rptTeacherStudentsAction(){
-		$db = new Allreport_Model_DbTable_DbRptLecturer();
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}
-			else{
-				$search = array(
-						'degree' =>-1,
-						'grade' =>-1,
-						'academic' =>-1,
-						'txtsearch'=>"",
-						'branch_id'=> '',
-						'session'=>'',
-				);
-			}
-			$this->view->search = $search;
-			$this->view->row = $db->getAmountStudentByTeacher($search);
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
-		}
-		$this->view->degree = $db->getAllDegree();
-		$this->view->grade= $db->getAllGrade();
-		$this->view->academic = $db->getAcademicyear();
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;	
-	}
+	
 	public function rptInvoiceAction(){
 		try{
 				if($this->getRequest()->isPost()){

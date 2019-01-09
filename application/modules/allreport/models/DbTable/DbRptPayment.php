@@ -207,16 +207,19 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     
     function getAllSpecailDis($search = '',$type=null){
     	$db = $this->getAdapter();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$from_date =(empty($search['start_date']))? '1': "d.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "d.create_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
-    	$sql = " SELECT d.id,
-    	d.stu_name,
-    	d.request_name,
-    	d.phone,
+    	$sql = " SELECT d.*,
+    	CASE    
+				WHEN  d.duration_type = 1 THEN CONCAT(d.duration_type,' ".$tr->translate("MONTHLY")."') 
+				WHEN  d.duration_type = 2 THEN CONCAT(d.duration_type,' ".$tr->translate("QUARTER")."')
+				WHEN  d.duration_type = 3 THEN CONCAT(d.duration_type,' ".$tr->translate("SEMESTER")."')
+				WHEN  d.duration_type = 4 THEN CONCAT(d.duration_type,' ".$tr->translate("YEAR")."')
+				END AS duration_type,
     	(SELECT so.dis_name FROM rms_discount AS so WHERE so.disco_id = d.dis_type LIMIT 1) AS discount_type,
-    	expired_date,
-    	(SELECT name_kh FROM rms_view WHERE TYPE=11 AND key_code =d.status) AS status,notes,
+    	(SELECT name_kh FROM rms_view WHERE TYPE=11 AND key_code =d.status) AS status,
     	(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name
     	FROM `rms_specail_discount` AS d WHERE 1 ";
     	$orderby = " ORDER BY d.dis_type ASC, d.id DESC ";

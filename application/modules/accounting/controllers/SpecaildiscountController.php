@@ -28,7 +28,7 @@ class Accounting_SpecaildiscountController extends Zend_Controller_Action {
         $rs_rows = $db_dept->getAllSpecailDis($search);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("REQUEST_NAME","PHONE","STUDENT_NAME","DISCOUNT_TYPE","EXPIRE_DATE","STATUS","NOTE","USER");
+    	$collumns = array("REQUEST_NAME","PHONE","STUDENT_NAME","DISCOUNT_TYPE","PERIOD","EXPIRE_DATE","STATUS","NOTE","USER");
     	$link=array(
     			'module'=>'accounting','controller'=>'specaildiscount','action'=>'edit',
     	);

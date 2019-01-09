@@ -85,6 +85,9 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     	$id = $this->getRequest()->getParam('id');
     	$db = new Accounting_Model_DbTable_DbTransfercredit();
     	$row  = $db->getTransferbyid($id);
+			if(empty($row)){
+				Application_Form_FrmMessage::redirectUrl("/accounting/transfercredit");
+			}
     	$this->view->row = $row;
     	
     	$db = new Application_Model_DbTable_DbGlobal();
@@ -115,6 +118,10 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     		}
     	}
     	$id = $this->getRequest()->getParam('id');
+    	if(empty($id)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/accounting/creditmemo");
+    		exit();
+    	}
     	$db = new Accounting_Model_DbTable_DbCreditmemo();
     	$row  = $db->getCreditmemobyid($id);
     	$this->view->row = $row;

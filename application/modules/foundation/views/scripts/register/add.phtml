@@ -1681,6 +1681,7 @@ function uploadcomplete(event){
 			},
 			handleAs:"json",
 			load: function(data) {
+				
 				dijit.byId('academic_year').set('value',data.academic_year);
 				dijit.byId('academic_year').set('readOnly',true);
 				dijit.byId('degree').set('value',data.degree);

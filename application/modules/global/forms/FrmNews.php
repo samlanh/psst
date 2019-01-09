@@ -95,12 +95,7 @@ Class Global_Form_FrmNews extends Zend_Dojo_Form {
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				));
 		$_date = $request->getParam("start_date");
-		
-		if(empty($_date)){
-			//$_date = date("Y-m-d");
-		}
 		$from_date->setValue($_date);
-		
 		
 		$to_date = new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$to_date->setAttribs(array(

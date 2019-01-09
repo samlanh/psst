@@ -21,7 +21,7 @@ class Global_GroupController extends Zend_Controller_Action {
 						'grade' => '',
 						'time' => '',
 						'session' =>'',
-						'status_search'=>1,
+						'status'=>-1,
 						);
 			}
 			$db = new Global_Model_DbTable_DbGroup();

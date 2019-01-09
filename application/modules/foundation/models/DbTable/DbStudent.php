@@ -207,9 +207,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$_arr= array(
 						'branch_id'		=>$_data['branch_id'],
 						'user_id'		=>$this->getUserId(),
-						'stu_enname'	=>$_data['name_en'],
 						'stu_khname'	=>$_data['name_kh'],
-						'last_name'		=>$_data['last_name'],
+						'last_name'		=>ucfirst($_data['last_name']),
+						'stu_enname'	=>ucfirst($_data['name_en']),
 						'sex'			=>$_data['sex'],
 						'is_stu_new'	=>$_data['stu_denttype'],
 						'nationality'	=>$_data['studen_national'],
@@ -388,9 +388,9 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$_arr=array(
  					'branch_id'		=>$_data['branch_id'],
 					'user_id'		=>$this->getUserId(),
-					'stu_enname'	=>$_data['name_en'],
 					'stu_khname'	=>$_data['name_kh'],
-					'last_name'		=>$_data['last_name'],
+					'last_name'		=>ucfirst($_data['last_name']),
+					'stu_enname'	=>ucfirst($_data['name_en']),
 					'sex'			=>$_data['sex'],
 					'is_stu_new'	=>$_data['stu_denttype'],
 					'nationality'	=>$_data['studen_national'],

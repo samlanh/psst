@@ -10,9 +10,7 @@
 	dojo.require("dijit.form.NumberTextBox");
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
-	dojo.require("dijit.form.CheckBox");
 	dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.parser");
 </script>
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
@@ -353,7 +351,6 @@ function checkSubject(index){
 			
 		}else{
 			old_subject = dijit.byId('subject_study_'+arrays[i]).get('value');
-			
 			if(current_subject == old_subject){
 				alert("Can not add the same subject !!! ");
 				deleteRecord(index);
@@ -378,8 +375,6 @@ function calculateTotalScore() {
 	pass_average = max_average / 2;
 
 	dijit.byId('max_average').attr('value',max_average.toFixed(2));
-	dijit.byId('pass_average').attr('value',pass_average.toFixed(2));
-	
-	//alert("total score = "+total_score+",amt_sub = "+amount_subject+", max avg = "+max_average+", pass avg = "+pass_average);
+	dijit.byId('pass_average').attr('value',pass_average.toFixed(2));	
 }
 </script>

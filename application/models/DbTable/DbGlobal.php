@@ -904,7 +904,7 @@ function getAllgroupStudyNotPass($action=null){
 	   		FROM rms_tuitionfee WHERE `status`=1
 	   		AND type=1
 	   		AND is_finished=0 $branch_id 
-	   	GROUP BY from_academic,to_academic,generation";
+	   	GROUP BY branch_id,from_academic,to_academic,generation ";
 	   	$order=' ORDER BY id DESC';
 	   	return $db->fetchAll($sql.$order);
    }

@@ -485,7 +485,11 @@ class Allreport_StockController extends Zend_Controller_Action {
 				exit();
 			}
 			$this->view->row = $row;
-			$this->view->rowDetail = $db->getPurchasePaymentDetail($id);;
+			$this->view->rowDetail = $db->getPurchasePaymentDetail($id);
+			
+			$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
+			$_db = new Application_Form_FrmGlobal();
+			$this->view->header = $_db->getHeaderReceipt($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

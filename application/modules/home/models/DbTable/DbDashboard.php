@@ -32,9 +32,10 @@
     	if(!empty($search['advance_search'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['advance_search']));
-    		$s_where[] = " d.request_name LIKE '%{$s_search}%'";
-    		$s_where[] = " d.phone LIKE '%{$s_search}%'";
-    		$s_where[] = " d.stu_name LIKE '%{$s_search}%'";
+    		$s_search = str_replace(' ', '', addslashes(trim($search['advance_search'])));
+    		$s_where[] = " REPLACE(d.request_name,' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(d.phone,' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(d.stu_name,' ','') LIKE '%{$s_search}%'";
     		$sql .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['dis_type'])){

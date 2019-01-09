@@ -365,11 +365,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     public function rptIncomeExpenseDetailAction(){
 		$id = $this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbRptIncomeExpense();
-		$this->view->row = $db->getAllexspanByid($id);	
+		$row =$db->getAllexspanByid($id);
+		$this->view->row = 	$row;
 		$this->view->detail = $db->getAllexspandetailByid($id);
 		
+		$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
 		$_db = new Application_Form_FrmGlobal();
-		$this->view->header = $_db->getHeaderReceipt();
+		$this->view->header = $_db->getHeaderReceipt($branch_id);
 	}
 	public function rptOtherIncomeAction(){
 		try{
@@ -707,12 +709,17 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$id=$this->getRequest()->getParam('id');		
 		if($this->getRequest()->isPost()){
 		}		
-		$this->view->invoice = $db->getinvoiceByid($id);
+		$row = $db->getinvoiceByid($id);
+		$this->view->invoice = $row;
 		$rs=$this->view->invoice_service = $db->getinvoiceservice($id);
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);		
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+		
+		$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
+		$_db = new Application_Form_FrmGlobal();
+		$this->view->header = $_db->getHeaderReceipt($branch_id);
 	}	
 	public function rptCreditmemoAction(){
 		try{

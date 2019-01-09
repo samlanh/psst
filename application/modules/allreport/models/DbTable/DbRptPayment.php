@@ -219,9 +219,15 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				WHEN  d.duration_type = 4 THEN CONCAT(d.duration_type,' ".$tr->translate("YEAR")."')
 				END AS duration_type,
     	(SELECT so.dis_name FROM rms_discount AS so WHERE so.disco_id = d.dis_type LIMIT 1) AS discount_type,
-    	(SELECT name_kh FROM rms_view WHERE TYPE=11 AND key_code =d.status) AS status,
+    	CASE    
+				WHEN  d.status = 1 THEN '".$tr->translate("RELATIVE")."'
+				WHEN  d.status = 2 THEN '".$tr->translate("FRIEND")."'
+				WHEN  d.status = 3 THEN '".$tr->translate("BUSINESS_PARTNER")."'
+				WHEN  d.status = 4 THEN '".$tr->translate("OTHER")."'
+				END AS status,
     	(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name
     	FROM `rms_specail_discount` AS d WHERE 1 ";
+    	//(SELECT name_kh FROM rms_view WHERE TYPE=11 AND key_code =d.status) AS status,
     	$orderby = " ORDER BY d.dis_type ASC, d.id DESC ";
     	if(!empty($search['title'])){
     		$s_where = array();

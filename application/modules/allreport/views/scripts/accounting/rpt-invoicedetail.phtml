@@ -18,76 +18,66 @@ p.t_shadow {
 			<style>
 				ul li{line-height: 15px; list-style: none;}
 				ul{padding: 0;margin: 0;}
-				.value{border:1px solid #000 !important;
-					   padding:1px; height:28px !important;line-height: 24px;
+				.value{    
+				/* border: 1px solid #000 !important; */
+			    padding: 1px;
+			    /* height: 28px !important; */
+			    /* line-height: 24px; */
+			    font-weight: 600;
 					}
 				
 			</style>
 		<table width="100%" style="font-family:'Khmer OS Battambang">
+				<tr height="90px;">
+					<td colspan="3"  style="" align="center" valign="top">
+						<?php echo $this->header?>
+					</td>
+				</tr>
 				<tr>
-					<td width="20%"><img style="height: 90px" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> </td>
-					<td width="60%" align="center" valign="top" style="font-weight:bold;color:#000; font-size: 16px;font-family:'Khmer MEF2';">
+					<td colspan="3" align="center">
 						<ul>
 							<li><?php echo $tr->translate("INVOICE");?></li>
 							<li style="padding-top:2px;">Invoice</li>
 						</ul>
 					</td>
-					<td width="20%"></td>
 				</tr>
 				<tr>
 					<td align="center" valign="top" colspan="3">
 						<table style="margin: 0 auto; width:100%;font-size: 14px;" cellspacing="2">
 							<tr>
 								<td width="20%" style="white-space: nowrap;">
-									<ul>
-										<li><?php echo $tr->translate("STUDENT_ID");?>:</li>
-										<li>Student ID</li>
-									</ul>
+									<?php echo $tr->translate("STUDENT_ID");?> :
 								</td>
 								<td width="25%" valign="top" ><div  class="value"><?php echo $this->invoice['stu_code']; ?></div></td>
 								<td width="150px"></td>
 								<td width="20%" style="white-space: nowrap;">
-									<ul>
-										<li><?php echo $tr->translate("INVOICE_NUMBER");?>:</li>
-										<li>Invoice No</li>
-									</ul>
+									<?php echo $tr->translate("INVOICE_NUMBER");?> :
 								</td>
 								<td width="25%" valign="top"><div  class="value"><?php echo $this->invoice['invoice_num']; ?></div></td>
 							</tr>
 							<tr>
 								<td  style="white-space: nowrap;">
-									<ul>
-										<li><?php echo $tr->translate("STUDENT_NAME");?>:</li>
-										<li>Student Name</li>
-									</ul>
+									<?php echo $tr->translate("STUDENT_NAME");?> :
 								</td>
-								<td width="25%" valign="top" style="white-space: nowrap;" ><div  class="value">
+								<td width="25%" valign="top" style="white-space: nowrap;" >
+									<div  class="value">
 									<?php echo $this->invoice['stu_khname']."/".$this->invoice['stu_enname']." ".$this->invoice['last_name']; ?>
-										
-									</div></td>
+									</div>
+								</td>
 								<td></td>
 								<td style="white-space: nowrap;">
-									<ul>
-										<li><?php echo $tr->translate("INVOICE_DATE");?>:</li>
-										<li>Invoice Date</li>
-									</ul>
+									<?php echo $tr->translate("INVOICE_DATE");?> :
 								</td>
 								<td width="25%" valign="top" ><div  class="value"><?php echo date("d/m/Y",strtotime($this->invoice['invoice_date'])); ?></div></td>
 							</tr>
 							<tr>
 								<td  style="white-space: nowrap;">
-									<ul>
-										<li><?php echo $tr->translate("SEX");?>:</li>
-										<li>Gender</li>
-									</ul>
+									<?php echo $tr->translate("SEX");?> :
 								</td>
 								<td width="25%" valign="top" ><div  class="value"><?php echo @$gender[$this->invoice['sex']]; ?></div></td>
 								<td></td>
 								<td style="white-space: nowrap;">
-									<ul>
-										<li><?php echo $tr->translate("REMARK");?>:</li>
-										<li>Note</li>
-									</ul>
+									<?php echo $tr->translate("REMARK");?> :
 								</td>
 								<td width="25%" valign="top"><div  class="value"><?php echo $this->invoice['remark']; ?></div></td>
 							</tr>

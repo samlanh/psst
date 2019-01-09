@@ -573,19 +573,22 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchOne($sql);
    }
    
-   function getTeacherCode(){
+   function getTeacherCode($branch_id=0){
    	$db = $this->getAdapter();
-   	$sql =" SELECT COUNT(id) AS number FROM `rms_teacher` LIMIT 1 ";
+   	
+   	$pre = $this->getPrefixCode($branch_id);
+   	
+   	$sql =" SELECT COUNT(id) AS number FROM `rms_teacher` where branch_id = $branch_id LIMIT 1 ";
    	$acc_no = $db->fetchOne($sql);
    
    	$new_acc_no= (int)$acc_no+1;
    	$acc_no= strlen((int)$acc_no+1);
-   	$pre="";
+
    	for($i = $acc_no;$i<5;$i++){
    		$pre.='0';
    	}
-   	$last = '/CAS';
-   	return $pre.$new_acc_no.$last;
+   	//$last = '/CAS';
+   	return $pre.$new_acc_no;
    }
    
    function getPrefixCode($branch_id){

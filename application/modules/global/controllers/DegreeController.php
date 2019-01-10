@@ -30,7 +30,7 @@ class Global_DegreeController extends Zend_Controller_Action {
         $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("TITLE","TITLE","SCHOOL_OPTION","BY_USER","CREATE_DATE","MODIFY_DATE","STATUS");
+    	$collumns = array("TITLE_KH","TITLE_EN","SCHOOL_OPTION","BY_USER","CREATE_DATE","MODIFY_DATE","STATUS");
     	$link=array(
     			'module'=>'global','controller'=>'degree','action'=>'edit',
     	);

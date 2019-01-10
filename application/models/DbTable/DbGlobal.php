@@ -1807,7 +1807,7 @@ function getAllgroupStudyNotPass($action=null){
   			                       <p class="text-muted info-list font-13">
   			                       		<span class="title-info">'.$tr->translate("STUDENT_CODE").'</span> : <span id="lbl_stucode" class="inf-value" >'.$rs["stu_code"].'</span><br />
   			                       		<span class="title-info">'.$tr->translate("NAME_KH").'</span> : <span id="lbl_namekh" class="inf-value" >'.$rs["stu_khname"].'</span><br />
-  			                       		<span class="title-info">'.$tr->translate("NAME_EN").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"].$rs["stu_enname"].'</span><br />
+  			                       		<span class="title-info">'.$tr->translate("NAME_EN").'</span> : <span id="lbl_nameen" class="inf-value" >'.$rs["last_name"]." ".$rs["stu_enname"].'</span><br />
   			                       		<span class="title-info">'.$tr->translate("DOB").'</span> : <span id="lbl_dob" class="inf-value" >'.date("d/m/Y",strtotime($rs['dob'])).'</span><br />
   			                            <span class="title-info">'.$tr->translate("PHONE").'</span> : <span id="lbl_phone" class="inf-value">'. $rs['tel'].'</span>
   			                        	<span class="title-info">'.$tr->translate("PARENT_PHONE").'</span> : <span id="lbl_parentphone" class="inf-value">'.$rs['guardian_tel'].'</span>
@@ -1993,5 +1993,23 @@ function getAllgroupStudyNotPass($action=null){
 		$id = $this->insert($_arr);
 	return $id;
   }
+  
+  function getAllYearServiceFeeByBranch($branch_id){
+  	$db  = $this->getAdapter();
+  	$sql = " SELECT 
+  					t.id ,
+  					CONCAT(t.from_academic,' - ',t.to_academic) AS name 
+  				FROM 
+  					`rms_tuitionfee` as t 
+  				WHERE 
+  					status=1 
+  					and type=2
+  					and branch_id = $branch_id
+  				ORDER BY 
+  					id DESC 
+  			";
+  	return $db->fetchAll($sql);
+  }
+  
 }
 ?>

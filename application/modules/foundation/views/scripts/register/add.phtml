@@ -292,7 +292,7 @@ input.btn_borwse_image {
 				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("academic_year");?>
+				                   		<input id="academic_year" />
 				                   </div>
 				                </div>  
 				                <div class="form-group">
@@ -751,6 +751,20 @@ dojo.ready(function(){
 			  }
 	    }
 	}, "group");
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                     
+		id: "academic_year",
+		name: "academic_year",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
+		onChange: function() {  
+			academic_year = dijit.byId('academic_year').get('value');
+		}
+	}, "academic_year");
+	
 	new dijit.form.FilteringSelect({
 	    queryExpr: "*${0}*",
 		autoComplete: false,                     
@@ -1208,6 +1222,35 @@ function getStudentNo(){
 		}
 	});
 }	
+
+url_getacademic = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
+	function getAllAcademicByBranch(){
+		dijit.byId('academic_year').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('academic_year').set('store',academic_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getacademic,
+			content:{
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data){
+				academic_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('academic_year').set('store',academic_store);  
+				
+				dijit.byId('academic_year').attr("value","<?php echo $this->adv_search['academic_year']?>");
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+
 </script>
 
 <style>

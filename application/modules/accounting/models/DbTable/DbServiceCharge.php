@@ -23,7 +23,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 	    	CONCAT(t.from_academic,' - ',t.to_academic) AS academic,
 	    	t.create_date,
 	    	(select name_en from rms_view where type=12 and key_code=t.is_finished LIMIT 1) as is_finished,
-	    	t.status,
+	    	(select name_kh from rms_view where type=1 and key_code = t.status) as status,
 	    	(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id LIMIT 1) as user
 	    	
     	FROM `rms_tuitionfee` AS t

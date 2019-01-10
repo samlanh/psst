@@ -17,20 +17,49 @@
 var aca_year= getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->rows_year));?> );
 
 	dojo.ready(function(){
-	new dijit.form.FilteringSelect({
-	    store: aca_year,
-	    autoComplete: true,                        
-	    required: false,
-	    id: "year",
-	    name: "year",
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
-	    onChange: function() {  
-	    	 
-	    }
-	}, "year");
-	dijit.byId('year').attr('value','<?php echo $this->adv_search['year']?>');
-});
+		new dijit.form.FilteringSelect({
+			store: aca_year,
+			autoComplete: true,                        
+			required: false,
+			id: "year",
+			name: "year",
+			class: 'fullside',  
+			placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
+			onChange: function() {  
+				 
+			}
+		}, "year");
+		getAllAcademicByBranch();
+	});
+	
+	url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'get-yearbybranch'));?>';
+	function getAllAcademicByBranch(){
+		dijit.byId('year').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('year').set('store',academic_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getacademic,
+			content:{
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data){
+				academic_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('year').set('store',academic_store);  
+				
+				dijit.byId('year').attr("value","<?php echo $this->adv_search['year']?>");
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+	
 </script>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -41,10 +70,15 @@ var aca_year= getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(
 					 	<?php echo $frm->getElement("title");?>
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
-					  	<?php echo $frm->getElement("branch_id");?>
+					  	<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="getAllAcademicByBranch();" id="branch_id" name="branch_id" type="text">
+							<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+							<?php if(!empty($this->branch)){ foreach ($this->branch as $year){?>	
+								<option value="<?php echo $year['id'];?>" <?php if ($this->adv_search['branch_id']==$year['id']){ echo 'selected="selected"';}?>><?php echo $year['name'];?></option>
+							<?php }}?>
+						</select>
 					 </div>
-					  <div class="col-md-2 col-sm-2 col-xs-12">
-					  <?php echo $frm_fee->getElement("year");?>
+					 <div class="col-md-2 col-sm-2 col-xs-12">
+					  	<input id="year" />
 					 </div>
 					 <div class="col-md-2 col-sm-2 col-xs-12">
 					  	<?php echo $frm_fee->getElement("is_finished_search");?>

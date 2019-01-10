@@ -37,6 +37,10 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
+    	
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->branch = $_db->getAllBranch();
+    	
     	$this->view->adv_search = $search;    	
     	$frm = new Accounting_Form_FrmFee();
     	$frm->FrmTutionfee();
@@ -259,4 +263,15 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 			}
 		}
 	}
+	
+	public function getYearbybranchAction(){
+		$db = new Application_Model_DbTable_DbGlobal();
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$rs = $db->getAllYearServiceFeeByBranch($_data["branch_id"]);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
+	}
+	
 }

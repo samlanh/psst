@@ -50,6 +50,8 @@ $teacher_id = $session_t->teacher_id;
 	$stuproductNew = $dbNotification->getStuProductAlert(1);
 	
 	$stu_nogroup = $dbNotification->getStudentNotYetGroup();
+	
+	$crmNotif = $dbNotification->getCrmNextContactNoti();
     ?>
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -224,6 +226,40 @@ $teacher_id = $session_t->teacher_id;
 				                  </ul>
 				                </li>
 				                <li role="presentation" class="dropdown">
+					                  <a title="<?php echo $tr->translate("CRM For Follow Up");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+					                    <i class="fa fa-globe "></i>
+					                    <span id="countNews" class="badge bg-green"><?php if (count($crmNotif)>0){ echo count($crmNotif);}?></span>
+					                  </a>
+					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+						                 <li class=" event title">
+						                  	<h4><i class="fa fa-phone "></i> <?php echo $tr->translate("CRM For Follow Up");?></h4>
+						                  </li>
+						                  <?php if(!empty($crmNotif)){?>
+						                  	<?php foreach($crmNotif as $key=> $crmn){
+				                          	$url = $this->url(array('module'=>'home','controller'=>'crm','action'=>'edit'), null, true)."/id/".$crmn['crm_id'];
+					                          	$style="";
+					                          	if (!empty($crmn['branch_logo'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/'.$crmn['branch_logo'])) {
+					                          			$style="background: url(/elt/trunk/public/images/".$crmn['branch_logo'].");  background-repeat: no-repeat; background-size: 100%;";
+					                          		}
+					                          	}
+				                          	?>
+				                          	<li class="event " title="<?php echo $crmn['kh_name']."/".$crmn['first_name']." ".$crmn['last_name'];?>">
+				                         	 <a href="<?php echo $url;?>">
+				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
+					                            <div class="media-body">
+					                              <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $crmn['branch_name'];?></span><br />
+					                              <span class="title bold" ><?php echo $crmn['kh_name'];?>/<?php echo $crmn['first_name']." ".$crmn['last_name'];?></span><br />
+					                              <span class="title"  ><?php echo $tr->translate("TEL")." : <strong style='color: red;'>".$crmn['tel']."</strong>";?></span><br />
+					                              <small ><?php echo $tr->translate("NEXT_DATE_CONTACT")." : <strong style='color: red;'>".date("d-M-Y",strtotime($crmn['next_contact']))."</strong>";?></small>
+					                            </div>
+				                            </a>
+				                          </li>
+				                          	<?php }?>
+						                  <?php }?>
+						               </ul>
+					            </li>
+				                <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-file-text-o "></i>
 					                    <span id="countNews" class="badge bg-green"><?php if (count($stu_nogroup)>0){ echo count($stu_nogroup);}?></span>
@@ -236,7 +272,7 @@ $teacher_id = $session_t->teacher_id;
 						                  	<?php foreach($stu_nogroup as $key=> $stunogro){
 				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$stunogro['stu_id'];
 					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
-					                          	if (!empty($rsdoc['photo'])){
+					                          	if (!empty($stunogro['photo'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$stunogro['photo'])) {
 					                          			$profileimg = $this->baseUrl().'/images/photo/'.$stunogro['photo'];
 					                          		}
@@ -249,9 +285,10 @@ $teacher_id = $session_t->teacher_id;
 					                          	}
 				                          	?>
 				                          	<li class="event " title="<?php echo $stunogro['stu_khname']." ".$stunogro['stu_code'];?>">
+				                         	 <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $stunogro['branch_name'];?></span>
 				                         	 <a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <div class="pull-left profile-list ">
+				                         	 	<div class="pull-left profile-list ">
 					                              <img src="<?php echo $profileimg;?>" />
 					                            </div>
 					                            <div class="media-body">
@@ -309,9 +346,10 @@ $teacher_id = $session_t->teacher_id;
 					                          	}
 				                          	?>
 				                          	<li class="event " title="<?php echo $rspro['items_name'];?>">
+				                          		<span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rspro['branch_name'];?></span>
 				                         	 <a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <div class="pull-left profile-list ">
+				                         	 	<div class="pull-left profile-list ">
 					                              <img src="<?php echo $profileimg;?>" />
 					                            </div>
 					                            <div class="media-body">
@@ -348,6 +386,7 @@ $teacher_id = $session_t->teacher_id;
 					                          	$total_late_day=$total_day/(60*60*24);
 				                          	?>
 				                          	<li class="event " title="<?php echo $rspro['items_name'];?>">
+				                         	 <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rspro['branch_name'];?></span>
 				                         	 <a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
 					                            <div class="pull-left profile-list ">
@@ -411,14 +450,17 @@ $teacher_id = $session_t->teacher_id;
 					                          	$total_late_day=$total_day/(60*60*24);
 				                          	?>
 				                          	<li class="event " title="<?php echo $rsdoc['document_type'];?>">
-				                         	 <a href="<?php echo $url;?>">
+				                         	  <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rsdoc['branch_name'];?></span>
+				                         	 	<a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
 					                            <div class="pull-left profile-list ">
 					                              <img src="<?php echo $profileimg;?>" />
 					                            </div>
 					                            <div class="media-body">
+					                            <?php if (!empty($rsdoc['stu_code'])){?>
 					                              <span ><?php echo $rsdoc['stu_code'];?>  
 					                              </span><br />
+					                              <?php }?>
 					                              <span class="title bold" ><?php echo $rsdoc['stu_enname']." ".$rsdoc['last_name'];?></span><br />
 					                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rsdoc['tel'];?></span><br />
 					                              <span class="title" ><?php echo $rsdoc['document_type'];?></span>
@@ -474,6 +516,7 @@ $teacher_id = $session_t->teacher_id;
 					                          	$total_late_day=$total_day/(60*60*24);
 				                          	?>
 				                          	<li class="event " title="<?php echo $rsdoc['document_type'];?>">
+				                         	 <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rsdoc['branch_name'];?></span>
 				                         	 <a href="<?php echo $url;?>">
 				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
 					                            <div class="pull-left profile-list ">

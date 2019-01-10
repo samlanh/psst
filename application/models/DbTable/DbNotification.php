@@ -132,6 +132,37 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 			AND s.status=1
 			AND s.is_subspend=0
 			AND s.is_setgroup =0 ";//(s.group_id=0 OR s.group_id='')
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission("s.branch_id");
+		$limit=" LIMIT 10";
+		return $db->fetchAll($sql.$limit);
+	}
+	
+	function getCrmNextContactNoti(){
+		$db = $this->getAdapter();
+		$day = 5;
+		$end_date = date('Y-m-d',strtotime(" +$day day"));
+		$sql ="SELECT 
+			crm.branch_id,
+			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=crm.branch_id LIMIT 1) AS branch_name,
+			(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=crm.branch_id LIMIT 1) AS branch_logo,
+			crm.kh_name,
+			crm.first_name,
+			crm.last_name,
+			crm.tel,
+			crm.reason,
+			crh.* FROM `rms_crm_history_contact` AS crh,`rms_crm` AS crm
+			WHERE crm.id = crh.crm_id
+			AND crh.proccess = 1
+			";
+		$to_date = (empty($end_date))? '1': " crh.next_contact <= '".$end_date." 23:59:59'";
+		$sql.= " AND ".$to_date;
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission("crm.branch_id");
+		
+		$sql.=" GROUP BY crh.crm_id
+			ORDER BY crh.next_contact DESC ,crh.id DESC";
 		$limit=" LIMIT 10";
 		return $db->fetchAll($sql.$limit);
 	}

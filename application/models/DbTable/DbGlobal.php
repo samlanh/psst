@@ -1697,10 +1697,17 @@ function getAllgroupStudyNotPass($action=null){
   		(SELECT nd.description FROM `ln_news_detail` AS nd WHERE nd.news_id =n.id AND nd.lang=$currentLang LIMIT 1 ) AS description,
 		(SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) AS is_read
 		 FROM `ln_news` AS n
-		 WHERE n.status = 1
-		 ORDER BY 
+		 WHERE n.status = 1 
+		 ";
+  	
+  	$dbp = new Application_Model_DbTable_DbGlobal();
+  	$sql.=$dbp->getAccessPermission("n.branch_id");
+  	
+  	$sql.=" OR n.branch_id=0 ";
+  	$sql.="  ORDER BY 
 		 (SELECT nr.is_read FROM `ln_news__read` AS nr WHERE nr.new_feed_id = n.id AND nr.cus_id=$userid LIMIT 1) ASC,
 		 n.publish_date DESC, n.created_date DESC ";
+  	
   	if (!empty($limit)){
   		if (!is_numeric($limit)){
   			$limit = 5;

@@ -179,13 +179,12 @@ dojo.require("dojo.store.Memory");
 dojo.require("dojo.html");
 dojo.ready(function(){
 	getValue();
-	Initailize();
-
+//	Initailize();
+	getSubject();
 	 var schoolOption = dijit.byId('schoolOption');
 	 schoolOption.on('change', function(evt) {
 		 getSubject();
     });
-	getSubject();
 });
 var oldSchoolOption='<?php echo $this->row['schoolOption'];?>';
 var subject = '';
@@ -215,6 +214,7 @@ function getSubject(){
 				 dojo.query("#table_row").append("");
 				    $("#identity").val("");
 				Initailize();
+			
 			}else{
 			    
 			    dojo.query("#table_row").append("");

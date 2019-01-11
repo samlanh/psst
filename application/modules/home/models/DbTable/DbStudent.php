@@ -54,6 +54,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(tel,' ','')  			LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
@@ -95,7 +96,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();
-// 		echo $sql.$where.$orderby;exit();
 		return $_db->fetchAll($sql.$where.$orderby);
 	}
 	

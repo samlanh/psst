@@ -122,7 +122,10 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside',
     			'style'=>'font-family: inherit; width:99%;  min-height:100px !important;'));
     	
-    	$_arr = array(1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"),0=>$this->tr->translate("DROPPED"));
+    	$_arr = array(1=>$this->tr->translate("PROGRESSING"),
+    			2=>$this->tr->translate("WAITING_COMPLETED"),
+    			3=>$this->tr->translate("COMPLETED"),
+    			0=>$this->tr->translate("CANCEL"));
     	$_crm_status = new Zend_Dojo_Form_Element_FilteringSelect("crm_status");
     	$_crm_status->setMultiOptions($_arr);
     	$_crm_status->setAttribs(array(
@@ -251,7 +254,11 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	$_know_by_search->setValue($request->getParam("know_by_search"));
     	
-    	$_arr = array(-1=>$this->tr->translate("ALL"),1=>$this->tr->translate("PROCCESSING"),2=>$this->tr->translate("WAITING_TEST"),3=>$this->tr->translate("COMPLETED"),0=>$this->tr->translate("DROPPED"));
+    	$_arr = array(-1=>$this->tr->translate("ALL"),1=>
+    			$this->tr->translate("PROGRESSING"),
+    			2=>$this->tr->translate("WAITING_COMPLETED"),
+    			3=>$this->tr->translate("COMPLETED"),
+    			0=>$this->tr->translate("CANCEL"));
     	$_status_search = new Zend_Dojo_Form_Element_FilteringSelect("status_search");
     	$_status_search->setMultiOptions($_arr);
     	$_status_search->setAttribs(array(

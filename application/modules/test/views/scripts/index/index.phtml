@@ -5,6 +5,8 @@
 	$urlEnterResult = $this->baseUrl()."/test/index/createtestexam?type=2&id=";
 	$urlCreateExamKh = $this->baseUrl()."/test/index/createtestexam?type=1&id=";
 	$urlCreateExamUniver = $this->baseUrl()."/test/index/createtestexam?type=3&id=";
+	$urlProfile = $this->baseUrl()."/test/index/profile/id/";
+	$urledit = $this->baseUrl()."/test/index/edit/id/";
 ?>
 <script>
 	dojo.require('dijit.form.Button');
@@ -73,19 +75,7 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("end_date");?>
                    </div>
-                  <!-- 
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php //echo $frm->getElement("term_test");?>
-                   </div>
-                   -->
                 	<div class="col-md-2 col-sm-2 col-xs-12">
-                		<!-- 
-                		<select name="result_status" id="result_status" class="fullside" style="width: 60%;display: inline-block;" dojoType="dijit.form.FilteringSelect" >
-			   				<option value="" <?php //if($this->adv_search['result_status']==""){echo "selected='selected'";}?>> <?php //echo $tr->translate('Select Result Status');?> </option>
-			   				<option value="0" <?php //if($this->adv_search['result_status']==0){echo "selected='selected'";}?>> <?php //echo $tr->translate('Result Not Updated');?> </option>
-			   				<option value="1" <?php //if($this->adv_search['result_status']==1){echo "selected='selected'";}?>> <?php //echo $tr->translate('Result Updated');?> </option>
-			   			</select>
-                		 -->
 			   			<button style="width: 30%;display: inline-block;" iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
                 </div>
@@ -97,7 +87,6 @@
 	</div>
 </div>
  <script type="text/javascript">
-
 	var row=0;
 	var url="";
 	$(function(){
@@ -113,14 +102,20 @@
 				}else if(key=="enterresultuniver"){
 					url='<?php echo $urlCreateExamUniver;?>';
 				}
-				
+				else if(key=="profile"){
+					url='<?php echo $urlProfile;?>';
+				}
+				else if(key=="edit"){
+					url='<?php echo $urledit;?>';
+				}
 				gotoAction();
-				//window.console && console.log(m) || alert(m); 
 			},
 			items: {
 				"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop  "},
 				"enterresultkh": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_KH");?>", icon: "fa-laptop  "},
 				"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
+				"profile": {name: "<?php echo $tr->translate("STUDENT_PROFILE");?>", icon: "fa fa-user"},
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "fa fa-edit"},
 			}
 		});
 	});

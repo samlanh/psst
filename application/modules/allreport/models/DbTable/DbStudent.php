@@ -86,9 +86,9 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			WHEN  c.ask_for = 4 THEN '".$tr->translate("OTHER")."'
 			END AS ask_for_title,
 			CASE
-			WHEN  c.crm_status = 0 THEN '".$tr->translate("DROPPED")."'
-			WHEN  c.crm_status = 1 THEN '".$tr->translate("PROCCESSING")."'
-			WHEN  c.crm_status = 2 THEN '".$tr->translate("WAITING_TEST")."'
+			WHEN  c.crm_status = 0 THEN '".$tr->translate("CANCEL")."'
+			WHEN  c.crm_status = 1 THEN '".$tr->translate("PROGRESSING")."'
+			WHEN  c.crm_status = 2 THEN '".$tr->translate("WAITING_COMPLETED")."'
 			WHEN  c.crm_status = 3 THEN '".$tr->translate("COMPLETED")."'
 			END AS crm_status_title,
 			(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = c.know_by LIMIT 1 ) AS know_by_title,
@@ -172,9 +172,9 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				WHEN  c.sex = 2 THEN '".$tr->translate("FEMALE")."'
 			END AS sexTitle,
 			CASE
-			WHEN  cc.proccess = 0 THEN '".$tr->translate("DROPPED")."'
-			WHEN  cc.proccess = 1 THEN '".$tr->translate("PROCCESSING")."'
-			WHEN  cc.proccess = 2 THEN '".$tr->translate("WAITING_TEST")."'
+			WHEN  cc.proccess = 0 THEN '".$tr->translate("CANCEL")."'
+			WHEN  cc.proccess = 1 THEN '".$tr->translate("PROGRESSING")."'
+			WHEN  cc.proccess = 2 THEN '".$tr->translate("WAITING_COMPLETED")."'
 			WHEN  cc.proccess = 3 THEN '".$tr->translate("COMPLETED")."'
 			END AS crm_status_title,
 			 c.kh_name,c.first_name,c.last_name,c.tel FROM `rms_crm` AS c,

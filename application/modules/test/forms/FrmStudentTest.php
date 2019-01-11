@@ -223,12 +223,6 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	));
     	$_province_id->setValue(12);
     	
-//     	$address=  new Zend_Form_Element_Textarea('address');
-//     	$address->setAttribs(array(
-//     			'dojoType'=>'dijit.form.Textarea',
-//     			'class'=>'fullside',
-//     			'style'=>'font-family: inherit; width:99%;  min-height:100px !important;'));
-    	
     	$_stu_code = new Zend_Dojo_Form_Element_TextBox('stu_code');
     	$_stu_code->setAttribs(array(
     			'dojoType'=>'dijit.form.TextBox',
@@ -302,7 +296,10 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	
     	));
     	
-    	$_arr = array(1=>$this->tr->translate("STUDENT"),2=>$this->tr->translate("WORKING"),3=>$this->tr->translate("OWN_BUSSINESS"));
+    	$_arr = array(
+    			1=>$this->tr->translate("STUDENT"),
+    			2=>$this->tr->translate("STAFF"),
+    			3=>$this->tr->translate("OWN_BUSSINESS"));
     	$_student_option = new Zend_Dojo_Form_Element_FilteringSelect("student_option");
     	$_student_option->setMultiOptions($_arr);
     	$_student_option->setAttribs(array(
@@ -310,15 +307,6 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			'required'=>'true',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
-    	
-//     	$_emergency_address = new Zend_Dojo_Form_Element_TextBox('emergency_address');
-//     	$_emergency_address->setAttribs(array(
-//     			'dojoType'=>'dijit.form.TextBox',
-//     			'class'=>' fullside height-text',
-//     			'missingMessage'=>$this->tr->translate("Forget Enter")
-    			 
-//     	));
-    	
     	
     	$_arr_opt = array(""=>$this->tr->translate("SELECT_DEGREE"));
     	$Option = $_dbgb->getAllItems(1);
@@ -410,7 +398,10 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     	$_nation_search->setValue($request->getParam("nation_search"));
     	
     	
-    	$_arr = array(""=>$this->tr->translate("PLEASE_SELECT"),1=>$this->tr->translate("STUDENT"),2=>$this->tr->translate("WORKING"),3=>$this->tr->translate("OWN_BUSSINESS"));
+    	$_arr = array(""=>$this->tr->translate("PLEASE_SELECT"),1=>
+    			$this->tr->translate("STUDENT"),
+    			2=>$this->tr->translate("STAFF"),
+    			3=>$this->tr->translate("OWN_BUSSINESS"));
     	$_student_option_search = new Zend_Dojo_Form_Element_FilteringSelect("student_option_search");
     	$_student_option_search->setMultiOptions($_arr);
     	$_student_option_search->setAttribs(array(

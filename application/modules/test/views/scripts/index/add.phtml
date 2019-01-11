@@ -84,13 +84,6 @@ tr#head-title {
 		            <li class="nav-item active">
 		                <a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i> <?php echo $tr->translate("STUDENT_INFO");?></a>
 		            </li>
-		            <!-- 
-		            <li class="nav-item">
-		                <a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
-		                <i class="fa fa-graduation-cap ml-2"></i> <?php //echo $tr->translate("STUDENT_TEST_INFORMATION");?>
-		                </a>
-		            </li>
-		             -->
 		        </ul>
 		    </div>
 		    <!--/. Tab Menu -->
@@ -252,7 +245,6 @@ tr#head-title {
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("COMMUNE");?> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("commune_name");?>
 				                   		<input id="commune_name"/>
 				                   </div>
 				                </div>
@@ -260,7 +252,6 @@ tr#head-title {
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("VILLAGE");?> :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php //echo $frm->getElement("village_name");?>
 				                   		<input id="village_name"/>
 				                   </div>
 				                </div>
@@ -355,7 +346,6 @@ tr#head-title {
 				                   		<?php echo $frm->getElement("emergency_tel");?>
 				                   </div>
 				                </div>
-				                
 				             </div>
 				        </div>
 				        <div class="card-box">
@@ -382,7 +372,6 @@ tr#head-title {
 				       </div>
 				   </div>
 				   <!--/.Panel 1-->
-				   
 				    <!--Panel 2-->
 			        <div class="tab-pane fade in " id="panel22" role="tabpanel">
 			        	<div class="card-box">
@@ -420,7 +409,6 @@ tr#head-title {
 				                   		<?php echo $frm->getElement("test_date");?>
 				                   </div>
 				                </div>
-				                
 				            </div>
 				            <div class="col-md-4 col-sm-4 col-xs-12">
 								<div class="form-group">
@@ -565,7 +553,7 @@ dojo.ready(function(){
 				else{
 					filterVillage();
 				}
-	  }
+	  		}
 		}, "commune_name");
 		 
 		new dijit.form.FilteringSelect({
@@ -586,6 +574,8 @@ dojo.ready(function(){
 			}
 		}, "village_name");
 		filterDistrict();
+		dijit.byId('nationality').attr('value',1);
+		dijit.byId('nation').attr('value',1);
 });
 
 function AllRefresh(){

@@ -46,11 +46,6 @@ class Test_IndexController extends Zend_Controller_Action
     	$crm = $dbcrm->getAllCompleteCRM();
     	$this->view->crm = $crm;
     	
-//     	$form=new Registrar_Form_FrmSearchInfor();
-//     	$form->FrmSearchRegister();
-//     	Application_Model_Decorator::removeAllDecorator($form);
-//     	$this->view->form_search=$form;
-    	
     	$frm = new Test_Form_FrmStudentTest();
     	$frm->FrmAddStudentTest(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -96,7 +91,6 @@ class Test_IndexController extends Zend_Controller_Action
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		try {
-//     			print_r($data);exit();
     			$db->updateStudentTest($data);
     			Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS', self::REDIRECT_URL);
     			exit();
@@ -108,7 +102,6 @@ class Test_IndexController extends Zend_Controller_Action
     	}
     	$row  = $db->getStudentTestById($id);
     	$this->view->rs = $row; 
-    	//print_r($this->view->rs);exit();
     	$this->view->row_detail=$db->getStudentTestDetail($id);
     	if(empty($row)){
     		Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
@@ -139,45 +132,7 @@ class Test_IndexController extends Zend_Controller_Action
     	$this->view->testresulteng = $db->getAllTestResult($id,2);
     	$this->view->testresultuniver = $db->getAllTestResult($id,3);
     }
-    
-//     function makecrmtestAction(){
-//     	if($this->getRequest()->isPost()){
-//     		$data=$this->getRequest()->getPost();
-//     		$db = new Test_Model_DbTable_DbStudentTest();
-//     		try {
-    			
-//     			$db->createStudentTestFromCrm($data);
-//     			if(!empty($data['saveclose'])){
-//     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
-//     			}else{
-//     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
-//     			}
-//     			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
-//     		} catch (Exception $e) {
-//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-//     			Application_Form_FrmMessage::message("INSERT_FAIL");
-    			
-//     		}
-//     	}
-//     	$_dbgb = new Application_Model_DbTable_DbGlobal();
-//     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-//     	$optionNation = $_dbgb->getViewByType(21);//Nation
-//     	array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
-//     	array_unshift($optionNation,array ( 'id' =>"",'name' => $tr->translate("PLEASE_SELECT")));
-//     	$this->view->nation = $optionNation;
-    	
-//     	$id = $this->getRequest()->getParam("id");
-//     	$dbcrm = new Home_Model_DbTable_DbCRM();
-//     	$row = $dbcrm->getCRMById($id);
-//     	$this->view->row = $row;
-//     	if (empty($row)){
-//     		Application_Form_FrmMessage::Sucessfull("This Record Created to Student Test Ready",self::REDIRECT_URL);
-//     	}
-//     	$frm = new Test_Form_FrmStudentTest();
-//     	$frm->FrmAddCRMToTest($row);
-//     	Application_Model_Decorator::removeAllDecorator($frm);
-//     	$this->view->frm_crm = $frm;
-//     }
+   
     function getserialAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
@@ -187,9 +142,7 @@ class Test_IndexController extends Zend_Controller_Action
     		exit();
     	}
     }
-    
     function createtestexamAction(){
-    	
     	$id = $this->getRequest()->getParam("id");
     	$type = $this->getRequest()->getParam("type");
     	if ($type!=1 AND $type!=2 AND $type!=3){ // check it again with branch that has schooloption
@@ -211,7 +164,6 @@ class Test_IndexController extends Zend_Controller_Action
     			 
     		}
     	}
-    	
     	
     	$db = new Test_Model_DbTable_DbStudentTest();
     	$row  = $db->getStudentTestById($id);
@@ -239,95 +191,6 @@ class Test_IndexController extends Zend_Controller_Action
     	$this->view->form = $frm;
     	
     }
-//     function createtestexamuniverAction(){
-    	 
-//     	if($this->getRequest()->isPost()){
-//     		$data=$this->getRequest()->getPost();
-//     		$db = new Test_Model_DbTable_DbStudentTest();
-//     		try {
-    
-//     			$db->insertTestExam($data,3);
-//     			if(!empty($data['saveclose'])){
-//     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
-//     			}
-//     		} catch (Exception $e) {
-//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-//     			Application_Form_FrmMessage::message("INSERT_FAIL");
-    
-//     		}
-//     	}
-    	 
-//     	$id = $this->getRequest()->getParam("id");
-//     	$db = new Test_Model_DbTable_DbStudentTest();
-//     	$row  = $db->getStudentTestById($id);
-//     	$this->view->rs = $row;
-//     	if(empty($row)){
-//     		Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
-//     	}
-//     	$test = $this->getRequest()->getParam("test");
-//     	$result=null;
-    	 
-//     	if (!empty($test)){
-//     		$db = new Test_Model_DbTable_DbStudentTest();
-//     		$result  = $db->getTestResultById($test,3);
-//     		if (empty($result)){
-//     			Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
-//     		}
-//     	}
-//     	$this->view->detailscore = $result;
-    	 
-//     	$frm = new Test_Form_FrmStudentTest();
-//     	$frm->FrmCreateTestUniversity($row,$result);
-//     	Application_Model_Decorator::removeAllDecorator($frm);
-//     	$this->view->form = $frm;
-//     }
-    
-//     function createtestexamkhAction(){
-    
-//     	if($this->getRequest()->isPost()){
-//     		$data=$this->getRequest()->getPost();
-//     		$db = new Test_Model_DbTable_DbStudentTest();
-//     		try {
-    
-//     			$db->insertTestExam($data,1);
-//     			if(!empty($data['saveclose'])){
-//     				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
-//     			}
-//     		} catch (Exception $e) {
-//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-//     			Application_Form_FrmMessage::message("INSERT_FAIL");
-    
-//     		}
-//     	}
-    
-//     	$id = $this->getRequest()->getParam("id");
-//     	$db = new Test_Model_DbTable_DbStudentTest();
-//     	$row  = $db->getStudentTestById($id);
-//     	$this->view->rs = $row;
-//     	if(empty($row)){
-//     		Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
-//     	}
-//     	$test = $this->getRequest()->getParam("test");
-//     	$result=null;
-    
-//     	if (!empty($test)){
-//     		$db = new Test_Model_DbTable_DbStudentTest();
-//     		$result  = $db->getTestResultById($test,1);
-//     		if (empty($result)){
-//     			Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
-//     		}
-    		
-//     		$subject = $db->getSubjectScoreByTest($test);
-//     		$this->view->subjectScore = $subject;
-//     	}
-//     	$this->view->detailscore = $result;
-    
-//     	$frm = new Test_Form_FrmStudentTest();
-//     	$frm->FrmCreateTestKhmer($row,$result);
-//     	Application_Model_Decorator::removeAllDecorator($frm);
-//     	$this->view->form = $frm;
-//     }
-    
     function getstudenttestbybranchAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

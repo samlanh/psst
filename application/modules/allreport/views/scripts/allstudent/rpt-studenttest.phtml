@@ -1,9 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("RPT_STUDENT_TEST"));
-	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$session_user=new Zend_Session_Namespace('authstu');
-	$user_id=$session_user->user_id;
 	$frm =  $this->form_search;
 ?>
 <div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
@@ -22,7 +19,6 @@
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
     	               	<?php echo $frm->getElement("nation_search");?>
-	               		<?php //echo $frm->getElement("user");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
     	               	<?php echo $frm->getElement("student_option_search");?>
@@ -45,15 +41,6 @@
 			   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>> បានទទួល </option>
 			   			</select>
                    </div>
-                   <!-- 
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<select name="register_status" id="register_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-			   				<option value="" <?php //if($this->search['register_status']==""){echo "selected='selected'";}?>>ប្រភេទចុះឈ្មោះ </option>
-			   				<option value="0" <?php //if($this->search['register_status']==0){echo "selected='selected'";}?>> មិនទាន់ចុះឈ្មោះ </option>
-			   				<option value="1" <?php //if($this->search['register_status']==1){echo "selected='selected'";}?>> បានចុះឈ្មោះ </option>
-			   			</select>
-                   </div>
-                    -->
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
@@ -95,7 +82,6 @@
 										</style>
 			
 									<table class="padd" width="100%" border="1" align="center" style="font-family: Khmer OS Battambang,Times New Roman ;">
-										 
 										 <?php 
 										 	$i=0; $total=0;$total_paid=0;$total_balance=0;
 										 	$comple_b=0; $isset =0; $total_other_income=0;
@@ -108,7 +94,6 @@
 										 	$register=0;
 										 	if (!empty($this->row)){  
 										 ?>
-										 
 										  <tr style="font-size:12px; height: 20px; white-space:nowrap;background: #ccd9ff !important; line-height: 25px; font-weight: bold;" align="center">
 										    <td rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
 										    <td rowspan="2">&nbsp;<?php echo $tr->translate("SERIAL"); ?>&nbsp;</td>
@@ -119,10 +104,7 @@
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("TEST_DATE"); ?>&nbsp;</td>
 											<td colspan="3">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
-											
-											
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
-											
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
@@ -144,7 +126,7 @@
 												    <td><?php echo $rs['serial']; ?></td>
 												    <td><?php echo $rs['stu_code']; ?></td>
 												    <td><?php echo $rs['stu_khname']; ?></td>
-												    <td><?php echo $rs['stu_enname']." ".$rs['last_name']; ?></td>
+												    <td><?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
 												    <td><?php echo $rs['sex']; ?></td>
 												    <td><?php echo $rs['tel']; ?></td>
 												     <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
@@ -152,35 +134,20 @@
 												    <td><?php if ($rs['updated_result_de']==1){ echo $rs['grade_result_title']; }?></td>
 												    <td><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
 												    <td><?php echo $rs['note_result']; ?></td>
-												   
 													<td><?php echo $rs['user_id'];?></td>								    
 												    <td <?php if($rs['updated_result_de']==0){echo "style='color:red'";}?>><?php echo $rs['result_status']; ?></td>
 												    <td <?php if($rs['is_registered']==0){echo "style='color:red'";}?>>&nbsp;<?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?>&nbsp;</td>							    
 											  		<td>&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
 											  </tr>
-											  
 											  <?php 
 											  	if($rs['updated_result_de']==1){
 													$updated_result = $updated_result + 1;
 											  	}
-// 											  	if($rs['register']==1){
-// 													$register = $register + 1;		
-// 											  	}					
-											  	  
 											  ?>
-											  
 										  <?php }}?>
-										  
 									</table>
 									<?php if (!empty($this->row)){?>
 									<table width="40%"  align="right" style=" white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;font-size: 12px;margin-top: 10px;">
-										<!-- 
-										<tr align="center" style="background: #ccd9ff;">
-											<td></td>
-											<td><?php //echo $tr->translate("បានទទួលលទ្ធផល");?></td>
-											<td><?php //echo $tr->translate("មិនទាន់បានទទួលលទ្ធផល");?></td>
-											<td><?php //echo $tr->translate("បានចុះឈ្មោះ");?></td>
-										</tr> -->
 										<tr align="right">
 											<td>
 												<ul style=" list-style: none;    padding: 0;">
@@ -195,10 +162,6 @@
 													</li>
 												</ul>
 											</td>
-											<!-- <td><?php //echo $i." នាក់";?></td>
-											<td><?php //echo $updated_result." នាក់";?></td>
-											<td><?php // echo ($i-$updated_result)." នាក់";?></td>
-											<td><?php //echo $register." នាក់";?></td> -->
 										</tr>
 									</table>
 									<?php }?>
@@ -218,17 +181,6 @@
 												<span style="text-align: right;font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('PREPARED_BY')?></span>
 											</td>
 										</tr>
-										<tr>
-											<td>
-											</td>
-											<td  width="50%">
-												&nbsp;
-											</td>
-											<td align="center"  width="25%">
-												
-											</td>
-										</tr>
-										
 									</table>
 								</td>
 							</tr>
@@ -255,4 +207,3 @@
 		</div>
 	</div>
 </div>
-

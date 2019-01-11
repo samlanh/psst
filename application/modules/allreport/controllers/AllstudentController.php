@@ -918,12 +918,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();
 		}
-// 		$form=new Registrar_Form_FrmSearchInfor();
-// 		$form->FrmSearchRegister();
-// 		Application_Model_Decorator::removeAllDecorator($form);
-// 		$this->view->form_search=$form;
 		$this->view->search = $search;
-		
 		$frm = new Test_Form_FrmStudentTest();
 		$frm->FrmAddStudentTest(null);
 		Application_Model_Decorator::removeAllDecorator($frm);

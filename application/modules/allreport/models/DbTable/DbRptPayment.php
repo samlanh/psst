@@ -214,7 +214,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	$sql = " SELECT d.*,
     	CASE    
 				WHEN  d.duration_type = 1 THEN CONCAT(d.duration_type,' ".$tr->translate("MONTHLY")."') 
-				WHEN  d.duration_type = 2 THEN CONCAT(d.duration_type,' ".$tr->translate("QUARTER")."')
+				WHEN  d.duration_type = 2 THEN CONCAT(d.duration_type,' ".$tr->translate("TERM")."')
 				WHEN  d.duration_type = 3 THEN CONCAT(d.duration_type,' ".$tr->translate("SEMESTER")."')
 				WHEN  d.duration_type = 4 THEN CONCAT(d.duration_type,' ".$tr->translate("YEAR")."')
 				END AS duration_type,

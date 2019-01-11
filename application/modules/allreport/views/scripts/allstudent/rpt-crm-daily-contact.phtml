@@ -87,6 +87,7 @@
 											<td><?php echo $tr->translate("PHONE");?></td>
 											<td><?php echo $tr->translate("FEEDBACK");?></td>
 											<td><?php echo $tr->translate("STATUS");?></td>
+											<td><?php echo $tr->translate("CONTACT_BY");?></td>
 											<td>&nbsp;</td>
 										</tr>
 									</thead>
@@ -102,11 +103,14 @@
 										<td ><?php echo $row['tel'];?></td>
 										<td ><?php echo $row['feedback'];?></td>
 										<td><?php echo $row['crm_status_title'];?></td>	
+										<td>&nbsp;<?php echo $row['user_contact_name'];?>&nbsp;</td>
 										<td>
 											<a target="_blank" style="text-decoration: none;color:#000;" href="<?php echo $this->baseUrl();?>/allreport/allstudent/rpt-crm-detail/id/<?php echo $row['crm_id'];?>">
 											<?php echo $tr->translate("DETAIL");?>
 											</a>
 										</td>	
+										
+										
 									</tr>
 								<?php }}?>	
 								</table>	

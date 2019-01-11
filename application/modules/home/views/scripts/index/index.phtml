@@ -351,6 +351,9 @@ small.pull-right.showall-ann {
 			                      	<img src="<?php echo $images;?>" />
 			                      </a>
 			                      <div class="media-body">
+			                      	<?php if (!empty($announ['branch_name'])){?>
+			                      	<span style="color: #1abb9c;"><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $announ['branch_name'];?></span><br />
+			                        <?php }?>
 			                        <a class="title" href="<?php echo $url;?>"><?php echo $announ['title'];?></a><br />
 			                        <small class="red"><?php echo date("d/M/Y",strtotime($announ['publish_date']));?></small>
 			                        <p><?php echo  mb_substr(strip_tags($announ['description']),0,70, "utf-8")."...";?></p>

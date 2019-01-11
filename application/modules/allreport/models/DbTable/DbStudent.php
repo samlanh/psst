@@ -165,7 +165,8 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			cc.user_contact,
 			(SELECT CONCAT(first_name) FROM rms_users WHERE cc.user_contact=id LIMIT 1 ) AS user_contact,
 			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
-			(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=id LIMIT 1 ) AS userby,
+			(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=rms_users.id LIMIT 1 ) AS userby,
+			 (SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE cc.user_contact=rms_users.id LIMIT 1 ) AS user_contact_name,
 			 CASE
 				WHEN  c.sex = 1 THEN '".$tr->translate("MALE")."'
 				WHEN  c.sex = 2 THEN '".$tr->translate("FEMALE")."'

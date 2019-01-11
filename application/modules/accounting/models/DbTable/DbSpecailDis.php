@@ -19,7 +19,7 @@
 		(SELECT so.dis_name FROM rms_discount AS so WHERE so.disco_id = d.dis_type LIMIT 1) AS discount_type,
 		CASE    
 				WHEN  d.duration_type = 1 THEN CONCAT(d.duration_type,' ".$tr->translate("MONTHLY")."') 
-				WHEN  d.duration_type = 2 THEN CONCAT(d.duration_type,' ".$tr->translate("QUARTER")."')
+				WHEN  d.duration_type = 2 THEN CONCAT(d.duration_type,' ".$tr->translate("TERM")."')
 				WHEN  d.duration_type = 3 THEN CONCAT(d.duration_type,' ".$tr->translate("SEMESTER")."')
 				WHEN  d.duration_type = 4 THEN CONCAT(d.duration_type,' ".$tr->translate("YEAR")."')
 				END AS duration_type,

@@ -392,7 +392,7 @@ input.btn_borwse_image {
 				                   </label>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME");?>  :
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FATHER_NAME");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("fa_name_en");?>
@@ -450,7 +450,7 @@ input.btn_borwse_image {
 				                   </label>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME");?>  :
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("MOTHER_NAME");?>  :
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<?php echo $frm->getElement("mom_name_en");?>
@@ -1072,6 +1072,7 @@ dojo.ready(function(){
 		getAllGroupByBranch();
 		getStudentNo();
 		oldRow();
+		dijit.byId('nation').attr("value",1);
 }); 
 
 
@@ -1827,7 +1828,7 @@ date_format = '"dd/MM/yyyy"';
 			}
 			template+='<td width="5%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="5%" align="center">'+no+'</td>';
-			template+='<td width="25%"><label style="padding: 1px 1px;"><?php echo $row['name']?></label><input type="hidden" class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" dojoType="dijit.form.TextBox" value="<?php echo $row['id']?>" />';
+			template+='<td width="25%"><label style="padding: 1px 1px;font-weight:normal;"><?php echo $row['name']?></label><input type="hidden" class="fullside" name="document_type_'+col+'" id="document_type_'+col+'" dojoType="dijit.form.TextBox" value="<?php echo $row['id']?>" />';
 			template+='</td>';
 			template+='<td width="15%"><input type="text" class="fullside" name="date_give_'+col+'" id="date_give_'+col+'" value="now" dojoType="dijit.form.DateTextBox" constraints='+'{datePattern:"dd/MM/yyyy"}'+' /></td>';
 			template+='<td width="15%"><select class="fullside" name="is_receive_'+col+'" id="is_receive_'+col+'" dojoType="dijit.form.FilteringSelect" ><option value="1"><?php echo $tr->translate("RECEIVED");?></option><option value="0"><?php echo $tr->translate("NOT_RECEIVED");?></option></select></td>';

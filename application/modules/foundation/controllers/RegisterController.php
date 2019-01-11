@@ -104,13 +104,8 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
-// 		$this->view->year = $db->getAllYear();
 		$this->view->degree = $db->getAllFecultyName();
-// 		$this->view->room = $row =$db->getAllRoom();
 		$this->view->province = $db->getProvince();
-		
-// 		$_db = new Global_Model_DbTable_DbTeacher();
-// 		$this->view->branch_id = $_db->getAllBranch();
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister();

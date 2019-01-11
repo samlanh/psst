@@ -594,7 +594,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$row = $db->getStudentGroup($id,$search,1);
 		$this->view->rs = $row;
-		$rs= $db->getGroupDetailByID($id);
+		$rs = $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
 	}
 	function submitlistAction(){

@@ -74,6 +74,12 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
     	 
     }
    public function getStudentGroup($id,$search,$type){
+   	$session_lang=new Zend_Session_Namespace('lang');
+	$lang_id=$session_lang->lang_id;
+		$gender_str = 'name_en';
+	if($lang_id==1){//for kh
+		$gender_str = 'name_kh';
+	}
    	$db = $this->getAdapter();
 		$sql="SELECT
 					 g.gd_id,
@@ -82,7 +88,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				  	 `s`.`stu_code` AS `stu_code`,
 				     `s`.`stu_khname` AS `kh_name`,
 				     `s`.`stu_enname` AS `en_name`,
-				      `s`.`last_name` AS `last_name`,
+				     `s`.`last_name` AS `last_name`,
 				     `s`.`address` AS `address`,
 				     s.pob,
 				     `s`.`tel` AS `tel`,
@@ -91,12 +97,11 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				     s.father_enname AS father_name,
 				     (SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality,
     				(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nation` LIMIT 1) AS nation,
-    	
 					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job,
 					 s.mother_enname AS mother_name,
 					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job,
 				    (SELECT
-				        `rms_view`.`name_kh`
+				        `rms_view`.$gender_str
 				      FROM `rms_view`
 				      WHERE ((`rms_view`.`type` = 2)
 				             AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`,
@@ -104,25 +109,24 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				  s.home_num,
 				  s.street_num,
 				  (SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
-    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
-    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
-    	(SELECT province_en_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province,
-    	(SELECT v.village_namekh FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_namekh,
-    	(SELECT c.commune_namekh FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_namekh,
-    	(SELECT d.district_namekh FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_namekh,
-    	(SELECT rms_province.province_kh_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province_kh_name
+			    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+			    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+			    	(SELECT province_en_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province,
+			    	(SELECT v.village_namekh FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_namekh,
+			    	(SELECT c.commune_namekh FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_namekh,
+			    	(SELECT d.district_namekh FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_namekh,
+			    	(SELECT rms_province.province_kh_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province_kh_name
 				FROM 
 					`rms_group_detail_student` AS g,
 					rms_student as s,
 					`rms_group` AS gr
 				WHERE 
-				gr.id = g.group_id
-					AND
-					g.stu_id = s.stu_id
-		   			and `g`.`status` = 1 ";
-		if (!empty($id)){
-			$sql.=' AND g.group_id='.$id;
-		}
+					gr.id = g.group_id
+					AND g.stu_id = s.stu_id
+		   			AND `g`.`status` = 1 ";
+			if (!empty($id)){
+				$sql.=' AND g.group_id='.$id;
+			}
 			if($type == 0){
 				$sql.=' and g.type=1 ';
 			}  
@@ -139,16 +143,19 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		   		$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		   	}
 		   	if(!empty($search['branch_id'])){
-		   		$sql.=' and gr.branch_id = '.$search['branch_id'];
+		   		$sql.=' AND gr.branch_id = '.$search['branch_id'];
 		   	}
 		   	if(!empty($search['study_year'])){
-		   		$sql.=' and gr.academic_year = '.$search['study_year'];
+		   		$sql.=' AND gr.academic_year = '.$search['study_year'];
 		   	}
 		   	if(!empty($search['group'])){
-		   		$sql.=' and gr.id = '.$search['group'];
+		   		$sql.=' AND gr.id = '.$search['group'];
 		   	}
-		   	if(!empty($search['study_type'])){
-		   		$sql.=' and g.type = '.$search['study_type'];
+		   	if(!empty($search['study_type']) AND $search['study_type']==1){
+		   		$sql.=' AND g.stop_type = 0';
+		   	}
+		   	if(!empty($search['study_type']) AND $search['study_type']!=1){
+		   		$sql.=' AND g.stop_type != 0 ';
 		   	}
 		 return $db->fetchAll($sql.$order);
 	}

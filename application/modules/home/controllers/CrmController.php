@@ -11,7 +11,6 @@ class Home_CrmController extends Zend_Controller_Action
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	
 	}
-
     public function indexAction()
     {
     	try{
@@ -70,7 +69,6 @@ class Home_CrmController extends Zend_Controller_Action
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
     		}
     	}
     	$_dbgb = new Application_Model_DbTable_DbGlobal();

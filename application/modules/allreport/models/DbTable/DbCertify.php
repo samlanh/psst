@@ -39,7 +39,7 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				s.stu_id = gds.stu_id
     				and g.id=gds.group_id
     				and g.academic_year=t.id
-    				and gds.gd_id=$id";
+    				and s.stu_id=$id";
     	return $db->fetchRow($sql);
     }
 }

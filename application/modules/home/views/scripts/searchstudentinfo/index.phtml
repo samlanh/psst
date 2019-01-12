@@ -185,12 +185,14 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 	                        	 <li>
 		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/".$rs['group_id'];?>"><?php echo $tr->translate('STUDENT_LIST_REPORT');?></a>
 		                          </li>
+		                          <?php if($rs['is_subspend']==0){?>
 		                          <li>
 		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/allstudent/certify-khmer/id/".$rs['stu_id'];?>"><?php echo $tr->translate('CERTIFY_KHMER');?></a>
 		                          </li>
 		                          <li>
 		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/allstudent/certify-english/id/".$rs['stu_id'];?>"><?php echo $tr->translate('CERTIFY_ENGLIISH');?></a>
 		                          </li>
+		                          <?php }?>
 		                          <?php }?>
 	                        	<?php if (!empty($lastExam)){?>
 		                          <li>

@@ -74,10 +74,12 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 
 		if(!empty($search['adv_search'])){
 			$s_where = array();
-			$s_search = addslashes(trim($search['adv_search']));
-			$s_where[]=" REPLACE(stu_code,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(stu_khname,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(stu_enname,' ','') LIKE '%{$s_search}%'";
+// 			$s_search = addslashes(trim($search['adv_search']));
+			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+			$s_where[]=" REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(tel,' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(father_phone,' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(mother_phone,' ','') LIKE '%{$s_search}%'";
@@ -92,8 +94,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(commune_name,' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(district_name,' ','') LIKE '%{$s_search}%'";
 			
-			$s_where[]=" (SELECT rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session LIMIT 1) LIKE '%{$s_search}%'";
-			$s_where[]=" (SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex  LIMIT 1) LIKE '%{$s_search}%'";
+// 			$s_where[]=" (SELECT rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session LIMIT 1) LIKE '%{$s_search}%'";
+// 			$s_where[]=" (SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex  LIMIT 1) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['study_year'])){
@@ -105,8 +107,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['degree'])){
 			$where.=" AND s.degree=".$search['degree'];
 		}
-		if(!empty($search['grade_bac'])){
-			$where.=" AND s.grade=".$search['grade_bac'];
+		if(!empty($search['grade_all'])){
+			$where.=" AND s.grade=".$search['grade_all'];
 		}
 		if(!empty($search['session'])){
 			$where.=" AND s.session=".$search['session'];
@@ -114,11 +116,11 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if($search['status']>0){
 			$where.=" AND s.status=".$search['status'];
 		}
-		if($search['branch_id']!=''){
+		if(!empty($search['branch_id'])){
 			$where.=" AND s.branch_id=".$search['branch_id'];
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission();
+		$where.=$dbp->getAccessPermission('s.branch_id');
 		return $_db->fetchAll($sql.$where.$orderby);
 	}
 	public function getStudentById($id){

@@ -7,13 +7,15 @@ if(!empty($this->rs['photo'])){
 		$image = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
 	}
 }
+$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<link href="https://fonts.googleapis.com/css?family=Moul|Roboto|Sumana|Leckerli One" rel="stylesheet">
     <meta charset="utf-8">
+    <title>លិខិតបញ្ជាក់ការសិក្សា</title>
 </head>
 <body>
 	<div class="wrapper" style="border: 1px dotted #000;background: #fff;width:26cm;margin: 0 auto;min-height: 27cm;padding: 0.5cm;">
@@ -69,24 +71,32 @@ if(!empty($this->rs['photo'])){
 						<table width="100%" >
 							<tr>
 								<td width="20%" align="center">
-									<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br>
+									<?php $logo = $this->baseUrl().'/images/logo.png';
+									if (!empty($this->rs['branch_logo'])){
+										$logo = $this->baseUrl().'/images/'.$this->rs['branch_logo'];
+									}
+									?>
+									<img style="max-height:100px;" src="<?php echo $logo;?>"><br>
 								</td>
-								<td width="60%">
-									<table   style="text-align:center;border:solid 1px #FFF;">
-										<tr style="list-style:12px;font-size:20px;font-weight: bold;">
-											<td>KINGDOM OF CAMBODIA</td>
-										</tr>
-										<tr style="list-style:12px;font-weight: bold;font-size:13px;" class="img-size">
-											<td>NATION RELIGION KING<br>
-												<img style="height: 10px;" src="<?php echo $this->baseUrl().'/images/style.png'?>"><br>
+								<td width="80%" valign="top">
+									<div class="schoo-headkh" style="text-align: center;">
+										<h2 style="padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol;font-size:24px;background: #2e3192;color: #fff;padding: 8px 0px;"><?php echo $this->rs['school_namekh'];?></h2>
+									</div>
+									<table width="100%" >
+										<tr>
+											<td width="60%" align="center" valign="top">
+												<h2 style="white-space:nowrap; font-weight:bold; font-size:16px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #000;"><?php echo $this->rs['school_nameen'];?></h2>
+											</td>
+											<td width="40%" align="left" valign="top" style="white-space:nowrap;font-size: 12px;line-height: 14px;">
+												Contacts: <?php echo $this->rs['branch_tel'];?><br />
+												<span style="visibility: hidden;">Contacts: </span><?php echo $this->rs['branch_tel'];?>
 											</td>
 										</tr>
-										<tr style="list-style:15px;font-family: Times New Roman , Khmer OS Muol;font-size:20px;font-weight: bold;">
-											<td><?php echo $tr->translate("CUSTOMER_BRANCH");?></td>
-										</tr>
 									</table>
+									<div class="schoo-add" style="text-align: center; font-size: 13px;">
+										<?php echo $this->rs['br_address'];?>, E-mail: <?php echo $this->rs['email'];?>, Website: <?php echo $this->rs['website'];?>
+									</div>
 								</td>
-								<td width="20%" >&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -99,43 +109,42 @@ if(!empty($this->rs['photo'])){
 			  					<td>&nbsp;</td>
 			  				</tr>
 			  				<tr>
-			  					<td><div style="margin-left: 25px;">លេខៈ ២៥៥/០១៧   អអធ.កណ </div></td>
+			  					<td><div style="margin-left: 25px;">លេខៈ <span style="min-width: 100px"><!-- ២៥៥/០១៧   អអធ.កណ  --></span></div></td>
 			  				</tr>
 			  				<tr>
-			  					<td>
+			  					<td valign="top">
 			  						<table width="100%" style="line-height: 15px;white-space: nowrap;">
 			  							<tr class="account-image">
 			  								<td width="20%" >&nbsp;</td>
-											<td width="60%" align="center" style="font-family: Times New Roman , Khmer OS Muol;font-size:20px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
+											<td width="60%" valign="top" align="center" style="font-family: Times New Roman , Khmer OS Muol;font-size:18px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
 												លិខិតបញ្ជាក់ការសិក្សា<br>STUDENT RECOMMENDATION
 											</td>
-											<td width="25%" align="left" class="image-box" style="padding-left: 0px;">
-												<img id="profile_wiew" src="<?php echo $image;?>" alt=""  />
+											<td valign="top" width="20%" align="left" class="image-box" style="padding-left: 0px;">
+												<!-- <img style="margin-top: -30px;" id="profile_wiew" src="<?php //echo $image;?>" alt=""  /> -->
+											</td>
+										</tr>
+										<tr class="account-image">
+			  								<td colspan="2" valign="bottom">
+			  									<div style="margin-left: 25px;font-family: Khmer OS Muol Light;font-size:16px; ">នាយិកាសាលាបឋមសិក្សា និង មធ្យមសិក្សា អ៊ី.អិល.ធី </div>
+											</td>
+											<td valign="top" width="20%" align="left" class="image-box" style="padding-left: 0px;">
+												<img style="margin-top: -85px" id="profile_wiew" src="<?php echo $image;?>" alt=""  />
 											</td>
 										</tr>
 			  						</table>
 			  					</td>
 			  				</tr>
 			  				<tr>
-			  					<td><div style="margin-left: 25px;font-family: Khmer OS Muol Light;font-size:18px;font-weight: bold; ">នាយិកាសាលាបឋមសិក្សា និង មធ្យមសិក្សា អ៊ី.អិល.ធី </div></td>
-			  				</tr>	
-			  				<tr>
 			  					<td>
 			  						<table width="100%" style="line-height: 15px;white-space: nowrap;">
 			  							<tr>
-											<td width="60%" align="center" style="font-family: Times New Roman, cursive;font-size:14px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
-												&nbsp;
-											</td>
-											<td width="50%" align="left" class="image-box" style="padding-left: 0px;font-size:15px;font-weight: bold;">
-												This is to certify that	
-											</td>
-										</tr>	
-										<tr>
-											<td width="60%" align="center" style="font-family: Times New Roman , Khmer OS Muol light;font-size:18px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
+											<td width="60%" valign="bottom" align="center" style="font-family: 'Times New Roman', Khmer OS Muol Light; font-size:14px;  line-height: 24px; text-align: center;">
 												បញ្ជាក់ថាៈ
 											</td>
-											<td width="50%" align="left" class="image-box" style="padding-left: 0px; font-family: Times New Roman, cursive;font-size:25px;font-weight: bold; padding-rgiht: 34px;">
-												<?php echo $this->rs['name_englsih'];?>
+											<td width="50%" style="padding-left: 0px;font-size:14px; text-align: center; line-height: 24px;">
+												<span style="font-family: 'Times New Roman', Khmer OS Muol Light;">This is to certify that	</span>
+												<br />
+												<span style="font-family: 'Times New Roman', Khmer OS Muol Light; font-size:18px;  font-weight: bold; text-transform: uppercase;"><?php echo $this->rs['name_englsih'];?></span>
 											</td>
 										</tr>	
 			  						</table>
@@ -144,86 +153,103 @@ if(!empty($this->rs['photo'])){
 			  				<tr>
 			  					<td>
   									<table width="100%" border="0" style="line-height: 20px;margin-top: -10px;font-family:  Times New Roman , Khmer OS Battambang;">
-  										<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td style="font-weight: bold;">ឈ្មោះនិស្សិត</td>
-											<td> : &nbsp;<?php echo $this->rs['stu_khname'];?></td>
-											<td style="font-weight: bold;">&nbsp;</td>
-											<td> &nbsp;</td>
-										</tr>
-										<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td style="font-weight: bold;">ភេទ </td>
-											<td> : &nbsp;<?php echo $this->rs['sexkh'];?> </td>
-											<td style="font-weight: bold;">Gender</td>
-											<td>  : &nbsp;<?php echo $this->rs['sex'];?></td>
-										</tr>
-										<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td style="font-weight: bold;">ថ្ងៃខែឆ្នាំកំណើត</td>
-											<td> : &nbsp;<?php echo $db_global->getNumberInkhmer($this->rs['dob']);?> </td>
-											<td style="font-weight: bold;">Date Of Brith</td>
-											<td>  : &nbsp;<?php echo $this->rs['dob'];?></td>
-										</tr>
-										<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: normal;">
-											<td style="font-weight: bold;">ទីកន្លែងកំណើត</td>
-											<td> : &nbsp;<?php echo $this->rs['pob'];?></td>
-											<td style="font-weight: bold;">Place Of Brith</td>
-											<td> : &nbsp;<?php echo $this->rs['pob'];?></td>
-										</tr>
-										<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td style="font-weight: bold;">ឪពុកឈ្មោះ</td>
-											<td> : &nbsp;<?php echo $this->rs['father_enname'];?></td>
-											<td style="font-weight: bold;">Father Name</td>
-											<td> : &nbsp;<?php echo $this->rs['father_enname'];?></td>
-										</tr>
-										<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td style="font-weight: bold;">មុខរបរ </td>
-											<td> : &nbsp<?php echo $this->rs['fa_job'];?></td>
-											<td style="font-weight: bold;">Occupation</td>
-											<td> : &nbsp;<?php echo $this->rs['fa_job'];?></td>
-										</tr>
-										<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td style="font-weight: bold;">ម្តាយឈ្មោះ</td>
-											<td> : &nbsp;<?php echo $this->rs['mother_enname'];?></td>
-											<td style="font-weight: bold;">Mother Name</td>
-											<td> : &nbsp;<?php echo $this->rs['mother_enname'];?></td>
-				 						</tr>
-				 						<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td style="font-weight: bold;">មុខរបរ</td>
-											<td> : &nbsp;<?php echo $this->rs['mo_job'];?></td>
-											<td style="font-weight: bold;">Occupation</td>
-											<td> : &nbsp;<?php echo $this->rs['mo_job'];?></td>
-										</tr>
-				 						<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td style="font-weight: bold;">អាសយដ្ឋានអចិន្រ្តៃយ៍</td>
-											<td> : &nbsp;<strong>ផ្ទះលេខ:</strong>&nbsp;<?php echo $db_global->getNumberInkhmer($this->rs['home_num']);?>&nbsp;<strong>ផ្លូវលេខ:</strong>&nbsp;<?php echo $db_global->getNumberInkhmer($this->rs['street_num']);?></td>
-											<td style="font-weight: bold;">Permanent Address</td>
-											<td> : &nbsp;<strong>N<sup>o</sup>:</strong>&nbsp;<?php echo $this->rs['home_num'];?>&nbsp;<strong>Street:</strong>&nbsp;<?php echo $this->rs['street_num'];?></td>
-				 						</tr>
-				 						
-				 						<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td><strong>សង្កាត់ :</strong><?php echo $this->rs['commune_name'];?></td>
-											<td><strong>ខណ្ឌ :</strong>&nbsp;<?php echo $this->rs['district_khmer'];?>&nbsp;<strong>ក្រុង :</strong><?php echo $this->rs['province_khname'];?></td>
-											<td><strong>Sangkat:</strong>&nbsp;<?php echo $this->rs['commune_nameeg'];?></td>
-											<td><strong>Khan :</strong>&nbsp;<?php echo $this->rs['district_en'];?>&nbsp;<strong>,</strong>&nbsp;<?php echo $this->rs['province_enname'];?></td>
-				 						</tr>
-				 						
-				 						<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td><strong>ពិតជាសិស្សកំពុងសិក្សានៅ  </strong></td>
-											<td>:&nbsp;<?php echo $this->rs['grade'];?></td>
-											<td><strong>Is currently a Student  of</strong></td>
-				 							<td>:&nbsp;<?php echo $this->rs['grade'];?></td>
-				 						</tr>
-				 						<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td><strong>នៅសាលាបឋមសិក្សា </strong>&nbsp;<?php //echo $this->rs['street_num'];?></td>
-											<td><strong>និង មធ្យមសិក្សា អ៊ី.អិល.ធី</strong>&nbsp;<?php //echo $this->rs['grade'];?></td>
-											<td><strong>At ELT Elementary</strong>&nbsp;<?php //echo $this->rs['street_num'];?></td>
-				 							<td><strong>and Secondary School  in the</strong>&nbsp;<?php //echo $this->rs['grade'];?></td>
-				 						</tr>
-				 						<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td><strong>ក្នុងឆ្នាំសិក្សា </strong></td>
-											<td><?php echo $db_global->getNumberInkhmer($this->rs['academic_year']);?>&nbsp;<strong>ពិតប្រាកដមែន។</strong>&nbsp;<?php //echo $this->rs['grade'];?></td>
-											<td><strong>school year </strong>&nbsp;<?php //echo $this->rs['academic_year'];?></td>
-				 							<td><?php echo $this->rs['academic_year'];?>&nbsp;<?php //echo $this->rs['grade'];?></td>
-				 						</tr>
+  										<tr>
+  											<td width="50%" valign="top">
+  												<table width="100%" border="0" style="line-height: 20px;font-family:  Times New Roman , Khmer OS Battambang;">
+  													<tr >
+														<td >សិស្សឈ្មោះ &nbsp;
+															<strong style=" font-family:  arial , 'Khmer OS Battambang'; display: inline-block; white-space:nowrap; min-width: 60px; font-weight: bold;"><?php echo $this->rs['stu_khname'];?></strong> 
+															<span style="display: inline-block; min-width: 20px;">
+																ភេទ <?php echo $this->rs['sexkh'];?>
+															</span>
+														</td>
+													</tr>
+													<tr>
+														<td>ថ្ងៃខែឆ្នាំកំណើត: &nbsp;<?php echo $db_global->getNumberInkhmer(date("d",strtotime($this->rs['dob'])))." ".$month[date("m",strtotime($this->rs['dob']))]." ".$db_global->getNumberInkhmer(date("Y",strtotime($this->rs['dob'])));?></td>
+													</tr>
+													<tr>
+														<td>
+															ទីកន្លែងកំណើត: &nbsp;<?php echo $this->rs['pob'];?>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<span style="white-space: nowrap;">
+															ឪពុកឈ្មោះ : &nbsp;<strong style="display: inline-block; white-space:nowrap; min-width: 160px; font-weight: bold;"><?php echo $this->rs['father_enname'];?></strong>
+															<span style="font-style: italic;">មុខរបរ &nbsp;<?php echo $this->rs['fa_job'];?></span>
+															</span>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<span style="white-space: nowrap;">
+															ម្តាយឈ្មោះ : &nbsp;<strong style="display: inline-block; white-space:nowrap; min-width: 160px; font-weight: bold;"><?php echo $this->rs['mother_enname'];?></strong>
+															<span style="font-style: italic;">មុខរបរ &nbsp;<?php echo $this->rs['mo_job'];?></span>
+															</span>
+														</td>
+													</tr>
+													<tr>
+														<td style="line-height: 32px;">
+															អាសយដ្ឋានអចិន្រ្តៃយ៍ &nbsp;ផ្ទះលេខ:&nbsp;<span style="display: inline-block; white-space:nowrap; min-width: 40px;"><?php echo $db_global->getNumberInkhmer($this->rs['home_num']);?></span>&nbsp;ផ្លូវលេខ:&nbsp;<span style="display: inline-block; min-width: 40px;"><?php echo $db_global->getNumberInkhmer($this->rs['street_num']);?></span>
+															សង្កាត់ <span style="display: inline-block; min-width: 40px;"><?php echo $this->rs['commune_name'];?></span> ខណ្ឌ  &nbsp;<span style="display: inline-block; min-width: 40px;"><?php echo $this->rs['district_khmer'];?></span>&nbsp; 
+															ក្រុង<span style="display: inline-block; min-width: 40px;"> <?php echo $this->rs['province_khname'];?></span> 
+															ពិតជាសិស្សកំពុងសិក្សានៅ  <?php echo $this->rs['grade'];?> <?php echo $this->rs['school_namekh'];?> ក្នុងឆ្នាំសិក្សា <?php echo $db_global->getNumberInkhmer($this->rs['academic_year']);?> ពិតប្រាកដមែន។
+														</td>
+													</tr>
+													<tr>
+														<td>
+														</td>
+													</tr>
+  												</table>
+  											</td>
+  											<td width="50%" valign="top">
+  												<table width="100%" border="0" style="line-height: 20px;font-family:  Times New Roman , Khmer OS Battambang;">
+  													<tr>
+  														<td >
+  														&nbsp;
+  														</td>
+  													</tr>
+  													<tr>
+  														<td >
+  															<strong>Date Of Brith:</strong> &nbsp;<?php echo date("d",strtotime($this->rs['dob']))." ".date("F",strtotime($this->rs['dob']))." ".date("Y",strtotime($this->rs['dob']));?>
+															<span style="font-weight: bold;">Gender</span>: <?php echo $this->rs['sex'];?>
+														</td>
+  													</tr>
+  													<tr>
+  														<td >
+  															<strong>Place Of Brith:</strong> <?php echo $this->rs['pob'];?>
+  														</td>
+  													</tr>
+  													<tr>
+														<td>
+															<span style="white-space: nowrap;">
+															<strong>Father Name:</strong> &nbsp;<span style="display: inline-block; white-space:nowrap; min-width: 130px;"><?php echo $this->rs['father_enname'];?></span>
+															<strong>Occupation</strong>&nbsp;<?php echo $this->rs['fa_job'];?>
+															</span>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<span style="white-space: nowrap;">
+															<strong>Mother Name:</strong> &nbsp;<span style="display: inline-block; white-space:nowrap; min-width: 130px; "><?php echo $this->rs['mother_enname'];?></span>
+															<strong>Occupation</strong>&nbsp;<?php echo $this->rs['mo_job'];?>
+															</span>
+														</td>
+													</tr>
+  													<tr>
+  														<td style="line-height: 32px;">
+  															<strong>Permanent Address:</strong> N<sup>o</sup> <span style="display: inline-block; white-space:nowrap; min-width: 20px;"><?php echo $this->rs['home_num'];?></span> &nbsp;Street &nbsp;<span style="display: inline-block; min-width: 40px;"><?php echo $this->rs['street_num'];?>,</span>
+  														<?php echo $this->rs['commune_nameeg'];?>,&nbsp;<?php echo $this->rs['district_en'];?>&nbsp;,&nbsp;<?php echo $this->rs['province_enname'];?> 
+  														Is currently a Student  of <?php echo $this->rs['grade'];?> At <?php echo $this->rs['school_nameen'];?> in the school year <?php echo $this->rs['academic_year'];?>
+  														</td>
+  													</tr>
+  													<tr>
+  														<td >
+  														</td>
+  													</tr>
+  												</table>
+  											</td>
+  										</tr>
   									</table>
 			  					</td>
 			  				</tr>
@@ -231,7 +257,7 @@ if(!empty($this->rs['photo'])){
 			  					<td>
 			  						<table style="font-family:  Times New Roman , Khmer OS Battambang;">
 			  							<tr style="list-style:25px; line-height:17px; font-size:13px; list-style:none; white-space: nowrap;">
-											<td width="60%" align="center" style="font-size:14px;font-weight: bold; padding-rgiht: 34px; line-height: 24px; text-align: center;">
+											<td width="60%" align="center" style="font-size:14px; padding-rgiht: 34px; line-height: 24px; text-align: center;">
 												លិខិតនេះចេញជូនសាមីខ្លួនប្រើប្រាស់តាមផ្លូវការ។
 											</td>
 											<td width="40%" align="left" class="image-box" style="padding-left: 0px; font-weight: bold;">
@@ -247,7 +273,7 @@ if(!empty($this->rs['photo'])){
 			  							<tr>
 			  								<td>&nbsp;</td>
 			  								<td >&nbsp;</td>
-			  								<td align="center"><div><?php echo date('l, F j , Y');?></div></td>
+			  								<td align="center"><div>ភ្នំពេញ ថ្ងៃទី <span style="display: inline-block; min-width: 20px;"><?php echo $db_global->getNumberInkhmer(date("d"));?></span> ខែ <span style="display: inline-block; min-width: 20px;"><?php echo $month[date("m")];?></span> ឆ្នាំ <span style="display: inline-block; min-width: 20px;"><?php echo $db_global->getNumberInkhmer(date("Y"));?></span></div></td>
 			  							</tr>
 			  							<tr>
 			  								<td>&nbsp;</td>
@@ -260,7 +286,12 @@ if(!empty($this->rs['photo'])){
 			  							<tr>
 			  								<td>&nbsp;</td>
 			  								<td >&nbsp;</td>
-			  								<td width="40%" align="center"><strong style="font-weight: bold;font-size: 16px; margin-buttom: 78px;">Principal</strong></td>
+			  								<td width="40%" align="center">
+			  								<span style="line-height:32px; font-family: 'Times New Roman', Khmer OS Muol Light; display:block;font-size: 16px; margin-buttom: 78px;">
+			  								នាយិក<br />
+			  								<strong>SCHOOL PRINCIPAL</strong>
+			  								</span>
+			  								</td>
 			  							</tr>
 			  						</table>
 			  						

@@ -85,8 +85,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if(!empty($search['degree'])){
 			$where.=" AND s.degree=".$search['degree'];
 		}
-		if(!empty($search['grade_bac'])){
-			$where.=" AND s.grade=".$search['grade_bac'];
+		if(!empty($search['grade_all'])){
+			$where.=" AND s.grade=".$search['grade_all'];
 		}
 		if(!empty($search['session'])){
 			$where.=" AND s.session=".$search['session'];

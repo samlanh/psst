@@ -3,6 +3,10 @@
 	echo $this->headTitle($tr->translate('GROUP_LISTINGS')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
+	$urlStudentGroup = $this->baseUrl()."/allreport/allstudent/rpt-student-group/id/";
+	$urlAttList = $this->baseUrl()."/allreport/allstudent/rpt-att-list/id/";
+	$urlTotalAtt = $this->baseUrl()."/allreport/allstudent/rpt-totalattendance/id/";
+	$urlStudentList = $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/";
 ?>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -54,15 +58,6 @@
             <div class="col-md-2 col-sm-2 col-xs-12">
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-            	<button onclick="getstudentlist();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("STUDENT_LIST");?></button>
-            	<button onclick="gettotalatt();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("Total Attendance List");?></button>
-            	<button onclick="getTranscript();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("TRANSCRIPT");?></button>
-            	<button onclick="getAttendancelist();" iconclass="dijitEditorIcon dijitEditorIconPrint" dojoType="dijit.form.Button" showLabel="true" type="button"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></button>
-	       		<input type="hidden" name="group_id" id="group_id" dojoType="dijit.form.TextBox" />
-            </div>
-        </div>
 	</form>	
 <style>
 .hidden{
@@ -98,10 +93,9 @@
 						$active_student = 0;
 						$drop_student = 0;?>
 					<div id="exportExcel">
-					<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="white-space:nowrap;">
+						<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family:Time New Roman , Khmer OS Battambang;">
 						  <thead>
-						  <tr style="font-size:12px; height: 25px; font-weight: bold; background: #ccd9ff;" align="center">
-						    <td class="hidden"></td>
+						  <tr style="font-size:13px; line-height: 27px; font-weight: bold; background: #ccd9ff;" align="center">
 						    <td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
@@ -111,7 +105,6 @@
 							<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 							<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
 							<td>&nbsp;<?php echo $tr->translate("CLASSES");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("AMOUNT_MONTH");?>&nbsp;</td>
 							<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
 							<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 							<td>&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
@@ -120,43 +113,48 @@
 						  </tr>
 						  </thead>
 						  <?php $i=0; 
-						  foreach($this->rs as $rs)if (!empty($this->rs)){ $i++;?>
-						  <tr style="font-size:12px; height: 18px;"​ align="center" class='hover padding'>
-						   	<td class="hidden">
-								<input style="height: 15px;margin-top: 5px;" type="radio" onClick="setValue(<?php echo $i?>)" name="check_box" id="check_box<?php echo $i?>" />
-								<input type="hidden" name="group_id<?php echo $i;?>" id="group_id<?php echo $i;?>" value="<?php echo $rs['id'];?>" dojoType="dijit.form.TextBox" />
-							</td>
+						  //print_r($this->rs);exit();
+						  if (!empty($this->rs)){foreach($this->rs as $rs){ $i++;?>
+						  <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding context-menu-one'>
 						   	<td><?php echo $i;?></td>
-						   	<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['branch_name']; ?></a></td>
-						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>
-						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic']; ?></a></td>
-						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['semester']; ?></a></td>
+						   	<td align="left">&nbsp;<?php echo $rs['branch_name']; ?></a></td>
+						    <td align="left">&nbsp;<?php echo $rs['group_code']; ?></a></td>
+						    <td align="left">&nbsp;<?php echo $rs['academic']; ?></a></td>
+						    <td><?php echo $rs['semester']; ?></a></td>
 						    <td align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
 						    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
-						    <td align="center">&nbsp;<?php echo $rs['amount_month']; ?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;</td>
+						    <td>&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
+						    <td>&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
+						    <td>&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
 						    <td align="left">&nbsp;&nbsp;<?php echo $rs['note']; ?>&nbsp;</td>
 						  </tr>
 						  <?php 
 						  	$all_student = $all_student+$rs['Num_Student'];
 						  	$drop_student = $drop_student+$rs['student_drop'];
-							} ?>
-						  <tr>
-						  	  <td colspan="11" style="border:1px solid #fff;border-top:1px solid #000;border-right:1px solid #000;"></td>
-						  	  <td align="center"><strong><?php echo $all_student;?></strong></td>
-						  	  <td align="center"><strong><?php echo $drop_student;?></strong></td>
-						  	  <td align="center"><strong><?php echo $all_student -$drop_student;?></strong></td>
-						  </tr>
+						  }} ?>
 						</table>
-						</div>
-					</td>
-				</tr>
-				<tr >
+						<br>
+						<table cellpadding="3" class="padd" width="20%" align="right" style="line-height:27px;white-space:nowrap;font-family:Time New Roman , Khmer OS Battambang;">
+							<tr>
+								<td width="60%" style="border-bottom:1px solid #1d76e5;"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
+								<td width="40%" align="center" style="border-bottom:1px solid #1d76e5;"><strong><?php echo $all_student;?> <?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+							</tr>
+							<tr>
+								<td style="border-bottom:1px solid #1d76e5;"><?php echo $tr->translate("STUDENT_DROP");?></td>
+								<td align="center" style="border-bottom:1px solid #1d76e5;"><strong><?php echo $drop_student;?> <?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+							</tr>
+							<tr>
+								<td style="border-bottom:1px solid #1d76e5;"><?php echo $tr->translate("STUDENT_STUDY");?></td>
+								<td align="center" style="border-bottom:1px solid #1d76e5;"><strong><?php echo $all_student - $drop_student;?> <?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr>
 				<td colspan="3" width="100%">
 					<table width="100%" style="font-family:'Khmer OS Battambang';">
 						<tr>
@@ -287,45 +285,41 @@ function getAllGroupByBranch(){
 	});
 }
 
-function setValue(index){
-	if(dojo.byId('check_box'+index).checked){
-		group_id = dijit.byId('group_id'+index).get('value');
-		dijit.byId('group_id').attr('value',group_id);
-	}
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+		
+			var m = "clicked: " + key;
+			if(key=="rpt-student-group"){
+				url='<?php echo $urlStudentGroup;?>';
+			}else if(key=="rpt-att-list"){
+				url='<?php echo $urlAttList;?>';
+			}else if(key=="rpt-totalattendance"){
+				url='<?php echo $urlTotalAtt;?>';
+			}else if(key=="rpt-student-list"){
+				url='<?php echo $urlStudentList;?>';
+			}  
+			
+			gotoAction();
+		},
+		items: {
+			"rpt-student-group": {name: "<?php echo $tr->translate("STUDENT_LIST_REPORT");?>", icon: "fa-file-text-o",},
+			"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
+			"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
+			"rpt-student-list": {name: "<?php echo $tr->translate("STUDENT_LIST");?>", icon: "fa-file-text-o"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
 }
-function getstudentlist(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'allstudent','action'=>'rpt-student-list'));?>'+'/id/'+id,'_blank');
+var recordid ='';
+function gotoAction(){
+	window.open(url+row);
 }
-function gettotalatt(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'allstudent','action'=>'rpt-totalattendance'));?>'+'/id/'+id,'_blank');
-}
-function getTranscript(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'allstudent','action'=>'rpt-student-group'));?>'+'/id/'+id,'_blank');
-}
-function getAttendancelist(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'allstudent','action'=>'rpt-att-list'));?>'+'/id/'+id,'_blank');
-}
-function getResultyearly(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-resultbyyear'));?>'+'/id/'+id+'/type/3','_blank');
-}
-function getHonoryearly(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'yearly-outstanding-student'));?>'+'/id/'+id+'/type/3','_blank');
-}
-function getCertificate(){
-	id = dijit.byId('group_id').get('value');
-	if(id==''){alert("Please select record first!");return false;}
-	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-certificate'));?>'+'/id/'+id+'/type/3','_blank');
-}
+
+
 </script>

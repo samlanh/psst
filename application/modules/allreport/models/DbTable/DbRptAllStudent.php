@@ -365,7 +365,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    	rms_student.sex as sex_key,
 		    	(SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
        			(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
-		    	tel,email,stu_code,home_num,street_num,
+		    	tel,email,stu_code,home_num,street_num,dob,
 		    	is_subspend,
 		    	(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
 		    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,

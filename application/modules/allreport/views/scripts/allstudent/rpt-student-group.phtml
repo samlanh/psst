@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle('RPT_STUDENT_GROUP'); 
+	$this->headTitle($tr->translate("STUDENT_LIST_REPORT")); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	

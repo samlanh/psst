@@ -58,6 +58,9 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 				    width: 120px;
 				    margin: 0 auto;
 				}
+				.transfrom{
+					text-transform: uppercase;
+}
 				.center-no-next{text-align: center;}
 				.back-color,.back-footer{background-color: #eee;}
 				.back-color td{padding: 20px;}
@@ -211,34 +214,34 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
   													</tr>
   													<tr>
   														<td >
-  															<strong>Date Of Brith:</strong> &nbsp;<?php echo date("d",strtotime($this->rs['dob']))." ".date("F",strtotime($this->rs['dob']))." ".date("Y",strtotime($this->rs['dob']));?>
-															<span style="font-weight: bold;">Gender</span>: <?php echo $this->rs['sex'];?>
+  															<strong class="transfrom">Date Of Brith:</strong> &nbsp;<?php echo date("d",strtotime($this->rs['dob']))." ".date("F",strtotime($this->rs['dob']))." ".date("Y",strtotime($this->rs['dob']));?>
+															<span style="font-weight: bold;" class="transfrom">Gender</span>: <?php echo $this->rs['sex'];?>
 														</td>
   													</tr>
   													<tr>
   														<td >
-  															<strong>Place Of Brith:</strong> <?php echo $this->rs['pob'];?>
+  															<strong class="transfrom">Place Of Brith:</strong> <?php echo $this->rs['pob'];?>
   														</td>
   													</tr>
   													<tr>
 														<td>
 															<span style="white-space: nowrap;">
-															<strong>Father Name:</strong> &nbsp;<span style="display: inline-block; white-space:nowrap; min-width: 130px;"><?php echo $this->rs['father_enname'];?></span>
-															<strong>Occupation</strong>&nbsp;<?php echo $this->rs['fa_job'];?>
+															<strong class="transfrom">Father Name:</strong> &nbsp;<span style="display: inline-block; white-space:nowrap; min-width: 130px;"><?php echo $this->rs['father_enname'];?></span>
+															<strong class="transfrom">OCCUPATION</strong>&nbsp;<?php echo $this->rs['fa_job'];?>
 															</span>
 														</td>
 													</tr>
 													<tr>
 														<td>
 															<span style="white-space: nowrap;">
-															<strong>Mother Name:</strong> &nbsp;<span style="display: inline-block; white-space:nowrap; min-width: 130px; "><?php echo $this->rs['mother_enname'];?></span>
-															<strong>Occupation</strong>&nbsp;<?php echo $this->rs['mo_job'];?>
+															<strong class="transfrom">Mother Name:</strong> &nbsp;<span style="display: inline-block; white-space:nowrap; min-width: 130px; "><?php echo $this->rs['mother_enname'];?></span>
+															<strong class="transfrom">OCCUPATION</strong>&nbsp;<?php echo $this->rs['mo_job'];?>
 															</span>
 														</td>
 													</tr>
   													<tr>
   														<td style="line-height: 32px;">
-  															<strong>Permanent Address:</strong> N<sup>o</sup> <span style="display: inline-block; white-space:nowrap; min-width: 20px;"><?php echo $this->rs['home_num'];?></span> &nbsp;Street &nbsp;<span style="display: inline-block; min-width: 40px;"><?php echo $this->rs['street_num'];?>,</span>
+  															<strong class="transfrom">Permanent Address:</strong> N<sup>o</sup> <span style="display: inline-block; white-space:nowrap; min-width: 20px;"><?php echo $this->rs['home_num'];?></span> &nbsp;Street &nbsp;<span style="display: inline-block; min-width: 40px;"><?php echo $this->rs['street_num'];?>,</span>
   														<?php echo $this->rs['commune_nameeg'];?>,&nbsp;<?php echo $this->rs['district_en'];?>&nbsp;,&nbsp;<?php echo $this->rs['province_enname'];?> 
   														Is currently a Student  of <?php echo $this->rs['grade'];?> At <?php echo $this->rs['school_nameen'];?> in the school year <?php echo $this->rs['academic_year'];?>
   														</td>

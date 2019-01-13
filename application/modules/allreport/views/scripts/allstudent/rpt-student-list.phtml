@@ -191,10 +191,10 @@
 									<span style="padding: 0 2px; line-height:16px; display: block;">
 										<?php if (!empty($row['home_num'])){ echo $tr->translate("NUMBER_HOME")." ".$row['home_num']." ";}?>
 										<?php if (!empty($row['street_num'])){ echo $tr->translate("STREET")." ".$row['street_num']." ";}?>
-										<?php if (!empty($row['village_namekh'])){ echo $tr->translate("VILLAGE")." ".str_replace('ភូមិ', '', $row['village_namekh'])." ";}?>
-										<?php if (!empty($row['commune_namekh'])){ echo $tr->translate("COMMUNE")." ".$row['commune_namekh']." ";}?>
-										<?php if (!empty($row['district_namekh'])){ echo $tr->translate("DISTRICT")." ".$row['district_namekh']." ";}?>
-										<?php if (!empty($row['province_kh_name'])){ echo $tr->translate("CITY_PROVINCE")." ".$row['province_kh_name']." ";}?>
+										<?php if (!empty($row['village_name'])){ echo $tr->translate("VILLAGE")." ".str_replace('ភូមិ', '', $row['village_name'])." ";}?>
+										<?php if (!empty($row['commune_name'])){ echo $tr->translate("COMMUNE")." ".$row['commune_name']." ";}?>
+										<?php if (!empty($row['district_name'])){ echo $tr->translate("DISTRICT")." ".$row['district_name']." ";}?>
+										<?php if (!empty($row['province'])){ echo $tr->translate("CITY_PROVINCE")." ".$row['province']." ";}?>
 									</span>
 								</td>
 								<td style="text-align: left;width: 200px;min-width: 100px;white-space: normal;">
@@ -229,13 +229,13 @@
 									<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 14px">
 										<tr>
 											<td width="35%" align="center">
-												<strong style="color:#4839bd; font-size: 14px;font-family:'khmer os battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></strong><br />
-												<strong style="color:#4839bd; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("PRINCIPAL");?></strong>
+												<span style="color:#4839bd; font-size: 14px;font-family:'khmer os battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+												<span style="color:#4839bd; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("PRINCIPAL");?></span>
 											</td>
 											<td width="30%">&nbsp;</td>
 											<td width="35%" align="center">
-												<strong style="color:#4839bd; font-size: 14px;font-family:'khmer os battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></strong><br />
-												<strong style="color:#4839bd; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("TEACHER_ROOM");?></strong>
+												<span style="color:#4839bd; font-size: 14px;font-family:'khmer os battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+												<span style="color:#4839bd; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("TEACHER_ROOM");?></span>
 											</td>
 										</tr>
 									</table>

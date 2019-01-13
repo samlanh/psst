@@ -71,48 +71,18 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 			<table cellpadding="0" cellspacing="0" width="100%">
 				<tr class="no-boder">
 					<td>
-						<table width="100%" >
-							<tr>
-								<td width="20%" align="center">
-									<?php $logo = $this->baseUrl().'/images/logo.png';
-									if (!empty($this->rs['branch_logo'])){
-										$logo = $this->baseUrl().'/images/'.$this->rs['branch_logo'];
-									}
-									?>
-									<img style="max-height:100px;" src="<?php echo $logo;?>"><br>
-								</td>
-								<td width="80%" valign="top">
-									<div class="schoo-headkh" style="text-align: center;">
-										<h2 style="padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol;font-size:24px;background: #2e3192;color: #fff;padding: 8px 0px;"><?php echo $this->rs['school_namekh'];?></h2>
-									</div>
-									<table width="100%" >
-										<tr>
-											<td width="60%" align="center" valign="top">
-												<h2 style="white-space:nowrap; font-weight:bold; font-size:16px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #000;"><?php echo $this->rs['school_nameen'];?></h2>
-											</td>
-											<td width="40%" align="left" valign="top" style="white-space:nowrap;font-size: 12px;line-height: 14px;">
-												Contacts: <?php echo $this->rs['branch_tel'];?><br />
-												<span style="visibility: hidden;">Contacts: </span><?php echo $this->rs['branch_tel'];?>
-											</td>
-										</tr>
-									</table>
-									<div class="schoo-add" style="text-align: center; font-size: 13px;">
-										<?php echo $this->rs['br_address'];?>, E-mail: <?php echo $this->rs['email'];?>, Website: <?php echo $this->rs['website'];?>
-									</div>
-								</td>
-							</tr>
-						</table>
+						<?php echo $this->rsheader;?>
 					</td>
 				</tr>
 				<tr class="line"><td></td></tr>
 			  	<tr>
 			  		<td>
-			  			<table style="font-family: Khmer OS Battambang, Times New Roman;">
+			  			<table style="font-family: Khmer OS Battambang, Times New Roman;" >
 			  				<tr>
 			  					<td>&nbsp;</td>
 			  				</tr>
 			  				<tr>
-			  					<td><div style="margin-left: 25px;">លេខៈ <span style="display:inline-block;min-width: 100px;border-bottom: dotted 1px #000;line-height: 11px;">&nbsp;</span></div></td>
+			  					<td><div style="margin-left: 25px;">លេខៈ <span style="width:100px;">.......................</span></div></td>
 			  				</tr>
 			  				<tr>
 			  					<td valign="top">
@@ -243,7 +213,7 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
   														<td style="line-height: 32px;">
   															<strong class="transfrom">Permanent Address:</strong> N<sup>o</sup> <span style="display: inline-block; white-space:nowrap; min-width: 20px;"><?php echo $this->rs['home_num'];?></span> &nbsp;Street &nbsp;<span style="display: inline-block; min-width: 40px;"><?php echo $this->rs['street_num'];?>,</span>
   														<?php echo $this->rs['commune_nameeg'];?>,&nbsp;<?php echo $this->rs['district_en'];?>&nbsp;,&nbsp;<?php echo $this->rs['province_enname'];?> 
-  														Is currently a Student  of <?php echo $this->rs['grade'];?> At <?php echo $this->rs['school_nameen'];?> in the school year <?php echo $this->rs['academic_year'];?>
+  														Is currently a Student  of <?php echo $this->rs['grade_eng'];?> At <?php echo $this->rs['school_nameen'];?> in the school year <?php echo $this->rs['academic_year'];?>
   														</td>
   													</tr>
   													<tr>
@@ -291,7 +261,7 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 			  								<td >&nbsp;</td>
 			  								<td width="40%" align="center">
 			  								<span style="line-height:32px; font-family: 'Times New Roman', Khmer OS Muol Light; display:block;font-size: 16px; margin-buttom: 78px;">
-			  								នាយិកា<br />
+			  								<?php echo $tr->translate("PRINCIPAL_SIGNATURE");?><br />
 			  								<strong>SCHOOL PRINCIPAL</strong>
 			  								</span>
 			  								</td>
@@ -308,4 +278,3 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 	</div>
 </body>
 </html>
-

@@ -10,6 +10,7 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
 					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
 					(SELECT b.branch_tel FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_tel,
+					(SELECT b.branch_tel1 FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_tel1,
 					(SELECT b.br_address FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS br_address,
 					(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS school_namekh,
 					(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS school_nameen,
@@ -28,6 +29,7 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
 					(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job,
     				(SELECT rms_items.title FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degree,
     				(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
+    				(SELECT rms_itemsdetail.title_en FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade_eng,
     				CONCAT(t.from_academic,' - ',t.to_academic) as academic_year,
     				t.generation
     			from 

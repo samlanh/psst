@@ -13,7 +13,8 @@ th.tdheader{background:url("../images/tbheader-bg1.jpg") repeat-x scroll center 
 td.items-no{padding:5px !important;text-align:center;}
 th.tdcheck{width:20px;}
 th.tdedit{width:30px;}
-tr.normal td, tr.alternate td{border:1px solid #DDDDDD;line-height:14px;padding:0px 5px 0px 5px;}
+tr.normal td, tr.alternate td{border:1px solid #DDDDDD;
+	line-height:14px;padding:0px 2px 0px 2px;font-size: 14px;}
 td.items-no{border:1px solid #CCCCCC;color:#666666;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:30px;padding:0px 5px 0px 5px;text-align:center;width:35px;}
 td.items-no-inline{border:1px solid #CCCCCC;font-family:Arial,Helvetica,sans-serif;font-size:12px;padding:0px 5px 0px 5px;text-align:left;}
 tr.normal{background:none repeat scroll 0 0 #FFFFFF;}
@@ -55,7 +56,8 @@ td.field-member{color:#333333;font-family:"Lucida Grande",Tahoma,"Bitstream Vera
 td #value-auto-row span{color:#146295;}
 td.no-field{text-align:center;font-size:14px;color:#FF4747;}
 td.add-edit input[type=text],.select select{color:#000;min-height:25px;//width:232px;}
-td.value{background:none repeat scroll 0 0 #FFFFFF;border:1px solid #eeeeee;color:#333333;width:400px;min-height:25px;padding:1px 2px;margin-top:3px;word-wrap:break-word;}
+td.value{background:none repeat scroll 0 0 #FFFFFF;
+color:#333333;width:400px;min-height:25px;padding:1px 2px;margin-top:3px;word-wrap:break-word;}
 td.add-edit-yes select{border:1px solid #BDB597;background-color:#FFFFFF;min-height:25px;}
 td.total-qauter{border:1px solid #ccc;margin:0px;padding:0px;padding-right:5px;text-align:right;}
 select optgroup{font-style:normal;color:#3B5998;}
@@ -280,4 +282,41 @@ a.qButton.excel {
 }
 a.qButton.print {
     background: #4839bd;
+}
+<style>
+.image-box {
+    text-align: center;
+}
+.image-box img {
+    width: 120px;
+    height: 130px;
+}
+.button_browse {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    height: 38px;
+    background: #fbf9f9;
+    border: 1px solid #e8e8e8;
+}
+.button_browse span {
+    line-height: 33px;
+    font-weight: 600;
+    cursor: pointer;
+}
+input.btn_borwse_image {
+    position: absolute;
+    width: 100%;
+    height: 38px;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+}
+.account-image {
+    border: solid 1px #eee;
+    width: 120px;
+    margin: 0 auto;
 }

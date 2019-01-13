@@ -95,7 +95,7 @@
 								</tr>
 								<tr>
 									<td>&nbsp; Name (Khmer) : <?php echo $this->row['stu_khname']?></td>
-									<td colspan="2">&nbsp; ID# : <?php echo $this->row['stu_code']?></td>
+									<td colspan="2">&nbsp; Student Id# : <?php echo $this->row['stu_code']?></td>
 								</tr>
 								<tr class="defaultheight">
 									<td width="50%">&nbsp; Name (Latin) : <?php echo $this->row['stu_enname']." ".$this->row['last_name']?></td>
@@ -129,7 +129,7 @@
 								</tr>
 								<tr class="defaultheight">
 									<td>&nbsp; Parent's Name(if under 18) : <?php echo $this->row['guardian_khname']?></td>
-									<td>&nbsp; Tel : <?php echo $this->row['guardian_tel']?></td>
+									<td>&nbsp; Guardian Tel : <?php echo $this->row['guardian_tel']?></td>
 								</tr>
 								<tr class="defaultheight">
 									<td colspan="3" style="font-size: 11px;">&nbsp; Home Address : 
@@ -139,7 +139,7 @@
 										echo empty($this->row['village_name'])?"":" ".$tr->translate("VILLAGE")." ".$this->row['village_name'];
 										echo empty($this->row['commune_name'])?"":" ".$tr->translate("COMMUNE")." ".$this->row['commune_name'];
 										echo empty($this->row['district_name'])?"":" ".$tr->translate("DISTRICT")." ".$this->row['district_name'];
-										echo empty($this->row['province_id'])?"":" ".$this->row['province_title'];
+										echo empty($this->row['province_id'])?"":" ".$this->row['province'];
 									
 									?></td>
 								</tr>

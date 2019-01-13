@@ -9,14 +9,14 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 //     	return $session_user->user_id;
     	 
 //     }
-    public function getAllStudent($search){
+    public function getAllStudent($search){//for card list
     	$db = $this->getAdapter();
     	$sql ='SELECT 
-    	*,
+    			*,
     	      (SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-    	       CONCAT(stu_khname," - ",stu_enname," ",last_name) as name,
-    	       (SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
-    			(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
+    	      CONCAT(stu_khname," - ",stu_enname," ",last_name) as name,
+    	      (SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
+    		  (SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
     		   degree as dept,
     		   (SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
     		   (SELECT CONCAT(from_academic,"-",to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
@@ -359,7 +359,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql ='SELECT stu_id,
 		    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-		    	CONCAT(stu_enname," ",last_name) AS name,
+		    	CONCAT(last_name," ",stu_enname) AS name,
 		    	stu_khname,
 		    	is_stu_new,
 		    	rms_student.sex as sex_key,

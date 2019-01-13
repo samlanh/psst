@@ -337,10 +337,25 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function getStudentTestProfileById($id){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		
+		$session_lang=new Zend_Session_Namespace('lang');
+		$lang_id=$session_lang->lang_id;
+
+		$str_village='village_name';
+		$str_commune='commune_name';
+		$str_district='district_name';
+		$str_province='province_en_name';
+// 		if($lang_id==1){//for kh
+// 			$str_village='village_namekh';
+// 			$str_commune='commune_namekh';
+// 			$str_district='district_namekh';
+// 			$str_province='province_kh_name';
+// 		}
+		
 		$sql=" SELECT 
 					*,
-					(SELECT name_en FROM rms_view where type=21 and key_code=rms_student.nationality LIMIT 1) AS nationality,
-    			(SELECT name_en FROM rms_view where type=21 and key_code=rms_student.nation LIMIT 1) AS nation,
+					(SELECT name_en FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+    			(SELECT name_en FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
 					CASE    
 				WHEN  student_status = 1 THEN '".$tr->translate("SINGLE")."'
 				WHEN  student_status = 2 THEN '".$tr->translate("MARRIED")."'
@@ -350,15 +365,17 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				WHEN  sex = 1 THEN '".$tr->translate("MALE")."'
 				WHEN  sex = 2 THEN '".$tr->translate("FEMALE")."'
 				END AS sex_title,
-				(SELECT p.province_kh_name FROM `rms_province` AS p WHERE p.province_id = province_id LIMIT 1) AS province_title
+				(SELECT v.$str_village FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+			    (SELECT c.$str_commune FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+			    (SELECT d.$str_district FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+			    (SELECT $str_province from rms_province where rms_province.province_id = s.province_id LIMIT 1) AS province
+			    
 				FROM 
-					rms_student 
+					rms_student As s
 				where 
 					stu_id=$id AND is_studenttest=1";
-		// customer_type =4
 		return $db->fetchRow($sql);
 	}
-	
 	
 	function createStudentTestFromCrm($data){
 		$db=$this->getAdapter();

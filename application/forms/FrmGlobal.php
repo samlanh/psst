@@ -28,7 +28,6 @@ class Application_Form_FrmGlobal{
 			$str.='</tr>';						
 				return $str;
 	}
-	
 	public function getHeaderReceipt($branch_id=null){
 		$key = new Application_Model_DbTable_DbKeycode();
 		$setting = $key->getKeyCodeMiniInv(TRUE);
@@ -56,7 +55,7 @@ class Application_Form_FrmGlobal{
 				$website = $rs['website'];
 			}
 		}
-		if($setting['show_header_receipt']==1){
+	    if($setting['show_header_receipt']==1){
 			$str="<table width='100%' style='white-space:nowrap;'>
 				<tr>
 					<td width='17%' valign='top'>
@@ -76,6 +75,41 @@ class Application_Form_FrmGlobal{
 				</tr>
 			</table>";
 		}
+		return $str;
+	}
+	function getLetterHeaderReport($branch_id){
+		//$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/logo.png';
+		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$rs = $db->getBranchInfo($branch_id);
+		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
+		
+		$str="<table width='100%'>
+				<tr>
+					<td width='20%' align='center'>
+						<img style='max-height:100px;' src=".$logo."><br>
+					</td>
+					<td width='80%' valign='top'>
+						<div class='schoo-headkh' style='text-align: center;'>
+							<h2 style='padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol;font-size:24px;background: #2e3192;color: #fff;padding: 8px 0px;'>".$rs['school_namekh']."</h2>
+						</div>
+						<table width='100%' >
+							<tr>
+								<td width='60%' align='center' valign='top'>
+									<h2 style='white-space:nowrap; font-weight:bold; font-size:16px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #000;'>".$rs['school_nameen']."</h2>
+								</td>
+								<td width='40%' align='left' valign='top' style='white-space:nowrap;font-size: 12px;line-height: 14px;'>
+									Contacts: ".$rs['branch_tel']."<br />
+									<span style='visibility: hidden;'>Contacts: </span>".$rs['branch_tel1']."
+								</td>
+							</tr>
+						</table>
+						<div class='schoo-add' style='text-align: center; font-size: 13px;'>
+							 ".$rs['br_address'].", E-mail: ".$rs['email'].", Website: ".$rs['website']."
+						</div>
+					</td>
+				</tr>
+		</table>";
 		return $str;
 	}
 }

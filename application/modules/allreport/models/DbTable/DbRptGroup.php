@@ -77,8 +77,18 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
    	$session_lang=new Zend_Session_Namespace('lang');
 	$lang_id=$session_lang->lang_id;
 		$gender_str = 'name_en';
+		
+		$str_village='village_name';
+		$str_commune='commune_name';
+		$str_district='district_name';
+		$str_province='province_en_name';
 	if($lang_id==1){//for kh
 		$gender_str = 'name_kh';
+		
+		$str_village='village_namekh';
+		$str_commune='commune_namekh';
+		$str_district='district_namekh';
+		$str_province='province_kh_name';
 	}
    	$db = $this->getAdapter();
 		$sql="SELECT
@@ -108,14 +118,11 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				  `g`.`status`   AS `status`,
 				  s.home_num,
 				  s.street_num,
-				  (SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
-			    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
-			    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
-			    	(SELECT province_en_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province,
-			    	(SELECT v.village_namekh FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_namekh,
-			    	(SELECT c.commune_namekh FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_namekh,
-			    	(SELECT d.district_namekh FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_namekh,
-			    	(SELECT rms_province.province_kh_name from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province_kh_name
+				    (SELECT v.$str_village FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+			    	(SELECT c.$str_commune FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+			    	(SELECT d.$str_district FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+			    	(SELECT $str_province from rms_province where rms_province.province_id = s.province_id LIMIT 1) AS province
+			    	
 				FROM 
 					`rms_group_detail_student` AS g,
 					rms_student as s,

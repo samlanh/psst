@@ -372,36 +372,30 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	
 	function mistakeCertificateAction(){
-		
 		$group_id=$this->getRequest()->getParam("id");
 		$stu_id=$this->getRequest()->getParam("stu_id");
-		
-		//echo $stu_id;
-		
 		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
 		else{
 			$search=array(
-					'start_date'	=> null,
-					'end_date'		=> date('Y-m-d'),
+				'start_date'	=> null,
+				'end_date'		=> date('Y-m-d'),
 			);
-		}
+		}		
 		$this->view->search=$search;
 		$this->view->stu_id = $stu_id;
 		$this->view->group_id = $group_id;
 		
 		$db = new Allreport_Model_DbTable_DbMistakeCertificate();
 		$this->view->student_info = $db->getStudentInfo($group_id,$stu_id);
-// 		$this->view->student_mistake = $db->getMistakeRecord($search,$group_id,$stu_id);
 		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
-	}
-	
+	}	
 	
 	public function rptAttendenceAction(){
 		if($this->getRequest()->isPost()){
@@ -638,7 +632,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$this->view->search = $search;
 		
-		
 		$this->view->rs = $row;
 		$this->view->rr = $rs;
 		
@@ -658,6 +651,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbCertify();
 		$result = $db->getStudentCertify($id);
 		$this->view->rs = $result;
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($result['branch_id']);
 	}
 	function rptTranscriptAction(){
 		$group_id=$this->getRequest()->getParam("group_id");

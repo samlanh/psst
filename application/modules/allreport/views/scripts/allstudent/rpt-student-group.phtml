@@ -12,26 +12,42 @@
 	}
 	</style>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_LIST_REPORT');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table>
-			<tr>
-				<td><input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH_STUDENT_NAME");?>" value="" type="text"></td>
-				<td>
-					<select dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
+		<div class="form-group">
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH_STUDENT_NAME");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
 						<option value=""><?php echo $tr->translate("STUDENT_TYPE");?></option>
 						<option value="1" <?php if($this->search['study_type']==1){echo "selected";}?>><?php echo $tr->translate("STUDENT_STUDY");?></option>
 						<option value="2" <?php if($this->search['study_type']==2){echo "selected";}?>><?php echo $tr->translate("STUDENT_DROP");?></option>
 					</select>
-				</td>
-				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-			</tr>
-		</table>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+            </div>
+        </div>
 	</form>
 	<div id="divPrint">
 		<table style="margin: 0 auto; width: 100%;color:#4839bd;"  >
 				<tr>
 					<td style="width:30%;" rowspan="2">
-						<img style="max-height:90px;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
+						<?php $logo = $this->baseUrl().'/images/logo.png';
+					if (!empty($this->rr['branch_logo'])){
+						$logo = $this->baseUrl().'/images/'.$this->rr['branch_logo'];
+					}
+					?>
+						<img style="max-height:90px;" src="<?php echo $logo;?>">
 					</td>
 					<td align="center">
 						<strong style="font-weight:200;font-size: 14px;font-family:Arial,'Khmer OS Muol Light';"><?php echo $tr->translate("NATIONALITY_OFKINGDOM");?></strong><br />

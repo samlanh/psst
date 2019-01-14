@@ -61,49 +61,83 @@
             <div class="col-md-2 col-sm-2 col-xs-12">
             </div>
          </div>
-	</form>		
-	<div id="divPrint">
-		<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
+	</form>
+	<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
 			<tr>
 				<td width="25%" align="left">
-					<img style="width: 40%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 				</td>
 				<td align="center">
-					<strong​​ style="font-weight:bold;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCHCUSTOMER_BRANCH");?></strong><br />										
 					<strong style="font-weight:bold;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong><br />
 					<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 				</td>
 				<td width="25%" align="right">
 				</td>
 			</tr>
+	</table>		
+	<div id="divPrint">
+		<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
 		<style>
-			table tr th{
-				border: 1px solid #000;	
-			}
-			.hover:hover{background: #ccc;}
-			table { page-break-inside:auto }
-			  tr{ page-break-inside:avoid; page-break-after:auto; }
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
-			}
-			tr.head_schedule th {
-			    padding:0;
-			    text-align: center;
-			}
-			.head_schedule{background:#9db5fb;}
-			ul.subject{list-style: none;line-height: 20px;}
+				table tr th{
+						border: 1px solid #000;	
+					}
+					.hover:hover{background: #ccc;}
+					table { page-break-inside:auto }
+					  tr{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					}
+					tr.head_schedule th {
+					    padding: 5px 0;
+					    text-align: center;
+					}
+					tr.head_schedule {
+					    font-weight: bold;
+					    background-color: #ffdbdb;
+					}
+					thead tr th,tr.hover td {
+					        border: 1px solid #4839bd;
+					}
+					.green {
+					    color: #1ABB9C;
+					}
+					ul.subject {
+					    list-style: none;
+					    padding: 0;
+					    line-height: 24px;
+					    margin: 0;
+					}
+			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 		</style>
-			<tr>
-				<td colspan="3">
+			
 				<?php $title=0; $titles=0; $year='';$group='';$hour=''; if(!empty($this->rs)) 
 					foreach ($this->rs As $rs){
 					$timestudy = $db_sub->getTimeSchelduleByYGS($rs['year_id'],$rs['group_id']);
+					
+					$branch_id = empty($rs['branch_id'])?1:$rs['branch_id'];
+					$frm = new Application_Form_FrmGlobal();
+					$rsheader = $frm->getLetterHeaderReport($branch_id);
 					?>
-					<table border="1" cellpadding="2"​ style="font-family:'Khmer os battambang';margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;border:1px solid #000;" >
+					
+					<tr>
+						<td colspan="3"><?php echo $rsheader;?></td>
+					</tr>
+					<tr class="line"><td colspan="3"></td></tr>
+					<tr>
+						<td colspan="3">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="3" align="center">
+							<strong style="color: #4839bd; font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong>
+						</td>
+					</tr>
+					<tr>
+				<td colspan="3">
+					<table border="1" cellpadding="5"​ style="color: #4839bd; margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;" >
 						<thead>
+							
 							<tr>
-								<th align="left" colspan="7" style="border:1px solid #fff;border-bottom: solid 1px #000;">
+								<th align="left" colspan="7" style="border:1px solid #fff;border-bottom: solid 1px #4839bd;">
 								<ul class="subject">
 									<li><?php echo $tr->translate("BRANCH_NAME");?>:&nbsp;<?php echo $rs['branch_name']?></li>
 									<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
@@ -111,9 +145,9 @@
 								</ul>
 								</th>
 							</tr>
-							<tr class="head_schedule" style="font-size:14px;border-top:1px solid #000 !important;" align="center" >
-								<th rowspan="2" style="border:1px solid #000 !important;"><?php echo $tr->translate("TIME");?></th>
-								<th colspan="5" style="border:1px solid #000 !important;"><?php echo $tr->translate("DAYS");?></th>
+							<tr class="head_schedule" style="font-size:14px;" align="center" >
+								<th rowspan="2" ><?php echo $tr->translate("TIME");?></th>
+								<th colspan="5" ><?php echo $tr->translate("DAYS");?></th>
 							</tr>
 							<tr class="head_schedule" style="font-size:14px;" align="center" >
 							<?php foreach ($day as $key => $days){?>
@@ -125,14 +159,14 @@
 						if($time['from_hour']<=12){
 							if($title==0){?>
 							<tr  align="center" >
-								<th colspan="6" style="font-size:12px; padding: 0px 2px; text-decoration: underline;"><?php echo  $tr->translate("Morning");?></th>
+								<td  align="center"  colspan="6" style="font-size:12px; padding: 5px 2px; text-decoration: underline;"><?php echo  $tr->translate("Morning");?></td>
 							</tr>
 					        <?php $title=1;}
 						}else{
 							if($titles==0){
 				        ?>
 				        	<tr  align="center" >
-								<th colspan="6" style="font-size:12px; padding: 5px 2px; text-decoration: underline;"><?php echo  $tr->translate("Afternoon");?></th>
+								<td  align="center"  colspan="6" style="font-size:12px; padding: 5px 2px; text-decoration: underline;"><?php echo  $tr->translate("Afternoon");?></td>
 							</tr>
 				        <?php $titles=1;}
 							}
@@ -168,30 +202,52 @@
 					    <td style="border-left: 1px solid #fff;border-right: 1px solid #fff;border-bottom: 1px solid #fff;padding:0px;line-height: 20px;" colspan="2"><?php echo $key+1?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;//$rs_list['total_hour'].''.$h_label?></td>
 					 </tr>
 					 <?php }?>
+					 <tr >
+					 	<td  style="border: 1px solid #fff;">&nbsp;</td>
+					 </tr>
+					 <!-- 
 					  <tr >
 					 	<td colspan="7" align="right" style="border: 1px solid #fff;">
-					 	Phnom Penh,&nbsp;<?php echo date('d F Y');?>
+					 	Phnom Penh,&nbsp;<?php //echo date('d F Y');?>
 					 	</td>
 					 </tr>
+					  -->
 					</table>											
-					<br/>
-				<?php  }?>
+					</td>
+				</tr>
+				<td colspan="3" style="border:1px solid #fff;">
+					<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 14px">
+						<tr>
+							<td width="35%" align="center">
+								<span style="color:#4839bd; font-size: 14px;font-family:'khmer os battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="color:#4839bd; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
+							</td>
+							<td width="30%">&nbsp;</td>
+							<td width="35%" align="center">
+								<span style="color:#4839bd; font-size: 14px;font-family:'khmer os battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="color:#4839bd; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
+							</td>
+						</tr>
+					</table>
 				</td>
-			</tr>
+				<?php  }?>
+				
+			<!-- 
 			<tr>
 				<td colspan="3">&nbsp;</td>
 			</tr>
 			<tr>
 				<td align="center" width="25%">
-					<span style="font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+					<span style="font-size: 14px;"><?php //echo $tr->translate('VERIFIED_BY')?></span>
 				</td>
 				<td  width="50%">
 					&nbsp;
 				</td>
 				<td align="center"  width="25%">
-					<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+					<span style="font-size: 14px;text-align: right;"><?php //echo $tr->translate('PREPARED_BY')?></span>
 				</td>
 			</tr>
+			 -->
 		</table>
 	</div>		
 </div>

@@ -9,22 +9,40 @@
 	}
 	</style>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+    	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('Total Student Attendance List');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<div id="divPrint">
 		<table style="background:#fff; margin: 0 auto; width: 100%;" >
 				<tr>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td colspan="3"></td></tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
 					<td style="width:200px;">
-						<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 					</td>
 					<td align="center" >
-						<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("Total Student Attendance List");?></strong><br />
-						<strong style="font-weight:bold;color:#000; font-size: 12px;font-family:'Khmer MEF2';white-space: nowrap;"><?php echo $tr->translate("ACADEMIC_YEAR");?> : <?php echo $this->rr['academic'];?></strong><br />
-						<strong style="font-weight:bold;color:#000; font-size: 12px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDY_GROUP");?> : <?php echo $this->rr['group_code'];?> </strong><br />
+						<strong style="font-weight:bold;color:#4839bd; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("Total Student Attendance List");?></strong><br />
+						<strong style="font-weight:bold;color:#4839bd; font-size: 12px;font-family:'Khmer MEF2';white-space: nowrap;"><?php echo $tr->translate("ACADEMIC_YEAR");?> : <?php echo $this->rr['academic'];?></strong><br />
+						<strong style="font-weight:bold;color:#4839bd; font-size: 12px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDY_GROUP");?> : <?php echo $this->rr['group_code'];?> </strong><br />
 					</td>
 					<td style="width:200px;"></td>
 				</tr>
 				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
 					<td colspan="3" id="exportExcel">
-						<table cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;"  border="1" >
+						<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="border-collapse:collapse;color:#4839bd;white-space:nowrap;font-family:Time New Roman , Khmer OS Battambang;"  >
 							<style> td{padding:0 3px; }
 							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
 							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
@@ -34,6 +52,7 @@
 							  page-break-inside:avoid; page-break-after:auto;
 							}
 							.hover:hover{ background: #ccc;}
+							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 							</style>
 							<thead>
 							<tr style="background: #ccd9ff;" class="cheader" align="center" >
@@ -109,6 +128,23 @@
 						</table>	
 					</td>
 				</tr>
+				<tr>
+				<td colspan="3" style="border:1px solid #fff;">
+					<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 14px">
+						<tr>
+							<td width="35%" align="center">
+								<span style="color:#4839bd; font-size: 14px;font-family:'khmer os battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="color:#4839bd; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
+							</td>
+							<td width="30%">&nbsp;</td>
+							<td width="35%" align="center">
+								<span style="color:#4839bd; font-size: 14px;font-family:'khmer os battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="color:#4839bd; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
 		</table>
 	</div>
 </div>

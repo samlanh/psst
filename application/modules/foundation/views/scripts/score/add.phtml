@@ -133,19 +133,35 @@ function filterStudent(){
 				
 				column = 0;
 				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
-					+'<thead><tr style="border:1px solid #000;"><td class="tdheader" ><?php echo $tr->translate('DEL');?></th>'
-					+'<td class="tdheader" ><?php echo $tr->translate('NO');?></td>'
+					+'<thead><tr style="border:1px solid #000; border-bottom:1px solid #fff;  "><td  class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
+					+'<td  class="tdheader" ><?php echo $tr->translate('NO');?></td>'
 					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
 					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
-					+'<td class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
+					+'<td  class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
 					no=0;
 				  for(j=0;j<subject.length;j++){
 	      			  no++;
 	      			  stringsname = subject[j].subject_titleen.replace(' ','');
-		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;<input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].subject_id+');"  class="checkbox" id="subject'+subject[j].subject_id+'" value="'+subject[j].subject_id+'"  name="selector[]"/>&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
+		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	              }
-				  temp+='<td class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
-				  temp+='<td class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</thead></tr>';
+				  temp+='<td  class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
+				  temp+='<td  class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
+				  temp+='<tr style="border:1px solid #000;">';
+					  temp+='<td>&nbsp;</td>';
+					  temp+='<td>&nbsp;</td>';
+					  temp+='<td>&nbsp;</td>';
+					  temp+='<td>&nbsp;</td>';
+					  temp+='<td>&nbsp;</td>';
+					  no=0;
+					  for(j=0;j<subject.length;j++){
+		      			  no++;
+		      			  stringsname = subject[j].subject_titleen.replace(' ','');
+			      	      temp+='<td title="'+stringsname+'"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subject[j].subject_id+');"  class="checkbox" id="subject'+subject[j].subject_id+'" value="'+subject[j].subject_id+'"  name="selector[]"/></td>';
+		              }
+					  temp+='<td>&nbsp;</td>';
+				  	  temp+='<td>&nbsp;</td>';
+				  temp+='</tr>';
+				  temp+='</thead>';
 				  
 				for(i=0;i<data.length;i++){
 					num++;

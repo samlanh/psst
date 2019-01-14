@@ -138,7 +138,7 @@ function filterStudentOld(){
 	str='';
 	column = 0;
 	temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc; text-align: center; table-layout: fixed;" id="table" width="100%">'
-		+'<thead><tr style="border:1px solid #000;"><td class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
+		+'<thead><tr style="border:1px solid #000; border-bottom:1px solid #fff; "><td class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
 		+'<td class="tdheader" ><?php echo $tr->translate('NO');?></td>'
 		+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
 		+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
@@ -151,11 +151,31 @@ function filterStudentOld(){
 			  <?php 
 			  $result_score = $db_score->checkSubjectScore($this->score_id, $subj["subject_id"],null);
 			  ?>
-		      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;<input <?php if (!empty($result_score)){?>checked="checked"<?php }?> style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(<?php echo $subj["subject_id"]; ?>);"  class="checkbox" id="subject<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subject_id"]; ?>"  name="selector[]"/>&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
+		      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	             
 		<?php }?>
 		 temp+='<td class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
-		  temp+='<td class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</thead></tr>';
+		  temp+='<td class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
+		  temp+='<tr style="border:1px solid #000;">';
+			  temp+='<td>&nbsp;</td>';
+			  temp+='<td>&nbsp;</td>';
+			  temp+='<td>&nbsp;</td>';
+			  temp+='<td>&nbsp;</td>';
+			  temp+='<td>&nbsp;</td>';
+			  no=0;
+				<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ ?>
+					  no++;
+					  stringsname = '<?php echo str_replace(" ", "", $subj['subject_titleen'])?>';
+					  <?php 
+					  $result_score = $db_score->checkSubjectScore($this->score_id, $subj["subject_id"],null);
+					  ?>
+				      temp+='<td title="'+stringsname+'"><input <?php if (!empty($result_score)){?>checked="checked"<?php }?> style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(<?php echo $subj["subject_id"]; ?>);"  class="checkbox" id="subject<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subject_id"]; ?>"  name="selector[]"/></td>';
+			             
+				<?php }?>
+			  temp+='<td>&nbsp;</td>';
+		  	  temp+='<td>&nbsp;</td>';
+		  temp+='</tr>';
+		  temp+='</thead>';
 		 <?php $old_stu = null;$i=0;
 			if(!empty($student))foreach ($student as $key=>$rs){
 				$i = $i+1;
@@ -166,8 +186,8 @@ function filterStudentOld(){
 	        	<?php 
 	        	?>
 	        	temp+= '<tr class="hover normal" id="row'+inx+'">';
-				temp +='<td align="center">&nbsp;<?php echo $i; ?></td>';
 				temp+='<td width="4%"align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+				temp +='<td align="center">&nbsp;<?php echo $i; ?></td>';
 				temp +='<td>&nbsp;<?php echo $rs["stu_code"]; ?></td>';
 				temp +='<td style="min-width:100px;">'+'&nbsp;<?php echo $rs["student_name"]; ?><input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'" value="<?php echo $rs["student_id"] ?>"/></td>';
 				temp +='<td>&nbsp;'+gender(<?php echo $rs["sex"];?>)+'&nbsp;</td>';

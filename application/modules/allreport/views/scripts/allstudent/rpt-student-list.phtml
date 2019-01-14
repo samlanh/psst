@@ -83,8 +83,13 @@
 		</style>
 		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table style="background:#fff; margin: 0 auto; width: 100%;color:#4839bd;" >
+				<?php $logo = $this->baseUrl().'/images/logo.png';
+					if (!empty($this->rr['branch_logo'])){
+						$logo = $this->baseUrl().'/images/'.$this->rr['branch_logo'];
+					}
+					?>
 				<tr>
-					<td> <img style="max-height:90px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> </td>
+					<td> <img style="max-height:90px;" alt="<?php ?>" src="<?php echo $logo;?>"> </td>
 					<td align="center">
 						<strong style="color:#4839bd; font-size: 14px;font-family:Arial,'Khmer MEF2';"><?php echo $tr->translate("NATIONALITY_OFKINGDOM");?></strong><br />
 						<strong style="color:#4839bd; font-size: 14px;font-family:Arial,'Khmer MEF2';"><?php echo $tr->translate("NATION_RELIGION_KING");?></strong>

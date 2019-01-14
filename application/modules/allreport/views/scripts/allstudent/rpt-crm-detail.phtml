@@ -7,18 +7,15 @@
 		<div id="divPrint">
 			<table width="100%" border="0" style="font-size:12px;font-family:Tahoma,'Khmer OS Battambang';"> 
 				<tr>
-					<td>
-					   <table width="100%" style="font-family: Times New Roman,'Khmer MEF2';">
-				   			<tr>
-								<td colspan="3" align="center" >
-									<img style="height: 80px;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-									<span style="font-family: Brush Script Std;font-size: 11px;">School for the Elite</span>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" align="center" style="font-size: 20px;"><?php echo $tr->translate("CRM_SUMMARY");?></td>
-							</tr>
-					   </table>
+					<td><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td ></td></tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>	
+					<td align="center" style="font-family: Times New Roman,'Khmer MEF2'; font-size: 20px;">
+						<?php echo $tr->translate("CRM_SUMMARY");?>
 				   </td>
 				</tr>
 				<tr>
@@ -57,12 +54,12 @@
 						table.data-value tbody tr td.borderright-none {
 							 border-right: none;
 						}
-						
+						tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 				</style>
 				<tr>
 					<td>
 						<table width="100%" border="1"  style="font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
-							<tr style="height: 24px; background: #0077c5;">
+							<tr style="height: 24px; background: #2e3192;">
 								<td colspan="2" style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp; <?php echo $tr->translate('CUSTOMER_INFO')?></td>
 							</tr>
 							<tr>
@@ -119,7 +116,7 @@
 				<tr>
 					<td>
 						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
-							<tr style="height: 24px; background: #0077c5;">
+							<tr style="height: 24px; background: #2e3192;">
 								<td style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp;<?php echo $tr->translate("STUDENT_INFORMATION");?></td>
 							</tr>
 							<tr>
@@ -159,7 +156,7 @@
 				<tr>
 					<td>
 						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
-							<tr style="height: 24px; background: #0077c5;">
+							<tr style="height: 24px; background: #2e3192;">
 								<td style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp;<?php echo $tr->translate("CONTACT_HISTORY");?></td>
 							</tr>
 							<tr>

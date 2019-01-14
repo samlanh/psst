@@ -81,6 +81,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->search=$search;
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+		
+		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	
 	public function rptAllStudentprofileAction(){
@@ -521,6 +525,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$_db = new Global_Model_DbTable_DbGroup();
 		$teacher = $_db->getAllTeacher();
 		$this->view->teacher = $teacher;
+		
+		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptgroupstudentchangegroupAction()
 	{
@@ -701,6 +709,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->datasearch = $search;		
 		$this->view->all_teacher_by_group = $db->getAllTeacherByGroup($id);
 		$this->view->all_subject_by_group = $db->getAllSubjectByGroup($id);
+		
+		$branch_id = empty($rs['branch_id'])?1:$rs['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	
 	public function rptRescheduleGroupAction(){
@@ -732,6 +744,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->search=$search;
 		$db_glob = new Application_Model_GlobalClass();
 		$this->view->opttime = $db_glob->getHoursStudy();
+		
+		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptReschedulebygroupAction(){
 			if($this->getRequest()->isPost()){
@@ -755,8 +771,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			Application_Model_Decorator::removeAllDecorator($forms);
 			$this->view->form_search=$form;
 			$group= new Allreport_Model_DbTable_DbRptStudentDrop();
-			$this->view->rs = $rs_rows = $group->getAllReschedulebygroup($search);
+			$rs_rows = $group->getAllReschedulebygroup($search);
+			$this->view->rs = $rs_rows;
 			$this->view->search=$search;
+			
+			
 	}
 	public function rptCertificateAction()
 	{
@@ -791,6 +810,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $row;
 		$rs= $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
+		
+		$branch_id = empty($rs['branch_id'])?1:$rs['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	
 	public function rptCrmAction(){
@@ -815,6 +838,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$rs_rows = $db->getAllCRM($search);
 			$this->view->row = $rs_rows;
 			$this->view->search  = $search;
+			
+			$branch_id = empty($search['branch_search'])?1:$search['branch_search'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -856,6 +883,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			}
 		}
 		$this->view->prevconcern = $prevCon;
+		
+		$branch_id = empty($row['branch_search'])?1:$row['branch_search'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	
 	function rptCrmDailyContactAction(){
@@ -880,6 +911,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$this->view->row = $rs_rows;
 			$this->view->search  = $search;
 		
+			$branch_id = empty($search['branch_search'])?1:$search['branch_search'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}

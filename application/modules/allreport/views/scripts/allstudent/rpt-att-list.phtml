@@ -25,57 +25,67 @@
 	$amount_day = $amount_day + 1;
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 ?>	
-<div style="margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<div class="card-box">
+    	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_ATTENDANT_LIST');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-att-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table width="80%">
-			<tr>
-				<td><input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" placeholder="Search....." value="<?php echo $this->datasearch['start_date'];?>" type="text"></td>
-				<td><input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date"  value="<?php echo $this->datasearch['end_date'];?>" type="text"></td>
-				<td>
-					<select name="teacher" id="teacher" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setTeacherName();">
+		<div class="form-group">
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="start_date" name="start_date" placeholder="<?php echo $tr->translate('SEARCH');?>....." value="<?php echo $this->datasearch['start_date'];?>" type="text">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<input dojoType="dijit.form.DateTextBox" class="fullside" constraints="{datePattern:'dd/MM/yyyy'}" id="end_date" name="end_date"  value="<?php echo $this->datasearch['end_date'];?>" type="text">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<select name="teacher" id="teacher" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setTeacherName();">
 						<option value="0"><?php echo $tr->translate("SELECT_TEACHER");?></option>
 						<?php if($this->all_teacher_by_group){foreach ($this->all_teacher_by_group as $teacher){?>
 							<option value="<?php echo $teacher['id']?>"><?php echo $teacher['name']?></option>
 						<?php }}?>
 					</select>
-				</td>
-				<td>
-					<select name="subject" id="subject" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setSubjectName();">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<select name="subject" id="subject" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="setSubjectName();">
 						<option value="0"><?php echo $tr->translate("SELECT_SUBJECT");?></option>
 						<?php if($this->all_subject_by_group){foreach ($this->all_subject_by_group as $subject){?>
 							<option value="<?php echo $subject['id']?>"><?php echo $subject['name']?></option>
 						<?php }}?>
 					</select>
-				</td>
-				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-				<td><select name="showsign" id="showsign" dojoType="dijit.form.FilteringSelect" class="fullside">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<select name="showsign" id="showsign" dojoType="dijit.form.FilteringSelect" class="fullside">
 						<option value="1" <?php if($this->datasearch['showsign']==1){echo"selected";}?>>Print Show Signature</option>
 						<option value="0" <?php if($this->datasearch['showsign']==0){echo"selected";}?>>Print Hide Signature</option>
 					</select>
-				</td>
-			</tr>
-		</table>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+            </div>
+        </div>
 	</form>
-</div>
 <div id="divPrint">
 	<table style="background:#fff; margin: 0 auto; width: 100%;"  border="0">
 			<tr>
-				<td colspan="3">
-					<table width="100%" border="0">
-						<tr>
-							<td width="15%" align="center">
-								<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
-							</td>
-							<td width="70%" align="center">
-								<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:Arial,'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
-								<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></strong>
-							</td>
-							<td width="15%">
-								&nbsp;
-							</td>
-						</tr>
-					</table>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="3" align="center">
+					<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></strong>
 				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
 			</tr>
 			<?php $total_day=0;for($k=0;$k<$amount_day;$k++){?>
 				<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));
@@ -97,6 +107,7 @@
 						  transform: rotate(270deg);
 							width: 20px;
 						}
+						tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 						</style>
 						<thead>									
 							<tr>

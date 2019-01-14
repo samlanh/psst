@@ -33,37 +33,62 @@
 			);
 ?>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_RESULT_LIST');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
 <form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-bac-monthly')); ?>" dojoType="dijit.form.Form" method="post">
-	<table style="width:100%;margin: 0 auto;">
-		<tr> 
-			<td><?php echo $frm->getElement("title");?></td>
-			<td><?php echo $frm->getElement("branch_id");?></td>
-			<td><input id="study_year" /></td>
-			<td><input id="group_name" /></td>
-			<td><?php echo $frm->getElement("degree");?></td>
-			<td><?php echo $frm->getElement("grade");?></td>
-		</tr>
-		<tr>
-			<td>
-			  	<select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
-			   		<option value="-1">ជ្រើសរើសប្រភេទលទ្ធផល</option>
-			   		<option value="1">ប្រចាំខែ</option>
-			   		<option value="2">ប្រលងឆមាស</option>
-			   	</select>
-			</td>
-			<td><?php echo $frm->getElement("session");?></td>
-			<td><?php echo $frm->getElement("room");?></td>
-			<td>
-				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
-					<option><?php echo $tr->translate("CHOOSE");?></option>
-					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-						<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
-					<?php }}?>
-				</select>
-			</td>
-			<td> <button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		</tr>
-	</table>
+	<div class="form-group">
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("title");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("branch_id");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<input id="study_year" />
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<input id="group_name" />
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("degree");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("grade");?>
+    	</div>
+    </div>
+    <div class="form-group">
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
+		   		<option value="-1">ជ្រើសរើសប្រភេទលទ្ធផល</option>
+		   		<option value="1">ប្រចាំខែ</option>
+		   		<option value="2">ប្រលងឆមាស</option>
+		   	</select>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("session");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<?php echo $frm->getElement("room");?>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
+				<option><?php echo $tr->translate("CHOOSE");?></option>
+				<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+					<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']?></option>
+				<?php }}?>
+			</select>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+    	</div>
+    </div>
 </form>
 <div id="divPrint">
 		<style type="text/css">
@@ -82,17 +107,26 @@
 			  page-break-inside:avoid; page-break-after:auto;
 			}
 			.hover:hover{background:#ccc;}
+			tr.line td{ border-bottom: 2px solid #000; }
 		</style>
 		<table style="width:28cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td colspan="3"></td></tr>
+				<tr>
+					<td style="height: 10px">&nbsp;</td>
+				</tr>
+				<tr>
 					<td width="28%" align="left">
-						<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 					</td>
 					<td width="44%" align="center">
-						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_RESULT_LIST");?></strong>
 					</td>
 					<td align="right" width="28%"></td>
+				</tr>
+				<tr>
+					<td style="height: 10px">&nbsp;</td>
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">

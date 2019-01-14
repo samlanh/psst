@@ -278,6 +278,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	$sql="SELECT
    	s.`id`,
    	g.`branch_id`,
+   	(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
+					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
    	s.`group_id`,
    	g.`group_code`,
    	s.for_academic_year,

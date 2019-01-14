@@ -140,7 +140,12 @@
 									<table width="70%">
 										<tr>
 											<td width="100%" align="center">
-												<img style="width: 50%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+												<?php $logo = $this->baseUrl().'/images/logo.png';
+													if (!empty($this->studentgroup[0]['branch_logo'])){
+														$logo = $this->baseUrl().'/images/'.$this->studentgroup[0]['branch_logo'];
+													}
+													?>
+												<img style="width: 50%;" alt="<?php ?>" src="<?php echo $logo;?>"><br />
 											</td>
 										</tr>
 									</table>

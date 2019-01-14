@@ -106,7 +106,8 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			}
 		    $id= $this->getRequest()->getParam('id');
 			$this->view->adv_search=$search;
-			$this->view->rs =$db->getStudentById($id);
+			$student = $db->getStudentById($id);
+			$this->view->rs =$student;
 			$this->view->document =$db->getStudentDocumentById($id);
 			
 			$rs=$this->view->row = $db->getStudentPaymentDetail($id);
@@ -124,7 +125,9 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 					$dbgb->updateReadNotif(1, $drid);
 				}
 			}
-			
+			$branch_id = empty($student['branch_id'])?1:$student['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

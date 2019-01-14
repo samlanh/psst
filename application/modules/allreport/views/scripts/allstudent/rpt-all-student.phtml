@@ -69,16 +69,20 @@ display: table-cell !important;
 	<div id="divPrint">
 			<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
 				<tr>
-					<td width="15%" align="center">
-						<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"> 
-					</td>
-					<td width="70%"  align="center">
-					    <strong style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td colspan="3"></td></tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
 						<strong style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_CARD");?></strong><br />
 						<strong  style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
-					<td width="15%" align="center">
-					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
 				</tr>
 				<style>
 					table tr th{
@@ -92,7 +96,7 @@ display: table-cell !important;
 					  page-break-inside:avoid; page-break-after:auto;
 					}
 					.hidden{visibility: hidden; display: none;}
-					
+				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 				</style>
 				<tr>
 					<td colspan="3">

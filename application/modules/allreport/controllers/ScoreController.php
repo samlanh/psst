@@ -39,6 +39,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
+    	
+    	$frm = new Application_Form_FrmGlobal();
+    	$branch_id= empty($search['branch_id'])?1:$search['branch_id'];
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     }
     function rptScoreDetailAction(){//តាមមុខវិជ្ជាលម្អិត
     	$id=$this->getRequest()->getParam("id");
@@ -176,6 +180,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$_db = new Global_Model_DbTable_DbGroup();
     	$teacher = $_db->getAllTeacher();
     	$this->view->teacher = $teacher;
+    	
+    	$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     }
     function rptResultbysemesterAction(){
     	$group_id=$this->getRequest()->getParam("id");

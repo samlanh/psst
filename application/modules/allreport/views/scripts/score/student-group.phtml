@@ -73,18 +73,27 @@
 .hidden{
 	display: table-cell !important;
 }
+
 </style>
 	<div id="divPrint">
 		<table style="background:#fff; margin: 0 auto; width: 100%;">
 			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
 				<td width="28%" align="left">
-					<img style="max-height:100px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 				</td>
 				<td width="44%" align="center">
-					<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
 					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><p><?php echo $tr->translate("SCORE_SEMESTER_YEAR");?></p></strong>
 				</td>
 				<td align="right" width="28%"></td>
+			</tr>
+			<tr>
+				<td >&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" valign="top" id="exportExcel">
@@ -97,6 +106,7 @@
 							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
 							.hover:hover{background: #ccc;}
 							.hidden{display: none;}
+							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 						</style>
 						<?php 
 						$all_student = 0;

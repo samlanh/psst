@@ -118,33 +118,16 @@
 									.green {
 									    color: #1ABB9C;
 									}
+									tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 				        	</style>
 				        		<div style="background: #fff;width: 27cm;margin: 0 auto;min-height: 27cm; padding: 0.5cm;">
 								<table width="100%" style="font-size:12px; font-family:Tahoma,'Khmer OS Battambang';"> 
-									<tr class="head">
-										<td colspan="3" align="center" style="border-bottom: 1px solid #4839bd;">
-											<table width="100%" style="white-space:nowrap;">
-												<tbody>
-													<tr>
-														<td width="17%" valign="top">
-															<?php $image = $this->baseUrl()."/images/logo.png";
-																if (!empty($this->rs['photo_branch'])){
-																	$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
-																}
-																
-															?>
-															<img style="max-width: 98%;max-height:90px;" src="<?php echo $image;?>">
-														</td>
-														<td width="83%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
-															<div style="font-size:18px;margin-top: 10px;"><?php echo $this->rs['school_nameen']?></div>
-															<div style="line-height: 16px;"><?php echo $this->rs['br_address']?></div>
-															<div style="line-height: 16px;"><?php echo $this->rs['branch_tel']?></div>
-															<div style="line-height: 16px;"><?php echo $this->rs['email_branch']?> / <?php echo $this->rs['website']?></div>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-									   </td>
+									<tr>
+										<td colspan="3"><?php echo $this->rsheader;?></td>
+									</tr>
+									<tr class="line"><td colspan="3"></td></tr>
+									<tr>
+										<td>&nbsp;</td>
 									</tr>
 									<tr class="head">
 									   <td colspan="3" align="center">
@@ -508,34 +491,18 @@
 										<div id="divPrintSchedule">
 											<table style="background:#fff;   margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
 												<tr class="head">
-													<td colspan="3" align="center" style="border-bottom: 1px solid #4839bd;">
-														<table width="100%" style="white-space:nowrap;">
-															<tbody>
-																<tr>
-																	<td width="17%" valign="top">
-																		<?php $image = $this->baseUrl()."/images/logo.png";
-																			if (!empty($this->rs['photo_branch'])){
-																				$image = $this->baseUrl()."/images/".$this->rs['photo_branch'];
-																			}
-																			
-																		?>
-																		<img style="max-width: 98%;max-height:90px;" src="<?php echo $image;?>">
-																	</td>
-																	<td width="83%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
-																		<div style="font-size:18px;margin-top: 10px;"><?php echo $this->rs['school_nameen']?></div>
-																		<div style="line-height: 16px;"><?php echo $this->rs['br_address']?></div>
-																		<div style="line-height: 16px;"><?php echo $this->rs['branch_tel']?></div>
-																		<div style="line-height: 16px;"><?php echo $this->rs['email_branch']?> / <?php echo $this->rs['website']?></div>
-																	</td>
-																</tr>
-															</tbody>
-														</table>
+													<td colspan="3" align="center">
+														<?php echo $this->rsheader;?>
 												   </td>
+												</tr>
+												<tr class="line"><td colspan="3"></td></tr>
+												<tr>
+													<td>&nbsp;</td>
 												</tr>
 												<tr class="head">
 												   <td colspan="3" align="center">
-												   		<h2 style="color: #4839bd; font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';" >កាលវិភាគសិក្សា</h2>
-												   		<h2 class="green" style="font-size:18px;font-weight: bold;font-family:'Times New Roman','Khmer OS Muol Light';" >Schedule Study</h2>
+												   		<h2 style="color: #4839bd; font-size:18px;font-weight: initial;font-family:'Khmer OS Muol Light';" ><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></h2>
+												   		<!-- <h2 class="green" style="font-size:18px;font-weight: bold;font-family:'Times New Roman','Khmer OS Muol Light';" >Schedule Study</h2> -->
 												   </td>
 												</tr>
 												
@@ -564,6 +531,7 @@
 												.green {
 												    color: #1ABB9C;
 												}
+												tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 											</style>
 												<tr>
 													<td colspan="3">

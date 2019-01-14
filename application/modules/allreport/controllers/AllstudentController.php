@@ -645,6 +645,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbCertify();
 		$result = $db->getStudentCertify($id);
 		$this->view->rs = $result;
+		
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($result['branch_id']);
 	}
 	function certifyKhmerAction(){
 		$id=$this->getRequest()->getParam("id");

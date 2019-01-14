@@ -45,15 +45,23 @@ tr td table tr th:{padding: 5px;margin: 5px;};
 	<div id="divPrint">
 		<table style="background:#fff; margin: 0 auto; width: 100%;">
 			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
 				<td  width="28%">
-					<img style="width:115px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br /><br />
 				</td>
 				<td width="44%" align="center">
-					<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
 					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></strong><br /><br >
 				</td>
 				<td width="28%" align="right">
 				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
 			</tr>
 		<style>
 			table tr th{
@@ -61,6 +69,7 @@ tr td table tr th:{padding: 5px;margin: 5px;};
 				text-align: center;
 				padding: 3px 2px;
 			}
+			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 			table {page-break-inside:auto }
 			tr{ page-break-inside:avoid; page-break-after:auto; }
 			#header {

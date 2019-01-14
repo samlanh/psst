@@ -59,24 +59,28 @@
 	<div id="divPrint">
 		<style> 
 		th{border-top:1px solid #000;border-collapse: collapse;}
+		tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto;border-collapse: collapse;">
-			<tr style="font-size: 18px;">
-				<td colspan="2"></td>
-				<td align="center">
-				</td>
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td width="28%" >
-					<img style="width: 110px;padding-left: 45px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 				</td>
 				<td width="44%" align="center">
-					<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
 					<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';;"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></strong><br />
 					<strong></strong>
 				</td>
 				<td width="28%" align="right">
 				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="4" id="exportExcel">								

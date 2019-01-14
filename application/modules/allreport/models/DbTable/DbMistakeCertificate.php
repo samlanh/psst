@@ -20,6 +20,7 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 		}
 		$sql="SELECT 
 					s.stu_id,
+					s.branch_id,
 					$stuname as student_name,
 					s.`stu_khname`,
 					s.`stu_enname`,

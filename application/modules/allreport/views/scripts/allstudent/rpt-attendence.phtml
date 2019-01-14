@@ -116,6 +116,7 @@
 				  display: table-header-group;
 				  page-break-inside:avoid; page-break-after:auto;
 				}				
+tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 			</style>			
 				<tr>
 					<td colspan="3">
@@ -135,6 +136,18 @@
 								</td>
 							</tr>
 							<?php }$i=0; ?>
+							<!-- 
+							<?php 
+// 								$branch_id = empty($rs['branch_id'])?1:$rs['branch_id'];
+// 								$frm = new Application_Form_FrmGlobal();
+// 								$rsheader = $frm->getLetterHeaderReport($branch_id);
+								?>
+							<tr>
+								<td style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;" colspan="<?php echo $amount_day+9;?>"><?php echo $rsheader;?></td>
+							</tr>
+							<tr class="line"><td style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;"colspan="<?php echo $amount_day+9;?>"></td></tr>
+							
+							 -->
 							<tr>
 								<td align="center" colspan="<?php echo $amount_day+9;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 									<!-- <img style="width: 90px;float: left; " alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>"> -->

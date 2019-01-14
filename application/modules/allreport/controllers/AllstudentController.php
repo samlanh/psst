@@ -393,12 +393,17 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->group_id = $group_id;
 		
 		$db = new Allreport_Model_DbTable_DbMistakeCertificate();
-		$this->view->student_info = $db->getStudentInfo($group_id,$stu_id);
+		$row = $db->getStudentInfo($group_id,$stu_id);
+		$this->view->student_info = $row;
 		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+		
+		$branch_id = empty($row['branch_id'])?1:$row['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}	
 	
 	public function rptAttendenceAction(){
@@ -431,6 +436,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$result= $db_global->getAllgroupStudy();
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
+		
+		
 	}
 // 	public function rptAttendenceHighschoolAction(){
 // 		if($this->getRequest()->isPost()){
@@ -494,6 +501,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
 		$this->view->rs = $rs_rows = $group->getAllStudentDrop($search);
 		$this->view->search=$search;
+		
+		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function studentGroupAction()
 	{
@@ -553,6 +564,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $db->getAllStu($search);
 		$this->view->change_type = $db->getChangeType();
 		$this->view->search=$search;
+		
+		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptStudentChangeGroupAction(){
 		if($this->getRequest()->isPost()){
@@ -577,6 +592,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+		
+		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptStudentGroupAction()
 	{
@@ -982,6 +1001,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows;
 	
 		$this->view->search=$search;
+		
+		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function suspensionletterAction(){
 		$id=$this->getRequest()->getParam("id");

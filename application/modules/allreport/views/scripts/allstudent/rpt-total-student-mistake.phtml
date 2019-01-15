@@ -8,22 +8,52 @@
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
 ?>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_TOTAL_STUDENT_MISTAKE');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-total-student-mistake')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table width="100%">
-	       <tr>
-	           <td><?php echo $frm->getElement("title");?></td>
-	           <td><?php echo $frm->getElement("branch_id");?></td>
-	           <td><input id="group" /></td>
-	           <td><input id="study_year" /></td>
-	           <td><?php echo $frm->getElement("degree");?></td>
-			</tr>
-			<tr>
-	            <td><?php echo $frm->getElement("grade_all");?></td>
-				<td><?php echo $frm->getElement("session");?></td>
-				<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-	
-		 	</tr>
-		</table>		
+		<div class="form-group">
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("title");?>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("branch_id");?>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<input id="group" />
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<input id="study_year" />
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("degree");?>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            </div>
+         </div>
+         <div class="form-group">
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("grade_all");?>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("session");?>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            </div>
+         </div>
 	</form>
 	<div id="divPrint">
 		<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
@@ -58,8 +88,16 @@
 				  display: table-header-group;
 				  page-break-inside:avoid; page-break-after:auto;
 				}	
-				.hover:hover{background: #ccc;}			
-			</style>			
+				.hover:hover{background: #ccc;}	
+				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }		
+			</style>
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>			
 			<tr>
 				<td colspan="3">
 				<div id="exportExcel">

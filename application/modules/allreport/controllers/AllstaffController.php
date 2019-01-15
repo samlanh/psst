@@ -59,6 +59,10 @@ public function init()
 		$frm = new Global_Form_FrmSearchMajor();
 		$this->view->frm_search = $frm->frmSearchTeacher();
 		Application_Model_Decorator::removeAllDecorator($frm);
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptTeacheralertAction(){
 		$db = new Allreport_Model_DbTable_DbRptAllStaff();
@@ -82,6 +86,10 @@ public function init()
 		Application_Model_Decorator::removeAllDecorator($frm);
 		
 		$this->view->search =$search;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	
 }

@@ -4,33 +4,63 @@
 	$frm = $this->form_search;
 ?>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SERVICE_CHARGE_RPT');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table style="width: 100%">	
-			<tr>
-				<td>	
-					<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
-				</td>
-				<td><?php echo $frm->getElement('branch_id')?></td>	
-				<td><?php echo $frm->getElement('study_year')?></td>
-			</tr>
-			<tr>
-				<td><?php echo $frm->getElement('degree_bac')?></td>
-				<td><?php echo $frm->getElement('grade_all')?></td>
-				<td><?php echo $frm->getElement('finished_status')?></td>
-				<td>
-					<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-				</td>
-			</tr>
-		</table>	
+		<div class="form-group">
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('branch_id')?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('study_year')?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('degree_bac')?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		</div>
+       	</div>
+       	<div class="form-group">
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('grade_all')?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('finished_status')?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		</div>
+       	</div>
 	</form>	
 	<div id="divPrint">
 		<table style="background:#fff; margin: 0 auto; white-space: nowrap;width: 100%">
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
 			<tr >
 				<td width="15%" align="center">
-					<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 				</td>
 				<td width="70%" align="center">
-					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
 					<strong style="padding-left: 0px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></strong><br />
 				</td>
 				<td width="15%" align="center">
@@ -43,8 +73,12 @@
 				  page-break-inside:avoid; page-break-after:auto;
 				}
 				.hover:hover{background:#ccc;}
+				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 			</style>
 				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel">

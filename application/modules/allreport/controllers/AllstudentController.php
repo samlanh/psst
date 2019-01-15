@@ -223,6 +223,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $group->getStudentStatistic($search);
 		$this->view->search=$search;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}	
 	public function rptStudyHistoryAction(){
 		if($this->getRequest()->isPost()){
@@ -249,6 +253,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $db->getAllStudyHistory($search);
 		$this->view->search =$search;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptStudentAction(){
 		if($this->getRequest()->isPost()){
@@ -373,6 +381,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$result= $db_global->getAllgroupStudy();
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	
 	function mistakeCertificateAction(){
@@ -974,6 +986,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm->FrmAddStudentTest(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->form_search = $frm;
+		
+		$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptStudentDocumentAction(){
 		if($this->getRequest()->isPost()){
@@ -1046,5 +1062,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->search=$search;
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 }

@@ -6,34 +6,47 @@
 ?>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
-	  <table width="100%">
-		   <tr>  
-		        <td><?php echo $frm->getElement("adv_search");?></td>
-		        <td><?php echo $frm->getElement('branch_id');?></td>
-		        <td><?php echo $frm->getElement('status');?></td>
-		   		<td><?php echo $frm->getElement('paid_transfer');?></td>
-		   		<!-- <td>
-		   			<select name="paid_status" id="paid_status" dojoType="dijit.form.FilteringSelect" class="fullside"  >
-		        		<option value="" <?php if($this->adv_search['paid_status']==""){echo 'selected="selected"';} ?>> Piad Status </option>
-		        		<option value="1" <?php if($this->adv_search['paid_status']==1){echo 'selected="selected"';} ?>> Cleared </option>
-		        		<option value="0" <?php if($this->adv_search['paid_status']==0){echo 'selected="selected"';} ?>> Not Cleared </option>
-		        	</select>
-		   		</td> -->
-		   		<td>
-		   			<select name="paid_type" id="paid_type" dojoType="dijit.form.FilteringSelect" class="fullside"  >
+	  	<div class="form-group">
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("adv_search");?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('branch_id');?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('status');?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('paid_transfer');?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<select name="paid_type" id="paid_type" dojoType="dijit.form.FilteringSelect" class="fullside"  >
 		        		<option value="0" <?php if($this->search['paid_type']==0){echo "selected='selected'";}?>><?php echo $tr->translate('SELECT_FORM_REPORT');?></option>
 						<option value="1" <?php if($this->search['paid_type']==1){echo "selected='selected'";}?>>Credit Memo</option>
 						<option value="2" <?php if($this->search['paid_type']==2){echo "selected='selected'";}?>>Credit Memo Transfer</option>	
 		        	</select>
-		   		</td>
-		   </tr>
-		   <tr>
-		   		<td><?php echo $frm->getElement('by_date');?></td>
-		   		<td><?php echo $frm->getElement('start_date');?></td>
-		   		<td><?php echo $frm->getElement('end_date');?></td>
-		   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
-		   </tr>
-		</table>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('by_date');?>
+       		</div>
+       	</div>
+       	<div class="form-group">
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('start_date');?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement('end_date');?>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">	
+       			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		</div>
+       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		</div>
+       	</div>
 	</form>
 	<div id="divPrint">
 		<style>
@@ -45,19 +58,28 @@
 				  page-break-inside:avoid; page-break-after:auto;
 				}	
 				td{ padding: 1px !important;}
+				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 			</style>	
 		<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 			<tr>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td colspan="3"></td></tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+			<tr>
 				<td width="15%" align="center">
-					<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 				</td>
 				<td width="70%" align="center">
-					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
 				    <strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CREDIT_MEMO_RePORT')?></strong><br />
 					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO')?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 				</td>
 				<td width="15%" align="center"></td>
 			</tr>
+			<tr>
+					<td>&nbsp;</td>
+				</tr>
 			<tr>
 				<td colspan="3" >
 					<div id="exportExcel">

@@ -703,7 +703,7 @@ function getAllgroupStudyNotPass($action=null){
    }
    function getSession(){
    	$db=$this->getAdapter();
-   	$sql="SELECT key_code AS id,key_code,name_en aS name,name_en AS view_name 
+   	$sql="SELECT key_code AS id,key_code,name_en as name,name_en AS view_name 
    		FROM rms_view WHERE `type`=4 AND `status`=1";
 	return $db->fetchAll($sql);
    }
@@ -853,7 +853,13 @@ function getAllgroupStudyNotPass($action=null){
    
    function getViewById($type,$is_opt=null){
    	$db=$this->getAdapter();
-   	$sql="SELECT key_code,name_kh AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 ";
+   	$lang = $this->currentlang();
+   	if($lang==1){// khmer
+   		$label = "name_kh";
+   	}else{ // English
+   		$label = "name_en";
+   	}
+   	$sql="SELECT key_code,$label AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 ";
    	$rows = $db->fetchAll($sql);
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$options= array(-1=>$tr->translate("CHOOSE"));

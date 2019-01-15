@@ -218,20 +218,30 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		try{
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = $_db->getAccessPermission('st.branch_id');
-	
+			$lang = $_db->currentlang();
+			if($lang==1){// khmer 
+				$label = "name_kh";
+				$grade = "idd.title";
+				$degree = "i.title";
+			}else{ // English
+				$label = "name_en";
+				$grade = "idd.title_en";
+				$degree = "i.title_en";
+			}
+			
 			$db=$this->getAdapter();
 	
 			$from_date =(empty($search['start_date']))? '1': "str.create_date >= '".$search['start_date']." 00:00:00'";
 			$to_date = (empty($search['end_date']))? '1': "str.create_date <= '".$search['end_date']." 23:59:59'";
 	
 			$sql=" SELECT st.*,
-					(SELECT name_en FROM rms_view WHERE TYPE=2 AND key_code=st.sex LIMIT 1) AS sex,
-					(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
-					(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
-					(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
-					(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
+					(SELECT $label FROM rms_view WHERE TYPE=2 AND key_code=st.sex LIMIT 1) AS sex,
+					(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
+					(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
+					(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
+					(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
 					(SELECT first_name FROM rms_users WHERE rms_users.id = str.user_id LIMIT 1) AS user_id,
-					(SELECT name_kh FROM rms_view WHERE TYPE=15 AND key_code = str.updated_result LIMIT 1) AS result_status,
+					(SELECT $label FROM rms_view WHERE TYPE=15 AND key_code = str.updated_result LIMIT 1) AS result_status,
 					(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by,
 					str.create_date AS create_date_exam,
 					str.result_date,
@@ -239,14 +249,15 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					str.updated_result AS updated_result_de,
 					str.note AS note_result,
 					str.is_registered
-					FROM `rms_student` AS st,
+				FROM 
+					`rms_student` AS st,
 					`rms_student_test_result` AS str
-					WHERE st.is_studenttest =1
+				WHERE 
+					st.is_studenttest = 1
 					AND str.stu_test_id = st.stu_id
-					AND
-					STATUS=1
+					AND STATUS=1
 					AND st.stu_khname!=''
-			$branch_id
+					$branch_id
 			";
 	
 			$where = " AND ".$from_date." AND ".$to_date;
@@ -265,31 +276,31 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if(($search['branch_search']>0)){
 				$where.= " AND st.branch_id = ".$search['branch_search'];
 			}
-		if(!empty($search['user'])){
-			$where.= " AND str.user_id = ".$search['user'];
-		}
-		if(!empty($search['degree_search'])){
-			$where .= " and str.degree_result = ".$search['degree_search'];
-		}
-		if(!empty($search['student_option_search'])){
-			$where .= " and st.student_option = ".$search['student_option_search'];
-		}
-		if(!empty($search['province_search'])){
-			$where .= " and st.province_id = ".$search['province_search'];
-		}
-// 		if($search['register_status']!=''){
-// 		$where .= " and st.register = ".$search['register_status'];
-// 		}
-		if($search['result_status']!=''){
-		$where .= " and str.updated_result = ".$search['result_status'];
-		}
-		$order=" ORDER By str.updated_result DESC,str.degree_result ASC,str.grade_result ASC ";
-		return $db->fetchAll($sql.$where.$order);
+			if(!empty($search['user'])){
+				$where.= " AND str.user_id = ".$search['user'];
+			}
+			if(!empty($search['degree_search'])){
+				$where .= " and str.degree_result = ".$search['degree_search'];
+			}
+			if(!empty($search['student_option_search'])){
+				$where .= " and st.student_option = ".$search['student_option_search'];
+			}
+			if(!empty($search['province_search'])){
+				$where .= " and st.province_id = ".$search['province_search'];
+			}
+	// 		if($search['register_status']!=''){
+	// 			$where .= " and st.register = ".$search['register_status'];
+	// 		}
+			if($search['result_status']!=''){
+				$where .= " and str.updated_result = ".$search['result_status'];
+			}
+			$order=" ORDER By str.updated_result DESC,str.degree_result ASC,str.grade_result ASC ";
+			return $db->fetchAll($sql.$where.$order);
 		}catch(Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				echo $e->getMessage();
 		}
-		}
+	}
 }
 
 

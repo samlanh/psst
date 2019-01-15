@@ -36,9 +36,9 @@
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<select name="result_status" id="result_status" class="fullside" dojoType="dijit.form.FilteringSelect" >
-			   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>>ប្រភេទលទ្ធផល </option>
-			   				<option value="0" <?php if($this->search['result_status']==0){echo "selected='selected'";}?>> មិនទាន់បាន </option>
-			   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>> បានទទួល </option>
+			   				<option value="" <?php if($this->search['result_status']==""){echo "selected='selected'";}?>><?php echo $tr->translate("RESULT_TEST_TYPE"); ?></option>
+			   				<option value="0" <?php if($this->search['result_status']==0){echo "selected='selected'";}?>><?php echo $tr->translate("NO_RESULT"); ?></option>
+			   				<option value="1" <?php if($this->search['result_status']==1){echo "selected='selected'";}?>><?php echo $tr->translate("GET_RESULT"); ?></option>
 			   			</select>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
@@ -64,9 +64,9 @@
 									<img style="width:62%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 								</td>
 								<td align="center"  width="70%">
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></strong><br />
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_TEST"); ?></strong><br />
-									<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';">For Date <?php if(!empty($this->search["start_date"])){echo date("d-M-Y",strtotime($this->search["start_date"]))." to ";}?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong><br /><br />
+									<strong style="font-weight:bold;color:#000; font-size: 17px;font-family:Times New Roman,Khmer MEF2;"><?php echo $tr->translate("CUSTOMER_BRANCH"); ?></strong><br />
+									<strong style="font-weight:bold;color:#000; font-size: 17px;font-family:Times New Roman,Khmer MEF2;"><?php echo $tr->translate("RPT_STUDENT_TEST"); ?></strong><br />
+									<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:Times New Roman,Khmer MEF2;">For Date <?php if(!empty($this->search["start_date"])){echo date("d-M-Y",strtotime($this->search["start_date"]))." to ";}?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));?></strong><br /><br />
 								</td>
 								<td width="15%">&nbsp;</td>
 							</tr>
@@ -77,7 +77,6 @@
 											body{font-family: "Times New Roman",Arial,'Kh Battambang','Khmer Battambang'; }
 											table{ border-collapse:collapse; margin:0 auto;
 											border-color:#000; }
-											.padd tr td{  text-align:center}
 											.padd tr th{  background-color: #e4e4e4; }
 										</style>
 			
@@ -98,8 +97,8 @@
 										    <td rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
 										    <td rowspan="2">&nbsp;<?php echo $tr->translate("SERIAL"); ?>&nbsp;</td>
 										    <td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
-											<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_KH"); ?>&nbsp;</td>
-											<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_EN"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER"); ?>&nbsp;</td>
+											<td rowspan="2">&nbsp;<?php echo $tr->translate("NAME_ENGLISH"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
 											<td rowspan="2">&nbsp;<?php echo $tr->translate("TEST_DATE"); ?>&nbsp;</td>
@@ -121,12 +120,12 @@
 										 </style>
 										 
 										 <?php foreach($this->row as $rs){ $i++;?>
-											  <tr style="font-size:12px; height: 20px;white-space:nowrap;"​ class="hover">
+											  <tr oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="center" style="font-size:12px; height: 20px;white-space:nowrap;"​ class="hover context-menu-one">
 												    <td><?php echo $i;?></td>
 												    <td><?php echo $rs['serial']; ?></td>
 												    <td><?php echo $rs['stu_code']; ?></td>
-												    <td><?php echo $rs['stu_khname']; ?></td>
-												    <td><?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
+												    <td align="left">&nbsp;<?php echo $rs['stu_khname']; ?></td>
+												    <td align="left">&nbsp;<?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
 												    <td><?php echo $rs['sex']; ?></td>
 												    <td><?php echo $rs['tel']; ?></td>
 												     <td><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?></td>
@@ -147,18 +146,18 @@
 										  <?php }}?>
 									</table>
 									<?php if (!empty($this->row)){?>
-									<table width="40%"  align="right" style=" white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;font-size: 12px;margin-top: 10px;">
+									<table width="40%"  align="right" style=" white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;font-size: 14px;margin-top: 10px;">
 										<tr align="right">
 											<td>
-												<ul style=" list-style: none;    padding: 0;">
+												<ul style=" list-style: none; padding: 0;">
 													<li>
-														<?php echo $tr->translate("សិស្សសរុប");?> : <?php echo $i." នាក់";?>
+														<?php echo $tr->translate("STUDENT_TOTAL");?> : <?php echo $i;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 													</li>
 													<li>
-														<?php echo $tr->translate("បានទទួលលទ្ធផល");?> : <?php echo $updated_result." នាក់";?>
+														<?php echo $tr->translate("TOTAL_GET_RESULT");?> : <?php echo $updated_result;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 													</li>
 													<li>
-														<?php echo $tr->translate("មិនទាន់បានទទួលលទ្ធផល");?> : <?php echo ($i-$updated_result)." នាក់";?>
+														<?php echo $tr->translate("TOTAL_NO_RESULT");?> : <?php echo ($i-$updated_result);?> <?php echo $tr->translate("STUDENT_UNIT");?>
 													</li>
 												</ul>
 											</td>
@@ -169,16 +168,16 @@
 							</tr>
 							<tr >
 								<td colspan="3" width="100%"><br />
-									<table width="100%" style="font-family: 'Khmer OS Battambang';">
+									<table width="100%" style="font-family: Times New Roman , Khmer MEF2;">
 										<tr>
 											<td  width="25%" align="center">
-												<span style="font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('APPROVED_BY')?></span>
+												<?php echo $tr->translate('APPROVED_BY')?>
 											</td>
 											<td  width="50%" align="center">
-												&nbsp;<span style="text-align: right;font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('VERIFIED_BY')?></span>
+												<?php echo $tr->translate('VERIFIED_BY')?>
 											</td>
-											<td align="center"  width="25%">
-												<span style="text-align: right;font-size: 14px;font-family:'Khmer MEF2'"><?php echo $tr->translate('PREPARED_BY')?></span>
+											<td width="25%" align="center">
+												<?php echo $tr->translate('PREPARED_BY')?>
 											</td>
 										</tr>
 									</table>
@@ -207,3 +206,35 @@
 		</div>
 	</div>
 </div>
+<?php 
+	$urlStudentProfile = $this->baseUrl()."/test/index/profile/id/";
+?>
+<script>
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+		
+			var m = "clicked: " + key;
+			if(key=="profile"){
+				url='<?php echo $urlStudentProfile;?>';
+			}
+			
+			gotoAction();
+		},
+		items: {
+			"profile": {name: "<?php echo $tr->translate("STUDENT_INFO");?>", icon: "fa-file-text-o",},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	window.open(url+row);
+}
+</script>
+

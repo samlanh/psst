@@ -98,13 +98,13 @@ class Application_Form_FrmGlobal{
 								<td width='60%' align='center' valign='top'>
 									<h2 style='white-space:nowrap; font-weight:bold; font-size:16px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #000;'>".$rs['school_nameen']."</h2>
 								</td>
-								<td width='40%' align='left' valign='top' style='white-space:nowrap;font-size: 12px;line-height: 14px;'>
+								<td width='40%' align='left' valign='top' style='white-space:nowrap;font-size: 12px;line-height: 14px;font-family: Times New Roman , Khmer OS Battambang;'>
 									Contacts: ".$rs['branch_tel']."<br />
 									<span style='visibility: hidden;'>Contacts: </span>".$rs['branch_tel1']."
 								</td>
 							</tr>
 						</table>
-						<div class='schoo-add' style='text-align: center; font-size: 13px;'>
+						<div class='schoo-add' style='text-align: center; font-size: 13px;font-family: Times New Roman , Khmer OS Battambang;'>
 							 ".$rs['br_address'].", E-mail: ".$rs['email'].", Website: ".$rs['website']."
 						</div>
 					</td>

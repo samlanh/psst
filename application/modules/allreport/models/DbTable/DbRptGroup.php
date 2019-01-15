@@ -77,14 +77,12 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
    	$session_lang=new Zend_Session_Namespace('lang');
 	$lang_id=$session_lang->lang_id;
 		$gender_str = 'name_en';
-		
 		$str_village='village_name';
 		$str_commune='commune_name';
 		$str_district='district_name';
 		$str_province='province_en_name';
 	if($lang_id==1){//for kh
 		$gender_str = 'name_kh';
-		
 		$str_village='village_namekh';
 		$str_commune='commune_namekh';
 		$str_district='district_namekh';
@@ -170,23 +168,38 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	}
 	public function getGroupDetail($search){
 	   	$db = $this->getAdapter();
-	   	$sql = 'SELECT
+	   	
+	   	$_db = new Application_Model_DbTable_DbGlobal();
+	   	$lang = $_db->currentlang();
+	   	if($lang==1){// khmer
+	   		$label = "name_kh";
+	   		$grade = "rms_itemsdetail.title";
+	   		$degree = "rms_items.title";
+	   		$branch = "b.branch_namekh";
+	   	}else{ // English
+	   		$label = "name_en";
+	   		$grade = "rms_itemsdetail.title_en";
+	   		$degree = "rms_items.title_en";
+	   		$branch = "b.branch_nameen";
+	   	}
+	   	
+	   	$sql = "SELECT
 				   	`g`.`id`,
-				   	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
-				   	`g`.`group_code`    AS `group_code`,
-				   	(SELECT CONCAT(from_academic," - ",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
+				   	(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
+				   	`g`.`group_code` AS `group_code`,
+				   	(SELECT CONCAT(from_academic,' - ',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
 				   	`g`.`semester` AS `semester`,
-				   	(SELECT rms_items.title FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,
-				   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
+				   	(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,
+				   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
 				   	
 		
-				   	(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
+				   	(SELECT	$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
 				   	(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)LIMIT 1) AS `room_name`,
 				   	 g.amount_month,
 				   	`g`.`start_date`,
 				   	`g`.`expired_date`,
 				   	`g`.`note`,
-				   	(SELECT `rms_view`.`name_kh` FROM `rms_view` WHERE `rms_view`.`type` = 9 AND `rms_view`.`key_code` = `g`.`is_pass` LIMIT 1) AS `status`,
+				   	(SELECT $label FROM `rms_view` WHERE `rms_view`.`type` = 9 AND `rms_view`.`key_code` = `g`.`is_pass` LIMIT 1) AS `status`,
 				   	(SELECT COUNT(DISTINCT  sg.`stu_id`) FROM `rms_group_detail_student` AS sg,rms_student AS s  
 	   					WHERE sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status=1 AND type=1 LIMIT 1) AS Num_Student,
 	   				(SELECT COUNT(DISTINCT  sg.`stu_id`) FROM `rms_group_detail_student` AS sg,rms_student as s 
@@ -194,7 +207,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				FROM 
 	   				`rms_group` `g`
 	   			WHERE 
-	   				 group_code != "" ';
+	   				 group_code != '' ";
 	   	
 	   	$where=" ";
 	   	
@@ -241,16 +254,27 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
    
 	public function getGroupDetailByID($id){
 	   	$db = $this->getAdapter();
-	   	$sql = 'SELECT
+	   	$_db = new Application_Model_DbTable_DbGlobal();
+	   	$lang = $_db->currentlang();
+	   	if($lang==1){// khmer
+	   		$label = "name_kh";
+	   		$grade = "rms_itemsdetail.title";
+	   		$degree = "rms_items.title";
+	   	}else{ // English
+	   		$label = "name_en";
+	   		$grade = "rms_itemsdetail.title_en";
+	   		$degree = "rms_items.title_en";
+	   	}
+	   	$sql = "SELECT
 				   	`g`.`id`,
 				   	`g`.`branch_id`,
 				   	(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name,
 					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_logo,
 				   	`g`.`group_code`    AS `group_code`,
-				   	(SELECT CONCAT(from_academic," - ",to_academic,"(",generation,")") FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
+				   	(SELECT CONCAT(from_academic,' - ',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
 				   	`g`.`semester` AS `semester`,
-				   	(SELECT rms_items.title FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,
-				   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
+				   	(SELECT $degree FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,
+				   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
 				   	(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
 				   	(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)) AS `room_name`,
 				   	`g`.`start_date`,
@@ -261,7 +285,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			   	FROM 
 		   			`rms_group` `g` 
 		   		WHERE 
-		   			`g`.`id`='.$id;
+		   			`g`.`id`=".$id;
 	   	return $db->fetchRow($sql);
 	}
 	

@@ -131,6 +131,10 @@ class Test_IndexController extends Zend_Controller_Action
     	$this->view->testresultkh = $db->getAllTestResult($id,1);
     	$this->view->testresulteng = $db->getAllTestResult($id,2);
     	$this->view->testresultuniver = $db->getAllTestResult($id,3);
+    	
+    	$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     }
    
     function getserialAction(){

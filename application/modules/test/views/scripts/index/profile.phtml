@@ -49,29 +49,15 @@
 			<div class="pagebreak">
 				<table width="100%" border="0" style=" font-size:12px;font-family:Tahoma,'Khmer OS Battambang';"> 
 					<tr>
+						<td colspan="1"><?php echo $this->rsheader;?></td>
+					</tr>
+					<tr class="line"><td colspan="1"></td></tr>
+					<tr>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
 						<td>
 						   <table width="100%" style="font-family: Times New Roman;">
-					   			<tr>
-									<td width="28%" align="left" >
-										<table width="100%" border="0" style="white-space: nowrap;">
-											<tr>
-												<td width="25%" align="center">
-													<img style="width: 75%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-													<span style="font-family: Brush Script Std;font-size: 11px;">School for the Elite</span>
-												</td>
-												<td width="75%" valign="top" align="left">
-													<strong style="font-family: Khmer MEF2;font-size: 16px;"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
-													<strong style="font: 15px Times New Roman;"><?php echo $tr->translate("SCHOOL_NAME");?></strong>
-												</td>
-											</tr>
-										</table>
-									</td>
-									<td align="center" width="44%"  >&nbsp;
-										
-									</td>
-									<td width="28%" align="right">
-									</td>
-								</tr>
 								<tr>
 									<td colspan="3" align="center" style="font-size: 20px;">ENTRY APPLICATION FORM</td>
 								</tr>
@@ -86,6 +72,7 @@
 					<style>
 						.defaultheight{height: 21px;}
 						.border{border:1px solid #000;border-left: none;border-right: none;}
+						tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 					</style>
 					<tr>
 						<td>
@@ -208,8 +195,8 @@
 									<td colspan="4" style="padding: 5px;line-height: 22px;">
 										&nbsp; * To the best of my knowledge, the information I have given is true and accurate.<br />
 										&nbsp; ខ្ញុំសូមសន្យាថាពត៌មានខាងលើនេះពិតជាត្រឹមត្រូវពិតប្រាកដមែន។<br />
-										&nbsp; * By signing this application, I agree to abide by the policies and regulations of <?php echo $tr->translate("CUSTOMER_BRANCH");?>(PSIS-Sen Sok).<br />
-										&nbsp; ខ្ញុំយល់ព្រមគោរពតាមបទបញ្ជាផ្ទៃក្នុងរបស់<?php echo $tr->translate("CUSTOMER_BRANCH");?>។<br />
+										&nbsp; * By signing this application, I agree to abide by the policies and regulations of <span style="font-weight:bold;">&nbsp;<?php echo $tr->translate("CUSTOMER_BRANCH");?></span>.<br />
+										&nbsp; ខ្ញុំយល់ព្រមគោរពតាមបទបញ្ជាផ្ទៃក្នុងរបស់ <span style="font-weight:bold;">&nbsp;<?php echo $tr->translate("CUSTOMER_BRANCH");?></span> ។<br />
 									</td>
 								</tr>
 								<tr class="defaultheight">
@@ -249,31 +236,17 @@
 				</table>
 			</div>
 			<div class="pagebreak">
-				<table width="100%" border="0" style=" font-size:12px;font-family:Tahoma,'Khmer OS Battambang';"> 
+				<table width="100%" border="0" style=" font-size:12px;font-family:Tahoma,'Khmer OS Battambang';margin-top:20px;"> 
+					<tr>
+						<td colspan="1"><?php echo $this->rsheader;?></td>
+					</tr>
+					<tr class="line"><td colspan="1"></td></tr>
+					<tr>
+						<td>&nbsp;</td>
+					</tr>
 					<tr>
 						<td>
 						   <table width="100%" style="font-family: Times New Roman,'Khmer MEF2';">
-					   			<tr>
-									<td width="28%" align="left" >
-										<table width="100%" border="0" style="white-space: nowrap;">
-											<tr>
-												<td width="25%" align="center">
-													<img style="width: 75%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
-													<span style="font-family: Brush Script Std;font-size: 11px;">School for the Elite</span>
-												</td>
-												<td width="75%" valign="top" align="left">
-													<strong style="font-family: Khmer MEF2;font-size: 16px;"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
-													<strong style="font: 15px Times New Roman;"><?php echo $tr->translate("SCHOOL_NAME");?></strong>
-												</td>
-											</tr>
-										</table>
-									</td>
-									<td align="center" width="44%"  >&nbsp;
-										
-									</td>
-									<td width="28%" align="right">
-									</td>
-								</tr>
 								<tr>
 									<td colspan="3" align="center" style="font-size: 20px;"><?php echo $tr->translate("TEST_HISTORY");?></td>
 								</tr>

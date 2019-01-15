@@ -586,6 +586,19 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function getAllTestResult($stu_id,$type=null){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+			$grade = "idd.title";
+			$degree = "i.title";
+		}else{ // English
+			$label = "name_en";
+			$grade = "idd.title_en";
+			$degree = "i.title_en";
+		}
+		
 		$sql="SELECT 
 			str.*,
 			CASE    
@@ -599,10 +612,10 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				WHEN  str.comment = 3 THEN '".$tr->translate("FAIR")."'
 				WHEN  str.comment = 4 THEN '".$tr->translate("WEAK")."'
 				END AS comment_title,
-			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
-			(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
-			(SELECT i.title FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
-			(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
+			(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
+			(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
+			(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
+			(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
 			(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by
 			FROM
 			`rms_student_test_result` AS str

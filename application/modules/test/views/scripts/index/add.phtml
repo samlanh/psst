@@ -361,7 +361,7 @@ tr#head-title {
 				            	<div class="form-group">
 				                   <div class="col-md-12 col-sm-12 col-xs-12">
 				                   		<table class="collape tablesorter" id="table_row" style="white-space: nowrap;border:1px solid #ddd;width: 100%;">
-									    	<tr id="head-title" class="head-td" align="right"></tr>
+									    	<tr id="head-title" class="head-td" align="center"></tr>
 										</table>
 										<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" 
 											iconClass="dijitIconEditProperty" onclick="addRow();" />
@@ -682,7 +682,7 @@ function typethisamephone(){
 	parent_tel = dijit.byId('parent_tel').get('value');
 	dijit.byId('emergency_tel').set('value',parent_tel);
 }
-var url_getserial = '<?php echo $this->url(array('module'=>'registrar','controller'=>'studenttest','action'=>'getserial')); ?>';
+var url_getserial = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'getserial')); ?>';
 function getSerailCodeByBranch(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id==''){

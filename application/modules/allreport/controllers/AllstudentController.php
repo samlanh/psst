@@ -82,7 +82,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 		
-		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
@@ -401,7 +401,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 		
-		$branch_id = empty($row['branch_id'])?1:$row['branch_id'];
+		$branch_id = empty($row['branch_id'])?null:$row['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}	
@@ -502,7 +502,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rs = $rs_rows = $group->getAllStudentDrop($search);
 		$this->view->search=$search;
 		
-		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
@@ -537,7 +537,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$teacher = $_db->getAllTeacher();
 		$this->view->teacher = $teacher;
 		
-		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
@@ -565,7 +565,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->change_type = $db->getChangeType();
 		$this->view->search=$search;
 		
-		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
@@ -593,7 +593,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 		
-		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
@@ -729,7 +729,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->all_teacher_by_group = $db->getAllTeacherByGroup($id);
 		$this->view->all_subject_by_group = $db->getAllSubjectByGroup($id);
 		
-		$branch_id = empty($rs['branch_id'])?1:$rs['branch_id'];
+		$branch_id = empty($rs['branch_id'])?null:$rs['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
@@ -764,7 +764,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db_glob = new Application_Model_GlobalClass();
 		$this->view->opttime = $db_glob->getHoursStudy();
 		
-		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
@@ -830,7 +830,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$rs= $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
 		
-		$branch_id = empty($rs['branch_id'])?1:$rs['branch_id'];
+		$branch_id = empty($rs['branch_id'])?null:$rs['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
@@ -858,7 +858,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$this->view->row = $rs_rows;
 			$this->view->search  = $search;
 			
-			$branch_id = empty($search['branch_search'])?1:$search['branch_search'];
+			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		
@@ -903,7 +903,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$this->view->prevconcern = $prevCon;
 		
-		$branch_id = empty($row['branch_search'])?1:$row['branch_search'];
+		$branch_id = empty($row['branch_search'])?null:$row['branch_search'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
@@ -930,7 +930,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$this->view->row = $rs_rows;
 			$this->view->search  = $search;
 		
-			$branch_id = empty($search['branch_search'])?1:$search['branch_search'];
+			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch (Exception $e){
@@ -1002,7 +1002,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	
 		$this->view->search=$search;
 		
-		$branch_id = empty($search['branch_id'])?1:$search['branch_id'];
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}

@@ -79,7 +79,7 @@ class Application_Form_FrmGlobal{
 	}
 	function getLetterHeaderReport($branch_id){
 		//$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/logo.png';
-		
+		$branch_id = empty($branch_id)?1:$branch_id;
 		$db = new Application_Model_DbTable_DbGlobal();
 		$rs = $db->getBranchInfo($branch_id);
 		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];

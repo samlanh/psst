@@ -357,29 +357,49 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     public function getAllAmountStudent($search){
     	$db = $this->getAdapter();
-    	$sql ='SELECT stu_id,
-		    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-		    	CONCAT(last_name," ",stu_enname) AS name,
-		    	stu_khname,
-		    	is_stu_new,
-		    	rms_student.sex as sex_key,
-		    	(SELECT name_en FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
-       			(SELECT name_en FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
-		    	tel,email,stu_code,home_num,street_num,dob,
-		    	is_subspend,
-		    	(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
-		    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
-		    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-				(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
-		    	(SELECT name_kh from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,    
-		    	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_name,
-		    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
-		    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
-		    	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,
-		    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
-		    	(SELECT room_name FROM `rms_room` AS r WHERE r.room_id = room LIMIT 1) AS room
-    	FROM rms_student ';
-    	$where=' WHERE status=1 AND customer_type=1';
+    	
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    	}else{ // English
+    		$label = "name_en";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    	}
+    	
+    	$sql ="SELECT stu_id,
+			    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
+			    	CONCAT(last_name,' ',stu_enname) AS name,
+			    	stu_khname,
+			    	is_stu_new,
+			    	rms_student.sex as sex_key,
+			    	(SELECT $label FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
+	       			(SELECT $label FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
+			    	tel,email,stu_code,home_num,street_num,dob,
+			    	is_subspend,
+			    	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
+			    	(SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1)AS session,
+			    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+					(SELECT $degree FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
+					rms_student.degree as degree_id,
+			    	(SELECT $label from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,    
+			    	(SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_name,
+			    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
+			    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
+			    	(SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,
+			    	(SELECT $label from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
+			    	(SELECT room_name FROM `rms_room` AS r WHERE r.room_id = room LIMIT 1) AS room
+	    		FROM 
+    				rms_student 
+    			WHERE 
+    				status=1 
+    				AND customer_type=1
+    		";
+    	
+    	$where=' ';
     	 
     	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";

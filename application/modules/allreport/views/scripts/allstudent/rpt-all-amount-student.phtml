@@ -46,9 +46,9 @@
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
         		<select class="fullside" dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
-					<option value="" <?php if($this->search['study_type']==''){echo "selected";}?>>ជ្រើសរើសប្រភេទសិស្ស</option>
-					<option value="0" <?php if($this->search['study_type']==0){echo "selected";}?>>សិស្សនៅរៀន</option>
-					<option value="1" <?php if($this->search['study_type']!=0){echo "selected";}?>>សិស្សឈប់</option>
+					<option value="" <?php if($this->search['study_type']==''){echo "selected";}?>><?php echo $tr->translate("STUDENT_TYPE");?></option>
+					<option value="0" <?php if($this->search['study_type']==0){echo "selected";}?>><?php echo $tr->translate("STUDENT_STUDY");?></option>
+					<option value="1" <?php if($this->search['study_type']!=0){echo "selected";}?>><?php echo $tr->translate("STUDENT_DROP");?></option>
 				</select>
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
@@ -72,8 +72,8 @@
 				</td>
 				<td width="70%"  align="center">
 					<ul>
-						<li><strong​​ style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong></li>
-						<li><strong​​ style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT");?></strong></li>
+						<li><strong​​ style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 18px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong></li>
+						<li><strong​​ style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 17px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT");?></strong></li>
 						<strong​​ style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</ul>
 				</td>
@@ -114,24 +114,24 @@
 						}
 					?>
 						
-						<?php if($degree!=$row['degree']){?>
+						<?php if($degree!=$row['degree_id']){?>
 							<?php if ($key>0){?>
 							<tr>
 								<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
 									<table cellpadding="0" cellspacing="0" width="50%" style="color:#000; font-family:'Khmer OS Battambang';font-size: 14px;white-space:nowrap;">
 										<tr>
 											<td valign="top" style="width:33%; font-size:14px;text-align: left;">
-												<span style=" font-family:'Khmer MEF2';">
+												<span style=" font-family:Times New Roman,'Khmer MEF2';">
 													<?php echo $tr->translate("STUDENT_TOTAL");?> : <?php echo str_pad($count, 2, '0', STR_PAD_LEFT); $male=$count-$female; $count=0;$i=0;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 												</span> 
 											</td>
 											<td  valign="top" style="width:33%; text-align: center;">
-												<span style=" font-family:'Khmer MEF2';">
+												<span style=" font-family:Times New Roman,'Khmer MEF2';">
 													<?php echo $tr->translate("FEMALE");?> : <?php echo str_pad($female, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); $female=0;?>
 												</span> 
 											</td>
 											<td  style="width:33%;white-space: nowrap;" valign="top">
-												<span style=" font-family:'Khmer MEF2';text-align: center;">
+												<span style=" font-family:Times New Roman,'Khmer MEF2';text-align: center;">
 													<?php echo $tr->translate("MALE");?> : <?php echo str_pad($male, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
 												</span> 
 											</td>
@@ -187,24 +187,24 @@
 							<td class="border" >&nbsp;<?php echo date("d-m-Y",strtotime($row['dob']));?>&nbsp;</td>
 							<td class="border" <?php if($row['is_subspend']!=0){echo 'style="color: red;"';}?>>&nbsp;<?php echo $row['status'];?>&nbsp;</td>	
 						</tr>
-						<?php $degree=$row['degree'];?>
+						<?php $degree=$row['degree_id'];?>
 					<?php }?>	
 						<tr>
 							<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
 								<table cellpadding="0" cellspacing="0" width="50%" style="color:#000; font-family:'Khmer OS Battambang';font-size: 14px;white-space:nowrap;">
 									<tr>
 										<td valign="top" style="width:33%; font-size:14px;text-align: left;">
-											<span style=" font-family:'Khmer MEF2';">
+											<span style=" font-family:Times New Roman,'Khmer MEF2';">
 												<?php echo $tr->translate("STUDENT_TOTAL");?> : <?php echo str_pad($count, 2, '0', STR_PAD_LEFT); $male=$count-$female; $count=0;$i=0;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 											</span> 
 										</td>
 										<td  valign="top" style="width:33%; text-align: center;">
-											<span style=" font-family:'Khmer MEF2';">
+											<span style=" font-family:Times New Roman,'Khmer MEF2';">
 												<?php echo $tr->translate("FEMALE");?> : <?php echo str_pad($female, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); $female=0;?>
 											</span> 
 										</td>
 										<td  style="width:33%;white-space: nowrap;" valign="top">
-											<span style=" font-family:'Khmer MEF2';text-align: center;">
+											<span style=" font-family:Times New Roman,'Khmer MEF2';text-align: center;">
 												<?php echo $tr->translate("MALE");?> : <?php echo str_pad($male, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
 											</span> 
 										</td>
@@ -214,10 +214,10 @@
 						</tr>
 						<tr><td colspan="14" style="border:1px solid #fff;">&nbsp;</td></tr>
 					</table>	
-					<table border="0" align="center" class="table-width" style="width:70%; font-family:'Khmer MEF2'; margin:0 auto; font-weight: bolder;white-space:nowrap;">
+					<table border="0" align="center" class="table-width" style="width:80%; font-family:Times New Roman,'Khmer MEF2'; margin:0 auto; font-weight: bolder;white-space:nowrap;">
 						<tr>
 							<td width="15%" >
-								<?php echo $tr->translate("សិស្សកំពុងសិក្សាសរុប");?>
+								<?php echo $tr->translate("TOTAL_STUDYING_STUDENT");?>
 							</td>
 							<td width="15%" >
 								: <?php echo str_pad($all_total, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
@@ -237,7 +237,7 @@
 						</tr>
 						<tr>
 							<td>
-								<?php echo $tr->translate("សិស្សឈប់សរុប");?>
+								<?php echo $tr->translate("TOTAL_STOP_STUDENT");?>
 							</td>
 							<td>
 								: <?php echo str_pad($all_drop, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>

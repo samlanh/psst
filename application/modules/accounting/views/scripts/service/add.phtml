@@ -55,6 +55,12 @@
 		                </div>
 		             </div>
 		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SERVICE_NAME_EN");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_items->getElement("title_en");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_items->getElement("shortcut");?>
@@ -99,13 +105,13 @@
 		</form>
     </div>
 </div>
-
 <script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
+	dojo.require("dojo.NodeList-manipulate");
     dojo.require("dijit.form.Textarea");
     dojo.require("dojo.data.ItemFileWriteStore");  
+    
     dojo.ready(function(){
+        
     });
     var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->degree));?> );
     require(["dojo/ready"], function(ready){

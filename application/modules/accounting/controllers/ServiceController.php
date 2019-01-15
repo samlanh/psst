@@ -31,11 +31,11 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 	    	$glClass = new Application_Model_GlobalClass();
 	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("SERVICE_NAME","","SHORTCUT","ORDERING","SERVICE_TYPE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
+	    	$collumns = array("SERVICE_NAME","SERVICE_NAME_EN","SHORTCUT","ORDERING","SERVICE_TYPE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(
 	    			'module'=>'accounting','controller'=>'service','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link ,'title'=>$link ,'ordering'=>$link));
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('shortcut'=>$link ,'title'=>$link ,'title_en'=>$link,'ordering'=>$link));
 	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");

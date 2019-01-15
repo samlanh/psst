@@ -54,7 +54,7 @@
 	}
 	function getAllItemsOption($search = '',$type=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT d.id,d.title,
+		$sql = " SELECT d.id,d.title,d.title_en,
 		(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
 		d.status FROM `rms_items` AS d WHERE 1 ";
 		$orderby = " ORDER BY d.type ASC, d.id DESC ";

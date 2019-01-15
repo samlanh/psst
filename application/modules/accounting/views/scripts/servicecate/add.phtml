@@ -41,8 +41,6 @@ ul.opt-school {
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
 					loadingBlock();
-                	//dijit.byId("save_new").attr("disabled",true);
-					//dijit.byId("save_close").attr("disabled",true);
 					return true;
 				}else {
 					return false;
@@ -51,9 +49,15 @@ ul.opt-school {
 	    	<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
 		    		<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> </label>
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SERVICE_TYPE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<?php echo $frm_degree->getElement("title");?>
+		                </div>
+		             </div>
+		             <div class="form-group">
+		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SERVICE_TYPE_EN");?></label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<?php echo $frm_degree->getElement("title_en");?>
 		                </div>
 		             </div>
 		             <div class="form-group">
@@ -63,20 +67,6 @@ ul.opt-school {
 		                	<input type="hidden" id="type" name="type" value="2" />
 		                </div>
 		             </div>
-		             <!-- 
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php //echo $frm_degree->getElement("type");?>
-		                </div>
-		             </div>
-		              
-		             <div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("School Option");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php //echo $frm_degree->getElement("schoolOption");?>
-		                </div>
-		             </div>-->
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">

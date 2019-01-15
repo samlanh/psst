@@ -28,7 +28,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    	$glClass = new Application_Model_GlobalClass();
 	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("GRADE_KH","GRADE_EN","SHORTCUT","ORDERING","DEGREE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
+	    	$collumns = array("MAJOR_KHNAME","MAJOR_ENNAME","SHORTCUT","ORDERING","DEGREE","CREATE_DATE","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(
 	    			'module'=>'global','controller'=>'grade','action'=>'edit',
 	    	);

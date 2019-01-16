@@ -155,7 +155,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'study_year' 	=>'',
 					'grade_all' 	=>'',
 					'session' 		=>'',
-					'branch_id'=>0,
+					'branch_id'		=>0,
 					'group'			=>'',
 					'degree'=>0,
 					'study_type'=>'',
@@ -171,6 +171,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->rs = $rs_rows = $group->getAllAmountStudent($search);
 		$this->view->search=$search;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 	public function rptenglishprogramAction(){
 		if($this->getRequest()->isPost()){
@@ -429,8 +433,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'grade_all' 	=>'',
 					'session' 		=>'',
 					'group' 		=>'',
-					'branch_id'=>0,
-					'degree'=>0,
+					'branch_id'		=>0,
+					'degree'		=>0,
 					'start_date'	=> date('Y-m-d'),
 					'end_date'		=> date('Y-m-d'),
 			);
@@ -449,7 +453,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		array_unshift($result, array ( 'id' => '', 'name' => 'ជ្រើសរើសក្រុម') );
 		$this->view->group = $result;
 		
-		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
 // 	public function rptAttendenceHighschoolAction(){
 // 		if($this->getRequest()->isPost()){

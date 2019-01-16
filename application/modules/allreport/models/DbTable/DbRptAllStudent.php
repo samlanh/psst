@@ -768,6 +768,19 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getStudentAttendence($search){
     	$db = $this->getAdapter();
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    		$branch = "b.branch_namekh";
+    	}else{ // English
+    		$label = "name_en";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    		$branch = "b.branch_nameen";
+    	}
     	$sql=" SELECT 
 					g.id as group_id,
 					g.`group_code`,
@@ -778,7 +791,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		
 					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 					`g`.`semester` AS `semester`,
-					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+					(SELECT`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 					gsd.`stu_id`,
 					st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`last_name`,st.`sex`
 				FROM 

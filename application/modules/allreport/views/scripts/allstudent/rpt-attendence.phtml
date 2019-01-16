@@ -116,8 +116,15 @@
 				  display: table-header-group;
 				  page-break-inside:avoid; page-break-after:auto;
 				}				
-tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 			</style>			
+				<tr>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td colspan="3"></td></tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
 				<tr>
 					<td colspan="3">
 					<div id="exportExcel">
@@ -150,19 +157,29 @@ tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 							 -->
 							<tr>
 								<td align="center" colspan="<?php echo $amount_day+9;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									<!-- <img style="width: 90px;float: left; " alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>"> -->
-									<strong​​ style="font-weight:bold;color:#000; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"><?php echo $tr->translate("STUDENT_ATTENDENCE");?></strong><br />
-									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
-										<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
-										<?php echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['degree'];?></span> 
-										<?php echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $month[date("m",strtotime($end_date))]." ".date("Y",strtotime($end_date));?></span>
-										<br />
-										<?php echo $tr->translate("GROUP");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> , 
-										<?php echo $tr->translate("GRADE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['grade'];?></span> , 
-									 	<?php //echo $tr->translate("SEMESTER");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php //echo $rs['semester'].",";?></span>  
-									 	<?php echo $tr->translate("ROOM_NAME");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['room_name'];?></span> 
-									 	, <?php echo $tr->translate("SESSION");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['session'];?></span>
-									</strong>
+									<strong style="font-weight:bold;color:#000; font-size: 18px;font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_ATTENDENCE");?></strong><br />
+								</td>
+							</tr>
+							<tr>
+								<td align="left" colspan="<?php echo $amount_day+9;?>" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<table width="50%" style="white-space:nowrap;line-height:20px;font-size:14px;font-family: 'Times New Roman','Khmer OS Battambang';">
+										<tr>
+											<td width="30%"><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+											<td width="70%">: <?php echo $rs['academic_year'];?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("GROUP");?></td>
+											<td>: <?php echo $rs['group_code'];?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("ROOM_NAME");?></td>
+											<td>: <?php echo $rs['room_name'];?></td>
+										</tr>
+										<tr>
+											<td><?php echo $tr->translate("SESSION");?></td>
+											<td>: <?php echo $rs['session'];?></td>
+										</tr>
+									</table>
 								</td>
 							</tr>
 							</thead>
@@ -225,8 +242,8 @@ tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 							<?php $old_groupid = $rs['group_id'];
 							}?>
 							<tr>
-								<td align="right" colspan="<?php echo $amount_day+4;?>" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									<strong​​ style="font-family: 'Times New Roman','Khmer MEF2';font-weight:bold;color:#000; font-size: 13px;">
+								<td align="right" colspan="<?php echo $amount_day+7;?>" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<strong style="font-family: 'Times New Roman','Khmer MEF2';font-weight:bold;color:#000; font-size: 15px;">
 									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $i." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
 									</strong><br />
 								</td>
@@ -238,27 +255,27 @@ tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 				<tr>
 					<td colspan="3">&nbsp;</td>
 				</tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
 				<tr style="font-size: 12px;">
 					<td colspan="3">
 						<span style="color: red;">Note:</span>
 						A = Absent , P = Permission , L = Late , EL = Early Leave
 					</td>
 				</tr>
-				<tr >
-					<td colspan="3" width="100%">
-						<table width="100%" style="font-family:'Khmer OS Battambang';">
+				<tr>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="3" style="border:1px solid #fff;">
+						<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 14px">
 							<tr>
-								<td  width="25%" align="center">
-									<span style=" font-size: 14px;font-family: 'Times New Roman','Khmer MEF2'"><?php echo $tr->translate('VERIFIED_BY')?></span>
+								<td width="35%" align="center">
+									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PRINCIPAL");?></span>
 								</td>
-								<td  width="50%">
-									&nbsp;
-								</td>
-								<td align="center"  width="25%">
-									<span style="font-size: 14px;text-align: right;font-family: 'Times New Roman','Khmer MEF2'"><?php echo $tr->translate('PREPARED_BY')?></span>
+								<td width="30%">&nbsp;</td>
+								<td width="35%" align="center">
+									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PREPARE_BY");?></span>
 								</td>
 							</tr>
 						</table>

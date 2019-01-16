@@ -32,6 +32,9 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     		$where.=" AND cate_income = ".$search['cate_income'] ;
     	}
     	if(!empty($search['branch_id'])){
+    		$where.= " AND ln_income.branch_id = ".$search['branch_id'];
+    	}
+    	if(!empty($search['branch_id'])){
     		$where.=" AND branch_id = ".$search['branch_id'] ;
     	}
     	if(!empty($search['user']) AND $search['user']>0){

@@ -60,16 +60,24 @@
 		<div id="divPrint">
 			<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;" >
 				<tr>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td colspan="3"></td></tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
 					<td width="15%" align="center">
-						<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 					</td>
 					<td align="center"  width="70%">
-						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
 						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_PRODUCT_SOLD');?></strong><br />
 						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong> 
 					</td>
 					<td width="15%" align="center">
 					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
@@ -81,7 +89,8 @@
 							  display: table-header-group;
 							  page-break-inside:avoid; page-break-after:auto;
 							}
-						.hover:hover{background:#eee;}										
+						.hover:hover{background:#eee;}	
+							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }									
 						</style>
 						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
 							<thead>

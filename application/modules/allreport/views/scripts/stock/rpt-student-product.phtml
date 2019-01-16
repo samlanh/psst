@@ -51,17 +51,25 @@
 	<div id="divPrint">
 		<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
 			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
 				<td width="15%" align="center">
-					<img style="width: 60%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
 				</td>
 				<td width="70%"  align="center">
 					<ul>
-						<li><strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong></li>
 						<li><strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_GET_PRODUCT");?></strong></li>
 					</ul>
 				</td>
 				<td width="15%" align="center">
 				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
 			</tr>
 		<style>
 			table tr th{
@@ -80,6 +88,7 @@
 				font-weight: bold;
 				padding: 6px 2px;
 			}
+			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 		</style>
 			<tr>
 				<td colspan="3">

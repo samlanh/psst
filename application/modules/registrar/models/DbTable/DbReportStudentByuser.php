@@ -180,6 +180,10 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 			$s_where[]= " s.grade LIKE '%{$s_search}%'";
 			$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
+			
+			if(!empty($search['branch_id'])){
+				$where.= " AND sp.branch_id = ".$search['branch_id'];
+			}
 			if(!empty($search['user'])){
 					$where.= " AND sp.user_id = ".$search['user'];
 			}
@@ -355,7 +359,9 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				$s_where[]= " name_en LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
-	
+			if(!empty($search['branch_id'])){
+				$where.= " AND c.branch_id = ".$search['branch_id'];
+			}
 			if(!empty($search['user'])){
 				$where.=" AND c.user_id = ".$search['user'] ;
 			}
@@ -420,6 +426,9 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 				$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
 				$s_where[]= " s.stu_enname LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
+			}
+			if(!empty($search['branch_id'])){
+				$where.= " AND sp.branch_id = ".$search['branch_id'];
 			}
 			if(!empty($search['user'])){
 				$where.=" AND scb.user_id = ".$search['user'] ;

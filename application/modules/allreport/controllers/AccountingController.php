@@ -1120,6 +1120,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			else{
 				$search = array(
 						'adv_search' =>'',
+						'branch_id'     =>0,
 						'degree'     =>'',
 						'grade_all'  =>'',
 						'session'    =>'',
@@ -1138,7 +1139,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				);
 			}
 	
-			//print_r($search);
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	
 			$db = new Registrar_Model_DbTable_DbReportStudentByuser();
 			$user_type=$db->getUserType();

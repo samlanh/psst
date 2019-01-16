@@ -8,18 +8,35 @@
 	$frm =  $this->form_search;
 ?>
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('REPORT_PRODUCT_NEAR_OUT_STOCK');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<table width="90%" style="margin: 0px;">
-			<tr>
-				<td><?php echo $frm->getElement("title");?></td>
-				<td><?php echo $frm->getElement("location");?></td>
-				<td><?php echo $frm->getElement("category_id");?></td>
-				<td> <?php echo $frm->getElement("status_search");?></td>
-				<td>
-					<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-				</td>
-			</tr>
-		</table>
+		<div class="form-group">
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("title");?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("location");?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("category_id");?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("status_search");?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button"showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+			</div>
+		</div>
 	</form>
 	<style>
 		.hover:hover{ background: #ddd;}
@@ -28,18 +45,25 @@
 	</style>
 	<div style="min-height:22cm; margin:0 auto;">
 		<div id="divPrint">
-				<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">
-			
+			<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">
+				<tr>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td colspan="3"></td></tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
 				<tr>
 					<td width="15%" align="center">
-						<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 					</td>
 					<td align="center" width="70%">
-						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('CUSTOMER_BRANCH');?></strong><br />
 					    <strong style=" padding-left: 0px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('REPORT_PRODUCT_NEAR_OUT_STOCK');?></strong>
 					</td>
 					<td width="15%" align="center">
 					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
 				</tr>
 					<tr>
 					<style>
@@ -50,6 +74,7 @@
 						  display: table-header-group;
 						  page-break-inside:avoid; page-break-after:auto;
 						}
+						tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 					</style>
 						<tr colspan="3"​>
 					<td  colspan="3"​  id="exportExcel" >

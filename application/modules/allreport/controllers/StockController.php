@@ -25,6 +25,10 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbProductList();
 			$this->view->pro_loc = $db->getProductLocation($search);
 	
+			$branch_id = empty($search['location'])?null:$search['location'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -83,6 +87,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbPurchase();
 			$this->view->pur_code = $db->getPurchaseCodeSuplier($search);
 	
+			$branch_id = empty($search['location'])?null:$search['location'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -142,6 +149,11 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbPurchase();
 			$this->view->pur_all = $db->getAllPurchase($search);
+			
+			$branch_id = empty($search['location'])?null:$search['location'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -175,6 +187,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbRptSummaryStock();
 			$this->view->product_sold = $db->getAllProductSold($search);
 	
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -214,6 +229,10 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$d_row= $db->getAllProductsNormal();
 			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 			$this->view->product= $d_row;
+			
+			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -237,6 +256,10 @@ class Allreport_StockController extends Zend_Controller_Action {
     		}
     		$this->view->search=$search;
     		$this-> view->all_transfer = $db->getAllTransfer($search);	
+    		
+    		$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
+    		$frm = new Application_Form_FrmGlobal();
+    		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -272,6 +295,10 @@ class Allreport_StockController extends Zend_Controller_Action {
 			}
 			$db=new Allreport_Model_DbTable_DbRptSummaryStock();
 			$this->view->rows=$db->getAllRequestProduct($search);
+			
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -324,6 +351,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db=new Allreport_Model_DbTable_DbRequestStock();
 			$ds=$this->view->rows=$db->getAllRequestProductDetail($search);
 	
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -370,6 +400,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db=new Allreport_Model_DbTable_DbRequestStock();
 			$this->view->rows=$db->getAllAdjustStockDetail($search);
 	
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -395,6 +428,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db = new Registrar_Model_DbTable_DbReportProductNearOutStock();
 			$this->view->pro_loc = $db->getProductLocation($search);
 	
+			$branch_id = empty($search['location'])?null:$search['location'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -424,6 +460,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db=new Allreport_Model_DbTable_DbRptSummaryStock();
 			$ds=$this->view->rows=$db->getAllProduct($search);
 	
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -463,7 +502,11 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbPurchase();
 			$this->view->row = $db->getAllPurchasePayment($search);
-	
+			
+			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -519,6 +562,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbPurchase();
 			$this->view->row = $db->getAllPurchasePaymentForClose($search);
 	
+			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -569,6 +615,9 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbPurchase();
 			$this->view->pur_code = $db->getSuplierPuchaseBalance($search);
 		
+			$branch_id = empty($search['location'])?null:$search['location'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -602,6 +651,11 @@ class Allreport_StockController extends Zend_Controller_Action {
 		$this->view->rs = $stock->getAllStudentProduct($search);
 		$this->view->rsnew = $stock->getAllStudentProduct($search,1);
 		$this->view->search=$search;
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		
 	}
 	public function rptStudentGetProductAction(){
 		try{
@@ -621,6 +675,10 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();
 			$rows = $db->getAllCutStock($search);
 			$this->view->rs=$rows;
+			
+			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 			
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -650,7 +708,11 @@ class Allreport_StockController extends Zend_Controller_Action {
 			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();
 			$rows = $db->getAllCutStockForClose($search);
 			$this->view->rs=$rows;
-				
+			
+			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}

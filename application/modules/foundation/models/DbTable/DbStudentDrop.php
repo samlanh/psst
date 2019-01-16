@@ -53,14 +53,22 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	
 	public function getAllStudentDrop($search){
 		$_db = $this->getAdapter();
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$sql = "SELECT  s.id,
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,			
 				(SELECT stu_code FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS stu_id,
 				(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_name,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.gender LIMIT 1) AS sex,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
-				(SELECT `title` FROM `rms_items` WHERE `id`=s.degree AND TYPE=1 LIMIT 1) AS degree,
-				(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND TYPE=1 LIMIT 1) AS degree,
+				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 				
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group LIMIT 1 ) AS group_name,
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,

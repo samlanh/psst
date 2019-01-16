@@ -343,13 +343,21 @@
 	
 	public function getCRMDetailById($id){
 		$db = $this->getAdapter();
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql="SELECT st.*,CASE    
 				WHEN  st.sex = 1 THEN '".$tr->translate("MALE")."'
 				WHEN  st.sex = 2 THEN '".$tr->translate("FEMALE")."'
 				END AS sextitle,
-				(SELECT i.title FROM `rms_items` AS i WHERE i.id = st.crm_degree AND i.type=1 LIMIT 1) AS degree_title,
-				(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = st.crm_grade AND idd.items_type=1 LIMIT 1) AS grade_title
+				(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = st.crm_degree AND i.type=1 LIMIT 1) AS degree_title,
+				(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = st.crm_grade AND idd.items_type=1 LIMIT 1) AS grade_title
 		FROM `rms_student` AS st WHERE st.crm_id = $id  ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('st.branch_id');

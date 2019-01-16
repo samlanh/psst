@@ -16,8 +16,10 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 				$field = 'name_en';
+				$colunmname='title_en';
 				if ($lang==1){
 					$field = 'name_kh';
+					$colunmname='title';
 				}
 				$sql = "SELECT  s.stu_id,
 				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
@@ -33,8 +35,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=s.group_id LIMIT 1) AS group_name,
 				
-			  (SELECT i.title FROM `rms_items` AS i WHERE i.id = s.degree AND i.type=1 LIMIT 1) AS degree,
-			  (SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = s.grade AND idd.items_type=1 LIMIT 1) AS grade,
+			  (SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = s.degree AND i.type=1 LIMIT 1) AS degree,
+			  (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = s.grade AND idd.items_type=1 LIMIT 1) AS grade,
 			 
 				(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
 				(select room_name from rms_room where room_id=s.room LIMIT 1) as room,
@@ -105,6 +107,13 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 // 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 // 		$where = " AND ".$from_date." AND ".$to_date;
 
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
  		$sql = "SELECT s.*,
  				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_name,
  				(SELECT school_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_namekh,
@@ -135,8 +144,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				 
 				 (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')')AS years FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year GROUP BY from_academic,to_academic,generation,TIME ) AS year_name,
 				 
-				(SELECT i.title FROM `rms_items` AS i WHERE i.id = s.degree AND i.type=1 LIMIT 1) AS degree_name,
-			    (SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = s.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
+				(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = s.degree AND i.type=1 LIMIT 1) AS degree_name,
+			    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = s.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
 			  
 				 (SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1 ) AS room_name,
 				  (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
@@ -200,6 +209,12 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
 	
+		$currentLang = $_db->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$sql=" SELECT
 		spd.id,		 
 		spd.fee,
@@ -223,7 +238,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		s.stu_khname,
 		s.stu_enname,
 		p.title,
-		(SELECT i.title FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,
+		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,
 		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS `user`,
 		(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
 		(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status
@@ -247,6 +262,12 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
 	
+		$currentLang = $_db->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$sql=" SELECT
 		spd.id,
 		spd.fee,
@@ -266,8 +287,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		s.stu_khname,
 		s.stu_enname,
 		p.title AS service_name,
- 		(SELECT i.title FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,		
-		(SELECT idd.title FROM `rms_itemsdetail` AS idd WHERE idd.id = sp.grade LIMIT 1) AS items_name,			  
+ 		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = p.items_id  LIMIT 1) AS category,		
+		(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = sp.grade LIMIT 1) AS items_name,			  
 		(SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,
 		(SELECT name_kh FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
 		(SELECT name_en FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status
@@ -290,10 +311,18 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	 
 	function getRescheduleByGroupId($id){
 		$db=$this->getAdapter();
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$sql=" SELECT gr.id,gr.year_id,gr.group_id,gr.day_id,gr.from_hour,gr.to_hour,gr.subject_id,gr.techer_id,
     	(SELECT room_name AS NAME FROM `rms_room` WHERE is_active=1 AND room_name!='' AND rms_room.room_id=(SELECT g.room_id FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) )AS room_name,
     	
-    	(SELECT CONCAT(rms_itemsdetail.title,' ',(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_itemsdetail.items_id AND rms_items.type=1 LIMIT 1)) FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT g.grade FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
+    	(SELECT CONCAT(rms_itemsdetail.$colunmname,' ',(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=rms_itemsdetail.items_id AND rms_items.type=1 LIMIT 1)) FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT g.grade FROM rms_group AS g WHERE g.id=gr.group_id LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
 				
     	REPLACE(CONCAT(gr.from_hour,'-',to_hour),' ','') AS times ,
     	gd.stu_id
@@ -314,12 +343,20 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	function getStudentMistake($stu_id){
 		$db = $this->getAdapter();
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$sql="SELECT
 					g.id as group_id,
 					g.`group_code`,
 					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+					(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+					(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 				
 					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 					`g`.`semester` AS `semester`,
@@ -368,12 +405,20 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	function getStudentAttendence($stu_id){
 		$db = $this->getAdapter();
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$sql="SELECT
 					g.id AS group_id,
 					g.`group_code`,
 					(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
-					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+					(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+					(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 				
 					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 					`g`.`semester` AS `semester`,

@@ -988,13 +988,18 @@ function getAllgroupStudyNotPass($action=null){
    }
    function getStudentinfoById($stu_id){
 	   	$db=$this->getAdapter();
+	   	$currentLang = $this->currentlang();
+	   	$colunmname='title_en';
+	   	if ($currentLang==1){
+	   		$colunmname='title';
+	   	}
 	   	$sql="SELECT s.*,
 	   		(SELECT group_code FROM `rms_group` WHERE id=s.group_id LIMIT 1) as group_name,
 	   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
 	   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 	   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
-	   		(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=s.grade LIMIT 1) as grade_label,
-	   		(SELECT title FROM `rms_items` WHERE rms_items.id=s.degree LIMIT 1) as degree_label,
+	   		(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=s.grade LIMIT 1) as grade_label,
+	   		(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=s.degree LIMIT 1) as degree_label,
 	   		(SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
 	   		(SELECT room_name FROM `rms_room` WHERE room_id=s.room LIMIT 1) AS room_label
 	   		FROM rms_student as s
@@ -1003,13 +1008,18 @@ function getAllgroupStudyNotPass($action=null){
    }
    function getStudentTestinfoById($stu_id){//for student with result
    	$db=$this->getAdapter();
+   	$currentLang = $this->currentlang();
+   	$colunmname='title_en';
+   	if ($currentLang==1){
+   		$colunmname='title';
+   	}
    	$sql="SELECT s.*,
 	   	(SELECT group_code FROM `rms_group` WHERE id=s.group_id LIMIT 1) as group_name,
 	   	(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
 	   	(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 	   	(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,  	
-	   	(SELECT title FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=t.grade_result LIMIT 1) as grade_label,
-		(SELECT title FROM `rms_items` WHERE rms_items.id=t.degree_result LIMIT 1) as degree_label,
+	   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=t.grade_result LIMIT 1) as grade_label,
+		(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=t.degree_result LIMIT 1) as degree_label,
 		t.degree_result AS degree,t.grade_result AS grade,t.session_result AS session,
 		t.id,
 	    (SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=s.session LIMIT 1) as session_label,
@@ -1558,8 +1568,15 @@ function getAllgroupStudyNotPass($action=null){
 //   }
   function getAllItems($type=null,$branch=null,$schooloption=null){
   	$db = $this->getAdapter();
+  	
+  	$currentLang = $this->currentlang();
+  	$colunmname='title_en';
+  	if ($currentLang==1){
+  		$colunmname='title';
+  	}
+  	
   	$this->_name = "rms_items";
-  	$sql="SELECT m.id, m.title AS name FROM $this->_name AS m WHERE m.status=1 ";
+  	$sql="SELECT m.id, m.$colunmname AS name FROM $this->_name AS m WHERE m.status=1 ";
   	if (!empty($type)){
   		$sql.=" AND m.type=$type";
   	}
@@ -1607,8 +1624,13 @@ function getAllgroupStudyNotPass($action=null){
   
   function getAllGradeStudy($option=1){
   	$db = $this->getAdapter();
+  	$currentLang = $this->currentlang();
+  	$colunmname='title_en';
+  	if ($currentLang==1){
+  		$colunmname='title';
+  	}
   	$sql="SELECT i.id,
-			CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+			CONCAT(i.$colunmname,' (',(SELECT it.$colunmname FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
 		FROM `rms_itemsdetail` AS i 
 		WHERE i.status =1 ";
   	if($option!=null){
@@ -1637,8 +1659,15 @@ function getAllgroupStudyNotPass($action=null){
 //   	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
 //   	FROM `rms_itemsdetail` AS i
 //   	WHERE i.status =1 ";
+
+  	$currentLang = $this->currentlang();
+  	$colunmname='i.title_en';
+  	if ($currentLang==1){
+  		$colunmname='i.title';
+  	}
+  	
   	$sql="SELECT i.id,
-  		i.title AS name
+  		$colunmname AS name
   	FROM `rms_itemsdetail` AS i
   	WHERE i.status =1 ";
   	if($category_id!=null AND $category_id>0 AND $category_id!=''){
@@ -1863,10 +1892,17 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getStudentGroupInfoById($id){
   	$db = $this->getAdapter();
+  	
+  	$currentLang = $this->currentlang();
+  	$colunmname='title_en';
+  	if ($currentLang==1){
+  		$colunmname='title';
+  	}
+  	
   	$sql = "SELECT start_date,expired_date,
   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_group.academic_year )AS year,
-  	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
-  	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+  	(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree,
+  	(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
   	(SELECT name_en FROM `rms_view` WHERE `rms_view`.`type`=4 AND `rms_view`.`key_code`=`rms_group`.`session` LIMIT 1) AS session,
   	(SELECT room_name FROM rms_room WHERE room_id = rms_group.room_id LIMIT 1) AS room,
   	academic_year AS academic_year_id,

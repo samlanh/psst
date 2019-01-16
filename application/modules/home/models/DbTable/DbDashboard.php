@@ -62,8 +62,10 @@
     	$dbgb = new Application_Model_DbTable_DbGlobal();
     	$currentlang = $dbgb->currentlang();
     	$title="v.name_en";
+    	$colunmname='title_en';
     	if ($currentlang==1){
     		$title="v.name_kh";
+    		$colunmname='title';
     	}
     	$sql="SELECT d.*,
 			(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = d.branch_id LIMIT 1) AS branch_name,
@@ -76,8 +78,8 @@
 			s.sex,
 			s.photo,
 			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=d.academic_year LIMIT 1) AS academic,
-			(SELECT `title` FROM `rms_items` WHERE `id`=d.degree AND TYPE=1 LIMIT 1) AS degree,
-			(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=d.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+			(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=d.degree AND TYPE=1 LIMIT 1) AS degree,
+			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=d.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=d.group LIMIT 1 ) AS group_name,
 			(SELECT $title AS `name` FROM rms_view AS v WHERE v.type=5 AND v.key_code=d.type LIMIT 1) AS type_drop
 			FROM `rms_student_drop` AS d,

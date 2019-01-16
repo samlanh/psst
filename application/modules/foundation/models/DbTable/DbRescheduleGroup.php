@@ -143,13 +143,21 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
 	
 	function getAllGroup($search){
 		$db = $this->getAdapter();
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 //   		$sql = ' SELECT * FROM `v_getallgroup` WHERE 1';
 // 		$sql = ' SELECT group_code , CONCAT(from_academic,'-',to_academic) as year,semester,session,degree,grade,room_id,start_date,expired_date,note,status FROM `rms_group` WHERE 1';
 		
 		$sql = 'SELECT `g`.`id`,`g`.`group_code` AS `group_code`,academic_year as academic ,`g`.`semester` AS `semester`,
 		
-		(SELECT rms_items.`title` FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
-		(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+		(SELECT rms_items.'.$colunmname.' FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
+		(SELECT rms_itemsdetail.'.$colunmname.' FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			
 			
 		(SELECT`rms_view`.`name_en`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)

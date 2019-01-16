@@ -69,6 +69,14 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order.$limit);
 	}
 	function getStuProductAlert($new=null){
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$db = $this->getAdapter();
 		$day = 5;
 		$end_date = date('Y-m-d',strtotime(" +$day day"));
@@ -83,7 +91,7 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
 			(SELECT s.photo FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS photo,
 			(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS tel,
-			(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
+			(SELECT ie.$colunmname FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
 			(SELECT ie.images FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS pro_images,
 			(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type,
 			spd.*,
@@ -118,14 +126,22 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 	}
 	
 	function getStudentNotYetGroup(){
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$db = $this->getAdapter();
 		$sql="SELECT
 			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
 			(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
 			(SELECT b.school_namekh FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS school_namekh,
 			(SELECT b.school_nameen FROM rms_branch AS b WHERE b.br_id=s.branch_id LIMIT 1) AS school_nameen,
-			(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_title,
-			   (SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_title,	 
+			(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_title,
+			   (SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_title,	 
 			s.* FROM 
 			`rms_student` AS s
 			WHERE s.customer_type =1

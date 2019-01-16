@@ -208,6 +208,14 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	
 	function getAllScore($search=null){
 		$db=$this->getAdapter();
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$sql="SELECT s.id,
 			(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) As branch_name,
 			s.title_score,
@@ -217,8 +225,8 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			s.max_score,
 			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
 			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_id,
-			(SELECT rms_items.`title` FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
-			(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
+			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 			(SELECT CONCAT(name_en ,'-',name_kh ) FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			(SELECT name_en FROM rms_view WHERE type=1 AND key_code = s.status LIMIT 1) as status

@@ -182,5 +182,32 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		$limit=" LIMIT 10";
 		return $db->fetchAll($sql.$limit);
 	}
+	
+	function getCreditMemoNearExpired(){
+		$db = $this->getAdapter();
+		$day = 7;
+		$end_date = date('Y-m-d',strtotime(" +$day day"));
+		$sql ="SELECT 
+			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=cr.branch_id LIMIT 1) AS branch_name,
+			(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=cr.branch_id LIMIT 1) AS branch_logo,
+			(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS student_name,
+			(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS stu_enname,
+			(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS last_name,
+			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS stu_code,
+			(SELECT s.photo FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS photo,
+			(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id = cr.student_id LIMIT 1) AS tel,
+			cr.* FROM `rms_creditmemo` AS cr
+			WHERE cr.status=1
+		";
+		$to_date = (empty($end_date))? '1': " cr.end_date <= '".$end_date." 23:59:59'";
+		$sql.= " AND ".$to_date;
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission("cr.branch_id");
+		
+		$sql.=" ORDER BY cr.end_date DESC ,cr.id DESC";
+		$limit=" LIMIT 20";
+		return $db->fetchAll($sql.$limit);
+	}
 }
 ?>

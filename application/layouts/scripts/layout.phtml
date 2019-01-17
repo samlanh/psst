@@ -52,6 +52,8 @@ $teacher_id = $session_t->teacher_id;
 	$stu_nogroup = $dbNotification->getStudentNotYetGroup();
 	
 	$crmNotif = $dbNotification->getCrmNextContactNoti();
+	
+	$creditNotif = $dbNotification->getCreditMemoNearExpired();
     ?>
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -236,7 +238,7 @@ $teacher_id = $session_t->teacher_id;
 						                  </li>
 						                  <?php if(!empty($crmNotif)){?>
 						                  	<?php foreach($crmNotif as $key=> $crmn){
-				                          	$url = $this->url(array('module'=>'home','controller'=>'crm','action'=>'edit'), null, true)."/id/".$crmn['crm_id'];
+				                          	$url = $this->url(array('module'=>'home','controller'=>'crm','action'=>'contact'), null, true)."/id/".$crmn['crm_id'];
 					                          	$style="";
 					                          	if (!empty($crmn['branch_logo'])){
 					                          		if (file_exists(PUBLIC_PATH.'/images/'.$crmn['branch_logo'])) {
@@ -543,6 +545,71 @@ $teacher_id = $session_t->teacher_id;
 						                  <li>
 						                      <div class="text-center">
 						                        <a href="<?php echo $this->baseUrl()."/allreport/allstaff/rpt-teacheralert"?>">
+						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
+						                          <i class="fa fa-angle-right"></i>
+						                        </a>
+						                      </div>
+						                    </li>
+						                   <?php }?>
+						               </ul>
+					            </li>
+					            <li role="presentation" class="dropdown">
+					                  <a title="<?php echo $tr->translate("Credit Memo Expired");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+					                    <i class="fa fa-credit-card "></i>
+					                    <span id="countNews" class="badge bg-green"><?php if (count($creditNotif)>0){ echo count($creditNotif);}?></span>
+					                  </a>
+					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+						                 <li class=" event title">
+						                  	<h4><i class="fa fa-credit-card "></i> <?php echo $tr->translate("Credit Memo Expired");?></h4>
+						                  </li>
+						                  <?php if(!empty($creditNotif)){?>
+						                  	<?php foreach($creditNotif as $key=> $rscrd){
+				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rscrd['id'];
+					                          	$profileimg = $this->baseUrl().'/images/no-profile.png';
+					                          	if (!empty($rsdoc['photo'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/photo/'.$rscrd['photo'])) {
+					                          			$profileimg = $this->baseUrl().'/images/photo/'.$rscrd['photo'];
+					                          		}
+					                          	}
+					                          	$style="";
+					                          	if (!empty($rscrd['branch_logo'])){
+					                          		if (file_exists(PUBLIC_PATH.'/images/'.$rscrd['branch_logo'])) {
+					                          			$style="background: url(/elt/trunk/public/images/".$rscrd['branch_logo'].");  background-repeat: no-repeat; background-size: 100%;";
+					                          		}
+					                          	}
+					                          	$end_dat=date("Y-m-d");
+					                          	$total_day=strtotime($end_dat)-strtotime($rscrd['end_date']);
+					                          	$total_late_day=$total_day/(60*60*24);
+				                          	?>
+				                          	<li class="event " title="<?php echo $rscrd['stu_enname']." ".$rscrd['last_name'];?>">
+				                         	  <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rscrd['branch_name'];?></span>
+				                         	 	<a href="<?php echo $url;?>">
+				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
+					                            <div class="pull-left profile-list ">
+					                              <img src="<?php echo $profileimg;?>" />
+					                            </div>
+					                            <div class="media-body">
+					                            <?php if (!empty($rscrd['stu_code'])){?>
+					                              <span ><?php echo $rscrd['stu_code'];?>  
+					                              </span><br />
+					                              <?php }?>
+					                              <span class="title bold" ><?php echo $rscrd['stu_enname']." ".$rscrd['last_name'];?></span><br />
+					                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rscrd['tel'];?></span><br />
+					                              <p> 
+					                               <?php if ($total_late_day>0){?>
+					                              <small><?php echo $tr->translate("EXPIRED")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
+					                              <?php }?>
+					                              <small><?php echo $tr->translate("EXPIRE_DATE")." : ".date("d/M/Y",strtotime($rscrd['end_date'])); ?></small>
+					                              </p>
+					                            </div>
+				                            </a>
+				                          </li>
+				                          	<?php }?>
+						                  <?php }?>
+						                  <?php if (count($creditNotif)>15){?>
+						                  <li>
+						                      <div class="text-center">
+						                        <a href="<?php echo $this->baseUrl()."/allreport/accounting/rpt-creditmemo"?>">
 						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
 						                          <i class="fa fa-angle-right"></i>
 						                        </a>

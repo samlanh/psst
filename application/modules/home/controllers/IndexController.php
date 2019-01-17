@@ -35,8 +35,8 @@ class Home_IndexController extends Zend_Controller_Action
       $_db = new Home_Model_DbTable_DbDashboard();
       $this->view->studropnew = $_db->getStudentDropNew();
       $this->view->alltypedrop = $_db->countStudentDrop();
-      $this->view->stu_suppend = $_db->countStudentDrop(1);
-      $this->view->stu_stopped = $_db->countStudentDrop(2);
+      $this->view->stu_suppend = $_db->countStudentDrop(2);
+      $this->view->stu_stopped = $_db->countStudentDrop(1);
       
       $this->view->dissetting = $_db->getSettingDiscountNearlyExpire();
       
@@ -103,8 +103,8 @@ class Home_IndexController extends Zend_Controller_Action
     	
     	$this->view->studropnew = $_db->getStudentDropNew();
     	$this->view->alltypedrop = $_db->countStudentDrop();
-    	$this->view->stu_suppend = $_db->countStudentDrop(1);
-    	$this->view->stu_stopped = $_db->countStudentDrop(2);
+    	$this->view->stu_suppend = $_db->countStudentDrop(2);
+    	$this->view->stu_stopped = $_db->countStudentDrop(1);
     	
     	$db = new Allreport_Model_DbTable_DbRptAllStudent();
     	$this->view->rsamountstudent = $db->getAmountStudent();

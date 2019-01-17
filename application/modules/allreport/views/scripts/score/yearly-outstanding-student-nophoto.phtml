@@ -34,21 +34,27 @@
 			); 
 ?>	
 <script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.data.ObjectStore");
 dojo.ready(function(){
 });
 </script>
+<form  action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'yearly-outstanding-student')); ?>" dojoType="dijit.form.Form" method="post">
+</form>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div id="divPrint">
 		<style type="text/css">
 			.style{
-				line-height: 21px; font-size: 15px !important;
+				line-height: 20px; font-size: 12px !important;
 				font-family: 'Times New Roman','Khmer OS Battambang';
-				white-space: nowrap;
+				body{
+				    background:url(../images/logo.png);  
+				}
 			}
 			.padding{ padding: 0 1px !important;}
 			table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
 			tr{ page-break-inside:avoid; page-break-after:auto }
-			.cheader{height: 27px;font-weight: bold; background: #ccc; white-space: nowrap;}
+			.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
 			#header {
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
@@ -56,14 +62,28 @@ dojo.ready(function(){
 		</style>
 		<table style="width:27cm;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
-					$semester_str = array(1=>"I",2=>"II");
 					 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_totalscore = 0; $old_rank=0;
 					 $duplicate=0;$count_pass=0;$female=0;
 					 $rank1="";$rank2="";$rank3="";$rank4="";$rank5="";
-					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ $i++;
-						if($rs['sex']==1){ $sex = $tr->translate("MALE");}else{$sex = $tr->translate("FEMALE");$female++;}
+					 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
+					 	$i++;
+						if($rs['sex']==1){ 
+								$sex = $tr->translate("MALE");
+						}else{
+								$sex = $tr->translate("FEMALE");$female++;
+						}
 						
-						$score_average = ($rs['avg_forsemester']/$rs['avg_formonth'])/2;
+						$average_semester1 = ($rs['avg_forsemester1']+$rs['avg_formonthsemester1'])/2;
+						$average_semester2 = ($rs['avg_forsemester2']+$rs['avg_formonthsemester2'])/2;
+						$score_average = ($average_semester1+$average_semester2)/2;
+							
+						if($score_average==$old_totalscore){
+							$duplicate=$duplicate+1;
+						}else{
+							$old_rank=$old_rank+1+$duplicate;
+							$duplicate=0;
+						}
+						
 						if($score_average == $old_totalscore){
 							if($key==1){
 								$rank2=$old_rank;
@@ -100,23 +120,20 @@ dojo.ready(function(){
 							}
 						}
 					?>
-								
 					<?php 
 						$old_totalscore = $score_average;
 					?>
-					
 				<?php }}?>
-				
 				<tr>
 					<td>
-						<table width="100%" border="0" style="background-image: url('logo.png');">
+						<table width="100%" border="0" >
 							<tr>
 								<td colspan="3" align="center" style="font-family: Khmer MEF2;font-size: 30px;">
 									ព្រះរាជាណាចក្រកម្ពុជា <br />
 									ជាតិ សាសនា ព្រះមហាក្សត្រ <br />
 									<img style="width: 20%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/style.png'?>">
 								</td>
-							</tr>						
+							</tr>
 							<tr>
 								<td width="33%">&nbsp;</td>
 								<td width="34%">&nbsp;</td>	
@@ -138,72 +155,96 @@ dojo.ready(function(){
 									</table>
 								</td>
 								<td align="center" style="font-family: Khmer MEF2;font-size: 25px;">
-									<span style="font-size: 28px;">តារាងកិត្តិយស </span><br />
-									ប្រចាំឆមាស <?php echo $semester[$this->studentgroup[0]['for_semester']];?><br />
-									ឆ្នាំសិក្សា  <label id="academic_year"></label><br />
+									<div style="font-size: 28px;">តារាងកិត្តិយស </div>
+									<span style="white-space: nowrap;">ប្រចាំឆ្នាំសិក្សា  <label id="academic_year"></label></span><br />
 									ថ្នាក់ <?php echo $this->studentgroup[0]['group_code'];?>
 								</td>
 								<script type="text/javascript">
 									year = convertEnglishToKhmerNumber(' <?php echo $this->studentgroup[0]['start_year'];?>')+' - '+convertEnglishToKhmerNumber('<?php echo $this->studentgroup[0]['end_year'];?>');
 									dojo.byId('academic_year').innerHTML=year;
 								</script>
+								
 								<td></td>
 							</tr>
 							<style>
-								.number{color: red;}
-								.studentname{color:#1318b9;font-size: 19px;}
+								.number{color: #fff;font-size: 25px;}
+								.studentname{color:#fff;font-size: 19px;}
+								.background{width:65% !important;background:#2e3192 !important;border-radius: 8px;margin-top:10px;border: 1px solid red;height: 60px;}
+								.margin{margin-top:10px;}
+								.background-number{width:13% !important;background:#2e3192 !important;border-radius: 8px;border: 1px solid red;}
 							</style>
 							<tr>
-								<td>&nbsp;</td>
-							</tr>	
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
 							<tr>
 								<td>&nbsp;</td>
 								<td>
-									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 17px;">
-										<tr>
-											<td align="center">
-												<table width="125px" height="150px">
-													<tr>
-														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[0])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[0]['photo'];}?>">
-														</td>
-													</tr>
-												</table>											
+									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 17px ;">
+										<tr align="center">
+											<td class="number" >
+												<div class="background-number">
+													<?php echo $rank1;?>
+												</div>
 											</td>
 										</tr>
 										<tr align="center">
-											<td colspan="1" class="number">លេខ <?php echo $rank1;?></td>
-										</tr>
-										<tr align="center">
-											<td class="studentname" colspan="1">
-												<?php if(!empty($this->studentgroup[0])){if(!empty($this->studentgroup[0]['stu_khname'])){echo $this->studentgroup[0]['stu_khname'];}else{echo $this->studentgroup[0]['stu_enname'];}}?>
+											<td class="studentname">
+												<div class="background">
+													<div class="margin">
+														<?php 
+															  if(!empty($this->studentgroup[0])){
+																if(!empty($this->studentgroup[0]['stu_khname'])){
+																	echo $this->studentgroup[0]['stu_khname'];
+																}else{
+																	echo $this->studentgroup[0]['stu_enname'];
+																}
+															  }
+														?>
+													</div>	
+												</div>
 											</td>
 										</tr>
 									</table>
 								</td>
 								<td>&nbsp;</td>
 							</tr>	
-							
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
 							<tr>
 								<td>
-									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 17px;">
-										<tr>
-											<td align="center">
-												<table width="125px" height="150px">
-													<tr>
-														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[1])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[1]['photo'];}?>">
-														</td>
-													</tr>
-												</table>											
+									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 17px ;">
+										<tr align="center">
+											<td class="number" >
+												<div class="background-number">
+													<?php echo $rank2;?>
+												</div>
 											</td>
 										</tr>
 										<tr align="center">
-											<td class="number">លេខ <?php echo $rank2;?></td>
-										</tr>
-										<tr align="center">
-											<td style=""  class="studentname" >
-												<?php if(!empty($this->studentgroup[1])){if(!empty($this->studentgroup[1]['stu_khname'])){echo $this->studentgroup[1]['stu_khname'];}else{echo $this->studentgroup[1]['stu_enname'];}}?>
+											<td class="studentname">
+												<div class="background">
+													<div class="margin">
+														<?php 
+															  if(!empty($this->studentgroup[1])){
+																if(!empty($this->studentgroup[1]['stu_khname'])){
+																	echo $this->studentgroup[1]['stu_khname'];
+																}else{
+																	echo $this->studentgroup[1]['stu_enname'];
+																}
+															  }
+														?>
+													</div>	
+												</div>
 											</td>
 										</tr>
 									</table>
@@ -212,24 +253,29 @@ dojo.ready(function(){
 									&nbsp;
 								</td>
 								<td>
-									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 17px;">
-										<tr>
-											<td align="center">
-												<table width="125px" height="150px">
-													<tr>
-														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[2])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[2]['photo'];}?>">
-														</td>
-													</tr>
-												</table>											
+									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 17px ;">
+										<tr align="center">
+											<td class="number" >
+												<div class="background-number">
+													<?php echo $rank3;?>
+												</div>
 											</td>
 										</tr>
 										<tr align="center">
-											<td class="number">លេខ <?php echo $rank3;?></td>
-										</tr>
-										<tr align="center">
-											<td style=""  class="studentname" >
-												<?php if(!empty($this->studentgroup[2])){if(!empty($this->studentgroup[2]['stu_khname'])){echo $this->studentgroup[2]['stu_khname'];}else{echo $this->studentgroup[2]['stu_enname'];}}?>
+											<td class="studentname">
+												<div class="background">
+													<div class="margin">
+														<?php 
+															  if(!empty($this->studentgroup[2])){
+																if(!empty($this->studentgroup[2]['stu_khname'])){
+																	echo $this->studentgroup[2]['stu_khname'];
+																}else{
+																	echo $this->studentgroup[2]['stu_enname'];
+																}
+															  }
+														?>
+													</div>	
+												</div>
 											</td>
 										</tr>
 									</table>
@@ -240,53 +286,70 @@ dojo.ready(function(){
 							</tr>
 							<tr>
 								<td colspan="3">&nbsp;</td>
-							</tr>							
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
 							<tr>
 								<td>
-									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 17px;">
-										<tr>
-											<td align="center">
-												<table width="125px" height="150px">
-													<tr>
-														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[3])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[3]['photo'];}?>">
-														</td>
-													</tr>
-												</table>											
+									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 17px ;">
+										<tr align="center">
+											<td class="number" >
+												<div class="background-number">
+													<?php echo $rank4;?>
+												</div>
 											</td>
 										</tr>
 										<tr align="center">
-											<td class="number">លេខ <?php echo $rank4;?></td>
-										</tr>
-										<tr align="center">
-											<td style=""  class="studentname" >
-												<?php if(!empty($this->studentgroup[3])){if(!empty($this->studentgroup[3]['stu_khname'])){echo $this->studentgroup[3]['stu_khname'];}else{echo $this->studentgroup[3]['stu_enname'];}}?>
+											<td class="studentname">
+												<div class="background">
+													<div class="margin">
+														<?php 
+															  if(!empty($this->studentgroup[3])){
+																if(!empty($this->studentgroup[3]['stu_khname'])){
+																	echo $this->studentgroup[3]['stu_khname'];
+																}else{
+																	echo $this->studentgroup[3]['stu_enname'];
+																}
+															  }
+														?>
+													</div>	
+												</div>
 											</td>
 										</tr>
 									</table>
 								</td>
+								<td>&nbsp;</td>
 								<td>
-									&nbsp;
-								</td>
-								<td>
-									<table width="50%" style="margin: 0 auto;font-family: Khmer MEF2;font-size: 17px;">
-										<tr>
-											<td align="center">
-												<table width="125px" height="150px">
-													<tr>
-														<td style="border:1px solid #000;">
-															<img style="width: 125px;height: 150px;" alt="<?php ?>" src="<?php if(!empty($this->studentgroup[4])){echo $this->baseUrl().'/images/photo/'.$this->studentgroup[4]['photo'];}?>">
-														</td>
-													</tr>
-												</table>											
+									<table width="100%" style="margin: 0 auto; font-family: Khmer MEF2;font-size: 17px ;">
+										<tr align="center">
+											<td class="number" >
+												<div class="background-number">
+													<?php echo $rank5;?>
+												</div>
 											</td>
 										</tr>
 										<tr align="center">
-											<td class="number">លេខ <?php echo $rank5;?></td>
-										</tr>
-										<tr align="center">
-											<td  class="studentname" >
-												<?php if(!empty($this->studentgroup[4])){if(!empty($this->studentgroup[4]['stu_khname'])){echo $this->studentgroup[4]['stu_khname'];}else{echo $this->studentgroup[4]['stu_enname'];}}?>
+											<td class="studentname">
+												<div class="background">
+													<div class="margin">
+														<?php 
+															  if(!empty($this->studentgroup[4])){
+																if(!empty($this->studentgroup[4]['stu_khname'])){
+																	echo $this->studentgroup[4]['stu_khname'];
+																}else{
+																	echo $this->studentgroup[4]['stu_enname'];
+																}
+															  }
+														?>
+													</div>	
+												</div>
 											</td>
 										</tr>
 									</table>
@@ -302,18 +365,18 @@ dojo.ready(function(){
 									&nbsp;
 								</td>
 							</tr>	
-							<tr>	
+							<tr>
+								<td colspan="3">
+									&nbsp;
+								</td>
+							</tr>	
+							<tr>
 								<td colspan="3">
 									&nbsp;
 								</td>
 							</tr>
-							<tr>	
-								<td colspan="3">
-									&nbsp;
-								</td>
-							</tr>
-							<tr>	
-								<td colspan="3">
+							<tr style="border: 1px solid #fff;">
+								<td colspan="3" style="border:0px solid #fff !important;">
 									<table " cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 14px">
 										<tr>
 											<td width="35%" align="center">
@@ -345,17 +408,21 @@ dojo.ready(function(){
 								</td>
 							</tr>
 							<tr>	
+								<td colspan="3">
+									&nbsp;
+								</td>
+							</tr>
+							<tr>	
 								<td colspan="2">
 									&nbsp;
 								</td>
 								<td colspan="1" align="center" style="font-family: Khmer OS Muol Light;font-size: 15px;">
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $this->studentgroup[0]['teacher_name'];?>
 								</td>
-							</tr>
+							</tr>							
 						</table>
 					</td>
 				</tr>
-				
 		</table>
 	</div>
 </div>

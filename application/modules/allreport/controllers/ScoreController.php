@@ -25,7 +25,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     				'degree'=>0,
     				'session'=> 0,
     				'for_month'=>date('m'),
-    				);
+    			);
     	}
     	
     	$this->view->search=$search;
@@ -149,6 +149,34 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
+    }
+    function monthlyOutstandingStudentNophotoAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search = array(
+    				'group_name' => '',
+    				'study_year'=> '',
+    				'grade_bac'=> '',
+    				'degree_bac'=>'',
+    				'session'=> '',
+    				'for_month'=>'',
+    		);
+    	}
+    	$this->view->search=$search;
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$this->view->studentgroup = $db->getStundetScoreResult($search,$id,2);
+    	 
+    	$this->view->all_student = $db->getStundetScoreDetailGroup($search,$id,1);
+    	 
+    	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
+    	$this->view->month = $db->getAllMonth();
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($form);
+    	$this->view->form_search=$form;
     }   
     public function studentGroupAction()
     {
@@ -213,6 +241,17 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	$this->view->studentgroup = $result_semester;
     }
+    function semesterOutstandingStudentNophotoAction(){
+    	$group_id=$this->getRequest()->getParam("id");
+    	$semester=$this->getRequest()->getParam("type");
+    	$search= array();
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$result_semester = $db->getStundetScorebySemester($group_id,$semester);
+    	if(empty($result_semester)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
+    	}
+    	$this->view->studentgroup = $result_semester;
+    }
     
     function rptResultbyyearAction(){
     	$group_id=$this->getRequest()->getParam("id");
@@ -226,6 +265,17 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     }
     
     function yearlyOutstandingStudentAction(){
+    	$group_id=$this->getRequest()->getParam("id");
+    	$type=$this->getRequest()->getParam("type");
+    
+    	$db = new Allreport_Model_DbTable_DbRptStudentScore();
+    	$result_year = $db->getStundetScorebyYear($group_id);
+    	if(empty($result_year)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD_FOUND","/allreport/score/student-group");
+    	}
+    	$this->view->studentgroup = $result_year;
+    }
+    function yearlyOutstandingStudentNophotoAction(){
     	$group_id=$this->getRequest()->getParam("id");
     	$type=$this->getRequest()->getParam("type");
     

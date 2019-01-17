@@ -10,7 +10,14 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
     }
     function getAllMonth(){
 		$db = $this->getAdapter();
-		$sql="select id , month_kh from rms_month where status=1 ";
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$month = "month_kh";
+		}else{ // English
+			$month = "month_en";
+		}
+		$sql="select id , $month as month from rms_month where status=1 ";
 		return $db->fetchAll($sql);
 	}	
     function getAllSession(){
@@ -115,37 +122,60 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    public function getStundetScoreGroup($search){ // List លទ្ធផលដែលបានបញ្ចូលទាំងអស់មក
    	$db = $this->getAdapter();
-   	$sql="SELECT s.`id`, s.`group_id`, g.`group_code`,
-   		(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as examtype,
-   		title_score,s.for_semester,s.note,
-   		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') 
-		FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year
- 		,(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree, 
-	 	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-	 	`g`.`semester` AS `semester`,
-	 	(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
-	 	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name, 
-	 	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
-	 	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
-	 	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month) AS for_month,
-	 	s.exam_type,
-	 	s.for_semester,
-	  	s.reportdate
-   			FROM `rms_score` AS s, `rms_group` AS g 
-   		WHERE  g.`id`=s.`group_id` AND s.status = 1 AND s.type_score=1 ";
-   			$where='';
+   	$_db = new Application_Model_DbTable_DbGlobal();
+   	$lang = $_db->currentlang();
+   	if($lang==1){// khmer
+   		$label = "name_kh";
+   		$grade = "rms_itemsdetail.title";
+   		$degree = "rms_items.title";
+   		$month = "month_kh";
+   	}else{ // English
+   		$label = "name_en";
+   		$grade = "rms_itemsdetail.title_en";
+   		$degree = "rms_items.title_en";
+   		$month = "month_en";
+   	}
+   	$sql="SELECT 
+   				s.`id`,
+   				s.`group_id`,
+   				g.`group_code`,
+		   		(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as examtype,
+		   		title_score,s.for_semester,s.note,
+		   		(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') 
+				FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
+		 		(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree, 
+			 	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+			 	`g`.`semester` AS `semester`,
+			 	(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
+			 	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name, 
+			 	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
+			 	(SELECT $label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
+			 	(SELECT $month FROM rms_month WHERE rms_month.id = s.for_month) AS for_month,
+			 	s.exam_type,
+			 	s.for_semester,
+			  	s.reportdate
+   			FROM 
+   				`rms_score` AS s,
+   				`rms_group` AS g 
+   			WHERE 
+   				g.`id`=s.`group_id` 
+   				AND s.status = 1 
+   				AND s.type_score=1 
+   		";
+   		
+   		$where='';
 //    	$from_date =(empty($search['for_month']))? '1': " s.formonth >= '".$search['for_month']." 00:00:00'";
 //    	$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
 //    	$where = " AND ".$from_date;
-   	if(!empty($search['title'])){
-   				$s_where=array();
-   				$s_search=addslashes(trim($search['title']));
-   				$s_where[]= " s.title_score LIKE '%{$s_search}%'";
-   				$s_where[]=" g.group_code LIKE '%{$s_search}%'";
-   				$s_where[]=" s.note LIKE '%{$s_search}%'";
-   				$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
-   				$where.=' AND ('.implode(' OR ', $s_where).')';
-   	}
+	   	if(!empty($search['title'])){
+	   				$s_where=array();
+	   				$s_search=addslashes(trim($search['title']));
+	   				$s_where[]= " s.title_score LIKE '%{$s_search}%'";
+	   				$s_where[]=" g.group_code LIKE '%{$s_search}%'";
+	   				$s_where[]=" s.note LIKE '%{$s_search}%'";
+	   				$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
+	   				$where.=' AND ('.implode(' OR ', $s_where).')';
+	   	}
 	   	if(!empty($search['branch_id'])){
 	   		$where.= " AND s.branch_id =".$search['branch_id'];
 	   	}
@@ -181,7 +211,22 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    public function getStundetScoreDetailGroup($search,$id=null,$limit){ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា
    	$db = $this->getAdapter();
-   		$sql="SELECT
+   	$_db = new Application_Model_DbTable_DbGlobal();
+   	$lang = $_db->currentlang();
+   	if($lang==1){// khmer
+   		$label = "name_kh";
+   		$grade = "rms_itemsdetail.title";
+   		$degree = "rms_items.title";
+   		$branch = "b.branch_namekh";
+   		$month = "month_kh";
+   	}else{ // English
+   		$label = "name_en";
+   		$grade = "rms_itemsdetail.title_en";
+   		$degree = "rms_items.title_en";
+   		$branch = "b.branch_nameen";
+   		$month = "month_en";
+   	}
+   	$sql="SELECT
 		   	s.`id`,
 		   	g.`branch_id`,
 		   	sd.`group_id`,
@@ -191,12 +236,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year,
 		   	(SELECT from_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS start_year,
 		   	(SELECT to_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS end_year,
-		   	(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-		   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+		   	(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+		   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 		   	
 		   	`g`.`semester` AS `semester`,
 		   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-		   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+		   	(SELECT $label	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 		   	(select teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
 		   	sd.`student_id`,
 		   	st.`stu_code`,
@@ -228,10 +273,11 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND sd.`is_parent`=1
 		   	AND s.`id`=sd.`score_id`
 		   	AND s.status = 1
-		   	AND s.type_score=1  ";
-   		if (!empty($id)){
-   			$sql.=" AND s.id = $id ";
-   		}
+		   	AND s.type_score=1  
+   	";
+   	if (!empty($id)){
+   		$sql.=" AND s.id = $id ";
+   	}
    	$where='';
    
    	if (!empty($search['branch_id'])){
@@ -275,58 +321,71 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    }
    public function getStundetScoreResult($search,$id=null,$limit){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត
    	$db = $this->getAdapter();
+   	$_db = new Application_Model_DbTable_DbGlobal();
+   	$lang = $_db->currentlang();
+   	if($lang==1){// khmer
+   		$label = "name_kh";
+   		$grade = "rms_itemsdetail.title";
+   		$degree = "rms_items.title";
+   		$branch = "b.branch_namekh";
+   		$month = "month_kh";
+   	}else{ // English
+   		$label = "name_en";
+   		$grade = "rms_itemsdetail.title_en";
+   		$degree = "rms_items.title_en";
+   		$branch = "b.branch_nameen";
+   		$month = "month_en";
+   	}
    	$sql="SELECT
-   	s.`id`,
-   	g.`branch_id`,
-   	(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
-					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
-   	s.`group_id`,
-   	g.`group_code`,
-   	s.for_academic_year,
-   	`g`.`degree` as degree_id,
-   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year,
-   	(SELECT from_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS start_year,
-   	(SELECT to_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS end_year,
-   	(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-   	(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-   
-   	`g`.`semester` AS `semester`,
-   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-   	(select teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
-   	sm.`student_id`,
-   	st.`stu_code`,
-   	st.stu_khname,
-   	st.stu_enname,
-   	st.`sex`,
-   	st.photo,
-   	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
-   	s.exam_type,
-   	s.for_semester,
-   	s.for_month as for_month_id,
-   	s.reportdate,
-   	s.title_score,
-   	s.max_score,
+		   	s.`id`,
+		   	g.`branch_id`,
+		   	(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
+			(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
+		   	s.`group_id`,
+		   	g.`group_code`,
+		   	s.for_academic_year,
+		   	`g`.`degree` as degree_id,
+		   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS academic_year,
+		   	(SELECT from_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS start_year,
+		   	(SELECT to_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS end_year,
+		   	(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+		   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+		   
+		   	`g`.`semester` AS `semester`,
+		   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
+		   	(SELECT $label	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+		   	(select teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
+		   	sm.`student_id`,
+		   	st.`stu_code`,
+		   	st.stu_khname,
+		   	st.stu_enname,
+		   	st.`sex`,
+		   	st.photo,
+		   	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+		   	s.exam_type,
+		   	s.for_semester,
+		   	s.for_month as for_month_id,
+		   	s.reportdate,
+		   	s.title_score,
+		   	s.max_score,
+		   	sm.total_score,
+		    sm.total_avg,
+		   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
+		   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem ,
+		   	(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as average_pass
+   		FROM
+		   	`rms_score` AS s,
+		   	`rms_score_monthly` AS sm,
+		   	`rms_student` AS st,
+		   	`rms_group` AS g
+   		WHERE
+		   	st.`stu_id`=sm.`student_id`
+		   	AND g.`id` = s.`group_id`
+		   	AND s.`id`=sm.`score_id`
+		   	AND s.status = 1
+		   	AND s.type_score=1  
+   	";
    	
-   	sm.total_score,
-    sm.total_avg,
-   	
-   	(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subject ,
-   	(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amount_subjectsem ,
-   	(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as average_pass
-   
-   	FROM
-   	`rms_score` AS s,
-   	`rms_score_monthly` AS sm,
-   	`rms_student` AS st,
-   	`rms_group` AS g
-   	WHERE
-   	st.`stu_id`=sm.`student_id`
-   	AND g.`id` = s.`group_id`
-
-   	AND s.`id`=sm.`score_id`
-   	AND s.status = 1
-   	AND s.type_score=1  ";
    	if (!empty($id)){
    		$sql.=" AND s.id = $id ";
    	}
@@ -384,6 +443,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	g.`semester` AS `semester`,
 			   	g.branch_id,
 			    $semester as for_semester,
+				(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
 			   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
 			   	(SELECT CONCAT(from_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS start_year,
 			   	(SELECT CONCAT(to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS end_year,
@@ -392,7 +452,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			   	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 			   	(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id=g.teacher_id LIMIT 1) AS teacher_name,
-			   	
 			   	(SELECT sm.total_avg 
 			   		FROM `rms_score_monthly` AS sm,
 			   			  rms_score s
@@ -441,7 +500,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			   	g.`group_code`,
 			   	g.`semester` AS `semester`,
 			   	g.branch_id,
-			   
+			    (SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
 			   	(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
 			   	(SELECT CONCAT(from_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS start_year,
 			   	(SELECT CONCAT(to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS end_year,

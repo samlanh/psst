@@ -1388,7 +1388,7 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getTestStudentId($branch=null){
   	$db = $this->getAdapter();
-  	$sql ="SELECT COUNT(stu_id) AS number FROM `rms_student` WHERE customer_type =4  ";
+  	$sql ="SELECT COUNT(stu_id) AS number FROM `rms_student` WHERE customer_type = 4  ";
   	if (!empty($branch)){
   		$sql.= " AND branch_id=$branch";
   	}

@@ -38,6 +38,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
 		
 		$title_en = new Zend_Dojo_Form_Element_TextBox('title_en');
     	$title_en->setAttribs(array(
+    			'required'=>'true',
     			'dojoType'=>'dijit.form.ValidationTextBox',
     			'class'=>'fullside height-text',
     			'missingMessage'=>$this->tr->translate("Forget Enter Title")

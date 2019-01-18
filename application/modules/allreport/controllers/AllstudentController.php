@@ -512,17 +512,19 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'end_date'=>date("Y-m-d")
 			);
 		}
-		$form=new Registrar_Form_FrmSearchInfor();
-		$forms=$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
+		
 		$group= new Allreport_Model_DbTable_DbRptStudentDrop();
-		$this->view->rs = $rs_rows = $group->getAllStudentDrop($search);
+		$this->view->rs = $group->getAllStudentDrop($search);
 		$this->view->search=$search;
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$forms=$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
 	public function studentGroupAction()
 	{
@@ -541,11 +543,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'room'=>0,
 					'degree'=>0,
 					'study_status'=>-1,
-			);
+				);
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$rs= $db->getGroupDetail($search);
-		$this->view->rs = $rs;
+		$this->view->rs = $db->getGroupDetail($search);
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);

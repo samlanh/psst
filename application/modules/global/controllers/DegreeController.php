@@ -9,7 +9,6 @@ class Global_DegreeController extends Zend_Controller_Action {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
-	
     public function indexAction()
     {
     	$db_dept=new Global_Model_DbTable_DbItems();

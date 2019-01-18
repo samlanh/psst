@@ -64,10 +64,11 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$sql = "SELECT  s.id,
 				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,			
 				(SELECT stu_code FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS stu_id,
-				(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_name,
+				(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_kh,
+				(SELECT CONCAT(last_name,' ',stu_enname) FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_name,
 				(SELECT name_kh FROM `rms_view` WHERE TYPE=2 AND key_code = s.gender LIMIT 1) AS sex,
 				(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic,
-				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND TYPE=1 LIMIT 1) AS degree,
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
 				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 				
 				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group LIMIT 1 ) AS group_name,
@@ -76,7 +77,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				date_stop,
 				reason,
 				(SELECT first_name FROM `rms_users` WHERE id=S.user_id LIMIT 1) AS user_name,
-				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS STATUS
+				(SELECT name_en FROM `rms_view` WHERE TYPE=1 AND key_code = s.status LIMIT 1) AS status
 				FROM `rms_student_drop` AS s where 1 ";
 		$where = "";
 		$from_date =(empty($search['start_date']))? '1': " s.date_stop >= '".$search['start_date']." 00:00:00'";
@@ -116,6 +117,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	public function addStudentDrop($_data){
 		$_db= $this->getAdapter();
 			try{	
+				
 				$_arr= array(
 						'branch_id'	=>$_data['branch_id'],
 						'stu_id'	=>$_data['studentid'],
@@ -140,42 +142,29 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				
 				$this->_name='rms_student';
 				$where=" stu_id=".$_data['studentid'];
-				if($_data['status']==1){
-					$arr=array(
-						'is_subspend'	=>	$_data['type'],
-					);
-				}else{
-					$arr=array(
-						'is_subspend'	=>	0,
-					);
-				}
+				$arr=array(
+					'is_subspend'	=>	$_data['type'],
+				);
 				$this->update($arr, $where);
-				$this->_name='rms_student_payment';
-				$where=" student_id=".$_data['studentid'];
-				if($_data['status']==1){
-					$arr=array(
-							'is_suspend'	=>	$_data['type'],
-					);
-				}else{
-					$arr=array(
-							'is_suspend'	=>	0,
-					);
-				}
-				$this->update($arr, $where);
+				
+// 				$this->_name='rms_student_payment';
+// 				$where=" student_id=".$_data['studentid'];
+// 				$arr=array(
+// 					'is_suspend'	=>	$_data['type'],
+// 				);
+// 				$this->update($arr, $where);
+				
 				$this->_name='rms_group_detail_student';
-				$where = " stu_id=".$_data['studentid']." and is_pass = 0";
-				if($_data['status']==1){
-					$ar=array(
-							'type'	=>	2,
-					);
-				}else{
-					$ar=array(
-							'type'	=>	1,
-					);
-				}
+				$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
+				$ar=array(
+					'stop_type'	=>	$_data['type'],
+				);
 				$this->update($ar, $where);
 				$_db->commit();
+				
 			}catch(Exception $e){
+				$_db->rollBack();
+				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 	}
@@ -206,45 +195,26 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 			$this->update($_arr, $where);
 			
 			$this->_name='rms_student';
-			
 			$where=" stu_id=".$_data['studentid'];
 			
-			if($_data['status']==0){
-				$arr=array(
-						'is_subspend'	=>	0,
-				);
-			}else{
-				$arr=array(
-						'is_subspend'	=>	$_data['type'],
-				);
-			}
+			$arr=array(
+				'is_subspend'	=>	$_data['type'],
+			);
 			$this->update($arr, $where);
 			
 			
-			$this->_name='rms_student_payment';
-			$where=" student_id=".$_data['studentid'];
-			if($_data['status']==1){
-				$arr=array(
-						'is_suspend'	=>	$_data['type'],
-				);
-			}else{
-				$arr=array(
-						'is_suspend'	=>	0,
-				);
-			}
-			$this->update($arr, $where);
+// 			$this->_name='rms_student_payment';
+// 			$where=" student_id=".$_data['studentid'];
+// 			$arr=array(
+// 				'is_suspend'	=>	$_data['type'],
+// 			);			
+// 			$this->update($arr, $where);
 			
 			$this->_name='rms_group_detail_student';
-			$where = " stu_id=".$_data['studentid']." and is_pass = 0";
-			if($_data['status']==1){
-				$ar=array(
-						'type'	=>	2,
-				);
-			}else{
-				$ar=array(
-						'type'	=>	1,
-				);
-			}
+			$where = " stu_id=".$_data['studentid']." AND is_pass = 0 AND group_id=".$_data['group'];
+			$ar=array(
+				'stop_type'	=>	$_data['type'],
+			);
 			$this->update($ar, $where);
 
 			$db->commit();
@@ -253,31 +223,13 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	function getAllGrade($grade_id){
-		$db = $this->getAdapter();
-		$sql = "SELECT major_id As id,major_enname As name FROM rms_major WHERE dept_id=".$grade_id;
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
 	function getStudentInfoById($stu_id){
 		$db = $this->getAdapter();
 		$sql = "SELECT 	* FROM rms_student AS st WHERE stu_id=$stu_id LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-	
 	function getAllDropType(){
-		$db = $this->getAdapter();
-		$sql = "SELECT key_code as id,name_kh as name from rms_view where type=5 and status=1";
-		return $db->fetchAll($sql);
-	}
-	
-	
-	
-	
-	
-	
-	
+		$db = new Application_Model_DbTable_DbGlobal();
+		return $db->getViewById(5);
+	}	
 }
-
-
-

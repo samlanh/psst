@@ -4,7 +4,6 @@ class Stock_ProductcateController extends Zend_Controller_Action {
 	const REDIRECT_URL = '/stock/productcate';
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -18,7 +17,6 @@ class Stock_ProductcateController extends Zend_Controller_Action {
     	else{
     		$search = array(
     				'advance_search' => "",
-//     				'type_search'=>"",
     				'schoolOption_search'=>"",
     				'status_search' => -1
     		);
@@ -29,17 +27,16 @@ class Stock_ProductcateController extends Zend_Controller_Action {
         $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("TITLE","BY_USER","STATUS");
+    	$collumns = array("TITLE","TITLE_EN","BY_USER","STATUS");
     	$link=array(
     			'module'=>'stock','controller'=>'productcate','action'=>'edit',
     	);
-    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'schoolOption'=>$link));
+    	$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
     	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
-    	
     }
     function addAction(){
     	if($this->getRequest()->isPost()){

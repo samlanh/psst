@@ -100,8 +100,13 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 		$branch_tel->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
-				'onkeyup'=>'Calfive()'
 				));
+		
+		$branch_tel1 = new Zend_Dojo_Form_Element_NumberTextBox('branch_tel1');
+		$branch_tel1->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+		));
 		
 		$email = new Zend_Dojo_Form_Element_NumberTextBox('email');
 		$email->setAttribs(array(
@@ -193,6 +198,7 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 			
 			$br_address->setValue($data['br_address']);
 			$branch_tel->setValue($data['branch_tel']);
+			$branch_tel1->setValue($data['branch_tel1']);
 			$branch_code->setValue($data['branch_code']);
 			$_fax->setValue($data['fax']);
 			$email->setValue($data['email']);
@@ -202,7 +208,7 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 			$branch_display->setValue($data['displayby']);
 		}
 		
-		$this->addElements(array($school_nameen,$school_namekh,$branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
+		$this->addElements(array($branch_tel1,$school_nameen,$school_namekh,$branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
 				$branch_status,$branch_display));
 		
 		return $this;

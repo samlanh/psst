@@ -32,23 +32,19 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$db_student= new Foundation_Model_DbTable_DbStudentDrop();
 			$rs_rows = $db_student->getAllStudentDrop($search);
 			$list = new Application_Form_Frmtable();
-			if(!empty($rs_rows)){
-				} 
-				else{
-					$result = Application_Model_DbTable_DbGlobal::getResultWarning();
-				}
-				$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","STOP_DATE","REASON","USER","STATUS");
-				$link=array(
-						'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
-				);
-				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'academic'=>$link,'stu_id'=>$link,'student_name'=>$link,'sex'=>$link));
+			
+			$collumns = array("BRANCH_NAME","STUDENT_ID","STUDENT_NAMEKHMER","STUDENT_NAME","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","STOP_DATE","REASON","USER","STATUS");
+			$link=array(
+					'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
+			);
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'student_kh'=>$link,'academic'=>$link,'stu_id'=>$link,'student_name'=>$link,'sex'=>$link));
 	
 			$this->view->search = $search;
 		}catch(Exception $e){
-			echo $e->getMessage();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
 	function addAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -66,10 +62,10 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 				}
 			}
 			$db = new Foundation_Model_DbTable_DbStudentDrop();
-			$this->view->type = $db->getAllDropType();
+// 			$this->view->type = $db->getAllDropType();
 						
 			$db_global = new Application_Model_DbTable_DbGlobal();
-			$this->view->rsbranch = $db_global->getAllBranch();
+// 			$this->view->rsbranch = $db_global->getAllBranch();
 			$this->view->degree = $db_global->getAllDegreeMent();
 			$this->view->group = $db->getAllgroupStudy();
 			$this->view->session=$db_global->getSession();
@@ -79,16 +75,15 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$tsub= new Global_Form_FrmAddClass();
 			$frm_student=$tsub->FrmAddGroup();
 			Application_Model_Decorator::removeAllDecorator($frm_student);
-			$this->view->frm = $frm_student;
-			
+			$this->view->frm = $frm_student;			
 		}catch(Exception $e){
-			echo $e->getMessage();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	public function editAction(){
 		try{	
 			$id=$this->getRequest()->getParam("id");
-			
 			$db= new Foundation_Model_DbTable_DbStudentDrop();
 			$row = $this->view->row = $db->getStudentDropById($id);
 			
@@ -108,14 +103,14 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			}	
 			$db = new Foundation_Model_DbTable_DbStudentDrop();
 			$this->view->stu_id = $db->getAllStudentNameEdit();
-			$this->view->type = $db->getAllDropType();
+// 			$this->view->type = $db->getAllDropType();
 			
 			$db = new Application_Model_DbTable_DbGlobal();
 			$stu = $db->getAllStudentName();
 			$this->view->stuname=$stu;
 			
 			$db_global = new Application_Model_DbTable_DbGlobal();
-			$this->view->rsbranch = $db_global->getAllBranch();
+// 			$this->view->rsbranch = $db_global->getAllBranch();
 			$this->view->degree = $db_global->getAllDegreeMent();
 			$this->view->group = $db->getAllgroupStudy();
 			$this->view->session=$db_global->getSession();
@@ -126,10 +121,10 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$frm_student=$tsub->FrmAddDrup($row);
 			Application_Model_Decorator::removeAllDecorator($frm_student);
 			$this->view->frm = $frm_student;
-			//print_r($row); exit();
 			
 		}catch(Exception $e){
-			echo $e->getMessage();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 

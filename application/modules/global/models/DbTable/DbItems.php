@@ -54,9 +54,9 @@
 	}
 	function getAllItemsOption($search = '',$type=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT d.id,d.title,d.title_en,
-		(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
-		d.status FROM `rms_items` AS d WHERE 1 ";
+		$sql = "SELECT d.id,d.title,d.title_en,
+			(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name,
+			d.status FROM `rms_items` AS d WHERE 1 ";
 		$orderby = " ORDER BY d.type ASC, d.id DESC ";
 		// 		(SELECT dt.title FROM `rms_itemstype` AS dt WHERE dt.id = d.type LIMIT 1) AS degreetype,
 		$where = ' ';
@@ -67,15 +67,16 @@
 			$s_where = array();
 			$s_search = addslashes(trim($search['advance_search']));
 			$s_where[] = " d.title LIKE '%{$s_search}%'";
+			$s_where[] = " d.title_en LIKE '%{$s_search}%'";
 			$s_where[] = " d.shortcut LIKE '%{$s_search}%'";
 			$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 // 		if(!empty($search['schoolOption_search'])){
 // 			$where.= " AND d.schoolOption  = ".$db->quote($search['schoolOption_search']);
 // 		}
-		// 		if(!empty($search['type_search'])){
-		// 			$where.= " AND d.type = ".$db->quote($search['type_search']);
-		// 		}
+		//if(!empty($search['type_search'])){
+		// 	$where.= " AND d.type = ".$db->quote($search['type_search']);
+		//}
 		if($search['status_search']>-1){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}

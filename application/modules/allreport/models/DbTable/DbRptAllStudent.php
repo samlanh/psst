@@ -4,11 +4,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'rms_student';
-//     public function getUserId(){
-//     	$session_user=new Zend_Session_Namespace('authstu');
-//     	return $session_user->user_id;
-    	 
-//     }
     public function getAllStudent($search){//for card list
     	$db = $this->getAdapter();
     	$sql ='SELECT 

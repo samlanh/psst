@@ -3,20 +3,17 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate('ALL_STUDENT_REPORT_PROFILE')); 
 	echo $this->headTitle(''); 
-	$frm =  $this->form_search;
-	
-	
+	$frm =  $this->form_search;	
 ?>	
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
-       		<div class="col-sm-12 border-botom">
-		    	<div class="col-sm-8 pd-0">
+       <div class="col-sm-12 border-botom">
+		 	<div class="col-sm-8 pd-0">
 	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ALL_STUDENT_REPORT_PROFILE');?></h4>
-    			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
     		</div>
+    		<div class="col-sm-4 text-right"></div>
     	</div>
+    </div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-all-studentprofile')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
@@ -27,7 +24,6 @@
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                     	<input id="study_year" />
-		           		<?php //echo $frm->getElement("study_year");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input id="group" />
@@ -135,7 +131,6 @@
 			<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
 				<tr>
 					<td width="15%" align="center">
-						<!-- <img style="width: 60%;" alt="<?php ?>" src="<?php //echo $this->baseUrl().'/images/logo.png'?>">  -->
 					</td>
 					<td width="70%"  align="center">
 						<?php 
@@ -152,7 +147,7 @@
 								$degreename=$rowdegree["title"];
 							}
 						?>
-					    <strong​​ style=" font-weight:bold;font-family: Arial Black;color:#f00; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("អត្តលេខសិស្ស").$branc_name;?></strong><br />
+					    <strong​​ style=" font-weight:bold;font-family: Arial Black;color:#f00; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("ALL_STUDENT_REPORT_PROFILE").$branc_name;?></strong><br />
 						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#0400ff; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $degreename;?></strong><br />
 						<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
@@ -231,12 +226,12 @@
 						<table width="100%" style="font-family:'Khmer MEF2';">
 							<tr>
 								<td  width="25%" align="center">
-									<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PRINCIPAL");?></span>
 								</td>
-								<td  width="50%">
-								</td>
+								<td  width="50%"></td>
 								<td align="center"  width="25%">
-									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+									<span style="color:#4839bd;font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
 								</td>
 							</tr>
 						</table>

@@ -27,7 +27,7 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
            $glClass = new Application_Model_GlobalClass();
 			$rs_rowshow = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("SCHOOL_NAMEKH","SCHOOL_NAMEEN","BRANCH_NAME","PARENT_BRANCH","PREFIX_CODE","CODE","ADDRESS","PHONE","BRANCH_FAX","NOTE","STATUS");
+			$collumns = array("SCHOOL_NAMEKH","SCHOOL_NAMEEN","BRANCH_NAME","PARENT_BRANCH","PREFIX_CODE","CODE","ADDRESS","PHONE","PHONE1","BRANCH_FAX","NOTE","STATUS");
 			$link=array(
 					      'module'=>'rsvacl','controller'=>'branch','action'=>'edit',
 			);
@@ -37,7 +37,6 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message($this->tr->translate("APPLICATION_ERROR"));
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
 		$fm = new RsvAcl_Form_Frmbranch();
 		$frm = $fm->Frmbranch();
@@ -63,7 +62,7 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 				}
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message($this->tr->translate("INSERT_FAIL"));
-				echo $e->getMessage();exit();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -87,7 +86,7 @@ class Rsvacl_BranchController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::Sucessfull($this->tr->translate("EDIT_SUCCESS"),self::REDIRECT_URL."/branch/index");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message($this->tr->translate("EDIT_FAIL"));
-				echo $e->getMessage();exit();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();

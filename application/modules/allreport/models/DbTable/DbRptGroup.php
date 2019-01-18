@@ -191,26 +191,21 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	`g`.`semester` AS `semester`,
 				   	(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,
 				   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
-				   	
-		
 				   	(SELECT	$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
-				   	(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)LIMIT 1) AS `room_name`,
-				   	 g.amount_month,
-				   	`g`.`start_date`,
-				   	`g`.`expired_date`,
-				   	`g`.`note`,
+				   	(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 				   	(SELECT $label FROM `rms_view` WHERE `rms_view`.`type` = 9 AND `rms_view`.`key_code` = `g`.`is_pass` LIMIT 1) AS `status`,
+				   	
 				   	(SELECT COUNT(DISTINCT  sg.`stu_id`) FROM `rms_group_detail_student` AS sg,rms_student AS s  
-	   					WHERE sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status=1 AND type=1 LIMIT 1) AS Num_Student,
+	   					WHERE sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status=1  LIMIT 1) AS Num_Student,
+	   					
 	   				(SELECT COUNT(DISTINCT  sg.`stu_id`) FROM `rms_group_detail_student` AS sg,rms_student as s 
-	   					WHERE sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.is_subspend!=0 AND type=1 LIMIT 1) AS student_drop
+	   					WHERE sg.`group_id`=`g`.`id` AND s.stu_id =sg.`stu_id` AND s.status =1 AND sg.stop_type!=0 LIMIT 1) AS student_drop
 				FROM 
 	   				`rms_group` `g`
 	   			WHERE 
 	   				 group_code != '' ";
 	   	
 	   	$where=" ";
-	   	
 	   	if(!empty($search['title'])){
 	   		$s_where = array();
 	   		$s_search = addslashes(trim($search['title']));

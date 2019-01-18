@@ -138,7 +138,10 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$rows= $db->getAllDropType();
 		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_TYPE")));
 		$opt=array();
-		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		if(!empty($rows))foreach($rows As $row)
+			{
+				$opt[$row['id']]=$row['name'];
+			}
 		$_type->setMultiOptions($opt);
 		
 		$room =  new Zend_Dojo_Form_Element_FilteringSelect('room');
@@ -184,7 +187,6 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'required'=>false
 		));
 		$db = new Application_Model_DbTable_DbGlobal();
-// 		$calture_opt = $db->getAllDegree();
 		
 		$calture_opt = array(""=>$this->tr->translate("PLEASE_SELECT_EDUCATION_LEVEL"));
 		$optionDegree = $_dbgb->getAllDegreeMent(21);//Education Level

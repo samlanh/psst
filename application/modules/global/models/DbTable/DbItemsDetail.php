@@ -173,6 +173,7 @@
 					'items_type'=> $_data['items_type'],
 					'code'=> $_data['code'],
 					'title'	  => $_data['title'],
+					'title_en'=> $_data['title'],
 					'note'    => $_data['note'],
 					'product_type' => $_data['product_type'],
 					'is_onepayment' => $_data['is_onepayment'],
@@ -200,12 +201,10 @@
 				);
 				$this->insert($_arr);
 			}
-			
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
 	
@@ -303,6 +302,7 @@
 					'items_type'=> $_data['items_type'],
 					'code'=> $_data['code'],
 					'title'	  => $_data['title'],
+					'title_en'=> $_data['title'],
 					'note'    => $_data['note'],
 					'product_type' => $_data['product_type'],
 					'is_onepayment' => $_data['is_onepayment'],

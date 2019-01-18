@@ -5,10 +5,8 @@
 ?>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
-dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.CheckBox");
 </script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -125,20 +123,12 @@ dojo.require("dijit.form.CheckBox");
 		            </div>
 		        </div>
 		        <div class="col-md-4 col-sm-4 col-xs-12">
-		            <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS")?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<?php echo $frm->getElement("status");?>
-		                </div>
-		            </div>
 		        </div>
 			</div>
 		     <div class="clearfix"></div>
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-              		 <input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="button" label="<?php echo $tr->translate('GO_BACK');?>" id="back" dojoType="dijit.form.Button" 
-			 		iconClass="dijitIconUndo" onclick="window.location = '<?php echo $this->url(array('module'=>'foundation','controller'=>"studentdrop",'action'=>'index'),null,true); ?>';" />
+              		 <input iconClass="dijitIconClear" type="reset"  label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 					<input type="button" onclick="submitDataClose();" id="save_close" value="save_close" name="save_close" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
 					iconClass="dijitEditorIcon dijitEditorIconSave" />
             	 </div>
@@ -146,32 +136,6 @@ dojo.require("dijit.form.CheckBox");
 		</form>
 	</div>
 </div>
-	<table cellspacing="20" style="margin: 0 auto; width: 100%">
-		<tr>
-			<td>
-				<fieldset style=" background: #fff;   border: solid 1px #008;">
-					<legend align="center" style="font-size: 14px; color: #008;"><strong><?php echo $tr->translate("EDIT_STUDENT_DROP");?></strong></legend>
-					<table cellspacing="20" width="100%" >
-						<tr>
-							<td align="center" valign="top">
-								<table cellspacing="5" width="100%"​>
-									
-									
-									<tr>
-										<td colspan="6" align="center">
-											
-										</td>
-									</tr>					
-								</table>
-							</td>							
-						</tr>
-					</table>	
-				</fieldset>
-			</td>			
-		</tr>
-		
-	</table>	
-</form>
 <script type="text/javascript">
 var stuid_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->stuname));?> );
 var group_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->group));?> );
@@ -254,6 +218,17 @@ function loading(){
 }
 function submitDataClose(){
 	if(dijit.byId('add_studentdrop').validate()) {
+		studentid=dijit.byId('studentid').get('value');
+		 if(studentid==0 || studentid=='' || studentid ==-1){
+			alert('Select studentid feld!');
+			dijit.byId('studentid').focus();
+			return false;
+		}
+ 		if(dijit.byId('type').get('value')==''){
+				dijit.byId('type').focus();
+			return false;
+	  	  	}
+  	  	
 		dijit.byId('save_close').set('disabled',true);
 		var url_submit = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentdrop','action'=>'edit')); ?>';
 		loading();
@@ -304,7 +279,6 @@ function getStudentInfo(){
 			dijit.byId('room').set('readOnly',true);
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

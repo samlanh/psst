@@ -23,14 +23,8 @@
             	<?php echo $frm->getElement("branch_id");?>
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">
-            	<?php //echo $frm->getElement("study_year");?>
             	<input id="study_year">
             </div>
-            <!-- 
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php //echo $frm->getElement("grade_bac");?>
-            </div>
-             -->
             <div class="col-md-3 col-sm-3 col-xs-12">
             	<?php echo $frm->getElement("session");?>
             </div>
@@ -54,26 +48,20 @@
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
 				<td width="25%" align="left">
 				</td>
 				<td align="center">
-					<span style="font-family: Arial Black;color:#4839bd; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("RPT_STUDENT_DROP");?></span><br />
-					<span​​ style="font-family: Arial Black;color:#4839bd; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
+					<span style="font-family: Arial Black;color:#4839bd; font-size: 17px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_DROP");?></span><br />
+					<span​​ style="maring-top:20px;font-family: Arial Black;color:#4839bd; font-size: 13px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
 				</td>
 				<td width="25%" align="right">
 				</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
 			</tr>
 		<style>
 			table tr th{
 				border: 1px solid #000;	
 				text-align: center;
-				padding:5px;
+				padding:1px;
 			}
 			.hover:hover{background: #ccc;}
 			table {page-break-inside:auto }
@@ -86,53 +74,47 @@
 		</style>
 			<tr>
 				<td colspan="3">
-					<table border="1" cellpadding="5"​ style="border:1px #4839bd solid; width:100%; border-collapse:collapse; color:#4839bd; white-space:nowrap;font-family:'Time New Roman' , 'Khmer OS Battambang';" >
+					<table border="1" cellpadding="1"​ style="border:1px #4839bd solid; width:100%; border-collapse:collapse; color:#4839bd; font-family:'Time New Roman' , 'Khmer OS Battambang';" >
 						<thead>
 						<tr style="font-size:12px; height: 25px;background: #fdbdbd; font-weight: bold" align="center" >
 							<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 							<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
-							<td colspan="3">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
-							<td colspan="4">&nbsp;<?php echo $tr->translate("DOCUMENT_INFO");?>&nbsp;</td>
-							
+							<td colspan="4">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
+							<td colspan="4">&nbsp;<?php echo $tr->translate("STUDY_INFO");?>&nbsp;</td>
 							<td rowspan="2" ><?php echo $tr->translate("TYPE")?></td>
 							<td rowspan="2"><?php echo $tr->translate("STOP_DATE")?></td>
 							<td rowspan="2"><?php echo $tr->translate("REASON")?></td>
 						</tr>
 						<tr style="font-size:12px; height:25px; background: #fdbdbd; font-weight: bold;" align="center" >
-							<td ><?php echo $tr->translate("STUDENT_ID")?></td>
-							<td ><?php echo $tr->translate("STUDENT_NAME")?></td>
-							<td ><?php echo $tr->translate("GENDER")?></td>
-							
-							<td ><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
-							<td ><?php echo $tr->translate("GROUP")?></td>
-							<td ><?php echo $tr->translate("GRADE")?></td>
-							<td ><?php echo $tr->translate("SESSION")?></td>
+							<td><?php echo $tr->translate("STUDENT_ID")?></td>
+							<td><?php echo $tr->translate("STUDENT_NAMEKHMER")?></td>
+							<td><?php echo $tr->translate("NAME_ENGLISH")?></td>
+							<td><?php echo $tr->translate("GENDER")?></td>							
+							<td><?php echo $tr->translate("ACADEMIC_YEAR")?></td>
+							<td><?php echo $tr->translate("GROUP")?></td>
+							<td><?php echo $tr->translate("GRADE")?></td>
+							<td><?php echo $tr->translate("SESSION")?></td>
 						</tr>
 						</thead>
 					<?php $i=0;foreach ($this->rs AS $row) { $i++;?>
 						<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
-							<td ><?php echo $i;?></td>
-							<td ><?php echo $row['branch_name'];?></td>
-							<td ><?php echo $row['stu_id'];?></td>
-							<td align="left">&nbsp;&nbsp;<?php echo $row['name'];?></td>
-							<td ><?php echo $row['sex'];?></td>
-							<td ><?php echo $row['academic_year'];?></td>
-							<td ><?php echo $row['group_name'];?></td>
-							<td ><?php echo $row['grade'];?></td>
-							<td ><?php echo $row['session'];?></td>
-							<td ><?php echo $row['type'];?></td>
-							<td ><?php echo $row['date_stop'];?></td>
-							<td ><?php echo $row['reason'];?></td>
+							<td><?php echo $i;?></td>
+							<td><?php echo $row['branch_name'];?></td>
+							<td><?php echo $row['stu_id'];?></td>
+							<td align="left"><?php echo $row['stu_khname'];?></td>
+							<td align="left"><?php echo $row['last_name'].' '.$row['stu_enname'];?></td>
+							<td><?php echo $row['sex'];?></td>
+							<td><?php echo $row['academic_year'];?></td>
+							<td><?php echo $row['group_name'];?></td>
+							<td><?php echo $row['grade'];?></td>
+							<td><?php echo $row['session'];?></td>
+							<td><?php echo $row['type'];?></td>
+							<td><?php echo $row['date_stop'];?></td>
+							<td style="width:200px !important;white-space:normal !important;font-size: 10px;"><?php echo $row['reason'];?></td>
 						</tr>
 					<?php }?>	
 					</table>	
 				</td>
-			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
-			</tr>
-			<tr>
-				<td colspan="3">&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">
@@ -156,7 +138,6 @@
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.require("dijit.form.FilteringSelect"); 
 
@@ -213,5 +194,4 @@ function getAllAcademicByBranch(){
 		}
 	});
 }
-
 </script>

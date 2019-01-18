@@ -31,7 +31,6 @@ display: table-cell !important;
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                     	<input id="study_year" />
-		           		<?php //echo $frm->getElement("study_year");?>
                    </div>
                     <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input id="group" />
@@ -64,20 +63,14 @@ display: table-cell !important;
 				</tr>
 				<tr class="line"><td colspan="3"></td></tr>
 				<tr>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
 					<td width="15%" align="center">
 					</td>
 					<td width="70%"  align="center">
-						<span​​ style=" font-family: Arial Black;color:#4839bd; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("REPORT_STUDENT_DOCUMENT_NOT_ENOUGH");?></span><br />
-						<span​​ style=" font-family: Arial Black;color:#4839bd; font-size: 14px;font-family:'Khmer MEF2';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
+						<span​​ style=" font-family: Arial Black;color:#4839bd; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_STUDENT_DOCUMENT_NOT_ENOUGH");?></span><br />
+						<span​​ style=" font-family: Arial Black;color:#4839bd; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
 					</td>
 					<td width="15%" align="center">
 					</td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
 				</tr>
 				<style>
 					table tr th{
@@ -97,19 +90,18 @@ display: table-cell !important;
 				<tr>
 					<td colspan="3">
 					<div id="exportExcel">
-						<table cellpadding="4"​ style="border:1px #4839bd solid; width:100%; border-collapse:collapse;color:#4839bd;white-space:nowrap;font-family:Time New Roman , Khmer OS Battambang;" border="1" >
+						<table cellpadding="0"​ style="border:1px #4839bd solid; width:100%; border-collapse:collapse;color:#4839bd;white-space:nowrap;font-family:Time New Roman , Khmer OS Battambang;" border="1" >
 							<thead>
 								<tr style="font-size:12px; height: 25px;background: #fdbdbd; font-weight: bold" align="center" >
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 									<td colspan="8">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
 									<td colspan="3">&nbsp;<?php echo $tr->translate("DOCUMENT_INFO");?>&nbsp;</td>
 								</tr>
 								<tr style="font-size:12px; height: 25px;background: #fdbdbd; font-weight: bold;" align="center" >
 									<td>&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
-									<td>&nbsp;<?php echo $tr->translate("STUDENT_NAME");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER");?>&nbsp;</td>
+									<td >&nbsp;<?php echo $tr->translate("NAME_ENGLISH");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("SEX");?>&nbsp;</td>
-									<td >&nbsp;<?php echo $tr->translate("NATIONALITY");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
@@ -120,24 +112,23 @@ display: table-cell !important;
 								</tr>
 							</thead>
 						<?php $i=0;$degree=0;foreach ($this->rs AS $row) { $i++;
-						$end_dat=date("Y-m-d");
-						$total_day=strtotime($end_dat)-strtotime($row['date_end']);
-						$total_late_day=$total_day/(60*60*24);
+							$end_dat=date("Y-m-d");
+							$total_day=strtotime($end_dat)-strtotime($row['date_end']);
+							$total_late_day=$total_day/(60*60*24);
 						?>
-							<tr style="font-size:13px;line-height:18px;" align="center" class="hover" >
+							<tr style="font-size:13px;line-height:20px;" align="center" class="hover" >
 								<td >&nbsp;<?php echo $i;?>&nbsp;</td>
-								<td >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
 								<td >&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
-								<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['student_name'];?>&nbsp;</td>
+								<td align="left"><?php echo $row['stu_khname'];?>&nbsp;</td>
+								<td >&nbsp;<?php echo $row['last_name'].''.$row['stu_enname'];?>&nbsp;</td>
 								<td >
 									&nbsp;<?php if ($row['sex']==1){ echo $tr->translate("MALE");}else{ echo $tr->translate("FEMALE");}?>&nbsp;
 								</td>	
-								<td >&nbsp;<?php echo $row['nationality'];?>&nbsp;</td>
 								<td >&nbsp;<?php echo $row['tel'];?>&nbsp;</td>
 								<td >&nbsp;<?php echo $row['academic_year'];?>&nbsp;</td>
 								<td >&nbsp;<?php echo $row['degree'];?>&nbsp;</td>
 								<td align="left">&nbsp;<?php echo $row['grade'];?></td>
-								<td >&nbsp;<?php echo $row['document_type'];?>&nbsp;</td>	
+								<td align="left">&nbsp;<?php echo $row['document_type'];?>&nbsp;</td>	
 								<td >&nbsp;<?php if ($total_late_day>0){echo $total_late_day." ".$tr->translate("DAY");}else{ echo "-";}?>&nbsp;</td>	
 								<td >&nbsp;<?php echo date("d/M/Y",strtotime($row['date_end']));?>&nbsp;</td>	
 							</tr>

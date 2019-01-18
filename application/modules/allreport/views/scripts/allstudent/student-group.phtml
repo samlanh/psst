@@ -78,9 +78,7 @@
 				<td width="28%" align="left">
 				</td>
 				<td width="44%" align="center">
-					<strong style="font-weight:200;color:#4839bd; font-size: 18px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
-					<strong style="font-weight:200;color:#4839bd; font-size: 18px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></strong>
-					<strong style="font-weight:200;font-family: Arial Black;color:#4839bd; font-size: 15px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></strong>
+					<strong style="font-weight:200;font-family: Arial Black;color:#4839bd; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></strong>
 				</td>
 				<td align="right" width="28%"></td>
 			</tr>
@@ -127,10 +125,10 @@
 						  if (!empty($this->rs)){foreach($this->rs as $rs){ $i++;?>
 						  <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding context-menu-one'>
 						   	<td><?php echo $i;?></td>
-						   	<td align="left">&nbsp;<?php echo $rs['branch_name']; ?></a></td>
-						    <td align="left">&nbsp;<?php echo $rs['group_code']; ?></a></td>
-						    <td align="left">&nbsp;<?php echo $rs['academic']; ?></a></td>
-						    <td><?php echo $rs['semester']; ?></a></td>
+						   	<td align="left">&nbsp;<?php echo $rs['branch_name']; ?></td>
+						    <td align="left">&nbsp;<?php echo $rs['group_code']; ?></td>
+						    <td align="left">&nbsp;<?php echo $rs['academic']; ?></td>
+						    <td><?php echo $rs['semester']; ?></td>
 						    <td align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
 						    <td>&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>

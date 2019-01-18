@@ -60,6 +60,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    			'br_address'	=>$_data['br_address'],
 	    			'branch_code'	=>$_data['branch_code'],
 	    			'branch_tel'	=>$_data['branch_tel'],
+	    			'branch_tel1'	=>$_data['branch_tel1'],
 	    			'fax'		    =>$_data['fax'],
 	    			'email'		    =>$_data['email'],
 	    			'website'		=>$_data['website'],
@@ -86,7 +87,6 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 	    	$_db->commit();
 	    	}catch(Exception $e){
 	    		$_db->rollBack();
-	    		echo $e->getMessage(); exit();
 	    	}
     }
     function getAllSchoolOption(){
@@ -129,6 +129,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'br_address'	=>$_data['br_address'],
     			'branch_code'	=>$_data['branch_code'],
     			'branch_tel'	=>$_data['branch_tel'],
+    			'branch_tel1'	=>$_data['branch_tel1'],
     			'fax'			=>$_data['fax'],
     			'email'		    =>$_data['email'],
     			'website'		=>$_data['website'],
@@ -164,7 +165,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			b.school_nameen,
     			b.branch_nameen,
 		    	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.parent LIMIT 1) as parent_name,
-		    	b.prefix,b.branch_code,b.br_address,b.branch_tel,b.fax,
+		    	b.prefix,b.branch_code,b.br_address,b.branch_tel,b.branch_tel1,b.fax,
     			b.other,b.status FROM rms_branch AS b  ";
     	$where = ' WHERE  b.branch_nameen !="" ';   	
 //     	(SELECT name_en FROM `rms_view` AS v WHERE v.`type` = 4 AND v.key_code = b.displayby)AS displayby,

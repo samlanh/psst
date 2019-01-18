@@ -11,21 +11,30 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 //     }
     public function getAllStudentDrop($search){
     	$db = $this->getAdapter();
+    	$session_lang=new Zend_Session_Namespace('lang');
+    	$lang_id=$session_lang->lang_id;
+    	$str='name_en';
+    	if($lang_id==1){//for kh
+    		$str = 'name_kh';
+    	}
+    	
     	$sql = "SELECT st.stu_code as stu_id, 
 		(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = stdp.branch_id LIMIT 1) AS branch_name,
-		(CASE WHEN st.stu_khname IS NULL THEN st.stu_enname ELSE st.stu_khname END) AS name,
+			st.stu_khname,
+			st.stu_enname,
+			st.last_name,
     	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year) as academic_year,
-    	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=st.session limit 1)AS session,
-    	
-    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=st.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-					  
-		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex )AS sex,
-		(SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
+    	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=stdp.session limit 1)AS session,
+    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=stdp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+		(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex ) AS sex,
+		(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
 		(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=st.group_id LIMIT 1 ) AS group_name,
 		stdp.note,stdp.date_stop,stdp.reason,
 		(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
-		 from rms_student_drop as stdp,
-    	rms_student as st where stdp.stu_id=st.stu_id and stdp.status=1 ";
+		 FROM 
+		 	rms_student_drop as stdp,
+    		rms_student as st
+    	 WHERE stdp.stu_id=st.stu_id and stdp.status=1 AND type !=0 ";
 
     	$from_date =(empty($search['start_date']))? '1': " date_stop >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " date_stop <= '".$search['end_date']." 23:59:59'";
@@ -43,6 +52,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		$s_search = addslashes(trim($search['title']));
     		$s_where[] = " st.stu_code LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
+    		$s_where[] = " st.last_name LIKE '%{$s_search}%'";
     		$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = "  (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`stdp`.`type`) LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
@@ -59,24 +69,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	if(!empty($search['session'])){
     		$where.=' AND stdp.session='.$search['session'];
     	}
-    	
-//     	$searchs=$search['txtsearch'];
-    	
-//     	if($search['searchby']==0){
-//     		$where.='';
-//     	}
-//     	if($search['searchby']==1){
-//     		$where.=" AND stu_id  LIKE  '%".$searchs."%' ";
-//     	}
-//     	if($search['searchby']==2){
-//     		$where.=" AND (SELECT CONCAT(stu_khname,' - ',stu_enname) FROM `rms_student` WHERE `rms_student`.`stu_id`=`rms_student_drop`.`stu_id`) LIKE '%".$searchs."%'";
-//     	}
-//     	if($search['searchby']==3){
-//     		$where.=" AND (SELECT name_kh FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=`rms_student_drop`.`type`) LIKE '%".$searchs."%'";
-//     	}
-    	
     	return $db->fetchAll($sql.$where.$order);
-    	 
     }
    
     function getAllRescheduleGroup($search){

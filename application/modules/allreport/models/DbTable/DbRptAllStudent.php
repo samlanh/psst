@@ -403,7 +403,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	
-    	$order="  order by academic_year DESC,degree ASC,grade DESC,session ASC,stu_id DESC";
+    	$order="  order by academic_year DESC,degree ASC,grade DESC,session ASC,stu_khname ASC ";
     	if(empty($search)){
     		return $db->fetchAll($sql.$order);
     	}

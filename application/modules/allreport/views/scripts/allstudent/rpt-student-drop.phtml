@@ -16,24 +16,30 @@
     </div>
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
-            <div class="col-md-3 col-sm-3 col-xs-12">
+            <div class="col-md-2 col-sm-3 col-xs-12">
             	<?php echo $frm->getElement("title");?>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-12">
+            <div class="col-md-2 col-sm-3 col-xs-12">
             	<?php echo $frm->getElement("branch_id");?>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-12">
+            <div class="col-md-2 col-sm-3 col-xs-12">
             	<input id="study_year">
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-12">
+			<div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("degree");?>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("grade");?>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-12">
             	<?php echo $frm->getElement("session");?>
             </div>
         </div>	
         <div class="form-group">
-        	 <div class="col-md-3 col-sm-3 col-xs-12">
+        	 <div class="col-md-2 col-sm-3 col-xs-12">
         	 	<?php echo $frm->getElement("start_date");?>
             </div>
-             <div class="col-md-3 col-sm-3 col-xs-12">
+             <div class="col-md-2 col-sm-3 col-xs-12">
              	<?php echo $frm->getElement("end_date");?>
             </div>
              <div class="col-md-2 col-sm-2 col-xs-12">
@@ -48,11 +54,14 @@
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
+				<td colspan="3">&nbsp;</td>
+			</tr>
+			<tr>
 				<td width="25%" align="left">
 				</td>
 				<td align="center">
-					<span style="font-family: Arial Black;color:#4839bd; font-size: 17px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_DROP");?></span><br />
-					<span​​ style="maring-top:20px;font-family: Arial Black;color:#4839bd; font-size: 13px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
+					<span style="font-family: Arial Black;color:#4839bd; font-size: 17px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_DROP");?></span><br />
+					<span style="maring-top:20px;font-family: Arial Black;color:#4839bd; font-size: 13px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
 				</td>
 				<td width="25%" align="right">
 				</td>
@@ -101,20 +110,23 @@
 							<td><?php echo $i;?></td>
 							<td><?php echo $row['branch_name'];?></td>
 							<td><?php echo $row['stu_id'];?></td>
-							<td align="left"><?php echo $row['stu_khname'];?></td>
-							<td align="left"><?php echo $row['last_name'].' '.$row['stu_enname'];?></td>
+							<td align="left">&nbsp;<?php echo $row['stu_khname'];?></td>
+							<td align="left">&nbsp;<?php echo $row['last_name'].' '.$row['stu_enname'];?></td>
 							<td><?php echo $row['sex'];?></td>
 							<td><?php echo $row['academic_year'];?></td>
 							<td><?php echo $row['group_name'];?></td>
 							<td><?php echo $row['grade'];?></td>
 							<td><?php echo $row['session'];?></td>
 							<td><?php echo $row['type'];?></td>
-							<td><?php echo $row['date_stop'];?></td>
-							<td style="width:200px !important;white-space:normal !important;font-size: 10px;"><?php echo $row['reason'];?></td>
+							<td><?php echo date("d-m-Y",strtotime($row['date_stop']));?></td>
+							<td style="max-width:200px !important;white-space:normal !important;font-size: 10px;"><?php echo $row['reason'];?></td>
 						</tr>
 					<?php }?>	
 					</table>	
 				</td>
+			</tr>
+			<tr>
+				<td colspan="3">&nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">

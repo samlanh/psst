@@ -14,23 +14,25 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$session_lang=new Zend_Session_Namespace('lang');
     	$lang_id=$session_lang->lang_id;
     	$str='name_en';
+    	$grade="title_en";
     	if($lang_id==1){//for kh
     		$str = 'name_kh';
+    		$grade="title";
     	}
     	
     	$sql = "SELECT st.stu_code as stu_id, 
-		(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = stdp.branch_id LIMIT 1) AS branch_name,
+			(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = stdp.branch_id LIMIT 1) AS branch_name,
 			st.stu_khname,
 			st.stu_enname,
 			st.last_name,
-    	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year) as academic_year,
-    	(select name_en from rms_view where rms_view.type=4 and rms_view.key_code=stdp.session limit 1)AS session,
-    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=stdp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-		(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex ) AS sex,
-		(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
-		(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=st.group_id LIMIT 1 ) AS group_name,
-		stdp.note,stdp.date_stop,stdp.reason,
-		(select name_kh from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
+	    	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year) as academic_year,
+	    	(select $str from rms_view where rms_view.type=4 and rms_view.key_code=stdp.session limit 1)AS session,
+	    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=stdp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+			(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex ) AS sex,
+			(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
+			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=st.group_id LIMIT 1 ) AS group_name,
+			stdp.note,stdp.date_stop,stdp.reason,
+			(select $str from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
 		 FROM 
 		 	rms_student_drop as stdp,
     		rms_student as st
@@ -63,9 +65,12 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	if(!empty($search['study_year'])){
     		$where.=' AND st.academic_year='.$search['study_year'];
     	}
-    	if(!empty($search['grade_bac'])){
-    		$where.=' AND stdp.grade='.$search['grade_bac'];
-    	}
+    	if(!empty($search['grade'])){
+	   		$where.=' AND stdp.grade='.$search['grade'];
+	   	}
+	   	if($search['degree']>0){
+	   		$where.=' AND `stdp`.`degree`='.$search['degree'];
+	   	}
     	if(!empty($search['session'])){
     		$where.=' AND stdp.session='.$search['session'];
     	}
@@ -74,24 +79,35 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
    
     function getAllRescheduleGroup($search){
     	$db = $this->getAdapter();
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$subject = "subject_titlekh";
+    		$branch = "branch_namekh";
+    	}else{ // English
+    		$label = "name_en";
+    		$subject = "subject_titleen";
+    		$branch = "branch_nameen";
+    	}
     	$sql = "SELECT 
-    	gr.group_id,
-    	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
-    	(SELECT CONCAT(rms_tuitionfee.from_academic,'-',rms_tuitionfee.to_academic,'(',rms_tuitionfee.generation,')')
-    	 FROM rms_tuitionfee WHERE rms_tuitionfee.status=1 AND rms_tuitionfee.is_finished=0 AND rms_tuitionfee.id=gr.year_id LIMIT 1) AS years,
-    	(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
-    	(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1)AS days,
-    	gr.from_hour,gr.to_hour,
-    	(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1 )AS session_id,
-    	(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AND v.type=4 LIMIT 1)AS `session`,
-    	(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
-    	(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.id=gr.techer_id AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
-    	
-    	DATE_FORMAT(gr.create_date,'%d-%m-%Y')As create_date, (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS USER,
-    	(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.status AND rms_view.type=1 LIMIT 1) AS STATUS
-    	FROM 
-    		rms_group_reschedule AS gr  
-    	WHERE gr.status=1 ";
+			    	gr.group_id,
+			    	(SELECT $branch FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
+			    	(SELECT CONCAT(rms_tuitionfee.from_academic,'-',rms_tuitionfee.to_academic,'(',rms_tuitionfee.generation,')')
+			    	 FROM rms_tuitionfee WHERE rms_tuitionfee.status=1 AND rms_tuitionfee.is_finished=0 AND rms_tuitionfee.id=gr.year_id LIMIT 1) AS years,
+			    	(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
+			    	(SELECT $label FROM rms_view WHERE rms_view.key_code=gr.day_id AND rms_view.type=18 LIMIT 1)AS days,
+			    	gr.from_hour,gr.to_hour,
+			    	(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1 )AS session_id,
+			    	(SELECT $label FROM rms_view AS v WHERE v.key_code=(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AND v.type=4 LIMIT 1)AS `session`,
+			    	(SELECT $subject FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
+			    	(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.id=gr.techer_id AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
+			    	
+			    	DATE_FORMAT(gr.create_date,'%d-%m-%Y')As create_date, (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS USER,
+			    	(SELECT $label FROM rms_view WHERE rms_view.key_code=gr.status AND rms_view.type=1 LIMIT 1) AS STATUS
+    		FROM 
+    			rms_group_reschedule AS gr  
+    		WHERE gr.status=1 ";
     	$where =' ';
     			$from_date =(empty($search['start_date']))? '1': "gr.create_date >= '".$search['start_date']." 00:00:00'";
     			$to_date = (empty($search['end_date']))? '1': "gr.create_date <= '".$search['end_date']." 23:59:59'";

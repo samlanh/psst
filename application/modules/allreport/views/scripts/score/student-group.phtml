@@ -4,6 +4,11 @@
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
+	
+	$urlStudentGroup = $this->baseUrl()."/allreport/allstudent/rpt-student-group/id/";
+	$urlAttList = $this->baseUrl()."/allreport/allstudent/rpt-att-list/id/";
+	$urlTotalAtt = $this->baseUrl()."/allreport/allstudent/rpt-totalattendance/id/";
+	$urlStudentList = $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/";
 ?>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -88,7 +93,7 @@
 				<td width="28%" align="left">
 				</td>
 				<td width="44%" align="center">
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><p><?php echo $tr->translate("SCORE_SEMESTER_YEAR");?></p></strong>
+					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:Times New Roman,'Khmer MEF2';"><p><?php echo $tr->translate("SCORE_SEMESTER_YEAR");?></p></strong>
 				</td>
 				<td align="right" width="28%"></td>
 			</tr>
@@ -113,78 +118,80 @@
 						$active_student = 0;
 						$drop_student = 0;?>
 					<div id="exportExcel">
-					<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="white-space:nowrap;">
+						<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="white-space:nowrap;font-family:Times New Roman,Khmer OS Battambang">
 						  <thead>
-						  <tr style="font-size:12px; height: 25px; font-weight: bold; background: #ccd9ff;" align="center">
-						    <td class="hidden"></td>
-						    <td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("CLASSES");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
-							<td>&nbsp;<?php echo $tr->translate("STUDENT_STUDY");?>&nbsp;</td>
-						  </tr>
+							  <tr style="font-size:14px; height: 25px; font-weight: bold; background: #ccd9ff;" align="center">
+								<td class="hidden"></td>
+								<td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("CLASSES");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("STUDENT_STUDY");?>&nbsp;</td>
+							  </tr>
 						  </thead>
 						  <?php $i=0; 
 						  foreach($this->rs as $rs)if (!empty($this->rs)){ $i++;?>
-						  <tr style="font-size:12px; height: 18px;"​ align="center" class='hover padding'>
-						   	<td class="hidden">
-								<input style="height: 15px;margin-top: 5px;" type="radio" onClick="setValue(<?php echo $i?>)" name="check_box" id="check_box<?php echo $i?>" />
-								<input type="hidden" name="group_id<?php echo $i;?>" id="group_id<?php echo $i;?>" value="<?php echo $rs['id'];?>" dojoType="dijit.form.TextBox" />
-							</td>
-						   	<td><?php echo $i;?></td>
-						   	<td><a style="text-align:left;text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['branch_name']; ?></a></td>
-						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>
-						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic']; ?></a></td>
-						    <td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['semester']; ?></a></td>
-						    <td align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
-						    <td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;</td>
-						    <td>&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;</td>
-						  </tr>
+							  <tr style="font-size:12px; height: 18px;"​ align="center" class='hover padding '>
+								<td class="hidden">
+									<input style="height: 15px;margin-top: 5px;" type="radio" onClick="setValue(<?php echo $i?>)" name="check_box" id="check_box<?php echo $i?>" />
+									<input type="hidden" name="group_id<?php echo $i;?>" id="group_id<?php echo $i;?>" value="<?php echo $rs['id'];?>" dojoType="dijit.form.TextBox" />
+								</td>
+								<td><?php echo $i;?></td>
+								<td><a style="text-align:left;text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['branch_name']; ?></a></td>
+								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['group_code']; ?></a></td>
+								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['academic']; ?></a></td>
+								<td><a style=" text-decoration: none; color:#000;" href="<?php echo $this->url(array('controller'=>'allstudent','action'=>'rpt-student-group','id'=>$rs['id']));?>" target="_blank"><?php echo $rs['semester']; ?></a></td>
+								<td>&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
+								<td align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
+								<td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
+								<td>&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp; <?php echo $tr->translate("STUDENT_UNIT");?></td>
+								<td>&nbsp;<?php echo $rs['student_drop']; ?>&nbsp; <?php echo $tr->translate("STUDENT_UNIT");?></td>
+								<td>&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp; <?php echo $tr->translate("STUDENT_UNIT");?></td>
+							  </tr>
 						  <?php 
 						  	$all_student = $all_student+$rs['Num_Student'];
 						  	$drop_student = $drop_student+$rs['student_drop'];
 							} ?>
-						  <tr>
-						  	  <td colspan="11" style="border:1px solid #fff;border-top:1px solid #000;border-right:1px solid #000;"></td>
-						  	  <td align="center"><strong><?php echo $all_student;?></strong></td>
-						  	  <td align="center"><strong><?php echo $drop_student;?></strong></td>
-						  	  <td align="center"><strong><?php echo $all_student -$drop_student;?></strong></td>
-						  </tr>
 						</table>
-						</div>
-					</td>
-				</tr>
-				<tr >
+						<br>
+						<table cellpadding="3" class="padd" width="20%" align="right" style="font-size:14px;line-height:27px;white-space:nowrap;font-family:Time New Roman , Khmer OS Battambang;margin-bottom:10px;color:#4839bd;">
+							<tr>
+								<td width="60%" style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
+								<td width="40%" align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student;?> <?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+							</tr>
+							<tr>
+								<td style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("STUDENT_DROP");?></td>
+								<td align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $drop_student;?> <?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+							</tr>
+							<tr>
+								<td style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("STUDENT_STUDY");?></td>
+								<td align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student - $drop_student;?> <?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr >
 				<td colspan="3" width="100%">
-					<table width="100%" style="font-family:'Khmer OS Battambang';">
+					<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 14px">
 						<tr>
-							<td colspan="3">&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="3">&nbsp;</td>
-						</tr>
-						<tr>
-							<td  width="25%" align="center">
-								<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+							<td width="35%" align="center">
+								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PRINCIPAL");?></span>
 							</td>
-							<td  width="50%">
-								&nbsp;
-							</td>
-							<td align="center"  width="25%">
-								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+							<td width="30%">&nbsp;</td>
+							<td width="35%" align="center">
+								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PREPARE_BY");?></span>
 							</td>
 						</tr>
 					</table>
@@ -339,4 +346,5 @@ function getCertificate(){
 	if(id==''){alert("Please select record first!");return false;}
 	window.open('<?php echo $this->url(array("module"=>'allreport','controller'=>'score','action'=>'rpt-certificate'));?>'+'/id/'+id+'/type/3','_blank');
 }
+
 </script>

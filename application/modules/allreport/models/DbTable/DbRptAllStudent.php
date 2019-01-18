@@ -532,21 +532,34 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     public function getStudentStatistic($search){
     	$db = $this->getAdapter();
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    		$branch = "branch_namekh";
+    	}else{ // English
+    		$label = "name_en";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    		$branch = "branch_nameen";
+    	}
     	$sql ="SELECT 
 					 s.stu_id,
-					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,	
+					(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,	
 					(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=s.academic_year LIMIT 1) AS academic_year_name,
-					(SELECT name_en FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=s.session LIMIT 1) AS `session_name`,
-					(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
-					(SELECT rms_items.title FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
+					(SELECT $label FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=s.session LIMIT 1) AS `session_name`,
+					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
+					(SELECT $degree FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
 					s.academic_year,
 					s.degree,
 					s.grade,
 					s.session,
 					s.is_stu_new,
 					s.`is_subspend`,
-					(SELECT name_en FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
-    				(SELECT name_en FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation
+					(SELECT $label FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+    				(SELECT $label FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation
 				FROM 
 					rms_student AS s 
 				WHERE 

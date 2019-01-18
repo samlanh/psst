@@ -44,13 +44,19 @@
 			</tr>
 			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
+				<td colspan="3">&nbsp;</td>
+			</tr>
+			<tr>
 				<td width="15%" align="center">
 				</td>
 				<td width="70%"  align="center">
-					<strong​​ style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></strong><br />
+					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></strong><br />
 				</td>
 				<td width="15%" align="center">
 				</td>
+			</tr>
+			<tr>
+				<td colspan="3">&nbsp;</td>
 			</tr>
 		<style>
 			table tr th{
@@ -109,7 +115,7 @@
 						<?php if(($academic_year != $row['academic_year'] || $degree != $row['degree'] || $grade != $row['grade'] || $session != $row['session']) && $key>0){ $i++; ?>
 								<tr style="font-size:14px !important; line-height: 25px;" align="center" class="hover" >
 									<td><?php echo $i;?></td>
-									<td align="left"><?php echo $branch_id;?></td>
+									<td align="left">&nbsp;<?php echo $branch_id;?></td>
 									<td align="left">&nbsp;<?php echo $academic_name;?></td>
 									<td><?php echo $degree_name;?></td>
 									<td><?php echo $grade_name;?></td>
@@ -164,20 +170,20 @@
 							$total_amount_student_new = $total_amount_student_new + $new_student;
 							$total_amount_student_drop = $total_amount_student_drop + $drop_student;
 						?>
-						<tr style="font-size:12px;line-height:25px;" align="center" class="hover" >
+						<tr style="font-size:14px !important; line-height: 25px;" align="center" class="hover" >
 							<td><?php echo ++$i;?></td>
-							<td><?php echo $branch_id;?></td>
-							<td><?php echo $academic_name;?></td>
+							<td align="left">&nbsp;<?php echo $branch_id;?></td>
+							<td align="left">&nbsp;<?php echo $academic_name;?></td>
 							<td><?php echo $degree_name;?></td>
 							<td><?php echo $grade_name;?></td>
 							<td><?php echo $session_name;?></td>
-							<td><?php echo $amount_student." ".$tr->translate("STUDENT_UNIT");;?></td>	
+							<td><?php echo $amount_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $new_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $amount_student - $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>	
 						</tr>
-						<tr align="center" class="hover">
-							<td colspan="6">Total</td>
+						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:15px;">
+							<td colspan="6"><?php echo $tr->translate("TOTAL");?></td>
 							<td><?php echo $total_amount_student." ".$tr->translate("STUDENT_UNIT");;?></td>	
 							<td><?php echo $total_amount_student_new." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $total_amount_student_drop." ".$tr->translate("STUDENT_UNIT");?></td>
@@ -205,6 +211,7 @@
 								&nbsp;
 							</td>
 							<td align="center"  width="25%">
+								<span style="color:#000; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
 								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
 							</td>
 						</tr>

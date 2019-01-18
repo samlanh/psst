@@ -26,13 +26,13 @@ table tr td strong{
 						<table width="100%" style="font-size: 10px;margin-bottom: 0px;margin-top: -20px;" >
 							<tr>
 								<td width="25%"></td>
-								<td width="50%" valign="top" align="center" style="font-family:Khmer OS Muol Light, Times New Roman;font-size: 14px;line-height: 20px">
+								<td width="50%" valign="top" align="center" style="font-family: Times New Roman,Khmer OS Muol Light;font-size: 14px;line-height: 20px">
 									<div>បង្កាន់ដៃបង់ប្រាក់</div>
 									<div>Official Receipt</div>
 								</td>
 								<td width="25%" valign="bottom">
-									<div style="font-size: 12px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <?php echo $this->rr['receipt_number'];?><?php if($this->rr['is_void']==1){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></div> 
-									<span style="font-size: 12px;font-weight: bold;font-family: arail"><?php echo $tr->translate('Pmt Date');?> : <?php echo date('d-M-Y',strtotime($this->rr['create_date']));?></span>
+									<div style="font-size: 12px;font-family:Times New Roman,Battambang;"><u>Receipt N<sup>o</sup></u> <?php echo $this->rr['receipt_number'];?><?php if($this->rr['is_void']==1){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></div> 
+									<span style="font-size: 12px;font-weight: bold;font-family: Times New Roman"><?php echo $tr->translate('Pmt Date');?> : <?php echo date('d-M-Y',strtotime($this->rr['create_date']));?></span>
 									<div style="font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime($this->rr['create_date']));?></div>
 								</td>
 							</tr>
@@ -108,7 +108,7 @@ table tr td strong{
 							    <td><?php echo $rs['discount_amount']; echo ($rs['discount_percent']>0)?'+'.$rs['discount_percent']."%":"";?></td>
 							    <td><?php echo number_format($rs['paidamount'],2);?></td>
 							    <td><?php if($rs['is_onepayment']!=1){echo empty($rs['start_date'])?"":date('d/m/Y', strtotime($rs['start_date'])); ?>-<?php echo empty($rs['validate'])?"":date('d/m/Y', strtotime($rs['validate'])); }?></td>
-							    <td><?php echo $rs['note'];?></td>
+							    <td style="max-width: 150px !important;white-space: normal;"><?php echo $rs['note'];?></td>
 							  </tr> <?php $total = $total + $rs['subtotal']; ?>
 							  <?php } 
 							  ?>

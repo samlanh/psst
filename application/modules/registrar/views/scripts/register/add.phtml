@@ -140,7 +140,7 @@ table.collape tbody td{padding: 0px !important;}
 			<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('Add Student Register');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('REGISTER');?></h4>
 	    			</div>
 	    			<div class="col-sm-4 text-right">
 	    			</div>
@@ -658,8 +658,8 @@ function getMonthByNumber(m){
 									<div style="font-family:Times New Roman;">Official Receipt</div>
 								</td>
 								<td width="25%" valign="top" align="left">
-									<div style="font-size: 15px;font-family:Battambang,Arial,Helvetica,sans-serif;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
-									<div style="font-size: 14px;font-weight: bold;font-family: arail">Pmt Date : <label id="lb_date" class=" one bold"></label></div>
+									<div style="font-size: 15px;font-family:Times New Roman;"><u>Receipt N<sup>o</sup></u> <label id="lb_receipt_no"></label></div> 
+									<div style="font-size: 14px;font-weight: bold;font-family: Times New Roman">Pmt Date : <label id="lb_date" class=" one bold"></label></div>
 									<div style="font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
 								</td>
 							</tr>
@@ -1410,7 +1410,7 @@ function printSave(new_stu_id,new_receipt,submit){
 						  var epx_date = dd + '/' +months+ '/' + y ;
 					  }
 					  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-					  temp+='<td style="border:1px solid #000;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
+					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
 					  i++;
 					  temp+='</tr>';
 					}

@@ -7,24 +7,12 @@
 		  $tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		  $session_user=new Zend_Session_Namespace('authstu');
 		  $arr_module = $session_user->arr_acl;
-// 		  print_r($arr_module);exit();
 		  $menu = array();
 		  $module = '';
 		  $controller=array();
 		  $newarray=array();
 		  if(!empty($arr_module)){
 		  	foreach ($arr_module as $key => $rs){
-		  		
-// 		  		$lblcontroller = $rs['label'];
-// 		  		if($module!=$rs['module']){
-// 		  			$newarray= array($rs['controller']=>'<li><a href="">'.$tr->translate(($lblcontroller)).'</a></li>');
-// 		  			$menu[$rs['module']]= $newarray;
-// 		  			$old_module=$rs['module'];
-// 		  		}else{
-// 		  			$newarray= array_merge($newarray,array($rs['controller']=>'<li><a href="">'.$tr->translate(($lblcontroller)).'</a></li>'));
-// 		  			$menu[$rs['module']] = $newarray;
-// 		  		}
-// 		  		$module=$rs['module'];
 		  		$lblcontroller = $rs['label'];
 		  		if($module!=$rs['module']){
 		  			$newarray= array($rs['controller']=>$tr->translate(($lblcontroller)));

@@ -859,7 +859,7 @@ function getAllgroupStudyNotPass($action=null){
    	}else{ // English
    		$label = "name_en";
    	}
-   	$sql="SELECT key_code,$label AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 ";
+   	$sql="SELECT key_code AS id,$label AS name,key_code,$label AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 ";
    	$rows = $db->fetchAll($sql);
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$options= array(-1=>$tr->translate("CHOOSE"));

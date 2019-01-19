@@ -73,8 +73,21 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	function getAllCRM($search = ''){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbp->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+			$branch = "b.branch_namekh";
+		}else{ // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+		}
 		$sql="SELECT c.*,
-			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+			(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
 			CASE
 			WHEN  c.sex = 1 THEN '".$tr->translate("MALE")."'
 			WHEN  c.sex = 2 THEN '".$tr->translate("FEMALE")."'
@@ -156,30 +169,50 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	function getAllCRMDailyContact($search = ''){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbp->currentlang();
+		if($lang==1){// khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+			$branch = "b.branch_namekh";
+		}else{ // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+		}
 		$sql="
 			SELECT 
-			cc.id,
-			cc.crm_id,
-			cc.contact_date,
-			cc.feedback,cc.next_contact,
-			cc.user_contact,
-			(SELECT CONCAT(first_name) FROM rms_users WHERE cc.user_contact=id LIMIT 1 ) AS user_contact,
-			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
-			(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=rms_users.id LIMIT 1 ) AS userby,
-			 (SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE cc.user_contact=rms_users.id LIMIT 1 ) AS user_contact_name,
-			 CASE
-				WHEN  c.sex = 1 THEN '".$tr->translate("MALE")."'
-				WHEN  c.sex = 2 THEN '".$tr->translate("FEMALE")."'
-			END AS sexTitle,
-			CASE
-			WHEN  cc.proccess = 0 THEN '".$tr->translate("CANCEL")."'
-			WHEN  cc.proccess = 1 THEN '".$tr->translate("PROGRESSING")."'
-			WHEN  cc.proccess = 2 THEN '".$tr->translate("WAITING_COMPLETED")."'
-			WHEN  cc.proccess = 3 THEN '".$tr->translate("COMPLETED")."'
-			END AS crm_status_title,
-			 c.kh_name,c.first_name,c.last_name,c.tel FROM `rms_crm` AS c,
-			`rms_crm_history_contact` AS cc
-			WHERE cc.crm_id = c.id
+				cc.id,
+				cc.crm_id,
+				cc.contact_date,
+				cc.feedback,
+				cc.next_contact,
+				cc.user_contact,
+				(SELECT CONCAT(first_name) FROM rms_users WHERE cc.user_contact=id LIMIT 1 ) AS user_contact,
+				(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+				(SELECT CONCAT(first_name) FROM rms_users WHERE c.user_id=rms_users.id LIMIT 1 ) AS userby,
+				 (SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE cc.user_contact=rms_users.id LIMIT 1 ) AS user_contact_name,
+				 CASE
+					WHEN  c.sex = 1 THEN '".$tr->translate("MALE")."'
+					WHEN  c.sex = 2 THEN '".$tr->translate("FEMALE")."'
+				END AS sexTitle,
+				CASE
+				WHEN  cc.proccess = 0 THEN '".$tr->translate("CANCEL")."'
+				WHEN  cc.proccess = 1 THEN '".$tr->translate("PROGRESSING")."'
+				WHEN  cc.proccess = 2 THEN '".$tr->translate("WAITING_COMPLETED")."'
+				WHEN  cc.proccess = 3 THEN '".$tr->translate("COMPLETED")."'
+				END AS crm_status_title,
+				c.kh_name,
+				c.first_name,
+				c.last_name,
+				c.tel 
+			 FROM 
+			 	`rms_crm` AS c,
+				`rms_crm_history_contact` AS cc
+			WHERE 
+				cc.crm_id = c.id
 		";
 		
 		$where = ' ';

@@ -66,8 +66,8 @@ display: table-cell !important;
 					<td width="15%" align="center">
 					</td>
 					<td width="70%"  align="center">
-						<span​​ style=" font-family: Arial Black;color:#4839bd; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_STUDENT_DOCUMENT_NOT_ENOUGH");?></span><br />
-						<span​​ style=" font-family: Arial Black;color:#4839bd; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
+						<span style=" font-family: Arial Black;color:#4839bd; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_STUDENT_DOCUMENT_NOT_ENOUGH");?></span><br />
+						<span style=" font-family: Arial Black;color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
 					</td>
 					<td width="15%" align="center">
 					</td>
@@ -92,12 +92,12 @@ display: table-cell !important;
 					<div id="exportExcel">
 						<table cellpadding="0"​ style="border:1px #4839bd solid; width:100%; border-collapse:collapse;color:#4839bd;white-space:nowrap;font-family:Time New Roman , Khmer OS Battambang;" border="1" >
 							<thead>
-								<tr style="font-size:12px; height: 25px;background: #fdbdbd; font-weight: bold" align="center" >
+								<tr style="font-size:13px; height: 30px;background: #fdbdbd; font-weight: bold" align="center" >
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td colspan="8">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
 									<td colspan="3">&nbsp;<?php echo $tr->translate("DOCUMENT_INFO");?>&nbsp;</td>
 								</tr>
-								<tr style="font-size:12px; height: 25px;background: #fdbdbd; font-weight: bold;" align="center" >
+								<tr style="font-size:13px; height: 28px;background: #fdbdbd; font-weight: bold;" align="center" >
 									<td>&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER");?>&nbsp;</td>
 									<td >&nbsp;<?php echo $tr->translate("NAME_ENGLISH");?>&nbsp;</td>
@@ -116,11 +116,11 @@ display: table-cell !important;
 							$total_day=strtotime($end_dat)-strtotime($row['date_end']);
 							$total_late_day=$total_day/(60*60*24);
 						?>
-							<tr style="font-size:13px;line-height:20px;" align="center" class="hover" >
+							<tr style="font-size:12px;line-height:22px;" align="center" class="hover" >
 								<td >&nbsp;<?php echo $i;?>&nbsp;</td>
 								<td >&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
-								<td align="left"><?php echo $row['stu_khname'];?>&nbsp;</td>
-								<td >&nbsp;<?php echo $row['last_name'].''.$row['stu_enname'];?>&nbsp;</td>
+								<td align="left">&nbsp;<?php echo $row['stu_khname'];?>&nbsp;</td>
+								<td align="left">&nbsp;<?php echo $row['last_name'].' '.$row['stu_enname'];?>&nbsp;</td>
 								<td >
 									&nbsp;<?php if ($row['sex']==1){ echo $tr->translate("MALE");}else{ echo $tr->translate("FEMALE");}?>&nbsp;
 								</td>	

@@ -77,8 +77,8 @@ display: table-cell !important;
 				</tr>
 				<tr>
 					<td colspan="3" align="center">
-						<strong style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_CARD");?></strong><br />
-						<strong  style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+						<strong style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDNET_CARD");?></strong><br />
+						<strong  style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
 				</tr>
 				<tr>
@@ -131,7 +131,7 @@ display: table-cell !important;
 								<td >&nbsp;<?php echo $i;?>&nbsp;</td>
 								<td >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
 								<td >&nbsp;<?php echo $row['stu_code'];?></td>
-								<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['name'];?>&nbsp;</td>
+								<td align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_khname']." - ".$row['last_name']." ".$row['stu_enname'];?>&nbsp;</td>
 								<td >&nbsp;<?php echo $row['sex'];?>&nbsp;</td>	
 								<td >&nbsp;<?php echo $row['tel'];?>&nbsp;</td>
 								<td >&nbsp;<?php echo $row['academic_year'];?>&nbsp;</td>

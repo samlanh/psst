@@ -357,6 +357,19 @@ class Global_GroupController extends Zend_Controller_Action {
     		exit();
     	}
     }
+    function getgroupbyacademicAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$group = $db->getAllGroupByAcademic($data['academic_year']);
+    		if (empty($data['noaddnew'])){
+    			array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    		}
+    		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
+    		print_r(Zend_Json::encode($group));
+    		exit();
+    	}
+    }
     function getacademicAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();

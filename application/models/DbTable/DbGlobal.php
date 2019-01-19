@@ -1946,6 +1946,17 @@ function getAllgroupStudyNotPass($action=null){
   	$sql.=" ORDER BY `g`.`id` DESC ";
   	return $db->fetchAll($sql);
   }
+  function getAllGroupByAcademic($academic=null){
+  	$db = $this->getAdapter();
+  	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+  	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+  	FROM `rms_group` AS `g` where (g.is_pass=0 OR g.is_pass=2) and status=1 ";
+  	if (!empty($academic)){
+  		$sql.=" AND g.academic_year = $academic";
+  	}
+  	$sql.=" ORDER BY `g`.`id` DESC ";
+  	return $db->fetchAll($sql);
+  }
   function getNumberInkhmer($number){
   	$khmernumber = array("០","១","២","៣","៤","៥","៦","៧","៨","៩");
   	$spp = str_split($number);
@@ -2060,6 +2071,19 @@ function getAllgroupStudyNotPass($action=null){
   			";
   	return $db->fetchAll($sql);
   }
-  
+  function getExamTypeEngItems(){
+  	
+  	$currentLang = $this->currentlang();
+  	$colunmname='title_en';
+  	if ($currentLang==1){
+  		$colunmname='title';
+  	}
+  	
+  	$db = $this->getAdapter();
+  	$sql="SELECT ex.id,ex.$colunmname AS `name` 
+		FROM `rms_exametypeeng` AS ex
+		WHERE ex.status=1";
+  	return $db->fetchAll($sql);
+  }
 }
 ?>

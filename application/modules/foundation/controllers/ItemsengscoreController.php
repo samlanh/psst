@@ -1,0 +1,104 @@
+<?php
+class Foundation_ItemsengscoreController extends Zend_Controller_Action {
+	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+    public function init()
+    {    	
+     /* Initialize action controller here */
+    	header('content-type: text/html; charset=utf8');
+    	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	}
+	public function start(){
+		return ($this->getRequest()->getParam('limit_satrt',0));
+	}
+	public function indexAction(){
+		try{
+			$db = new Foundation_Model_DbTable_DbItemsScoreEng();
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'adv_search' => '',
+						'status'=> -1,
+					);
+			}
+			$rs_rows = $db->getAllItesmScoreEn($search);
+			$glClass = new Application_Model_GlobalClass();
+			$rs = $glClass->getImgActive($rs_rows, BASE_URL, true);
+			 
+			$list = new Application_Form_Frmtable();
+			$collumns = array("ITEMS_ENG_KH","ITEMS_ENG_EN","NOTE","STATUS");
+			$link=array(
+					'module'=>'foundation','controller'=>'itemsengscore','action'=>'edit',
+			);
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('title'=>$link,'title_en'=>$link,'subject_titleen'=>$link));
+	
+		}catch (Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		
+	}
+	function addAction()
+	{
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			try {
+				$sms="INSERT_SUCCESS";
+				$_dbmodel = new Foundation_Model_DbTable_DbItemsScoreEng();
+				$subject_id = $_dbmodel->addItemsScoreEng($_data);
+				if(isset($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull($sms,"/foundation/itemsengscore");
+				}else{
+					Application_Form_FrmMessage::Sucessfull($sms,"/foundation/itemsengscore/add");
+				}
+				Application_Form_FrmMessage::message($sms);
+			} catch (Exception $e) {
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				$err =$e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			}
+		}
+		
+		$subject_exam=new Foundation_Form_FrmItemsScoreEngExam();
+		$frm_subject_exam=$subject_exam->FrmAddItemsScoreExam();
+		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
+		$this->view->frm_subject_exam = $frm_subject_exam;
+		
+	}
+	function editAction()
+	{
+		$id = $this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
+		$_dbmodel = new Foundation_Model_DbTable_DbItemsScoreEng();
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			try {
+				$subject_id = $_dbmodel->addItemsScoreEng($_data);
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/itemsengscore");
+			} catch (Exception $e) {
+				Application_Form_FrmMessage::message("EDIT_FAIL");
+				$err =$e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			}
+		}
+		
+		$row = $_dbmodel->getItemsEnByID($id);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/itemsengscore");
+			exit();
+		}
+		$subject_exam=new Foundation_Form_FrmItemsScoreEngExam();
+		$frm_subject_exam=$subject_exam->FrmAddItemsScoreExam($row);
+		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
+		$this->view->frm_subject_exam = $frm_subject_exam;
+		
+	}
+	
+}
+

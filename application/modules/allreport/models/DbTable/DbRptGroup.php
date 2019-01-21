@@ -243,6 +243,8 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	if($search['study_status']>=0){
 	   		$where.=' AND g.is_pass='.$search['study_status'];
 	   	}
+	   	$dbp = new Application_Model_DbTable_DbGlobal();
+	   	$where.=$dbp->getAccessPermission('g.branch_id');
 	   	
 	   	$order = ' ORDER BY `g`.`is_pass` ASC ,`g`.`group_code` ASC ';
 	   	return $db->fetchAll($sql.$where.$order);

@@ -122,11 +122,9 @@ class Accounting_ServiceController extends Zend_Controller_Action {
     			if($_major_id==-1){
     				$sms = "RECORD_EXIST";
     			}
-    			if(!empty($_data['save_close'])){
     				Application_Form_FrmMessage::Sucessfull($sms,"/accounting/service");
-    			}else{
     				Application_Form_FrmMessage::message($sms);
-    			}
+    			
     		}catch (Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

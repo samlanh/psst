@@ -26,11 +26,11 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 			$db = new Accounting_Model_DbTable_Dbinvoice();
 			$rs_rows = $db->getinvoice($search);
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","GROUP","STUDENT_ID","STUDENT_NAME","LAST_NAME","FIRST_NAME","SEX","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
+    		$collumns = array("BRANCH","GROUP","STUDENT_ID","STUDENT_NAME","NAME_ENGLISH","SEX","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'invoice','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('group_name'=>$link,'stu_code'=>$link,'stu_khname'=>$link,'invoice_date'=>$link, ));
+    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array('group_name'=>$link,'stu_code'=>$link,'stu_khname'=>$link,'invoice_date'=>$link, ));
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$this->view->all_student_name = $db->getAllGerneralOldStudentName();
 			$this->view->all_student_code = $db->getAllGerneralOldStudent();
@@ -46,7 +46,6 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
     public function addAction()
     {	
     	$db = new Accounting_Model_DbTable_Dbinvoice();
-		$this->view->vcode= $db-> getvCode();
     	if($this->getRequest()->isPost()){
 	    	try{
 	    		$data = $this->getRequest()->getPost();
@@ -103,6 +102,15 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 			$db = new Accounting_Model_DbTable_Dbinvoice();
 			$student_id = empty($data['student_id'])?null:$data['student_id'];
 			$grade = $db->getAllGradeStudy($data['items_type'],$student_id);
+			print_r(Zend_Json::encode($grade));
+			exit();
+		}
+	}
+	function getInvoicenumberAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Accounting_Model_DbTable_Dbinvoice();
+			$grade = $db->getvCode($data['branch_id']);
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

@@ -12,8 +12,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) AS group_name,
 					s.stu_code ,
 					s.stu_khname ,
-					s.stu_enname ,
-					s.last_name ,
+					CONCAT(s.last_name,' ',s.stu_enname),
 					(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2) AS sex,
 					DATE_FORMAT(v.invoice_date,'%d-%b-%Y') AS invoice_date,
 					v.invoice_num ,
@@ -91,132 +90,128 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     	$db= $this->getAdapter();
     	$db->beginTransaction();
     	try{
-    			$rs = $this->getInvoiceExisting($data['invoice_num']);
-    			if(!empty($rs)){
-    				$dbiv = new Accounting_Model_DbTable_Dbinvoice();
-    				$data['invoice_num']= $this->getvCode();
-    			}
-
-		    	$arr = array(
-		    			'branch_id'=>$data['branch_id'],
-		    			'student_name'=>$data['student_name'],
-		    			'student_id'=>$data['student_name'],
-						'invoice_date'=>$data['invoice_date'],
-		    			'invoice_num'=>$data['invoice_num'],
-						'input_date'=>$data['input_date'],
-		    			'remark'=>$data['remark'],
-						'totale_amount'=>$data['totle_amount'],
-		    			'user_id'=>$this->getUserId(),
-		    			);
-				$this->_name='rms_invoice_account';		
-		    	$_id = $this->insert($arr);
-				$ids = explode(',', $data['identity']);
-				foreach ($ids as $i){
-					$arr_s = array(
-						'vid'=>$_id,
-						'service_id'=>$data['service_'.$i],
-						'type'	=>$data['type_'.$i],
-						'month'=>$data['amount_'.$i],
-						'term'=>$data['term_'.$i],
-						'semester'=>$data['semester_'.$i],
-						'year'=>$data['year_'.$i],
-						'start_date'=>$data['startdate_'.$i],
-						'end_date'=>$data['enddate_'.$i],
-						'remark'=>$data['remark_'.$i],
-						);
-					$this->_name='rms_invoice_account_detail';	
-					$this->insert($arr_s);
-				}
-		    	$db->commit();
+    		$invoice_num= $this->getvCode($data['branch_id']);
+	    	$arr = array(
+	    			'branch_id'=>$data['branch_id'],
+	    			'student_name'=>$data['student_name'],
+	    			'student_id'=>$data['student_name'],
+					'invoice_date'=>$data['invoice_date'],
+	    			'invoice_num'=>$invoice_num,
+					'input_date'=>$data['input_date'],
+	    			'remark'=>$data['remark'],
+					'totale_amount'=>$data['totle_amount'],
+	    			'user_id'=>$this->getUserId(),
+	    		);
+			$this->_name='rms_invoice_account';		
+	    	$_id = $this->insert($arr);
+			$ids = explode(',', $data['identity']);
+			foreach ($ids as $i){
+				$arr_s = array(
+					'vid'=>$_id,
+					'service_id'=>$data['service_'.$i],
+					'type'	=>$data['type_'.$i],
+					'month'=>$data['amount_'.$i],
+					'term'=>$data['term_'.$i],
+					'semester'=>$data['semester_'.$i],
+					'year'=>$data['year_'.$i],
+					'start_date'=>$data['startdate_'.$i],
+					'end_date'=>$data['enddate_'.$i],
+					'remark'=>$data['remark_'.$i],
+					);
+				$this->_name='rms_invoice_account_detail';	
+				$this->insert($arr_s);
+			}
+		    $db->commit();
     	}catch(Exception $e){
     		$db->rollBack();
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
 	public function editinvice($data,$id){
-		try{$db= $this->getAdapter();
-		    	$arr = array(
-		    			'branch_id'=>$data['branch_id'],
-		    			'student_name'=>$data['student_name'],
-		    			'student_id'=>$data['student_name'],
-						'invoice_date'=>$data['invoice_date'],
-		    			'invoice_num'=>$data['invoice_num'],
-						'input_date'=>$data['input_date'],
-		    			'remark'=>$data['remark'],
-						'totale_amount'=>$data['totle_amount'],
-		    			'user_id'=>$this->getUserId(),
-		    			);
-				$this->_name='rms_invoice_account';	
-				$where="id = '".$id."'";	
-		    	$this->update($arr,$where);
+		$db= $this->getAdapter();
+		try{
+	    	$arr = array(
+    			'branch_id'=>$data['branch_id'],
+    			'student_name'=>$data['student_name'],
+    			'student_id'=>$data['student_name'],
+				'invoice_date'=>$data['invoice_date'],
+    			'invoice_num'=>$data['invoice_num'],
+				'input_date'=>$data['input_date'],
+    			'remark'=>$data['remark'],
+				'totale_amount'=>$data['totle_amount'],
+    			'user_id'=>$this->getUserId(),
+	    	);
+			$this->_name='rms_invoice_account';	
+			$where="id = '".$id."'";	
+	    	$this->update($arr,$where);
+			
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$where = $db->quoteInto('vid = ?', $id);
+			$db->delete('rms_invoice_account_detail', $where);
 				
-				$db = Zend_Db_Table::getDefaultAdapter();
-				$where = $db->quoteInto('vid = ?', $id);
-				$db->delete('rms_invoice_account_detail', $where);
-				
-				$ids = explode(',', $data['identity']);
-				foreach ($ids as $i){
-					$arr_s = array(
-						'vid'=>$id,
-						'service_id'=>$data['service_'.$i],
-						'type'	=>$data['type_'.$i],
-						'month'=>$data['amount_'.$i],
-						'term'=>$data['term_'.$i],
-						'semester'=>$data['semester_'.$i],
-						'year'=>$data['year_'.$i],
-						'start_date'=>$data['startdate_'.$i],
-						'end_date'=>$data['enddate_'.$i],
-						'remark'=>$data['remark_'.$i],
-						);
-					$this->_name='rms_invoice_account_detail';	
-					$this->insert($arr_s);
-				}
+			$ids = explode(',', $data['identity']);
+			foreach ($ids as $i){
+				$arr_s = array(
+					'vid'=>$id,
+					'service_id'=>$data['service_'.$i],
+					'type'	=>$data['type_'.$i],
+					'month'=>$data['amount_'.$i],
+					'term'=>$data['term_'.$i],
+					'semester'=>$data['semester_'.$i],
+					'year'=>$data['year_'.$i],
+					'start_date'=>$data['startdate_'.$i],
+					'end_date'=>$data['enddate_'.$i],
+					'remark'=>$data['remark_'.$i],
+					);
+				$this->_name='rms_invoice_account_detail';	
+				$this->insert($arr_s);
+			}
 		    	
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
 	}
-	public function getvCode(){
-		  $db = $this->getAdapter();
-		  $sql="SELECT v.id FROM `rms_invoice_account` AS v  ORDER BY v.`id` DESC LIMIT 1";
-		  $num = $db->fetchOne($sql);
-		  $num_lentgh = strlen((int)$num+1);
-		  $num = (int)$num+1;
-		  $pre = "0";
-		  for($i=$num_lentgh;$i<4;$i++){
-		   $pre.="0";
-		  }
-		  return $pre.$num;
-		 }
+	public function getvCode($branch_id){
+		$db = $this->getAdapter();
+		$sql="SELECT count(id) FROM `rms_invoice_account` AS v where branch_id = $branch_id ORDER BY v.`id` DESC LIMIT 1";
+		$num = $db->fetchOne($sql);
+		$num_lentgh = strlen((int)$num+1);
+		$num = (int)$num+1;
+		$pre = "0";
+		for($i=$num_lentgh;$i<4;$i++){
+			$pre.="0";
+		}
+ 		return $pre.$num;
+	}
 		 
-		 function getAllGradeStudy($option=1,$student_id=null){
-		 	$db = $this->getAdapter();
-		 	$sql="SELECT i.id,
-		 	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
-		 	FROM `rms_itemsdetail` AS i
-		 	WHERE i.status =1 ";
-		 	if($option!=null){
-		 		$sql.=" AND i.items_type=".$option;
-		 	}
-		 	if($student_id!=null){//new parameter for invoice09-1-019
-		 		$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
-		 	}
-		 	$dbbg = new Application_Model_DbTable_DbGlobal();
-		 	$branchlist = $dbbg->getAllSchoolOption();
-		 	if (!empty($branchlist)){
-		 		foreach ($branchlist as $i){
-		 			$s_where[] = $i['id']." IN (i.schoolOption)";
-		 		}
-		 		$sql .=' AND ( '.implode(' OR ',$s_where).')';
-		 	}
-		 	$user = $dbbg->getUserInfo();
-		 	$level = $user['level'];
-		 	if ($level!=1){
-		 		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
-		 	}
-		 	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
-		 	return $db->fetchAll($sql);
-		 }
+	function getAllGradeStudy($option=1,$student_id=null){
+	 	$db = $this->getAdapter();
+	 	$sql="SELECT i.id,
+	 	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
+	 	FROM `rms_itemsdetail` AS i
+	 	WHERE i.status =1 ";
+	 	if($option!=null){
+	 		$sql.=" AND i.items_type=".$option;
+	 	}
+	 	if($student_id!=null){//new parameter for invoice09-1-019
+	 		$sql.=" AND (i.items_type !=1 OR i.id=(SELECT grade FROM `rms_student` WHERE stu_id =$student_id LIMIT 1)) ";
+	 	}
+	 	$dbbg = new Application_Model_DbTable_DbGlobal();
+	 	$branchlist = $dbbg->getAllSchoolOption();
+	 	if (!empty($branchlist)){
+	 		foreach ($branchlist as $i){
+	 			$s_where[] = $i['id']." IN (i.schoolOption)";
+	 		}
+	 		$sql .=' AND ( '.implode(' OR ',$s_where).')';
+	 	}
+	 	$user = $dbbg->getUserInfo();
+	 	$level = $user['level'];
+	 	if ($level!=1){
+	 		$sql .=' AND '.$user['schoolOption'].' IN (i.schoolOption)';
+	 	}
+	 	$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+	 	return $db->fetchAll($sql);
+	}
 }
 
 

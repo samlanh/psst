@@ -916,7 +916,12 @@ function getPaymentHistory(student_id){
 				tem += '<td>'+respone[i].fee+'</td>';
 				tem += '<td>'+respone[i].subtotal+'</td>';
 				tem += '<td>'+respone[i].extra_fee+'</td>';
-				tem += '<td>'+respone[i].discount_type+'</td>';
+				if(respone[i].discount_type==null || respone[i].discount_type==''){
+					dis_type = "";
+				}else{
+					dis_type = respone[i].discount_type;
+				}
+				tem += '<td>'+dis_type+'</td>';
 				tem += '<td>'+respone[i].discount_percent+'/'+respone[i].discount_amount+'</td>';
 				start_date='';
 				validate='';

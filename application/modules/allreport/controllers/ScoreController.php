@@ -15,10 +15,11 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	else{
     		$search = array(
-    				'title',
+    				'title'=>'',
     				'branch_id'=> '',
     				'room'=>0,
     				'exam_type'=>-1,
+    				'for_semester'=>-1,
     				'group' => '',
     				'study_year'=> '',
     				'grade'=> 0,

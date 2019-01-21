@@ -3,6 +3,9 @@ $request = Zend_Controller_Front::getInstance ()->getRequest ();
 $tr = Application_Form_FrmLanguages::getCurrentlanguage ();
 $frm = $this->frm;
 $formList = new Application_Form_Frmtable();
+
+$urlPrint = $this->baseUrl()."/allreport/accounting/rpt-invoicedetail/id/";
+$urlEdit = $this->baseUrl()."/accounting/invoice/edit/id/";
 ?>
 <title><?php echo $tr->translate("INVOICE");?></title>
 <meta charset="utf-8">
@@ -212,6 +215,38 @@ function getallstudentname(){//
 		}
 	});
 }
+
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="rpt-invoicedetail"){
+				url='<?php echo $urlPrint;?>';
+			}else if(key=="edit"){
+				url='<?php echo $urlEdit;?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"rpt-invoicedetail": {name: "<?php echo $tr->translate("PRINT");?>", icon: "copy", accesskey: "e"},
+			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+
+var recordid ='';
+function gotoAction(){
+	//window.location.href =url+row;
+	window.open(url+row);
+}
+
+
 </script>
 
 

@@ -65,9 +65,16 @@
     	<div class="col-md-2 col-sm-2 col-xs-12">
     		<select id="exam_type" name="exam_type" class="fullside" dojoType="dijit.form.FilteringSelect" >
 		   		<option value="-1"><?php echo $tr->translate("RESULT_TYPE");?></option>
-		   		<option value="1"><?php echo $tr->translate("MONTHLY");?></option>
-		   		<option value="2"><?php echo $tr->translate("SEMESTER");?></option>
+		   		<option value="1" <?php if($this->search['exam_type']==1){echo "selected='selected'";}?>><?php echo $tr->translate("MONTHLY");?></option>
+		   		<option value="2" <?php if($this->search['exam_type']==2){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER");?></option>
 		   	</select>
+    	</div>
+    	<div class="col-md-2 col-sm-2 col-xs-12">
+    		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">	
+    			<option value="-1"><?php echo $tr->translate("FOR_SEMESTER");?></option>							
+				<option value="1" <?php if($this->search['for_semester']==1){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER1");?></option>
+				<option value="2" <?php if($this->search['for_semester']==2){echo "selected='selected'";}?>><?php echo $tr->translate("SEMESTER2");?></option>
+			</select>
     	</div>
     	<div class="col-md-2 col-sm-2 col-xs-12">
     		<?php echo $frm->getElement("session");?>

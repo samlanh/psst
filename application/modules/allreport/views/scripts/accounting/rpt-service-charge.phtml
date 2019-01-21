@@ -15,36 +15,28 @@
     </div>
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
-       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		<div class="col-md-3 col-sm-2 col-xs-12">
        			<input dojoType="dijit.form.TextBox" class="fullside" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
        		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		<div class="col-md-3 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement('branch_id')?>
        		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
-       			<?php echo $frm->getElement('study_year')?>
+       		<div class="col-md-3 col-sm-2 col-xs-12">
+       			<input id="study_year" />
        		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		<div class="col-md-3 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement('degree_bac')?>
-       		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
-       		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
        		</div>
        	</div>
        	<div class="form-group">
-       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		<div class="col-md-3 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement('grade_all')?>
        		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		<div class="col-md-3 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement('finished_status')?>
        		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
+       		<div class="col-md-3 col-sm-2 col-xs-12">
        			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-       		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
-       		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
        		</div>
        	</div>
 	</form>	
@@ -61,7 +53,7 @@
 				<td width="15%" align="center">
 				</td>
 				<td width="70%" align="center">
-					<strong style="padding-left: 0px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></strong><br />
+					<strong style="font-weight:bold;color:#000; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate('SERVICE_CHARGE_RPT');?></strong><br />
 				</td>
 				<td width="15%" align="center">
 				<style>
@@ -140,3 +132,55 @@
 		</table>
 	</div>	
 </div>
+
+<script type="text/javascript">
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.store.Memory");
+	dojo.require("dojo.data.ObjectStore");
+	var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+			store: academic_store,
+			autoComplete: true,                        
+			required: false,
+			id: "study_year",
+			name: "study_year",
+			class: 'fullside',  
+			placeHolder:"<?php echo $tr->translate("SELECT_YEAR");?>",          
+			onChange: function() {  
+				 
+			}
+		}, "study_year");
+		getAllAcademicByBranch();
+	});
+	
+	url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'get-yearbybranch'));?>';
+	function getAllAcademicByBranch(){
+		dijit.byId('study_year').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('study_year').set('store',academic_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getacademic,
+			content:{
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data){
+				academic_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('study_year').set('store',academic_store);  
+				
+				dijit.byId('study_year').attr("value","<?php echo $this->search['study_year']?>");
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+	
+</script>

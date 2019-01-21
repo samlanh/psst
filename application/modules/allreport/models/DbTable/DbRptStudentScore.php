@@ -129,11 +129,13 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		$grade = "rms_itemsdetail.title";
    		$degree = "rms_items.title";
    		$month = "month_kh";
+   		$branch = "branch_namekh";
    	}else{ // English
    		$label = "name_en";
    		$grade = "rms_itemsdetail.title_en";
    		$degree = "rms_items.title_en";
    		$month = "month_en";
+   		$branch = "branch_nameen";
    	}
    	$sql="SELECT 
    				s.`id`,
@@ -146,8 +148,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		 		(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree, 
 			 	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 			 	`g`.`semester` AS `semester`,
-			 	(SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) as for_month,
-			 	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name, 
+			 	(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name, 
 			 	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
 			 	(SELECT $label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
 			 	(SELECT $month FROM rms_month WHERE rms_month.id = s.for_month) AS for_month,
@@ -205,6 +206,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   	}
 	   	if($search['exam_type']>0){
 	   		$where.= " AND s.exam_type =".$search['exam_type'];
+	   	}
+	   	if($search['for_semester']>0){
+	   		$where.= " AND s.for_semester =".$search['for_semester'];
 	   	}
    		$order = "  ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month	";
    		return $db->fetchAll($sql.$where.$order);

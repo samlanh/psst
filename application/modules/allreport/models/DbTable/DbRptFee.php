@@ -13,11 +13,23 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	
     	$_db=new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    		$branch = "branch_namekh";
+    	}else{ // English
+    		$label = "name_en";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    		$branch = "branch_nameen";
+    	}
     	
     	$sql = "SELECT id,CONCAT(from_academic,' - ',to_academic) AS academic,note,generation,
-    			(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
-    		    (select name_en from `rms_view` where `rms_view`.`type`=7 and `rms_view`.`key_code`=`rms_tuitionfee`.`time`)AS time,
-    		    (SELECT name_en FROM `rms_view` WHERE `rms_view`.`type`=12 AND `rms_view`.`key_code`=`rms_tuitionfee`.`is_finished`)AS is_process,
+    			(select $branch from rms_branch where br_id = branch_id) as branch_name,
+    		    (select $label from `rms_view` where `rms_view`.`type`=7 and `rms_view`.`key_code`=`rms_tuitionfee`.`time`)AS time,
+    		    (SELECT $label FROM `rms_view` WHERE `rms_view`.`type`=12 AND `rms_view`.`key_code`=`rms_tuitionfee`.`is_finished`)AS is_process,
     			create_date ,status FROM `rms_tuitionfee`  WHERE 1  $branch_id  ";
     	$sql.=" AND type= $type ";
     	$where= ' ';
@@ -57,13 +69,29 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     }
     function getFeebyOther($fee_id,$grade_search,$degree_id){
     	$db = $this->getAdapter();
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$grade = "i.title";
+    		$degree = "rms_items.title";
+    		$branch = "b.branch_namekh";
+    	}else{ // English
+    		$label = "name_en";
+    		$grade = "i.title_en";
+    		$degree = "rms_items.title_en";
+    		$branch = "b.branch_nameen";
+    	}
     	$sql = "select tf.*,
-			    	i.title as class,
-			    	(SELECT title FROM `rms_items` WHERE rms_items.id=i.items_id LIMIT 1) as degree
+			    	$grade as class,
+			    	(SELECT $degree FROM `rms_items` WHERE rms_items.id=i.items_id LIMIT 1) as degree
 			    	FROM 
 			    		rms_tuitionfee_detail as tf,
-			    		rms_itemsdetail as i WHERE  
-    				i.id=tf.class_id AND tf.fee_id = $fee_id ";
+			    		rms_itemsdetail as i 
+			    	WHERE 
+    					i.id=tf.class_id 
+    					AND tf.fee_id = $fee_id 
+    		";
     	
     	$where = ' ';
     	$order = ' ORDER BY tf.id ASC';

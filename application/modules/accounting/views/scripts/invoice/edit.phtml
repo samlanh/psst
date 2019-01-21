@@ -69,7 +69,7 @@ table#table_row tr th {
 	  		 }
 			</script>
 			<div class="card-box">
-				<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="col-md-5 col-sm-5 col-xs-12">
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH_NAME");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -87,8 +87,14 @@ table#table_row tr th {
 		                	<input id="student_name" />
 		                </div>
 		             </div>
+					 <div class="form-group">
+		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("INPUT_DATE");?> </label>
+		                <div class="col-md-7 col-sm-7 col-xs-12">
+		                	<input type="text" name="input_date" id="input_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['input_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
+		                </div>
+		             </div>
 		        </div>
-		        <div class="col-md-4 col-sm-4 col-xs-12">
+		        <div class="col-md-5 col-sm-5 col-xs-12">
 		    		<div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("INVOICE_NUMBER");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -101,20 +107,16 @@ table#table_row tr th {
 		                	<input type="text" name="invoice_date" id="invoice_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['invoice_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
 		                </div>
 		             </div>
-		        </div>
-		        <div class="col-md-4 col-sm-4 col-xs-12">
-		    		<div class="form-group">
+					 <div class="form-group">
 		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("REMARK");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
 		                	<input dojoType="dijit.form.TextBox" class="fullside" id="remark" name="remark" value="<?php echo $row['remark']?>" type="text"  >
 		                </div>
 		             </div>
-		             <div class="form-group">
-		                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("INPUT_DATE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<input type="text" name="input_date" id="input_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['input_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
-		                </div>
-		             </div>
+		        </div>
+		        <div class="col-md-4 col-sm-4 col-xs-12">
+		    		
+		             
 		        </div>
 		   </div>
 		   <div class="card-box" >
@@ -133,7 +135,7 @@ table#table_row tr th {
 		           </div>
 		           <div class="col-md-5 col-sm-5 col-xs-12">
 		           		 <div class="form-group">
-		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" style="font-size: 16px;" >វគ្គសិក្សា/សេវាកម្ម</label>
+		                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" style="font-size: 16px;text-align:center" ><?php echo $tr->translate("LEVEL/SERVICE");?></label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		<input id="item" name="item" />
 		                   </div>
@@ -149,7 +151,6 @@ table#table_row tr th {
 						    <th><?php echo $tr->translate("N_O");?></th>
 						    <th><?php echo $tr->translate("TYPE");?></th>
 							<th><?php echo $tr->translate("SERVICES");?></th>
-							<!--  <th><?php echo $tr->translate("PRICE");?></th>-->
 							
 							<?php $s=0; ?>
 							<?php  foreach ($payment_term as $value){?>

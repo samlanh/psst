@@ -1,0 +1,217 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate("Assessment Term")); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	
+	$urlCertifyKhmer = $this->baseUrl()."/allreport/allstudent/certify-khmer/id/";
+	$urlCertifyEnglish = $this->baseUrl()."/allreport/allstudent/certify-english/id/";
+	
+	$dbgb = new Application_Model_DbTable_DbGlobal();
+	$db = $db = new Allreport_Model_DbTable_DbRptGroup();
+?>	
+	<style>
+	.hide{visibility:visible !important;
+	}
+	</style>
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('Assessment Term');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right">
+    		</div>
+    	</div>
+    </div>
+	<!-- 
+	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<div class="form-group">
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php //echo $tr->translate("SEARCH_STUDENT_NAME");?>" value="<?php //echo $this->search['txtsearch'];?>" type="text">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
+					<option value=""><?php //echo $tr->translate("STUDENT_TYPE");?></option>
+					<option value="1" <?php //if($this->search['study_type']==1){echo "selected";}?>><?php //echo $tr->translate("STUDENT_STUDY");?></option>
+					<option value="2" <?php //if($this->search['study_type']==2){echo "selected";}?>><?php //echo $tr->translate("STUDENT_DROP");?></option>
+				</select>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php //echo $tr->translate("SEARCH");?></button>
+            </div>
+        </div>
+	</form>
+	 -->
+	<div id="divPrint">
+		<table style="margin: 0 auto; width: 100%;color:#4839bd;"  >
+				<tr>
+					<td style="width:30%;" valign="top" >
+						<table style="width: 100%;white-space: nowrap;line-height: 16px;color:#4839bd;font-size:14px; font-family:Times New Roman,'Khmer OS Battambang';" >
+							
+							<tr>
+								<td colspan="2"><?php echo $this->rr['school_nameen']." (".$this->rr['branch_name'].")";?></td>
+							</tr>
+							<tr>
+								<td><?php echo $tr->translate("Term");?></td>
+								<td>: <?php echo $this->rr['academic'];?></td>
+							</tr>
+						</table>
+					</td>
+					<td style="width:40%;font-size: 17px;font-family:Times New Roman,'Khmer OS Muol Light';text-align: center;" >
+						<span style="font-weight:bold;font-size: 24px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("Final Term Result");?></span><br />
+					</td>
+					<td style="width:30%;" valign="top">
+						<table style="width: 100%;white-space: nowrap;line-height: 16px;color:#4839bd;font-size:14px; font-family:Times New Roman,'Khmer OS Battambang';" >
+							<tr>
+								<td width="35%"><?php echo $tr->translate("Time");?></td>
+								<td width="65%">: <?php echo $this->rr['time'];?></td>
+							</tr>
+							<tr>
+								<td width="35%"><?php echo $tr->translate("Level");?></td>
+								<td width="65%">: <?php echo $this->rr['grade'];?></td>
+							</tr>
+							<!-- 
+							<tr>
+								<td width="35%"><?php //echo $tr->translate("DEGREE");?></td>
+								<td width="65%">: <?php //echo $this->rr['degree'];?></td>
+							</tr>
+							 
+							<tr>
+								<td><?php //echo $tr->translate("STUDY_GROUP");?></td>
+								<td>: <?php //echo $this->rr['group_code'];?></td>
+							</tr>-->
+							<tr>
+								<td><?php echo $tr->translate("Room");?></td>
+								<td>: <?php echo $this->rr['room_name'];?></td>
+							</tr>
+							<tr>
+								<td colspan="2"><?php echo $this->rr['teacher_name_en'];?></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" id="exportExcel">
+						<table cellpadding="5"​ style="font-family:Times New Roman,'Khmer OS Battambang';font-size:12px; margin:0 auto;width:100%; border-collapse:collapse;border:1px solid #4839bd; white-space: nowrap;color:#4839bd;"  border="1" >
+							<style> td{padding:0 3px; }
+							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
+							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+							tr{ page-break-inside:avoid; page-break-after:auto }
+							#header {
+							  display: table-header-group;
+							  page-break-inside:avoid; page-break-after:auto;
+							}
+							.hover:hover{ background: #ccc;}
+							</style>
+							<thead>
+							<tr style="background:#ffdbdb;font-size:13px;" class="cheader" align="center" >
+								<td>No</td>
+								<td>Name</td>
+								<td>Sex</td>
+								<td>ID</td>
+								<?php $totalPercent=0; if (!empty($this->scoreSetting)) foreach ($this->scoreSetting as $sc){?>
+								<td>&nbsp;<?php $totalPercent=$totalPercent+$sc['pecentage_score']; echo $sc['name']?><br /><?php echo $sc['pecentage_score']."%";?>&nbsp;</td>	
+								<?php }?>
+								<td>Total<br />(<?php echo $totalPercent;?>%)</td>	
+								<td>Position</td>	
+								<td>Grade</td>	
+							</tr>
+							</thead>
+							<?php  $i=0;
+							$male=0;$femle=0; 
+							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ $i++;?>
+							<tr oncontextmenu="setrowdata(<?php echo $row['gd_id'];?>);return false;" style="font-size:13px; height: 25px;white-space: nowrap;"​ align="center" class='padding hover context-menu-one'>
+								<td><?php echo $i;?></td>
+								<td align="left"><?php echo $row['last_name'].' '.$row['en_name'];?></td>
+								<td><?php //echo $row['sex'];
+									if($row['gender']==1){
+										$male=$male+1;
+										echo "M";
+									}else{
+										$femle=$femle+1;
+										echo "F";
+									}
+								?>
+								</td>
+								<td><?php echo $row['stu_code'];?></td>
+								<?php $totalscore=0; if (!empty($this->scoreSetting)) foreach ($this->scoreSetting as $sc){
+									$score = $db->getScoreEngByStuAndType($this->rr['id'],$row['stu_id'],$sc['id']);
+									$totalscore = $totalscore +$score['score'];
+									?>
+								<td align="center">&nbsp;<?php echo empty($score['score'])?"-":$score['score'];?>&nbsp;</td>	
+								<?php }?>
+								<td><?php echo $totalscore;?></td>
+								<td></td>
+								<td>&nbsp;<?php  echo $dbgb->getMentionScore($totalscore, $this->rr['academic_year'],$this->rr['degree_id'],1); //Mention Grade?>&nbsp;</td>
+							</tr>
+							<?php }}?>	
+							<!-- 
+							<tr>
+								<td colspan="<?php //echo count($this->scoreSetting)+7;?>" style="padding-top:10px;border:1px solid #fff;border-top:1px solid #4839bd;">
+									<strong style="font-weight:200;color:#4839bd; font-size: 14px;font-family:'khmer os battambang';">
+										<?php //echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?>,
+										<?php //echo $tr->translate("FEMALE")." ".$femle;?> <?php //echo $tr->translate("STUDENT_UNIT");?>,
+										<?php //echo $tr->translate("MALE")." ".$male;?> <?php //echo $tr->translate("STUDENT_UNIT");?>
+									</strong>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="<?php //echo count($this->scoreSetting)+7;?>" style="padding-top:10px;border:1px solid #fff;border-top:1px solid #4839bd;">
+									&nbsp;
+								</td>
+							</tr>
+							<tr style="border: 1px solid #fff;">
+								<td colspan="<?php //echo count($this->scoreSetting)+7;?>" style="border:0px solid #fff !important;">
+									<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 14px">
+										<tr>
+											<td width="35%" align="center">
+												<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,Khmer OS Battambang;"><?php //echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+												<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,Khmer OS Battambang;"><?php //echo $tr->translate("PRINCIPAL");?></span>
+											</td>
+											<td width="30%">&nbsp;</td>
+											<td width="35%" align="center">
+												<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,Khmer OS Battambang;;"><?php //echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+												<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,Khmer OS Battambang;;"><?php //echo $tr->translate("TEACHER_ROOM");?></span>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							 -->
+						</table>	
+					</td>
+				</tr>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+		
+			var m = "clicked: " + key;
+			if(key=="certifykhmer"){
+				url='<?php echo $urlCertifyKhmer;?>';
+			}else if(key=="certifyenglish"){
+				url='<?php echo $urlCertifyEnglish;?>';
+			} 
+			gotoAction();
+		},
+		items: {
+			"certifykhmer": {name: "<?php echo $tr->translate("CERTIFY_KHMER");?>", icon: "fa-file-text-o",},
+			"certifyenglish": {name: "<?php echo $tr->translate("CERTIFY_ENGLIISH");?>", icon: "fa-file-text-o"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	window.open(url+row);
+}
+</script>

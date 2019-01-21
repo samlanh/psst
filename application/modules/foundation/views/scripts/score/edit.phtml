@@ -208,10 +208,10 @@ function filterStudentOld(){
 
 			<?php } ?>
 			temp+='</table>';
-			tmp='<tr id="row'+inx+'">';
+			tmp='<tr id="rowindex'+inx+'">';
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
-			dojo.html.set(dojo.byId("row"+inx),temp , {
+			dojo.html.set(dojo.byId("rowindex"+inx),temp , {
 			     parseContent: true,
 			});
 			HideloadingBlock();

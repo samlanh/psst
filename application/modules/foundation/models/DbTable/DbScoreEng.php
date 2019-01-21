@@ -257,9 +257,16 @@ class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	function getScoreSettingDetail($id){
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
 		$db = $this->getAdapter();
 		$sql="SELECT 
-			s.*,seng.title AS `name`
+			s.*,seng.$colunmname AS `name`
 			FROM 
 			`rms_scoreengsettingdetail` AS s,
 			`rms_exametypeeng` AS seng

@@ -7,6 +7,7 @@
 	$urlAttList = $this->baseUrl()."/allreport/allstudent/rpt-att-list/id/";
 	$urlTotalAtt = $this->baseUrl()."/allreport/allstudent/rpt-totalattendance/id/";
 	$urlStudentList = $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/";
+	$urlAssesment = $this->baseUrl()."/allreport/score/rpt-assessmentterm/id/";
 ?>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -302,6 +303,8 @@ $(function(){
 				url='<?php echo $urlTotalAtt;?>';
 			}else if(key=="rpt-student-list"){
 				url='<?php echo $urlStudentList;?>';
+			}else if(key=="rpt-assessmentterm"){
+				url='<?php echo $urlAssesment;?>';
 			}  
 			
 			gotoAction();
@@ -311,6 +314,7 @@ $(function(){
 			"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
 			"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
 			"rpt-student-list": {name: "<?php echo $tr->translate("STUDENT_LIST");?>", icon: "fa-file-text-o"},
+			"rpt-assessmentterm": {name: "<?php echo $tr->translate("Assessment Term");?>", icon: "fa-file-text-o"},
 		}
 	});
 });

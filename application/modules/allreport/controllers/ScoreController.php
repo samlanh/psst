@@ -463,6 +463,43 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->subject = $subject;
     	$this->view-> month = $db->getAllMonth();
     }
+    
+    function rptAssessmenttermAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	if(empty($id)){
+    		$this->_redirect("/allreport/allstudent/student-group");
+    	}
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}
+    	else{
+    		$search = array(
+    				'txtsearch' => "",
+    				'study_type'=>1);
+    	}
+    	$this->view->search = $search;
+    	
+    	$db = new Allreport_Model_DbTable_DbRptGroup();
+    	$row = $db->getStudentGroup($id,$search,1);
+    	$this->view->rs = $row;
+    	$rs = $db->getGroupDetailByID($id);
+    	$this->view->rr = $rs;
+    	
+    	$scorepolicy = $db->checkScorePolicyMoreThanOne($id);
+    	if (count($scorepolicy)>1){
+    		Application_Form_FrmMessage::Sucessfull("This Group has use score policy type more than one. Please Check Score policy for this group.", "/allreport/allstudent/student-group");
+    		exit();
+    	}
+    	$groupScore = $db->getScoreSettingIdByGroup($id);
+    	if (empty($groupScore)){
+    		Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/allstudent/student-group");
+    		exit();
+    	}
+    	$db = new Foundation_Model_DbTable_DbScoreEng();
+    	$scoreSetting=$db->getScoreSettingDetail($groupScore['score_setting']);
+    	$this->view->scoreSetting = $scoreSetting;
+    	
+    }
 }
 
 

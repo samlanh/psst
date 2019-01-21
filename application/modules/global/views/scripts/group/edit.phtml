@@ -596,8 +596,7 @@ function getRefreshTeacher(){
 		load: function(data) {
 			teacher_storeass  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('teacher_ass').set('store',teacher_storeass);  
-		    teacher_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('teacher_id').set('store',teacher_store);  
+		    dijit.byId('teacher_id').set('store',teacher_storeass);  
 
 		    for(var i = 0; i < data.length; i++) {
 			    if(data[i].id==-1){

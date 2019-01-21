@@ -92,6 +92,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		$sql="SELECT
 					 g.gd_id,
 					 (SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name,
+					 (SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee AS f WHERE f.id=gr.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_yeartitle,
 					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_logo,
 					 `g`.`group_id` AS `group_id`,
 					 `g`.`stu_id`   AS `stu_id`,
@@ -263,11 +264,14 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	$sql = "SELECT
 				   	`g`.`id`,
 				   	`g`.`branch_id`,
+				   	g.academic_year,
 				   	(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name,
+				   	(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS school_nameen,
 					(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_logo,
 				   	`g`.`group_code`    AS `group_code`,
 				   	(SELECT CONCAT(from_academic,' - ',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic,
 				   	`g`.`semester` AS `semester`,
+				   	`g`.`degree` as degree_id,
 				   	(SELECT $degree FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,
 				   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
 				   	(SELECT	`rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
@@ -275,6 +279,9 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	`g`.`start_date`,
 				   	`g`.`expired_date`,
 				   	`g`.`note`,
+				   	`g`.`time`,
+				   	(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacher_name_en,
+					(SELECT t.teacher_name_kh FROM `rms_teacher` AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacher_name_kh,
 				   	(SELECT `rms_view`.`name_en` FROM `rms_view` WHERE ((`rms_view`.`type` = 1) AND (`rms_view`.`key_code` = `g`.`status`)) LIMIT 1) AS `status`,
 				   	(SELECT COUNT(`stu_id`) FROM `rms_group_detail_student` WHERE `group_id`=`g`.`id`)AS Num_Student
 			   	FROM 
@@ -345,6 +352,33 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	
+	function getScoreSettingIdByGroup($group_id){
+		$db = $this->getAdapter();
+		$sql="SELECT * FROM `rms_score_eng` AS s WHERE s.group_id = $group_id
+			AND s.status=1
+			GROUP BY s.score_setting
+			ORDER BY s.id DESC 
+			LIMIT 1";
+		return $db->fetchRow($sql);
+	}
+	function checkScorePolicyMoreThanOne($group_id){
+		$db = $this->getAdapter();
+		$sql="SELECT s.score_setting FROM `rms_score_eng` AS s WHERE s.group_id = $group_id 
+				AND s.status=1
+				GROUP BY s.score_setting
+				ORDER BY s.id DESC ";
+		return $db->fetchAll($sql);
+	}
+	function getScoreEngByStuAndType($group_id,$stu_id,$typescore){
+		$db = $this->getAdapter();
+		$sql="SELECT sed.* FROM `rms_score_eng_detail` AS sed,`rms_score_eng` AS se
+			WHERE sed.score_id=se.id
+			AND se.group_id=$group_id AND sed.student_id=$stu_id
+			AND se.exame_type=$typescore 
+			AND se.status=1
+			ORDER BY sed.id DESC
+		LIMIT 1";
+		return $db->fetchRow($sql);
+	}
        
 }

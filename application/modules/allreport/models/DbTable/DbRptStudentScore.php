@@ -1366,12 +1366,175 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    
    //for get score by id
    function getScoreExamByID($score_id){
-   	$db = $this->getAdapter();
-   	$sql="SELECT
-   	s.* FROM
-   	`rms_score` AS s
-   	WHERE s.id = $score_id
-    LIMIT 1";
-   	return $db->fetchRow($sql);
+	   	$db = $this->getAdapter();
+	   	$sql="SELECT
+	   	s.* FROM
+	   	`rms_score` AS s
+	   	WHERE s.id = $score_id
+	    LIMIT 1";
+	   	return $db->fetchRow($sql);
    }
+   
+   
+   function getAllStudentPassed($search){
+	   	$db= $this->getAdapter();
+	   	$_db = new Application_Model_DbTable_DbGlobal();
+	   	$lang = $_db->currentlang();
+	   	if($lang==1){// khmer
+	   		$label = "name_kh";
+	   		$grade = "rms_itemsdetail.title";
+	   		$degree = "rms_items.title";
+	   		$branch = "b.branch_namekh";
+	   	}else{ // English
+	   		$label = "name_en";
+	   		$grade = "rms_itemsdetail.title_en";
+	   		$degree = "rms_items.title_en";
+	   		$branch = "b.branch_nameen";
+	   	}
+	   	$sql="SELECT
+				   	gds.`stu_id`,
+				   	gscg.`from_group`,
+				   	gscg.`to_group`,
+				   	st.stu_code,
+				   	st.stu_khname,
+				   	st.last_name,
+				   	st.stu_enname,
+				   	(SELECT $label FROM rms_view WHERE rms_view.`type`=2 AND rms_view.`key_code`=st.sex Limit 1) AS sex,
+				   	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=(SELECT rms_group.academic_year FROM rms_group WHERE rms_group.id=gscg.`from_group`) Limit 1) AS academic_year,
+				   	(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=(SELECT rms_group.grade FROM rms_group WHERE rms_group.id=gscg.`from_group`) limit 1) AS grade,
+				   	(select $label from rms_view where rms_view.type=4 and key_code=(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gscg.`from_group`) Limit 1) AS session,
+				   	(SELECT group_code from rms_group WHERE rms_group.id=gscg.from_group limit 1) AS from_group_code,
+				   
+				   	gscg.`to_group` ,
+				   	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=g.academic_year Limit 1) AS to_academic_year,
+				   	(SELECT $grade from rms_itemsdetail WHERE `rms_itemsdetail`.`items_type`=1 AND rms_itemsdetail.id=g.grade limit 1) AS to_grade,
+				   
+				   	(select $label from rms_view where rms_view.type=4 and key_code=g.session Limit 1) AS to_session,
+				   	(select $label from rms_view where type=17 and key_code=gscg.change_type Limit 1) as change_type,
+				   	g.group_code as to_group_code
+				FROM
+				   	`rms_group_detail_student` AS gds,
+				   	`rms_group_student_change_group` AS gscg,
+				   	rms_group as g,
+				   	rms_student as st
+				WHERE
+				   	gds.`group_id` = gscg.`to_group`
+				   	AND gds.`old_group` = gscg.`from_group`
+				   	and gscg.to_group=g.id
+				   	and gds.stu_id=st.stu_id
+				   	and gscg.change_type=2
+	   		";
+	   		
+	   	$order=" ORDER BY gscg.`id` ASC ";
+	   		
+	   	//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
+	   	$where  = '';
+	   	//echo $sql;exit();
+	   	if(empty($search)){
+	   		return $db->fetchAll($sql.$order);
+	   	}
+	   		
+	   	if(!empty($search['title'])){
+		   	$s_where = array();
+		   	$s_search = addslashes(trim($search['title']));
+		   	$s_where[] = " (select CONCAT(from_academic,'-',to_academic,' ',generation) from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
+		   	$s_where[] = " (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
+		   	$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) LIKE '%{$s_search}%'";
+		   	$where .=' AND ( '.implode(' OR ',$s_where).')';
+	   	}
+	   	if(!empty($search['branch_id'])){
+	   		$where.=' AND st.branch_id='.$search['branch_id'];
+	   	}
+	   	if(!empty($search['study_year'])){
+	   		$where.=' AND g.academic_year='.$search['study_year'];
+	   	}
+	   	if(!empty($search['grade_bac'])){
+	   		$where.=' AND g.grade='.$search['grade_bac'];
+	   	}
+	   	if(!empty($search['session'])){
+	   		$where.=' AND g.session='.$search['session'];
+	   	}
+	   	if(!empty($search['change_id'])){
+	   		$where.=' AND gscg.id='.$search['change_id'];
+	   	}
+	   	
+	   	$row = $db->fetchAll($sql.$where.$order);
+	   	if($row){
+	   		return $row;
+   		}
+   	}
+   
+   	function getAllStudentFailed($search,$from_group){
+   		$db= $this->getAdapter();
+   		$_db = new Application_Model_DbTable_DbGlobal();
+   		$lang = $_db->currentlang();
+   		if($lang==1){// khmer
+   			$label = "name_kh";
+   			$grade = "rms_itemsdetail.title";
+   			$degree = "rms_items.title";
+   			$branch = "b.branch_namekh";
+   		}else{ // English
+   			$label = "name_en";
+   			$grade = "rms_itemsdetail.title_en";
+   			$degree = "rms_items.title_en";
+   			$branch = "b.branch_nameen";
+   		}
+   		$sql="SELECT
+			   		gds.`stu_id`,
+			   		gscg.`from_group`,
+			   		st.stu_code,
+			   		st.stu_khname,
+			   		st.last_name,
+			   		st.stu_enname,
+			   		(SELECT $label FROM rms_view WHERE rms_view.`type`=2 AND rms_view.`key_code`=st.sex Limit 1) AS sex
+			   	FROM
+			   		`rms_group_detail_student` AS gds,
+			   		`rms_group_student_change_group` AS gscg,
+			   		rms_group as g,
+			   		rms_student as st
+			   	WHERE
+			   		gds.`group_id` = gscg.`from_group`
+			   		and gds.`group_id` = $from_group
+			   		and gscg.from_group=g.id
+			   		and gds.stu_id=st.stu_id
+			   		and gscg.change_type=2
+			   		and gds.is_pass=0
+			   		and stop_type=0
+   			";
+   	
+   		$order=" ORDER BY gscg.`id` ASC";
+   	
+   		//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
+   		$where  = '';
+   		//echo $sql;exit();
+   		if(empty($search)){
+	   		return $db->fetchAll($sql.$order);
+	   	}
+   	
+   		if(!empty($search['title'])){
+	   		$s_where = array();
+	   		$s_search = addslashes(trim($search['title']));
+	   		$s_where[] = " (select CONCAT(from_academic,'-',to_academic,' ',generation) from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
+	   		$s_where[] = " (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
+	   		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) LIKE '%{$s_search}%'";
+	   		$where .=' AND ( '.implode(' OR ',$s_where).')';
+   		}
+   		if(!empty($search['branch_id'])){
+   			$where.=' AND st.branch_id='.$search['branch_id'];
+   		}
+   		if(!empty($search['study_year'])){
+	   		$where.=' AND g.academic_year='.$search['study_year'];
+	   	}
+   		if(!empty($search['change_id'])){
+	   		$where.=' AND gscg.id='.$search['change_id'];
+	   	}
+   		//echo $sql.$where.$order;exit();
+   		$row = $db->fetchAll($sql.$where.$order);
+   		if($row){
+   			return $row;
+   		}
+   	}
+   
+   
+   
 }

@@ -5,12 +5,20 @@
 	$ac = null;
 	$ad = null;
 	$i=null;
+	$j=null;
 	$session='';
 	$grade='';
 	
 	$to_ad = null;
 	$to_session='';
 	$to_grade='';
+	
+	$amt_stu_pass=0;
+	$amt_stu_fail=0;
+	
+	$from_group='';
+	$to_group='';
+	
 	$frm =  $this->form_search;
 ?>	
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
@@ -23,7 +31,7 @@
     			</div>
     		</div>
     	</div>
-		<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rptgroupstudentchangegroup')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<div class="form-group">
             	<div class="col-md-2 col-sm-2 col-xs-12">
             		<?php echo $frm->getElement("title");?>
@@ -52,6 +60,11 @@
 		<style> 
 		th{border-top:1px solid #000;border-collapse: collapse;}
 		tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+		table { page-break-before: avoid; }
+		tr{ 
+			page-break-inside:auto;
+			page-break-after:avoid;
+		}
 		</style>
 		<table style="width:100%;background:#fff; border-collapse: collapse;">
 			<tr>
@@ -65,7 +78,7 @@
 				<td width="28%" >
 				</td>
 				<td width="44%" align="center">
-					<strong style="font-weight:bold;color:#000; font-size: 20px;font-family:Times New Roman,'Khmer MEF2';;"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></strong><br />
+					<strong style="font-weight:bold;color:#000; font-size: 20px;font-family:Times New Roman,'Khmer MEF2';;"><?php echo $tr->translate("RPT_STUDENT_PASSED");?></strong><br />
 				</td>
 				<td width="28%" align="right">
 				</td>
@@ -76,26 +89,53 @@
 			<tr>
 				<td colspan="4" id="exportExcel">								
 					<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;padding-buttom: 10px;font-family:Times New Roman,Khmer OS Battambang;"  border="1" >																			
-					<?php $total_stu=0; if(!empty($this->rs))foreach ($this->rs as $key =>$stu){										
+					<?php $total_stu=0; if(!empty($this->student_pass)){foreach ($this->student_pass as $key =>$stu){										
 					?>
-						<?php if((($ad!=$stu["academic_year"] OR $session!=$stu["session"] OR $grade!=$stu["grade"]) OR ($to_ad!=$stu["to_academic_year"] OR $to_session!=$stu["to_session"] OR $to_grade!=$stu["to_grade"])) AND  $key>0 ){?>											
-						<tr class="hover" style="font-size:14px;height: 25px;font-weight: bold;"​>
-							<td align="right" colspan="4" ><?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;&nbsp;</td>
-							<td align="center"><?php echo number_format($i,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
-						</tr>
+						<?php if(($from_group!=$stu["from_group"] OR $to_group!=$stu["to_group"]) AND  $key>0 ){?>											
+						
+						<?php 
+							$db= new Allreport_Model_DbTable_DbRptStudentScore();
+							$student_fail = $db->getAllStudentFailed($this->search,$from_group);
+						?>
+						
+						<?php $amt_stu_fail=0;if(!empty($student_fail)){foreach ($student_fail as $key =>$stu_fail){$i++;$amt_stu_fail++;?>
+							<tr class="hover" style="font-size:13px;height: 22px;color:red;"​ align="center">
+								<td><?php echo $i;?></td>
+								<td align="left">&nbsp;<?php echo $stu_fail['stu_code'];?></td>
+								<td align="left">&nbsp;<?php echo $stu_fail['stu_khname'];?></td>
+								<td align="left">&nbsp;<?php echo $stu_fail['last_name']." ".$stu_fail['stu_enname'];?></td>
+								<td><?php echo $stu_fail['sex'];?></td>
+								<td><?php echo $tr->translate("FAIL");?></td>
+							</tr>
+						<?php }}?>
 					</table>
 					<br/>
+					<table style="width:40%; font-family:Times New Roman,Khmer OS Battambang;font-size:15px;font-weight: bold;" align="right" border="0" >	
+						<tr class="hover" style="height: 26px;"​>
+							<td align="right" ><?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;&nbsp;</td>
+							<td align="center"><?php echo number_format($amt_stu_pass+$amt_stu_fail,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+						</tr>
+						<tr class="hover" style="height: 22px;"​>
+							<td align="right" ><?php echo $tr->translate("STUDENT_PASSED");?>&nbsp;&nbsp;</td>
+							<td align="center"><?php echo number_format($amt_stu_pass,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+						</tr>
+						<tr class="hover" style="height: 22px;"​>
+							<td align="right" ><?php echo $tr->translate("STUDENT_FAILED");?>&nbsp;&nbsp;</td>
+							<td align="center"><?php echo number_format($amt_stu_fail,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+						</tr>
+					</table>
 					
-					
+					<br/>
 					<table cellpadding="5"​ style="margin:0 auto;width:100%; padding-bottom: 10px;font-family:Times New Roman,Khmer OS Battambang;"  border="1" >
 							
-						<?php }$i++;?>
+						<?php }$i++;$amt_stu_pass++;?>
 						<?php 
-							if(($ad!=$stu["academic_year"] OR $session!=$stu["session"] OR $grade!=$stu["grade"]) OR ($to_ad!=$stu["to_academic_year"] OR $to_session!=$stu["to_session"] OR $to_grade!=$stu["to_grade"])){
-								$ac=0;$i=1;
+							if($from_group!=$stu["from_group"] OR $to_group!=$stu["to_group"]){
+								$ac=0;$i=1;$amt_stu_pass=1;
+								
 						?>
 						<tr style="font-size:14px; height: 45px;" align="center" >
-							<td colspan="5" style="border: 1px solid white;border-bottom: 1px solid black;">
+							<td colspan="6" style="border: 1px solid white;border-bottom: 1px solid black;">
 								<span style="font-size: 15px;font-weight: bold;">
 									<span style="background-color: rgba(249,249,249,1);white-space: nowrap;color: red;padding: 10px 5px;border: 1px solid #efefef;border-radius: 5px;">&nbsp;<?php echo $stu["academic_year"]?> &nbsp; <?php echo $stu["from_group_code"];?> &nbsp; <?php echo $stu["session"];?>&nbsp;</span> &nbsp; To &nbsp; <span style="color: red;background-color: rgba(249,249,249,1);padding: 10px 5px;border: 1px solid #efefef;border-radius: 5px;">&nbsp;<?php echo $stu["to_academic_year"]?> &nbsp; <?php echo $stu["to_group_code"];?> &nbsp; <?php echo $stu["to_session"];?>&nbsp; </span> &nbsp; <?php echo $tr->translate("TYPE")?> : <span style="background-color: rgba(249,249,249,1);white-space: nowrap;color: red;padding: 10px 5px;border: 1px solid #efefef;border-radius: 5px;"><?php echo $stu["change_type"];?> </span>         
 								</span><br>
@@ -104,18 +144,15 @@
 						<tr style="font-size:14px; height: 20px;background: #ccd9ff !important;line-height: 25px;font-weight: bold;" align="center" >
 							<td style="width: 10%;"><?php echo $tr->translate("N_O");?></td>
 							<td style="width: 15%;"><?php echo $tr->translate("STUDENT_ID");?></td>
-							<td style="width: 30%;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
-							<td style="width: 30%;"><?php echo $tr->translate("NAME_ENGLISH");?></td>
+							<td style="width: 25%;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
+							<td style="width: 25%;"><?php echo $tr->translate("NAME_ENGLISH");?></td>
 							<td style="width: 15%;"><?php echo $tr->translate("SEX");?></td>
+							<td style="width: 10%;"><?php echo $tr->translate("STATUS");?></td>
 						</tr>
 						<?php }?>
 						<?php 
-							  $ad=$stu["academic_year"];
-						 	  $session=$stu["session"];
-						 	  $grade=$stu["grade"];
-						 	  $to_ad=$stu["to_academic_year"];
-						 	  $to_session=$stu["to_session"];
-						 	  $to_grade=$stu["to_grade"];
+							$from_group=$stu["from_group"];
+							$to_group=$stu["to_group"];
 						?>
 						
 						<tr class="hover" style="font-size:13px;height: 22px;"​ align="center">
@@ -124,15 +161,43 @@
 							<td align="left">&nbsp;<?php echo $stu['stu_khname'];?></td>
 							<td align="left">&nbsp;<?php echo $stu['last_name']." ".$stu['stu_enname'];?></td>
 							<td><?php echo $stu['sex'];?></td>
+							<td><?php echo $tr->translate("PASS");?></td>
 						</tr>
-					<?php }?>
-					<?php if(!empty($this->rs)){?>
-						<tr class="hover" style="font-size:15px;height: 30px;font-weight: bold;"​>
-							<td align="right" colspan="4" ><?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;&nbsp;</td>
-							<td align="center"><?php echo number_format($i,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
-						</tr>
+					<?php }}?>
+					<?php if(!empty($this->student_pass)){?>
+						<?php 
+							$db= new Allreport_Model_DbTable_DbRptStudentScore();
+							$student_fail = $db->getAllStudentFailed($this->search,$from_group);
+						?>
+						<?php $amt_stu_fail=0;if(!empty($student_fail)){foreach ($student_fail as $key =>$stu_fail){$i++;$amt_stu_fail++;?>
+							<tr class="hover" style="font-size:13px;height: 22px; color:red"​ align="center">
+								<td><?php echo $i;?></td>
+								<td align="left">&nbsp;<?php echo $stu_fail['stu_code'];?></td>
+								<td align="left">&nbsp;<?php echo $stu_fail['stu_khname'];?></td>
+								<td align="left">&nbsp;<?php echo $stu_fail['last_name']." ".$stu_fail['stu_enname'];?></td>
+								<td><?php echo $stu_fail['sex'];?></td>
+								<td><?php echo $tr->translate("FAIL");?></td>
+							</tr>
+						<?php }}?>
+						
 					<?php }?>
 					</table>	
+					<?php if(!empty($this->student_pass)){?>
+					<table style="width:40%; font-family:Times New Roman,Khmer OS Battambang;font-size:15px;font-weight: bold;" align="right" border="0" >	
+						<tr class="hover" style="height: 26px;"​>
+							<td align="right" ><?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;&nbsp;</td>
+							<td align="center"><?php echo number_format($amt_stu_pass+$amt_stu_fail,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+						</tr>
+						<tr class="hover" style="height: 22px;"​>
+							<td align="right" ><?php echo $tr->translate("STUDENT_PASSED");?>&nbsp;&nbsp;</td>
+							<td align="center"><?php echo number_format($amt_stu_pass,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+						</tr>
+						<tr class="hover" style="height: 22px;"​>
+							<td align="right" ><?php echo $tr->translate("STUDENT_FAILED");?>&nbsp;&nbsp;</td>
+							<td align="center"><?php echo number_format($amt_stu_fail,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+						</tr>
+					</table>	
+					<?php }?>
 				</td>
 			</tr>
 			<tr><td></td></tr>

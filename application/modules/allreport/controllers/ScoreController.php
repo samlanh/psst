@@ -500,6 +500,39 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->scoreSetting = $scoreSetting;
     	
     }
+	
+	public function rptStudentPassedAction()
+    {
+    	if($this->getRequest()->isPost()){
+    		$search=$this->getRequest()->getPost();
+    	}else{
+    		$search=array(
+    				'title' 		=> '',
+    				'branch_id' 	=> '',
+    				'study_year' 	=> '',
+    				'change_id' 	=> '',
+    		);
+    	}
+    	$form=new Registrar_Form_FrmSearchInfor();
+    	$forms=$form->FrmSearchRegister();
+    	Application_Model_Decorator::removeAllDecorator($forms);
+    	$this->view->form_search=$form;
+    
+    	$db= new Allreport_Model_DbTable_DbRptStudentScore();
+    	$this->view->student_pass = $db->getAllStudentPassed($search);
+    	//$this->view->student_fail= $db->getAllStudentFailed($search);
+    	//print_r($this->view->student_fail);exit();
+    	
+    	$_db= new Allreport_Model_DbTable_DbRptGroupStudentChangeGroup();
+    	$this->view->change_type = $_db->getChangeType();
+    	$this->view->all_change_group = $_db->getAllChangeGroup(2); // 2=ឡើងថ្នាក់
+    	
+    	$this->view->search=$search;
+    
+    	$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+    	$frm = new Application_Form_FrmGlobal();
+    	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+    }
 }
 
 

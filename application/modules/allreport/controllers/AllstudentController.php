@@ -583,6 +583,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db= new Allreport_Model_DbTable_DbRptGroupStudentChangeGroup();
 		$this->view->rs = $db->getAllStu($search);
 		$this->view->change_type = $db->getChangeType();
+		$this->view->all_change_group = $db->getAllChangeGroup(1); // 1=ប្តូរក្រុម
+		
 		$this->view->search=$search;
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];

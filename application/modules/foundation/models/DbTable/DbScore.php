@@ -511,12 +511,8 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
+	
+	
 }
-
-
-
-
-
-
 
 

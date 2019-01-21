@@ -105,6 +105,7 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
 				   rms_student as st
 				WHERE 
 					gds.`group_id` = gscg.`to_group` 
+					and gscg.change_type=1
 				  	AND gds.`old_group` = gscg.`from_group`
 				  	and gscg.to_group=g.id
 				  	and gds.stu_id=st.stu_id   
@@ -143,7 +144,7 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     		$where.=' AND gscg.change_type='.$search['change_type'];
     	}
     	
-    	$row = $db->fetchAll($sql.$where);
+    	$row = $db->fetchAll($sql.$where.$order);
     	if($row){
     		return $row;
     	}
@@ -166,6 +167,20 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     public function getChangeType(){
     	$db=$this->getAdapter();
     	$sql="SELECT key_code as id, name_kh as name from rms_view where type=17 and status=1 ";
+    	return $db->fetchAll($sql);
+    }
+    public function getAllChangeGroup($type){//1=ប្តូរក្រុម , 2=ឡើងថ្នាក់
+    	$db=$this->getAdapter();
+    	$sql="SELECT 
+    				id, 
+    				(select group_code from rms_group as g where g.id = from_group) as from_group,
+    				(select group_code from rms_group as g where g.id = to_group) as to_group
+    			from 
+    				rms_group_student_change_group 
+    			where 
+    				change_type=$type
+    				and status=1 
+    		";
     	return $db->fetchAll($sql);
     }
     

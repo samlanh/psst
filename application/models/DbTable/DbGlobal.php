@@ -1669,7 +1669,7 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT i.id,
   		$colunmname AS name
   	FROM `rms_itemsdetail` AS i
-  	WHERE i.status =1 ";
+  	WHERE i.status = 1 and product_type=1 ";
   	if($category_id!=null AND $category_id>0 AND $category_id!=''){
   		$sql.=" AND i.items_id=".$category_id;
   	}

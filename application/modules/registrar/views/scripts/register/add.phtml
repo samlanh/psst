@@ -548,19 +548,19 @@ function getgradebyDegree(dept_id,a,type=1){
 	}
 	student_id = dijit.byId("old_stu").get("value");
 	dojo.xhrPost({
-			url:url_dept,
-			content:{
-				'dept_id':dept_id,
-				'student_id':student_id
-				},
-			handleAs:"json",
-			load: function(data) {
-				if(type==1){
-					
-				}else{
-					item_store  = getDataStorefromJSON('id','name', data);
-				    dijit.byId('item').set('store',item_store);  	
-				}
+		url:url_dept,
+		content:{
+			'dept_id':dept_id,
+			'student_id':student_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(type==1){
+				
+			}else{
+				item_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('item').set('store',item_store);  	
+			}
 		},
 		error: function(err) {
 			alert('err'+err);

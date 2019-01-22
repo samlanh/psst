@@ -6,8 +6,6 @@
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
     dojo.require("dijit.form.Textarea");
 </script>
 <style>
@@ -268,7 +266,7 @@ input.btn_borwse_image {
 				temp+='<th><?php echo $tr->translate("N_O");?></th>';
 				temp+='<th><?php echo $tr->translate("BRANCH_NAME");?></th>';
 				temp+='<th><?php echo $tr->translate("QTY");?></th>';
-				temp+='<th><?php echo $tr->translate("PRICE");?></th>';
+				temp+='<th><?php echo $tr->translate("SELL_PRICE");?></th>';
 				temp+='<th><?php echo $tr->translate("QTY_WARNING");?></th>';
 				temp+='<th><?php echo $tr->translate("OTHER");?></th>';
 				dojo.query("#head-title").append(temp);

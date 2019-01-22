@@ -13,6 +13,7 @@
 		$sign="&";
 	}
 	$db_student= new Home_Model_DbTable_DbStudent();
+	$dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 	//print_r($this->row); exit();
 ?>
 <style>
@@ -193,6 +194,12 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/allstudent/certify-english/id/".$rs['stu_id'];?>"><?php echo $tr->translate('CERTIFY_ENGLIISH');?></a>
 		                          </li>
 		                          <?php }?>
+		                         <?php $groupScore= $dbreportGr->getScoreSettingIdByGroup($rs['group_id']); 
+		                         if (!empty($groupScore)){?>
+		                         <li>
+		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/score/rpt-assessmentterm/id/".$rs['group_id'];?>"><?php echo $tr->translate('Assessment Term');?></a>
+		                          </li>
+		                         <?php }?>
 		                          <?php }?>
 	                        	<?php if (!empty($lastExam)){?>
 		                          <li>

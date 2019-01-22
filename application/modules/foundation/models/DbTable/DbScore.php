@@ -465,7 +465,14 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 
 	function getAllMonth(){
 		$db = $this->getAdapter();
-		$sql="select id , month_kh from rms_month where status=1 ";
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if($lang==1){// khmer
+			$month = "month_kh";
+		}else{ // English
+			$month = "month_en";
+		}
+		$sql="select id , $month as month_kh from rms_month where status=1 ";
 		return $db->fetchAll($sql);
 	}	
 	

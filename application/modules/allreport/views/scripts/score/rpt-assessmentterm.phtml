@@ -121,7 +121,7 @@
 							<?php  $i=0;
 							$male=0;$femle=0; 
 							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ $i++;?>
-							<tr oncontextmenu="setrowdata(<?php echo $row['gd_id'];?>);return false;" style="font-size:13px; height: 25px;white-space: nowrap;"​ align="center" class='padding hover context-menu-one'>
+							<tr oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;" style="font-size:13px; height: 25px;white-space: nowrap;"​ align="center" class='padding hover context-menu-one'>
 								<td><?php echo $i;?></td>
 								<td align="left"><?php echo $row['last_name'].' '.$row['en_name'];?></td>
 								<td><?php //echo $row['sex'];

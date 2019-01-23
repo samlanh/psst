@@ -345,8 +345,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->student = $rs_rows = $group->getStudentMistake($search);
-		$this->view->search=$search;
-		$this->view->datasearch = $search;
+		$this->view->search = $search;
 	
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$result= $db_global->getAllgroupStudy();
@@ -439,7 +438,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'end_date'		=> date('Y-m-d'),
 			);
 		}
-		$this->view->datasearch = $search;
+		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->student = $db->getStudentAttendence($search);
 		
@@ -560,6 +559,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+		
+		$this->view->search = $search;
 	}
 	public function rptgroupstudentchangegroupAction()
 	{

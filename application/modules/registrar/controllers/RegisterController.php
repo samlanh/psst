@@ -342,9 +342,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     	}
     	$db = new Registrar_Model_DbTable_DbRegister();
-    	$this->view->row = $db->getRegisterById($id);
+    	$this->view->row = $row = $db->getRegisterById($id);
     	
-    	$this->view->receipt = $db->getRecieptNo();
+    	$this->view->receipt = $db->getRecieptNo($row['branch_id']);
     	
     	$_db = new Application_Form_FrmGlobal();
     	$this->view->header = $_db->getHeaderReceipt();

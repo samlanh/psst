@@ -29,13 +29,13 @@
 	  			 if(this.validate()) {
 					academic_year = dijit.byId("academic_year").get('value');
 					if(academic_year=='' || academic_year==-1){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_ACADEMIC_YEAR");?>");
+						alert("<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?> !!!");
 						dijit.byId("academic_year").focus();
 						return false;
 					}
 					var rowId = $('#identity').val();
 					if(rowId==''){ 
-						alert("<?php echo $tr->translate("PLEASE_ADD_TERM_DURATION");?>");
+						alert("<?php echo $tr->translate("ADD_TERM");?> !!!");
 						return false;
 					}
 					if(rowId!=''){ 

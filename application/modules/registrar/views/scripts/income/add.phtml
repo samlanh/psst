@@ -177,30 +177,29 @@ dojo.require("dojo.store.Memory");
 	});
 
 	var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'get-receipt-number')); ?>";
-		function getReceiptNumber(condition){
-			branch_id = dijit.byId('branch_id').get('value');
-			if(branch_id=="" || branch_id==-1){
-				dijit.byId('invoice').attr('value','');
-				return false;
-			}
-				
-			dojo.xhrPost({
-				url:url_get_recceipt_number,
-				content:{
-					'branch_id':branch_id
-					},
-				handleAs:"json",
-				load: function(data) {
-					 dijit.byId('invoice').attr('value',data);
-					 if(condition!=''){
-						 printReceipt(data);
-					 }
+	function getReceiptNumber(condition){
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=="" || branch_id==-1){
+			dijit.byId('invoice').attr('value','');
+			return false;
+		}
+		dojo.xhrPost({
+			url:url_get_recceipt_number,
+			content:{
+				'branch_id':branch_id
 				},
-				error: function(err) {
-					alert(err);
-				}
-			});
-}
+			handleAs:"json",
+			load: function(data) {
+				 dijit.byId('invoice').attr('value',data);
+				 if(condition!=''){
+					 printReceipt(data);
+				 }
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
 
 	var url_add_cate_income = '<?php echo $this->url(array("module"=>"registrar","controller"=>"income","action"=>"add-cate-income")); ?>';
 	function addCateIncome(){

@@ -101,6 +101,9 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		if(!empty($search['study_year'])){
 			$where.=" AND s.academic_year = ".$search['study_year'];
 		}
+		if(!empty($search['degree'])){
+			$where.=" AND s.degree=".$search['degree'];
+		}
 		if(!empty($search['grade'])){
 			$where.=" AND s.grade=".$search['grade'];
 		}

@@ -217,7 +217,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'autoComplete'=>"false",
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>false,
+				'onchange'=>'getallGrade();'
 		));
 		$_degree->setValue($request->getParam('degree'));
 		$opt_deg = array(''=>$this->tr->translate("DEGREE"));

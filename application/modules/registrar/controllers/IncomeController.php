@@ -147,7 +147,6 @@ class Registrar_IncomeController extends Zend_Controller_Action
 	    	$db = new Registrar_Model_DbTable_DbRegister();
 	    	$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
 	    	$receipt = $db->getRecieptNo($branch_id);
-	    	//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 	    	print_r(Zend_Json::encode($receipt));
 	    	exit();
     	}

@@ -568,7 +568,9 @@ function getgradebyDegree(dept_id,a,type=1){
 }
 
 var url_getreceipt_no = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
-function getReceiptNo(stu_id,submit){
+function getReceiptNo(stu_id='',submit=''){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id==''){return false;}
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=="" || branch_id==-1){
 		dijit.byId('receipt_no').attr('value','');
@@ -577,8 +579,9 @@ function getReceiptNo(stu_id,submit){
 	dojo.xhrPost({
 		url:url_getreceipt_no,
 		content:{
-			'dept_id':1,'branch_id':branch_id
-			},
+			'dept_id':1,
+			'branch_id':branch_id
+		},
 		handleAs:"json",
 		load: function(data) {
 			  dijit.byId('receipt_no').attr('value',data); 

@@ -17,7 +17,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 						'adv_search' => '',
 						'study_year'=> '',
 						'group'=> '',
-						'grade'=> '',
+						'grade_all'=> '',
 						'session'=> '',
 						'time'=> '',
 						'degree'=> '',

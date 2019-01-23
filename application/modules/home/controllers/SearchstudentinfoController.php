@@ -19,7 +19,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 				$search = array(
 						'adv_search' => '',
 						'study_year'=> '',
-						'grade'=> '',
+						'grade_all'=> '',
 						'session'=> '',
 						'time'=> '',
 						'group'=>'',

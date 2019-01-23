@@ -121,8 +121,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$paid_date = date("Y-m-d H:i:s");
 				
 		$stu_id = $data['old_stu'];//$this->getNewAccountNumber($data['dept']);
-		$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
-		$receipt_number =$this->getRecieptNo($branch_id);
+		$receipt_number = $this->getRecieptNo($data['branch_id']);
 			try{
 				$gdb = new  Application_Model_DbTable_DbGlobal();
 				//$this->_name='rms_student';
@@ -694,24 +693,32 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     }
     function getRegisterById($id){
     	$db=$this->getAdapter();
-    	$sql=" SELECT s.stu_id,
-    			s.stu_code,
-    			sp.receipt_number,
-    			s.academic_year,
-    			s.stu_khname,
-    			s.stu_enname,
-    			s.sex,
-    			s.session,
-    			s.degree,
-    			s.grade,
-		    	sp.paid_amount,
-		    	sp.is_void,sp.create_date,
-		    	sp.balance_due,sp.amount_in_khmer,
-		    	sp.note,sp.time,
-		    	spd.start_date,
-		    	spd.validate,spd.is_start
-		    	FROM rms_student AS s,rms_student_payment AS sp ,rms_student_paymentdetail AS spd
-		    	WHERE s.stu_id=sp.student_id AND sp.id=spd.payment_id AND sp.id=".$id;
+    	$sql=" SELECT 
+	    			s.stu_id,
+	    			s.stu_code,
+	    			sp.receipt_number,
+	    			sp.branch_id,
+	    			s.academic_year,
+	    			s.stu_khname,
+	    			s.stu_enname,
+	    			s.sex,
+	    			s.session,
+	    			s.degree,
+	    			s.grade,
+			    	sp.paid_amount,
+			    	sp.is_void,sp.create_date,
+			    	sp.balance_due,sp.amount_in_khmer,
+			    	sp.note,sp.time,
+			    	spd.start_date,
+			    	spd.validate,spd.is_start
+		    	FROM 
+		    		rms_student AS s,
+		    		rms_student_payment AS sp ,
+		    		rms_student_paymentdetail AS spd
+		    	WHERE 
+    				s.stu_id=sp.student_id 
+    				AND sp.id=spd.payment_id 
+    				AND sp.id=".$id;
     	$dbl = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbl->getAccessPermission(" sp.branch_id ");
     	return $db->fetchRow($sql);
@@ -822,20 +829,18 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		}
     	}
      }
-    public function getRecieptNo($branch_id=null){
+    public function getRecieptNo($branch=0){
     	$db = $this->getAdapter();
-    	
-//     	$_db = new Application_Model_DbTable_DbGlobal();
-//     	$branch_id = $_db->getAccessPermission();
-//     	$branch_id="";
-    	
-    	$branch_id = empty($branch_id)?"":" AND branch_id = ".$branch_id;
-//     	return "Receipt";
+    	if($branch==0){
+    		$_db = new Application_Model_DbTable_DbGlobal();
+    		$branch_id = $_db->getAccessPermission();
+    	}else{
+    		$branch_id = " and branch_id = $branch ";
+    	}
     	
     	$sql="SELECT count(id)  FROM rms_student_payment where 1 $branch_id LIMIT 1 ";
     	$payment_no = $db->fetchOne($sql);
     	
-//     	$sql1="SELECT count(id)  FROM ln_income where date>='2018-03-06' $branch_id LIMIT 1 ";
     	$sql1="SELECT count(id)  FROM ln_income where 1 $branch_id LIMIT 1 ";
     	$income_no = $db->fetchOne($sql1);
     	
@@ -1350,7 +1355,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			$array = array(
 					"payment_id"	=>$payment_id,
 					"stu_id"		=>$data['stu_id'],
-					"receipt_no"	=>$this->getRecieptNo(),
+					"receipt_no"	=>$this->getRecieptNo($result['branch_id']),
 					"total_balance"	=>$data['total_balance'],
 					"paid_amount"	=>$data['paid_amount'],
 					"balance"		=>$data['balance'],

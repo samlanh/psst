@@ -130,8 +130,7 @@ table.collape tbody td{padding: 0px !important;}
 					dijit.byId("item").focus();
 					return false;
 				}
-					dijit.byId('save_new').set('disabled',true);	
-					dijit.byId('save_close').set('disabled',true);
+					loadingBlock();
     				return true;
    				}else {
     				return false;
@@ -155,7 +154,7 @@ table.collape tbody td{padding: 0px !important;}
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH_NAME");?> <span class="required">*</span> :</label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchinfo();getallstudentname();getAllAcademicByBranch();">
+	                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getReceiptNo('','');getbranchinfo();getallstudentname();getAllAcademicByBranch();">
 				    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
 				    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
 				    			<?php }?>
@@ -424,7 +423,7 @@ table.collape tbody td{padding: 0px !important;}
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
                		<input type="submit"  name="save_close" id="save_close" value="1" label="<?php echo $tr->translate('SAVE_CLOSE');?>"   dojoType="dijit.form.Button" 
 					 	iconClass="dijitEditorIcon dijitEditorIconSave"  />
-					<input type="button" onclick="submitDataAddNew();" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
+					<input type="submit" name="save_new" id="save_new" value="1" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 					 	iconClass="dijitEditorIcon dijitEditorIconSave"  />
 					 <input type="button" value="1" label="<?php echo $tr->translate('PRINT');?>" id="busyButton" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconPrint" onclick="printSave('','','');displayNone();"/> 
@@ -570,10 +569,15 @@ function getgradebyDegree(dept_id,a,type=1){
 
 var url_getreceipt_no = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-receipt-no')); ?>';
 function getReceiptNo(stu_id,submit){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=="" || branch_id==-1){
+		dijit.byId('receipt_no').attr('value','');
+		return false;
+	}
 	dojo.xhrPost({
 		url:url_getreceipt_no,
 		content:{
-			'dept_id':1
+			'dept_id':1,'branch_id':branch_id
 			},
 		handleAs:"json",
 		load: function(data) {

@@ -1,6 +1,6 @@
 <?php
-	$session_lang=new Zend_Session_Namespace('lang');
-	$session_lang->lang_id=1;
+// 	$session_lang=new Zend_Session_Namespace('lang');
+// 	$session_lang->lang_id=1;
 
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage(1);
 	$this->headTitle($this->data["system_name"]."-Student Management System"); 
@@ -129,8 +129,8 @@
 				                 </label>
 			                   	 <div class="col-md-9 col-sm-9 col-xs-12">
 			                    	<select class="fullside" data-dojo-type="dijit/form/FilteringSelect" name="lang" id="lang" style="width: 150px"  onchange="changeLange();" > 
-									<option value="1" <?php if($this->rslang==1){echo"selected";}?>>ខ្មែរ</option> 
-									<option value="2" <?php if($this->rslang==2){echo"selected";}?>>English</option> 
+									<option value="1" <?php if($this->rslang==1){echo"selected";}?>><?php echo $tr->translate("KHMER");?></option> 
+									<option value="2" <?php if($this->rslang==2){echo"selected";}?>><?php echo $tr->translate("ENGLISH");?></option> 
 								</select>
 			                    </div>
 							</div>

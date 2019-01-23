@@ -13,7 +13,8 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 	}	
 	function addIncome($data){
 		$db = new Registrar_Model_DbTable_DbRegister();
-	    $receipt_no = $db->getRecieptNo();
+		$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
+	    $receipt_no = $db->getRecieptNo($branch_id);
 	    
 		$array = array(
 				'branch_id'		=>$data['branch_id'],

@@ -17,17 +17,18 @@
 	<div class="card-content collapse show">
 		<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">	
-			branch=dijit.byId('branch_id').get('value');
-			if(branch=='' || branch==0){
-				alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');dijit.byId('branch_id').focus();return false;
-				return false;
-			}		
-			cate_income=dijit.byId('cate_income').get('value');
-			if(cate_income==0 || cate_income==''){
-				alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');dijit.byId('cate_income').focus();return false;
-				return false;
-			}
-		if(this.validate()) {
+			if(this.validate()) {			
+				branch=dijit.byId('branch_id').get('value');
+				if(branch=='' || branch==0){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');dijit.byId('branch_id').focus();return false;
+					return false;
+				}		
+				cate_income=dijit.byId('cate_income').get('value');
+				if(cate_income==0 || cate_income==''){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');dijit.byId('cate_income').focus();return false;
+					return false;
+				}
+				loadingBlock();
 				return true;
 			}else {
 				return false;
@@ -48,7 +49,7 @@
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="filterClient();">
+	                   		<select name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getReceiptNumber();filterClient();">
 								<option value=""><?php echo $tr->translate("PLEASE_SELECT_BRANCH");?></option>
 								<?php if(!empty($this->branch_name)){foreach ($this->branch_name as $branch){?>
 									<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
@@ -133,9 +134,9 @@
 	       <div class="card-box">
                	<div class="col-md-8 col-sm-8 col-xs-12 border-top mt-20 ptb-10 text-center">
                			<input type="reset" label="<?php echo $tr->translate("CLEAR")?>" dojoType="dijit.form.Button"  iconClass="dijitIconClear"/>
-						<input  label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' id='saveclose' value='saveclose' type="button" onclick="submitDataClose();" dojoType="dijit.form.Button"
+						<input  label="<?php echo $tr->translate("SAVE_CLOSE");?>" name='saveclose' id='saveclose' value='saveclose' type="submit" dojoType="dijit.form.Button"
 							 iconClass="dijitIconNewTask"/>
-						<input  label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' type="submit" onclick="submitDataAddNew();" dojoType="dijit.form.Button"
+						<input  label="<?php echo $tr->translate("SAVE_NEW")?>" name='savenew' id='savenew' value='savenew' type="submit" dojoType="dijit.form.Button"
 							 iconClass="dijitIconNewTask"/>
 						<input type="button" label="<?php echo $tr->translate("PRINT")?>" name='print' value='print' dojoType="dijit.form.Button" iconClass="dijitIconNewTask"  onclick="printReceipt('');"   />
 	    		</div>
@@ -177,9 +178,16 @@ dojo.require("dojo.store.Memory");
 
 	var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'get-receipt-number')); ?>";
 		function getReceiptNumber(condition){
+			branch_id = dijit.byId('branch_id').get('value');
+			if(branch_id=="" || branch_id==-1){
+				dijit.byId('invoice').attr('value','');
+				return false;
+			}
+				
 			dojo.xhrPost({
 				url:url_get_recceipt_number,
 				content:{
+					'branch_id':branch_id
 					},
 				handleAs:"json",
 				load: function(data) {

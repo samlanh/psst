@@ -121,7 +121,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$paid_date = date("Y-m-d H:i:s");
 				
 		$stu_id = $data['old_stu'];//$this->getNewAccountNumber($data['dept']);
-		$receipt_number =$this->getRecieptNo();
+		$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
+		$receipt_number =$this->getRecieptNo($branch_id);
 			try{
 				$gdb = new  Application_Model_DbTable_DbGlobal();
 				//$this->_name='rms_student';
@@ -821,18 +822,21 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		}
     	}
      }
-    public function getRecieptNo(){
+    public function getRecieptNo($branch_id=null){
     	$db = $this->getAdapter();
     	
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
-    	$branch_id="";
+//     	$_db = new Application_Model_DbTable_DbGlobal();
+//     	$branch_id = $_db->getAccessPermission();
+//     	$branch_id="";
+    	
+    	$branch_id = empty($branch_id)?"":" AND branch_id = ".$branch_id;
 //     	return "Receipt";
     	
     	$sql="SELECT count(id)  FROM rms_student_payment where 1 $branch_id LIMIT 1 ";
     	$payment_no = $db->fetchOne($sql);
     	
-    	$sql1="SELECT count(id)  FROM ln_income where date>='2018-03-06' $branch_id LIMIT 1 ";
+//     	$sql1="SELECT count(id)  FROM ln_income where date>='2018-03-06' $branch_id LIMIT 1 ";
+    	$sql1="SELECT count(id)  FROM ln_income where 1 $branch_id LIMIT 1 ";
     	$income_no = $db->fetchOne($sql1);
     	
 //     	$sql2="SELECT count(id)  FROM rms_student_test where total_price>0 AND paid_date>='2018-03-06' and is_paid=1 $branch_id LIMIT 1 ";

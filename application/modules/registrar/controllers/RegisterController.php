@@ -61,6 +61,12 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	try {
       		$db = new Registrar_Model_DbTable_DbRegister();
       		$db->addRegister($_data);
+      		if(!empty($_data['save_close'])){
+      			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");
+      		}else{
+      			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register/add");
+      		}
+      		
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       	} catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
@@ -421,7 +427,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Registrar_Model_DbTable_DbRegister();
-			$receipt = $db->getRecieptNo();
+			$branch_id = empty($data['branch_id'])?null:$data['branch_id'];
+			$receipt = $db->getRecieptNo($branch_id);
 			print_r(Zend_Json::encode($receipt));
 			exit();
 		}

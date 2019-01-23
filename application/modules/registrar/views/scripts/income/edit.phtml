@@ -16,18 +16,18 @@ $frm = $this->frm_expense;
 	<div class="card-content collapse show">
 		<form id="frm_add_tran" action="<?php echo $this->url(array('module'=>'registrar','controller'=>'income','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">
-			branch_id=dijit.byId('branch_id').get('value');
+			if(this.validate()) {
+				branch_id=dijit.byId('branch_id').get('value');
 				if(branch_id==-1 || branch_id==''){
 					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');dijit.byId('branch_id').focus();return false;
 					return false;
 				}
 				cate_income=dijit.byId('cate_income').get('value');
-			if(cate_income==0 || branch_id==''){
-				alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');dijit.byId('cate_income').focus();return false;
-				return false;
-			}			
-			if(this.validate()) {
-				
+				if(cate_income==0 || branch_id==''){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_CATEGORY');?>!');dijit.byId('cate_income').focus();return false;
+					return false;
+				}	
+				loadingBlock();
 				return true;
 			}else {
 				return false;
@@ -48,7 +48,7 @@ $frm = $this->frm_expense;
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BRANCH_NAME");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="filterClient();" >
+	                   		<select name="branch_id" id="branch_id" readonly="readonly" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="filterClient();" >
 								<?php if(!empty($this->branch_name)){foreach ($this->branch_name as $branch){?>
 									<option value="<?php echo $branch['id']?>"<?php if($branch['id']==$this->rs['branch_id']){echo 'selected="selected"';}?>><?php echo $branch['name']?></option>
 								<?php }}?>

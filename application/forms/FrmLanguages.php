@@ -11,9 +11,32 @@ class Application_Form_FrmLanguages{
 		if($lang_id==1){
 			$str="km";
 		}else{$str="en"; }	
-		$tr = new Zend_Translate('ini', PUBLIC_PATH.'/lang/'.$str,  null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+		
+		$schoolOption=1;
+		$session_user=new Zend_Session_Namespace('authstu');
+		$session_teacher=new Zend_Session_Namespace('authteacher');
+		if (!empty($session_user->user_id)){
+			$schoolOption = $session_user->schoolOption;
+		}elseif (!empty($session_teacher->teacher_id)){
+			$schoolOption = $session_teacher->schoolOption;;
+		}
+		
+		$schollist = explode(",", $schoolOption);
+		$partlang = PUBLIC_PATH.'/lang/generalschool/';
+		if (count($schollist)==1){
+			if($schoolOption==3){
+				$partlang = PUBLIC_PATH.'/lang/university/';
+			}
+		}
+		
+// 		$tr = new Zend_Translate('ini', PUBLIC_PATH.'/lang/'.$str,  null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+// 		// set locale
+// 		$tr->setLocale('en');
+		
+		$tr = new Zend_Translate('ini', $partlang.$str,  null, array('scan' => Zend_Translate::LOCALE_FILENAME));
 		// set locale
 		$tr->setLocale('en');
+		
 		$session_language=new Zend_Session_Namespace('language');		
 		if(!empty($session_language->language)){
 			$tr->setLocale(strtolower($session_language->language));

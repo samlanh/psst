@@ -119,6 +119,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	}
 	public function addStudentDrop($_data){
 		$_db= $this->getAdapter();
+		$_db->beginTransaction();
 			try{	
 				
 				$_arr= array(
@@ -173,6 +174,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	}
 	public function updateStudentDrop($_data){
 		$db= $this->getAdapter();
+		$db->beginTransaction();
 		try{	
 			$_arr=array(
 						'branch_id'	=>$_data['branch_id'],

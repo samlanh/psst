@@ -204,12 +204,17 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	
 	public function rptStudentStatisticAction(){
+		
+		$db_yeartran = new Allreport_Model_DbTable_DbRptAllStudent();
+		$yeartran = $db_yeartran->getAllYearTuitionfee();
+		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 		}
 		else{
 			$search=array(
 					'title' 		=>'',
+					'allacademicyear'=>$yeartran[0]['academicyear'],
 					'study_year' 	=>'',
 					'grade_all' 	=>'',
 					'session' 		=>'',
@@ -225,8 +230,10 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->rs = $rs_rows = $group->getStudentStatistic($search);
+// 		$this->view->rs = $rs_rows = $group->getStudentStatistic($search);
+		$this->view->rs = $group->getGroupBYStudentGrade($search);
 		$this->view->search=$search;
+		
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();

@@ -573,11 +573,30 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		}
 		$_user_id->setValue($request->getParam("user_id"));
 		
+		
+		$allacademicyear = new Zend_Dojo_Form_Element_FilteringSelect('allacademicyear');
+		$allacademicyear->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$db_yeartran = new Allreport_Model_DbTable_DbRptAllStudent();
+		$yeartran = $db_yeartran->getAllYearTuitionfee();
+		$opt = array();
+		if(!empty($yeartran))foreach($yeartran AS $row) $opt[$row['academicyear']]=$row['academicyear'];
+		$allacademicyear->setMultiOptions($opt);
+		$allacademicyear->setValue($request->getParam("allacademicyear"));
+		
 		$this->addElements(array($item,$finished_status,$term_test,$term,$stuname_con,
 					$_day,$_cate,$_teacher,$_subject,$study_status,$_status_type,$_group,$payment_by,$study_year,$academic_year,
 					$service_type,$_stu_name,$_stu_code,$_degree_bac,$_dis_type,$_room,$branch_id,$start_date,
 					$user,$end_date,$sess_gep,$_title,$generation,
-					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id));
+					$_session,$_time,$_degree,$_grade,$_grade_all,$adv_search,$_status,$service,$pay_term,$_user_id,
+				
+				$allacademicyear
+				));
 	
 		return $this;
 	} 

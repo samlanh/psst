@@ -155,9 +155,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							'academic_year'	=>$group_detail['academic_year'],
 							'room'			=>$group_detail['room_id'],
 							);
-					if($_data['change_type']==2){
-						$array['is_stu_new']=0;
-					}
+							if($_data['change_type']==2){
+								$array['is_stu_new']=0;
+							}
 					$where = " stu_id=".$_data['stu_id_'.$j];
 					$this->update($array, $where);
 				}
@@ -178,7 +178,11 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'date'		=>date('Y-m-d'),
 								'type'		=>1,
 								'old_group'	=>$_data['from_group'],
+								
 						);
+						if($_data['change_type']==2){
+							$array['is_newstudent']=0;
+						}
 						$this->insert($arr);
 					}
 				}

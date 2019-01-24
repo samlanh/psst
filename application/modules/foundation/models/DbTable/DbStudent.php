@@ -327,6 +327,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 							'group_id'	=> $_data['group'],
 							'date'		=> date("Y-m-d H:i:s"),
 							'status'	=> $_data['status'],
+							'is_newstudent'	=>$_data['stu_denttype'],
 							'user_id'	=> $this->getUserId(),
 							);
 					$this->insert($arr_group_history);
@@ -517,6 +518,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$this->_name='rms_group_detail_student';
 				$arr_group_history= array(
 						'status'	=>$_data['status'],
+						'is_newstudent'	=>$_data['stu_denttype'],
 						'group_id'	=>$_data['group'],
 						'user_id'	=>$this->getUserId(),
 				);
@@ -528,6 +530,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					$arr_group_history= array(
 							'stu_id'	=>$_data["id"],
 							'group_id'	=>$_data['group'],
+							'is_newstudent'	=>$_data['stu_denttype'],
 							'date'		=>date("Y-m-d"),
 							'status'	=>$_data['status'],
 							'user_id'	=>$this->getUserId(),

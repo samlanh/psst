@@ -1359,4 +1359,98 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where.=$dbp->getAccessPermission();
     	return $db->fetchAll($sql.$where.$order);
     }
+    
+    function getGroupBYStudentGrade($search){
+    	$db = $this->getAdapter();
+    	$sql="SELECT 
+			g.branch_id,
+			(SELECT branch_namekh FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
+			g.academic_year,
+			(SELECT CONCAT(from_academic,'-',to_academic,'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS academic_year_name,
+			g.session,
+			(SELECT name_kh FROM rms_view WHERE rms_view.type=4 AND rms_view.key_code=g.session LIMIT 1) AS `session_name`, 
+			g.grade,
+			(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
+			g.degree,
+			(SELECT rms_items.title FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
+			(SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS from_academic,
+			(SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS to_academic,
+			(SELECT generation FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) AS generation,
+			COUNT(gds.stu_id) AS total_stu
+			FROM `rms_group_detail_student` AS gds,
+			`rms_group` AS g
+			WHERE g.id = gds.group_id
+			
+			";
+    	$where=' ';
+    	if(($search['branch_id'])>0){
+    		$where.=' AND g.branch_id='.$search['branch_id'];
+    	}
+    	if(!empty($search['study_year'])){
+    		$where.=' AND g.academic_year='.$search['study_year'];
+    	}
+    	if(!empty($search['degree'])){
+    		$where.=' AND g.degree='.$search['degree'];
+    	}
+    	if(!empty($search['grade_all'])){
+    		$where.=' AND g.grade='.$search['grade_all'];
+    	}
+    	if(!empty($search['session'])){
+    		$where.=' AND g.session='.$search['session'];
+    	}
+    	if (!empty($search['allacademicyear'])){
+    		$acad = explode("-", $search['allacademicyear']);
+    		if (!empty($acad)){
+    			$from_year=$acad[0];
+    			$to_year=$acad[1];
+    			if (!empty($from_year)){
+    			$where.=" AND (SELECT from_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) = '$from_year'";
+    			}
+    			if (!empty($from_year)){
+    				$where.=" AND (SELECT to_academic FROM rms_tuitionfee WHERE rms_tuitionfee.id=g.academic_year LIMIT 1) = '$to_year'";
+    			}
+    		}
+    	}
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("g.branch_id");
+    	$group_by = " GROUP BY g.branch_id,g.`academic_year`,
+			g.`degree`,g.`grade`,g.`session`";
+    	$order_by = " ORDER BY g.branch_id DESC,g.`academic_year` ASC,
+			g.`degree` ASC,g.`grade` ASC,g.`session` ASC ";
+    	return $db->fetchAll($sql.$where.$group_by.$order_by);
+    }
+    function getCountStuBYtype($branch_id,$academic_year,$degree,$grade,$session,$status_study=0,$is_new=null){
+    	$db = $this->getAdapter();
+    	$sql="SELECT 
+			COUNT(gds.stu_id) AS total_stu
+			FROM `rms_group_detail_student` AS gds,
+			`rms_group` AS g
+			WHERE g.id = gds.group_id
+			AND g.branch_id =$branch_id
+			AND g.academic_year=$academic_year
+			AND g.degree = $degree
+			AND g.grade = $grade
+			AND g.session = $session
+			";
+    	if (!empty($is_new)){
+    		$sql.=" AND gds.is_newstudent = 1";
+    	}else{
+    		if ($status_study!=0){
+    			$sql.=" AND gds.stop_type != 0";
+    		}else{
+    			$sql.=" AND gds.stop_type = 0";
+    		}
+    	}
+    	return $db->fetchOne($sql);
+    }
+    //for rpt-student-static
+    function getAllYearTuitionfee(){
+    	$db = $this->getAdapter();
+    	$sql="SELECT CONCAT(t.from_academic,'-',t.to_academic) AS academicyear FROM `rms_tuitionfee` AS t
+			GROUP BY t.from_academic,t.to_academic 
+			ORDER BY t.from_academic DESC
+		";
+    	return $db->fetchAll($sql);
+    }
 }

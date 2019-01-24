@@ -2,6 +2,8 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("RPT_STUDENT_STATISTIC")); 
 	$frm =  $this->form_search;
+	
+	$dbst = new Allreport_Model_DbTable_DbRptAllStudent();
 ?>	
 <style>
 .hover:hover{ background:#ccc;}</style>
@@ -17,6 +19,9 @@
     </div>
 		<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-statistic')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<div class="form-group">
+				<div class="col-md-2 col-sm-2 col-xs-12">
+            		<?php echo $frm->getElement("allacademicyear");?>
+            	</div>
             	<div class="col-md-2 col-sm-2 col-xs-12">
             		<?php echo $frm->getElement("branch_id");?>
             	</div>
@@ -30,10 +35,12 @@
             		<?php echo $frm->getElement("grade_all");?>
             	</div>
             	<div class="col-md-2 col-sm-2 col-xs-12">
+            		<div class="col-md-8 col-sm-8 col-xs-12">
             		<?php echo $frm->getElement("session");?>
-            	</div>
-            	<div class="col-md-2 col-sm-2 col-xs-12">
-            		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+            		</div>
+            		<div class="col-md-4 col-sm-4 col-xs-12">
+	            		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+	            	</div>
             	</div>
             </div>
 		</form>
@@ -51,6 +58,7 @@
 				</td>
 				<td width="70%"  align="center">
 					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></strong><br />
+					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php if (!empty($this->search['allacademicyear'])){ echo $tr->translate("STUDY_YEAR")." ".$this->search['allacademicyear'];}?></strong>
 				</td>
 				<td width="15%" align="center">
 				</td>
@@ -75,121 +83,66 @@
 			<tr>
 				<td colspan="3">
 				<div id="exportExcel">
-				<?php if(!empty($this->rs)){?>
+				<?php if (!empty($this->rs)){?>
 					<table cellpadding="4"​ style="font-family:'Khmer OS Battambang'; margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1" >
-					<thead>
-					<tr style="font-size:14px; height: 20px;background: #f8ccaf; font-weight:bold;" align="center" >
-						<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
-						<th colspan="9"><?php echo $tr->translate("STUDY_INFO");?>
-							<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
-						</th>
-					</tr>
-					<tr style="font-size:14px; height: 20px;background: #f8ccaf;" align="center" >
-						<th><?php echo $tr->translate("BRANCH_NAME");?></th>
-						<th><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
-						<th><?php echo $tr->translate("DEGREE");?></th>
-						<th><?php echo $tr->translate("GRADE");?></th>
-						<th><?php echo $tr->translate("SESSION");?></th>
-						<th><?php echo $tr->translate("AMOUNT_STUDENT");?></th>
-						<th><?php echo $tr->translate("NEW_STUDENT");?></th>
-						<th><?php echo $tr->translate("STUDENT_DROP");?></th>
-						<th><?php echo $tr->translate("STUDENT_STUDY");?></th>
-					</tr>
-					</thead>
-					<?php 
-						$i=0;$academic_year=0;$degree=0;$grade=0;$session=0;
-						$amount_student=0;
-						$count=0; 
-						$new_student=0;
-						$total_amount_student = 0;
-						$total_amount_student_new = 0;
-						$total_amount_student_drop = 0;
-						$drop_student=0;
-						$academic_name = "";
-						$branch_id="";
-						$degree_name = "";
-						$grade_name = "";
-						$session_name = "";
+						<thead>
+							<tr style="font-size:14px; height: 20px;background: #f8ccaf; font-weight:bold;" align="center" >
+								<th rowspan="2"><?php echo $tr->translate("NUM");?></th>
+								<th colspan="9"><?php echo $tr->translate("STUDY_INFO");?>
+									<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
+								</th>
+							</tr>
+							<tr style="font-size:14px; height: 20px;background: #f8ccaf;" align="center" >
+								<th><?php echo $tr->translate("BRANCH_NAME");?></th>
+								<th><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
+								<th><?php echo $tr->translate("DEGREE");?></th>
+								<th><?php echo $tr->translate("GRADE");?></th>
+								<th><?php echo $tr->translate("SESSION");?></th>
+								<th><?php echo $tr->translate("AMOUNT_STUDENT");?></th>
+								<th><?php echo $tr->translate("NEW_STUDENT");?></th>
+								<th><?php echo $tr->translate("STUDENT_DROP");?></th>
+								<th><?php echo $tr->translate("STUDENT_STUDY");?></th>
+							</tr>
+						</thead>
+					<?php $i=0;
+					$total_amount_student = 0;
+					$total_amount_student_new = 0;
+					$total_amount_student_drop=0;
+					$total_studying=0;
 						foreach($this->rs AS $key=>$row){  
+							
+							$studyng = $dbst->getCountStuBYtype($row['branch_id'], $row['academic_year'], $row['degree'], $row['grade'], $row['session']);
+							$stop = $dbst->getCountStuBYtype($row['branch_id'], $row['academic_year'], $row['degree'], $row['grade'], $row['session'],1);
+							$newstu = $dbst->getCountStuBYtype($row['branch_id'], $row['academic_year'], $row['degree'], $row['grade'], $row['session'],1,1);
+							$totalstu = $row['total_stu'];
+							
+							$total_amount_student=$total_amount_student+$totalstu;
+							$total_amount_student_new=$total_amount_student_new+$newstu;
+							$total_amount_student_drop=$total_amount_student_drop+$stop;
+							$total_studying = $total_studying+$studyng;
 					?>
-						<?php if(($academic_year != $row['academic_year'] || $degree != $row['degree'] || $grade != $row['grade'] || $session != $row['session']) && $key>0){ $i++; ?>
-								<tr style="font-size:14px !important; line-height: 25px;" align="center" class="hover" >
-									<td><?php echo $i;?></td>
-									<td align="left">&nbsp;<?php echo $branch_id;?></td>
-									<td align="left">&nbsp;<?php echo $academic_name;?></td>
-									<td><?php echo $degree_name;?></td>
-									<td><?php echo $grade_name;?></td>
-									<td><?php echo $session_name;?></td>
-									<td><?php echo $amount_student." ".$tr->translate("STUDENT_UNIT");?></td>	
-									<td><?php echo $new_student." ".$tr->translate("STUDENT_UNIT");?></td>	
-									<td><?php echo $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>
-									<td><?php echo $amount_student - $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>
-								</tr>
-								<?php 
-									$total_amount_student = $total_amount_student + $amount_student;
-									$total_amount_student_new = $total_amount_student_new + $new_student; 
-									$total_amount_student_drop = $total_amount_student_drop + $drop_student;
-									
-									$amount_student=1;
-									$new_student = 0;
-									$drop_student = 0;
-									
-									if($row['is_stu_new']==1){
-										$new_student++;
-									}
-									
-									if($row['is_subspend']!=0){
-										$drop_student++;
-									}
-								?>
-						<?php }else{ ?>
-								<?php 
-									$amount_student++;
-									if($row['is_stu_new']==1){
-										$new_student++;
-									}
-									if($row['is_subspend']!=0){
-										$drop_student++;
-									}
-								?>
-						<?php }?>
-						<?php 
-							$academic_year = $row['academic_year'];
-							$degree = $row['degree'];
-							$branch_id = $row['branch_name'];
-							$grade = $row['grade'];
-							$session = $row['session'];
-							$academic_name = $row['academic_year_name'];
-							$degree_name = $row['degree_name'];
-							$grade_name = $row['grade_name'];
-							$session_name = $row['session_name'];
-						?>
-					<?php } ?>	
-						<?php 
-							$total_amount_student = $total_amount_student + $amount_student;
-							$total_amount_student_new = $total_amount_student_new + $new_student;
-							$total_amount_student_drop = $total_amount_student_drop + $drop_student;
-						?>
 						<tr style="font-size:14px !important; line-height: 25px;" align="center" class="hover" >
 							<td><?php echo ++$i;?></td>
-							<td align="left">&nbsp;<?php echo $branch_id;?></td>
-							<td align="left">&nbsp;<?php echo $academic_name;?></td>
-							<td><?php echo $degree_name;?></td>
-							<td><?php echo $grade_name;?></td>
-							<td><?php echo $session_name;?></td>
-							<td><?php echo $amount_student." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $new_student." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $amount_student - $drop_student." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td align="left">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
+							<td align="left">&nbsp;<?php echo $row['academic_year_name'];?>&nbsp;</td>
+							<td><?php echo $row['degree_name'];?></td>
+							<td><?php echo $row['grade_name'];?></td>
+							<td><?php echo $row['session_name'];?></td>
+							<td><?php echo $totalstu." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $newstu." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $stop." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $studyng." ".$tr->translate("STUDENT_UNIT");?></td>	
 						</tr>
+						<?php } ?>	
 						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:15px;">
 							<td colspan="6"><?php echo $tr->translate("TOTAL");?></td>
 							<td><?php echo $total_amount_student." ".$tr->translate("STUDENT_UNIT");;?></td>	
 							<td><?php echo $total_amount_student_new." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $total_amount_student_drop." ".$tr->translate("STUDENT_UNIT");?></td>
-							<td><?php echo $total_amount_student-$total_amount_student_drop." ".$tr->translate("STUDENT_UNIT");?></td>
+							<td><?php echo $total_studying." ".$tr->translate("STUDENT_UNIT");?></td>
 						</tr>
-					</table> <?php } ?>	
+					</table> 
+					<?php }?>
 				</div>	
 				</td>
 			</tr>

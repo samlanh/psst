@@ -205,6 +205,8 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$forms=$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($forms);
     	$this->view->form_search=$form;
+    	
+    	$this->view->search=$search;
     	    
     	$_db = new Global_Model_DbTable_DbGroup();
     	$teacher = $_db->getAllTeacher();

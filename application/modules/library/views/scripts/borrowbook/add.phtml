@@ -57,16 +57,16 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	    		</div>
 	    	</div>
 	    	<div class="card-box">
-	        	<div class="col-md-4 col-sm-4 col-xs-12">
+	        	<div class="col-md-3 col-sm-12 col-xs-12">
 	        		<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROWER_INFO");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
 	                   </label>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CHOOSE_ONE");?> <span class="required">*</span> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select name="type" id="type" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" onchange="hideControll()" >
+	                   		<select name="type" id="type" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" class="fullside" onchange="hideControll()" >
 					             <option value="1"><?php echo $tr->translate("Student")?></option>
 					             <option value="2"><?php echo $tr->translate("Teacher")?> </option>
 					             <option value="3"> <?php echo $tr->translate("Parents of student")?></option>
@@ -79,7 +79,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<span id="span_stu_id">
-								<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect" onchange="setNameStudent(1);setControll();">
+								<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect"  class="fullside" onchange="setNameStudent(1);setControll();">
 								       <option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
 								 <?php if(!empty($this->stu_id)) foreach($this->stu_id As $rs_id){?>
 										<option value="<?php echo $rs_id['stu_id']?>" ><?php echo $rs_id['stu_code'];?></option>
@@ -87,7 +87,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 								</select>
 							</span>
 							<span id="span_card_id">
-								<input dojoType="dijit.form.ValidationTextBox"   name="card_id" id="card_id" value=""  type="text" required="required">
+								<input dojoType="dijit.form.ValidationTextBox"   name="card_id" id="card_id" value="" class="fullside" type="text" required="required">
 							</span>
 	                   </div>
 	                </div>
@@ -97,7 +97,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<span id="span_stu_name">
-							<select   name="stu_name" id="stu_name"  queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();setControll();">
+							<select   name="stu_name" id="stu_name"  queryExpr="*${0}*" autoComplete="false" class="fullside" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();setControll();">
 								<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 								<?php 
 								if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
@@ -106,7 +106,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 							</select>
 							</span>
 							<span id="span_name">
-								<input dojoType="dijit.form.TextBox"   name="name" id="name" value=""  type="text" >
+								<input dojoType="dijit.form.TextBox"   name="name" id="name" value="" class="fullside" type="text" >
 							</span>
 	                   </div>
 	                </div>
@@ -114,11 +114,11 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PHONE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.TextBox"   name="phone" id="phone" value=""  type="text">
+	                   		<input dojoType="dijit.form.TextBox"   name="phone" id="phone" value="" class="fullside"  type="text">
 	                   </div>
 	                </div>
 	            </div>
-	            <div class="col-md-4 col-sm-4 col-xs-12">
+	            <div class="col-md-3 col-sm-12 col-xs-12">
 	            	<div class="form-group">
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
 	                   </label>
@@ -127,21 +127,21 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BORROW_NO");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.TextBox"   name="borrow_id" id="borrow_id" value="<?php echo $this->borr_no;?>"  type="text" readonly>
+	                   		<input dojoType="dijit.form.TextBox"   name="borrow_id" id="borrow_id" value="<?php echo $this->borr_no;?>"  type="text" readonly class="fullside" >
 	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BORROW_DATE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.DateTextBox" name="borrow_date" id="borrow_date" onchange="" value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}" type="text">
+	                   		<input dojoType="dijit.form.DateTextBox" name="borrow_date" id="borrow_date" onchange="" class="fullside" value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}" type="text">
 	                   </div>
 	                </div>
 	                <div class="form-group">
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("RETURN_DATE");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text"  value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}">
+	                   		<input dojoType="dijit.form.DateTextBox" id="return_date" name="return_date" type="text" class="fullside" value="<?php echo date('Y-m-d');?>" constraints="{datePattern:'dd/MM/yyyy'}">
 	                   </div>
 	                </div>
 					<div class="form-group">
@@ -149,50 +149,50 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		<div class="col-md-4 col-sm-4 col-xs-12">
-	                   			<input class="fullside" dojoType="dijit.form.NumberTextBox"   name="amountweek" id="amountweek" value="" onkeyup="setEndDate();" type="text"   class="fullside">
+	                   			<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amountweek" id="amountweek" value="" onkeyup="setEndDate();" type="text"   class="fullside">
 	                   		</div>
 	                   		<div class="col-md-4 col-sm-4 col-xs-12 text-center">
 	                   			<?php echo $tr->translate("HOUR")?>
 	                   		</div>
 	                   		<div class="col-md-4 col-sm-4 col-xs-12">
-	                   			<input class="fullside" dojoType="dijit.form.NumberTextBox"   name="amount_hour" id="amount_hour" value="" onkeyup="setEndDate();" type="text"  class="fullside">
+	                   			<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amount_hour" id="amount_hour" value="" onkeyup="setEndDate();" type="text"  class="fullside">
 	                   		</div>
 	                   </div>
 	                </div>		
+						
 	            </div>
-	            <div class="col-md-4 col-sm-4 col-xs-12">
+	            <div class="col-md-6 col-sm-12 col-xs-12">
 	            	<div class="form-group">
 	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("OTHER_INFOMATION");?> 
 	                   </label>
 	                </div>
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<textarea style="min-height: 60px" class="fullside" id="note" name="note" dojoType="dijit.form.Textarea"></textarea>	
-	                   </div>
-	                </div>	
-	                <div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("STATUS");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<select class="fullside" name="status" id="status" dojoType="dijit.form.FilteringSelect">
-							    <option value="1" label="<?php echo $tr->translate("ACTIVE")?>"><?php echo $tr->translate("ACTIVE")?></option>
-							    <option value="0" label="<?php echo $tr->translate("DEACTIVE")?>"><?php echo $tr->translate("DEACTIVE")?></option>
+					<div class="form-group">
+						<div class="col-md-5 col-sm-12 col-xs-12">
+							<select name="book" id="book" dojoType="dijit.form.FilteringSelect"  queryExpr="*${0}*" autoComplete="false" class="fullside" onchange="getBookDetail();" >
+								<?php if(!empty($this->book_title)){echo $this->book_title;} ?>
 							</select>
-	                   </div>
-	                </div>	
+						</div>
+						<div class="col-md-7 col-sm-12 col-xs-12">
+							<input id="book_detail" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<table width="100%" id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;">
+								<tr id="head-title" class="head-td" align="right"></tr>
+							</table>
+						</div>
+						<input type="hidden" name="identity" id="identity"  value="" >
+					</div>
 	           	</div>
 	        </div>
-	        <div class="card-box ">
-	        	<div class="col-md-12 col-sm-12 col-xs-12 mt-20">
-	        		<table id="table_row" style=" width:100%; border-collapse: collapse; border:1px solid #ccc;">
-							<tr id="head-title" class="head-td" align="right"></tr>
-					</table>
-					<input type="button" label="<?php echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" iconClass="dijitIconEditProperty" onclick="addRow();" />
-								 		<input type="hidden" name="identity" id="identity"  />
-	        	</div>
-	        </div>
+			<div class="card-box ">
+			   <label class="control-label  col-md-1 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?> :
+			   </label>
+			   <div class="col-md-5 col-sm-7 col-xs-12">
+					<textarea style="min-height: 60px" class="fullside" id="note" name="note" dojoType="dijit.form.Textarea"></textarea>	
+			   </div>
+			</div>
 	        <div class="card-box">
 	        	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
 	        		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
@@ -216,96 +216,62 @@ dojo.require("dojo.data.ItemFileWriteStore");
 dojo.require("dojo.store.Memory");
 //dojo.require('dojox.form.BusyButton');
 dojo.require("dojo.html");
-var room_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->room));?> );
+var book_detail_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->book_detail));?> );
 dojo.ready(function(){
-
+	new dijit.form.FilteringSelect({
+		store: book_detail_store,
+		autoComplete: true,                        
+		id: "book_detail",
+		name: "book_detail",  
+		style:'',         
+		class: 'fullside',  
+		required:false,
+		placeHolder:"Select Book",          
+		onChange: function() {  
 			addRow();
-			hideControll();
+		}
+	}, "book_detail");
+
+
+	hideControll();
 			
 });
-function setEndDate(){
-	amount_date = dijit.byId('amountmonth').get('value');
-	release_date = dijit.byId("start_date").get('value');//just update follow by first payment
-	if(isNaN(amount_date)){
-	}else{
-		var a = new Date(release_date);
-		mm = a.getMonth()+amount_date+1;
-		var dd = a.getDate();
-		 if(dd<10){
-			 dd = "0"+dd;
-		}
-		 if(mm<10){
-			 mm = "0"+mm;
-		}
-		var y = a.getFullYear();
-		var epx_date = y + '-'+ mm + '-'+dd ;
-		dijit.byId('end_date').attr('value',epx_date);	
-    }
-}
 
-var url_room = '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'add-room')); ?>';
-function addRoom(){
-		//subject_id
-		dojo.xhrPost({
-			url:url_room,
-			form: dojo.byId("form_add_room"),
-			handleAs:"json",
-			load: function(data) {
-				
-				var myNewItem = {					
-						id: data,
-						name: dijit.byId('room_name').get('value')
-				};			
-				addDataToSelectbox(dijit.byId('room'), room_store, myNewItem, data);
-				
-				dijit.byId("form_add_room").reset();
-				//dijit.byId("pop_room").hide();
-				hideDialog();
-				//alert(1);
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
-	}
-
-var subject = '<?php echo $this->book_title;?>';
 var col = 0;
 var no = 0;
 var title = 0;
-tmp = '';
-temp='';
-function addRow() {
-	col++;no++;
-	template='';
-	if(title!=1){
-		temp+='<th><?php echo $tr->translate("DEL");?></th>';
-		temp+='<th><?php echo $tr->translate("N_O");?></th>';
-		temp+='<th id="lbl_titlemetion" width="250px"><?php echo $tr->translate("BOOK_TITLE");?></th>';
-		temp+='<th id="lbl_titlemetion" width="50px"><?php echo $tr->translate("CURR_QTY");?>(ក្បាល)</th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("BORROW_QTY");?>(ក្បាល)</th>';
-		temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
-		dojo.query("#head-title").append(temp);
-		title=1;
-	}
-		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-		template+='<td width="4%" align="center">'+no+'</td>';
-		template+='<td><select style="width:100%;" onchange="getQtyById('+col+')"  queryExpr="*${0}*" autoComplete="false"  dojoType="dijit.form.FilteringSelect" class="fullside" id="book_id'+col+'" name="book_id'+col+'">'+subject+'</select></td>';
-		template+='<td nowrap="nowrap"><input  type="number" style="width:100%;color:#000;font-weight:900;text-align:center;" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="curr_qty'+col+'" id="curr_qty'+col+'" readonly="readonly" value="0" type="text"> </td>';	
-		template+='<td><input style="width:100%;text-align:center;"  onkeyup="getCheckQty('+col+')" dojoType="dijit.form.NumberTextBox" data-dojo-props="constraints:{places:0}" class="fullside" name="borr_qty'+col+'" id="borr_qty'+col+'" value="" type="text" required="required"></td>';	
-		template+='<td><input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="" type="text"></td>';	
-	tmp='<tr id="row'+col+'">';
-	tmp+="</tr>";
-	dojo.query("#table_row").append(tmp);
+var tmp = '';
+var temp='';
+var template = '';
 
-	if($("#identity").val()!="") {
-		var identity = $("#identity").val();
-		$("#identity").val(identity+','+col);
-	} else {$("#identity").val(col);}
-	dojo.html.set(dojo.byId("row"+col),template , {
-	     parseContent: true,
-	});
-}
+function addRow() { 
+		book_detail=dijit.byId("book_detail").get("value");
+		if(book_detail==''){return false;}
+		label_book_detail = dijit.byId("book_detail").attr('displayedValue');
+		col++;no++;
+		template='';
+		if(title!=1){    
+			temp+='<th><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+			dojo.query("#head-title").append(temp);
+			title=1;
+		}
+			template+='<td width="10%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="10%" align="center">'+no+'</td>';
+			template+='<td width="80%">&nbsp;'+label_book_detail+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="book_id'+col+'" name="book_id'+col+'" value="'+book_detail+'" /></td>';
+		tmp='<tr id="row'+col+'">';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+col);
+		} else {$("#identity").val(col);}
+		dojo.html.set(dojo.byId("row"+col),template , {
+		     parseContent: true,
+		});
+ }
 function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -444,6 +410,25 @@ function checkValidateAddRow(){
 			}
 		}
 	}
+}
+
+var url_get_book_detail = '<?php echo $this->url(array('module'=>'library','controller'=>'borrowbook','action'=>'get-bookdetail')); ?>';
+function getBookDetail(){
+	book_id = dijit.byId('book').get('value');
+	dojo.xhrPost({
+		url:url_get_book_detail,
+		content:{
+			'book_id':book_id
+			},
+		handleAs:"json",
+		load: function(data) {
+			book_detail_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('book_detail').set('store',book_detail_store);  
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 
 </script>

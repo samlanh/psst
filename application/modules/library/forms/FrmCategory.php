@@ -23,7 +23,15 @@ Class Library_Form_FrmCategory extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'placeholder'=>$this->tr->translate("Remark")
 		));
-		$remark->setValue($request->getParam("remark"));
+		
+		$note_cate = new Zend_Dojo_Form_Element_TextBox('note_cate');
+		$note_cate->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("NOTE")
+		));
+		
+		$note_cate->setValue($request->getParam("note_cate"));
 		
 		$status = new Zend_Dojo_Form_Element_FilteringSelect("status");
 		$opt=array(
@@ -64,7 +72,7 @@ Class Library_Form_FrmCategory extends Zend_Dojo_Form {
 			$note->setValue($data['remark']);
 			$status->setValue($data['status']);
 		}
-		$this->addElements(array($id,$cat_name,$remark,$status,$note,$_cateory_parent));
+		$this->addElements(array($note_cate,$id,$cat_name,$remark,$status,$note,$_cateory_parent));
 		return $this;
 	}
 

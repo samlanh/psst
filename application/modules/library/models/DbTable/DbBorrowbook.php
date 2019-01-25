@@ -78,14 +78,12 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 					"phone"         => 	$data['phone'],
 					"is_completed"  => 	0,
 					"user_id"       => 	$GetUserId,
-					"status"        => 	$data['status'],
 					"card_id"     	=> 	$data["card_id"],
 					"name"     		=> 	$data["name"],
 					"borrow_type"   => 	$data["type"],
 			);
 			$this->_name="rms_borrow";
 			$borr_id = $this->insert($arr); 
-			unset($info_purchase_order);
             
 			if($data['identity']!=""){
 				$ids=explode(',',$data['identity']);
@@ -94,40 +92,24 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 					$data_item= array(
 							'borr_id'	=>  $borr_id,
 							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $data['borr_qty'.$i],
-							'note'  	=> 	$data['note_'.$i],
-							'user_id'	=> 	$GetUserId,
-							'is_full'	=> 	0,
-							'date'		=>	date('Y-m-d'),
-							'return_date'=>	date("Y-m-d",strtotime($data['return_date'])),
-							'status'	=> 	$data['status'],
 					);
 					$this->_name='rms_borrowdetails';
 					$this->insert($data_item);
-					$rows=$this->getBookQty($data['book_id'.$i]); 
-					if($rows){
-						
-							$datatostock= array(
-									'qty_after' => $rows["qty_after"]-$data['borr_qty'.$i],
-									'date'		=>	date("Y-m-d"),
-									'user_id'	=>$GetUserId
-							);
-							$this->_name="rms_book";
-							$where=" id = ".$rows['id'];
-							$this->update($datatostock, $where);
-							
-					}else{
-						
-					}
+					
+					// update rms_book_detail
+					$datatostock= array(
+						'is_borrow' => 1,
+					);
+					$this->_name="rms_book_detail";
+					$where=" id = ".$data['book_id'.$i];
+					$this->update($datatostock, $where);
 				 }
 			}
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
-			$err =$e->getMessage();
-			echo $err;exit();
-			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			echo $e->getMessage();
 		}
 	}
 	 
@@ -316,16 +298,25 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 	
 	function getBookTitle(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(title,'(',book_no,')') AS name FROM rms_book WHERE `status`=1 AND title!=''";
+		$sql="SELECT id,CONCAT(title) AS name FROM rms_book WHERE `status`=1 AND title!=''";
 		$rows=$db->fetchAll($sql);
-		//array_unshift($rows,array('id' => '-1',"name"=>$this->tr->translate("ADD_NEW")));
-		array_unshift($rows,array('id' => '',"name"=>$this->tr->translate("SELECT_TITLE")));
+		array_unshift($rows,array('id' => '-1',"name"=>$this->tr->translate("SELECT_TITLE")));
 		$options = '';
 		if(!empty($rows))foreach($rows as $value){
 			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
 		}
 		return $options;
 	}
+	
+	function getBookDetail($book_id=0){
+		$db=$this->getAdapter();
+		$sql="SELECT id,CONCAT(serial,' - ',barcode) as name FROM rms_book_detail WHERE is_borrow=0 and is_broken=0  ";
+		if($book_id>0){
+			$sql.=" and book_id = $book_id ";
+		}
+		return $db->fetchAll($sql);
+	}
+	
 	
 	function getBookTitlePurchase(){
 		$db=$this->getAdapter();

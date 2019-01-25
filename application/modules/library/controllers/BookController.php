@@ -27,14 +27,7 @@ protected $tr;
     	    }
     	    $rs_rows =$db->getAllBook($search);
     	    $list = new Application_Form_Frmtable();
-    	    if(!empty($rs_rows)){
-    	    	$glClass = new Application_Model_GlobalClass();
-    	    	$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-    	    }
-    	    else{
-    	    	$result = Application_Model_DbTable_DbGlobal::getResultWarning();
-    	    }
-    	    $collumns = array("BOOK_NO","BOOK_NAME","AUTHOR_NAME","SERIAL_NO","BLOCK_NAME","CATEGORY","QUANTITY","UNIT_PRICE","DATE","USER","STATUS");
+    	    $collumns = array("BOOK_NAME","AUTHOR_NAME","CATEGORY","BLOCK_NAME","CREATE_DATE","USER","STATUS");
     	    $link=array(
     	    		'module'=>'library','controller'=>'book','action'=>'edit',
     	    );

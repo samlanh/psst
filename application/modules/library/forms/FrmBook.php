@@ -40,8 +40,15 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		$serial_no->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("SERIAL_NO")
-		        ));
+				'placeholder'=>$this->tr->translate("SERIAL")
+		));
+		
+		$barcode = new Zend_Dojo_Form_Element_ValidationTextBox('barcode');
+		$barcode->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("BAR_CODE"),
+		));
 		
 		$publisher = new Zend_Dojo_Form_Element_ValidationTextBox('publisher');
 		$publisher->setAttribs(array(
@@ -78,7 +85,7 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 				'placeholder'=>$this->tr->translate("Remark")
 		        ));
 		
-		$status = new Zend_Dojo_Form_Element_FilteringSelect("statuss");
+		$status = new Zend_Dojo_Form_Element_FilteringSelect("status");
 		$opt=array(
 				"1"=>$this->tr->translate("ACTIVE"),
 				"0"=>$this->tr->translate("DEACTIVE"),
@@ -94,7 +101,7 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 				'style'=>'width:98%;min-height:60px;'
 				));
 	 
-		$_cateory_parent = new Zend_Dojo_Form_Element_FilteringSelect("parent_id");
+		$_cateory_parent = new Zend_Dojo_Form_Element_FilteringSelect("cat_id");
 		$_cateory_parent->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required'=>'true',
@@ -110,7 +117,7 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		}
 		if (!empty($data)){unset($option[$data['id']]);}
 		$_cateory_parent->setMultiOptions($option);
-		$_cateory_parent->setValue($request->getParam('parent'));
+		$_cateory_parent->setValue($request->getParam('cat_id'));
 		
 		$_block_id = new Zend_Dojo_Form_Element_FilteringSelect("block_id");
 		$_block_id->setAttribs(array(
@@ -132,6 +139,13 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		$_photo = new Zend_Form_Element_File('photo');
 		$old_photo = new Zend_Form_Element_Hidden("old_photo");
 		
+		$note = new Zend_Dojo_Form_Element_ValidationTextBox('note');
+		$note->setAttribs(array(
+				'dojoType'=>'dijit.form.ValidationTextBox',
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("NOTE")
+		));
+		
 		if($data!=null){
 			//print_r($data);exit();
 			$book_name	->setValue($data['title']);
@@ -148,7 +162,7 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 			$old_photo	->setValue($data['photo']);
 			$_block_id	->setValue($data['block_id']);
 		}
-		$this->addElements(array($total_amount,$_block_id,$old_photo,$id,$book_name,$book_id,$author_name,$serial_no,$publisher,$_photo,
+		$this->addElements(array($total_amount,$barcode,$note,$_block_id,$old_photo,$id,$book_name,$book_id,$author_name,$serial_no,$publisher,$_photo,
 				                 $qty,$unit_price,$remark,$status,$note,$_cateory_parent));
 		return $this;
 	}	

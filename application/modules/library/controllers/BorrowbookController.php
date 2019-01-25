@@ -63,11 +63,13 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     			echo $e->getMessage();
     		}
     	}
-    	$db_cat = new Library_Model_DbTable_DbBorrowbook();
-    	$this->view->stu_id=$db_cat->getAllStudentId(1);
-    	$this->view->stu_name=$db_cat->getAllStudentId(2);
-    	$b=$this->view->book_title=$db_cat->getBookTitle();
-    	$this->view->borr_no=$db_cat->getBorrowNo();
+    	$db = new Library_Model_DbTable_DbBorrowbook();
+    	$this->view->stu_id=$db->getAllStudentId(1);
+    	$this->view->stu_name=$db->getAllStudentId(2);
+    	$b=$this->view->book_title=$db->getBookTitle();
+    	$this->view->borr_no=$db->getBorrowNo();
+    	
+    	$this->view->book_detail=$db->getBookDetail();
      
 		$frm_major = new Library_Form_FrmBook();
 		$frm_search = $frm_major->frmBook();
@@ -128,12 +130,12 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	}
     }
     
-    function getBookqtyAction(){
+    function getBookdetailAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$db = new Library_Model_DbTable_DbCategory();
-    		$gty= $db->getBookQty($data['book_id']);
-    		print_r(Zend_Json::encode($gty));
+    		$db = new Library_Model_DbTable_DbBorrowbook();
+    		$book= $db->getBookDetail($data['book_id']);
+    		print_r(Zend_Json::encode($book));
     		exit();
     	}
     

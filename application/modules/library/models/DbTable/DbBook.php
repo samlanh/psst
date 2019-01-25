@@ -10,29 +10,34 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
     
     function getAllBook($search=null){
     	$db=$this->getAdapter();
-    	$sql="SELECT b.id,b.book_no,b.title,b.author,b.serial_no,
-    			  (SELECT c.block_name FROM rms_blockbook AS c WHERE c.id=b.block_id) AS block_name,
-			      (SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id) AS cat_name,
-			        b.qty_after,b.unit_price,b.date,
-			      (SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,b.status
-			     
-			    
-			      FROM rms_book AS b 
-			      WHERE b.title!='' ";
-//     	(SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`,
-//     	REPLACE(b.book_no,' ', '') As book_code,REPLACE(b.title,' ', '')AS book_title
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    	}else{ // English
+    		$label = "name_en";
+    	}
+    	$sql="SELECT 
+    				b.id,
+    				b.title,
+    				b.author,
+    				(SELECT c.name FROM rms_bcategory AS c WHERE c.id=b.cat_id limit 1) AS cat_name,
+    			  	(SELECT c.block_name FROM rms_blockbook AS c WHERE c.id=b.block_id limit 1) AS block_name,
+			        b.date,
+			      	(SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
+			      	(select $label from rms_view where type=1 and key_code = b.status) as status
+			      FROM 
+			      	rms_book AS b 
+			      WHERE 
+    				b.title!='' 
+    		";
+    	
     	$where = '';
     	if(!empty($search["title"])){
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
-    		$s_where[]= " b.book_no LIKE '%{$s_search}%'";
     		$s_where[]="  b.title LIKE '%{$s_search}%'";
     		$s_where[]= " b.author LIKE '%{$s_search}%'";
-    		$s_where[]= " b.serial_no LIKE '%{$s_search}%'";
-    		
-    		$s_where[]="  b.qty_after LIKE '%{$s_search}%'";
-    		$s_where[]= " b.unit_price LIKE '%{$s_search}%'";
-    		$s_where[]= " b.serial_no LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
         $db_cat=new Library_Model_DbTable_DbCategory();
@@ -54,42 +59,42 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
     }
  
 	public function addBook($data){
-			$db = $this->getAdapter();
-			$session_user=new Zend_Session_Namespace('authstu');
-		    $userName=$session_user->user_name;
-		    $GetUserId= $session_user->user_id;
-		    
-// 		    $adapter = new Zend_File_Transfer_Adapter_Http();
-// 		    $part = PUBLIC_PATH.'/images';
-// 		    $adapter->setDestination($part);
-// 		    $adapter->receive();
-// 		    $photo = $adapter->getFileInfo();
-		    	
-// 		    if(!empty($photo['photo']['name'])){
-// 		    	$pho_name = $photo['photo']['name'];
-// 		    }else{
-// 		    	$pho_name = '';
-// 		    }
-		    
-			$arr = array(
-					'book_no'	=>	$data["book_id"],
-					'title'		=>	$data["book_name"],
-					'author'	=>	$data["author_name"],
-					'serial_no'	=>	$data["serial_no"],
-					'cat_id'	=>	$data["parent_id"],
-					'block_id'	=>	$data["block_id"],
-					//'photo'		=>	$pho_name,
-					'publisher'	=>	$data["publisher"],
-					'qty'		=>	$data["qty"],
-					'qty_after'	=>	$data["qty"],
-					'unit_price'=>	$data["unit_price"],
-					'date'		=>	date('Y-m-d'),
-					'status'	=>	$data["statuss"],
-					'note'		=>	$data["remark"],
-					"user_id"   =>  $GetUserId,
-			);
-			$this->_name = "rms_book";
-			$this->insert($arr);
+		$db = $this->getAdapter();
+		
+		$session_user=new Zend_Session_Namespace('authstu');
+	    $userName=$session_user->user_name;
+	    $GetUserId= $session_user->user_id;
+	    
+		$arr = array(
+				'title'		=>	$data["book_name"],
+				'author'	=>	$data["author_name"],
+				'publisher'	=>	$data["publisher"],
+				
+				'cat_id'	=>	$data["cat_id"],
+				'block_id'	=>	$data["block_id"],
+				
+				'note'		=>	$data["remark"],
+				
+				'date'		=>	date('Y-m-d'),
+				"user_id"   =>  $GetUserId,
+		);
+		$this->_name = "rms_book";
+		$book_id = $this->insert($arr);
+		
+		if(!empty($data["identity"])){
+			$ids = explode(",", $data['identity']);
+			foreach ($ids as $i){
+				$array = array(
+					'book_id'	=> $book_id,
+					'serial'	=> $data['serial_'.$i],
+					'barcode'	=> $data['barcode_'.$i],
+					'note'	  	=> $data['note_'.$i],
+				);
+				$this->_name="rms_book_detail";
+				$this->insert($array);
+			}
+		}
+		
 	}
 	 
 	public function editBook($data){ 

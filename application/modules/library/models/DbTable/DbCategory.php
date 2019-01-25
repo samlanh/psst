@@ -82,8 +82,7 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 				'name'			=>	$data["cat_name"],
 				'parent_id'		=>	$data["parent"],
 				'date'			=>	new Zend_Date(),
-				'status'		=>	$data["status"],
-				'remark'		=>	$data["note"],
+				'remark'		=>	$data["note_cate"],
 				"user_id"       =>  $GetUserId,
 		);
 		$this->_name = "rms_bcategory";
@@ -99,7 +98,6 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 		$arr = array(
 				'block_name'	=>	$data["block_name"],
 				'date'			=>	new Zend_Date(),
-				'status'		=>	$data["block_status"],
 				'remark'		=>	$data["b_note"],
 				"user_id"       =>  $GetUserId,
 		);

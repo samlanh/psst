@@ -17,17 +17,33 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission('sp.branch_id');
-		$sql="SELECT bd.id,b.phone,b.stu_id,        
-			    b.borrow_no,(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) AS bookno,
-			    (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) AS bookname,
-		          b.card_id,b.name,(SELECT name_kh FROM rms_view WHERE rms_view.key_code=b.borrow_type AND rms_view.type=13 LIMIT 1) AS `type`,
-			    (SELECT name_en FROM rms_view WHERE rms_view.type=2 AND key_code=(SELECT sex FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1))AS sex,
-			    (SELECT major_enname FROM rms_major WHERE major_id = (SELECT grade FROM rms_student WHERE rms_student.stu_id=b.stu_id LIMIT 1)) AS grade,
-			    b.borrow_date,b.return_date,bd.borr_qty
-           FROM rms_borrow AS b,rms_borrowdetails AS bd 
-           WHERE b.id=bd.borr_id
-           AND bd.is_full=0
-           AND b.is_completed=0";
+		$sql="SELECT 
+					bd.id,
+					b.phone,
+					b.stu_id,   
+					(select stu_code from rms_student where rms_student.stu_id = b.stu_id) as stu_code, 
+					(select stu_khname from rms_student where rms_student.stu_id = b.stu_id) as stu_name,     
+			    	b.borrow_no,
+			    	serial,
+			    	barcode,
+			    	(SELECT title FROM rms_book WHERE rms_book.id=bdt.book_id LIMIT 1) AS bookname,
+		          	b.card_id,
+		          	b.name,
+		          	(SELECT name_kh FROM rms_view WHERE rms_view.key_code=b.borrow_type AND rms_view.type=13 LIMIT 1) AS `type`,
+			    	b.borrow_date,
+			    	b.return_date,
+			    	b.borrow_type
+           		FROM 
+           			rms_borrow AS b,
+           			rms_borrowdetails AS bd,
+           			rms_book_detail as bdt
+           		WHERE 
+           			b.id = bd.borr_id
+           			and bd.book_id = bdt.id
+           			and b.status = 1
+           			and bdt.is_broken = 0
+           			and bd.is_return = 0
+			";
 		$where = '';
 		if(!empty($search["title"])){
 			$s_where=array();
@@ -88,7 +104,7 @@ class Library_Model_DbTable_DbNeardayreturnbook extends Zend_Db_Table_Abstract
 	
 	function getAllBorrowName(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,name FROM rms_borrow WHERE is_completed=0";
+		$sql="SELECT id,name FROM rms_borrow WHERE 1";
 		return $db->fetchAll($sql);
 	}
 	

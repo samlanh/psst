@@ -15,21 +15,35 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
     
     function getAllBorrow($search=null){
     	$db=$this->getAdapter();
-    	$sql=" SELECT b.id,b.borrow_no,(SELECT v.name_kh FROM rms_view  AS v WHERE v.key_code=b.borrow_type AND v.type=13)AS `type`,
-    			b.card_id,b.name,b.phone,
-		        SUM(bd.borr_qty) AS qty,DATE_FORMAT(b.borrow_date,'%d/%b/%Y'),DATE_FORMAT(b.return_date,'%d/%b/%Y'),b.note,
-		       (SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
-			   (SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`
-		       FROM rms_borrow AS b,rms_borrowdetails AS bd
-		       WHERE  1
-		       AND b.id=bd.borr_id 
-		       AND b.name!=''
-		        ";
+    	$sql=" SELECT 
+    				b.id,
+    				b.borrow_no,
+    				(SELECT v.name_kh FROM rms_view  AS v WHERE v.key_code=b.borrow_type AND v.type=13) AS `type`,
+    				CASE
+						WHEN borrow_type = 1 THEN (select stu_code from rms_student as s where b.stu_id = s.stu_id)
+						ELSE b.card_id
+					END,
+					CASE
+						WHEN borrow_type = 1 THEN (select stu_khname from rms_student as s where b.stu_id = s.stu_id)
+						ELSE b.name
+					END,
+    				b.phone,
+		        	DATE_FORMAT(b.borrow_date,'%d/%b/%Y'),
+		        	DATE_FORMAT(b.return_date,'%d/%b/%Y'),
+		        	b.note,
+		       		(SELECT first_name FROM rms_users WHERE id=b.user_id LIMIT 1) AS user_name,
+			   		(SELECT name_en FROM rms_view WHERE key_code=b.status LIMIT 1) AS `status`
+		       	FROM 
+		       		rms_borrow AS b
+		       	WHERE  
+		       		1
+		    ";
+    	
     	$where = '';
     	
     	$from_date =(empty($search['start_date']))? '1': " b.borrow_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " b.borrow_date <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
+    	$where .= " AND ".$from_date." AND ".$to_date;
     	
     	if(!empty($search["title"])){
     		$s_where=array();
@@ -63,21 +77,16 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$db_global = new Application_Model_DbTable_DbGlobal();
-			$session_user=new Zend_Session_Namespace('authstu');
-		    $userName=$session_user->user_name;
-		    $GetUserId= $session_user->user_id;
-             
 			$arr=array(
 					"borrow_no"     => 	$data["borrow_id"],
 					"stu_id"        => 	$data["stu_id"],
 					"borrow_date"   => 	date("Y-m-d",strtotime($data['borrow_date'])),
 					"return_date"   => 	date("Y-m-d",strtotime($data['return_date'])),
-					"amount_week"	=> 	$data['amountweek'],
+					"amount_day"	=> 	$data['amountday'],
 					"note"          => 	$data['note'],
 					"phone"         => 	$data['phone'],
 					"is_completed"  => 	0,
-					"user_id"       => 	$GetUserId,
+					"user_id"       => 	$this->getUserId(),
 					"card_id"     	=> 	$data["card_id"],
 					"name"     		=> 	$data["name"],
 					"borrow_type"   => 	$data["type"],
@@ -308,11 +317,16 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		return $options;
 	}
 	
-	function getBookDetail($book_id=0){
+	function getBookDetail($book_id=0,$type=1){
 		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(serial,' - ',barcode) as name FROM rms_book_detail WHERE is_borrow=0 and is_broken=0  ";
+		$sql="SELECT id,CONCAT(serial,' - ',barcode) as name FROM rms_book_detail WHERE is_broken=0  ";
 		if($book_id>0){
 			$sql.=" and book_id = $book_id ";
+		}
+		if($type==1){ // borrow
+			$sql.=" and is_borrow=0 ";
+		}else{  // return
+			$sql.=" and is_borrow=1 ";
 		}
 		return $db->fetchAll($sql);
 	}

@@ -29,10 +29,8 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	    }
     	    $rs_row=$db->getAllReturnBook($search);
 	    	$glClass = new Application_Model_GlobalClass();
-			//$rs_rows = $glClass->getGetPayTerm($rs_row, BASE_URL );
 			$list = new Application_Form_Frmtable();
-			$collumns = array("RETURN_NO","IS_TYPE","CODE","NAME","RETURN_DATE","NOTE","USER",
-					"STATUS");
+			$collumns = array("RETURN_NO","RETURN_DATE","NOTE","USER","STATUS");
 			$link=array(
 					'module'=>'library','controller'=>'returnbook','action'=>'edit',
 			);
@@ -72,20 +70,10 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbReturnbook();
-    	$this->view->stu_id=$db_cat->getAllBorrowId(1);
-    	$this->view->stu_name=$db_cat->getAllBorrowId(2);
-    	$b=$this->view->book_title=$db_cat->getBookTitle();
     	$this->view->borr_no=$db_cat->getReturnBookNo();
      
-		$frm_major = new Library_Form_FrmBookreturn();
-		$frm_search = $frm_major->frmBook();
-		Application_Model_Decorator::removeAllDecorator($frm_search);
-		$this->view->frm_book = $frm_search;
-		
-		$frm_major = new Library_Form_FrmCategory();
-		$frm_search = $frm_major->FrmCategory();
-		Application_Model_Decorator::removeAllDecorator($frm_search);
-		$this->view->frm_cat = $frm_search;
+    	$_db = new Library_Model_DbTable_DbBorrowbook();
+    	$b=$this->view->book_title=$_db->getBookTitle();
     }
     
     public function editAction(){
@@ -133,47 +121,14 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 		$this->view->frm_cat = $frm_search;
     }
     
-    function addCategoryAction(){
-    	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
-    		$_dbmodel = new Library_Model_DbTable_DbCategory();
-    		$id = $_dbmodel->ajaxAddCategory($_data);
-    		print_r(Zend_Json::encode($id));
-    		exit();
-    	}
-    }
-    
-    function getBookqtyAction(){
+    function getBookdetailAction(){
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
-    		$db = new Library_Model_DbTable_DbCategory();
-    		$gty= $db->getBookQty($data['book_id']);
-    		print_r(Zend_Json::encode($gty));
+    		$db = new Library_Model_DbTable_DbReturnbook();
+    		$book = $db->getBookDetail($data['book_id']); // type => 1=borrow , 2=return
+    		print_r(Zend_Json::encode($book));
     		exit();
     	}
-    
-    }
-    
-    function getReturnBookAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Library_Model_DbTable_DbCategory();
-    		$gty= $db->getReturnBook($data['stu_id']);
-    		print_r(Zend_Json::encode($gty));
-    		exit();
-    	}
-    
-    }
-    
-    function getReturnBookDetailAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-    		$db = new Library_Model_DbTable_DbCategory();
-    		$gty= $db->getReturnBookDetail($data['id']);
-    		print_r(Zend_Json::encode($gty));
-    		exit();
-    	}
-    
     }
     
 }

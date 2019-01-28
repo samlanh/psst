@@ -29,7 +29,7 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    	$glClass = new Application_Model_GlobalClass();
 			//$rs_rows = $glClass->getGetPayTerm($rs_row, BASE_URL );
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BORROW_NO","TYPE","CODE","NAME","PHONE","BORR_QTY","BORROW_DATE","RETURN_DATE","NOTE","USER",
+			$collumns = array("BORROW_NO","BORROWER","CODE","NAME","PHONE","BORROW_DATE","RETURN_DATE","NOTE","USER",
 					"STATUS");
 			$link=array(
 					'module'=>'library','controller'=>'borrowbook','action'=>'edit',
@@ -134,11 +134,10 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Library_Model_DbTable_DbBorrowbook();
-    		$book= $db->getBookDetail($data['book_id']);
+    		$book= $db->getBookDetail($data['book_id'],$data['type']); // type => 1=borrow , 2=return
     		print_r(Zend_Json::encode($book));
     		exit();
     	}
-    
     }
     
 }

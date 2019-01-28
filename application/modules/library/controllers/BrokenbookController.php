@@ -28,14 +28,14 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    	$glClass = new Application_Model_GlobalClass();
 			//$rs_rows = $glClass->getGetPayTerm($rs_row, BASE_URL );
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BOOK_NO","BROKEN_DATE","BR_QTY","NOTE","STATUS","USER");
+			$collumns = array("BOOK_NO","BROKEN_DATE","NOTE","STATUS","USER");
 			$link=array(
 					'module'=>'library','controller'=>'brokenbook','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_row,array('broke_no'=>$link,'date_broken'=>$link,'qty'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
     	}
     	
     	$frm_major = new Library_Form_FrmSearchMajor();
@@ -62,10 +62,8 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();
-    	$this->view->stu_id=$db_cat->getAllStudentId(1);
-    	$this->view->stu_name=$db_cat->getAllStudentId(2);
     	$b=$this->view->book_title=$db_cat->getBookTitle();
-    	$this->view->borr_no=$db_cat->getBorrowNo();
+    	
     	$db = new Library_Model_DbTable_DbBrokenbook();
     	$this->view->bro_no=$db->getBrokenNo();
     }

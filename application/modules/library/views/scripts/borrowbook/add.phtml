@@ -145,18 +145,10 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	                   </div>
 	                </div>
 					<div class="form-group">
-	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT_WEEK");?> :
+	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT_DAYS");?> :
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<div class="col-md-4 col-sm-4 col-xs-12">
-	                   			<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amountweek" id="amountweek" value="" onkeyup="setEndDate();" type="text"   class="fullside">
-	                   		</div>
-	                   		<div class="col-md-4 col-sm-4 col-xs-12 text-center">
-	                   			<?php echo $tr->translate("HOUR")?>
-	                   		</div>
-	                   		<div class="col-md-4 col-sm-4 col-xs-12">
-	                   			<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amount_hour" id="amount_hour" value="" onkeyup="setEndDate();" type="text"  class="fullside">
-	                   		</div>
+	                   		<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amountday" id="amountday" value="" onkeyup="setEndDate();" type="text"   class="fullside">
 	                   </div>
 	                </div>		
 						
@@ -187,10 +179,10 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	           	</div>
 	        </div>
 			<div class="card-box ">
-			   <label class="control-label  col-md-1 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?> :
+			   <label class="control-label  col-md-1 col-sm-5 col-xs-12" for="first-name">&nbsp;&nbsp;&nbsp;<?php echo $tr->translate("NOTE");?> :
 			   </label>
 			   <div class="col-md-5 col-sm-7 col-xs-12">
-					<textarea style="min-height: 60px" class="fullside" id="note" name="note" dojoType="dijit.form.Textarea"></textarea>	
+					<textarea style="min-height: 60px;margin-left:10px;" class="fullside" id="note" name="note" dojoType="dijit.form.Textarea"></textarea>	
 			   </div>
 			</div>
 	        <div class="card-box">
@@ -253,7 +245,7 @@ function addRow() {
 		if(title!=1){    
 			temp+='<th><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th><?php echo $tr->translate("REMARK");?></th>';
+			temp+='<th><?php echo $tr->translate("BOOK");?></th>';
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
@@ -335,14 +327,13 @@ function getCheckQty(index){
 }
 
 function setEndDate(){
-	amount_date = dijit.byId('amountweek').get('value');
-	//dayofweek = parseFloat(amount*7);
+	amount_date = dijit.byId('amountday').get('value');
 	release_date = dijit.byId("borrow_date").get('value');//just update follow by first payment
 	if(isNaN(amount_date)){
 	}else{
 		var a = new Date(release_date);
 		mm = a.getMonth()+1;
-		var dd = a.getDate()+(amount_date*7);
+		var dd = a.getDate()+(amount_date);
 		 if(dd<10){
 			 dd = "0"+dd;
 		}
@@ -418,7 +409,8 @@ function getBookDetail(){
 	dojo.xhrPost({
 		url:url_get_book_detail,
 		content:{
-			'book_id':book_id
+			'book_id':book_id,
+			'type'	 :1	// from borrow
 			},
 		handleAs:"json",
 		load: function(data) {

@@ -19,7 +19,9 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 						'cood_book'		=>	0,
 						'block_id'		=>  0,
 						'status_search'	=>	-1,
-						'parent'		=>0,
+						'parent'		=>  0,
+						'is_borrow'		=>  -1,
+						'is_broken'		=>  -1,
 				);
 			}
 			$this->view->search = $search;
@@ -46,6 +48,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 				$search = array(
 						'title'	        =>	'',
 						'cood_book'		=>	0,
+						'is_type_bor'	=>  0,
 						'student_name'	=>	0,
 						'status_search'	=>	-1,
 						'end_date'		=>date('Y-m-d')
@@ -71,14 +74,14 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search = array(
-						'title'	        =>	'',
-						'cood_book'		=>	0,
-						'is_full'		=>	-1,
-						'student_name'	=>	0,
-						'is_type_bor'	=>0,
-						'parent'		=>0,
+						'title'	        => '',
+						'is_type_bor'	=> 0,
+						'student_name'	=> 0,
+						'cood_book'		=> 0,
+						'parent'		=> 0,
 						'start_date'	=>date('Y-m-d'),
 						'end_date'		=>date('Y-m-d'),
+						'is_return'		=> -1,
 				);
 			}
 			$this->view->search = $search;
@@ -102,20 +105,18 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 				$search=$this->getRequest()->getPost();
 			}else{
 				$search = array(
-						'title'	        =>	'',
-						'student_name'	=>	0,
-						//'status_search'	=>	-1,
-						'is_type_bor'	=>	0,
-				        'cood_book'		=>0,
-						'is_full'	=>	-1,
-						'parent'		=>0,
-						'start_date'	=>date('Y-m-d'),
-						'end_date'		=>date('Y-m-d'),
+						'title'	        => '',
+						'student_name'	=> 0,
+						'is_type_bor'	=> 0,
+				        'cood_book'		=> 0,
+						'parent'		=> 0,
+						'start_date'	=> date('Y-m-d'),
+						'end_date'		=> date('Y-m-d'),
 				);
 			}
 			$this->view->search = $search;
 			$db = new Allreport_Model_DbTable_DbRptLibraryQuery();
-			$this->view->borr_detail= $db->getReturnBookDetail($search);
+			$this->view->return_detail= $db->getReturnBookDetail($search);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

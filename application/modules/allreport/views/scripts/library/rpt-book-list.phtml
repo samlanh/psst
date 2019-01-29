@@ -11,7 +11,20 @@
 			<td><?php echo $frm->getElement("cood_book");?></td>
 			<td><?php echo $frm->getElement('block_id');?></td>
 			<td><?php echo $frm->getElement('parent');?></td>
-			<td><?php echo $frm->getElement('status_search');?></td>
+			<td>
+				<select name="is_borrow" id="is_borrow" class="fullside" dojoType="dijit.form.FilteringSelect" >
+					<option value="-1"><?php echo $tr->translate('STATUS');?></option>
+					<option value="1" <?php if($this->search['is_borrow']==1){echo "selected";}?>><?php echo $tr->translate('BORROW');?></option>
+					<option value="0" <?php if($this->search['is_borrow']==0){echo "selected";}?>><?php echo $tr->translate('NOT_BORROW');?></option>
+				</select>
+			</td>
+			<td>
+				<select name="is_broken" id="is_broken" class="fullside" dojoType="dijit.form.FilteringSelect" >
+					<option value="-1"><?php echo $tr->translate('STATUS');?></option>
+					<option value="1" <?php if($this->search['is_broken']==1){echo "selected";}?>><?php echo $tr->translate('BROKEN');?></option>
+					<option value="0" <?php if($this->search['is_broken']==0){echo "selected";}?>><?php echo $tr->translate('NOT_BROKEN');?></option>
+				</select>
+			</td>
 			<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
 		</tr>
 	</table>
@@ -36,9 +49,7 @@
 							<img style="width:60%;" src="<?php echo $this->baseUrl().'/images/logo.png'?>">
 						</td>
 						<td align="center" width="70%">
-							<strong​​ style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("CUSTOMER_BRANCH");?></strong><br />
 							<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:'Khmer MEF2';"><?php echo $tr->translate("BOOK_LIST_REPORT"); ?></strong><br />
-							<span style="font-weight: bold;font-size: 12px; font-family:'Khmer OS Battambang';​">&nbsp;<?php echo $tr->translate("DATE"); ?>&nbsp; <?php echo date("d-M-Y");?></span><br />
 						</td>
 						<td width="15%" >
 							&nbsp;
@@ -49,82 +60,56 @@
 						<td colspan="3" id="exportExcel">
 							<table cellpadding="5"​ style="margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;font-family:'Khmer OS Battambang';"  border="1" >
 								<thead>
-								<tr style="font-size:12px; height: 20px;border: 1px solid #000; background: #CCD9FF; line-height: 30px; font-weight: bold;" align="center" >
-									<th>&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("BOOK_NO"); ?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("BOOK_NAME"); ?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("AUTHOR"); ?>&nbsp;</th>
-									<th style="border: 1px solid #000;">&nbsp;<?php echo $tr->translate("PUBLISHER"); ?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("BLOCK_NAME"); ?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("CATEGORY"); ?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("CURRENT_QTY"); ?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("QTY_AFTER"); ?>&nbsp;</th>
-									<th style="border: 1px solid #000;"><?php echo $tr->translate("UNIT_PRICE"); ?></th>				
-									<th style="border: 1px solid #000;"><?php echo $tr->translate("DATE"); ?></th>
-									<th style="border: 1px solid #000;"><?php echo $tr->translate("USER"); ?></th>
-									<th style="border: 1px solid #000;"><?php echo $tr->translate("STATUS"); ?></th>
+								<tr align="center" style="font-size:12px; height: 20px;border: 1px solid #000; background: #CCD9FF; line-height: 30px; font-weight: bold;" align="center" >
+									<td><?php echo $tr->translate("N_O"); ?></td>
+									<td><?php echo $tr->translate("BOOK_NAME"); ?></td>
+									<td><?php echo $tr->translate("SERIAL"); ?></td>
+									<td><?php echo $tr->translate("AUTHOR"); ?></td>
+									<td><?php echo $tr->translate("PUBLISHER"); ?></td>
+									<td><?php echo $tr->translate("CATEGORY"); ?></td>
+									<td><?php echo $tr->translate("BLOCK_NAME"); ?></td>
+									<td><?php echo $tr->translate("USER"); ?></td>
+									<td colspan="2"><?php echo $tr->translate("STATUS"); ?></td>
 								</tr>
 								</thead>
-								<?php  $qty_curr=0;$qty_after=0;?> 
+								<?php  
+									$is_borrow = array(1=>$tr->translate("BORROW"),0=>$tr->translate("NOT_BORROW"));
+									$is_broken = array(1=>$tr->translate("BROKEN"),0=>$tr->translate("NOT_BROKEN"));
+								?> 
 							<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->book_list)){foreach ($this->book_list AS $row) { $i++; ?>
 								<tr style="font-size:12px; height: 30px;border: 1px solid #000;font-family:'Khmer OS Battambang';" align="center" class="hover" >
-									<td style="border: 1px solid #000;"><?php echo $i;?></td>
-									<td>&nbsp;<?php echo $row['book_no'];?></td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['title'];?></td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['author'];?></td>
-									
-									<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['publisher'];?></td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['block_name'];?></td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['cat_name'];?></td>
-									<td style="border: 1px solid #000;">&nbsp;<?php echo $row['qty_curr'];?>&nbsp;ក្បាល</td>
-									<td style="border: 1px solid #000;background:yellow; font-weight: 900;">&nbsp;<?php echo $row['qty_after'];?>&nbsp;ក្បាល</td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['unit_price'];?></td>
-									<td style="border: 1px solid #000;">&nbsp;<?php echo date("d/M/Y",strtotime($row['date']));?>&nbsp;</td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['user_name'];?></td>
-									<td align="left" style="border: 1px solid #000;">&nbsp;<?php echo $row['status'];?></td>
+									<td><?php echo $i;?></td>
+									<td align="left">&nbsp;<?php echo $row['title'];?></td>
+									<td align="left">&nbsp;<?php echo $row['serial']." - ".$row['barcode'];?></td>
+									<td align="left">&nbsp;<?php echo $row['author'];?></td>
+									<td>&nbsp;<?php echo $row['publisher'];?></td>
+									<td>&nbsp;<?php echo $row['cat_name'];?></td>
+									<td>&nbsp;<?php echo $row['block_name'];?></td>
+									<td>&nbsp;<?php echo $row['user_name'];?></td>
+									<td style="<?php if($row['is_borrow']==1){echo 'color:blue;';}?>">&nbsp;<?php echo $is_borrow[$row['is_borrow']];?></td>
+									<td style="<?php if($row['is_broken']==1){echo 'color:red;';}?>">&nbsp;<?php echo $is_broken[$row['is_broken']];?></td>
 								</tr>
-							<?php 
-								$qty_curr=$qty_curr+$row['qty_curr'];
-								$qty_after=$qty_after+$row['qty_after'];
-								}
-							}?>	 
+							<?php }}?>
 							</table>
-							 
-							<table width="100%" style="width:100%; border-collapse: collapse;white-space: nowrap;" >
-							<tr height="5px;"></tr>
-							<tr >
-								<td align="right" width="25%" style="border: 1px solid #000;">
-									<span style="font-size: 14px;"><?php echo $tr->translate("TOTAL_CURRENT_QTY"); ?></span>&nbsp;
-								</td>
-								<td align="center" width="15%" style="border: 1px solid #000; background:#ccc; font-weight: 900;">
-									<span style="font-size: 14px;"><?php echo $qty_curr;?>&nbsp;ក្បាល</span>
-								</td>
-								<td align="center"  width="15%" style="border: 1px solid #000;">
-									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("TOTAL_QTY_AFTER"); ?></span>
-								</td>
-								<td align="center" width="15%" style="border: 1px solid #000;background:#ccc;font-weight: 900;">
-									<span style="font-size: 14px;"><?php echo $qty_after;?>&nbsp;ក្បាល</span>
-								</td>
-							</tr>
-							</table>
+							
 							<table width="100%">
-							<tr>
-								<td colspan="3">&nbsp;</td>
-							</tr>
-							<tr>
-								<td colspan="3">&nbsp;</td>
-							</tr>
-							<tr >
-								<td align="center" width="25%">
-									<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
-								</td>
-								<td  width="50%">
-									&nbsp;
-								</td>
-								<td align="center"  width="25%">
-									<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
-								</td>
-							</tr>
+								<tr>
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr>
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr >
+									<td align="center" width="25%">
+										<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
+									</td>
+									<td  width="50%">
+										&nbsp;
+									</td>
+									<td align="center"  width="25%">
+										<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
+									</td>
+								</tr>
 							</table>				
 						</td>
 					</tr>				

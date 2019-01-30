@@ -53,7 +53,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
     	    $where.=' AND b.`status`='.$search["status_search"];
     	}
     	
-    	$order=" ORDER BY REPLACE(b.book_no,' ', '') DESC ";
+    	$order=" ORDER BY b.id DESC ";
     	//echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }

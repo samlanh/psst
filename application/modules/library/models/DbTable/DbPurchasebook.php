@@ -15,15 +15,22 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
     
     function getAllPurchase($search=null){
     	$db=$this->getAdapter();
-    	$sql=" SELECT b.id,b.purchase_no,b.title,b.date_order,
-                       SUM(bd.borr_qty),
-		       (SELECT CONCAT(u.first_name,' ',u.last_name) FROM rms_users AS u WHERE u.id=b.user_id LIMIT 1) AS user_name,
-		       (SELECT v.`name_en` FROM rms_view AS v WHERE v.`type`=1  AND b.status=v.`key_code` LIMIT 1) AS `status` 
-		       FROM rms_bookpurchase AS b,rms_bookpurchasedetails bd WHERE b.id=bd.purchase_id
-		       ";
-    	$where = '';
-    	$from_date =(empty($search['start_date']))? '1': " b.date_order >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " b.date_order <= '".$search['end_date']." 23:59:59'";
+    	$sql=" SELECT 
+    				b.id,
+    				b.purchase_no,
+    				DATE_FORMAT(b.date_purchase, '%d-%m-%Y') AS date_purchase,
+    				b.note,
+		       		(SELECT CONCAT(u.first_name,' ',u.last_name) FROM rms_users AS u WHERE u.id=b.user_id LIMIT 1) AS user_name,
+		       		(SELECT v.`name_en` FROM rms_view AS v WHERE v.`type`=1  AND b.status=v.`key_code` LIMIT 1) AS `status` 
+		       	FROM 
+		       		rms_bookpurchase AS b,
+		       		rms_bookpurchasedetails bd 
+		       	WHERE 
+		       		b.id=bd.purchase_id
+			";
+    	
+    	$from_date =(empty($search['start_date']))? '1': " b.date_purchase >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " b.date_purchase <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
     	if(!empty($search["title"])){
     		$s_where=array();
@@ -40,70 +47,44 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
     }
  
 	public function addPurchaseBook($data){
-		//print_r($data);exit();
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$db_global = new Application_Model_DbTable_DbGlobal();
-			$session_user=new Zend_Session_Namespace('authstu');
-		    $userName=$session_user->user_name;
-		    $GetUserId= $session_user->user_id;
-             
 			$arr=array(
-					"title"     	=> 	$data["note_p"],
-					"purchase_no"   => 	$data["purchase_no"],
-					"amount_due"    => 	$data["amount_due"],
-					"date_order"    => 	date("Y-m-d",strtotime($data['date_order'])),
-					"user_id"       => 	$GetUserId,
-					"status"        => 	$data['status_p'],
+				"purchase_no"   => 	$data["purchase_no"],
+				"date_purchase" => 	date("Y-m-d",strtotime($data['date_purchase'])),
+				"note"     		=> 	$data["note_p"],
+				"user_id"       => 	$this->getUserId(),
 			);
 			$this->_name="rms_bookpurchase";
-			$po_id = $this->insert($arr); 
-			unset($info_purchase_order);
+			$purchase_id = $this->insert($arr); 
 
-			if($data['identity']!=""){
+			if(!empty($data['identity'])){
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
+					$array = array(
+						'book_id'	=> 	$data['book_id'.$i],
+						'serial'	=>  $data['serial_'.$i],
+						'barcode'	=>  $data['barcode_'.$i],
+						'note'  	=> 	$data['note_'.$i],
+					);
+					$this->_name='rms_book_detail';
+					$book_id = $this->insert($array);
+					
 					$data_item= array(
-							'purchase_id'	=>  $po_id,
-							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $data['qty_'.$i],
-							'cost'		=>  $data['cost_'.$i],
-							'amount'	=>  $data['amount_'.$i],
-							'note'  	=> 	$data['note_'.$i],
-							'user_id'	=> 	$GetUserId,
-							'is_full'	=> 	1,
-							'status'	=> 	$data['status_p'],
+						'purchase_id'	=>  $purchase_id,
+						'book_id'		=> 	$book_id,
+						'note'  		=> 	$data['note_'.$i],
 					);
 					$this->_name='rms_bookpurchasedetails';
 					$this->insert($data_item);
-					$db_book=new Library_Model_DbTable_DbBook();
-					$rows=$db_book->getBookQty($data['book_id'.$i]); 
-					if($rows){
-							$datatostock= array(
-									'qty_after' => $rows["qty_after"]+$data['qty_'.$i],
-									'qty' 		=> $rows["qty"]+$data['qty_'.$i],
-									'unit_price'=> $data['cost_'.$i],
-									'total_amount'=> $data['amount_'.$i],
-									'date'		=>	date("Y-m-d"),
-									'user_id'	=>$GetUserId
-							);
-							$this->_name="rms_book";
-							$where=" id = ".$rows['id'];
-							$this->update($datatostock, $where);
-					}else{
-						
-					}
 				 }
 			}
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
-			Application_Form_FrmMessage::message('INSERT_FAIL');
-			$err =$e->getMessage();
-			echo $err;exit();
-			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			echo $e->getMessage();exit();
 		}
 	}
 

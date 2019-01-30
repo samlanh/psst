@@ -15,27 +15,24 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
 	    	$db = new Library_Model_DbTable_DbPurchasebook();
 	    	if($this->getRequest()->isPost()){
 	    		$search=$this->getRequest()->getPost();
-		    	
     	   	}else{
     			$search = array(
 	    				'title'	        =>	'',
 		    			'status_search'	=>	1,
-    					'start_date'=> date('Y-m-d'),
-    					'end_date'=>date('Y-m-d') 
+    					'start_date'	=> date('Y-m-d'),
+    					'end_date'		=>date('Y-m-d') 
 	    		);
     	    }
     	    $rs_row=$db->getAllPurchase($search);
-	    	$glClass = new Application_Model_GlobalClass();
-			//$rs_rows = $glClass->getGetPayTerm($rs_row, BASE_URL );
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PO_NUMBER","NOTE","DATE_ORDER","PUR_QTY","USER","STATUS");
+			$collumns = array("PO_NUMBER","DATE_ORDER","NOTE","USER","STATUS");
 			$link=array(
 					'module'=>'library','controller'=>'bookpurchase','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_row,array('purchase_no'=>$link,'title'=>$link));
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
     	}
     	
     	$frm_major = new Library_Form_FrmSearchMajor();

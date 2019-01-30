@@ -73,59 +73,38 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	}
 	
 	public function ajaxAddCategory($data){
-		//return  $data;
-		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('authstu');
-		$userName=$session_user->user_name;
-		$GetUserId= $session_user->user_id;
 		$arr = array(
 				'name'			=>	$data["cat_name"],
 				'parent_id'		=>	$data["parent"],
 				'date'			=>	new Zend_Date(),
 				'remark'		=>	$data["note_cate"],
-				"user_id"       =>  $GetUserId,
+				"user_id"       =>  $this->getUserId(),
 		);
 		$this->_name = "rms_bcategory";
 		return $this->insert($arr);
 	}
 	
 	public function ajaxAddBlock($data){
-		//return  $data;
-		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('authstu');
-		$userName=$session_user->user_name;
-		$GetUserId= $session_user->user_id;
 		$arr = array(
 				'block_name'	=>	$data["block_name"],
 				'date'			=>	new Zend_Date(),
 				'remark'		=>	$data["b_note"],
-				"user_id"       =>  $GetUserId,
+				"user_id"       =>  $this->getUserId(),
 		);
 		$this->_name = "rms_blockbook";
 		return $this->insert($arr);
 	}
 	
 	public function ajaxAddBook($data){
-		$db = $this->getAdapter();
-		$session_user=new Zend_Session_Namespace('authstu');
-		$userName=$session_user->user_name;
-		$GetUserId= $session_user->user_id;
 		$arr = array(
-					'book_no'	=>	$data["book_id"],
-					'title'		=>	$data["book_name"],
-					'author'	=>	$data["author_name"],
-					'serial_no'	=>	$data["serial_no"],
-					'cat_id'	=>	$data["parent_id"],
-					'block_id'	=>	$data["block_id"],
-					'publisher'	=>	$data["publisher"],
-					'qty'		=>	0,
-					'qty_after'	=>	0,
-// 					'unit_price'=>	$data["unit_price"],
-// 					'total_amount'=>$data["total_amount"],
-					'date'		=>	date('Y-m-d'),
-					'status'	=>	$data["statuss"],
-					//'note'		=>	$data["remark"],
-					"user_id"   =>  $GetUserId,
+			'title'		=>	$data["book_name"],
+			'author'	=>	$data["author_name"],
+			'cat_id'	=>	$data["cat_id"],
+			'block_id'	=>	$data["block_id"],
+			'publisher'	=>	$data["publisher"],
+			'note'		=>	$data["note"],
+			'date'		=>	date('Y-m-d'),
+			"user_id"   =>  $this->getUserId(),
 		);
 		$this->_name = "rms_book";
 		return $this->insert($arr);
@@ -253,7 +232,7 @@ class Library_Model_DbTable_DbCategory extends Zend_Db_Table_Abstract
 	
 	function getAllBookOpt(){
 		$db=$this->getAdapter();
-		$sql="SELECT id,CONCAT(title,'(',book_no,')') AS name FROM rms_book WHERE STATUS=1";
+		$sql="SELECT id,CONCAT(title) AS name FROM rms_book WHERE STATUS=1";
 		$order=" ORDER BY id DESC";
 		return $db->fetchAll($sql.$order);
 	}

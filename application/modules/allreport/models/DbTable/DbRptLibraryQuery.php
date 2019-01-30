@@ -369,46 +369,53 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     
     function getPurchaseDetail($search=null){
     	$db=$this->getAdapter();
-    	$sql="SELECT bd.id,b.purchase_no,b.stu_id,b.date_order,bd.cost,
-    	(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
-    	(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_name,
-    	(SELECT sex FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS sex,
-    	(SELECT `name` FROM rms_bcategory WHERE rms_bcategory.id=(SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id) LIMIT 1) AS cat_name,
-    	(SELECT `block_name` FROM rms_blockbook WHERE rms_blockbook.id=(SELECT block_id FROM rms_book WHERE rms_book.id=bd.book_id)  AND rms_blockbook.status=1 LIMIT 1) AS block_name,
-    	(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_no,
-    	(SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_name,
-    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users WHERE rms_users.id=bd.user_id LIMIT 1) AS user_name,
-    	bd.borr_qty,bd.is_full
-    	FROM rms_bookpurchase AS b,rms_bookpurchasedetails AS bd
-    	WHERE b.id=bd.purchase_id ";
+    	$sql="SELECT 
+    				bd.id,
+    				b.purchase_no,
+    				b.date_purchase,
+			    	(SELECT `name` FROM rms_bcategory WHERE rms_bcategory.id=rms_book.cat_id LIMIT 1) AS cat_name,
+			    	(SELECT `block_name` FROM rms_blockbook WHERE rms_blockbook.id=rms_book.block_id LIMIT 1) AS block_name,
+			    	rms_book.title AS book_name,
+			    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users WHERE rms_users.id=b.user_id LIMIT 1) AS user_name,
+			    	bdt.serial,
+			    	bdt.barcode
+    			FROM 
+    				rms_bookpurchase AS b,
+    				rms_bookpurchasedetails AS bd,
+    				rms_book_detail as bdt,
+    				rms_book
+    			WHERE 
+    				b.id=bd.purchase_id
+    				and bdt.id=bd.book_id 
+    				and rms_book.id = bdt.book_id
+    		";
     	 
     	$where = '';
-    	$from_date =(empty($search['start_date']))? '1': "b.date_order >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "b.date_order <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': "b.date_purchase >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "b.date_purchase <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
     	 
     	if(!empty($search["title"])){
     		$s_where=array();
     		$s_search = addslashes(trim($search['title']));
     		$s_where[]="  b.purchase_no LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]=" (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
-    		$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
+    		$s_where[]="  rms_book.title LIKE '%{$s_search}%'";
+    		$s_where[]="  bdt.serial LIKE '%{$s_search}%'";
+    		$s_where[]="  bdt.barcode LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	 
     	$db_cat=new Library_Model_DbTable_DbCategory();
     	if($search["parent"]>0){
-    		$where.=' AND (SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id)  IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
+    		$where.=' AND rms_book.cat_id IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
     	}
     	 
     	if($search["block_id"]>0){
-    		$where.=' AND (SELECT `id` FROM rms_blockbook WHERE rms_blockbook.id=(SELECT block_id FROM rms_book WHERE rms_book.id=bd.book_id)
-    					  AND rms_blockbook.status=1 LIMIT 1)='.$search["block_id"];
+    		$where.=' AND rms_book.block_id ='.$search["block_id"];
     	}
     	 
     	if($search["cood_book"]>0){
-    		$where.=' AND bd.book_id='.$search["cood_book"];
+    		$where.=' AND rms_book.id='.$search["cood_book"];
     	}
     	 
     	$order=" ORDER BY b.id DESC ";
@@ -417,47 +424,54 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     
     function getBrokenDetail($search=null){
     	$db=$this->getAdapter();
-    	$sql="SELECT bd.id,b.broke_no,b.date_broken,
-    	(SELECT stu_code FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_code,
-    	(SELECT stu_enname FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS stu_name,
-    	(SELECT sex FROM rms_student WHERE rms_student.is_subspend=0 AND rms_student.stu_id=b.stu_id LIMIT 1) AS sex,
-    	(SELECT `name` FROM rms_bcategory WHERE rms_bcategory.id=(SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id) LIMIT 1) AS cat_name,
-    	(SELECT `block_name` FROM rms_blockbook WHERE rms_blockbook.id=(SELECT block_id FROM rms_book WHERE rms_book.id=bd.book_id)  AND rms_blockbook.status=1 LIMIT 1) AS block_name,
-    	(SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_no,
-    	(SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1)AS book_name,
-    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users WHERE rms_users.id=bd.user_id LIMIT 1) AS user_name,
-    	bd.borr_qty,bd.is_full
-    	FROM rms_bookbroken AS b,rms_bookbrokendetails AS bd
-    	WHERE b.id=bd.broken_id ";
+    	$sql="SELECT 
+    				brd.id,
+    				br.broke_no,
+    				br.date_broken,
+			    	(SELECT `name` FROM rms_bcategory WHERE rms_bcategory.id=b.cat_id LIMIT 1) AS cat_name,
+			    	(SELECT `block_name` FROM rms_blockbook WHERE rms_blockbook.id=b.block_id LIMIT 1) AS block_name,
+			    	b.title AS book_name,
+			    	bdt.serial,
+			    	bdt.barcode,
+			    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users WHERE rms_users.id=br.user_id LIMIT 1) AS user_name
+		    	FROM 
+		    		rms_bookbroken AS br,
+		    		rms_bookbrokendetails AS brd,
+		    		rms_book_detail as bdt,
+		    		rms_book as b
+    			WHERE 
+    				br.id=brd.broken_id 
+    				and brd.book_id = bdt.id
+    				and b.id = bdt.book_id
+    		";
     
     	$where = '';
-    	    	$from_date =(empty($search['start_date']))? '1': "b.date_broken >= '".$search['start_date']." 00:00:00'";
-    	    	$to_date = (empty($search['end_date']))? '1': "b.date_broken <= '".$search['end_date']." 23:59:59'";
-    	    	$where = " AND ".$from_date." AND ".$to_date;
+    	$from_date =(empty($search['start_date']))? '1': "br.date_broken >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "br.date_broken <= '".$search['end_date']." 23:59:59'";
+    	$where = " AND ".$from_date." AND ".$to_date;
     
-    	    	if(!empty($search["title"])){
-    	    		$s_where=array();
-    	    		$s_search = addslashes(trim($search['title']));
-    	    		$s_where[]="  b.broke_no LIKE '%{$s_search}%'";
-    	    		$s_where[]=" (SELECT book_no FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
-    	    		$s_where[]=" (SELECT title FROM rms_book WHERE rms_book.id=bd.book_id LIMIT 1) LIKE '%{$s_search}%'";
-    	    		$s_where[]="  bd.borr_qty LIKE '%{$s_search}%'";
-    	    		$where.=' AND ('.implode(' OR ', $s_where).')';
-    	    	}
+    	if(!empty($search["title"])){
+    		$s_where=array();
+    		$s_search = addslashes(trim($search['title']));
+    		$s_where[]="  br.broke_no LIKE '%{$s_search}%'";
+    		$s_where[]="  b.title LIKE '%{$s_search}%'";
+    		$s_where[]="  bdt.serial LIKE '%{$s_search}%'";
+    		$s_where[]="  bdt.barcode LIKE '%{$s_search}%'";
+    		$where.=' AND ('.implode(' OR ', $s_where).')';
+    	}
     
-    	    	$db_cat=new Library_Model_DbTable_DbCategory();
-    	    	if($search["parent"]>0){
-    	    		$where.=' AND (SELECT cat_id FROM rms_book WHERE rms_book.id=bd.book_id)  IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
-    	    	}
+    	$db_cat=new Library_Model_DbTable_DbCategory();
+    	if($search["parent"]>0){
+    		$where.=' AND b.cat_id IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
+    	}
     
-    	    	if($search["cood_book"]>0){
-    	    		$where.=' AND bd.book_id='.$search["cood_book"];
-    	    	}
+    	if($search["cood_book"]>0){
+    		$where.=' AND b.id='.$search["cood_book"];
+    	}
     
-    	    	if($search["block_id"]>0){
-    	    		$where.=' AND (SELECT `id` FROM rms_blockbook WHERE rms_blockbook.id=(SELECT block_id FROM rms_book WHERE rms_book.id=bd.book_id)
-    	    		AND rms_blockbook.status=1 LIMIT 1)='.$search["block_id"];
-    	    	}
+    	if($search["block_id"]>0){
+    		$where.=' AND b.block_id ='.$search["block_id"];
+    	}
     
     	$order=" ORDER BY b.id DESC ";
     	return $db->fetchAll($sql.$where.$order);

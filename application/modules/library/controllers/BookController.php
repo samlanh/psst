@@ -36,7 +36,7 @@ protected $tr;
 //     	    $this->view->book_row=$db->getAllBook($search);
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			echo $e->getMessage();
     	}
     	
     	$frm_major = new Library_Form_FrmSearchMajor();

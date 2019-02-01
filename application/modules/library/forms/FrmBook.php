@@ -18,16 +18,6 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 				'placeholder'=>$this->tr->translate("BOOK_NAME")
 		        ));
 		
-		$book_id = new Zend_Dojo_Form_Element_ValidationTextBox('book_id');
-		$book_id->setAttribs(array(
-				'dojoType'=>'dijit.form.ValidationTextBox',
-				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("BOOK_NO"),
-				'required'=>'true',
-				));
-// 		$db_book=new Library_Model_DbTable_DbBook();
-// 		$b_id=$db_book->getBookNo();
-// 		$book_id->setValue($b_id);
 		
 		$author_name = new Zend_Dojo_Form_Element_ValidationTextBox('author_name');
 		$author_name->setAttribs(array(
@@ -56,27 +46,6 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'placeholder'=>$this->tr->translate("PUBLISHER")
 		        ));
-		
-		$qty = new Zend_Dojo_Form_Element_NumberTextBox('qty');
-		$qty->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'required'=>'true','class'=>'fullside',
-				'onkeyup'=>'getTotalBookPrice()'
-		        ));
-		
-		$unit_price = new Zend_Dojo_Form_Element_NumberTextBox('unit_price');
-		$unit_price->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>'fullside',
-				'onkeyup'=>'getTotalBookPrice()'
-				));
-		
-		$total_amount = new Zend_Dojo_Form_Element_NumberTextBox('total_amount');
-		$total_amount->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>'fullside',
-				'readonly'=>true
-		));
 		
 		$remark = new Zend_Dojo_Form_Element_TextBox('remarks');
 		$remark->setAttribs(array(
@@ -115,7 +84,6 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		if(!empty($result))foreach($result AS $row){
 			$option[$row['id']]=$row['name'];
 		}
-		if (!empty($data)){unset($option[$data['id']]);}
 		$_cateory_parent->setMultiOptions($option);
 		$_cateory_parent->setValue($request->getParam('cat_id'));
 		
@@ -149,21 +117,16 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		if($data!=null){
 			//print_r($data);exit();
 			$book_name	->setValue($data['title']);
-			$book_id	->setValue($data['book_no']);
 			$author_name->setValue($data['author']);
-			$serial_no	->setValue($data['serial_no']);
 			$_cateory_parent->setValue($data['cat_id']);
 			$publisher	->setValue($data['publisher']);
-			$qty		->setValue($data['qty']);
-			$unit_price	->setValue($data['unit_price']);
 			$remark		->setValue($data['note']);
 			$status		->setValue($data['status']);
-			$note		->setValue($data['note']);
 			$old_photo	->setValue($data['photo']);
 			$_block_id	->setValue($data['block_id']);
 		}
-		$this->addElements(array($total_amount,$barcode,$note,$_block_id,$old_photo,$id,$book_name,$book_id,$author_name,$serial_no,$publisher,$_photo,
-				                 $qty,$unit_price,$remark,$status,$note,$_cateory_parent));
+		$this->addElements(array($barcode,$note,$_block_id,$old_photo,$id,$book_name,$author_name,$serial_no,$publisher,$_photo,
+				                 $remark,$status,$note,$_cateory_parent));
 		return $this;
 	}	
 	

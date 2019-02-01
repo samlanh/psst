@@ -85,7 +85,6 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 					"amount_day"	=> 	$data['amountday'],
 					"note"          => 	$data['note'],
 					"phone"         => 	$data['phone'],
-					"is_completed"  => 	0,
 					"user_id"       => 	$this->getUserId(),
 					"card_id"     	=> 	$data["card_id"],
 					"name"     		=> 	$data["name"],
@@ -94,7 +93,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 			$this->_name="rms_borrow";
 			$borr_id = $this->insert($arr); 
             
-			if($data['identity']!=""){
+			if(!empty($data['identity'])){
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
@@ -122,115 +121,74 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 		}
 	}
 	 
-	public function editBorrowBook($data){
+	public function editBorrowBook($data,$id){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$db_global = new Application_Model_DbTable_DbGlobal();
-			$session_user=new Zend_Session_Namespace('authstu');
-		    $userName=$session_user->user_name;
-		    $GetUserId= $session_user->user_id;
-		    
-		    $row_item=$this->getItemDetail($data['id']);
+		    $row_item=$this->getItemDetail($id);
 		    if(!empty($row_item)){
 		    	foreach ($row_item As $rs_item){
-		    		$row=$this->getBookQty($rs_item['book_id']);
-		    		//print_r($row);exit();
-		    		if($row){
-		    			$datatostock   = array(
-		    					'qty_after' =>  $row["qty_after"]+$rs_item['borr_qty'],
-		    					'date'		=>	date("Y-m-d"),
-		    			);
-		    			$this->_name="rms_book";
-		    			$where=" id = ".$row['id'];
-		    			$this->update($datatostock, $where);
-		    		}
+	    			$arr = array(
+	    				'is_borrow'	=>	0,
+	    			);
+	    			$this->_name="rms_book_detail";
+	    			$where=" id = ".$rs_item['book_id'];
+	    			$this->update($arr, $where);
 		    	}
-		    }else { }
+		    }
              
 			$arr=array(
 					"borrow_no"     => 	$data["borrow_id"],
 					"stu_id"        => 	$data["stu_id"],
 					"borrow_date"   => 	date("Y-m-d",strtotime($data['borrow_date'])),
 					"return_date"   => 	date("Y-m-d",strtotime($data['return_date'])),
-					"amount_week"	=> 	$data['amountweek'],
+					"amount_day"	=> 	$data['amountday'],
 					"note"          => 	$data['note'],
 					"phone"         => 	$data['phone'],
-					"user_id"       => 	$GetUserId,
-					"is_completed"  => 	0,
-					"status"        => 	$data['status'],
+					"user_id"       => 	$this->getUserId(),
 					"card_id"     	=> 	$data["card_id"],
 					"name"     		=> 	$data["name"],
 					"borrow_type"   => 	$data["type"],
 			);
 			$this->_name="rms_borrow";
-			$where="id=".$data['id'];
-			$db->getProfiler()->setEnabled(true);
+			$where = " id = $id";
 		    $this->update($arr, $where); 
-			unset($arr);
 			 
 			$this->_name="rms_borrowdetails";
-			$where=" borr_id=".$data['id'];
-			$db->getProfiler()->setEnabled(true);
+			$where=" borr_id = $id " ;
 			$this->delete($where);
 
-			if($data['identity']!=""){
+			if(!empty($data['identity'])){
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
-				    if($data['status']!=0){
-				    	$qty=$data['borr_qty'.$i];
-				    }else{
-				    	$qty=0;
-				    }
 					$data_item= array(
-							'borr_id'	=>  $data['id'],
+							'borr_id'	=>  $id,
 							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $qty,
-							'note'  	=> 	$data['note_'.$i],
-							'user_id'	=> 	$GetUserId,
-							'date'		=>	date('Y-m-d'),
-							'return_date'=>	date("Y-m-d",strtotime($data['return_date'])),
-							'is_full'	=> 	0,
-							'status'	=> 	$data['status'],
 					);
-					$db->getProfiler()->setEnabled(true);
 					$this->_name='rms_borrowdetails';
 					$this->insert($data_item);
-					$rows=$this->getBookQty($data['book_id'.$i]); 
-					if($rows){
-						if($data['status']!=0){
-							$datatostock= array(
-									'qty_after' => $rows["qty_after"]-$data['borr_qty'.$i],
-									'date'		=>	date("Y-m-d"),
-									'user_id'	=>	$GetUserId
-							);
-							$this->_name="rms_book";
-							$where=" id = ".$rows['id'];
-							$db->getProfiler()->setEnabled(true);
-							$this->update($datatostock, $where);
-// 							Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQuery());
-// 							Zend_Debug::dump($db->getProfiler()->getLastQueryProfile()->getQueryParams());
-// 							$db->getProfiler()->setEnabled(false);
-						}
-					}else{ }
+					
+					// update rms_book_detail
+					$datatostock= array(
+						'is_borrow' => 1,
+					);
+					$this->_name="rms_book_detail";
+					$where=" id = ".$data['book_id'.$i];
+					$this->update($datatostock, $where);
 				 }
 			}
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
-			Application_Form_FrmMessage::message('INSERT_FAIL');
-			$err =$e->getMessage();
-			echo $err;exit();
-			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			echo $e->getMessage();
 		}
 	}
 	
 	public function getItemDetail($id){
 		$db=$this->getAdapter();
 		$sql = "SELECT * FROM rms_borrowdetails WHERE borr_id=$id";
-		$rows=$db->fetchAll($sql);
-		return $rows;
+		return $db->fetchAll($sql);
 	}
 	
 	public function getCategory($parent = 0, $spacing = '', $cate_tree_array = ''){
@@ -285,7 +243,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 	
 	function getBorrowDetailById($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM rms_borrowdetails WHERE borr_id=$id";
+		$sql="SELECT brd.*,bd.serial,bd.barcode FROM rms_borrowdetails as brd , rms_book_detail as bd WHERE bd.id = brd.book_id and brd.borr_id = $id ";
 		return $db->fetchAll($sql);
 	}
 	
@@ -298,7 +256,7 @@ class Library_Model_DbTable_DbBorrowbook extends Zend_Db_Table_Abstract
 			WHERE s.status=1 AND s.stu_enname!=''
 			and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
 		}else {
-			$sql="SELECT s.stu_id As stu_id,CONCAT(s.stu_enname) as name FROM rms_student AS s
+			$sql="SELECT s.stu_id As stu_id,CONCAT(s.stu_khname) as name FROM rms_student AS s
 			WHERE s.status=1 AND s.stu_enname!=''
 			and s.is_subspend=0  $branch_id  ORDER BY stu_type DESC ";
 		}

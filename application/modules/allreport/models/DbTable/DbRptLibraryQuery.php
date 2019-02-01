@@ -80,7 +80,6 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="SELECT 
     				b.id,
-    				b.book_no,
     				b.title,
     				bd.serial,
     				bd.barcode,
@@ -102,7 +101,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     				b.id = bd.book_id
     				and b.status=1
     		";
-    	
+    	$order = " order by b.id ASC , bd.id ASC ";
     	$where = '';
     	if(!empty($search["title"])){
     		$s_where=array();
@@ -130,8 +129,7 @@ class Allreport_Model_DbTable_DbRptLibraryQuery extends Zend_Db_Table_Abstract
     	if($search["parent"]>0){
     		$where.=' AND b.cat_id IN ('.$db_cat->getAllCategoryUnlimit($search["parent"]).')';
     	} 
-    	//echo $sql.$where;
-    	return $db->fetchAll($sql.$where);
+    	return $db->fetchAll($sql.$where.$order);
     }
     
     function getBorrowDetail($search=null){

@@ -57,47 +57,56 @@ dojo.require("dojo.data.ItemFileWriteStore");
 						<?php echo $tr->translate("DETAIL_INFORMATION");?> 
 				   </label>
 				</div>
-	        	<div class="col-md-3 col-sm-4 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BOOK_NAME");?> <span class="required">*</span> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("book_name");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AUTHOR_NAME");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("author_name");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PUBLISHER");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("publisher");?>
-	                   </div>
-	                </div>
-	                
-	           </div>
-	           <div class="col-md-3 col-sm-4 col-xs-12">
+				<div class="col-md-6 col-sm-12 col-xs-12">
+					<div class="col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BOOK_NAME");?> <span class="required">*</span> :
+						   </label>
+						   <div class="col-md-7 col-sm-7 col-xs-12">
+								<?php echo $frm->getElement("book_name");?>
+						   </div>
+						</div>
+						<div class="form-group">
+						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AUTHOR_NAME");?> :
+						   </label>
+						   <div class="col-md-7 col-sm-7 col-xs-12">
+								<?php echo $frm->getElement("author_name");?>
+						   </div>
+						</div>
+						<div class="form-group">
+						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("PUBLISHER");?> :
+						   </label>
+						   <div class="col-md-7 col-sm-7 col-xs-12">
+								<?php echo $frm->getElement("publisher");?>
+						   </div>
+						</div>
+				   </div>
+				   <div class="col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CATEGORY");?> :
+						   </label>
+						   <div class="col-md-7 col-sm-7 col-xs-12">
+								<?php echo $frm->getElement("cat_id");?>
+						   </div>
+						</div>
+						<div class="form-group">
+						   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BOOK_BLOCK");?> :
+						   </label>
+						   <div class="col-md-7 col-sm-7 col-xs-12">
+								<?php echo $frm->getElement("block_id");?>
+						   </div>
+						</div>
+				   </div>
 					<div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("CATEGORY");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("cat_id");?>
-	                   </div>
-	                </div>
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("BOOK_BLOCK");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<?php echo $frm->getElement("block_id");?>
-	                   </div>
-	                </div>
-	           </div>
-			   
+					   <label class="control-label bold col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("DESCRIPTION");?> :
+					   </label>
+					</div>
+					<div class="form-group">
+					   <div class="col-md-12 col-sm-12 col-xs-12">
+							<textarea rows="6" id="remark" name="remark" style="width:100%"><?php echo $this->row['note']?></textarea>
+					   </div>
+					</div>
+			   </div>
 			   <div class="col-md-6 col-sm-12 col-xs-12">
 					<div class="form-group">
 	                   <div class="col-md-3 col-sm-12 col-xs-12">
@@ -115,28 +124,14 @@ dojo.require("dojo.data.ItemFileWriteStore");
 					   </div>
 	                </div>
 					<div class="form-group">
-		         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;">
+		         	 	<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;">
 								<tr id="head-title" class="head-td" align="right"></tr>
 						</table>
 						
 						<input type="hidden" name="identity" id="identity"  />
 		         	</div>
 	           </div>
-			   
-	       </div>
-	       <div class="card-box">
-	        	<div class="col-md-6 col-sm-8 col-xs-12">
-	                <div class="form-group">
-	                   <label class="control-label bold col-md-12 col-sm-12 col-xs-12" for="first-name"><?php echo $tr->translate("DESCRIPTION");?> :
-	                   </label>
-	                </div>
-	                <div class="form-group">
-	                   <div class="col-md-12 col-sm-12 col-xs-12">
-	                   		<textarea rows="6" id="remark" name="remark" style="width:100%"></textarea>
-	                   </div>
-	                </div>
-	           </div>
-	       </div>
+	        </div>
 	       <div class="clearfix"></div>
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">

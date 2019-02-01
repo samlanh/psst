@@ -86,10 +86,9 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$id = $this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['id']=$id;
     		try {
     			$db = new Library_Model_DbTable_DbBorrowbook();
-    			$db->editBorrowBook($_data);
+    			$db->editBorrowBook($_data,$id);
     			if(!empty($_data['save_close'])){
     				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/borrowbook/index");
     			}else{
@@ -106,6 +105,9 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$this->view->stu_name=$db_cat->getAllStudentId(2);
     	$b=$this->view->book_title=$db_cat->getBookTitle();
     	$this->view->borr_no=$db_cat->getBorrowNo();
+    	
+    	$this->view->book_detail=$db_cat->getBookDetail();
+    	
     	$this->view->row=$db_cat->getBorrowById($id);
     	$this->view->row_detail=$db_cat->getBorrowDetailById($id);
     	 

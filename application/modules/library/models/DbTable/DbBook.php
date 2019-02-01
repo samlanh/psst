@@ -60,11 +60,6 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
  
 	public function addBook($data){
 		$db = $this->getAdapter();
-		
-		$session_user=new Zend_Session_Namespace('authstu');
-	    $userName=$session_user->user_name;
-	    $GetUserId= $session_user->user_id;
-	    
 		$arr = array(
 				'title'		=>	$data["book_name"],
 				'author'	=>	$data["author_name"],
@@ -76,7 +71,7 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 				'note'		=>	$data["remark"],
 				
 				'date'		=>	date('Y-m-d'),
-				"user_id"   =>  $GetUserId,
+				"user_id"   =>  $this->getUserId(),
 		);
 		$this->_name = "rms_book";
 		$book_id = $this->insert($arr);
@@ -94,47 +89,42 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 				$this->insert($array);
 			}
 		}
-		
 	}
 	 
-	public function editBook($data){ 
-			$db = $this->getAdapter();
-			$session_user=new Zend_Session_Namespace('authstu');
-		    $userName=$session_user->user_name;
-		    $GetUserId= $session_user->user_id;
-		    
-// 		    $adapter = new Zend_File_Transfer_Adapter_Http();
-// 		    $part = PUBLIC_PATH.'/images';
-// 		    $adapter->setDestination($part);
-// 		    $adapter->receive();
-// 		    $photo = $adapter->getFileInfo();
-		    	
-// 		    if(!empty($photo['photo']['name'])){
-// 		    	$pho_name = $photo['photo']['name'];
-// 		    }else{
-// 		    	$pho_name = $data['old_photo'];
-// 		    }
-		    
-			$arr = array(
-					'book_no'	=>	$data["book_id"],
-					'title'		=>	$data["book_name"],
-					'author'	=>	$data["author_name"],
-					'serial_no'	=>	$data["serial_no"],
-					'cat_id'	=>	$data["parent_id"],
-					//'photo'		=>	$pho_name,
-					'publisher'	=>	$data["publisher"],
-					'block_id'	=>	$data["block_id"],
-					'qty'		=>	$data["qty"],
-					'qty_after'	=>	$data["qty"],
-					'unit_price'=>	$data["unit_price"],
-					'date'		=>	date('Y-m-d'),
-					'status'	=>	$data["statuss"],
-					'note'		=>	$data["remark"],
-					"user_id"   =>  $GetUserId,
-			);
-			$this->_name = "rms_book";
-			$where=" id=".$data['id'];
-			$this->update($arr, $where);
+	public function editBook($data,$id){ 
+		$db = $this->getAdapter();
+		$arr = array(
+				'title'		=>	$data["book_name"],
+				'author'	=>	$data["author_name"],
+				'publisher'	=>	$data["publisher"],
+				
+				'cat_id'	=>	$data["cat_id"],
+				'block_id'	=>	$data["block_id"],
+				'note'		=>	$data["remark"],
+				
+				"user_id"   =>  $this->getUserId(),
+		);
+		$this->_name = "rms_book";
+		$where = " id = $id";
+		$this->update($arr, $where);
+		
+		$this->_name="rms_book_detail";
+		$where1 = " book_id = $id";
+		$this->delete($where1);
+		
+		if(!empty($data["identity"])){
+			$ids = explode(",", $data['identity']);
+			foreach ($ids as $i){
+				$array = array(
+					'book_id'	=> $id,
+					'serial'	=> $data['serial_'.$i],
+					'barcode'	=> $data['barcode_'.$i],
+					'note'	  	=> $data['note_'.$i],
+				);
+				$this->_name="rms_book_detail";
+				$this->insert($array);
+			}
+		}
 	}
 	
 	public function getCategory($parent = 0, $spacing = '', $cate_tree_array = ''){
@@ -192,6 +182,11 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT * FROM rms_book WHERE id=$id";
 		return $db->fetchRow($sql);
+	}
+	function getBookRowDetailById($id){
+		$db=$this->getAdapter();
+		$sql="SELECT * FROM rms_book_detail WHERE book_id=$id";
+		return $db->fetchAll($sql);
 	}
 	
 	function getTotalBookEmpty(){

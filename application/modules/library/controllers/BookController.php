@@ -92,7 +92,7 @@ protected $tr;
     		$_data = $this->getRequest()->getPost();
     		$_data['id']=$id;
     		try {
-    			$db->editBook($_data);
+    			$db->editBook($_data,$id);
     			if(!empty($_data['save_close'])){
     				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/book/index");
     			}else{
@@ -114,7 +114,8 @@ protected $tr;
     	
     	$row=$db->getBookRowById($id);
     	$this->view->row=$row;
-    	$this->view->row=$row;
+    	$this->view->row_detail=$db->getBookRowDetailById($id);;
+    	
     	$frm_major = new Library_Form_FrmBook();
     	$frm_search = $frm_major->frmBook($row);
     	Application_Model_Decorator::removeAllDecorator($frm_search);

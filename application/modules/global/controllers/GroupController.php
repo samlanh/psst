@@ -350,7 +350,7 @@ class Global_GroupController extends Zend_Controller_Action {
     		$db = new Application_Model_DbTable_DbGlobal();
     		$group = $db->getAllGroupByBranch($data['branch_id']);
     		if (empty($data['noaddnew'])){
-    		array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+    			array_unshift($group, array ('id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     		}
     		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_GROUP")));
     		print_r(Zend_Json::encode($group));

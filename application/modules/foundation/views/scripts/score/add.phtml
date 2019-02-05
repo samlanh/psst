@@ -112,7 +112,8 @@ function filterStudent(){
 	grade = dijit.byId('grade').get('value');
 	session = dijit.byId('session').get('value');
 	group = dijit.byId('group').get('value');
-	
+	amtsubject = 0;
+	exam_type = dijit.byId('exam_type').get('value');
 	if(group==''){
 		return false;
 	}
@@ -139,11 +140,20 @@ function filterStudent(){
 					+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
 					+'<td  class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
 					no=0;
+				
+					
 				  for(j=0;j<subject.length;j++){
+					  if(exam_type==1){//for month
+						  amtsubject = amtsubject+parseFloat(subject[j].amtsubject_month);
+					  }else{//for year
+						  amtsubject = amtsubject+parseFloat(subject[j].amtsubject_semester);
+						}
+					  
 	      			  no++;
 	      			  stringsname = subject[j].subject_titleen.replace(' ','');
 		      	      temp+='<td class="verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
 	              }
+	              
 				  temp+='<td  class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
 				  temp+='<td  class="text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
 				  temp+='<tr style="border:1px solid #000;">';
@@ -166,7 +176,6 @@ function filterStudent(){
 				for(i=0;i<data.length;i++){
 					num++;
 					inx = inx+1;
-					//alert(inx);
 					temp += '<tr class="hover normal" id="row'+inx+'">';
 					temp +='<td width="4%" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 					temp += '<td align="center">&nbsp;'+inx+'</td>';
@@ -176,7 +185,7 @@ function filterStudent(){
 					for(j=0;j<subject.length;j++){
 						temp += '<td id="score_'+j+'"><input required="1" class="fullside" onKeyUp="checkScore('+inx+','+subject[j].subject_id+');" dojoType="dijit.form.NumberTextBox" type="text" id="score_'+inx+'_'+subject[j].subject_id+'"  name="score_'+inx+'_'+subject[j].subject_id+'" /><input dojoType="dijit.form.TextBox" value="'+subject[j].max_score+'" name="max_score_'+inx+'_'+subject[j].subject_id+'" id="max_score_'+inx+'_'+subject[j].subject_id+'" type="hidden" ></td>';
 					}
-					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+subject.length+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
+					temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+amtsubject+'" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 					temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="" type="text" ></td>';
 					temp+= '</tr>';
 					
@@ -206,8 +215,6 @@ function filterStudent(){
 }
 
 function checkScore(index,subject_id){
-	//alert(index+" , "+subject_id)
-	
 	score_input = dijit.byId('score_'+index+'_'+subject_id).get('value');
 	max_score = dijit.byId('max_score_'+index+'_'+subject_id).get('value');
 	if(score_input>max_score){

@@ -356,6 +356,8 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					(SELECT CONCAT(sj.subject_titlekh) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
 					(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
 					(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
+					(gsjd.amount_subject) amtsubject_month,
+					(gsjd.amount_subject_sem) amtsubject_semester,
 					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
 					(select dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id) as max_score
 				FROM 
@@ -368,13 +370,12 @@ class Foundation_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		if($teacher_id!=null){
 			$sql.=" AND gsjd.teacher = ".$teacher_id;
 		}
-		if($exam_type==1){
+		if($exam_type==1){//for month
 			$sql.=" AND gsjd.amount_subject >0 ";
-		}else{
+		}else{//for semester
 			$sql.=" AND gsjd.amount_subject_sem >0 ";
 		}
 		$sql.=' ORDER BY gsjd.id ASC ';
-// 		echo $sql;
 		return $db->fetchAll($sql);
 		
 	}

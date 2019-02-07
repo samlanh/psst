@@ -8,6 +8,12 @@
 .hover:hover{ background:#ccc;}
 .line-height{line-height:25px !important;}
 .table-width{width:40% !important}
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.content-data-main tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
 </style>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -78,8 +84,12 @@
 				</td>
 				<td width="70%"  align="center">
 					<ul>
-						<li><strong​​ style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 17px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT");?></strong></li>
-						<strong​​ style=" font-weight:200;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+						<li>
+						<span​​ style=" font-weight:200;color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT");?></span>
+						</li>
+						<li>
+						<span​​ style=" font-weight:200;color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?></span>
+						</li>
 					</ul>
 				</td>
 				<td width="15%" align="center">
@@ -98,13 +108,47 @@
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
-			.border{border:1px solid #000;}
 			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+			table.content-data-main{
+				width:100%;
+				font-family:'Times New Roman','Khmer OS Battambang';
+				font-size:13px;
+				white-space: nowrap;
+				margin:0 auto;
+				color:#4839bd;
+				margin:0 auto;
+				border-collapse:collapse;
+			}
+			table.content-data{
+				border-collapse:collapse;
+				width:100%;
+				border:1px solid #4839bd; 
+				font-family:'Times New Roman','Khmer OS Battambang';
+				font-size:13px;
+				white-space: nowrap;
+				margin:0 auto;
+				color:#4839bd;
+				margin:0 auto;
+			}
+			table.content-data-main  tr.style-head,
+			table.content-data  tr.style-head {
+			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+				background: #ccd9ff;
+				text-align: center;
+			}
+			table.content-data tr.style-rowdata {
+				font-size:12px; 
+				height: 23px;
+			}
+			td.border,
+			table.content-data-main tr.style-head td {
+			    border: 1px solid #4839bd;
+			}
 		</style>
 			<tr>
 				<td colspan="3">
 				<div id="exportExcel">
-					<table cellpadding="4"​ style="font-family:'Khmer OS Battambang' ; margin:0 auto;width:100%;border:0px solid #000; border-collapse: collapse;white-space: nowrap;"  border="0" >
+					<table class="content-data-main" cellpadding="4"​ border="0" >
 					<?php $i=0;$degree="";$count=0; 
 						$all_total = 0;$all_drop = 0; $all_female=0; $all_femaledrop=0;
 						$female=0;$male=0;
@@ -124,20 +168,20 @@
 							<?php if ($key>0){?>
 							<tr>
 								<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									<table cellpadding="0" cellspacing="0" width="50%" style="color:#000; font-family:'Khmer OS Battambang';font-size: 14px;white-space:nowrap;">
+									<table cellpadding="0" cellspacing="0" width="50%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 14px;white-space:nowrap;">
 										<tr>
-											<td valign="top" style="width:33%; font-size:14px;text-align: left;">
-												<span style=" font-family:Times New Roman,'Khmer OS Battambang';">
+											<td valign="top" style="width:33%;">
+												<span>
 													<?php echo $tr->translate("STUDENT_TOTAL");?> : <?php echo str_pad($count, 2, '0', STR_PAD_LEFT); $male=$count-$female; $count=0;$i=0;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 												</span> 
 											</td>
 											<td  valign="top" style="width:33%; text-align: center;">
-												<span style=" font-family:Times New Roman,'Khmer OS Battambang';">
+												<span>
 													<?php echo $tr->translate("FEMALE");?> : <?php echo str_pad($female, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); $female=0;?>
 												</span> 
 											</td>
 											<td  style="width:33%;white-space: nowrap;" valign="top">
-												<span style=" font-family:Times New Roman,'Khmer OS Battambang';text-align: center;">
+												<span style=" text-align: center;">
 													<?php echo $tr->translate("MALE");?> : <?php echo str_pad($male, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
 												</span> 
 											</td>
@@ -149,7 +193,7 @@
 							<?php }?>
 								<tr style="border:0px solid #fff;">
 									<td colspan="14" >
-										<table width="100%" class="line-height" style="white-space: nowrap;line-height: 19px;font-size: 14px;">
+										<table width="100%" class="line-height" style="color:#4839bd; white-space: nowrap;line-height: 19px;font-size: 14px;">
 											<tr>
 												<td width="10%" ><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 												<td width="15%" ><?php echo $row['academic_year'];?></td>
@@ -173,18 +217,18 @@
 										</table>
 									</td>
 								</tr>
-								<tr style="font-size:14px; height: 20px;background: #ccd9ff;" align="center" >
-									<th>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER");?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("NAME_ENGLISH");?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("SEX");?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("DOB");?>&nbsp;</th>
-									<th>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</th>
+								<tr class="style-head" align="center" >
+									<td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("NAME_ENGLISH");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("SEX");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("DOB");?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
 								</tr>
 						<?php }?>
 						<?php $i++;$count++; if ($row['sex_key']==2){ $female++;}?>
-						<tr style="font-size:13px; height: 23px;border:1px solid #000;line-height:24px;" align="center" class="hover" >
+						<tr class="style-rowdata hover" align="center" >
 							<td class="border">&nbsp;<?php echo $i;?>&nbsp;</td>
 							<td class="border" >&nbsp;<?php echo $row['stu_code'];?></td>
 							<td class="border" align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['stu_khname'];?>&nbsp;</td>
@@ -197,20 +241,20 @@
 					<?php }?>	
 						<tr>
 							<td colspan="14" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<table cellpadding="0" cellspacing="0" width="50%" style="color:#000; font-family:'Khmer OS Battambang';font-size: 14px;white-space:nowrap;">
+								<table cellpadding="0" cellspacing="0" width="50%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 14px;white-space:nowrap;">
 									<tr>
-										<td valign="top" style="width:33%; font-size:14px;text-align: left;">
-											<span style=" font-family:Times New Roman,'Khmer OS Battambang';">
+										<td valign="top" style="width:33%;">
+											<span>
 												<?php echo $tr->translate("STUDENT_TOTAL");?> : <?php echo str_pad($count, 2, '0', STR_PAD_LEFT); $male=$count-$female; $count=0;$i=0;?> <?php echo $tr->translate("STUDENT_UNIT");?>
 											</span> 
 										</td>
 										<td  valign="top" style="width:33%; text-align: center;">
-											<span style=" font-family:Times New Roman,'Khmer OS Battambang';">
+											<span>
 												<?php echo $tr->translate("FEMALE");?> : <?php echo str_pad($female, 2, '0', STR_PAD_LEFT)." ".$tr->translate("STUDENT_UNIT"); $female=0;?>
 											</span> 
 										</td>
 										<td  style="width:33%;white-space: nowrap;" valign="top">
-											<span style=" font-family:Times New Roman,'Khmer OS Battambang';text-align: center;">
+											<span style="text-align: center;">
 												<?php echo $tr->translate("MALE");?> : <?php echo str_pad($male, 2, '0', STR_PAD_LEFT);?> <?php echo $tr->translate("STUDENT_UNIT");?>
 											</span> 
 										</td>
@@ -220,7 +264,7 @@
 						</tr>
 						<tr><td colspan="14" style="border:1px solid #fff;">&nbsp;</td></tr>
 					</table>	
-					<table border="0" align="right" width="60%" style="font-family:Times New Roman,'Khmer OS Battambang'; margin:0 auto; font-weight: bolder;white-space:nowrap;">
+					<table border="0" align="right" width="60%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang'; margin:0 auto; white-space:nowrap;">
 						<tr>
 							<td width="15%" >
 								<?php echo $tr->translate("TOTAL_STUDYING_STUDENT");?>
@@ -273,16 +317,16 @@
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 14px">
+					<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 14px font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
 						<tr>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PRINCIPAL");?></span>
+								<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
 							</td>
 							<td width="30%">&nbsp;</td>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PREPARE_BY");?></span>
+								<span ><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
 							</td>
 						</tr>
 					</table>

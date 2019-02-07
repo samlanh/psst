@@ -2,7 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_CUTSTOCK')); 
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	
+	$dbcut = new Stock_Model_DbTable_DbCutStock();
 	$frm = $this->frm_payment;
 ?>	
  <style>
@@ -137,25 +137,27 @@ tr.head-td th {
 				                   </div>
 				                </div>
 				            </div>
+			          <!-- 
 			           <div class="form-group">      
-			                 <label style=" margin: 0; line-height: 30px; " class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("FILTER_BY_PURCHASE_NO");?> </label>
+			                 <label style=" margin: 0; line-height: 30px; " class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php //echo $tr->translate("FILTER_BY_PURCHASE_NO");?> </label>
 			                 <div class="col-md-7 col-sm-7 col-xs-12">
-			                		<?php echo $frm->getElement("bypuchase_no");?>
+			                		<?php //echo $frm->getElement("bypuchase_no");?>
 			                </div>
 			                <div class="col-md-3 col-sm-3 col-xs-12">
-	                   			<input iconClass="dijitIconUndo" type="button" label="<?php echo $tr->translate('SEARCH');?>" dojoType="dijit.form.Button" onclick="getStudentProductPaymentDetail();"/>
+	                   			<input iconClass="dijitIconUndo" type="button" label="<?php //echo $tr->translate('SEARCH');?>" dojoType="dijit.form.Button" onclick="getStudentProductPaymentDetail();"/>
 	                   		</div>
 			                <div class="clearfix"></div>
 			                <div class="clearfix">
 			               		 <input type="checkbox" class="checkbox"  name="check_all" id="check_all" value="all" OnChange="CheckAllTotal(0);" style="display: inline-block;height: initial;"  />&nbsp;
-								<span class="bold" style="vertical-align: top;"><?php echo $tr->translate('ALL');?></span>
+								<span class="bold" style="vertical-align: top;"><?php //echo $tr->translate('ALL');?></span>
 							</div>
 		             	</div>
+			           -->
 		             	<div class="form-group">
 		          			<table  style="margin: 0 auto; width: 100%; border-collapse: collapse; border: 1px #ccc solid;">
 								<thead>
 									<tr id="head-title" class="head-td" align="right">
-										<th>&nbsp;</th>
+										<th style="display: none;">&nbsp;</th>
 										<th><?php echo $tr->translate("NUM");?></th>
 										<th style=" min-width: 105px;"><?php echo $tr->translate("DATE");?></th>
 										<th ><?php echo $tr->translate("RECEIPT_NO");?></th>
@@ -168,10 +170,123 @@ tr.head-td th {
 									</tr>
 								</thead>
 								<tbody id="table_row">
+									<?php $identity=""; $i=0; if (!empty($this->detailStuPayInCut)) foreach ($this->detailStuPayInCut as $key => $cut){ ?>
+										<?php $checkProd = $dbcut->checkProdetail($cut['itemdetail_id']);?>
+										<?php if ($checkProd['is_productseat']==0){$i++;
+										if (empty($identity)){
+											$identity=$i;
+										}else{$identity=$identity.",".$i;
+										}
+										?>
+											<?php $cutdetial = $dbcut->getCutStockDetailBYIdAndStuPaydetailAndProID($this->row['id'], $cut['id'], $cut['itemdetail_id'])?>
+											<tr id="row<?php echo $i?>" style="background: #fff; border: solid 1px #bac;">
+												<td style="display: none;"><input checked="checked" onchange="CheckAllTotal(<?php echo $i?>)" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_<?php echo $i?>" value="<?php echo $i?>" name="selector[]"></td>
+												<td align="center"><?php echo $key+1;?></td>
+												<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
+									    			<label id="billingdatelabel<?php echo $i?>"><?php echo date("d-M-Y",strtotime($cut['payment_date']))?></label>
+									    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id<?php echo $i?>" id="payment_id<?php echo $i?>" value="<?php echo $cut['payment_id'];?>" >
+									    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id<?php echo $i?>" id="paymentdetail_id<?php echo $i?>" value="<?php echo $cut['id'];?>" >
+									    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname<?php echo $i?>"  id="productname<?php echo $i?>" value="<?php echo $cut['items_name'];?>" >
+								    			</td>
+												<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+												&nbsp;
+								    			<label id="invoicelabel<?php echo $i?>" title="<?php echo $cut['receipt_number'];?>" class="invoicelabel"><?php echo $cut['receipt_number'];?></label>
+								    			<input type="hidden" dojoType="dijit.form.TextBox"  name="receipt_number<?php echo $i?>" id="receipt_number<?php echo $i?>" value="<?php echo $cut['receipt_number'];?>">
+								    			&nbsp;</td>
+												<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+								    				<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id<?php echo $i;?>" id="itemdetail_id<?php echo $i;?>" >
+										    			<?php if (!empty($this->allproduct)) foreach ($this->allproduct as $pro){ ?>
+										    				<option <?php if ($pro['id']==$cut['itemdetail_id']){ echo 'selected="selected"';}?> value="<?php echo $pro['id'];?>"><?php echo $pro['name'];?></option>
+										    			<?php }?>
+								    				</select>
+		    									</td>
+		    									<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
+									    			<label id="origtotallabel<?php echo $i?>"><?php echo $cut['qty'];?></label>
+									    			<input type="hidden" dojoType="dijit.form.TextBox"  name="qty<?php echo $i?>"  id="qty<?php echo $i?>" value="<?php echo $cut['qty'];?>">
+								    			</td>
+												<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
+									    			<label id="duelabel<?php echo $i?>"><?php echo $cutdetial['remain']+$cutdetial['qty_receive'];?></label>
+									    			<input type="hidden" dojoType="dijit.form.TextBox"  name="qty_balance<?php echo $i?>"  id="qty_balance<?php echo $i?>" value="<?php echo $cutdetial['remain']+$cutdetial['qty_receive'];?>" >
+								    			</td>
+												<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount(<?php echo $i;?>);" name="qty_receive<?php echo $i;?>" id="qty_receive<?php echo $i;?>" value="<?php echo $cutdetial['qty_receive'];?>" style="text-align: center;" ></td>
+								    			<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain<?php echo $i;?>" id="remain<?php echo $i;?>" value="<?php echo $cutdetial['remain'];?>" style="text-align: center;" ></td>
+								    			<td >
+								    				<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date<?php echo $i;?>" value="<?php echo date("Y-m-d",strtotime($cutdetial['remide_date']))?>" >
+								    			</td>
+											</tr>
+										<?php }else{ ?>
+										<?php $subpro = $dbcut->getSubProductSet($cut['itemdetail_id']);
+    										if (!empty($subpro)){ $i++;?>
+    											<tr style="background: #fff; border: solid 1px #bac;">
+						    						<td style=" display: none; text-align: center;vertical-align: middle; ">&nbsp;</td>
+						    						<td style="text-align: center;vertical-align: middle; "><?php echo $i?></td>
+										    		<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
+										    			<label id="billingdatelabel<?php echo $i?>"><?php echo date("d-M-Y",strtotime($cut['payment_date']))?></label>
+										    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id<?php echo $i?>" id="payment_id<?php echo $i?>" value="<?php echo $cut['payment_id'];?>" >
+										    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id<?php echo $i?>" id="paymentdetail_id<?php echo $i?>" value="<?php echo $cut['id'];?>" >
+										    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname<?php echo $i?>"  id="productname<?php echo $i?>" value="<?php echo $cut['items_name'];?>" >
+									    			</td>
+									    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+													&nbsp;
+									    			<label id="invoicelabel<?php echo $i?>" title="<?php echo $cut['receipt_number'];?>" class="invoicelabel"><?php echo $cut['receipt_number'];?></label>
+									    			<input type="hidden" dojoType="dijit.form.TextBox"  name="receipt_number<?php echo $i?>" id="receipt_number<?php echo $i?>" value="<?php echo $cut['receipt_number'];?>">
+									    			&nbsp;</td>
+						    						<td align="left" colspan="6">
+						    							<label id="billingdatelabel1"><?php echo $cut['items_name'];?> Qty: <?php echo $cut['qty'];?></label>
+							    					</td>
+						    					</tr>
+						    					<?php foreach ($subpro as $sbpr){ $i++;
+						    						$qtybalancesubp = $cut['qty']*$sbpr['subproqty'];
+							    					if (empty($identity)){
+							    						$identity=$i;
+							    					}else{$identity=$identity.",".$i;
+							    					}?>
+							    					<?php $cutdetial = $dbcut->getCutStockDetailBYIdAndStuPaydetailAndProID($this->row['id'], $cut['id'], $sbpr['subpro_id'])?>
+														<?php if (!empty($cutdetial)){?>
+														<tr id="row<?php echo $i?>" style="background: #fff; border: solid 1px #bac;">
+															<td style="display: none;"><input checked="checked" onchange="CheckAllTotal(<?php echo $i?>)" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_<?php echo $i?>" value="<?php echo $i?>" name="selector[]"></td>
+															<td colspan="3"  style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
+												    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id<?php echo $i?>" id="payment_id<?php echo $i?>" value="<?php echo $cut['payment_id'];?>" >
+												    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id<?php echo $i?>" id="paymentdetail_id<?php echo $i?>" value="<?php echo $cut['id'];?>" >
+												    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname<?php echo $i?>"  id="productname<?php echo $i?>" value="<?php echo $sbpr['subpro']."(".$sbpr['name'].")";?>" >
+											    				<input type="hidden" dojoType="dijit.form.TextBox"  name="receipt_number<?php echo $i?>" id="receipt_number<?php echo $i?>" value="<?php echo $cut['receipt_number'];?>">
+											    			</td>
+															<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+											    				<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id<?php echo $i;?>" id="itemdetail_id<?php echo $i;?>" >
+													    			<?php if (!empty($this->allproduct)) foreach ($this->allproduct as $pro){ ?>
+													    				<option <?php if ($pro['id']==$sbpr['subpro_id']){ echo 'selected="selected"';}?> value="<?php echo $pro['id'];?>"><?php echo $pro['name'];?></option>
+													    			<?php }?>
+											    				</select>
+					    									</td>
+					    									<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
+												    			<label id="origtotallabel<?php echo $i?>"><?php echo $qtybalancesubp;?></label>
+												    			<input type="hidden" dojoType="dijit.form.TextBox"  name="qty<?php echo $i?>"  id="qty<?php echo $i?>" value="<?php echo $qtybalancesubp;?>">
+											    			</td>
+															<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
+												    			<label id="duelabel<?php echo $i?>"><?php echo $cutdetial['remain']+$cutdetial['qty_receive'];?></label>
+												    			<input type="hidden" dojoType="dijit.form.TextBox"  name="qty_balance<?php echo $i?>"  id="qty_balance<?php echo $i?>" value="<?php echo $cutdetial['remain']+$cutdetial['qty_receive'];?>" >
+											    			</td>
+															<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount(<?php echo $i;?>);" name="qty_receive<?php echo $i;?>" id="qty_receive<?php echo $i;?>" value="<?php echo $cutdetial['qty_receive'];?>" style="text-align: center;" ></td>
+											    			<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain<?php echo $i;?>" id="remain<?php echo $i;?>" value="<?php echo $cutdetial['remain'];?>" style="text-align: center;" ></td>
+											    			<td >
+											    				<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date<?php echo $i;?>" value="<?php echo date("Y-m-d",strtotime($cutdetial['remide_date']))?>" >
+											    			</td>
+														</tr>
+														<?php }?>
+							    					<?php }?>
+							    					<tr style="background: #fff; border: solid 1px #bac;">
+									    				<td align="center" colspan="9">
+									    				&nbsp;
+									    				</td>
+								    				</tr>
+    										<?php }?>
+											
+										<?php }?>
+									<?php }?>
 								<tbody>
 							</table>
-							<input type="hidden" id="identity" name="identity" />
-							<input type="hidden" name="old_identity" id="old_identity"  value="" >
+							<input type="hidden" id="identity" name="identity" value="<?php echo $identity;?>" />
+							<input type="hidden" name="old_identity" id="old_identity"  value="<?php echo $identity;?>" >
 						<!-- 
 						<input type="button" label="<?php //echo $tr->translate('ADD_ROW');?>" dojoType="dijit.form.Button" id="btn_add_row"
 									 		iconClass="dijitIconEditProperty" onclick="addRow();" />
@@ -319,7 +434,7 @@ tr.head-td th {
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 			onChange: function(){
-					getStudentProductPaymentDetail();
+					//getStudentProductPaymentDetail();
 			}
 		}, "student_id");
 		
@@ -331,7 +446,7 @@ tr.head-td th {
 		    });
 		    
 		 	getallstudentname();
-	 		getStudentProductPaymentDetail();
+	 		//getStudentProductPaymentDetail();
 	 		getbranchinfo();
 	});
 	var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
@@ -477,7 +592,8 @@ tr.head-td th {
 		});
 	}
 	var keyindex=1;
-	var url_getSupplier = '<?php echo $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'getallpaydetailbystudentedit')); ?>';
+	/*
+	var url_getSupplier = '<?php ///echo $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'getallpaydetailbystudentedit')); ?>';
 	function getStudentProductPaymentDetail(){
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id==""){
@@ -519,6 +635,7 @@ tr.head-td th {
 			}
 		});
 	}
+	*/
 	
 	function CheckAllTotal(index){
 		var total = 0;

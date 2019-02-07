@@ -60,6 +60,13 @@
 			'21:30'=>"09:30 PM",
 	);
 ?>	
+<style>
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
+</style>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div class="card-box">
     	<div class="col-sm-12 border-botom">
@@ -128,8 +135,8 @@
 				<td width="25%" align="left">
 				</td>
 				<td align="center">
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_GROUP");?></strong><br />
-					<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+					<span style="color:#4839bd; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_GROUP");?></span><br />
+					<span style="color:#4839bd; font-size: 13px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
 				</td>
 				<td width="25%" align="right">
 				</td>
@@ -151,24 +158,44 @@
 			  page-break-inside:avoid; page-break-after:auto;
 			}
 			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+			
+			table.content-data{
+				border-collapse:collapse;
+				width:100%;
+				border:1px solid #4839bd; 
+				font-family:'Times New Roman','Khmer OS Battambang';
+				font-size:13px;
+				white-space: nowrap;
+				margin:0 auto;
+				color:#4839bd;
+			}
+			table.content-data thead tr.style-head {
+			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+				background: #ccd9ff;
+				text-align: center;
+			}
+			table.content-data tr.style-rowdata {
+				font-size:12px; 
+				height: 23px;
+			}
 		</style>
 			<tr>
 				<td colspan="3">
-					<table border="1" cellpadding="5"​ style="border:1px solid #000;margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;font-family: Khmer OS Battambang,Times New Roman;" >
+					<table class="content-data" border="1" cellpadding="5"​>
 						<thead>
-						<tr style="font-size:13px; height: 20px;background: #ccd9ff;" align="center" >
-							<th >No.</th>
-							<th ><?php echo $tr->translate("BRANCH_NAME");?></th>
-							<th ><?php echo $tr->translate("STUDY_YEAR");?></th>
-							<th ><?php echo $tr->translate("GROUP");?></th>
-							<th ><?php echo $tr->translate("SESSION");?></th>
-							<th ><?php echo $tr->translate("DAY");?></th>
-							<th ><?php echo $tr->translate("TIME");?></th>
-							<th ><?php echo $tr->translate("SUBJECT");?></th>
-							<th ><?php echo $tr->translate("TEACHER");?></th>
-							<th ><?php echo $tr->translate("DATE");?></th>
-							<th ><?php echo $tr->translate("USER");?></th>
-						</tr>
+							<tr class="style-head" >
+								<td >No.</td>
+								<td><?php echo $tr->translate("BRANCH_NAME");?></td>
+								<td><?php echo $tr->translate("STUDY_YEAR");?></td>
+								<td><?php echo $tr->translate("GROUP");?></td>
+								<td><?php echo $tr->translate("SESSION");?></td>
+								<td><?php echo $tr->translate("DAY");?></td>
+								<td><?php echo $tr->translate("TIME");?></td>
+								<td><?php echo $tr->translate("SUBJECT");?></td>
+								<td><?php echo $tr->translate("TEACHER");?></td>
+								<td><?php echo $tr->translate("DATE");?></td>
+								<td><?php echo $tr->translate("USER");?></td>
+							</tr>
 						</thead>
 					<?php  $i=0;  foreach ($this->rs AS $row) { $i++;
 					          if($row['from_hour']<=12){
@@ -177,7 +204,7 @@
 					          	$session=$tr->translate("AFTERNOON");
 					          }
 					?>
-						<tr class="hover" style="font-size:12px; height: 20px;" align="center" >
+						<tr class="style-rowdata hover hover" align="center" >
 							<td ><?php echo $i;?></td>
 							<td ><?php echo $row['branch_name'];?></td>
 							<td ><?php echo $row['years'];?></td>
@@ -189,7 +216,6 @@
 							<td ><?php echo $row['teacher_name'];?></td>
 							<td ><?php echo $row['create_date'];?></td>
 							<td ><?php echo $row['USER'];?></td>
-							 
 						</tr>
 					<?php }?>	
 					</table>	
@@ -203,16 +229,16 @@
 			</tr>
 			<tr >
 				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 14px">
+					<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 14px; font-family:'Times New Roman','Khmer OS Battambang';">
 						<tr>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PRINCIPAL");?></span>
+								<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
 							</td>
 							<td width="30%">&nbsp;</td>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PREPARE_BY");?></span>
+								<span><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
 							</td>
 						</tr>
 					</table>

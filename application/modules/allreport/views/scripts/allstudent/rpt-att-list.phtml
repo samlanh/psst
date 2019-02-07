@@ -81,7 +81,7 @@
 			</tr>
 			<tr>
 				<td colspan="3" align="center">
-					<strong style="font-weight:bold;color:#000; font-size: 18px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></strong>
+					<span style="color:#000; font-size: 18px;font-family:Times New Roman,'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?></span>
 				</td>
 			</tr>
 			<tr>
@@ -94,25 +94,26 @@
 			<?php }?>					
 			<tr>
 				<td colspan="3" id="exportExcel">
-					<table cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;font-family: Times New Roman, Khmer OS Battambang;"  border="1" >
-						<style> td{padding:0 3px; }
-						.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
-						table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
-						tr{ page-break-inside:avoid; page-break-after:auto }
-						#header {
-						  display: table-header-group;
-						  page-break-inside:avoid; page-break-after:auto;
-						}
-						td.rotate > div {
-						  transform: rotate(270deg);
-							width: 20px;
-						}
-						tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+					<table cellpadding="5"​ style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang';"  border="1" >
+						<style> 
+							td{padding:0 3px; }
+							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
+							table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+							tr{ page-break-inside:avoid; page-break-after:auto }
+							#header {
+							  display: table-header-group;
+							  page-break-inside:avoid; page-break-after:auto;
+							}
+							td.rotate > div {
+							  transform: rotate(270deg);
+								width: 20px;
+							}
+							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 						</style>
 						<thead>									
 							<tr>
 								<td colspan="<?php echo 4+$total_day;?>">
-									<table width="100%" border="0" style="border-collapse: collapse;font-family: Times New Roman, Khmer OS Battambang;font-size: 14px;font-weight: bold;line-height: 25px;">
+									<table width="100%" border="0" style="border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;line-height: 25px;">
 										<tr>
 											<td width="20%" style="border-right: 1px solid #000;">
 												Attendance sheet for : <?php echo $this->rr['grade']?>
@@ -132,7 +133,7 @@
 							</tr>
 							<tr>
 								<td colspan="<?php echo 4+$total_day;?>">
-									<table width="100%" border="0" style="border-collapse: collapse;font-family: Times New Roman, Khmer OS Battambang;font-size: 14px;font-weight: bold;line-height: 25px;">
+									<table width="100%" border="0" style="border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;font-weight: bold;line-height: 25px;">
 										<tr>
 											<td width="50%" style="border-right: 1px solid #000;">
 												Instructor : <label id="teacher_name"> </label>
@@ -211,8 +212,8 @@
 						</tr>
 						<?php }?>	
 						<tr>
-							<td colspan="2" style="border:1px solid #fff;border-top:1px solid #000;"><strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?></strong></td>
-							<td colspan="3" align="center" style="border:1px solid #fff;border-top:1px solid #000;"><strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Khmer MEF2';"><?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT")."  <br />";?><?php echo $tr->translate("MALE")." ".$male;?><?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+							<td colspan="2" style="border:1px solid #fff;border-top:1px solid #000;"><span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_TOTAL")." : ".$i." ".$tr->translate("STUDENT_UNIT");?></span></td>
+							<td colspan="3" align="center" style="border:1px solid #fff;border-top:1px solid #000;"><span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("FEMALE")." ".$femle;?> <?php echo $tr->translate("STUDENT_UNIT")."  <br />";?><?php echo $tr->translate("MALE")." ".$male;?><?php echo $tr->translate("STUDENT_UNIT");?></span></td>
 						</tr>
 					</table>	
 				</td>

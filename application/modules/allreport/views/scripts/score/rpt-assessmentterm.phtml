@@ -13,6 +13,11 @@
 	<style>
 	.hide{visibility:visible !important;
 	}
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
 	</style>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div class="card-box">
@@ -58,8 +63,8 @@
 							</tr>
 						</table>
 					</td>
-					<td style="width:40%;font-size: 17px;font-family:Times New Roman,'Khmer OS Muol Light';text-align: center;" >
-						<span style="font-weight:bold;font-size: 24px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("Final Term Result");?></span><br />
+					<td style="width:40%;font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';text-align: center;" >
+						<span style="font-weight:bold;font-size: 24px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("Final Term Result");?></span><br />
 					</td>
 					<td style="width:30%;" valign="top">
 						<table style="width: 100%;white-space: nowrap;line-height: 16px;color:#4839bd;font-size:14px; font-family:Times New Roman,'Khmer OS Battambang';" >
@@ -93,37 +98,57 @@
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table cellpadding="5"​ style="font-family:Times New Roman,'Khmer OS Battambang';font-size:12px; margin:0 auto;width:100%; border-collapse:collapse;border:1px solid #4839bd; white-space: nowrap;color:#4839bd;"  border="1" >
-							<style> td{padding:0 3px; }
+						<style> 
+							td{padding:0 3px; }
 							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
-							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+							table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
 							tr{ page-break-inside:avoid; page-break-after:auto }
 							#header {
 							  display: table-header-group;
 							  page-break-inside:avoid; page-break-after:auto;
 							}
-							.hover:hover{ background: #ccc;}
-							</style>
+							table.content-data{
+								border-collapse:collapse;
+								width:100%;
+								border:1px solid #4839bd; 
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size:13px;
+								white-space: nowrap;
+								margin:0 auto;
+								color:#4839bd;
+								margin:0 auto;
+							}
+							table.content-data thead tr.style-head {
+							   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+								background: #ffdbdb;
+								text-align: center;
+							}
+							table.content-data tr.style-rowdata {
+								font-size:12px; 
+								height: 23px;
+							}
+						</style>
+						<table class="content-data" cellpadding="5"​ border="1" >
 							<thead>
-							<tr style="background:#ffdbdb;font-size:13px;" class="cheader" align="center" >
-								<td>No</td>
-								<td>Name</td>
-								<td>Sex</td>
-								<td>ID</td>
+							<tr class="style-head" align="center" >
+								<td>&nbsp;No&nbsp;</td>
+								<td>&nbsp;Name&nbsp;</td>
+								<td>&nbsp;Sex&nbsp;</td>
+								<td>&nbsp;ID&nbsp;</td>
 								<?php $totalPercent=0; if (!empty($this->scoreSetting)) foreach ($this->scoreSetting as $sc){?>
 								<td>&nbsp;<?php $totalPercent=$totalPercent+$sc['pecentage_score']; echo $sc['name']?><br /><?php echo $sc['pecentage_score']."%";?>&nbsp;</td>	
 								<?php }?>
 								<td>Total<br />(<?php echo $totalPercent;?>%)</td>	
-								<td>Position</td>	
-								<td>Grade</td>	
+								<td>&nbsp;Position&nbsp;</td>	
+								<td>&nbsp;Grade&nbsp;</td>	
 							</tr>
 							</thead>
 							<?php  $i=0;
 							$male=0;$femle=0; 
 							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ $i++;?>
-							<tr oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;" style="font-size:13px; height: 25px;white-space: nowrap;"​ align="center" class='padding hover context-menu-one'>
-								<td><?php echo $i;?></td>
-								<td align="left"><?php echo $row['last_name'].' '.$row['en_name'];?></td>
+							<tr align="center" class='style-rowdata hover context-menu-one' oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;">
+								<td>&nbsp;<?php echo $i;?>&nbsp;</td>
+								<td align="left">&nbsp;<?php echo $row['last_name'].' '.$row['en_name'];?>&nbsp;</td>
 								<td><?php //echo $row['sex'];
 									if($row['gender']==1){
 										$male=$male+1;
@@ -134,15 +159,15 @@
 									}
 								?>
 								</td>
-								<td><?php echo $row['stu_code'];?></td>
+								<td>&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
 								<?php $totalscore=0; if (!empty($this->scoreSetting)) foreach ($this->scoreSetting as $sc){
 									$score = $db->getScoreEngByStuAndType($this->rr['id'],$row['stu_id'],$sc['id']);
 									$totalscore = $totalscore +$score['score'];
 									?>
 								<td align="center">&nbsp;<?php echo empty($score['score'])?"-":$score['score'];?>&nbsp;</td>	
 								<?php }?>
-								<td><?php echo $totalscore;?></td>
-								<td></td>
+								<td>&nbsp;<?php echo $totalscore;?>&nbsp;</td>
+								<td>&nbsp;&nbsp;</td>
 								<td>&nbsp;<?php  echo $dbgb->getMentionScore($totalscore, $this->rr['academic_year'],$this->rr['degree_id'],1); //Mention Grade?>&nbsp;</td>
 							</tr>
 							<?php }}?>	

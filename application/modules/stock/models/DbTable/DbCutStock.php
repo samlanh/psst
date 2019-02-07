@@ -30,7 +30,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$sql="SELECT i.id,
     	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
     	FROM `rms_itemsdetail` AS i
-    	WHERE i.status =1 AND i.items_type=3   ";
+    	WHERE i.status =1 AND i.items_type=3  AND i.is_productseat=0 ";
     
     	if(!empty($product_type)){//check type product sale or office
     		$sql.= " AND i.product_type = ".$db->quote($product_type);
@@ -61,6 +61,31 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		return $options;
     	}
     	return $rows;
+    }
+    function checkProdetail($pro_id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT i.*,
+    	CONCAT(i.title,' (',(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS `name`
+    	FROM `rms_itemsdetail` AS i
+    	WHERE i.status =1 AND i.items_type=3 
+    	AND i.id =$pro_id LIMIT 1";
+    	return $db->fetchRow($sql);
+    }
+    function getSubProductSet($pro_id){
+    	$db = $this->getAdapter();
+    	$sql="
+	    	SELECT i.id,
+		    	CONCAT(i.title) AS `name`,
+		    	(SELECT idt.title FROM `rms_itemsdetail` AS idt WHERE idt.id = pd.subpro_id) AS subpro,
+		    	pd.subpro_id,
+		    	pd.qty AS subproqty
+		    	FROM `rms_itemsdetail` AS i,
+		    	`rms_product_setdetail` AS pd
+		    	WHERE
+			pd.pro_id=i.id
+			AND
+    	 i.status =1 AND i.items_type=3  AND i.is_productseat=1 AND pd.pro_id = $pro_id";
+    	return $db->fetchAll($sql);
     }
     public function getStudentProductPaymentDetail($data){
     	$db = $this->getAdapter();
@@ -99,62 +124,143 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
     	
     	$allproduct = $this->getAllProducts(1);
+    	$all_balance =0;
     	if(!empty($rs)){
     		foreach ($rs as $key => $row){
-    			if (empty($identity)){
-    				$identity=$no;
-    			}else{$identity=$identity.",".$no;
+    			$checkProd = $this->checkProdetail($row['itemdetail_id']);
+    			if ($checkProd['is_productseat']==0){
+	    			if (empty($identity)){
+	    				$identity=$no;
+	    			}else{$identity=$identity.",".$no;
+	    			}
+	    			$stuName=$row['stu_enname']." ".$row['last_name'];
+	    			$stuCode=$row['stu_code'];
+	    			$string.='
+	    			<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
+		    			<td align="center" style=" display:none; padding: 0 10px;"><input checked="checked"  OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
+		    			<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
+		    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
+		    			<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
+		    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
+		    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
+		    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
+	    			</td>
+	    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel" >'.$row['receipt_number'].'</label>
+	    			<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+	    			&nbsp;</td>
+	    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+	    				<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
+			    			if (!empty($allproduct)) foreach ($allproduct as $pro){ 
+			    				$selected="";
+			    				if ($row['itemdetail_id']==$pro['id']){
+			    					$selected='Selected="Selected"';
+			    				}
+			    				$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
+			    			}
+	    			$string.='</select>
+	    			</td>
+	    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
+	    			<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
+	    			<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
+	    			</td>
+	    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
+	    			<label id="duelabel'.$no.'">'.number_format($row['qty_balance'],2).'</label>
+	    			<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_balance'].'" >
+	    			</td>
+	    			<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_balance'].'" style="text-align: center;" ></td>
+	    			<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
+	    			<td >
+	    				<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
+	    			</td>
+	    			</tr>
+	    			';
+	    			$all_balance= $all_balance +$row['qty_balance'];
+	    			$no++;
+    			}else{
+    				$subpro = $this->getSubProductSet($row['itemdetail_id']);
+    				if (!empty($subpro)){
+    					$string.='
+    					<tr  style="background: #fff; border: solid 1px #bac;">
+    						<td style="display:none; text-align: center;vertical-align: middle; ">&nbsp;</td>
+    						<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
+				    		<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
+				    			<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
+				    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
+				    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
+				    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
+			    			</td>
+			    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel" >'.$row['receipt_number'].'</label>
+			    			<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+			    			&nbsp;</td>
+    					<td align="left" colspan="6">
+    						<label id="billingdatelabel'.$no.'">'.$row['items_name']." Qty: ".$row['qty_balance'].'</label>
+	    					</td>
+    					</tr>
+    					';$no++;
+    					foreach ($subpro as $sbpr){
+    						$qtybalancesubp = $row['qty_balance']*$sbpr['subproqty'];
+	    					if (empty($identity)){
+	    						$identity=$no;
+	    					}else{$identity=$identity.",".$no;
+	    					}
+	    					$stuName=$row['stu_enname']." ".$row['last_name'];
+	    					$stuCode=$row['stu_code'];
+	    					$string.='
+	    					<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
+	    					<td align="center" style=" display:none;  padding: 0 10px;"><input checked="checked"  OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
+	    					<td colspan="3" style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+	    						<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+	    						<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
+				    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
+				    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$sbpr['subpro']."(".$sbpr['name'].")".'" >
+	    					</td>
+	    					<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+	    					<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
+	    					if (!empty($allproduct)) foreach ($allproduct as $pro){
+	    						$selected="";
+	    						if ($sbpr['subpro_id']==$pro['id']){
+	    							$selected='Selected="Selected"';
+	    						}
+	    						$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
+	    					}
+	    					$string.='</select>
+	    					</td>
+	    					<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
+	    					<label id="origtotallabel'.$no.'">'.number_format($row['qty']*$sbpr['subproqty'],2).'</label>
+	    					<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
+	    					</td>
+	    					<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
+	    					<label id="duelabel'.$no.'">'.number_format($qtybalancesubp,2).'</label>
+	    					<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$qtybalancesubp.'" >
+	    					</td>
+	    					<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_balance']*$sbpr['subproqty'].'" style="text-align: center;" ></td>
+	    					<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
+	    					<td >
+	    					<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
+	    					</td>
+	    					</tr>
+	    					';
+	    					$all_balance = $all_balance +$qtybalancesubp;
+	    					$no++;
+	    				}
+	    				$string.='
+	    				<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
+	    				<td align="center" colspan="9">
+	    				&nbsp;
+	    				</td>
+	    				</tr>
+	    				';
+    				}
     			}
-    			$stuName=$row['stu_enname']." ".$row['last_name'];
-    			$stuCode=$row['stu_code'];
-    			$string.='
-    			<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
-	    			<td align="center" style="  padding: 0 10px;"><input checked="checked"  OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
-	    			<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
-	    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
-	    			<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
-	    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
-	    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
-	    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
-    			</td>
-    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel" >'.$row['receipt_number'].'</label>
-    			<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
-    			&nbsp;</td>
-    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
-    				<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
-		    			if (!empty($allproduct)) foreach ($allproduct as $pro){ 
-		    				$selected="";
-		    				if ($row['itemdetail_id']==$pro['id']){
-		    					$selected='Selected="Selected"';
-		    				}
-		    				$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
-		    			}
-    	$string.='</select>
-    			</td>
-    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
-    			<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
-    			<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
-    			</td>
-    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
-    			<label id="duelabel'.$no.'">'.number_format($row['qty_balance'],2).'</label>
-    			<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_balance'].'" >
-    			</td>
-    			<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_balance'].'" style="text-align: center;" ></td>
-    			<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
-    			<td >
-    				<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
-    			</td>
-    			</tr>
-    			';$no++;
     		}
     	}else{
     		$no++;
     	}
-    	$all_balance =0;
-    	$userbalace = $this->getCurrentBalanceByStudent($data);
-    	if (!empty($userbalace)){
-    		$all_balance = $userbalace;
-    	}
+    	
+//     	$userbalace = $this->getCurrentBalanceByStudent($data);
+//     	if (!empty($userbalace)){
+//     		$all_balance = $userbalace;
+//     	}
     	$array = array('stuName'=>$stuName,'stucode'=>$stuCode,'stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'all_balance'=>$all_balance);
     	return $array;
     }
@@ -203,29 +309,36 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		$ids = explode(',', $_data['identity']);
     		$qtyfter=0;
     		foreach ($ids as $i){
-    			$stupaydetail = $this->getStudentPaymentDetailById($_data['paymentdetail_id'.$i],$_data['payment_id'.$i],$_data['branch_id']);
-    			$qtyreceive = $_data['qty_receive'.$i];
+    			//old Condiction
+//     			$stupaydetail = $this->getStudentPaymentDetailById($_data['paymentdetail_id'.$i],$_data['payment_id'.$i],$_data['branch_id']);
+//     			$qtyreceive = $_data['qty_receive'.$i];
     			
+//     			if (!empty($stupaydetail)){
+//     				$qtyfter = $stupaydetail['qty_balance']-$qtyreceive;
+//     				// update Purchase Balance
+//     				$array=array(
+//     						'qty_balance'=>$qtyfter,
+//     				);
+//     				$where="id=".$_data['paymentdetail_id'.$i]." AND payment_id =".$_data['payment_id'.$i];
+//     				$this->_name="rms_student_paymentdetail";
+//     				$this->update($array, $where);
+//     			}
+    			$stupaydetail = $this->getStudentPaymentDetailById($_data['paymentdetail_id'.$i],$_data['payment_id'.$i],$_data['branch_id']);
     			if (!empty($stupaydetail)){
-    				$qtyfter = $stupaydetail['qty_balance']-$qtyreceive;
-    				// update Purchase Balance
     				$array=array(
-    						'qty_balance'=>$qtyfter,
+    						'qty_balance'=>0,
     				);
     				$where="id=".$_data['paymentdetail_id'.$i]." AND payment_id =".$_data['payment_id'.$i];
     				$this->_name="rms_student_paymentdetail";
     				$this->update($array, $where);
     			}
-    			
     			$arrs = array(
     					'cutstock_id'=>$cut_id,
-//     					'payment_id'=>$_data['payment_id'.$i],
     					'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
     					'product_id'=>$_data['itemdetail_id'.$i],
     					'due_amount'=>$_data['qty_balance'.$i],
     					'qty_receive'=>$_data['qty_receive'.$i],
     					'remain'=>$_data['remain'.$i],
-//     					'received_date'=>date("Y-m-d"),
     					'remide_date'=>$_data['remide_date'.$i],
     			);
     			$this->_name ='rms_cutstock_detail';
@@ -340,355 +453,512 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 //     	FROM `rms_purchase_payment_detail` AS pd WHERE pd.payment_id =$cutstockid AND pd.purchase_id =$purchase_id LIMIT 1 ";
     	return $db->fetchRow($sql);
     }
-    public function getStudentProductPaymentDetailEdit($data){
-    	$db = $this->getAdapter();
+//     public function getStudentProductPaymentDetailEdit($data){
+//     	$db = $this->getAdapter();
 
-    	$rows = $this->getCutStockDetailBYId($data['cutstockid']);
-    	$listSaleidpaid ='';
-    	if (!empty($rows)) foreach ($rows as $paymentdetail){
-    		if (empty($listSaleidpaid)){
-    			$listSaleidpaid=$paymentdetail['student_paymentdetail_id'];
-    		}else{$listSaleidpaid=$listSaleidpaid.",".$paymentdetail['student_paymentdetail_id'];
-    		}
-    	}
+//     	$rows = $this->getCutStockDetailBYId($data['cutstockid']);
+//     	$listSaleidpaid ='';
+//     	if (!empty($rows)) foreach ($rows as $paymentdetail){
+//     		if (empty($listSaleidpaid)){
+//     			$listSaleidpaid=$paymentdetail['student_paymentdetail_id'];
+//     		}else{$listSaleidpaid=$listSaleidpaid.",".$paymentdetail['student_paymentdetail_id'];
+//     		}
+//     	}
     	
-    	$student_id = $data['student_id'];
-    	$branch_id = $data['branch_id'];
-    	$sql="
-    	SELECT
-	    	spd.*,
-	    	(SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS branch_id,
-	    	(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS receipt_number,
-	    	(SELECT sp.create_date FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS payment_date,
+//     	$student_id = $data['student_id'];
+//     	$branch_id = $data['branch_id'];
+//     	$sql="
+//     	SELECT
+// 	    	spd.*,
+// 	    	(SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS branch_id,
+// 	    	(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS receipt_number,
+// 	    	(SELECT sp.create_date FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS payment_date,
 	    	
-	    	(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS student_name,
-	    	(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_enname,
-	    	(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS last_name,
-	    	(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_code,
+// 	    	(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS student_name,
+// 	    	(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_enname,
+// 	    	(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS last_name,
+// 	    	(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_code,
 	    	
 	    	
-	    	(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
-	    	(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type
-	    	FROM  `rms_student_paymentdetail` AS spd
-	    	WHERE (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
-	    	AND (SELECT sp.is_void FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=0
-	    	AND spd.qty_balance >0
-	    	AND (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$student_id
-	    	AND (SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$branch_id 
-    	"; 
-    	if (!empty($data['bypuchase_no'])){
-    		$s_search=addslashes(trim($data['bypuchase_no']));
-    		$sql.= " AND (SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIKE '%{$s_search}%'";
-    	}
-    	if (!empty($listSaleidpaid)){
-    		$sql.=" OR spd.`id` IN ($listSaleidpaid) ";
-    	}
-    	$rs = $db->fetchAll($sql);
+// 	    	(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
+// 	    	(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type
+// 	    	FROM  `rms_student_paymentdetail` AS spd
+// 	    	WHERE (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
+// 	    	AND (SELECT sp.is_void FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=0
+// 	    	AND spd.qty_balance >0
+// 	    	AND (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$student_id
+// 	    	AND (SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$branch_id 
+//     	"; 
+//     	if (!empty($data['bypuchase_no'])){
+//     		$s_search=addslashes(trim($data['bypuchase_no']));
+//     		$sql.= " AND (SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIKE '%{$s_search}%'";
+//     	}
+//     	if (!empty($listSaleidpaid)){
+//     		$sql.=" OR spd.`id` IN ($listSaleidpaid) ";
+//     	}
+//     	$rs = $db->fetchAll($sql);
     
-    	$string='';
-    	$no = $data['keyindex'];
-    	$identity='';
-    	$identityedit='';
-    	$stuName="";
-    	$stuCode="";
-    	$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
+//     	$string='';
+//     	$no = $data['keyindex'];
+//     	$identity='';
+//     	$identityedit='';
+//     	$stuName="";
+//     	$stuCode="";
+//     	$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
     	
-    	$allproduct = $this->getAllProducts(1);
-    	if(!empty($rs)){
-	    	foreach ($rs as $key => $row){
-		    	if (empty($identity)){
-		    		$identity=$no;
-			    }else{$identity=$identity.",".$no;
-			    }
-			    $stuName=$row['stu_enname']." ".$row['last_name'];
-			    $stuCode=$row['stu_code'];
-			    $rowpaymentdetail = $this->getCutstockDetailByCutstockIdAndStuDetailId($data['cutstockid'], $row['id']);
-			    if (!empty($rowpaymentdetail)){
-			    	if (empty($identityedit)){
-			    		$identityedit=$no;
-			    	}else{$identityedit=$identityedit.",".$no;
-			    	}
-			    	$duevalu=$rowpaymentdetail['due_amount'];
-			    	$paymenttailbybilling = $this->getSumCutStockDetailByStuPayDetId($rowpaymentdetail['student_paymentdetail_id'], $rowpaymentdetail['id']);// get other pay amount on this Purchase on other payment number
-			    	if (!empty($paymenttailbybilling)){
-			    		$duevalu = $rowpaymentdetail['qty']-$paymenttailbybilling['tolalpayamount'];
-			    	}
+//     	$allproduct = $this->getAllProducts(1);
+//     	if(!empty($rs)){
+// 	    	foreach ($rs as $key => $row){
+// 		    	if (empty($identity)){
+// 		    		$identity=$no;
+// 			    }else{$identity=$identity.",".$no;
+// 			    }
+// 			    $stuName=$row['stu_enname']." ".$row['last_name'];
+// 			    $stuCode=$row['stu_code'];
+// 			    $rowpaymentdetail = $this->getCutstockDetailByCutstockIdAndStuDetailId($data['cutstockid'], $row['id']);
+// 			    if (!empty($rowpaymentdetail)){
+// 			    	if (empty($identityedit)){
+// 			    		$identityedit=$no;
+// 			    	}else{$identityedit=$identityedit.",".$no;
+// 			    	}
+// 			    	$duevalu=$rowpaymentdetail['due_amount'];
+// 			    	$paymenttailbybilling = $this->getSumCutStockDetailByStuPayDetId($rowpaymentdetail['student_paymentdetail_id'], $rowpaymentdetail['id']);// get other pay amount on this Purchase on other payment number
+// 			    	if (!empty($paymenttailbybilling)){
+// 			    		$duevalu = $rowpaymentdetail['qty']-$paymenttailbybilling['tolalpayamount'];
+// 			    	}
 			    	
-			    	$string.='
-			    	<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
-				    	<td align="center" style="  padding: 0 10px;"><input checked="checked" OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
-				    	<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
-				    		<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
-				    	<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$rowpaymentdetail['items_name'].'" >
+// 			    	$string.='
+// 			    	<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
+// 				    	<td align="center" style="  padding: 0 10px;"><input checked="checked" OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
+// 				    	<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
+// 				    		<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
+// 				    	<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
+// 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
+// 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$rowpaymentdetail['items_name'].'" >
 				    		
-				    	</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
-				    	&nbsp;<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel"">'.$row['receipt_number'].'</label>&nbsp;
-				    	<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
-				    	</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
-				    		<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
-						    	if (!empty($allproduct)) foreach ($allproduct as $pro){
-						    		$selected="";
-						    		if ($rowpaymentdetail['product_id']==$pro['id']){
-						    			$selected='Selected="Selected"';
-						    		}
-						    		$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
-						    	}
-				   $string.='</select></td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
-				    		<label id="origtotallabel'.$no.'">'.number_format($rowpaymentdetail['qty'],2).'</label>
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$rowpaymentdetail['qty'].'" >
-				    	</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
-				    		<label id="duelabel'.$no.'">'.number_format($duevalu,2).'</label>
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$duevalu.'" >
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="detailid'.$no.'" id="detailid'.$no.'" value="'.$rowpaymentdetail['id'].'" >
-				    	</td>
-				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$rowpaymentdetail['qty_receive'].'" style="text-align: center;" ></td>
-				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$rowpaymentdetail['qty_balance'].'" style="text-align: center;" ></td>
-				    	<td >
-				    		<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="'.date("Y-m-d",strtotime($rowpaymentdetail['remide_date'])).'" >
-				    	</td>
-			    	</tr>';
+// 				    	</td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+// 				    	&nbsp;<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel"">'.$row['receipt_number'].'</label>&nbsp;
+// 				    	<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+// 				    	</td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+// 				    		<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
+// 						    	if (!empty($allproduct)) foreach ($allproduct as $pro){
+// 						    		$selected="";
+// 						    		if ($rowpaymentdetail['product_id']==$pro['id']){
+// 						    			$selected='Selected="Selected"';
+// 						    		}
+// 						    		$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
+// 						    	}
+// 				   $string.='</select></td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
+// 				    		<label id="origtotallabel'.$no.'">'.number_format($rowpaymentdetail['qty'],2).'</label>
+// 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$rowpaymentdetail['qty'].'" >
+// 				    	</td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
+// 				    		<label id="duelabel'.$no.'">'.number_format($duevalu,2).'</label>
+// 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$duevalu.'" >
+// 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="detailid'.$no.'" id="detailid'.$no.'" value="'.$rowpaymentdetail['id'].'" >
+// 				    	</td>
+// 				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$rowpaymentdetail['qty_receive'].'" style="text-align: center;" ></td>
+// 				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$rowpaymentdetail['qty_balance'].'" style="text-align: center;" ></td>
+// 				    	<td >
+// 				    		<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="'.date("Y-m-d",strtotime($rowpaymentdetail['remide_date'])).'" >
+// 				    	</td>
+// 			    	</tr>';
 			    	
-			    }else{
-			    	$string.='
-			    	<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
-				    	<td align="center" style="  padding: 0 10px;"><input  OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
-				    	<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
-				    		<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
-				    	<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
-				    	</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
-				    	<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel">'.$row['receipt_number'].'</label>&nbsp;
-				    	<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
-				    	</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
-				    	<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
-						    	if (!empty($allproduct)) foreach ($allproduct as $pro){
-						    		$selected="";
-						    		if ($row['itemdetail_id']==$pro['id']){
-						    			$selected='Selected="Selected"';
-						    		}
-						    		$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
-						    	}
-				   $string.='</select>	
-				    	</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
-				    		<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
-				    	</td>
-				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
-				    		<label id="duelabel'.$no.'">'.number_format($row['qty_balance'],2).'</label>
-				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_balance'].'" >
-				    	</td>
-				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="0" style="text-align: center;" ></td>
-				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$row['qty_balance'].'" style="text-align: center;" ></td>
-				    	<td >
-				    		<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
-				    	</td>
-			    	</tr>';
-			    }
-			    $no++;
+// 			    }else{
+// 			    	$string.='
+// 			    	<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
+// 				    	<td align="center" style="  padding: 0 10px;"><input  OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
+// 				    	<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
+// 				    		<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
+// 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
+// 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
+// 				    	<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
+// 				    	</td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
+// 				    	<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel">'.$row['receipt_number'].'</label>&nbsp;
+// 				    	<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+// 				    	</td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
+// 				    	<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
+// 						    	if (!empty($allproduct)) foreach ($allproduct as $pro){
+// 						    		$selected="";
+// 						    		if ($row['itemdetail_id']==$pro['id']){
+// 						    			$selected='Selected="Selected"';
+// 						    		}
+// 						    		$string.='<option '.$selected.' value="'.$pro['id'].'">'.$pro['name'].'</option>';
+// 						    	}
+// 				   $string.='</select>	
+// 				    	</td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
+// 				    		<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
+// 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
+// 				    	</td>
+// 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
+// 				    		<label id="duelabel'.$no.'">'.number_format($row['qty_balance'],2).'</label>
+// 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_balance'].'" >
+// 				    	</td>
+// 				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="0" style="text-align: center;" ></td>
+// 				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$row['qty_balance'].'" style="text-align: center;" ></td>
+// 				    	<td >
+// 				    		<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
+// 				    	</td>
+// 			    	</tr>';
+// 			    }
+// 			    $no++;
 			    
-		    }
-	    }else{
-	    	$no++;
-	    }
-	    $all_balance =0;
-	    $userbalace = $this->getCurrentBalanceByStudent($data);
-	    if (!empty($userbalace)){
-	   	 	$all_balance = $userbalace;
-	    }
-	    $array = array('stuName'=>$stuName,'stucode'=>$stuCode,'stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'identitycheck'=>$identityedit,'all_balance'=>$all_balance,'sql'=>$sql);
-	    return $array;
-    }
+// 		    }
+// 	    }else{
+// 	    	$no++;
+// 	    }
+// 	    $all_balance =0;
+// 	    $userbalace = $this->getCurrentBalanceByStudent($data);
+// 	    if (!empty($userbalace)){
+// 	   	 	$all_balance = $userbalace;
+// 	    }
+// 	    $array = array('stuName'=>$stuName,'stucode'=>$stuCode,'stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'identitycheck'=>$identityedit,'all_balance'=>$all_balance,'sql'=>$sql);
+// 	    return $array;
+//     }
     function getSumCutStockDetailByStuPayDetId($stupaydetail_id,$cutstockdetailid){
     	$db = $this->getAdapter();
     	$sql="SELECT SUM(pd.`qty_receive`) AS tolalpayamount FROM `rms_cutstock_detail` AS pd WHERE pd.`student_paymentdetail_id`=$stupaydetail_id AND pd.`id` != $cutstockdetailid AND (SELECT p.`status`=1 FROM `rms_cutstock` AS p WHERE p.`id` = pd.`cutstock_id` LIMIT 1) =1";
     	return $db->fetchRow($sql);
     }
     
-    function updateCutStock($_data){
-    	try{
-    		$_arr=array(
-    				'branch_id'	   => $_data['branch_id'],
-    				'serailno'	   => $_data['serailno'],
-    				'student_id'   => $_data['student_id'],
-    				'balance'      => $_data['balance'],
-    				'total_received'=> $_data['total_paid'],
-    				'total_qty_due' => $_data['total_due'],
-    				'received_date' => $_data['date_payment'],
-//     				'create_date'   => date("Y-m-d H:i:s"),
-    				'modify_date'	=> date("Y-m-d H:i:s"),
-    				'status'        => 1,
-    				'user_id'       => $this->getUserId(),
-    				'note'          => $_data['note'],
-    		);
-    		$this->_name ='rms_cutstock';
-    		$cut_id = $_data['id'];
-    		$where = " id = $cut_id";
-    		$this->update($_arr, $where);
+//     function updateCutStock($_data){
+//     	try{
+//     		$_arr=array(
+//     				'branch_id'	   => $_data['branch_id'],
+//     				'serailno'	   => $_data['serailno'],
+//     				'student_id'   => $_data['student_id'],
+//     				'balance'      => $_data['balance'],
+//     				'total_received'=> $_data['total_paid'],
+//     				'total_qty_due' => $_data['total_due'],
+//     				'received_date' => $_data['date_payment'],
+// //     				'create_date'   => date("Y-m-d H:i:s"),
+//     				'modify_date'	=> date("Y-m-d H:i:s"),
+//     				'status'        => 1,
+//     				'user_id'       => $this->getUserId(),
+//     				'note'          => $_data['note'],
+//     		);
+//     		$this->_name ='rms_cutstock';
+//     		$cut_id = $_data['id'];
+//     		$where = " id = $cut_id";
+//     		$this->update($_arr, $where);
     
-    		$row = $this->getCutStockDetailBYId($cut_id);
+//     		$row = $this->getCutStockDetailBYId($cut_id);
     		
-    		if (!empty($row)) foreach ($row as $pay_detail){
-    			$rowpaymentdetail = $this->getCutstockDetailByCutstockIdAndStuDetailId($cut_id, $pay_detail['student_paymentdetail_id']);
-//     			print_r($rowpaymentdetail);exit();
-    			if (!empty($rowpaymentdetail)){
-    				$stupaydetail = $this->getStudentPaymentDetailById($pay_detail['student_paymentdetail_id'],null,$_data['branch_id']);
+//     		if (!empty($row)) foreach ($row as $pay_detail){
+//     			$rowpaymentdetail = $this->getCutstockDetailByCutstockIdAndStuDetailId($cut_id, $pay_detail['student_paymentdetail_id']);
+// //     			print_r($rowpaymentdetail);exit();
+//     			if (!empty($rowpaymentdetail)){
+//     				$stupaydetail = $this->getStudentPaymentDetailById($pay_detail['student_paymentdetail_id'],null,$_data['branch_id']);
     					
-    				$qtyreceive=$rowpaymentdetail['qty_receive'];
+//     				$qtyreceive=$rowpaymentdetail['qty_receive'];
     				
-    				$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
-    				$qtyfter = $stupaydetail['qty_balance']+$qtyreceive;
-    				//     				echo $dueafters;exit();
-    				if (!empty($paymenttailbysale['tolalpayamount'])){
-    					$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
-    					$qtyfter =$duevalu;
-    				}
+//     				$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
+//     				$qtyfter = $stupaydetail['qty_balance']+$qtyreceive;
+//     				//     				echo $dueafters;exit();
+//     				if (!empty($paymenttailbysale['tolalpayamount'])){
+//     					$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
+//     					$qtyfter =$duevalu;
+//     				}
     				
-    				$array=array(
-    						'qty_balance'=>$qtyfter,
-    				);
-    				$where="id=".$pay_detail['student_paymentdetail_id'];
-    				$this->_name="rms_student_paymentdetail";
-    				$this->update($array, $where);
+//     				$array=array(
+//     						'qty_balance'=>$qtyfter,
+//     				);
+//     				$where="id=".$pay_detail['student_paymentdetail_id'];
+//     				$this->_name="rms_student_paymentdetail";
+//     				$this->update($array, $where);
     				
-    				//return product to stock
-    				$dbpu = new Stock_Model_DbTable_DbPurchase();
-    				$dbpu->updateStock($pay_detail['product_id'],$_data['branch_id'],$qtyreceive);
-    			}
-    		}
+//     				//return product to stock
+//     				$dbpu = new Stock_Model_DbTable_DbPurchase();
+//     				$dbpu->updateStock($pay_detail['product_id'],$_data['branch_id'],$qtyreceive);
+//     			}
+//     		}
     		
     		
-    		$ids = explode(',', $_data['identity']);
-    		$detailidlist = '';
-    		foreach ($ids as $i){
-    			if (empty($detailidlist)){
-    				if (!empty($_data['detailid'.$i])){
-    					$detailidlist= $_data['detailid'.$i];
-    				}
-    			}else{
-    				if (!empty($_data['detailid'.$i])){
-    					$detailidlist = $detailidlist.",".$_data['detailid'.$i];
-    				}
-    			}
-    		}
-    		// delete old payment detail that don't have on new payment detail after edit
-    		$this->_name="rms_cutstock_detail";
-    		$where2=" cutstock_id = ".$cut_id;
-    		if (!empty($detailidlist)){ // check if has old payment detail  detail id
-    			$where2.=" AND id NOT IN (".$detailidlist.")";
-    		}
-    		$this->delete($where2);
+//     		$ids = explode(',', $_data['identity']);
+//     		$detailidlist = '';
+//     		foreach ($ids as $i){
+//     			if (empty($detailidlist)){
+//     				if (!empty($_data['detailid'.$i])){
+//     					$detailidlist= $_data['detailid'.$i];
+//     				}
+//     			}else{
+//     				if (!empty($_data['detailid'.$i])){
+//     					$detailidlist = $detailidlist.",".$_data['detailid'.$i];
+//     				}
+//     			}
+//     		}
+//     		// delete old payment detail that don't have on new payment detail after edit
+//     		$this->_name="rms_cutstock_detail";
+//     		$where2=" cutstock_id = ".$cut_id;
+//     		if (!empty($detailidlist)){ // check if has old payment detail  detail id
+//     			$where2.=" AND id NOT IN (".$detailidlist.")";
+//     		}
+//     		$this->delete($where2);
     		
-    		$qtyfter=0;
-    		foreach ($ids as $i){
-    			$stupaydetail = $this->getStudentPaymentDetailById($_data['paymentdetail_id'.$i],$_data['payment_id'.$i],$_data['branch_id']);
-    			$qtyreceive = $_data['qty_receive'.$i];
+//     		$qtyfter=0;
+//     		foreach ($ids as $i){
+//     			$stupaydetail = $this->getStudentPaymentDetailById($_data['paymentdetail_id'.$i],$_data['payment_id'.$i],$_data['branch_id']);
+//     			$qtyreceive = $_data['qty_receive'.$i];
     			 
-    			if (!empty($stupaydetail)){
-    				$qtyfter = $stupaydetail['qty_balance']-$qtyreceive;
-    				// update Purchase Balance
-    				$array=array(
-    						'qty_balance'=>$qtyfter,
-    				);
-    				$where="id=".$_data['paymentdetail_id'.$i]." AND payment_id =".$_data['payment_id'.$i];
-    				$this->_name="rms_student_paymentdetail";
-    				$this->update($array, $where);
-    			}
-    			if (!empty($_data['detailid'.$i])){
-    				$arrs = array(
-    						'cutstock_id'=>$cut_id,
-    						'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
-    						'product_id'=>$_data['itemdetail_id'.$i],
-    						'due_amount'=>$_data['qty_balance'.$i],
-    						'qty_receive'=>$_data['qty_receive'.$i],
-    						'remain'=>$_data['remain'.$i],
-    						'remide_date'=>$_data['remide_date'.$i],
-    				);
-    				$this->_name ='rms_cutstock_detail';
-    				$where=" id= ".$_data['detailid'.$i];
-    				$this->update($arrs, $where);
-    			}else{
-	    			$arrs = array(
-	    					'cutstock_id'=>$cut_id,
-	    					//     					'payment_id'=>$_data['payment_id'.$i],
-	    					'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
-	    					'product_id'=>$_data['itemdetail_id'.$i],
-	    					'due_amount'=>$_data['qty_balance'.$i],
-	    					'qty_receive'=>$_data['qty_receive'.$i],
-	    					'remain'=>$_data['remain'.$i],
-	    					//     					'received_date'=>date("Y-m-d"),
-	    					'remide_date'=>$_data['remide_date'.$i],
-	    			);
-	    			$this->_name ='rms_cutstock_detail';
-	    			$this->insert($arrs);
-    			}
+//     			if (!empty($stupaydetail)){
+//     				$qtyfter = $stupaydetail['qty_balance']-$qtyreceive;
+//     				// update Purchase Balance
+//     				$array=array(
+//     						'qty_balance'=>$qtyfter,
+//     				);
+//     				$where="id=".$_data['paymentdetail_id'.$i]." AND payment_id =".$_data['payment_id'.$i];
+//     				$this->_name="rms_student_paymentdetail";
+//     				$this->update($array, $where);
+//     			}
+//     			if (!empty($_data['detailid'.$i])){
+//     				$arrs = array(
+//     						'cutstock_id'=>$cut_id,
+//     						'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
+//     						'product_id'=>$_data['itemdetail_id'.$i],
+//     						'due_amount'=>$_data['qty_balance'.$i],
+//     						'qty_receive'=>$_data['qty_receive'.$i],
+//     						'remain'=>$_data['remain'.$i],
+//     						'remide_date'=>$_data['remide_date'.$i],
+//     				);
+//     				$this->_name ='rms_cutstock_detail';
+//     				$where=" id= ".$_data['detailid'.$i];
+//     				$this->update($arrs, $where);
+//     			}else{
+// 	    			$arrs = array(
+// 	    					'cutstock_id'=>$cut_id,
+// 	    					//     					'payment_id'=>$_data['payment_id'.$i],
+// 	    					'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
+// 	    					'product_id'=>$_data['itemdetail_id'.$i],
+// 	    					'due_amount'=>$_data['qty_balance'.$i],
+// 	    					'qty_receive'=>$_data['qty_receive'.$i],
+// 	    					'remain'=>$_data['remain'.$i],
+// 	    					//     					'received_date'=>date("Y-m-d"),
+// 	    					'remide_date'=>$_data['remide_date'.$i],
+// 	    			);
+// 	    			$this->_name ='rms_cutstock_detail';
+// 	    			$this->insert($arrs);
+//     			}
     			 
-    			//cut stock
-    			$dbpu = new Stock_Model_DbTable_DbPurchase();
-    			$dbpu->updateStock($_data['itemdetail_id'.$i],$_data['branch_id'],-$_data['qty_receive'.$i]);
-    		}
-    		return $cut_id;
-    	}catch(Exception $e){
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    	}
+//     			//cut stock
+//     			$dbpu = new Stock_Model_DbTable_DbPurchase();
+//     			$dbpu->updateStock($_data['itemdetail_id'.$i],$_data['branch_id'],-$_data['qty_receive'.$i]);
+//     		}
+//     		return $cut_id;
+//     	}catch(Exception $e){
+//     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+//     	}
+//     }
+    
+//     function voidCutStock($id,$branch_id){
+//     	try{
+// 	    	$_arr=array(
+// 	    			'status'	      => 0,
+// 	    			'user_id'  =>$this->getUserId(),
+// 	    			'modify_date'	  => date("Y-m-d H:i:s"),
+// 	    	);
+// 	    	$this->_name ='rms_cutstock';
+// 	    	$where = ' id = '.$id;
+// 	    	$this->update($_arr, $where);
+// 	    	$cut_id = $id;
+//    			$row = $this->getCutStockDetailBYId($cut_id);
+    		
+//     		if (!empty($row)) foreach ($row as $pay_detail){
+//     			$rowpaymentdetail = $this->getCutstockDetailByCutstockIdAndStuDetailId($cut_id, $pay_detail['student_paymentdetail_id']);
+//     			if (!empty($rowpaymentdetail)){
+//     				$stupaydetail = $this->getStudentPaymentDetailById($pay_detail['student_paymentdetail_id'],null,$branch_id);
+    					
+//     				$qtyreceive=$rowpaymentdetail['qty_receive'];
+    				
+//     				$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
+//     				$qtyfter = $stupaydetail['qty_balance']+$qtyreceive;
+//     				//     				echo $dueafters;exit();
+//     				if (!empty($paymenttailbysale['tolalpayamount'])){
+//     					$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
+//     					$qtyfter =$duevalu;
+//     				}
+    				
+//     				$array=array(
+//     						'qty_balance'=>$qtyfter,
+//     				);
+//     				$where="id=".$pay_detail['student_paymentdetail_id'];
+//     				$this->_name="rms_student_paymentdetail";
+//     				$this->update($array, $where);
+    				
+//     				//return product to stock
+//     				$dbpu = new Stock_Model_DbTable_DbPurchase();
+//     				$dbpu->updateStock($pay_detail['product_id'],$branch_id,$qtyreceive);
+//     			}
+//     		}
+    		
+//     		return $cut_id;
+//     	}catch(Exception $e){
+//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+//     	}
+//     }
+    //new check
+        function updateCutStock($_data){
+        	try{
+        		$_arr=array(
+        				'branch_id'	   => $_data['branch_id'],
+        				'serailno'	   => $_data['serailno'],
+        				'student_id'   => $_data['student_id'],
+        				'balance'      => $_data['balance'],
+        				'total_received'=> $_data['total_paid'],
+        				'total_qty_due' => $_data['total_due'],
+        				'received_date' => $_data['date_payment'],
+    //     				'create_date'   => date("Y-m-d H:i:s"),
+        				'modify_date'	=> date("Y-m-d H:i:s"),
+        				'status'        => 1,
+        				'user_id'       => $this->getUserId(),
+        				'note'          => $_data['note'],
+        		);
+        		$this->_name ='rms_cutstock';
+        		$cut_id = $_data['id'];
+        		$where = " id = $cut_id";
+        		$this->update($_arr, $where);
+    
+        		$row = $this->getCutStockDetailBYId($cut_id);
+        		if (!empty($row)) foreach ($row as $pay_detail){
+        			//return product to stock
+        			$dbpu = new Stock_Model_DbTable_DbPurchase();
+        			$dbpu->updateStock($pay_detail['product_id'],$_data['branch_id'],$pay_detail['qty_receive']);
+        		}
+    
+    
+        		$ids = explode(',', $_data['identity']);
+        		// delete old payment detail that don't have on new payment detail after edit
+        		$this->_name="rms_cutstock_detail";
+        		$where2=" cutstock_id = ".$cut_id;
+        		$this->delete($where2);
+        		
+        		$qtyfter=0;
+        		foreach ($ids as $i){
+        			$arrs = array(
+        					'cutstock_id'=>$cut_id,
+        					'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
+        					'product_id'=>$_data['itemdetail_id'.$i],
+        					'due_amount'=>$_data['qty_balance'.$i],
+        					'qty_receive'=>$_data['qty_receive'.$i],
+        					'remain'=>$_data['remain'.$i],
+        					'remide_date'=>$_data['remide_date'.$i],
+        			);
+        			$this->_name ='rms_cutstock_detail';
+        			$this->insert($arrs);
+        			 
+        			//cut stock
+        			$dbpu = new Stock_Model_DbTable_DbPurchase();
+        			$dbpu->updateStock($_data['itemdetail_id'.$i],$_data['branch_id'],-$_data['qty_receive'.$i]);
+        		}
+        		return $cut_id;
+        	}catch(Exception $e){
+        		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+        	}
+        }    
+        function voidCutStock($id,$branch_id){
+        	try{
+        		$_arr=array(
+        				'status'	      => 0,
+        				'user_id'  =>$this->getUserId(),
+        				'modify_date'	  => date("Y-m-d H:i:s"),
+        		);
+        		$this->_name ='rms_cutstock';
+        		$where = ' id = '.$id;
+        		$this->update($_arr, $where);
+        		$cut_id = $id;
+        		$row = $this->getCutStockDetailBYId($cut_id);
+        		
+        		$detailStuPayInCut = $this->getStuPaymentDetailForEditCutStock($id);
+        		if (!empty($detailStuPayInCut)) foreach ($detailStuPayInCut as $key => $cut){
+        			$checkProd = $this->checkProdetail($cut['itemdetail_id']);
+        			if ($checkProd['is_productseat']==0){
+        				$cutdetail = $this->getCutStockDetailBYIdAndStuPaydetailAndProID($cut_id, $cut['id'], $cut['itemdetail_id']);
+        				if (!empty($cutdetail)){
+	        				$array=array(
+	        				      	'qty_balance'=>$cutdetail['due_amount'],
+	        				      );
+	        				$where="id=".$cutdetail['student_paymentdetail_id'];
+	        				$this->_name="rms_student_paymentdetail";
+	        				$this->update($array, $where);
+        				}
+        			}
+        			
+        			
+        		}
+//         		if (!empty($row)) foreach ($row as $pay_detail){
+//         			$rowpaymentdetail = $this->getCutstockDetailByCutstockIdAndStuDetailId($cut_id, $pay_detail['student_paymentdetail_id']);
+//         			if (!empty($rowpaymentdetail)){
+//         				$stupaydetail = $this->getStudentPaymentDetailById($pay_detail['student_paymentdetail_id'],null,$branch_id);
+        					
+//         				$qtyreceive=$rowpaymentdetail['qty_receive'];
+        
+//         				$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
+//         				$qtyfter = $stupaydetail['qty_balance']+$qtyreceive;
+//         				//     				echo $dueafters;exit();
+//         				if (!empty($paymenttailbysale['tolalpayamount'])){
+//         					$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
+//         					$qtyfter =$duevalu;
+//         				}
+        
+//         				$array=array(
+//         						'qty_balance'=>$qtyfter,
+//         				);
+//         				$where="id=".$pay_detail['student_paymentdetail_id'];
+//         				$this->_name="rms_student_paymentdetail";
+//         				$this->update($array, $where);
+        
+//         				//return product to stock
+//         				$dbpu = new Stock_Model_DbTable_DbPurchase();
+//         				$dbpu->updateStock($pay_detail['product_id'],$branch_id,$qtyreceive);
+//         			}
+//         		}
+        
+        		return $cut_id;
+        	}catch(Exception $e){
+        		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+        	}
+        } 
+    function getStuPaymentDetailForEditCutStock($cutstock_id){
+    	$db = $this->getAdapter();
+    	$sql="
+    	SELECT 
+				spd.*,
+				sp.branch_id,
+				sp.receipt_number,
+				sp.create_date AS payment_date,
+				(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS student_name,
+				(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_enname,
+				(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS last_name,
+				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
+				(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_name,
+				(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) AS items_type
+				FROM `rms_student_payment` AS sp,
+				`rms_student_paymentdetail` AS spd
+				WHERE spd.payment_id = sp.id
+				AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.itemdetail_id LIMIT 1) =3
+				AND is_void=0
+				AND spd.id IN ((SELECT cd.student_paymentdetail_id FROM `rms_cutstock_detail` AS cd
+	WHERE cd.cutstock_id=$cutstock_id
+	GROUP BY cd.student_paymentdetail_id))
+    	";
+    	return $db->fetchAll($sql);
     }
     
-    function voidCutStock($id,$branch_id){
-    	try{
-	    	$_arr=array(
-	    			'status'	      => 0,
-	    			'user_id'  =>$this->getUserId(),
-	    			'modify_date'	  => date("Y-m-d H:i:s"),
-	    	);
-	    	$this->_name ='rms_cutstock';
-	    	$where = ' id = '.$id;
-	    	$this->update($_arr, $where);
-	    	$cut_id = $id;
-   			$row = $this->getCutStockDetailBYId($cut_id);
-    		
-    		if (!empty($row)) foreach ($row as $pay_detail){
-    			$rowpaymentdetail = $this->getCutstockDetailByCutstockIdAndStuDetailId($cut_id, $pay_detail['student_paymentdetail_id']);
-    			if (!empty($rowpaymentdetail)){
-    				$stupaydetail = $this->getStudentPaymentDetailById($pay_detail['student_paymentdetail_id'],null,$branch_id);
-    					
-    				$qtyreceive=$rowpaymentdetail['qty_receive'];
-    				
-    				$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
-    				$qtyfter = $stupaydetail['qty_balance']+$qtyreceive;
-    				//     				echo $dueafters;exit();
-    				if (!empty($paymenttailbysale['tolalpayamount'])){
-    					$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
-    					$qtyfter =$duevalu;
-    				}
-    				
-    				$array=array(
-    						'qty_balance'=>$qtyfter,
-    				);
-    				$where="id=".$pay_detail['student_paymentdetail_id'];
-    				$this->_name="rms_student_paymentdetail";
-    				$this->update($array, $where);
-    				
-    				//return product to stock
-    				$dbpu = new Stock_Model_DbTable_DbPurchase();
-    				$dbpu->updateStock($pay_detail['product_id'],$branch_id,$qtyreceive);
-    			}
-    		}
-    		
-    		return $cut_id;
-    	}catch(Exception $e){
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    	}
+    function getCutStockDetailBYIdAndStuPaydetailAndProID($cutstockid,$stupaydetail,$pro_id){
+    	$db=$this->getAdapter();
+    	$sql="SELECT ct.*,
+    	(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = ct.product_id LIMIT 1) AS items_name,
+    	(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE sp.id = (SELECT spd.payment_id FROM `rms_student_paymentdetail` AS spd WHERE spd.id = ct.student_paymentdetail_id LIMIT 1) LIMIT 1) AS receipt_number
+    	FROM `rms_cutstock_detail` AS ct
+    	WHERE ct.cutstock_id=$cutstockid and ct.student_paymentdetail_id=$stupaydetail and ct.product_id=$pro_id LIMIT 1 ";
+    	return $db->fetchRow($sql);
     }
 }
 

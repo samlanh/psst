@@ -61,6 +61,11 @@
         </div>
 	</form>	
 <style>
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
 .hidden{
 	display: table-cell !important;
 }
@@ -79,7 +84,7 @@
 				<td width="28%" align="left">
 				</td>
 				<td width="44%" align="center">
-					<strong style="font-weight:200;font-family: Arial Black;color:#4839bd; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></strong>
+					<span style="font-weight:200;color:#4839bd; font-size: 16px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></span>
 				</td>
 				<td align="right" width="28%"></td>
 			</tr>
@@ -92,34 +97,54 @@
 							th,td{ padding:0 1px;}
 							table{ border-collapse:collapse; margin:0 auto;border-color:#4839bd; }
 							.padding{ padding: 0 1px !important;}
-							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
+							table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
 							tr{ page-break-inside:avoid; page-break-after:auto }
 							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
 							.hover:hover{background: #ccc;}
 							.hidden{display: none;}
 							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+							
+							table.content-data{
+								border-collapse:collapse;
+								width:100%;
+								border:1px solid #4839bd; 
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size:13px;
+								white-space: nowrap;
+								margin:0 auto;
+								color:#4839bd;
+							}
+							table.content-data thead tr.style-head {
+							   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+								background: #ccd9ff;
+								text-align: center;
+							}
+							table.content-data tr.style-rowdata {
+								font-size:12px; 
+								height: 23px;
+							}
 						</style>
 						<?php 
 						$all_student = 0;
 						$active_student = 0;
 						$drop_student = 0;?>
 					<div id="exportExcel">
-						<table cellpadding="3" class="padd" width="99%" border="1" align="center" style="border-collapse:collapse;color:#4839bd;white-space:nowrap;font-family:Time New Roman , Khmer OS Battambang;">
+						<table class="content-data" cellpadding="3"  border="1" >
 						  <thead>
-							  <tr style="font-size:13px; line-height: 27px; font-weight:bold; background: #ccd9ff;" align="center">
-							    <td><?php echo $tr->translate("NUM");?>&nbsp;</td>
-							    <td><?php echo $tr->translate("BRANCH_NAME");?></td>
-							    <td><?php echo $tr->translate("STUDY_GROUP");?></td>
-							    <td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
-								<td><?php echo $tr->translate("SEMESTER");?></td>
-								<td><?php echo $tr->translate("DEGREE");?></td>
-								<td><?php echo $tr->translate("GRADE");?></td>
-								<td><?php echo $tr->translate("SESSION");?></td>
-								<td><?php echo $tr->translate("ROOM");?></td>
-								<td><?php echo $tr->translate("STATUS");?></td>
-								<td><?php echo $tr->translate("TOTAL_STUDENT");?></td>
-								<td><?php echo $tr->translate("STUDENT_DROP");?></td>
-								<td><?php echo $tr->translate("STUDENT_STUDY");?></td>
+							  <tr class="style-head">
+							    <td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("ROOM");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("STUDENT_STUDY");?>&nbsp;</td>
 							  </tr>
 						  </thead>
 						  <?php $i=0; 
@@ -145,18 +170,18 @@
 						  }} ?>
 						</table>
 						<br>
-						<table cellpadding="3" class="padd" width="20%" align="right" style="font-size:12px;line-height:27px;white-space:nowrap;font-family:Time New Roman , Khmer OS Battambang;margin-bottom:10px;color:#4839bd;">
+						<table cellpadding="3" class="padd" width="20%" align="right" style="font-size:12px;line-height:27px;white-space:nowrap;font-family:'Times New Roman','Khmer OS Battambang';margin-bottom:10px;color:#4839bd;">
 							<tr>
 								<td width="60%" style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
-								<td width="40%" align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student;?> <?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+								<td width="40%" align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
 							</tr>
 							<tr>
 								<td style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("STUDENT_DROP");?></td>
-								<td align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $drop_student;?> <?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+								<td align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $drop_student;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
 							</tr>
 							<tr>
 								<td style="border-bottom:1px solid #4839bd;"><?php echo $tr->translate("STUDENT_STUDY");?></td>
-								<td align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student - $drop_student;?> <?php echo $tr->translate("STUDENT_UNIT");?></strong></td>
+								<td align="center" style="border-bottom:1px solid #4839bd;"><strong><?php echo $all_student - $drop_student;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
 							</tr>
 						</table>
 					</div>
@@ -167,13 +192,13 @@
 					<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 14px">
 						<tr>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PRINCIPAL");?></span>
+								<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
 							</td>
 							<td width="30%">&nbsp;</td>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PREPARE_BY");?></span>
+								<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
 							</td>
 						</tr>
 					</table>

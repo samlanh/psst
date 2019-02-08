@@ -68,7 +68,7 @@
 			</td>
 			<td align="center">
 				<strong style="font-weight:bold;color:#000; font-size: 17px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong><br />
-				<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+				<strong style="font-weight:bold;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?><?php echo $tr->translate("TO");?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 			</td>
 			<td width="25%" align="right">
 			</td>
@@ -93,7 +93,6 @@
 					    text-align: center;
 					}
 					tr.head_schedule {
-					    font-weight: bold;
 					    background-color: #ffdbdb;
 					}
 					thead tr th,tr.hover td {
@@ -134,7 +133,7 @@
 					</tr>
 					<tr>
 						<td colspan="3" align="center">
-							<strong style="color: #4839bd; font-size:18px;font-weight: initial;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></strong>
+							<span style="color: #4839bd; font-size:18px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span>
 						</td>
 					</tr>
 					<tr>
@@ -143,21 +142,21 @@
 						<thead>
 							
 							<tr>
-								<th align="left" colspan="7" style="border:1px solid #fff;border-bottom: solid 1px #4839bd;">
+								<td align="left" colspan="7" style="border:1px solid #fff;border-bottom: solid 1px #4839bd;">
 								<ul class="subject">
 									<li><?php echo $tr->translate("BRANCH_NAME");?>:&nbsp;<?php echo $rs['branch_name']?></li>
 									<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
 									<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>	
 								</ul>
-								</th>
+								</td>
 							</tr>
 							<tr class="head_schedule" style="font-size:14px;" align="center" >
-								<th rowspan="2" ><?php echo $tr->translate("TIME");?></th>
-								<th colspan="5" ><?php echo $tr->translate("DAYS");?></th>
+								<td rowspan="2" ><?php echo $tr->translate("TIME");?></td>
+								<td colspan="5" ><?php echo $tr->translate("DAYS");?></td>
 							</tr>
 							<tr class="head_schedule" style="font-size:14px;" align="center" >
 							<?php foreach ($day as $key => $days){?>
-								<th style="width:18%;"><?php echo $tr->translate($days);?></th>
+								<td style="width:18%;"><?php echo $tr->translate($days);?></td>
 							<?php }?>
 							</tr>
 						</thead>
@@ -222,16 +221,16 @@
 					</td>
 				</tr>
 				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="font-family:'Khmer OS Battambang';font-size: 14px">
+					<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 14px">
 						<tr>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'khmer os battambang';"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
+								<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
 							</td>
 							<td width="30%">&nbsp;</td>
 							<td width="35%" align="center">
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'khmer os battambang';"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
+								<span><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
 							</td>
 						</tr>
 					</table>

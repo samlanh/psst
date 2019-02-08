@@ -132,8 +132,9 @@
 							?>					
 							<tr>
 								<td align="right" colspan="<?php echo $amount_day+7;?>" style=" border: 1px solid #fff; border-top: 1px solid #000;">
-									<strong​​ style="font-weight:bold;color:#000; font-size: 13px;font-family: 'Times New Roman','Khmer OS Battambang';">
-									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $i." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
+									<span​​ style="color:#000; font-size: 13px;font-family: 'Times New Roman','Khmer OS Battambang';">
+									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span>&nbsp;<strong><?php echo $i;?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
+									</span>
 								</td>
 							</tr>
 							<?php }$i=0; ?>
@@ -178,11 +179,11 @@
 								<?php }?>
 								<td colspan="4" style="font-family: 'Times New Roman','Khmer OS Muol Light';">&nbsp;<?php echo $tr->translate("TOTAL_ATTENDENCE");?>&nbsp;</td>
 							</tr>
-							<tr style="font-size:14px; line-height: 18px; " align="center">
-								<td style="width: 30px;font-family: 'Times New Roman','Khmer OS Muol Light';">&nbsp;<?php echo $tr->translate("ABSENT");?>&nbsp;</td>
-								<td style="width: 30px;font-family: 'Times New Roman','Khmer OS Muol Light';">&nbsp;<?php echo $tr->translate("PERMISSION");?>&nbsp;</td>
-								<td style="width: 30px;font-family: 'Times New Roman','Khmer OS Muol Light';">&nbsp;<?php echo $tr->translate("LATE");?>&nbsp;</td>
-								<td style="width: 30px;font-family: 'Times New Roman','Khmer OS Muol Light';">&nbsp;<?php echo $tr->translate("EARLY_LEAVE");?>&nbsp;</td>
+							<tr style="font-size:14px; line-height: 18px; font-family: 'Times New Roman','Khmer OS Muol Light'; " align="center">
+								<td style="width: 30px;">&nbsp;<?php echo $tr->translate("ABSENT");?>&nbsp;</td>
+								<td style="width: 30px;">&nbsp;<?php echo $tr->translate("PERMISSION");?>&nbsp;</td>
+								<td style="width: 30px;">&nbsp;<?php echo $tr->translate("LATE");?>&nbsp;</td>
+								<td style="width: 30px;">&nbsp;<?php echo $tr->translate("EARLY_LEAVE");?>&nbsp;</td>
 							</tr>
 							
 							<?php } $i++;?>
@@ -225,9 +226,9 @@
 							}?>
 							<tr>
 								<td align="right" colspan="<?php echo $amount_day+7;?>" style=" border-bottom: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-									<strong style="font-family: 'Times New Roman','Khmer OS Muol Light';font-weight:200;color:#000; font-size: 15px;">
-									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<?php echo $i." ".$tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
-									</strong><br />
+									<span style="font-family: 'Times New Roman','Khmer OS Muol Light';font-weight:200;color:#000; font-size: 15px;">
+									<?php echo $tr->translate("TOTAL_STUDENT");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';">&nbsp;<strong><?php echo $i ?></strong> <?php echo $tr->translate("STUDENT_UNIT");?>&nbsp;</span> 
+									</span><br />
 								</td>
 							</tr>
 						</table>	
@@ -248,16 +249,16 @@
 				</tr>
 				<tr>
 					<td colspan="3" style="border:1px solid #fff;">
-						<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 14px">
+						<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
 							<tr>
 								<td width="35%" align="center">
-									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PRINCIPAL");?></span>
+									<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+									<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
 								</td>
 								<td width="30%">&nbsp;</td>
 								<td width="35%" align="center">
-									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-									<span style="color:#4839bd; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PREPARE_BY");?></span>
+									<span><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+									<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
 								</td>
 							</tr>
 						</table>
@@ -309,7 +310,7 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		queryExpr: "*${0}*",
 		autoComplete: false,                     
-		required: true,                        
+		required: false,                        
 		id: "grade_all",
 		name: "grade_all",  
 		class: 'fullside',  

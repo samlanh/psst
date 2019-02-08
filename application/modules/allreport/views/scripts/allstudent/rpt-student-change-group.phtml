@@ -6,6 +6,11 @@
 ?>	
 <style>
 tr td table tr th:{padding: 5px;margin: 5px;};
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
 </style>
 <div style="min-height:20cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -55,7 +60,7 @@ tr td table tr th:{padding: 5px;margin: 5px;};
 				<td  width="28%">
 				</td>
 				<td width="44%" align="center">
-					<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 17px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></strong><br /><br >
+					<span style="font-family: Arial Black;color:#000; font-size: 17px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></span><br /><br >
 				</td>
 				<td width="28%" align="right">
 				</td>
@@ -75,59 +80,80 @@ tr td table tr th:{padding: 5px;margin: 5px;};
 			#header {
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
-			}							
+			}	
+			table.content-data{
+				border-collapse:collapse;
+				width:100%;
+				border:1px solid #000; 
+				font-family:'Times New Roman','Khmer OS Battambang';
+				font-size:13px;
+				white-space: nowrap;
+				margin:0 auto;
+			}
+			table.content-data thead tr.style-head {
+			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+				background: #ccd9ff;
+				text-align: center;;
+			}
+			table.content-data tr td {
+				padding: 0 2px;
+			}
+			table.content-data tr.style-rowdata {
+				font-size:12px; 
+				height: 23px;
+			}						
 		</style>
 			<tr>
 				<td colspan="3">
-					<table style="margin:0 auto;width:100%; border-collapse: collapse;white-space: nowrap;border: 1px solid #000;font-family:Times New Roman,'Khmer OS Battambang'"  border="1" >
+					<table class="content-data" cellpadding="1"​  border="1" >
 						<thead>
-						<tr style="font-size:12px; height: 20px;  background: #ccd9ff;" align="center" >
-								<th rowspan="2"><?php echo $tr->translate("N_O");?></th>
- 								<th rowspan="2"><?php echo $tr->translate("STUDENT_ID");?></th>
-								<th rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></th>
-								<th rowspan="2"><?php echo $tr->translate("GENDER");?></th>
-								<th colspan="6"><?php echo $tr->translate("FROM_GROUP");?></th>
-								<th colspan="6"><?php echo $tr->translate("TO_GROUP");?></th>
-								<th rowspan="2"><?php echo $tr->translate("MOVING_DATE");?></th>
-								<th rowspan="2"><?php echo $tr->translate("NOTE");?></th>												
+						<tr class="style-head">
+							<td rowspan="2"><?php echo $tr->translate("N_O");?></td>
+ 							<td rowspan="2"><?php echo $tr->translate("STUDENT_ID");?></td>
+							<td rowspan="2"><?php echo $tr->translate("STUDENT_NAME");?></td>
+							<td rowspan="2"><?php echo $tr->translate("GENDER");?></td>
+							<td colspan="6"><?php echo $tr->translate("FROM_GROUP");?></td>
+							<td colspan="6"><?php echo $tr->translate("TO_GROUP");?></td>
+							<td rowspan="2"><?php echo $tr->translate("MOVING_DATE");?></td>
+							<td rowspan="2"><?php echo $tr->translate("NOTE");?></td>												
 						</tr>
-						<tr style="font-size:12px; height: 20px; background: #ccd9ff;" align="center">
-							<th ><?php echo $tr->translate("GROUP_CODE");?></th>
-							<th ><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
-							<th ><?php echo $tr->translate("GRADE");?></th>
-							<th ><?php echo $tr->translate("ROOM");?></th>
-							<th ><?php echo $tr->translate("SEMESTER");?></th>
-							<th ><?php echo $tr->translate("SESSION");?></th>										
-							<th ><?php echo $tr->translate("GROUP_CODE");?></th>
-							<th ><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
-							<th ><?php echo $tr->translate("GRADE");?></th>
-							<th ><?php echo $tr->translate("ROOM");?></th>
-							<th ><?php echo $tr->translate("SEMESTER");?></th>
-							<th ><?php echo $tr->translate("SESSION");?></th>
+						<tr  class="style-head">
+							<td><?php echo $tr->translate("GROUP_CODE");?></td>
+							<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+							<td><?php echo $tr->translate("GRADE");?></td>
+							<td><?php echo $tr->translate("ROOM");?></td>
+							<td><?php echo $tr->translate("SEMESTER");?></td>
+							<td><?php echo $tr->translate("SESSION");?></td>										
+							<td><?php echo $tr->translate("GROUP_CODE");?></td>
+							<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+							<td><?php echo $tr->translate("GRADE");?></td>
+							<td><?php echo $tr->translate("ROOM");?></td>
+							<td><?php echo $tr->translate("SEMESTER");?></td>
+							<td><?php echo $tr->translate("SESSION");?></td>
 						</tr>
 						</thead>
 					<?php $i=0; foreach ($this->rs AS $row) { $i++;?>
-						<tr cellpadding="5"​ style="font-size:11px; height: 30px;" align="center" >
-							<th ><?php echo $i;?></th>
-							<th ><?php echo $row['stu_code'];?></th>
-							<th align="left">&nbsp;&nbsp;<?php echo $row['name'];?>&nbsp;</th>	
-							<th ><?php echo $row['sex'];?></th>
+						<tr class="style-rowdata hover" align="center" >
+							<td><?php echo $i;?></td>
+							<td><?php echo $row['stu_code'];?></td>
+							<td align="left"><?php echo $row['name'];?></td>	
+							<td align="center"><?php echo $row['sex'];?></td>
 							
-							<th ><?php echo $row['code'];?></th>
-							<th >&nbsp;<?php echo $row['academic'];?>&nbsp;</th>
-							<th align="left">&nbsp;<?php echo $row['grade'];?>&nbsp;</th>
-							<th align="left">&nbsp;<?php echo $row['room_name'];?>&nbsp;</th>
-							<th ><?php echo $row['semester'];?></th>
-							<th >&nbsp;<?php echo $row['session'];?>&nbsp;</th>
+							<td align="center"><?php echo $row['code'];?></td>
+							<td><?php echo $row['academic'];?></td>
+							<td align="left"><?php echo $row['grade'];?></td>
+							<td align="left"><?php echo $row['room_name'];?></td>
+							<td><?php echo $row['semester'];?></td>
+							<td><?php echo $row['session'];?></td>
 							
-							<th ><?php echo $row['to_code'];?></th>
-							<th >&nbsp;<?php echo $row['to_academic'];?>&nbsp;</th>
-							<th align="left">&nbsp;<?php echo $row['to_grade'];?>&nbsp;</th>
-							<th align="left">&nbsp;<?php echo $row['to_room_name'];?>&nbsp;</th>
-							<th ><?php echo $row['to_semester'];?></th>
-							<th ><?php echo $row['to_session'];?></th>
-							<th ><?php echo date("d-M-Y",strtotime($row['moving_date']));?></th>
-							<th align="left">&nbsp;<?php echo $row['note'];?>&nbsp;</th>
+							<td><?php echo $row['to_code'];?></td>
+							<td><?php echo $row['to_academic'];?></td>
+							<td align="left"><?php echo $row['to_grade'];?></td>
+							<td align="left"><?php echo $row['to_room_name'];?></td>
+							<td><?php echo $row['to_semester'];?></td>
+							<td><?php echo $row['to_session'];?></td>
+							<td align="center"><?php echo date("d-M-Y",strtotime($row['moving_date']));?></td>
+							<td align="left"><?php echo $row['note'];?></td>
 						</tr>
 					<?php }?>	
 					</table>	
@@ -141,13 +167,13 @@ tr td table tr th:{padding: 5px;margin: 5px;};
 			</tr>
 			<tr >
 				<td align="center" width="25%">
-					<span style="font-weight: bold;font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY");?></span>
+					<span style="font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY");?></span>
 				</td>
 				<td  width="50%">
 					&nbsp;
 				</td>
 				<td align="center"  width="25%">
-					<span style="font-weight: bold;font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY");?></span>
+					<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY");?></span>
 				</td>
 			</tr>
 		</table>

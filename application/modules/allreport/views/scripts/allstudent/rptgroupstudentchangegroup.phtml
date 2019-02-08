@@ -65,7 +65,7 @@
 				<td width="28%" >
 				</td>
 				<td width="44%" align="center">
-					<strong style="font-weight:bold;color:#000; font-size: 20px;font-family:Times New Roman,'Khmer MEF2';;"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></strong><br />
+					<span style="color:#000; font-size: 20px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("STUDNET_TRANDSFORMATION");?></span><br />
 				</td>
 				<td width="28%" align="right">
 				</td>
@@ -75,19 +75,19 @@
 			</tr>
 			<tr>
 				<td colspan="4" id="exportExcel">								
-					<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;padding-buttom: 10px;font-family:Times New Roman,Khmer OS Battambang;"  border="1" >																			
+					<table border="1" cellpadding="5"​ style="margin:0 auto;width:100%;border:1px solid #000; border-collapse: collapse;padding-buttom: 10px;font-family:'Times New Roman','Khmer OS Battambang';"  border="1" >																			
 					<?php $total_stu=0; if(!empty($this->rs))foreach ($this->rs as $key =>$stu){										
 					?>
 						<?php if((($ad!=$stu["academic_year"] OR $session!=$stu["session"] OR $grade!=$stu["grade"]) OR ($to_ad!=$stu["to_academic_year"] OR $to_session!=$stu["to_session"] OR $to_grade!=$stu["to_grade"])) AND  $key>0 ){?>											
-						<tr class="hover" style="font-size:14px;height: 25px;font-weight: bold;"​>
+						<tr class="hover" style="font-size:14px;height: 25px;"​>
 							<td align="right" colspan="4" ><?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;&nbsp;</td>
-							<td align="center"><?php echo number_format($i,0);?> <?php echo $tr->translate("STUDENT_UNIT");?></td>
+							<td align="center"><strong><?php echo number_format($i,0);?></strong> <?php echo $tr->translate("STUDENT_UNIT");?></td>
 						</tr>
 					</table>
 					<br/>
 					
 					
-					<table cellpadding="5"​ style="margin:0 auto;width:100%; padding-bottom: 10px;font-family:Times New Roman,Khmer OS Battambang;"  border="1" >
+					<table cellpadding="5"​ style="margin:0 auto;width:100%; padding-bottom: 10px;font-family:'Times New Roman','Khmer OS Battambang';"  border="1" >
 							
 						<?php }$i++;?>
 						<?php 
@@ -96,12 +96,13 @@
 						?>
 						<tr style="font-size:14px; height: 45px;" align="center" >
 							<td colspan="5" style="border: 1px solid white;border-bottom: 1px solid black;">
-								<span style="font-size: 15px;font-weight: bold;">
+								<span">
 									<span style="background-color: rgba(249,249,249,1);white-space: nowrap;color: red;padding: 10px 5px;border: 1px solid #efefef;border-radius: 5px;">&nbsp;<?php echo $stu["academic_year"]?> &nbsp; <?php echo $stu["from_group_code"];?> &nbsp; <?php echo $stu["session"];?>&nbsp;</span> &nbsp; To &nbsp; <span style="color: red;background-color: rgba(249,249,249,1);padding: 10px 5px;border: 1px solid #efefef;border-radius: 5px;">&nbsp;<?php echo $stu["to_academic_year"]?> &nbsp; <?php echo $stu["to_group_code"];?> &nbsp; <?php echo $stu["to_session"];?>&nbsp; </span> &nbsp; <?php echo $tr->translate("TYPE")?> : <span style="background-color: rgba(249,249,249,1);white-space: nowrap;color: red;padding: 10px 5px;border: 1px solid #efefef;border-radius: 5px;"><?php echo $stu["change_type"];?> </span>         
-								</span><br>
+								</span>
+								<br>
 							</td>
 						</tr>
-						<tr style="font-size:14px; height: 20px;background: #ccd9ff !important;line-height: 25px;font-weight: bold;" align="center" >
+						<tr style="font-size:14px; height: 20px;background: #ccd9ff !important;line-height: 25px;" align="center" >
 							<td style="width: 10%;"><?php echo $tr->translate("N_O");?></td>
 							<td style="width: 15%;"><?php echo $tr->translate("STUDENT_ID");?></td>
 							<td style="width: 30%;"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
@@ -141,16 +142,16 @@
 			</tr>
 			<tr>
 				<td colspan="3" style="border:1px solid #fff;">
-					<table cellpadding="0" cellspacing="0" width="100%" style="font-size: 14px">
+					<table cellpadding="0" cellspacing="0" width="100%" style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
 						<tr>
 							<td width="35%" align="center">
-								<span style="color:#000; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
-								<span style="color:#000; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PRINCIPAL");?></span>
+								<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PRINCIPAL");?></span>
 							</td>
 							<td width="30%">&nbsp;</td>
 							<td width="35%" align="center">
-								<span style="color:#000; font-size: 14px;font-family:Times New Roman , khmer os battambang;"><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
-								<span style="color:#000; font-size: 14px;font-family:Times New Roman , Khmer OS Muol Light;"><?php echo $tr->translate("PREPARE_BY");?></span>
+								<span><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+								<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("PREPARE_BY");?></span>
 							</td>
 						</tr>
 					</table>

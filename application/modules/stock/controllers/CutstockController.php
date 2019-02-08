@@ -95,11 +95,6 @@ class Stock_CutstockController extends Zend_Controller_Action {
 	
 		$row = $db->getCutStockBYId($id);
 		$this->view->row = $row;
-		$this->view->rowdetail = $db->getCutStockDetailBYId($id);
-		
-		$this->view->detailStuPayInCut = $db->getStuPaymentDetailForEditCutStock($id);
-		
-		$this->view->allproduct = $db->getAllProducts(1);
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD",self::REDIRECT_URL."/index");
 			exit();
@@ -158,15 +153,15 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-// 	function getallpaydetailbystudenteditAction(){
-// 		if($this->getRequest()->isPost()){
-// 			$data = $this->getRequest()->getPost();
-// 			$db_com = new Stock_Model_DbTable_DbCutStock();
-// 			$id = $db_com->getStudentProductPaymentDetailEdit($data);
-// 			print_r(Zend_Json::encode($id));
-// 			exit();
-// 		}
-// 	}
+	function getallpaydetailbystudenteditAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db_com = new Stock_Model_DbTable_DbCutStock();
+			$id = $db_com->getStudentProductPaymentDetailEdit($data);
+			print_r(Zend_Json::encode($id));
+			exit();
+		}
+	}
 	function receiptAction(){
 		$db = new Stock_Model_DbTable_DbCutStock();
 		$id=$this->getRequest()->getParam('id');

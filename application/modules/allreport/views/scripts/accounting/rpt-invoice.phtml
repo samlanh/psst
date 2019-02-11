@@ -7,6 +7,13 @@
 	Application_Model_Decorator::removeAllDecorator($form);
 	$frm=$form;
 ?>
+<style>
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
+</style>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
@@ -57,14 +64,35 @@
 <div id="divPrint">
 		<style>
 			a{text-decoration: none;color: 000;}
-			table {page-break-inside:auto }
+			table {page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
 			tr{ page-break-inside:avoid; page-break-after:auto; }
 			#header {
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
-			td{line-height: 30px; padding:2px 0px !important;}	
 			tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+			table.content-data{
+				border-collapse:collapse;
+				width:100%;
+				font-family:'Times New Roman','Khmer OS Battambang';
+				font-size:13px;
+				white-space: nowrap;
+				margin:0 auto;
+				color:#000;
+				margin:0 auto;
+			}
+			table.content-data  tr.style-head {
+			   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+				background: #CCD9FF;
+				text-align: center;
+			}
+			table.content-data tr td{
+				padding: 2px;
+			}
+			table.content-data tr.style-rowdata {
+				font-size:12px; 
+				height: 23px;
+			}
 		</style>
 		<table width="100%">
 			<tr>
@@ -78,7 +106,7 @@
 				<td width="15%" align="center">
 				</td>
 				<td align="center" width="70%">
-					<strong style="padding-left: 0px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_INVOICE');?></strong> 
+					<span style="padding-left: 0px; color:#000; font-size: 16px; font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INVOICE');?></span> 
 					<?php if(!empty($this->search['start_date'])){?><div><?php echo date("d/m/Y",strtotime($this->search['start_date'])).' '.$tr->translate('TO').' ';echo date("d/m/Y",strtotime($this->search['end_date']));?></div><?php }?>
 				</td>
 				<td width="15%" align="center">
@@ -90,21 +118,21 @@
 			<tr>
 				<td colspan="3" id="exportExcel">
 					<?php if(!empty($this->all_invoice)){ ?>
-					<table class="padd" width="100%" align="center" style="font-family: 'Khmer OS Battambang','Times New Roman';">
+					<table class="content-data" align="center">
 						<thead>
-						<tr align="center" style="background: #ccd9ff;font-size:12px; height: 20px; font-weight: bold;">
-							<td ><?php echo $tr->translate("N_O");?></td>
-							<td ><?php echo $tr->translate("BRANCH_NAME");?></td>
-							<td ><?php echo $tr->translate("GROUP");?></td>
-							<td ><?php echo $tr->translate("STUDENT_ID");?></td>
-							<td ><?php echo $tr->translate("STUDENT_NAME");?></td>
-							<td ><?php echo $tr->translate("SEX");?></td>
-							<td ><?php echo $tr->translate("INVOICE_NUM");?></td>
-							<td ><?php echo $tr->translate("INVOICE_DATE");?></td>
-							<td ><?php echo $tr->translate("INPUT_DATE");?></td>
-							<td ><?php echo $tr->translate("REMARK");?></td>
-							<td ><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
-							<td ><?php echo $tr->translate("BY_USER");?></td>
+						<tr class="style-head" align="center">
+							<td><?php echo $tr->translate("N_O");?></td>
+							<td><?php echo $tr->translate("BRANCH_NAME");?></td>
+							<td><?php echo $tr->translate("GROUP");?></td>
+							<td><?php echo $tr->translate("STUDENT_ID");?></td>
+							<td><?php echo $tr->translate("STUDENT_NAME");?></td>
+							<td><?php echo $tr->translate("SEX");?></td>
+							<td><?php echo $tr->translate("INVOICE_NUM");?></td>
+							<td><?php echo $tr->translate("INVOICE_DATE");?></td>
+							<td><?php echo $tr->translate("INPUT_DATE");?></td>
+							<td><?php echo $tr->translate("REMARK");?></td>
+							<td><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
+							<td><?php echo $tr->translate("BY_USER");?></td>
 						</tr>
 						</thead>
 						<?php 
@@ -114,27 +142,27 @@
 						
 						$total = $total +$rs['totale_amount'];
 						?>
-						 <tr align="center" style="font-size:11px; height: 20px;border-bottom: 1px solid #000;"​ class="hover">
-							<td ><?php echo $key; ?></td>
-							<td ><?php echo $rs['branch']; ?></td>
-							<td ><?php echo $rs['group_name']; ?></td>
-							<td ><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
+						<tr class="style-rowdata hover" style="border-bottom: 1px solid #000;" align="center" >
+							<td><?php echo $key; ?></td>
+							<td><?php echo $rs['branch']; ?></td>
+							<td><?php echo $rs['group_name']; ?></td>
+							<td><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
 							<td align="left"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['last_name']." ".$rs['stu_enname']; ?></a></td>
-							<td ><?php echo $rs['sex']; ?></td>
-							<td ><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
-							<td ><?php echo $rs['invoice_num']; ?></td>
-							<td ><?php echo date("d/m/Y",strtotime($rs['input_date'])); ?></td>
-							<td ><?php echo $rs['remark']; ?></td>
-							<td ><strong>$ <?php echo number_format($rs['totale_amount'],2); ?></strong></td>
-							<td ><?php echo $rs['first_name'] ?></td>
+							<td><?php echo $rs['sex']; ?></td>
+							<td><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
+							<td><?php echo $rs['invoice_num']; ?></td>
+							<td><?php echo date("d/m/Y",strtotime($rs['input_date'])); ?></td>
+							<td><?php echo $rs['remark']; ?></td>
+							<td><strong>$ <?php echo number_format($rs['totale_amount'],2); ?></strong></td>
+							<td><?php echo $rs['first_name'] ?></td>
 						</tr>
 						<?php
 						}
 						?>
 					</table>
-					<table align="right" style="font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang'">
+					<table align="right" style="font-family:'Times New Roman','Khmer OS Battambang';">
 						  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
-							<td style="width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+							<td style="width:146px; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
 							<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($total,2);?></td>
 						  </tr>
 					 </table>
@@ -146,16 +174,16 @@
 			</tr>
 			<tr >
 				<td colspan="3" width="100%">
-					<table width="100%" style="font-family:'Khmer OS Battambang';">
+					<table width="100%" style=" font-size: 14px; font-family:'Times New Roman','Khmer OS Battambang';">
 						<tr>
 							<td  width="25%" align="center">
-								<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+								<span><?php echo $tr->translate('VERIFIED_BY')?></span>
 							</td>
 							<td  width="50%">
 								&nbsp;
 							</td>
 							<td align="center"  width="25%">
-								<span style="font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+								<span><?php echo $tr->translate('PREPARED_BY')?></span>
 							</td>
 						</tr>
 					</table>

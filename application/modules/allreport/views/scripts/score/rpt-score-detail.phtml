@@ -124,7 +124,7 @@
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
-			.cheader{height: 30px;font-weight: bold; background: #fffbcb; white-space: nowrap;}
+			.cheader{height: 30px; background: #fffbcb; white-space: nowrap;}
 			.hover:hover{background: #ccc;}
 			 td.rotate {
 				height: 130px;
@@ -149,6 +149,9 @@
 			.border-bottom-none{
     			border-bottom: #fff solid 1px;
 			}
+			table tr td{
+				color: #4839bd;
+			}
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; color: #4839bd;font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<?php
@@ -167,17 +170,17 @@
 				<?php $i=0; $count_fail=0;?>
 					<tr>
 						<td align="center" width="32%" rowspan="2">
-							<strong​​ style="color:#4839bd; font-size: 15px;font-family: 'Times New Roman','Khmer MEF2';">
+							<strong​​ style="color:#4839bd; font-size: 15px;font-family: 'Times New Roman','Khmer OS Muol Light';">
 								<?php echo $tr->translate("MINISTRY_INPHNOMPENH");?><br />
 								<?php echo $tr->translate("OFFICE_MINISTRY");?><br />
 								<?php echo $tr->translate("CUSTOMER_BRANCH");?>
 							</strong>
 						</td>
 						<td align="center" width="36%">
-							<strong​​ style="color:#4839bd; font-size: 14px;font-family: 'Times New Roman','Khmer MEF2';"></strong>
+							<strong​​ style="color:#4839bd; font-size: 14px;font-family: 'Times New Roman','Khmer OS Muol Light';"></strong>
 						</td>
 						<td align="center" width="32%" valign="top">
-							<strong​​ style="color:#4839bd; font-size: 15px;font-family: 'Times New Roman','Khmer MEF2';">
+							<strong​​ style="color:#4839bd; font-size: 15px;font-family: 'Times New Roman','Khmer OS Muol Light';">
 								<?php echo $tr->translate("NATIONALITY_OFKINGDOM");?><br />
 								<?php echo $tr->translate("NATION_RELIGION_KING");?>
 							</strong>
@@ -185,10 +188,10 @@
 					</tr>
 					<tr>
 						<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-							<strong​​ style="color:#4839bd; font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';">
+							<strong​​ style="color:#4839bd; font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';">
 								<?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?>
 							</strong><br />
-							<strong​​ style="color:#4839bd; font-size: 13px;font-family:'Times New Roman','Khmer MEF2';">
+							<strong​​ style="color:#4839bd; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';">
 								<?php echo $tr->translate("ACADEMIC_YEAR");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span> ,
 								<!--<?php //echo $tr->translate("DEGREE");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php //echo $rs['degree'];?></span> ,-->
 								<?php if($rs['exam_type']!=2){echo $tr->translate("MONTHLY");?> : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['for_month'];?></span><?php }?>
@@ -278,15 +281,15 @@
 									$average = number_format($rs['total_score']/$amount_subject,2);//amount_subjectsem
 								?>
 								<td align="center"><?php echo number_format($average,2);?></td>
-								<td class="border-right-none red" align="center">&nbsp;
+								<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
 								<?php //echo $dbgb->calCulateGrade($average,$rs['max_score']);?>
 								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],1);?>
 								&nbsp;</td>
-								<td class="border-right-none red" align="center">&nbsp;
+								<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
 								<?php //echo $dbgb->calCulateGradeKhmerMention($average,$rs['max_score']);?>
 								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],2);?>
 								&nbsp;</td>
-								<td class="red" align="center">&nbsp;
+								<td class="red" align="center" style="white-space: nowrap;">&nbsp;
 								<?php //echo $dbgb->calCulateGradeEnglishMention($average,$rs['max_score']);?>
 								<?php  echo $dbgb->getMentionScore($average, $rs['for_academic_year'],$rs['degree_id'],3);?>
 								&nbsp;

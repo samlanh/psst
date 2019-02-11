@@ -2,7 +2,14 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("RPT_PRODUCT_SOLD")); 
 	$frm =  $this->form_search;
-?>	
+?>
+<style>
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
+</style>	
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
@@ -46,7 +53,32 @@
 	</style>
 	<div style="min-height:22cm; margin:0 auto;">
 		<div id="divPrint">
-			<style>tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }</style>
+			<style>
+				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+				table.content-data{
+					border-collapse:collapse;
+					width:100%;
+					border:1px solid #000; 
+					font-family:'Times New Roman','Khmer OS Battambang';
+					font-size:13px;
+					white-space: nowrap;
+					margin:0 auto;
+					color:#000;
+					margin:0 auto;
+				}
+				table.content-data  tr.style-head {
+				   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+					background: #CCD9FF;
+					text-align: center;
+				}
+				table.content-data tr td{
+					padding: 2px;
+				}
+				table.content-data tr.style-rowdata {
+					font-size:12px; 
+					height: 23px;
+				}
+			</style>
 			<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
@@ -58,8 +90,8 @@
 				<tr>
 					<td width="15%" align="right">&nbsp;</td>
 					<td align="center"  width="70%">
-						<strong style="font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2'; "><?php echo $tr->translate("RPT_PRODUCT_SOLD"); ?></strong><br />
-						<strong style="font-weight:bold;font-family: 'Times New Roman','Khmer MEF2';color:#000; font-size: 13px;"><?php if(!empty($this->search['start_date'])){?>&nbsp;<?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> ដល់ <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+						<span style="color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'; "><?php echo $tr->translate("RPT_PRODUCT_SOLD"); ?></span><br />
+						<span style="font-family: 'Times New Roman','Khmer OS Muol Light';color:#000; font-size: 13px;"><?php if(!empty($this->search['start_date'])){?>&nbsp;<?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate("TO"); ?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 					</td>
 					<td width="15%" align="right">&nbsp;</td>
 				</tr>
@@ -68,14 +100,14 @@
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table cellpadding="5"​ style="font-family:'Times New Roman','Khmer OS Battambang'; border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
-							<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+						<table class="content-data" cellpadding="5"​  border="1" >
+							<tr class="style-head" align="center">
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 									<td colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
 									<td colspan="3">&nbsp;<?php echo $tr->translate("SALE_INFO");?>&nbsp;</td>
 								</tr>
-							<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+							<tr class="style-head" align="center">
 								<td>&nbsp;<?php echo $tr->translate("CATEGORY");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("PRODUCT_CODE");?>&nbsp;</td>
 							    <td>&nbsp;<?php echo $tr->translate("PRODUCT_NAME");?>&nbsp;</td>
@@ -85,7 +117,7 @@
 							    <td>&nbsp;<?php echo $tr->translate("TOTAL");?>&nbsp;</td>
 							</tr>
 						<?php $grand_total=0; if (!empty($this->rspro)) foreach ($this->rspro as $key=> $rs){?>
-							<tr class="hover" style="font-size:11px; line-height:16px; "​ align="center">
+							<tr class="style-rowdata hover" align="center">
 								<td>&nbsp;<?php echo $key+1; ?>&nbsp;</td>
 								<td align="left">&nbsp;<?php echo $rs['branch_name'];?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $rs['category'];?>&nbsp;</td>
@@ -99,15 +131,15 @@
 						<?php 
 						$grand_total = $grand_total + $rs['subtotal'];
 						}?>
-	 						<tr style="font-size:13px; height: 20px;border: 1px solid #000;font-weight: bold;" align="center" class="hover" >
+	 						<tr style="font-size:13px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
 								<td colspan="7" ><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
-								<td align="center" style="border: 1px solid #000;font-weight: bolder;">&nbsp;<?php echo "$ ".number_format($grand_total,2);?></td>
+								<td align="center" style="border: 1px solid #000;"><strong><?php echo "$ ".number_format($grand_total,2);?></strong></td>
 	 						</tr>
 						</table>
 					</td>
 				</tr>
 			</table>
-			<table style="background:#fff;width:90%;margin:0 auto;white-space: nowrap;width:100%;font-family:Khmer OS Battambang,Times New Roman;">
+			<table style="font-size: 14px; background:#fff;width:90%;margin:0 auto;white-space: nowrap;width:100%;font-family:'Times New Roman','Khmer OS Battambang';">
 				<tr>
 					<td colspan="3">&nbsp;</td>
 				</tr>
@@ -116,11 +148,11 @@
 				</tr>
 				<tr>
 					<td align="center" width="25%">
-						<span style=" font-size: 14px;"><?php echo $tr->translate('VERIFIED_BY')?></span>
+						<span><?php echo $tr->translate('VERIFIED_BY')?></span>
 					</td>
 					<td  width="50%">&nbsp;</td>
 					<td align="center"  width="25%">
-						<span style=" font-size: 14px;text-align: right;"><?php echo $tr->translate('PREPARED_BY')?></span>
+						<span><?php echo $tr->translate('PREPARED_BY')?></span>
 					</td>
 				</tr>
 			</table>

@@ -6,6 +6,13 @@
 	$frm = $this->form_search;
 ?>	
 <meta charset="utf-8">
+<style>
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
+</style>
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
@@ -53,6 +60,38 @@
 	</form>
 	 <div style="min-height:22cm; margin:0 auto;">
 		<div id="divPrint">
+			<style>
+				table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
+				tr{ page-break-inside:avoid; page-break-after:auto }
+				#header {
+				  display: table-header-group;
+				  page-break-inside:avoid; page-break-after:auto;
+				}
+				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+				table.content-data{
+					border-collapse:collapse;
+					width:100%;
+					border:1px solid #000; 
+					font-family:'Times New Roman','Khmer OS Battambang';
+					font-size:13px;
+					white-space: nowrap;
+					margin:0 auto;
+					color:#000;
+					margin:0 auto;
+				}
+				table.content-data  tr.style-head {
+				   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+					background: #CCD9FF;
+					text-align: center;
+				}
+				table.content-data tr td{
+					padding: 2px;
+				}
+				table.content-data tr.style-rowdata {
+					font-size:12px; 
+					height: 23px;
+				}									
+			</style>
 			<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;">
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
@@ -65,7 +104,7 @@
 					<td width="15%" align="center">
 					</td>
 					<td align="center" width="70%">
-						<strong style="padding-left: 1px;font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_PURCHASE_ALL');?></strong><br>
+						<span style="padding-left: 1px; color:#000; font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_PURCHASE_ALL');?></span><br>
 						<span style="font-weight: bold;font-size: 12px; "><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search['start_date']));?> &nbsp;<?php echo $tr->translate('TO');?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search['end_date']));}?></span>
 					</td>
 					<td width="15%" align="center">
@@ -76,26 +115,15 @@
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<style>
-							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
-							tr{ page-break-inside:avoid; page-break-after:auto }
-							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap; font-size: 14px;}
-							#header {
-							  display: table-header-group;
-							  page-break-inside:avoid; page-break-after:auto;
-							}
-							.hover:hover{background:#eee;}
-							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }										
-						</style>
-						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;border: 1px solid #000;width:100%; border-collapse: collapse;white-space: nowrap;"  border="1" >
+						<table class="content-data" cellpadding="5"​ border="1" >
 							<thead>
-								<tr style="font-size:12px; height: 16px; background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+								<tr class="style-head"  align="center">
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH_NAME");?>&nbsp;</td>
 									<td colspan="2">&nbsp;<?php echo $tr->translate("SUPPLIER_INFO");?>&nbsp;</td>
 									<td colspan="8">&nbsp;<?php echo $tr->translate("PURCHASE_INFO");?>&nbsp;</td>
 								</tr>
-								<tr style="font-size:12px; height: 16px;background-color: #CCD9FF;line-height: 24px;font-weight: bold;" align="center">
+								<tr class="style-head" align="center">
 									
 									<td>&nbsp;<?php echo $tr->translate('SUPPLIER_NAME');?></td>
 									<td>&nbsp;<?php echo $tr->translate('TEL');?></td>
@@ -113,19 +141,19 @@
 						$totalpaid=0;
 						$totalQTY=0;
 						$totalbalance=0; if(!empty($this->pur_all))foreach ($this->pur_all AS $rs) { $i++; ?>
-							<tr class="hover" style="font-size:11px; height: 18px;"​ align="center">
-								    <td>&nbsp;<?php echo $i; ?>&nbsp;</td>
-								    <td>&nbsp;<?php echo $rs['brand_name'];?>&nbsp;</td>
-								    <td>&nbsp;<?php echo $rs['sup_name'];?>&nbsp;</td>
-								    <td>&nbsp;<?php echo $rs['tel'];?>&nbsp;</td>
-								    <td>&nbsp;<strong><?php echo $rs['supplier_no'];?></strong>&nbsp;</td>
-								    <td>&nbsp;<?php echo $rs['cate_name'];?>&nbsp;</td>
-								    <td>&nbsp;<?php echo $rs['pro_id'];?>&nbsp;</td>
-								    <td><?php echo number_format($rs['qty'],0);?>&nbsp;</td>
-								    <td>&nbsp;$&nbsp;<?php echo $rs['cost'];?>&nbsp;</td>
-								    <td>&nbsp;$&nbsp;<?php echo $rs['amount'];?>&nbsp;</td>
-								    <td><?php echo date("d/m/Y",strtotime($rs['date']));?>&nbsp;</td>
-								    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
+							<tr class="style-rowdata hover" align="center">
+							    <td>&nbsp;<?php echo $i; ?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $rs['brand_name'];?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $rs['sup_name'];?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $rs['tel'];?>&nbsp;</td>
+							    <td>&nbsp;<strong><?php echo $rs['supplier_no'];?></strong>&nbsp;</td>
+							    <td>&nbsp;<?php echo $rs['cate_name'];?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $rs['pro_id'];?>&nbsp;</td>
+							    <td><?php echo number_format($rs['qty'],0);?>&nbsp;</td>
+							    <td>&nbsp;$&nbsp;<?php echo $rs['cost'];?>&nbsp;</td>
+							    <td>&nbsp;$&nbsp;<?php echo $rs['amount'];?>&nbsp;</td>
+							    <td><?php echo date("d/m/Y",strtotime($rs['date']));?>&nbsp;</td>
+							    <td>&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
 							 </tr>
 							<?php $totalbalance=$totalbalance+$rs['amount'];
 							$totalQTY = $totalQTY +$rs['qty'];
@@ -140,11 +168,11 @@
 				<tr>
 					<td colspan="3" align="right">
 					     <table width="25%"  style="font-family:'Times New Roman','Khmer OS Battambang'; border: 1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1"  >
-					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;" align="center">
 					               <td><?php echo $tr->translate('TOTAL_QTY');?> :</td>
-					               <td align="right"><strong>&nbsp;<?php echo number_format($totalQTY,2)." ".$tr->translate('Items');?>&nbsp;</strong></td>
+					               <td align="right"><strong>&nbsp;<?php echo number_format($totalQTY,2);?>&nbsp;</strong><?php echo " ".$tr->translate('Items'); ?>&nbsp;</td>
 					           </tr>
-					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center">
+					           <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;" align="center">
 					               <td><?php echo $tr->translate('TOTAL_AMOUNT');?> :</td>
 					               <td align="right"><strong>&nbsp;$&nbsp;<?php echo number_format($totalbalance,2);?>&nbsp;</strong></td>
 					           </tr>

@@ -5,7 +5,7 @@
 ?>	
 	<div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 		<div id="divPrint">
-			<table width="100%" border="0" style="font-size:12px;font-family:Tahoma,'Khmer OS Battambang';"> 
+			<table width="100%" border="0" style="font-size:12px;font-family:'Times New Roman','Khmer OS Battambang';"> 
 				<tr>
 					<td><?php echo $this->rsheader;?></td>
 				</tr>
@@ -14,7 +14,7 @@
 					<td>&nbsp;</td>
 				</tr>
 				<tr>	
-					<td align="center" style="font-family: Times New Roman,'Khmer MEF2'; font-size: 20px;">
+					<td align="center" style="font-family: 'Times New Roman','Khmer OS Muol Light'; font-size: 20px;">
 						<?php echo $tr->translate("CRM_SUMMARY");?>
 				   </td>
 				</tr>
@@ -38,7 +38,6 @@
 						table.data-value tbody tr.head-title td
 						 {
 						    text-align: center;
-						    font-weight: 600;
 						    border: solid 1px #000;
 						    border-top: none;
 						    border-left: none;
@@ -58,13 +57,13 @@
 				</style>
 				<tr>
 					<td>
-						<table width="100%" border="1"  style="font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+						<table width="100%" border="1"  style="font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; white-space: nowrap;">
 							<tr style="height: 24px; background: #2e3192;">
-								<td colspan="2" style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp; <?php echo $tr->translate('CUSTOMER_INFO')?></td>
+								<td colspan="2" style="font-size: 13px; color: #fff;">&nbsp; <?php echo $tr->translate('CUSTOMER_INFO')?></td>
 							</tr>
 							<tr>
 								<td valign="top" width="50%">
-									<table class="data-value"  width="100%" style="font-size:12px; border-collapse:collapse; vertical-align:top; font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+									<table class="data-value"  width="100%" style="font-size:12px; border-collapse:collapse; vertical-align:top; font-family: 'Times New Roman','Khmer OS Battambang'; white-space: nowrap;">
 										<tr>
 											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span>&nbsp;: <?php echo $this->rs['kh_name'];?></td>
 										</tr>
@@ -83,7 +82,7 @@
 									</table>
 								</td>
 								<td valign="top" width="50%">
-									<table class="data-value"   width="100%" style="font-size:12px; border-collapse:collapse; font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+									<table class="data-value"   width="100%" style="font-size:12px; border-collapse:collapse; font-family: 'Times New Roman','Khmer OS Battambang'; white-space: nowrap;">
 										<tr>
 											<td  >&nbsp;<span class="label-title"><?php echo $tr->translate("ASK_FOR");?></span>&nbsp;: <?php echo $this->rs['ask_for_title'];?></td>
 										</tr>
@@ -115,13 +114,13 @@
 				<?php if (!empty($this->rowdetail)) {?>
 				<tr>
 					<td>
-						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; white-space: nowrap;">
 							<tr style="height: 24px; background: #2e3192;">
-								<td style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp;<?php echo $tr->translate("STUDENT_INFORMATION");?></td>
+								<td style="font-size: 13px; color: #fff;">&nbsp;<?php echo $tr->translate("STUDENT_INFORMATION");?></td>
 							</tr>
 							<tr>
 								<td>
-									<table class="data-value"   width="100%" style="font-size:12px; border-collapse:collapse; font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+									<table class="data-value"   width="100%" style="font-size:12px; border-collapse:collapse; font-family: 'Times New Roman','Khmer OS Battambang'; white-space: nowrap;">
 										<tr class="head-title">
 											<td  ><?php echo $tr->translate("N_O");?></td>
 											<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
@@ -155,15 +154,15 @@
 				<?php if (!empty($this->history)) {?>
 				<tr>
 					<td>
-						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+						<table width="100%" border="1"  style="margin-top:20px; font-size:12px; border-collapse:collapse;border: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; white-space: nowrap;">
 							<tr style="height: 24px; background: #2e3192;">
-								<td style="font-size: 13px;font-weight: bold;color: #fff;">&nbsp;<?php echo $tr->translate("CONTACT_HISTORY");?></td>
+								<td style="font-size: 13px;color: #fff;">&nbsp;<?php echo $tr->translate("CONTACT_HISTORY");?></td>
 							</tr>
 							<tr>
 								<td>
-									<table class="data-value"   width="100%" style="font-size:12px; border-collapse:collapse; font-family: Times New Roman , Khmer OS Battambang; white-space: nowrap;">
+									<table class="data-value"   width="100%" style="font-size:12px; border-collapse:collapse; font-family: 'Times New Roman','Khmer OS Battambang'; white-space: nowrap;">
 										<tr class="head-title">
-											<td  >&nbsp;<?php echo $tr->translate("N_O");?>&nbsp;</td>
+											<td>&nbsp;<?php echo $tr->translate("N_O");?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("CONTACT_DATE");?>&nbsp;</td>
 											<td style="width: 380px;">&nbsp;<?php echo $tr->translate("FEEDBACK");?>&nbsp;</td>
 											<td>&nbsp;<?php echo $tr->translate("NEXT_DATE_CONTACT");?>&nbsp;</td>

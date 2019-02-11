@@ -109,7 +109,7 @@ dojo.ready(function(){
 			}
 			.cheader{height: 30px;background: #ffdbdb; white-space: nowrap;
 			height:50px;
-						color:#5a71b5;font-size: 16px;font-family: 'Times New Roman','Khmer MEF2';"
+						color:#5a71b5;font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';"
 }
 			.hover:hover{background: #ccc;}
 			 td.rotate {
@@ -160,17 +160,17 @@ dojo.ready(function(){
 						<img style="max-width: 98%;max-height:90px;" src="<?php echo $image;?>">
 					</td>
 					<td width="60%" align="center" >
-						<h3 style="color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer MEF2';">លទ្ធផលនៃការសិក្សាប្រចាំ ខែ<?php echo $this->rs['for_month']?></h3>
-						<h3 class="green" style="font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Monthly Result  For <?php echo $this->rs['for_monthen']?></h3>
-						<h3 style="color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
-						<h3 class="green" style="font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
+						<h3 style=" font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';">លទ្ធផលនៃការសិក្សាប្រចាំ ខែ<?php echo $this->rs['for_month']?></h3>
+						<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Monthly Result  For <?php echo $this->rs['for_monthen']?></h3>
+						<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
+						<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
 					</td>
 					<td width="20%" align="center" >
 					</td>
 				</tr>
 				<tr>
-					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer MEF2';">
-						<table  style="width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer MEF2'; ">
+					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer OS Muol Light';">
+						<table  style="width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Muol Light'; ">
 							<tr>
 								<td align="left" style="width: 55%;" >ឈ្មោះសិស្សៈ <?php echo $this->rs['stu_khname']?></td>
 								<td align="right" style="width: 30px;">ភេទៈ</td>
@@ -201,7 +201,7 @@ dojo.ready(function(){
 								<td style="min-width:250px;">មុខវិជ្ជា<br />Subjects</td>
 								<td>ពិន្ទុ<br />Scores</td>
 								<td>មធ្យមភាគ<br />Average</td>
-								<td class="red bold">ចំ.ថ្នាក់<br />Rank</td>
+								<td class="red ">ចំ.ថ្នាក់<br />Rank</td>
 								<td>និទ្ទេស <br />Grade</td>
 								<td colspan="2">មូលវិចារ<br />Comments</td>
 							</tr>
@@ -240,10 +240,10 @@ dojo.ready(function(){
 									<?php //echo $dbgb->calCulateGrade($this->rs['total_avg'],$this->rs['max_score'])?>
 									<?php  echo $dbgb->getMentionScore($this->rs['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],1);?>
 									</strong>&nbsp;</td>
-								<td style="white-space: nowrap;" class="border-right-none red bold">&nbsp;<strong>
+								<td style="white-space: nowrap;" class="border-right-none red ">&nbsp;
 								<?php //echo $dbgb->calCulateGradeKhmerMention($this->rs['total_avg'],$this->rs['max_score'])?>
 								<?php  echo $dbgb->getMentionScore($this->rs['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],2);?>
-								</strong>&nbsp;</td>
+								&nbsp;</td>
 								<td style="white-space: nowrap;" class="red bold">&nbsp;<strong>
 								<?php //echo $dbgb->calCulateGradeEnglishMention($this->rs['total_avg'],$this->rs['max_score'])?>
 								<?php  echo $dbgb->getMentionScore($this->rs['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],3);?>
@@ -298,17 +298,17 @@ dojo.ready(function(){
 							  	$semsteren="Semester Two Evaluation";
 							  }
 						?>
-						<h3 style="color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer MEF2';"><?php echo $semster;?></h3>
-						<h3 class="red bold" style="font-size: 18px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $semsteren;?></h3>
-						<h3 style="color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
-						<h3 class="green" style="font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
+						<h3 style="font-weight:normal; color:#4839bd; font-size: 18px; line-height:28px; margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $semster;?></h3>
+						<h3 class="red bold" style="font-weight:normal; font-size: 18px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $semsteren;?></h3>
+						<h3 style="font-weight:normal; color:#4839bd; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">ឆ្នាំសិក្សាៈ​ <?php echo $dbgb->getNumberInkhmer($this->rs['start_year']." - ".$this->rs['end_year']) ?></h3>
+						<h3 class="green" style="font-weight:normal; font-size: 16px; line-height:24px; margin: 0; font-family: 'Times New Roman','Khmer OS Battambang';">Academic Year: <?php echo $this->rs['start_year']." - ".$this->rs['end_year']?></h3>
 					</td>
 					<td width="20%" align="center" >
 					</td>
 				</tr>
 				<tr>
-					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer MEF2';">
-						<table  style="width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer MEF2'; ">
+					<td colspan="3" width="100%" align="left" style=" font-family: 'Times New Roman','Khmer OS Muol Light';">
+						<table  style="width:100%;background:#fff; color:#4839bd; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Muol Light'; ">
 							<tr>
 								<td align="left" style="width: 55%;" >ឈ្មោះសិស្សៈ <?php echo $this->rs['stu_khname']?></td>
 								<td align="right" style="width: 30px;">ភេទៈ</td>
@@ -339,7 +339,7 @@ dojo.ready(function(){
 								<td style="min-width:250px;">មុខវិជ្ជា<br />Subjects</td>
 								<td>ពិន្ទុ<br />Scores</td>
 								<td>មធ្យមភាគ<br />Average</td>
-								<td class="red bold">ចំ.ថ្នាក់<br />Rank</td>
+								<td class="red ">ចំ.ថ្នាក់<br />Rank</td>
 								<td>និទ្ទេស <br />Grade</td>
 								<td colspan="2">មូលវិចារ<br />Comments</td>
 							</tr>
@@ -395,10 +395,8 @@ dojo.ready(function(){
 								</strong>
 								&nbsp;</td>
 								<td style="white-space: nowrap;" class="border-bottom-none border-right-none red">&nbsp;
-									<strong>
 										<?php //echo $dbgb->calCulateGradeKhmerMention($this->monthlySemester['total_avg'],$this->monthlySemester['max_score'])?>
 										<?php  echo $dbgb->getMentionScore($this->monthlySemester['total_avg'], $this->rs['for_academic_year'],$this->rs['degree_id'],2);?>
-										</strong>
 									&nbsp;</td>
 								<td style="white-space: nowrap;" class="border-bottom-none red">&nbsp;
 									<strong>
@@ -428,10 +426,10 @@ dojo.ready(function(){
 									<?php //echo $dbgb->calCulateGrade($this->Semester['average_semester_score'],$this->Semester['max_score'])?>
 									<?php  echo $dbgb->getMentionScore($this->Semester['average_semester_score'], $this->rs['for_academic_year'],$this->rs['degree_id'],1);?>
 									</strong>&nbsp;</td>
-								<td style="white-space: nowrap;" class="border-right-none red">&nbsp;<strong>
+								<td style="white-space: nowrap;" class="border-right-none red">&nbsp;
 									<?php //echo $dbgb->calCulateGradeKhmerMention($this->Semester['average_semester_score'],$this->Semester['max_score'])?>
 									<?php  echo $dbgb->getMentionScore($this->Semester['average_semester_score'], $this->rs['for_academic_year'],$this->rs['degree_id'],2);?>
-									</strong>&nbsp;</td>
+									&nbsp;</td>
 								<td style="white-space: nowrap;" class="red" >&nbsp;<strong>
 									<?php //echo $dbgb->calCulateGradeEnglishMention($this->Semester['average_semester_score'],$this->Semester['max_score'])?>
 									<?php  echo $dbgb->getMentionScore($this->Semester['average_semester_score'], $this->rs['for_academic_year'],$this->rs['degree_id'],3);?>

@@ -24,7 +24,6 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 .dijitTabPaneWrapper , .dijitContentPane,.dijitTabListContainer-top{max-width: 99% !important;}	
 </style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript"  src="<?php echo $this->baseUrl();?>/js/jquery-1.7.2.min.js"></script>
 <script>
 	dojo.require("dijit.layout.TabContainer");
 	dojo.require("dijit.form.Textarea");
@@ -76,7 +75,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("NOTE");?>
 	                   </label>
 	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<textarea id="notes" class="fullside" name="notes" dojoType="dijit.form.Textarea" style="height:45px;"><?php echo $this->rs_return['note']?></textarea>	
+	                   		<textarea id="notes" class="fullside" name="notes" dojoType="dijit.form.Textarea" style="min-height:60px;"><?php echo $this->rs_return['note']?></textarea>	
 	                   </div>
 	                </div>
 	            </div>
@@ -102,7 +101,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 								<tr id="head-title" class="head-td" align="right"></tr>
 							</table>
 						</div>
-						<input type="text" name="identity" id="identity"  value="" >
+						<input type="hidden" name="identity" id="identity"  value="" >
 					</div>
 					
 	            </div>

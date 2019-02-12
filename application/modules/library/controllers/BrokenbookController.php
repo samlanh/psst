@@ -70,28 +70,22 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     
     public function editAction(){
     	$id = $this->getRequest()->getParam("id");
+    	$db = new Library_Model_DbTable_DbBrokenbook();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['id']=$id;
     		try {
-    			$db = new Library_Model_DbTable_DbBrokenbook();
-    			$db->editBrokenBook($_data);
-    			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/brokenbook/index");
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/brokenbook/index");
-    			}
+    			$db->editBrokenBook($_data,$id);
+    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/brokenbook/index");
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("EDIT_FAIL");
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			echo $e->getMessage();
     		}
     	}
-    	$db_cat = new Library_Model_DbTable_DbBorrowbook();
-    	$b=$this->view->book_title=$db_cat->getBookTitle();
-    	$db = new Library_Model_DbTable_DbBrokenbook();
     	$this->view->row=$db->getBrokenById($id);
     	$this->view->row_detail=$db->getBrokenDetailById($id);
+    	
+    	$db_cat = new Library_Model_DbTable_DbBorrowbook();
+    	$b=$this->view->book_title=$db_cat->getBookTitle();
     }
     
     function addCategoryAction(){

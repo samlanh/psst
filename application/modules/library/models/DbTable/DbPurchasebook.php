@@ -23,10 +23,9 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 		       		(SELECT CONCAT(u.first_name,' ',u.last_name) FROM rms_users AS u WHERE u.id=b.user_id LIMIT 1) AS user_name,
 		       		(SELECT v.`name_en` FROM rms_view AS v WHERE v.`type`=1  AND b.status=v.`key_code` LIMIT 1) AS `status` 
 		       	FROM 
-		       		rms_bookpurchase AS b,
-		       		rms_bookpurchasedetails bd 
+		       		rms_bookpurchase AS b
 		       	WHERE 
-		       		b.id=bd.purchase_id
+		       		1
 			";
     	
     	$from_date =(empty($search['start_date']))? '1': " b.date_purchase >= '".$search['start_date']." 00:00:00'";
@@ -42,7 +41,7 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
     	if($search["status_search"] > -1){
     	    $where.=' AND b.status='.$search["status_search"];
     	}
-    	$order=" GROUP BY b.purchase_no ORDER BY id DESC";
+    	$order=" ORDER BY id ASC";
     	return $db->fetchAll($sql.$where.$order);
     }
  
@@ -88,114 +87,81 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 		}
 	}
 
-	public function getItemDetail($id){
-		$db=$this->getAdapter();
-		$sql = "SELECT * FROM rms_bookpurchasedetails WHERE purchase_id=$id";
-		$rows=$db->fetchAll($sql);
-		return $rows;
-	}
-	
-	public function editPurchaseDetail($data){
+	public function editPurchaseDetail($data,$id){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$db_global = new Application_Model_DbTable_DbGlobal();
-			$session_user=new Zend_Session_Namespace('authstu');
-		    $userName=$session_user->user_name;
-		    $GetUserId= $session_user->user_id;
-		    
-		    $row_item=$this->getItemDetail($data['id']);
-		    $db_book=new Library_Model_DbTable_DbBook();
-		    if(!empty($row_item)){
-		    	foreach ($row_item As $rs_item){
-		    		$row=$db_book->getBookQty($rs_item['book_id']);
-		    		//print_r($row);exit();
-		    		if($row){
-		    			$datatostock   = array(
-		    					'qty_after' =>  $row["qty_after"]-$rs_item['borr_qty'],
-		    					'qty' 		=>  $row["qty"]-$rs_item['borr_qty'],
-		    					'date'		=>	date("Y-m-d"),
-		    			);
-		    			$this->_name="rms_book";
-		    			$where=" id = ".$row['id'];
-		    			$this->update($datatostock, $where);
-		    		}
+		    $row_detail=$this->getPurchaseDetailById($id);
+		    if(!empty($row_detail)){
+		    	foreach ($row_detail As $rs_item){
+	    			$this->_name = "rms_book_detail";
+	    			$where=" id = ".$rs_item['book_id'];
+	    			$this->delete($where);
 		    	}
-		    }else { }
+		    }
              
 		    $arr=array(
-		    		"title"     	=> 	$data["note_p"],
-					"purchase_no"   => 	$data["purchase_no"],
-					"amount_due"    => 	$data["amount_due"],
-					"date_order"    => 	date("Y-m-d",strtotime($data['date_order'])),
-					"user_id"       => 	$GetUserId,
-					"status"        => 	$data['status_p'],
+		    	"purchase_no"   => 	$data["purchase_no"],
+				"date_purchase" => 	date("Y-m-d",strtotime($data['date_purchase'])),
+				"note"     		=> 	$data["note_p"],
+				"user_id"       => 	$this->getUserId(),
 		    );
 		    $this->_name="rms_bookpurchase";
-			$where=" id=".$data['id'];
-		    $this->update($arr, $where); 
-			unset($arr);
+			$where1=" id = $id ";
+		    $this->update($arr, $where1); 
 			
 			$this->_name="rms_bookpurchasedetails";
-			$where=" purchase_id=".$data['id'];
+			$where=" purchase_id = $id ";
 			$this->delete($where);
 
-			if($data['identity']!=""){
+			if(!empty($data['identity'])){
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
-					if($data['status_p']!=0){
-						$qty=$data['qty_'.$i];
-					}else{
-						$qty=0;
-					}
+					$array = array(
+						'book_id'	=> 	$data['book_id'.$i],
+						'serial'	=>  $data['serial_'.$i],
+						'barcode'	=>  $data['barcode_'.$i],
+						'note'  	=> 	$data['note_'.$i],
+					);
+					$this->_name='rms_book_detail';
+					$book_id = $this->insert($array);
+					
 					$data_item= array(
-							'purchase_id'	=>  $data['id'],
-							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $qty,
-							'cost'		=>  $data['cost_'.$i],
-							'amount'	=>  $data['amount_'.$i],
-							'note'  	=> 	$data['note_'.$i],
-							'user_id'	=> 	$GetUserId,
-							'is_full'	=> 	1,
-							'status'	=> 	$data['status_p'],
+						'purchase_id'	=>  $id,
+						'book_id'		=> 	$book_id,
+						'note'  		=> 	$data['note_'.$i],
 					);
 					$this->_name='rms_bookpurchasedetails';
 					$this->insert($data_item);
-					$rows=$db_book->getBookQty($data['book_id'.$i]); 
-					if($rows){
-							$datatostock= array(
-									'qty_after' => $rows["qty_after"]+$data['qty_'.$i],
-									'qty' 		=> $rows["qty"]+$data['qty_'.$i],
-									'date'		=>	date("Y-m-d"),
-									'user_id'	=>$GetUserId
-							);
-							$this->_name="rms_book";
-							$where=" id = ".$rows['id'];
-							if($data['status_p']!=0){
-								$this->update($datatostock, $where);
-							}
-							
-					}else{
-						
-					}
 				 }
 			}
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
-			$err =$e->getMessage();
-			echo $err;exit();
-			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			echo $e->getMessage();exit();
 		}
 	}
 	
 	public function getPurchaseDetailById($id){
 		$db=$this->getAdapter();
-		$sql = "SELECT * FROM rms_bookpurchasedetails WHERE purchase_id=$id";
-		$rows=$db->fetchAll($sql);
-		return $rows;
+		$sql = "SELECT 
+					bpd.*,
+					bd.barcode,
+					bd.serial,
+					b.title,
+					b.id as b_id
+				FROM 
+					rms_bookpurchasedetails as bpd,
+					rms_book_detail as bd,
+					rms_book as b
+				WHERE 
+					bpd.book_id = bd.id
+					and bd.book_id = b.id
+					and purchase_id=$id
+			";
+		return $db->fetchAll($sql);
 	}
 	 
 	function getPurchaseById($id){

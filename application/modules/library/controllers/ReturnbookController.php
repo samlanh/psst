@@ -78,47 +78,23 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     
     public function editAction(){
     	$id=$this->getRequest()->getParam('id');
+    	$db = new Library_Model_DbTable_DbReturnbook();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		//print_r($_data);exit();
-    		$_data['id']=$id;
     		try {
-    			$db = new Library_Model_DbTable_DbReturnbook();
-    			$db->updateReturnBook($_data);
-    			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/returnbook/index");
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/returnbook/index");
-    			}
+    			$db->updateReturnBook($_data,$id);
+    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/returnbook/index");
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("EDIT_FAIL");
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
+    			echo $e->getMessage();exit();
     		}
     	}
-    	$db_cat = new Library_Model_DbTable_DbBorrowbook();
-//     	$this->view->stu_id=$db_cat->getAllStudentId(1);
-//     	$this->view->stu_name=$db_cat->getAllStudentId(2);
-    	$db_cat = new Library_Model_DbTable_DbReturnbook();
-    	$this->view->stu_id=$db_cat->getAllBorrId(1);
-    	$this->view->stu_name=$db_cat->getAllBorrId();
     	
-    	$b=$this->view->book_title=$db_cat->getBookTitle();
-    	$this->view->borr_no=$db_cat->getBorrowNo();
-    	
-    	$db = new Library_Model_DbTable_DbReturnbook();
-        $this->view->rs_return=$db->getReturnBookById($id);
-    	//$this->view->rs_detail=$db_cat->getReturnDetailById($id);
+        $this->view->row=$db->getReturnBookById($id);
+    	$this->view->row_detail=$db->getReturnDetailById($id);
      
-		$frm_major = new Library_Form_FrmBookreturn();
-		$frm_search = $frm_major->frmBook();
-		Application_Model_Decorator::removeAllDecorator($frm_search);
-		$this->view->frm_book = $frm_search;
-		
-		$frm_major = new Library_Form_FrmCategory();
-		$frm_search = $frm_major->FrmCategory();
-		Application_Model_Decorator::removeAllDecorator($frm_search);
-		$this->view->frm_cat = $frm_search;
+    	$_db = new Library_Model_DbTable_DbBorrowbook();
+    	$b=$this->view->book_title=$_db->getBookTitle();
     }
     
     function getBookdetailAction(){

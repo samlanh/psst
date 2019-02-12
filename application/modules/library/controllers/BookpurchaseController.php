@@ -59,9 +59,8 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();
-    	$this->view->stu_id=$db_cat->getAllStudentId(1);
-    	$this->view->stu_name=$db_cat->getAllStudentId(2);
     	$b=$this->view->book_title=$db_cat->getBookTitlePurchase();
+    	
     	$db=new Library_Model_DbTable_DbPurchasebook();
     	$this->view->po_no=$db->getPONo();
     	
@@ -95,31 +94,22 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     
     public function editAction(){
     	$id = $this->getRequest()->getParam("id");
+    	$db = new Library_Model_DbTable_DbPurchasebook();
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		$_data['id']=$id;
     		try {
-    			$db = new Library_Model_DbTable_DbPurchasebook();
-    			$db->editPurchaseDetail($_data);
-    			if(!empty($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/bookpurchase/index");
-    			}else{
-    				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/bookpurchase/index");
-    			}
+    			$db->editPurchaseDetail($_data,$id);
+    			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", "/library/bookpurchase/index");
     		} catch (Exception $e) {
     			Application_Form_FrmMessage::message("EDIT_FAIL");
-    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    			echo $e->getMessage();
+    			echo $e->getMessage();exit();
     		}
     	}
     	$db_cat = new Library_Model_DbTable_DbBorrowbook();
-    	$this->view->stu_id=$db_cat->getAllStudentId(1);
-    	$this->view->stu_name=$db_cat->getAllStudentId(2);
     	$b=$this->view->book_title=$db_cat->getBookTitlePurchase();
-    	$db=new Library_Model_DbTable_DbPurchasebook();
-    	$this->view->po_no=$db->getPONo();
+    	
     	$this->view->row=$db->getPurchaseById($id);
-    	$this->view->pus_item=$db->getPurchaseDetailById($id);
+    	$this->view->row_detail=$db->getPurchaseDetailById($id);
     	
     	$frm_major = new Library_Form_FrmBook();
     	$frm_search = $frm_major->frmBook();

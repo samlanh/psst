@@ -103,120 +103,77 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function updateReturnBook($data){
-		//print_r($data['stu_id']);exit();
+	public function updateReturnBook($data,$id){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			
-			$id=$data['id'];
-			$row_item=$this->getItemDetail($id);
-			if(!empty($row_item)){
-				foreach ($row_item As $rs_item){
-					$row=$this->getBookQty($rs_item['book_id']);
-					if($row){
-						$datatostock   = array(
-								'qty_after' =>  $row["qty_after"]-$rs_item['borr_qty'],
-								'date'		=>	date("Y-m-d"),
-						);
-// 						$db->getProfiler()->setEnabled(true);
-						$this->_name="rms_book";
-						$where=" id = ".$row['id'];
-						$this->update($datatostock, $where);
-					}
+			$row=$this->getReturnBookById($id);
+			$row_detail=$this->getReturnDetailById($id);
+			if(!empty($row_detail)){
+				foreach ($row_detail As $rs_item){
+					$arr = array(
+						'is_return' =>  0,
+					);
+					$this->_name="rms_borrowdetails";
+					$where=" id = ".$rs_item['borr_detail_id'];
+					$this->update($arr, $where);
 					
-					$borr_qty=$this->getQtyBorrow($rs_item['borrow_id'],$rs_item['book_id']);
-					if($borr_qty){
-						$arr    = array(
-								'borr_qty' =>  $borr_qty["borr_qty"]+$rs_item['borr_qty'],
-								'date'		=>	date("Y-m-d"),
-						);
-						$this->_name="rms_borrowdetails";
-						$where=" id = ".$borr_qty['id'];
-						$this->update($arr, $where);
-					}
+					$arr1 = array(
+							'is_borrow' =>  1,
+					);
+					$this->_name="rms_book_detail";
+					$where1=" id = ".$rs_item['book_id'];
+					$this->update($arr1, $where1);
 				}
 			}
 			
 			$this->_name='rms_bookreturndetails';
-			$where=" return_id=".$id;
-			$this->delete($where);
+			$where2=" return_id = $id ";
+			$this->delete($where2);
 			
-			$stu_id=$data['stu_id'];
 			$arr_return=array(
-					"return_no"     => 	$data["return_no"],
-					"phone"     	=> 	$data["phone"],
-					"stu_id"        => 	$data["stu_id"],
+					"return_no"     => 	$data["borrow_id"],
 					"return_date"   => 	date("Y-m-d",strtotime($data['return_date'])),
 					"note"          => 	$data['notes'],
 					"user_id"       => 	$this->getUserId(),
-					"status"        => 	$data['status'],
 			);
 			$this->_name="rms_bookreturn";
-			$where=" id=".$data['id'];
-			$this->update($arr_return, $where);
+			$where3=" id = $id ";
+			$this->update($arr_return, $where3);
 			 
 			
-			if($data['record_row']!=""){
-				$ids=explode(',',$data['record_row']);
-				//print_r($ids);exit();
+			if(!empty($data['identity'])){
+				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{ 
-					$is_comp=0;
-					$total_borr=$data['oldbor_qty_'.$i]+$data['oldqty_return_'.$i];
-					if($total_borr <= $data['return_qty_'.$i]){
-						$is_comp=1;
-					}
 					$data_item= array(
-							'return_id'	=>  $data['id'],
-							'book_id'	=> 	$data['book_id_'.$i],
-							'borr_qty'	=>  $data['return_qty_'.$i],
-							'note'  	=> 	$data['note_'.$i],
-							'borr_detail_id'=>$data['oldborrow_id'.$i],
-							'user_id'	=> 	$this->getUserId(),
-							'is_full'	=> 	$is_comp,
-							'status'	=> 	$data['status'],
-							
-							'delay_qty'	=>  $data['delay_qty_'.$i],
-							'date_delay'=>  $data['date_delay_'.$i],
+						'return_id'		=> $id,
+						'book_id'		=> $data['book_id'.$i],
+						'borr_detail_id'=> $data['borrow_detail_id'.$i],
 					);
 					$this->_name='rms_bookreturndetails';
 					$this->insert($data_item);
 					
-					$borr_qtys=$this->getQtyBorrow($data['stu_id'],$data['book_id_'.$i]);
-					if($borr_qtys){
-						$data_borrow    = array(
-								'is_full'	=> 	$is_comp,
-								'borr_qty' =>  $borr_qtys["borr_qty"]-$data['return_qty_'.$i],
-								'date'		=>	date("Y-m-d"),
-								'return_date'=> date("Y-m-d",strtotime($data['date_delay_'.$i]))
-						);
-						$this->_name="rms_borrowdetails";
-						$where=" id = ".$borr_qtys['id'];
-						$this->update($data_borrow, $where);
-					}
-				
-					$rows=$this->getBookQty($data['book_id_'.$i]);
-					if($rows){
-						$datatostock= array(
-								'qty_after' => $rows["qty_after"]+$data['return_qty_'.$i],
-								'date'		=>	date("Y-m-d"),
-								'user_id'	=>$this->getUserId()
-						);
-						$this->_name="rms_book";
-						$where=" id = ".$rows['id'];
-						$this->update($datatostock, $where);
-					} 
+					$borr_item= array(
+						'is_return'	=> 1,
+					);
+					$this->_name='rms_borrowdetails';
+					$where4=" book_id = ".$data['book_id'.$i]." and id = ".$data['borrow_detail_id'.$i];
+					$this->update($borr_item, $where4);
+					
+					$book = array(
+							'is_borrow'	=> 0,
+					);
+					$this->_name='rms_book_detail';
+					$where5=" id = ".$data['book_id'.$i];
+					$this->update($book, $where5);
 				}
 			}
-			//exit();
 			$db->commit();
 		}catch(Exception $e){
 			$db->rollBack();
 			Application_Form_FrmMessage::message('INSERT_FAIL');
-			$err =$e->getMessage();
-			echo $err;exit();
-			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			echo $e->getMessage();exit();
 		}
 	}
 	 
@@ -228,7 +185,36 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 	
 	function getReturnDetailById($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM rms_bookreturndetails WHERE return_id=$id";
+		$sql="SELECT 
+					brd.*,
+					bd.serial,
+					bd.barcode,
+					DATE_FORMAT(rms_borrow.return_date, '%d-%m-%Y') AS return_date,
+					rms_borrow.borrow_no,
+					rms_borrow.borrow_type,
+					CASE
+						WHEN 
+							rms_borrow.borrow_type = 1 THEN (select stu_khname from rms_student where rms_student.stu_id = rms_borrow.stu_id)
+						ELSE 
+							rms_borrow.name
+					END as name,
+					CASE
+						WHEN 
+							rms_borrow.borrow_type = 1 THEN (select stu_code from rms_student where rms_student.stu_id = rms_borrow.stu_id)
+						ELSE 
+							rms_borrow.card_id
+					END as code
+				FROM 
+					rms_bookreturndetails as brd,
+					rms_book_detail as bd,
+					rms_borrowdetails,
+					rms_borrow 
+				WHERE 
+					bd.id = brd.book_id 
+					and brd.borr_detail_id = rms_borrowdetails.id
+					and rms_borrowdetails.borr_id = rms_borrow.id
+					and brd.return_id=$id
+			";
 		return $db->fetchAll($sql);
 	}
 	
@@ -265,7 +251,6 @@ class Library_Model_DbTable_DbReturnbook extends Zend_Db_Table_Abstract
 				WHERE 
 					b.id = bd.borr_id
 					and b.stu_id = s.stu_id
-					and is_return = 0
 					and bd.book_id = $book_id
 			";
 		return $db->fetchRow($sql);

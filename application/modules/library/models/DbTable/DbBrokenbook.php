@@ -40,7 +40,7 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
     	if($search["status_search"]>-1){
     	    $where.=' AND b.status='.$search["status_search"];
     	}
-    	$order=" ORDER BY b.id DESC";
+    	$order=" ORDER BY b.id ASC";
     	return $db->fetchAll($sql.$where.$order);
     }
  
@@ -57,7 +57,7 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 			$this->_name="rms_bookbroken";
 			$broken_id = $this->insert($arr); 
 
-			if($data['identity']!=""){ 
+			if(!empty($data['identity'])){
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
@@ -90,86 +90,53 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 		return $rows;
 	}
 	
-	public function editBrokenBook($data){
+	public function editBrokenBook($data,$id){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$db_global = new Application_Model_DbTable_DbGlobal();
-			$session_user=new Zend_Session_Namespace('authstu');
-		    $userName=$session_user->user_name;
-		    $GetUserId= $session_user->user_id;
-		    $db_book=new Library_Model_DbTable_DbBook();
-		    
-		    $row_item=$this->getItemDetail($data['id']);
+		    $row_item=$this->getBrokenDetailById($id);
 		    if(!empty($row_item)){
 		    	foreach ($row_item As $rs_item){
-		    		$row=$db_book->getBookQty($rs_item['book_id']);
-		    		//print_r($row);exit();
-		    		if($row){
-		    			$datatostock   = array(
-		    					'qty_after' =>  $row["qty_after"]+$rs_item['borr_qty'],
-		    					'qty' 		=> $row["qty"]+$rs_item['borr_qty'],
-		    					'date'		=>	date("Y-m-d"),
-		    			);
-		    			$this->_name="rms_book";
-		    			$where=" id = ".$row['id'];
-		    			$this->update($datatostock, $where);
-		    		}
+	    			$datatostock   = array(
+    					'is_broken' => 0,
+	    			);
+	    			$this->_name="rms_book_detail";
+	    			$where=" id = ".$rs_item['book_id'];
+	    			$this->update($datatostock, $where);
 		    	}
-		    }else { }
+		    }
              
 		    $arr=array(
-		    		"title"     	=> 	$data["note"],
-		    		"date_broken"   => 	date("Y-m-d",strtotime($data['broken_date'])),
-		    		"user_id"       => 	$GetUserId,
-		    		"broke_no"     	=> 	$data["broken_no"],
-		    		"status"        => 	$data['status'],
+	    		"broke_no"     	=> 	$data["broken_no"],
+				"date_broken"   => 	date("Y-m-d",strtotime($data['broken_date'])),
+				"note"     		=> 	$data["note"],
+				"user_id"       => 	$this->getUserId(),
 		    );
 		    $this->_name="rms_bookbroken";
-			$where=" id=".$data['id'];
+			$where=" id = $id ";
 		    $this->update($arr, $where); 
-			unset($arr);
 			
 			$this->_name="rms_bookbrokendetails";
-			$where=" broken_id=".$data['id'];
-			$this->delete($where);
+			$where1=" broken_id = $id ";
+			$this->delete($where1);
 
-			if($data['identity']!=""){
+			if(!empty($data['identity'])){
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
-					if(!empty($data['status'])){
-						$qty=$data['borr_qty'.$i];
-					}else{
-						$qty=0;
-					}
 					$data_item= array(
-							'broken_id'	=>  $data['id'],
-							'book_id'	=> 	$data['book_id'.$i],
-							'borr_qty'	=>  $qty,
-							'note'  	=> 	$data['note_'.$i],
-							'user_id'	=> 	$GetUserId,
-							'is_full'	=> 	1,
-							'status'	=> 	$data['status'],
+						'broken_id'	=>  $id,
+						'book_id'	=> 	$data['book_id'.$i],
 					);
 					$this->_name='rms_bookbrokendetails';
 					$this->insert($data_item);
-					$rows=$db_book->getBookQty($data['book_id'.$i]); 
-					if($rows){
-							$datatostock= array(
-									'qty_after' => $rows["qty_after"]-$data['borr_qty'.$i],
-									'qty' 		=> $rows["qty"]-$data['borr_qty'.$i],
-									'date'		=>	date("Y-m-d"),
-									'user_id'	=>$GetUserId
-							);
-							$this->_name="rms_book";
-							$where=" id = ".$rows['id'];
-							if (!empty($data['status'])){
-								$this->update($datatostock, $where);
-							}
-					}else{
-						
-					}
+					
+					$book = array(
+							'is_broken'	=> 1,
+					);
+					$this->_name='rms_book_detail';
+					$where2=" id = ".$data['book_id'.$i];
+					$this->update($book, $where2);
 				 }
 			}
 			$db->commit();
@@ -184,9 +151,18 @@ class Library_Model_DbTable_DbBrokenbook extends Zend_Db_Table_Abstract
 	
 	public function getBrokenDetailById($id){
 		$db=$this->getAdapter();
-		$sql = "SELECT * FROM rms_bookbrokendetails WHERE broken_id=$id";
-		$rows=$db->fetchAll($sql);
-		return $rows;
+		$sql="SELECT 
+					bkd.*,
+					bd.serial,
+					bd.barcode 
+				FROM 
+					rms_bookbrokendetails as bkd , 
+					rms_book_detail as bd 
+				WHERE 
+					bd.id = bkd.book_id 
+					and bkd.broken_id = $id 
+			";
+		return $db->fetchAll($sql);
 	}
 	 
 	function getBrokenById($id){

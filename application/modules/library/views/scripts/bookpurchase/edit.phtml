@@ -106,10 +106,7 @@ $frm_c=$this->frm_cat;
 	         <div class="clearfix"></div>
 		    <div class="card-box">
                	<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-						iconClass="dijitEditorIcon dijitEditorIconSave" />
-					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+					<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('GO_EDIT');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
 	    		</div>
 	    	</div>
@@ -133,7 +130,8 @@ dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: book_store,
 		queryExpr: "*${0}*",
-		autoComplete: false,                                           
+		autoComplete: false,     
+		required:false,
 		id: "book",
 		name: "book",           
 		class: 'fullside',  
@@ -219,6 +217,8 @@ function initialize() {
 		barcode = "<?php echo $row['barcode'];?>";
 		note = "<?php echo $row['note'];?>";
 		
+		book_id = "<?php echo $row['book_id'];?>";
+		
 		book_name = "<?php echo $row['title'];?>";
 
 		col++;no++;
@@ -234,7 +234,7 @@ function initialize() {
 			title=1;
 		}
 			template+='<td width="5%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="5%" align="center">'+no+'</td>';
+			template+='<td width="5%" align="center"><input dojoType="dijit.form.TextBox" name="old_'+col+'" id="old_'+col+'" value="'+book_id+'" type="hidden">'+no+'</td>';
 			template+='<td width="20%" align="center"><input dojoType="dijit.form.TextBox" class="fullside" name="book_id'+col+'" id="book_id'+col+'" value="'+book+'" type="hidden">'+book_name+'</td>';
 			template+='<td width="20%"><input dojoType="dijit.form.TextBox" class="fullside" name="serial_'+col+'" id="serial_'+col+'" value="'+serial_no+'" type="text"/></td>';	
 			template+='<td width="20%"><input dojoType="dijit.form.TextBox" class="fullside" name="barcode_'+col+'" id="barcode_'+col+'" value="'+barcode+'" type="text"/></td>';	

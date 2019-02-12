@@ -91,41 +91,79 @@ class Library_Model_DbTable_DbPurchasebook extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			$arr=array(
+					"purchase_no"   => 	$data["purchase_no"],
+					"date_purchase" => 	date("Y-m-d",strtotime($data['date_purchase'])),
+					"note"     		=> 	$data["note_p"],
+					"user_id"       => 	$this->getUserId(),
+			);
+			$this->_name="rms_bookpurchase";
+			$where1=" id = $id ";
+			$this->update($arr, $where1);
+			
+			
+			if(!empty($data["identity"])){
+				$identitys = explode(',',$data['identity']);
+				$oldId="";
+				if (!empty($identitys)){
+					foreach ($identitys as $i){
+						if(empty($oldId)){
+							if (!empty($data['old_'.$i])){
+								$oldId = $data['old_'.$i];
+							}
+						}else{
+							if (!empty($data['old_'.$i])){
+								$oldId= $oldId.",".$data['old_'.$i];
+							}
+						}
+					}
+				}
+			}
+			
 		    $row_detail=$this->getPurchaseDetailById($id);
 		    if(!empty($row_detail)){
 		    	foreach ($row_detail As $rs_item){
 	    			$this->_name = "rms_book_detail";
 	    			$where=" id = ".$rs_item['book_id'];
+	    			if(!empty($oldId)){
+	    				$where.=" and id NOT IN ($oldId) ";
+	    			}
 	    			$this->delete($where);
 		    	}
 		    }
              
-		    $arr=array(
-		    	"purchase_no"   => 	$data["purchase_no"],
-				"date_purchase" => 	date("Y-m-d",strtotime($data['date_purchase'])),
-				"note"     		=> 	$data["note_p"],
-				"user_id"       => 	$this->getUserId(),
-		    );
-		    $this->_name="rms_bookpurchase";
-			$where1=" id = $id ";
-		    $this->update($arr, $where1); 
+		    
 			
 			$this->_name="rms_bookpurchasedetails";
 			$where=" purchase_id = $id ";
 			$this->delete($where);
 
+			
 			if(!empty($data['identity'])){
 				$ids=explode(',',$data['identity']);
 				foreach ($ids as $i)
 				{
-					$array = array(
-						'book_id'	=> 	$data['book_id'.$i],
-						'serial'	=>  $data['serial_'.$i],
-						'barcode'	=>  $data['barcode_'.$i],
-						'note'  	=> 	$data['note_'.$i],
-					);
-					$this->_name='rms_book_detail';
-					$book_id = $this->insert($array);
+					if (!empty($data['old_'.$i])){
+						$arr = array(
+								'book_id'	=> $data['book_id'.$i],
+								'serial'	=> $data['serial_'.$i],
+								'barcode'	=> $data['barcode_'.$i],
+								'note'	  	=> $data['note_'.$i],
+						);
+						$this->_name='rms_book_detail';
+						$where =" id =".$data['old_'.$i];
+						$this->update($arr, $where);
+						$book_id = $data['old_'.$i];
+					}else{
+						$array = array(
+							'book_id'	=> 	$data['book_id'.$i],
+							'serial'	=>  $data['serial_'.$i],
+							'barcode'	=>  $data['barcode_'.$i],
+							'note'  	=> 	$data['note_'.$i],
+						);
+						$this->_name='rms_book_detail';
+						$book_id = $this->insert($array);
+					}
 					
 					$data_item= array(
 						'purchase_id'	=>  $id,

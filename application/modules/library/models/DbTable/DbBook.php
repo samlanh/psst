@@ -108,21 +108,53 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		$where = " id = $id";
 		$this->update($arr, $where);
 		
+		if(!empty($data["identity"])){
+			$identitys = explode(',',$data['identity']);
+			$oldId="";
+			if (!empty($identitys)){
+				foreach ($identitys as $i){
+					if(empty($oldId)){
+						if (!empty($data['old_'.$i])){
+							$oldId = $data['old_'.$i];
+						}
+					}else{
+						if (!empty($data['old_'.$i])){
+							$oldId= $oldId.",".$data['old_'.$i];
+						}
+					}
+				}
+			}
+		}
+		
 		$this->_name="rms_book_detail";
 		$where1 = " book_id = $id";
+		if(!empty($oldId)){
+			$where1.=" AND id NOT IN ($oldId)";
+		}
 		$this->delete($where1);
 		
+		$this->_name="rms_book_detail";
 		if(!empty($data["identity"])){
 			$ids = explode(",", $data['identity']);
 			foreach ($ids as $i){
-				$array = array(
-					'book_id'	=> $id,
-					'serial'	=> $data['serial_'.$i],
-					'barcode'	=> $data['barcode_'.$i],
-					'note'	  	=> $data['note_'.$i],
-				);
-				$this->_name="rms_book_detail";
-				$this->insert($array);
+				if (!empty($data['old_'.$i])){
+					$arr = array(
+						'book_id'	=>$id,
+						'serial'	=> $data['serial_'.$i],
+						'barcode'	=> $data['barcode_'.$i],
+						'note'	  	=> $data['note_'.$i],
+					);
+					$where =" id =".$data['old_'.$i];
+					$this->update($arr, $where);
+				}else{
+					$array = array(
+						'book_id'	=> $id,
+						'serial'	=> $data['serial_'.$i],
+						'barcode'	=> $data['barcode_'.$i],
+						'note'	  	=> $data['note_'.$i],
+					);
+					$this->insert($array);
+				}
 			}
 		}
 	}

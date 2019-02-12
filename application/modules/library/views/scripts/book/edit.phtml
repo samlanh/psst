@@ -380,6 +380,7 @@ function initialize() {
 		serial_no = "<?php echo $row['serial']?>";
 		barcode = "<?php echo $row['barcode']?>";
 		note = "<?php echo $row['note']?>";
+		old_id = "<?php echo $row['id']?>";
 	
 		col++;no++;
 		template='';
@@ -393,7 +394,7 @@ function initialize() {
 			title=1;
 		}
 			template+='<td width="5%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="5%" align="center">'+no+'</td>';
+			template+='<td width="5%" align="center"><input dojoType="dijit.form.TextBox" class="fullside" name="old_'+col+'" id="old_'+col+'" value="'+old_id+'" type="hidden">'+no+'</td>';
 			template+='<td width="27%"><input dojoType="dijit.form.TextBox" class="fullside" name="serial_'+col+'" id="serial_'+col+'" value="'+serial_no+'" type="text"></td>';	
 			template+='<td width="27%"><input dojoType="dijit.form.TextBox" class="fullside" name="barcode_'+col+'" id="barcode_'+col+'" value="'+barcode+'" type="text"></td>';	
 			template+='<td width="36%"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+col+'" id="note_'+col+'" value="'+note+'" type="text"></td>';
@@ -412,4 +413,14 @@ function initialize() {
 	<?php }} ?>
 }
 
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+}
 </script>

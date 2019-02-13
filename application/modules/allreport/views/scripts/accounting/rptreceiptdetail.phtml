@@ -44,15 +44,15 @@ table tr td strong{
 						<table width="100%" border="0" style="font-family: Khmer OS Battambang; font-size: 12px;white-space: nowrap;margin-bottom: 5px;">
 							<tr style="line-height: 16px;">
 								<td width="10%">Student's ID</td>
-								<td width="25%"> : &nbsp;&nbsp;<strong><?php echo $this->rr['stu_code'];?></strong></td>
+								<td width="25%"> : &nbsp;&nbsp;<?php echo $this->rr['stu_code'];?></td>
 								<td width="8%">Dob</td>
 								<td width="20%"> : &nbsp;&nbsp;<?php echo empty($this->rr['dob'])?"":date('d-m-Y',strtotime($this->rr['dob']));?></td>
 								<td width="12%">Grade</td>
-								<td width="25%"> : &nbsp;&nbsp;<strong><?php echo $this->rr['grade'];?></strong></td>
+								<td width="25%"> : &nbsp;&nbsp;<?php echo $this->rr['grade'];?></td>
 							</tr>
 							<tr style="line-height: 16px;">
 								<td>Student's Name</td>
-								<td colspan="1"> :&nbsp;&nbsp;<strong><?php echo $this->rr['stu_khname'].' / ';echo $this->rr['last_name'].' '.$this->rr['stu_enname']?></strong></td>
+								<td colspan="1"> :&nbsp;&nbsp;<?php echo $this->rr['stu_khname'].' / ';echo $this->rr['last_name'].' '.$this->rr['stu_enname']?></td>
 								<td>Phone</td>
 								<td> : &nbsp;&nbsp;<?php echo $this->rr['tel'];?></td>
 								<td>Academic Year</td>
@@ -60,11 +60,11 @@ table tr td strong{
 							</tr>
 							<tr style="line-height: 16px;">
 								<td >Gender</td>
-								<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['sex'];?></strong></td>
+								<td> : &nbsp;&nbsp;<?php echo $this->rr['sex'];?></td>
 								<td >Degree</td>
-								<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['degree'];?></strong></td>
+								<td> : &nbsp;&nbsp;<?php echo $this->rr['degree'];?></td>
 								<td >Session</td>
-								<td> : &nbsp;&nbsp;<strong><?php echo $this->rr['session'];?></strong></td>
+								<td> : &nbsp;&nbsp;<?php echo $this->rr['session'];?></td>
 							</tr>
 						</table>
 					</td>
@@ -77,22 +77,22 @@ table tr td strong{
 								table{ border-collapse:collapse; margin:0 auto;
 								border-color:#000; }
 								.padd tr td,.padd tr th{  text-align:center}
+								td{padding:0 3px; }
 							</style>
 						<table border="1" class="padd" width="100%" border="1" align="center" style="line-height:15px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;">
 							  <tr style="font-size:12px; height: 25px;background: #f0f0f0;text-align: center !important;" align="center"  >
-							    <th>&nbsp;<?php echo $tr->translate('No');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Item Name');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Term');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Qty');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Unit Price');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Deduct/Extra');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Disc Type');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Disc Amt');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Amount');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Period');?>&nbsp;</th>
-								<th>&nbsp;<?php echo $tr->translate('Note');?>&nbsp;</th>
+							    <td>&nbsp;<?php echo $tr->translate('No');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Item Name');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Term');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Qty');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Unit Price');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Deduct/Extra');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Disc Type');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Disc Amt');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Amount');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Period');?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate('Note');?>&nbsp;</td>
 							  </tr>
-								<style> td{padding:0 3px; }</style>
 							  <?php $i=0; $total=0; if(!empty($this->row)) foreach($this->row as $rs){ 
 							  		$i++;
 							  ?>

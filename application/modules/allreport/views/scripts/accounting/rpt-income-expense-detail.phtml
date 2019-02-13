@@ -12,7 +12,7 @@ table tr td strong{
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 		<div id="divPrint">
 			<?php for($print=0;$print<1;$print++){?>
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: ''Times New Roman','Khmer OS Battambang'' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
 				
 				<tr height="90px;">
 					<td colspan="10"  style="" align="center" valign="top">
@@ -26,8 +26,8 @@ table tr td strong{
 								<td width="30%">
 								</td>
 								<td width="40%" align="center" valign="top" style="line-height: 20px;">
-									<div style="font-size: 16px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div> 
-									<div style="font-size: 13px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:0px;font-weight: bold;">PAYMENT VOUCHER</div> 
+									<div style="font-size: 16px;font-family: 'Times New Roman','Khmer OS Muol Light';">ប័ណ្ណចំណាយ</div> 
+									<div style="font-size: 13px;font-family:'Times New Roman',''Times New Roman','Khmer OS Battambang'';margin-top:0px;font-weight: bold;">PAYMENT VOUCHER</div> 
 								</td>
 								<td width="30%">
 									<div style="font-size: 16px;font-weight:bold;text-align:center;">
@@ -40,8 +40,8 @@ table tr td strong{
 				</tr>
 				<tr>
 					<td colspan="10">
-						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
-							<tr >
+						<table width="100%" style="font-family: 'Times New Roman','Khmer OS Battambang';font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
+							<tr>
 								<td width="10%"></td>
 								<td width="18%"></td>
 								<td width="9%"></td>
@@ -53,26 +53,26 @@ table tr td strong{
 								<td width="3%"></td>
 								<td width="8%"></td>
 							</tr>
-							<tr style="line-height: 15px;">
+							<tr style="line-height: 18px;">
 								<td class="one ">ចំណាយឱ្យ​ <br />Pay To </td>
 								<td valign="top"> :&nbsp; <?php echo $this->row['title'];?> </td>
-								<td  align="center">ថ្ងៃចំណាយ </br />Paid Date</td>
+								<td  align="center">ថ្ងៃចំណាយ <br />Paid Date</td>
 								<td valign="top"> :&nbsp; <?php echo date("d-M-Y",strtotime($this->row['date']));?> </td>
-								<td colspan="3"><label id="" >ចំណាយជា  </br />Payment Method</label></td>
+								<td colspan="3"><label id="" >ចំណាយជា  <br />Payment Method</label></td>
 								<td colspan="3" valign="top">:&nbsp;<?php echo $this->row['pay'];?></td>
 							</tr>
-							<tr style="line-height: 15px;">
-								<td>សម្គាល់  </br /> Note </td>
-								<td colspan="9" valign="top"> :&nbsp; <?php echo $this->row['description'];?></label></td>
+							<tr style="line-height: 18px;">
+								<td>សម្គាល់  <br /> Note </td>
+								<td colspan="9" valign="top"> :&nbsp; <?php echo $this->row['description'];?></td>
 							</tr>
 							<tr>
 								<td colspan="10">
 									<table width="100%" border="1" style="border:1px solid #000; border-collapse: collapse;">
 										<tr style=" font-size:14px; text-align:center; height:25px;">
-											<td style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</span></td>
-											<td style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">ប្រភេទចំណាយ/Expense Type</span></td>
-											<td style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">ពណ៌នា/Description</span></td>
-											<td style="border:1px solid #000;"><span style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">ចំនួនប្រាក់/Amount</span></td>
+											<td style="border:1px solid #000;"><span style="font-family: 'Times New Roman','Khmer OS Battambang';color:#000;font-size: 14;">លរ/No</span></td>
+											<td style="border:1px solid #000;"><span style="font-family: 'Times New Roman','Khmer OS Battambang';color:#000;font-size: 14;">ប្រភេទចំណាយ/Expense Type</span></td>
+											<td style="border:1px solid #000;"><span style="font-family: 'Times New Roman','Khmer OS Battambang';color:#000;font-size: 14;">ពណ៌នា/Description</span></td>
+											<td style="border:1px solid #000;"><span style="font-family: 'Times New Roman','Khmer OS Battambang';color:#000;font-size: 14;">ចំនួនប្រាក់/Amount</span></td>
 										</tr>
 										<?php $i=0;$total=0;if(!empty($this->detail)){foreach ($this->detail as $row){$i++;?>
 											<tr style=" font-size:12px; text-align:center; height:25px;">
@@ -97,7 +97,7 @@ table tr td strong{
 							</tr>
 							<tr>
 								<td colspan="10" valign="bottom">
-									<table width="100%"   style="font-family:'Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:-5px;margin-bottom:5px;">
+									<table width="100%"   style="font-family:'Times New Roman','Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:-5px;margin-bottom:5px;">
 										<tr>
 											<td width="20%"></td>
 											<td width="20%"></td>
@@ -130,7 +130,7 @@ table tr td strong{
 										</tr>
 										<tr >
 											<td colspan="2" align="center" valign="top">
-												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+												<div style="color:#000; font-size: 14px;margin-top:-10px;"> 
 													<?php 
 													   $session_user=new Zend_Session_Namespace('authstu');
 													   $last_name=$session_user->last_name;
@@ -140,7 +140,7 @@ table tr td strong{
 												</div>
 											</td>
 											<td colspan="2" valign="top">
-												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+												<div style="color:#000; font-size: 14px;margin-top:-10px;"> 
 													<?php 
 													   echo"Received By :........................ &nbsp;&nbsp;";
 													?>

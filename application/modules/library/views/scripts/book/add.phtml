@@ -21,15 +21,6 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		<form  id='frm_book' action="" dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data" >
 			<script type="dojo/method" event="onSubmit" enctype="multipart/form-data">			
 				if(this.validate()) {
-               		 parent_id=dijit.byId('parent_id').get('value');
-                 	 if(parent_id==0){
-                        alert('Please Select Category');
-                        dijit.byId('parent_id').focus();
-                        return false;
-					}
-					$(this).unbind("submit");
-               		$(this).on("submit",function(){return false;});
-                 	dijit.byId('save_new').set('disabled',true);
 					loading();
 					return true;
 				} else {
@@ -178,7 +169,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 								<td colspan="4" align="center" style="padding-left:40px;">
 									<input type="button" value="cate_close" name="cate_close" label="<?php echo $tr->translate('CLOSE');?>" dojoType="dijit.form.Button" 
 										onclick="hideCategory();"  />
-									<input type="button" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
+									<input type="button" value="save_close_cate" name="save_close_cate" id="save_close_cate" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
 										onclick="addCategory();"    iconClass="dijitEditorIcon dijitEditorIconSave" />
 									 
 								</td>
@@ -220,7 +211,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 								<td colspan="4" align="center" style="padding-left:40px;">
 									<input type="button" value="block_close" name="block_close" label="<?php echo $tr->translate('CLOSE');?>" dojoType="dijit.form.Button" 
 										onclick="hideBlock();"  />
-									<input type="button" value="btn_save_close" name="btn_save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
+									<input type="button" value="btn_save_close" name="btn_save_close" id="btn_save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
 										onclick="addBlock();" iconClass="dijitEditorIcon dijitEditorIconSave" />
 								</td>
 							</tr>
@@ -269,16 +260,16 @@ dojo.ready(function(){
 var url_make = '<?php echo $this->url(array('module'=>'library','controller'=>'book','action'=>'add-category')); ?>';
 var book_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->cat))?>);
 function addCategory(){
-	
 	if(dijit.byId('frm_category').validate()){
+		dijit.byId('save_close_cate').set('disabled',true);
 		dojo.xhrPost({
 			url:url_make,
 			form: dojo.byId("frm_category"),
 			handleAs:"json",
 			load: function(data) {
 				var Itemcat = {					
-						id: data,
-					    name: dijit.byId('cat_name').get('value')
+					id: data,
+					name: dijit.byId('cat_name').get('value')
 				};			
 				addDataToSelectbox(dijit.byId('cat_id'), book_store, Itemcat, data);
 				dijit.byId('frm_category').reset();
@@ -294,16 +285,16 @@ function addCategory(){
 var url_add_block = '<?php echo $this->url(array('module'=>'library','controller'=>'book','action'=>'add-block')); ?>';
 var cat_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->block))?>);
 function addBlock(){
-	 
 	if(dijit.byId('frm_popup_block').validate()){
+		dijit.byId('btn_save_close').set('disabled',true);
 		dojo.xhrPost({
 			url:url_add_block,
 			form: dojo.byId("frm_popup_block"),
 			handleAs:"json",
 			load: function(data) {
 				var Itemcat = {					
-						id: data,
-						name: dijit.byId('block_name').get('value')
+					id: data,
+					name: dijit.byId('block_name').get('value')
 				};			
 				addDataToSelectbox(dijit.byId('block_id'), cat_store, Itemcat, data);
 				dijit.byId('frm_popup_block').reset();
@@ -339,7 +330,7 @@ function addRow() {
 	barcode = dijit.byId('barcode').get('value');
 	note = dijit.byId('note').get('value');
 
-	if(serial_no=="" || barcode==""){
+	if(barcode==""){
 		alert("<?php echo $tr->translate("Please Enter Serial No !!! ");?>");
 		dijit.byId('serial_no').focus();
 		return false;
@@ -375,6 +366,7 @@ function addRow() {
 	serial_no = dijit.byId('serial_no').set('value','');
 	barcode = dijit.byId('barcode').set('value','');
 	note = dijit.byId('note').set('value','');
+	dijit.byId('barcode').focus();
 }
 
 </script>

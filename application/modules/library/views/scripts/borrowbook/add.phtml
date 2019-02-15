@@ -16,31 +16,29 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">		
 			if(this.validate()) {
-				stu_id = dijit.byId('stu_id').get('value');
-				stu_name = dijit.byId('stu_name').get('value');
-				if (stu_id==-1){
-					alert('Please Select Student Id !');
-                    dijit.byId('stu_id').focus();
-			        return false;
-                }
-                if ( stu_name==-1){
-					alert('Please Select Student Id !');
-                    dijit.byId('stu_id').focus();
-			        return false;
-                }
-				var rowId = $('#identity').val();
-    			if(rowId!=''){ 
-					var rowIDArray = rowId.split(',');
-					for(var n = 0; n < rowIDArray.length; n++){
-					var book_id = dijit.byId('book_id'+rowIDArray[n]).get('value');
-					if(book_id==''){
-							alert("Please select book title!");
-							return false;
-						}
+				type = dijit.byId('type').get('value');
+				if(type==1){
+					stu_id = dijit.byId('stu_id').get('value');
+					if (stu_id==-1){
+						alert('Please Select Student Id !');
+						dijit.byId('stu_id').focus();
+						return false;
 					}
-				}				
-               dijit.byId('save_new').set('disabled',true);
-			   dijit.byId('save_close').set('disabled',true);
+				}else{
+					name = dijit.byId('name').get('value');
+					if (name==''){
+						alert('Please input name !');
+						dijit.byId('name').focus();
+						return false;
+					}
+				}
+				var rowId = $('#identity').val();
+    			if(rowId==''){
+					alert('Please Select Book !');
+					dijit.byId('book_detail').focus();
+					return false;
+				}			
+				loading();
 				return true;
 			}else {
 				return false;
@@ -81,7 +79,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<span id="span_stu_id">
-										<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect"  class="fullside" onchange="setNameStudent(1);setControll();">
+										<select name="stu_id" id="stu_id" dojoType="dijit.form.FilteringSelect"  class="fullside" onchange="setNameStudent(1);"  queryExpr="*${0}*" autoComplete="false" >
 											   <option value="-1"><?php echo $tr->translate("SELECT_STUDENT_ID")?></option>
 										 <?php if(!empty($this->stu_id)) foreach($this->stu_id As $rs_id){?>
 												<option value="<?php echo $rs_id['stu_id']?>" ><?php echo $rs_id['stu_code'];?></option>
@@ -89,7 +87,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 										</select>
 									</span>
 									<span id="span_card_id">
-										<input dojoType="dijit.form.ValidationTextBox"   name="card_id" id="card_id" value="" class="fullside" type="text" required="required">
+										<input dojoType="dijit.form.ValidationTextBox"   name="card_id" id="card_id" value="" class="fullside" type="text" >
 									</span>
 							   </div>
 							</div>
@@ -99,7 +97,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<span id="span_stu_name">
-									<select   name="stu_name" id="stu_name"  queryExpr="*${0}*" autoComplete="false" class="fullside" dojoType="dijit.form.FilteringSelect" placeholder="Select Degree" onchange="setValue();setControll();">
+									<select   name="stu_name" id="stu_name" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="setNameStudent(2);"  queryExpr="*${0}*" autoComplete="false" >
 										<option value="-1"><?php echo $tr->translate("SELECT_STUDENT_NAME")?></option>
 										<?php 
 										if(!empty($this->stu_name))foreach ($this->stu_name as $row){?>
@@ -149,7 +147,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 							   </div>
 							</div>
 							<div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT_DAYS");?> :
+							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT");?> (<?php echo $tr->translate("DAY");?>) :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amountday" id="amountday" value="" onkeyup="setEndDate();" type="text"   class="fullside">
@@ -245,32 +243,33 @@ var temp='';
 var template = '';
 
 function addRow() { 
-		book_detail=dijit.byId("book_detail").get("value");
-		if(book_detail==''){return false;}
-		label_book_detail = dijit.byId("book_detail").attr('displayedValue');
-		col++;no++;
-		template='';
-		if(title!=1){    
-			temp+='<th><?php echo $tr->translate("DEL");?></th>';
-			temp+='<th><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th><?php echo $tr->translate("BOOK");?></th>';
-			dojo.query("#head-title").append(temp);
-			title=1;
-		}
-			template+='<td width="10%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
-			template+='<td width="10%" align="center">'+no+'</td>';
-			template+='<td width="80%">&nbsp;'+label_book_detail+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="book_id'+col+'" name="book_id'+col+'" value="'+book_detail+'" /></td>';
-		tmp='<tr id="row'+col+'">';
-		tmp+="</tr>";
-		dojo.query("#table_row").append(tmp);
+	book_detail=dijit.byId("book_detail").get("value");
+	if(book_detail==''){return false;}
+	label_book_detail = dijit.byId("book_detail").attr('displayedValue');
+	col++;no++;
+	template='';
+	if(title!=1){    
+		temp+='<th><?php echo $tr->translate("DEL");?></th>';
+		temp+='<th><?php echo $tr->translate("N_O");?></th>';
+		temp+='<th><?php echo $tr->translate("BOOK");?></th>';
+		dojo.query("#head-title").append(temp);
+		title=1;
+	}
+		template+='<td width="10%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="10%" align="center">'+no+'</td>';
+		template+='<td width="80%">&nbsp;'+label_book_detail+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="book_id'+col+'" name="book_id'+col+'" value="'+book_detail+'" /></td>';
+	tmp='<tr id="row'+col+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
 
-		if($("#identity").val()!="") {
-			var identity = $("#identity").val();
-			$("#identity").val(identity+','+col);
-		} else {$("#identity").val(col);}
-		dojo.html.set(dojo.byId("row"+col),template , {
-		     parseContent: true,
-		});
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+col);
+	} else {$("#identity").val(col);}
+	dojo.html.set(dojo.byId("row"+col),template , {
+		 parseContent: true,
+	});
+	dijit.byId('book_detail').set('value','');
  }
 function deleteRecord(index) {
 	var identity = $('#identity').val();
@@ -288,10 +287,18 @@ function hideDialog() {
 }
 
 function setNameStudent(type){
-	stu_id=dijit.byId("stu_id").get("value");
-	if(stu_id !='' || stu_id!=0){
-		dijit.byId("stu_name").attr("value",stu_id);
+	if(type==1){
+		stu_id=dijit.byId("stu_id").get("value");
+		if(stu_id !='' || stu_id!=0){
+			dijit.byId("stu_name").attr("value",stu_id);
+		}
+	}else{
+		stu_id=dijit.byId("stu_name").get("value");
+		if(stu_id !='' || stu_id!=0){
+			dijit.byId("stu_id").attr("value",stu_id);
+		}
 	}
+	
 }
 
 function setValue(){
@@ -325,8 +332,7 @@ function setEndDate(){
 function hideControll(){
 	type_id=dijit.byId("type").get("value");
 	if(type_id==1){
-		dijit.byId("card_id").attr('required', false);
-		dijit.byId("stu_name").attr('required', true);
+		
 		$("#span_card_id").hide();
 		$("#span_name").hide();
 		$("#name_lbl").hide();
@@ -334,14 +340,11 @@ function hideControll(){
 		$("#span_stu_id").show();
 		$("#span_stu_name").show();
 		$("#student_name_lbl").show();
+		
+		dijit.byId('card_id').attr('value','');
+		dijit.byId('name').attr('value','');
 	}else {
-		dijit.byId("card_id").attr('required', true);
-		setControllClear();
-		dijit.byId("stu_name").attr('value', '');
-		dijit.byId("stu_id").attr('value', '');
-		dijit.byId("stu_name").attr('required', false);
-		dijit.byId("stu_id").attr('required', false);
-		dijit.byId("card_id").attr('required', true);
+		
 		$("#span_card_id").show();
 		$("#span_name").show();
 		$("#name_lbl").show();
@@ -349,19 +352,9 @@ function hideControll(){
 		$("#span_stu_id").hide();
 		$("#span_stu_name").hide();
 		$("#student_name_lbl").hide();
+		
+		dijit.byId('stu_id').attr('value',-1);
 	}
-}
-
-function setControll(){
-	stu_code= dijit.byId("stu_id").attr('displayedValue');
-	stu_name=dijit.byId("stu_name").attr('displayedValue');
-	dijit.byId("card_id").attr('value',stu_code);
-	dijit.byId("name").attr('value',stu_name);
-}
-
-function setControllClear(){
-	dijit.byId("card_id").attr('value','');
-	dijit.byId("name").attr('value','');
 }
 
 var url_get_book_detail = '<?php echo $this->url(array('module'=>'library','controller'=>'borrowbook','action'=>'get-bookdetail')); ?>';
@@ -383,5 +376,14 @@ function getBookDetail(){
 		}
 	});
 }
+function loading(){
+    document.getElementsByClassName("overlay")[0].style.display="block";
+}
 
 </script>
+<div class="overlay">
+ <div class="overlay-load">
+  <div class="overlay-msg">
+     </div>
+ </div>
+</div>

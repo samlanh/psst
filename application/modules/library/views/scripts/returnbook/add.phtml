@@ -7,22 +7,6 @@ $frm = $this->frm_loan;
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
-<style>
-	.fullside50{ width:48%;}
-</style>
-<div class="overlay">
-	<div class="overlay-load">
-		<div class="overlay-msg">
-		</div>
-	</div>
-</div>
-<style>
-.dojoxGridSortNode{
-		text-align: center;	
-		height: 30px;
-	}
-.dijitTabPaneWrapper , .dijitContentPane,.dijitTabListContainer-top{max-width: 99% !important;}	
-</style>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script>
 	dojo.require("dijit.layout.TabContainer");
@@ -44,8 +28,13 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		<form id='frm_add_tran' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">
 			 	if(this.validate()) {
-			   		dijit.byId('save_new').set('disabled',true);
-			   		dijit.byId('save_close').set('disabled',true);
+			   		var rowId = $('#identity').val();
+					if(rowId==''){
+						alert('Please Select Book !');
+						dijit.byId('book_detail').focus();
+						return false;
+					}			
+					loading();
 					return true;
 				}else {
 					return false;
@@ -54,7 +43,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			<div class="card-box">
 	        	<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("RETURN_INFO");?> 
 	                   </label>
 	                </div>
 	        		<div class="form-group">
@@ -81,7 +70,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	            </div>
 	            <div class="col-md-8 col-sm-12 col-xs-12">
 	            	<div class="form-group">
-	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("BORROW_INFO");?> 
+	                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" for="first-name"><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("DETAIL_INFORMATION");?> 
 	                   </label>
 	                </div>
 					
@@ -157,6 +146,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	var url_get_borrow_detail = '<?php echo $this->url(array('module'=>'library','controller'=>'returnbook','action'=>'get-bookdetail')); ?>';
 	function addRow() { 
 		book_id = dijit.byId('book_detail').get('value');
+		if(book_id==''){return false;}
 		dojo.xhrPost({
 			url:url_get_borrow_detail,
 			content:{
@@ -202,6 +192,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 					dojo.html.set(dojo.byId("row"+col),template , {
 						 parseContent: true,
 					});
+					dijit.byId('book_detail').set('value','');
 				}
 			},
 			error: function(err) {
@@ -239,6 +230,14 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			}
 		});
 	}
-
+	function loading(){
+		document.getElementsByClassName("overlay")[0].style.display="block";
+	}
 
 </script>
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+		</div>
+	</div>
+</div>

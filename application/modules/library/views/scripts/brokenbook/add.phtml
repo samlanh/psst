@@ -27,19 +27,12 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
 					var rowId = $('#identity').val();
-    				if(rowId!=''){ 
-						var rowIDArray = rowId.split(',');
-						for(var n = 0; n < rowIDArray.length; n++){
-							var book_id = dijit.byId('book_id'+rowIDArray[n]).get('value');
-							if(book_id==''){
-								alert("Please select book title!");
-								return false;
-							}
-						}
-					}
-
-			   		dijit.byId('save_new').set('disabled',true);
-			   		dijit.byId('save_close').set('disabled',true);
+					if(rowId==''){
+						alert('Please add Book !');
+						dijit.byId('barcode').focus();
+						return false;
+					}			
+					loading();
 					return true;
 				}else {
 					return false;
@@ -163,6 +156,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		dojo.html.set(dojo.byId("row"+col),template , {
 			 parseContent: true,
 		});
+		dijit.byId('book_detail').set('value','');
 	}
 	function deleteRecord(index) {
 		var identity = $('#identity').val();
@@ -193,5 +187,13 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			}
 		});
 	}
-
+	function loading(){
+		document.getElementsByClassName("overlay")[0].style.display="block";
+	}
 </script>
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+		</div>
+	</div>
+</div>

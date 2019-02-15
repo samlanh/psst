@@ -149,7 +149,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 							   </div>
 							</div>
 							<div class="form-group">
-							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT_DAYS");?> :
+							   <label class="control-label  col-md-5 col-sm-5 col-xs-12" for="first-name"><?php echo $tr->translate("AMOUNT");?> (<?php echo $tr->translate("DAY");?>) :
 							   </label>
 							   <div class="col-md-7 col-sm-7 col-xs-12">
 									<input class="fullside" dojoType="dijit.form.NumberTextBox" class="fullside"  name="amountday" id="amountday" value="<?php echo $this->row['amount_day'];?>" onkeyup="setEndDate();" type="text"   class="fullside">

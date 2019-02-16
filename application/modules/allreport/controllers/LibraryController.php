@@ -196,7 +196,7 @@ class Allreport_LibraryController extends Zend_Controller_Action {
 						'title'	        =>	'',
 						'block_id'		=>	0,
 						'cood_book'		=>	0,
-						'parent'		=>0,
+						'parent'		=> 0,
 						'start_date'	=>date('Y-m-d'),
 						'end_date'		=>date('Y-m-d'),
 				);

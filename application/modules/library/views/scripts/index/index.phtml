@@ -17,38 +17,21 @@
    
   <?php 
 		$tr=Application_Form_FrmLanguages::getCurrentlanguage();
-		$register=$this->url(array('module'=>'registrar','controller'=>'register','action'=>'add'), null, true);
 		$near_day_return=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-nealydayreturn'), null, true);
 		$rpt_borrowdetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-borrowdetail'), null, true);
 		$rpt_returndetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-returndetail'), null, true);
-		
 		$rpt_purchasedetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-purchasedetail'), null, true);
 		$rpt_brokendetail=$this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-brokendetail'), null, true);
-	?>
-	<?php 
-    $book_empt=0;$i=1;
-    if(!empty($this->rs)) foreach($this->rs As $key=>$rs){
-    	$book_empt=$book_empt+$i;
-    }
-?>
-
-<?php 
-    $bnot_return=0;
-    if(!empty($this->rs_notreturn)) foreach($this->rs_notreturn As $key=>$rs){
-    	$bnot_return=$bnot_return+$rs['borr_qty'];
-    }
-?>
-<?php 
-    $b_thisday=0;
-    if(!empty($this->rs_borr)) foreach($this->rs_borr As $key=>$rs){
-    	$b_thisday=$b_thisday+$rs['borr_qty'];
-    }
-?>
-<?php 
-    $r_thisday=0;
-    if(!empty($this->rs_return)) foreach($this->rs_return As $key=>$rs){
-    	$r_thisday=$r_thisday+$rs['borr_qty'];
-    }
+    
+		$total_book = $this->total_book;
+		$total_broken_book = $this->total_broken;
+	    $book_not_return = $this->book_not_return;
+	    $borrow_today = $this->borr_today;
+	    $return_today = $this->return_today;
+	    
+	    $puchase_today = $this->puchase_today;
+	    $broken_today = $this->broken_today;
+	    $book_near_return = $this->book_near_return;
 ?>
 
 <?php 
@@ -83,14 +66,14 @@
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $book_empt;?> &nbsp;ក្បាល</h4>
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $tr->translate('BOOK');?> : <?php echo $total_book;?> &nbsp;<?php echo $tr->translate('BOOK_QTY');?></h4>
               
-              <p style="font-family: 'khmer os battambang' !important;"><br></p>
+              <p style="font-family: 'khmer os battambang' !important;color:red"><?php echo $tr->translate('BROKEN_BOOK');?> : <?php echo $total_broken_book;?> &nbsp;<?php echo $tr->translate('BOOK_QTY');?></p>
             </div>
             <div class="icon">
               <i class="fa fa-book"></i>
             </div>
-            <a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-unavailable'), null, true);?>" class="small-box-footer"><?php echo $tr->translate('TOTAL_BOOK_UNAVAILABLE');?> <i  class="fa fa-arrow-circle-right"></i></a>
+            <a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'library','action'=>'rpt-book-list'), null, true);?>" class="small-box-footer"><?php echo $tr->translate('TOTAL_BOOK_UNAVAILABLE');?> <i  class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -99,7 +82,7 @@
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $bnot_return;?> &nbsp;ក្បាល<sup style="font-size: 20px"></sup></h4>
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $book_not_return;?> &nbsp;<?php echo $tr->translate('BOOK_QTY');?><sup style="font-size: 20px"></sup></h4>
 
               <p><br></p>
             </div>
@@ -113,9 +96,9 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-yellow">
+          <div class="small-box bg-aqua">
             <div class="inner">
-              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $b_thisday?>&nbsp;ក្បាល</h4>
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $borrow_today?>&nbsp;<?php echo $tr->translate('BOOK_QTY');?></h4>
 
               <p><br></p>
             </div>
@@ -130,7 +113,7 @@
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $r_thisday;?> &nbsp;ក្បាល</h4>
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $return_today;?> &nbsp;<?php echo $tr->translate('BOOK_QTY');?></h4>
 
               <p><br></p>
             </div>
@@ -141,28 +124,12 @@
           </div>
         </div>
         
-        <!-- ./col -->
         
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
-              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $s_num;?> &nbsp;នាក់</h4>
-
-              <p><br></p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-graduation-cap"></i>
-            </div>
-            <a target="_blank" href="<?php echo $near_day_return;?>" class="small-box-footer"><?php echo $tr->translate('STUDENT_NEAR_DAY_RETURN_BOOK');?><i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h4 style="font-family: 'khmer os battambang' !important;"><?php if(empty($this->rs_near_return['borr_qty']))echo 0;else echo $this->rs_near_return['borr_qty'];?> &nbsp;ក្បាល</h4>
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $book_near_return;?> &nbsp;<?php echo $tr->translate('BOOK_QTY');?></h4>
 
               <p><br></p>
             </div>
@@ -177,7 +144,7 @@
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h4 style="font-family: 'khmer os battambang' !important;"><?php if(empty($this->rs_purchase['borr_qty']))echo 0;else echo $this->rs_purchase['borr_qty'];?> &nbsp;ក្បាល</h4>
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $puchase_today;?> &nbsp;<?php echo $tr->translate('BOOK_QTY');?></h4>
 
               <p><br></p>
             </div>
@@ -190,9 +157,9 @@
         
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-yellow">
+          <div class="small-box bg-red">
             <div class="inner">
-              <h4 style="font-family: 'khmer os battambang' !important;"><?php if(empty($this->rs_broken['borr_qty']))echo 0;else echo $this->rs_broken['borr_qty'];?> &nbsp;ក្បាល</h4>
+              <h4 style="font-family: 'khmer os battambang' !important;"><?php echo $broken_today;?> &nbsp;<?php echo $tr->translate('BOOK_QTY');?></h4>
 
               <p><br></p>
             </div>

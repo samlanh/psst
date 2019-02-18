@@ -221,40 +221,35 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	function getTotalBookEmpty(){
+	function getTotalBook(){
 		$db=$this->getAdapter();
-		$sql=" SELECT qty_after FROM rms_book WHERE `status`=1 AND qty_after=0";
-		return $db->fetchAll($sql);
+		$sql="SELECT count(id) FROM rms_book_detail WHERE `status`=1 ";
+		return $db->fetchOne($sql);
+	}
+	function getTotalBrokenBook(){
+		$db=$this->getAdapter();
+		$sql="SELECT count(id) FROM rms_book_detail WHERE `status`=1 and is_broken=1 ";
+		return $db->fetchOne($sql);
 	}
 	
 	function getBookNotReturn(){
 		$db=$this->getAdapter();
-		$sql=" SELECT b.id,bd.borr_qty
-		       FROM  rms_borrow AS b,rms_borrowdetails AS bd
-		       WHERE b.id=bd.borr_id 
-		       AND bd.is_full=0 ";
-		return $db->fetchAll($sql);
+		$sql="SELECT count(id) FROM rms_borrowdetails WHERE is_return=0";
+		return $db->fetchOne($sql);
 	}
-	
+
 	function getBorrowThisDay(){
 		$date=date('Y-m-d');
 		$db=$this->getAdapter();
-		$sql="SELECT b.id,bd.borr_qty
-		       FROM  rms_borrow AS b,rms_borrowdetails AS bd
-		       WHERE b.id=bd.borr_id 
-		       AND bd.is_full=0 
-		       AND bd.date='$date'";
-		return $db->fetchAll($sql);
+		$sql="SELECT count(bd.id) FROM rms_borrow as b,rms_borrowdetails as bd WHERE b.id=bd.borr_id AND b.borrow_date='$date'";
+		return $db->fetchOne($sql);
 	}
 	
 	function getReturnThisDay(){
 		$date=date('Y-m-d');
 		$db=$this->getAdapter();
-		$sql="SELECT b.id,bd.borr_qty
-		       FROM  rms_bookreturn AS b,rms_bookreturndetails AS bd
-		       WHERE b.id=bd.return_id 
-		       AND b.return_date='$date'";
-		return $db->fetchAll($sql);
+		$sql="SELECT count(bd.id) FROM rms_bookreturn as b,rms_bookreturndetails as bd WHERE b.id=bd.return_id AND b.return_date='$date'";
+		return $db->fetchOne($sql);
 	}
 	
 	public function getBookQty($book_id){
@@ -284,20 +279,13 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 	
 	function getNearDayReturnBookLate($search=null){
 		$db=$this->getAdapter();
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$branch_id = $_db->getAccessPermission('sp.branch_id');
-		$sql="SELECT  SUM(bd.borr_qty) AS borr_qty
-		FROM rms_borrow AS b,rms_borrowdetails AS bd
-		WHERE b.id=bd.borr_id
-		AND bd.is_full=0
-		AND b.is_completed=0";
-		$where = '';
+		$sql="SELECT count(bd.id) FROM rms_borrow as b,rms_borrowdetails as bd WHERE b.id=bd.borr_id and bd.is_return=0 ";
 		$search['end_date']=date("Y-m-d");
-		$str_next = '+1 week';
+		$str_next = '+3 day';
 		$search['end_date']=date("Y-m-d", strtotime($search['end_date'].$str_next));
 		$to_date = (empty($search['end_date']))? '1': " b.return_date <= '".$search['end_date']." 23:59:59'";
-		$where .= " AND ".$to_date;
-		return $db->fetchRow($sql.$where);
+		$sql .= " AND ".$to_date;
+		return $db->fetchOne($sql);
 	}
 	
 	function getStudentNearDayReturnBook($search=null){
@@ -320,24 +308,18 @@ class Library_Model_DbTable_DbBook extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$group);
 	}
 	
-	function getPurchaseDay(){
+	function getPurchaseToday(){
 		$date=date('Y-m-d');
 		$db=$this->getAdapter();
-		$sql="SELECT b.id,SUM(bd.borr_qty) AS borr_qty
-		FROM  rms_bookpurchase AS b,rms_bookpurchasedetails AS bd
-		WHERE b.id=bd.purchase_id
-		AND b.date_order='$date'";
-		return $db->fetchRow($sql);
+		$sql="SELECT count(bd.id) FROM rms_bookpurchase as b,rms_bookpurchasedetails as bd WHERE b.id=bd.purchase_id AND b.date_purchase='$date'";
+		return $db->fetchOne($sql);
 	}
 	
-	function getBrokenDay(){
+	function getBrokenToday(){
 		$date=date('Y-m-d');
 		$db=$this->getAdapter();
-		$sql="SELECT b.id,SUM(bd.borr_qty) AS borr_qty
-		FROM  rms_bookbroken AS b,rms_bookbrokendetails AS bd
-		WHERE b.id=bd.broken_id
-		AND b.date_broken='$date'";
-		return $db->fetchRow($sql);
+		$sql="SELECT count(bd.id) FROM rms_bookbroken as b,rms_bookbrokendetails as bd WHERE b.id=bd.broken_id AND b.date_broken='$date'";
+		return $db->fetchOne($sql);
 	}
 	
 	

@@ -4,6 +4,7 @@
 	
 	$frm = $this->frm_crm;
 ?>
+
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <style>
@@ -69,6 +70,7 @@ a.btn.btn-primary.btn-xs {
 }
 </style>
 <script type="text/javascript">
+	dojo.require("dijit.form.DateTextBox");
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
     dojo.require("dojo.data.ItemFileWriteStore");  

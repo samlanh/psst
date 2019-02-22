@@ -309,7 +309,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    		}
     			$db->commit();
 		   	}catch (Exception $e){
-		   		echo $e->getMessage();
+		   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		   		$db->rollBack();
 		   	}
     }

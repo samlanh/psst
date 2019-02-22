@@ -133,6 +133,7 @@
 	</div>
 </div>
 <script type="text/javascript">
+dojo.require("dijit.form.CheckBox"); 
 dojo.require("dojo.data.ItemFileWriteStore");
 var degree_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->degree_store));?> );
 

@@ -5,11 +5,6 @@
 	
 	$frm = $this->frm_payment;
 ?>	
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dijit.form.Textarea");
-</script>
  <style>
 	select{ width:100%;}
 	fieldset{  background:none;}
@@ -227,9 +222,13 @@ span.oldsup input[type=checkbox] {
 		</form>
     </div>
  </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require('dijit.form.NumberTextBox');
 
 	var keyindex=1;
 	var url_getSupplier = '<?php echo $this->url(array('module'=>'stock','controller'=>'purchasepayment','action'=>'getallpuchasebysupplier')); ?>';

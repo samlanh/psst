@@ -2,19 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_GRADUATED_STUDENT')); 
 ?>
-
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dijit.form.NumberTextBox");
-	//dojo.require("dijit.form.Textarea");
-	dojo.require("dijit.form.DateTextBox");
-	dojo.require("dijit.form.CheckBox");
-
-	dojo.ready(function(){
-	
-	}); 
-
-</script>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -115,8 +102,18 @@
 		</form>
 	</div>
 </div>
-
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.NumberTextBox");
+	//dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox");
+
+	dojo.ready(function(){
+	
+	}); 
+
 
 	var url_get_all_student_from_group = "<?php echo $this->url(array('module'=>'foundation','controller'=>'graduatedstudent','action'=>'get-all-student')); ?>";
 	function getStudentFromGroup(){

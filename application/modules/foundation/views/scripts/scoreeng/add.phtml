@@ -68,7 +68,6 @@ span.note_score {
     text-decoration: underline;
 }
 </style>
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -175,10 +174,15 @@ span.note_score {
 		</form>
 	</div>
 </div>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
 dojo.require('dijit.form.Textarea');
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
+dojo.require("dijit.form.DateTextBox");
+dojo.require('dijit.form.NumberTextBox');
+dojo.require("dojo.number");
+
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var scoreSetting_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){

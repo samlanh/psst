@@ -2,9 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_STUDENT_CHANGE_GROUP')); 
 ?>
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-</script>
 <div class="card">
 	<div class="card-content collapse show">
 		<form id="add_car" action="<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
@@ -163,7 +160,11 @@
        </form>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.DateTextBox");
+	
 	var url_student = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-student')); ?>';
 	function getStudentInfo(){
 		studentid = dijit.byId('studentid').get('value');

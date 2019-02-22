@@ -4,12 +4,6 @@
 	$baseurl = $this->baseUrl();
 	$frm_items= $this->frm_items;
 ?>
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-    dojo.require("dijit.form.Textarea");
-</script>
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
 	width: 99%;
@@ -138,9 +132,14 @@ input.btn_borwse_image {
 		</form>
     </div>
 </div>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+    dojo.require("dijit.form.Textarea");
+    dojo.require('dijit.form.NumberTextBox');
+    dojo.require("dojo.number");
 	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
 	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
 	dojo.ready(function(){ 
 		$("#title").keyup(function(){

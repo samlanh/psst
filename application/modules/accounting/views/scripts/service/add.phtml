@@ -4,7 +4,6 @@
 	$baseurl = $this->baseUrl();
 	$frm_items= $this->frm_items;
 ?>
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
 	width: 99%;
@@ -105,11 +104,12 @@
 		</form>
     </div>
 </div>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.NodeList-manipulate");
     dojo.require("dijit.form.Textarea");
     dojo.require("dojo.data.ItemFileWriteStore");  
-    
+    dojo.require('dijit.form.NumberTextBox');
     dojo.ready(function(){
         
     });

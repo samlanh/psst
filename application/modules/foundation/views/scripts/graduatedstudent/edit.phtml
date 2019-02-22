@@ -7,14 +7,6 @@
 	//print_r($hour);exit();
 	
 ?>
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dijit.form.NumberTextBox");
-	dojo.require("dijit.form.Textarea");
-	dojo.require("dijit.form.DateTextBox");
-	dojo.require("dijit.form.CheckBox");
-
-</script>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -120,8 +112,14 @@
 	</div>
 </div>
 	
-
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox");
+
 
 dojo.ready(function(){
 	toStudentGroup(1);

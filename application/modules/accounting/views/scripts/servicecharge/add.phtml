@@ -3,12 +3,7 @@
 	echo $this->headTitle($tr->translate('ADD_SERVICE_FEE')); 
 	$payment_term = $this->payment_term;
 	$frm = $this->frm_fee;
-?>	
-<script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-</script>
+?>
 <style>
 select{ width:100%;}
 fieldset{  background:none;}
@@ -17,12 +12,6 @@ table tr td.null-border{ background: #fff; border-left:none !important;}
 table .set-style td,table .set-style th{ padding: 0px; border:1px solid #ccc;}
 table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
 </style>
-<script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dijit.form.NumberTextBox");
-	dojo.require("dijit.form.Textarea");
-	dojo.require("dijit.form.DateTextBox");
-</script>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -123,7 +112,14 @@ table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255
     	</form>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>	
 <script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dojo.parser");
+    dojo.require('dijit.form.NumberTextBox');
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.DateTextBox");
 function getRefreshGroup(){
 	var url_getgroup = '<?php echo $this->url(array("module"=>"accounting","controller"=>"servicecharge","action"=>"refreshservice"));?>';										
 		loading();

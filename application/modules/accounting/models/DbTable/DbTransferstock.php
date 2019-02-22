@@ -42,11 +42,19 @@ class Accounting_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
 				t.id='".$id."'";
     	return $db->fetchRow($sql);
     }
-    function getTransferByIdDetail($id){
+    function getTransferByIdDetail($id,$frombranch=null){
     	$db = $this->getAdapter();
-    	$sql = "SELECT *,
-		(SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = pro_id LIMIT 1) AS pro_name
-    	FROM rms_transferdetail WHERE transferid=".$id;
+    	if (!empty($frombranch)){
+    		$sql = "
+    			SELECT trd.*,
+				(SELECT pl.pro_qty FROM rms_product_location AS pl WHERE pl.brand_id = $frombranch AND pl.pro_id = trd.pro_id LIMIT 1 ) AS curr_qty,
+				(SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = trd.pro_id LIMIT 1) AS pro_name
+		    	FROM rms_transferdetail  AS trd WHERE trd.transferid=$id";
+    	}else{
+	    	$sql = "SELECT *,
+			(SELECT ide.title FROM `rms_itemsdetail` AS ide WHERE ide.items_type=3 AND ide.id = pro_id LIMIT 1) AS pro_name
+	    	FROM rms_transferdetail WHERE transferid=".$id;
+    	}
     	return $db->fetchAll($sql);
     }
     public function addTransferStock($_data){

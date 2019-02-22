@@ -450,13 +450,21 @@ div.img-back {
     box-sizing: border-box;
 }		                       		
 </style>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/js/pdbs_js.js"  type="text/javascript"></script>
 <script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore");  
-	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dijit.layout.BorderContainer");
+	dojo.require("dijit.layout.TabContainer");
+	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dojo.number");
-	dojo.require("dojo.data.ObjectStore");
+	
+	dojo.require("dijit.form.DateTextBox");
 	dojo.require('dijit.form.TextBox');
 	dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
+	
 	
 	item_store = getDataStorefromJSON('id','name');
 require(["dojo/ready"], function(ready){

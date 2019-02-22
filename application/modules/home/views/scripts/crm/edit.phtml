@@ -4,11 +4,6 @@
 	$baseurl = $this->baseUrl();
 	$frm_items= $this->frm_crm;
 ?>
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-    dojo.require("dijit.form.Textarea");
-</script>
 <style>
 table.history-record {
     width: 100%;
@@ -266,13 +261,15 @@ table#table_row tr td {
  	}
  }
 ?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
 require(["dojo/ready"], function(ready){
 	ready(function(){
 		 $("#e15").select2({tags:[<?php echo $tags;?>],placeholder: "<?php echo $tr->translate("Previous Concern");?>",allowClear: true});
 	});
 });
-
+dojo.require("dijit.form.Textarea");
+dojo.require('dijit.form.NumberTextBox');
 dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.store.Memory");

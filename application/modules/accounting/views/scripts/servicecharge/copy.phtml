@@ -5,12 +5,6 @@
 	$payment_term = $this->payment_term;
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>	
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dijit.form.Textarea");
-    dojo.require("dojo.data.ItemFileWriteStore");
-</script>
 <style>
 .dijitTextArea[cols].dijitTextArea[cols]{
 	width: 99%;
@@ -112,7 +106,13 @@ table .set-style td, table .set-style th {
     	</form>
     </div>
 </div>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dojo.data.ItemFileWriteStore");
+    dojo.require('dijit.form.NumberTextBox');
+    
 var service_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->service_name));?> );
 function submitDataClose(){
 	condition = validateservice();

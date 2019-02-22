@@ -16,10 +16,6 @@
 	}
 	.center{border:1px solid #000;}
 </style>
-<script type="text/javascript">
-    dojo.require("dojo.NodeList-manipulate");
-	dojo.require("dojo.data.ItemFileWriteStore");  
-</script>
 <title><?php echo $this->tr->translate("EDIT_TRANSFER_PRODUCT")?></title>
 <div class="card">
 	<div class="card-content collapse show">
@@ -153,11 +149,16 @@
 		</form>
 	</div>
 </div>
-	 
-<script>
-dojo.ready(function(){
-	initailize();
-});
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="text/javascript">
+    dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require('dijit.form.NumberTextBox');  
+	
+	dojo.ready(function(){
+		initailize();
+	});
 function initailize(){
 	<?php if(!empty($this->rsdetail)){
 		foreach($this->rsdetail as $row){
@@ -178,8 +179,8 @@ function initailize(){
 	pro_name='';
 	template='<td width="2%" align="center">'+index+'</td>';
 	template+='<td ><?php echo $row['pro_name'];?><input dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
-	template+='<td ></td>';
-	template+='<td ><input dojoType="dijit.form.NumberTextBox" class="fullside" type="text" required="1" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+	template+='<td ><input dojoType="dijit.form.NumberTextBox" readonly="readonly" class="fullside" type="text"  id="currqty_'+index+'" name="currqty_'+index+'" ></td>';
+	template+='<td ><input onkeyup="checkCurrentStock('+index+')"  dojoType="dijit.form.NumberTextBox" class="fullside" type="text" required="1" id="qty_'+index+'" name="qty_'+index+'" ></td>';
 	template+='<td ><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 	template+='<td align="center"><img onClick="deleteRecord('+index+');" src="<?php echo BASE_URL; ?>/images/Delete_16.png" /></td>';
 	
@@ -194,6 +195,8 @@ function initailize(){
 	dojo.html.set(dojo.byId("row"+index),template , {
 	     parseContent: true,
 	});
+	
+	dijit.byId('currqty_'+index).attr('value',<?php echo $row['curr_qty']+$row['qty']?>);
 	dijit.byId('qty_'+index).attr('value',<?php echo $row['qty']?>);
 	dijit.byId('remark_'+index).attr('value','<?php echo $row['note']?>');
 	dijit.byId('pro_id_'+index).attr('value',<?php echo $row['pro_id']?>);

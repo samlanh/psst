@@ -110,6 +110,9 @@ class IndexController extends Zend_Controller_Action
 			}			
 		}
 		$session_lang=new Zend_Session_Namespace('lang');
+		if (empty($session_lang->lang_id)){
+			$session_lang->lang_id =1;
+		}
 		$this->view->rslang = $session_lang->lang_id;
     }
     public function teacherloginAction()

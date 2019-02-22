@@ -85,8 +85,9 @@ class Stock_TransferController extends Zend_Controller_Action {
 			}
 		}
 		$id=$this->getRequest()->getParam("id");
-		$this->view->rs = $db->getTransferById($id);
-		$this->view->rsdetail = $db->getTransferByIdDetail($id);
+		$row = $db->getTransferById($id);
+		$this->view->rs = $row;
+		$this->view->rsdetail = $db->getTransferByIdDetail($id,$row['from_location']);
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rsbranch = $db->getAllBranchName();
 // 		$this->view->rsproduct = $db->getallProductName();

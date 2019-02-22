@@ -61,11 +61,10 @@ $teacher_id = $session_t->teacher_id;
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>js/dojo-1.6.1/dijit/themes/<?php echo $them_style."/".$them_style?>.css" />
     <script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
-    
-    <script src="<?php echo $base_url;?>/js/help.js"  type="text/javascript"></script>
-	<script src="<?php echo $base_url;?>/js/pdbs_js.js"  type="text/javascript"></script>
+	<?php if ( ($module=='test' AND $controller=="index" AND $action=="add") OR ($module=='test' AND $controller=="index" AND $action=="edit") OR ($module=='foundation' AND $controller=="register" AND $action=="add") OR ($module=='foundation' AND $controller=="register" AND $action=="edit")){?>
 	<script type="text/javascript" src="<?php echo $this->baseUrl();?>/webcam/webcamjs/webcam.js"></script>
 	<script type="text/javascript" src="<?php echo $this->baseUrl();?>/webcam/webcamjs/webcam.min.js"></script>
+	<?php }?>
 	<!-- export library -->
 	<?php if($module=='allreport' OR $action=='allreports' OR $action=='studentnearlyendservice' OR 
 		$action=='studentpaymentlate' OR $controller=='allreports' OR $controller=='rptproductsold' OR
@@ -139,22 +138,12 @@ $teacher_id = $session_t->teacher_id;
    <?php }else{?>   
    <script src="<?php echo $base_url;?>js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
    <script>dojoConfig = {parseOnLoad: true}</script>
-      <script>
+   <script>
+		require(["dijit/form/Form","dijit/form/FilteringSelect","dijit/form/Button","dijit/Dialog"]);
+		<?php if ($module=="allreport"){?>
 		dojo.require("dijit.form.DateTextBox");
-		dojo.require("dijit.form.ValidationTextBox");
-		dojo.require('dijit.form.Form');
-		dojo.require('dijit.form.FilteringSelect');	
-		dojo.require('dijit.form.Button');
-		dojo.require('dijit.form.NumberTextBox');
-		
-		dojo.require("dijit.form.CheckBox");     
-		dojo.require("dojo.number");
-		dojo.require("dijit.Dialog");
-		
-		dojo.require("dijit.layout.BorderContainer");
-		dojo.require("dijit.layout.TabContainer");
-		</script>
-	
+		<?php }?>
+   </script>
 	<?php }?>
 	 
 	<link rel="shortcut icon" href="<?php echo $base_url;?>images/icon.ico" type="image/x-icon"/>

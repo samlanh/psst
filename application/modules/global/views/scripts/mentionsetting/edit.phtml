@@ -3,6 +3,7 @@
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
      $frm = $this->frm;
 ?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <style>
 #table tr td{
 	border:1px solid #cccccc;
@@ -92,8 +93,7 @@
 			<div class="clearfix"></div>
 	       	<div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
-					<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
+               		<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>
@@ -103,9 +103,9 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-    dojo.require("dijit.form.FilteringSelect");
-    dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dijit.form.NumberTextBox");
+
     var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){ 
 		new dijit.form.FilteringSelect({
@@ -157,15 +157,12 @@
 			    }
 			},
 			error: function(err) {
-				alert(err);
 			}
-		});
-		
-	}
-	
-	var col= 0; var no=0;
-	var title = 0;
-	function addRow() {
+		});		
+}	
+var col= 0; var no=0;
+var title = 0;
+function addRow() {
 		col++;no++;
 		template='';
 		temp = "";
@@ -205,7 +202,6 @@
 		col++;no++;
 		template='';
 		temp = "";
-	
 		if(title!=1){
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
@@ -216,7 +212,6 @@
 			dojo.query("#head-title").append(temp);
 			title=1;
 		}
-			
 		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
 		template+='<td width="10%"><input required="required" dojoType="dijit.form.NumberTextBox" class="fullside" id="max_score'+col+'" name="max_score'+col+'" placeholder="'+'<?php echo $tr->translate("MAX_SCORE")." ";?> " value="<?php echo $rs['max_score'];?>" type="text"  ></td>';	
@@ -240,9 +235,7 @@
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
 		for(var i=0;i<arrays.length;i++) {
-		
 		if(arrays[i] == index) arrays.splice(i,1);
-			
 		}
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
@@ -273,9 +266,7 @@
 				} 
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
-		
 	}
 </script>

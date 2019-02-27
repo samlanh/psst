@@ -3,6 +3,7 @@
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
      $frm = $this->frm;
 ?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <style>
 #table tr td{
 	border:1px solid #cccccc;
@@ -104,7 +105,6 @@
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");
-    dojo.require("dijit.form.FilteringSelect");
     dojo.require("dijit.form.Textarea");
     var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){ 

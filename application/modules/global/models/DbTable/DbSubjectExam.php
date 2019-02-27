@@ -19,42 +19,36 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 	    	return $db->fetchAll($sql);
     	}
     }
-    
     public function getAllSubjectParentByID($id){
     	$db = $this->getAdapter();
     	$sql = "SELECT * FROM rms_subject WHERE id=".$id;
     	return $db->fetchRow($sql);
     }
-    
 	public function addNewSubjectExam($_data){
 		$db = $this->getAdapter();
-		//print_r($_data); exit();
 		try{
 			$sql="SELECT id FROM rms_subject WHERE parent =".$_data['parent'];
 			$sql.=" AND subject_titlekh='".$_data['subject_kh']."'";
 			$sql.=" AND subject_titleen='".$_data['subject_en']."'";
-			//$sql.=" AND shortcut='".$_data['score_percent']."'";
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
 				return -1;
 			}
-		$_arr=array(
-				'parent' 			=> $_data['parent'],
-				'subject_titlekh' 	=> $_data['subject_kh'],
-				'subject_titleen' 	=> $_data['subject_en'],
-				'date' 				=> date("Y-m-d"),
-				'status'   			=> $_data['status'],
-				'schoolOption'   			=> $_data['schoolOption'],
-				'is_parent'   		=> $_data['par'],
-				//'score_percent'   	=> $_data['score_percent'],
-				//'access_type'   	=> $_data['access_type'],
-		        'shortcut'			=> $_data['score_percent'],
-				'user_id'	  		=> $this->getUserId()
-		);
-		return  $this->insert($_arr);
+			$_arr=array(
+					'parent' 			=> $_data['parent'],
+					'subject_titlekh' 	=> $_data['subject_kh'],
+					'subject_titleen' 	=> $_data['subject_en'],
+					'date' 				=> date("Y-m-d"),
+					'status'   			=> 1,
+					'schoolOption'   	=> $_data['schoolOption'],
+					'is_parent'   		=> $_data['par'],
+			        'shortcut'			=> $_data['score_percent'],
+					'user_id'	  		=> $this->getUserId()
+			);
+			return  $this->insert($_arr);
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
 	}
 	public function updateSubjectExam($_data,$id){
@@ -85,17 +79,16 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = " SELECT 
 					id,
-					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,
 					subject_titlekh,
 					subject_titleen,
 					shortcut,
+					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,
 					date,
-					(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=user_id LIMIT 1) as user_name,
+					(SELECT first_name FROM rms_users WHERE id=user_id LIMIT 1) as user_name,
 					status
 				FROM 
 					rms_subject   
-				WHERE 1
-			";
+				WHERE 1 ";
 		$order=" order by id DESC";
 		$where = '';
 		if(empty($search)){
@@ -115,7 +108,6 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		if(!empty($search['schoolOption_search'])){
 			$where.= " AND schoolOption  = ".$search['schoolOption_search'];
 		}
-		
 		return $db->fetchAll($sql.$where.$order);
 	}
 	public function addNewSubjectajax($_data){

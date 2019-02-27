@@ -3,6 +3,7 @@
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
      $frm = $this->frm;
 ?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <style>
 #table tr td{
 	border:1px solid #cccccc;
@@ -91,10 +92,9 @@
 			<div class="clearfix"></div>
 	       	<div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="reset" value="Clear" label="Clear"dojoType="dijit.form.Button" iconClass="dijitIconClear"/>
-					<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
+               		<input type="submit" value="save_close" id="save_close" name="save_close" label="<?php echo $tr->translate("SAVE_CLOSE");?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
-						<input type="submit" value="save_close" id="save_new" name="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
+					<input type="submit" value="save_close" id="save_new" name="save_new" label="<?php echo $tr->translate("SAVE_NEW");?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>
@@ -104,9 +104,9 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-    dojo.require("dojo.parser");
-    dojo.require("dijit.form.FilteringSelect");
     dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.NumberTextBox");
+    
     var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){ 
 		new dijit.form.FilteringSelect({
@@ -153,7 +153,6 @@
 			    dijit.byId('degree').set('store',dept_store);   
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
 		
@@ -199,9 +198,7 @@
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
 		for(var i=0;i<arrays.length;i++) {
-		
-		if(arrays[i] == index) arrays.splice(i,1);
-			
+			if(arrays[i] == index) arrays.splice(i,1);
 		}
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
@@ -231,9 +228,7 @@
 				} 
 			},
 			error: function(err) {
-				alert(err);
 			}
 		});
-		
 	}
 </script>

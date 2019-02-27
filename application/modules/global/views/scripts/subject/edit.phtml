@@ -1,10 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_SUBJECT')); 
-//	print_r($this->rs );
-	//print_r($this->row );
 ?>	
-
 <?php  $subject_exam= $this->frm_subject_exam;?>
 <div class="card">
 	<div class="card-content collapse show">
@@ -36,12 +33,11 @@
 				<div class="col-md-6 col-sm-6 col-xs-12">
 		    		<div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12">
-		                <input type="checkBox" checked="checked" <?php if($this->row['is_parent']==1){echo "checked='checked'";}?> dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" />
-		                <?php echo $tr->translate("IS_PARENT");?> 
-		                <input type="hidden" id="par" name="par" />
+			                <input type="checkBox" checked="checked" <?php if($this->row['is_parent']==1){echo "checked='checked'";}?> dojoType="dijit.form.CheckBox" value="1" id="is_parent" onChange="getValue();" name="is_parent" />
+			                <?php echo $tr->translate("IS_PARENT");?> 
+			                <input type="hidden" id="par" name="par" />
 		                </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                </div>
+		                <div class="col-md-7 col-sm-7 col-xs-12"></div>
 		             </div>
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PARENT");?> </label>
@@ -66,17 +62,6 @@
 		                	<?php  echo $subject_exam->getElement('subject_en');?>
 		                </div>
 		             </div>
-					<!--<div class="form-group">
-		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php //echo $tr->translate("ACCESS_TYPE");?> </label>
-		                <div class="col-md-7 col-sm-7 col-xs-12">
-		                	<select class="fullside" name="access_type" id="access_type" dojoType="dijit.form.FilteringSelect" >
-										<option value="1" <?php // if($this->row['access_type']==1) echo 'selected="selected"';?>>All</option>
-										<option value="2" <?php //if($this->row['access_type']==2) echo 'selected="selected"';?>>GEP</option>
-										<option value="3" <?php //if($this->row['access_type']==3) echo 'selected="selected"';?>>Kindergarten</option>
-										<option value="4" <?php //if($this->row['access_type']==4) echo 'selected="selected"';?>>General Education</option>
-									</select>
-		                </div>
-		             </div> -->
 		             <div class="form-group">
 		                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SHORTCUT");?> </label>
 		                <div class="col-md-7 col-sm-7 col-xs-12">
@@ -96,13 +81,12 @@
 		                </div>
 		             </div>
 		             <div class="clearfix"></div>
-				         <div class="card-box mt-20">
-			               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-			               		<input iconClass="dijitIconClear" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-								<input type="submit" value="<?php echo $tr->translate("GO_EDIT");?>" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
-									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="dijit.byId('add_subject_exam').submit();"/>
-			               	</div>
+				     <div class="card-box mt-20">
+			             <div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+			               	<input type="submit" value="<?php echo $tr->translate("GO_EDIT");?>" label="<?php echo $tr->translate("GO_EDIT");?>" id="submitButton" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" onclick="dijit.byId('add_subject_exam').submit();"/>
 			             </div>
+			         </div>
 		         </div>
 			</div>
 		</form>
@@ -110,44 +94,21 @@
 </div>
 <script type="text/javascript">
 dojo.require("dijit.form.CheckBox"); 
-	function getValue(){
-		//alert(1);
-		var par='';
-		if(dojo.byId('is_parent').checked){
-			par = 1;
-			dijit.byId('parent').attr('value','');
-			dijit.byId("parent").set('readOnly',true);
-			
-		}else{
-			par=0;
-			dijit.byId('parent').attr('value','0');
-			dijit.byId("parent").set('readOnly',false);
-		}
-		//dijit.byId('parent').attr('value',par);
-		$('#par').val(par);
+function getValue(){
+	var par='';
+	if(dojo.byId('is_parent').checked){
+		par = 1;
+		dijit.byId('parent').attr('value','');
+		dijit.byId("parent").set('readOnly',true);	
+	}else{
+		par=0;
+		dijit.byId('parent').attr('value','0');
+		dijit.byId("parent").set('readOnly',false);
 	}
-
-	dojo.ready(function(){
-
-		getValue();
-		dijit.byId('parent').attr('value','<?php echo $this->row['parent'] ?>');
-
-
-	});
-
+	$('#par').val(par);
+}
+dojo.ready(function(){
+	getValue();
+	dijit.byId('parent').attr('value','<?php echo $this->row['parent'] ?>');
+});
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

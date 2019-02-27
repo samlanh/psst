@@ -18,9 +18,7 @@ class Global_MentionsettingController extends Zend_Controller_Action {
     				'academic_year'=>"",
 				);
     		}
-    		
     		$this->view->search = $search;
-    		
 			$db = new Global_Model_DbTable_DbMetion();
 			$rs_rows = $db->getAllMentionSetting($search);
 			$glClass = new Application_Model_GlobalClass();
@@ -36,6 +34,7 @@ class Global_MentionsettingController extends Zend_Controller_Action {
     		$this->view->year = $db->getAceYear();
     		
 		}catch (Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
@@ -56,12 +55,10 @@ class Global_MentionsettingController extends Zend_Controller_Action {
 	    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	    	}
     	}
-    	
     	$frm = new Global_Form_FrmMetion();
     	$frm->FrmAddMetionSetting(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm = $frm;
-    	
     }
 	public function editAction(){
 		$db = new Global_Model_DbTable_DbMetion();

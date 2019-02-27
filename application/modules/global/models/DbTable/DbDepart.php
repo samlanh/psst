@@ -10,7 +10,6 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
 	public function addNewDepartment($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		//print_r($_data); exit();
 		try{
   		$sql="SELECT depart_id FROM rms_department where status =".$_data['status'];
   		$sql.=" AND depart_namekh='".$_data['depart_namekh']."'";
@@ -19,16 +18,16 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
   			return -1;
   		}
   		$arr = array(
-  				'depart_namekh'	=>$_data['depart_namekh'],
-  				'depart_nameen'	=>$_data['depart_nameen'],
+  				'depart_namekh'	=> $_data['depart_namekh'],
+  				'depart_nameen'	=> $_data['depart_nameen'],
   				'create_date' 	=> Zend_Date::now(),
-  				'status'		=>$_data['status'],
+  				'status'		=> 1,
 				'user_id'		=> $this->getUserId()
   		);
 		$this->insert($arr);
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
 	public function getDepartmentById($id){
@@ -41,15 +40,14 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
 	public function updateDepartment($_data){
 		$db = $this->getAdapter();
 		$_arr=array(
-				'depart_namekh'	=>$_data['depart_namekh'],
-  				'depart_nameen'	=>$_data['depart_nameen'],
-				'create_date' => Zend_Date::now(),
-  				'status'	=>$_data['status'],
-				'user_id'	  => $this->getUserId()
+				'depart_namekh'	=> $_data['depart_namekh'],
+  				'depart_nameen'	=> $_data['depart_nameen'],
+				'create_date'   => Zend_Date::now(),
+  				'status'	    => $_data['status'],
+				'user_id'	    => $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("depart_id=?", $_data["id"]);
 		$this->update($_arr,$where);
-		//print_r($_data); exit();
 	}
 	function getAllDepartment($search){
 		$db = $this->getAdapter();
@@ -79,4 +77,3 @@ class Global_Model_DbTable_DbDepart extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql.$where.$order);
 	}	
 }
-

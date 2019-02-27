@@ -1,14 +1,9 @@
 <?php
 class Global_DepartmentController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
 	}
 	public function indexAction(){
 		try{
@@ -46,7 +41,7 @@ class Global_DepartmentController extends Zend_Controller_Action {
 	public function addAction(){
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			try {
+			try{
 				$sms="INSERT_SUCCESS";
 				$_dbmodel = new Global_Model_DbTable_DbDepart();
 				$_discount = $_dbmodel->addNewDepartment($_data);
@@ -59,8 +54,7 @@ class Global_DepartmentController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull($sms,"/global/department/add");
 				}
 				Application_Form_FrmMessage::message($sms);				
-					
-			}catch (Exception $e) {
+			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}		
@@ -92,6 +86,4 @@ class Global_DepartmentController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
 }
-

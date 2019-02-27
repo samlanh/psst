@@ -58,10 +58,11 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     	$_items_id->setMultiOptions($_arr_opt);
     	$_items_id->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
-// 				'required'=>false,
     			'onChange'=>'checkaddItems();',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
-    			'class'=>'fullside height-text',));
+    			'class'=>'fullside',));
     	
     	$_ordering = new Zend_Dojo_Form_Element_NumberTextBox('ordering');
     	$_ordering->setAttribs(array(

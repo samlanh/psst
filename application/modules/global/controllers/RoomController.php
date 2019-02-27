@@ -1,6 +1,6 @@
+
 <?php
 class Global_RoomController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
     public function init()
     {    	
      /* Initialize action controller here */
@@ -24,12 +24,10 @@ class Global_RoomController extends Zend_Controller_Action {
 			}
 			$db = new Global_Model_DbTable_DbRoom();
 			$rs_rows= $db->getAllRooms($search);
-			 
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-			 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","FLOOR","ROOM_NAME","MODIFY_DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","ROOM_NAME","FLOOR","MAX_STUDENT","MODIFY_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'room','action'=>'edit',
 			);

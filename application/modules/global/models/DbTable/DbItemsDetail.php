@@ -29,7 +29,7 @@
 			$where.= " AND ide.items_type = ".$db->quote($items_type);
 		}
 		if(!empty($search['advance_search'])){
-			$s_where = array();
+				$s_where = array();
 	    		$s_search = addslashes(trim($search['advance_search']));
 		 		$s_where[] = " ide.title LIKE '%{$s_search}%'";
 		 		$s_where[] = " ide.title_en LIKE '%{$s_search}%'";
@@ -86,11 +86,10 @@
 					'is_onepayment' => $_data['is_onepayment'],
 					'note'   		=> $_data['note'],
 					'ordering'    	=> $_data['ordering'],
-// 					'is_onepayment' => $_data['is_onepayment'],
 					'schoolOption'  => $schooloption,
 					'create_date' 	=> date("Y-m-d H:i:s"),
 					'modify_date' 	=> date("Y-m-d H:i:s"),
-					'status'		=> $_data['status'],
+					'status'		=> 1,
 					'user_id'	  	=> $this->getUserId()
 			);
 			$this->_name = "rms_itemsdetail";
@@ -99,9 +98,7 @@
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
-		print_r($schooloption); exit();
 	}
 	public function updateItemsDetail($_data){
 		$_db= $this->getAdapter();
@@ -122,7 +119,6 @@
 					'ordering'    	=> $_data['ordering'],
 					'is_onepayment' => $_data['is_onepayment'],
 					'schoolOption'  => $schooloption,
-// 					'create_date' 	=> date("Y-m-d H:i:s"),
 					'modify_date' 	=> date("Y-m-d H:i:s"),
 					'status'		=> $_data['status'],
 					'user_id'	  	=> $this->getUserId()
@@ -130,16 +126,14 @@
 			$this->_name = "rms_itemsdetail";
 			$id = $_data["id"];
 			$where = $this->getAdapter()->quoteInto("id=?",$id);
-			$this->update($_arr, $where);
-			
+			$this->update($_arr, $where);			
 			return $id;
+			
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
-	}
-	
+	}	
 	// For Module Product Stock
 	public function AddProduct($_data){
 		$_db= $this->getAdapter();
@@ -149,23 +143,23 @@
 			if (!empty($_data['items_id'])){
 				$itemsinfo = $db_items->getDegreeById($_data['items_id'],$_data['items_type']);
 				$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
-			}
-			
+			}			
 			$part= PUBLIC_PATH.'/images/proimage/';
 			if (!file_exists($part)) {
 				mkdir($part, 0777, true);
 			}
 			$photo = "";
 			$name = $_FILES['images']['name'];
-			if (!empty($name)){
-				$ss = 	explode(".", $name);
-				$image_name = "product_".date("Y").date("m").date("d").time().".".end($ss);
-				$tmp = $_FILES['images']['tmp_name'];
-				if(move_uploaded_file($tmp, $part.$image_name)){
-					$photo = $image_name;
-				}
-				else
-					$string = "Image Upload failed";
+			if(!empty($name)){
+					$ss = 	explode(".", $name);
+					$image_name = "product_".date("Y").date("m").date("d").time().".".end($ss);
+					$tmp = $_FILES['images']['tmp_name'];
+					if(move_uploaded_file($tmp, $part.$image_name)){
+						$photo = $image_name;
+					}
+					else{
+						$string = "Image Upload failed";
+					}
 			}
 			
 			$_arr=array(

@@ -102,10 +102,9 @@
 					'title_en'	  	=> $_data['title_en'],
 					'shortcut' 		=> $_data['shortcut'],
 					'type'			=> $_data['type'],
-// 					'schoolOption'  => $_data['schoolOption'],
 					'create_date' 	=> date("Y-m-d H:i:s"),
 					'modify_date' 	=> date("Y-m-d H:i:s"),
-					'status'		=> $_data['status'],
+// 					'status'		=> $_data['status'],
 					'user_id'	 	=> $this->getUserId()
 			);
 			if ($_data['type']==1){
@@ -118,12 +117,12 @@
 					$ids = explode(',', $_data['identity']);
 					foreach ($ids as $i){
 						$arr = array(
-								'dept_id'		=>$id,
-								'subject_id'	=>$_data['subject_study_'.$i],
-								'score_in_class'=>$_data['scoreinclass_'.$i],
-								'score_out_class'=>$_data['scoreoutclass_'.$i],
-								'score_short'	=>$_data['scoreshort_'.$i],
-								'status'    	=> $_data['status_'.$i],
+								'dept_id'		=> $id,
+								'subject_id'	=> $_data['subject_study_'.$i],
+								'score_in_class'=> $_data['scoreinclass_'.$i],
+								'score_out_class'=> $_data['scoreoutclass_'.$i],
+								'score_short'	=> $_data['scoreshort_'.$i],
+								'status'    	=> 1,
 								'note'   		=> $_data['note_'.$i],
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId()
@@ -151,14 +150,11 @@
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 	}
 	public function UpdateDegree($_data){
-		
 		$_db= $this->getAdapter();
 		try{
-				
 			$_arr=array(
 					'title'	  		=> $_data['title'],
 					'title_en'	  	=> $_data['title_en'],
@@ -253,14 +249,11 @@
 				$where = $this->getAdapter()->quoteInto("id=?",$id);
 				$this->update($_arr, $where);
 			}
-			
-			
 			$this->updateItemsDetailByItems($_data);
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("Application Error!");
-			echo $e->getMessage();
 		}
 		
 	}

@@ -1,6 +1,5 @@
 <?php
 class Global_GradeController extends Zend_Controller_Action {
-private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	const REDIRECT_URL = '/global/grade';
     public function init()
     {    	
@@ -78,14 +77,8 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$d_row = $_dbgb->getAllItems(1);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
     	$this->view->degree = $d_row;
-    	$this->view->subjectlist = $_dbgb->getAllSubjectStudy();
-    	$this->view->schooloptionlist =  $_dbgb->getAllSchoolOption($userinfo['branch_list']);
-    	
-    	$_model = new Global_Model_DbTable_DbGroup();
-    	$this->view->subject = $_model->getAllSubjectStudy();
     }
-    
-    public function editAction(){
+public function editAction(){
     	$db = new Global_Model_DbTable_DbItemsDetail();
     	$id = $this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
@@ -108,17 +101,14 @@ private $activelist = array('មិនប្រើ​ប្រាស់', 'ប�
     	$frm->FrmAddItemsDetail($row,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
-		
     	
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
     	$_dbuser = new Application_Model_DbTable_DbUsers();
     	$d_row = $_dbgb->getAllItems(1);
     	array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-    	$this->view->degree = $d_row;
-    	
-    }
-    
-    public function copyAction(){
+    	$this->view->degree = $d_row;    	
+   }    
+   public function copyAction(){
     	$db = new Global_Model_DbTable_DbItemsDetail();
     	$id = $this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){

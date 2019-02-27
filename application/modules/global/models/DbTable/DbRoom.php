@@ -23,7 +23,7 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 					'room_name'	  => $title,
 					'max_std'	  => $_data['max_student'],
 					'modify_date' => Zend_Date::now(),
-					'is_active'   => $_data['status'],
+					'is_active'   => 1,
 					'user_id'	  => $this->getUserId()
 			);
 			 return $this->insert($_arr);
@@ -72,22 +72,25 @@ class Global_Model_DbTable_DbRoom extends Zend_Db_Table_Abstract
 		$sql = " SELECT 
 					room_id AS id,
 					(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id =branch_id LIMIT 1) AS branch,
-					floor,
 					room_name,
+					floor,
+					max_std,
 					modify_date,
 					(SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id LIMIT 1 )AS user_name,
 					is_active as status
 				FROM 
 					rms_room
 				WHERE 
-					room_name != ''";
+					room_name != '' ";
 		$order=" order by id DESC ";
 		$where = '';
 		if(!empty($search['title'])){
-			$search['title']=addslashes(trim($search['title']));
-			$where.=" AND ( room_name LIKE '%".$search['title']."%'";
-			$where.=" OR floor LIKE '%".$search['title']."%'";
-			$where.=" OR floor LIKE '%".$search['title']."%' )";
+			$s_where = array();
+			$s_search = addslashes(trim($search['title']));
+			$s_where[].=" room_name LIKE '%".$s_search."%'";
+			$s_where[].=" floor LIKE '%".$s_search."%'";
+			$s_where[].=" max_std LIKE '%".$s_search."%' ";
+			$where.=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['branch_id'])){
 			$where.=" AND branch_id=".$search['branch_id'];

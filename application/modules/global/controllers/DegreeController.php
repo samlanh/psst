@@ -1,6 +1,5 @@
 <?php
 class Global_DegreeController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	const REDIRECT_URL = '/global/degree';
     public function init()
     {    	
@@ -18,7 +17,6 @@ class Global_DegreeController extends Zend_Controller_Action {
     	else{
     		$search = array(
     				'advance_search' => "",
-//     				'type_search'=>"",
     				'schoolOption_search'=>"",
     				'status_search' => -1
     		);
@@ -27,7 +25,6 @@ class Global_DegreeController extends Zend_Controller_Action {
         $rs_rows = $db_dept->getAllItems($search,$type);
         $glClass = new Application_Model_GlobalClass();
         $rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-        
     	$list = new Application_Form_Frmtable();
     	$collumns = array("FACULTY_KHNAME","FACULTY_ENNAME","SCHOOL_OPTION","BY_USER","CREATE_DATE","MODIFY_DATE","STATUS");
     	$link=array(
@@ -39,7 +36,6 @@ class Global_DegreeController extends Zend_Controller_Action {
     	$frm->FrmAddDegree(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
-    	
     }
     function addAction(){
     	if($this->getRequest()->isPost()){
@@ -48,7 +44,6 @@ class Global_DegreeController extends Zend_Controller_Action {
     			$_data = $this->getRequest()->getPost();
     			$db = new Global_Model_DbTable_DbItems();
     			$degree_id= $db->AddDegree($_data);
-    			
     			if($degree_id==-1){
     				$sms = "RECORD_EXIST";
     			}
@@ -65,18 +60,8 @@ class Global_DegreeController extends Zend_Controller_Action {
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
-    	$this->view->frm_degree = $frm;
-    	
-//     	$_model = new Global_Model_DbTable_DbGroup();
-//     	$this->view->subject = $_model->getAllSubjectStudy();
-    	 
-    	$parent = new Global_Model_DbTable_DbSubjectExam();
-    	$is_parent = $parent->getAllSubjectParent();
-    	$sub = $parent->getAllSubjectParent(1);
-    	$this->view->rs = $is_parent;
-    	$this->view->sub = $sub;
+    	$this->view->frm_degree = $frm;    	
     }
-    
     public function editAction(){
     	$db = new Global_Model_DbTable_DbItems();
     	$id= $this->getRequest()->getParam("id");
@@ -87,8 +72,8 @@ class Global_DegreeController extends Zend_Controller_Action {
     			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS", self::REDIRECT_URL."/index");
     			exit();
     		} catch (Exception $e) {
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     			Application_Form_FrmMessage::message("Application Error!");
-    			echo $e->getMessage();
     		}
     	}
     	$type=1; //Degree
@@ -104,21 +89,9 @@ class Global_DegreeController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     	
-    	$subject_exam=new Global_Form_FrmAddSubjectExam();
-    	$frm_subject_exam=$subject_exam->FrmAddSubjectExam();
-    	Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
-    	$this->view->frm_subject_exam = $frm_subject_exam;
-    	
     	$_model = new Global_Model_DbTable_DbGroup();
-    	$this->view->subject = $_model->getAllSubjectStudy(null,$row['schoolOption']);
-    	 
-    	$parent = new Global_Model_DbTable_DbSubjectExam();
-    	$is_parent = $parent->getAllSubjectParent();
-    	$sub = $parent->getAllSubjectParent(1);
-    	$this->view->rs = $is_parent;
-    	$this->view->sub = $sub;
+    	$this->view->subject = $_model->getAllSubjectStudy(null,$row['schoolOption']);    	 
     }
-    
     function refreshitemsAction(){
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
@@ -151,4 +124,3 @@ class Global_DegreeController extends Zend_Controller_Action {
     	}
     }
 }
-

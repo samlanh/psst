@@ -2,8 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("GRADE"));
 	
-	$url_copy =$this->url(array('module'=>'global','controller'=>'grade','action'=>'copy'));
-	$formList = new Application_Form_Frmtable();
 	$urlCopy = $this->baseUrl()."/global/grade/copy/id/";
 	$urlEdit = $this->baseUrl()."/global/grade/edit/id/";
 	 $frm =  $this->frm_items;?>
@@ -42,17 +40,7 @@
 		</div>
 	</div>
 </div>
-
-
-
-
- 
 <script type="text/javascript">
-dojo.require("dijit.form.CheckBox"); 
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dijit.form.DateTextBox");
-
 	function copyRecord(url){
 		 id = dijit.byId('recordcopy').get('value');
 		 if(id!=''){
@@ -94,12 +82,8 @@ dojo.require("dijit.form.DateTextBox");
 	function setrowdata(index){
 		row = index;
 	}
-
 	var recordid ='';
 	function gotoAction(){
 		window.location.href =url+row;
-		 //window.open(url+row);
 	}
 </script> 
-
-

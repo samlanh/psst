@@ -137,7 +137,8 @@
 							</thead>
 							<?php  $i=0;
 							$male=0;$femle=0; 
-							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ $i++;?>
+							$teacher_name="";
+							if (!empty($this->rs)){ foreach ($this->rs as  $key=> $row){ $i++; $teacher_name=$row['teacher'];?>
 							<tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['stu_id'];?>);return false;" >
 								<td align="center"><?php echo $i;?></td>
 								<td>&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
@@ -188,6 +189,11 @@
 												<span><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
 												<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("TEACHER_ROOM");?></span>
 											</td>
+										</tr>
+										<tr>
+											<td valign="top"  style="font-family:'Khmer MEF2';font-size:16px;text-align: center;"></td>
+											<td valign="top" ></td>
+											<td valign="top" style="font-family:'Khmer MEF2';font-size:16px;text-align: center;"><br /><br /><?php echo $teacher_name;?></td>
 										</tr>
 									</table>
 								</td>

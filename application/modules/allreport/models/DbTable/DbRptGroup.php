@@ -122,7 +122,8 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				    (SELECT v.$str_village FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 			    	(SELECT c.$str_commune FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
 			    	(SELECT d.$str_district FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
-			    	(SELECT $str_province from rms_province where rms_province.province_id = s.province_id LIMIT 1) AS province
+			    	(SELECT $str_province FROM rms_province WHERE rms_province.province_id = s.province_id LIMIT 1) AS province,
+			    	(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = gr.teacher_id LIMIT 1) as teacher
 			    	
 				FROM 
 					`rms_group_detail_student` AS g,
@@ -289,7 +290,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			   	FROM 
 		   			`rms_group` `g` 
 		   		WHERE 
-		   			`g`.`id`=".$id;
+		   			`g`.`id`=".$id." LIMIT 1";
 	   	return $db->fetchRow($sql);
 	}
 	

@@ -982,7 +982,14 @@ dojo.ready(function(){
 				dijit.byId('grade').set('readOnly',false);
 				dijit.byId('session').set('readOnly',false);
 	    		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/group/add";?>','_blank');
-			  }else{
+			}else if(group_id==""){
+				dijit.byId('academic_year').set('readOnly',false);
+	    		dijit.byId('calture').set('readOnly',false);
+				dijit.byId('degree').set('readOnly',false);
+				dijit.byId('grade').set('readOnly',false);
+				dijit.byId('session').set('readOnly',false);
+				dijit.byId('room').set('readOnly',false);
+			}else{
 				  getInfoBygroup();
 			  }
 	    }

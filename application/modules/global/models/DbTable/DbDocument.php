@@ -9,7 +9,6 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
     }
 	public function addNewDocument($_data){
 		$db = $this->getAdapter();
-		//print_r($_data); exit();
 		try{
 			$title = trim($_data['name']);
 			$sql="SELECT id FROM rms_document_type WHERE status =".$_data['status'];
@@ -18,20 +17,19 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 			if(!empty($rs)){
 				return -1;
 			}			
-		$_arr=array(
-				'name'	  	  => $title,
-				'create_date' => date("Y-m-d"),
-				'types'		  => $_data['types'],
-				'status'  	  => $_data['status'],
-				'user_id'	  => $this->getUserId()
-		);
+			$_arr=array(
+					'name'	  	  => $title,
+					'create_date' => date("Y-m-d"),
+					'types'		  => $_data['types'],
+					'status'	  => 1,
+					'user_id'	  => $this->getUserId()
+			);
 		$this->insert($_arr);
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
 	public function addNewOccupationPopup($_data){
 		$_arr=array(
 				'name' 		  => $_data['name'],
@@ -41,8 +39,6 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		);
 		return  $this->insert($_arr);
 	}
-	
-	
 	public function getDocumentById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_document_type WHERE id = ".$db->quote($id);
@@ -105,4 +101,3 @@ class Global_Model_DbTable_DbDocument extends Zend_Db_Table_Abstract
 		return  $this->insert($_arr);
 	}
 }
-

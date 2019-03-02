@@ -1,11 +1,9 @@
 <?php
 class Global_NewsController extends Zend_Controller_Action {
 	const REDIRECT_URL='/global/news';
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
 	protected $tr;
     public function init()
     {    	
-     /* Initialize action controller here */
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
@@ -64,12 +62,12 @@ class Global_NewsController extends Zend_Controller_Action {
 	   	Application_Model_Decorator::removeAllDecorator($frm);
 	   	$this->view->frm_new = $frm;
    	
-   	$dbglobal = new Application_Model_DbTable_DbGlobal();
-   	$this->view->lang = $dbglobal->getLaguage();
+   		$dbglobal = new Application_Model_DbTable_DbGlobal();
+   		$this->view->lang = $dbglobal->getLaguage();
    }
    function editAction(){
-   	$db = new Global_Model_DbTable_DbNews();
-   	$id = $this->getRequest()->getParam('id');
+	   	$db = new Global_Model_DbTable_DbNews();
+	   	$id = $this->getRequest()->getParam('id');
   	 	if($this->getRequest()->isPost()){
 	   		try{
 	   			$_data = $this->getRequest()->getPost();
@@ -81,7 +79,6 @@ class Global_NewsController extends Zend_Controller_Action {
 	   			Application_Model_DbTable_DbUserLog::writeMessageError($err);
 	   		}
 	   	}
-	   	
 	   	$row = $db->getArticleById($id);
 	   	$this->view->row = $row;
 	   	$this->view->id = $id;
@@ -91,59 +88,57 @@ class Global_NewsController extends Zend_Controller_Action {
 	   	Application_Model_Decorator::removeAllDecorator($frm);
 	   	$this->view->frm_new = $frm;
    	
-   	$dbglobal = new Application_Model_DbTable_DbGlobal();
-   	$this->view->lang = $dbglobal->getLaguage();
+	   	$dbglobal = new Application_Model_DbTable_DbGlobal();
+	   	$this->view->lang = $dbglobal->getLaguage();
    }
-   
    function copyAction(){
-   	$db = new Global_Model_DbTable_DbNews();
-   	$id = $this->getRequest()->getParam('id');
-   	if($this->getRequest()->isPost()){
-   		try{
-   			$_data = $this->getRequest()->getPost();
-   			$db->addArticle($_data);
-   			Application_Form_FrmMessage::Sucessfull($this->tr->translate('COPY_SUCCESS'), self::REDIRECT_URL);
-   		}catch(Exception $e){
-   			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
-   			$err =$e->getMessage();
-   			Application_Model_DbTable_DbUserLog::writeMessageError($err);
-   		}
-   	}
-   	$row = $db->getArticleById($id);
-   	$this->view->row = $row;
-   	$this->view->id = $id;
-   	 
-   	$frm = new Global_Form_FrmNews();
-   	$frm=$frm->FrmAddNews($row);
-   	Application_Model_Decorator::removeAllDecorator($frm);
-   	$this->view->frm_new = $frm;
-   
-   	$dbglobal = new Application_Model_DbTable_DbGlobal();
-   	$this->view->lang = $dbglobal->getLaguage();
+	   	$db = new Global_Model_DbTable_DbNews();
+	   	$id = $this->getRequest()->getParam('id');
+	   	if($this->getRequest()->isPost()){
+	   		try{
+	   			$_data = $this->getRequest()->getPost();
+	   			$db->addArticle($_data);
+	   			Application_Form_FrmMessage::Sucessfull($this->tr->translate('COPY_SUCCESS'), self::REDIRECT_URL);
+	   		}catch(Exception $e){
+	   			Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
+	   			$err = $e->getMessage();
+	   			Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	   		}
+	   	}
+	   	$row = $db->getArticleById($id);
+	   	$this->view->row = $row;
+	   	$this->view->id = $id;
+	   	 
+	   	$frm = new Global_Form_FrmNews();
+	   	$frm=$frm->FrmAddNews($row);
+	   	Application_Model_Decorator::removeAllDecorator($frm);
+	   	$this->view->frm_new = $frm;
+	   
+	   	$dbglobal = new Application_Model_DbTable_DbGlobal();
+	   	$this->view->lang = $dbglobal->getLaguage();
    }
-   
    function deleteAction(){
-   	try{
-   		$request=Zend_Controller_Front::getInstance()->getRequest();
-   		$action=$request->getActionName();
-   		$controller=$request->getControllerName();
-   		$module=$request->getModuleName();
-   
-   		$dbacc = new Application_Model_DbTable_DbUsers();
-   		$rs = $dbacc->getAccessUrl($module,$controller,'delete');
-   		if(!empty($rs)){
-   			$id = $this->getRequest()->getParam('id');
-   			$db = new Global_Model_DbTable_DbNews();
-   			if(!empty($id)){
-   				$db->deleteNews($id);
-   				Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS",self::REDIRECT_URL);
-   			}
-   		}
-   		Application_Form_FrmMessage::Sucessfull("You no permission to delete",self::REDIRECT_URL);
-   	}catch (Exception $e){
-   		Application_Form_FrmMessage::message("Application Error");
-   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-   	}
+	   	try{
+	   		$request=Zend_Controller_Front::getInstance()->getRequest();
+	   		$action=$request->getActionName();
+	   		$controller=$request->getControllerName();
+	   		$module=$request->getModuleName();
+	   
+	   		$dbacc = new Application_Model_DbTable_DbUsers();
+	   		$rs = $dbacc->getAccessUrl($module,$controller,'delete');
+	   		if(!empty($rs)){
+	   			$id = $this->getRequest()->getParam('id');
+	   			$db = new Global_Model_DbTable_DbNews();
+	   			if(!empty($id)){
+	   				$db->deleteNews($id);
+	   				Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS",self::REDIRECT_URL);
+	   			}
+	   		}
+	   		Application_Form_FrmMessage::Sucessfull("You no permission to delete",self::REDIRECT_URL);
+	   	}catch (Exception $e){
+	   		Application_Form_FrmMessage::message("Application Error");
+	   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	   	}
    }
 }
 

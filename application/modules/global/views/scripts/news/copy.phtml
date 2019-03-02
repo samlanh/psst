@@ -36,7 +36,6 @@ input.btn_borwse_image {
     cursor: pointer;
 }
 .button_browse {
-    /*margin-top: 10px; */
     position: relative;
     overflow: hidden;
     text-align: center;
@@ -62,7 +61,6 @@ input.btn_borwse_image {
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
 					loadingBlock();
-					//dijit.byId('save_close').set('disabled',true);
 					return true;
 				} else {
 					return false;
@@ -73,8 +71,7 @@ input.btn_borwse_image {
 		    		<div class="col-sm-8 pd-0">
 		    			<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('COPY_NEWS');?></h4>
 	    			</div>
-	    			<div class="col-sm-4 text-right">
-	    			</div>
+	    			<div class="col-sm-4 text-right"></div>
 	    		</div>
 	    	</div>
 	    	<div class="col-md-8 col-sm-12 col-xs-12">
@@ -98,7 +95,6 @@ input.btn_borwse_image {
                       	$alias = str_replace(' ','',$rs['title']);
                       	$lang = $db->getArticleTitleByLang($this->id, $rs['id']);
                   ?>
-			        <!--Panel <?php echo $key+1?>-->
 			        <div class="tab-pane fade <?php if ($key<1){echo "active in";}?>" id="<?php echo $alias;?>" role="tabpanel">
 			        	<div class="col-md-12 col-sm-12 col-xs-12">
 			                <div class="form-group">
@@ -117,10 +113,7 @@ input.btn_borwse_image {
 			                   </div>
 			                </div>
 			          	</div>
-			          	
-			          	
 			        </div>
-			        <!--/ Panel <?php echo $key+1?>-->
 			        <?php }?>
 			   </div>
 			</div>
@@ -189,8 +182,6 @@ input.btn_borwse_image {
 			<div class="clearfix"></div>
 			    <div class="card-box">
                		<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-		    			<input type="reset" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" 
-						 iconClass="dijitIconClear" /> 
 					 <input type="submit" value="SAVE_CLOSE" tabindex="2" label="<?php echo $tr->translate('SAVECLOSE');?>" id="save_close" dojoType="dijit.form.Button" name="save_close"
 						 iconClass="dijitEditorIcon dijitEditorIconSave" /> 
 	    		</div>
@@ -199,17 +190,16 @@ input.btn_borwse_image {
 	</div>
 </div>
 <script>
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        
-        reader.onload = function (e) {
-            $('#image_view').attr('src', e.target.result);
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-$("#photo").change(function(){
-    readURL(this);
-});
+	function readURL(input) {
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+	        reader.onload = function (e) {
+	            $('#image_view').attr('src', e.target.result);
+	        }
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+	$("#photo").change(function(){
+	    readURL(this);
+	});
  </script>

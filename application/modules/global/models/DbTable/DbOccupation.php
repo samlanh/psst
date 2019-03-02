@@ -9,7 +9,6 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
     }
 	public function addNewOccupation($_data){
 		$db = $this->getAdapter();
-		//print_r($_data); exit();
 		try{
 			$title = trim($_data['occu_name']);
 			$sql="SELECT occupation_id FROM rms_occupation WHERE status =".$_data['status'];
@@ -21,27 +20,25 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 		$_arr=array(
 				'occu_name'	  => $title,
 				'create_date' => Zend_Date::now(),
-				'status'  	  => $_data['status'],
+				'status'  	  => 1,
 				'user_id'	  => $this->getUserId()
 		);
 		$this->insert($_arr);
 		}catch (Exception $e){
 			$db->rollBack();
-			echo $e->getMessage();exit();
+			Application_Form_FrmMessage::message("INSERT_FAIL");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
 	public function addNewOccupationPopup($_data){
 		$_arr=array(
-				'occu_name'	  => $_data['occu_name'],
-				'create_date' => Zend_Date::now(),
-				'status'   => $_data['status_j'],
-				'user_id'	  => $this->getUserId()
+			'occu_name'	  => $_data['occu_name'],
+			'create_date' => Zend_Date::now(),
+			'status'   => $_data['status_j'],
+			'user_id'	  => $this->getUserId()
 		);
 		return  $this->insert($_arr);
 	}
-	
-	
 	public function getOccupationById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM rms_occupation WHERE occupation_id = ".$db->quote($id);
@@ -51,10 +48,10 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 	}
 	public function updateOccupation($_data){
 		$_arr=array(
-				'occu_name'	  => $_data['occu_name'],
-				'create_date' => Zend_Date::now(),
-				'status'   => $_data['status'],
-				'user_id'	  => $this->getUserId()
+			'occu_name'	  => $_data['occu_name'],
+			'create_date' => Zend_Date::now(),
+			'status'   => $_data['status'],
+			'user_id'	  => $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("occupation_id=?", $_data["id"]);
 		$this->update($_arr, $where);
@@ -88,12 +85,11 @@ class Global_Model_DbTable_DbOccupation extends Zend_Db_Table_Abstract
 	}	
 	public function addOccupation($_data){//ajax
 		$_arr=array(
-				'occu_name'	  => $_data['occu_name'],
-				'create_date' => Zend_Date::now(),
-				'status'   => 1,
-				'user_id'	  => $this->getUserId()
+			'occu_name'	  => $_data['occu_name'],
+			'create_date' => Zend_Date::now(),
+			'status'   => 1,
+			'user_id'	  => $this->getUserId()
 		);
 		return  $this->insert($_arr);
 	}
 }
-

@@ -30,7 +30,6 @@ input.btn_borwse_image {
     cursor: pointer;
 }
 .button_browse {
-    /*margin-top: 10px; */
     position: relative;
     overflow: hidden;
     text-align: center;
@@ -56,8 +55,6 @@ input.btn_borwse_image {
 			<script type="dojo/method" event="onSubmit">			
 				if(this.validate()) {
 					loadingBlock();
-					//dijit.byId('save_new').set('disabled',true);
-					//dijit.byId('save_close').set('disabled',true);
 					return true;
 				}else{
 					return false;
@@ -109,10 +106,7 @@ input.btn_borwse_image {
 			                   </div>
 			                </div>
 			          	</div>
-			          	
-			          	
 			        </div>
-			        <!--/ Panel <?php echo $key+1?>-->
 			        <?php }?>
 			   </div>
 			</div>
@@ -178,8 +172,6 @@ input.btn_borwse_image {
 			<div class="clearfix"></div>
 			    <div class="card-box">
                		<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
-		    			<input type="reset" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" 
-						 iconClass="dijitIconClear" /> 
 					 <input type="submit" value="SAVE_CLOSE" tabindex="2" label="<?php echo $tr->translate('SAVECLOSE');?>" id="save_close" dojoType="dijit.form.Button" name="save_close"
 						 iconClass="dijitEditorIcon dijitEditorIconSave" /> 
 					<input type="submit" value="SAVE_NEW" tabindex="1" label="<?php echo $tr->translate('SAVENEW');?>" id="save_new" dojoType="dijit.form.Button" name="save_new"
@@ -190,17 +182,16 @@ input.btn_borwse_image {
 	</div>
 </div>
 <script>
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        
-        reader.onload = function (e) {
-            $('#image_view').attr('src', e.target.result);
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-$("#photo").change(function(){
-    readURL(this);
-});
+	function readURL(input) {
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+	        reader.onload = function (e) {
+	            $('#image_view').attr('src', e.target.result);
+	        }
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+	$("#photo").change(function(){
+	    readURL(this);
+	});
  </script>

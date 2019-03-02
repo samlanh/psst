@@ -11,14 +11,13 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
     }
 	public function addCommune($_data,$id=null){
 		$_arr=array(
-				'code' => $_data['code'],
-				'district_id' => $_data['district_name'],
-				'commune_namekh'=> $_data['commune_namekh'],
-				'commune_name'=> $_data['commune_name'],
-				//'displayby'=> $_data['display'],
-				'status'	  => $_data['status'],
-				'modify_date' => Zend_Date::now(),
-				'user_id'	  => $this->getUserId()
+			'code' => $_data['code'],
+			'district_id' => $_data['district_name'],
+			'commune_namekh'=> $_data['commune_namekh'],
+			'commune_name'=> $_data['commune_name'],
+			'status'	  => 1,
+			'modify_date' => Zend_Date::now(),
+			'user_id'	  => $this->getUserId()
 		);
 		if(!empty($id)){
 			$where = 'com_id = '.$id;
@@ -32,13 +31,11 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 				'district_id' => $_data['district_nameen'],
 				'commune_namekh'=> $_data['commune_namekh'],
 				'commune_name'=> $_data['commune_nameen'],
-				//'displayby'=> $_data['display'],
 				'status'	  => 1,
 				'modify_date' => Zend_Date::now(),
 				'user_id'	  => $this->getUserId()
 		);
 			return  $this->insert($_arr);
-		
 	}
 	
 	public function getCommuneById($id){
@@ -56,7 +53,6 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 			com.modify_date,com.status,
 			(SELECT first_name FROM rms_users WHERE id=user_id LIMIT 1) As user_name
 			FROM ln_commune AS com";
-		//$sql = " SELECT * FROM v_getallcommune ";
 		
 		$where = ' WHERE 1 ';
 		if(!empty($search['adv_search'])){
@@ -78,7 +74,6 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 			$where.=" AND com.status=".$search['search_status'];
 		}
 		$order = " ORDER BY com.com_id DESC ";
-// 		echo $sql.$where.$order;
 		return $db->fetchAll($sql.$where.$order);	
 	}
         public function getCommuneBydistrict($distict_id){
@@ -90,10 +85,8 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 		if ($lang==1){
 			$field = 'commune_namekh';
 		}
-		
 		$sql = "SELECT com_id AS id ,$field AS name FROM $this->_name WHERE status=1 AND commune_name!='' AND  $this->_name.district_id=".$db->quote($distict_id); 
 		$rows=$db->fetchAll($sql);
 		return $rows;
 	}	
 }
-

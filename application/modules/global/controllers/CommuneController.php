@@ -72,7 +72,6 @@ class Global_CommuneController extends Zend_Controller_Action {
 		$db = new Global_Model_DbTable_DbCommune();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			//print_r($_data);exit();
 			try{				
 				$db->addCommune($_data,$id);
 				Application_Form_FrmMessage::Sucessfull($this->tr->translate("EDIT_SUCCESS"),self::REDIRECT_URL.'/commune/');
@@ -99,7 +98,7 @@ class Global_CommuneController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-      function getCommuneAction(){
+    function getCommuneAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Global_Model_DbTable_DbCommune();
@@ -109,14 +108,4 @@ class Global_CommuneController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	/*function getCommuneAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$data['status']=1;
-			$db_com = new Global_Model_DbTable_DbCommune();
-			$id = $db_com->addCommune($data);
-			print_r(Zend_Json::encode($id));
-			exit();
-		}
-	}*/
 }

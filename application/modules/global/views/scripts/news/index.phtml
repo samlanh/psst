@@ -1,10 +1,10 @@
 <?php 
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate("NEWS"));
-$frm = $this->frm_new;
-$urlEdit = $this->baseUrl()."/global/news/edit/id/";
-$urlDelete = $this->baseUrl()."/global/news/delete/id/";
-$urlCopy = $this->baseUrl()."/global/news/copy/id/";
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("NEWS"));
+	$frm = $this->frm_new;
+	$urlEdit = $this->baseUrl()."/global/news/edit/id/";
+	$urlDelete = $this->baseUrl()."/global/news/delete/id/";
+	$urlCopy = $this->baseUrl()."/global/news/copy/id/";
 ?>
 <script type="text/javascript">	
 	dojo.require("dijit.form.DateTextBox");
@@ -71,7 +71,6 @@ $(function(){
 			"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "c o p y"},
 			"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy", accesskey: "c o p y"},
 			"delete": {name: "<?php echo $tr->translate("DELETE");?>", icon: "delete"},
-			
 		}
 	});
 });

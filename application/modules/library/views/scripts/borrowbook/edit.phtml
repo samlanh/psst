@@ -3,7 +3,7 @@ $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_callteral;
  
 echo $this->headTitle($tr->translate("EDIT_BORROW_BOOK"));
-$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+$baseurl = $this->baseUrl();
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">

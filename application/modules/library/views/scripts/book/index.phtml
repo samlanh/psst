@@ -1,12 +1,11 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("LIST_BOOK"));
-	$url_edit = $this->url(array('module'=>'library','controller'=>'book','action'=>'edit',));
-	$url_copy =$this->url(array('module'=>'library','controller'=>'book','action'=>'copy'));
-	$formList = new Application_Form_Frmtable();
 	$urlCopy = $this->baseUrl()."/library/book/copy/id/";
 	$urlEdit = $this->baseUrl()."/library/book/edit/id/";
+	$baseurl = $this->baseUrl();
 ?>	
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <?php $frm =  $this->frm_search;?>
  <style>
 	#items  {

@@ -32,8 +32,9 @@
 	    $puchase_today = $this->puchase_today;
 	    $broken_today = $this->broken_today;
 	    $book_near_return = $this->book_near_return;
-?>
-
+		$baseurl = $this->baseUrl();
+	?>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <?php 
     $s_num=0;
     if(!empty($this->rs_studen)) foreach($this->rs_studen As $key=>$rs){

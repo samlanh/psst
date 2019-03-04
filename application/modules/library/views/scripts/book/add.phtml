@@ -2,10 +2,9 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_BOOK"));
 	$frm=$this->frm_book;
+	$baseurl = $this->baseUrl();
 ?>	
-<style>
- 
-</style>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");
     dojo.require("dojo.parser");

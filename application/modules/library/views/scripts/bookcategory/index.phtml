@@ -4,8 +4,10 @@
 	$url_edit = $this->url(array('module'=>'library','controller'=>'bookcategory','action'=>'edit',));
 	$imgnone='<img src="'.$this->baseUrl().'/images/icon/cross.png"/>';
 	$imgtick='<img src="'.$this->baseUrl().'/images/icon/apply2.png"/>';
+	$baseurl = $this->baseUrl();
 ?>
 <?php $frm =  $this->frm_search;?>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <style>
 	#items  {
 	    border: 1px solid #CCCCCC;

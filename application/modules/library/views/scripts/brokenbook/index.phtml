@@ -2,7 +2,9 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("BROKEN_BOOK"));
 	$url_edit = $this->url(array('module'=>'library','controller'=>'book','action'=>'edit',));
+	$baseurl = $this->baseUrl();
 ?>	
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <?php $frm =  $this->frm_search;?>
  <style>
 	#items  {

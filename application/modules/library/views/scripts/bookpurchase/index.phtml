@@ -2,8 +2,11 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("BOOK_PURCHASE"));
 	$url_edit = $this->url(array('module'=>'library','controller'=>'book','action'=>'edit',));
+	$baseurl = $this->baseUrl();
 ?>	
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <?php $frm =  $this->frm_search;?>
+
  <style>
 	#items  {
 	    border: 1px solid #CCCCCC;

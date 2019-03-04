@@ -1,9 +1,8 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 $frm = $this->frm_callteral;
- 
 echo $this->headTitle($tr->translate("EDIT_BOOK_PURCHASE"));
-$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+$baseurl = $this->baseUrl();
 $frm_b=$this->frm_book;
 $frm_c=$this->frm_cat; 
 ?>

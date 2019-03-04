@@ -2,10 +2,9 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_GATEGORY"));
 	$frm=$this->frm_cat;
+	$baseurl = $this->baseUrl();
 ?>	
-<style>
-     
-</style>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">

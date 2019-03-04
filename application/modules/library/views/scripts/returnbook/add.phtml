@@ -1,11 +1,7 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 echo $this->headTitle($tr->translate("ADD_RETURN_BOOK"));
-echo $this->headTitle();
-$frm = $this->frm_callteral;
-$frm = $this->frm_loan;
-$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+$baseurl = $this->baseUrl();
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script>

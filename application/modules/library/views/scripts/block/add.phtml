@@ -2,11 +2,9 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_BLOCK"));
 	$frm=$this->frm_cat;
-	 
+	$baseurl = $this->baseUrl();
 ?>	
-<style>
-     
-</style>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript" src="js/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript">
     dojo.require("dojo.NodeList-manipulate");

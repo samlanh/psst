@@ -2,8 +2,9 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("BLOCK"));
 	$url_edit = $this->url(array('module'=>'library','controller'=>'bookcategory','action'=>'edit',));
+	$baseurl = $this->baseUrl();
 ?>	
-<?php $frm =  $this->frm_search;?>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <style>
 	#items  {
 	    border: 1px solid #CCCCCC;
@@ -16,6 +17,7 @@
 	    width: 35px;
 	}
 </style>
+<?php $frm =  $this->frm_search;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">

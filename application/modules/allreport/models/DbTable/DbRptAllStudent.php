@@ -13,42 +13,56 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$grade = "rms_itemsdetail.title";
     		$degree = "rms_items.title";
     		$branch = "branch_namekh";
+    		
+    		$village_name = "village_namekh";
+    		$commune_name = "commune_namekh";
+    		$district_name = "district_namekh";
+    		$province = "province_kh_name";
     	}else{ // English
     		$label = "name_en";
     		$grade = "rms_itemsdetail.title_en";
     		$degree = "rms_items.title_en";
     		$branch = "branch_nameen";
+    		
+    		$village_name = "village_name";
+    		$commune_name = "commune_name";
+    		$district_name = "district_name";
+    		$province = "province_en_name";
     	}
     	$sql ="SELECT 
     				*,
-	    	      (SELECT $branch FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
+	    	      (SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 	    	       CONCAT(stu_khname,' - ',stu_enname,' ',last_name) as name,
 	    	       stu_khname,
 	    	       last_name,
 	    	       stu_enname,
-	    	      (SELECT $label FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
-	    		  (SELECT $label FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
+	    	      (SELECT $label FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+	    		  (SELECT $label FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
 	    		   degree as dept,
-	    		   (SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
-	    		   (SELECT CONCAT(from_academic,'-',to_academic) from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as academic_year,
-	    		   (SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as start_year,
-	    		   (SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as end_year,
-	    		   (SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year LIMIT 1) as end_date,
-	    		   (SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session LIMIT 1)AS session,
+	    		   (SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
+	    		   (SELECT CONCAT(from_academic,'-',to_academic) from rms_tuitionfee where rms_tuitionfee.id=s.academic_year LIMIT 1) as academic_year,
+	    		   (SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=s.academic_year LIMIT 1) as start_year,
+	    		   (SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=s.academic_year LIMIT 1) as end_year,
+	    		   (SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=s.academic_year LIMIT 1) as end_date,
+	    		   (SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=s.session LIMIT 1)AS session,
 	    		   
-	    		   (SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-				   (SELECT $degree FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
-				   (SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
+	    		   (SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+				   (SELECT $degree FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
+				   (SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
 			
 	    		   (SELECT $label from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
-	    		   (SELECT v.village_name FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_name,
-			    	(SELECT c.commune_name FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
-			    	(SELECT d.district_name FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
-	    		   (SELECT province_en_name from rms_province where rms_province.province_id = rms_student.province_id LIMIT 1)AS province,	   	
-	    		   (SELECT $label from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex LIMIT 1) AS sex,
-	    		   photo
+	    		   (SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+			    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+			    	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+	    		   (SELECT $province from rms_province where rms_province.province_id = s.province_id LIMIT 1)AS province,
+	    		   	   	
+	    		   (SELECT $label from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS sex,
+	    		   photo,
+	    		   (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
+				 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job
     		   	FROM 
-    				rms_student 
+    				rms_student as s
     			WHERE 
     				status=1 
     				AND customer_type=1 
@@ -58,10 +72,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
-    	$from_date =(empty($search['start_date']))? '1': "rms_student.create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "rms_student.create_date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;    	
-    	$order=" ORDER BY stu_id,degree,grade,academic_year DESC";
+    	$order=" ORDER BY s.stu_id,s.degree,s.grade,s.academic_year DESC";
     	if(!empty($search['title'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['title']));
@@ -342,35 +356,63 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     public function getAllStudentSelected($stu_id){
     	$db = $this->getAdapter();
-    	$sql ='SELECT
+    	
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    		$branch = "branch_namekh";
+    	
+    		$village_name = "village_namekh";
+    		$commune_name = "commune_namekh";
+    		$district_name = "district_namekh";
+    		$province = "province_kh_name";
+    	}else{ // English
+    		$label = "name_en";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    		$branch = "branch_nameen";
+    	
+    		$village_name = "village_name";
+    		$commune_name = "commune_name";
+    		$district_name = "district_name";
+    		$province = "province_en_name";
+    	}
+    	
+    	$sql ="SELECT
     	*,
-    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=rms_student.branch_id LIMIT 1) AS branch_name,
-    	CONCAT(stu_khname," - ",stu_enname," ",last_name) as name,
+    	(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+    	CONCAT(stu_khname,' - ',stu_enname,' ',last_name) as name,
     	stu_khname,last_name,stu_enname as en_name,
-    	CONCAT(stu_enname," ",last_name) AS stu_enname,
-    	(SELECT name_kh FROM rms_view where type=21 and key_code=nationality LIMIT 1) AS nationality,
-    	(SELECT name_kh FROM rms_view where type=21 and key_code=nation LIMIT 1) AS nation,
-    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=rms_student.group_id LIMIT 1 ) AS group_name,
+    	CONCAT(stu_enname,' ',last_name) AS stu_enname,
+    	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+    	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
+    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
     	degree as dept,
-    	(SELECT CONCAT(from_academic,"-",to_academic,"(",generation,")") from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as academic_year,
-    	(SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as start_year,
-    	(SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_year,
-    	(SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=academic_year limit 1) as end_date,
-    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=rms_student.session limit 1) AS session,
-    	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=rms_student.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-    	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS degree,
-    	(SELECT name_en from rms_view where type=5 and key_code=is_subspend LIMIT 1) as status,
-    	(SELECT v.village_namekh FROM `ln_village` AS v WHERE v.vill_id = rms_student.village_name LIMIT 1) AS village_name,
-    	(SELECT c.commune_namekh FROM `ln_commune` AS c WHERE c.com_id = rms_student.commune_name LIMIT 1) AS commune_name,
-    	(SELECT d.district_namekh FROM `ln_district` AS d WHERE d.dis_id = rms_student.district_name LIMIT 1) AS district_name,
-    	(SELECT province_kh_name from rms_province where rms_province.province_id = rms_student.province_id limit 1)AS province,
-    	(SELECT name_en from rms_view where rms_view.type=2 and rms_view.key_code=rms_student.sex limit 1)AS sex,
-    	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=rms_student.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
-    	photo
+    	(SELECT CONCAT(from_academic,'-',to_academic) from rms_tuitionfee where rms_tuitionfee.id=s.academic_year limit 1) as academic_year,
+    	(SELECT from_academic from rms_tuitionfee where rms_tuitionfee.id=s.academic_year limit 1) as start_year,
+    	(SELECT to_academic from rms_tuitionfee where rms_tuitionfee.id=s.academic_year limit 1) as end_year,
+    	(SELECT end_date from rms_tuitionfee where rms_tuitionfee.id=s.academic_year limit 1) as end_date,
+    	(SELECT name_en from rms_view where rms_view.type=4 and rms_view.key_code=s.session limit 1) AS session,
+    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+    	(SELECT $degree FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS degree,
+    	(SELECT name_en from rms_view where type=5 and key_code=s.is_subspend LIMIT 1) as status,
+    	(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+    	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+    	(SELECT $province from rms_province where rms_province.province_id = s.province_id limit 1)AS province,
+    	(SELECT $label from rms_view where rms_view.type=2 and rms_view.key_code=s.sex limit 1)AS sex,
+    	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
+    	 photo,
+    		   (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+			 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
+			 (SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job
     	from
-    	rms_student
+    	rms_student as s
     	where
-    	stu_id ='.$stu_id;
+    	stu_id =".$stu_id;
     	return $db->fetchAll($sql);
     }
     public function getAllAmountStudent($search){
@@ -1452,5 +1494,51 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			ORDER BY t.from_academic DESC
 		";
     	return $db->fetchAll($sql);
+    }
+    
+    public function getStudentInfo($id){
+    	$db = $this->getAdapter();
+    
+    	$_db = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$village_name = "village_namekh";
+    		$commune_name = "commune_namekh";
+    		$district_name = "district_namekh";
+    		$province = "province_kh_name";
+    	}else{ // English
+    		$label = "name_en";
+    		$village_name = "village_name";
+    		$commune_name = "commune_name";
+    		$district_name = "district_name";
+    		$province = "province_en_name";
+    	}
+    
+    	$sql = "SELECT *,
+    	(SELECT CONCAT(f.from_academic,'-',f.to_academic) FROM rms_tuitionfee AS f WHERE f.id=(SELECT g.academic_year FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AND f.`status`=1 GROUP BY f.from_academic,f.to_academic,f.generation)  AS academic_year,
+    	(SELECT sgh.group_id FROM rms_group_detail_student AS sgh WHERE sgh.stu_id = s.`stu_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+    	(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 ) AS group_name,
+    	(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=s.degree AND rms_items.type=1 LIMIT 1) AS schoolOption,
+    	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality_title,
+    	(SELECT name_kh FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation_title,
+    	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
+    	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
+    	(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+    		
+    	(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_title,
+    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_title,
+    	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_title,
+    	(SELECT $province FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_title,
+    	(SELECT $label from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS sex
+    	
+    	FROM rms_student as s
+    	WHERE s.stu_id =".$id."
+    	AND s.customer_type=1";
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission();
+    	return $db->fetchRow($sql);
+    	echo $sql; exit();
     }
 }

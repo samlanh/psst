@@ -143,6 +143,18 @@ class RsvAcl_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 					$_arr['background']=$image_name;
 				}
 			}
+			
+			$frontimage_name="";
+			$frontname = $_FILES['front_background']['name'];
+			if (!empty($frontname)){
+				$ss = 	explode(".", $frontname);
+				$frontimage_name = "frontbackgroun_".date("Y").date("m").date("d").time().".".end($ss);
+				$tmp = $_FILES['front_background']['tmp_name'];
+				if(move_uploaded_file($tmp, $part.$frontimage_name)){
+					$_arr['front_background']=$frontimage_name;
+				}
+			}
+			
 			$this->_name ="rms_cardbackground";
 			$where=$this->getAdapter()->quoteInto("id=?", $id);
 			$this->update($_arr, $where);

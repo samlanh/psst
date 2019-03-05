@@ -1085,4 +1085,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
+	
+	function certificateLetterofpraiseAction(){
+		$id=$this->getRequest()->getParam("id");
+		$db = new Allreport_Model_DbTable_DbRptAllStudent();
+		$result = $db->getStudentInfo($id);
+		$this->view->rs = $result;
+	}
 }

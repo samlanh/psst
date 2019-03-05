@@ -172,11 +172,8 @@ display: table-cell !important;
 						 background-size: 100%;background-repeat: no-repea
 						 page-break-after:always;					
 					}
-					<?php 
-					$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
-					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+					<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
 						$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
-						$imagebg_front = $this->baseUrl().'/images/card/default_front_card_bg.jpg';
 						$color = "000000";
 						$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
 						if(!empty($bg['background'])){
@@ -187,183 +184,80 @@ display: table-cell !important;
 								$color = str_replace("#", "", $bg['colorcode']);
 							}
 						}
-						if(!empty($bg['front_background'])){
-							if (file_exists(PUBLIC_PATH."/images/card/".$bg['front_background'])){
-								$imagebg_front = $this->baseUrl().'/images/card/'.$bg['front_background'];
-							}
-						}
 						?>
 						
 					.card-content-student-print<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
 						background-image: url('<?php echo $image;?>');
-						background-size: 100%;
-						background-repeat: no-repeat;
-						position: relative;		
-						border:solid 1px #eee;				
-
-					}	
-					.card-content-student-print-front<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{
-						background-image: url('<?php echo $imagebg_front;?>');
-						background-size: 100%;
-						background-repeat: no-repeat;
-						position: relative;		
-						border:solid 1px #eee;				
+						 background-size: 100%;background-repeat: no-repeat;	
+						 page-break-after:always;					
 					}
-			
+					
+					.name-card-block ul.list-data li.sdudent-id.color-<?php echo "card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+					color:#<?php echo $color;?>;
+				}
 					<?php }?>
 					
+					.profile-card-block {
+					    position: relative;
+					}
+					.profile-card-block .photo {
+					    text-align: center;
+					    width: 100%;
+					    position: absolute;
+					    top: 96px;
+						left: -0.58px;
+					}
+					.photo img {
+					    width: 70.7px;
+					    height: 92px;
+					}
+					.name-card-block {
+					    position: relative;
+					}
+			
 					.name-card-block ul.list-data {
 					    list-style-type: none;
 					    padding: 0;
 					    width: 100%;
 					    position: absolute;
-					    top: 12px;
-					    color: #000;
+					    text-align: center;
+					    top: 182.5px;
+					    color: #01049f;
 					    font-weight: bold;
-					    font-size: 11px;
+					    font-size: 12px;
 					}	
+				.name-card-block ul.list-data li{
+					line-height: 16px;	    
+				}
+				.name-card-block ul.list-data li.sdudent-id{
+						margin-top:10px;
+						color: #01731b;
+					}
+				.foot-left-block {
+				    position: relative;
+				}
+				.qrimages {
+				    position: absolute;
+				    top: 262px;
+				    width: 100%;
+				    text-align: center;
+				}
+				.qrimages img {
+				    width: 80%;
+				    text-align: center;
+					height: 17px;}
 				
-
-				.name-card-block ul.list-data-secondrow {
-					    list-style-type: none;
-					    padding: 0;
-					    width: 100%;
-					    position: absolute;
-					    top: 126px;
-					    color: #000;
-					    font-weight: bold;
-					    font-size: 11px;
-					}	
-
-				.name-card-block ul.list-data li,.name-card-block ul.list-data-secondrow li{
-					line-height: 23px;
-					text-align: left;   
+				.validdate {
+				    position: relative;
 				}
-		
-				span.title_value{
-					display:inline-block;
+				.validdate .exp_date {
+					color: #01049f;
+				    position: absolute;
+				    top: 250px;
+				    right: 5px;
+				    font-size: 5px;
+				    font-weight: 700 !important;
 				}
-				span.title_value.student-name{
-					margin-left:80px;
-					min-width:160px;
-					text-align: center;										
-				}
-				span.title_value.nationality,
-				span.title_value.gender{
-					margin-left:45px;											
-				}
-				span.title_value.dob{
-					margin-left:80px;
-					min-width:160px;
-					text-align: center;									
-				}
-				span.title_value.pob{
-					padding-left:60px;
-					display: initial;
-					overflow-wrap: break-word;
-				}
-				span.title_value.grade{
-					margin-left:75px;
-					min-width:45px;
-					text-align: center;			
-				}
-				span.title_value.studentcode{
-					margin-left:40px;
-					min-width:90px;
-					text-align: center;			
-				}
-				span.title_value.parent-name{
-					margin-left:80px;
-					min-width:160px;
-					text-align: center;		
-				}
-				span.title_value.parent-job{
-					margin-left:50px;
-				}	
-				span.title_value.home_num{
-					margin-left:113px;	
-					min-width:15px;					
-					text-align: center;	
-					font-size: 10px;									
-				}
-				span.title_value.street_num{
-					margin-left:8px;
-					min-width:25px;
-					text-align: center;	
-					font-size: 9px;									
-				}				
-				span.title_value.commnue{
-					margin-left:25px;
-					min-width:100px;
-					font-size: 10px;
-					overflow-wrap: break-word;												
-				}	
-	
-				span.title_value.district{
-					margin-left:25px;
-					min-width:50px;
-					font-size: 10px;	
-				}	
-				
-				.name-card-block-front ul.list-data {
-					list-style-type: none;
-					padding: 0;
-					width: 100%;
-					position: absolute;
-					top: 93.5px;
-					color: #000000;
-					font-weight: bold;
-					font-size: 11px;
-				}	
-				.name-card-block-front ul.list-data li{
-					line-height: 24px;	
-					text-align: left;												
-				}
-				.name-card-block-front span.title_value.student-name,
-				.name-card-block-front span.title_value.grade{
-					margin-left:60px;
-					min-width:160px;
-					text-align: center;										
-				}
-				.name-card-block-front span.title_value.studentcode,
-				.name-card-block-front span.title_value.acadimicyear{
-					margin-left:70px;
-					min-width:150px;
-					text-align: center;										
-				}
-				.one-row-persone{
-					margin-bottom:30px;
-				}
-				.profile-card-block .photo {
-					text-align: center;
-					width: 100%;
-					position: absolute;
-					top: 220px;
-					left:-68px;
-					
-				}
-				.photo img {
-					width: 70.7px;
-					height: 92px;
-				}
-				
-				.validdate .issue_date{
-					position: absolute;
-					top: 240px;
-					color: #000000;
-					font-size:10px;
-				}
-				.validdate .issue_date.day{
-					right:95px;
-				}
-				.validdate .issue_date.month{
-					right:50px;
-					min-width:40px;
-					text-align: center;
-				}	
-				.validdate .issue_date.year{
-					right:20px;
-				}	
 	</style>
 		<?php $con=4;$i=0; $student= count($this->rs);
 			if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
@@ -387,52 +281,47 @@ display: table-cell !important;
 							$validDate = $bg['valid'];
 						}
 						?>
-						
-						<div class="main-card-block" style="text-align:center; margin: 0 auto; padding: 0;">
-							<div class="one-row-persone" >
-								<div class="card-content-student-print-front <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-									<div class="profile-card-block">
-										<div class="photo">
-											<img  src="<?php echo $image;?>" alt="profile-image" >
-										</div>
-									</div> 
-									<div class="name-card-block-front">
-										<ul class="list-data">
-											<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
-											<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span></li>
-											<li><span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
-											<li><span class="title_value acadimicyear">&nbsp;<?php echo $row['academic_year'];?></span></li>
-										</ul>
-									</div>
-									<div class="validdate">
-										<span class="issue_date day"><?php echo date("d",strtotime($validDate));?></span>
-										<span class="issue_date month"><?php echo $month[date("m",strtotime($validDate))];?></span>
-										<span class="issue_date year"><?php echo date("y",strtotime($validDate))?></span>
-									</div>
-								</div>
-								
-								<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
-									
-									<div class="name-card-block">
-										<ul class="list-data">
-											<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
-											<li><span class="title_value gender">&nbsp;<?php echo $row['sex'];?></span> <span class="title_value nationality">&nbsp;<?php echo $row['nationality'];?></span></li>
-											<li><span class="title_value dob">&nbsp;<?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($row['dob'])))."-".$month[date("m",strtotime($row['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($row['dob'])));?></span></li>
-											<li style="padding-left: 20px;"><span class="title_value pob">&nbsp;<?php echo $row['pob'];?></span></li>
-										</ul>
-										<ul class="list-data-secondrow">
-											<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span> <span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
-											<li><span class="title_value parent-name">&nbsp;<?php echo $row['father_enname'];?></span></li>
-											<li><span class="title_value parent-job">&nbsp;<?php echo $row['fath_job'];?></span></li>
-											<li><span class="title_value parent-name">&nbsp;<?php echo $row['mother_enname'];?></span></li>
-											<li><span class="title_value parent-job">&nbsp;<?php echo $row['moth_job'];?></span></li>
-											<li style=" line-height: 21px; "><span class="title_value home_num">&nbsp;<?php echo $row['home_num'];?></span> <span class="title_value street_num">&nbsp;<?php echo $row['street_num'];?></span> <span class="title_value commnue">&nbsp;<?php echo $row['commune_name'];?></span>  <span class="title_value district">&nbsp;<?php echo $row['district_name'];?></span></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							
-						</div>
+						<?php if ($key==0){?>
+                    	<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
+                    	<?php }?>
+						<?php if ($i==1){?>
+                    	<div style="display:inline-block; margin-right:10px; height:8.3cm; width: 1px; background: #000"></div>
+                    	<?php }?>
+						<div class="card-content-student-print <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8.3cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+                    		<div class="profile-card-block">
+                    			<div class="photo">
+                    				<img  src="<?php echo $image;?>" alt="profile-image" >
+                    			</div>
+                    		</div>
+                    		<div class="name-card-block">
+	                    		<ul class="list-data">
+	                    			<li><span class="title_value">&nbsp;<?php echo $stu_name;?></span></li>
+                    				<li><span class="title_value">&nbsp;Grade: <?php echo str_replace("Grade","",$row['group_name']);?></span></li>
+									<li class="sdudent-id color-<?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>"><span class="title_value">&nbsp;ID: <?php echo $row['stu_code'];?></span></li>
+                    			</ul>
+                    		</div>
+                    		<div class="validdate">
+	                    		<span class="exp_date"><?php echo date("F j , Y",strtotime($validDate))?></span>
+	                    	</div>
+                    	<?php  
+//                     	$prefix = $this->data["prefix_barcode_grade_school"];
+//                     	$barcode = $prefix."-".$row['stu_code']."-".date("y");
+                    	$barcode = $prefix."-".$row['stu_code']."-".date("y",strtotime($validDate));
+                    	$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
+	                    	<div class="foot-left-block">
+                    			<div class="qrimages">
+                    				<img  src="<?php echo $url;?>" alt="profile-image" >
+                    			</div>
+                    		</div>
+                    		<div class="foot-right-block">
+                    		</div>
+                    	</div>	
+                    	<?php if ($student>1){?>
+                    	<div style="display:inline-block; margin:0 10px; height:8.3cm; width: 1px; background: #000"></div>
+                    	<?php }?>
+                    	<?php if ($i==4){ $i=0;?>
+                    	<div style="display:inline-block; margin:10px 0; height:1px; width:100%; background: #000"></div>
+                    	<?php }?>
 		<?php }
 			}?>
 		</div>		

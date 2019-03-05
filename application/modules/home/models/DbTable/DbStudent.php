@@ -103,9 +103,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	public function getStudentById($stu_id){
 		$db = $this->getAdapter();
-// 		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
-// 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
-// 		$where = " AND ".$from_date." AND ".$to_date;
 
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
@@ -155,49 +152,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				 (SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
 				  
 				FROM rms_student as s WHERE 1 AND s.stu_id=$stu_id";
-		
-// 		if(!empty($search['adv_search'])){
-// 			$s_where = array();
-// 			//$s_search = addslashes(trim($search['adv_search']));
-// 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
-// 			$s_where[]=" REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(stu_khname,' ','') 	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(stu_enname,' ','')    	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(tel,' ','')  		   	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(guardian_tel,' ','')  	LIKE '%{$s_search}%'";
-				
-// 			$s_where[]=" REPLACE(father_enname,' ','')  LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(mother_enname,' ','')  LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(guardian_enname,' ','')LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(remark,' ','')  		LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(home_num,' ','')  		LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(street_num,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(village_name,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(commune_name,' ','')  	LIKE '%{$s_search}%'";
-// 			$s_where[]=" REPLACE(district_name,' ','')  LIKE '%{$s_search}%'";
-				
-// 			$s_where[]="(SELECT	rms_view.name_en FROM rms_view WHERE rms_view.type = 4 AND rms_view.key_code = s.session) LIKE '%{$s_search}%'";
-// 			$s_where[]="(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) LIKE '%{$s_search}%'";
-// 			$where .=' AND ( '.implode(' OR ',$s_where).')';
-// 		}
-		
-// 		if(!empty($search['study_year'])){
-// 			$where.=" AND s.academic_year=".$search['study_year'];
-// 		}
-// 		if(!empty($search['degree'])){
-// 			$where.=" AND s.degree=".$search['degree'];
-// 		}
-// 		if(!empty($search['grade_bac'])){
-// 			$where.=" AND s.grade=".$search['grade_bac'];
-// 		}
-// 		if(!empty($search['session'])){
-// 			$where.=" AND s.session=".$search['session'];
-// 		}
-// 		if(!empty($search['time'])){
-// 			$where.=" AND sp.time=".$search['time'];
-// 		}
 		$where='';
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission();

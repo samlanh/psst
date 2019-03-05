@@ -186,16 +186,20 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$this->insert($arr);
 					}
 				}
-				
 			}
-					
-			$this->_name = 'rms_group';
-			$group=array(
-					'is_use'	=>1,
-					'is_pass'	=>1,
-					);
-			$where=" id=".$_data['from_group'];
-			$this->update($group, $where);
+
+			$ident = explode(',', $_data['identity']);
+			$selected_student = count($ident);
+			$all_student = $_data['all_student'];
+			
+			if($all_student == $selected_student){
+				$this->_name = 'rms_group';
+				$group=array(
+						'is_pass'	=>1,
+						);
+				$where=" id=".$_data['from_group'];
+				$this->update($group, $where);
+			}
 					
 			$this->_name = 'rms_group';
 			$group=array(
@@ -325,15 +329,23 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where=" id=".$_data['old_to_group'];
 				$this->update($group, $where);
 	
-				$this->_name = 'rms_group';
-				$group=array(
-						'is_use'	=>0,
-						'is_pass'	=>1,
+				$ident = explode(',', $_data['identity']);
+				$selected_student = count($ident);
+				$all_student = $_data['all_student'];
+				if($all_student == $selected_student){
+					$from_group=array(
+						'is_pass' => 1,
 					);
+				}else{
+					$from_group=array(
+						'is_pass' => 0,
+					);
+				}
+				$this->_name = 'rms_group';
 				$where=" id=".$_data['from_group'];
-				$this->update($group, $where);
-								
-							
+				$this->update($from_group, $where);
+				
+				
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>1,
@@ -410,15 +422,12 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where=" id=".$_data['old_to_group'];
 				$this->update($group, $where);
 				
-				$this->_name = 'rms_group';
-				$group=array(
-						'is_use'	=>1, // true 
-						'is_pass'	=>2, // studying 
+				$from_group=array(
+					'is_pass' => 0,
 				);
+				$this->_name = 'rms_group';
 				$where=" id=".$_data['from_group'];
-				$this->update($group, $where);
-				
-				
+				$this->update($from_group, $where);
 			}
 			
 			return $_db->commit();
@@ -438,16 +447,31 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			WHERE st.is_subspend = 0 AND 
 				gds.type=1 
 				and gds.stu_id=st.stu_id 
-				and gds.group_id=$from_group";
-		//remove and is_pass=0  but bat old student when have repeat student 
+				and gds.group_id=$from_group
+				and gds.is_pass=0
+		";
+		//remove and gds.is_pass=0  but bat old student when have repeat student 
 		return $db->fetchAll($sql);
 	}
 	
 	function getAllStudentFromGroupUpdate($from_group){
 		$db=$this->getAdapter();
-		$sql="select gds.stu_id as stu_id,st.stu_enname,st.last_name,st.stu_khname,st.stu_code,
-		(select name_en from rms_view where rms_view.type=2 and rms_view.key_code=st.sex) as sex
-		from rms_group_detail_student as gds,rms_student as st where st.is_subspend=0 and gds.type=1 and gds.stu_id=st.stu_id and gds.group_id=$from_group";
+		$sql="select 
+					gds.stu_id as stu_id,
+					st.stu_enname,
+					st.last_name,
+					st.stu_khname,
+					st.stu_code,
+					(select name_en from rms_view where rms_view.type=2 and rms_view.key_code=st.sex) as sex
+				from 
+					rms_group_detail_student as gds,
+					rms_student as st 
+				where 
+					st.is_subspend=0 
+					and gds.type=1 
+					and gds.stu_id=st.stu_id 
+					and gds.group_id=$from_group
+			";
 		return $db->fetchAll($sql);
 	}
 	

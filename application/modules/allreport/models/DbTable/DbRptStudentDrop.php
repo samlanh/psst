@@ -21,22 +21,26 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	}
     	
     	$sql = "SELECT st.stu_code as stu_id, 
-			(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = stdp.branch_id LIMIT 1) AS branch_name,
-			st.stu_khname,
-			st.stu_enname,
-			st.last_name,
-	    	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year) as academic_year,
-	    	(select $str from rms_view where rms_view.type=4 and rms_view.key_code=stdp.session limit 1)AS session,
-	    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=stdp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-			(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex ) AS sex,
-			(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
-			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=st.group_id LIMIT 1 ) AS group_name,
-			stdp.note,stdp.date_stop,stdp.reason,
-			(select $str from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
-		 FROM 
-		 	rms_student_drop as stdp,
-    		rms_student as st
-    	 WHERE stdp.stu_id=st.stu_id and stdp.status=1 AND type !=0 ";
+					(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = stdp.branch_id LIMIT 1) AS branch_name,
+					st.stu_khname,
+					st.stu_enname,
+					st.last_name,
+			    	(select CONCAT(from_academic,'-',to_academic,'(',generation,')') from rms_tuitionfee where rms_tuitionfee.id=st.academic_year) as academic_year,
+			    	(select $str from rms_view where rms_view.type=4 and rms_view.key_code=stdp.session limit 1)AS session,
+			    	(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=stdp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
+					(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=2 and `rms_view`.`key_code`=st.sex ) AS sex,
+					(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`) as type,
+					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=st.group_id LIMIT 1 ) AS group_name,
+					stdp.note,stdp.date_stop,stdp.reason,
+					(select $str from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status`)AS status
+				 FROM 
+				 	rms_student_drop as stdp,
+		    		rms_student as st
+		    	 WHERE 
+		    		stdp.stu_id=st.stu_id 
+		    		and stdp.status=1 
+		    		AND type !=0 
+    		";
 
     	$from_date =(empty($search['start_date']))? '1': " date_stop >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " date_stop <= '".$search['end_date']." 23:59:59'";

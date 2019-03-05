@@ -86,6 +86,7 @@
 		                <div class="form-group">
 		                   <div id="data_table" style="min-height: 300px !important;overflow-y: auto;border: solid 1px #d0d0d0ee; padding: 5px 10px;" class="col-md-12 col-sm-12 col-xs-12">
 		                   </div>
+						   <input type="text" name="all_student" id="all_student" dojoType="dijit.form.TextBox"  />
 		                </div>
 		            </div>
 		            <div class="col-md-4 col-sm-4 col-xs-12 search-blog">
@@ -185,53 +186,56 @@ dojo.ready(function(){
 });
 var url_get_all_student_from_group_update = "<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-all-student-update')); ?>";
 function getStudentFromGroup(){
-		from_group = dijit.byId('from_group').get('value');
-		if(from_group==0){
-			alert("Please Select Group");
-			return false;
-		}
-		dojo.xhrPost({
-			url:url_get_all_student_from_group_update,
-			content:{
-				'from_group':from_group
-				},
-			handleAs:"json",
-			load: function(respone) {
-				tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table">'
-					+'<thead><tr align="center" style="background: #bcd5f0;min-height: 30px;font-size:13px;font-weight: bold"><td><?php echo $tr->translate('NUM');?></td>'
-						+'<td><?php echo $tr->translate('CODE');?></td>'
-						+'<td><?php echo $tr->translate('NAME_KH');?></td>'
-						+'<td><?php echo $tr->translate('NAME_EN');?></td>'
-						+'<td colspan="2"><?php echo $tr->translate('SEX');?></td>'
-						+'<td style="white-space:nowrap; border-right: 0px none;" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
-						+'<td align="left" style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></td></tr>'
-					+'</thead>';
-				if(respone!=""){
-					num=0;
-					for(var i=0;i<respone.length;i++){
-						inx = i+1;
-							tem += '<tr style="border:1px solid #000;">';
-						    tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden" name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
-							tem += '<td>&nbsp;<label >'+respone[i].stu_code+'</label></td>';
-							tem += '<td>&nbsp;<label >'+respone[i].stu_khname+'</label></td>';
-							tem += '<td>&nbsp;<label >'+respone[i].last_name+" "+respone[i].stu_enname+'</label></td>';
-							tem += '<td colspan="2" align="center">&nbsp;<label >'+respone[i].sex+'</label></td>';
-							tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
-							tem += '</tr>';
-						    if($("#identity").val()!="") {
-								var identity = $("#identity").val();
-								$("#identity").val(identity+','+inx);
-							} else { $("#identity").val(inx);}
-					}
-				}
-				tem+='</table>';
-				dojo.byId('data_table').innerHTML = tem;
-				setpassstudent();
+	from_group = dijit.byId('from_group').get('value');
+	if(from_group==0){
+		alert("Please Select Group");
+		return false;
+	}
+	dijit.byId('all_student').attr('value','');
+	dojo.xhrPost({
+		url:url_get_all_student_from_group_update,
+		content:{
+			'from_group':from_group
 			},
-			error: function(err) {
-				alert(err);
+		handleAs:"json",
+		load: function(respone) {
+			tem='<table border="1" style="border:1px solid #000;border-collapse:collapse; font-size:12px;background-color:white;width: 99.5%;font-family: Khmer OS Battambang, Times New Roman;"  id="table">'
+				+'<thead><tr align="center" style="background: #bcd5f0;min-height: 30px;font-size:13px;font-weight: bold"><td><?php echo $tr->translate('NUM');?></td>'
+					+'<td><?php echo $tr->translate('CODE');?></td>'
+					+'<td><?php echo $tr->translate('NAME_KH');?></td>'
+					+'<td><?php echo $tr->translate('NAME_EN');?></td>'
+					+'<td colspan="2"><?php echo $tr->translate('SEX');?></td>'
+					+'<td style="white-space:nowrap; border-right: 0px none;" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
+					+'<td align="left" style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></td></tr>'
+				+'</thead>';
+			if(respone!=""){
+				num=0;
+				all_student = respone.length;
+				dijit.byId('all_student').attr('value',all_student);
+				for(var i=0;i<respone.length;i++){
+					inx = i+1;
+						tem += '<tr style="border:1px solid #000;">';
+						tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden" name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
+						tem += '<td>&nbsp;<label >'+respone[i].stu_code+'</label></td>';
+						tem += '<td>&nbsp;<label >'+respone[i].stu_khname+'</label></td>';
+						tem += '<td>&nbsp;<label >'+respone[i].last_name+" "+respone[i].stu_enname+'</label></td>';
+						tem += '<td colspan="2" align="center">&nbsp;<label >'+respone[i].sex+'</label></td>';
+						tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
+						tem += '</tr>';
+						if($("#identity").val()!="") {
+							var identity = $("#identity").val();
+							$("#identity").val(identity+','+inx);
+						} else { $("#identity").val(inx);}
+				}
 			}
-		});
+			tem+='</table>';
+			dojo.byId('data_table').innerHTML = tem;
+			setpassstudent();
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
 }
 function setpassstudent(){
 	var identity = $('#identity').val();

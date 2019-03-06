@@ -1909,9 +1909,14 @@ function getAllgroupStudyNotPass($action=null){
   	degree AS degree_id,
   	grade AS grade_id,
   	SESSION AS session_id,
-  	room_id
+  	room_id,
+  	(SELECT rms_items.title FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree_kh,
+  	(SELECT rms_items.title_en FROM rms_items WHERE rms_items.id=rms_group.degree AND rms_items.type=1 LIMIT 1) AS degree_eng,
+  	(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_kh,
+  	(SELECT rms_itemsdetail.title_en FROM rms_itemsdetail WHERE rms_itemsdetail.id =`rms_group`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_eng
   	FROM
   	`rms_group` WHERE id=$id LIMIT 1 ";
+  	// last 4 row query use for cetifcate only ( added in 06-3-2019)
   	return $db->fetchRow($sql);
   }
   function getPuchaseNo($branch_id){//used global
@@ -2083,6 +2088,48 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT ex.id,ex.$colunmname AS `name` 
 		FROM `rms_exametypeeng` AS ex
 		WHERE ex.status=1";
+  	return $db->fetchAll($sql);
+  }
+  
+  function getAllCompleteGroupByBranch($branch_id=null){
+  	$db = $this->getAdapter();
+  	$sql ="SELECT `g`.`id`, CONCAT(`g`.`group_code`,' ',
+  	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) ) AS name
+  	FROM `rms_group` AS `g` WHERE g.is_pass=1 ";
+  	if (!empty($branch_id)){
+  		$sql.=" AND g.branch_id = $branch_id";
+  	}
+  	$sql.=" ORDER BY `g`.`id` DESC ";
+  	return $db->fetchAll($sql);
+  }
+  function getAllPassStudentGroup($group){
+  	
+  	$currentLang = $this->currentlang();
+  	$colunmname='name_en';
+  	$stu_name="CONCAT(st.last_name,' ',st.stu_enname)";
+  	if ($currentLang==1){
+  		$colunmname='name_kh';
+  		$stu_name="st.stu_khname";
+  	}
+  	
+  	$db=$this->getAdapter();
+  	$sql="
+  		SELECT 
+	  		gds.stu_id as stu_id,
+	  		st.stu_enname,
+	  		st.last_name,
+	  		st.stu_khname,
+	  		st.stu_code,
+	  		$stu_name AS stu_name,
+	  		(SELECT $colunmname FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=st.sex LIMIT 1) as sex
+  		FROM rms_group_detail_student as gds,
+  			rms_student as st
+  		WHERE st.is_subspend = 0 AND
+		  	gds.type=1
+		  	and gds.stu_id=st.stu_id
+		  	and gds.group_id=$group
+		  	and gds.is_pass=1
+  	";
   	return $db->fetchAll($sql);
   }
 }

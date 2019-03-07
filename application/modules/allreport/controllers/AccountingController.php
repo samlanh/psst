@@ -254,22 +254,15 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	public function rptstudentbalanceAction(){
 		try{
 			if($this->getRequest()->isPost()){
-				$data=$this->getRequest()->getPost();
-				$search = array(
-						'txtsearch' => $data['txtsearch'],
-						'start_date'=> $data['from_date'],
-                        'end_date'=>$data['to_date'],
-						'service'=>$data['service'],
-						'branch_id'=>$data['branch_id'],
-				);
+				$search=$this->getRequest()->getPost();
 			}else{
 				$search=array(
-						'txtsearch' =>'',
-						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'),
-						'service'=>'',
-						'branch_id'=>'',
-				);;
+						'adv_search' 	=>'',
+						'start_date'	=>date('Y-m-d'),
+						'end_date'		=>date('Y-m-d'),
+						'grade'			=>'',
+						'branch_id'		=>'',
+				);
 			}
 			
 			$form=new Registrar_Form_FrmSearchInfor();
@@ -280,6 +273,10 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$db = new Allreport_Model_DbTable_DbRptStudentBalance();
 			$this->view->rs = $db->getAllStudentBalance($search);
 			$this->view->search = $search;
+			
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -942,7 +939,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				);
 			}
 			$db = new Registrar_Model_DbTable_DbRptByType();
-			$this->view->row = $db->getIncomebyCategory($search,1);
+			$this->view->row = $db->getIncomebyCategory($search);
 			
 			$db = new Allreport_Model_DbTable_DbRptOtherIncome();
 			$this->view->rsincome = $db->getAllOtherIncomebyCate($search);
@@ -960,6 +957,45 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 	}
+	
+	public function rptIncomestatementAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'adv_search' =>'',
+						'branch_id' =>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
+				);
+			}
+			$db = new Registrar_Model_DbTable_DbRptByType();
+			$this->view->row = $db->getIncomebyCategory($search);
+				
+			$db = new Allreport_Model_DbTable_DbRptOtherIncome();
+			$this->view->rsincome = $db->getAllOtherIncomebyCate($search);
+			
+			$db = new Allreport_Model_DbTable_DbRptOtherExpense();
+			$abc = $this->view->rsexpense = $db->getAllExpensebycate($search);
+			
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
+	
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+	}
+	
+	
 	function  rptPaymentbydegreeAction(){
 		try{
 			if($this->getRequest()->isPost()){

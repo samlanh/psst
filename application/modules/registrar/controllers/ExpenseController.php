@@ -139,8 +139,8 @@ class Registrar_ExpenseController extends Zend_Controller_Action
     	if($this->getRequest()->isPost()){
     		$data = $this->getRequest()->getPost();
     		$db = new Registrar_Model_DbTable_DbIncome();
-    		$receipt = $db->getReceiptNumber($data['branch_id'],2);
-    		print_r(Zend_Json::encode($receipt));
+    		$invoice = $db->getReceiptNumber($data['branch_id'],2);
+    		print_r(Zend_Json::encode($invoice));
     		exit();
     	}
     }

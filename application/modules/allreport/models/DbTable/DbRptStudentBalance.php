@@ -11,21 +11,49 @@ class Allreport_Model_DbTable_DbRptStudentBalance extends Zend_Db_Table_Abstract
 //     }
     function getAllStudentBalance($search){
     	$db=$this->getAdapter();
-    	
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission();
+    	$branch_id = $_db->getAccessPermission("sp.branch_id");
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    		$branch = "school_namekh";
+    		$stu_name="s.stu_khname ";
+    	}else{ // English
+    		$label = "name_en";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    		$branch = "school_nameen";
+    		$stu_name="CONCAT(s.last_name,'-',s.stu_enname) ";
+    	}
+    	$sql="select 
+    				sp.id,
+    				(select $branch from rms_branch where br_id = sp.branch_id) as branch_name,
+    				sp.receipt_number,
+    				s.stu_code,
+    				$stu_name as stu_name ,
+    				(select $grade from rms_itemsdetail where rms_itemsdetail.id = sp.grade) as grade_name,
+    				sp.penalty,
+    				sp.grand_total,
+    				sp.credit_memo,
+    				sp.paid_amount,
+    				sp.balance_due,
+    				sp.note,
+    				(SELECT CONCAT (`last_name`,' ', `first_name`) FROM `rms_users` WHERE `rms_users`.id = sp.user_id LIMIT 1) as user,
+    				sp.create_date
+				from 
+					rms_student_payment AS sp,
+					rms_student as s
+				where 
+					s.stu_id=sp.student_id
+					and sp.balance_due>0  
+					and sp.status=1
+					and sp.is_void=0
+					$branch_id 
+    		";
     	
-    	$sql = "select spd.id,spd.fee AS fee,spd.discount_percent,spd.subtotal AS payment,spd.paidamount AS paid,spd.is_complete AS complete,
-    			spd.balance AS balance,spd.validate AS validate,spd.comment AS comment,sp.create_date AS paid_date,sp.receipt_number AS receipt,     
-				(select CONCAT(from_academic,' - ',to_academic,'(',generation,')',(select name_en from rms_view where type=7 and key_code = time)) from rms_tuitionfee where rms_tuitionfee.id=sp.year limit 1)AS year,
-				(select stu_code from rms_student where rms_student.stu_id=sp.student_id limit 1)AS code,
-				(select CONCAT(stu_enname) from rms_student where rms_student.stu_id=sp.student_id limit 1)AS name,
-				(select name_en from rms_view where rms_view.type=2 and key_code=(select sex from rms_student where rms_student.stu_id=sp.student_id limit 1))AS sex,
-				
-				from rms_student_payment AS sp,rms_student_paymentdetail AS spd where spd.payment_id=sp.id and spd.balance>0  $branch_id 
-    		   ";
-    	
-     	$order=" ORDER by sp.receipt_number ASC ";
+     	$order=" ORDER by sp.id ASC ";
     	$where = '';
      	
      	$from_date =(empty($search['start_date']))? '1': "sp.create_date >= '".$search['start_date']." 00:00:00'";
@@ -33,24 +61,24 @@ class Allreport_Model_DbTable_DbRptStudentBalance extends Zend_Db_Table_Abstract
      	
      	$where = " AND ".$from_date." AND ".$to_date;
      	
-     	if(!empty($search['service'])){
-     		$where .=" and spd.service_id = ".$search['service'];
-     	}
-     	if(!empty($search['branch_id'])){
-     		$where .=" and branch_id = ".$search['branch_id'];
+     	if(!empty($search['adv_search'])){
+     		$s_where = array();
+     		$s_search = addslashes(trim($search['adv_search']));
+     		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
+     		$s_where[] = " s.stu_code LIKE '%{$s_search}%'";
+     		$s_where[] = " s.stu_khname LIKE '%{$s_search}%'";
+     		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
+     		$s_where[] = " s.last_name LIKE '%{$s_search}%'";
+     		$where .=' AND ( '.implode(' OR ',$s_where).')';
      	}
      	
-    		if(!empty($search['txtsearch'])){
-    			$s_where = array();
-    			$s_search = addslashes(trim($search['txtsearch']));
-    			$s_where[] = " (select CONCAT(from_academic,'-',to_academic) from rms_servicefee where rms_servicefee.id=sp.year limit 1) LIKE '%{$s_search}%'";
-    			$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
-    			$s_where[] = " (select stu_code from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select CONCAT(stu_khname,stu_enname) from rms_student where rms_student.stu_id=sp.student_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " (select title from rms_program_name where rms_program_name.service_id=spd.service_id) LIKE '%{$s_search}%'";
-    			$s_where[] = " spd.comment LIKE '%{$s_search}%'";
-    			$where .=' AND ( '.implode(' OR ',$s_where).')';
-    		}
+     	if(!empty($search['branch_id'])){
+     		$where .=" and sp.branch_id = ".$search['branch_id'];
+     	}
+     	if(!empty($search['grade'])){
+     		$where .=" and sp.grade = ".$search['grade'];
+     	}
+    		
 //     		echo $sql.$where;
     	return $db->fetchAll($sql.$where.$order);
     }

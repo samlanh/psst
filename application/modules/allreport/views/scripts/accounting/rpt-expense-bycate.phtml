@@ -34,16 +34,16 @@
        			<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
        		</div>
        	</div>
-</form>	
+	</form>	
 	<div id="divPrint">
-	<style>
-		table {page-break-inside:auto }
-		      tr{ page-break-inside:avoid; page-break-after:auto; }
-		      #header {
-		        display: table-header-group;
-		        page-break-inside:avoid; page-break-after:auto;
-		      }
-	</style>
+		<style>
+			table {page-break-inside:auto }
+				  tr{ page-break-inside:avoid; page-break-after:auto; }
+				  #header {
+					display: table-header-group;
+					page-break-inside:avoid; page-break-after:auto;
+				  }
+		</style>
 		<div id="exportExcel">
 			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 				<tr>
@@ -57,8 +57,8 @@
 					<td width="15%" align="center">
 					</td>
 					<td width="70%" align="center">
-						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 16px;font-family:'Khmer MEF2';"><?php echo $tr->translate('RPT_CATE_EXPENSE')?></strong><br />
-						<strong style=" font-weight:bold;font-family: Arial Black;color:#000; font-size: 13px;font-family:'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+						<strong style="color:#000; font-size: 18px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('RPT_CATE_EXPENSE')?></strong><br />
+						<strong style="color:#000; font-size: 13px;font-family:Times New Roman,'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 					</td>
 					<td width="15%" align="center">
 					</td>
@@ -72,12 +72,12 @@
 				</style>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table cellpadding="5"​ style="font-family:'Khmer OS Battambang';margin:0 auto;width:100%; " >
+						<table cellpadding="5"​ style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%; " >
 							<thead>
 								<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
 									<td style="text-align: right;" colspan="2"><?php echo $tr->translate('CATE_EXPENSE')?></td>
 									<td style=""></td>
-									<td style=""><?php echo $tr->translate('TOTAL_EXPENSE')?></td>
+									<td align="left" style=""><?php echo $tr->translate('TOTAL_EXPENSE')?></td>
 								</tr>
 							</thead>
 						<?php $i=0;
@@ -87,12 +87,15 @@
 								<td style=""></td>
 								<td style="text-align: right;"><?php echo $row['account_name'];?></td>
 								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
-								<td style=""><?php echo number_format($row['total_expense'],2);?></td>
+								<td align="left" style="">&nbsp;&nbsp;<?php echo number_format($row['total_expense'],2);?></td>
 							</tr>
+							<?php $total_expense = $total_expense + $row['total_expense'];?>
 						<?php }}?>
 							<tr>
 								<td colspan="3"></td>
-								<td style="border-bottom: 5px double #000;text-align: center;">$&nbsp;<strong><?php echo number_format($total_expense,2);?></strong></td>
+								<td align="left" >
+									<strong style="border-bottom: 5px double #000;font-size:17px">$&nbsp;<?php echo number_format($total_expense,2);?></strong>
+								</td>
 							</tr>	
 						</table>	
 					</td>
@@ -103,24 +106,25 @@
 				<tr>
 					<td colspan="3">&nbsp;</td>
 				</tr>
-				<tr >
-					<td colspan="3" width="100%">
-						<table width="100%" style="font-family:'Khmer OS Battambang';">
-							<tr>
-								<td  width="25%" align="center">
-									<span style=" font-size: 15px;font-family:'Khmer MEF2'"><?php echo $tr->translate('VERIFIED_BY')?></span>
-								</td>
-								<td  width="50%">
-									&nbsp;
-								</td>
-								<td align="center"  width="25%">
-									<span style="font-size: 15px;text-align: right;font-family:'Khmer MEF2'"><?php echo $tr->translate('PREPARED_BY')?></span>
-								</td>
+				<tr>
+					<td colspan="3">
+						<br />
+						<br />
+						<table width="100%" style="font-size:12px;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
+							<tr style="text-align: center;">
+								<td width="30%">បានឃើញនិង ឯកភាព</td>
+								<td width="30%">បានពិនិត្យ</td>
+								<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
+							</tr>
+							<tr style="text-align: center;">
+								<td width="30%" style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'">លោកអគ្គនាយក</td>
+								<td width="30%">ប្រធានគណនេយ្យ</td>
+								<td width="30%">បេឡាករ</td>
 							</tr>
 						</table>
-					</td>
+					</td>	
 				</tr>
 			</table>
-			</div>
+		</div>
 	</div>		
 </div>

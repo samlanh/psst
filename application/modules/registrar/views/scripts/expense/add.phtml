@@ -286,7 +286,6 @@ dojo.require("dijit.form.Textarea");
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ObjectStore");
-dojo.require("dojo.store.Memory");
 dojo.ready(function(){
 	getReceiptNumber("");
 	addRow();
@@ -298,22 +297,25 @@ function hideDialog(){
 
 var url_get_recceipt_number = "<?php echo $this->url(array('module'=>'registrar','controller'=>'expense','action'=>'get-receipt-number')); ?>";
 function getReceiptNumber(receipt){
-	dojo.xhrPost({
-		url:url_get_recceipt_number,
-		content:{
-			'branch_id':dijit.byId('branch_id').get('value')
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id>0){
+		dojo.xhrPost({
+			url:url_get_recceipt_number,
+			content:{
+				'branch_id' : branch_id
+				},
+			handleAs:"json",
+			load: function(data){
+				 dijit.byId('invoice').attr('value',data);
+				 if(receipt!=''){
+					 printSave(data);
+				}
 			},
-		handleAs:"json",
-		load: function(data){
-			 dijit.byId('invoice').attr('value',data);
-			 if(receipt!=''){
-				 printSave(data);
+			error: function(err) {
+				alert(err);
 			}
-		},
-		error: function(err) {
-			alert(err);
-		}
-	});
+		});
+	}
 }
 function deleteRecord(index) {
 	var identity = $('#identity').val();

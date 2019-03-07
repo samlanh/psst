@@ -1,0 +1,242 @@
+<?php 
+	$frm = $this->form_search;
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+?>
+<title><?php echo $tr->translate('RPT_INCOME_STATEMENT');?></title>
+<script>
+	dojo.require('dijit.form.Button');
+	dojo.require("dijit.form.DateTextBox");
+</script>
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_INCOME_STATEMENT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>			
+		<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+			<div class="form-group">
+	        	<div class="col-md-2 col-sm-2 col-xs-12">
+	        		<?php echo $frm->getElement("branch_id");?>
+	        	</div>
+	        	<div class="col-md-2 col-sm-2 col-xs-12">
+	        		<?php echo $frm->getElement("start_date");?>
+	        	</div>
+	        	<div class="col-md-2 col-sm-2 col-xs-12">
+	        		<?php echo $frm->getElement("end_date");?>
+	        	</div>
+	        	<div class="col-md-2 col-sm-2 col-xs-12">
+	        		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+	        	</div>
+	        </div>
+		</form>
+	<div id="divPrint">
+			<style type="text/css">
+				table{ 
+					border-collapse:collapse; margin:0 auto;
+					border-color:#000;
+					font-family: 'Times New Roman','Khmer OS Battambang';
+				}
+				.padd tr td{  text-align:left}
+				.padd tr th{  background-color: #ccc; }
+				th,td{ padding:0 1px;}
+				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
+				td{padding:0 3px; }
+			</style>
+		<table style="background:#fff; margin: 0 auto; width: 100%; padding:0.5cm;" >
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="15%" align="center">
+				</td>
+				<td width="70%" align="center">
+					<strong style="color:#000; font-size: 18px;font-family:Times New Roman,'Khmer MEF2';"><?php echo $tr->translate('RPT_INCOME_STATEMENT')?></strong><br />
+					<strong style="color:#000; font-size: 13px;font-family:Times New Roman,'Khmer MEF2';"><?php if(!empty($this->search["start_date"])){?>For Date <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+				</td>
+				<td width="15%" align="center"></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<table class="padd" width="100%" align="left" border="0" style="white-space:nowrap;font-family: 'Times New Roman','Khmer OS Battambang';">
+						<thead>
+							<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight:bold;" align="center" >
+								<td width="22%" style="text-align: left;" ><?php echo $tr->translate('ALL_INCOME')?></td>
+								<td width="13%" style=""></td>
+								<td width="31%" style=""></td>
+								<td width="34%" style=""><?php echo $tr->translate('')?></td>
+							</tr>
+						</thead>
+						  <?php 
+							$i=0; 
+							$grand_total=0;
+							$total_income=0;
+							$total_penalty=0;
+							$credit_memo= 0;
+							$no=0;
+						 ?>
+						 <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
+							<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;"><?php echo $rs['category_name'];?></td>
+								<td style="white-space: nowrap;">...................................................................................</td>
+								<td style=""><?php echo number_format($rs['total_paidamount'],2);?></td>
+							</tr>
+								<?php 
+								 	$total_income = $total_income + $rs['total_paidamount']+$rs['total_penalty']-$rs['credit_memo'];
+								 	$total_penalty = $total_penalty + $rs['total_penalty'];
+								 	$credit_memo = $credit_memo + $rs['credit_memo'];
+						 	 	?>
+						  <?php }}if($total_penalty>0){ ?>
+					  		<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;"><?php echo $tr->translate('FINE');?></td>
+								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style=""><?php echo number_format($total_penalty,2);?></td>
+							</tr>
+						  <?php }if($credit_memo>0){?>
+						  	<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;"><?php echo $tr->translate('Credit Memo');?>(-)</td>
+								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style=""><?php echo number_format($credit_memo,2);?></td>
+							</tr>
+						  <?php }?>
+						   <?php if(!empty($this->rsincome)){ foreach($this->rsincome as $key => $rs){?>
+							  <tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+								<td style=""></td>
+								<td style="text-align: right;"><?php echo $rs['income_category'];?></td>
+								<td style="white-space: nowrap;width:200px;">...................................................................................</td>
+								<td style=""><?php echo number_format($rs['total_income'],2);?></td>
+							  </tr>
+								<?php 
+								 	$total_income = $total_income + $rs['total_income'];
+						 	 	}}
+						 	 	?>
+							<tr>
+								<td colspan="3"></td>
+								<td><strong style="border-bottom: 5px double #000;font-size:17px;">$&nbsp;<?php echo number_format($total_income,2);?></strong></td>
+							</tr>
+					</table>
+				</td>	
+			</tr>	
+			<tr>
+				<td colspan="3">
+					&nbsp;
+				</td>	
+			</tr>
+			<tr>
+				<td colspan="3">
+					<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
+						<style>
+							table tr th{background-color: #ccc;}	
+							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }									
+						</style>
+						<tr>
+							<td colspan="3" id="exportExcel">
+								<table cellpadding="5"​ border="0" style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%; " >
+									<thead>
+										<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
+											<td width="22%" style="text-align: left;" ><?php echo $tr->translate('ALL_EXPENSE')?></td>
+											<td width="13%" style=""></td>
+											<td width="31%" style=""></td>
+											<td width="34%" align="left" style=""><?php echo $tr->translate('')?></td>
+										</tr>
+									</thead>
+								<?php $i=0;
+									$total_expense = 0;
+								if(!empty($this->rsexpense)){foreach ($this->rsexpense AS $row) { $i++;?>
+									<tr class="hover" style="font-size:15px; height: 20px;" align="center" >
+										<td style=""></td>
+										<td style="text-align: right;"><?php echo $row['account_name'];?></td>
+										<td style="white-space: nowrap;">...................................................................................</td>
+										<td align="left" style="color:red">&nbsp;&nbsp;<?php echo number_format($row['total_expense'],2);?></td>
+									</tr>
+									<?php $total_expense = $total_expense + $row['total_expense'];?>
+								<?php }}?>
+									<tr>
+										<td colspan="3"></td>
+										<td align="left" >
+											<strong style="border-bottom: 5px double red;font-size:17px;color:red">$&nbsp;<?php echo number_format($total_expense,2);?></strong>
+										</td>
+									</tr>	
+								</table>	
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>	
+			<tr>
+				<td colspan="3">
+					&nbsp;
+				</td>	
+			</tr>
+			<tr>
+				<td colspan="3">
+					<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
+						<style>
+							table tr th{background-color: #ccc;}	
+							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }									
+						</style>
+						<tr>
+							<td colspan="3" id="exportExcel">
+								<table cellpadding="5"​ border="0" style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%; " >
+									<thead>
+										<tr style="font-size:16px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
+											<td width="22%" style="text-align: left;" ><?php echo $tr->translate('NET_INCOME')?></td>
+											<td width="13%" style=""></td>
+											<td width="31%" style=""></td>
+											<td width="34%" align="left" style=""><?php echo $tr->translate('')?></td>
+										</tr>
+									</thead>
+									<?php 
+										$grand_total = $total_income - $total_expense;
+									?>
+									
+									<tr>
+										<td style=""></td>
+										<td style="text-align: right;font-size:17px;font-weight:bold;"><?php echo $tr->translate('NET_INCOME')?></td>
+										<td style="white-space: nowrap;">...................................................................................</td>
+										<td align="left" >
+											<strong style="border-bottom: 5px double #000;font-size:17px;<?php if($grand_total<0){echo 'color:red;';}?>">$&nbsp;<?php echo number_format($grand_total,2);?></strong>
+										</td>
+									</tr>	
+								</table>	
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="3">
+					<br />
+					<br />
+					<table width="100%" style="font-size:12px;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
+						<tr style="text-align: center;">
+							<td width="30%">បានឃើញនិង ឯកភាព</td>
+							<td width="30%">បានពិនិត្យ</td>
+							<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
+						</tr>
+						<tr style="text-align: center;">
+							<td width="30%" style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'">លោកអគ្គនាយក</td>
+							<td width="30%">ប្រធានគណនេយ្យ</td>
+							<td width="30%">បេឡាករ</td>
+						</tr>
+					</table>
+				</td>	
+			</tr>
+		</table>
+	</div>	
+</div>

@@ -48,7 +48,7 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'required' =>'true',
 				'class'=>'fullside',
-				'onchange'=>'filterClient();'
+				'onchange'=>'filterClient();getReceiptNumber("");'
 		));
 		
 		$db = new Application_Model_DbTable_DbGlobal();

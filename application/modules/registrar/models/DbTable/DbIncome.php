@@ -130,13 +130,12 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 
 	function getReceiptNumber($branch_id,$type){  // $type==1 => select from rms_income , $type==2 => select from rms_expense
 		$db = $this->getAdapter();
-		
 		if($type==1){
 			$table = 'ln_income';
 		}else{
 			$table = 'ln_expense';
 		}
-		$sql="select id from $table where status = 1 and branch_id = $branch_id order by id DESC";
+		$sql="select count(id) from $table where status = 1 and branch_id = $branch_id limit 1 ";
 		$id = $db->fetchOne($sql);
 		$id = $id + 1;
 		$length = strlen($id) + 1;

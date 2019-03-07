@@ -1,5 +1,4 @@
 <?php
-
 class Foundation_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_scoreengsetting';
@@ -10,7 +9,6 @@ class Foundation_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
     function getAllScoreSetting($search = '',$items_type=null){
     	$db = $this->getAdapter();
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    
     	$sql = " SELECT 
 				s.id,
 				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
@@ -160,11 +158,3 @@ class Foundation_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
    	}
    }
 }
-
-
-
-
-
-
-
-

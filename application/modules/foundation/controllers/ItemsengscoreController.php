@@ -1,15 +1,11 @@
 <?php
 class Foundation_ItemsengscoreController extends Zend_Controller_Action {
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
     public function init()
     {    	
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
 	}
 	public function indexAction(){
 		try{
@@ -42,7 +38,6 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
-		
 	}
 	function addAction()
 	{
@@ -60,7 +55,7 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 				Application_Form_FrmMessage::message($sms);
 			} catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
-				$err =$e->getMessage();
+				$err = $e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
@@ -69,7 +64,6 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 		$frm_subject_exam=$subject_exam->FrmAddItemsScoreExam();
 		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
 		$this->view->frm_subject_exam = $frm_subject_exam;
-		
 	}
 	function editAction()
 	{
@@ -78,16 +72,15 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 		$_dbmodel = new Foundation_Model_DbTable_DbItemsScoreEng();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			try {
+			try{
 				$subject_id = $_dbmodel->addItemsScoreEng($_data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/itemsengscore");
-			} catch (Exception $e) {
+			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				$err =$e->getMessage();
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
-		
 		$row = $_dbmodel->getItemsEnByID($id);
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/itemsengscore");
@@ -97,8 +90,5 @@ class Foundation_ItemsengscoreController extends Zend_Controller_Action {
 		$frm_subject_exam=$subject_exam->FrmAddItemsScoreExam($row);
 		Application_Model_Decorator::removeAllDecorator($frm_subject_exam);
 		$this->view->frm_subject_exam = $frm_subject_exam;
-		
 	}
-	
 }
-

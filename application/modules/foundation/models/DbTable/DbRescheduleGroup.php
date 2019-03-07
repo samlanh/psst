@@ -200,13 +200,10 @@ class Foundation_Model_DbTable_DbRescheduleGroup extends Zend_Db_Table_Abstract
        		gr.from_hour,gr.to_hour,
        		(SELECT subject_titlekh FROM `rms_subject` WHERE is_parent=1 AND rms_subject.id = gr.subject_id AND subject_titlekh!='' LIMIT 1) AS subject_name,
        		(SELECT CONCAT(teacher_name_kh,'-',teacher_name_en) FROM rms_teacher WHERE rms_teacher.status=1 AND teacher_name_kh!='' LIMIT 1) AS teacher_name,
-       		DATE_FORMAT(gr.create_date,'%d-%m-%Y'), (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS USER,
-       		(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.status AND rms_view.type=1 LIMIT 1) AS STATUS
+       		DATE_FORMAT(gr.create_date,'%d-%m-%Y'), (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = gr.user_id) AS user,
+       		(SELECT name_en FROM rms_view WHERE rms_view.key_code=gr.status AND rms_view.type=1 LIMIT 1) AS status
      		FROM rms_group_reschedule AS gr  WHERE gr.status=1";
 		$where =' ';
-// 		$from_date =(empty($search['start_date']))? '1': "g.start_date >= '".$search['start_date']." 00:00:00'";
-// 		$to_date = (empty($search['end_date']))? '1': "g.start_date <= '".$search['end_date']." 23:59:59'";
-// 		$where.= " AND ".$from_date." AND ".$to_date;
 		$order =  ' ORDER BY `gr`.`id` DESC ' ;
 		if(!empty($search['title'])){
 			$s_where = array();

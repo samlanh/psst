@@ -20,7 +20,6 @@ class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
-    		
     		$id_multiscore = $this->countMulitScoretype();
     		$rssubject = $_data['selector'];
     		$examtype='';
@@ -72,10 +71,8 @@ class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
     	try{
-    
     		$id_multiscore = $_data['score_id'];
     		$rssubject = $_data['selector'];
-    		
     		$ex_type='';
     		foreach ($rssubject as $key=> $subject){
     			if (empty($ex_type)){
@@ -98,7 +95,6 @@ class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
     			$wheredeleteMain.=" AND exame_type NOT IN ($ex_type)";
     		}
     		$this->delete($wheredeleteMain);
-    		
     		
     		$examtype='';
     		$id=0;
@@ -274,8 +270,6 @@ class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
 			AND score_setting_id=$id";
 		return $db->fetchAll($sql);
 	}
-	
-	
 	function getGroupInforByID($group_id,$string=null){
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
@@ -303,17 +297,8 @@ class Foundation_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
 				<li><span class="lbl-tt">'.$tr->translate("DEGREE").'</span>: '.$row['gradetitle'].'</li>
 				</ul>
 				</div>';
-				
 			}
 			return $string;
 		}
 	}
 }
-
-
-
-
-
-
-
-

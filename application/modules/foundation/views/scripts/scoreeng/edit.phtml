@@ -1,13 +1,11 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_SCOREENG"));
-	$current_month = date("m");
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	$db = new Foundation_Model_DbTable_DbScoreEng();
 ?>	
 <style>
-	select{ width:100%;}
-	
+		select{ width:100%;}
 		tr.hover td.verites-col,
 		td.verites-col {
 		    text-align: center;
@@ -93,8 +91,6 @@ span.note_score {
 				} else {
   					  return false;
 				}
-
-				
    			}else {
     			return false;
    			}
@@ -147,14 +143,11 @@ span.note_score {
 			                <div class="col-md-7 col-sm-7 col-xs-12">
 			                	<textarea dojoType="dijit.form.Textarea" class="fullside"  style=" height: 60px !important;" tabindex="20" dojoType=""  id="note" name="note"  ></textarea>
 			                </div>
-			             </div>
+			         </div>
 		          </div>
 		          <div class="col-md-6 col-sm-6 col-xs-12">
-		          		<div id="gr-info">
-		          			
-		          		</div>
-		          		<div id="score-info">
-						</div>
+		          		<div id="gr-info"></div>
+		          		<div id="score-info"></div>
 		          </div>
 		     </div>
 		     <div class="card-box">
@@ -169,8 +162,7 @@ span.note_score {
 	       <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input iconClass="dijitIconClear" type="reset" value="" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
-					<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+               		<input type="submit" value="save_new" id="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
 						iconClass="dijitEditorIcon dijitEditorIconSave" />
                	</div>
              </div>
@@ -182,9 +174,7 @@ dojo.require('dijit.form.Textarea');
 dojo.require('dijit.form.DateTextBox');
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
-dojo.require("dijit.form.DateTextBox");
 dojo.require('dijit.form.NumberTextBox');
-dojo.require("dojo.number");
 
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var scoreSetting_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -214,7 +204,6 @@ dojo.ready(function(){
 	    name: "scoreSetting",           
 	    class: 'fullside',  
 	    required:'true',
-	    placeHolder:"<?php //echo $tr->translate("SELECT_YEAR");?>",          
 	    onChange: function() {  
 		    getDetailScoreSetting();
 	    }
@@ -235,7 +224,6 @@ dojo.ready(function(){
 		getAllGroupByBranch();
 		getScoreSetting();
 		getDetailScoreSetting();
-		//filterStudentOld();
 });
 
 url_getacademic= '<?php echo $this->url(array('module'=>'global','controller'=>'group','action'=>'getacademic'));?>';
@@ -263,7 +251,6 @@ function getAllAcademicByBranch(){
 		    } 
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -329,7 +316,6 @@ function getDetailScoreSetting(){
 				}else{
 					filterStudent();
 				}
-				
 			}else{
 				filterStudent();
 			}
@@ -338,7 +324,6 @@ function getDetailScoreSetting(){
 		}
 	});
 }
-
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-grade')); ?>';
 function filterGrade(){
@@ -358,11 +343,9 @@ function filterGrade(){
 			}
 		});
 }
-var inx=0;
-var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
-
+	var inx=0;
+	var url_getStudent= '<?php echo $this->url(array('module'=>'foundation','controller'=>'score','action'=>'get-student')); ?>';
 function filterStudent(){
-
 	$('#identity').val('');
 	dojo.query("#table_row").append("");
 	loadingBlock();
@@ -372,7 +355,6 @@ function filterStudent(){
 		HideloadingBlock();
 		return false;
 	}
-	
 	if(group==''){
 		HideloadingBlock();
 		return false;
@@ -399,8 +381,7 @@ function filterStudent(){
 				title=0;
 				temp='';
 				str='';
-				
-				column = 0;/*border-bottom: 1px solid #fdbdbd;*/
+				column = 0;
 				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
 					+'<thead><tr style="border: 1px #4839bd solid;background: #fdbdbd;color: #4839bd;font-family: Time New Roman, Khmer OS Battambang;font-weight: bold;font-size: 12px;"><td  class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
 					+'<td  class="tdheader" ><?php echo $tr->translate('NO');?></td>'
@@ -433,7 +414,6 @@ function filterStudent(){
 				for(i=0;i<data.length;i++){
 					num++;
 					inx = inx+1;
-					//alert(inx);
 					temp += '<tr class="hover normal" id="row'+inx+'">';
 					temp +='<td width="4%" align="center"><img onclick="deleteRecord('+inx+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 					temp += '<td align="center">&nbsp;'+inx+'</td>';
@@ -454,7 +434,6 @@ function filterStudent(){
 					
 				}
 				temp+='</table>';
-
 				tmp='<tr id="row'+inx+'">';
 				tmp+="</tr>";
 				dojo.query("#table_row").append(tmp);
@@ -470,15 +449,12 @@ function filterStudent(){
 	});
 	HideloadingBlock();
 }
-
-
 function filterStudentOld(){
-
 	num =0;
 	title=0;
 	temp='';
 	str='';
-	column = 0;/*border-bottom: 1px solid #fdbdbd;*/
+	column = 0;
 	temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
 		+'<thead><tr style="border: 1px #4839bd solid;background: #fdbdbd;color: #4839bd;font-family: Time New Roman, Khmer OS Battambang;font-weight: bold;font-size: 12px;"><td  class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
 		+'<td  class="tdheader" ><?php echo $tr->translate('NO');?></td>'
@@ -547,8 +523,6 @@ function filterStudentOld(){
 }
 
 function checkScore(index,subject_id){
-	//alert(index+" , "+subject_id)
-	
 	score_input = dijit.byId('score_'+index+'_'+subject_id).get('value');
 	max_score = dijit.byId('max_score_'+index+'_'+subject_id).get('value');
 	if(score_input>max_score){
@@ -570,14 +544,12 @@ function CheckSubjectExam(subject_id){
 			}
 		}
 	}else{
-		
 		if(rowId!=''){ 
 			var rowIDArray = rowId.split(',');
 			for(var b = 0; b < rowIDArray.length; b++){
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('disabled',true);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).attr('value',0);
 				dijit.byId('score_'+rowIDArray[b]+'_'+subject_id).set('required',false); 
-				
 			}
 		}
 	}
@@ -599,12 +571,11 @@ function gender(sex){
 	return sex;
 }
 </script>
-<script> //validate controll form 
+<script> 
 function getInfoBygroup(){
 	url_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
 	group = dijit.byId('group').get('value');
 	if(group==''){
-		//alert("Please Select Group");
 		return false;
 	}
 	dojo.xhrPost({
@@ -614,12 +585,9 @@ function getInfoBygroup(){
 		},
 		handleAs:"json",
 		load: function(data) {
-
 			dojo.byId("gr-info").innerHTML = data;
-			
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 	}
@@ -648,7 +616,6 @@ function getAllGroupByBranch(){
 		    } 
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }
@@ -677,7 +644,6 @@ function getAllGroupByAcademic(){
 		    } 
 		},
 		error: function(err) {
-			alert(err);
 		}
 	});
 }

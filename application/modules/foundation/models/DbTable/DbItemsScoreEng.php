@@ -12,8 +12,7 @@ class Foundation_Model_DbTable_DbItemsScoreEng extends Zend_Db_Table_Abstract
     	$sql = " SELECT
 			en.id,en.title,en.title_en,en.note,en.status
 			 FROM `rms_exametypeeng` AS en
-			 WHERE 1
-    	";
+			 WHERE 1 ";
     	$order=" order by en.id DESC";
     	$where = '';
     	if(empty($search)){
@@ -40,12 +39,13 @@ class Foundation_Model_DbTable_DbItemsScoreEng extends Zend_Db_Table_Abstract
 	    		'title'=>$_data['title'],
     			'title_en'=>$_data['title_en'],
 	    		'note'=>$_data['note'],
-    			'status'=>$_data['status'],
+    			'status'=>1,
 	    		'modify_date'=>date("Y-m-d H:i:s"),
 	    		'user_id'=>$this->getUserId(),
 	    	);
     		$this->_name='rms_exametypeeng';
     		if (!empty($_data['id'])){
+    			$_arr['status']=$_data['status'];
     			$where = "id=".$_data['id'];
     			$this->update($_arr, $where);
     		}else{
@@ -64,11 +64,3 @@ class Foundation_Model_DbTable_DbItemsScoreEng extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
 }
-
-
-
-
-
-
-
-

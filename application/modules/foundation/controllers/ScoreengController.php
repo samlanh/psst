@@ -9,7 +9,6 @@ class Foundation_ScoreengController extends Zend_Controller_Action {
 	public function indexAction(){
 		try{
 			$db = new Foundation_Model_DbTable_DbScoreEng();
-// 			$this->view->g_all_name=$db->getGroupSearch();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}
@@ -67,7 +66,6 @@ class Foundation_ScoreengController extends Zend_Controller_Action {
 		}
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->row_branch=$db_global->getAllBranch();
-	
 		$db_global=new Application_Model_DbTable_DbGlobal();
 	}
 	public	function editAction(){

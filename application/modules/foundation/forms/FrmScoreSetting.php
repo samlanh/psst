@@ -11,7 +11,6 @@ class Foundation_Form_FrmScoreSetting extends Zend_Dojo_Form
     	$this->filter = 'dijit.form.FilteringSelect';
     }
     function FrmAddScoreSetting($data){
-    	
     	$request=Zend_Controller_Front::getInstance()->getRequest();
     	$typeItems = empty($typeItems)?1:$typeItems;
     	$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -27,6 +26,8 @@ class Foundation_Form_FrmScoreSetting extends Zend_Dojo_Form
     	$_branch_id->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',  			 
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	if (count($optionBranch)==1){
@@ -41,9 +42,10 @@ class Foundation_Form_FrmScoreSetting extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.ValidationTextBox',
     			'required'=>'true',
     			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'missingMessage'=>$this->tr->translate("Forget Enter Title")
     	));
-    	
     	
     	$note=  new Zend_Form_Element_Textarea('note');
     	$note->setAttribs(array(
@@ -68,10 +70,11 @@ class Foundation_Form_FrmScoreSetting extends Zend_Dojo_Form
     	$_examtype_items->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'onChange'=>'addRow()',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
-    	
     	
     	$id = new Zend_Form_Element_Hidden('id');
     	
@@ -124,7 +127,8 @@ class Foundation_Form_FrmScoreSetting extends Zend_Dojo_Form
     	$_branch_search->setAttribs(array(
     			'dojoType'=>'dijit.form.FilteringSelect',
     			'required'=>'true',
-    	
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
     	if (count($optionBranch)==1){
@@ -153,7 +157,6 @@ class Foundation_Form_FrmScoreSetting extends Zend_Dojo_Form
 				$_status_search,
     			$start_date,
     			$end_date,
-    			
     			$_branch_search
     			));
     	return $this;

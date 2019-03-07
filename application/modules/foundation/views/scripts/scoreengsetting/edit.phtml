@@ -107,7 +107,7 @@ input.btn_borwse_image {
 		         </div>
 		         <div class="col-md-8 col-sm-8 col-xs-12">
 		         	<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
-		         	  <label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_ITEMS");?> </label>
+		         	  <label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("SELECT_TYPE");?> </label>
 	                   <div class="col-md-5 col-sm-5 col-xs-12">
 	                   		<?php echo $frm_items->getElement("examtype_items");?>
 	                   </div>
@@ -118,7 +118,7 @@ input.btn_borwse_image {
 							<tr id="head-title" class="head-td" align="right">
 								<th><?php echo $tr->translate("DEL");?></th>
 								<th><?php echo $tr->translate("N_O");?></th>
-								<th><?php echo $tr->translate("ITEMS");?></th>
+								<th><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>
 								<th><?php echo $tr->translate("PERCENTAGE");?></th>
 								<th><?php echo $tr->translate("OTHER");?></th>
 							</tr>
@@ -129,7 +129,6 @@ input.btn_borwse_image {
 		         <div class="clearfix"></div>
 			         <div class="card-box mt-20">
 		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-		               		<input iconClass="dijitIconClear" type="reset" value="clear" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 							<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button" 
 							iconClass="dijitEditorIcon dijitEditorIconSave" />
 		               	</div>
@@ -150,7 +149,6 @@ input.btn_borwse_image {
 	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
 	dojo.ready(function(){ 
 		$("#title").keyup(function(){
-			//deplicateItem();
 		});
 		oldRow();
 	});	
@@ -187,7 +185,7 @@ input.btn_borwse_image {
 				$("#head-title").html("");
 				temp+='<th><?php echo $tr->translate("DEL");?></th>';
 				temp+='<th><?php echo $tr->translate("N_O");?></th>';
-				temp+='<th><?php echo $tr->translate("ITEMS");?></th>';
+				temp+='<th><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>';
 				temp+='<th><?php echo $tr->translate("PERCENTAGE");?></th>';
 				temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 				dojo.query("#head-title").append(temp);
@@ -219,7 +217,7 @@ input.btn_borwse_image {
 				$("#head-title").html("");
 				temp+='<th><?php echo $tr->translate("DEL");?></th>';
 				temp+='<th><?php echo $tr->translate("N_O");?></th>';
-				temp+='<th><?php echo $tr->translate("ITEMS");?></th>';
+				temp+='<th><?php echo $tr->translate("ITEMS_SCORE_ENG");?></th>';
 				temp+='<th><?php echo $tr->translate("PERCENTAGE");?></th>';
 				temp+='<th><?php echo $tr->translate("NOTE");?></th>';
 				dojo.query("#head-title").append(temp);

@@ -2,10 +2,8 @@
 class Foundation_ReschedulegroupController extends Zend_Controller_Action {
     public function init()
     {    	
-     /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
-    	
 	}
 	public function indexAction(){
 		try{
@@ -26,7 +24,6 @@ class Foundation_ReschedulegroupController extends Zend_Controller_Action {
 			$db = new Foundation_Model_DbTable_DbRescheduleGroup();
 			$rs_rows= $db->getAllRescheduleGroup($search);
 			$glClass = new Application_Model_GlobalClass();
-			//$rs_rows = $glClass->getGetPayTerm($rs_rows, BASE_URL );
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH_NAME","STUDY_YEAR","GROUP","DAY","FROM_HOUR","TO_HOUR","SUBJECT","TEACHER","DATE","USER","STATUS");
 			$link=array(
@@ -36,14 +33,8 @@ class Foundation_ReschedulegroupController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			echo $e->getMessage();
 		}
-		$frm = new Application_Form_FrmOther();
-		$this->view->add_major = $frm->FrmAddMajor(null);
-		$frm = new Global_Form_FrmSearchMajor();
-		$frm = $frm->frmSearchTeacher();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm_search = $frm;
+		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$forms=$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($forms);

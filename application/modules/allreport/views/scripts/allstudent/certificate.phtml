@@ -151,6 +151,17 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 					width: 100px;
 					height: 127px;
 				}
+				
+				span.issue_date {
+					position: absolute;
+					bottom: 77px;
+					right: 436px;
+					font-size: 14px;
+					min-width: 110px;
+					text-align: center;
+					font-family: 'Times New Roman','Khmer OS Battambang';
+					font-weight: bold;
+				}
 			</style>
 			<div class="one-row-certif" >
 				<div class="certificate">
@@ -165,6 +176,10 @@ $month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីន�
 					<span class="value dob_eng"><?php echo date("d",strtotime($this->rs['dob']))."-".date("F",strtotime($this->rs['dob']))."-".date("Y",strtotime($this->rs['dob']));?></span>
 					<span class="value dept_eng"><?php echo $this->rs['dept_eng'];?></span>
 					<span class="value duration_eng"><?php if(!empty($this->rs['from_date'])  AND $this->rs['from_date'] != "0000-00-00"){ echo date("d",strtotime($this->rs['from_date']))."-".date("F",strtotime($this->rs['from_date']))."-".date("Y",strtotime($this->rs['from_date']))." To ".date("d",strtotime($this->rs['to_date']))."-".date("F",strtotime($this->rs['to_date']))."-".date("Y",strtotime($this->rs['to_date'])); }?></span>
+					
+					<?php if(!empty($this->rs['issue_date'])  AND $this->rs['issue_date'] != "0000-00-00"){?>
+					<span class="value issue_date"><?php echo date("d/F/Y",strtotime($this->rs['issue_date']));?></span>
+					<?php }?>
 					
 					
 					<?php 

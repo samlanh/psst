@@ -1629,6 +1629,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 	    	c.program_en,
 	    	c.from_date,
 	    	c.to_date,
+	    	c.issue_date,
 	    	st.stu_enname,
 	    	st.last_name,
 	    	st.stu_khname,
